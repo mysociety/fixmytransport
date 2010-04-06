@@ -24,5 +24,9 @@
 // Secret key for signing cookie_store sessions
 define('OPTION_COOKIE_STORE_SESSION_SECRET', 'your secret key here, make it long and random');
 
+define('OPTION_STAGING_SITE', 1);
+
+define('OPTION_DOMAIN', '127.0.0.1:3000');
+
 ?>
 
