@@ -33,6 +33,7 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem "rack", :version => '1.0.1'
   config.gem "haml", :version => '2.2.20'
+  config.gem "erubis", :version => '2.6.5'
 
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
@@ -53,3 +54,8 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
 end
+# Tell HAML to escape HTML by default
+Haml::Template.options[:escape_html] = true
+
+# Use HTML 5
+Haml::Template.options[:format] = :html5
