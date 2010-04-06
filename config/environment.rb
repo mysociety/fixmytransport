@@ -6,7 +6,19 @@ RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
+# MySociety specific helper functions
+$:.push(File.join(File.dirname(__FILE__), '../commonlib/rblib'))
+
+# ... if these fail to include, you need the commonlib submodule from git
+
+load "config.rb"
+
 Rails::Initializer.run do |config|
+  
+  # Load intial mySociety config
+  MySociety::Config.set_file(File.join(config.root_path, 'config', 'general'), true)
+  MySociety::Config.load_default
+  
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded.
