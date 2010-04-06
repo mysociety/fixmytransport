@@ -1,8 +1,9 @@
-log/*.log
+log/*
 tmp/**/*
 doc/api
 doc/app
 config/database.yml
 config/general
 config/general.deployed
+config/rails_env.rb
 public/down.html
