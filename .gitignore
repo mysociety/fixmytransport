@@ -5,3 +5,4 @@ doc/app
 config/database.yml
 config/general
 config/general.deployed
+public/down.html
