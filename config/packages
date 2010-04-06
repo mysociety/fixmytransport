@@ -1,5 +1,6 @@
 libopenssl-ruby1.8
 libpgsql-ruby1.8
+librack-ruby1.8 (>= 1.0.1-1)
 rake (>= 0.8.4-1)
 ruby1.8
 rubygems
