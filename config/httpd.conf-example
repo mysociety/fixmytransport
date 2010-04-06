@@ -1,0 +1,16 @@
+# Apache configuration for fixmytransport site.
+#
+# For development ignore this, you can just run ./scripts/server as for any
+# Ruby on Rails application.
+#
+# Copyright (c) 2010 UK Citizens Online Democracy. All rights reserved.
+# Email: louise@mysociety.org; WWW: http://www.mysociety.org
+# 
+
+
+# Make a file down.html in the DocumentRoot bring down the whole site and
+# display itself.
+ErrorDocument 503 /down.html
+Redirect 503 /down
+RewriteCond %{DOCUMENT_ROOT}/down.html -s
+RewriteRule /([^.]*)$ /down [PT]
