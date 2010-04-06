@@ -3,6 +3,7 @@ tmp/**/*
 doc/api
 doc/app
 config/database.yml
+config/database.yml.deployed
 config/general
 config/general.deployed
 config/rails_env.rb
