@@ -1,0 +1,5 @@
+libopenssl-ruby1.8
+libpgsql-ruby1.8
+rake (>= 0.8.4-1)
+ruby1.8
+rubygems
