@@ -6,4 +6,8 @@
     %meta{ :content => "text/html; charset=utf-8", "http-equiv" => "Content-type" }
     = stylesheet_link_tag 'application'
   %body
+    %h2= t :site_name
+    - [:notice, :error, :message].each do |key| 
+      - unless flash[key].blank? 
+        %p{ :class => "flash flash_#{key}" }!= flash[key]
     = yield

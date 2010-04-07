@@ -1,0 +1,55 @@
+/* General */
+
+body {
+  font-family: verdana, sans-serif;
+}
+
+.flash_notice {
+  padding: 5px;
+  margin: 5px;
+  background-color: #ADFF2F;
+  border: 1px solid #7CFC00;
+}
+
+.flash_error {
+  padding: 5px;
+  margin: 5px;
+  background-color: #FFADB9;
+  border: 1px solid #CC0000;
+}
+
+/* Home page */
+
+.home-nav{
+  margin-top: 20%;
+}
+.home-nav-item {
+  margin: 1em;
+  text-align: center;
+}
+
+/* Forms */
+
+label {
+  width: 6em;  
+  padding-right: 0.5em;
+  text-align: right;
+  float: left;
+}
+
+.form-field-error{
+  color: #CC0000;
+}
+/* Browsing problems */
+
+.problem-list{ 
+  margin-top: 20%;
+}
+
+/* Problem page */
+
+.problem-list-item {
+  margin: 1em;
+  text-align: center;
+  list-style-type: none;
+}

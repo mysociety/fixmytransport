@@ -1,0 +1,10 @@
+en:
+  activerecord:
+    errors:
+      models:
+        problem:
+          attributes: 
+            subject:
+              blank: "Please enter a subject"
+            description:
+              blank: "Please enter a description"

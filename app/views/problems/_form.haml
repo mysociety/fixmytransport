@@ -1,0 +1,14 @@
+- if !@problem.errors.empty?
+  .form-error
+    = t(:problem_form_error)
+.fieldset
+  .form-field
+  - if @problem.errors.on(:subject)
+    .form-field-error= error_message_on @problem, :subject
+  != form.label :subject, t(:subject)
+  != form.text_field :subject
+  .form-field
+  - if @problem.errors.on(:description)
+    .form-field-error= error_message_on @problem, :description
+  != form.label :description, t(:description)
+  != form.text_area :description
