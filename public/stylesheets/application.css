@@ -4,6 +4,13 @@ body {
   font-family: verdana, sans-serif;
 }
 
+.content {
+  margin-top: 2em;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+}
+
 .flash_notice {
   padding: 5px;
   margin: 5px;
@@ -20,9 +27,6 @@ body {
 
 /* Home page */
 
-.home-nav{
-  margin-top: 20%;
-}
 .home-nav-item {
   margin: 1em;
   text-align: center;
@@ -39,11 +43,6 @@ label {
 
 .form-field-error{
   color: #CC0000;
-}
-/* Browsing problems */
-
-.problem-list{ 
-  margin-top: 20%;
 }
 
 /* Problem page */
