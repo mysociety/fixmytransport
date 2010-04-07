@@ -40,13 +40,13 @@ describe ProblemsController do
     it "should render the 'New problem' view if the problem can't be saved" do 
       @problem.stub!(:save).and_return(false)
       make_request
-      response.should render_template 'problems/new'
+      response.should render_template('problems/new')
     end
     
     it 'should redirect to the problem page if the problem can be saved' do 
       @problem.stub!(:save).and_return(true)
       make_request
-      response.should redirect_to problem_url(@problem)
+      response.should redirect_to(problem_url(@problem))
     end
     
   end
