@@ -10,4 +10,5 @@
     - [:notice, :error, :message].each do |key| 
       - unless flash[key].blank? 
         %p{ :class => "flash flash_#{key}" }!= flash[key]
-    = yield
+    .content
+      = yield
