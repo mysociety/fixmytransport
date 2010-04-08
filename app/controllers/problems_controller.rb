@@ -3,6 +3,7 @@ class ProblemsController < ApplicationController
   def new
     @title = t :submit_problem
     @problem = Problem.new
+    @problem.build_reporter
   end
   
   def index

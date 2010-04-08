@@ -1,0 +1,11 @@
+en:
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes: 
+            email:
+              blank: "Please enter your email address"
+              invalid: "Please enter a valid email address"
+            name:
+              blank: "Please enter your name"

@@ -3,10 +3,21 @@
     = t(:problem_form_error)
 .fieldset
   .form-field
-  - if @problem.errors.on(:subject)
-    .form-field-error= error_message_on @problem, :subject
-  != form.label :subject, t(:subject)
-  != form.text_field :subject
+    - if @problem.errors.on(:subject)
+      .form-field-error= error_message_on @problem, :subject
+    != form.label :subject, t(:subject)
+    != form.text_field :subject
+  - form.fields_for :reporter do |builder|
+    .form-field
+      - if @problem.reporter.errors.on(:email)
+        .form-field-error= error_message_on @problem.reporter, :email
+      != builder.label :email, t(:email)
+      != builder.text_field :email
+    .form-field
+      - if @problem.reporter.errors.on(:name)
+        .form-field-error= error_message_on @problem.reporter, :name
+      != builder.label :name, t(:name)
+      != builder.text_field :name
   .form-field
   - if @problem.errors.on(:description)
     .form-field-error= error_message_on @problem, :description

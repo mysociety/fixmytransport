@@ -7,4 +7,4 @@ en:
             subject:
               blank: "Please enter a subject"
             description:
-              blank: "Please enter a description"
+              blank: "Please enter a description of the problem"

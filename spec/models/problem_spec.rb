@@ -1,3 +1,16 @@
+# == Schema Information
+# Schema version: 20100408120352
+#
+# Table name: problems
+#
+#  id          :integer         not null, primary key
+#  subject     :text
+#  description :text
+#  created_at  :datetime
+#  updated_at  :datetime
+#  reporter_id :integer
+#
+
 require 'spec_helper'
 
 describe Problem do
