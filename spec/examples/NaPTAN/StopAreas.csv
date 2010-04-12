@@ -1,0 +1,3 @@
+"StopAreaCode","Name","NameLang","AdministrativeAreaCode","StopAreaType","GridType","Easting","Northing","CreationDateTime","ModificationDateTime","RevisionNumber","Modification","Status"
+"020G33094","Willoughby Close","en","069","GPBS","U",512825,252349,"2009-02-13T00:00:00","2009-02-13T00:00:00",1,"rev","act"
+"020G33100","Green End Road","en","069","GPBS","U",512723,252343,"2009-02-13T00:00:00","2009-02-13T00:00:00",1,"rev","del"
