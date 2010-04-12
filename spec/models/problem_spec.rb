@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100408120352
+# Schema version: 20100408151525
 #
 # Table name: problems
 #
@@ -9,6 +9,7 @@
 #  created_at  :datetime
 #  updated_at  :datetime
 #  reporter_id :integer
+#  stop_id     :integer
 #
 
 require 'spec_helper'
