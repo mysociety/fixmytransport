@@ -1,3 +1,19 @@
+# == Schema Information
+# Schema version: 20100408173847
+#
+# Table name: stop_area_memberships
+#
+#  id                    :integer         not null, primary key
+#  stop_id               :integer
+#  stop_area_id          :integer
+#  creation_datetime     :datetime
+#  modification_datetime :datetime
+#  revision_number       :integer
+#  modification          :string(255)
+#  created_at            :datetime
+#  updated_at            :datetime
+#
+
 require 'spec_helper'
 
 describe StopAreaMembership do

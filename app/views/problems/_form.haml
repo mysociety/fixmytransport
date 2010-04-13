@@ -5,21 +5,23 @@
   .form-field
     - if @problem.errors.on(:subject)
       .form-field-error= error_message_on @problem, :subject
-    != form.label :subject, t(:subject)
-    != form.text_field :subject
+    = render 'text_field', :f => form, :name => :subject
   - form.fields_for :reporter do |builder|
     .form-field
       - if @problem.reporter.errors.on(:email)
         .form-field-error= error_message_on @problem.reporter, :email
-      != builder.label :email, t(:email)
-      != builder.text_field :email
+      = render 'text_field', :f => builder, :name => :email
     .form-field
       - if @problem.reporter.errors.on(:name)
         .form-field-error= error_message_on @problem.reporter, :name
-      != builder.label :name, t(:name)
-      != builder.text_field :name
+      = render 'text_field', :f => builder, :name => :name
+  - form.fields_for :stop_attributes do |builder|
+    .form-field
+      = render 'text_field', :f => builder, :name => :common_name
+    .form-field
+      = render 'text_field', :f => builder, :name => :locality_name
   .form-field
-  - if @problem.errors.on(:description)
-    .form-field-error= error_message_on @problem, :description
-  != form.label :description, t(:description)
-  != form.text_area :description
+    - if @problem.errors.on(:description)
+      .form-field-error= error_message_on @problem, :description
+    != form.label :description, t(:description)
+    != form.text_area :description

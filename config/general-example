@@ -28,5 +28,6 @@ define('OPTION_STAGING_SITE', 1);
 
 define('OPTION_DOMAIN', '127.0.0.1:3000');
 
+define('GOOGLE_MAPS_API_KEY', 'Your Google Maps API key');
 ?>
 

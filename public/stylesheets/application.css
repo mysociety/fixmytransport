@@ -25,6 +25,16 @@ body {
   border: 1px solid #CC0000;
 }
 
+.wrapper {
+  margin: 2em;
+}
+
+.content {
+  margin: 0 auto;
+  max-width: 60em;
+  position: relative;
+  width: 100%;
+}
 /* Home page */
 
 .home-nav-item {
@@ -35,7 +45,7 @@ body {
 /* Forms */
 
 label {
-  width: 6em;  
+  width: 10em;  
   padding-right: 0.5em;
   text-align: right;
   float: left;
@@ -46,6 +56,17 @@ label {
 }
 
 /* Problem page */
+
+#map {
+  width: 500px; 
+  height: 500px; 
+  float: right; 
+  padding-left: 20px; 
+  position:relative;
+  border: 1px solid #000000;
+}
+
+/* Problem list */
 
 .problem-list-item {
   margin: 1em;

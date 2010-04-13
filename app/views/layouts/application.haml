@@ -5,10 +5,12 @@
       = yield :title
     %meta{ :content => "text/html; charset=utf-8", "http-equiv" => "Content-type" }
     = stylesheet_link_tag 'application'
+    = yield :javascript
   %body
     %h2= link_to_unless_current(t(:site_name), root_url) 
     - [:notice, :error, :message].each do |key| 
       - unless flash[key].blank? 
         %p{ :class => "flash flash_#{key}" }!= flash[key]
-    .content
-      = yield
+    .wrapper
+      .content
+        = yield

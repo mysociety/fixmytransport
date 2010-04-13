@@ -9,7 +9,8 @@ describe ProblemsController do
     end  
   
     it 'should ask for a new problem' do 
-      Problem.should_receive(:new).and_return(mock_model(Problem, :build_reporter => true))
+      problem = mock_model(Problem, :build_reporter => true)
+      Problem.should_receive(:new).and_return(problem)
       make_request
     end
     

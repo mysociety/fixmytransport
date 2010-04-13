@@ -6,3 +6,5 @@ en:
   problem_created: 'Thanks! Your problem has been created.'
   email: 'Email'
   name: 'Name'
+  common_name: 'Station/stop name'
+  locality_name: 'Town/area'

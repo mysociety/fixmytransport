@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100408151525
+# Schema version: 20100408173847
 #
 # Table name: stops
 #
@@ -40,4 +40,6 @@
 
 class Stop < ActiveRecord::Base
   named_scope :active, :conditions => { :status => 'act' }
+  has_many :stop_area_memberships
+  has_many :stop_areas, :through => :stop_area_memberships
 end

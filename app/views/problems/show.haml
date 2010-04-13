@@ -1,2 +1,20 @@
-%h3= @problem.subject
-.problem-description= @problem.description
+- content_for :javascript do 
+  =javascript_include_tag 'jquery-1.4.2.min.js'
+  =javascript_include_tag "http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=#{google_maps_key}"
+  =javascript_include_tag 'http://openlayers.org/api/OpenLayers.js'
+  =javascript_include_tag 'map.js'
+
+- if @problem.stop
+  #map
+  :javascript
+    var problem_lat = #{@problem.stop.lat};
+    var problem_lon = #{@problem.stop.lon};
+.problem-info
+  %h3= @problem.subject
+  %p.problem-description= @problem.description
+  - if @problem.stop
+    .problem-stop-name= @problem.stop.common_name
+    .problem-stop-locality-name= @problem.stop.locality_name
+    .problem-stop-landmark= @problem.stop.landmark
+    .problem-stop-street= @problem.stop.street
+    

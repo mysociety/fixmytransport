@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100408151525
+# Schema version: 20100408173847
 #
 # Table name: problems
 #
@@ -18,4 +18,9 @@ class Problem < ActiveRecord::Base
   has_one :reporter, :class_name => 'User'
   accepts_nested_attributes_for :reporter
   belongs_to :stop
+  
+  def stop_attributes=(attributes)
+    self.stop = Stop.find(:first, :conditions => ['common_name = ? and locality_name = ?', attributes[:common_name], attributes[:locality_name]])
+  end
+  
 end
