@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100413102606) do
+ActiveRecord::Schema.define(:version => 20100413110304) do
 
   create_table "problems", :force => true do |t|
     t.text     "subject"
@@ -57,11 +57,11 @@ ActiveRecord::Schema.define(:version => 20100413102606) do
     t.string   "code"
     t.string   "description"
     t.boolean  "on_street"
-    t.string   "mode"
     t.string   "point_type"
     t.float    "version"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "transport_mode_id"
   end
 
   create_table "stops", :force => true do |t|
@@ -100,6 +100,12 @@ ActiveRecord::Schema.define(:version => 20100413102606) do
   end
 
   add_index "stops", [nil], :name => "index_stops_on_atco_code_lower"
+
+  create_table "transport_modes", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "name"

@@ -154,7 +154,6 @@ CREATE TABLE stop_types (
 --
 
 CREATE SEQUENCE stop_types_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -228,6 +227,37 @@ ALTER SEQUENCE stops_id_seq OWNED BY stops.id;
 
 
 --
+-- Name: transport_modes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE transport_modes (
+    id integer NOT NULL,
+    name character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: transport_modes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE transport_modes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: transport_modes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE transport_modes_id_seq OWNED BY transport_modes.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -297,6 +327,13 @@ ALTER TABLE stops ALTER COLUMN id SET DEFAULT nextval('stops_id_seq'::regclass);
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE transport_modes ALTER COLUMN id SET DEFAULT nextval('transport_modes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
@@ -338,6 +375,14 @@ ALTER TABLE ONLY stop_types
 
 ALTER TABLE ONLY stops
     ADD CONSTRAINT stops_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: transport_modes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY transport_modes
+    ADD CONSTRAINT transport_modes_pkey PRIMARY KEY (id);
 
 
 --
@@ -430,3 +475,5 @@ INSERT INTO schema_migrations (version) VALUES ('20100408164042');
 INSERT INTO schema_migrations (version) VALUES ('20100408173847');
 
 INSERT INTO schema_migrations (version) VALUES ('20100413102606');
+
+INSERT INTO schema_migrations (version) VALUES ('20100413110049');

@@ -2,6 +2,7 @@ en:
   browsing_problems: 'Browsing problems'
   subject: 'Subject'
   description: 'Description'
+  transport_mode: 'Transport type'
   problem_form_error: 'There were problems with your report. Please see below.'
   problem_created: 'Thanks! Your problem has been created.'
   email: 'Email'

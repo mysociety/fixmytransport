@@ -55,6 +55,10 @@ label {
   color: #CC0000;
 }
 
+input[type=radio] {
+  display: inline-block;
+}
+
 /* Problem page */
 
 #map {

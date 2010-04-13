@@ -33,6 +33,11 @@ namespace :naptan do
       parse('stop_area_memberships')
     end
     
+    desc "Loads stop type data from a CSV file specified as FILE=filename"
+    task :stop_types => :environment do 
+      parse('stop_types')
+    end
+    
     desc "Loads all data from CSV files in a directory specified as DIR=dirname"
     task :all => :environment do 
       unless ENV['DIR']
@@ -42,6 +47,8 @@ namespace :naptan do
         exit 0
       end
       puts "Loading data from #{ENV['DIR']}..."
+      ENV['FILE'] = File.join(ENV['DIR'], 'StopTypes.csv')
+      Rake::Task['naptan:load:stop_types'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'Stops.csv')
       Rake::Task['naptan:load:stops'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'StopAreas.csv')

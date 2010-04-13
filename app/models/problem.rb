@@ -20,7 +20,8 @@ class Problem < ActiveRecord::Base
   belongs_to :stop
   
   def stop_attributes=(attributes)
-    self.stop = Stop.find(:first, :conditions => ['common_name = ? and locality_name = ?', attributes[:common_name], attributes[:locality_name]])
+    self.stop = Stop.find(:first, :conditions => ['common_name = ? and locality_name = ?', 
+                                  attributes[:common_name], attributes[:locality_name]])
   end
   
 end
