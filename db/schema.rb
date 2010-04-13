@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100408173847) do
+ActiveRecord::Schema.define(:version => 20100413102606) do
 
   create_table "problems", :force => true do |t|
     t.text     "subject"
@@ -52,6 +52,17 @@ ActiveRecord::Schema.define(:version => 20100408173847) do
   end
 
   add_index "stop_areas", [nil], :name => "index_stop_areas_on_code_lower"
+
+  create_table "stop_types", :force => true do |t|
+    t.string   "code"
+    t.string   "description"
+    t.boolean  "on_street"
+    t.string   "mode"
+    t.string   "point_type"
+    t.float    "version"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "stops", :force => true do |t|
     t.string   "atco_code"

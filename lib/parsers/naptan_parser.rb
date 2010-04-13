@@ -19,6 +19,19 @@ class Parsers::NaptanParser
     Iconv.iconv('utf-8', 'ISO_8859-1', File.read(filepath)).join
   end
   
+  def parse_stop_types filepath
+    csv_options = self.csv_options.merge(:encoding => 'U')
+    csv_data = File.read(filepath)
+    FasterCSV.parse(csv_data, csv_options) do |row|
+      yield StopType.new(:code        => row['Value'], 
+                         :description => row['Description'], 
+                         :on_street   => row['On Street'] == 'On street' ? true : false, 
+                         :mode        => row['Mode'], 
+                         :point_type  => row['Type'], 
+                         :version     => row['Version'])
+    end
+  end
+  
   def parse_stop_area_memberships filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|

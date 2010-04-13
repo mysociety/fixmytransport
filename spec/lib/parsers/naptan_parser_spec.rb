@@ -51,6 +51,26 @@ describe Parsers::NaptanParser do
     
   end
   
+  describe 'when parsing an example CSV file of stop types' do 
+  
+    before(:all) do 
+      @stop_types = []
+      @parser = Parsers::NaptanParser.new
+      @parser.parse_stop_types(example_file("StopTypes.csv")){ |stop_type| @stop_types << stop_type }
+    end
+    
+    it 'should extract the NaPTAN stop type code' do 
+      @stop_types.first.code.should == 'BCT'
+      @stop_types.second.code.should == 'FER'
+    end
+    
+    it 'should set the "on_street" attribute correctly' do 
+      @stop_types.first.on_street.should be_true
+      @stop_types.second.on_street.should be_false
+    end
+    
+  end
+  
   describe 'when parsing an example CSV file of stops in stop areas' do 
     
     before(:each) do 
