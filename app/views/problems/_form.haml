@@ -15,15 +15,22 @@
       - if @problem.reporter.errors.on(:name)
         .form-field-error= error_message_on @problem.reporter, :name
       = render 'text_field', :f => builder, :name => :name
-  %label{:for => 'transport_mode_id'}
-    =t(:transport_mode)
-  - TransportMode.find(:all).each do |transport_mode| 
-    != radio_button_tag 'problem[stop_attributes][transport_mode_id]', transport_mode.id
-    = transport_mode.name
-  - form.fields_for :stop_attributes do |builder|
+  - if @problem.errors.on(:location)
+    .form-field-error= error_message_on @problem, :location  
+  .form-field
+    - if @problem.errors.on(:transport_mode_id)
+      .form-field-error= error_message_on @problem, :transport_mode_id
+    %label{:for => 'transport_mode_id'}
+      =t(:transport_mode)
+    != transport_mode_radio_buttons
+  - fields_for @stop do |builder|
     .form-field
+      - if @stop.errors.on(:common_name)
+        .form-field-error= error_message_on @stop, :common_name
       = render 'text_field', :f => builder, :name => :common_name
     .form-field
+      - if @stop.errors.on(:locality_name)
+        .form-field-error= error_message_on @stop, :locality_name
       = render 'text_field', :f => builder, :name => :locality_name
   .form-field
     - if @problem.errors.on(:description)

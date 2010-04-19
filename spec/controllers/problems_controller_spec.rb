@@ -19,12 +19,17 @@ describe ProblemsController do
   describe 'POST #create' do 
   
     before do 
-      @problem = mock_model(Problem, :id => 8, :subject => 'A test problem', :save => true)
+      @problem = mock_model(Problem, :id => 8, 
+                                     :subject => 'A test problem', 
+                                     :save => true, 
+                                     :location => mock_model(Stop), 
+                                     :location_attributes= => true)
       Problem.stub!(:new).and_return(@problem)
     end
     
     def make_request
-      post :create, {:problem => {:subject => 'A test problem', :description => 'More info'}}
+      post :create, {:problem => {:subject => 'A test problem', :description => 'More info'},
+                     :stop => {:common_name => 'My stop', :locality_name => 'My town'}}
     end
   
     it 'should create a new problem with the problem request params' do 
@@ -44,7 +49,7 @@ describe ProblemsController do
       response.should render_template('problems/new')
     end
     
-    it 'should redirect to the problem page if the problem can be saved' do 
+    it 'should redirect to the problem page if the problem can be saved and the location found' do 
       @problem.stub!(:save).and_return(true)
       make_request
       response.should redirect_to(problem_url(@problem))

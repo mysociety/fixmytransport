@@ -4,6 +4,7 @@ class ProblemsController < ApplicationController
     @title = t :submit_problem
     @problem = Problem.new
     @problem.build_reporter
+    @stop = Stop.new
   end
   
   def index
@@ -13,7 +14,13 @@ class ProblemsController < ApplicationController
   
   def create
     @problem = Problem.new(params[:problem])
-    if @problem.save
+    @stop = Stop.new(params[:stop])
+    if !@stop.valid? 
+      @title = t :submit_problem
+      render :new and return false
+    end
+    @problem.location_attributes = params[:stop]
+    if @problem.save 
       flash[:notice] = t :problem_created
       redirect_to problem_url(@problem)
     else

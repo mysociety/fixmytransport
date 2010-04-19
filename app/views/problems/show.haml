@@ -4,17 +4,15 @@
   =javascript_include_tag 'http://openlayers.org/api/OpenLayers.js'
   =javascript_include_tag 'map.js'
 
-- if @problem.stop
+- if @problem.location
   #map
   :javascript
-    var problem_lat = #{@problem.stop.lat};
-    var problem_lon = #{@problem.stop.lon};
+    var problem_lat = #{@problem.location.lat};
+    var problem_lon = #{@problem.location.lon};
 .problem-info
   %h3= @problem.subject
   %p.problem-description= @problem.description
-  - if @problem.stop
-    .problem-stop-name= @problem.stop.common_name
-    .problem-stop-locality-name= @problem.stop.locality_name
-    .problem-stop-landmark= @problem.stop.landmark
-    .problem-stop-street= @problem.stop.street
+  - if @problem.location
+    = render :partial => @problem.location.type.to_s.underscore
+
     

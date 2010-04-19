@@ -59,6 +59,10 @@ input[type=radio] {
   display: inline-block;
 }
 
+.fieldWithErrors{
+  display: inline;
+}
+
 /* Problem page */
 
 #map {

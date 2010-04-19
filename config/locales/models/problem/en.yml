@@ -8,3 +8,14 @@ en:
               blank: "Please enter a subject"
             description:
               blank: "Please enter a description of the problem"
+            transport_mode_id:
+              blank: "Please select a transport type"
+            location:
+              blank: "We can't figure out where your problem is"
+        stop:
+          attributes: 
+            common_name:
+              blank: "Please enter the station/stop name"
+            locality_name:
+              blank: "Please enter the town or area"   
+   
