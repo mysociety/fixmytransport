@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100413110304) do
+ActiveRecord::Schema.define(:version => 20100419121920) do
 
   create_table "problems", :force => true do |t|
     t.text     "subject"
@@ -17,7 +17,19 @@ ActiveRecord::Schema.define(:version => 20100413110304) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "reporter_id"
-    t.integer  "stop_id"
+    t.integer  "stop_area_id"
+    t.integer  "location_id"
+    t.string   "location_type"
+    t.integer  "transport_mode_id"
+  end
+
+  create_table "stop_area_links", :force => true do |t|
+    t.integer  "ancestor_id"
+    t.integer  "descendant_id"
+    t.boolean  "direct"
+    t.integer  "count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "stop_area_memberships", :force => true do |t|
@@ -49,9 +61,12 @@ ActiveRecord::Schema.define(:version => 20100413110304) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.point    "coords",                   :srid => 27700
+    t.float    "lon"
+    t.float    "lat"
   end
 
-  add_index "stop_areas", [nil], :name => "index_stop_areas_on_code_lower"
+  add_index "stop_areas", ["coords"], :name => "index_stop_areas_on_coords", :spatial => true
 
   create_table "stop_types", :force => true do |t|
     t.string   "code"
@@ -99,8 +114,6 @@ ActiveRecord::Schema.define(:version => 20100413110304) do
     t.datetime "updated_at"
   end
 
-  add_index "stops", [nil], :name => "index_stops_on_atco_code_lower"
-
   create_table "transport_modes", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -118,5 +131,7 @@ ActiveRecord::Schema.define(:version => 20100413110304) do
 
   add_foreign_key "stop_area_memberships", "stop_areas", :name => "stop_area_memberships_stop_area_id_fk"
   add_foreign_key "stop_area_memberships", "stops", :name => "stop_area_memberships_stop_id_fk"
+
+  add_foreign_key "stop_types", "transport_modes", :name => "stop_types_transport_mode_id_fk"
 
 end
