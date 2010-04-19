@@ -1,0 +1,31 @@
+# == Schema Information
+# Schema version: 20100414172905
+#
+# Table name: transport_modes
+#
+#  id         :integer         not null, primary key
+#  name       :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+bus_coach:
+  name: BusCoach
+  id: "1"
+taxi:
+  name: Taxi
+  id: "2"
+air:
+  name: Air
+  id: "3"
+ferry:
+  name: Ferry / Ship
+  id: "4"
+rail:
+  name: Rail
+  id: "5"
+tram_metro:
+  name: Tram / Metro
+  id: "6"

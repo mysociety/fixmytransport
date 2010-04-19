@@ -20,14 +20,25 @@
 #  updated_at               :datetime
 #
 
-class StopArea < ActiveRecord::Base
-  has_many :stop_area_memberships
-  has_many :stops, :through => :stop_area_memberships
-  has_dag_links :link_class_name => 'StopAreaLink'
-  has_many :problems, :as => :location                                  
-  
-  def self.find_by_code(code)
-    find(:first, :conditions => ["lower(code) = ?", code.downcase])
-  end
-  
-end
+victoria_station_root:
+  status: act
+  northing: "179000"
+  easting: "528900"
+  name: London Victoria Rail Station
+  grid_type: U
+  area_type: GRLS
+  revision_number: "2"
+  code: 910GVICTRIC
+  administrative_area_code: "110"
+  modification: rev
+victoria_station_leaf:
+  status: act
+  northing: "179000"
+  easting: "528900"
+  name: London Victoria Rail Station
+  grid_type: U
+  area_type: GRLS
+  revision_number: "2"
+  code: 910GVICTRIE
+  administrative_area_code: "110"
+  modification: rev

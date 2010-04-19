@@ -1,0 +1,15 @@
+one: 
+  revision_number: "0"
+  stop: victoria_station_one
+  modification: new
+  stop_area: victoria_station_root
+two: 
+  revision_number: "1"
+  stop: victoria_station_two
+  modification: del
+  stop_area: victoria_station_root
+three:
+  revision_number: "0"
+  stop: victoria_station_two
+  modification: new
+  stop_area: victoria_station_leaf

@@ -1,0 +1,184 @@
+# == Schema Information
+# Schema version: 20100414172905
+#
+# Table name: stops
+#
+#  id                         :integer         not null, primary key
+#  atco_code                  :string(255)
+#  naptan_code                :string(255)
+#  plate_code                 :string(255)
+#  common_name                :text
+#  short_common_name          :text
+#  landmark                   :text
+#  street                     :text
+#  crossing                   :text
+#  indicator                  :text
+#  bearing                    :string(255)
+#  nptg_locality_code         :string(255)
+#  locality_name              :string(255)
+#  parent_locality_name       :string(255)
+#  grand_parent_locality_name :string(255)
+#  town                       :string(255)
+#  suburb                     :string(255)
+#  locality_centre            :boolean
+#  grid_type                  :string(255)
+#  easting                    :float
+#  northing                   :float
+#  lon                        :float
+#  lat                        :float
+#  stop_type                  :string(255)
+#  bus_stop_type              :string(255)
+#  administrative_area_code   :string(255)
+#  creation_datetime          :datetime
+#  modification_datetime      :datetime
+#  revision_number            :integer
+#  modification               :string(255)
+#  status                     :string(255)
+#  created_at                 :datetime
+#  updated_at                 :datetime
+#
+victoria_station_one:
+  status: act
+  lat: "51.49526"
+  lon: "-0.14455"
+  northing: "179000"
+  easting: "528900"
+  parent_locality_name: London
+  locality_name: Victoria
+  grid_type: U
+  naptan_code: ""
+  revision_number: "2"
+  landmark: ""
+  common_name: London Victoria Rail Station
+  administrative_area_code: "110"
+  bearing: ""
+  plate_code: ""
+  stop_type: RLY
+  locality_centre: t
+  suburb: ""
+  grand_parent_locality_name: ""
+  modification: rev
+  bus_stop_type: ""
+  crossing: ""
+  short_common_name: ""
+  atco_code: 9100VICTRIC
+  town: ""
+  street: "-"
+  indicator: ""
+  nptg_locality_code: E0034956
+victoria_station_two:
+  status: act
+  lat: "51.49526"
+  lon: "-0.14454"
+  northing: "179000"
+  easting: "528901"
+  parent_locality_name: London
+  locality_name: Victoria
+  grid_type: U
+  naptan_code: ""
+  revision_number: "5"
+  landmark: ""
+  common_name: London Victoria Rail Station
+  bearing: ""
+  plate_code: ""
+  stop_type: RLY
+  locality_centre: t
+  suburb: ""
+  grand_parent_locality_name: ""
+  modification: rev
+  bus_stop_type: ""
+  crossing: ""
+  short_common_name: ""
+  atco_code: 9100VICTRIE
+  town: ""
+  street: "-"
+  indicator: ""
+  nptg_locality_code: E0034956
+bristol_16: 
+  status: act
+  lat: "51.45919"
+  lon: "-2.59239"
+  northing: "173523"
+  easting: "358940"
+  parent_locality_name: Bristol
+  locality_name: Broadmead
+  grid_type: U
+  naptan_code: bstgmam
+  revision_number: "0"
+  landmark: Bristol Bus Station
+  common_name: Bus Station Bay 16
+  administrative_area_code: 009
+  bearing: SW
+  plate_code: ""
+  stop_type: BCT
+  locality_centre: f
+  suburb: ""
+  grand_parent_locality_name: ""
+  id: "4"
+  modification: new
+  bus_stop_type: MKD
+  crossing: Cannon Street
+  short_common_name: Bristol Bus Station - Bay 16
+  atco_code: "01000053206"
+  town: ""
+  street: Marlborough Street
+  indicator: Bay 16
+  nptg_locality_code: N0077024
+dursley_road: 
+  status: act
+  lon: "-2.67666"
+  lat: "51.48381"
+  easting: "353111"
+  northing: "176312"
+  parent_locality_name: Avonmouth
+  locality_name: Shirehampton
+  grid_type: U
+  naptan_code: bstagjm
+  revision_number: "0"
+  landmark: ""
+  common_name: Dursley Road
+  administrative_area_code: 009
+  bearing: W
+  plate_code: ""
+  stop_type: BCT
+  locality_centre: f
+  suburb: ""
+  grand_parent_locality_name: Bristol
+  modification: new
+  bus_stop_type: MKD
+  crossing: Hung Road
+  short_common_name: ""
+  atco_code: 0100BRA10681
+  town: ""
+  street: Dursley Road
+  indicator: ""
+  nptg_locality_code: E0035642
+victoria_bus_station_deleted: 
+  status: del
+  lon: "-0.14491"
+  lat: "51.49609"
+  easting: "528873"
+  northing: "179092"
+  parent_locality_name: Victoria
+  locality_name: Belgravia
+  grid_type: U
+  naptan_code: ""
+  revision_number: "0"
+  landmark: ---
+  common_name: Victoria Bus Station
+  administrative_area_code: 082
+  bearing: N
+  plate_code: ""
+  stop_type: BCT
+  locality_centre: f
+  suburb: ""
+  grand_parent_locality_name: London
+  modification: del
+  bus_stop_type: MKD
+  crossing: --
+  short_common_name: ""
+  atco_code: "4900140501"
+  town: ""
+  street: VICTORIA BUS STATION
+  indicator: "1"
+  nptg_locality_code: E0034917

@@ -1,0 +1,33 @@
+# == Schema Information
+# Schema version: 20100414172905
+#
+# Table name: stop_types
+#
+#  id                :integer         not null, primary key
+#  code              :string(255)
+#  description       :string(255)
+#  on_street         :boolean
+#  point_type        :string(255)
+#  version           :float
+#  created_at        :datetime
+#  updated_at        :datetime
+#  transport_mode_id :integer
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  code: MyString
+  description: MyString
+  on_street: false
+  mode: MyString
+  point_type: MyString
+  version: 1.5
+
+two:
+  code: MyString
+  description: MyString
+  on_street: false
+  mode: MyString
+  point_type: MyString
+  version: 1.5
