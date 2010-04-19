@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100414172905
+# Schema version: 20100419121920
 #
 # Table name: stops
 #

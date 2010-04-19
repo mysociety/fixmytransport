@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100414172905
+# Schema version: 20100419121920
 #
 # Table name: stop_areas
 #
@@ -18,6 +18,9 @@
 #  status                   :string(255)
 #  created_at               :datetime
 #  updated_at               :datetime
+#  coords                   :geometry
+#  lon                      :float
+#  lat                      :float
 #
 
 victoria_station_root:

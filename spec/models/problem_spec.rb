@@ -1,17 +1,18 @@
 # == Schema Information
-# Schema version: 20100414172905
+# Schema version: 20100419121920
 #
 # Table name: problems
 #
-#  id            :integer         not null, primary key
-#  subject       :text
-#  description   :text
-#  created_at    :datetime
-#  updated_at    :datetime
-#  reporter_id   :integer
-#  stop_area_id  :integer
-#  location_id   :integer
-#  location_type :string(255)
+#  id                :integer         not null, primary key
+#  subject           :text
+#  description       :text
+#  created_at        :datetime
+#  updated_at        :datetime
+#  reporter_id       :integer
+#  stop_area_id      :integer
+#  location_id       :integer
+#  location_type     :string(255)
+#  transport_mode_id :integer
 #
 
 require 'spec_helper'
