@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100408173847
+# Schema version: 20100414172905
 #
 # Table name: stop_area_memberships
 #
