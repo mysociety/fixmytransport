@@ -1,0 +1,19 @@
+class AddPostGisSettings < ActiveRecord::Migration
+
+  def self.up
+    spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
+    sql_file_path = MySociety::Config.get('SPATIAL_EXTENSION_SQL_FILE_PATH', '') 
+    db_conf = ActiveRecord::Base.configurations[RAILS_ENV]
+    postgres = (db_conf['adapter'] == 'postgresql')
+    port = db_conf['port']
+    database = db_conf['database']
+    if spatial_extensions and postgres
+      system "createlang -p #{port} plpgsql #{database}"
+      system "psql -p #{port} -d #{database} -f #{File.join(sql_file_path, 'postgis.sql')}"
+      system "psql -p #{port} -d #{database} -f #{File.join(sql_file_path, 'spatial_ref_sys.sql')}"      
+    end
+  end
+
+  def self.down
+  end
+end
