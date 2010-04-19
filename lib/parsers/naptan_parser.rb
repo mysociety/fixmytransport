@@ -19,6 +19,15 @@ class Parsers::NaptanParser
     Iconv.iconv('utf-8', 'ISO_8859-1', File.read(filepath)).join
   end
   
+  def parse_stop_area_hierarchy filepath
+    csv_data = convert_encoding(filepath)
+    FasterCSV.parse(csv_data, csv_options) do |row|
+      ancestor = StopArea.find_by_code(row['ParentStopAreaCode'])
+      descendant = StopArea.find_by_code(row['ChildStopAreaCode'])
+      yield StopAreaLink.build_edge(ancestor, descendant)
+    end
+  end
+  
   def parse_stop_types filepath
     csv_options = self.csv_options.merge(:encoding => 'U')
     csv_data = File.read(filepath)
@@ -36,12 +45,10 @@ class Parsers::NaptanParser
   def parse_stop_area_memberships filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      stops = Stop.find(:all, :conditions => ["lower(atco_code) = ?", row['AtcoCode'].downcase])
-      raise "Atco code #{row['AtcoCode']} - #{stops.size} stops found" if stops.size != 1
-      stop_areas = StopArea.find(:all, :conditions => ["lower(code) = ?", row['StopAreaCode'].downcase])
-      raise "Area code #{row['StopAreaCode']} - #{stop_areas.size} stop areas found" if stop_areas.size != 1
-      yield StopAreaMembership.new( :stop_id                => stops.first.id,
-                                    :stop_area_id           => stop_areas.first.id,
+      stop = Stop.find_by_atco_code(row['AtcoCode'])
+      stop_area = StopArea.find_by_code(row['StopAreaCode'])
+      yield StopAreaMembership.new( :stop_id                => stop.id,
+                                    :stop_area_id           => stop_area.id,
                                     :creation_datetime      => row['CreationDateTime'],
                                     :modification_datetime  => row['ModificationDateTime'],
                                     :revision_number        => row['RevisionNumber'],
@@ -52,6 +59,12 @@ class Parsers::NaptanParser
   def parse_stop_areas filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
+      spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
+      if spatial_extensions
+        coords = Point.from_x_y(row['Easting'], row['Northing'], WGS_84)
+      else
+        coords = nil
+      end
       yield StopArea.new( :code                      => row['StopAreaCode'],
                           :name                      => row['Name'],
                           :administrative_area_code  => row['AdministrativeAreaCode'], 
@@ -59,6 +72,7 @@ class Parsers::NaptanParser
                           :grid_type                 => row['GridType'], 
                           :easting                   => row['Easting'],
                           :northing                  => row['Northing'],
+                          :coords                    => coords,
                           :creation_datetime         => row['CreationDateTime'],
                           :modification_datetime     => row['ModificationDateTime'],
                           :revision_number           => row['RevisionNumber'],

@@ -77,18 +77,18 @@ describe Parsers::NaptanParser do
       @parser = Parsers::NaptanParser.new
       @stop = mock_model(Stop)
       @stop_area = mock_model(StopArea)
-      Stop.stub!(:find).and_return([@stop])
-      StopArea.stub!(:find).and_return([@stop_area])
+      Stop.stub!(:find).and_return(@stop)
+      StopArea.stub!(:find).and_return(@stop_area)
     end
   
     it 'should look for any stops with each atco code found in a case-insensitive comparison' do 
-      Stop.should_receive(:find).with(:all, :conditions => ["lower(atco_code) = ?", '020033094']).and_return([@stop])
-      Stop.should_receive(:find).with(:all, :conditions => ["lower(atco_code) = ?", '020033095']).and_return([@stop])
+      Stop.should_receive(:find).with(:first, :conditions => ["lower(atco_code) = ?", '020033094']).and_return(@stop)
+      Stop.should_receive(:find).with(:first, :conditions => ["lower(atco_code) = ?", '020033095']).and_return(@stop)
       @parser.parse_stop_area_memberships(example_file("StopsInArea.csv")){|membership|}
     end
     
     it 'should look for any stop areas with each area code found in a case-insensitive comparison' do 
-      StopArea.should_receive(:find).with(:all, :conditions => ["lower(code) = ?", '020g33094']).exactly(2).times.and_return([@stop_area])
+      StopArea.should_receive(:find).with(:first, :conditions => ["lower(code) = ?", '020g33094']).exactly(2).times.and_return(@stop_area)
       @parser.parse_stop_area_memberships(example_file("StopsInArea.csv")){|membership|}
     end
     
