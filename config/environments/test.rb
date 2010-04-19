@@ -1,4 +1,7 @@
 # Settings specified here will take precedence over those in config/environment.rb
+# An alternative way of disabling foreign keys in fixture loading in Postgres and
+# does not require superuser permissions
+require 'lib/patches/fixtures_constraint_disabling'
 
 # The test environment is used exclusively to run your application's
 # test suite.  You never need to work with it otherwise.  Remember that
