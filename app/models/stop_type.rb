@@ -15,7 +15,8 @@
 #
 
 class StopType < ActiveRecord::Base
-  belongs_to :transport_mode
+  has_many :transport_mode_stop_types
+  has_many :transport_modes, :through => :transport_mode_stop_types
   
   def self.codes_for_transport_mode(transport_mode_id)
     stop_types = find_all_by_transport_mode_id(transport_mode_id)

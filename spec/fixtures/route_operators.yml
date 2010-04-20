@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  operator_id: 1
+  route_id: 1
+
+two:
+  operator_id: 1
+  route_id: 1
