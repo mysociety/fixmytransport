@@ -54,6 +54,7 @@ describe Parsers::NaptanParser do
   describe 'when parsing an example CSV file of stop types' do 
   
     before(:all) do 
+      TransportMode.stub!(:find_by_naptan_name).and_return(mock_model(TransportMode))
       @stop_types = []
       @parser = Parsers::NaptanParser.new
       @parser.parse_stop_types(example_file("StopTypes.csv")){ |stop_type| @stop_types << stop_type }

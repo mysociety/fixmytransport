@@ -32,13 +32,17 @@ class Parsers::NaptanParser
     csv_options = self.csv_options.merge(:encoding => 'U')
     csv_data = File.read(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      transport_mode = TransportMode.find_or_create_by_name(row['Mode'])
-      yield StopType.new(:code              => row['Value'], 
-                         :description       => row['Description'], 
-                         :on_street         => row['On Street'] == 'On street' ? true : false, 
-                         :transport_mode_id => transport_mode.id, 
-                         :point_type        => row['Type'], 
-                         :version           => row['Version'])
+      stop_type = StopType.new(:code              => row['Value'], 
+                               :description       => row['Description'], 
+                               :on_street         => row['On Street'] == 'On street' ? true : false, 
+                               :point_type        => row['Type'], 
+                               :version           => row['Version'])                   
+      transport_mode_names = row['Mode'].split(',')
+      transport_mode_names.each do |transport_mode_name|
+        transport_mode = TransportMode.find_by_naptan_name(transport_mode_name)
+        stop_type.transport_mode_stop_types.build(:transport_mode_id => transport_mode.id)
+      end
+      yield stop_type
     end
   end
   

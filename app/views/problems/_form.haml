@@ -22,7 +22,8 @@
       .form-field-error= error_message_on @problem, :transport_mode_id
     %label{:for => 'transport_mode_id'}
       =t(:transport_mode)
-    != transport_mode_radio_buttons
+    .transport-mode
+      != transport_mode_radio_buttons
   - fields_for @stop do |builder|
     .form-field
       - if @stop.errors.on(:common_name)

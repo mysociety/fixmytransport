@@ -9,7 +9,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100419121920) do
+ActiveRecord::Schema.define(:version => 20100420102749) do
+
+  create_table "operators", :force => true do |t|
+    t.string   "code"
+    t.text     "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "problems", :force => true do |t|
     t.text     "subject"
@@ -21,6 +28,20 @@ ActiveRecord::Schema.define(:version => 20100419121920) do
     t.integer  "location_id"
     t.string   "location_type"
     t.integer  "transport_mode_id"
+  end
+
+  create_table "route_operators", :force => true do |t|
+    t.integer  "operator_id"
+    t.integer  "route_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "routes", :force => true do |t|
+    t.integer  "transport_mode_id"
+    t.string   "number"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "stop_area_links", :force => true do |t|
@@ -76,7 +97,6 @@ ActiveRecord::Schema.define(:version => 20100419121920) do
     t.float    "version"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "transport_mode_id"
   end
 
   create_table "stops", :force => true do |t|
@@ -114,10 +134,19 @@ ActiveRecord::Schema.define(:version => 20100419121920) do
     t.datetime "updated_at"
   end
 
+  create_table "transport_mode_stop_types", :force => true do |t|
+    t.integer  "transport_mode_id"
+    t.integer  "stop_type_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "transport_modes", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "naptan_name"
+    t.boolean  "active"
   end
 
   create_table "users", :force => true do |t|
@@ -129,9 +158,13 @@ ActiveRecord::Schema.define(:version => 20100419121920) do
 
   add_foreign_key "problems", "users", :name => "problems_reporter_id_fk", :column => "reporter_id", :dependent => :nullify
 
+  add_foreign_key "route_operators", "operators", :name => "route_operators_operator_id_fk", :dependent => :nullify
+  add_foreign_key "route_operators", "routes", :name => "route_operators_route_id_fk", :dependent => :nullify
+
   add_foreign_key "stop_area_memberships", "stop_areas", :name => "stop_area_memberships_stop_area_id_fk"
   add_foreign_key "stop_area_memberships", "stops", :name => "stop_area_memberships_stop_id_fk"
 
-  add_foreign_key "stop_types", "transport_modes", :name => "stop_types_transport_mode_id_fk"
+  add_foreign_key "transport_mode_stop_types", "stop_types", :name => "transport_mode_stop_types_stop_type_id_fk", :dependent => :nullify
+  add_foreign_key "transport_mode_stop_types", "transport_modes", :name => "transport_mode_stop_types_transport_mode_id_fk", :dependent => :nullify
 
 end

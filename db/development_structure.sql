@@ -9737,6 +9737,38 @@ CREATE TABLE geometry_columns (
 SET default_with_oids = false;
 
 --
+-- Name: operators; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE operators (
+    id integer NOT NULL,
+    code character varying(255),
+    name text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: operators_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE operators_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: operators_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE operators_id_seq OWNED BY operators.id;
+
+
+--
 -- Name: problems; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -9771,6 +9803,70 @@ CREATE SEQUENCE problems_id_seq
 --
 
 ALTER SEQUENCE problems_id_seq OWNED BY problems.id;
+
+
+--
+-- Name: route_operators; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE route_operators (
+    id integer NOT NULL,
+    operator_id integer,
+    route_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: route_operators_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE route_operators_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: route_operators_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE route_operators_id_seq OWNED BY route_operators.id;
+
+
+--
+-- Name: routes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE routes (
+    id integer NOT NULL,
+    transport_mode_id integer,
+    number character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: routes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE routes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: routes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE routes_id_seq OWNED BY routes.id;
 
 
 --
@@ -9886,6 +9982,8 @@ CREATE TABLE stop_areas (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     coords geometry,
+    lon double precision,
+    lat double precision,
     CONSTRAINT enforce_dims_coords CHECK ((st_ndims(coords) = 2)),
     CONSTRAINT enforce_geotype_coords CHECK (((geometrytype(coords) = 'POINT'::text) OR (coords IS NULL))),
     CONSTRAINT enforce_srid_coords CHECK ((st_srid(coords) = 27700))
@@ -9923,8 +10021,7 @@ CREATE TABLE stop_types (
     point_type character varying(255),
     version double precision,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    transport_mode_id integer
+    updated_at timestamp without time zone
 );
 
 
@@ -10008,6 +10105,38 @@ ALTER SEQUENCE stops_id_seq OWNED BY stops.id;
 
 
 --
+-- Name: transport_mode_stop_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE transport_mode_stop_types (
+    id integer NOT NULL,
+    transport_mode_id integer,
+    stop_type_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: transport_mode_stop_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE transport_mode_stop_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: transport_mode_stop_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE transport_mode_stop_types_id_seq OWNED BY transport_mode_stop_types.id;
+
+
+--
 -- Name: transport_modes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -10015,7 +10144,9 @@ CREATE TABLE transport_modes (
     id integer NOT NULL,
     name character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    naptan_name character varying(255),
+    active boolean
 );
 
 
@@ -10074,7 +10205,28 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE operators ALTER COLUMN id SET DEFAULT nextval('operators_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE problems ALTER COLUMN id SET DEFAULT nextval('problems_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE route_operators ALTER COLUMN id SET DEFAULT nextval('route_operators_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE routes ALTER COLUMN id SET DEFAULT nextval('routes_id_seq'::regclass);
 
 
 --
@@ -10116,6 +10268,13 @@ ALTER TABLE stops ALTER COLUMN id SET DEFAULT nextval('stops_id_seq'::regclass);
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE transport_mode_stop_types ALTER COLUMN id SET DEFAULT nextval('transport_mode_stop_types_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE transport_modes ALTER COLUMN id SET DEFAULT nextval('transport_modes_id_seq'::regclass);
 
 
@@ -10135,11 +10294,35 @@ ALTER TABLE ONLY geometry_columns
 
 
 --
+-- Name: operators_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY operators
+    ADD CONSTRAINT operators_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: problems_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY problems
     ADD CONSTRAINT problems_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: route_operators_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY route_operators
+    ADD CONSTRAINT route_operators_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: routes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY routes
+    ADD CONSTRAINT routes_pkey PRIMARY KEY (id);
 
 
 --
@@ -10188,6 +10371,14 @@ ALTER TABLE ONLY stop_types
 
 ALTER TABLE ONLY stops
     ADD CONSTRAINT stops_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: transport_mode_stop_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY transport_mode_stop_types
+    ADD CONSTRAINT transport_mode_stop_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -10285,6 +10476,22 @@ ALTER TABLE ONLY problems
 
 
 --
+-- Name: route_operators_operator_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY route_operators
+    ADD CONSTRAINT route_operators_operator_id_fk FOREIGN KEY (operator_id) REFERENCES operators(id) ON DELETE SET NULL;
+
+
+--
+-- Name: route_operators_route_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY route_operators
+    ADD CONSTRAINT route_operators_route_id_fk FOREIGN KEY (route_id) REFERENCES routes(id) ON DELETE SET NULL;
+
+
+--
 -- Name: stop_area_memberships_stop_area_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10301,11 +10508,19 @@ ALTER TABLE ONLY stop_area_memberships
 
 
 --
--- Name: stop_types_transport_mode_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: transport_mode_stop_types_stop_type_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY stop_types
-    ADD CONSTRAINT stop_types_transport_mode_id_fk FOREIGN KEY (transport_mode_id) REFERENCES transport_modes(id);
+ALTER TABLE ONLY transport_mode_stop_types
+    ADD CONSTRAINT transport_mode_stop_types_stop_type_id_fk FOREIGN KEY (stop_type_id) REFERENCES stop_types(id) ON DELETE SET NULL;
+
+
+--
+-- Name: transport_mode_stop_types_transport_mode_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY transport_mode_stop_types
+    ADD CONSTRAINT transport_mode_stop_types_transport_mode_id_fk FOREIGN KEY (transport_mode_id) REFERENCES transport_modes(id) ON DELETE SET NULL;
 
 
 --
@@ -10349,3 +10564,21 @@ INSERT INTO schema_migrations (version) VALUES ('20100414172905');
 INSERT INTO schema_migrations (version) VALUES ('20100415135241');
 
 INSERT INTO schema_migrations (version) VALUES ('20100415183707');
+
+INSERT INTO schema_migrations (version) VALUES ('20100419121920');
+
+INSERT INTO schema_migrations (version) VALUES ('20100406150740');
+
+INSERT INTO schema_migrations (version) VALUES ('20100419160210');
+
+INSERT INTO schema_migrations (version) VALUES ('20100419161650');
+
+INSERT INTO schema_migrations (version) VALUES ('20100420093013');
+
+INSERT INTO schema_migrations (version) VALUES ('20100420093220');
+
+INSERT INTO schema_migrations (version) VALUES ('20100420093248');
+
+INSERT INTO schema_migrations (version) VALUES ('20100420101658');
+
+INSERT INTO schema_migrations (version) VALUES ('20100420102749');

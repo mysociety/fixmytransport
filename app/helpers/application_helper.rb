@@ -7,9 +7,8 @@ module ApplicationHelper
   
   def transport_mode_radio_buttons
     tags = []
-    TransportMode.find(:all).each do |transport_mode| 
-      radio_button("post", "category", "rails")
-      tag = radio_button 'problem', 'transport_mode_id', transport_mode.id
+    TransportMode.active.find(:all).each do |transport_mode| 
+      tag = radio_button 'problem', 'transport_mode_id', transport_mode.id, {:class => 'transport-mode'}
       tag += transport_mode.name
       tags << tag
     end

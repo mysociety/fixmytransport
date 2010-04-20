@@ -22,7 +22,6 @@ describe StopType do
       :code => "value for code",
       :description => "value for description",
       :on_street => false,
-      :transport_mode_id => 1,
       :point_type => "value for point_type",
       :version => 1.5
     }
