@@ -55,8 +55,9 @@ label {
   color: #CC0000;
 }
 
-input[type=radio] {
-  display: inline-block;
+
+input, textarea{
+  margin: 0.5em;
 }
 
 .fieldWithErrors{
@@ -81,3 +82,5 @@ input[type=radio] {
   text-align: center;
   list-style-type: none;
 }
+
+/* Reporting a problem */

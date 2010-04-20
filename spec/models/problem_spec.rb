@@ -47,6 +47,7 @@ describe Problem do
         
     before do 
       @problem = Problem.new(@valid_attributes)
+      StopType.stub!(:codes_for_transport_mode).and_return([])
     end
 
     def expect_location(attributes, location)
