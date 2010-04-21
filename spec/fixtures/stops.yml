@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100419121920
+# Schema version: 20100420165342
 #
 # Table name: stops
 #
@@ -222,3 +222,119 @@ victoria_bus_station_deleted:
   street: VICTORIA BUS STATION
   indicator: "1"
   nptg_locality_code: E0034917
+clapham_junction: 
+  status: act
+  lon: "-0.17028"
+  lat: "51.46419"
+  easting: "527201"
+  northing: "175500"
+  parent_locality_name: London
+  locality_name: Clapham Junction
+  grid_type: U
+  naptan_code: ""
+  revision_number: "2"
+  landmark: ""
+  common_name: Clapham Junction Rail Station
+  administrative_area_code: "110"
+  bearing: ""
+  plate_code: ""
+  stop_type: RLY
+  locality_centre: t
+  suburb: ""
+  grand_parent_locality_name: ""
+  modification: rev
+  bus_stop_type: ""
+  crossing: ""
+  short_common_name: ""
+  atco_code: 9100CLPHMJC
+  town: ""
+  street: "-"
+  indicator: ""
+  nptg_locality_code: E0034892
+croydon_station: 
+  status: act
+  lon: "-0.09278"
+  northing: "165770"
+  lat: "51.37545"
+  easting: "532841"
+  parent_locality_name: ""
+  locality_name: Croydon
+  grid_type: U
+  naptan_code: ""
+  revision_number: "2"
+  landmark: ""
+  common_name: East Croydon Rail Station
+  administrative_area_code: "110"
+  bearing: ""
+  plate_code: ""
+  stop_type: RLY
+  locality_centre: t
+  suburb: ""
+  grand_parent_locality_name: ""
+  modification: rev
+  bus_stop_type: ""
+  crossing: ""
+  short_common_name: ""
+  atco_code: 9100ECROYDN
+  town: ""
+  street: "-"
+  indicator: ""
+  nptg_locality_code: N0060493
+gatwick_airport_station: 
+  status: act
+  lon: "-0.16104"
+  northing: "141300"
+  lat: "51.15649"
+  easting: "528700"
+  parent_locality_name: ""
+  locality_name: Gatwick Airport
+  grid_type: U
+  naptan_code: ""
+  revision_number: "1"
+  landmark: ""
+  common_name: Gatwick Airport Rail Station
+  administrative_area_code: "110"
+  bearing: ""
+  plate_code: ""
+  stop_type: RLY
+  locality_centre: t
+  suburb: ""
+  grand_parent_locality_name: ""
+  modification: rev
+  bus_stop_type: ""
+  crossing: ""
+  short_common_name: ""
+  atco_code: 9100GTWK
+  town: ""
+  street: "-"
+  indicator: ""
+  nptg_locality_code: N0061431
+haywards_heath_station: 
+  status: act
+  lon: "-0.10531"
+  northing: "124583"
+  lat: "51.00525"
+  easting: "533030"
+  parent_locality_name: ""
+  locality_name: Haywards Heath
+  grid_type: U
+  naptan_code: ""
+  revision_number: "1"
+  landmark: ""
+  common_name: Haywards Heath Rail Station
+  administrative_area_code: "110"
+  bearing: ""
+  plate_code: ""
+  stop_type: RLY
+  locality_centre: t
+  suburb: ""
+  grand_parent_locality_name: ""
+  modification: rev
+  bus_stop_type: ""
+  crossing: ""
+  short_common_name: ""
+  atco_code: 9100HYWRDSH
+  town: ""
+  street: "-"
+  indicator: ""
+  nptg_locality_code: E0052196

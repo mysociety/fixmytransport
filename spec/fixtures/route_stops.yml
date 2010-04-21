@@ -1,0 +1,27 @@
+# == Schema Information
+# Schema version: 20100420165342
+#
+# Table name: route_stops
+#
+#  id         :integer         not null, primary key
+#  route_id   :integer
+#  stop_id    :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+
+one:
+  route: victoria_to_haywards_heath
+  stop: victoria_station_one
+two:
+  route: victoria_to_haywards_heath
+  stop: clapham_junction
+three:
+  route: victoria_to_haywards_heath
+  stop: croydon_station
+four:
+  route: victoria_to_haywards_heath  
+  stop: gatwick_airport_station
+five:
+  route: victoria_to_haywards_heath
+  stop: haywards_heath_station

@@ -1,9 +1,17 @@
+# == Schema Information
+# Schema version: 20100420165342
+#
+# Table name: routes
+#
+#  id                :integer         not null, primary key
+#  transport_mode_id :integer
+#  number            :string(255)
+#  created_at        :datetime
+#  updated_at        :datetime
+#
+
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  transport_mode_id: 1
-  number: MyString
-
-two:
-  transport_mode_id: 1
-  number: MyString
+victoria_to_haywards_heath:
+  transport_mode_id: 5
+  number: 1F50
