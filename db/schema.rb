@@ -9,13 +9,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100420102749) do
+ActiveRecord::Schema.define(:version => 20100420165342) do
 
   create_table "operators", :force => true do |t|
     t.string   "code"
     t.text     "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "short_name"
   end
 
   create_table "problems", :force => true do |t|
@@ -33,6 +34,13 @@ ActiveRecord::Schema.define(:version => 20100420102749) do
   create_table "route_operators", :force => true do |t|
     t.integer  "operator_id"
     t.integer  "route_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "route_stops", :force => true do |t|
+    t.integer  "route_id"
+    t.integer  "stop_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

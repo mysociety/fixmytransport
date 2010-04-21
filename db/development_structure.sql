@@ -9745,7 +9745,8 @@ CREATE TABLE operators (
     code character varying(255),
     name text,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    short_name character varying(255)
 );
 
 
@@ -9835,6 +9836,38 @@ CREATE SEQUENCE route_operators_id_seq
 --
 
 ALTER SEQUENCE route_operators_id_seq OWNED BY route_operators.id;
+
+
+--
+-- Name: route_stops; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE route_stops (
+    id integer NOT NULL,
+    route_id integer,
+    stop_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: route_stops_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE route_stops_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: route_stops_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE route_stops_id_seq OWNED BY route_stops.id;
 
 
 --
@@ -10226,6 +10259,13 @@ ALTER TABLE route_operators ALTER COLUMN id SET DEFAULT nextval('route_operators
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE route_stops ALTER COLUMN id SET DEFAULT nextval('route_stops_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE routes ALTER COLUMN id SET DEFAULT nextval('routes_id_seq'::regclass);
 
 
@@ -10315,6 +10355,14 @@ ALTER TABLE ONLY problems
 
 ALTER TABLE ONLY route_operators
     ADD CONSTRAINT route_operators_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: route_stops_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY route_stops
+    ADD CONSTRAINT route_stops_pkey PRIMARY KEY (id);
 
 
 --
@@ -10582,3 +10630,7 @@ INSERT INTO schema_migrations (version) VALUES ('20100420093248');
 INSERT INTO schema_migrations (version) VALUES ('20100420101658');
 
 INSERT INTO schema_migrations (version) VALUES ('20100420102749');
+
+INSERT INTO schema_migrations (version) VALUES ('20100420143048');
+
+INSERT INTO schema_migrations (version) VALUES ('20100420165342');
