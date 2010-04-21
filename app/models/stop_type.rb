@@ -1,17 +1,16 @@
 # == Schema Information
-# Schema version: 20100419121920
+# Schema version: 20100420165342
 #
 # Table name: stop_types
 #
-#  id                :integer         not null, primary key
-#  code              :string(255)
-#  description       :string(255)
-#  on_street         :boolean
-#  point_type        :string(255)
-#  version           :float
-#  created_at        :datetime
-#  updated_at        :datetime
-#  transport_mode_id :integer
+#  id          :integer         not null, primary key
+#  code        :string(255)
+#  description :string(255)
+#  on_street   :boolean
+#  point_type  :string(255)
+#  version     :float
+#  created_at  :datetime
+#  updated_at  :datetime
 #
 
 class StopType < ActiveRecord::Base

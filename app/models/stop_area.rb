@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100419121920
+# Schema version: 20100420165342
 #
 # Table name: stop_areas
 #
