@@ -1,30 +1,16 @@
+require File.dirname(__FILE__) +  '/data_loader'
 namespace :naptan do
     
   namespace :load do
     
-    def check_for_file taskname
-      unless ENV['FILE']
-        puts ''
-        puts "usage: rake naptan:load:#{taskname} FILE=filename"
-        puts ''
-        exit 0
-      end
+    include DataLoader
+  
+    def parser_class 
+      Parsers::NaptanParser
     end
     
-    def parse(model)
-      check_for_file model
-      puts "Loading #{model} from #{ENV['FILE']}..."
-      parser = Parsers::NaptanParser.new 
-      
-      parser.send("parse_#{model}".to_sym, ENV['FILE']) do |model| 
-        begin
-          model.save! 
-        rescue ActiveRecord::RecordInvalid => validation_error
-          puts validation_error
-          puts model.inspect
-          puts 'Continuing....'
-        end
-      end
+    def data_source
+      'naptan'
     end
   
     desc "Loads stop data from a CSV file specified as FILE=filename"
