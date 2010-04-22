@@ -34,4 +34,6 @@ define('OPTION_GOOGLE_MAPS_API_KEY', 'Your Google Maps API key');
 define('OPTION_USE_SPATIAL_EXTENSIONS', 1);
 
 define('OPTION_SPATIAL_EXTENSION_SQL_FILE_PATH', 'path to spatial extension SQL files');
+
+define('OPTION_SPATIAL_EXTENSION_SQL_FILE_NAME', 'postgis');
 ?>
