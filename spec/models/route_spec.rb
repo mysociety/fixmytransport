@@ -21,7 +21,8 @@ describe Route do
   end
 
   it "should create a new instance given valid attributes" do
-    Route.create!(@valid_attributes)
+    route = Route.new(@valid_attributes)
+    route.valid?.should be_true
   end
   
   describe 'when finding existing routes' do 
