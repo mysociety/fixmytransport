@@ -22,6 +22,7 @@ class Parsers::NaptanParser
   def parse_stop_area_hierarchy filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
+      raise "Not a new record" unless ['new', 'rev'].include? row['Modification'] 
       ancestor = StopArea.find_by_code(row['ParentStopAreaCode'])
       descendant = StopArea.find_by_code(row['ChildStopAreaCode'])
       yield StopAreaLink.build_edge(ancestor, descendant)
