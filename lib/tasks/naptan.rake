@@ -5,11 +5,11 @@ namespace :naptan do
     
     include DataLoader
   
-    def parser_class 
+    def self.parser_class 
       Parsers::NaptanParser
     end
     
-    def data_source
+    def self.data_source
       'naptan'
     end
   
