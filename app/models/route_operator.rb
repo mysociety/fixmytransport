@@ -11,4 +11,6 @@
 #
 
 class RouteOperator < ActiveRecord::Base
+  belongs_to :operator
+  belongs_to :route
 end
