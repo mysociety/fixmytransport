@@ -9,7 +9,7 @@ module DataLoader
     end
   end
   
-  def parse(model)
+  def parse(model, skip_invalid=true)
     check_for_file model
     puts "Loading #{model} from #{ENV['FILE']}..."
     parser = parser_class.new 
@@ -17,9 +17,13 @@ module DataLoader
       begin
         model.save! 
       rescue ActiveRecord::RecordInvalid => validation_error
-        puts validation_error
-        puts model.inspect
-        puts 'Continuing....'
+        if skip_invalid
+          puts validation_error
+          puts model.inspect
+          puts 'Continuing....'
+        else
+          raise
+        end
       end
     end
   end
