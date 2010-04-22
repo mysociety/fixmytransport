@@ -66,7 +66,7 @@ class Parsers::NaptanParser
     FasterCSV.parse(csv_data, csv_options) do |row|
       spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
       if spatial_extensions
-        coords = Point.from_x_y(row['Easting'], row['Northing'], WGS_84)
+        coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
       else
         coords = nil
       end

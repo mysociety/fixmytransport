@@ -3,13 +3,13 @@ module DataLoader
   def check_for_file taskname
     unless ENV['FILE']
       puts ''
-      puts "usage: rake #{data_source}:load:#{taskname} FILE=filename"
+      puts "usage: This task requires FILE=filename"
       puts ''
       exit 0
     end
   end
   
-  def parse(model, skip_invalid=true)
+  def parse(model, parser_class, skip_invalid=true)
     check_for_file model
     puts "Loading #{model} from #{ENV['FILE']}..."
     parser = parser_class.new 

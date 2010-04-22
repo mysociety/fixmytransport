@@ -5,38 +5,30 @@ namespace :naptan do
     
     include DataLoader
   
-    def self.parser_class 
-      Parsers::NaptanParser
-    end
-    
-    def self.data_source
-      'naptan'
-    end
-  
     desc "Loads stop data from a CSV file specified as FILE=filename"
     task :stops => :environment do 
-      parse('stops')
+      parse('stops', Parsers::NaptanParser)
     end 
     
     desc "Loads stop area data from a CSV file specified as FILE=filename"
     task :stop_areas => :environment do 
-      parse('stop_areas')
+      parse('stop_areas', Parsers::NaptanParser)
     end
     
     desc "Loads stop area membership data from a CSV file specified as FILE=filename"
     task :stop_area_memberships => :environment do 
-      parse('stop_area_memberships')
+      parse('stop_area_memberships', Parsers::NaptanParser)
     end
     
     desc "Loads stop area hierarchy from a CSV file specified as FILE=filename"
     task :stop_area_hierarchy => :environment do 
-      parse('stop_area_hierarchy')
+      parse('stop_area_hierarchy', Parsers::NaptanParser)
     end
     
     
     desc "Loads stop type data from a CSV file specified as FILE=filename"
     task :stop_types => :environment do 
-      parse('stop_types')
+      parse('stop_types', Parsers::NaptanParser)
     end
     
     desc "Loads all data from CSV files in a directory specified as DIR=dirname"
