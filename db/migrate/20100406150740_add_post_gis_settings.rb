@@ -10,8 +10,8 @@ class AddPostGisSettings < ActiveRecord::Migration
     username = db_conf['username']
     if spatial_extensions and postgres
       system "createlang -p #{port} plpgsql --username=#{username} #{database}"
-      system "psql -p #{port} -d #{database} -u #{username} -f #{File.join(sql_file_path, 'postgis.sql')}"
-      system "psql -p #{port} -d #{database} -u #{username} -f #{File.join(sql_file_path, 'spatial_ref_sys.sql')}"      
+      system "psql -p #{port} -f #{File.join(sql_file_path, 'postgis.sql')} #{database} #{username}"
+      system "psql -p #{port} -u #{username} -f #{File.join(sql_file_path, 'spatial_ref_sys.sql')} #{database} #{username}"      
     end
   end
 
