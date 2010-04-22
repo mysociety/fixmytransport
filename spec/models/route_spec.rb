@@ -27,7 +27,7 @@ describe Route do
   
   describe 'when finding existing routes' do 
     
-    fixtures :stops, :routes, :route_stops
+    fixtures :stops, :routes, :route_stops, :transport_modes
   
     it 'should include in the results returned a route with the same number, mode of transport and stop codes' do 
       attributes = { :number => '1F50', 
