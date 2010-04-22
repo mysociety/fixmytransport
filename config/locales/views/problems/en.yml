@@ -9,3 +9,5 @@ en:
   name: 'Name'
   common_name: 'Station/stop name'
   locality_name: 'Town/area'
+  number: 'Route number'
+  location_type: 'Stop or route'

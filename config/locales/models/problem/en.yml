@@ -18,4 +18,8 @@ en:
               blank: "Please enter the station/stop name"
             locality_name:
               blank: "Please enter the town or area"   
+        route:
+          attributes:
+            number:
+              blank: "Please enter a route"
    
