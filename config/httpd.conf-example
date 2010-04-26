@@ -1,0 +1,22 @@
+# Apache configuration for FixMyTransport.
+#
+# For development ignore this, you can just run ./scripts/server as for any
+# Ruby on Rails application.
+#
+#
+# Add lines something like this to your main /etc/apache/httpd.conf:
+#
+
+# # FixMyTransport
+# <VirtualHost *:80>
+#     ServerName transport.owl
+#     DocumentRoot /home/devel/fixmytransport/public/
+#     <Directory /home/devel/fixmytransport/public>
+#         Include /home/devel/fixmytransport/config/httpd.conf
+#     </Directory>
+#     Alias /admin/ /home/devel/fixmytransport/web-admin/
+# </VirtualHost>
+#
+# Copyright (c) 2010 UK Citizens Online Democracy. All rights reserved.
+# Email: louise@mysociety.org; WWW: http://www.mysociety.org
+#
