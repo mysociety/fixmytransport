@@ -41,59 +41,69 @@
 require 'spec_helper'
 
 describe Stop do
-  before(:each) do
-    @valid_attributes = {
-      :atco_code => "value for atco_code",
-      :naptan_code => "value for naptan_code",
-      :plate_code => "value for plate_code",
-      :common_name => "value for common_name",
-      :short_common_name => "value for short_common_name",
-      :landmark => "value for landmark",
-      :street => "value for street",
-      :crossing => "value for crossing",
-      :indicator => "value for indicator",
-      :bearing => "value for bearing",
-      :nptg_locality_code => "value for nptg_locality_code",
-      :locality_name => "value for locality_name",
-      :parent_locality_name => "value for parent_locality_name",
-      :grand_parent_locality_name => "value for grand_parent_locality_name",
-      :town => "value for town",
-      :suburb => "value for suburb",
-      :locality_centre => false,
-      :grid_type => "value for grid_type",
-      :easting => 1.5,
-      :northing => 1.5,
-      :lon => 1.5,
-      :lat => 1.5,
-      :stop_type => "value for stop_type",
-      :bus_stop_type => "value for bus_stop_type",
-      :administrative_area_code => "value for administrative_area_code",
-      :creation_datetime => Time.now,
-      :modification_datetime => Time.now,
-      :revision_number => 1,
-      :modification => "value for modification",
-      :status => "value for status"
-    }
-  end
 
-  it "should create a new instance given valid attributes" do
-    Stop.create!(@valid_attributes)
-  end
+  fixtures :stops, :stop_areas, :stop_area_memberships, :stop_area_links
+  
+  before(:each) do
+     @valid_attributes = {
+       :atco_code => "value for atco_code",
+       :naptan_code => "value for naptan_code",
+       :plate_code => "value for plate_code",
+       :common_name => "value for common_name",
+       :short_common_name => "value for short_common_name",
+       :landmark => "value for landmark",
+       :street => "value for street",
+       :crossing => "value for crossing",
+       :indicator => "value for indicator",
+       :bearing => "value for bearing",
+       :nptg_locality_code => "value for nptg_locality_code",
+       :locality_name => "value for locality_name",
+       :parent_locality_name => "value for parent_locality_name",
+       :grand_parent_locality_name => "value for grand_parent_locality_name",
+       :town => "value for town",
+       :suburb => "value for suburb",
+       :locality_centre => false,
+       :grid_type => "value for grid_type",
+       :easting => 1.5,
+       :northing => 1.5,
+       :lon => 1.5,
+       :lat => 1.5,
+       :stop_type => "value for stop_type",
+       :bus_stop_type => "value for bus_stop_type",
+       :administrative_area_code => "value for administrative_area_code",
+       :creation_datetime => Time.now,
+       :modification_datetime => Time.now,
+       :revision_number => 1,
+       :modification => "value for modification",
+       :status => "value for status"
+     }
+   end
+   
+   it "should create a new instance given valid attributes" do
+     Stop.create!(@valid_attributes)
+   end
   
   describe 'when finding by ATCO code' do 
 
-    fixtures :stops
-    
     it 'should ignore case' do 
       Stop.find_by_atco_code('9100VICTric').should == stops(:victoria_station_one)
     end
     
   end
   
+  describe 'when finding by name and coordinates' do 
+    
+    it 'should only return a stop whose name matches and whose coordinates are less than the specified distance away from the given stop' do 
+      stop = Stop.find_by_name_and_coords('Haywards Heath Rail Station', 533030, 124583, 10)  
+      stop.should == stops(:haywards_heath_station)
+      stop = Stop.find_by_name_and_coords('Haywards Heath Rail Station', 533030, 124594, 10)  
+      stop.should be_nil
+    end
+    
+  end
+  
   describe 'when finding a common root area' do 
 
-    fixtures :stops, :stop_areas, :stop_area_memberships, :stop_area_links
-    
     it 'should return the common root stop area that all stops in the list belong to' do 
       stops = [stops(:victoria_station_one), stops(:victoria_station_two)]
       Stop.common_root_area(stops).should == stop_areas(:victoria_station_root)
@@ -102,8 +112,6 @@ describe Stop do
   end
   
   describe 'when finding stops from attributes' do 
-
-    fixtures :stops, :stop_areas, :stop_area_memberships, :stop_area_links
     
     def expect_stop(attributes, stop)
       Stop.find_from_attributes(attributes).include?(stop).should be_true

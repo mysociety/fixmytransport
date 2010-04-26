@@ -46,6 +46,8 @@ class Stop < ActiveRecord::Base
   validates_presence_of :common_name
   attr_accessor :transport_mode_id
   has_many :problems, :as => :location
+  has_many :route_stops
+  has_many :routes, :through => :route_stops
   
   def name
     common_name
@@ -75,8 +77,30 @@ class Stop < ActiveRecord::Base
         "%#{common_name}%", locality, locality, locality, attributes[:stop_type_codes]])
   end
   
+  def self.find_by_name_and_coords(name, easting, northing, distance)
+    stops = find_by_sql(["SELECT   *, ABS(easting - ?) easting_dist, ABS(northing - ?) northing_dist
+                          FROM     stops
+                          WHERE    common_name = ? 
+                          AND      ABS(easting - ?) < ? 
+                          AND      ABS(northing - ?) < ?
+                          ORDER BY easting_dist asc, northing_dist asc
+                          LIMIT 1",
+                          easting, northing, name, easting, distance, northing, distance])
+    stops.empty? ? nil : stops.first
+  end
+  
   def self.find_by_atco_code(atco_code)
     find(:first, :conditions => ["lower(atco_code) = ?", atco_code.downcase])
+  end
+  
+  def self.match_old_stop(stop)
+     existing = find_by_atco_code(stop.atco_code)
+     return existing if existing
+     existing = find_by_name_and_coords(stop.common_name, stop.easting, stop.northing, 5)     
+     return existing if existing
+     existing = find_by_easting_and_northing(stop.easting, stop.northing)
+     return existing if existing
+     return nil
   end
   
 end
