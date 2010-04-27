@@ -10540,6 +10540,14 @@ ALTER TABLE ONLY route_operators
 
 
 --
+-- Name: routes_transport_mode_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY routes
+    ADD CONSTRAINT routes_transport_mode_id_fk FOREIGN KEY (transport_mode_id) REFERENCES transport_modes(id) ON DELETE SET NULL;
+
+
+--
 -- Name: stop_area_memberships_stop_area_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10574,6 +10582,8 @@ ALTER TABLE ONLY transport_mode_stop_types
 --
 -- PostgreSQL database dump complete
 --
+
+INSERT INTO schema_migrations (version) VALUES ('20100406150740');
 
 INSERT INTO schema_migrations (version) VALUES ('20100407110848');
 
@@ -10614,8 +10624,6 @@ INSERT INTO schema_migrations (version) VALUES ('20100415135241');
 INSERT INTO schema_migrations (version) VALUES ('20100415183707');
 
 INSERT INTO schema_migrations (version) VALUES ('20100419121920');
-
-INSERT INTO schema_migrations (version) VALUES ('20100406150740');
 
 INSERT INTO schema_migrations (version) VALUES ('20100419160210');
 
