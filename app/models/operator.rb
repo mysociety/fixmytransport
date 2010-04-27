@@ -12,4 +12,6 @@
 #
 
 class Operator < ActiveRecord::Base
+  has_many :route_operators
+  has_many :routes, :through => :route_operator, :uniq => true
 end

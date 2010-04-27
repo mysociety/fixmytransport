@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100427114647) do
+ActiveRecord::Schema.define(:version => 20100427141606) do
 
   create_table "operators", :force => true do |t|
     t.string   "code"
@@ -169,6 +169,9 @@ ActiveRecord::Schema.define(:version => 20100427114647) do
 
   add_foreign_key "route_operators", "operators", :name => "route_operators_operator_id_fk", :dependent => :nullify
   add_foreign_key "route_operators", "routes", :name => "route_operators_route_id_fk", :dependent => :nullify
+
+  add_foreign_key "route_stops", "routes", :name => "route_stops_route_id_fk"
+  add_foreign_key "route_stops", "stops", :name => "route_stops_stop_id_fk"
 
   add_foreign_key "routes", "transport_modes", :name => "routes_transport_mode_id_fk", :dependent => :nullify
 

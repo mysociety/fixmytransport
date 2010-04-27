@@ -47,10 +47,16 @@ class Stop < ActiveRecord::Base
   attr_accessor :transport_mode_id
   has_many :problems, :as => :location
   has_many :route_stops
-  has_many :routes, :through => :route_stops
+  has_many :routes, :through => :route_stops, :uniq => true
   
   def name
     common_name
+  end
+  
+  def name_and_bearing
+    text = "#{name}"
+    text += " (#{bearing})" if ! bearing.blank?
+    text
   end
   
   def root_areas
