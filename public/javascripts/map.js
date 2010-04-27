@@ -4,13 +4,15 @@ var map;
 
 function problem_init() {
   var problemCoords = new OpenLayers.LonLat(problem_lon, problem_lat);
-  createMap(problemCoords);
+  createMap();
+  map.setCenter(problemCoords, 12); 
   addProblemMarker(problemCoords);
 }
 
 function stop_init() {
   var stopCoords = new OpenLayers.LonLat(stop_lon, stop_lat);
-  createMap(stopCoords);
+  createMap();
+  map.setCenter(stopCoords, 12); 
   bounds = new OpenLayers.Bounds();
   var markers = new OpenLayers.Layer.Markers( "Markers" );
   map.addLayer(markers);
@@ -18,8 +20,7 @@ function stop_init() {
 }
 
 function route_init() {
-  var firstCoords = new OpenLayers.LonLat(centre[0], centre[1]);
-  createMap(firstCoords);
+  createMap();
   var stopCoords;
   bounds = new OpenLayers.Bounds();
   var markers = new OpenLayers.Layer.Markers( "Markers" );
@@ -32,11 +33,10 @@ function route_init() {
   map.zoomToExtent(bounds, false);
 }
 
-function createMap(centerCoords) {
+function createMap() {
   map = new OpenLayers.Map('map');
   var gmap = new OpenLayers.Layer.Google( "Google Streets", {numZoomLevels: 20});
-  map.addLayer(gmap);
-  map.setCenter(centerCoords, 12);  
+  map.addLayer(gmap); 
 }
 
 function addRouteMarker(stopCoords, bounds, markers) {
