@@ -13,6 +13,9 @@
 require 'spec_helper'
 
 describe Route do
+
+  fixtures :transport_modes, :stops, :stop_areas, :routes, :route_stops, :stop_area_memberships
+
   before(:each) do
     @valid_attributes = {
       :transport_mode_id => 1,
@@ -27,7 +30,6 @@ describe Route do
   
   describe 'when finding existing routes' do 
     
-    fixtures :transport_modes, :stops, :routes, :route_stops
   
     it 'should include in the results returned a route with the same number, mode of transport and stop codes' do 
       attributes = { :number => '1F50', 
