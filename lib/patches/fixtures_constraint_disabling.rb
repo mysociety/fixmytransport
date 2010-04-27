@@ -3,6 +3,7 @@
 # http://kopongo.com/2008/7/25/postgres-ri_constrainttrigger-error
 # Additionally, require the spatial adapter plugin to make sure
 # it doesn't clobber our change
+require 'active_record/connection_adapters/postgresql_adapter'
 require 'vendor/plugins/spatial_adapter/init.rb'
 module ActiveRecord
   module ConnectionAdapters
