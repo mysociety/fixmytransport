@@ -1,0 +1,24 @@
+- content_for :javascript do 
+  != map_javascript_include_tags
+#map
+:javascript
+  var routeStops = #{route_stops_js(@route)};
+  jQuery(document).ready(function(){
+     route_init();
+  });
+
+.route
+  = "#{@route.transport_mode_name} route number #{@route.number}"
+  .operator
+    - if @route.operators.empty? 
+      Operator unknown
+    - else
+      Operated by:
+      %ul
+      - @route.operators.each do |operator|
+        %li= "#{operator.code})"
+  .stops
+    Stopping at:
+    %ol
+    - @route.stops.each do |stop|
+      %li= link_to(stop.name, stop_url(stop))

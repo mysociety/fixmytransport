@@ -33,6 +33,16 @@
       - if @stop.errors.on(:locality_name)
         .form-field-error= error_message_on @stop, :locality_name
       = render 'text_field', :f => builder, :name => :locality_name
+  - fields_for @route do |builder|
+    .form-field
+      - if @route.errors.on(:number)
+        .form-field-error= error_message_on @route, :number
+      = render 'text_field', :f => builder, :name => :number
+  .form-field
+    - if @problem.errors.on(:location_type)
+      .form-field-error= error_message_on @problem, :location_type
+    != form.label :location_type, t(:location_type)
+    != location_type_radio_buttons
   .form-field
     - if @problem.errors.on(:description)
       .form-field-error= error_message_on @problem, :description

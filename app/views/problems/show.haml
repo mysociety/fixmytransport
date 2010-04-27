@@ -1,14 +1,13 @@
 - content_for :javascript do 
-  =javascript_include_tag 'jquery-1.4.2.min.js'
-  =javascript_include_tag "http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=#{google_maps_key}"
-  =javascript_include_tag 'http://openlayers.org/api/OpenLayers.js'
-  =javascript_include_tag 'map.js'
-
+  != map_javascript_include_tags
 - if @problem.location
   #map
   :javascript
     var problem_lat = #{@problem.location.lat};
     var problem_lon = #{@problem.location.lon};
+    jQuery(document).ready(function(){
+       problem_init();
+    });
 .problem-info
   %h3= @problem.subject
   %p.problem-description= @problem.description
