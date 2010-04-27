@@ -23,7 +23,8 @@ describe ProblemsController do
                                      :subject => 'A test problem', 
                                      :save => true, 
                                      :location => mock_model(Stop), 
-                                     :location_attributes= => true)
+                                     :location_attributes= => true,
+                                     :location_type => 'Stop')
       Problem.stub!(:new).and_return(@problem)
     end
     

@@ -5,6 +5,7 @@ class ProblemsController < ApplicationController
     @problem = Problem.new
     @problem.build_reporter
     @stop = Stop.new
+    @route = Route.new
   end
   
   def index
@@ -15,7 +16,9 @@ class ProblemsController < ApplicationController
   def create
     @problem = Problem.new(params[:problem])
     @stop = Stop.new(params[:stop])
-    if !@stop.valid? 
+    @route = Route.new(params[:route])
+    if (@problem.location_type == 'Stop' and !@stop.valid?) or \
+       (@problem.location_type == 'Route' and !@route.valid?)
       @title = t :submit_problem
       render :new and return false
     end
