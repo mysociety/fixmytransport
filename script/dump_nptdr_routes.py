@@ -27,21 +27,35 @@ mysociety.config.set_file("../conf/general")
 parser = optparse.OptionParser()
 
 parser.set_usage('''
-./dump_nptdr_routes.py [PARAMETERS]
+./dump_nptdr_routes.py [PARAMETERS] [COMMAND]
 
 Dump data on NPDTR routes, operators and locations. Reads ATCO-CIF timetable files.
-Outputs a CSV file per subdirectory of the parent directory specified.
+Outputs a CSV file per subdirectory of the parent directory specified. 
+
+Commands
+routes - Dump a CSV file of route data
+stops - Dump a CSV file of stop data
 
 Examples
---datadir="October 2008/Timetable Data/CIF/ --datavalidfrom="6 Oct 2008" --datavalidto="12 Oct 2008"  
+--datadir="October 2008/Timetable Data/CIF/ --outdir="../output" --datavalidfrom="6 Oct 2008" --datavalidto="12 Oct 2008" routes  
 ''')
 
 parser.add_option('--datadir', type='string', dest="datadir", help='parent directory of ATCO-CIF files containing timetables to use.')
 parser.add_option('--outdir', type='string', dest="outdir", help='directory for output files.')
 parser.add_option('--datavalidfrom', type='string', dest="data_valid_from", help='Date range we know the data is good for')
 parser.add_option('--datavalidto', type='string', dest="data_valid_to", help='Date range we know the data is good for')
+parser.add_option('--stopcodefile', type='string', dest="stop_code_mapping_file",  default=None, help='File containing mappings from old to new ATCO codes')
 
 (options, args) = parser.parse_args()
+
+# Work out command
+if len(args) > 1:
+    raise Exception, 'Give at most one command'
+if len(args) == 0:
+    args = ['stops']
+command = args[0]
+if command not in ['stops', 'routes']:
+    raise Exception, 'Unknown command'
 
 # Required parameters
 if not options.outdir:
@@ -51,8 +65,128 @@ if not options.datadir:
 data_valid_from = datetime.datetime.fromtimestamp(mx.DateTime.DateTimeFrom(options.data_valid_from)).date()
 data_valid_to = datetime.datetime.fromtimestamp(mx.DateTime.DateTimeFrom(options.data_valid_to)).date()
 
-def setup_atco():
-    atco = mysociety.atcocif.ATCO()
+class CSVDumpATCO(mysociety.atcocif.ATCO):
+    def __init__(self, nptdr_files, outfilepath, stop_code_mapping_file, show_progress = True):
+        self.nptdr_files = nptdr_files
+        self.assume_no_holidays = True
+        self.show_progress = show_progress
+        self.outfilepath = outfilepath
+        self.vehicle_type_to_code = {}
+        self.stops_dumped = {}
+        self.route_locations = {}
+        self.stop_code_mapping_file = stop_code_mapping_file
+        self.stop_code_mappings = {}
+
+    def read_files(self, files):
+        '''Loads in multiple ATCO-CIF files.'''
+        for file in files:
+            self.input_filename = file
+            self.read(file)
+            
+    # reload all ATCO files, setting load function to given one
+    def read_all(self, func):
+        # reset file number counter
+        self.file_loading_number = 0
+        # change the loading function to the one asked for
+        self.item_loaded = func
+        # do the loading
+        self.read_files(self.nptdr_files)
+   
+    def dump_stops(self):
+        self.outfile = csv.writer(open(self.outfilepath, 'w'), 
+                                  delimiter="\t", 
+                                  quotechar='"', 
+                                  quoting=csv.QUOTE_MINIMAL) 
+        self.outfile.writerow(['Location Code', 
+                               'Name', 
+                               'Easting', 
+                               'Northing', 
+                               'Gazeteer Code', 
+                               'Point Type', 
+                               'National Gazetteer ID', 
+                               'District Name', 
+                               'Town Name'])
+        self.read_all(self.dump_stops_to_file)
+    
+    def dump_stops_to_file(self, item):
+        # locations only
+        if not isinstance(item, mysociety.atcocif.Location):
+            return
+        assert item.transaction_type == 'N'
+        assert item.additional.transaction_type == 'N'
+        if not self.stops_dumped.get(item.location) == 1:
+            self.outfile.writerow([item.location, 
+                              item.full_location,
+                              item.additional.grid_reference_easting, 
+                              item.additional.grid_reference_northing, 
+                              item.gazetteer_code,
+                              item.point_type, 
+                              item.national_gazetteer_id, 
+                              item.additional.district_name, 
+                              item.additional.town_name])
+        self.stops_dumped[item.location] = 1
+        
+    def dump_routes(self):
+        self.outfile = csv.writer(open(self.outfilepath, 'w'), 
+                                  delimiter="\t", 
+                                  quotechar='"', 
+                                  quoting=csv.QUOTE_MINIMAL) 
+        self.outfile.writerow(['Vehicle Code', 
+                               'Route Number', 
+                               'Operator Code', 
+                               'Default Vehicle Code', 
+                               'Locations'])
+        # Read the file once to get the vehicle type mappings
+        self.read_all(self.noop)
+        self.read_all(self.dump_routes_to_file)
+        
+    def noop(self, item):
+        return 
+        
+    def dump_routes_to_file(self, item):
+        if not isinstance(item, mysociety.atcocif.JourneyHeader):
+            return
+        assert item.transaction_type == 'N'
+        if item.vehicle_type != '':
+            vehicle_code = item.vehicle_code(self)
+            default_code = False
+        else:
+            vehicle_code = self.vehicle_code_from_filename()
+            default_code = True
+        identifier = item.route_number + vehicle_code + item.operator
+        locations = []
+        for hop in item.hops:
+            location = self.new_stop_code(hop.location)
+            locations.append(location)
+        if not locations in self.route_locations.setdefault(identifier, []):
+            self.route_locations[identifier].append(locations)
+            self.outfile.writerow([vehicle_code, 
+                                   item.route_number, 
+                                   item.operator, 
+                                   default_code, 
+                                   ','.join(locations)])
+     
+   def vehicle_code_from_filename(self):
+       basename, ext = os.path.splitext(self.input_filename)
+       name_parts = basename.split("_")
+       name_mappings = { "BUS"  : 'B',
+                         "COACH": 'C',
+                         "FERRY": 'F',
+                         "AIR"  : 'A', 
+                         "TRAIN": 'T', 
+                         "METRO": 'M' }
+       return name_mappings[name_parts[-1]]
+
+    def new_stop_code(self, stop_code):
+        if not self.stop_code_mappings:
+           mapping_file = open(self.stop_code_mapping_file)
+           for line in mapping_file:
+               data = line.split("\t")
+               self.stop_code_mappings[data[0]] = data[1] 
+        return self.stop_code_mappings.get(stop_code, stop_code)
+    
+def setup_atco(nptdr_files, outfilepath, stop_code_mapping_file=None):
+    atco = CSVDumpATCO(nptdr_files, outfilepath, stop_code_mapping_file, True)
     atco.restrict_to_date_range(data_valid_from, data_valid_to)
     atco.register_line_patches({
         # ATCO_NATIONAL_BUS.CIF doesn't have the grid reference for Victoria Coach Station
@@ -89,42 +223,36 @@ def setup_atco():
     ])
     return atco
     
-def vehicle_code_from_filename(filepath):
-    basename, ext = os.path.splitext(filepath)
-    name_parts = basename.split("_")
-    name_mappings = { "BUS"  : 'B',
-                      "COACH": 'C',
-                      "FERRY": 'F',
-                      "AIR"  : 'A', 
-                      "TRAIN": 'T', 
-                      "METRO": 'M' }
-    return name_mappings[name_parts[-1]]
 
-subdirs = [name for name in os.listdir(options.datadir) if os.path.isdir(os.path.join(options.datadir, name))]
-for subdir in subdirs:
-    atco = setup_atco()      
-    route_locations = {}
-    nptdr_files = glob.glob(os.path.join(options.datadir, subdir, "*.CIF"))
-    outfilepath = os.path.join(options.outdir, "%s.tsv" % subdir)
-    if os.path.exists(outfilepath):
-      continue  
-    outfile = csv.writer(open(outfilepath, 'w'), delimiter="\t", quotechar='"', quoting=csv.QUOTE_MINIMAL) 
-    outfile.writerow(['Vehicle Code', 'Route Number', 'Operator Code', 'Default Vehicle Code', 'Locations'])
-    for filepath in nptdr_files:
-        atco.read(filepath)    
-        for journey in atco.journeys:
-            assert journey.transaction_type == 'N'
-            if journey.vehicle_type != '':
-                vehicle_code = journey.vehicle_code(atco)
-                default_code = False
-            else:
-                vehicle_code = vehicle_code_from_filename(filepath)
-                default_code = True
-            identifier = journey.route_number + vehicle_code + journey.operator
-            locations = []
-            for hop in journey.hops:
-                locations.append(hop.location)
-            if not locations in route_locations.setdefault(identifier, []):
-                route_locations[identifier].append(locations)
-                outfile.writerow([vehicle_code, journey.route_number, journey.operator, default_code, ','.join(locations)])
+def data_dirs():
+    return [name for name in os.listdir(options.datadir) if os.path.isdir(os.path.join(options.datadir, name))]
+    
+def cif_files(directory):
+    return glob.glob(os.path.join(options.datadir, directory, "*.CIF"))
+
+def dump_stops():
+    for subdir in data_dirs():
+        outfilepath = os.path.join(options.outdir, "%s_stops.tsv" % subdir)
+        if os.path.exists(outfilepath):
+            continue 
+        nptdr_files = cif_files(subdir)
+        atco = setup_atco(nptdr_files=nptdr_files, 
+                          outfilepath=outfilepath)      
+        atco.dump_stops()
+       
+def dump_routes():    
+    for subdir in data_dirs():
+        outfilepath = os.path.join(options.outdir, "%s.tsv" % subdir)
+        if os.path.exists(outfilepath):
+            continue
+        nptdr_files = cif_files(subdir)
+        
+        atco = setup_atco(nptdr_files=nptdr_files, 
+                          outfilepath=outfilepath,
+                          stop_code_mapping_file=options.stop_code_mapping_file)      
+        atco.dump_routes()
          
+if command == 'stops':
+    dump_stops()
+if command == 'routes':
+    dump_routes()         
