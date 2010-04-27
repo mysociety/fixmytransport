@@ -166,16 +166,16 @@ class CSVDumpATCO(mysociety.atcocif.ATCO):
                                    default_code, 
                                    ','.join(locations)])
      
-   def vehicle_code_from_filename(self):
-       basename, ext = os.path.splitext(self.input_filename)
-       name_parts = basename.split("_")
-       name_mappings = { "BUS"  : 'B',
+    def vehicle_code_from_filename(self):
+        basename, ext = os.path.splitext(self.input_filename)
+        name_parts = basename.split("_")
+        name_mappings = { "BUS"  : 'B',
                          "COACH": 'C',
                          "FERRY": 'F',
                          "AIR"  : 'A', 
                          "TRAIN": 'T', 
                          "METRO": 'M' }
-       return name_mappings[name_parts[-1]]
+        return name_mappings[name_parts[-1]]
 
     def new_stop_code(self, stop_code):
         if not self.stop_code_mappings:
@@ -228,7 +228,9 @@ def data_dirs():
     return [name for name in os.listdir(options.datadir) if os.path.isdir(os.path.join(options.datadir, name))]
     
 def cif_files(directory):
-    return glob.glob(os.path.join(options.datadir, directory, "*.CIF"))
+    # get cif files in this dir and one level down
+    full_dir = os.path.join(options.datadir, directory)
+    return glob.glob(os.path.join(full_dir, "*.CIF")) + glob.glob(os.path.join(full_dir, "*", "*.CIF"))
 
 def dump_stops():
     for subdir in data_dirs():
