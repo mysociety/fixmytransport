@@ -66,7 +66,7 @@ class Parsers::NptdrParser
       route = Route.new(:number => route_number,
                         :transport_mode => transport_mode)                 
       stop_codes.each_with_index do |stop_code,index|
-        stop = Stop.find_by_atco_code(stop_code)
+        stop = Stop.find_by_atco_code(stop_code.strip)
         if ! stop
           puts "Can't find stop #{stop_code} for route #{route.inspect}" 
           next
