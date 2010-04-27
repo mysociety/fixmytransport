@@ -15,4 +15,28 @@ module ApplicationHelper
     tags.join("\n")
   end
   
+  def location_type_radio_buttons
+    tags = []
+    [Stop, Route].each do |location_class|
+      tag = radio_button 'problem', 'location_type', location_class.to_s, {:class => 'location-type'}
+      tag += location_class.to_s.singularize
+      tags << tag
+    end
+    tags.join("\n")
+  end
+  
+  def map_javascript_include_tags
+    tags = []
+    tags << javascript_include_tag('jquery-1.4.2.min.js')
+    tags << javascript_include_tag('http://openlayers.org/api/OpenLayers.js')
+    tags << javascript_include_tag("http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=#{google_maps_key}")
+    tags << javascript_include_tag('map.js')
+    tags.join("\n")
+  end
+  
+  def route_stops_js route
+    array_content = route.stops.map{|stop| "[#{stop.lat}, #{stop.lon}]"}.join(',') 
+    "[#{array_content}];"
+  end
+  
 end
