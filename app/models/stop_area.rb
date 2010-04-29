@@ -33,4 +33,8 @@ class StopArea < ActiveRecord::Base
     find(:first, :conditions => ["lower(code) = ?", code.downcase])
   end
   
+  def routes
+    stops.map{ |stop| stop.routes }.flatten.uniq
+  end
+  
 end
