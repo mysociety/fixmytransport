@@ -29,7 +29,7 @@ module ApplicationHelper
     tags = []
     tags << javascript_include_tag('jquery-1.4.2.min.js')
     tags << javascript_include_tag('http://openlayers.org/api/OpenLayers.js')
-    tags << javascript_include_tag("http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=#{google_maps_key}")
+    tags << "<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=#{google_maps_key}\" type=\"text/javascript\"></script>"
     tags << javascript_include_tag('map.js')
     tags.join("\n")
   end
