@@ -71,7 +71,13 @@ namespace :naptan do
                                         st_Y(st_transform(coords,#{WGS_84})) as lat 
                                  FROM stop_areas 
                                  WHERE id = #{stop_area.id}")
-        stop_area.lon, stop_area.lat = lon_lats[0]
+        lon_lat = lon_lats[0]
+        if lon_lat.is_a? Hash
+          stop_area.lon = lon_lat[:lon]
+          stop_area.lat = lon_lat[:lat]
+        else  
+          stop_area.lon, stop_area.lat = lon_lat
+        end
         stop_area.save!
       end
     end
