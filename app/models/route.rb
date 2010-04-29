@@ -98,7 +98,7 @@ class Route < ActiveRecord::Base
     original.save!
   end
   
-  def name
+  def name(from_stop=nil)
     return "#{transport_mode_name} route #{number}"
   end
 

@@ -35,6 +35,28 @@ describe TrainRoute do
       route = routes(:victoria_to_haywards_heath)
       route.name.should == 'Train route between Haywards Heath and London Victoria'
     end
+    
+    describe 'when given a stop to start from' do 
+      
+      describe 'if the stop is not a terminus' do 
+        
+        it 'should be of the form "Train between Haywards Heath and London Victoria"' do 
+          route = routes(:victoria_to_haywards_heath)
+          route.name(stops(:gatwick_airport_station)).should == 'Train between Haywards Heath and London Victoria'
+        end
+        
+      end
+      
+      describe 'if the stop is a terminus' do 
+        
+        it 'should be of the form "Train to London Victoria"' do 
+          route = routes(:victoria_to_haywards_heath)
+          route.name(stops(:haywards_heath_station)).should == 'Train to London Victoria'
+        end
+        
+      end
+
+    end
   
   end
   
