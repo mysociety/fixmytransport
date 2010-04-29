@@ -63,6 +63,7 @@ class Parsers::NptdrParser
       operator_code = row['Operator Code'].strip      
       stop_codes = row['Locations'].split(',')
       transport_mode = vehicle_codes_to_transport_modes(vehicle_code)
+      next unless transport_mode.route_type
       route_type = transport_mode.route_type.constantize
       route = route_type.new(:number => route_number,
                              :transport_mode => transport_mode)                 
