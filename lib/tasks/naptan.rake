@@ -73,8 +73,8 @@ namespace :naptan do
                                  WHERE id = #{stop_area.id}")
         lon_lat = lon_lats[0]
         if lon_lat.is_a? Hash
-          stop_area.lon = lon_lat[:lon]
-          stop_area.lat = lon_lat[:lat]
+          stop_area.lon = lon_lat["lon"]
+          stop_area.lat = lon_lat["lat"]
         else  
           stop_area.lon, stop_area.lat = lon_lat
         end
