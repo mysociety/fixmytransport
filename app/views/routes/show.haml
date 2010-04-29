@@ -8,7 +8,7 @@
   });
 
 .route
-  = "#{@route.transport_mode_name} route number #{@route.number}"
+  = "#{@route.name}"
   .operator
     - if @route.operators.empty? 
       Operator unknown
@@ -16,9 +16,9 @@
       Operated by:
       %ul
       - @route.operators.each do |operator|
-        %li= "#{operator.code})"
+        %li= "#{operator.code}"
   .stops
-    Stopping at:
+    Stops at:
     %ol
-    - @route.stops.each do |stop|
-      %li= link_to(stop.name, stop_url(stop))
+    - @route.route_stops.each do |route_stop|
+      %li= link_to(route_stop.name, stop_url(route_stop.stop))

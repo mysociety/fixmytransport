@@ -15,4 +15,4 @@
   .street= @stop.street
 You can pick up the following routes here:
 - @stop.routes.each do |route|
-  .route= link_to(route.number, route_url(route))
+  .route= link_to(route.name, route_url(route))
