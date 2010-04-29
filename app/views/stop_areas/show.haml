@@ -1,0 +1,18 @@
+- content_for :javascript do 
+  != map_javascript_include_tags
+#map
+:javascript
+  var stop_lon = #{@stop_area.lon};
+  var stop_lat = #{@stop_area.lat};
+  jQuery(document).ready(function(){
+     stop_init();
+  });
+
+.stop
+  .name= @stop_area.name
+The following stops are here: 
+- @stop_area.stops.each do |stop|
+  .stop= link_to(stop.name, stop_url(stop))
+You can pick up the following routes here:
+- @stop_area.routes.each do |route|
+  .route= link_to(route.name, route_url(route))
