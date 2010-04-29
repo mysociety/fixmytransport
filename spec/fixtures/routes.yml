@@ -13,5 +13,10 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 victoria_to_haywards_heath:
-  transport_mode_id: 5
+  transport_mode_id: 6
   number: 1F50
+  type: TrainRoute
+number_807_bus: 
+  transport_mode_id: 1
+  number: 807
+  type: BusRoute

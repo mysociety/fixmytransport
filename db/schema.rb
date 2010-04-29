@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100427141606) do
+ActiveRecord::Schema.define(:version => 20100429120538) do
 
   create_table "operators", :force => true do |t|
     t.string   "code"
@@ -51,7 +51,12 @@ ActiveRecord::Schema.define(:version => 20100427141606) do
     t.string   "number"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "type"
   end
+
+  add_index "routes", ["number"], :name => "index_routes_on_number"
+  add_index "routes", ["transport_mode_id"], :name => "index_routes_on_transport_mode_id"
+  add_index "routes", ["type"], :name => "index_routes_on_type"
 
   create_table "stop_area_links", :force => true do |t|
     t.integer  "ancestor_id"
@@ -156,6 +161,7 @@ ActiveRecord::Schema.define(:version => 20100427141606) do
     t.datetime "updated_at"
     t.string   "naptan_name"
     t.boolean  "active"
+    t.string   "route_type"
   end
 
   create_table "users", :force => true do |t|

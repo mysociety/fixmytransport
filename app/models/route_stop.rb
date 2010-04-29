@@ -16,7 +16,7 @@ class RouteStop < ActiveRecord::Base
   named_scope :terminuses, :conditions => {:terminus => true}
   
   def name
-    if route.transport_mode_name == 'Train'
+    if route.is_a? TrainRoute
       text = stop.name_without_station
     else
       text = stop.name_and_bearing

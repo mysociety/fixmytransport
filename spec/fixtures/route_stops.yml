@@ -13,15 +13,32 @@
 one:
   route: victoria_to_haywards_heath
   stop: victoria_station_one
+  terminus: t
 two:
   route: victoria_to_haywards_heath
   stop: clapham_junction
+  terminus: f
 three:
   route: victoria_to_haywards_heath
   stop: croydon_station
+  terminus: f
 four:
   route: victoria_to_haywards_heath  
   stop: gatwick_airport_station
+  terminus: f
 five:
   route: victoria_to_haywards_heath
   stop: haywards_heath_station
+  terminus: t
+six: 
+  route: number_807_bus
+  stop: bus_station
+  terminus: t
+seven: 
+  route: number_807_bus
+  stop: bethany_terrace
+  terminus: f
+eight: 
+  route: number_807_bus
+  stop: arch
+  terminus: t

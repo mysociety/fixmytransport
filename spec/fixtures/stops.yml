@@ -338,3 +338,90 @@ haywards_heath_station:
   street: "-"
   indicator: ""
   nptg_locality_code: E0052196
+arch: 
+  status: act
+  lon: "-1.70864"
+  lat: "54.86627"
+  easting: "418799"
+  northing: "552426"
+  parent_locality_name: ""
+  locality_name: South Moor
+  grid_type: U
+  naptan_code: duragpwg
+  revision_number: "1"
+  landmark: Landmark not known
+  common_name: Arch (Eden Terrace)
+  administrative_area_code: 078
+  bearing: NE
+  plate_code: ""
+  stop_type: BCT
+  locality_centre: f
+  suburb: ""
+  grand_parent_locality_name: ""
+  modification: rev
+  bus_stop_type: MKD
+  crossing: ""
+  short_common_name: ""
+  atco_code: 13001612B
+  town: South Moor
+  street: A693
+  indicator: north east bound
+  nptg_locality_code: E0010042
+bethany_terrace:
+  status: act
+  lon: "-1.74365"
+  lat: "54.86376"
+  easting: "416553"
+  northing: "552138"
+  parent_locality_name: Annfield Plain
+  locality_name: Catchgate
+  grid_type: U
+  naptan_code: duradtga
+  revision_number: "1"
+  landmark: Bethany Terrace
+  common_name: Bethany Terrace
+  administrative_area_code: 078
+  bearing: SW
+  plate_code: ""
+  stop_type: BCT
+  locality_centre: f
+  suburb: ""
+  grand_parent_locality_name: ""
+  modification: rev
+  bus_stop_type: MKD
+  crossing: ""
+  short_common_name: ""
+  atco_code: 13001451F
+  town: Catchgate
+  street: Kyo Road
+  indicator: south west bound
+  nptg_locality_code: E0009961
+bus_station:
+  status: act
+  lon: "-1.69864"
+  lat: "54.86916"
+  easting: "419439"
+  northing: "552750"
+  parent_locality_name: ""
+  locality_name: Stanley
+  grid_type: U
+  naptan_code: duradmgw
+  revision_number: "2"
+  landmark: Bus station Stand E
+  common_name: Bus Station
+  administrative_area_code: 078
+  bearing: ""
+  plate_code: ""
+  stop_type: BCS
+  locality_centre: f
+  suburb: ""
+  grand_parent_locality_name: ""
+  modification: rev
+  bus_stop_type: MKD
+  crossing: ""
+  short_common_name: ""
+  atco_code: 13001288E
+  town: Stanley
+  street: Mary Street
+  indicator: north bound
+  nptg_locality_code: E0010044

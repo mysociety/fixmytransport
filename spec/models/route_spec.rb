@@ -14,8 +14,6 @@ require 'spec_helper'
 
 describe Route do
 
-  fixtures :transport_modes, :stops, :stop_areas, :routes, :route_stops, :stop_area_memberships
-
   before(:each) do
     @valid_attributes = {
       :transport_mode_id => 1,
@@ -33,7 +31,7 @@ describe Route do
     it 'should raise an exception if a route to be merged has problems associated with it' do
       Route.stub!(:find_existing).and_return([mock_model(Route)])
       route = Route.new(:problems => [mock_model(Problem)], :transport_mode_id => 5, :number => '43')
-      lambda{ Route.add!(route) }.should raise_exception(/Can't merge route with problems/)
+      lambda{ Route.add!(route) }.should raise_error(/Can't merge route with problems/)
     end
     
     it 'should save the route if no existing routes are found' do 
@@ -49,7 +47,7 @@ describe Route do
       existing_route = Route.new(:number => '111')
       existing_route.route_operators << existing_route_operator
       Route.stub!(:find_existing).and_return([existing_route])
-      route_operator = mock_model(RouteOperator, :operator => Operator.new, :destroy => true)
+      route_operator = RouteOperator.new(:operator => Operator.new)
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
                         :route_operators => [route_operator])
@@ -112,16 +110,6 @@ describe Route do
     end
     
   end
-  
-  describe 'when finding existing routes' do 
-  
-    it 'should include in the results returned a route with the same number, mode of transport and stop codes' do 
-      attributes = { :number => '1F50', 
-                     :transport_mode_id => 5, 
-                     :stop_codes => ['9100VICTRIC', '9100CLPHMJC', '9100ECROYDN', '9100GTWK', '9100HYWRDSH'] }
-      Route.find_existing(attributes).include?(routes(:victoria_to_haywards_heath)).should be_true
-    end
-    
-  end
+
   
 end

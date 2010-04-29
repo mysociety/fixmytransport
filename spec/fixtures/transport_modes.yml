@@ -13,21 +13,24 @@
 
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-bus_coach:
-  name: BusCoach
+bus:
+  name: Bus
   id: "1"
+coach:
+  name: Coach
+  id: "2"
 taxi:
   name: Taxi
-  id: "2"
+  id: "3"
 air:
   name: Air
-  id: "3"
+  id: "4"
 ferry:
   name: Ferry / Ship
-  id: "4"
-rail:
-  name: Rail
   id: "5"
+rail:
+  name: Train
+  id: "6"
 tram_metro:
   name: Tram / Metro
-  id: "6"
+  id: "7"

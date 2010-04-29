@@ -9,7 +9,7 @@ describe Parsers::NptdrParser do
   describe 'when parsing a TSV file of route data' do 
     
     before(:each) do 
-      @transport_mode = mock_model(TransportMode)
+      @transport_mode = mock_model(TransportMode, :route_type => "BusRoute")
       TransportMode.stub!(:find_by_name).with('Bus').and_return(@transport_mode)
       @stop = mock_model(Stop, :atco_code => 'xxxxx')
       Stop.stub!(:find_by_atco_code).and_return(@stop)

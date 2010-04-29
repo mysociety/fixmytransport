@@ -21,14 +21,14 @@ class Route < ActiveRecord::Base
   
   # Return routes with this number and transport mode that have a stop in common with 
   # the stop list given
-  def self.find_existing(attributes)
-    stop_codes = attributes[:stop_codes]
-    routes = self.find(:all, :conditions => ['number = ? and transport_mode_id = ?', 
-                              attributes[:number], attributes[:transport_mode_id]],
-                             :include => { :route_stops => :stop })
+  def self.find_all_by_number_and_common_stop(new_route)
+    stop_codes = new_route.stop_codes
+    routes = find(:all, :conditions => ['number = ? and transport_mode_id = ?', 
+                                         new_route.number, new_route.transport_mode.id],
+                        :include => { :route_stops => :stop })
     routes_with_same_stops = []
     routes.each do |route|
-      route_stop_codes = route.stops.map{ |stop| stop.atco_code }
+      route_stop_codes = route.stop_codes
       stop_codes_in_both = (stop_codes & route_stop_codes)
       if stop_codes_in_both.size > 0
         routes_with_same_stops << route
@@ -37,11 +37,37 @@ class Route < ActiveRecord::Base
     routes_with_same_stops
   end
   
+  # Return routes with this transport mode whose stops are a superset or subset of the stop 
+  # list given and whose terminuses are the same
+  def self.find_all_by_terminuses_and_stop_set(new_route)
+    stop_codes = new_route.stop_codes
+    condition_string = 'transport_mode_id = ?' 
+    params = [new_route.transport_mode_id]
+    terminuses = new_route.route_stops.select{|route_stop| route_stop.terminus == true }
+    joins = ''
+    terminuses.each_with_index do |terminus,index|
+      joins += " inner join route_stops rs#{index} on routes.id = rs#{index}.route_id"
+      condition_string += " and rs#{index}.terminus = 't' and rs#{index}.stop_id = ?"
+      params << terminus.stop.id
+    end
+    conditions = [condition_string] + params
+    routes = find(:all, :joins => joins, 
+                        :conditions => conditions, 
+                        :include => { :route_stops => :stop })
+    routes_with_same_stops = []
+    routes.each do |route|
+      route_stop_codes = route.stop_codes
+      stop_codes_in_both = (stop_codes & route_stop_codes)
+      next if stop_codes_in_both.size == 0
+      if (stop_codes_in_both.size == stop_codes.size) or (stop_codes_in_both.size == route_stop_codes.size)
+        routes_with_same_stops << Route.find(route.id)
+      end    
+    end
+    routes_with_same_stops
+  end
+  
   def self.add!(route)
-    route_attributes = { :number => route.number, 
-                         :transport_mode_id => route.transport_mode.id, 
-                         :stop_codes => route.route_stops.map{ |route_stop| route_stop.stop.atco_code } }
-    existing_routes = find_existing(route_attributes)
+    existing_routes = find_existing(route)
     if existing_routes.empty?
       route.save!
       return route
@@ -73,14 +99,12 @@ class Route < ActiveRecord::Base
   end
   
   def name
-    if transport_mode_name == 'Train'
-      terminus_description = route_stops.terminuses.map{ |terminus| terminus.name }.to_sentence
-      return "Train route between #{terminus_description}"      
-    else
-      return "#{transport_mode_name} route number #{number}"
-    end
+    return "#{transport_mode_name} route #{number}"
   end
 
+  def stop_codes
+    route_stops.map{ |route_stop| route_stop.stop.atco_code }
+  end
 
   def transport_mode_name
     transport_mode.name

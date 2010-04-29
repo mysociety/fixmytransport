@@ -63,8 +63,9 @@ class Parsers::NptdrParser
       operator_code = row['Operator Code'].strip      
       stop_codes = row['Locations'].split(',')
       transport_mode = vehicle_codes_to_transport_modes(vehicle_code)
-      route = Route.new(:number => route_number,
-                        :transport_mode => transport_mode)                 
+      route_type = transport_mode.route_type.constantize
+      route = route_type.new(:number => route_number,
+                             :transport_mode => transport_mode)                 
       stop_codes.each_with_index do |stop_code,index|
         stop = Stop.find_by_atco_code(stop_code.strip)
         if ! stop

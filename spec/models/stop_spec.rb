@@ -41,8 +41,6 @@
 require 'spec_helper'
 
 describe Stop do
-
-  fixtures :stops, :stop_areas, :stop_area_memberships, :stop_area_links
   
   before(:each) do
      @valid_attributes = {

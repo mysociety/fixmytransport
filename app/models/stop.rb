@@ -54,7 +54,7 @@ class Stop < ActiveRecord::Base
   end
   
   def name_without_station
-    text = name.gsub('Rail Station', '')
+    text = name.gsub(' Rail Station', '')
     text
   end
   
