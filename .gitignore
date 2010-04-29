@@ -7,4 +7,6 @@ config/database.yml.deployed
 config/general
 config/general.deployed
 config/rails_env.rb
+config/httpd.conf
+config/httpd.conf.deployed
 public/down.html
