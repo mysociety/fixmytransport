@@ -18,6 +18,8 @@ class RouteStop < ActiveRecord::Base
   def name
     if route.is_a? TrainRoute
       text = stop.name_without_station
+    elsif route.is_a? MetroRoute
+      text = stop.name_without_metro_station
     else
       text = stop.name_and_bearing
     end

@@ -43,7 +43,7 @@ class Stop < ActiveRecord::Base
   named_scope :active, :conditions => { :status => 'act' }
   has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
-  validates_presence_of :common_name
+  validates_presence_of :common_name, :locality_name
   attr_accessor :transport_mode_id
   has_many :problems, :as => :location
   has_many :route_stops
@@ -55,6 +55,11 @@ class Stop < ActiveRecord::Base
   
   def name_without_station
     text = name.gsub(' Rail Station', '')
+    text
+  end
+  
+  def name_without_metro_station
+    text = name.gsub(' Underground Station', '')
     text
   end
   

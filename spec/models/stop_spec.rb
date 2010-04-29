@@ -160,5 +160,21 @@ describe Stop do
     
   end
   
+  describe 'when giving name without station' do 
+  
+    it 'should remove "Rail Station" from the end of the name' do 
+      Stop.new(:common_name => "Kensington Rail Station").name_without_station.should == "Kensington"
+    end
+    
+  end
+  
+  describe 'when giving name without metro station' do 
+  
+    it 'should remove "Underground Station" from the end of the name' do 
+      Stop.new(:common_name => "Kensington Underground Station").name_without_metro_station.should == "Kensington"
+    end
+    
+  end
+  
 end
 
