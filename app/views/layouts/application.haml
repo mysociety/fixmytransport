@@ -2,12 +2,17 @@
 %html{ :lang => I18n.locale }
   %head
     %title 
-      = yield :title
+      ="FixMyTransport #{yield :title}"
     %meta{ :content => "text/html; charset=utf-8", "http-equiv" => "Content-type" }
     = stylesheet_link_tag 'application'
     = yield :javascript
   %body
     %h2= link_to_unless_current(t(:site_name), root_url) 
+    %ul.navigation 
+      %li=link_to t(:random_stop), random_stops_url
+      %li=link_to t(:random_stop_area), random_stop_areas_url
+      %li=link_to t(:random_route), random_routes_url
+      %li=link_to t(:submit_problem), new_problem_url
     - [:notice, :error, :message].each do |key| 
       - unless flash[key].blank? 
         %p{ :class => "flash flash_#{key}" }!= flash[key]

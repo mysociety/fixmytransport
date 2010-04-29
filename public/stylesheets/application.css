@@ -35,6 +35,20 @@ body {
   position: relative;
   width: 100%;
 }
+
+/* Navigation */
+
+ul.navigation {
+  list-style-type: none;
+  position: absolute;
+  right: 8em;
+  top: 1em;
+}
+
+ul.navigation li {
+  display: inline-block;
+}
+
 /* Home page */
 
 .home-nav-item {
@@ -45,7 +59,7 @@ body {
 /* Forms */
 
 label {
-  width: 10em;  
+  width: 15em;  
   padding-right: 0.5em;
   text-align: right;
   float: left;
