@@ -53,6 +53,11 @@ class Stop < ActiveRecord::Base
     common_name
   end
   
+  def name_without_station
+    text = name.gsub('Rail Station', '')
+    text
+  end
+  
   def name_and_bearing
     text = "#{name}"
     text += " (#{bearing})" if ! bearing.blank?

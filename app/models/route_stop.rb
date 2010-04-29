@@ -13,4 +13,15 @@
 class RouteStop < ActiveRecord::Base
   belongs_to :stop
   belongs_to :route
+  named_scope :terminuses, :conditions => {:terminus => true}
+  
+  def name
+    if route.transport_mode_name == 'Train'
+      text = stop.name_without_station
+    else
+      text = stop.name_and_bearing
+    end
+    text
+  end
+  
 end
