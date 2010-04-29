@@ -47,7 +47,7 @@ describe Route do
       existing_route_operator = mock_model(RouteOperator, :operator => mock_model(Operator))
       existing_route = mock_model(Route, :save! => true, :route_operators => [existing_route_operator])
       Route.stub!(:find_existing).and_return([existing_route])
-      route_operator = mock_model(RouteOperator, :operator => mock_model(Operator))
+      route_operator = mock_model(RouteOperator, :operator => mock_model(Operator), :destroy => true)
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
                         :route_operators => [route_operator])
@@ -57,7 +57,7 @@ describe Route do
     
     it 'should not add duplicate route operator associations when merging overlapping routes' do 
       operator = mock_model(Operator)
-      route_operator = mock_model(RouteOperator, :operator => operator)
+      route_operator = mock_model(RouteOperator, :operator => operator, :destroy => true)
       existing_route = mock_model(Route, :save! => true, :route_operators => [route_operator])
       Route.stub!(:find_existing).and_return([existing_route])
       
@@ -72,7 +72,7 @@ describe Route do
       existing_route_stop = mock_model(RouteStop, :stop => mock_model(Stop))
       existing_route = mock_model(Route, :save! => true, :route_stops => [existing_route_stop])
       Route.stub!(:find_existing).and_return([existing_route])
-      route_stop = mock_model(RouteStop, :stop => mock_model(Stop, :atco_code => 'aaaa'))
+      route_stop = mock_model(RouteStop, :stop => mock_model(Stop, :atco_code => 'aaaa'), :destroy => true)
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
                         :route_stops => [route_stop])
@@ -85,7 +85,7 @@ describe Route do
       existing_route_stop = mock_model(RouteStop, :stop => existing_stop, :terminus? => false)
       existing_route = mock_model(Route, :save! => true, :route_stops => [existing_route_stop])
       Route.stub!(:find_existing).and_return([existing_route])
-      route_stop = mock_model(RouteStop, :stop => existing_stop)
+      route_stop = mock_model(RouteStop, :stop => existing_stop, :destroy => true)
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
                         :route_stops => [route_stop])
@@ -98,7 +98,7 @@ describe Route do
       existing_route_stop = mock_model(RouteStop, :stop => existing_stop, :terminus? => true)
       existing_route = mock_model(Route, :save! => true, :route_stops => [existing_route_stop])
       Route.stub!(:find_existing).and_return([existing_route])
-      route_stop = mock_model(RouteStop, :stop => existing_stop, :terminus? => false)
+      route_stop = mock_model(RouteStop, :stop => existing_stop, :terminus? => false, :destroy => true)
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
                         :route_stops => [route_stop])

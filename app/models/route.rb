@@ -11,9 +11,9 @@
 #
 
 class Route < ActiveRecord::Base
-  has_many :route_operators
+  has_many :route_operators, :dependent => :destroy
   has_many :operators, :through => :route_operators, :uniq => true
-  has_many :route_stops
+  has_many :route_stops, :dependent => :destroy
   has_many :stops, :through => :route_stops, :uniq => true, :order => 'common_name asc'
   belongs_to :transport_mode
   validates_presence_of :number
@@ -71,6 +71,16 @@ class Route < ActiveRecord::Base
     end
     original.save!
   end
+  
+  def name
+    if transport_mode_name == 'Train'
+      terminus_description = route_stops.terminuses.map{ |terminus| terminus.name }.to_sentence
+      return "Train route between #{terminus_description}"      
+    else
+      return "#{transport_mode_name} route number #{number}"
+    end
+  end
+
 
   def transport_mode_name
     transport_mode.name
