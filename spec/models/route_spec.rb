@@ -44,23 +44,25 @@ describe Route do
     end
     
     it 'should transfer route operator associations when merging overlapping routes' do 
-      existing_route_operator = mock_model(RouteOperator, :operator => mock_model(Operator))
-      existing_route = mock_model(Route, :save! => true, :route_operators => [existing_route_operator])
+      existing_route_operator = RouteOperator.new
+      existing_route_operator.operator = Operator.new
+      existing_route = Route.new(:number => '111')
+      existing_route.route_operators << existing_route_operator
       Route.stub!(:find_existing).and_return([existing_route])
-      route_operator = mock_model(RouteOperator, :operator => mock_model(Operator), :destroy => true)
+      route_operator = mock_model(RouteOperator, :operator => Operator.new, :destroy => true)
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
                         :route_operators => [route_operator])
       Route.add!(route)
-      existing_route.route_operators.should == [existing_route_operator, route_operator]
+      existing_route.route_operators.size.should == 2
     end 
     
     it 'should not add duplicate route operator associations when merging overlapping routes' do 
-      operator = mock_model(Operator)
-      route_operator = mock_model(RouteOperator, :operator => operator, :destroy => true)
-      existing_route = mock_model(Route, :save! => true, :route_operators => [route_operator])
+      operator = Operator.new
+      route_operator = RouteOperator.new(:operator => operator)
+      existing_route = Route.new(:number => '111')
+      existing_route.route_operators << route_operator
       Route.stub!(:find_existing).and_return([existing_route])
-      
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
                         :route_operators => [route_operator])
@@ -69,15 +71,18 @@ describe Route do
     end
     
     it 'should transfer route stops when merging overlapping routes' do 
-      existing_route_stop = mock_model(RouteStop, :stop => mock_model(Stop))
-      existing_route = mock_model(Route, :save! => true, :route_stops => [existing_route_stop])
+      existing_route_stop = RouteStop.new(:stop => Stop.new)
+      existing_route = Route.new(:number => '111')
+      existing_route.route_stops << existing_route_stop 
       Route.stub!(:find_existing).and_return([existing_route])
-      route_stop = mock_model(RouteStop, :stop => mock_model(Stop, :atco_code => 'aaaa'), :destroy => true)
+      route_stop = mock_model(RouteStop, :stop => Stop.new, 
+                                         :terminus => false,
+                                         :destroy => true)
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
                         :route_stops => [route_stop])
       Route.add!(route)
-      existing_route.route_stops.should == [existing_route_stop, route_stop]
+      existing_route.route_stops.size.should == 2
     end
     
     it 'should not add duplicate route stops when merging overlapping routes' do 

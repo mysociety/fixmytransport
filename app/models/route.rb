@@ -55,16 +55,16 @@ class Route < ActiveRecord::Base
       end
       duplicate.route_operators.each do |route_operator|
         if ! original.route_operators.detect { |existing| existing.operator == route_operator.operator }
-          original.route_operators << route_operator
+          original.route_operators.build(:operator => route_operator.operator)
         end
       end
       duplicate.route_stops.each do |route_stop|
-        if existing = original.route_stops.detect { |existing| existing.stop == route_stop.stop }
-          if existing.terminus? and !route_stop.terminus?
-            existing.terminus = false
+        if existing_route_stop = original.route_stops.detect { |existing| existing.stop == route_stop.stop }
+          if existing_route_stop.terminus? and !route_stop.terminus?
+            existing_route_stop.terminus = false
           end
         else
-          original.route_stops << route_stop
+          original.route_stops.build(:stop => route_stop.stop, :terminus => route_stop.terminus)
         end
       end
       duplicate.destroy
