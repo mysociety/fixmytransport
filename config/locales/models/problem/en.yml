@@ -12,6 +12,8 @@ en:
               blank: "Please select a transport type"
             location:
               blank: "We can't figure out where your problem is"
+            location_type:
+              blank: "Please select stop, station or route"
         stop:
           attributes: 
             common_name:

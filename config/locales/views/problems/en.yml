@@ -10,4 +10,7 @@ en:
   common_name: 'Station/stop name'
   locality_name: 'Town/area'
   number: 'Route number'
-  location_type: 'Stop or route'
+  location_type: 'Stop, station or route'
+  problem_location_found: "We think your problem is here:"
+  problem_location_not_found: "We couldn't find your problem"
+  go: Go!
