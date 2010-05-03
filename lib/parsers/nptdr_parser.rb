@@ -58,9 +58,12 @@ class Parsers::NptdrParser
   def parse_routes filepath
     csv_data = File.read(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      route_number = row['Route Number'].strip
-      vehicle_code = row['Vehicle Code'].strip
-      operator_code = row['Operator Code'].strip      
+      route_number = row['Route Number']
+      vehicle_code = row['Vehicle Code']
+      operator_code = row['Operator Code']
+      route_number.strip! if route_number 
+      vehicle_code.strip! if vehicle_code
+      operator_code.strip! if operator_code   
       stop_codes = row['Locations'].split(',')
       transport_mode = vehicle_codes_to_transport_modes(vehicle_code)
       next unless transport_mode.route_type
