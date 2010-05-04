@@ -36,10 +36,11 @@ class Problem < ActiveRecord::Base
         return
       end
       if stops.size > 1
-        if stop_area = Stop.common_root_area(stops)
+        if stop_area = Stop.common_area(stops)
           self.location = stop_area
           return 
         end
+        stop_areas = Stop.stop_areas(stops)
       end
       self.locations = stops
       return

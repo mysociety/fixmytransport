@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  transport_mode_id: 1
+  stop_area_type_id: 1
+
+two:
+  transport_mode_id: 1
+  stop_area_type_id: 1

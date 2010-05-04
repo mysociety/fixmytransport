@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100429120538) do
+ActiveRecord::Schema.define(:version => 20100504150644) do
 
   create_table "operators", :force => true do |t|
     t.string   "code"
@@ -81,6 +81,13 @@ ActiveRecord::Schema.define(:version => 20100429120538) do
   add_index "stop_area_memberships", ["stop_area_id"], :name => "index_stop_area_memberships_on_stop_area_id"
   add_index "stop_area_memberships", ["stop_id"], :name => "index_stop_area_memberships_on_stop_id"
 
+  create_table "stop_area_types", :force => true do |t|
+    t.string   "code"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "stop_areas", :force => true do |t|
     t.string   "code"
     t.text     "name"
@@ -148,6 +155,13 @@ ActiveRecord::Schema.define(:version => 20100429120538) do
     t.datetime "updated_at"
   end
 
+  create_table "transport_mode_stop_area_types", :force => true do |t|
+    t.integer  "transport_mode_id"
+    t.integer  "stop_area_type_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "transport_mode_stop_types", :force => true do |t|
     t.integer  "transport_mode_id"
     t.integer  "stop_type_id"
@@ -183,6 +197,8 @@ ActiveRecord::Schema.define(:version => 20100429120538) do
 
   add_foreign_key "stop_area_memberships", "stop_areas", :name => "stop_area_memberships_stop_area_id_fk"
   add_foreign_key "stop_area_memberships", "stops", :name => "stop_area_memberships_stop_id_fk"
+
+  add_foreign_key "transport_mode_stop_area_types", "transport_modes", :name => "transport_mode_stop_area_types_transport_mode_id_fk"
 
   add_foreign_key "transport_mode_stop_types", "stop_types", :name => "transport_mode_stop_types_stop_type_id_fk", :dependent => :nullify
   add_foreign_key "transport_mode_stop_types", "transport_modes", :name => "transport_mode_stop_types_transport_mode_id_fk", :dependent => :nullify

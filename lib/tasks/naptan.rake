@@ -24,11 +24,15 @@ namespace :naptan do
     task :stop_area_hierarchy => :environment do 
       parse('stop_area_hierarchy', Parsers::NaptanParser)
     end
-    
-    
+        
     desc "Loads stop type data from a CSV file specified as FILE=filename"
     task :stop_types => :environment do 
       parse('stop_types', Parsers::NaptanParser)
+    end
+    
+    desc "Loads stop area type data from a CSV file specified as FILE=filename"
+    task :stop_area_types => :environment do 
+      parse('stop_area_types', Parsers::NaptanParser)
     end
     
     desc "Loads all data from CSV files in a directory specified as DIR=dirname"
@@ -42,6 +46,8 @@ namespace :naptan do
       puts "Loading data from #{ENV['DIR']}..."
       ENV['FILE'] = File.join(ENV['DIR'], 'StopTypes.csv')
       Rake::Task['naptan:load:stop_types'].execute
+      ENV['FILE'] = File.join(ENV['DIR'], 'StopAreaTypes.csv')
+      Rake::Task['naptan:load:stop_area_types'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'Stops.csv')
       Rake::Task['naptan:load:stops'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'StopAreas.csv')

@@ -100,11 +100,11 @@ describe Stop do
     
   end
   
-  describe 'when finding a common root area' do 
+  describe 'when finding a common area' do 
 
-    it 'should return the common root stop area that all stops in the list belong to' do 
+    it 'should return a common root stop area that all stops in the list belong to' do 
       stops = [stops(:victoria_station_one), stops(:victoria_station_two)]
-      Stop.common_root_area(stops).should == stop_areas(:victoria_station_root)
+      Stop.common_area(stops).should == stop_areas(:victoria_station_root)
     end
     
   end

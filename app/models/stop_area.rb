@@ -44,7 +44,7 @@ class StopArea < ActiveRecord::Base
   end
   
   def area
-    areas = stops.map{ |stop| stop.locality_name}.uniq
+    areas = stops.map{ |stop| stop.locality_name }.uniq
     if areas.size == 1
       return areas.first
     end

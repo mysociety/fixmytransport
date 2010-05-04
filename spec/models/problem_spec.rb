@@ -83,7 +83,7 @@ describe Problem do
       second_stop = mock_model(Stop)
       stop_area = mock_model(StopArea)
       Stop.stub!(:find_from_attributes).and_return([first_stop, second_stop])
-      Stop.stub!(:common_root_area).and_return(stop_area)
+      Stop.stub!(:common_area).and_return(stop_area)
       attributes = { :name => 'name', :area => 'locality name' }
       expect_location(attributes, 'Stop', stop_area)
     end

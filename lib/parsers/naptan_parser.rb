@@ -29,6 +29,21 @@ class Parsers::NaptanParser
     end
   end
   
+  def parse_stop_area_types filepath
+    csv_options = self.csv_options.merge(:encoding => 'U',  :col_sep => "\t")
+    csv_data = File.read(filepath)
+    FasterCSV.parse(csv_data, csv_options) do |row|
+      stop_area_type = StopAreaType.new(:code        => row['Value'],
+                                        :description => row['Description'])
+      transport_mode_names = row['Mode'].split(',')
+      transport_mode_names.each do |transport_mode_name|
+        transport_mode = TransportMode.find_by_naptan_name(transport_mode_name)
+        stop_area_type.transport_mode_stop_area_types.build(:transport_mode_id => transport_mode.id)
+      end
+      yield stop_area_type
+    end
+  end
+  
   def parse_stop_types filepath
     csv_options = self.csv_options.merge(:encoding => 'U')
     csv_data = File.read(filepath)

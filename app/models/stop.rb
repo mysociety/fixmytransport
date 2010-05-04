@@ -44,7 +44,6 @@ class Stop < ActiveRecord::Base
   has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
   validates_presence_of :common_name, :locality_name
-  attr_accessor :transport_mode_id
   has_many :problems, :as => :location
   has_many :route_stops
   has_many :routes, :through => :route_stops, :uniq => true
@@ -69,17 +68,23 @@ class Stop < ActiveRecord::Base
     text
   end
   
-  def root_areas
-    stop_areas.select{ |stop_area| stop_area.root? }
-  end
-  
-  def self.common_root_area(stops)
-    stop_area_sets = stops.map{ |stop| stop.root_areas }
+  def self.common_area(stops)
+    stop_area_sets = stops.map{ |stop| stop.stop_areas }
     stop_areas = stop_area_sets.inject{ |intersection_set,stop_area_set| intersection_set && stop_area_set }
+    root_stop_areas = stop_areas.select{ |stop_area| stop_area.root? }
+    if root_stop_areas.size == 1
+      return root_stop_areas.first
+    end
     if stop_areas.size == 1
       return stop_areas.first
     end
     return nil
+  end
+  
+  def self.location_list(stops)
+    root_stop_area_sets = stops.map{ |stop| stop.stop_areas.select{ |stop_area| } }
+    stop_areas = stop_area_sets.inject{ |union_set,stop_area_set| union_set | stop_area_set }
+    return stop_areas
   end
   
   def self.find_from_attributes(attributes)

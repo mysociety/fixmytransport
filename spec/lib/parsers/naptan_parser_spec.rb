@@ -51,6 +51,21 @@ describe Parsers::NaptanParser do
     
   end
   
+  describe 'when parsing an example CSV file of stop area types' do 
+    
+    before(:all) do 
+      TransportMode.stub!(:find_by_naptan_name).and_return(mock_model(TransportMode))
+      @stop_area_types = []
+      @parser = Parsers::NaptanParser.new
+      @parser.parse_stop_area_types(example_file("StopAreaTypes.csv")){ |stop_area_type| @stop_area_types << stop_area_type }
+    end
+    
+    it 'should extract the NaPTAN stop area type code' do 
+      @stop_area_types.first.code.should == 'GTMU'
+    end
+    
+  end
+  
   describe 'when parsing an example CSV file of stop types' do 
   
     before(:all) do 

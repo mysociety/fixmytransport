@@ -14,5 +14,7 @@
 class TransportMode < ActiveRecord::Base
   has_many :transport_mode_stop_types
   has_many :stop_types, :through => :transport_mode_stop_types
+  has_many :transport_mode_stop_area_types
+  has_many :stop_area_types, :through => :transport_mode_stop_area_types
   named_scope :active, :conditions => { :active => true }
 end
