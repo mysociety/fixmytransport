@@ -9,7 +9,7 @@
   });
 
 .stop
-  .name= @stop_area.name
+  .name= @stop_area.description
 The following stops are here: 
 - @stop_area.stops.each do |stop|
   .stop= link_to(stop.name, stop_url(stop))

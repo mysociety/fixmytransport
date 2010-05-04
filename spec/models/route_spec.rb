@@ -26,6 +26,25 @@ describe Route do
     route.valid?.should be_true
   end
   
+  describe 'when finding from attributes' do 
+  
+    it 'should find any routes matching the number and transport mode id' do 
+      expected_id = routes(:victoria_to_haywards_heath).id
+      attributes = { :transport_mode_id => 6, 
+                     :route_number => '1F50' }
+      routes = Route.find_from_attributes(attributes)
+      routes.map{ |route| route.id }.include?(expected_id).should be_true
+    end
+    
+    it 'should return instances of the base Route class' do 
+      attributes = { :transport_mode_id => 6, 
+                     :route_number => '1F50' }
+      routes = Route.find_from_attributes(attributes)
+      routes.each{ |route| route.class.should == Route }
+    end
+    
+  end
+  
   describe 'when adding a route' do 
   
     it 'should raise an exception if a route to be merged has problems associated with it' do

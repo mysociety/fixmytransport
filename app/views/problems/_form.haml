@@ -2,19 +2,7 @@
   .form-error
     = t(:problem_form_error)
 .fieldset
-  .form-field
-    - if @problem.errors.on(:subject)
-      .form-field-error= error_message_on @problem, :subject
-    = render 'text_field', :f => form, :name => :subject
-  - form.fields_for :reporter do |builder|
-    .form-field
-      - if @problem.reporter.errors.on(:email)
-        .form-field-error= error_message_on @problem.reporter, :email
-      = render 'text_field', :f => builder, :name => :email
-    .form-field
-      - if @problem.reporter.errors.on(:name)
-        .form-field-error= error_message_on @problem.reporter, :name
-      = render 'text_field', :f => builder, :name => :name
+  != form.hidden_field :location_id 
   - if @problem.errors.on(:location)
     .form-field-error= error_message_on @problem, :location  
   .form-field
@@ -24,27 +12,17 @@
       =t(:transport_mode)
     .transport-mode
       != transport_mode_radio_buttons
-  - fields_for @stop do |builder|
     .form-field
-      - if @stop.errors.on(:common_name)
-        .form-field-error= error_message_on @stop, :common_name
-      = render 'text_field', :f => builder, :name => :common_name
+      != label_tag 'problem[location_attributes][name]', t(:location_name)
+      != text_field_tag 'problem[location_attributes][name]', location_param(:name)
     .form-field
-      - if @stop.errors.on(:locality_name)
-        .form-field-error= error_message_on @stop, :locality_name
-      = render 'text_field', :f => builder, :name => :locality_name
-  - fields_for @route do |builder|
+      != label_tag 'problem[location_attributes][area]', t(:area)
+      != text_field_tag 'problem[location_attributes][area]', location_param(:area)
     .form-field
-      - if @route.errors.on(:number)
-        .form-field-error= error_message_on @route, :number
-      = render 'text_field', :f => builder, :name => :number
+      != label_tag 'problem[location_attributes][route_number]', t(:route_number)
+      != text_field_tag 'problem[location_attributes][route_number]', location_param(:route_number)
   .form-field
     - if @problem.errors.on(:location_type)
       .form-field-error= error_message_on @problem, :location_type
     != form.label :location_type, t(:location_type)
-    != location_type_radio_buttons
-  .form-field
-    - if @problem.errors.on(:description)
-      .form-field-error= error_message_on @problem, :description
-    != form.label :description, t(:description)
-    != form.text_area :description
+    != location_type_radio_buttons @problem

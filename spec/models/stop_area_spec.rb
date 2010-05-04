@@ -46,4 +46,37 @@ describe StopArea do
   it "should create a new instance given valid attributes" do
     StopArea.create!(@valid_attributes)
   end
+  
+  describe ' area ' do 
+  
+    describe 'for stop areas whose stops all share a locality_name' do
+      
+      it 'should return the locality_name' do 
+        stop_areas(:victoria_station_leaf).area.should == "Victoria"
+      end
+    
+    end
+    
+    describe 'for areas whose stops do not share a locality_name' do 
+      
+      it 'should return nil' do 
+        stop_areas(:victoria_station_root).area.should be_nil
+      end
+      
+    end
+    
+  end
+  
+  describe ' description ' do
+    
+    describe 'for stop areas with an area attribute' do 
+  
+      it 'should be of the form "name in area" ' do 
+        stop_areas(:victoria_station_leaf).description.should == "London Victoria Rail Station in Victoria"
+      end
+    
+    end
+  
+  end 
+
 end

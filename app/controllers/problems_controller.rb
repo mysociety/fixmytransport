@@ -1,11 +1,8 @@
 class ProblemsController < ApplicationController
 
   def new
-    @title = t :submit_problem
-    @problem = Problem.new
-    @problem.build_reporter
-    @stop = Stop.new
-    @route = Route.new
+    @title = t :find_location
+    @problem = Problem.new()
   end
   
   def index
@@ -15,21 +12,21 @@ class ProblemsController < ApplicationController
   
   def create
     @problem = Problem.new(params[:problem])
-    @stop = Stop.new(params[:stop])
-    @route = Route.new(params[:route])
-    if (@problem.location_type == 'Stop' and !@stop.valid?) or \
-       (@problem.location_type == 'Route' and !@route.valid?)
-      @title = t :submit_problem
-      render :new and return false
-    end
-    @problem.location_attributes = params[:stop]
-    if @problem.save 
-      flash[:notice] = t :problem_created
-      redirect_to problem_url(@problem)
+    if @problem.save
+      flash[:notice] = t :problem_location_found
+      redirect_to polymorphic_url(@problem.location)
     else
-      @title = t :submit_problem
-      render :new
+      if !@problem.locations.empty?
+        @title = t :multiple_locations
+        render :choose_location
+      else
+        @title = t :find_location
+        render :new
+      end
     end
+  end
+  
+  def choose_location
   end
   
   def show

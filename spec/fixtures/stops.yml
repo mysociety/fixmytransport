@@ -84,7 +84,7 @@ victoria_station_one:
   northing: "179000"
   easting: "528900"
   parent_locality_name: London
-  locality_name: Victoria
+  locality_name: Victoria C.
   grid_type: U
   naptan_code: ""
   revision_number: "2"

@@ -115,46 +115,50 @@ describe Stop do
       Stop.find_from_attributes(attributes).include?(stop).should be_true
     end
     
+    before do 
+      StopType.stub!(:codes_for_transport_mode).with(5).and_return(['BCT'])
+    end
+    
     it 'should not return stops with status "del"' do 
       deleted_stop = stops(:victoria_bus_station_deleted)
-      attributes = { :common_name => 'victoria bus station', 
-                     :locality_name => 'london', 
-                     :stop_type_codes => ['BCT'] }
+      attributes = { :name => 'victoria bus station', 
+                     :area => 'london', 
+                     :transport_mode_id => 5 }
       Stop.find_from_attributes(attributes).include?(deleted_stop).should be_false
     end
     
     it 'should return stops that match the full common name, locality name and list of stop type codes' do     
-      attributes = {:common_name => 'Bus Station Bay 16', 
-                   :locality_name => 'Broadmead',
-                   :stop_type_codes => ['BCT']} 
+      attributes = { :name => 'Bus Station Bay 16', 
+                     :area => 'Broadmead',
+                     :transport_mode_id => 5 } 
       expect_stop(attributes, stops(:bristol_16))
     end
       
     it 'should return stops that match a partial common name, locality name and list of stop type codes' do
-      attributes = {:common_name => 'Bay 16', 
-                   :locality_name => 'Broadmead',
-                   :stop_type_codes => ['BCT']}
+      attributes = { :name => 'Bay 16', 
+                     :area => 'Broadmead',
+                     :transport_mode_id => 5 }
       expect_stop(attributes, stops(:bristol_16))
     end  
     
     it 'should return stops that match a full common name, locality name and list of stop type codes ignoring case ' do
-      attributes = {:common_name => 'bUs station Bay 16', 
-                    :locality_name => 'broadmead',
-                    :stop_type_codes => ['BCT']} 
+      attributes = { :name => 'bUs station Bay 16', 
+                     :area => 'broadmead',
+                     :transport_mode_id => 5 } 
       expect_stop(attributes, stops(:bristol_16))
     end  
     
     it 'should return stops that match the full common name, parent locality name and list of stop type codes ignoring case' do 
-      attributes = {:common_name => 'bUs station Bay 16', 
-                    :locality_name => 'bristol',
-                    :stop_type_codes => ['BCT']}
+      attributes = { :name => 'bUs station Bay 16', 
+                     :area => 'bristol',
+                     :transport_mode_id => 5 }
       expect_stop(attributes, stops(:bristol_16))
     end
     
     it 'should return a stops that match the full common name, grandparent locality name and list of stop type codes ignoring case' do
-      attributes = {:common_name => 'dursley road', 
-                    :locality_name => 'bristol',
-                    :stop_type_codes => ['BCT']}
+      attributes = { :name => 'dursley road', 
+                     :area => 'bristol',
+                     :transport_mode_id => 5 }
       expect_stop(attributes, stops(:dursley_road))
     end
     

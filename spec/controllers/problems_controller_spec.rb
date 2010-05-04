@@ -19,10 +19,11 @@ describe ProblemsController do
   describe 'POST #create' do 
   
     before do 
+      @stop = mock_model(Stop)
       @problem = mock_model(Problem, :id => 8, 
                                      :subject => 'A test problem', 
                                      :save => true, 
-                                     :location => mock_model(Stop), 
+                                     :location => @stop, 
                                      :location_attributes= => true,
                                      :location_type => 'Stop')
       Problem.stub!(:new).and_return(@problem)
@@ -44,16 +45,24 @@ describe ProblemsController do
       make_request
     end
     
-    it "should render the 'New problem' view if the problem can't be saved" do 
+    it "should render the 'New problem' view if the problem can't be saved and no locations were found" do 
       @problem.stub!(:save).and_return(false)
+      @problem.stub!(:locations).and_return([])
       make_request
       response.should render_template('problems/new')
     end
     
-    it 'should redirect to the problem page if the problem can be saved and the location found' do 
+    it 'should render the "Choose location" view if more than one location is found' do 
+      @problem.stub!(:save).and_return(false)
+      @problem.stub!(:locations).and_return([mock('location one'), mock('location two')])
+      make_request
+      response.should render_template('problems/choose_location')
+    end
+    
+    it 'should redirect to the location page if the problem can be saved and the location found' do 
       @problem.stub!(:save).and_return(true)
       make_request
-      response.should redirect_to(problem_url(@problem))
+      response.should redirect_to(stop_url(@stop))
     end
     
   end

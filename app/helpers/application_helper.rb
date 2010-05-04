@@ -15,11 +15,20 @@ module ApplicationHelper
     tags.join("\n")
   end
   
-  def location_type_radio_buttons
+  def location_param(param_name)
+    h(params[:problem][:location_attributes][param_name]) rescue nil
+  end
+  
+  def location_type_radio_buttons(problem)
     tags = []
-    [Stop, Route].each do |location_class|
-      tag = radio_button 'problem', 'location_type', location_class.to_s, {:class => 'location-type'}
-      tag += location_class.to_s.singularize
+    location_types = { 'Stop' => 'Stop', 
+                       'StopArea' => 'Station', 
+                       'Route' => 'Route'}
+              
+    location_types.keys.sort.each do |location_class|
+      checked = problem.location_type == location_class
+      tag = radio_button 'problem', 'location_type', location_class, {:class => 'location-type'}
+      tag += location_types[location_class]
       tags << tag
     end
     tags.join("\n")

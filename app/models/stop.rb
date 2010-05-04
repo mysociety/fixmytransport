@@ -53,7 +53,7 @@ class Stop < ActiveRecord::Base
     common_name
   end
   
-  def name_without_station
+    def name_without_station
     text = name.gsub(' Rail Station', '')
     text
   end
@@ -83,14 +83,15 @@ class Stop < ActiveRecord::Base
   end
   
   def self.find_from_attributes(attributes)
-    locality = attributes[:locality_name].downcase
-    common_name = attributes[:common_name].downcase
+    stop_type_codes = StopType.codes_for_transport_mode(attributes[:transport_mode_id])
+    area = attributes[:area].downcase
+    name = attributes[:name].downcase
     active.find(:all, :conditions => ["lower(common_name) like ? 
                                        AND (lower(locality_name) = ? 
                                        OR lower(parent_locality_name) = ?
                                        OR lower(grand_parent_locality_name) = ?)
                                        AND stop_type in (?)", 
-        "%#{common_name}%", locality, locality, locality, attributes[:stop_type_codes]])
+        "%#{name}%", area, area, area, stop_type_codes])
   end
   
   def self.find_by_name_and_coords(name, easting, northing, distance)

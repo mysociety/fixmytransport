@@ -37,4 +37,18 @@ class StopArea < ActiveRecord::Base
     stops.map{ |stop| stop.routes }.flatten.uniq
   end
   
+  def description
+    text = name
+    text += " in #{area}" if area
+    text  
+  end
+  
+  def area
+    areas = stops.map{ |stop| stop.locality_name}.uniq
+    if areas.size == 1
+      return areas.first
+    end
+    return nil
+  end
+  
 end

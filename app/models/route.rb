@@ -66,6 +66,12 @@ class Route < ActiveRecord::Base
     routes_with_same_stops
   end
   
+  def self.find_from_attributes(attributes)
+    routes = find_all_by_number_and_transport_mode_id(attributes[:route_number], attributes[:transport_mode_id])
+    # map any Route subclasses back to base class 
+    routes = routes.map{ |route| route.becomes(Route) }
+  end
+  
   def self.add!(route)
     existing_routes = find_existing(route)
     if existing_routes.empty?
