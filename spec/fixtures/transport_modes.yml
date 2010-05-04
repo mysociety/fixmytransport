@@ -12,25 +12,58 @@
 #
 
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
 bus:
   name: Bus
+  route_type: BusRoute
   id: "1"
+  active: t
+  naptan_name: Bus
+
 coach:
   name: Coach
+  route_type: CoachRoute
   id: "2"
+  active: t
+  naptan_name: Coach
+
 taxi:
   name: Taxi
+  route_type: 
   id: "3"
+  active: f
+  naptan_name: Taxi
+
 air:
   name: Air
+  route_type: 
   id: "4"
+  active: f
+  naptan_name: Air
+
 ferry:
-  name: Ferry / Ship
+  name: Ferry
+  route_type: FerryRoute
   id: "5"
-rail:
+  active: f
+  naptan_name: Ferry / Ship
+
+train:
   name: Train
+  route_type: TrainRoute
   id: "6"
-tram_metro:
-  name: Tram / Metro
+  active: t
+  naptan_name: Rail
+
+metro:
+  name: Metro
+  route_type: MetroRoute
   id: "7"
+  active: t
+  naptan_name: Metro
+
+tram:
+  name: Tram
+  route_type: TramRoute
+  id: "8"
+  active: t
+  naptan_name: Tram

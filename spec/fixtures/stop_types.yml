@@ -14,19 +14,171 @@
 #
 
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+marked_point:
+  point_type: MarkedPoint
+  code: BCT
+  id: "1"
+  version: "1"
+  description: On-street Bus / Coach / Tram Stop
+  on_street: t
 
-one:
-  code: MyString
-  description: MyString
-  on_street: false
-  mode: MyString
-  point_type: MyString
-  version: 1.5
+unmarked_point:
+  point_type: UnmarkedPoint
+  code: BCT
+  id: "2"
+  version: "1"
+  description: On-street Bus / Coach / Tram Stop
+  on_street: t
 
-two:
-  code: MyString
-  description: MyString
-  on_street: false
-  mode: MyString
-  point_type: MyString
-  version: 1.5
+hail_and_ride:
+  point_type: HailAndRide
+  code: BCT
+  id: "3"
+  version: "1"
+  description: On-street Bus / Coach / Tram Stop
+  on_street: t
+
+flexible_zone:
+  point_type: FlexibleZone
+  code: BCT
+  id: "4"
+  version: "2"
+  description: On-street Bus / Coach / Tram Stop
+  on_street: t
+
+taxi_rank:
+  point_type: TaxiRank
+  code: TXR
+  id: "5"
+  version: "1"
+  description: Taxi Rank (head of)
+  on_street: t
+  created_at: 2010-04-26 14:29:34.824679
+
+shared_taxi_rank:
+  point_type: SharedTaxiRank
+  code: STR
+  id: "6"
+  version: "1"
+  description: Shared Taxi Rank (head of)
+  on_street: t
+  
+airport_entrance:
+  point_type: Entrance
+  code: AIR
+  id: "7"
+  version: "1"
+  description: Airport Entrance
+  on_street: f
+ 
+airport_interchange: 
+  point_type: AccessArea
+  code: GAT
+  id: "8"
+  version: "1"
+  description: Airport Interchange Area
+  on_street: f
+
+ferry_terminal_entrance:
+  point_type: Entrance
+  code: FTD
+  id: "9"
+  version: "1"
+  description: Ferry Terminal / Dock Entrance
+  on_street: f
+
+berth:
+  point_type: Berth
+  code: FBT
+  id: "10"
+  version: "1"
+  description: Ferry or Port Berth
+  on_street: f
+
+ferry_terminal_interchange:
+  point_type: AccessArea
+  code: FER
+  id: "11"
+  version: "1"
+  description: Ferry or Port Interchange Area
+  on_street: f
+
+rail_station_entrance:
+  point_type: Entrance
+  code: RSE
+  id: "12"
+  version: "1"
+  description: Rail Station Entrance
+  on_street: f
+
+railway_interchange:
+  point_type: AccessArea
+  code: RLY
+  id: "13"
+  version: "1"
+  description: Railway Interchange Area
+  on_street: f
+
+railway_platform:
+  point_type: Platform
+  code: RPL
+  id: "14"
+  version: "1.2"
+  description: Railway Platform
+  on_street: f
+
+metro_entrance:
+  point_type: Entrance
+  code: TMU
+  id: "15"
+  version: "1"
+  description: Tram / Metro / Underground Entrance
+  on_street: f
+
+metro_interchange:
+  point_type: AccessArea
+  code: MET
+  id: "16"
+  version: "1.2"
+  description: Underground or Metro Interchange Area
+  on_street: f
+
+metro_platform:
+  point_type: Platform
+  code: PLT
+  id: "17"
+  version: "1"
+  description: Underground or Metro platform
+  on_street: f
+
+bus_station_entrance:
+  point_type: Entrance
+  code: BCE
+  id: "18"
+  version: "1"
+  description: Bus / Coach Station Entrance
+  on_street: f
+
+bus_station_access_area:
+  point_type: AccessArea
+  code: BST
+  id: "19"
+  version: "1"
+  description: Bus Coach Station Access Area
+  on_street: f
+
+bus_station_bay:
+  point_type: Bay
+  code: BCS
+  id: "20"
+  version: "1"
+  description: Bus / Coach bay / stand / stance within Bus / Coach Stations
+  on_street: f
+
+bus_station_variable_bay:
+  point_type: VariableBay
+  code: BCQ
+  id: "21"
+  version: "2"
+  description: Bus Coach Station Variable Bay
+  on_street: f

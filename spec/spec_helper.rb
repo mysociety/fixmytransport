@@ -31,6 +31,10 @@ Spec::Runner.configure do |config|
   # names with your fixtures.
   #
   config.global_fixtures = :transport_modes, 
+                           :stop_types,
+                           :stop_area_types,
+                           :transport_mode_stop_types,
+                           :transport_mode_stop_area_types,
                            :stops, 
                            :stop_areas, 
                            :routes, 

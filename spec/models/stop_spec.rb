@@ -104,7 +104,10 @@ describe Stop do
 
     it 'should return a common root stop area that all stops in the list belong to' do 
       stops = [stops(:victoria_station_one), stops(:victoria_station_two)]
-      Stop.common_area(stops).should == stop_areas(:victoria_station_root)
+      Stop.common_area(stops, 6).should == stop_areas(:victoria_station_root)
+    end
+    
+    it 'should return a common stop area that all stops in the list belong to' do 
     end
     
   end

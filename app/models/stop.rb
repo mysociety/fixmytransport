@@ -52,7 +52,7 @@ class Stop < ActiveRecord::Base
     common_name
   end
   
-    def name_without_station
+  def name_without_station
     text = name.gsub(' Rail Station', '')
     text
   end
@@ -68,8 +68,9 @@ class Stop < ActiveRecord::Base
     text
   end
   
-  def self.common_area(stops)
-    stop_area_sets = stops.map{ |stop| stop.stop_areas }
+  def self.common_area(stops, transport_mode_id)
+    stop_area_type_codes = StopAreaType.codes_for_transport_mode(transport_mode_id)
+    stop_area_sets = stops.map{ |stop| stop.stop_areas.select{ |stop_area| stop_area_type_codes.include? stop_area.area_type } }
     stop_areas = stop_area_sets.inject{ |intersection_set,stop_area_set| intersection_set && stop_area_set }
     root_stop_areas = stop_areas.select{ |stop_area| stop_area.root? }
     if root_stop_areas.size == 1
@@ -79,12 +80,6 @@ class Stop < ActiveRecord::Base
       return stop_areas.first
     end
     return nil
-  end
-  
-  def self.location_list(stops)
-    root_stop_area_sets = stops.map{ |stop| stop.stop_areas.select{ |stop_area| } }
-    stop_areas = stop_area_sets.inject{ |union_set,stop_area_set| union_set | stop_area_set }
-    return stop_areas
   end
   
   def self.find_from_attributes(attributes)

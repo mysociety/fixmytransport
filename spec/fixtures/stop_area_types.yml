@@ -1,9 +1,40 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+airport_building:
+  code: GAIR
+  id: "12"
+  description: Airport Building
 
-one:
-  code: MyString
-  description: MyText
+ferry_terminal:
+  code: GFTD
+  id: "13"
+  description: Ferry Terminal or Dock Building
 
-two:
-  code: MyString
-  description: MyText
+rail_station:
+  code: GRLS
+  id: "14"
+  description: Rail Station
+
+metro_station:
+  code: GTMU
+  id: "15"
+  description: Tram / Metro / Underground Station
+
+bus_station:
+  code: GBCS
+  id: "16"
+  description: Bus / Coach Station
+
+coach_service_coverage:
+  code: GCCH
+  id: "17"
+  description: Coach Service Coverage
+
+bus_stop_cluster:
+  code: GCLS
+  id: "18"
+  description: On-street Bus / Coach / Tram stops cluster (more than two stops in the same general location)
+
+bus_stop_pair:
+  code: GPBS
+  id: "19"
+  description: On-street Bus/ Coach / Tram stop pair (one in each direction)

@@ -13,9 +13,125 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  transport_mode_id: 1
-  stop_type_id: 1
+  transport_mode_id: "1"
+  stop_type_id: "1"
 
 two:
-  transport_mode_id: 1
-  stop_type_id: 1
+  transport_mode_id: "2"
+  stop_type_id: "1"
+
+three:
+  transport_mode_id: "1"
+  stop_type_id: "2"
+
+four:
+  transport_mode_id: "2"
+  stop_type_id: "2"
+
+five:
+  transport_mode_id: "1"
+  stop_type_id: "3"
+
+six:
+  transport_mode_id: "2"
+  stop_type_id: "3"
+
+seven:
+  transport_mode_id: "1"
+  stop_type_id: "4"
+
+eight:
+  transport_mode_id: "2"
+  stop_type_id: "4"
+
+nine:
+  transport_mode_id: "3"
+  stop_type_id: "5"
+
+ten:
+  transport_mode_id: "3"
+  stop_type_id: "6"
+
+eleven:
+  transport_mode_id: "4"
+  stop_type_id: "7"
+
+twelve:
+  transport_mode_id: "4"
+  stop_type_id: "8"
+
+thirteen:
+  transport_mode_id: "5"
+  stop_type_id: "9"
+  
+fourteen:  
+  transport_mode_id: "5"
+  stop_type_id: "10"
+  
+fifteen:
+  transport_mode_id: "5"
+  stop_type_id: "11"
+  
+sixteen:
+  transport_mode_id: "6"
+  stop_type_id: "12"
+  
+seventeen:
+  transport_mode_id: "6"
+  stop_type_id: "13"
+  
+eighteen:
+  transport_mode_id: "6"
+  stop_type_id: "14"
+  
+nineteen:
+  transport_mode_id: "8"
+  stop_type_id: "15"
+  
+twenty:
+  transport_mode_id: "7"
+  stop_type_id: "15"
+
+twenty_one:
+  transport_mode_id: "8"
+  stop_type_id: "16"
+
+twenty_two:
+  transport_mode_id: "7"
+  stop_type_id: "16"
+
+twenty_three:
+  transport_mode_id: "8"
+  stop_type_id: "17"
+  
+twenty_four:  
+  transport_mode_id: "7"
+  stop_type_id: "17"
+  
+twenty_five:
+  transport_mode_id: "1"
+  stop_type_id: "18"
+  
+twenty_six:
+  transport_mode_id: "2"
+  stop_type_id: "18"
+  
+twenty_seven:
+  transport_mode_id: "1"
+  stop_type_id: "19"
+  
+twenty_eight:
+  transport_mode_id: "2"
+  stop_type_id: "19"
+
+twenty_nine:
+  transport_mode_id: "1"
+  stop_type_id: "20"
+
+thirty:
+  transport_mode_id: "2"
+  stop_type_id: "20"
+
+thirty_one:
+  transport_mode_id: "1"
+  stop_type_id: "21"

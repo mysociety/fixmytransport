@@ -1,9 +1,52 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
 one:
-  transport_mode_id: 1
-  stop_area_type_id: 1
+  stop_area_type_id: "12"
+  transport_mode_id: "4"
 
 two:
-  transport_mode_id: 1
-  stop_area_type_id: 1
+  stop_area_type_id: "13"
+  transport_mode_id: "5"
+
+three:
+  stop_area_type_id: "14"
+  transport_mode_id: "6"
+
+four:
+  stop_area_type_id: "15"
+  transport_mode_id: "7"
+
+five:
+  stop_area_type_id: "15"
+  transport_mode_id: "8"
+
+six:
+  stop_area_type_id: "16"
+  transport_mode_id: "1"
+
+seven:
+  stop_area_type_id: "16"
+  transport_mode_id: "2"
+
+eight:
+  stop_area_type_id: "17"
+  transport_mode_id: "2"
+
+nine:
+  stop_area_type_id: "18"
+  transport_mode_id: "1"
+
+ten:
+  stop_area_type_id: "18"
+  transport_mode_id: "2"
+
+eleven:
+  stop_area_type_id: "18"
+  transport_mode_id: "8"
+
+twelve:
+  stop_area_type_id: "19"
+  transport_mode_id: "1"
+
+thirteen:
+  stop_area_type_id: "19"
+  transport_mode_id: "2"
