@@ -11,7 +11,7 @@ en:
             transport_mode_id:
               blank: "Please select a transport type"
             location:
-              blank: "We can't figure out where your problem is"
+              blank: "We can't figure out where this is"
             location_type:
               blank: "Please select stop, station or route"
         stop:
