@@ -45,3 +45,15 @@ victoria_station_leaf:
   code: 910GVICTRIE
   administrative_area_code: "110"
   modification: rev
+south_moor_and_arch: 
+  easting: "418799"
+  status: act
+  northing: "552426"
+  name: South Moor - Arch (Eden Terrace)
+  grid_type: U
+  area_type: GPBS
+  revision_number: "1"
+  code: 130G1612
+  administrative_area_code: 078
+  modification: rev
+

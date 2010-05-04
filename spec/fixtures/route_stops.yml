@@ -40,5 +40,5 @@ seven:
   terminus: f
 eight: 
   route: number_807_bus
-  stop: arch
+  stop: arch_ne
   terminus: t

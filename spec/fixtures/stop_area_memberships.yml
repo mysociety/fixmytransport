@@ -29,3 +29,13 @@ three:
   stop: victoria_station_two
   modification: new
   stop_area: victoria_station_leaf
+four: 
+  revision_number: "1"
+  stop: arch_ne
+  modification: rev
+  stop_area: south_moor_and_arch
+five: 
+  revision_number: "1"
+  stop: arch_sw
+  modification: rev
+  stop_area: south_moor_and_arch

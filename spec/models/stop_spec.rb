@@ -107,9 +107,6 @@ describe Stop do
       Stop.common_area(stops, 6).should == stop_areas(:victoria_station_root)
     end
     
-    it 'should return a common stop area that all stops in the list belong to' do 
-    end
-    
   end
   
   describe 'when finding stops from attributes' do 
@@ -180,6 +177,14 @@ describe Stop do
     it 'should remove "Underground Station" from the end of the name' do 
       Stop.new(:common_name => "Kensington Underground Station").name_without_metro_station.should == "Kensington"
     end
+    
+  end
+  
+  describe 'when giving a full name' do 
+    
+    it 'should add the landmark if there is one'
+    it 'should not add the landmark if it is the same as the name'
+    it 'should add the bearing if there is one'
     
   end
   

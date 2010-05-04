@@ -19,10 +19,11 @@ class Route < ActiveRecord::Base
   validates_presence_of :number
   has_many :problems, :as => :location
   
-  # Return routes with this number and transport mode that have a stop in common with 
-  # the stop list given
+  # Return routes with this number and transport mode that have a stop or stop area in common with 
+  # the route given
   def self.find_all_by_number_and_common_stop(new_route)
     stop_codes = new_route.stop_codes
+    stop_area_codes = new_route.stop_area_codes
     routes = find(:all, :conditions => ['number = ? and transport_mode_id = ?', 
                                          new_route.number, new_route.transport_mode.id],
                         :include => { :route_stops => :stop })
@@ -32,7 +33,13 @@ class Route < ActiveRecord::Base
       stop_codes_in_both = (stop_codes & route_stop_codes)
       if stop_codes_in_both.size > 0
         routes_with_same_stops << route
-      end    
+        next
+      end  
+      route_stop_area_codes = route.stop_area_codes
+      stop_area_codes_in_both = (stop_area_codes & route_stop_area_codes)
+      if stop_area_codes_in_both.size > 0
+        routes_with_same_stops << route
+      end
     end
     routes_with_same_stops
   end
@@ -110,6 +117,11 @@ class Route < ActiveRecord::Base
 
   def stop_codes
     route_stops.map{ |route_stop| route_stop.stop.atco_code }
+  end
+  
+  def stop_area_codes
+    stop_areas = route_stops.map{ |route_stop| route_stop.stop.stop_areas }.flatten
+    stop_areas.map{ |stop_area| stop_area.code }.uniq
   end
 
   def transport_mode_name

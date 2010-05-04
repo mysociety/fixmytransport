@@ -45,6 +45,22 @@ describe Route do
     
   end
   
+  describe 'when finding routes by number and common stops' do 
+  
+    it 'should include routes with the same number and one stop in common with the new route' do 
+      route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
+      route.route_stops.build(:stop => stops(:arch_ne), :terminus => true)
+      Route.find_all_by_number_and_common_stop(route).include?(routes(:number_807_bus)).should be_true
+    end
+    
+    it 'should include routes with the same number, no stops in common, but one stop area in common with the new route' do
+      route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
+      route.route_stops.build(:stop => stops(:arch_sw), :terminus => true)
+      Route.find_all_by_number_and_common_stop(route).include?(routes(:number_807_bus)).should be_true
+    end
+    
+  end
+  
   describe 'when adding a route' do 
   
     it 'should raise an exception if a route to be merged has problems associated with it' do
