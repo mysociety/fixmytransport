@@ -29,6 +29,29 @@ describe TrainRoute do
 
   end
   
+  describe 'when adding a route' do 
+  
+    it 'should merge a route with the same stops and terminuses' do 
+      @route = TrainRoute.new(:transport_mode => transport_modes(:train))
+      routes(:victoria_to_haywards_heath).route_stops.each do |route_stop|
+        @route.route_stops.build(:stop => route_stop.stop, :terminus => route_stop.terminus)
+      end
+      TrainRoute.add!(@route)
+      @route.id.should be_nil
+    end
+    
+    it 'should merge a route with the same stops and terminuses that visits a stop twice' do 
+      @route = TrainRoute.new(:transport_mode => transport_modes(:train))
+      routes(:victoria_to_haywards_heath).route_stops.create(:stop => stops(:haywards_heath_station), :terminus => false)
+      routes(:victoria_to_haywards_heath).route_stops.each do |route_stop|
+        @route.route_stops.build(:stop => route_stop.stop, :terminus => route_stop.terminus)
+      end
+      TrainRoute.add!(@route)
+      @route.id.should be_nil
+    end
+    
+  end
+  
   describe 'name' do 
   
     it 'should be of the form "Train route between Haywards Heath and London Victoria"' do 

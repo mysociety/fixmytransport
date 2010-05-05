@@ -150,7 +150,7 @@ class Route < ActiveRecord::Base
   end
 
   def stop_codes
-    route_stops.map{ |route_stop| route_stop.stop.atco_code }
+    route_stops.map{ |route_stop| route_stop.stop.atco_code }.uniq
   end
   
   def stop_area_codes
