@@ -44,23 +44,40 @@ class Route < ActiveRecord::Base
     routes_with_same_stops
   end
   
-  # Return routes with this transport mode whose stops are a superset or subset of the stop 
-  # list given and whose terminuses are the same
-  def self.find_all_by_terminuses_and_stop_set(new_route)
-    stop_codes = new_route.stop_codes
+  # Accepts an array of stops or an array of arrays of stops as first parameter.
+  # If passed the latter, will find routes that pass through at least one stop in
+  # each array. 
+  def self.find_all_by_stops(stops, transport_mode_id, as_terminus=false)
+    terminus_clause = ''
     condition_string = 'transport_mode_id = ?' 
-    params = [new_route.transport_mode_id]
-    terminuses = new_route.route_stops.select{|route_stop| route_stop.terminus == true }
+    params = [transport_mode_id]
     joins = ''
-    terminuses.each_with_index do |terminus,index|
+    stops.each_with_index do |item,index|
+      if as_terminus
+        terminus_clause = "and rs#{index}.terminus = 't'"
+      end
+      if item.is_a? Array
+        stop_id_criteria = "in (?)"
+      else
+        stop_id_criteria = "= ?"
+      end
       joins += " inner join route_stops rs#{index} on routes.id = rs#{index}.route_id"
-      condition_string += " and rs#{index}.terminus = 't' and rs#{index}.stop_id = ?"
-      params << terminus.stop.id
+      condition_string += " #{terminus_clause} and rs#{index}.stop_id #{stop_id_criteria}"
+      params << item
     end
     conditions = [condition_string] + params
     routes = find(:all, :joins => joins, 
                         :conditions => conditions, 
-                        :include => { :route_stops => :stop })
+                        :include => { :route_stops => :stop }).uniq
+  end
+  
+  # Return routes with this transport mode whose stops are a superset or subset of the stop 
+  # list given and whose terminuses are the same
+  def self.find_all_by_terminuses_and_stop_set(new_route)
+    stop_codes = new_route.stop_codes
+    terminuses = new_route.route_stops.select{|route_stop| route_stop.terminus == true }
+    stops = terminuses.map{ |route_stop| route_stop.stop }
+    routes = find_all_by_stops(stops, new_route.transport_mode_id, as_terminus=true)
     routes_with_same_stops = []
     routes.each do |route|
       route_stop_codes = route.stop_codes
@@ -74,9 +91,26 @@ class Route < ActiveRecord::Base
   end
   
   def self.find_from_attributes(attributes)
-    routes = find_all_by_number_and_transport_mode_id(attributes[:route_number], attributes[:transport_mode_id])
-    # map any Route subclasses back to base class 
-    routes = routes.map{ |route| route.becomes(Route) }
+    if terminuses = get_terminuses(attributes[:route_number])
+      first, last = terminuses
+      routes = find_all_by_stop_names(first, last, attributes)
+    else
+      routes = find_all_by_number_and_transport_mode_id(attributes[:route_number], attributes[:transport_mode_id])
+    end
+  end
+  
+  def self.find_all_by_stop_names(first, last, attributes)
+    first_stops = Stop.find_from_attributes(attributes.merge(:name => first))
+    last_stops = Stop.find_from_attributes(attributes.merge(:name => last))
+    find_all_by_stops([first_stops, last_stops], attributes[:transport_mode_id])
+  end
+  
+  def self.get_terminuses(route_name)
+    if terminus_match = /^(.*)\sto\s(.*)$/.match(route_name)
+      return [terminus_match[1], terminus_match[2]]
+    else
+      return nil
+    end
   end
   
   def self.add!(route)

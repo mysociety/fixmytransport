@@ -29,18 +29,19 @@ describe Route do
   describe 'when finding from attributes' do 
   
     it 'should find any routes matching the number and transport mode id' do 
-      expected_id = routes(:victoria_to_haywards_heath).id
       attributes = { :transport_mode_id => 6, 
-                     :route_number => '1F50' }
+                     :route_number => '1F50', 
+                     :area => '' }
       routes = Route.find_from_attributes(attributes)
-      routes.map{ |route| route.id }.include?(expected_id).should be_true
+      routes.include?(routes(:victoria_to_haywards_heath)).should be_true
     end
     
-    it 'should return instances of the base Route class' do 
+    it "should find a route described by it's terminuses" do 
       attributes = { :transport_mode_id => 6, 
-                     :route_number => '1F50' }
+                     :route_number => 'London Victoria to Haywards Heath', 
+                     :area => '' }
       routes = Route.find_from_attributes(attributes)
-      routes.each{ |route| route.class.should == Route }
+      routes.include?(routes(:victoria_to_haywards_heath)).should be_true
     end
     
   end
@@ -57,6 +58,14 @@ describe Route do
       route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
       route.route_stops.build(:stop => stops(:arch_sw), :terminus => true)
       Route.find_all_by_number_and_common_stop(route).include?(routes(:number_807_bus)).should be_true
+    end
+    
+  end
+  
+  describe 'when getting terminuses from a route name' do 
+  
+    it 'should get "London Victoria" and "Haywards Heath" from "London Victoria to Haywards Heath"' do 
+      Route.get_terminuses("London Victoria to Haywards Heath").should == ['London Victoria', 'Haywards Heath']
     end
     
   end
