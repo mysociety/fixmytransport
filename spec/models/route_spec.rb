@@ -33,7 +33,7 @@ describe Route do
                      :route_number => '1F50', 
                      :area => '' }
       routes = Route.find_from_attributes(attributes)
-      routes.include?(routes(:victoria_to_haywards_heath)).should be_true
+      routes.should include(routes(:victoria_to_haywards_heath))
     end
     
     it "should find a route described by it's terminuses" do 
@@ -41,7 +41,7 @@ describe Route do
                      :route_number => 'London Victoria to Haywards Heath', 
                      :area => '' }
       routes = Route.find_from_attributes(attributes)
-      routes.include?(routes(:victoria_to_haywards_heath)).should be_true
+      routes.should include(routes(:victoria_to_haywards_heath))
     end
     
   end
@@ -51,16 +51,37 @@ describe Route do
     it 'should include routes with the same number and one stop in common with the new route' do 
       route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
       route.route_stops.build(:stop => stops(:arch_ne), :terminus => true)
-      Route.find_all_by_number_and_common_stop(route).include?(routes(:number_807_bus)).should be_true
+      Route.find_all_by_number_and_common_stop(route).should include(routes(:number_807_bus))
     end
     
     it 'should include routes with the same number, no stops in common, but one stop area in common with the new route' do
       route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
       route.route_stops.build(:stop => stops(:arch_sw), :terminus => true)
-      Route.find_all_by_number_and_common_stop(route).include?(routes(:number_807_bus)).should be_true
+      Route.find_all_by_number_and_common_stop(route).should include(routes(:number_807_bus))
     end
     
   end
+  
+  describe 'when finding routes by terminuses and stops' do 
+    
+    before do 
+      @route = Route.new(:transport_mode => transport_modes(:train))
+      routes(:victoria_to_haywards_heath).route_stops.each do |route_stop|
+        @route.route_stops.build(:stop => route_stop.stop, :terminus => route_stop.terminus)
+      end
+    end
+    
+    it 'should include a route with identical stops to the new route and the same terminuses' do 
+      Route.find_all_by_terminuses_and_stop_set(@route).should include(routes(:victoria_to_haywards_heath))
+    end
+    
+    it 'should include a route with a superset of the stops of the new route and the same terminuses' do 
+      @route.route_stops.delete(@route.route_stops.second)
+      Route.find_all_by_terminuses_and_stop_set(@route).should include(routes(:victoria_to_haywards_heath))
+    end
+  
+  end
+  
   
   describe 'when getting terminuses from a route name' do 
   
