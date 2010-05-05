@@ -49,6 +49,10 @@ describe Parsers::NaptanParser do
       @stops.second.status.should == 'act'
     end
     
+    it 'should extract and clean the street' do 
+      @stops.first.street.should be_nil
+    end
+    
   end
   
   describe 'when parsing an example CSV file of stop area types' do 

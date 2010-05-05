@@ -103,16 +103,16 @@ class Parsers::NaptanParser
   
   def parse_stops filepath
     csv_data = convert_encoding(filepath)
-    FasterCSV.parse(csv_data, csv_options) do |row|
+    FasterCSV.parse(csv_data, csv_options) do |row|  
       yield Stop.new( :atco_code                  => row['AtcoCode'],
                       :naptan_code                => row['NaptanCode'],
                       :plate_code                 => row['PlateCode'], 
                       :common_name                => row['CommonName'], 
                       :short_common_name          => row['ShortCommonName'], 
-                      :landmark                   => row['Landmark'], 
-                      :street                     => row['Street'],
-                      :crossing                   => row['Crossing'], 
-                      :indicator                  => row['Indicator'], 
+                      :landmark                   => clean_field(:landmark, row['Landmark']), 
+                      :street                     => clean_field(:street, row['Street']),
+                      :crossing                   => clean_field(:crossing, row['Crossing']), 
+                      :indicator                  => clean_field(:indicator, row['Indicator']), 
                       :bearing                    => row['Bearing'], 
                       :nptg_locality_code         => row['NptgLocalityCode'],
                       :locality_name              => row['LocalityName'],
@@ -135,6 +135,18 @@ class Parsers::NaptanParser
                       :modification               => row['Modification'],
                       :status                     => row['Status'])
     end
+  end
+
+  def clean_field(field, value)
+    null_value_indicators = { :landmark  => ['---', '*', 'Landmark not known', 'Unknown', 'N/A', '-', 'landmark','N', 'TBA', 'N/K', '-'],
+                              :indicator => ['---'], 
+                              :crossing  => ['*', '--', 'No'], 
+                              :street    =>  ['---', '-', 'N/A', 'No name', 'Street not known', 'Unclassified', 'N/K', 'Unknown', 'Unnamed Road', 'Unclassified Road'], 
+                            }
+    if value && null_value_indicators[field].include?(value.strip)
+      return nil
+    end
+    return value
   end
 
 end
