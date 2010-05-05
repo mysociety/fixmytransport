@@ -12,7 +12,7 @@ function problem_init() {
 function stop_init() {
   var stopCoords = new OpenLayers.LonLat(stop_lon, stop_lat);
   createMap();
-  map.setCenter(stopCoords, 12); 
+  map.setCenter(stopCoords, 17); 
   bounds = new OpenLayers.Bounds();
   var markers = new OpenLayers.Layer.Markers( "Markers" );
   map.addLayer(markers);
