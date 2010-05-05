@@ -128,4 +128,11 @@ class Route < ActiveRecord::Base
     transport_mode.name
   end
   
+  def area
+    areas = stops.map{ |stop| stop.parent_locality_name if !stop.parent_locality_name.blank? }.compact.uniq
+    coverage = areas.to_sentence
+    coverage = " in #{coverage}" if !coverage.blank?
+    return coverage
+  end
+  
 end
