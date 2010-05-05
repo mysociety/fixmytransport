@@ -12,11 +12,12 @@ class ProblemsController < ApplicationController
   
   def create
     @problem = Problem.new(params[:problem])
+    @location_search = LocationSearch.new_search!(session[:session_id], params)
     if @problem.save
-      flash[:notice] = t :problem_location_found
-      redirect_to polymorphic_url(@problem.location)
+      redirect_to location_url(@problem.location)
     else
       if !@problem.locations.empty?
+        location_search.add_choice(@problem.locations)
         @title = t :multiple_locations
         render :choose_location
       else

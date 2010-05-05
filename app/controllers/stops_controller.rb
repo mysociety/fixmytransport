@@ -1,12 +1,14 @@
-class StopsController < ApplicationController
+class StopsController < LocationsController
   
   def show
     @stop = Stop.find(params[:id])
+    location_search.add_location(@stop) if location_search
   end
   
-  def random
-    @stop = Stop.find :first, :offset => rand(Stop.count)
-    redirect_to stop_url(@stop)
+  private
+  
+  def model_class
+    Stop
   end
   
 end

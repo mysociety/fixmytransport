@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   end
    
   def location_url(location)
+   # map any Route subclasses back to base class in order to pass to polymorphic_url
    location = location.becomes(Route) if location.is_a? Route 
    polymorphic_url(location) 
   end

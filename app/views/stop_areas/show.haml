@@ -7,12 +7,12 @@
   jQuery(document).ready(function(){
      stop_init();
   });
-
+= render :partial => 'shared/respond', :locals => { :instance => @stop_area }
 .stop
   .name= @stop_area.description
 The following stops are here: 
 - @stop_area.stops.each do |stop|
-  .stop= link_to(stop.name, stop_url(stop))
+  .stop= link_to(stop.full_name, stop_url(stop))
 You can pick up the following routes here:
 - @stop_area.routes.each do |route|
   .route= link_to(route.name, route_url(route))

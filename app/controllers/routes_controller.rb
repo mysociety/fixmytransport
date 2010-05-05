@@ -1,12 +1,14 @@
-class RoutesController < ApplicationController
+class RoutesController < LocationsController
   
   def show
     @route = Route.find(params[:id])
+    location_search.add_location(@route) if location_search
   end
+
+  private 
   
-  def random
-    @route = Route.find :first, :offset => rand(Route.count)
-    redirect_to route_url(@route)
+  def model_class
+    Route
   end
   
 end

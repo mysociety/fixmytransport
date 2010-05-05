@@ -6,9 +6,9 @@
   jQuery(document).ready(function(){
      route_init();
   });
-
+= render :partial => 'shared/respond', :locals => { :instance => @route }
 .route
-  = "#{@route.name}"
+  .name= @route.name
   .operator
     - if @route.operators.empty? 
       Operator unknown
