@@ -30,12 +30,17 @@ describe ProblemsController do
     end
     
     def make_request
-      post :create, {:problem => {:subject => 'A test problem', :description => 'More info'},
-                     :stop => {:common_name => 'My stop', :locality_name => 'My town'}}
+      post :create, {:problem => {:transport_mode_id => 5, 
+                                  :location_attributes => 
+                                     {:name => 'My stop', 
+                                      :area => 'My town'}}}
     end
   
     it 'should create a new problem with the problem request params' do 
-      expected_params = {"subject" => 'A test problem', "description" => 'More info'}
+      expected_params = {'transport_mode_id' => 5,
+                         'location_attributes' => 
+                            {'name' => 'My stop', 
+                             'area' => 'My town'}}
       Problem.should_receive(:new).with(expected_params).and_return(@problem)
       make_request
     end
