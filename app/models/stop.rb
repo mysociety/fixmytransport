@@ -52,6 +52,20 @@ class Stop < ActiveRecord::Base
     common_name
   end
   
+  def full_name
+    descriptors = [name]
+    [street, indicator, landmark, crossing].each do |attribute|
+      descriptors << attribute if !attribute.blank? and ! descriptors.include? attribute
+    end
+    text = descriptors.join(" ")
+    text += " (#{bearing})" if ! bearing.blank?
+    text
+  end
+  
+  def area
+    locality_name
+  end
+  
   def name_without_station
     text = name.gsub(' Rail Station', '')
     text
