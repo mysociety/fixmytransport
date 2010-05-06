@@ -26,7 +26,7 @@ namespace :nptg do
     end
     
     desc "Loads locality hierarchy data from a CSV file specified as FILE=filename"
-    task :locality_hierarcy => :environment do 
+    task :locality_hierarchy => :environment do 
       parse('locality_hierarchy', Parsers::NptgParser)
     end
     
