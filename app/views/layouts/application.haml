@@ -12,7 +12,7 @@
       %li=link_to t(:random_stop), random_stops_url
       %li=link_to t(:random_stop_area), random_stop_areas_url
       %li=link_to t(:random_route), random_routes_url
-      %li=link_to t(:find_location), new_problem_url
+      %li=link_to t(:find_location), new_place_url
     - [:notice, :error, :message].each do |key| 
       - unless flash[key].blank? 
         %p{ :class => "flash flash_#{key}" }!= flash[key]

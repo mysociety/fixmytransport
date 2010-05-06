@@ -14,7 +14,7 @@ class LocationsController < ApplicationController
     elsif params[:response] == 'fail'
      flash[:notice] = t(:location_search_failure)
     end
-    flash[:notice] += " <a href='#{new_problem_url}'>#{t(:try_another)}</a>"
+    flash[:notice] += " <a href='#{new_place_url}'>#{t(:try_another)}</a>"
     redirect_to location_url(instance)
   end
 

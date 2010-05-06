@@ -1,5 +1,5 @@
 - content_for :title, @title
 %h3= @title
-- form_for @problem do |f| 
+- form_for @problem, :url => places_path do |f| 
   = render :partial => f
   != submit_tag t(:go)
