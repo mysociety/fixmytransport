@@ -1,3 +1,21 @@
+# == Schema Information
+# Schema version: 20100506162135
+#
+# Table name: location_searches
+#
+#  id                :integer         not null, primary key
+#  transport_mode_id :integer
+#  name              :string(255)
+#  area              :string(255)
+#  route_number      :string(255)
+#  location_type     :string(255)
+#  session_id        :string(255)
+#  events            :text
+#  active            :boolean
+#  created_at        :datetime
+#  updated_at        :datetime
+#
+
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
