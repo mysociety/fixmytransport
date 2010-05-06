@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  code: MyString
+  name: MyText
+  admin_area_id: 1
+  creation_datetime: 2010-05-06 17:49:20
+  modification_datetime: 2010-05-06 17:49:20
+  revision_number: MyString
+  modification: MyString
+
+two:
+  code: MyString
+  name: MyText
+  admin_area_id: 1
+  creation_datetime: 2010-05-06 17:49:20
+  modification_datetime: 2010-05-06 17:49:20
+  revision_number: MyString
+  modification: MyString

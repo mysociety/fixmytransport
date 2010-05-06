@@ -38,10 +38,7 @@ namespace :naptan do
     desc "Loads all data from CSV files in a directory specified as DIR=dirname"
     task :all => :environment do 
       unless ENV['DIR']
-        puts ''
-        puts "usage: rake naptan:load:all DIR=dirname"
-        puts ''
-        exit 0
+        usage_message "usage: rake naptan:load:all DIR=dirname"
       end
       puts "Loading data from #{ENV['DIR']}..."
       ENV['FILE'] = File.join(ENV['DIR'], 'StopTypes.csv')
@@ -60,16 +57,28 @@ namespace :naptan do
     
   end
   
-  namespace :convert do 
-    desc "Converts stop area coords from OS OSGB36 6-digit eastings and northings to WGS-84 lat/lons and saves the result on the model"
-    task :os_to_lat_lon => :environment do 
+  namespace :geo do 
+    
+    desc "Adds 'coords' geometry values to Stops" 
+    task :add_stops_coords => :environment do 
       spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
       adapter = ActiveRecord::Base.configurations[RAILS_ENV]['adapter']
       if ! spatial_extensions or ! adapter == 'postgresql'
-        puts ''
-        puts 'rake naptan:convert:os_to_lat_lon requires PostgreSQL with PostGIS'
-        puts ''
-        exit 0
+        usage_message 'rake naptan:geo:add_stops_coords requires PostgreSQL with PostGIS'
+      end
+      Stop.find_each do |stop|
+        coords = Point.from_x_y(stop.easting, stop.northing, BRITISH_NATIONAL_GRID)
+        stop.coords = coords
+        stop.save!
+      end  
+    end
+    
+    desc "Converts stop area coords from OS OSGB36 6-digit eastings and northings to WGS-84 lat/lons and saves the result on the model"
+    task :convert_stop_areas => :environment do 
+      spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
+      adapter = ActiveRecord::Base.configurations[RAILS_ENV]['adapter']
+      if ! spatial_extensions or ! adapter == 'postgresql'
+        usage_message 'rake naptan:geo:convert_stop_areas requires PostgreSQL with PostGIS'
       end
       StopArea.find_each do |stop_area|
         conn = ActiveRecord::Base.connection

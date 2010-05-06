@@ -22,7 +22,7 @@ class Parsers::NaptanParser
   def parse_stop_area_hierarchy filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      raise "Not a new record" unless ['new', 'rev'].include? row['Modification'] 
+      next if row['Modification'] == 'del'
       ancestor = StopArea.find_by_code(row['ParentStopAreaCode'])
       descendant = StopArea.find_by_code(row['ChildStopAreaCode'])
       yield StopAreaLink.build_edge(ancestor, descendant)
@@ -65,6 +65,7 @@ class Parsers::NaptanParser
   def parse_stop_area_memberships filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
+      next if row['Modification'] == 'del'
       stop = Stop.find_by_atco_code(row['AtcoCode'])
       stop_area = StopArea.find_by_code(row['StopAreaCode'])
       yield StopAreaMembership.new( :stop_id                => stop.id,
@@ -79,6 +80,7 @@ class Parsers::NaptanParser
   def parse_stop_areas filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
+      next if row['Modification'] == 'del'
       spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
       if spatial_extensions
         coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
@@ -103,7 +105,14 @@ class Parsers::NaptanParser
   
   def parse_stops filepath
     csv_data = convert_encoding(filepath)
-    FasterCSV.parse(csv_data, csv_options) do |row|  
+    spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
+    FasterCSV.parse(csv_data, csv_options) do |row| 
+      if spatial_extensions
+        coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
+      else
+        coords = nil
+      end
+      next if row['Modification'] == 'del'
       yield Stop.new( :atco_code                  => row['AtcoCode'],
                       :naptan_code                => row['NaptanCode'],
                       :plate_code                 => row['PlateCode'], 
@@ -124,6 +133,7 @@ class Parsers::NaptanParser
                       :grid_type                  => row['GridType'],
                       :easting                    => row['Easting'],
                       :northing                   => row['Northing'],
+                      :coords                     => coords,
                       :lon                        => row['Longitude'],
                       :lat                        => row['Latitude'],
                       :stop_type                  => row['StopType'],

@@ -50,18 +50,18 @@ describe ProblemsController do
       make_request
     end
     
-    it "should render the 'New problem' view if the problem can't be saved and no locations were found" do 
+    it "should render the 'choose_location_area' view if the problem can't be saved and no locations were found" do 
       @problem.stub!(:save).and_return(false)
       @problem.stub!(:locations).and_return([])
       make_request
-      response.should render_template('problems/new')
+      response.should render_template('problems/choose_location_area')
     end
     
     it 'should render the "Choose location" view if more than one location is found' do 
       @problem.stub!(:save).and_return(false)
       @problem.stub!(:locations).and_return([mock_model(Route), mock_model(Stop)])
       make_request
-      response.should render_template('problems/choose_location')
+      response.should render_template('problems/choose_location_list')
     end
     
     it 'should redirect to the location page if the problem can be saved and the location found' do 

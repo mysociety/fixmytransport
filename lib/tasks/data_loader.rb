@@ -1,20 +1,21 @@
 module DataLoader
   
+  def usage_message message
+    puts ''
+    puts message
+    puts ''
+    exit 0
+  end
+  
   def check_for_file
     unless ENV['FILE']
-      puts ''
-      puts "usage: This task requires FILE=filename"
-      puts ''
-      exit 0
+      usage_message "usage: This task requires FILE=filename"
     end
   end
   
   def check_for_dir 
     unless ENV['DIR']
-      puts ''
-      puts "usage: This task requires DIR=dirname"
-      puts ''
-      exit 0
+      usage_message "usage: This task requires DIR=dirname"
     end
   end
   

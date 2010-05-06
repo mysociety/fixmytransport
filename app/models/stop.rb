@@ -135,4 +135,8 @@ class Stop < ActiveRecord::Base
      return nil
   end
   
+  # def self.find_all_by_placename()
+  #    find(:conditions => ["coords && ?", Polygon.from_coordinates([[[x_min, y_min], [x_min, y_max], [x_max, y_max], [x_max, y_min], [x_min, y_min]]], BRITISH_NATIONAL_GRID)])
+  #  end
+  
 end

@@ -19,15 +19,19 @@ class ProblemsController < ApplicationController
       if !@problem.locations.empty?
         location_search.add_choice(@problem.locations)
         @title = t :multiple_locations
-        render :choose_location
+        render :choose_location_list
       else
-        @title = t :find_location
-        render :new
+        # @locations = Stop.find_all_by_placename
+        @title = t :multiple_locations_area
+        render :choose_location_area
       end
     end
   end
   
-  def choose_location
+  def choose_location_list
+  end
+  
+  def choose_location_area
   end
   
   def show

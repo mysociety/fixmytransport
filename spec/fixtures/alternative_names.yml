@@ -1,0 +1,25 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyText
+  locality_id: 1
+  short_name: MyText
+  qualifier_name: MyText
+  qualifier_locality: MyText
+  qualifier_district: MyText
+  creation_datetime: 2010-05-06 19:33:19
+  modification_datetime: 2010-05-06 19:33:19
+  revision_number: MyString
+  modification: MyString
+
+two:
+  name: MyText
+  locality_id: 1
+  short_name: MyText
+  qualifier_name: MyText
+  qualifier_locality: MyText
+  qualifier_district: MyText
+  creation_datetime: 2010-05-06 19:33:19
+  modification_datetime: 2010-05-06 19:33:19
+  revision_number: MyString
+  modification: MyString

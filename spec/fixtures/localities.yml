@@ -1,0 +1,54 @@
+# == Schema Information
+# Schema version: 20100506162135
+#
+# Table name: localities
+#
+#  id                    :integer         not null, primary key
+#  code                  :string(255)
+#  atco_code             :string(255)
+#  name                  :text
+#  short_name            :text
+#  country               :string(255)
+#  region_code           :string(255)
+#  national              :boolean
+#  contact_email         :string(255)
+#  contact_telephone     :string(255)
+#  creation_datetime     :datetime
+#  modification_datetime :datetime
+#  revision_number       :string(255)
+#  modification          :string(255)
+#  created_at            :datetime
+#  updated_at            :datetime
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  code: MyString
+  atco_code: MyString
+  name: MyText
+  short_name: MyText
+  country: MyString
+  region_code: MyString
+  national: false
+  contact_email: MyString
+  contact_telephone: MyString
+  creation_datetime: 2010-05-06 16:55:45
+  modification_datetime: 2010-05-06 16:55:45
+  revision_number: MyString
+  modification: MyString
+
+two:
+  code: MyString
+  atco_code: MyString
+  name: MyText
+  short_name: MyText
+  country: MyString
+  region_code: MyString
+  national: false
+  contact_email: MyString
+  contact_telephone: MyString
+  creation_datetime: 2010-05-06 16:55:45
+  modification_datetime: 2010-05-06 16:55:45
+  revision_number: MyString
+  modification: MyString

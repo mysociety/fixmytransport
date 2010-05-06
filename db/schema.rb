@@ -9,17 +9,45 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100506163145) do
+ActiveRecord::Schema.define(:version => 20100506183319) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
     t.string   "atco_code"
+    t.text     "name"
     t.text     "short_name"
     t.string   "country"
-    t.string   "region_code"
     t.boolean  "national"
     t.string   "contact_email"
     t.string   "contact_telephone"
+    t.datetime "creation_datetime"
+    t.datetime "modification_datetime"
+    t.string   "revision_number"
+    t.string   "modification"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "region_id"
+  end
+
+  create_table "alternative_names", :force => true do |t|
+    t.text     "name"
+    t.integer  "locality_id"
+    t.text     "short_name"
+    t.text     "qualifier_name"
+    t.text     "qualifier_locality"
+    t.text     "qualifier_district"
+    t.datetime "creation_datetime"
+    t.datetime "modification_datetime"
+    t.string   "revision_number"
+    t.string   "modification"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "districts", :force => true do |t|
+    t.string   "code"
+    t.text     "name"
+    t.integer  "admin_area_id"
     t.datetime "creation_datetime"
     t.datetime "modification_datetime"
     t.string   "revision_number"
@@ -45,6 +73,26 @@ ActiveRecord::Schema.define(:version => 20100506163145) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "admin_area_id"
+    t.string   "qualifier_string"
+    t.string   "qualifier_locality"
+    t.string   "qualifier_district"
+    t.string   "qualifier_name"
+    t.string   "source_locality_type"
+    t.string   "grid_type"
+    t.float    "northing"
+    t.float    "easting"
+    t.point    "coords",                :srid => 27700
+  end
+
+  add_index "localities", ["coords"], :name => "index_localities_on_coords", :spatial => true
+
+  create_table "locality_links", :force => true do |t|
+    t.integer  "ancestor_id"
+    t.integer  "descendant_id"
+    t.boolean  "direct"
+    t.integer  "count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "location_searches", :force => true do |t|
@@ -78,6 +126,17 @@ ActiveRecord::Schema.define(:version => 20100506163145) do
     t.integer  "location_id"
     t.string   "location_type"
     t.integer  "transport_mode_id"
+  end
+
+  create_table "regions", :force => true do |t|
+    t.string   "code"
+    t.text     "name"
+    t.datetime "creation_datetime"
+    t.datetime "modification_datetime"
+    t.string   "revision_number"
+    t.string   "modification"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "route_operators", :force => true do |t|
