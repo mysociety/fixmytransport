@@ -99,6 +99,11 @@ class Route < ActiveRecord::Base
     end
   end
   
+  def self.find_all_by_number_and_transport_mode_id(route_number, transport_mode_id)
+    find(:all, :conditions => ['lower(number) = ? and transport_mode_id = ?', 
+                              route_number.downcase, transport_mode_id])
+  end
+  
   def self.find_all_by_stop_names(first, last, attributes)
     first_stops = Stop.find_from_attributes(attributes.merge(:name => first))
     last_stops = Stop.find_from_attributes(attributes.merge(:name => last))

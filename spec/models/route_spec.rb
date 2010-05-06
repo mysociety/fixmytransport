@@ -36,6 +36,15 @@ describe Route do
       routes.should include(routes(:victoria_to_haywards_heath))
     end
     
+    it 'should find any routes matching the number and transport mode id disregarding case' do 
+      attributes = { :transport_mode_id => 6, 
+                     :route_number => '1f50', 
+                     :area => '' }
+      routes = Route.find_from_attributes(attributes)
+      routes.should include(routes(:victoria_to_haywards_heath))
+    end
+    
+    
     it "should find a route described by it's terminuses" do 
       attributes = { :transport_mode_id => 6, 
                      :route_number => 'London Victoria to Haywards Heath', 
