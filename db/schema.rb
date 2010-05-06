@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100505100610) do
+ActiveRecord::Schema.define(:version => 20100506101504) do
 
   create_table "location_searches", :force => true do |t|
     t.integer  "transport_mode_id"
