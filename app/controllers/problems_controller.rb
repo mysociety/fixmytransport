@@ -12,7 +12,7 @@ class ProblemsController < ApplicationController
   
   def create
     @problem = Problem.new(params[:problem])
-    @location_search = LocationSearch.new_search!(session[:session_id], params)
+    @location_search = LocationSearch.new_search!(session_id, params)
     if @problem.save
       redirect_to location_url(@problem.location)
     else

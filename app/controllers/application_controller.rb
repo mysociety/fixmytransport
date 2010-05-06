@@ -11,7 +11,14 @@ class ApplicationController < ActionController::Base
   private
   
   def location_search 
-    @location_search ||= LocationSearch.find_current(session[:session_id])
+    @location_search ||= LocationSearch.find_current(session_id)
+  end
+  
+  def session_id
+    # Have to load session by requesting a value in order to read session id
+    # https://rails.lighthouseapp.com/projects/8994/tickets/2268-rails-23-session_optionsid-problem
+    session[:foo]
+    request.session_options[:id]
   end
    
   def location_url(location)
