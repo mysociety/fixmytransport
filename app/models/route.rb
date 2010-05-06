@@ -96,7 +96,11 @@ class Route < ActiveRecord::Base
       routes = find_all_by_stop_names(first, last, attributes)
     else
       routes = find_all_by_number_and_transport_mode_id(attributes[:route_number], attributes[:transport_mode_id])
+      if routes.size > 1 and ! attributes[:area].blank?
+        return routes.select{ |route| route.in_area?(attributes[:area]) }
+      end
     end
+    routes
   end
   
   def self.find_all_by_number_and_transport_mode_id(route_number, transport_mode_id)
@@ -167,11 +171,18 @@ class Route < ActiveRecord::Base
     transport_mode.name
   end
   
+  def in_area?(area_name)
+    areas.map{ |area| area.downcase }.include?(area_name.downcase)
+  end
+  
+  def areas
+    stops.map{ |stop| stop.parent_locality_name if !stop.parent_locality_name.blank? }.compact.uniq
+  end
+  
   def area
-    areas = stops.map{ |stop| stop.parent_locality_name if !stop.parent_locality_name.blank? }.compact.uniq
-    coverage = areas.to_sentence
-    coverage = " in #{coverage}" if !coverage.blank?
-    return coverage
+    area = areas.to_sentence
+    area = " in #{area}" if !area.blank?
+    return area
   end
   
 end
