@@ -1,4 +1,4 @@
 %p= t(:multiple_locations_intro)
 %ul
 - @problem.locations.each do |location|
-  %li= link_to "#{location.name} #{location.area}", polymorphic_url(location)
+  %li= link_to "#{location.name} #{location.area}", location_url(location)
