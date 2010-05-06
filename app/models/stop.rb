@@ -43,7 +43,7 @@ class Stop < ActiveRecord::Base
   named_scope :active, :conditions => { :status => 'act' }
   has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
-  validates_presence_of :common_name, :locality_name
+  validates_presence_of :common_name
   has_many :problems, :as => :location
   has_many :route_stops
   has_many :routes, :through => :route_stops, :uniq => true
