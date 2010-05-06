@@ -42,3 +42,15 @@ eight:
   route: number_807_bus
   stop: arch_ne
   terminus: t
+nine: 
+  route: aldershot_807_bus
+  stop: white_lion_n
+  terminus: t
+ten:
+  route: aldershot_807_bus
+  stop: white_lion_s
+  terminus: t
+eleven:
+  route: aldershot_807_bus
+  stop: wybourne_lane
+  terminus: f

@@ -20,3 +20,7 @@ number_807_bus:
   transport_mode_id: 1
   number: 807
   type: BusRoute
+aldershot_807_bus:
+  number: "807"
+  type: BusRoute
+  transport_mode_id: "1"

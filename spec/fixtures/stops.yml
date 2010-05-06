@@ -454,3 +454,89 @@ bus_station:
   street: Mary Street
   indicator: north bound
   nptg_locality_code: E0010044
+wybourne_lane:  
+  status: act
+  lon: "-0.78016"
+  northing: "149150"
+  parent_locality_name: ""
+  locality_name: Weybourne
+  grid_type: U
+  naptan_code: surgjtwg
+  revision_number: "3"
+  landmark: Upper Weybourne Lane
+  common_name: Upper Weybourne Lane
+  administrative_area_code: "102"
+  bearing: SE
+  plate_code: ""
+  stop_type: BCT
+  locality_centre: f
+  suburb: ""
+  grand_parent_locality_name: ""
+  modification: rev
+  bus_stop_type: HAR
+  crossing: ""
+  short_common_name: ""
+  atco_code: 40004411802Q
+  town: Weybourne
+  street: Upper Weybourne Lane
+  indicator: SE-bound
+  lat: "51.23517"
+  easting: "485260"
+  nptg_locality_code: E0025881
+white_lion_n:
+  status: act
+  lon: "-0.74342"
+  northing: "149822"
+  parent_locality_name: Aldershot
+  locality_name: North Town
+  grid_type: U
+  naptan_code: hamjajpm
+  revision_number: "0"
+  landmark: ""
+  common_name: White Lion
+  administrative_area_code: 084
+  bearing: N
+  plate_code: ""
+  stop_type: BCT
+  locality_centre: f
+  suburb: ""
+  grand_parent_locality_name: ""
+  modification: new
+  bus_stop_type: MKD
+  crossing: Stone Street
+  short_common_name: ""
+  atco_code: 1900HA090258
+  town: ""
+  street: Lower Farnham Road
+  indicator: ""
+  lat: "51.24083"
+  easting: "487814"
+  nptg_locality_code: N0060880
+white_lion_s:
+  status: act
+  lon: "-0.74331"
+  northing: "149820"
+  parent_locality_name: Aldershot
+  locality_name: North Town
+  grid_type: U
+  naptan_code: hamjajta
+  revision_number: "0"
+  landmark: ""
+  common_name: White Lion
+  administrative_area_code: 084
+  bearing: S
+  plate_code: ""
+  stop_type: BCT
+  locality_centre: f
+  suburb: ""
+  grand_parent_locality_name: ""
+  modification: new
+  bus_stop_type: MKD
+  crossing: Stone Street
+  short_common_name: ""
+  atco_code: 1900HA090259
+  town: ""
+  street: Lower Farnham Road
+  indicator: ""
+  lat: "51.24081"
+  easting: "487822"
