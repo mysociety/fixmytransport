@@ -40,8 +40,6 @@ class Problem < ActiveRecord::Base
           self.location = stop_area
           return 
         end
-        stop_areas = Stop.stop_areas(stops)
-        
       end
       self.locations = stops
       return
