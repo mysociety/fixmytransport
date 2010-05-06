@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100420165342
+# Schema version: 20100506162135
 #
 # Table name: routes
 #
@@ -8,6 +8,7 @@
 #  number            :string(255)
 #  created_at        :datetime
 #  updated_at        :datetime
+#  type              :string(255)
 #
 
 class Route < ActiveRecord::Base

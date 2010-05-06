@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100420165342
+# Schema version: 20100506162135
 #
 # Table name: operators
 #

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100420165342
+# Schema version: 20100506162135
 #
 # Table name: route_stops
 #
@@ -8,6 +8,7 @@
 #  stop_id    :integer
 #  created_at :datetime
 #  updated_at :datetime
+#  terminus   :boolean
 #
 
 class RouteStop < ActiveRecord::Base

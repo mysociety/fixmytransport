@@ -1,3 +1,15 @@
+# == Schema Information
+# Schema version: 20100506162135
+#
+# Table name: stop_area_types
+#
+#  id          :integer         not null, primary key
+#  code        :string(255)
+#  description :text
+#  created_at  :datetime
+#  updated_at  :datetime
+#
+
 require 'spec_helper'
 
 describe StopAreaType do

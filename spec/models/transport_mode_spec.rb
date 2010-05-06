@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100420165342
+# Schema version: 20100506162135
 #
 # Table name: transport_modes
 #
@@ -9,6 +9,7 @@
 #  updated_at  :datetime
 #  naptan_name :string(255)
 #  active      :boolean
+#  route_type  :string(255)
 #
 
 require 'spec_helper'

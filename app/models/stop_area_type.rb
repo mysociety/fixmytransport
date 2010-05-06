@@ -1,3 +1,15 @@
+# == Schema Information
+# Schema version: 20100506162135
+#
+# Table name: stop_area_types
+#
+#  id          :integer         not null, primary key
+#  code        :string(255)
+#  description :text
+#  created_at  :datetime
+#  updated_at  :datetime
+#
+
 class StopAreaType < ActiveRecord::Base
   has_many :transport_mode_stop_area_types
   has_many :transport_modes, :through => :transport_mode_stop_area_types
