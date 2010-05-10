@@ -113,6 +113,7 @@ class Parsers::NaptanParser
         coords = nil
       end
       next if row['Modification'] == 'del'
+      locality = Locality.find_by_code(row['NptgLocalityCode'])
       yield Stop.new( :atco_code                  => row['AtcoCode'],
                       :naptan_code                => row['NaptanCode'],
                       :plate_code                 => row['PlateCode'], 
@@ -123,7 +124,7 @@ class Parsers::NaptanParser
                       :crossing                   => clean_field(:crossing, row['Crossing']), 
                       :indicator                  => clean_field(:indicator, row['Indicator']), 
                       :bearing                    => row['Bearing'], 
-                      :nptg_locality_code         => row['NptgLocalityCode'],
+                      :locality                   => locality,
                       :locality_name              => row['LocalityName'],
                       :parent_locality_name       => row['ParentLocalityName'],
                       :grand_parent_locality_name => row['GrandParentLocalityName'],
