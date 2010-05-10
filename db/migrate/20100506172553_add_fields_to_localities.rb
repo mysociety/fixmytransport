@@ -25,7 +25,6 @@ class AddFieldsToLocalities < ActiveRecord::Migration
     remove_column :localities, :grid_type
     spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
     if spatial_extensions
-      remove_index :localities, :coords
       remove_column :localities, :coords
     end
   end
