@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100506183319) do
+ActiveRecord::Schema.define(:version => 20100510115509) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -18,8 +18,6 @@ ActiveRecord::Schema.define(:version => 20100506183319) do
     t.text     "short_name"
     t.string   "country"
     t.boolean  "national"
-    t.string   "contact_email"
-    t.string   "contact_telephone"
     t.datetime "creation_datetime"
     t.datetime "modification_datetime"
     t.string   "revision_number"
@@ -58,14 +56,9 @@ ActiveRecord::Schema.define(:version => 20100506183319) do
 
   create_table "localities", :force => true do |t|
     t.string   "code"
-    t.string   "atco_code"
     t.text     "name"
     t.text     "short_name"
-    t.string   "country"
-    t.string   "region_code"
     t.boolean  "national"
-    t.string   "contact_email"
-    t.string   "contact_telephone"
     t.datetime "creation_datetime"
     t.datetime "modification_datetime"
     t.string   "revision_number"
@@ -73,9 +66,6 @@ ActiveRecord::Schema.define(:version => 20100506183319) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "admin_area_id"
-    t.string   "qualifier_string"
-    t.string   "qualifier_locality"
-    t.string   "qualifier_district"
     t.string   "qualifier_name"
     t.string   "source_locality_type"
     t.string   "grid_type"
@@ -275,9 +265,11 @@ ActiveRecord::Schema.define(:version => 20100506183319) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.point    "coords",                     :srid => 27700
+    t.integer  "locality_id"
   end
 
   add_index "stops", ["coords"], :name => "index_stops_on_coords", :spatial => true
+  add_index "stops", ["locality_id"], :name => "index_stops_on_locality_id"
 
   create_table "transport_mode_stop_area_types", :force => true do |t|
     t.integer  "transport_mode_id"
