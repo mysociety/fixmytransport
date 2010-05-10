@@ -2,9 +2,11 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
+  include MySociety::UrlMapper
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
-  helper_method :location_search, :location_url, :respond_url
+  helper_method :location_search, :location_url, :respond_url, :main_url, :admin_url
+  url_mapper # See MySociety::UrlMapper
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
   
@@ -20,7 +22,7 @@ class ApplicationController < ActionController::Base
     session[:foo]
     request.session_options[:id]
   end
-   
+  
   def location_url(location)
    # map any Route subclasses back to base class in order to pass to polymorphic_url
    location = location.becomes(Route) if location.is_a? Route 
