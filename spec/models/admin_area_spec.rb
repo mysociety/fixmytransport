@@ -31,8 +31,6 @@ describe AdminArea do
       :country => "value for country",
       :region_id => "value for region_code",
       :national => false,
-      :contact_email => "value for contact_email",
-      :contact_telephone => "value for contact_telephone",
       :creation_datetime => Time.now,
       :modification_datetime => Time.now,
       :revision_number => "value for revision_number",

@@ -27,14 +27,9 @@ describe Locality do
   before(:each) do
     @valid_attributes = {
       :code => "value for code",
-      :atco_code => "value for atco_code",
       :name => "value for name",
       :short_name => "value for short_name",
-      :country => "value for country",
-      :region_code => "value for region_code",
       :national => false,
-      :contact_email => "value for contact_email",
-      :contact_telephone => "value for contact_telephone",
       :creation_datetime => Time.now,
       :modification_datetime => Time.now,
       :revision_number => "value for revision_number",
