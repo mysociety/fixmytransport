@@ -21,7 +21,7 @@ class ProblemsController < ApplicationController
         @title = t :multiple_locations
         render :choose_location_list
       else
-        @locations = Gazeteer.find(params[:problem][:location_attributes][:area])
+        @locations = Gazetteer.find(params[:problem][:location_attributes][:area])
         @title = t :multiple_locations_area
         render :choose_location_area
       end
