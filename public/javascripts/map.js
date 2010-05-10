@@ -10,8 +10,8 @@ function problem_init() {
 }
 
 function stop_init() {
-  var stopCoords = new OpenLayers.LonLat(stop_lon, stop_lat);
   createMap();
+  var stopCoords = new OpenLayers.LonLat(stop_lon, stop_lat);
   map.setCenter(stopCoords, 17); 
   bounds = new OpenLayers.Bounds();
   var markers = new OpenLayers.Layer.Markers( "Markers" );
@@ -27,6 +27,20 @@ function route_init() {
   map.addLayer(markers);
   for (var i=0; i < routeStops.length; i++){
     var coords = routeStops[i];
+    stopCoords = new OpenLayers.LonLat(coords[1], coords[0]);
+    addRouteMarker(stopCoords, bounds, markers);
+  }
+  map.zoomToExtent(bounds, false);
+}
+
+function area_init() {
+  createMap();
+  var stopCoords;
+  bounds = new OpenLayers.Bounds();
+  var markers = new OpenLayers.Layer.Markers( "Markers" );
+  map.addLayer(markers);
+  for (var i=0; i < areaStops.length; i++){
+    var coords = areaStops[i];
     stopCoords = new OpenLayers.LonLat(coords[1], coords[0]);
     addRouteMarker(stopCoords, bounds, markers);
   }

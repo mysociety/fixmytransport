@@ -36,25 +36,14 @@ describe ProblemsController do
                                       :area => 'My town'}}}
     end
   
-    it 'should create a new problem with the problem request params' do 
-      expected_params = {'transport_mode_id' => 5,
-                         'location_attributes' => 
-                            {'name' => 'My stop', 
-                             'area' => 'My town'}}
-      Problem.should_receive(:new).with(expected_params).and_return(@problem)
+    it 'should create a new problem' do 
+      Problem.should_receive(:new).and_return(@problem)
       make_request
     end
     
     it 'should try and save the new problem' do 
       @problem.should_receive(:save)
       make_request
-    end
-    
-    it "should render the 'choose_location_area' view if the problem can't be saved and no locations were found" do 
-      @problem.stub!(:save).and_return(false)
-      @problem.stub!(:locations).and_return([])
-      make_request
-      response.should render_template('problems/choose_location_area')
     end
     
     it 'should render the "Choose location" view if more than one location is found' do 

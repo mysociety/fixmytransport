@@ -55,7 +55,6 @@ describe Stop do
        :crossing => "value for crossing",
        :indicator => "value for indicator",
        :bearing => "value for bearing",
-       :nptg_locality_code => "value for nptg_locality_code",
        :locality_name => "value for locality_name",
        :parent_locality_name => "value for parent_locality_name",
        :grand_parent_locality_name => "value for grand_parent_locality_name",

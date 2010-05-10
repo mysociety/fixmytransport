@@ -21,7 +21,7 @@ class Problem < ActiveRecord::Base
   accepts_nested_attributes_for :reporter
   belongs_to :location, :polymorphic => true
   belongs_to :transport_mode
-  attr_accessor :location_attributes, :locations
+  attr_accessor :location_attributes, :locations, :location_search
   before_validation_on_create :location_from_attributes
   
   
@@ -31,6 +31,7 @@ class Problem < ActiveRecord::Base
     location_attributes[:transport_mode_id] = transport_mode_id
     if location_type == 'Stop' or location_type == 'StopArea'
       stops = Stop.find_from_attributes(location_attributes)
+      location_search.add_method('Stop.find_from_attributes') if location_search
       if stops.size == 1  
         self.location = stops.first
         return
@@ -38,20 +39,25 @@ class Problem < ActiveRecord::Base
       if stops.size > 1
         if stop_area = Stop.common_area(stops, transport_mode_id)
           self.location = stop_area
+          location_search.add_method('Stop.common_areas') if location_search
           return 
         end
       end
       self.locations = stops
-      return
+      if self.locations.empty? 
+        location_search.add_method('Gazetteer.find_from_attributes') if location_search
+        self.locations = Gazetteer.find_stops_from_attributes(location_attributes)
+      end
     else
       routes = Route.find_from_attributes(location_attributes)
+      location_search.add_method('Route.find_from_attributes') if location_search
       if routes.size == 1
         self.location = routes.first
         return
       end
       self.locations = routes
     end
+
   end
-  
  
 end

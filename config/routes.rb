@@ -19,4 +19,8 @@ ActionController::Routing::Routes.draw do |map|
                              :collection => {:random => :get}, 
                              :member => {:respond => :get}
 
+  map.namespace :admin do |admin|
+    admin.resources :location_searches, :only => [:index, :show]
+  end
+  
 end

@@ -1,1 +1,13 @@
 %p= t(:multiple_locations_intro)
+- content_for :javascript do 
+  != map_javascript_include_tags
+#map
+:javascript
+  var areaStops = #{stops_js(@locations.first.stops)}
+  jQuery(document).ready(function(){
+     area_init();
+  });
+
+= @location.name
+- @location.stops.each do |stop|
+  .stop= link_to stop.full_name, stop_url(stop)

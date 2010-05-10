@@ -11,8 +11,10 @@ class ProblemsController < ApplicationController
   end
   
   def create
-    @problem = Problem.new(params[:problem])
     @location_search = LocationSearch.new_search!(session_id, params)
+    problem_attributes = params[:problem]
+    problem_attributes[:location_search] = @location_search
+    @problem = Problem.new(problem_attributes)
     if @problem.save
       redirect_to location_url(@problem.location)
     else
@@ -21,9 +23,8 @@ class ProblemsController < ApplicationController
         @title = t :multiple_locations
         render :choose_location_list
       else
-        @locations = Gazetteer.find(params[:problem][:location_attributes][:area])
-        @title = t :multiple_locations_area
-        render :choose_location_area
+        @title = t :problem_location_not_found
+        render :new
       end
     end
   end

@@ -39,45 +39,6 @@
 #  coords                     :geometry
 #
 
-# == Schema Information
-# Schema version: 20100414172905
-#
-# Table name: stops
-#
-#  id                         :integer         not null, primary key
-#  atco_code                  :string(255)
-#  naptan_code                :string(255)
-#  plate_code                 :string(255)
-#  common_name                :text
-#  short_common_name          :text
-#  landmark                   :text
-#  street                     :text
-#  crossing                   :text
-#  indicator                  :text
-#  bearing                    :string(255)
-#  nptg_locality_code         :string(255)
-#  locality_name              :string(255)
-#  parent_locality_name       :string(255)
-#  grand_parent_locality_name :string(255)
-#  town                       :string(255)
-#  suburb                     :string(255)
-#  locality_centre            :boolean
-#  grid_type                  :string(255)
-#  easting                    :float
-#  northing                   :float
-#  lon                        :float
-#  lat                        :float
-#  stop_type                  :string(255)
-#  bus_stop_type              :string(255)
-#  administrative_area_code   :string(255)
-#  creation_datetime          :datetime
-#  modification_datetime      :datetime
-#  revision_number            :integer
-#  modification               :string(255)
-#  status                     :string(255)
-#  created_at                 :datetime
-#  updated_at                 :datetime
-#
 victoria_station_one:
   status: act
   lat: "51.49526"
@@ -106,7 +67,6 @@ victoria_station_one:
   town: ""
   street: "-"
   indicator: ""
-  nptg_locality_code: E0034956
 victoria_station_two:
   status: act
   lat: "51.49526"
@@ -134,7 +94,6 @@ victoria_station_two:
   town: ""
   street: "-"
   indicator: ""
-  nptg_locality_code: E0034956
 bristol_16: 
   status: act
   lat: "51.45919"
@@ -164,7 +123,6 @@ bristol_16:
   town: ""
   street: Marlborough Street
   indicator: Bay 16
-  nptg_locality_code: N0077024
 dursley_road: 
   status: act
   lon: "-2.67666"
@@ -193,7 +151,6 @@ dursley_road:
   town: ""
   street: Dursley Road
   indicator: ""
-  nptg_locality_code: E0035642
 victoria_bus_station_deleted: 
   status: del
   lon: "-0.14491"
@@ -222,7 +179,6 @@ victoria_bus_station_deleted:
   town: ""
   street: VICTORIA BUS STATION
   indicator: "1"
-  nptg_locality_code: E0034917
 clapham_junction: 
   status: act
   lon: "-0.17028"
@@ -251,7 +207,6 @@ clapham_junction:
   town: ""
   street: "-"
   indicator: ""
-  nptg_locality_code: E0034892
 croydon_station: 
   status: act
   lon: "-0.09278"
@@ -280,7 +235,6 @@ croydon_station:
   town: ""
   street: "-"
   indicator: ""
-  nptg_locality_code: N0060493
 gatwick_airport_station: 
   status: act
   lon: "-0.16104"
@@ -309,7 +263,6 @@ gatwick_airport_station:
   town: ""
   street: "-"
   indicator: ""
-  nptg_locality_code: N0061431
 haywards_heath_station: 
   status: act
   lon: "-0.10531"
@@ -338,7 +291,6 @@ haywards_heath_station:
   town: ""
   street: "-"
   indicator: ""
-  nptg_locality_code: E0052196
 arch_ne: 
   status: act
   lon: "-1.70864"
@@ -367,7 +319,6 @@ arch_ne:
   town: South Moor
   street: A693
   indicator: north east bound
-  nptg_locality_code: E0010042
 arch_sw: 
   status: act
   lon: "-1.70914"
@@ -396,7 +347,6 @@ arch_sw:
   town: South Moor
   street: A693
   indicator: south west bound
-  nptg_locality_code: E0010042
 bethany_terrace:
   status: act
   lon: "-1.74365"
@@ -425,7 +375,6 @@ bethany_terrace:
   town: Catchgate
   street: Kyo Road
   indicator: south west bound
-  nptg_locality_code: E0009961
 bus_station:
   status: act
   lon: "-1.69864"
@@ -454,7 +403,6 @@ bus_station:
   town: Stanley
   street: Mary Street
   indicator: north bound
-  nptg_locality_code: E0010044
 wybourne_lane:  
   status: act
   lon: "-0.78016"
@@ -483,7 +431,6 @@ wybourne_lane:
   indicator: SE-bound
   lat: "51.23517"
   easting: "485260"
-  nptg_locality_code: E0025881
 white_lion_n:
   status: act
   lon: "-0.74342"
@@ -512,7 +459,6 @@ white_lion_n:
   indicator: ""
   lat: "51.24083"
   easting: "487814"
-  nptg_locality_code: N0060880
 white_lion_s:
   status: act
   lon: "-0.74331"

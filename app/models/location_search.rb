@@ -19,6 +19,7 @@
 class LocationSearch < ActiveRecord::Base
   
   serialize :events
+  belongs_to :transport_mode
   
   def self.find_current(session_id)
     find(:first, :conditions => ['session_id = ? and active = ?', session_id, true], 
@@ -39,6 +40,21 @@ class LocationSearch < ActiveRecord::Base
     attributes[:active] = true
     attributes[:events] = []
     self.create!(attributes)
+  end
+  
+  def description
+    descriptors = [ transport_mode.name ]
+    descriptors << location_type.tableize.singularize.humanize.downcase
+    if !route_number.blank?
+      descriptors << "'#{route_number}'"
+    end
+    if !name.blank?
+      descriptors << "called '#{name}'"
+    end
+    if !area.blank?
+      descriptors << "in #{area}"
+    end
+    descriptors.join(' ')
   end
   
   def add_choice(locations)
@@ -62,6 +78,12 @@ class LocationSearch < ActiveRecord::Base
                      :response => response }
     save
     close if response == :success
+  end
+  
+  def add_method(method)
+    self.events << { :type => :method, 
+                     :method => method }
+    save
   end
   
   def responded?(location)

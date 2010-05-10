@@ -1,0 +1,13 @@
+!!!
+%html{ :lang => I18n.locale }
+  %head
+    %title 
+      ="FixMyTransport admin #{yield :title}"
+    %meta{ :content => "text/html; charset=utf-8", "http-equiv" => "Content-type" }
+    = stylesheet_link_tag 'application'
+    = yield :javascript
+  %body
+    - [:notice, :error, :message].each do |key| 
+      - unless flash[key].blank? 
+        %p{ :class => "flash flash_#{key}" }!= flash[key]
+    = yield
