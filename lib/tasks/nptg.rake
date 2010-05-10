@@ -1,10 +1,23 @@
 require File.dirname(__FILE__) +  '/data_loader'
 namespace :nptg do
+  
+  include DataLoader
+  
+  namespace :match do 
+  
+    desc 'Matches stops to localities using the nptg_locality_code field' 
+    task :stops_to_localities => :environment do 
+      Stop.find_each do |stop|
+        locality = Locality.find_by_code(stop.nptg_locality_code)
+        stop.locality = locality
+        stop.save!
+      end
+    end
     
+  end
+  
   namespace :load do
     
-    include DataLoader
-  
     desc "Loads regions from a CSV file specified as FILE=filename"
     task :regions => :environment do 
       parse('regions', Parsers::NptgParser)
