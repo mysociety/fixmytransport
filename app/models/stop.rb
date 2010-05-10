@@ -48,6 +48,7 @@ class Stop < ActiveRecord::Base
   has_many :problems, :as => :location
   has_many :route_stops
   has_many :routes, :through => :route_stops, :uniq => true
+  belongs_to :locality
   
   def name
     common_name
