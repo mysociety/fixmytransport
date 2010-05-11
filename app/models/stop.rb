@@ -54,6 +54,10 @@ class Stop < ActiveRecord::Base
     common_name
   end
   
+  def description
+    "#{name} #{area}"
+  end
+  
   def full_name
     descriptors = [name]
     [street, indicator, landmark, crossing].each do |attribute|
@@ -87,7 +91,7 @@ class Stop < ActiveRecord::Base
   def self.common_area(stops, transport_mode_id)
     stop_area_type_codes = StopAreaType.codes_for_transport_mode(transport_mode_id)
     stop_area_sets = stops.map{ |stop| stop.stop_areas.select{ |stop_area| stop_area_type_codes.include? stop_area.area_type } }
-    stop_areas = stop_area_sets.inject{ |intersection_set,stop_area_set| intersection_set && stop_area_set }
+    stop_areas = stop_area_sets.inject{ |intersection_set,stop_area_set| intersection_set & stop_area_set }
     root_stop_areas = stop_areas.select{ |stop_area| stop_area.root? }
     if root_stop_areas.size == 1
       return root_stop_areas.first
@@ -135,9 +139,5 @@ class Stop < ActiveRecord::Base
      return existing if existing
      return nil
   end
-  
-  # def self.find_all_by_placename()
-  #    find(:conditions => ["coords && ?", Polygon.from_coordinates([[[x_min, y_min], [x_min, y_max], [x_max, y_max], [x_max, y_min], [x_min, y_min]]], BRITISH_NATIONAL_GRID)])
-  #  end
   
 end

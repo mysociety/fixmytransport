@@ -101,10 +101,16 @@ describe Stop do
   end
   
   describe 'when finding a common area' do 
-
+    
     it 'should return a common root stop area that all stops in the list belong to' do 
       stops = [stops(:victoria_station_one), stops(:victoria_station_two)]
       Stop.common_area(stops, 6).should == stop_areas(:victoria_station_root)
+    end
+    
+    it 'should not return a stop area that not all stops in the list belong to' do 
+       stops = [stops(:gatwick_airport_station), stops(:victoria_station_one)]
+       puts Stop.common_area(stops, 6).name
+       Stop.common_area(stops, 6).should_not == stop_areas(:victoria_station_root)
     end
     
   end
