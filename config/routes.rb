@@ -4,8 +4,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :places, :controller => 'problems', 
                          :except => [:update, :edit], 
-                         :collection => {:choose_location_list => :get, 
-                                         :choose_location_area => :get}
+                         :collection => {:choose_location => :get}
 
   map.resources :routes, :only => [:show], 
                          :collection => {:random => :get}, 

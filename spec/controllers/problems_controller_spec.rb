@@ -50,7 +50,7 @@ describe ProblemsController do
       @problem.stub!(:save).and_return(false)
       @problem.stub!(:locations).and_return([mock_model(Route), mock_model(Stop)])
       make_request
-      response.should render_template('problems/choose_location_list')
+      response.should render_template('problems/choose_location')
     end
     
     it 'should redirect to the location page if the problem can be saved and the location found' do 

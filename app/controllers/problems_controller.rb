@@ -21,7 +21,7 @@ class ProblemsController < ApplicationController
       if !@problem.locations.empty?
         location_search.add_choice(@problem.locations)
         @title = t :multiple_locations
-        render :choose_location_list
+        render :choose_location
       else
         @title = t :problem_location_not_found
         render :new
@@ -29,10 +29,7 @@ class ProblemsController < ApplicationController
     end
   end
   
-  def choose_location_list
-  end
-  
-  def choose_location_area
+  def choose_location
   end
   
   def show

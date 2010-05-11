@@ -2,7 +2,7 @@
   != map_javascript_include_tags
 #map
 :javascript
-  var routeStops = #{stops_js(@route.stops)}
+  var routeStops = #{location_stops_js(@route.stops)}
   jQuery(document).ready(function(){
      route_init();
   });
