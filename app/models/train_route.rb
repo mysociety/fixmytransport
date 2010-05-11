@@ -32,4 +32,8 @@ class TrainRoute < Route
     end 
   end
   
+  def description
+    name
+  end
+  
 end

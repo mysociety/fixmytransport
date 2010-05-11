@@ -65,6 +65,15 @@ describe TrainRoute do
     
   end
   
+  describe 'description' do
+  
+    it 'should be of the form "Train route between Haywards Heath and London Victoria"' do 
+      route = routes(:victoria_to_haywards_heath)
+      route.description.should == 'Train route between Haywards Heath and London Victoria'
+    end
+    
+  end
+  
   describe 'name' do 
   
     it 'should be of the form "Train route between Haywards Heath and London Victoria"' do 
