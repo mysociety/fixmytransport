@@ -36,13 +36,13 @@ describe Route do
       end
       
       it 'should return a unique list of the names of the parent localities/localities of the route stops if the route has no terminuses' do 
-        routes(:number_807_bus).areas(all=false).should == ["Annfield Plain", "Stanley", "South Moor"]
+        routes(:number_807_bus).areas(all=false).sort.should == ["Annfield Plain", "South Moor", "Stanley"]
       end
       
     end
     
     it 'should return a unique list of the names of the parent localities/localities of the stops' do 
-      routes(:victoria_to_haywards_heath).areas.should == ["Haywards Heath", "Croydon", "Clapham Junction", "Victoria", "Gatwick Airport"]
+      routes(:victoria_to_haywards_heath).areas.sort.should == ["Clapham Junction", "Croydon", "Gatwick Airport", "Haywards Heath", "Victoria"]
     end
     
   end
