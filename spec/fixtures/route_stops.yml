@@ -34,7 +34,7 @@ five:
 six: 
   route: number_807_bus
   stop: bus_station
-  terminus: t
+  terminus: f
 seven: 
   route: number_807_bus
   stop: bethany_terrace
@@ -42,7 +42,7 @@ seven:
 eight: 
   route: number_807_bus
   stop: arch_ne
-  terminus: t
+  terminus: f
 nine: 
   route: aldershot_807_bus
   stop: white_lion_n

@@ -1,1 +1,16 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+one:
+  descendant: catchgate
+  ancestor: annfield_plain
+  count: "1"
+  direct: t
+two:
+  descendant: north_town
+  ancestor: aldershot
+  count: "1"
+  direct: t
+three:
+  descendant: broadmead
+  ancestor: bristol
+  count: "1"
+  direct: t

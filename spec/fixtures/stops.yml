@@ -67,6 +67,7 @@ victoria_station_one:
   town: ""
   street: "-"
   indicator: ""
+  locality: victoria
 victoria_station_two:
   status: act
   lat: "51.49526"
@@ -94,6 +95,7 @@ victoria_station_two:
   town: ""
   street: "-"
   indicator: ""
+  locality: victoria
 bristol_16: 
   status: act
   lat: "51.45919"
@@ -123,6 +125,7 @@ bristol_16:
   town: ""
   street: Marlborough Street
   indicator: Bay 16
+  locality: broadmead
 dursley_road: 
   status: act
   lon: "-2.67666"
@@ -151,6 +154,7 @@ dursley_road:
   town: ""
   street: Dursley Road
   indicator: ""
+  locality: shirehampton
 victoria_bus_station_deleted: 
   status: del
   lon: "-0.14491"
@@ -207,6 +211,7 @@ clapham_junction:
   town: ""
   street: "-"
   indicator: ""
+  locality: clapham_junction
 croydon_station: 
   status: act
   lon: "-0.09278"
@@ -235,6 +240,7 @@ croydon_station:
   town: ""
   street: "-"
   indicator: ""
+  locality: croydon
 gatwick_airport_station: 
   status: act
   lon: "-0.16104"
@@ -263,6 +269,7 @@ gatwick_airport_station:
   town: ""
   street: "-"
   indicator: ""
+  locality: gatwick_airport
 haywards_heath_station: 
   status: act
   lon: "-0.10531"
@@ -291,6 +298,7 @@ haywards_heath_station:
   town: ""
   street: "-"
   indicator: ""
+  locality: haywards_heath
 arch_ne: 
   status: act
   lon: "-1.70864"
@@ -319,6 +327,7 @@ arch_ne:
   town: South Moor
   street: A693
   indicator: north east bound
+  locality: south_moor
 arch_sw: 
   status: act
   lon: "-1.70914"
@@ -347,6 +356,7 @@ arch_sw:
   town: South Moor
   street: A693
   indicator: south west bound
+  locality: south_moor
 bethany_terrace:
   status: act
   lon: "-1.74365"
@@ -375,6 +385,7 @@ bethany_terrace:
   town: Catchgate
   street: Kyo Road
   indicator: south west bound
+  locality: catchgate
 bus_station:
   status: act
   lon: "-1.69864"
@@ -403,6 +414,7 @@ bus_station:
   town: Stanley
   street: Mary Street
   indicator: north bound
+  locality: stanley
 wybourne_lane:  
   status: act
   lon: "-0.78016"
@@ -431,6 +443,7 @@ wybourne_lane:
   indicator: SE-bound
   lat: "51.23517"
   easting: "485260"
+  locality: weybourne
 white_lion_n:
   status: act
   lon: "-0.74342"
@@ -459,6 +472,7 @@ white_lion_n:
   indicator: ""
   lat: "51.24083"
   easting: "487814"
+  locality: north_town
 white_lion_s:
   status: act
   lon: "-0.74331"
@@ -487,3 +501,4 @@ white_lion_s:
   indicator: ""
   lat: "51.24081"
   easting: "487822"
+  locality: north_town

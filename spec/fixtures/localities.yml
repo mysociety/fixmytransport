@@ -23,32 +23,227 @@
 
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  code: MyString
-  atco_code: MyString
-  name: MyText
-  short_name: MyText
-  country: MyString
-  region_code: MyString
-  national: false
-  contact_email: MyString
-  contact_telephone: MyString
-  creation_datetime: 2010-05-06 16:55:45
-  modification_datetime: 2010-05-06 16:55:45
-  revision_number: MyString
-  modification: MyString
-
-two:
-  code: MyString
-  atco_code: MyString
-  name: MyText
-  short_name: MyText
-  country: MyString
-  region_code: MyString
-  national: false
-  contact_email: MyString
-  contact_telephone: MyString
-  creation_datetime: 2010-05-06 16:55:45
-  modification_datetime: 2010-05-06 16:55:45
-  revision_number: MyString
-  modification: MyString
+victoria: 
+  northing: "179150"
+  source_locality_type: Lo
+  admin_area_id: "171"
+  national: 
+  name: Victoria
+  grid_type: U
+  revision_number: "0"
+  code: E0034956
+  qualifier_name: London
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C000000000000502420410000000070DE0541
+  easting: "528936"
+haywards_heath: 
+  northing: "124110"
+  source_locality_type: Pa
+  admin_area_id: "243"
+  national: 
+  name: Haywards Heath
+  grid_type: U
+  revision_number: "0"
+  code: E0052196
+  qualifier_name: ""
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C000000000000E442204100000000E04CFE40
+  easting: "532850"
+broadmead:  
+  northing: "173518"
+  source_locality_type: Add
+  admin_area_id: "247"
+  national: 
+  name: Broadmead
+  grid_type: U
+  revision_number: "0"
+  code: N0077024
+  qualifier_name: Bristol
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C000000000000ACE8154100000000702E0541
+  easting: "358955"
+shirehampton:  
+  northing: "176911"
+  source_locality_type: Lo
+  admin_area_id: "247"
+  national: 
+  name: Shirehampton
+  grid_type: U
+  revision_number: "0"
+  code: E0035642
+  qualifier_name: ""
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C000000000000E88E15410000000078980541
+  easting: "353210"
+clapham_junction:
+  northing: "175500"
+  source_locality_type: Lo
+  admin_area_id: "171"
+  national: 
+  name: Clapham Junction
+  grid_type: U
+  revision_number: "0"
+  code: E0034892
+  qualifier_name: ""
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C0000000000005018204100000000606C0541
+  easting: "527400"
+croydon:
+  northing: "165340"
+  source_locality_type: Add
+  admin_area_id: "171"
+  national: 
+  name: Croydon
+  grid_type: U
+  revision_number: "0"
+  code: N0060493
+  qualifier_name: London
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C000000000000C43F204100000000E02E0441
+  easting: "532450"
+gatwick_airport:
+  northing: "141324"
+  source_locality_type: Add
+  admin_area_id: "243"
+  national: 
+  name: Gatwick Airport
+  grid_type: U
+  revision_number: "1"
+  code: N0061431
+  qualifier_name: ""
+  modification: rev
+  short_name: ""
+  coords: 0101000020346C000000000000FE2220410000000060400141
+  easting: "528767"
+haywards_heath:
+  northing: "124110"
+  source_locality_type: Pa
+  admin_area_id: "243"
+  national: 
+  name: Haywards Heath
+  grid_type: U
+  revision_number: "0"
+  code: E0052196
+  qualifier_name: ""
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C000000000000E442204100000000E04CFE40
+  easting: "532850"
+south_moor:
+  northing: "551960"
+  source_locality_type: Lo
+  admin_area_id: "178"
+  national: 
+  name: South Moor
+  grid_type: U
+  revision_number: "1"
+  code: E0010042
+  qualifier_name: Durham
+  modification: rev
+  short_name: ""
+  coords: 0101000020346C000000000000409219410000000030D82041
+  easting: "418960"
+stanley:
+  northing: "553023"
+  source_locality_type: Lo
+  admin_area_id: "178"
+  national: 
+  name: Stanley
+  grid_type: U
+  revision_number: "1"
+  code: E0010044
+  qualifier_name: Derwentside
+  modification: rev
+  short_name: ""
+  coords: 0101000020346C000000000000AC9C1941000000007EE02041
+  easting: "419627"
+weybourne:
+  northing: "149037"
+  source_locality_type: Lo
+  admin_area_id: "242"
+  national: 
+  name: Weybourne
+  grid_type: U
+  revision_number: "0"
+  code: E0025881
+  qualifier_name: Surrey
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C000000000000FC9C1D410000000068310241
+  easting: "485183"
+north_town:
+  northing: "150470"
+  source_locality_type: Add
+  admin_area_id: "260"
+  national: 
+  name: North Town
+  grid_type: U
+  revision_number: "0"
+  code: N0060880
+  qualifier_name: Aldershot
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C00000000000010C81D4100000000305E0241
+  easting: "487940"
+catchgate:
+  northing: "552130"
+  source_locality_type: Lo
+  admin_area_id: "178"
+  national: 
+  name: Catchgate
+  grid_type: U
+  revision_number: "1"
+  code: E0009961
+  qualifier_name: ""
+  modification: rev
+  short_name: ""
+  coords: 0101000020346C000000000000E06A19410000000084D92041
+  easting: "416440"
+annfield_plain: 
+  northing: "551442"
+  source_locality_type: Lo
+  admin_area_id: "178"
+  national: 
+  name: Annfield Plain
+  grid_type: U
+  revision_number: "1"
+  code: E0009943
+  qualifier_name: ""
+  modification: rev
+  short_name: ""
+  coords: 0101000020346C000000000000107219410000000024D42041
+  easting: "416900"
+aldershot:
+  northing: "150625"
+  source_locality_type: Lo
+  admin_area_id: "260"
+  national: 
+  name: Aldershot
+  grid_type: U
+  revision_number: "0"
+  code: E0013319
+  qualifier_name: ""
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C0000000000008CAF1D410000000008630241
+  easting: "486371"
+bristol: 
+  northing: "173086"
+  source_locality_type: US
+  admin_area_id: "247"
+  national: 
+  name: Bristol
+  grid_type: U
+  revision_number: "1"
+  code: E0057160
+  qualifier_name: ""
+  modification: rev
+  short_name: ""
+  coords: 0101000020346C000000000000C0E3154100000000F0200541
+  easting: "358640"
