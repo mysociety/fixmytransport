@@ -242,7 +242,6 @@ ActiveRecord::Schema.define(:version => 20100510115509) do
     t.text     "crossing"
     t.text     "indicator"
     t.string   "bearing"
-    t.string   "nptg_locality_code"
     t.string   "locality_name"
     t.string   "parent_locality_name"
     t.string   "grand_parent_locality_name"
