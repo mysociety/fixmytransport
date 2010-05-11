@@ -30,7 +30,9 @@ Spec::Runner.configure do |config|
   # do so right here. Just uncomment the next line and replace the fixture
   # names with your fixtures.
   #
-  config.global_fixtures = :transport_modes, 
+  config.global_fixtures = :transport_modes,
+                           :localities,
+                           :locality_links,
                            :stop_types,
                            :stop_area_types,
                            :transport_mode_stop_types,
