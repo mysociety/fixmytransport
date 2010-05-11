@@ -32,7 +32,7 @@ describe Route do
     describe 'when asked for only terminuses' do
       
       it 'should return a unique list of the names of the parent localities/localities of the terminuses' do 
-        routes(:victoria_to_haywards_heath).areas(all=false).should == ['Haywards Heath', 'Victoria']
+        routes(:victoria_to_haywards_heath).areas(all=false).sort.should == ['Haywards Heath', 'Victoria']
       end
       
       it 'should return a unique list of the names of the parent localities/localities of the route stops if the route has no terminuses' do 
