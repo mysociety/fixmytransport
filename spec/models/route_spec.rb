@@ -27,6 +27,26 @@ describe Route do
     route.valid?.should be_true
   end
   
+  describe 'when giving its areas' do 
+  
+    describe 'when asked for only terminuses' do
+      
+      it 'should return a unique list of the names of the parent localities/localities of the terminuses' do 
+        routes(:victoria_to_haywards_heath).areas(all=false).should == ['Haywards Heath', 'Victoria']
+      end
+      
+      it 'should return a unique list of the names of the parent localities/localities of the route stops if the route has no terminuses' do 
+        routes(:number_807_bus).areas(all=false).should == ["Annfield Plain", "Stanley", "South Moor"]
+      end
+      
+    end
+    
+    it 'should return a unique list of the names of the parent localities/localities of the stops' do 
+      routes(:victoria_to_haywards_heath).areas.should == ["Haywards Heath", "Croydon", "Clapham Junction", "Victoria", "Gatwick Airport"]
+    end
+    
+  end
+  
   describe 'when finding from attributes' do 
   
     it 'should find any routes matching the number and transport mode id' do 

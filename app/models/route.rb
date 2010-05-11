@@ -176,13 +176,34 @@ class Route < ActiveRecord::Base
     areas.map{ |area| area.downcase }.include?(area_name.downcase)
   end
   
-  def areas
-    stops.map{ |stop| stop.parent_locality_name if !stop.parent_locality_name.blank? }.compact.uniq
+  def areas(all=true)
+    if all or route_stops.terminuses.empty? 
+      route_stop_list = route_stops
+    else
+      route_stop_list = route_stops.terminuses
+    end
+    areas = route_stop_list.map do |rs| 
+      if rs.stop.locality.parents.empty?
+        rs.stop.locality.name
+      else
+        rs.stop.locality.parents.map{ |parent_locality| parent_locality.name }
+      end
+    end.flatten.uniq
+    areas
+  end
+  
+  def description
+    "#{name} #{area}"
   end
   
   def area
-    area = areas.to_sentence
-    area = " in #{area}" if !area.blank?
+    area = ''
+    area_list = areas(all=false)
+    if area_list.size > 1
+      area = " between #{area_list.to_sentence}"
+    else
+      area = " in #{area_list.first}" if !area_list.empty?
+    end
     return area
   end
   
