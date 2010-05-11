@@ -24,11 +24,11 @@ class TrainRoute < Route
       if terminuses.size == 1
         "Train to #{terminuses.to_sentence}"
       else
-        "Train between #{terminuses.to_sentence}"
+        "Train between #{terminuses.sort.to_sentence}"
       end
     else
       terminuses = route_stops.terminuses.map{ |terminus| terminus.name }
-      "Train route between #{terminuses.to_sentence}"     
+      "Train route between #{terminuses.sort.to_sentence}"     
     end 
   end
   
