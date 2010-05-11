@@ -96,6 +96,7 @@ class Route < ActiveRecord::Base
       first, last = terminuses
       routes = find_all_by_stop_names(first, last, attributes)
     else
+      return [] if attributes[:route_number].blank?
       routes = find_all_by_number_and_transport_mode_id(attributes[:route_number], attributes[:transport_mode_id])
       if routes.size > 1 and ! attributes[:area].blank?
         return routes.select{ |route| route.in_area?(attributes[:area]) }
