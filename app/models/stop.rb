@@ -115,7 +115,7 @@ class Stop < ActiveRecord::Base
   end
   
   def self.find_by_name_and_coords(name, easting, northing, distance)
-    stops = find_by_sql(["SELECT   *, ABS(easting - ?) easting_dist, ABS(northing - ?) northing_dist
+    stops = find_by_sql(["SELECT   *, ABS(easting - ?) as easting_dist, ABS(northing - ?) as northing_dist
                           FROM     stops
                           WHERE    common_name = ? 
                           AND      ABS(easting - ?) < ? 
