@@ -1,5 +1,3 @@
-require 'xml'
-
 class Parsers::NptgParser
 
   def initialize
