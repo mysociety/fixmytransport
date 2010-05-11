@@ -109,7 +109,6 @@ describe Stop do
     
     it 'should not return a stop area that not all stops in the list belong to' do 
        stops = [stops(:gatwick_airport_station), stops(:victoria_station_one)]
-       puts Stop.common_area(stops, 6).name
        Stop.common_area(stops, 6).should_not == stop_areas(:victoria_station_root)
     end
     
