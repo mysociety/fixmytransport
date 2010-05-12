@@ -12,6 +12,8 @@
       =t(:transport_mode)
     .transport-mode
       != transport_mode_radio_buttons
+    - if @problem.errors.on(:location_attributes)
+      .form-field-error= error_message_on @problem, :location_attributes
     .form-field
       != label_tag 'problem[location_attributes][name]', t(:location_name)
       != text_field_tag 'problem[location_attributes][name]', location_param(:name)

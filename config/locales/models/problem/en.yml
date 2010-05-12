@@ -14,6 +14,10 @@ en:
               blank: "We can't figure out where this is"
             location_type:
               blank: "Please select stop, station or route"
+            location_attributes:
+              blank: "Please give the station/stop, town/area or route"
+              blank_stop: "Please give the stop or area"
+              blank_route: "Please give the route or area"
         stop:
           attributes: 
             common_name:
