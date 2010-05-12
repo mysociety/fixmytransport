@@ -22,7 +22,8 @@ describe ProblemsController do
       @stop = mock_model(Stop)
       @problem = mock_model(Problem, :id => 8, 
                                      :subject => 'A test problem', 
-                                     :save => true, 
+                                     :valid? => true, 
+                                     :location_from_attributes => mock_model(Stop),
                                      :location => @stop, 
                                      :location_attributes= => true,
                                      :location_type => 'Stop')
@@ -41,20 +42,20 @@ describe ProblemsController do
       make_request
     end
     
-    it 'should try and save the new problem' do 
-      @problem.should_receive(:save)
+    it 'should try and validate the new problem' do 
+      @problem.should_receive(:valid?)
       make_request
     end
     
     it 'should render the "Choose location" view if more than one location is found' do 
-      @problem.stub!(:save).and_return(false)
+      @problem.stub!(:valid?).and_return(false)
       @problem.stub!(:locations).and_return([mock_model(Route), mock_model(Stop)])
       make_request
       response.should render_template('problems/choose_location')
     end
     
-    it 'should redirect to the location page if the problem can be saved and the location found' do 
-      @problem.stub!(:save).and_return(true)
+    it 'should redirect to the location page if the problem is valid and the location found' do 
+      @problem.stub!(:valid?).and_return(true)
       make_request
       response.should redirect_to(stop_url(@stop))
     end

@@ -15,10 +15,10 @@ class ProblemsController < ApplicationController
     problem_attributes = params[:problem]
     problem_attributes[:location_search] = @location_search
     @problem = Problem.new(problem_attributes)
-    if @problem.save
+    if @problem.valid? && @problem.location_from_attributes
       redirect_to location_url(@problem.location)
     else
-      if !@problem.locations.empty?
+      if @problem.locations && !@problem.locations.empty?
         location_search.add_choice(@problem.locations)
         @title = t :multiple_locations
         render :choose_location
