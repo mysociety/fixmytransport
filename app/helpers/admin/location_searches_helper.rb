@@ -9,10 +9,7 @@ module Admin::LocationSearchesHelper
     when :method
       text = "Got result set using #{event[:method]}"
     when :choice
-      text = "Showed a choice of #{event[:locations].size} locations:"  
-      text += "<div class='location-list'>"
-      text += event[:locations].map{ |location_info| location_link(location_info)}.join("<br>")
-      text += "</div>"
+      text = "Showed a choice of #{event[:locations]} locations" 
     end
     return text
   end
