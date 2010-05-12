@@ -39,7 +39,7 @@ class LocationSearch < ActiveRecord::Base
     attributes[:session_id] = session_id
     attributes[:active] = true
     attributes[:events] = []
-    self.create!(attributes)
+    create(attributes)
   end
   
   def description
@@ -58,9 +58,8 @@ class LocationSearch < ActiveRecord::Base
   end
   
   def add_choice(locations)
-    location_list = locations.map{ |location| identifying_info(location) }
     self.events << { :type => :choice, 
-                     :locations => location_list } 
+                     :locations => locations.size } 
     save
   end
   
@@ -83,7 +82,7 @@ class LocationSearch < ActiveRecord::Base
   def add_method(method)
     self.events << { :type => :method, 
                      :method => method }
-    save
+    self.save!
   end
   
   def responded?(location)
