@@ -19,20 +19,6 @@ require 'spec_helper'
 
 describe Problem do
   
-  before(:each) do
-    @valid_attributes = {
-      :subject => "value for subject",
-      :description => "value for description",
-      :location => mock_model(Stop),
-      :transport_mode_id => 5
-    }
-  end
-
-  it "should create a new instance given valid attributes" do
-    problem = Problem.new(@valid_attributes)
-    problem.valid?.should be_true
-  end
-  
   it 'should be invalid without a description'
   
   it 'should be invalid without a subject'
@@ -40,7 +26,7 @@ describe Problem do
   describe "when finding a location by attributes" do 
         
     before do 
-      @problem = Problem.new(@valid_attributes)
+      @problem = Problem.new(:transport_mode_id => 5)
       StopType.stub!(:codes_for_transport_mode).and_return([])
     end
 
