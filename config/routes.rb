@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
 
-  map.root :controller => 'home'
+  map.root :controller => 'problems', :action => 'new'
 
   map.resources :places, :controller => 'problems', 
                          :except => [:update, :edit], 
