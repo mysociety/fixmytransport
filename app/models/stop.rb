@@ -106,12 +106,22 @@ class Stop < ActiveRecord::Base
     stop_type_codes = StopType.codes_for_transport_mode(attributes[:transport_mode_id])
     area = attributes[:area].downcase
     name = attributes[:name].downcase
-    active.find(:all, :conditions => ["lower(common_name) like ? 
-                                       AND (lower(locality_name) = ? 
-                                       OR lower(parent_locality_name) = ?
-                                       OR lower(grand_parent_locality_name) = ?)
-                                       AND stop_type in (?)", 
-        "%#{name}%", area, area, area, stop_type_codes])
+    query_clauses = []
+    params = []
+    if !name.blank? 
+      query_clauses << 'lower(common_name) like ?'
+      params <<  "%#{name}%"
+    end
+    if !area.blank?
+      query_clauses << '(lower(locality_name) = ? 
+       OR lower(parent_locality_name) = ?
+       OR lower(grand_parent_locality_name) = ?)'
+      3.times{ params << area }
+    end
+    query_clauses << 'stop_type in (?)'
+    params << stop_type_codes
+    params.unshift(query_clauses.join(" AND "))
+    active.find(:all, :conditions => params)
   end
   
   def self.find_by_name_and_coords(name, easting, northing, distance)
