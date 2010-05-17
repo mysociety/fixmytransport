@@ -44,7 +44,7 @@ class LocationSearch < ActiveRecord::Base
   
   def description
     descriptors = [ transport_mode.name ]
-    descriptors << location_type.tableize.singularize.humanize.downcase
+    descriptors << location_type.tableize.singularize.humanize.downcase if location_type
     if !route_number.blank?
       descriptors << "'#{route_number}'"
     end
