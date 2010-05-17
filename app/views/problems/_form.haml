@@ -23,7 +23,7 @@
     .form-field
       != label_tag 'problem[location_attributes][route_number]', t(:route_number)
       != text_field_tag 'problem[location_attributes][route_number]', location_param(:route_number)
-      %p For train routes, you can enter start and end stations e.g. "London to Brighton"
+      %p For train routes, you can enter start and end stations e.g. "London to Brighton" in the route box.
   .form-field
     - if @problem.errors.on(:location_type)
       .form-field-error= error_message_on @problem, :location_type
