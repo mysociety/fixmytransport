@@ -2,7 +2,7 @@
   != map_javascript_include_tags
 #map
 :javascript
-  var routeStops = #{location_stops_js(@route.stops)}
+  var routeSegments = #{route_segments_js(@route)}
   jQuery(document).ready(function(){
      route_init();
   });
@@ -20,5 +20,5 @@
   .stops
     Stops at:
     %ol
-    - @route.route_stops.each do |route_stop|
-      %li= link_to(route_stop.name, stop_url(route_stop.stop))
+    - @route.stops.each do |stop|
+      %li= link_to(stop.name, stop_url(stop))

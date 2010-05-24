@@ -12,7 +12,7 @@ describe Parsers::NptdrParser do
       @transport_mode = mock_model(TransportMode, :route_type => "BusRoute")
       TransportMode.stub!(:find_by_name).with('Bus').and_return(@transport_mode)
       @stop = mock_model(Stop, :atco_code => 'xxxxx')
-      Stop.stub!(:find_by_atco_code).and_return(@stop)
+      Stop.stub!(:find_by_atco_code).and_return{ |atco_code| mock_model(Stop, :atco_code => atco_code)}
       @operator = mock_model(Operator, :code => 'ZZ')
       Operator.stub!(:find_or_create_by_code).and_return(@operator)
       @parser = Parsers::NptdrParser.new
@@ -30,8 +30,8 @@ describe Parsers::NptdrParser do
     end
     
     it 'should add stops to the route' do 
-      @route.route_stops.first.stop.atco_code.should == 'xxxxx'
-      @route.route_stops.second.stop.atco_code.should == 'xxxxx'
+      @route.route_segments.first.from_stop.atco_code.should == 'aaaaaaaa'
+      @route.route_segments.first.to_stop.atco_code.should == 'bbbbbbbbb'
     end
     
     it 'should add operators to the route' do 
@@ -39,11 +39,11 @@ describe Parsers::NptdrParser do
     end
     
     it 'should mark the route terminus stops' do 
-      @route.route_stops.first.terminus?.should be_true
-      @route.route_stops.last.terminus?.should be_true
-      @route.route_stops.second.terminus?.should be_false
+      @route.route_segments.first.from_terminus?.should be_true
+      @route.route_segments.last.to_terminus?.should be_true
+      @route.route_segments.first.to_terminus?.should be_false
+      @route.route_segments.last.from_terminus?.should be_false
     end
-    
     
   end
   

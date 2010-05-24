@@ -43,12 +43,25 @@ module ApplicationHelper
     tags.join("\n")
   end
   
+  def stop_js_coords(stop)
+     "[#{stop.lat}, #{stop.lon}]"
+  end
+  
   def location_stops_js locations
     if locations.first.is_a? Route
-      array_content = locations.map{|route| route.stops.map{ |stop| "[#{stop.lat}, #{stop.lon}]"}.join(',') }.join(',') 
+      array_content = locations.map{|route| route.stops.map{ |stop| stop_js_coords(stop) }.join(',') }.join(',') 
     else
-     array_content = locations.map{|stop| "[#{stop.lat}, #{stop.lon}]"}.join(',') 
+     array_content = locations.map{|stop| stop_js_coords(stop) }.join(',') 
     end
+    "[#{array_content}];"
+  end
+  
+  def route_segments_js route
+    array_content = [];
+    route.display_route_segments.each do |route_segment|
+      array_content << "[#{stop_js_coords(route_segment.from_stop)}, #{stop_js_coords(route_segment.to_stop)}]"
+    end
+    array_content = array_content.join(',')
     "[#{array_content}];"
   end
   

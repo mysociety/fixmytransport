@@ -62,5 +62,20 @@ namespace :nptdr do
     end
     
   end
+  
+  namespace :postload do 
+    
+    desc "Removes redundant segments from routes"
+    task :routes => :environment do 
+      unless ENV['ROUTE_ID']
+        usage_message "usage: This task requires ROUTE_ID=route_id"
+      end
+      route_id = ENV['ROUTE_ID']
+      route = Route.find(route_id)
+      route.route_segments.each do |route_segment|
+        
+      end
+    end
+  end
 
 end

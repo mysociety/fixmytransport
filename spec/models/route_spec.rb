@@ -26,6 +26,13 @@ describe Route do
     route = Route.new(@valid_attributes)
     route.valid?.should be_true
   end
+  describe 'when giving its terminuses' do 
+    
+    it 'should return correct terminuses for an example route' do 
+      routes(:victoria_to_haywards_heath).terminuses.should == [stops(:victoria_station_one), stops(:haywards_heath_station)]
+    end
+    
+  end
   
   describe 'when giving its areas' do 
   
@@ -89,13 +96,18 @@ describe Route do
   
     it 'should include routes with the same number and one stop in common with the new route' do 
       route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
-      route.route_stops.build(:stop => stops(:arch_ne), :terminus => true)
+      new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
+      route.route_segments.build(:from_stop => stops(:arch_ne), :to_stop => new_stop, :from_terminus => true)
       Route.find_all_by_number_and_common_stop(route).should include(routes(:number_807_bus))
     end
     
     it 'should include routes with the same number, no stops in common, but one stop area in common with the new route' do
       route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
-      route.route_stops.build(:stop => stops(:arch_sw), :terminus => true)
+      new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
+      route.route_segments.build(:from_stop => stops(:arch_sw), 
+                                 :to_stop => new_stop,
+                                 :from_terminus => true,
+                                 :to_terminus => false)
       Route.find_all_by_number_and_common_stop(route).should include(routes(:number_807_bus))
     end
     
@@ -105,8 +117,11 @@ describe Route do
     
     before do 
       @route = Route.new(:transport_mode => transport_modes(:train))
-      routes(:victoria_to_haywards_heath).route_stops.each do |route_stop|
-        @route.route_stops.build(:stop => route_stop.stop, :terminus => route_stop.terminus)
+      routes(:victoria_to_haywards_heath).route_segments.each do |route_segment|
+        @route.route_segments.build(:from_stop => route_segment.from_stop,
+                                    :to_stop => route_segment.to_stop, 
+                                    :from_terminus => route_segment.from_terminus,
+                                    :to_terminus => route_segment.to_terminus)
       end
     end
     
@@ -115,7 +130,7 @@ describe Route do
     end
     
     it 'should include a route with a superset of the stops of the new route and the same terminuses' do 
-      @route.route_stops.delete(@route.route_stops.second)
+      @route.route_segments.delete(@route.route_segments.second)
       Route.find_all_by_terminuses_and_stop_set(@route).should include(routes(:victoria_to_haywards_heath))
     end
   
@@ -172,44 +187,64 @@ describe Route do
       existing_route.route_operators.should == [route_operator]
     end
     
-    it 'should transfer route stops when merging overlapping routes' do 
-      existing_route_stop = RouteStop.new(:stop => Stop.new)
+    it 'should transfer route segment when merging overlapping routes' do 
+      existing_route_segment = RouteSegment.new(:from_stop => Stop.new, 
+                                                :to_stop => Stop.new,
+                                                :from_terminus => false,
+                                                :to_terminus => false)
       existing_route = Route.new(:number => '111')
-      existing_route.route_stops << existing_route_stop 
+      existing_route.route_segments << existing_route_segment
       Route.stub!(:find_existing).and_return([existing_route])
-      route_stop = mock_model(RouteStop, :stop => Stop.new, 
-                                         :terminus => false,
-                                         :destroy => true)
+      route_segment = mock_model(RouteSegment, :from_stop => Stop.new, 
+                                               :to_stop => Stop.new,
+                                               :from_terminus => false,
+                                               :to_terminus => false,
+                                               :destroy => true)
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
-                        :route_stops => [route_stop])
+                        :route_segments => [route_segment])
       Route.add!(route)
-      existing_route.route_stops.size.should == 2
+      existing_route.route_segments.size.should == 2
     end
     
-    it 'should not add duplicate route stops when merging overlapping routes' do 
-      existing_stop = mock_model(Stop, :atco_code => 'aaaaaa')
-      existing_route_stop = mock_model(RouteStop, :stop => existing_stop, :terminus? => false)
-      existing_route = mock_model(Route, :save! => true, :route_stops => [existing_route_stop])
+    it 'should not add duplicate route segments when merging overlapping routes' do 
+      existing_from_stop = mock_model(Stop, :atco_code => 'aaaaaa')
+      existing_to_stop = mock_model(Stop, :atco_code => 'bbbbbb')
+      existing_route_segment = mock_model(RouteSegment, :from_stop => existing_from_stop, 
+                                                        :to_stop => existing_to_stop, 
+                                                        :from_terminus? => false,
+                                                        :to_terminus? => false)
+      existing_route = mock_model(Route, :save! => true, :route_segments => [existing_route_segment])
       Route.stub!(:find_existing).and_return([existing_route])
-      route_stop = mock_model(RouteStop, :stop => existing_stop, :destroy => true)
+      route_segment = mock_model(RouteSegment, :from_stop => existing_from_stop, 
+                                               :to_stop => existing_to_stop,
+                                               :destroy => true)
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
-                        :route_stops => [route_stop])
+                        :route_segments => [route_segment])
       Route.add!(route)
-      existing_route.route_stops.should == [existing_route_stop]
+      existing_route.route_segments.should == [existing_route_segment]
     end
     
     it 'should not make as terminuses stops that are terminuses in an existing route but not terminuses in a duplicate' do 
       existing_stop = mock_model(Stop, :atco_code => 'aaaaaa')
-      existing_route_stop = mock_model(RouteStop, :stop => existing_stop, :terminus? => true)
-      existing_route = mock_model(Route, :save! => true, :route_stops => [existing_route_stop])
+      new_stop = mock_model(Stop, :atco_code => 'bbbbbb')
+      existing_route_segment = mock_model(RouteSegment, 
+                                          :from_stop => existing_stop, 
+                                          :to_stop => new_stop, 
+                                          :from_terminus? => true,
+                                          :to_terminus? => false)
+      existing_route = mock_model(Route, :save! => true, :route_segments => [existing_route_segment])
       Route.stub!(:find_existing).and_return([existing_route])
-      route_stop = mock_model(RouteStop, :stop => existing_stop, :terminus? => false, :destroy => true)
+      route_segment = mock_model(RouteSegment, :from_stop => existing_stop, 
+                                               :to_stop => new_stop,
+                                               :from_terminus? => false, 
+                                               :to_terminus? => false, 
+                                               :destroy => true)
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
-                        :route_stops => [route_stop])
-      existing_route_stop.should_receive(:terminus=).with(false)
+                        :route_segments => [route_segment])
+      existing_route_segment.should_receive(:from_terminus=).with(false)
       Route.add!(route)
     end
     

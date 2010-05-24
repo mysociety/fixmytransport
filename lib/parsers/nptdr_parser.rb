@@ -71,18 +71,31 @@ class Parsers::NptdrParser
       route_type = transport_mode.route_type.constantize
       route = route_type.new(:number => route_number,
                              :transport_mode => transport_mode)                 
-      stop_codes.each_with_index do |stop_code,index|
-        stop = Stop.find_by_atco_code(stop_code.strip)
-        if ! stop
-          puts "Can't find stop #{stop_code} for route #{route.inspect}" 
+      stop_codes.each_cons(2) do |from_stop_code,to_stop_code|
+        from_stop = Stop.find_by_atco_code(from_stop_code.strip)
+        to_stop = Stop.find_by_atco_code(to_stop_code.strip)
+        if ! from_stop
+          puts "Can't find stop #{from_stop_code} for route #{route.inspect}" 
           next
         end
-        if index == 0 or (index == stop_codes.size - 1)
-          terminus = true
-        else
-          terminus = false
+        if ! to_stop
+          puts "Can't find stop #{to_stop_code} for route #{route.inspect}"
+          next
         end
-        route.route_stops.build(:stop => stop, :terminus => terminus)
+        if from_stop.atco_code == stop_codes.first 
+          from_terminus = true
+        else
+          from_terminus = false
+        end
+        if to_stop.atco_code == stop_codes.last
+          to_terminus = true
+        else
+          to_terminus = false
+        end
+        route.route_segments.build(:from_stop => from_stop, 
+                                   :to_stop   => to_stop,
+                                   :from_terminus => from_terminus, 
+                                   :to_terminus  => to_terminus)
       end
       operator = Operator.find_or_create_by_code(operator_code)   
       route.route_operators.build(:operator => operator)                  

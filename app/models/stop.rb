@@ -46,9 +46,15 @@ class Stop < ActiveRecord::Base
   has_many :stop_areas, :through => :stop_area_memberships
   validates_presence_of :common_name
   has_many :problems, :as => :location
-  has_many :route_stops
-  has_many :routes, :through => :route_stops, :uniq => true
+  has_many :route_segments_as_from_stop, :foreign_key => 'from_stop_id', :class_name => 'RouteSegment'
+  has_many :route_segments_as_to_stop, :foreign_key => 'to_stop_id', :class_name => 'RouteSegment'
+  has_many :routes_as_from_stop, :through => :route_segments_as_from_stop, :source => 'route'
+  has_many :routes_as_to_stop, :through => :route_segments_as_to_stop, :source => 'route'
   belongs_to :locality
+  
+  def routes
+    (routes_as_from_stop | routes_as_to_stop).uniq
+  end
   
   def name
     common_name
