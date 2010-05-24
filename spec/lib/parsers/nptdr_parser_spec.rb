@@ -82,15 +82,11 @@ describe Parsers::NptdrParser do
     end
     
     it 'should extract the operator code' do 
-      @operators.first.code.should == 'WP'
+      @operators.first.code.should == 'AW'
     end
     
     it 'should extract the name' do 
-      @operators.first.name.should == 'Whippet Coaches'
-    end
-    
-    it 'should extract the short name' do 
-      @operators.first.short_name.should == 'Whippet'
+      @operators.first.name.should == 'Arriva Trains Wales'
     end
   
   end

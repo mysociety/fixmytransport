@@ -39,12 +39,13 @@ class Parsers::NptdrParser
   def parse_operators filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      yield Operator.new(:code       => row['Operator'].strip, 
-                         :name       => row['Operator Legal Name'].strip,
-                         :short_name => row['Operator Short Form'].strip)
+      transport_mode_name = row['Transport Mode']
+      transport_mode = TransportMode.find_by_name(transport_mode_name)
+      yield Operator.new(:code       => row['Operator Code'].strip, 
+                         :name       => row['Operator Name'].strip)
     end
   end
-  
+
   def parse_stops filepath
     csv_data = File.read(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
