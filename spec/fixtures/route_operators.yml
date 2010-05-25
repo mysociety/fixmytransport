@@ -13,9 +13,11 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  operator_id: 1
-  route_id: 1
-
+  operator: a_train_company
+  route: victoria_to_haywards_heath
 two:
-  operator_id: 1
-  route_id: 1
+  operator: a_bus_company
+  route: number_807_bus
+three: 
+  operator: a_bus_company
+  route: aldershot_807_bus

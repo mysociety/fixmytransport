@@ -13,10 +13,12 @@
 
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  code: MyString
-  name: MyText
-
-two:
-  code: MyString
-  name: MyText
+a_train_company:
+  code: TRAIN
+  name: A train company
+another_train_company:
+  code: TRAIN2
+  name: Another train company
+a_bus_company:
+  code: BUS
+  name: A bus company
