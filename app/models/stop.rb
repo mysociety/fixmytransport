@@ -53,7 +53,7 @@ class Stop < ActiveRecord::Base
   belongs_to :locality
   
   def routes
-    (routes_as_from_stop | routes_as_to_stop).uniq
+    (routes_as_from_stop | routes_as_to_stop).uniq.sort{ |a,b| a.name <=> b.name }
   end
   
   def name

@@ -14,20 +14,20 @@
 class TrainRoute < Route
   
   def self.find_existing(route)
-    self.find_all_by_terminuses_and_stop_set(route)
+    self.find_existing_train_routes(route)
   end
   
   def name(from_stop=nil)
     if from_stop
       terminuses = self.terminuses.reject{ |terminus| terminus == from_stop }
-      terminuses = terminuses.map{ |terminus| terminus.name_without_station }
+      terminuses = terminuses.map{ |terminus| terminus.name_without_station }.uniq
       if terminuses.size == 1
         "Train to #{terminuses.to_sentence}"
       else
         "Train between #{terminuses.sort.to_sentence}"
       end
     else
-      terminuses = self.terminuses.map{ |terminus| terminus.name_without_station }
+      terminuses = self.terminuses.map{ |terminus| terminus.name_without_station }.uniq
       "Train route between #{terminuses.sort.to_sentence}"     
     end 
   end

@@ -66,8 +66,8 @@ class Route < ActiveRecord::Base
         stop_id_criteria = "= ?"
       end
       joins += " inner join route_segments rs#{index} on routes.id = rs#{index}.route_id"
-      condition_string += " and (#{from_terminus_clause} rs#{index}.from_stop_id #{stop_id_criteria})"
-      condition_string += " or (#{to_terminus_clause} rs#{index}.to_stop_id #{stop_id_criteria})"
+      condition_string += " and ((#{from_terminus_clause} rs#{index}.from_stop_id #{stop_id_criteria})"
+      condition_string += " or (#{to_terminus_clause} rs#{index}.to_stop_id #{stop_id_criteria}))"
       params << item
       params << item
     end
@@ -78,20 +78,27 @@ class Route < ActiveRecord::Base
   end
   
   # Return routes with this transport mode whose stops are a superset or subset of the stop 
-  # list given and whose terminuses are the same
-  def self.find_all_by_terminuses_and_stop_set(new_route)
+  # list given and whose terminuses are the same, or whose terminuses are the same and are run by the same
+  # operator
+  def self.find_existing_train_routes(new_route)
     stop_codes = new_route.stop_codes
     routes = find_all_by_stops(new_route.terminuses, new_route.transport_mode_id, as_terminus=true)
-    routes_with_same_stops = []
+    existing_routes = []
     routes.each do |route|
+      if new_route.route_operators.size == 1
+        if route.operators.include? new_route.route_operators.first.operator  
+          existing_routes << Route.find(route.id)
+          next
+        end
+      end
       route_stop_codes = route.stop_codes
       stop_codes_in_both = (stop_codes & route_stop_codes)
       next if stop_codes_in_both.size == 0
       if (stop_codes_in_both.size == stop_codes.size) or (stop_codes_in_both.size == route_stop_codes.size)
-        routes_with_same_stops << Route.find(route.id)
+        existing_routes << Route.find(route.id)
       end    
     end
-    routes_with_same_stops
+    existing_routes
   end
   
   def self.find_from_attributes(attributes)
@@ -170,8 +177,13 @@ class Route < ActiveRecord::Base
     duplicate.destroy
   end
   
-  def name(from_stop=nil)
-    return "#{transport_mode_name} route #{number}"
+  def name(from_stop=nil, short=false)
+    name = "#{number}"
+    if from_stop
+      return name
+    else
+      return "#{transport_mode_name} #{name}"
+    end
   end
 
   def stop_codes
@@ -208,7 +220,7 @@ class Route < ActiveRecord::Base
   end
   
   def description
-    "#{name} #{area}"
+    "#{name(stop=nil, short=true)} #{area(lowercase=true)}"
   end
   
   def stops
@@ -219,6 +231,16 @@ class Route < ActiveRecord::Base
     route_segments
   end
   
+  def next_stops(stop_id)
+    incoming_segments = route_segments.select{ |route_segment| route_segment.to_stop_id == stop_id } 
+    incoming_segments.map{ |route_segment| route_segment.from_stop }
+  end
+  
+  def previous_stops(stop_id)
+    outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == stop_id }
+    outgoing_segments.map{ |route_segment| route_segment.to_stop }
+  end
+  
   def terminuses
     from_terminuses = route_segments.select{ |route_segment| route_segment.from_terminus? }
     to_terminuses = route_segments.select{ |route_segment| route_segment.to_terminus? }
@@ -226,13 +248,16 @@ class Route < ActiveRecord::Base
     terminuses
   end
   
-  def area
+  def area(lowercase=false)
     area = ''
     area_list = areas(all=false)
     if area_list.size > 1
-      area = " between #{area_list.to_sentence}"
+      area = "Between #{area_list.to_sentence}"
     else
-      area = " in #{area_list.first}" if !area_list.empty?
+      area = "In #{area_list.first}" if !area_list.empty?
+    end
+    if lowercase
+      area[0] = area.first.downcase
     end
     return area
   end

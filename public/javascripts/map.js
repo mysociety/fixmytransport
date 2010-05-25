@@ -29,9 +29,12 @@ function route_init() {
   map.addLayer(markers);
   var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer",{projection: proj});
   map.addLayer(vectorLayer);
-
-
-  var points = [];
+  var style =
+      {
+          strokeColor: "#CC0000",
+          strokeOpacity: 0.7,
+          strokeWidth: 2
+      };
   for (var i=0; i < routeSegments.length; i++){
      var coords = routeSegments[i];
      var fromCoords = new OpenLayers.LonLat(coords[0][1], coords[0][0]);
@@ -40,20 +43,16 @@ function route_init() {
      lineTo = toCoords.transform(proj, map.getProjectionObject());
      var fromPoint = new OpenLayers.Geometry.Point(lineFrom.lon, lineFrom.lat);
      var toPoint = new OpenLayers.Geometry.Point(lineTo.lon, lineTo.lat);
+     var points = [];
      points.push(fromPoint);
      points.push(toPoint)
      addRouteMarker(lineFrom, bounds, markers);
      addRouteMarker(lineTo, bounds, markers);
+     lineString = new OpenLayers.Geometry.LineString(points);
+     lineFeature = new OpenLayers.Feature.Vector(lineString, {projection:proj}, style);
+     vectorLayer.addFeatures([lineFeature]);
    }
-  var style =
-      {
-          strokeColor: "#CC0000",
-          strokeOpacity: 0.7,
-          strokeWidth: 2
-      };
-  var lineString = new OpenLayers.Geometry.LineString(points);
-  var lineFeature = new OpenLayers.Feature.Vector(lineString, {projection:proj}, style);
-  vectorLayer.addFeatures([lineFeature]);
+
   map.zoomToExtent(bounds, false);  
 }
 
