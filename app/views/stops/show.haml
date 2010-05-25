@@ -9,14 +9,15 @@
   });
 = render :partial => 'shared/respond', :locals => { :instance => @stop }
 .stop
-  .name= @stop.name
-  .locality= @stop.locality_name
-  .landmark= @stop.landmark
-  .street= @stop.street
-- if !@stop.stop_areas.empty?
-  Belongs to:
-  - @stop.stop_areas.each do |stop_area|
-    .stop-area= link_to(stop_area.name, stop_area_url(stop_area))
-You can pick up the following routes here:
-- @stop.routes.each do |route|
-  .route= link_to(route.name(from_stop=@stop), route_url(route))
+  %h3.name= "#{@stop.name} stop" 
+  .details
+    %span.locality= "In #{@stop.locality_name}"
+    - if !@stop.landmark.blank?
+      %span.landmark= "near #{@stop.landmark}"
+    %span.street= "on #{@stop.street}."
+  .stop-areas
+    - if !@stop.stop_areas.empty?
+      Part of
+      -@stop.stop_areas.each do |stop_area|
+        %span.stop-area= link_to(stop_area.name, stop_area_url(stop_area))
+  =render :partial => "shared/route_list", :locals => {:stop => @stop}

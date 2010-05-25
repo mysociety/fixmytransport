@@ -8,17 +8,26 @@
   });
 = render :partial => 'shared/respond', :locals => { :instance => @route }
 .route
-  .name= @route.description
+  %h3.name= @route.name
+  .details
+    %span.locality= "#{@route.area}."
   .operator
     - if @route.operators.empty? 
       Operator unknown
     - else
-      Operated by:
+      Operated by
       %ul
-      - @route.operators.each do |operator|
-        %li= "#{operator.code}"
+        - @route.operators.each do |operator|
+          %li= "#{operator.code}"
   .stops
     Stops at:
     %ol
-    - @route.stops.each do |stop|
-      %li= link_to(stop.name, stop_url(stop))
+    - @route.route_segments.each do |route_segment|
+      %li
+        = link_to(route_segment.from_stop.name, stop_url(route_segment.from_stop))
+        = link_to(route_segment.to_stop.name, stop_url(route_segment.to_stop))
+        
+        - if route_segment.from_terminus? 
+          "t"
+        - if route_segment.to_terminus? 
+          "t"
