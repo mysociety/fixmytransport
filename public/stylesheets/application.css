@@ -31,7 +31,7 @@ body {
 
 .content {
   margin: 0 auto;
-  max-width: 60em;
+  max-width: 65em;
   position: relative;
   width: 100%;
 }
@@ -98,3 +98,76 @@ input, textarea{
 }
 
 /* Reporting a problem */
+
+/* Stop/stop area page */
+
+.stop, .stop-area, .route { 
+  width: 44%;
+  padding: 0 0.5em 0.5em 0.5em;
+}
+
+.stop .name, 
+.stop-area .name, 
+.route .name
+{
+  margin: 0 0 0.1em 0;
+}
+
+.route .stops {
+  list-style-type: none;
+}
+
+.stop .details,
+.stop-area .details,
+.route .details {
+  font-size: 0.8em;
+  margin-bottom: 0.5em;
+}
+
+.route-list {
+  margin-top: 1em;
+}
+
+.route .operator {
+  margin-bottom: 0.5em;
+}
+
+.route .operator ul, 
+.route .operator li{
+  display: inline;
+  padding: 0;
+  list-style-type: none;
+}
+
+.route-list .route-info,
+.route .stops li  { 
+  margin: 0.5em 0 0.5em 0;
+  padding: 0.2em;
+  overflow: hidden;
+}
+
+.route .stops li {
+  text-align: left;
+  margin-left: 3em;
+}
+
+.route-list .route-info .previous-stops {
+  float: left;
+  text-align: left;
+  font-size: 0.8em;
+  max-width: 42.5%;
+}
+
+.route-list .route-info .next-stops {
+  float: right;
+  text-align: right;
+  font-size: 0.8em;
+  max-width: 42.5%;
+}
+
+.route-list .route-info .route-name { 
+  margin-left: auto;
+  margin-right: auto;
+  width: 15%;
+  text-align: center;
+}
