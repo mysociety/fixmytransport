@@ -1,0 +1,11 @@
+.route-list
+  Routes:
+  - stop.routes.each do |route|
+    .route-info
+      .next-stops
+        - route.next_stops(stop.id).each do |next_stop|
+          .stop-link= link_to(next_stop.name, stop_url(next_stop))
+      .previous-stops
+        - route.previous_stops(stop.id).each do |previous_stop|
+          .stop-link= link_to(previous_stop.name, stop_url(previous_stop))
+      .route-name= link_to(route.name(from_stop=stop), route_url(route))
