@@ -28,11 +28,11 @@ describe BusRoute do
     
   end
   
-  describe 'name' do 
+  describe 'name (in short form)' do 
   
-    it 'should be of the form "Bus route 807"' do 
+    it 'should be of the form "807 bus"' do 
       route = routes(:number_807_bus)
-      route.name.should == 'Bus route 807'
+      route.name(from_stop=nil, short=true).should == '807 bus'
     end
   
   end

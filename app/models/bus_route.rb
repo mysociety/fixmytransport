@@ -16,5 +16,15 @@ class BusRoute < Route
   def self.find_existing(route)
     self.find_all_by_number_and_common_stop(route)
   end
+  
+  def name(from_stop=nil, short=false)
+    if from_stop
+      return number
+    elsif short
+      return "#{number} bus"
+    else
+      return "Number #{number} bus route"
+    end
+  end
 
 end
