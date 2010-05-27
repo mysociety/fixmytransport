@@ -2,9 +2,9 @@
   != map_javascript_include_tags
 #map
 :javascript
-  var routeSegments = #{routes_segments_js([@route])}
+  var areaStops = #{location_stops_js([@route])}
   jQuery(document).ready(function(){
-     routes_init();
+     area_init();
   });
 = render :partial => 'shared/respond', :locals => { :instance => @route }
 .route

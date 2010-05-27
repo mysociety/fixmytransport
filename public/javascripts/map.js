@@ -20,41 +20,14 @@ function stop_init() {
   addRouteMarker(stopCoords, bounds, markers);
 }
 
-function route_init() {
-  
-  createMap();
-  var stopCoords;
-  bounds = new OpenLayers.Bounds();
-  var markers = new OpenLayers.Layer.Markers( "Markers", {projection: proj});
-  map.addLayer(markers);
-  var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer",{projection: proj});
-  map.addLayer(vectorLayer);
-  var style =
-      {
-          strokeColor: "#CC0000",
-          strokeOpacity: 0.7,
-          strokeWidth: 2
-      };
-  for (var i=0; i < routeSegments.length; i++){
-     var coords = routeSegments[i];
-     var fromCoords = new OpenLayers.LonLat(coords[0][1], coords[0][0]);
-     var toCoords = new OpenLayers.LonLat(coords[1][1], coords[1][0]);
-     lineFrom = fromCoords.transform(proj, map.getProjectionObject());
-     lineTo = toCoords.transform(proj, map.getProjectionObject());
-     var fromPoint = new OpenLayers.Geometry.Point(lineFrom.lon, lineFrom.lat);
-     var toPoint = new OpenLayers.Geometry.Point(lineTo.lon, lineTo.lat);
-     var points = [];
-     points.push(fromPoint);
-     points.push(toPoint)
-     addRouteMarker(lineFrom, bounds, markers);
-     addRouteMarker(lineTo, bounds, markers);
-     lineString = new OpenLayers.Geometry.LineString(points);
-     lineFeature = new OpenLayers.Feature.Vector(lineString, {projection:proj}, style);
-     vectorLayer.addFeatures([lineFeature]);
-   }
+function random_colour() 
+{ 
+   var red = Math.floor(Math.random() * 255); 
+   var green = Math.floor(Math.random() * 255); 
+   var blue = Math.floor(Math.random() * 255); 
+   return 'rgb('+red+','+green+','+blue+')'; 
 
-  map.zoomToExtent(bounds, false);  
-}
+} 
 
 function area_init() {
   createMap();
@@ -71,15 +44,15 @@ function area_init() {
 }
 
 function createMap() {
-      var options = { 
-          projection: new OpenLayers.Projection("EPSG:900913"),
-          displayProjection: new OpenLayers.Projection("EPSG:4326"),
-          units: "m",
-          numZoomLevels: 18,
-          maxResolution: 156543.0339,
-          maxExtent: new OpenLayers.Bounds(-20037508, -20037508,
-                                            20037508, 20037508.34)
-          };
+  var options = { 
+        projection: new OpenLayers.Projection("EPSG:900913"),
+        displayProjection: new OpenLayers.Projection("EPSG:4326"),
+        units: "m",
+        numZoomLevels: 18,
+        maxResolution: 156543.0339,
+        maxExtent: new OpenLayers.Bounds(-20037508, -20037508,
+                                          20037508, 20037508.34)
+      };
   map = new OpenLayers.Map('map', options);
   var gmap = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true});
   map.addLayer(gmap); 

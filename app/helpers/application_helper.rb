@@ -56,13 +56,18 @@ module ApplicationHelper
     "[#{array_content}];"
   end
   
-  def route_segments_js route
-    array_content = [];
-    route.display_route_segments.each do |route_segment|
-      array_content << "[#{stop_js_coords(route_segment.from_stop)}, #{stop_js_coords(route_segment.to_stop)}]"
+  def terminus_text(route)
+    text = ''
+    terminuses = route.terminuses
+    terminus_links = route.terminuses.map{ |stop| link_to("#{stop.name} in #{stop.area}", stop_url(stop)) }
+    if terminuses.size > 1
+      text += "Between " 
+      text += terminus_links.to_sentence(:last_word_connector => ' and ') 
+    else
+      text += "From "
+      text += terminus_links.first
     end
-    array_content = array_content.join(',')
-    "[#{array_content}];"
+    text += "."    
   end
   
 end
