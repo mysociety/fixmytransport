@@ -9,12 +9,13 @@
   });
 = render :partial => 'shared/respond', :locals => { :instance => @stop_area }
 .stop-area
-  %h3.name= @stop_area.name
+  %h3.name= "#{@stop_area.name} stop area"
   .details
-    %span.locality= "In #{@stop_area.area}"
+    - if !@stop_area.area.blank?
+      %span.locality= "In #{@stop_area.area}"
   The following stops are here: 
 - @stop_area.stops.each do |stop|
   .stop
-    = link_to(stop.full_name, stop_url(stop))
+    = link_to("#{stop.name_with_indicator}", stop_url(stop))
     = render :partial => 'shared/route_list', :locals => {:stop => stop}
 

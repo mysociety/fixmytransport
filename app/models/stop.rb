@@ -60,6 +60,39 @@ class Stop < ActiveRecord::Base
     common_name
   end
   
+  def transport_modes
+    StopType.transport_modes_for_code(stop_type)
+  end
+  
+  def suffix
+    suffix = ''
+    if transport_modes.include? 'Bus'
+      suffix = " stop"
+    end
+    suffix
+  end
+  
+  def name_with_indicator
+    text = name
+    if !indicator.blank?
+      text += " (#{long_indicator})"
+    end
+    text
+  end
+  
+  def long_indicator
+    case indicator
+    when 'o/s'
+      'outside'
+    when 'opp'
+      'opposite'
+    when 'adj'
+      'adjacent'
+    else
+      indicator
+    end
+  end
+  
   def description
     "#{name} #{area}"
   end

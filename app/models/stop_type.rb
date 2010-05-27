@@ -24,4 +24,10 @@ class StopType < ActiveRecord::Base
     stop_types.map{ |stop_type| stop_type.code }
   end
   
+  def self.transport_modes_for_code(code)
+    modes = find(:first, :conditions => ['code = ?', code], 
+                 :include => { :transport_mode_stop_types => :transport_mode }).transport_modes
+    modes.map{ |mode| mode.name }
+  end
+  
 end

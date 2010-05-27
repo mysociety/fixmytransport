@@ -9,12 +9,13 @@
   });
 = render :partial => 'shared/respond', :locals => { :instance => @stop }
 .stop
-  %h3.name= "#{@stop.name} stop" 
+  %h3.name= "#{@stop.name_with_indicator} #{@stop.suffix}" 
   .details
     %span.locality= "In #{@stop.locality_name}"
     - if !@stop.landmark.blank?
       %span.landmark= "near #{@stop.landmark}"
-    %span.street= "on #{@stop.street}."
+    - if !@stop.street.blank? 
+      %span.street= "on #{@stop.street}"
   .stop-areas
     - if !@stop.stop_areas.empty?
       Part of

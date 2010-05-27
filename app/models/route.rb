@@ -285,11 +285,21 @@ class Route < ActiveRecord::Base
   end
   
   def name_by_terminuses(transport_mode, from_stop=nil)
+    is_loop = false
     if from_stop
-      terminuses = self.terminuses.reject{ |terminus| terminus == from_stop }
+      if terminuses.size > 1
+        terminuses = self.terminuses.reject{ |terminus| terminus == from_stop }
+      else
+        is_loop = true
+        terminuses = self.terminuses
+      end
       terminuses = terminuses.map{ |terminus| terminus.name_without_suffix(transport_mode) }.uniq
       if terminuses.size == 1
-        "#{transport_mode.name} to #{terminuses.to_sentence}"
+        if is_loop
+          "#{transport_mode.name} from #{terminuses.to_sentence}"
+        else
+          "#{transport_mode.name} to #{terminuses.to_sentence}"
+        end
       else
         "#{transport_mode.name} between #{terminuses.sort.to_sentence}"
       end
@@ -298,7 +308,7 @@ class Route < ActiveRecord::Base
       if terminuses.size == 1
         "#{transport_mode.name} from #{terminuses.to_sentence}"
       else
-        "#{transport_mode.name} route from #{terminuses.sort.to_sentence}"     
+        "#{transport_mode.name} route between #{terminuses.sort.to_sentence}"     
       end
     end 
   end
