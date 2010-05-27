@@ -59,7 +59,10 @@ module ApplicationHelper
   def terminus_text(route)
     text = ''
     terminuses = route.terminuses
-    terminus_links = route.terminuses.map{ |stop| link_to("#{stop.name} in #{stop.area}", stop_url(stop)) }
+    if terminuses.empty? 
+      terminuses = [route.stops.first]
+    end
+    terminus_links = terminuses.map{ |stop| link_to("#{stop.name} in #{stop.area}", stop_url(stop)) }
     if terminuses.size > 1
       text += "Between " 
       text += terminus_links.to_sentence(:last_word_connector => ' and ') 
