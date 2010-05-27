@@ -18,18 +18,7 @@ class TrainRoute < Route
   end
   
   def name(from_stop=nil)
-    if from_stop
-      terminuses = self.terminuses.reject{ |terminus| terminus == from_stop }
-      terminuses = terminuses.map{ |terminus| terminus.name_without_station }.uniq
-      if terminuses.size == 1
-        "Train to #{terminuses.to_sentence}"
-      else
-        "Train between #{terminuses.sort.to_sentence}"
-      end
-    else
-      terminuses = self.terminuses.map{ |terminus| terminus.name_without_station }.uniq
-      "Train route between #{terminuses.sort.to_sentence}"     
-    end 
+    name_by_terminuses(transport_mode, from_stop=from_stop)
   end
   
   def description

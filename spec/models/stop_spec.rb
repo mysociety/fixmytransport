@@ -169,18 +169,14 @@ describe Stop do
     
   end
   
-  describe 'when giving name without station' do 
+  describe 'when giving name without suffix' do 
   
-    it 'should remove "Rail Station" from the end of the name' do 
-      Stop.new(:common_name => "Kensington Rail Station").name_without_station.should == "Kensington"
+    it 'should remove "Rail Station" from the end of a train station name' do 
+      Stop.new(:common_name => "Kensington Rail Station").name_without_suffix(transport_modes(:train)).should == "Kensington"
     end
     
-  end
-  
-  describe 'when giving name without metro station' do 
-  
     it 'should remove "Underground Station" from the end of the name' do 
-      Stop.new(:common_name => "Kensington Underground Station").name_without_metro_station.should == "Kensington"
+      Stop.new(:common_name => "Kensington Underground Station").name_without_suffix(transport_modes(:metro)).should == "Kensington"
     end
     
   end

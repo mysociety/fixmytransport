@@ -284,4 +284,23 @@ class Route < ActiveRecord::Base
     return area
   end
   
+  def name_by_terminuses(transport_mode, from_stop=nil)
+    if from_stop
+      terminuses = self.terminuses.reject{ |terminus| terminus == from_stop }
+      terminuses = terminuses.map{ |terminus| terminus.name_without_suffix(transport_mode) }.uniq
+      if terminuses.size == 1
+        "#{transport_mode.name} to #{terminuses.to_sentence}"
+      else
+        "#{transport_mode.name} between #{terminuses.sort.to_sentence}"
+      end
+    else
+      terminuses = self.terminuses.map{ |terminus| terminus.name_without_suffix(transport_mode) }.uniq
+      if terminuses.size == 1
+        "#{transport_mode.name} from #{terminuses.to_sentence}"
+      else
+        "#{transport_mode.name} route from #{terminuses.sort.to_sentence}"     
+      end
+    end 
+  end
+  
 end
