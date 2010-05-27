@@ -41,9 +41,9 @@ namespace :naptan do
         usage_message "usage: rake naptan:load:all DIR=dirname"
       end
       puts "Loading data from #{ENV['DIR']}..."
-      ENV['FILE'] = File.join(ENV['DIR'], 'StopTypes.csv')
+      ENV['FILE'] = File.join(RAILS_ROOT, 'data', 'NaPTAN', 'StopTypes.csv')
       Rake::Task['naptan:load:stop_types'].execute
-      ENV['FILE'] = File.join(ENV['DIR'], 'StopAreaTypes.csv')
+      ENV['FILE'] = File.join(RAILS_ROOT, 'data', 'NaPTAN', 'StopAreaTypes.csv')
       Rake::Task['naptan:load:stop_area_types'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'Stops.csv')
       Rake::Task['naptan:load:stops'].execute
