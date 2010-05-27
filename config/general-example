@@ -35,4 +35,9 @@ define('OPTION_USE_SPATIAL_EXTENSIONS', 1);
 
 // Base URL for admin pages through the secure server
 define('OPTION_ADMIN_BASE_URL', 'http://example.com/secure/');
+
+// Locations of transport data
+define('OPTION_NAPTAN_DIR', '/my/naptan/dir');
+define('OPTION_NPTDR_DIR', '/my/nptdr/dir');
+define('OPTION_NPTG_DIR', '/my/nptg/dir');
 ?>
