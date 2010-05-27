@@ -102,8 +102,8 @@ describe Parsers::NaptanParser do
     end
   
     it 'should look for any stops with each atco code found in a case-insensitive comparison' do 
-      Stop.should_receive(:find).with(:first, :conditions => ["lower(atco_code) = ?", '020033094']).and_return(@stop)
-      Stop.should_receive(:find).with(:first, :conditions => ["lower(atco_code) = ?", '020033095']).and_return(@stop)
+      Stop.should_receive(:find).with(:first, :conditions => ["lower(atco_code) = ?", '020033094'], :include => nil).and_return(@stop)
+      Stop.should_receive(:find).with(:first, :conditions => ["lower(atco_code) = ?", '020033095'], :include => nil).and_return(@stop)
       @parser.parse_stop_area_memberships(example_file("StopsInArea.csv")){|membership|}
     end
     

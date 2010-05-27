@@ -12,7 +12,7 @@ describe Parsers::NptdrParser do
       @transport_mode = mock_model(TransportMode, :route_type => "BusRoute")
       TransportMode.stub!(:find_by_name).with('Bus').and_return(@transport_mode)
       @stop = mock_model(Stop, :atco_code => 'xxxxx')
-      Stop.stub!(:find_by_atco_code).and_return{ |atco_code| mock_model(Stop, :atco_code => atco_code)}
+      Stop.stub!(:find_by_atco_code).and_return{ |atco_code, options| mock_model(Stop, :atco_code => atco_code)}
       @operator = mock_model(Operator, :code => 'ZZ')
       Operator.stub!(:find_or_create_by_code).and_return(@operator)
       @parser = Parsers::NptdrParser.new

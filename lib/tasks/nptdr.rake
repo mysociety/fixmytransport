@@ -56,7 +56,7 @@ namespace :nptdr do
       files.each do |file|
         puts "Loading routes from #{file}"
         parser.parse_routes(file) do |route| 
-          route.class.add!(route)
+          route.class.add!(route, verbose=true)
         end
       end
     end
