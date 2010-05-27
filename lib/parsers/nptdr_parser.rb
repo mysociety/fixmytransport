@@ -70,10 +70,11 @@ class Parsers::NptdrParser
       next unless transport_mode.route_type
       route_type = transport_mode.route_type.constantize
       route = route_type.new(:number => route_number,
-                             :transport_mode => transport_mode)                 
+                             :transport_mode => transport_mode)         
       stop_codes.each_cons(2) do |from_stop_code,to_stop_code|
-        from_stop = Stop.find_by_atco_code(from_stop_code.strip)
-        to_stop = Stop.find_by_atco_code(to_stop_code.strip)
+        options = {:includes => {:stop_area_memberships => :stop_area}}
+        from_stop = Stop.find_by_atco_code(from_stop_code.strip, options)
+        to_stop = Stop.find_by_atco_code(to_stop_code.strip, options)
         if ! from_stop
           puts "Can't find stop #{from_stop_code} for route #{route.inspect}" 
           next
