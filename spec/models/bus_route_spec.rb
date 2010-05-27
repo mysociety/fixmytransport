@@ -22,6 +22,7 @@ describe BusRoute do
       atco_codes = ['13001288E', '13001612B', '13001612B']
       route = BusRoute.new(:number => '807', 
                            :transport_mode_id => 1)
+      route.route_operators.build(:operator => operators(:a_bus_company))
       add_stops_from_list route, atco_codes
       BusRoute.find_existing(route).include?(routes(:number_807_bus)).should be_true
     end

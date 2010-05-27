@@ -92,63 +92,114 @@ describe Route do
     
   end
   
-  describe 'when finding routes by number and common stops' do 
+  describe 'when finding existing routes' do 
   
     it 'should include routes with the same number and one stop in common with the new route' do 
-      route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
+      route = Route.new(:number => '807', 
+                        :transport_mode => transport_modes(:bus))
+      route.route_operators.build(:operator => operators(:a_bus_company))
       new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
       route.route_segments.build(:from_stop => stops(:arch_ne), :to_stop => new_stop, :from_terminus => true)
-      Route.find_all_by_number_and_common_stop(route).should include(routes(:number_807_bus))
+      Route.find_existing_routes(route).should include(routes(:number_807_bus))
     end
     
-    it 'should include routes with the same number, no stops in common, but one stop area in common with the new route' do
+    it 'should include routes with the same number, no stops in common, but one stop area in common with the new route and the same operator' do
       route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
+      route.route_operators.build(:operator => operators(:a_bus_company))
       new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
       route.route_segments.build(:from_stop => stops(:arch_sw), 
                                  :to_stop => new_stop,
                                  :from_terminus => true,
                                  :to_terminus => false)
-      Route.find_all_by_number_and_common_stop(route).should include(routes(:number_807_bus))
+      Route.find_existing_routes(route).should include(routes(:number_807_bus))
     end
     
+    it 'should not include routes with the same number, no stops in common, but one stop area in common with the new route and a different operator' do
+      route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
+      route.route_operators.build(:operator => operators(:another_bus_company))
+      new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
+      route.route_segments.build(:from_stop => stops(:arch_sw), 
+                                 :to_stop => new_stop,
+                                 :from_terminus => true,
+                                 :to_terminus => false)
+      Route.find_existing_routes(route).should_not include(routes(:number_807_bus))
+    end
   end
   
   describe 'when finding existing train routes' do 
     
     before do 
       @route = Route.new(:transport_mode => transport_modes(:train))
-      @route.route_operators.build(:operator => operators(:another_train_company))
-      routes(:victoria_to_haywards_heath).route_segments.each do |route_segment|
-        @route.route_segments.build(:from_stop => route_segment.from_stop,
-                                    :to_stop => route_segment.to_stop, 
-                                    :from_terminus => route_segment.from_terminus,
-                                    :to_terminus => route_segment.to_terminus)
+      @route.route_operators.build(:operator => operators(:a_train_company))
+      @existing_route = routes(:victoria_to_haywards_heath)
+      @terminus_segments = @existing_route.route_segments.select do |segment| 
+        segment.from_terminus? || segment.to_terminus? 
       end
     end
     
-    it 'should include a route with identical stops to the new route and the same terminuses' do 
-      Route.find_existing_train_routes(@route).should include(routes(:victoria_to_haywards_heath))
-    end
-    
-    it 'should include a route with a superset of the stops of the new route and the same terminuses' do 
-      @route.route_segments.delete(@route.route_segments.second)
-      Route.find_existing_train_routes(@route).should include(routes(:victoria_to_haywards_heath))
-    end
-    
     it 'should include a route with the same terminuses and the same operator' do 
-      @route.route_segments.delete(@route.route_segments.second)
-      @route.route_segments.delete(@route.route_segments.third)
-      @route.route_operators.delete(@route.route_operators.first)
+      @terminus_segments.each do |route_segment|
+        @route.route_segments.build(:from_stop => route_segment.from_stop,
+                                    :to_stop => route_segment.to_stop, 
+                                    :from_terminus => route_segment.from_terminus?,
+                                    :to_terminus => route_segment.to_terminus?)
+      end
       @route.route_segments.build(:from_stop => stops(:victoria_station_one), 
                                   :to_stop => stops(:victoria_station_two), 
                                   :from_terminus => false,
                                   :to_terminus => false)
-      @route.route_operators.build(:operator => operators(:a_train_company))
-      Route.find_existing_train_routes(@route).should include(routes(:victoria_to_haywards_heath))
+      Route.find_existing_train_routes(@route).should include(@existing_route)
     end
     
-    it 'should include a route that stops at the terminuses and has the same operator' do 
-      # @route.route_segments.clear
+    it 'should not include an identical route with a different operator' do 
+      @route.route_operators.clear
+      @route.route_operators.build(:operator => operators(:another_train_company))
+      @terminus_segments.each do |route_segment|
+        @route.route_segments.build(:from_stop => route_segment.from_stop,
+                                    :to_stop => route_segment.to_stop, 
+                                    :from_terminus => route_segment.from_terminus?,
+                                    :to_terminus => route_segment.to_terminus?)
+      end
+      Route.find_existing_train_routes(@route).should_not include(@existing_route)
+    end
+    
+    it "should include a route that passes through the new route's terminuses and has the same operator" do 
+      non_terminus_segments = @existing_route.route_segments.select do |segment| 
+        !segment.from_terminus? && !segment.to_terminus? 
+      end
+      # new route starts and ends in the middle of the existing route
+      new_route_start = non_terminus_segments.first
+      new_route_end = non_terminus_segments.second
+      @route.route_segments.build(:from_stop => new_route_start.from_stop, 
+                                  :to_stop => new_route_start.to_stop, 
+                                  :from_terminus => true,
+                                  :to_terminus => false)
+      @route.route_segments.build(:from_stop => new_route_end.from_stop, 
+                                  :to_stop => new_route_end.to_stop, 
+                                  :from_terminus => false,
+                                  :to_terminus => true)                            
+      Route.find_existing_train_routes(@route).should include(@existing_route)
+    end
+    
+    it 'should include a route whose terminuses the new route stops at that has the same operator' do 
+      # new route stops at the terminuses of the existing route but doesn't terminate there
+      @terminus_segments.each do |route_segment|
+        @route.route_segments.build(:from_stop => route_segment.from_stop,
+                                    :to_stop => route_segment.to_stop, 
+                                    :from_terminus => false,
+                                    :to_terminus => false)
+      end
+      # and has a couple of non-matching terminuses
+      @route.route_segments.build(:from_stop => stops(:victoria_station_two),
+                                  :to_stop => stops(:victoria_station_one), 
+                                  :from_terminus => true,
+                                  :to_terminus => false)
+                                  
+      @route.route_segments.build(:from_stop => stops(:haywards_heath_station), 
+                                  :to_stop => stops(:gatwick_airport_station), 
+                                  :from_terminus => false, 
+                                  :to_terminus => true)
+      Route.find_existing_train_routes(@route).should include(@existing_route)
     end
   
   end
@@ -207,8 +258,8 @@ describe Route do
       Route.stub!(:find_existing).and_return([existing_route])
       route_segment = mock_model(RouteSegment, :from_stop => Stop.new, 
                                                :to_stop => Stop.new,
-                                               :from_terminus => false,
-                                               :to_terminus => false,
+                                               :from_terminus? => false,
+                                               :to_terminus? => false,
                                                :destroy => true)
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
@@ -232,7 +283,7 @@ describe Route do
       existing_route.route_segments.size.should == 4
     end
     
-    it 'should not make as terminuses stops that are terminuses in an existing route but not terminuses in a duplicate' do 
+    it 'should not leave as terminuses stops that are terminuses in an existing route but not terminuses in a duplicate' do 
       existing_route = routes(:victoria_to_haywards_heath)
       Route.stub!(:find_existing).and_return([existing_route])
       existing_route_segment = existing_route.route_segments.detect{ |segment| segment.from_terminus? }
@@ -245,8 +296,8 @@ describe Route do
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
                         :route_segments => [route_segment])
-      existing_route_segment.should_receive(:from_terminus=).with(false)
       Route.add!(route)
+      RouteSegment.find(existing_route_segment.id).from_terminus.should be_false
     end
     
   end
