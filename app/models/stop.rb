@@ -142,8 +142,9 @@ class Stop < ActiveRecord::Base
     stops.empty? ? nil : stops.first
   end
   
-  def self.find_by_atco_code(atco_code)
-    find(:first, :conditions => ["lower(atco_code) = ?", atco_code.downcase])
+  def self.find_by_atco_code(atco_code, options={})
+    includes = options[:includes] or {}
+    find(:first, :conditions => ["lower(atco_code) = ?", atco_code.downcase], :include => includes)
   end
   
   def self.match_old_stop(stop)
