@@ -22,3 +22,6 @@ another_train_company:
 a_bus_company:
   code: BUS
   name: A bus company
+another_bus_company: 
+  code: BUS
+  name: Another bus company
