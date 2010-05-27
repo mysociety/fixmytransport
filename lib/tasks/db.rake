@@ -7,7 +7,7 @@ namespace :db do
     Rake::Task['nptg:load:all'].execute
     ENV['DIR'] = MySociety::Config.get('NAPTAN_DIR', '')
     Rake::Task['naptan:load:all'].execute
-    Rake::Task['naptan:convert:os_to_lat_lon '].execute
+    Rake::Task['naptan:geo:convert_stop_areas'].execute
     ENV['DIR'] = File.join(MySociety::Config.get('NPTDR_DIR', ''), 'routes')
     Rake::Task['nptdr:load:routes'].execute
   end
