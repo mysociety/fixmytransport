@@ -2,16 +2,16 @@
   != map_javascript_include_tags
 #map
 :javascript
-  var routeSegments = #{route_segments_js(@route)}
+  var routeSegments = #{routes_segments_js([@route])}
   jQuery(document).ready(function(){
-     route_init();
+     routes_init();
   });
 = render :partial => 'shared/respond', :locals => { :instance => @route }
 .route
   %h3.name= @route.name
   .details
     %span.locality= "#{@route.area}."
-  .operator
+  .operators
     - if @route.operators.empty? 
       Operator unknown
     - else
@@ -19,15 +19,5 @@
       %ul
         - @route.operators.each do |operator|
           %li= "#{operator.code}"
-  .stops
-    Stops at:
-    %ol
-    - @route.route_segments.each do |route_segment|
-      %li
-        = link_to(route_segment.from_stop.name, stop_url(route_segment.from_stop))
-        = link_to(route_segment.to_stop.name, stop_url(route_segment.to_stop))
-        
-        - if route_segment.from_terminus? 
-          "t"
-        - if route_segment.to_terminus? 
-          "t"
+  .terminuses
+    != terminus_text(@route)
