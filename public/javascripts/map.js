@@ -16,24 +16,22 @@ function stop_init() {
   var stopCoords = new OpenLayers.LonLat(stop_lon, stop_lat).transform(proj, map.getProjectionObject());
   map.setCenter(stopCoords, 17); 
   bounds = new OpenLayers.Bounds();  
-  var vectorLayer = new OpenLayers.Layer.Vector("Vector Overlay");
-  map.addLayer(vectorLayer);  
-  addRouteMarker(stopCoords, bounds, vectorLayer, '', stop_name);
-  addSelectedHandler(vectorLayer);
+  var markers = new OpenLayers.Layer.Markers( "Markers" );
+  map.addLayer(markers);  
+  addRouteMarker(stopCoords, bounds, markers, 'xxx', stop_name);
 }
 
 function area_init() {
   createMap();
   var stopCoords;
   bounds = new OpenLayers.Bounds();
-  var vectorLayer = new OpenLayers.Layer.Vector("Vector Overlay");
-  map.addLayer(vectorLayer);
+  var markers = new OpenLayers.Layer.Markers( "Markers" );
+  map.addLayer(markers);
   for (var i=0; i < areaStops.length; i++){
     var coords = areaStops[i];
     stopCoords = new OpenLayers.LonLat(coords[1], coords[0]).transform(proj, map.getProjectionObject());
-    addRouteMarker(stopCoords, bounds, vectorLayer, coords[2], coords[3]);
+    addRouteMarker(stopCoords, bounds, markers, coords[2], coords[3]);
   }
-  addSelectedHandler(vectorLayer);
   map.zoomToExtent(bounds, false);
 }
 
@@ -63,41 +61,40 @@ function createMap() {
 }
 
 function onPopupClose(evt) {
-  selectControl.unselect(this.feature);
+  stopUnselected(this.stop);
 }
 
-function stopUnselected(evt) {
-  feature = evt.feature;
-  if (feature.popup) {
-      popup.feature = null;
-      map.removePopup(feature.popup);
-      feature.popup.destroy();
-      feature.popup = null;
+function stopUnselected(stop) {
+  if (stop.popup) {
+      popup.stop = null;
+      map.removePopup(stop.popup);
+      stop.popup.destroy();
+      stop.popup = null;
   }
 }
-function stopSelected (evt) {
-  var feature = evt.feature;
+function stopSelected () {
   popup = new OpenLayers.Popup.FramedCloud("featurePopup",
-                                            feature.geometry.getBounds().getCenterLonLat(),
+                                            this.lonlat,
                                             new OpenLayers.Size(100,100),
-                                            '<h3><a href="' + feature.attributes.url + '">'+
-                                            feature.attributes.name + '</a></h3>',
+                                            '<h3><a href="' + this.url + '">'+
+                                            this.name + '</a></h3>',
                                             null, true, onPopupClose);
-  feature.popup = popup;
-  popup.feature = feature;
+  this.popup = popup;
+  popup.stop = this;
   map.addPopup(popup);
 
 }
 
-function addRouteMarker(stopCoords, bounds, vectorLayer, url, name) {
+function addRouteMarker(stopCoords, bounds, markers, url, name) {
   bounds.extend(stopCoords);
-  var point = new OpenLayers.Geometry.Point(stopCoords.lon, stopCoords.lat);
-  var marker = new OpenLayers.Feature.Vector(point,
-                                            {url: url, 
-                                             name: name},
-                                            {externalGraphic: '/images/circle-icon-sm.png', 
-                                            graphicHeight: 6, graphicWidth: 6});
-  vectorLayer.addFeatures(marker);
+  var size = new OpenLayers.Size(6, 6);
+  var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+  var stopIcon = new OpenLayers.Icon('/images/circle-icon-sm.png', size, offset);
+  var marker = new OpenLayers.Marker(stopCoords, stopIcon);
+  marker.url = url;
+  marker.name = name;
+  marker.events.register("mousedown", marker, stopSelected);
+  markers.addMarker(marker);
 }
 
 function addProblemMarker(problemCoords) {
