@@ -64,6 +64,10 @@ class Stop < ActiveRecord::Base
     StopType.transport_modes_for_code(stop_type)
   end
   
+  def full_name
+    "#{name_with_indicator}#{suffix}"
+  end
+  
   def suffix
     suffix = ''
     if transport_modes.include? 'Bus'
@@ -95,16 +99,6 @@ class Stop < ActiveRecord::Base
   
   def description
     "#{name} #{area}"
-  end
-  
-  def full_name
-    descriptors = [name]
-    [street, indicator, landmark, crossing].each do |attribute|
-      descriptors << attribute if !attribute.blank? and ! descriptors.include? attribute
-    end
-    text = descriptors.join(" ")
-    text += " (#{bearing})" if ! bearing.blank?
-    text
   end
   
   def area
