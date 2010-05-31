@@ -28,7 +28,13 @@ class Locality < ActiveRecord::Base
   has_many :stops, :order => 'common_name asc'
   
   def self.find_all_by_name(name)
-    find(:all, :conditions => ['lower(name) = ?', name.downcase])
+    find(:all, :conditions => ['lower(name) like ?', "#{name.downcase}%"])
+  end
+  
+  def self.find_all_with_descendants(name)
+    locality_list = find_all_by_name(name)
+    descendants = locality_list.map{ |locality| locality.descendants}
+    [locality_list + descendants].flatten.uniq
   end
   
 end
