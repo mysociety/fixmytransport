@@ -4,12 +4,13 @@
 :javascript
   var stop_lon = #{@stop.lon};
   var stop_lat = #{@stop.lat};
+  var stop_name = "#{@stop.full_name}";
   jQuery(document).ready(function(){
      stop_init();
   });
 = render :partial => 'shared/respond', :locals => { :instance => @stop }
 .stop
-  %h3.name= "#{@stop.name_with_indicator} #{@stop.suffix}" 
+  %h3.name= "#{@stop.full_name}" 
   .details
     %span.locality= "In #{@stop.locality_name}"
     - if !@stop.landmark.blank?

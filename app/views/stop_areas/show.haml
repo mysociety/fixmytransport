@@ -2,10 +2,9 @@
   != map_javascript_include_tags
 #map
 :javascript
-  var stop_lon = #{@stop_area.lon};
-  var stop_lat = #{@stop_area.lat};
+  var areaStops = #{location_stops_js(@stop_area.stops)}
   jQuery(document).ready(function(){
-     stop_init();
+     area_init();
   });
 = render :partial => 'shared/respond', :locals => { :instance => @stop_area }
 .stop-area

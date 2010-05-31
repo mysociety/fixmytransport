@@ -44,16 +44,19 @@ module ApplicationHelper
   end
   
   def stop_js_coords(stop)
-     "[#{stop.lat}, #{stop.lon}]"
+    "[#{stop.lat}, #{stop.lon}, '#{url_for(stop)}', '#{escape_javascript(stop.full_name)}']"
   end
   
   def location_stops_js locations
-    if locations.first.is_a? Route
-      array_content = locations.map{|route| route.stops.map{ |stop| stop_js_coords(stop) }.join(',') }.join(',') 
-    else
-     array_content = locations.map{|stop| stop_js_coords(stop) }.join(',') 
+    array_content = []
+    locations.each do |location|
+      if location.is_a? Route or location.is_a? StopArea
+        array_content <<  location.stops.map{ |stop| stop_js_coords(stop) }.join(',') 
+      else
+       array_content << stop_js_coords(location) 
+      end
     end
-    "[#{array_content}];"
+    "[#{array_content.join(',')} ];"
   end
   
   def terminus_text(route)
