@@ -3,6 +3,7 @@
 var map;
 var proj = new OpenLayers.Projection("EPSG:4326");
 var selectControl;
+var openPopup;
 
 function problem_init() {
   var problemCoords = new OpenLayers.LonLat(problem_lon, problem_lat).transform(proj, map.getProjectionObject());
@@ -18,7 +19,7 @@ function stop_init() {
   bounds = new OpenLayers.Bounds();  
   var markers = new OpenLayers.Layer.Markers( "Markers" );
   map.addLayer(markers);  
-  addRouteMarker(stopCoords, bounds, markers, '', stop_name);
+  addRouteMarker(stopCoords, bounds, markers, '', stop_name, 0);
 }
 
 function area_init() {
@@ -28,9 +29,22 @@ function area_init() {
   var markers = new OpenLayers.Layer.Markers( "Markers" );
   map.addLayer(markers);
   for (var i=0; i < areaStops.length; i++){
-    var coords = areaStops[i];
-    stopCoords = new OpenLayers.LonLat(coords[1], coords[0]).transform(proj, map.getProjectionObject());
-    addRouteMarker(stopCoords, bounds, markers, coords[2], coords[3]);
+    var item = areaStops[i];
+    if (item instanceof Array){
+      for (var j=0; j < item.length; j++){
+        coords = item[j];
+        console.log("1:" + coords[1] + ',2:' + coords[0] + ',3:' + coords[2] + ',4:' + coords[3]);
+
+        stopCoords = new OpenLayers.LonLat(coords[1], coords[0]).transform(proj, map.getProjectionObject());
+        addRouteMarker(stopCoords, bounds, markers, coords[2], coords[3], i);
+      }
+    }else{
+      coords = item;
+      stopCoords = new OpenLayers.LonLat(coords[1], coords[0]).transform(proj, map.getProjectionObject());
+      addRouteMarker(stopCoords, bounds, markers, coords[2], coords[3], i);
+    }
+    
+    
   }
   map.zoomToExtent(bounds, false);
 }
@@ -73,6 +87,9 @@ function stopUnselected(stop) {
   }
 }
 function stopSelected () {
+  if (openPopup){
+    stopUnselected(openPopup.stop);
+  }
   popup = new OpenLayers.Popup.FramedCloud("featurePopup",
                                             this.lonlat,
                                             new OpenLayers.Size(100,100),
@@ -82,14 +99,14 @@ function stopSelected () {
   this.popup = popup;
   popup.stop = this;
   map.addPopup(popup);
-
+  openPopup = popup;
 }
 
-function addRouteMarker(stopCoords, bounds, markers, url, name) {
+function addRouteMarker(stopCoords, bounds, markers, url, name, index) {
   bounds.extend(stopCoords);
   var size = new OpenLayers.Size(6, 6);
   var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-  var stopIcon = new OpenLayers.Icon('/images/circle-icon-sm.png', size, offset);
+  var stopIcon = new OpenLayers.Icon('/images/circle-icon-sm_'+index+'.png', size, offset);
   var marker = new OpenLayers.Marker(stopCoords, stopIcon);
   marker.url = url;
   marker.name = name;
