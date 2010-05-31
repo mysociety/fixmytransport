@@ -247,3 +247,17 @@ bristol:
   short_name: ""
   coords: 0101000020346C000000000000C0E3154100000000F0200541
   easting: "358640"
+london: 
+  northing: "180514"
+  source_locality_type: Add
+  admin_area_id: "171"
+  national: 
+  name: London
+  grid_type: U
+  revision_number: "0"
+  code: N0060403
+  qualifier_name: ""
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C0000000000001C2D20410000000010090641
+  easting: "530062"

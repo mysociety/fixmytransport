@@ -14,3 +14,8 @@ three:
   ancestor: bristol
   count: "1"
   direct: t
+four:
+  descendant: victoria
+  ancestor: london
+  count: "1"
+  direct: t
