@@ -6,7 +6,7 @@
   jQuery(document).ready(function(){
      area_init();
   });
-%p= t(:multiple_locations_intro)
+%p= t(:multiple_locations_intro, :num_locations => MAX_LOCATION_RESULTS)
 %ul
 - @problem.locations.each do |location|
   %li= link_to location.description, location_url(location)

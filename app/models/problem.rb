@@ -52,13 +52,13 @@ class Problem < ActiveRecord::Base
     return unless location_attributes_valid?
     location_attributes[:transport_mode_id] = transport_mode_id
     if location_type == 'Stop'
-      stops = Stop.find_from_attributes(location_attributes)
+      stops = Stop.find_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
       location_search.add_method('Stop.find_from_attributes') if location_search
       if stops.size == 1  
         self.locations = stops
         return
       end
-      if stops.size > 1 and stops.size < 80
+      if stops.size > 1 
         if stop_area = Stop.common_area(stops, transport_mode_id)
           self.locations = [stop_area]
           location_search.add_method('Stop.common_area') if location_search
@@ -68,10 +68,10 @@ class Problem < ActiveRecord::Base
       self.locations = stops
       if self.locations.empty? 
         location_search.add_method('Gazetteer.find_stops_from_attributes') if location_search
-        self.locations = Gazetteer.find_stops_from_attributes(location_attributes)
+        self.locations = Gazetteer.find_stops_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
       end
     else
-      routes = Route.find_from_attributes(location_attributes)
+      routes = Route.find_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
       location_search.add_method('Route.find_from_attributes') if location_search
       self.locations = routes
       if self.locations.size == 1
@@ -79,7 +79,7 @@ class Problem < ActiveRecord::Base
       end
       if self.locations.empty? 
         location_search.add_method('Gazetteer.find_routes_from_attributes') if location_search
-        self.locations = Gazetteer.find_routes_from_attributes(location_attributes)
+        self.locations = Gazetteer.find_routes_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
       end
     end
     return

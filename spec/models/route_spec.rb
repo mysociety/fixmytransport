@@ -39,7 +39,7 @@ describe Route do
     describe 'when asked for only terminuses' do
       
       it 'should return a unique list of the names of the parent localities/localities of the terminuses' do 
-        routes(:victoria_to_haywards_heath).areas(all=false).sort.should == ['Haywards Heath', 'Victoria']
+        routes(:victoria_to_haywards_heath).areas(all=false).sort.should == ['Haywards Heath', 'London']
       end
       
       it 'should return a unique list of the names of the parent localities/localities of the route stops if the route has no terminuses' do 
@@ -49,7 +49,7 @@ describe Route do
     end
     
     it 'should return a unique list of the names of the parent localities/localities of the stops' do 
-      routes(:victoria_to_haywards_heath).areas.sort.should == ["Clapham Junction", "Croydon", "Gatwick Airport", "Haywards Heath", "Victoria"]
+      routes(:victoria_to_haywards_heath).areas.sort.should == ["Clapham Junction", "Croydon", "Gatwick Airport", "Haywards Heath", "London"]
     end
     
   end
@@ -75,7 +75,7 @@ describe Route do
     
     it "should find a route described by it's terminuses" do 
       attributes = { :transport_mode_id => 6, 
-                     :route_number => 'London Victoria to Haywards Heath', 
+                     :route_number => 'London to Haywards Heath', 
                      :area => '' }
       routes = Route.find_from_attributes(attributes)
       routes.should include(routes(:victoria_to_haywards_heath))

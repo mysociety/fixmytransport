@@ -15,7 +15,7 @@ en:
   problem_location_not_found: "We couldn't find your location"
   go: Go!
   multiple_locations: "More than one match"
-  multiple_locations_intro: "We found more than one match for your description - please pick one."
+  multiple_locations_intro: "We found more than one match for your description. We show up to {{num_locations}} matches, please try a different search if yours is not here."
   location_search_failure: "Oh dear. We'll keep working on it. Thanks for playing!"
   location_search_success: "Brill. Thanks for helping!"
   try_another: "Try again?"

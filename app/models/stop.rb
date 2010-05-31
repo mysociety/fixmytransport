@@ -98,7 +98,7 @@ class Stop < ActiveRecord::Base
   end
   
   def description
-    "#{name} #{area}"
+    "#{full_name} in #{area}"
   end
   
   def area
@@ -134,7 +134,7 @@ class Stop < ActiveRecord::Base
     return nil
   end
   
-  def self.find_from_attributes(attributes)
+  def self.find_from_attributes(attributes, limit=nil)
     stop_type_codes = StopType.codes_for_transport_mode(attributes[:transport_mode_id])
     area = attributes[:area].downcase
     name = attributes[:name].downcase
@@ -153,7 +153,7 @@ class Stop < ActiveRecord::Base
     query_clauses << 'stop_type in (?)'
     params << stop_type_codes
     params.unshift(query_clauses.join(" AND "))
-    active.find(:all, :conditions => params)
+    active.find(:all, :conditions => params, :limit => limit)
   end
   
   def self.find_by_name_and_coords(name, easting, northing, distance)

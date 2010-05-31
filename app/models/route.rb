@@ -51,7 +51,7 @@ class Route < ActiveRecord::Base
   # Accepts an array of stops or an array of arrays of stops as first parameter.
   # If passed the latter, will find routes that pass through at least one stop in
   # each array.
-  def self.find_all_by_stops(stops, transport_mode_id, as_terminus=false)
+  def self.find_all_by_stops(stops, transport_mode_id, as_terminus=false, limit=nil)
     from_terminus_clause = ''
     to_terminus_clause = ''
     condition_string = 'transport_mode_id = ?' 
@@ -75,9 +75,14 @@ class Route < ActiveRecord::Base
       params << item
     end
     conditions = [condition_string] + params
-    routes = find(:all, :joins => joins, 
+    routes = find(:all, :select => "routes.id",
+                        :joins => joins, 
                         :conditions => conditions, 
-                        :include => include_param).uniq
+                        :include => include_param, 
+                        :limit => limit).uniq
+    # The joins in the query above cause it to return instances with missing segments - 
+    # remap to clean route objects
+    Route.find(routes.map{|route| route.id})
   end
   
   def self.find_existing_routes(new_route)
@@ -109,13 +114,15 @@ class Route < ActiveRecord::Base
     routes
   end
   
-  def self.find_from_attributes(attributes)
+  def self.find_from_attributes(attributes, limit=nil)
     if terminuses = get_terminuses(attributes[:route_number])
       first, last = terminuses
-      routes = find_all_by_stop_names(first, last, attributes)
+      routes = find_all_by_stop_names(first, last, attributes, limit)
     else
       return [] if attributes[:route_number].blank?
-      routes = find_all_by_number_and_transport_mode_id(attributes[:route_number], attributes[:transport_mode_id])
+      routes = find_all_by_number_and_transport_mode_id(attributes[:route_number], 
+                                                        attributes[:transport_mode_id], 
+                                                        limit=limit)
       if routes.size > 1 and ! attributes[:area].blank?
         return routes.select{ |route| route.in_area?(attributes[:area]) }
       end
@@ -123,15 +130,19 @@ class Route < ActiveRecord::Base
     routes
   end
   
-  def self.find_all_by_number_and_transport_mode_id(route_number, transport_mode_id)
+  def self.find_all_by_number_and_transport_mode_id(route_number, transport_mode_id, limit=nil)
     find(:all, :conditions => ['lower(number) = ? and transport_mode_id = ?', 
-                              route_number.downcase, transport_mode_id])
+                              route_number.downcase, transport_mode_id],
+               :limit => limit)
   end
   
-  def self.find_all_by_stop_names(first, last, attributes)
-    first_stops = Stop.find_from_attributes(attributes.merge(:name => first))
-    last_stops = Stop.find_from_attributes(attributes.merge(:name => last))
-    Route.find_all_by_stops([first_stops, last_stops], attributes[:transport_mode_id])
+  def self.find_all_by_stop_names(first, last, attributes, limit=nil)
+    first_stops = Gazetteer.find_stops_from_attributes(attributes.merge(:area => first))
+    last_stops = Gazetteer.find_stops_from_attributes(attributes.merge(:area => last))
+    Route.find_all_by_stops([first_stops, last_stops], 
+                            attributes[:transport_mode_id], 
+                            as_terminus=false, 
+                            limit=limit)
   end
   
   def self.get_terminuses(route_name)
