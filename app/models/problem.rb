@@ -16,7 +16,7 @@
 #
 
 class Problem < ActiveRecord::Base
-  validates_presence_of :transport_mode_id, :location_type
+  validates_presence_of :transport_mode_id
   validate :validate_location_attributes
   has_one :reporter, :class_name => 'User'
   accepts_nested_attributes_for :reporter
@@ -25,16 +25,14 @@ class Problem < ActiveRecord::Base
   attr_accessor :location_attributes, :locations, :location_search
   
   def validate_location_attributes
-    if location_type == 'Stop' or location_type == 'StopArea' 
-      if location_attributes[:name].blank? and location_attributes[:area].blank?
-        errors.add(:location_attributes, ActiveRecord::Error.new(self, :location_attributes, :blank_stop).to_s)
-      end
-    elsif location_type == 'Route'
-      if location_attributes[:route_number].blank? and location_attributes[:area].blank?
-        errors.add(:location_attributes, ActiveRecord::Error.new(self, :location_attributes, :blank_route).to_s)
-      end
-    elsif ! location_attributes_valid?
+    if ! location_attributes_valid?
       errors.add(:location_attributes, ActiveRecord::Error.new(self, :location_attributes, :blank).to_s)
+    end
+    if !location_attributes[:route_number].blank?
+      self.location_type = 'Route'
+    end
+    if !location_attributes[:name].blank?
+      self.location_type = 'Stop'
     end
   end
   
@@ -53,7 +51,7 @@ class Problem < ActiveRecord::Base
     return unless transport_mode_id
     return unless location_attributes_valid?
     location_attributes[:transport_mode_id] = transport_mode_id
-    if location_type == 'Stop' or location_type == 'StopArea'
+    if location_type == 'Stop'
       stops = Stop.find_from_attributes(location_attributes)
       location_search.add_method('Stop.find_from_attributes') if location_search
       if stops.size == 1  
