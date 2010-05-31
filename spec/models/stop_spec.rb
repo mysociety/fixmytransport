@@ -181,13 +181,5 @@ describe Stop do
     
   end
   
-  describe 'when giving a full name' do 
-    
-    it 'should add the landmark if there is one'
-    it 'should not add the landmark if it is the same as the name'
-    it 'should add the bearing if there is one'
-    
-  end
-  
 end
 

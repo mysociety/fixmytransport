@@ -34,7 +34,7 @@ describe Problem do
       @problem.location_type = location_type
       @problem.location_attributes = attributes
       @problem.location_from_attributes
-      @problem.location.should == location
+      @problem.locations.should == [location]
     end
     
     it 'should return nil if no location attributes have been set' do 
