@@ -33,8 +33,6 @@ function area_init() {
     if (item instanceof Array){
       for (var j=0; j < item.length; j++){
         coords = item[j];
-        console.log("1:" + coords[1] + ',2:' + coords[0] + ',3:' + coords[2] + ',4:' + coords[3]);
-
         stopCoords = new OpenLayers.LonLat(coords[1], coords[0]).transform(proj, map.getProjectionObject());
         addRouteMarker(stopCoords, bounds, markers, coords[2], coords[3], i);
       }
@@ -79,7 +77,7 @@ function onPopupClose(evt) {
 }
 
 function stopUnselected(stop) {
-  if (stop.popup) {
+  if (stop && stop.popup) {
       popup.stop = null;
       map.removePopup(stop.popup);
       stop.popup.destroy();
@@ -89,6 +87,7 @@ function stopUnselected(stop) {
 function stopSelected () {
   if (openPopup){
     stopUnselected(openPopup.stop);
+    openPopup = null;
   }
   popup = new OpenLayers.Popup.FramedCloud("featurePopup",
                                             this.lonlat,
