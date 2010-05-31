@@ -25,6 +25,7 @@ describe ProblemsController do
                                      :valid? => true, 
                                      :location_from_attributes => mock_model(Stop),
                                      :locations => [@stop], 
+                                     :locations= => true,
                                      :location_attributes= => true,
                                      :location_type => 'Stop')
       Problem.stub!(:new).and_return(@problem)
@@ -49,7 +50,8 @@ describe ProblemsController do
     
     it 'should render the "Choose location" view if more than one location is found' do 
       @problem.stub!(:valid?).and_return(true)
-      @problem.stub!(:locations).and_return([mock_model(Route), mock_model(Stop)])
+      @problem.stub!(:locations).and_return([mock_model(Route, :name => 'a test route'), 
+                                             mock_model(Stop, :name => 'a test stop')])
       make_request
       response.should render_template('problems/choose_location')
     end

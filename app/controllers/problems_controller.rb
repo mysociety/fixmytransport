@@ -23,6 +23,7 @@ class ProblemsController < ApplicationController
       if @problem.locations.size == 1
          redirect_to location_url(@problem.locations.first)
       elsif !@problem.locations.empty?
+        @problem.locations = @problem.locations.sort_by(&:name)
         location_search.add_choice(@problem.locations)
         @title = t :multiple_locations
         render :choose_location
