@@ -30,7 +30,7 @@ function area_init() {
   map.addLayer(markers);
   for (var i=0; i < areaStops.length; i++){
     var item = areaStops[i];
-    if (item instanceof Array){
+    if (item[0] instanceof Array){
       for (var j=0; j < item.length; j++){
         coords = item[j];
         stopCoords = new OpenLayers.LonLat(coords[1], coords[0]).transform(proj, map.getProjectionObject());
