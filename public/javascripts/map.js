@@ -4,6 +4,7 @@ var map;
 var proj = new OpenLayers.Projection("EPSG:4326");
 var selectControl;
 var openPopup;
+var stopsById = new Array();
 
 function problem_init() {
   var problemCoords = new OpenLayers.LonLat(problem_lon, problem_lat).transform(proj, map.getProjectionObject());
@@ -19,7 +20,7 @@ function stop_init() {
   bounds = new OpenLayers.Bounds();  
   var markers = new OpenLayers.Layer.Markers( "Markers" );
   map.addLayer(markers);  
-  addRouteMarker(stopCoords, bounds, markers, '', stop_name, 0);
+  addRouteMarker(stopCoords, bounds, markers, stop_id, '', stop_name, 0);
 }
 
 function area_init() {
@@ -34,12 +35,12 @@ function area_init() {
       for (var j=0; j < item.length; j++){
         coords = item[j];
         stopCoords = new OpenLayers.LonLat(coords[1], coords[0]).transform(proj, map.getProjectionObject());
-        addRouteMarker(stopCoords, bounds, markers, coords[2], coords[3], i);
+        addRouteMarker(stopCoords, bounds, markers, coords[2], coords[3], coords[4], i);
       }
     }else{
       coords = item;
       stopCoords = new OpenLayers.LonLat(coords[1], coords[0]).transform(proj, map.getProjectionObject());
-      addRouteMarker(stopCoords, bounds, markers, coords[2], coords[3], i);
+      addRouteMarker(stopCoords, bounds, markers, coords[2], coords[3], coords[4], i);
     }
     
     
@@ -85,23 +86,28 @@ function stopUnselected(stop) {
   }
 }
 function stopSelected () {
+  selectStop(this);
+}
+
+function selectStop(stop) {
   if (openPopup){
     stopUnselected(openPopup.stop);
     openPopup = null;
   }
-  popup = new OpenLayers.Popup.FramedCloud("featurePopup",
-                                            this.lonlat,
-                                            new OpenLayers.Size(100,100),
-                                            '<h3><a href="' + this.url + '">'+
-                                            this.name + '</a></h3>',
+  popup = new OpenLayers.Popup.FramedCloud("stopPopup",
+                                            stop.lonlat,
+                                            new OpenLayers.Size(50,50),
+                                            '<a href="' + stop.url + '">'+
+                                            stop.name + '</a>',
                                             null, true, onPopupClose);
-  this.popup = popup;
-  popup.stop = this;
+  popup.autoSize = true;
+  stop.popup = popup;
+  popup.stop = stop;
   map.addPopup(popup);
-  openPopup = popup;
+  openPopup = popup;  
 }
 
-function addRouteMarker(stopCoords, bounds, markers, url, name, index) {
+function addRouteMarker(stopCoords, bounds, markers, id, url, name, index) {
   bounds.extend(stopCoords);
   var size = new OpenLayers.Size(6, 6);
   var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
@@ -109,7 +115,9 @@ function addRouteMarker(stopCoords, bounds, markers, url, name, index) {
   var marker = new OpenLayers.Marker(stopCoords, stopIcon);
   marker.url = url;
   marker.name = name;
-  marker.events.register("mousedown", marker, stopSelected);
+  marker.id = id;
+  stopsById[id] = marker;
+  marker.events.register("mouseover", marker, stopSelected);
   markers.addMarker(marker);
 }
 
@@ -127,4 +135,10 @@ function addProblemMarker(problemCoords) {
 
 // Run jquery in no-conflict mode so it doesn't use $()
 jQuery.noConflict();
+
+jQuery(document).ready(function() {
+  jQuery("li.active-stop").hover(function(stop){
+    selectStop(stopsById[this.id]);
+  })
+});
 

@@ -44,7 +44,7 @@ module ApplicationHelper
   end
   
   def stop_js_coords(stop)
-    "[#{stop.lat}, #{stop.lon}, '#{url_for(stop)}', '#{escape_javascript(stop.description)}']"
+    "[#{stop.lat}, #{stop.lon}, #{stop.id}, '#{url_for(stop)}', '#{escape_javascript(stop.description)}']"
   end
   
   def location_stops_js locations
