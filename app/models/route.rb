@@ -131,7 +131,7 @@ class Route < ActiveRecord::Base
                   AND route_segments.to_stop_id = to_stops.id
                   AND transport_mode_id = ?'
     params = [transport_mode_id]
-    if localities
+    if !localities.empty?
       sql_string += " AND (to_stops.locality_id in (?) or from_stops.locality_id in (?))"
       params << localities
       params << localities
@@ -269,7 +269,11 @@ class Route < ActiveRecord::Base
     if from_stop
       return name
     else
-      return "#{transport_mode_name} #{name}"
+      if short
+        return name
+      else
+        return "#{transport_mode_name} #{name}"
+      end
     end
   end
   
@@ -312,8 +316,13 @@ class Route < ActiveRecord::Base
     return area
   end
   
-  def name_by_terminuses(transport_mode, from_stop=nil)
+  def name_by_terminuses(transport_mode, from_stop=nil, short=false)
     is_loop = false
+    if short
+      text = ""
+    else
+      text = transport_mode.name
+    end
     if from_stop
       if terminuses.size > 1
         terminuses = self.terminuses.reject{ |terminus| terminus == from_stop }
@@ -324,21 +333,22 @@ class Route < ActiveRecord::Base
       terminuses = terminuses.map{ |terminus| terminus.name_without_suffix(transport_mode) }.uniq
       if terminuses.size == 1
         if is_loop
-          "#{transport_mode.name} from #{terminuses.to_sentence}"
+          text += " towards #{terminuses.to_sentence}"
         else
-          "#{transport_mode.name} to #{terminuses.to_sentence}"
+          text += " towards #{terminuses.to_sentence}"
         end
       else
-        "#{transport_mode.name} between #{terminuses.sort.to_sentence}"
+        text += " between #{terminuses.sort.to_sentence}"
       end
     else
       terminuses = self.terminuses.map{ |terminus| terminus.name_without_suffix(transport_mode) }.uniq
       if terminuses.size == 1
-        "#{transport_mode.name} from #{terminuses.to_sentence}"
+        text += " from #{terminuses.to_sentence}"
       else
-        "#{transport_mode.name} route between #{terminuses.sort.to_sentence}"     
+        text += " route between #{terminuses.sort.to_sentence}"     
       end
     end 
+    text
   end
   
 end
