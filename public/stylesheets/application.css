@@ -2,13 +2,18 @@
 
 body {
   font-family: verdana, sans-serif;
+  margin: 0.5em;
+}
+
+h2 {
+  margin: 0.5em 0;
 }
 
 .content {
   margin-top: 2em;
   margin-left: auto;
   margin-right: auto;
-  padding: 10px;
+  padding: 1em;
 }
 
 .flash_notice {
@@ -26,7 +31,7 @@ body {
 }
 
 .wrapper {
-  margin: 2em;
+  margin: 1em;
 }
 
 .content {
@@ -34,6 +39,7 @@ body {
   max-width: 65em;
   position: relative;
   width: 100%;
+  padding: 0.5em;
 }
 
 /* Navigation */
@@ -41,8 +47,9 @@ body {
 ul.navigation {
   list-style-type: none;
   position: absolute;
-  right: 8em;
-  top: 1em;
+  right: 0.5em;
+  top: 0.5em;
+  margin: 0.5em;
 }
 
 ul.navigation li {
@@ -80,10 +87,14 @@ input, textarea{
 
 /* Problem page */
 
-#map {
-  width: 500px; 
-  height: 500px; 
+#map-col {
   float: right; 
+  
+}
+
+#map {
+  width: 400px; 
+  height: 400px; 
   padding-left: 20px; 
   position:relative;
   border: 1px solid #000000;
@@ -102,7 +113,7 @@ input, textarea{
 /* Stop/stop area page */
 
 .stop, .stop-area, .route { 
-  width: 44%;
+/*  width: 44%;*/
   padding: 0 0.5em 0.5em 0.5em;
 }
 
@@ -125,7 +136,7 @@ input, textarea{
 }
 
 .route-list {
-  margin-top: 1em;
+  margin-top: 0.5em;
 }
 
 .route .operators {

@@ -1,6 +1,7 @@
 - content_for :javascript do 
   != map_javascript_include_tags
 - if @problem.location
+#map-col
   #map
   :javascript
     var problem_lat = #{@problem.location.lat};

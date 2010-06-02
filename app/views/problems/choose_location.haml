@@ -1,11 +1,12 @@
 - content_for :javascript do 
   != map_javascript_include_tags
-#map
-:javascript
-  var areaStops = #{location_stops_js(@problem.locations)}
-  jQuery(document).ready(function(){
-     area_init();
-  });
+#map-col
+  #map
+  :javascript
+    var areaStops = #{location_stops_js(@problem.locations)}
+    jQuery(document).ready(function(){
+       area_init();
+    });
 %p= t(:multiple_locations_intro, :num_locations => MAX_LOCATION_RESULTS)
 %ul
 - @problem.locations.each do |location|

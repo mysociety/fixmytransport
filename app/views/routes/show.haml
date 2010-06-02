@@ -1,11 +1,12 @@
 - content_for :javascript do 
   != map_javascript_include_tags
-#map
-:javascript
-  var areaStops = #{location_stops_js([@route])}
-  jQuery(document).ready(function(){
-     area_init();
-  });
+#map-col
+  #map
+  :javascript
+    var areaStops = #{location_stops_js([@route])}
+    jQuery(document).ready(function(){
+       area_init();
+    });
 = render :partial => 'shared/respond', :locals => { :instance => @route }
 .route
   %h3.name= @route.name

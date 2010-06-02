@@ -1,20 +1,22 @@
 - content_for :javascript do 
   != map_javascript_include_tags
-#map
-:javascript
-  var areaStops = #{location_stops_js(@stop_area.stops)}
-  jQuery(document).ready(function(){
-     area_init();
-  });
+#map-col
+  #map
+  :javascript
+    var areaStops = #{location_stops_js(@stop_area.stops)}
+    jQuery(document).ready(function(){
+       area_init();
+    });
+  The following stops are here: 
+  - @stop_area.stops.each do |stop|
+    .stop
+      = link_to("#{stop.name_with_indicator}", stop_url(stop))
+      = render :partial => 'shared/route_list', :locals => {:stop => stop}
+
 = render :partial => 'shared/respond', :locals => { :instance => @stop_area }
 .stop-area
   %h3.name= "#{@stop_area.name} stop area"
   .details
     - if !@stop_area.area.blank?
       %span.locality= "In #{@stop_area.area}"
-  The following stops are here: 
-- @stop_area.stops.each do |stop|
-  .stop
-    = link_to("#{stop.name_with_indicator}", stop_url(stop))
-    = render :partial => 'shared/route_list', :locals => {:stop => stop}
 
