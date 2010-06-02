@@ -18,7 +18,7 @@ class TrainRoute < Route
   end
   
   def name(from_stop=nil, short=false)
-    name_by_terminuses(transport_mode, from_stop=from_stop)
+    name_by_terminuses(transport_mode, from_stop=from_stop, short=short)
   end
   
   def description
