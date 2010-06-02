@@ -141,8 +141,9 @@ class Stop < ActiveRecord::Base
     query_clauses = []
     params = []
     if !name.blank? 
-      query_clauses << 'lower(common_name) like ?'
+      query_clauses << '(lower(common_name) like ? or lower(street) = ?)'
       params <<  "%#{name}%"
+      params << name
     end
     if !area.blank?
       query_clauses << '(lower(locality_name) = ? 
