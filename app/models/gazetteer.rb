@@ -4,11 +4,13 @@ class Gazetteer
     return [] if attributes[:area].blank?
     stop_type_codes = StopType.codes_for_transport_mode(attributes[:transport_mode_id])
     localities = Locality.find_all_with_descendants(attributes[:area])
-    query = 'locality_id in (?) and stop_type in (?)'
+    query = 'locality_id in (?) AND stop_type in (?)'
     params = [localities, stop_type_codes]
     if !attributes[:name].blank? 
-      query += ' AND lower(common_name) like ?'
+      query += ' AND (lower(common_name) like ? OR lower(street) = ? OR naptan_code = ?)'
       params <<  "%#{attributes[:name].downcase}%"
+      params << attributes[:name]
+      params << attributes[:name]
     end
     conditions = [query] + params
     stops = Stop.find(:all, :conditions => conditions, :limit => limit)
