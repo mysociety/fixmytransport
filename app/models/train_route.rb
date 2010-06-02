@@ -17,7 +17,7 @@ class TrainRoute < Route
     self.find_existing_train_routes(route)
   end
   
-  def name(from_stop=nil)
+  def name(from_stop=nil, short=false)
     name_by_terminuses(transport_mode, from_stop=from_stop)
   end
   
