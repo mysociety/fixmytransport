@@ -11,12 +11,11 @@ class Gazetteer
   
   def self.find_routes_from_attributes(attributes, limit=nil)
     return [] if attributes[:area].blank?
-    stop_type_codes = StopType.codes_for_transport_mode(attributes[:transport_mode_id])
     localities = Locality.find_all_with_descendants(attributes[:area])
-    routes = Route.find(:all, :conditions => ['stops.locality_id in (?) and stops.stop_type in (?)',
-                                              localities, stop_type_codes], 
-                              :include => {:route_segments => [:from_stop, :to_stop]}, 
-                              :limit => limit)
+    routes = Route.find_all_by_transport_mode_id(attributes[:transport_mode_id], 
+                                                 route_number=nil, 
+                                                 localities=localities, 
+                                                 limit=limit)
     routes
   end
   

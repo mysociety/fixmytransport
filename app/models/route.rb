@@ -120,9 +120,14 @@ class Route < ActiveRecord::Base
       routes = find_all_by_stop_names(first, last, attributes, limit)
     else
       return [] if attributes[:route_number].blank?
-      routes = find_all_by_number_and_transport_mode_id(attributes[:route_number], 
-                                                        attributes[:transport_mode_id], 
-                                                        limit=limit)
+      localities = nil
+      if ! attributes[:area].blank?
+        localities = Locality.find_all_with_descendants(attributes[:area])
+      end
+      routes = find_all_by_transport_mode_id(attributes[:transport_mode_id],
+                                             attributes[:route_number], 
+                                             localities, 
+                                             limit)
       if routes.size > 1 and ! attributes[:area].blank?
         return routes.select{ |route| route.in_area?(attributes[:area]) }
       end
@@ -130,15 +135,39 @@ class Route < ActiveRecord::Base
     routes
   end
   
-  def self.find_all_by_number_and_transport_mode_id(route_number, transport_mode_id, limit=nil)
-    find(:all, :conditions => ['lower(number) = ? and transport_mode_id = ?', 
-                              route_number.downcase, transport_mode_id],
-               :limit => limit)
+  def self.find_all_by_transport_mode_id(transport_mode_id, route_number=nil, localities=nil, limit=nil)
+    sql_string = 'SELECT distinct routes.*
+                  FROM routes, route_segments, stops as from_stops, stops as to_stops
+                  WHERE routes.id = route_segments.route_id 
+                  AND route_segments.from_stop_id = from_stops.id 
+                  AND route_segments.to_stop_id = to_stops.id
+                  AND transport_mode_id = ?'
+    params = [transport_mode_id]
+    if localities
+      sql_string += " AND (to_stops.locality_id in (?) or from_stops.locality_id in (?))"
+      params << localities
+      params << localities
+    end
+    if route_number
+      sql_string += " AND lower(routes.number) = ?"
+      params << route_number.downcase
+    end
+    if limit 
+      sql_string += " limit #{limit}"
+    end
+    params = [sql_string] + params
+    find_by_sql(params)
   end
   
   def self.find_all_by_stop_names(first, last, attributes, limit=nil)
     first_stops = Gazetteer.find_stops_from_attributes(attributes.merge(:area => first))
     last_stops = Gazetteer.find_stops_from_attributes(attributes.merge(:area => last))
+    first_stops += Stop.find_from_attributes({:name => first, 
+                                              :area => attributes[:area], 
+                                              :transport_mode_id => attributes[:transport_mode_id]})
+    last_stops += Stop.find_from_attributes({:name => last, 
+                                             :area => attributes[:area], 
+                                             :transport_mode_id => attributes[:transport_mode_id]})
     Route.find_all_by_stops([first_stops, last_stops], 
                             attributes[:transport_mode_id], 
                             as_terminus=false, 
