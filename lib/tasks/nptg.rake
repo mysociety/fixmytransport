@@ -54,10 +54,10 @@ namespace :nptg do
         usage_message "usage: rake nptg:load:all DIR=dirname"
       end
       puts "Loading data from #{ENV['DIR']}..."
-      ENV['FILE'] = File.join(ENV['DIR'], 'AdminAreas.csv')
-      Rake::Task['nptg:load:admin_areas'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'Regions.csv')
       Rake::Task['nptg:load:regions'].execute
+      ENV['FILE'] = File.join(ENV['DIR'], 'AdminAreas.csv')
+      Rake::Task['nptg:load:admin_areas'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'Districts.csv')
       Rake::Task['nptg:load:districts'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'Localities.csv')
