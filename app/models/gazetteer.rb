@@ -13,7 +13,7 @@ class Gazetteer
     return [] if attributes[:area].blank?
     localities = Locality.find_all_with_descendants(attributes[:area])
     routes = Route.find_all_by_transport_mode_id(attributes[:transport_mode_id], 
-                                                 route_number=nil, 
+                                                 route_number=attributes[:route_number], 
                                                  localities=localities, 
                                                  limit=limit)
     routes

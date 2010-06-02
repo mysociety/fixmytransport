@@ -17,8 +17,5 @@ class FerryRoute < Route
     self.find_existing_routes(route)
   end
   
-  def name(from_stop=nil)
-    name_by_terminuses(transport_mode, from_stop=from_stop)
-  end
   
 end

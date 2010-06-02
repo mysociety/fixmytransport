@@ -115,22 +115,10 @@ class Route < ActiveRecord::Base
   end
   
   def self.find_from_attributes(attributes, limit=nil)
+    routes = []
     if terminuses = get_terminuses(attributes[:route_number])
       first, last = terminuses
       routes = find_all_by_stop_names(first, last, attributes, limit)
-    else
-      return [] if attributes[:route_number].blank?
-      localities = nil
-      if ! attributes[:area].blank?
-        localities = Locality.find_all_with_descendants(attributes[:area])
-      end
-      routes = find_all_by_transport_mode_id(attributes[:transport_mode_id],
-                                             attributes[:route_number], 
-                                             localities, 
-                                             limit)
-      if routes.size > 1 and ! attributes[:area].blank?
-        return routes.select{ |route| route.in_area?(attributes[:area]) }
-      end
     end
     routes
   end
@@ -148,7 +136,7 @@ class Route < ActiveRecord::Base
       params << localities
       params << localities
     end
-    if route_number
+    if !route_number.blank?
       sql_string += " AND lower(routes.number) = ?"
       params << route_number.downcase
     end
@@ -238,15 +226,6 @@ class Route < ActiveRecord::Base
     duplicate.destroy
     original.save!
   end
-  
-  def name(from_stop=nil, short=false)
-    name = "#{number}"
-    if from_stop
-      return name
-    else
-      return "#{transport_mode_name} #{name}"
-    end
-  end
 
   def stop_codes
     stops.map{ |stop| stop.atco_code }.uniq
@@ -282,7 +261,16 @@ class Route < ActiveRecord::Base
   end
   
   def description
-    "#{name(stop=nil, short=true)} #{area(lowercase=true)}"
+    "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
+  end
+  
+  def name(from_stop=nil, short=false)
+    name = "#{number}"
+    if from_stop
+      return name
+    else
+      return "#{transport_mode_name} #{name}"
+    end
   end
   
   def stops

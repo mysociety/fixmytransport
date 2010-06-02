@@ -33,8 +33,7 @@ class Locality < ActiveRecord::Base
   
   def self.find_all_with_descendants(name)
     locality_list = find_all_by_name(name)
-    descendants = locality_list.map{ |locality| locality.descendants }
-    [locality_list + descendants].flatten.uniq
+    with_descendants = locality_list.map{ |locality| [locality, locality.descendants] }.flatten.uniq
   end
   
 end
