@@ -28,12 +28,18 @@ class Locality < ActiveRecord::Base
   has_many :stops, :order => 'common_name asc'
   
   def self.find_all_by_name(name)
-    find(:all, :conditions => ['lower(name) = ?', name.downcase])
+    localities = find(:all, :conditions => ['lower(localities.name) = ? 
+                                        or lower(admin_areas.name) = ? 
+                                        or lower(districts.name) = ?
+                                        or lower(regions.name) = ?', 
+                                        name.downcase, name.downcase, name.downcase, name.downcase],
+                       :include => [{:admin_area => :region}, :district])
+    localities
   end
   
   def self.find_all_with_descendants(name)
-    locality_list = find_all_by_name(name)
-    with_descendants = locality_list.map{ |locality| [locality, locality.descendants] }.flatten.uniq
+    localities = find_all_by_name(name)
+    with_descendants = localities.map{ |locality| [locality, locality.descendants] }.flatten.uniq
   end
   
 end
