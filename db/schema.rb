@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100531140834) do
+ActiveRecord::Schema.define(:version => 20100602162053) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(:version => 20100531140834) do
     t.float    "northing"
     t.float    "easting"
     t.point    "coords",                :srid => 27700
+    t.integer  "district_id"
   end
 
   add_index "localities", ["coords"], :name => "index_localities_on_coords", :spatial => true
