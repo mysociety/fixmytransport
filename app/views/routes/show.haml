@@ -7,6 +7,10 @@
     jQuery(document).ready(function(){
        area_init();
     });
+  .stops
+    Stops:
+    - @route.stops.each do |stop|
+      %li.active-stop{:id => "#{stop.id}"}= link_to(stop.name, stop_url(stop))
 = render :partial => 'shared/respond', :locals => { :instance => @route }
 .route
   %h3.name= @route.name
@@ -19,6 +23,6 @@
       Operated by
       %ul
         - @route.operators.each do |operator|
-          %li= "#{operator.code}"
+          %li= operator.code
   .terminuses
     != terminus_text(@route)
