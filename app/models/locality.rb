@@ -26,6 +26,8 @@ class Locality < ActiveRecord::Base
   belongs_to :district
   has_dag_links :link_class_name => 'LocalityLink'
   has_many :stops, :order => 'common_name asc'
+  has_many :route_localities
+  has_many :routes, :through => :route_localities
   
   def self.find_all_by_name(name)
     localities = find(:all, :conditions => ['lower(localities.name) = ? 

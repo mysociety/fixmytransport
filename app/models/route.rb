@@ -20,6 +20,10 @@ class Route < ActiveRecord::Base
   belongs_to :transport_mode
   validates_presence_of :number
   has_many :problems, :as => :location
+  has_many :route_localities
+  has_many :localities, :through => :route_localities
+  cattr_reader :per_page
+  @@per_page = 20
   
   # Return routes with this number and transport mode that have a stop or stop area in common with 
   # the route given
@@ -124,26 +128,26 @@ class Route < ActiveRecord::Base
   end
   
   def self.find_all_by_transport_mode_id(transport_mode_id, route_number=nil, localities=nil, limit=nil)
-    sql_string = 'SELECT distinct routes.*
-                  FROM routes, route_segments, stops as from_stops, stops as to_stops
-                  WHERE routes.id = route_segments.route_id 
-                  AND route_segments.from_stop_id = from_stops.id 
-                  AND route_segments.to_stop_id = to_stops.id
-                  AND transport_mode_id = ?'
+    select_clause = 'SELECT distinct routes.*'
+    from_clause = 'FROM routes'
+    where_clause = 'WHERE transport_mode_id = ?'
     params = [transport_mode_id]
     if !localities.empty?
-      sql_string += " AND (to_stops.locality_id in (?) or from_stops.locality_id in (?))"
-      params << localities
+      from_clause += ", route_localities"
+      where_clause += " AND route_localities.route_id = routes.id
+                        AND route_localities.locality_id in (?)"
       params << localities
     end
     if !route_number.blank?
-      sql_string += " AND lower(routes.number) = ?"
-      params << route_number.downcase
+      route_number = route_number.downcase
+      where_clause += " AND (lower(routes.number) = ? OR lower(routes.name) = ?)"
+      params << route_number
+      params << route_number
     end
     if limit 
-      sql_string += " limit #{limit}"
+      where_clause += " limit #{limit}"
     end
-    params = [sql_string] + params
+    params = ["#{select_clause} #{from_clause} #{where_clause}"] + params
     find_by_sql(params)
   end
   
@@ -261,14 +265,15 @@ class Route < ActiveRecord::Base
   end
   
   def name(from_stop=nil, short=false)
-    name = "#{number}"
+    return self[:name] if !self[:name].blank?
+    default_name = "#{number}"
     if from_stop
-      return name
+      return default_name
     else
       if short
-        return name
+        return default_name
       else
-        return "#{transport_mode_name} #{name}"
+        return "#{transport_mode_name} #{default_name}"
       end
     end
   end
