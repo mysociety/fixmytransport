@@ -20,7 +20,7 @@ class Admin::RoutesController < ApplicationController
     @route = Route.find(params[:id])
     if @route.update_attributes(params[:route])
       flash[:notice] = t(:route_updated)
-      redirect_to admin_route_url(@route)
+      redirect_to admin_url(admin_route_url(@route))
     else
       flash[:error] = t(:route_problem)
       render :show
