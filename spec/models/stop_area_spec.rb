@@ -49,7 +49,7 @@ describe StopArea do
   
   describe ' area ' do 
   
-    describe 'for stop areas whose stops all share a locality_name' do
+    describe 'for stop areas whose stops all share a locality' do
       
       it 'should return the locality_name' do 
         stop_areas(:victoria_station_leaf).area.should == "Victoria"
@@ -57,7 +57,7 @@ describe StopArea do
     
     end
     
-    describe 'for areas whose stops do not share a locality_name' do 
+    describe 'for areas whose stops do not share a locality' do 
       
       it 'should return nil' do 
         stop_areas(:victoria_station_root).area.should be_nil

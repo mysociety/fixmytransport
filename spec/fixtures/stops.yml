@@ -42,8 +42,6 @@ victoria_station_one:
   lon: "-0.14455"
   northing: "179000"
   easting: "528900"
-  parent_locality_name: London
-  locality_name: Victoria C.
   grid_type: U
   naptan_code: ""
   revision_number: "2"
@@ -55,7 +53,6 @@ victoria_station_one:
   stop_type: RLY
   locality_centre: t
   suburb: ""
-  grand_parent_locality_name: ""
   modification: rev
   bus_stop_type: ""
   crossing: ""
@@ -64,15 +61,13 @@ victoria_station_one:
   town: ""
   street: "-"
   indicator: ""
-  locality: victoria
+  locality: london
 victoria_station_two:
   status: act
   lat: "51.49526"
   lon: "-0.14454"
   northing: "179000"
   easting: "528901"
-  parent_locality_name: London
-  locality_name: Victoria
   grid_type: U
   naptan_code: ""
   revision_number: "5"
@@ -83,7 +78,6 @@ victoria_station_two:
   stop_type: RLY
   locality_centre: t
   suburb: ""
-  grand_parent_locality_name: ""
   modification: rev
   bus_stop_type: ""
   crossing: ""
@@ -99,8 +93,6 @@ bristol_16:
   lon: "-2.59239"
   northing: "173523"
   easting: "358940"
-  parent_locality_name: Bristol
-  locality_name: Broadmead
   grid_type: U
   naptan_code: bstgmam
   revision_number: "0"
@@ -112,7 +104,6 @@ bristol_16:
   stop_type: BCT
   locality_centre: f
   suburb: ""
-  grand_parent_locality_name: ""
   id: "4"
   modification: new
   bus_stop_type: MKD
@@ -129,7 +120,6 @@ dursley_road:
   lat: "51.48381"
   easting: "353111"
   northing: "176312"
-  parent_locality_name: Avonmouth
   grid_type: U
   naptan_code: bstagjm
   revision_number: "0"

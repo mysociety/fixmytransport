@@ -121,20 +121,6 @@ gatwick_airport:
   short_name: ""
   coords: 0101000020346C000000000000FE2220410000000060400141
   easting: "528767"
-haywards_heath:
-  northing: "124110"
-  source_locality_type: Pa
-  admin_area_id: "243"
-  national: 
-  name: Haywards Heath
-  grid_type: U
-  revision_number: "0"
-  code: E0052196
-  qualifier_name: ""
-  modification: ""
-  short_name: ""
-  coords: 0101000020346C000000000000E442204100000000E04CFE40
-  easting: "532850"
 south_moor:
   northing: "551960"
   source_locality_type: Lo
