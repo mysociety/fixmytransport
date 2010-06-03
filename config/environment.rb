@@ -64,3 +64,8 @@ end
 
 # Tell HAML to escape HTML by default
 Haml::Template.options[:escape_html] = true
+
+# Use an asset host setting so that the admin interface can always get css, images, js.
+if (MySociety::Config.get("DOMAIN", "") != "")
+    ActionController::Base.asset_host = MySociety::Config.get("DOMAIN", 'localhost:3000')
+end

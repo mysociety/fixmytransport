@@ -9,8 +9,8 @@
   %body
     %h2= t(:site_name)
     %ul.admin-navigation 
-      %li=link_to "Location searches", admin_location_searches_url
-      %li=link_to "Routes", admin_routes_url
+      %li=link_to "Location searches", admin_url(admin_location_searches_url)
+      %li=link_to "Routes", admin_url(admin_routes_url)
     #main
       - [:notice, :error, :message].each do |key| 
         - unless flash[key].blank? 
