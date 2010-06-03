@@ -1,0 +1,8 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  locality: weybourne
+  route: aldershot_807_bus
+two:
+  locality: north_town
+  route: aldershot_807_bus

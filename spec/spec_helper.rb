@@ -44,7 +44,8 @@ Spec::Runner.configure do |config|
                            :stop_area_links, 
                            :route_segments,
                            :operators,
-                           :route_operators
+                           :route_operators,
+                           :route_localities
   #
   # If you declare global fixtures, be aware that they will be declared
   # for all of your examples, even those that don't use them.
