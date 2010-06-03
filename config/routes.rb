@@ -19,8 +19,9 @@ ActionController::Routing::Routes.draw do |map|
                              :member => {:respond => :get}
 
   map.namespace :admin do |admin|
-    admin.root :controller => 'location_searches'
+    admin.root :controller => 'home'
     admin.resources :location_searches, :only => [:index, :show]
+    admin.resources :routes, :only => [:index, :show, :update ]
   end
   
 end
