@@ -9,7 +9,7 @@
   -@routes.each do |route|
     %tr
       %td
-        = link_to route.id, route_url(route)
+        = link_to route.id, main_url(route_url(route))
         = link_to "(admin)", admin_url(admin_route_path(route))
       %td= route.name
       %td
