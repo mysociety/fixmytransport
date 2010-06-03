@@ -1,0 +1,14 @@
+%h2 Routes
+- TransportMode.active.find(:all).each do |transport_mode| 
+  = link_to transport_mode.name, "?mode=#{transport_mode.id}"
+%table.routes
+  %tr
+    %th ID
+    %th Name
+    %th 
+  -@routes.each do |route|
+    %tr
+      %td= link_to route.id, admin_route_url(route)
+      %td= route.name
+      %td
+= will_paginate @routes 

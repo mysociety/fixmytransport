@@ -1,0 +1,36 @@
+/* General */
+body {
+  font-family: verdana, sans-serif;
+  margin: 0.5em;
+}
+
+ul.admin-navigation {
+  list-style-type: none;
+  position: absolute;
+  right: 0.5em;
+  top: 0.5em;
+  margin: 0.5em;
+}
+
+ul.admin-navigation li {
+  display: inline-block;
+}
+
+.flash_notice {
+  padding: 5px;
+  margin: 5px;
+  background-color: #B9C7DD;
+  border: 1px solid #437DD4;
+}
+
+.flash_error {
+  padding: 5px;
+  margin: 5px;
+  background-color: #FFADB9;
+  border: 1px solid #CC0000;
+}
+
+#main {
+  margin: 1em;
+  clear: both;
+}
