@@ -60,7 +60,23 @@ namespace :nptdr do
         end
       end
     end
+  
   end
   
-
+  namespace :update do
+    
+    desc 'Adds cached route locality associations based on route stop localities' 
+    task :route_localities => :environment do 
+      Route.find_each do |route|
+        localities = []
+        route.stops.each do |stop|
+          localities << stop.locality unless localities.include? stop.locality
+        end
+        localities.each do |locality|
+          route.route_localities.build(:locality => locality)
+        end
+        route.save!
+      end
+    end
+  end
 end
