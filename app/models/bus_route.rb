@@ -18,6 +18,7 @@ class BusRoute < Route
   end
   
   def name(from_stop=nil, short=false)
+    return self[:name] if !self[:name].blank?
     if from_stop
       return number
     elsif short

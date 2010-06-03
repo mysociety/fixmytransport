@@ -18,6 +18,7 @@ class TrainRoute < Route
   end
   
   def name(from_stop=nil, short=false)
+    return self[:name] if !self[:name].blank?
     name_by_terminuses(transport_mode, from_stop=from_stop, short=short)
   end
   
