@@ -10,7 +10,7 @@
   .stops
     Stops:
     - @route.stops.each do |stop|
-      %li.active-stop{:id => "#{stop.id}"}= link_to(stop.name, stop_url(stop))
+      %li.active-stop{:id => "#{stop.id}"}= link_to(stop.name_without_suffix(@route.transport_mode), stop_url(stop))
 = render :partial => 'shared/respond', :locals => { :instance => @route }
 .route
   %h3.name= @route.name
