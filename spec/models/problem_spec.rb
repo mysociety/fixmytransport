@@ -59,7 +59,7 @@ describe Problem do
     
     it 'should return a stop if one is uniquely identified by the attributes' do 
       stop = mock_model(Stop)
-      Stop.stub!(:find_from_attributes).and_return([stop])
+      Gazetteer.stub!(:find_stops_from_attributes).and_return([stop])
       attributes = { :name => 'name', :area => 'locality name' }
       expect_location(attributes, 'Stop',  stop)
     end
@@ -68,7 +68,7 @@ describe Problem do
       first_stop = mock_model(Stop)
       second_stop = mock_model(Stop)
       stop_area = mock_model(StopArea)
-      Stop.stub!(:find_from_attributes).and_return([first_stop, second_stop])
+      Gazetteer.stub!(:find_stops_from_attributes).and_return([first_stop, second_stop])
       Stop.stub!(:common_area).and_return(stop_area)
       attributes = { :name => 'name', :area => 'locality name' }
       expect_location(attributes, 'Stop', stop_area)

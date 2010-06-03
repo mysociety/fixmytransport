@@ -7,10 +7,11 @@ class Gazetteer
     query = 'locality_id in (?) AND stop_type in (?)'
     params = [localities, stop_type_codes]
     if !attributes[:name].blank? 
+      name = attributes[:name].downcase
       query += ' AND (lower(common_name) like ? OR lower(street) = ? OR naptan_code = ?)'
-      params <<  "%#{attributes[:name].downcase}%"
-      params << attributes[:name]
-      params << attributes[:name]
+      params <<  "%#{name}%"
+      params << name
+      params << name
     end
     conditions = [query] + params
     stops = Stop.find(:all, :conditions => conditions, :limit => limit)

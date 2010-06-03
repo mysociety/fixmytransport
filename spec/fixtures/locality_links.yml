@@ -19,3 +19,18 @@ four:
   ancestor: london
   count: "1"
   direct: t
+five: 
+  descendant: avonmouth
+  ancestor: bristol
+  count: "1"
+  direct: t
+six: 
+  descendant: shirehampton
+  ancestor: avonmouth
+  count: "1"
+  direct: t
+seven: 
+  descendant: shirehampton
+  ancestor: bristol
+  count: "1"
+  direct: f

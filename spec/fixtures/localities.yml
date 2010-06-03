@@ -261,3 +261,33 @@ london:
   short_name: ""
   coords: 0101000020346C0000000000001C2D20410000000010090641
   easting: "530062"
+avonmouth: 
+  northing: "179239"
+  source_locality_type: Lo
+  admin_area_id: "98"
+  national: 
+  name: Avonmouth
+  grid_type: U
+  revision_number: "0"
+  code: E0035565
+  qualifier_name: ""
+  district_id: 
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C000000000000688015410000000038E10541
+  easting: "352282"
+shirehampton: 
+  northing: "176911"
+  source_locality_type: Lo
+  admin_area_id: "98"
+  national: 
+  name: Shirehampton
+  grid_type: U
+  revision_number: "0"
+  code: E0035642
+  qualifier_name: ""
+  district_id: 
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C000000000000E88E15410000000078980541
+  easting: "353210"

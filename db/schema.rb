@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100602162053) do
+ActiveRecord::Schema.define(:version => 20100603100029) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -260,9 +260,6 @@ ActiveRecord::Schema.define(:version => 20100602162053) do
     t.text     "crossing"
     t.text     "indicator"
     t.string   "bearing"
-    t.string   "locality_name"
-    t.string   "parent_locality_name"
-    t.string   "grand_parent_locality_name"
     t.string   "town"
     t.string   "suburb"
     t.boolean  "locality_centre"
@@ -281,7 +278,7 @@ ActiveRecord::Schema.define(:version => 20100602162053) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.point    "coords",                     :srid => 27700
+    t.point    "coords",                   :srid => 27700
     t.integer  "locality_id"
   end
 

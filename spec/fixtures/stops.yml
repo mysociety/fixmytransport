@@ -15,9 +15,6 @@
 #  indicator                  :text
 #  bearing                    :string(255)
 #  nptg_locality_code         :string(255)
-#  locality_name              :string(255)
-#  parent_locality_name       :string(255)
-#  grand_parent_locality_name :string(255)
 #  town                       :string(255)
 #  suburb                     :string(255)
 #  locality_centre            :boolean
@@ -133,7 +130,6 @@ dursley_road:
   easting: "353111"
   northing: "176312"
   parent_locality_name: Avonmouth
-  locality_name: Shirehampton
   grid_type: U
   naptan_code: bstagjm
   revision_number: "0"
@@ -145,7 +141,6 @@ dursley_road:
   stop_type: BCT
   locality_centre: f
   suburb: ""
-  grand_parent_locality_name: Bristol
   modification: new
   bus_stop_type: MKD
   crossing: Hung Road
@@ -161,8 +156,6 @@ victoria_bus_station_deleted:
   lat: "51.49609"
   easting: "528873"
   northing: "179092"
-  parent_locality_name: Victoria
-  locality_name: Belgravia
   grid_type: U
   naptan_code: ""
   revision_number: "0"
@@ -174,7 +167,6 @@ victoria_bus_station_deleted:
   stop_type: BCT
   locality_centre: f
   suburb: ""
-  grand_parent_locality_name: London
   modification: del
   bus_stop_type: MKD
   crossing: --
@@ -189,8 +181,6 @@ clapham_junction:
   lat: "51.46419"
   easting: "527201"
   northing: "175500"
-  parent_locality_name: London
-  locality_name: Clapham Junction
   grid_type: U
   naptan_code: ""
   revision_number: "2"
@@ -202,7 +192,6 @@ clapham_junction:
   stop_type: RLY
   locality_centre: t
   suburb: ""
-  grand_parent_locality_name: ""
   modification: rev
   bus_stop_type: ""
   crossing: ""
@@ -218,8 +207,6 @@ croydon_station:
   northing: "165770"
   lat: "51.37545"
   easting: "532841"
-  parent_locality_name: ""
-  locality_name: Croydon
   grid_type: U
   naptan_code: ""
   revision_number: "2"
@@ -231,7 +218,6 @@ croydon_station:
   stop_type: RLY
   locality_centre: t
   suburb: ""
-  grand_parent_locality_name: ""
   modification: rev
   bus_stop_type: ""
   crossing: ""
@@ -247,8 +233,6 @@ gatwick_airport_station:
   northing: "141300"
   lat: "51.15649"
   easting: "528700"
-  parent_locality_name: ""
-  locality_name: Gatwick Airport
   grid_type: U
   naptan_code: ""
   revision_number: "1"
@@ -260,7 +244,6 @@ gatwick_airport_station:
   stop_type: RLY
   locality_centre: t
   suburb: ""
-  grand_parent_locality_name: ""
   modification: rev
   bus_stop_type: ""
   crossing: ""
@@ -276,8 +259,6 @@ haywards_heath_station:
   northing: "124583"
   lat: "51.00525"
   easting: "533030"
-  parent_locality_name: ""
-  locality_name: Haywards Heath
   grid_type: U
   naptan_code: ""
   revision_number: "1"
@@ -289,7 +270,6 @@ haywards_heath_station:
   stop_type: RLY
   locality_centre: t
   suburb: ""
-  grand_parent_locality_name: ""
   modification: rev
   bus_stop_type: ""
   crossing: ""
@@ -305,8 +285,6 @@ arch_ne:
   lat: "54.86627"
   easting: "418799"
   northing: "552426"
-  parent_locality_name: ""
-  locality_name: South Moor
   grid_type: U
   naptan_code: duragpwg
   revision_number: "1"
@@ -318,7 +296,6 @@ arch_ne:
   stop_type: BCT
   locality_centre: f
   suburb: ""
-  grand_parent_locality_name: ""
   modification: rev
   bus_stop_type: MKD
   crossing: ""
@@ -334,8 +311,6 @@ arch_sw:
   northing: "552395"
   lat: "54.86599"
   easting: "418767"
-  parent_locality_name: ""
-  locality_name: South Moor
   grid_type: U
   naptan_code: duragpwj
   revision_number: "1"
@@ -347,7 +322,6 @@ arch_sw:
   stop_type: BCT
   locality_centre: f
   suburb: ""
-  grand_parent_locality_name: ""
   modification: rev
   bus_stop_type: MKD
   crossing: ""
@@ -363,8 +337,6 @@ bethany_terrace:
   lat: "54.86376"
   easting: "416553"
   northing: "552138"
-  parent_locality_name: Annfield Plain
-  locality_name: Catchgate
   grid_type: U
   naptan_code: duradtga
   revision_number: "1"
@@ -376,7 +348,6 @@ bethany_terrace:
   stop_type: BCT
   locality_centre: f
   suburb: ""
-  grand_parent_locality_name: ""
   modification: rev
   bus_stop_type: MKD
   crossing: ""
@@ -392,8 +363,6 @@ bus_station:
   lat: "54.86916"
   easting: "419439"
   northing: "552750"
-  parent_locality_name: ""
-  locality_name: Stanley
   grid_type: U
   naptan_code: duradmgw
   revision_number: "2"
@@ -405,7 +374,6 @@ bus_station:
   stop_type: BCS
   locality_centre: f
   suburb: ""
-  grand_parent_locality_name: ""
   modification: rev
   bus_stop_type: MKD
   crossing: ""
@@ -419,8 +387,6 @@ wybourne_lane:
   status: act
   lon: "-0.78016"
   northing: "149150"
-  parent_locality_name: ""
-  locality_name: Weybourne
   grid_type: U
   naptan_code: surgjtwg
   revision_number: "3"
@@ -432,7 +398,6 @@ wybourne_lane:
   stop_type: BCT
   locality_centre: f
   suburb: ""
-  grand_parent_locality_name: ""
   modification: rev
   bus_stop_type: HAR
   crossing: ""
@@ -448,8 +413,6 @@ white_lion_n:
   status: act
   lon: "-0.74342"
   northing: "149822"
-  parent_locality_name: Aldershot
-  locality_name: North Town
   grid_type: U
   naptan_code: hamjajpm
   revision_number: "0"
@@ -461,7 +424,6 @@ white_lion_n:
   stop_type: BCT
   locality_centre: f
   suburb: ""
-  grand_parent_locality_name: ""
   modification: new
   bus_stop_type: MKD
   crossing: Stone Street
@@ -477,8 +439,6 @@ white_lion_s:
   status: act
   lon: "-0.74331"
   northing: "149820"
-  parent_locality_name: Aldershot
-  locality_name: North Town
   grid_type: U
   naptan_code: hamjajta
   revision_number: "0"
@@ -490,7 +450,6 @@ white_lion_s:
   stop_type: BCT
   locality_centre: f
   suburb: ""
-  grand_parent_locality_name: ""
   modification: new
   bus_stop_type: MKD
   crossing: Stone Street
