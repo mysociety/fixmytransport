@@ -15,9 +15,6 @@
 #  indicator                  :text
 #  bearing                    :string(255)
 #  nptg_locality_code         :string(255)
-#  locality_name              :string(255)
-#  parent_locality_name       :string(255)
-#  grand_parent_locality_name :string(255)
 #  town                       :string(255)
 #  suburb                     :string(255)
 #  locality_centre            :boolean
@@ -99,6 +96,10 @@ class Stop < ActiveRecord::Base
   
   def description
     "#{full_name} in #{area}"
+  end
+  
+  def locality_name
+    locality.name
   end
   
   def area
