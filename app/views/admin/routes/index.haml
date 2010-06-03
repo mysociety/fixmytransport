@@ -8,7 +8,7 @@
     %th 
   -@routes.each do |route|
     %tr
-      %td= link_to route.id, admin_url(admin_route_url(route))
+      %td= link_to route.id, admin_url(admin_route_path(route))
       %td= route.name
       %td
 = will_paginate @routes 
