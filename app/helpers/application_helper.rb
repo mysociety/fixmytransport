@@ -61,8 +61,9 @@ module ApplicationHelper
   
   def terminus_text(route)
     text = ''
+    return text if route.stops.empty?
     terminuses = route.terminuses
-    if terminuses.empty? 
+    if terminuses.empty?
       terminuses = [route.stops.first]
     end
     terminus_links = terminuses.map do |stop| 
