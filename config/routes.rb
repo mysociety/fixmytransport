@@ -1,10 +1,12 @@
 ActionController::Routing::Routes.draw do |map|
 
+  # home page
   map.root :controller => 'problems', :action => 'new'
 
-  map.resources :places, :controller => 'problems', 
-                         :except => [:update, :edit], 
-                         :collection => {:choose_location => :get}
+  # resources
+  map.resources :stories, :controller => 'problems', 
+                          :except => [:update, :edit, :create], 
+                          :collection => {:choose_location => :get, :find => :post, :recent => :get}
 
   map.resources :routes, :only => [:show], 
                          :collection => {:random => :get}, 
