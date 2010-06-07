@@ -1,0 +1,26 @@
+- form_for location, :url => location_path(location) do |f| 
+  .fieldset
+    - f.fields_for :problems, @new_problem do |problem_fields|
+      - if location.errors.on('problems.subject')
+        .form-field-error= error_message_on location, 'problems.subject'
+      .form-field
+        = problem_fields.label :subject
+        != problem_fields.text_field :subject
+      - if location.errors.on('problems.description')
+        .form-field-error= error_message_on location, 'problems.description'
+      .form-field
+        = problem_fields.label :description
+        != problem_fields.text_area :description, {:rows => 5}
+      - problem_fields.fields_for :reporter do |reporter_fields|
+        - if location.errors.on('problems.reporter.email')
+          .form-field-error= error_message_on location, 'problems.reporter.email'
+        .form-field
+          = reporter_fields.label :email
+          != reporter_fields.text_field :email
+        - if location.errors.on('problems.reporter.name')
+          .form-field-error= error_message_on location, 'problems.reporter.name'
+        .form-field
+          = reporter_fields.label :name
+          != reporter_fields.text_field :name
+    != submit_tag t(:go)      
+ 

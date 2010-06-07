@@ -18,4 +18,16 @@ class LocationsController < ApplicationController
     redirect_to location_url(instance)
   end
 
+  private
+  
+  def update_location(location, attributes)
+    if location.update_attributes(attributes)
+      flash[:notice] = t(:confirmation_sent)
+      redirect_to location_url(location)
+    else
+      @new_problem = location.problems.detect{ |problem| problem.new_record? }
+      render :show 
+    end
+  end
+  
 end

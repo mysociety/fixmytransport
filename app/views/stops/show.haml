@@ -11,7 +11,6 @@
        stop_init();
     });
   =render :partial => "shared/route_list", :locals => {:stop => @stop}
-= render :partial => 'shared/respond', :locals => { :instance => @stop }
 .stop
   %h3.name= "#{@stop.full_name}" 
   .details
@@ -25,3 +24,7 @@
       Part of
       -@stop.stop_areas.each do |stop_area|
         %span.stop-area= link_to(stop_area.name, stop_area_url(stop_area))
+= render :partial => 'shared/new_story', :locals => { :location => @stop }
+- @stop.problems.confirmed.each do |problem|
+  %h3= problem.subject
+  %p= problem.description
