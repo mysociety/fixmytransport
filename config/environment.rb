@@ -69,3 +69,6 @@ Haml::Template.options[:escape_html] = true
 if (MySociety::Config.get("DOMAIN", "") != "")
     ActionController::Base.asset_host = MySociety::Config.get("DOMAIN", 'localhost:3000')
 end
+
+# Domain for URLs (so can work for scripts, not just web pages)
+ActionMailer::Base.default_url_options[:host] = MySociety::Config.get("DOMAIN", 'localhost:3000')
