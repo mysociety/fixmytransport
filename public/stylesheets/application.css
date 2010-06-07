@@ -9,6 +9,18 @@ h2 {
   margin: 0.5em 0;
 }
 
+#footer {
+  clear: both; 
+  text-align:center;
+}
+
+#footer li {
+  list-style-type: none;
+  font-size: 0.8em;
+  display: inline;
+  padding: 0 1em 0 1em;
+}
+
 .flash_notice {
   padding: 5px;
   margin: 5px;
@@ -59,7 +71,6 @@ ul.navigation li {
 /* Forms */
 
 label {
-  width: 15em;  
   padding-right: 0.5em;
   text-align: right;
   float: left;
@@ -103,10 +114,13 @@ input, textarea{
 
 /* Reporting a problem */
 
-/* Stop/stop area page */
+form.new_problem label{
+  width: 10em;  
+}
+
+/* Stop/stop area/route page */
 
 .stop, .stop-area, .route { 
-/*  width: 44%;*/
   padding: 0 .75em 0.5em 0;
 }
 
@@ -176,4 +190,13 @@ input, textarea{
   margin-right: auto;
   width: 15%;
   text-align: center;
+}
+
+form.edit_route label{
+  width: 5em;  
+}
+
+form.edit_route textarea, 
+form.edit_route input[type=text] {
+  width: 35em;
 }
