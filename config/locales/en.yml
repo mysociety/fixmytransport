@@ -1,8 +1,11 @@
 # Sample localization file for English. Add more files in this directory for other locales.
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 en:
-  site_name: "FixMyTransport"
+  site_name: "Brief Encounters"
+  site_tagline: "with the UK transport network"
   random_route: "Random route"
   random_stop: "Random stop"
   random_stop_area: "Random stop area"
   update: "Update"
+  about: "About"
+  built_by: "Built by {{link}}"

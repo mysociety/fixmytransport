@@ -21,3 +21,4 @@ en:
   try_another: "Try again?"
   location_response_yes: "Yes, this is what I was looking for"
   location_response_no: "No, this is not what I was looking for"
+  story_not_found: "We couldn't locate your story in the database. If you've copied the URL from an email, please check that you copied it exactly."
