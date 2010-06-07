@@ -79,7 +79,7 @@ class Route < ActiveRecord::Base
       params << item
     end
     conditions = [condition_string] + params
-    routes = find(:all, :select => "routes.id",
+    routes = find(:all, :select => "distinct routes.id",
                         :joins => joins, 
                         :conditions => conditions, 
                         :include => include_param, 
@@ -240,8 +240,18 @@ class Route < ActiveRecord::Base
     transport_mode.name
   end
   
-  def in_area?(area_name)
-    areas.map{ |area| area.downcase }.include?(area_name.downcase)
+  def area(lowercase=false)
+    area = ''
+    area_list = areas(all=false)
+    if area_list.size > 1
+      area = "Between #{area_list.to_sentence}"
+    else
+      area = "In #{area_list.first}" if !area_list.empty?
+    end
+    if lowercase
+      area[0] = area.first.downcase
+    end
+    return area
   end
   
   def areas(all=true)
@@ -301,20 +311,6 @@ class Route < ActiveRecord::Base
     to_terminuses = route_segments.select{ |route_segment| route_segment.to_terminus? }
     terminuses = from_terminuses.map{ |segment| segment.from_stop } + to_terminuses.map{ |segment| segment.to_stop }
     terminuses.uniq
-  end
-  
-  def area(lowercase=false)
-    area = ''
-    area_list = areas(all=false)
-    if area_list.size > 1
-      area = "Between #{area_list.to_sentence}"
-    else
-      area = "In #{area_list.first}" if !area_list.empty?
-    end
-    if lowercase
-      area[0] = area.first.downcase
-    end
-    return area
   end
   
   def name_by_terminuses(transport_mode, from_stop=nil, short=false)
