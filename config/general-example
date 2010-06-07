@@ -28,6 +28,9 @@ define('OPTION_STAGING_SITE', 1);
 
 define('OPTION_DOMAIN', '127.0.0.1:3000');
 
+// Address that email comes from
+define('OPTION_CONTACT_EMAIL', 'contact@localhost');
+
 define('OPTION_GOOGLE_MAPS_API_KEY', 'Your Google Maps API key');
 
 // Using a database with spatial extensions? PostGIS or MySQL with Spatial Extensions
