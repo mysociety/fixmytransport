@@ -10,7 +10,7 @@ class ProblemsController < ApplicationController
     @problems = Problem.find(:all)
   end
   
-  def create
+  def find
     @location_search = LocationSearch.new_search!(session_id, params)
     problem_attributes = params[:problem]
     problem_attributes[:location_search] = @location_search

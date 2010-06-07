@@ -17,6 +17,9 @@ describe ProblemsController do
   end
   
   describe 'POST #create' do 
+  end
+  
+  describe 'POST #find' do 
   
     before do 
       @stop = mock_model(Stop)
@@ -32,10 +35,10 @@ describe ProblemsController do
     end
     
     def make_request
-      post :create, {:problem => {:transport_mode_id => 5, 
-                                  :location_attributes => 
-                                     {:name => 'My stop', 
-                                      :area => 'My town'}}}
+      post :find, {:problem => {:transport_mode_id => 5, 
+                                :location_attributes => 
+                                  {:name => 'My stop', 
+                                   :area => 'My town'}}}
     end
   
     it 'should create a new problem' do 
