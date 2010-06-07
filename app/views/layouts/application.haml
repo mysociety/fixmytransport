@@ -8,14 +8,18 @@
     = yield :javascript
   %body
     %h2= link_to_unless_current(t(:site_name), root_url) 
+    %span#site-tagline= t(:site_tagline)
     %ul.navigation 
-      %li=link_to t(:random_stop), random_stops_url
-      %li=link_to t(:random_stop_area), random_stop_areas_url
-      %li=link_to t(:random_route), random_routes_url
-      %li=link_to t(:find_location), new_place_url
+      %li=link_to t(:find_location), new_story_url
     - [:notice, :error, :message].each do |key| 
       - unless flash[key].blank? 
         %p{ :class => "flash flash_#{key}" }!= flash[key]
     .wrapper
       .content
         = yield
+    #footer
+      %ul
+        %li.footer-item!= t(:built_by, :link => link_to('mySociety', 'http://mysociety.org'))
+        %li.footer-item!= link_to t(:about), about_path
+
+      
