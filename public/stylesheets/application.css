@@ -192,11 +192,17 @@ form.new_problem label{
   text-align: center;
 }
 
-form.edit_route label{
-  width: 5em;  
+form.edit_route label,
+form.edit_stop label,
+form.edit_stop_area label{
+  width: 6em;  
 }
 
 form.edit_route textarea, 
-form.edit_route input[type=text] {
+form.edit_route input[type=text],
+form.edit_stop textarea, 
+form.edit_stop input[type=text],
+form.edit_stop_area textarea, 
+form.edit_stop_area input[type=text] {
   width: 35em;
 }

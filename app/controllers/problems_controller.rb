@@ -37,6 +37,18 @@ class ProblemsController < ApplicationController
   def choose_location
   end
   
+  def recent
+  end
+  
+  def confirm
+    @problem = Problem.find_by_token(params[:email_token])
+    if !@problem
+      @error = t(:story_not_found)
+    else
+      @problem.toggle!(:confirmed)
+    end
+  end
+  
   def show
     @problem = Problem.find(params[:id])
     @title = @problem.subject

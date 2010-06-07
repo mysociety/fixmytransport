@@ -14,17 +14,21 @@
 #  location_type     :string(255)
 #  transport_mode_id :integer
 #
-
 class Problem < ActiveRecord::Base
-  validates_presence_of :transport_mode_id
+  validates_presence_of :transport_mode_id, :unless => :location
+  validates_presence_of :description, :subject, :if => :location
   validate :validate_location_attributes
   has_one :reporter, :class_name => 'User'
   accepts_nested_attributes_for :reporter
   belongs_to :location, :polymorphic => true
   belongs_to :transport_mode
   attr_accessor :location_attributes, :locations, :location_search
+  after_create :send_confirmation_email
+  before_create :generate_confirmation_token
+  named_scope :confirmed, :conditions => ['confirmed = ?', true]
   
   def validate_location_attributes
+    return true if location
     if ! location_attributes_valid?
       errors.add(:location_attributes, ActiveRecord::Error.new(self, :location_attributes, :blank).to_s)
     end
@@ -78,5 +82,14 @@ class Problem < ActiveRecord::Base
     end
     return
   end
- 
+  
+  # Makes a random token, suitable for using in URLs e.g confirmation messages.
+  def generate_confirmation_token
+    self.token = MySociety::Util.generate_token
+  end
+  
+  def send_confirmation_email
+    ProblemMailer.deliver_story_confirmation(reporter, self, token)
+  end
+  
 end

@@ -13,6 +13,7 @@ $:.push(File.join(File.dirname(__FILE__), '../commonlib/rblib'))
 
 load "config.rb"
 load "url_mapper.rb"
+load "util.rb"
 
 Rails::Initializer.run do |config|
   
