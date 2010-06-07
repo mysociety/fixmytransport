@@ -18,6 +18,10 @@ ActionController::Routing::Routes.draw do |map|
                              :collection => {:random => :get}, 
                              :member => {:respond => :get}
 
+  # static
+  map.about '/about', :controller => 'static', :action => 'about'
+  
+  # admin
   map.namespace :admin do |admin|
     admin.root :controller => 'home'
     admin.resources :location_searches, :only => [:index, :show]
