@@ -48,6 +48,7 @@ class Stop < ActiveRecord::Base
   has_many :routes_as_from_stop, :through => :route_segments_as_from_stop, :source => 'route'
   has_many :routes_as_to_stop, :through => :route_segments_as_to_stop, :source => 'route'
   belongs_to :locality
+  accepts_nested_attributes_for :problems
   
   def routes
     (routes_as_from_stop | routes_as_to_stop).uniq.sort{ |a,b| a.name <=> b.name }

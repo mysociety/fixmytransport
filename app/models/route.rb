@@ -20,6 +20,7 @@ class Route < ActiveRecord::Base
   belongs_to :transport_mode
   validates_presence_of :number
   has_many :problems, :as => :location
+  accepts_nested_attributes_for :problems
   has_many :route_localities
   has_many :localities, :through => :route_localities
   cattr_reader :per_page
