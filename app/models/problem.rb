@@ -60,6 +60,7 @@ class Problem < ActiveRecord::Base
     using_postcode = false
     if ! location_attributes[:area].blank?
       using_postcode = MySociety::Validate.is_valid_postcode(location_attributes[:area])
+      postcode = location_attributes[:area]
       location_type = 'Stop' if ! location_type
     end
     if location_type == 'Stop'
