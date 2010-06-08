@@ -78,8 +78,8 @@ describe ProblemsController do
       response.should render_template("problems/index")
     end
     
-    it 'should ask for all the problems' do 
-      Problem.should_receive(:find).with(:all)
+    it 'should ask for problems' do 
+      Problem.should_receive(:find).and_return([])
       make_request
     end
   
