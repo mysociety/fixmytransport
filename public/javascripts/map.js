@@ -94,7 +94,7 @@ function selectStop(stop) {
     stopUnselected(openPopup.stop);
     openPopup = null;
   }
-  popup = new OpenLayers.Popup.FramedCloud("stopPopup",
+  popup = new OpenLayers.Popup.AnchoredBubble("stopPopup",
                                             stop.lonlat,
                                             new OpenLayers.Size(50,50),
                                             '<a href="' + stop.url + '">'+
