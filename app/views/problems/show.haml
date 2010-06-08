@@ -1,18 +1,13 @@
 - content_for :javascript do 
   != map_javascript_include_tags
 - if @problem.location
-#map-col
-  #map
-  :javascript
-    var problem_lat = #{@problem.location.lat};
-    var problem_lon = #{@problem.location.lon};
-    jQuery(document).ready(function(){
-       problem_init();
-    });
-.problem-info
-  %h3= @problem.subject
-  %p.problem-description= @problem.description
-  - if @problem.location
-    = render :partial => @problem.location.type.to_s.underscore
-
-    
+  #map-col
+    #map
+    :javascript
+      var areaStops = #{location_stops_js([@problem.location])}
+      jQuery(document).ready(function(){
+         area_init();
+      });
+  .problem-info
+    %h3= @problem.subject
+    %p.problem-description= @problem.description
