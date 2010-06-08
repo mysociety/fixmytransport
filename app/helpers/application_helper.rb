@@ -66,16 +66,19 @@ module ApplicationHelper
     if terminuses.empty?
       terminuses = [route.stops.first]
     end
-    terminus_links = terminuses.map do |stop| 
+    stop_names = []
+    terminus_links = []
+    terminuses.each do |stop| 
       stop_name = stop.name_without_suffix(route.transport_mode)
       stop_area = stop.area
       link_text = stop_name
       if stop_name != stop_area
         link_text += " in #{stop_area}"
       end
-      link_to("#{link_text}", stop_url(stop)) 
+      terminus_links << link_to(link_text, stop_url(stop)) unless stop_names.include? link_text
+      stop_names << link_text
     end
-    if terminuses.size > 1
+    if terminus_links.size > 1
       text += "Between " 
       text += terminus_links.to_sentence(:last_word_connector => ' and ') 
     else
