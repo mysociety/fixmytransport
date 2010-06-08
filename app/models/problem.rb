@@ -26,6 +26,8 @@ class Problem < ActiveRecord::Base
   after_create :send_confirmation_email
   before_create :generate_confirmation_token
   named_scope :confirmed, :conditions => ['confirmed = ?', true]
+  cattr_reader :per_page
+  @@per_page = 10
   
   def validate_location_attributes
     return true if location
