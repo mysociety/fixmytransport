@@ -18,14 +18,14 @@ class Problem < ActiveRecord::Base
   validates_presence_of :transport_mode_id, :unless => :location
   validates_presence_of :description, :subject, :if => :location
   validate :validate_location_attributes
-  has_one :reporter, :class_name => 'User'
+  belongs_to :reporter, :class_name => 'User'
   accepts_nested_attributes_for :reporter
   belongs_to :location, :polymorphic => true
   belongs_to :transport_mode
   attr_accessor :location_attributes, :locations, :location_search
   after_create :send_confirmation_email
   before_create :generate_confirmation_token
-  named_scope :confirmed, :conditions => ['confirmed = ?', true]
+  named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
   cattr_reader :per_page
   @@per_page = 10
   
