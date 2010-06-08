@@ -57,9 +57,19 @@ class Problem < ActiveRecord::Base
     return unless transport_mode_id
     return unless location_attributes_valid?
     location_attributes[:transport_mode_id] = transport_mode_id
+    using_postcode = false
+    if ! location_attributes[:area].blank?
+      using_postcode = MySociety::Validate.is_valid_postcode(location_attributes[:area])
+      location_type = 'Stop' if ! location_type
+    end
     if location_type == 'Stop'
-      location_search.add_method('Gazetteer.find_stops_from_attributes') if location_search
-      self.locations = Gazetteer.find_stops_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
+      if using_postcode
+        location_search.add_method('Stop.find_by_postcode') if location_search      
+        self.locations = Stop.find_by_postcode(postcode, transport_mode_id, options={:limit => MAX_LOCATION_RESULTS})
+      else
+        location_search.add_method('Gazetteer.find_stops_from_attributes') if location_search
+        self.locations = Gazetteer.find_stops_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
+      end
       if self.locations.size == 1  
         return
       end

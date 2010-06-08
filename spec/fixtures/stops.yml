@@ -62,6 +62,7 @@ victoria_station_one:
   street: "-"
   indicator: ""
   locality: london
+  coords: 0101000020346C0000000000000824204100000000C0D90541
 victoria_station_two:
   status: act
   lat: "51.49526"
@@ -87,6 +88,7 @@ victoria_station_two:
   street: "-"
   indicator: ""
   locality: victoria
+  coords: 0101000020346C0000000000000A24204100000000C0D90541
 bristol_16: 
   status: act
   lat: "51.45919"
@@ -114,6 +116,7 @@ bristol_16:
   street: Marlborough Street
   indicator: Bay 16
   locality: broadmead
+  coords: 0101000020346C00000000000070E8154100000000982E0541
 dursley_road: 
   status: act
   lon: "-2.67666"
@@ -140,6 +143,7 @@ dursley_road:
   street: Dursley Road
   indicator: ""
   locality: shirehampton
+  coords: 0101000020346C0000000000005C8D154100000000C0850541
 victoria_bus_station_deleted: 
   status: del
   lon: "-0.14491"
@@ -191,6 +195,7 @@ clapham_junction:
   street: "-"
   indicator: ""
   locality: clapham_junction
+  coords: 0101000020346C000000000000C216204100000000606C0541
 croydon_station: 
   status: act
   lon: "-0.09278"
@@ -217,6 +222,7 @@ croydon_station:
   street: "-"
   indicator: ""
   locality: croydon
+  coords: 0101000020346C000000000000D242204100000000503C0441
 gatwick_airport_station: 
   status: act
   lon: "-0.16104"
@@ -243,6 +249,7 @@ gatwick_airport_station:
   street: "-"
   indicator: ""
   locality: gatwick_airport
+  coords: 0101000020346C0000000000007822204100000000A03F0141
 haywards_heath_station: 
   status: act
   lon: "-0.10531"
@@ -269,6 +276,7 @@ haywards_heath_station:
   street: "-"
   indicator: ""
   locality: haywards_heath
+  coords: 0101000020346C0000000000004C44204100000000706AFE40
 arch_ne: 
   status: act
   lon: "-1.70864"
@@ -295,6 +303,7 @@ arch_ne:
   street: A693
   indicator: north east bound
   locality: south_moor
+  coords: 0101000020346C000000000000BC8F194100000000D4DB2041
 arch_sw: 
   status: act
   lon: "-1.70914"
@@ -321,6 +330,7 @@ arch_sw:
   street: A693
   indicator: south west bound
   locality: south_moor
+  coords: 0101000020346C0000000000003C8F19410000000096DB2041
 bethany_terrace:
   status: act
   lon: "-1.74365"
@@ -347,6 +357,7 @@ bethany_terrace:
   street: Kyo Road
   indicator: south west bound
   locality: catchgate
+  coords: 0101000020346C000000000000A46C19410000000094D92041
 bus_station:
   status: act
   lon: "-1.69864"
@@ -373,6 +384,7 @@ bus_station:
   street: Mary Street
   indicator: north bound
   locality: stanley
+  coords: 0101000020346C000000000000BC991941000000005CDE2041
 wybourne_lane:  
   status: act
   lon: "-0.78016"
@@ -399,6 +411,7 @@ wybourne_lane:
   lat: "51.23517"
   easting: "485260"
   locality: weybourne
+  coords: 0101000020346C000000000000309E1D4100000000F0340241
 white_lion_n:
   status: act
   lon: "-0.74342"
@@ -425,6 +438,7 @@ white_lion_n:
   lat: "51.24083"
   easting: "487814"
   locality: north_town
+  coords: 0101000020346C00000000000018C61D4100000000F0490241
 white_lion_s:
   status: act
   lon: "-0.74331"
@@ -451,3 +465,32 @@ white_lion_s:
   lat: "51.24081"
   easting: "487822"
   locality: north_town
+  coords: 0101000020346C00000000000038C61D4100000000E0490241
+tennis_street: 
+  status: act
+  lon: "-0.09028"
+  northing: "179733"
+  locality_id: "19160"
+  grid_type: U
+  naptan_code: ""
+  revision_number: "4"
+  landmark: 
+  common_name: Tennis Street
+  administrative_area_code: 082
+  bearing: E
+  plate_code: ""
+  creation_datetime: 2006-09-06 15:44:51
+  stop_type: BCT
+  locality_centre: f
+  suburb: ""
+  modification: rev
+  bus_stop_type: MKD
+  crossing: 
+  short_common_name: ""
+  atco_code: 490017361E
+  town: ""
+  street: 
+  coords: 0101000020346C0000000000005641204100000000A8F00541
+  indicator: Stop
+  lat: "51.50098"
+  easting: "532651"
