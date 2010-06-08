@@ -18,6 +18,4 @@
     - if !@stop_area.area.blank?
       %span.locality= "In #{@stop_area.area}"
 = render :partial => 'shared/new_story', :locals => { :location => @stop_area }
-- @stop_area.problems.confirmed.each do |problem|
-  %h3= problem.subject
-  %p= problem.description
+= render :partial => 'shared/story', :collection => @stop_area.problems.confirmed

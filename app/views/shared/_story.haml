@@ -1,0 +1,3 @@
+%h3= story.subject 
+.posted-time= t(:story_posted_time, :time => time_ago_in_words(story.created_at))
+%p= story.description
