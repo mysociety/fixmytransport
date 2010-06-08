@@ -1,4 +1,5 @@
 en:
   submit_problem: "Report a problem"
   browse_problems: "Browse problems"
-  find_location: "Tell us a story"
+  new_story: "Tell us a story"
+  recent_stories: "Recent stories"
