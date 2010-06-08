@@ -27,7 +27,7 @@ class StopArea < ActiveRecord::Base
   has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships
   has_dag_links :link_class_name => 'StopAreaLink'
-  has_many :problems, :as => :location
+  has_many :problems, :as => :location, :order => 'created_at desc'
   accepts_nested_attributes_for :problems                                  
   
   def self.find_by_code(code)
