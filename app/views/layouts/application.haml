@@ -2,7 +2,7 @@
 %html{ :lang => I18n.locale }
   %head
     %title 
-      ="FixMyTransport #{yield :title}"
+      ="#{t(:site_name)} #{@title ? ':' : ''} #{@title}"
     %meta{ :content => "text/html; charset=utf-8", "http-equiv" => "Content-type" }
     = stylesheet_link_tag 'application'
     = yield :javascript
@@ -10,7 +10,8 @@
     %h2= link_to_unless_current(t(:site_name), root_url) 
     %span#site-tagline= t(:site_tagline)
     %ul.navigation 
-      %li=link_to t(:find_location), new_story_url
+      %li=link_to t(:new_story), new_story_url
+      %li=link_to t(:recent_stories), stories_url
     - [:notice, :error, :message].each do |key| 
       - unless flash[key].blank? 
         %p{ :class => "flash flash_#{key}" }!= flash[key]
