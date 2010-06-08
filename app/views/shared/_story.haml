@@ -1,3 +1,6 @@
-%h3= story.subject 
-.posted-time= t(:story_posted_time, :time => time_ago_in_words(story.created_at))
-%p= story.description
+.story
+  %h3.subject= story.subject 
+  .posted-time= t(:story_posted_time, :time => time_ago_in_words(story.created_at))
+  .transport-location!= t(:story_location, :link => link_to(story.location.description, location_url(story.location)))
+  .author= story.reporter.name.blank? ? t(:anonymously) : t(:story_by, :name => story.reporter.name)
+  %p.description= story.description

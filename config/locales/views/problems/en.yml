@@ -25,3 +25,7 @@ en:
   story_not_found: "We couldn't locate your story in the database. If you've copied the URL from an email, please check that you copied it exactly."
   story_posted_time: "Added {{time}} ago"
   recent_stories: "Latest stories"
+  story_by: "by {{name}}"
+  anonymously: "anonymously"
+  anonymous: "anonymous"
+  story_location: "to {{link}}"
