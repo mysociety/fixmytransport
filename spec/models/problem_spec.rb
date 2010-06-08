@@ -19,9 +19,17 @@ require 'spec_helper'
 
 describe Problem do
   
-  it 'should be invalid without a description'
+  it 'should be invalid without a description' do 
+    @problem = Problem.new(:transport_mode_id => 5, :location => Route.new)
+    @problem.valid? 
+    @problem.errors.on(:description).should == 'Please enter a description'
+  end
   
-  it 'should be invalid without a subject'
+  it 'should be invalid without a subject' do 
+    @problem = Problem.new(:transport_mode_id => 5, :location => Route.new)
+    @problem.valid? 
+    @problem.errors.on(:subject).should == 'Please enter a subject'
+  end
   
   describe "when finding a location by attributes" do 
         

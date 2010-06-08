@@ -7,7 +7,7 @@ en:
             subject:
               blank: "Please enter a subject"
             description:
-              blank: "Please enter a description of the problem"
+              blank: "Please enter a description"
             transport_mode_id:
               blank: "Please select a transport type"
             location:
