@@ -8,7 +8,7 @@ en:
   email: 'Email'
   name: 'Name'
   location_name: 'Station/stop name'
-  area: 'Town/area'
+  area: 'Town/area/postcode'
   route_number: 'Route'
   location_type: 'Stop, station or route'
   problem_location_found: "We think this is your location:"

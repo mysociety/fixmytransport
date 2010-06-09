@@ -2,8 +2,8 @@ Value	Description	Mode
 GAIR	Airport Building	Air
 GFTD	Ferry Terminal or Dock Building	Ferry / Ship
 GRLS	Rail Station	Rail
-GTMU	Tram / Metro / Underground Station	Metro,Tram
+GTMU	Tram / Metro / Underground Station	Tram / Metro
 GBCS	Bus / Coach Station	Bus,Coach
 GCCH	Coach Service Coverage	Coach
-GCLS	On-street Bus / Coach / Tram stops cluster (more than two stops in the same general location)	Bus,Coach,Tram
-GPBS	On-street Bus/ Coach / Tram stop pair (one in each direction)	Bus,Coach	Bus,Coach,Tram
+GCLS	On-street Bus / Coach / Tram stops cluster (more than two stops in the same general location)	Bus,Coach,Tram / Metro
+GPBS	On-street Bus/ Coach / Tram stop pair (one in each direction)	Bus,Coach	Bus,Coach,Tram / Metro

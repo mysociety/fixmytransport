@@ -1,8 +1,8 @@
 "Value","Description","Nat","On Street","Mode","Type","Version"
-"BCT","On-street Bus / Coach / Tram Stop",,"On street","Bus,Coach","MarkedPoint",1
-"BCT","On-street Bus / Coach / Tram Stop",,"On street","Bus,Coach","UnmarkedPoint",1
-"BCT","On-street Bus / Coach / Tram Stop",,"On street","Bus,Coach","HailAndRide",1
-"BCT","On-street Bus / Coach / Tram Stop",,"On street","Bus,Coach","FlexibleZone",2
+"BCT","On-street Bus / Coach / Tram Stop",,"On street","Bus,Coach,Tram / Metro","MarkedPoint",1
+"BCT","On-street Bus / Coach / Tram Stop",,"On street","Bus,Coach,Tram / Metro","UnmarkedPoint",1
+"BCT","On-street Bus / Coach / Tram Stop",,"On street","Bus,Coach,Tram / Metro","HailAndRide",1
+"BCT","On-street Bus / Coach / Tram Stop",,"On street","Bus,Coach,Tram / Metro","FlexibleZone",2
 "TXR","Taxi Rank (head of)",,"On street","Taxi","TaxiRank",1
 "STR","Shared Taxi Rank (head of)",,"On street","Taxi","SharedTaxiRank",1
 "AIR","Airport Entrance",,"Off street","Air","Entrance",1
@@ -13,9 +13,9 @@
 "RSE","Rail Station Entrance",,"Off street","Rail","Entrance",1
 "RLY","Railway Interchange Area",910,"Off street","Rail","AccessArea",1
 "RPL","Railway Platform",910,"Off street","Rail","Platform",1.2
-"TMU","Tram / Metro / Underground Entrance",,"Off street","Tram,Metro","Entrance",1
-"MET","Underground or Metro Interchange Area",940,"Off street","Tram,Metro","AccessArea",1.2
-"PLT","Underground or Metro platform",940,"Off street","Tram,Metro","Platform",1
+"TMU","Tram / Metro / Underground Entrance",,"Off street","Tram / Metro","Entrance",1
+"MET","Underground or Metro Interchange Area",940,"Off street","Tram / Metro","AccessArea",1.2
+"PLT","Underground or Metro platform",940,"Off street","Tram / Metro","Platform",1
 "BCE","Bus / Coach Station Entrance",,"Off street","Bus,Coach","Entrance",1
 "BST","Bus Coach Station Access Area",900,"Off street","Bus,Coach","AccessArea",1
 "BCS","Bus / Coach bay / stand / stance within Bus / Coach Stations",900,"Off street","Bus,Coach","Bay",1

@@ -27,10 +27,6 @@ four:
   stop_area_type_id: "15"
   transport_mode_id: "7"
 
-five:
-  stop_area_type_id: "15"
-  transport_mode_id: "8"
-
 six:
   stop_area_type_id: "16"
   transport_mode_id: "1"
@@ -50,10 +46,6 @@ nine:
 ten:
   stop_area_type_id: "18"
   transport_mode_id: "2"
-
-eleven:
-  stop_area_type_id: "18"
-  transport_mode_id: "8"
 
 twelve:
   stop_area_type_id: "19"

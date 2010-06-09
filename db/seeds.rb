@@ -11,6 +11,5 @@
                                { :name => 'Air', :naptan_name => 'Air', :active => false, :route_type => nil },
                                { :name => 'Ferry', :naptan_name => 'Ferry / Ship', :active => true, :route_type => 'FerryRoute' },
                                { :name => 'Train', :naptan_name => 'Rail', :active => true, :route_type => 'TrainRoute' },
-                               { :name => 'Metro', :naptan_name => 'Metro', :active => true, :route_type => 'MetroRoute' },
-                               { :name => 'Tram', :naptan_name => 'Tram', :active => true, :route_type => 'TramRoute' }]
+                               { :name => 'Tram/Metro', :naptan_name => 'Tram / Metro', :active => true, :route_type => 'TramMetroRoute' }]
   TransportMode.create(transport_mode_attributes)

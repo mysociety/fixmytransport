@@ -55,16 +55,9 @@ train:
   active: t
   naptan_name: Rail
 
-metro:
-  name: Metro
-  route_type: MetroRoute
+tram_metro:
+  name: Tram/Metro
+  route_type: TramMetroRoute
   id: "7"
   active: t
-  naptan_name: Metro
-
-tram:
-  name: Tram
-  route_type: TramRoute
-  id: "8"
-  active: t
-  naptan_name: Tram
+  naptan_name: Tram / Metro

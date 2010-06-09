@@ -98,4 +98,29 @@ namespace :naptan do
     end
   end
   
+  namespace :temp do 
+    task :merge_tram_and_metro => :environment do 
+      
+      StopAreaType.connection.execute("DELETE FROM transport_mode_stop_area_types")      
+      StopAreaType.connection.execute("DELETE FROM stop_area_types")
+      StopType.connection.execute("DELETE FROM stop_types")
+      #delete tram from transport mode
+      TransportMode.connection.execute("DELETE FROM transport_modes
+                                        WHERE name = 'Tram'")
+      #update naptan name in transport_mode 
+      TransportMode.connection.execute("UPDATE transport_modes 
+                                        SET name = 'Tram/Metro', naptan_name = 'Tram / Metro', route_type = 'TramMetroRoute'
+                                        WHERE name = 'Metro'")
+      
+
+      ENV['FILE'] = File.join(RAILS_ROOT, 'data', 'NaPTAN', 'StopTypes.csv')
+      Rake::Task['naptan:load:stop_types'].execute
+      ENV['FILE'] = File.join(RAILS_ROOT, 'data', 'NaPTAN', 'StopAreaTypes.csv')
+      Rake::Task['naptan:load:stop_area_types'].execute
+      Route.connection.execute("UPDATE routes 
+                                SET type = 'TramMetroRoute'
+                                WHERE type = 'MetroRoute'")
+    end
+  end
+  
 end
