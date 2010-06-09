@@ -121,6 +121,14 @@ describe Gazetteer do
       expect_no_stop(attributes, stops(:tennis_court_inn))
     end
    
+    it 'should return stops matching a name, route and area' do 
+      attributes = { :name => 'Tennis', 
+                     :area => 'SE1 4PF',
+                     :route_number => 'C10', 
+                     :transport_mode_id => 1 }
+      expect_stop(attributes, stops(:tennis_street))
+    end
+    
    end
   
 

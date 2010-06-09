@@ -37,7 +37,7 @@ class Gazetteer
       routes = find_routes_from_attributes(attributes)
       query += ' AND route_segments.route_id in (?)'
       params << routes
-      includes = :route_segments
+      includes = :route_segments_as_from_stop, :route_segments_as_to_stop
     end
     conditions = [query] + params
     stops = Stop.find(:all, :conditions => conditions, 
