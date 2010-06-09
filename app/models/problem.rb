@@ -51,7 +51,7 @@ class Problem < ActiveRecord::Base
     return unless transport_mode_id
     return unless location_attributes_valid?
     location_attributes[:transport_mode_id] = transport_mode_id
-    if !location_attributes[:route_number].blank?
+    if !location_attributes[:route_number].blank? and location_attributes[:name].blank?
       location_search.add_method('Gazetteer.find_routes_from_attributes') if location_search
       self.locations = Gazetteer.find_routes_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
     else

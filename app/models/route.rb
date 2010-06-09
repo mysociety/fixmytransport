@@ -129,10 +129,10 @@ class Route < ActiveRecord::Base
   end
   
   def self.find_all_by_stop_names(first, last, attributes, limit=nil)
-    first_stops = Gazetteer.find_stops_from_attributes(attributes.merge(:area => first))
-    last_stops = Gazetteer.find_stops_from_attributes(attributes.merge(:area => last))
-    first_stops += Gazetteer.find_stops_from_attributes(attributes.merge(:name => first))
-    last_stops += Gazetteer.find_stops_from_attributes(attributes.merge(:name => last))
+    first_stops = Gazetteer.find_stops_from_attributes(attributes.merge(:area => first, :route_number => nil))
+    last_stops = Gazetteer.find_stops_from_attributes(attributes.merge(:area => last, :route_number => nil))
+    first_stops += Gazetteer.find_stops_from_attributes(attributes.merge(:name => first, :route_number => nil))
+    last_stops += Gazetteer.find_stops_from_attributes(attributes.merge(:name => last, :route_number => nil))
     Route.find_all_by_stops([first_stops, last_stops], 
                             attributes[:transport_mode_id], 
                             as_terminus=false, 

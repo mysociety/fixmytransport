@@ -13,6 +13,7 @@ class Gazetteer
     query = 'stop_type in (?)'
     params = [stop_type_codes]
     order = nil
+    includes = nil
     if !attributes[:postcode].blank?
       coord_info = MySociety::MaPit.get_location(attributes[:postcode])
       easting, northing = coord_info['easting'], coord_info['northing']
@@ -32,8 +33,17 @@ class Gazetteer
       params << name
       params << name
     end
+    if !attributes[:route_number].blank?
+      routes = find_routes_from_attributes(attributes)
+      query += ' AND route_segments.route_id in (?)'
+      params << routes
+      includes = :route_segments
+    end
     conditions = [query] + params
-    stops = Stop.find(:all, :conditions => conditions, :limit => limit, :order => order)
+    stops = Stop.find(:all, :conditions => conditions, 
+                            :limit => limit, 
+                            :order => order, 
+                            :include => includes)
     stops
   end
   
