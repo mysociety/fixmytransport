@@ -67,19 +67,9 @@ describe Problem do
     
     it 'should return a stop if one is uniquely identified by the attributes' do 
       stop = mock_model(Stop)
-      Gazetteer.stub!(:find_stops_from_attributes).and_return([stop])
+      Gazetteer.stub!(:find_stops_from_attributes).and_return({:results => [stop], :errors => []})
       attributes = { :name => 'name', :area => 'locality name' }
       expect_location(attributes, 'Stop',  stop)
-    end
-    
-    it 'should return a stop area if that stop area is the common root parent of all stops matching the attributes' do 
-      first_stop = mock_model(Stop)
-      second_stop = mock_model(Stop)
-      stop_area = mock_model(StopArea)
-      Gazetteer.stub!(:find_stops_from_attributes).and_return([first_stop, second_stop])
-      Stop.stub!(:common_area).and_return(stop_area)
-      attributes = { :name => 'name', :area => 'locality name' }
-      expect_location(attributes, 'Stop', stop_area)
     end
     
   end

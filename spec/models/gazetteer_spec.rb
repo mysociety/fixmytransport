@@ -2,45 +2,50 @@ require 'spec_helper'
 
 describe Gazetteer do
 
+  def stub_postcode_finder
+    coords = { "wgs84_lon" => -0.091322256961134, 
+               "easting" => "532578", 
+               "coordsyst" => "G", 
+               "wgs84_lat" => 51.5012344990976, 
+               "northing" => "179760" }
+    MySociety::MaPit.stub!(:get_location).with('SE1 4PF').and_return(coords)
+  end
+  
   describe 'when finding routes from attributes' do 
     
     it 'should find any routes matching the number and transport mode id' do 
       attributes = { :transport_mode_id => 6, 
                      :route_number => '1F50', 
                      :area => '' }
-      routes = Gazetteer.find_routes_from_attributes(attributes)
-      routes.should include(routes(:victoria_to_haywards_heath))
+      results = Gazetteer.find_routes_from_attributes(attributes)
+      results[:results].should include(routes(:victoria_to_haywards_heath))
     end
   
     it 'should find any routes matching the number and transport mode id disregarding case' do 
       attributes = { :transport_mode_id => 6, 
                      :route_number => '1f50', 
                      :area => '' }
-      routes = Gazetteer.find_routes_from_attributes(attributes)
-      routes.should include(routes(:victoria_to_haywards_heath))
+      results = Gazetteer.find_routes_from_attributes(attributes)
+      results[:results].should include(routes(:victoria_to_haywards_heath))
     end
   
     it 'should find a route that can be uniquely identified by number and area' do 
       attributes = { :transport_mode_id => 1, 
                      :route_number => '807', 
                      :area => 'aldershot' }
-      routes = Gazetteer.find_routes_from_attributes(attributes)
-      routes.should include(routes(:aldershot_807_bus))
-      routes.size.should == 1
+      results = Gazetteer.find_routes_from_attributes(attributes)
+      results[:results].should include(routes(:aldershot_807_bus))
+      results[:results].size.should == 1
     end
     
     it 'should find a route that matches a name and passes within a km of a postcode if one is given' do 
-      MySociety::MaPit.stub!(:get_location).with('SE1 4PF').and_return({"wgs84_lon" => -0.091322256961134, 
-                                                                        "easting" => "532578", 
-                                                                        "coordsyst" => "G", 
-                                                                        "wgs84_lat" => 51.5012344990976, 
-                                                                        "northing" => "179760"})
+      stub_postcode_finder
       attributes = { :transport_mode_id => 1, 
                      :route_number => '', 
                      :area => 'SE1 4PF' }
-      routes = Gazetteer.find_routes_from_attributes(attributes)
-      routes.should include(routes(:borough_C10))
-      routes.size.should == 1
+      results = Gazetteer.find_routes_from_attributes(attributes)
+      results[:results].should include(routes(:borough_C10))
+      results[:results].size.should == 1
     end
     
   end
@@ -48,21 +53,17 @@ describe Gazetteer do
   describe 'when finding stops from attributes' do 
 
      def expect_stop(attributes, stop)
-       Gazetteer.find_stops_from_attributes(attributes).include?(stop).should be_true
+       results = Gazetteer.find_stops_from_attributes(attributes)
+       results[:results].include?(stop).should be_true
      end
      
      def expect_no_stop(attributes, stop)
-       Gazetteer.find_stops_from_attributes(attributes).include?(stop).should_not be_true
+       results = Gazetteer.find_stops_from_attributes(attributes)
+       results[:results].include?(stop).should_not be_true
      end
 
      before do 
-       StopType.stub!(:codes_for_transport_mode).with(1).and_return(['BCT'])
-       MySociety::MaPit.stub!(:get_location).with('SE1 4PF').and_return({"wgs84_lon" => -0.091322256961134, 
-                                                                         "easting" => "532578", 
-                                                                         "coordsyst" => "G", 
-                                                                         "wgs84_lat" => 51.5012344990976, 
-                                                                         "northing" => "179760"})
-       
+       stub_postcode_finder
      end
 
      it 'should return stops that match the full common name, locality name and list of stop type codes' do     
@@ -129,7 +130,49 @@ describe Gazetteer do
       expect_stop(attributes, stops(:tennis_street))
     end
     
-   end
-  
+    it 'should not return stops if the area is given but not recognized' do 
+      attributes = { :name => 'Tennis', 
+                     :area => 'Unrecognizable',
+                     :route_number => 'C10', 
+                     :transport_mode_id => 1 }
+      Gazetteer.find_stops_from_attributes(attributes)[:results].size.should == 0
+    end
+    
+    it 'should return an error if the area is given but not recognized' do 
+      attributes = { :name => 'Tennis', 
+                     :area => 'Unrecognizable',
+                     :route_number => 'C10', 
+                     :transport_mode_id => 1 }
+      Gazetteer.find_stops_from_attributes(attributes)[:errors].should == [:area_not_found]
+    end
+    
+    it 'should not return stops if the postcode is given but not found' do 
+      error = MySociety::RABX::RABXError.new(2002, "Postcode 'SE2 4PF' not found", nil)
+      MySociety::MaPit.stub!(:get_location).with('SE2 4PF').and_raise(error)
+      attributes = { :name => 'Tennis',
+                     :area => 'SE2 4PF',
+                     :route_number => 'C10', 
+                     :transport_mode_id => 1 }
+      Gazetteer.find_stops_from_attributes(attributes)[:results].size.should == 0
+    end
+    
+    it 'should return an error if the postcode is given but not recognized' do 
+      error = MySociety::RABX::RABXError.new(2002, "Postcode 'SE2 4PF' not found", nil)
+      MySociety::MaPit.stub!(:get_location).with('SE2 4PF').and_raise(error)
+      attributes = { :name => 'Tennis', 
+                     :area => 'SE2 4PF',
+                     :route_number => 'C10', 
+                     :transport_mode_id => 1 }
+      Gazetteer.find_stops_from_attributes(attributes)[:errors].should == [:postcode_not_found]
+    end
+    
+    it 'should return a stop area if that stop area is the common root parent of all stops matching the attributes' do 
+      attributes = { :name => 'Victoria', 
+                     :area => 'London',
+                     :transport_mode_id => 6 }
+      Gazetteer.find_stops_from_attributes(attributes)[:results].should == [stop_areas(:victoria_station_root)]
+    end
+    
+  end
 
 end

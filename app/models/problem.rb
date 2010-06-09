@@ -22,7 +22,7 @@ class Problem < ActiveRecord::Base
   accepts_nested_attributes_for :reporter
   belongs_to :location, :polymorphic => true
   belongs_to :transport_mode
-  attr_accessor :location_attributes, :locations, :location_search
+  attr_accessor :location_attributes, :locations, :location_search, :location_errors
   after_create :send_confirmation_email
   before_create :generate_confirmation_token
   named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
@@ -53,13 +53,15 @@ class Problem < ActiveRecord::Base
     location_attributes[:transport_mode_id] = transport_mode_id
     if !location_attributes[:route_number].blank? and location_attributes[:name].blank?
       location_search.add_method('Gazetteer.find_routes_from_attributes') if location_search
-      self.locations = Gazetteer.find_routes_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
+      results = Gazetteer.find_routes_from_attributes(location_attributes, :limit => MAX_LOCATION_RESULTS)
     else
-      self.locations = Gazetteer.find_stops_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
-      if self.locations.size > 1 and stop_area = Stop.common_area(self.locations, transport_mode_id)
-        self.locations = [stop_area]
-        location_search.add_method('Stop.common_area') if location_search
-      end
+      location_search.add_method('Gazetteer.find_stops_from_attributes') if location_search
+      results = Gazetteer.find_stops_from_attributes(location_attributes, :limit => MAX_LOCATION_RESULTS)
+    end
+    self.locations = results[:results]
+    self.location_errors = results[:errors]
+    if self.locations.empty? && self.location_errors.empty? 
+      self.location_errors << :problem_location_not_found
     end
   end
   

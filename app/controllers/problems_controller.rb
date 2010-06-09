@@ -30,7 +30,7 @@ class ProblemsController < ApplicationController
         @title = t :multiple_locations
         render :choose_location
       else
-        @title = t :problem_location_not_found
+        @title = t :new_story
         render :new
       end
     end

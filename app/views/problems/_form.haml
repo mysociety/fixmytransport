@@ -1,6 +1,6 @@
-- if !@problem.errors.empty?
-  .form-error
-    = t(:problem_form_error)
+- if @problem.location_errors and !@problem.location_errors.empty? 
+  - @problem.location_errors.each do |location_error|
+    .location-error= t(location_error)
 .fieldset
   != form.hidden_field :location_id 
   - if @problem.errors.on(:location)

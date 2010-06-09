@@ -12,7 +12,9 @@ en:
   route_number: 'Route'
   location_type: 'Stop, station or route'
   problem_location_found: "We think this is your location:"
-  problem_location_not_found: "We couldn't find your location"
+  problem_location_not_found: "Sorry, we couldn't find that location."
+  postcode_not_found: "That postcode wasn't recognized."
+  area_not_found: "We couldn't find a town or area that matches what you entered."
   go: Go!
   multiple_locations: "More than one match"
   multiple_locations_intro: "We found more than one match for your description. We show up to {{num_locations}} matches, please try a different search if yours is not here."
