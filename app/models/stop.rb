@@ -148,19 +148,6 @@ class Stop < ActiveRecord::Base
     stops.empty? ? nil : stops.first
   end
   
-  # Find the nearest stops to the centroid of a postcode
-  def self.find_by_postcode(postcode, transport_mode_id, options={})
-    stop_types = StopType.codes_for_transport_mode(transport_mode_id)
-    coord_info = MySociety::MaPit.get_location(postcode)
-    lon, lat = coord_info['easting'], coord_info['northing']
-    stops = find(:all, :conditions => ['stop_type in (?)', stop_types],
-                       :order => "ST_Distance(
-                                    ST_GeomFromText('POINT(#{lon} #{lat})', #{BRITISH_NATIONAL_GRID}), 
-                                    stops.coords) asc",
-                       :limit => options[:limit])
-    
-  end
-  
   def self.find_by_atco_code(atco_code, options={})
     includes = options[:includes] or {}
     find(:first, :conditions => ["lower(atco_code) = ?", atco_code.downcase], :include => includes)

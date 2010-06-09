@@ -6,3 +6,6 @@ one:
 two:
   locality: north_town
   route: aldershot_807_bus
+three: 
+  locality: the_borough
+  route: borough_C10

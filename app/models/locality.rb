@@ -44,4 +44,12 @@ class Locality < ActiveRecord::Base
     with_descendants = localities.map{ |locality| [locality, locality.descendants] }.flatten.uniq
   end
   
+  def self.find_by_coordinates(easting, northing)
+    distance_clause = "ST_Distance(
+                       ST_GeomFromText('POINT(#{easting} #{northing})', #{BRITISH_NATIONAL_GRID}), 
+                       localities.coords)"
+    localities = find(:all, :conditions => ["#{distance_clause} < 1000"], 
+                      :order => "#{distance_clause} asc", :limit => 1)
+  end
+  
 end

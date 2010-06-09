@@ -97,25 +97,6 @@ describe Stop do
     
   end
   
-  describe 'when finding by postcode' do 
-  
-    before do 
-      MySociety::MaPit.stub!(:get_location).and_return({"wgs84_lon" => -0.091322256961134, 
-                                                        "easting" => "532578", 
-                                                        "coordsyst" => "G", 
-                                                        "wgs84_lat" => 51.5012344990976, 
-                                                        "northing" => "179760"})
-    end
-    
-    it 'should find the closest stop to the postcode centroid' do 
-      nearest_train_stops = Stop.find_by_postcode('SE1 4PF', 6)
-      nearest_train_stops.first.should == stops(:victoria_station_two)
-      nearest_bus_stops = Stop.find_by_postcode('SE1 4PF', 1)
-      nearest_bus_stops.first.should == stops(:tennis_street)
-    end
-    
-  end
-  
   describe 'when finding a common area' do 
     
     it 'should return a common root stop area that all stops in the list belong to' do 

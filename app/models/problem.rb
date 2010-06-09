@@ -34,12 +34,6 @@ class Problem < ActiveRecord::Base
     if ! location_attributes_valid?
       errors.add(:location_attributes, ActiveRecord::Error.new(self, :location_attributes, :blank).to_s)
     end
-    if !location_attributes[:route_number].blank?
-      self.location_type = 'Route'
-    end
-    if !location_attributes[:name].blank?
-      self.location_type = 'Stop'
-    end
   end
   
   def location_attributes_valid?
@@ -57,43 +51,16 @@ class Problem < ActiveRecord::Base
     return unless transport_mode_id
     return unless location_attributes_valid?
     location_attributes[:transport_mode_id] = transport_mode_id
-    using_postcode = false
-    if ! location_attributes[:area].blank?
-      using_postcode = MySociety::Validate.is_valid_postcode(location_attributes[:area])
-      postcode = location_attributes[:area]
-      location_type = 'Stop' if ! location_type
-    end
-    if location_type == 'Stop'
-      if using_postcode
-        location_search.add_method('Stop.find_by_postcode') if location_search      
-        self.locations = Stop.find_by_postcode(postcode, transport_mode_id, options={:limit => MAX_LOCATION_RESULTS})
-      else
-        location_search.add_method('Gazetteer.find_stops_from_attributes') if location_search
-        self.locations = Gazetteer.find_stops_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
-      end
-      if self.locations.size == 1  
-        return
-      end
-      if self.locations.size > 1 
-        if stop_area = Stop.common_area(self.locations, transport_mode_id)
-          self.locations = [stop_area]
-          location_search.add_method('Stop.common_area') if location_search
-          return
-        end
-      end
+    if !location_attributes[:route_number].blank?
+      location_search.add_method('Gazetteer.find_routes_from_attributes') if location_search
+      self.locations = Gazetteer.find_routes_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
     else
-      routes = Route.find_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
-      location_search.add_method('Route.find_from_attributes') if location_search
-      self.locations = routes
-      if self.locations.size == 1
-        return
-      end
-      if self.locations.empty? 
-        location_search.add_method('Gazetteer.find_routes_from_attributes') if location_search
-        self.locations = Gazetteer.find_routes_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
+      self.locations = Gazetteer.find_stops_from_attributes(location_attributes, limit=MAX_LOCATION_RESULTS)
+      if self.locations.size > 1 and stop_area = Stop.common_area(self.locations, transport_mode_id)
+        self.locations = [stop_area]
+        location_search.add_method('Stop.common_area') if location_search
       end
     end
-    return
   end
   
   # Makes a random token, suitable for using in URLs e.g confirmation messages.

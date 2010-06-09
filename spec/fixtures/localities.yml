@@ -277,3 +277,18 @@ shirehampton:
   short_name: ""
   coords: 0101000020346C000000000000E88E15410000000078980541
   easting: "353210"
+the_borough: 
+  northing: "179690"
+  source_locality_type: Lo
+  admin_area_id: "22"
+  national: 
+  name: The Borough
+  grid_type: U
+  revision_number: "0"
+  code: E0034790
+  qualifier_name: London
+  district_id: "83"
+  modification: ""
+  short_name: ""
+  coords: 0101000020346C000000000000883F20410000000050EF0541
+  easting: "532420"

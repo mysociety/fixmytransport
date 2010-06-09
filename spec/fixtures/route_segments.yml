@@ -48,3 +48,15 @@ eight:
   to_stop: wybourne_lane
   from_terminus: f
   to_terminus: t
+nine:
+  route: borough_C10
+  from_stop: tennis_street
+  to_stop: borough_station  
+  from_terminus: f
+  to_terminus: f
+ten: 
+  route: borough_C10
+  from_stop: staple_street
+  to_stop: tennis_street
+  from_terminus: f
+  to_terminus: f      

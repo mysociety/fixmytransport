@@ -494,3 +494,84 @@ tennis_street:
   indicator: Stop
   lat: "51.50098"
   easting: "532651"
+tennis_court_inn: 
+  status: act
+  lon: "-2.48769"
+  northing: "173634"
+  locality_id: "7794"
+  grid_type: U
+  naptan_code: sglgmpd
+  revision_number: "0"
+  landmark: ""
+  common_name: Tennis Court Inn
+  administrative_area_code: "051"
+  bearing: E
+  plate_code: ""
+  stop_type: BCT
+  locality_centre: f
+  suburb: ""
+  modification: new
+  bus_stop_type: MKD
+  crossing: Grimsbury Road
+  short_common_name: ""
+  atco_code: 0170SGB20127
+  town: ""
+  street: Hill Street
+  coords: 0101000020346C0000000000001C5A16410000000010320541
+  indicator: ""
+  lat: "51.46067"
+  easting: "366215"
+borough_station: 
+  status: act
+  lon: "-0.09409"
+  northing: "179711"
+  locality_id: "19160"
+  grid_type: U
+  naptan_code: ""
+  revision_number: "7"
+  landmark: 
+  common_name: Borough Station
+  administrative_area_code: 082
+  bearing: N
+  plate_code: ""
+  stop_type: BCT
+  locality_centre: f
+  suburb: ""
+  modification: rev
+  bus_stop_type: MKD
+  crossing: 
+  short_common_name: ""
+  atco_code: 490000026D
+  town: ""
+  street: BOROUGH HIGH STREET
+  coords: 0101000020346C000000000000463F204100000000F8EF0541
+  indicator: Stop D
+  lat: "51.50085"
+  easting: "532387"
+staple_street:
+  status: act
+  lon: "-0.0876"
+  northing: "179625"
+  locality_id: "19160"
+  grid_type: U
+  naptan_code: ""
+  revision_number: "3"
+  landmark: 
+  common_name: Staple Street
+  administrative_area_code: 082
+  bearing: NW
+  plate_code: ""
+  stop_type: BCT
+  locality_centre: f
+  suburb: ""
+  modification: rev
+  bus_stop_type: MKD
+  crossing: 
+  short_common_name: ""
+  atco_code: 490017362W
+  town: ""
+  street: 
+  coords: 0101000020346C000000000000D04220410000000048ED0541
+  indicator: Stop
+  lat: "51.49997"
+  easting: "532840"

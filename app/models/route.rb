@@ -128,30 +128,6 @@ class Route < ActiveRecord::Base
     routes
   end
   
-  def self.find_all_by_transport_mode_id(transport_mode_id, route_number=nil, localities=nil, limit=nil)
-    select_clause = 'SELECT distinct routes.*'
-    from_clause = 'FROM routes'
-    where_clause = 'WHERE transport_mode_id = ?'
-    params = [transport_mode_id]
-    if !localities.empty?
-      from_clause += ", route_localities"
-      where_clause += " AND route_localities.route_id = routes.id
-                        AND route_localities.locality_id in (?)"
-      params << localities
-    end
-    if !route_number.blank?
-      route_number = route_number.downcase
-      where_clause += " AND (lower(routes.number) = ? OR lower(routes.name) = ?)"
-      params << route_number
-      params << route_number
-    end
-    if limit 
-      where_clause += " limit #{limit}"
-    end
-    params = ["#{select_clause} #{from_clause} #{where_clause}"] + params
-    find_by_sql(params)
-  end
-  
   def self.find_all_by_stop_names(first, last, attributes, limit=nil)
     first_stops = Gazetteer.find_stops_from_attributes(attributes.merge(:area => first))
     last_stops = Gazetteer.find_stops_from_attributes(attributes.merge(:area => last))
