@@ -118,6 +118,10 @@ form.new_problem label{
   width: 10em;  
 }
 
+.location-error {
+  color: #CC0000;
+}
+
 /* Stop/stop area/route page */
 
 .stop, .stop-area, .route { 
