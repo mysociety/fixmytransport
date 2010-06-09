@@ -118,7 +118,7 @@ describe Stop do
     end
     
     it 'should remove "Underground Station" from the end of the name' do 
-      Stop.new(:common_name => "Kensington Underground Station").name_without_suffix(transport_modes(:metro)).should == "Kensington"
+      Stop.new(:common_name => "Kensington Underground Station").name_without_suffix(transport_modes(:tram_metro)).should == "Kensington"
     end
     
   end

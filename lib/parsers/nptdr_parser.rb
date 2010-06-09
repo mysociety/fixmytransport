@@ -25,7 +25,7 @@ class Parsers::NptdrParser
     elsif vehicle_code == 'C'
       transport_mode_name = 'Coach'
     elsif vehicle_code == 'M'
-      transport_mode_name = 'Metro'
+      transport_mode_name = 'Tram/Metro'
     elsif vehicle_code == 'A'
       transport_mode_name = 'Air'
     elsif vehicle_code == 'F'
