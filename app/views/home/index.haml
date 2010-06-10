@@ -1,6 +1,7 @@
 .homepage
   .latest-stories
     %h3= t(:latest_stories)
+    = link_to(t(:feed), stories_url(:format => 'atom'))
     = render :partial => 'story', :collection => @stories
     %span.more-link=link_to t(:more_recent_stories), stories_url
   .new-story
