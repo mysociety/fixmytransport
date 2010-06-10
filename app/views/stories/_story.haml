@@ -1,6 +1,7 @@
 .story
   %span.subject
     %b= story.subject 
+  t(:added)
   %span.author= story.reporter.name.blank? ? t(:anonymously) : t(:story_by, :name => story.reporter.name)
   %span.posted-time= t(:story_posted_time, :time => time_ago_in_words(story.created_at))
   %span.transport-location!= t(:story_location, :link => link_to(story.location.description, location_url(story.location)))

@@ -25,4 +25,4 @@
       -@stop.stop_areas.each do |stop_area|
         %span.stop-area= link_to(stop_area.name, stop_area_url(stop_area))
 = render :partial => 'shared/new_story', :locals => { :location => @stop }
-= render :partial => 'shared/story', :collection => @stop.stories.confirmed
+= render :partial => 'shared/story', :collection => @stop.stories.confirmed, :locals => {:context => :location}

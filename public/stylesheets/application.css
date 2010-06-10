@@ -101,6 +101,11 @@ ul.navigation li {
   width: 15em;
 }
 
+/* Story lists */
+
+.story .details {
+  font-size: 0.8em;
+}
 /* Forms */
 
 label {
