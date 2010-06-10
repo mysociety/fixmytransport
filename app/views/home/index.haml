@@ -1,2 +1,12 @@
-.home-nav
-  .home-nav-item= link_to t(:new_story), new_story_url
+.homepage
+  .latest-stories
+    %h3= t(:latest_stories)
+    = render :partial => 'story', :collection => @stories
+    %span.more-link=link_to t(:more_recent_stories), stories_url
+  .new-story
+    %h3= t(:got_a_story) 
+    %p Is it comic, romantic, unfortunate or bizarre? 
+    %p Where did it take place? 
+    - form_for @story, :url => find_stories_path do |form| 
+      = render :partial => 'problems/form', :locals => { :form => form }
+      != submit_tag t(:go)

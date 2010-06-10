@@ -74,4 +74,8 @@ class Problem < ActiveRecord::Base
     ProblemMailer.deliver_story_confirmation(reporter, self, token)
   end
   
+  def self.find_recent(number)
+    find(:all, :order => 'created_at desc', :limit => number)
+  end
+  
 end

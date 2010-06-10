@@ -1,19 +1,19 @@
-- if @problem.location_errors and !@problem.location_errors.empty? 
-  - @problem.location_errors.each do |location_error|
+- if @story.location_errors and !@story.location_errors.empty? 
+  - @story.location_errors.each do |location_error|
     .location-error= t(location_error)
 .fieldset
   != form.hidden_field :location_id 
-  - if @problem.errors.on(:location)
-    .form-field-error= error_message_on @problem, :location  
+  - if @story.errors.on(:location)
+    .form-field-error= error_message_on @story, :location  
   .form-field
-    - if @problem.errors.on(:transport_mode_id)
-      .form-field-error= error_message_on @problem, :transport_mode_id
+    - if @story.errors.on(:transport_mode_id)
+      .form-field-error= error_message_on @story, :transport_mode_id
     %label{:for => 'transport_mode_id'}
       =t(:transport_mode)
     .transport-mode
       != transport_mode_radio_buttons
-    - if @problem.errors.on(:location_attributes)
-      .form-field-error= error_message_on @problem, :location_attributes
+    - if @story.errors.on(:location_attributes)
+      .form-field-error= error_message_on @story, :location_attributes
     .form-field
       != label_tag 'problem[location_attributes][name]', t(:location_name)
       != text_field_tag 'problem[location_attributes][name]', location_param(:name)
@@ -23,5 +23,4 @@
     .form-field
       != label_tag 'problem[location_attributes][route_number]', t(:route_number)
       != text_field_tag 'problem[location_attributes][route_number]', location_param(:route_number)
-      %p For train routes, you can enter start and end stations e.g. "London to Brighton" in the route box.
 

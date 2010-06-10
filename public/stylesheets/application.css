@@ -41,7 +41,7 @@ h2 {
 
 .content {
   margin: 0 auto;
-  max-width: 65em;
+  max-width: 70em;
   position: relative;
   width: 100%;
   padding: 0.5em;
@@ -63,9 +63,36 @@ ul.navigation li {
 
 /* Home page */
 
-.home-nav-item {
-  margin: 1em;
+.homepage .new-story, 
+.homepage .latest-stories {
+  width: 42%;
+  margin-bottom: 2em;
+}
+
+.homepage .new-story { 
+  margin-left: 3em;
+}
+
+.homepage .latest-stories {
+  margin-right: 3em;
+  float: right;
+}
+
+.homepage .latest-stories .more-link {
+  float: right;
+}
+
+.homepage  h3 {
+  margin: 0 0 1em 0;
   text-align: center;
+}
+
+.homepage .story {
+  padding: 1em;
+}
+
+.homepage input[type=text] {
+  width: 25em;
 }
 
 /* Forms */

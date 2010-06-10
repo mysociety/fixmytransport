@@ -9,9 +9,6 @@
   %body
     %h2= link_to_unless_current(t(:site_name), root_url) 
     %span#site-tagline= t(:site_tagline)
-    %ul.navigation 
-      %li=link_to t(:new_story), new_story_url
-      %li=link_to t(:recent_stories), stories_url
     - [:notice, :error, :message].each do |key| 
       - unless flash[key].blank? 
         %p{ :class => "flash flash_#{key}" }!= flash[key]
@@ -22,5 +19,5 @@
       %ul
         %li.footer-item!= t(:built_by, :link => link_to('mySociety', 'http://mysociety.org'))
         %li.footer-item!= link_to t(:about), about_path
-
+        %li.footer-item!= link_to t(:feedback), feedback_path
       

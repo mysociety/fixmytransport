@@ -1,13 +1,13 @@
 - content_for :javascript do 
   != map_javascript_include_tags
-- if @problem.location
+- if @story.location
   #map-col
     #map
     :javascript
-      var areaStops = #{location_stops_js([@problem.location])}
+      var areaStops = #{location_stops_js([@story.location])}
       jQuery(document).ready(function(){
          area_init();
       });
   .problem-info
-    %h3= @problem.subject
-    %p.problem-description= @problem.description
+    %h3= @story.subject
+    %p.problem-description= @story.description
