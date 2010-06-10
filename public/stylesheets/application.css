@@ -41,7 +41,7 @@ h2 {
 
 .content {
   margin: 0 auto;
-  max-width: 70em;
+  max-width: 60em;
   position: relative;
   width: 100%;
   padding: 0.5em;
@@ -49,7 +49,7 @@ h2 {
 
 input[type=text], 
 textarea {
-  font-size: 1em;
+  font-size: 0.9em;
   font-family: verdana, sans-serif;
 }
 
@@ -71,16 +71,16 @@ ul.navigation li {
 
 .homepage .new-story, 
 .homepage .latest-stories {
-  width: 42%;
+  width: 45%;
   margin-bottom: 2em;
 }
 
 .homepage .new-story { 
-  margin-left: 3em;
+  margin-left: 4%;
 }
 
 .homepage .latest-stories {
-  margin-right: 3em;
+  margin-right: 4%;
   float: right;
 }
 
@@ -127,7 +127,7 @@ input, textarea{
 #map-col {
   float: right; 
   max-width: 400px;
-  margin-right: 3em;
+  margin-right: 2em;
 }
 
 #map {
@@ -204,7 +204,7 @@ form.new_story label{
 
 .stops li {
   text-align: left;
-  margin-left: 3em;
+  margin-left: 4%;
   font-size: 0.8em;
   max-width: 42.5%;
 }

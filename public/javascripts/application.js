@@ -11,7 +11,7 @@ jQuery(document).ready(function() {
        activeTextColor: '#000000'
      });
   jQuery('#story_location_attributes_route_number').autofill({
-      value: 'e.g. C10',
+      value: 'e.g. C10, Cardiff to Exeter',
       defaultTextColor: '#595454',
       activeTextColor: '#000000'
      });

@@ -16,7 +16,7 @@
 #
 class Story < ActiveRecord::Base
   validates_presence_of :transport_mode_id, :unless => :location
-  validates_presence_of :description, :subject, :if => :location
+  validates_presence_of :description, :subject, :category, :if => :location
   validate :validate_location_attributes
   belongs_to :reporter, :class_name => 'User'
   accepts_nested_attributes_for :reporter
@@ -28,7 +28,10 @@ class Story < ActiveRecord::Base
   named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
   cattr_reader :per_page, :categories
   @@per_page = 10
-  @@categories = ['Comic', 'Romantic', 'Unfortunate', 'Bizarre']
+  @@categories = {'Comic' => 'comic', 
+                  'Romantic' => 'romantic', 
+                  'Unfortunate' => 'unfortunate', 
+                  'Bizarre' => 'bizarre'}
   
   def validate_location_attributes
     return true if location

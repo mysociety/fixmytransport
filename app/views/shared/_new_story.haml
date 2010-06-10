@@ -1,6 +1,11 @@
 - form_for location, :url => location_path(location) do |f| 
   .fieldset
     - f.fields_for :stories, @new_story do |story_fields|
+      - if location.errors.on('stories.category')
+        .form-field-error= error_message_on location, 'stories.category'
+      .form-field
+        = story_fields.label :category
+        != story_fields.select("category", Story.categories, { :include_blank => true })
       - if location.errors.on('stories.subject')
         .form-field-error= error_message_on location, 'stories.subject'
       .form-field

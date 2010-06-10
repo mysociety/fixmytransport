@@ -18,9 +18,10 @@
       != label_tag 'story[location_attributes][name]', t(:location_name)
       != text_field_tag 'story[location_attributes][name]', location_param(:name)
     .form-field
-      != label_tag 'story[location_attributes][area]', t(:area)
-      != text_field_tag 'story[location_attributes][area]', location_param(:area)
-    .form-field
       != label_tag 'story[location_attributes][route_number]', t(:route_number)
       != text_field_tag 'story[location_attributes][route_number]', location_param(:route_number)
+    .form-field
+      != label_tag 'story[location_attributes][area]', t(:area)
+      != text_field_tag 'story[location_attributes][area]', location_param(:area)
+
 
