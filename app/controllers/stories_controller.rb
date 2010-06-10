@@ -1,6 +1,7 @@
 class StoriesController < ApplicationController
 
   def new
+    @stories = Story.find_recent(5)
     @title = t :new_story
     @story = Story.new()
   end
