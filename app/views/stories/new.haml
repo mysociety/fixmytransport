@@ -1,0 +1,13 @@
+.homepage
+  .latest-stories
+    %h3= t(:latest_stories)
+    = link_to(t(:feed), stories_url(:format => 'atom'))
+    = render :partial => 'story', :collection => @stories
+    %span.more-link=link_to t(:more_recent_stories), stories_url
+  .new-story
+    %h3= t(:got_a_story) 
+    %p Is it comic, romantic, unfortunate or bizarre? 
+    %p Where did it take place? 
+    - form_for @story, :url => find_stories_path do |form| 
+      = render :partial => 'stories/form', :locals => { :form => form }
+      != submit_tag t(:go)

@@ -2,7 +2,7 @@ class StopsController < LocationsController
   
   def show
     @stop = Stop.find(params[:id])
-    @new_problem = Problem.new(:reporter => User.new)
+    @new_story = Story.new(:reporter => User.new)
     location_search.add_location(@stop) if location_search
   end
   

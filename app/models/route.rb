@@ -19,8 +19,8 @@ class Route < ActiveRecord::Base
   has_many :to_stops, :through => :route_segments, :class_name => 'Stop'
   belongs_to :transport_mode
   validates_presence_of :number
-  has_many :problems, :as => :location, :order => 'created_at desc'
-  accepts_nested_attributes_for :problems
+  has_many :stories, :as => :location, :order => 'created_at desc'
+  accepts_nested_attributes_for :stories
   has_many :route_localities
   has_many :localities, :through => :route_localities
   cattr_reader :per_page
@@ -180,7 +180,7 @@ class Route < ActiveRecord::Base
   end
   
   def self.merge_duplicate_route(duplicate, original)
-    raise "Can't merge route with problems: #{duplicate.inspect}" if !duplicate.problems.empty?
+    raise "Can't merge route with stories: #{duplicate.inspect}" if !duplicate.stories.empty?
     duplicate.route_operators.each do |route_operator|
       if ! original.route_operators.detect { |existing| existing.operator == route_operator.operator }
         original.route_operators.build(:operator => route_operator.operator)

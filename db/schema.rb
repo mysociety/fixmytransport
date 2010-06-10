@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100607162521) do
+ActiveRecord::Schema.define(:version => 20100610153811) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -105,20 +105,6 @@ ActiveRecord::Schema.define(:version => 20100607162521) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "short_name"
-  end
-
-  create_table "problems", :force => true do |t|
-    t.text     "subject"
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "reporter_id"
-    t.integer  "stop_area_id"
-    t.integer  "location_id"
-    t.string   "location_type"
-    t.integer  "transport_mode_id"
-    t.boolean  "confirmed",         :default => false
-    t.text     "token"
   end
 
   create_table "regions", :force => true do |t|
@@ -299,6 +285,20 @@ ActiveRecord::Schema.define(:version => 20100607162521) do
   add_index "stops", ["locality_id", "stop_type"], :name => "index_stops_on_locality_and_stop_type"
   add_index "stops", ["locality_id"], :name => "index_stops_on_locality_id"
 
+  create_table "stories", :force => true do |t|
+    t.text     "subject"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "reporter_id"
+    t.integer  "stop_area_id"
+    t.integer  "location_id"
+    t.string   "location_type"
+    t.integer  "transport_mode_id"
+    t.boolean  "confirmed",         :default => false
+    t.text     "token"
+  end
+
   create_table "transport_mode_stop_area_types", :force => true do |t|
     t.integer  "transport_mode_id"
     t.integer  "stop_area_type_id"
@@ -329,8 +329,6 @@ ActiveRecord::Schema.define(:version => 20100607162521) do
     t.datetime "updated_at"
   end
 
-  add_foreign_key "problems", "users", :name => "problems_reporter_id_fk", :column => "reporter_id", :dependent => :nullify
-
   add_foreign_key "route_operators", "operators", :name => "route_operators_operator_id_fk", :dependent => :nullify
   add_foreign_key "route_operators", "routes", :name => "route_operators_route_id_fk", :dependent => :nullify
 
@@ -341,6 +339,8 @@ ActiveRecord::Schema.define(:version => 20100607162521) do
 
   add_foreign_key "stop_area_memberships", "stop_areas", :name => "stop_area_memberships_stop_area_id_fk"
   add_foreign_key "stop_area_memberships", "stops", :name => "stop_area_memberships_stop_id_fk"
+
+  add_foreign_key "stories", "users", :name => "problems_reporter_id_fk", :column => "reporter_id", :dependent => :nullify
 
   add_foreign_key "transport_mode_stop_area_types", "transport_modes", :name => "transport_mode_stop_area_types_transport_mode_id_fk"
 

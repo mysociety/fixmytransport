@@ -1,13 +1,13 @@
-class ProblemsController < ApplicationController
+class StoriesController < ApplicationController
 
   def new
     @title = t :new_story
-    @story = Problem.new()
+    @story = Story.new()
   end
   
   def index
     @title = t(:recent_stories)
-    @stories = Problem.paginate( :page => params[:page], 
+    @stories = Story.paginate( :page => params[:page], 
                                   :conditions => ['confirmed = ?', true],
                                   :order => 'created_at DESC' )
     respond_to do |format|
@@ -18,9 +18,9 @@ class ProblemsController < ApplicationController
   
   def find
     @location_search = LocationSearch.new_search!(session_id, params)
-    problem_attributes = params[:problem]
-    problem_attributes[:location_search] = @location_search
-    @story = Problem.new(problem_attributes)
+    story_attributes = params[:story]
+    story_attributes[:location_search] = @location_search
+    @story = Story.new(story_attributes)
     if !@story.valid? 
       @title = t :new_story
       render :new
@@ -44,7 +44,7 @@ class ProblemsController < ApplicationController
   end
   
   def confirm
-    @story = Problem.find_by_token(params[:email_token])
+    @story = Story.find_by_token(params[:email_token])
     if !@story
       @error = t(:story_not_found)
     else
@@ -53,7 +53,7 @@ class ProblemsController < ApplicationController
   end
   
   def show
-    @story = Problem.find(params[:id])
+    @story = Story.find(params[:id])
     @title = @story.subject
   end
   

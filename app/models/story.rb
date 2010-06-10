@@ -1,7 +1,7 @@
 # == Schema Information
 # Schema version: 20100506162135
 #
-# Table name: problems
+# Table name: stories
 #
 #  id                :integer         not null, primary key
 #  subject           :text
@@ -14,7 +14,7 @@
 #  location_type     :string(255)
 #  transport_mode_id :integer
 #
-class Problem < ActiveRecord::Base
+class Story < ActiveRecord::Base
   validates_presence_of :transport_mode_id, :unless => :location
   validates_presence_of :description, :subject, :if => :location
   validate :validate_location_attributes
@@ -61,7 +61,7 @@ class Problem < ActiveRecord::Base
     self.locations = results[:results]
     self.location_errors = results[:errors]
     if self.locations.empty? && self.location_errors.empty? 
-      self.location_errors << :problem_location_not_found
+      self.location_errors << :story_location_not_found
     end
   end
   
@@ -71,7 +71,7 @@ class Problem < ActiveRecord::Base
   end
   
   def send_confirmation_email
-    ProblemMailer.deliver_story_confirmation(reporter, self, token)
+    StoryMailer.deliver_story_confirmation(reporter, self, token)
   end
   
   def self.find_recent(number)

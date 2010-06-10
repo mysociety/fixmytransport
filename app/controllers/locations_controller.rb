@@ -25,7 +25,7 @@ class LocationsController < ApplicationController
       flash[:notice] = t(:confirmation_sent)
       redirect_to location_url(location)
     else
-      @new_problem = location.problems.detect{ |problem| problem.new_record? }
+      @new_story = location.stories.detect{ |story| story.new_record? }
       render :show 
     end
   end

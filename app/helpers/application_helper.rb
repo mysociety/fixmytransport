@@ -8,7 +8,7 @@ module ApplicationHelper
   def transport_mode_radio_buttons
     tags = []
     TransportMode.active.find(:all).each do |transport_mode| 
-      tag = radio_button 'problem', 'transport_mode_id', transport_mode.id, {:class => 'transport-mode'}
+      tag = radio_button 'story', 'transport_mode_id', transport_mode.id, {:class => 'transport-mode'}
       tag += transport_mode.name
       tags << tag
     end
@@ -16,18 +16,18 @@ module ApplicationHelper
   end
   
   def location_param(param_name)
-    h(params[:problem][:location_attributes][param_name]) rescue nil
+    h(params[:story][:location_attributes][param_name]) rescue nil
   end
   
-  def location_type_radio_buttons(problem)
+  def location_type_radio_buttons(story)
     tags = []
     location_types = { 'Stop' => 'Stop', 
                        'StopArea' => 'Station', 
                        'Route' => 'Route'}
               
     location_types.keys.sort.each do |location_class|
-      checked = problem.location_type == location_class
-      tag = radio_button 'problem', 'location_type', location_class, {:class => 'location-type'}
+      checked = story.location_type == location_class
+      tag = radio_button 'story', 'location_type', location_class, {:class => 'location-type'}
       tag += location_types[location_class]
       tags << tag
     end

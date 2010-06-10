@@ -1,24 +1,24 @@
 - form_for location, :url => location_path(location) do |f| 
   .fieldset
-    - f.fields_for :problems, @new_problem do |problem_fields|
-      - if location.errors.on('problems.subject')
-        .form-field-error= error_message_on location, 'problems.subject'
+    - f.fields_for :stories, @new_story do |story_fields|
+      - if location.errors.on('stories.subject')
+        .form-field-error= error_message_on location, 'stories.subject'
       .form-field
-        = problem_fields.label :subject
-        != problem_fields.text_field :subject
-      - if location.errors.on('problems.description')
-        .form-field-error= error_message_on location, 'problems.description'
+        = story_fields.label :subject
+        != story_fields.text_field :subject
+      - if location.errors.on('stories.description')
+        .form-field-error= error_message_on location, 'stories.description'
       .form-field
-        = problem_fields.label :description
-        != problem_fields.text_area :description, {:rows => 5}
-      - problem_fields.fields_for :reporter do |reporter_fields|
-        - if location.errors.on('problems.reporter.email')
-          .form-field-error= error_message_on location, 'problems.reporter.email'
+        = story_fields.label :description
+        != story_fields.text_area :description, {:rows => 5}
+      - story_fields.fields_for :reporter do |reporter_fields|
+        - if location.errors.on('stories.reporter.email')
+          .form-field-error= error_message_on location, 'stories.reporter.email'
         .form-field
           = reporter_fields.label :email
           != reporter_fields.text_field :email
-        - if location.errors.on('problems.reporter.name')
-          .form-field-error= error_message_on location, 'problems.reporter.name'
+        - if location.errors.on('stories.reporter.name')
+          .form-field-error= error_message_on location, 'stories.reporter.name'
         .form-field
           = reporter_fields.label :name
           != reporter_fields.text_field :name

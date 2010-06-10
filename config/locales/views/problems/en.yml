@@ -1,18 +1,15 @@
 en:
-  browsing_problems: 'Browsing problems'
   subject: 'Subject'
   description: 'Description'
   transport_mode: 'Transport type'
-  problem_form_error: 'There were problems with your report. Please see below.'
-  problem_created: 'Thanks! Your problem has been created.'
   email: 'Email'
   name: 'Name'
   location_name: 'Station/stop name'
   area: 'Town/area/postcode'
   route_number: 'Route'
   location_type: 'Stop, station or route'
-  problem_location_found: "We think this is your location:"
-  problem_location_not_found: "Sorry, we couldn't find that location."
+  story_location_found: "We think this is your location:"
+  story_location_not_found: "Sorry, we couldn't find that location."
   postcode_not_found: "That postcode wasn't recognized."
   area_not_found: "We couldn't find a town or area that matches what you entered."
   go: Go!

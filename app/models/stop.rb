@@ -42,13 +42,13 @@ class Stop < ActiveRecord::Base
   has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
   validates_presence_of :common_name
-  has_many :problems, :as => :location, :order => 'created_at desc'
+  has_many :stories, :as => :location, :order => 'created_at desc'
   has_many :route_segments_as_from_stop, :foreign_key => 'from_stop_id', :class_name => 'RouteSegment'
   has_many :route_segments_as_to_stop, :foreign_key => 'to_stop_id', :class_name => 'RouteSegment'
   has_many :routes_as_from_stop, :through => :route_segments_as_from_stop, :source => 'route'
   has_many :routes_as_to_stop, :through => :route_segments_as_to_stop, :source => 'route'
   belongs_to :locality
-  accepts_nested_attributes_for :problems
+  accepts_nested_attributes_for :stories
   
   def routes
     (routes_as_from_stop | routes_as_to_stop).uniq.sort{ |a,b| a.name <=> b.name }

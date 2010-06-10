@@ -2,7 +2,7 @@ en:
   activerecord:
     errors:
       models:
-        problem:
+        story:
           attributes: 
             subject:
               blank: "Please enter a subject"

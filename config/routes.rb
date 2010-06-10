@@ -1,13 +1,12 @@
 ActionController::Routing::Routes.draw do |map|
 
   # home page
-  map.root :controller => 'home'
+  map.root :controller => 'stories', :action => 'new'
 
   # resources
-  map.resources :stories, :controller => 'problems', 
-                          :except => [:update, :edit, :create], 
+  map.resources :stories, :except => [:update, :edit, :create], 
                           :collection => {:choose_location => :get, :find => :post}
-  map.confirm '/c/:email_token', :action => 'confirm', :controller => 'problems'
+  map.confirm '/c/:email_token', :action => 'confirm', :controller => 'stories'
 
   [:routes, :stops, :stop_areas].each do |location|
     map.resources location, :only => [:show, :update], 

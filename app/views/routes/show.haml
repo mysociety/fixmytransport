@@ -22,5 +22,5 @@
   .terminuses
     != terminus_text(@route)
 = render :partial => 'shared/new_story', :locals => { :location => @route.becomes(Route) }
-= render :partial => 'shared/story', :collection => @route.problems.confirmed
+= render :partial => 'shared/story', :collection => @route.stories.confirmed
  
