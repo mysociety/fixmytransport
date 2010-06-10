@@ -47,6 +47,12 @@ h2 {
   padding: 0.5em;
 }
 
+input[type=text], 
+textarea {
+  font-size: 1em;
+  font-family: verdana, sans-serif;
+}
+
 /* Navigation */
 
 ul.navigation {
@@ -93,7 +99,6 @@ ul.navigation li {
 
 .homepage input[type=text] {
   width: 15em;
-  font-size: 1em;
 }
 
 /* Forms */
@@ -122,6 +127,7 @@ input, textarea{
 #map-col {
   float: right; 
   max-width: 400px;
+  margin-right: 3em;
 }
 
 #map {
@@ -236,5 +242,5 @@ form.edit_stop textarea,
 form.edit_stop input[type=text],
 form.edit_stop_area textarea, 
 form.edit_stop_area input[type=text] {
-  width: 35em;
+  width: 20em;
 }

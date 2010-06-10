@@ -26,8 +26,9 @@ class Story < ActiveRecord::Base
   after_create :send_confirmation_email
   before_create :generate_confirmation_token
   named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
-  cattr_reader :per_page
+  cattr_reader :per_page, :categories
   @@per_page = 10
+  @@categories = ['Comic', 'Romantic', 'Unfortunate', 'Bizarre']
   
   def validate_location_attributes
     return true if location

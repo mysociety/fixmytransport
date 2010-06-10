@@ -8,7 +8,7 @@
   .form-field
     - if @story.errors.on(:transport_mode_id)
       .form-field-error= error_message_on @story, :transport_mode_id
-    %label{:for => 'transport_mode_id'}
+    %label{:for => 'transport_mode_id', :style => 'display: none;'}
       =t(:transport_mode)
     .transport-mode
       != transport_mode_radio_buttons
