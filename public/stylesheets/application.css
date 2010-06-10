@@ -92,7 +92,8 @@ ul.navigation li {
 }
 
 .homepage input[type=text] {
-  width: 25em;
+  width: 15em;
+  font-size: 1em;
 }
 
 /* Forms */

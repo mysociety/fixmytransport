@@ -23,6 +23,7 @@ class StoriesController < ApplicationController
     story_attributes[:location_search] = @location_search
     @story = Story.new(story_attributes)
     if !@story.valid? 
+      @stories = Story.find_recent(5)
       @title = t :new_story
       render :new
     else
