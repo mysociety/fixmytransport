@@ -35,6 +35,7 @@ class StoriesController < ApplicationController
         @title = t :multiple_locations
         render :choose_location
       else
+        @stories = Story.find_recent(5)
         @title = t :new_story
         render :new
       end
