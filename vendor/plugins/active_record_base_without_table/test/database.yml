@@ -1,0 +1,4 @@
+sqlite3:
+  adapter: sqlite3
+  database: test/active_record_without_table
+  timeout: 5000

@@ -1,0 +1,15 @@
+en:
+  activerecord:
+    errors:
+      models:
+        feedback:
+          attributes: 
+            email:
+              blank: "Please enter your email address"
+              invalid: "Please enter a valid email address"
+            name:
+              blank: "Please tell us your name"
+            subject: 
+              blank: "Please give a subject"
+            message: 
+              blank: "Please write a message"

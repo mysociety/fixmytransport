@@ -16,7 +16,9 @@ ActionController::Routing::Routes.draw do |map|
 
   # static
   map.about '/about', :controller => 'static', :action => 'about'
-  map.feedback '/feedback', :controller => 'static', :action => 'feedback'
+  map.feedback '/feedback', :controller => 'static', 
+                            :action => 'feedback', 
+                            :conditions => { :method => [:get, :post] }
   
   # admin
   map.namespace :admin do |admin|
