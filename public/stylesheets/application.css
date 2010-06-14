@@ -132,6 +132,7 @@ input, textarea{
 #map-col {
   float: right; 
   max-width: 400px;
+  margin-left: 0.5em;
   margin-right: 2em;
 }
 
