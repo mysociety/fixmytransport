@@ -75,6 +75,7 @@ function setupFeedbackForm() {
   jQuery('.feedback-cancel').click(function() {
     jQuery('.feedback-panel').hide();
     clearFormElements('#ajax-feedback');
+    jQuery('#ajax-feedback .form-field-error').html('');
     event.preventDefault();
   });  
 }
