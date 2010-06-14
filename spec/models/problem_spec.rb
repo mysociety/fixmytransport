@@ -22,13 +22,13 @@ describe Story do
   it 'should be invalid without a description' do 
     @story = Story.new(:transport_mode_id => 5, :location => Route.new)
     @story.valid? 
-    @story.errors.on(:description).should == 'Please enter a description'
+    @story.errors.on(:description).should == 'Please tell us your story'
   end
   
   it 'should be invalid without a subject' do 
     @story = Story.new(:transport_mode_id => 5, :location => Route.new)
     @story.valid? 
-    @story.errors.on(:subject).should == 'Please enter a subject'
+    @story.errors.on(:subject).should == 'Please tell us the subject of your story'
   end
   
   describe "when finding a location by attributes" do 
