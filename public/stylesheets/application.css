@@ -151,7 +151,7 @@ input, textarea{
   list-style-type: none;
 }
 
-/* Reporting a problem */
+/* Adding a story */
 
 form.new_story label{
   width: 10em;  
@@ -159,6 +159,12 @@ form.new_story label{
 
 .location-error {
   color: #CC0000;
+}
+
+.guidance{
+  font-size: 0.8em;
+  text-align: right;
+  margin-right: 2em;
 }
 
 /* Stop/stop area/route page */

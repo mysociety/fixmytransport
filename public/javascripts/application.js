@@ -5,18 +5,21 @@
 jQuery.noConflict();
 
 jQuery(document).ready(function() {
+  jQuery('#guidance-name').hide();
   jQuery('#story_location_attributes_name').autofill({
-       value: 'e.g. London Euston',
+       value: jQuery('#guidance-name').text(),
        defaultTextColor: '#595454',
        activeTextColor: '#000000'
      });
+  jQuery('#guidance-route').hide();
   jQuery('#story_location_attributes_route_number').autofill({
-      value: 'e.g. C10, Cardiff to Exeter',
+      value: jQuery('#guidance-route').text(),
       defaultTextColor: '#595454',
       activeTextColor: '#000000'
      });
+  jQuery('#guidance-area').hide();
   jQuery('#story_location_attributes_area').autofill({
-       value: 'e.g. Bristol',
+       value: jQuery('#guidance-area').text(),
        defaultTextColor: '#595454',
        activeTextColor: '#000000'
      });
