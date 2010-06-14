@@ -4,8 +4,8 @@
 # Table name: stories
 #
 #  id                :integer         not null, primary key
-#  subject           :text
-#  description       :text
+#  title             :text
+#  story             :text
 #  created_at        :datetime
 #  updated_at        :datetime
 #  reporter_id       :integer
@@ -16,7 +16,7 @@
 #
 class Story < ActiveRecord::Base
   validates_presence_of :transport_mode_id, :unless => :location
-  validates_presence_of :description, :subject, :category, :if => :location
+  validates_presence_of :story, :title, :category, :if => :location
   validate :validate_location_attributes
   belongs_to :reporter, :class_name => 'User'
   accepts_nested_attributes_for :reporter

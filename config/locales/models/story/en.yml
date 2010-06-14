@@ -6,9 +6,9 @@ en:
           attributes: 
             category: 
               blank: "Please categorize your story so we can better appreciate it"
-            subject:
-              blank: "Please tell us the subject of your story"
-            description:
+            title:
+              blank: "Please tell us the title of your story"
+            story:
               blank: "Please tell us your story"
             transport_mode_id:
               blank: "Please select a transport type"

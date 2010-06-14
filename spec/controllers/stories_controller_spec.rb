@@ -24,7 +24,7 @@ describe StoriesController do
     before do 
       @stop = mock_model(Stop)
       @story = mock_model(Story, :id => 8, 
-                                     :subject => 'A test story', 
+                                     :title => 'A test story', 
                                      :valid? => true, 
                                      :location_from_attributes => mock_model(Stop),
                                      :locations => [@stop], 
@@ -88,7 +88,7 @@ describe StoriesController do
   describe 'GET #show' do 
   
     before do
-      @story = mock_model(Story, :id => 8, :subject => 'A test story')
+      @story = mock_model(Story, :id => 8, :title => 'A test story')
       Story.stub!(:find).and_return(@story)
     end
     

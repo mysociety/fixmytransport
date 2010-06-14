@@ -6,16 +6,16 @@
       .form-field
         = story_fields.label :category
         != story_fields.select("category", Story.categories, { :include_blank => true })
-      - if location.errors.on('stories.subject')
-        .form-field-error= error_message_on location, 'stories.subject'
+      - if location.errors.on('stories.title')
+        .form-field-error= error_message_on location, 'stories.title'
       .form-field
-        = story_fields.label :subject
-        != story_fields.text_field :subject
-      - if location.errors.on('stories.description')
-        .form-field-error= error_message_on location, 'stories.description'
+        = story_fields.label :title
+        != story_fields.text_field :title
+      - if location.errors.on('stories.story')
+        .form-field-error= error_message_on location, 'stories.story'
       .form-field
-        = story_fields.label :description
-        != story_fields.text_area :description, {:rows => 5}
+        = story_fields.label :story
+        != story_fields.text_area :story, {:rows => 5}
       - story_fields.fields_for :reporter do |reporter_fields|
         - if location.errors.on('stories.reporter.email')
           .form-field-error= error_message_on location, 'stories.reporter.email'

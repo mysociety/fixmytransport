@@ -1,6 +1,6 @@
 en:
-  subject: 'Subject'
-  description: 'Description'
+  title: 'Title'
+  story: 'Story'
   transport_mode: 'Transport type'
   email: 'Email'
   name: 'Name'

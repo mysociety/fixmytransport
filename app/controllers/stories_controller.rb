@@ -57,7 +57,7 @@ class StoriesController < ApplicationController
   
   def show
     @story = Story.find(params[:id])
-    @title = @story.subject
+    @title = @story.title
   end
   
   private

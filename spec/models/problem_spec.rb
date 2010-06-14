@@ -4,8 +4,8 @@
 # Table name: stories
 #
 #  id                :integer         not null, primary key
-#  subject           :text
-#  description       :text
+#  title             :text
+#  story             :text
 #  created_at        :datetime
 #  updated_at        :datetime
 #  reporter_id       :integer
@@ -22,13 +22,13 @@ describe Story do
   it 'should be invalid without a description' do 
     @story = Story.new(:transport_mode_id => 5, :location => Route.new)
     @story.valid? 
-    @story.errors.on(:description).should == 'Please tell us your story'
+    @story.errors.on(:story).should == 'Please tell us your story'
   end
   
-  it 'should be invalid without a subject' do 
+  it 'should be invalid without a title' do 
     @story = Story.new(:transport_mode_id => 5, :location => Route.new)
     @story.valid? 
-    @story.errors.on(:subject).should == 'Please tell us the subject of your story'
+    @story.errors.on(:title).should == 'Please tell us the title of your story'
   end
   
   describe "when finding a location by attributes" do 

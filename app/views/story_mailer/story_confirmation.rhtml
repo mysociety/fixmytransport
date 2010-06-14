@@ -8,9 +8,9 @@ added to Brief Encounters:
 If your email program does not let you click on this link, copy
 and paste it into your web browser and press return.
 
-Your <%= @story.category %> story had the title: <%= @story.subject %>
+Your <%= @story.category %> story had the title: <%= @story.title %>
  
-And details: <%= @story.description %>
+And text: <%= @story.story %>
 
 Your name will be shown as: <%= @recipient.name.blank? ? t(:anonymous) : @recipient.name %>
 
