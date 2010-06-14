@@ -54,6 +54,14 @@ class Stop < ActiveRecord::Base
     (routes_as_from_stop | routes_as_to_stop).uniq.sort{ |a,b| a.name <=> b.name }
   end
 
+  def next_stops
+    route_segments_as_from_stop.map{ |route_segment| route_segment.to_stop }.uniq.sort_by(&:name)
+  end
+  
+  def route_terminuses
+    routes.map{ |route| route.terminuses }.flatten.uniq.sort_by(&:name)
+  end
+  
   def name
     common_name
   end

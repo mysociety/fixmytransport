@@ -10,7 +10,8 @@
     jQuery(document).ready(function(){
        stop_init();
     });
-  =render :partial => "shared/route_list", :locals => {:stop => @stop}
+  .extra-info
+    =render :partial => "shared/route_list", :locals => {:stop => @stop}
 .stop
   %h3.name= "#{@stop.full_name}" 
   .details

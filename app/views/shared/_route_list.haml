@@ -1,12 +1,24 @@
-.route-list
-  - if ! stop.routes.empty? 
-    Routes:
-    - stop.routes.each do |route|
-      .route-info
-        .next-stops
-          - route.next_stops(stop.id).each do |next_stop|
-            .stop-link= link_to(next_stop.name_without_suffix(route.transport_mode), stop_url(next_stop))
-        .previous-stops
-          - route.previous_stops(stop.id).each do |previous_stop|
-            .stop-link= link_to(previous_stop.name_without_suffix(route.transport_mode), stop_url(previous_stop))
-        .route-name= link_to(route.name(from_stop=stop, short=true), route_url(route))
+- if ! stop.routes.empty? 
+  - if stop.routes.first.transport_mode_name == 'Train'
+    .train-routes
+      .final-destinations
+        Final destinations:
+        - stop.route_terminuses.each do |terminus|
+          .stop-link= link_to(terminus.name, stop_url(terminus))
+      .onward-stops
+        Next stops: 
+        - stop.next_stops.each do |next_stop|
+          .stop-link= link_to(next_stop.name, stop_url(next_stop))
+  - else
+    .route-list
+      Routes:
+      - stop.routes.each do |route|
+        .route-info
+          .next-stops
+            - route.next_stops(stop.id).each do |next_stop|
+              .stop-link= link_to(next_stop.name_without_suffix(route.transport_mode), stop_url(next_stop))
+          .previous-stops
+            - route.previous_stops(stop.id).each do |previous_stop|
+              .stop-link= link_to(previous_stop.name_without_suffix(route.transport_mode), stop_url(previous_stop))
+          .route-name= link_to(route.name(from_stop=stop, short=true), route_url(route))
+          

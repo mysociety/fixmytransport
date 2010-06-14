@@ -7,6 +7,11 @@
     jQuery(document).ready(function(){
        area_init();
     });
+  .extra-info
+    %ul.stops   
+      Stops:
+      - @route.stops.sort_by(&:name).each do |stop|
+        %li= link_to stop.full_name, stop_url(stop)
 .route
   %h3.name= @route.name
   .details

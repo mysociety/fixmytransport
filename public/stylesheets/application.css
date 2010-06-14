@@ -143,6 +143,22 @@ input, textarea{
   border: 1px solid #000000;
 }
 
+.extra-info {
+  overflow: auto;
+  padding: 0.5em;
+}
+
+.extra-info .stop, 
+.extra-info .stop .route-list, 
+.extra-info .stop .train-routes {
+  margin-top: 0.5em;
+}
+
+.extra-info .stop {
+  clear: both;
+}
+
+
 /* Feedback form */
 
 .feedback-tab {
@@ -214,7 +230,7 @@ form.new_story label{
   margin: 0 0 0.1em 0;
 }
 
- .stops {
+.stops {
   list-style-type: none;
 }
 
@@ -223,10 +239,6 @@ form.new_story label{
 .route .details {
   font-size: 0.8em;
   margin-bottom: 0.5em;
-}
-
-.route-list {
-  margin-top: 0.5em;
 }
 
 .route .operators {
@@ -240,8 +252,13 @@ form.new_story label{
   list-style-type: none;
 }
 
+ul.stops {
+  padding-left: 0;
+  margin-top: 0;
+}
+
 .route-list .route-info,
-.stops li  { 
+.stops li { 
   margin: 0.5em 0 0.5em 0;
   padding: 0.2em;
   overflow: hidden;
@@ -249,9 +266,7 @@ form.new_story label{
 
 .stops li {
   text-align: left;
-  margin-left: 4%;
   font-size: 0.8em;
-  max-width: 42.5%;
 }
 
 .route-list .route-info .previous-stops {
@@ -273,6 +288,22 @@ form.new_story label{
   margin-right: auto;
   width: 15%;
   text-align: center;
+}
+
+.train-routes .onward-stops .stop-link, 
+.train-routes .final-destinations .stop-link {
+    font-size: 0.8em;
+    margin: 0.5em 0 0.5em 0;
+    padding: 0.2em;
+}
+.train-routes .onward-stops{
+  float: left;
+    max-width: 45%;
+}
+
+.train-routes .final-destinations {
+  float: right;
+    max-width: 45%;
 }
 
 form.edit_route label,

@@ -117,7 +117,7 @@ function addRouteMarker(stopCoords, bounds, markers, id, url, name, index) {
   marker.name = name;
   marker.id = id;
   stopsById[id] = marker;
-  marker.events.register("mouseover", marker, stopSelected);
+  marker.events.register("click", marker, stopSelected);
   markers.addMarker(marker);
 }
 
@@ -135,10 +135,4 @@ function addProblemMarker(problemCoords) {
 
 // Run jquery in no-conflict mode so it doesn't use $()
 jQuery.noConflict();
-
-jQuery(document).ready(function() {
-  jQuery("li.active-stop").hover(function(stop){
-    selectStop(stopsById[this.id]);
-  })
-});
 

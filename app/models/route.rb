@@ -280,13 +280,13 @@ class Route < ActiveRecord::Base
   end
   
   def next_stops(stop_id)
-    incoming_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == stop_id } 
-    incoming_segments.map{ |route_segment| route_segment.to_stop }
+    outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == stop_id } 
+    outgoing_segments.map{ |route_segment| route_segment.to_stop }
   end
   
   def previous_stops(stop_id)
-    outgoing_segments = route_segments.select{ |route_segment| route_segment.to_stop_id == stop_id }
-    outgoing_segments.map{ |route_segment| route_segment.from_stop }
+    incoming_segments = route_segments.select{ |route_segment| route_segment.to_stop_id == stop_id }
+    incoming_segments.map{ |route_segment| route_segment.from_stop }
   end
   
   def terminuses
