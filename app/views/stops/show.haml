@@ -1,3 +1,4 @@
+- @title = @stop.full_name
 - content_for :javascript do 
   != map_javascript_include_tags
 #map-col
@@ -24,6 +25,6 @@
     - if !@stop.stop_areas.empty?
       Part of
       -@stop.stop_areas.each do |stop_area|
-        %span.stop-area= link_to(stop_area.name, stop_area_url(stop_area))
+        %span.stop-area= link_to("#{stop_area.name} stop area", stop_area_url(stop_area))
 = render :partial => 'shared/new_story', :locals => { :location => @stop }
 = render :partial => 'shared/story', :collection => @stop.stories.confirmed, :locals => {:context => :location}

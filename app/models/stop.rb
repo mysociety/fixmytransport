@@ -77,7 +77,7 @@ class Stop < ActiveRecord::Base
   def suffix
     suffix = ''
     if transport_modes.include? 'Bus'
-      suffix = " stop"
+      suffix = " bus stop"
     end
     suffix
   end

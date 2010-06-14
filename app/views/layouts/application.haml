@@ -2,7 +2,7 @@
 %html{ :lang => I18n.locale }
   %head
     %title 
-      ="#{t(:site_name)} #{@title ? ':' : ''} #{@title}"
+      ="#{t(:site_name)}#{@title ? ':' : ''} #{@title}"
     %meta{ :content => "text/html; charset=utf-8", "http-equiv" => "Content-type" }
     %link{ :rel => "alternate", :type => "application/atom+xml", :title => "atom", :href => stories_url(:format => 'atom') }
     = stylesheet_link_tag 'application'
