@@ -143,6 +143,40 @@ input, textarea{
   border: 1px solid #000000;
 }
 
+/* Feedback form */
+
+.feedback-tab {
+  height: auto;
+  left: 0px;
+  position: absolute;
+  text-align: left;
+  top: 120px;
+  width: auto;
+  z-index: 100;
+  background-color: #FFFFFF;
+}
+
+.feedback-panel {
+  height: auto;
+  left: 0px;
+  position: absolute;
+  text-align: left;
+  top: 120px;
+  border: 1px solid #CCCCCC;
+  background-color: #FFFFFF;
+  width: auto;
+  z-index: 100;
+  padding: 1em;
+}
+
+form.new_feedback label {
+  width: 6em;
+}
+
+.feedback-form {
+  max-width: 29em;
+}
+
 /* Problem list */
 
 .problem-list-item {

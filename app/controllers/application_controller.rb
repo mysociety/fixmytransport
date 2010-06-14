@@ -9,8 +9,13 @@ class ApplicationController < ActionController::Base
   url_mapper # See MySociety::UrlMapper
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
+  before_filter :initialize_feedback
   
   private
+  
+  def initialize_feedback 
+    @feedback = Feedback.new
+  end
   
   def location_search 
     @location_search ||= LocationSearch.find_current(session_id)

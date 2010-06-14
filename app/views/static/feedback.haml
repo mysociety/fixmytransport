@@ -1,29 +1,29 @@
 != t(:please_give_feedback, :email => mail_to(MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')))
-
-- form_for(@feedback, :url => feedback_path) do |form| 
-  .fieldset
-    - if @feedback.errors.on(:subject)
-      .form-field-error= error_message_on @feedback, :subject
-    .form-field
-      = form.label :subject
-      != form.text_field :subject 
+.feedback-form
+  - form_for(@feedback, :url => feedback_path) do |form| 
+    .fieldset
+      - if @feedback.errors.on(:subject)
+        .form-field-error= error_message_on @feedback, :subject
+      .form-field
+        = form.label :subject
+        != form.text_field :subject 
     
-    - if @feedback.errors.on(:name)
-      .form-field-error= error_message_on @feedback, :name
-    .form-field
-      = form.label :name 
-      != form.text_field :name
+      - if @feedback.errors.on(:name)
+        .form-field-error= error_message_on @feedback, :name
+      .form-field
+        = form.label :name 
+        != form.text_field :name
 
-    - if @feedback.errors.on(:email)
-      .form-field-error= error_message_on @feedback, :email
-    .form-field
-      = form.label :email 
-      != form.text_field :email 
+      - if @feedback.errors.on(:email)
+        .form-field-error= error_message_on @feedback, :email
+      .form-field
+        = form.label :email 
+        != form.text_field :email 
       
-    - if @feedback.errors.on(:message)
-      .form-field-error= error_message_on @feedback, :message
-    .form-field
-      = form.label :message
-      != form.text_area :message
-    
-    != form.submit t(:send)
+      - if @feedback.errors.on(:message)
+        .form-field-error= error_message_on @feedback, :message
+      .form-field
+        = form.label :message
+        != form.text_area :message, {:rows => 5}
+      
+      != form.submit t(:send)
