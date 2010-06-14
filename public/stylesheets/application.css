@@ -12,6 +12,7 @@ h2 {
 #footer {
   clear: both; 
   text-align:center;
+  padding: 1em;
 }
 
 #footer li {
@@ -114,20 +115,26 @@ label {
   float: left;
 }
 
-.form-field-error{
+.form-field-error {
   color: #CC0000;
 }
 
 
-input, textarea{
+input, textarea {
   margin: 0.5em;
 }
 
-.fieldWithErrors{
+.fieldWithErrors {
   display: inline;
 }
 
-/* Problem page */
+/* Choosing a location */
+
+ul.location-list li{
+  padding: 0.2em 0 0.2em 0;
+}
+
+/* Story page */
 
 #map-col {
   float: right; 

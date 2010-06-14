@@ -8,6 +8,6 @@
        area_init();
     });
 %p= t(:multiple_locations_intro, :num_locations => MAX_LOCATION_RESULTS)
-%ul
-- @story.locations.each do |location|
-  %li= link_to location.description, location_url(location)
+%ul.location-list
+  - @story.locations.each do |location|
+    %li= link_to location.description, location_url(location)
