@@ -35,8 +35,10 @@ class ApplicationController < ActionController::Base
       return stop_path(location.locality, location)
     elsif location.is_a? StopArea
       return stop_area_path(location.locality, location)
+    elsif location.is_a? Route
+      return route_path(location.region, location)
     end
-    polymorphic_path(location)
+    raise "Unknown location type: #{location.class}"
   end
   
   def location_url(location)
@@ -46,8 +48,10 @@ class ApplicationController < ActionController::Base
      return stop_url(location.locality, location)
    elsif location.is_a? StopArea
      return stop_area_url(location.locality, location)
+   elsif location.is_a? Route
+     return route_url(location.region, location)
    end
-   polymorphic_url(location) 
+   raise "Unknown location type: #{location.class}"
   end
   
   def story_url(story)
@@ -57,11 +61,11 @@ class ApplicationController < ActionController::Base
   def respond_url(location, params)
    case location
    when Route
-     respond_route_url(location, params)
+     respond_route_url(location.locality, location, params)
    when Stop
      respond_stop_url(location.locality, location, params)
    when StopArea
-     respond_stop_area_url(location.locality, location, params)
+     respond_stop_area_url(location.region, location, params)
    else
      raise "Unknown location type: #{location.class}"
    end

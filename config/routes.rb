@@ -43,9 +43,23 @@ ActionController::Routing::Routes.draw do |map|
                                                                   :conditions => { :method => :get }
   
 
-  map.resources :routes, :only => [:show, :update], 
-                          :collection => {:random => :get}, 
-                          :member => {:respond => :get}
+  # routes 
+  map.route "/routes/:scope/:id.:format", :controller => "routes", 
+                                          :action => 'show', 
+                                          :conditions => { :method => :get }
+
+  map.route "/routes/:scope/:id.:format", :controller => "routes", 
+                                          :action => 'update', 
+                                          :conditions => { :method => :put }
+  
+  map.routes "/routes/random.:format", :controller => "routes",
+                                       :action => "random", 
+                                       :conditions => { :method => :get }
+
+  map.respond_route "/routes/:scope/:id/respond.:format", :controller => "routes", 
+                                                          :action => "respond",
+                                                          :conditions => { :method => :get }  
+
 
   # static
   map.about '/about', :controller => 'static', :action => 'about'
@@ -57,7 +71,18 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace :admin do |admin|
     admin.root :controller => 'home'
     admin.resources :location_searches, :only => [:index, :show]
-    admin.resources :routes, :only => [:index, :show, :update ]
+    # admin.resources :routes, :only => [:index, :show, :update ]
+    admin.routes "/routes/", :controller => "routes", 
+                                  :action => 'index', 
+                                  :conditions => { :method => :get }
+
+    admin.route "/routes/:scope/:id.:format", :controller => "routes", 
+                                                    :action => 'show', 
+                                                    :conditions => { :method => :get }
+
+    admin.route "/routes/:scope/:id.:format", :controller => "routes", 
+                                                    :action => 'update', 
+                                                    :conditions => { :method => :put }
   end
   
 end

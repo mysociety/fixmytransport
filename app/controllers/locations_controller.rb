@@ -7,7 +7,7 @@ class LocationsController < ApplicationController
   end
   
   def respond
-    instance = model_class.find(params[:id])
+    instance = model_class.find(params[:id], :scope => params[:scope])
     location_search.add_response(instance, params[:response]) if location_search  
     if params[:response] == 'success'
      flash[:notice] = t(:location_search_success)

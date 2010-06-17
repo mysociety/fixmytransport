@@ -2,7 +2,7 @@
 - if !@route.errors.empty?
   .form-error
     = t(:route_form_error)
-- form_for [:admin, @route.becomes(Route)], :url => admin_url(admin_route_path(@route)) do |f| 
+- form_for [:admin, @route.becomes(Route)], :url => admin_url(admin_route_path(@route.region, @route)) do |f| 
   .form-field
   - if @route.errors.on(:name)
     .form-field-error= error_message_on @route, :name

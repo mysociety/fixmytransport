@@ -3,7 +3,7 @@ namespace :nptdr do
     
   include DataLoader
 
-  namespace :preload do 
+  namespace :pre_load do 
   
     desc 'Check stops data from any *.tsv files in directory specified DIR=dirname against existing stop data'
     task :check_stops => :environment do 
@@ -63,10 +63,34 @@ namespace :nptdr do
   
   end
   
-  namespace :update do
+  namespace :post_load do
+    
+    desc 'Deletes routes without stops'
+    task :delete_routes_without_stops => :environment do 
+      Route.find_each(:conditions => ['route_segments.id is null'],
+                         :include => 'route_segments') do |route|
+        Route.destroy(route.id)
+      end
+    end
+    
+    desc 'Adds region associations based on route localities'
+    task :add_route_regions => :environment do 
+      great_britain = Region.find_by_name('Great Britain')
+      Route.find_each do |route|
+        regions = route.localities.map{|locality| locality.admin_area.region }.uniq
+        if regions.size > 1 
+          regions = [great_britain]
+        end
+        if regions.size == 0
+          raise route.inspect
+        end
+        route.region = regions.first
+        route.save!
+      end
+    end
     
     desc 'Adds cached route locality associations based on route stop localities' 
-    task :route_localities => :environment do 
+    task :add_route_localities => :environment do 
       Route.find_each do |route|
         localities = []
         route.stops.each do |stop|

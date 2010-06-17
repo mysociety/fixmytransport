@@ -20,5 +20,5 @@
           .previous-stops
             - route.previous_stops(stop.id).each do |previous_stop|
               .stop-link= link_to(previous_stop.name_without_suffix(route.transport_mode), stop_url(previous_stop.locality, previous_stop))
-          .route-name= link_to(route.name(from_stop=stop, short=true), route_url(route))
+          .route-name= link_to(route.name(from_stop=stop, short=true), route_url(route.region, route))
           

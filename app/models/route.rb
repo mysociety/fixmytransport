@@ -21,9 +21,11 @@ class Route < ActiveRecord::Base
   validates_presence_of :number
   has_many :stories, :as => :location, :order => 'created_at desc'
   accepts_nested_attributes_for :stories
-  has_many :route_localities
+  has_many :route_localities, :dependent => :destroy
   has_many :localities, :through => :route_localities
   cattr_reader :per_page
+  belongs_to :region
+  has_friendly_id :short_name, :use_slug => true, :scope => :region
   @@per_page = 20
   
   # Return routes with this number and transport mode that have a stop or stop area in common with 
@@ -329,7 +331,11 @@ class Route < ActiveRecord::Base
       if terminuses.size == 1
         text += " from #{terminuses.to_sentence}"
       else
-        text += " route between #{terminuses.sort.to_sentence}"     
+        if short
+          text += "#{terminuses.sort.join(' to ')}"     
+        else
+          text += " route between #{terminuses.sort.to_sentence}"     
+        end
       end
     end 
     text

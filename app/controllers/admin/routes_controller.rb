@@ -3,7 +3,7 @@ class Admin::RoutesController < ApplicationController
   layout "admin" 
 
   def show
-    @route = Route.find(params[:id])
+    @route = Route.find(params[:id], :scope => params[:scope])
   end
   
   def index
@@ -17,10 +17,10 @@ class Admin::RoutesController < ApplicationController
   end
   
   def update
-    @route = Route.find(params[:id])
+    @route = Route.find(params[:id], :scope => params[:scope])
     if @route.update_attributes(params[:route])
       flash[:notice] = t(:route_updated)
-      redirect_to admin_url(admin_route_path(@route))
+      redirect_to admin_url(admin_route_path(@route.region, @route))
     else
       flash[:error] = t(:route_problem)
       render :show

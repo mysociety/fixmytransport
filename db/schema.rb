@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100617140830) do
+ActiveRecord::Schema.define(:version => 20100617171322) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -118,7 +118,10 @@ ActiveRecord::Schema.define(:version => 20100617140830) do
     t.string   "modification"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "cached_slug"
   end
+
+  add_index "regions", ["cached_slug"], :name => "index_regions_on_cached_slug"
 
   create_table "route_localities", :force => true do |t|
     t.integer  "locality_id"
@@ -172,9 +175,11 @@ ActiveRecord::Schema.define(:version => 20100617140830) do
     t.datetime "updated_at"
     t.string   "type"
     t.string   "name"
+    t.integer  "region_id"
   end
 
   add_index "routes", ["number"], :name => "index_routes_on_number"
+  add_index "routes", ["region_id"], :name => "index_routes_on_region_id"
   add_index "routes", ["transport_mode_id"], :name => "index_routes_on_transport_mode_id"
   add_index "routes", ["type"], :name => "index_routes_on_type"
 
