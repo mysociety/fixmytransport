@@ -34,7 +34,7 @@ namespace :naptan do
     task :stop_area_types => :environment do 
       parse('stop_area_types', Parsers::NaptanParser)
     end
-    
+  
     desc "Loads all data from CSV files in a directory specified as DIR=dirname"
     task :all => :environment do 
       unless ENV['DIR']
@@ -53,6 +53,67 @@ namespace :naptan do
       Rake::Task['naptan:load:stop_area_memberships'].execute   
       ENV['FILE'] = File.join(ENV['DIR'], 'AreaHierarchy.csv')
       Rake::Task['naptan:load:stop_area_hierarchy'].execute   
+    end
+    
+  end
+  
+  namespace :post_load do 
+    desc "Deletes stop areas with no stops"
+    task :delete_unpopulated_stop_areas => :environment do 
+      count = 0
+      StopArea.find_each(:conditions => ['stop_area_memberships.id is null'],
+                         :include => 'stop_area_memberships') do |stop_area|
+        count += 1
+        if stop_area.children.size > 0
+          links = stop_area.links_as_ancestor + stop_area.links_as_descendant
+          links.each do |link|
+            if link.destroyable?
+              link.destroy
+            else
+              link.make_indirect
+              link.save!
+            end
+          end
+        end
+        StopArea.destroy(stop_area.id)
+      end
+      puts "Deleted #{count} unpopulated stop areas"
+    end
+    
+    def find_stop_area_locality(stop_area)
+      found = false
+      localities = stop_area.stops.map{ |stop| stop.locality }.uniq
+      if localities.size == 1
+        # only one locality, choose that
+        return localities.first
+      else
+        parent_localities = []
+        localities.each do |locality|
+          parent_localities += locality.parents
+        end
+        # none of the localities has a parent - just pick one
+        if parent_localities.empty? 
+          return localities.first
+        end
+        
+        parent_localities.each do |parent_locality|
+          # there's a parent that's either identical to or a parent of all the localities with parents
+          if localities.all?{|locality| locality == parent_locality || locality.parents.empty? || locality.parents.include?(parent_locality) }
+            # choose parent
+            return parent_locality
+          end
+        end
+      end
+      # just pick the first
+      return localities.first
+    end
+    
+    desc 'Add locality_id to stop areas'
+    task :add_locality_to_stop_areas => :environment do 
+      StopArea.find_each do |stop_area|
+        stop_area.locality = find_stop_area_locality(stop_area)
+        stop_area.save
+      end
     end
     
   end
@@ -120,6 +181,17 @@ namespace :naptan do
       Route.connection.execute("UPDATE routes 
                                 SET type = 'TramMetroRoute'
                                 WHERE type = 'MetroRoute'")
+    end
+    
+    task :delete_bad_stop_area_memberships => :environment do
+      Stop.find(4).stop_area_memberships.each do |stop_area_membership|
+        StopAreaMembership.delete(stop_area_membership.id)
+      end
+      StopArea.find(4).stop_area_memberships.each do |stop_area_membership|
+        if stop_area_membership.stop_id != 6192
+          StopAreaMembership.delete(stop_area_membership.id)
+        end
+      end
     end
   end
   

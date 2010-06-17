@@ -11,9 +11,9 @@
   .extra-info
     The following stops are here: 
     - @stop_area.stops.each do |stop|
-      - if !stop.routes.empty? 
-        .stop
-          = link_to("#{stop.name_with_indicator}", stop_url(stop))
+      .stop
+        = link_to("#{stop.name_with_long_indicator}", stop_url(stop.locality, stop))
+        - if !stop.routes.empty? 
           = render :partial => 'shared/route_list', :locals => {:stop => stop}
 .stop-area
   %h3.name= "#{@stop_area.name} stop area"

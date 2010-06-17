@@ -22,7 +22,7 @@ describe StoriesController do
   describe 'POST #find' do 
   
     before do 
-      @stop = mock_model(Stop)
+      @stop = mock_model(Stop, :locality => mock_model(Locality))
       @story = mock_model(Story, :id => 8, 
                                      :title => 'A test story', 
                                      :valid? => true, 
@@ -62,7 +62,7 @@ describe StoriesController do
     it 'should redirect to the location page if the story is valid and the location found' do 
       @story.stub!(:valid?).and_return(true)
       make_request
-      response.should redirect_to(stop_url(@stop))
+      response.should redirect_to(stop_url(@stop.locality, @stop))
     end
     
   end

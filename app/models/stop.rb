@@ -49,6 +49,7 @@ class Stop < ActiveRecord::Base
   has_many :routes_as_to_stop, :through => :route_segments_as_to_stop, :source => 'route'
   belongs_to :locality
   accepts_nested_attributes_for :stories
+  has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality
   
   def routes
     (routes_as_from_stop | routes_as_to_stop).uniq.sort{ |a,b| a.name <=> b.name }
@@ -71,7 +72,7 @@ class Stop < ActiveRecord::Base
   end
   
   def full_name
-    "#{name_with_indicator}#{suffix}"
+    "#{name_with_long_indicator}#{suffix}"
   end
   
   def suffix
@@ -83,6 +84,14 @@ class Stop < ActiveRecord::Base
   end
   
   def name_with_indicator
+    text = name
+    if !indicator.blank? and ! /\d\d\d\d/.match(indicator)
+      text += " #{indicator}"
+    end
+    text
+  end
+  
+  def name_with_long_indicator
     text = name
     if !indicator.blank?
       text += " (#{long_indicator})"

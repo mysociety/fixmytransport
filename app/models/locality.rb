@@ -28,6 +28,7 @@ class Locality < ActiveRecord::Base
   has_many :stops, :order => 'common_name asc'
   has_many :route_localities
   has_many :routes, :through => :route_localities
+  has_friendly_id :name_and_qualifier_name, :use_slug => true
   
   def self.find_all_by_name(name)
     localities = find(:all, :conditions => ['lower(localities.name) = ? 
@@ -37,6 +38,10 @@ class Locality < ActiveRecord::Base
                                         name.downcase, name.downcase, name.downcase, name.downcase],
                        :include => [{:admin_area => :region}, :district])
     localities
+  end
+  
+  def name_and_qualifier_name
+    "#{name} #{qualifier_name}"
   end
   
   def self.find_all_with_descendants(name)

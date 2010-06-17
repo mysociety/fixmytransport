@@ -40,6 +40,7 @@ Rails::Initializer.run do |config|
   config.gem "erubis", :version => '2.6.5'
   config.gem "fastercsv", :version => '1.5.3'
   config.gem 'will_paginate', :version => '2.3.12'
+  config.gem "friendly_id", :version => "~> 2.3"
 
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named

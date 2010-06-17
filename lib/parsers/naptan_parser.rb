@@ -68,12 +68,14 @@ class Parsers::NaptanParser
       next if row['Modification'] == 'del'
       stop = Stop.find_by_atco_code(row['AtcoCode'])
       stop_area = StopArea.find_by_code(row['StopAreaCode'])
-      yield StopAreaMembership.new( :stop_id                => stop.id,
-                                    :stop_area_id           => stop_area.id,
-                                    :creation_datetime      => row['CreationDateTime'],
-                                    :modification_datetime  => row['ModificationDateTime'],
-                                    :revision_number        => row['RevisionNumber'],
-                                    :modification           => row['Modification'])
+      if stop and stop_area
+        yield StopAreaMembership.new( :stop_id                => stop.id,
+                                      :stop_area_id           => stop_area.id,
+                                      :creation_datetime      => row['CreationDateTime'],
+                                      :modification_datetime  => row['ModificationDateTime'],
+                                      :revision_number        => row['RevisionNumber'],
+                                      :modification           => row['Modification'])
+      end
     end
   end
   

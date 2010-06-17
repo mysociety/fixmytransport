@@ -4,6 +4,6 @@ class RenameProblemsToStories < ActiveRecord::Migration
   end
 
   def self.down
-    rename_table :problems, :stories
+    rename_table :stories, :problems
   end
 end

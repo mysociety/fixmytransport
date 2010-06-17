@@ -257,6 +257,10 @@ class Route < ActiveRecord::Base
     "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
   end
   
+  def short_name
+    name(from_stop=nil, short=true)
+  end
+  
   def name(from_stop=nil, short=false)
     return self[:name] if !self[:name].blank?
     default_name = "#{number}"

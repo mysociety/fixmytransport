@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100614082940) do
+ActiveRecord::Schema.define(:version => 20100617140830) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -73,8 +73,10 @@ ActiveRecord::Schema.define(:version => 20100614082940) do
     t.float    "easting"
     t.point    "coords",                :srid => 27700
     t.integer  "district_id"
+    t.string   "cached_slug"
   end
 
+  add_index "localities", ["cached_slug"], :name => "index_localities_on_cached_slug"
   add_index "localities", ["coords"], :name => "index_localities_on_coords", :spatial => true
 
   create_table "locality_links", :force => true do |t|
@@ -186,6 +188,18 @@ ActiveRecord::Schema.define(:version => 20100614082940) do
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
+  create_table "slugs", :force => true do |t|
+    t.string   "name"
+    t.integer  "sluggable_id"
+    t.integer  "sequence",                     :default => 1, :null => false
+    t.string   "sluggable_type", :limit => 40
+    t.string   "scope"
+    t.datetime "created_at"
+  end
+
+  add_index "slugs", ["name", "sluggable_type", "sequence", "scope"], :name => "index_slugs_on_n_s_s_and_s", :unique => true
+  add_index "slugs", ["sluggable_id"], :name => "index_slugs_on_sluggable_id"
+
   create_table "stop_area_links", :force => true do |t|
     t.integer  "ancestor_id"
     t.integer  "descendant_id"
@@ -234,9 +248,11 @@ ActiveRecord::Schema.define(:version => 20100614082940) do
     t.point    "coords",                   :srid => 27700
     t.float    "lon"
     t.float    "lat"
+    t.integer  "locality_id"
   end
 
   add_index "stop_areas", ["coords"], :name => "index_stop_areas_on_coords", :spatial => true
+  add_index "stop_areas", ["locality_id"], :name => "index_stop_areas_on_locality_id"
 
   create_table "stop_types", :force => true do |t|
     t.string   "code"
@@ -279,8 +295,10 @@ ActiveRecord::Schema.define(:version => 20100614082940) do
     t.datetime "updated_at"
     t.point    "coords",                   :srid => 27700
     t.integer  "locality_id"
+    t.string   "cached_slug"
   end
 
+  add_index "stops", ["cached_slug"], :name => "index_stops_on_cached_slug"
   add_index "stops", ["coords"], :name => "index_stops_on_coords", :spatial => true
   add_index "stops", ["locality_id", "stop_type"], :name => "index_stops_on_locality_and_stop_type"
   add_index "stops", ["locality_id"], :name => "index_stops_on_locality_id"

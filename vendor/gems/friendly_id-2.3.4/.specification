@@ -1,0 +1,167 @@
+--- !ruby/object:Gem::Specification 
+name: friendly_id
+version: !ruby/object:Gem::Version 
+  prerelease: false
+  segments: 
+  - 2
+  - 3
+  - 4
+  version: 2.3.4
+platform: ruby
+authors: 
+- Norman Clarke
+- Adrian Mugnolo
+- Emilio Tagua
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2010-03-22 00:00:00 +00:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: activerecord
+  prerelease: false
+  requirement: &id001 !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        segments: 
+        - 2
+        - 2
+        version: "2.2"
+  type: :runtime
+  version_requirements: *id001
+- !ruby/object:Gem::Dependency 
+  name: activesupport
+  prerelease: false
+  requirement: &id002 !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        segments: 
+        - 2
+        - 2
+        version: "2.2"
+  type: :runtime
+  version_requirements: *id002
+description: "    FriendlyId is the \"Swiss Army bulldozer\" of slugging and permalink plugins\n    for Ruby on Rails. It allows you to create pretty URL\xE2\x80\x99s and work with\n    human-friendly strings as if they were numeric ids for ActiveRecord models.\n"
+email: 
+- norman@njclarke.com
+- adrian@mugnolo.com
+- miloops@gmail.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- lib/friendly_id/active_record2/configuration.rb
+- lib/friendly_id/active_record2/finders.rb
+- lib/friendly_id/active_record2/simple_model.rb
+- lib/friendly_id/active_record2/slug.rb
+- lib/friendly_id/active_record2/slugged_model.rb
+- lib/friendly_id/active_record2/tasks.rb
+- lib/friendly_id/active_record2.rb
+- lib/friendly_id/configuration.rb
+- lib/friendly_id/finders.rb
+- lib/friendly_id/slug_string.rb
+- lib/friendly_id/slugged.rb
+- lib/friendly_id/status.rb
+- lib/friendly_id/test.rb
+- lib/friendly_id/version.rb
+- lib/friendly_id.rb
+- lib/friendly_id/active_record2/tasks/friendly_id.rake
+- Changelog.md
+- Contributors.md
+- Guide.md
+- README.md
+- LICENSE
+- Rakefile
+- rails/init.rb
+- generators/friendly_id/friendly_id_generator.rb
+- generators/friendly_id/templates/create_slugs.rb
+- test/active_record2/basic_slugged_model_test.rb
+- test/active_record2/cached_slug_test.rb
+- test/active_record2/core.rb
+- test/active_record2/custom_normalizer_test.rb
+- test/active_record2/custom_table_name_test.rb
+- test/active_record2/deprecated_test.rb
+- test/active_record2/scoped_model_test.rb
+- test/active_record2/simple_test.rb
+- test/active_record2/slug_test.rb
+- test/active_record2/slugged.rb
+- test/active_record2/slugged_status_test.rb
+- test/active_record2/sti_test.rb
+- test/active_record2/support/database.mysql.yml
+- test/active_record2/support/database.postgres.yml
+- test/active_record2/support/database.sqlite3.yml
+- test/active_record2/support/models.rb
+- test/active_record2/tasks_test.rb
+- test/active_record2/test_helper.rb
+- test/friendly_id_test.rb
+- test/slug_string_test.rb
+- test/test_helper.rb
+- extras/bench.rb
+- extras/extras.rb
+- extras/prof.rb
+- extras/README.txt
+- extras/template-gem.rb
+- extras/template-plugin.rb
+has_rdoc: true
+homepage: http://norman.github.com/friendly_id
+licenses: []
+
+post_install_message: |+
+  
+  ***********************************************************
+  
+    If you are upgrading friendly_id, please run
+  
+        ./script/generate friendly_id --skip-migration
+  
+    in your Rails application to ensure that you have the
+    latest friendly_id Rake tasks.
+  
+  ***********************************************************
+  
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: friendly-id
+rubygems_version: 1.3.6
+signing_key: 
+specification_version: 3
+summary: A comprehensive slugging and pretty-URL plugin.
+test_files: 
+- test/active_record2/basic_slugged_model_test.rb
+- test/active_record2/cached_slug_test.rb
+- test/active_record2/custom_normalizer_test.rb
+- test/active_record2/custom_table_name_test.rb
+- test/active_record2/deprecated_test.rb
+- test/active_record2/scoped_model_test.rb
+- test/active_record2/simple_test.rb
+- test/active_record2/slug_test.rb
+- test/active_record2/slugged_status_test.rb
+- test/active_record2/sti_test.rb
+- test/active_record2/tasks_test.rb
+- test/friendly_id_test.rb
+- test/slug_string_test.rb

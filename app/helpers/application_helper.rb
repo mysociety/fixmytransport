@@ -44,7 +44,7 @@ module ApplicationHelper
   end
   
   def stop_js_coords(stop)
-    "[#{stop.lat}, #{stop.lon}, #{stop.id}, '#{url_for(stop)}', '#{escape_javascript(stop.description)}']"
+    "[#{stop.lat}, #{stop.lon}, #{stop.id}, '#{stop_url(stop.locality, stop)}', '#{escape_javascript(stop.description)}']"
   end
   
   def location_stops_js locations
@@ -75,7 +75,7 @@ module ApplicationHelper
       if stop_name != stop_area
         link_text += " in #{stop_area}"
       end
-      terminus_links << link_to(link_text, stop_url(stop)) unless stop_names.include? link_text
+      terminus_links << link_to(link_text, stop_url(stop.locality, stop)) unless stop_names.include? link_text
       stop_names << link_text
     end
     if terminus_links.size > 1
