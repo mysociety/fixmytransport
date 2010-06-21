@@ -48,10 +48,10 @@ class StoriesController < ApplicationController
   
   def confirm
     @story = Story.find_by_token(params[:email_token])
-    if !@story
-      @error = t(:story_not_found)
-    else
+    if @story
       @story.toggle!(:confirmed)
+    else
+      @error = t(:story_not_found)
     end
   end
   
