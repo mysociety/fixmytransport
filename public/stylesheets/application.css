@@ -89,7 +89,8 @@ ul.navigation li {
   float: right;
 }
 
-.homepage  h3 {
+.homepage  h3,
+.about h3 {
   margin: 0 0 1em 0;
   text-align: center;
 }

@@ -41,21 +41,22 @@ class ApplicationController < ActionController::Base
     raise "Unknown location type: #{location.class}"
   end
   
-  def location_url(location)
+  def location_url(location, attributes={})
    # map any Route subclasses back to base class in order to pass to polymorphic_url
    location = location.becomes(Route) if location.is_a? Route 
    if location.is_a? Stop
-     return stop_url(location.locality, location)
+     return stop_url(location.locality, location, attributes)
    elsif location.is_a? StopArea
-     return stop_area_url(location.locality, location)
+     return stop_area_url(location.locality, location, attributes)
    elsif location.is_a? Route
-     return route_url(location.region, location)
+     return route_url(location.region, location, attributes)
    end
    raise "Unknown location type: #{location.class}"
   end
   
-  def story_url(story)
-    location_url(story.location)
+  def story_url(story, attributes={})
+    attributes = attributes.merge(:anchor => "story_#{story.id}")
+    location_url(story.location, attributes)
   end
   
   def respond_url(location, params)
