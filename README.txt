@@ -9,6 +9,8 @@ createlang  plpgsql [database name]
 
 Also, SRID 27700 (British National Grid) is incorrect in some installs of PostGIS. After you’ve installed and got a PostGIS template, log in to it and make sure the proj4text column of SRID 27700 includes +datum=OSGB36.
 
+Set the OPTION_USE_SPATIAL_EXTENSIONS option to 1 if you are using PostGIS.
+
 To install Postgres and PostGIS on OSX
 --------------------------------------
 1) sudo port install postgresql84 
