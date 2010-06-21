@@ -48,6 +48,15 @@ describe Gazetteer do
       results[:results].size.should == 1
     end
     
+    it 'should find a route given part of a route name' do 
+      stub_postcode_finder
+      attributes = { :transport_mode_id => 7, 
+                     :route_number => 'metropolitan', 
+                     :area => '' }
+      results = Gazetteer.find_routes_from_attributes(attributes)
+      results[:results].should include(routes(:metropolitan_line))
+      results[:results].size.should == 1
+    end
   end
   
   describe 'when finding stops from attributes' do 

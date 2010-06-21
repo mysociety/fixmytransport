@@ -30,3 +30,8 @@ borough_C10:
   number: C10
   type: BusRoute
   transport_mode_id: "1"
+metropolitan_line:
+  name: Metropolitan Line
+  number: MET0
+  type: TramMetroRoute
+  transport_mode_id: 7

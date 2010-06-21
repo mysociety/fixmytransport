@@ -123,9 +123,9 @@ class Gazetteer
     end
     if !attributes[:route_number].blank?
       route_number = attributes[:route_number].downcase
-      where_clause += " AND (lower(routes.number) = ? OR lower(routes.name) = ?)"
+      where_clause += " AND (lower(routes.number) = ? OR lower(routes.name) like ?)"
       params << route_number
-      params << route_number
+      params << "%#{route_number}%"
     end
     if limit 
       where_clause += " limit #{options[:limit]}"
