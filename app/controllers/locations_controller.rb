@@ -21,7 +21,7 @@ class LocationsController < ApplicationController
   private
   
   def update_location(location, attributes)
-    if location.update_attributes(attributes)
+    if location.update_attributes(:stories_attributes => attributes[:stories_attributes])
       flash[:notice] = t(:confirmation_sent)
       redirect_to location_url(location)
     else
