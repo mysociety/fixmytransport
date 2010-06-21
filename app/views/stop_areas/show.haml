@@ -20,5 +20,4 @@
   .details
     - if !@stop_area.area.blank?
       %span.locality= "In #{@stop_area.area}"
-= render :partial => 'shared/new_story', :locals => { :location => @stop_area }
-= render :partial => 'shared/story', :collection => @stop_area.stories.confirmed, :locals => {:context => :location}
+= render :partial => 'shared/location_stories', :locals => {:location => @stop_area}

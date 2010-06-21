@@ -49,7 +49,7 @@ class StoriesController < ApplicationController
   def confirm
     @story = Story.find_by_token(params[:email_token])
     if @story
-      @story.toggle!(:confirmed)
+      @story.update_attribute(:confirmed, true)
     else
       @error = t(:story_not_found)
     end

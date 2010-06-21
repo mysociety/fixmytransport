@@ -1,3 +1,4 @@
+%h3= t(:tell_us_your_story)
 - form_for location, :url => location_path(location) do |f| 
   .fieldset
     - f.fields_for :stories, @new_story do |story_fields|

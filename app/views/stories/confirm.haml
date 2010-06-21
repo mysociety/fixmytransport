@@ -1,5 +1,5 @@
 - if @error
   = @error
 - else
-  Thanks!
-  = link_to "See your story on the site", location_url(@story.location)
+  = t(:thanks_for_adding_story)
+  = link_to t(:see_your_story), story_url(@story)

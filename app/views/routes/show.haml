@@ -27,5 +27,4 @@
           %li= operator.code
   .terminuses
     != terminus_text(@route)
-= render :partial => 'shared/new_story', :locals => { :location => @route }
-= render :partial => 'shared/story', :collection => @route.stories.confirmed, :locals => {:context => :location}
+= render :partial => 'shared/location_stories', :locals => {:location => @route}

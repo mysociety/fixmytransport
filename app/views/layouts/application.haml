@@ -26,7 +26,7 @@
           = render :partial => 'shared/feedback_form' 
     #footer
       %ul
-        %li.footer-item!= t(:built_by, :link => link_to('mySociety', 'http://mysociety.org'))
         %li.footer-item!= link_to t(:about), about_path
         %li.footer-item!= link_to t(:feedback), feedback_path
-      
+        %li.footer-item!= t(:built_by, :link => link_to('mySociety', 'http://mysociety.org'))
+        %li.footer-item!= t(:powered_by, :link => link_to('Easynet', 'http://www.easynet.com'))  
