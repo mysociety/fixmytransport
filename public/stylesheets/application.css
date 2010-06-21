@@ -198,10 +198,6 @@ form.new_feedback label {
   width: 6em;
 }
 
-.feedback-form {
-  max-width: 29em;
-}
-
 /* Problem list */
 
 .problem-list-item {

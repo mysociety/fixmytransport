@@ -24,6 +24,6 @@
         .form-field-error= error_message_on @feedback, :message
       .form-field
         = form.label :message
-        != form.text_area :message, {:rows => 5}
+        != form.text_area :message, {:rows => 8, :cols => 50}
       
       != form.submit t(:send)
