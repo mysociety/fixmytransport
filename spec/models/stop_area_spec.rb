@@ -44,7 +44,8 @@ describe StopArea do
   end
 
   it "should create a new instance given valid attributes" do
-    StopArea.create!(@valid_attributes)
+    stop_area = StopArea.new(@valid_attributes)
+    stop_area.valid?.should be_true
   end
   
   describe ' area ' do 
