@@ -38,9 +38,11 @@ class Gazetteer
         errors << :postcode_not_found
       else
         query += " AND ST_Distance(
-                  ST_GeomFromText('POINT(#{coord_info['easting']} #{coord_info['northing']})', 
+                  ST_GeomFromText('POINT(? ?)', 
                   #{BRITISH_NATIONAL_GRID}), 
                   stops.coords) < 1000"
+        params << coord_info['easting'].to_i
+        params << coord_info['northing'].to_i
       end
     end
     if !attributes[:area].blank?
