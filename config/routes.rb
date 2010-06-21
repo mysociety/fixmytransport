@@ -20,11 +20,6 @@ ActionController::Routing::Routes.draw do |map|
   map.random_stops "/stops/random.:format", :controller => "stops",
                                             :action => "random", 
                                             :conditions => { :method => :get }
-
-  map.respond_stop "/stops/:scope/:id/respond.:format", :controller => "stops", 
-                                                        :action => "respond",
-                                                        :conditions => { :method => :get }
-
   # stop areas
   map.stop_area "/stop-areas/:scope/:id.:format", :controller => "stop_areas", 
                                                   :action => 'show', 
@@ -36,12 +31,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.random_stop_areas "/stop-areas/random.:format", :controller => "stop_areas",
                                                       :action => "random", 
-                                                      :conditions => { :method => :get }
-
-  map.respond_stop_area "/stop-areas/:scope/:id/respond.:format", :controller => "stop_areas", 
-                                                                  :action => "respond",
-                                                                  :conditions => { :method => :get }
-  
+                                                      :conditions => { :method => :get }  
 
   # routes 
   map.route "/routes/:scope/:id.:format", :controller => "routes", 
@@ -56,11 +46,6 @@ ActionController::Routing::Routes.draw do |map|
                                        :action => "random", 
                                        :conditions => { :method => :get }
 
-  map.respond_route "/routes/:scope/:id/respond.:format", :controller => "routes", 
-                                                          :action => "respond",
-                                                          :conditions => { :method => :get }  
-
-
   # static
   map.about '/about', :controller => 'static', :action => 'about'
   map.feedback '/feedback', :controller => 'static', 
@@ -71,7 +56,6 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace :admin do |admin|
     admin.root :controller => 'home'
     admin.resources :location_searches, :only => [:index, :show]
-    # admin.resources :routes, :only => [:index, :show, :update ]
     admin.routes "/routes/", :controller => "routes", 
                                   :action => 'index', 
                                   :conditions => { :method => :get }
