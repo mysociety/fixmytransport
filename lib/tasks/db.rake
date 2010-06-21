@@ -35,16 +35,27 @@ namespace :db do
   desc 'Load data from a Postgres binary dump'
   task :load_from_binary => :environment do 
     check_for_file
+    
+    puts "migrating down"
     ENV['VERSION'] = '0'
     Rake::Task['db:migrate'].execute
+    
+    puts "migrating up"
     ENV['VERSION'] = ''
     Rake::Task['db:migrate'].execute
+    
+    puts "seeding"
+    Rake::Task['db:seed'].execute
+    
+    puts "deleting data"
     ActiveRecord::Base.connection.execute('DELETE FROM geometry_columns;')
     ActiveRecord::Base.connection.execute('DELETE FROM spatial_ref_sys;')
     ActiveRecord::Base.connection.execute('DELETE FROM schema_migrations;')
+    
+    puts "Loading from binary file #{ENV['FILE']}"
     port = ActiveRecord::Base.configurations[RAILS_ENV]['port']
     database = ActiveRecord::Base.configurations[RAILS_ENV]['database']
-    user = ActiveRecord::Base.configurations[RAILS_ENV]['user']
+    user = ActiveRecord::Base.configurations[RAILS_ENV]['username']
     system("pg_restore --port=#{port} --disable-triggers --data-only -d #{database} -U #{user} #{ENV['FILE']}")
   end
 
