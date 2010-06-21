@@ -43,10 +43,7 @@ namespace :db do
     puts "migrating up"
     ENV['VERSION'] = ''
     Rake::Task['db:migrate'].execute
-    
-    puts "seeding"
-    Rake::Task['db:seed'].execute
-    
+
     puts "deleting data"
     ActiveRecord::Base.connection.execute('DELETE FROM geometry_columns;')
     ActiveRecord::Base.connection.execute('DELETE FROM spatial_ref_sys;')
