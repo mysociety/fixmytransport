@@ -1,5 +1,5 @@
 - if ! stop.routes.empty? 
-  - if stop.routes.first.transport_mode_name == 'Train'
+  - if ['RPL', 'RLY'].include?(stop.stop_type) 
     .train-routes
       .final-destinations
         Final destinations:

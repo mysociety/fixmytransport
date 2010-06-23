@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100623134404) do
+ActiveRecord::Schema.define(:version => 20100623145916) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -313,6 +313,8 @@ ActiveRecord::Schema.define(:version => 20100623134404) do
   add_index "stops", ["coords"], :name => "index_stops_on_coords", :spatial => true
   add_index "stops", ["locality_id", "stop_type"], :name => "index_stops_on_locality_and_stop_type"
   add_index "stops", ["locality_id"], :name => "index_stops_on_locality_id"
+  add_index "stops", ["naptan_code"], :name => "index_stops_on_naptan_code"
+  add_index "stops", ["stop_type"], :name => "index_stops_on_stop_type"
 
   create_table "stories", :force => true do |t|
     t.text     "title"
