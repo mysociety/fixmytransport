@@ -289,7 +289,7 @@ class Route < ActiveRecord::Base
   def stops
     route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }.flatten.uniq
   end
-  memoize :stops
+   memoize :stops
     
   def next_stops(stop_id)
     outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == stop_id } 

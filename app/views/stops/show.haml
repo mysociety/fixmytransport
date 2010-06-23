@@ -1,29 +1,30 @@
 - @title = @stop.full_name
 - content_for :javascript do 
   != map_javascript_include_tags
-#map-col
-  #map
-  :javascript
-    var stop_lon = #{@stop.lon};
-    var stop_lat = #{@stop.lat};
-    var stop_id = #{@stop.id};
-    var stop_name = "#{@stop.full_name}";
-    jQuery(document).ready(function(){
-       stop_init();
-    });
-  .extra-info
-    =render :partial => "shared/route_list", :locals => {:stop => @stop}
-.stop
-  %h3.name= "#{@stop.full_name}" 
-  .details
-    %span.locality= "In #{@stop.locality_name}"
-    - if !@stop.landmark.blank?
-      %span.landmark= "near #{@stop.landmark}"
-    - if !@stop.street.blank? 
-      %span.street= "on #{@stop.street}"
-  .stop-areas
-    - if !@stop.stop_areas.empty?
-      Part of
-      -@stop.stop_areas.each do |stop_area|
-        %span.stop-area= link_to("#{stop_area.name} stop area", stop_area_url(stop_area.locality, stop_area))
+- cache do 
+  #map-col
+    #map
+    :javascript
+      var stop_lon = #{@stop.lon};
+      var stop_lat = #{@stop.lat};
+      var stop_id = #{@stop.id};
+      var stop_name = "#{@stop.full_name}";
+      jQuery(document).ready(function(){
+         stop_init();
+      });
+    .extra-info
+      =render :partial => "shared/route_list", :locals => {:stop => @stop}
+  .stop
+    %h3.name= "#{@stop.full_name}" 
+    .details
+      %span.locality= "In #{@stop.locality_name}"
+      - if !@stop.landmark.blank?
+        %span.landmark= "near #{@stop.landmark}"
+      - if !@stop.street.blank? 
+        %span.street= "on #{@stop.street}"
+    .stop-areas
+      - if !@stop.stop_areas.empty?
+        Part of
+        -@stop.stop_areas.each do |stop_area|
+          %span.stop-area= link_to("#{stop_area.name} stop area", stop_area_url(stop_area.locality, stop_area))
 = render :partial => 'shared/location_stories', :locals => {:location => @stop}

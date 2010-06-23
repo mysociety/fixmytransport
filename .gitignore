@@ -11,3 +11,5 @@ config/httpd.conf
 config/httpd.conf.deployed
 public/down.html
 data/NPTDR/
+cache/*
+public/index.html

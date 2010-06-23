@@ -1,30 +1,31 @@
 - @title = @route.name
 - content_for :javascript do 
   != map_javascript_include_tags
-#map-col
-  #map
-  :javascript
-    var areaStops = #{location_stops_js([@route])}
-    jQuery(document).ready(function(){
-       area_init();
-    });
-  .extra-info
-    %ul.stops   
-      Stops:
-      - @route.stops.sort_by(&:name).each do |stop|
-        %li= link_to stop.full_name, stop_url(stop.locality, stop)
-.route
-  %h3.name= @route.name
-  .details
-    %span.locality= "#{@route.area}."
-  .operators
-    - if @route.operators.empty? 
-      Operator unknown
-    - else
-      Operated by
-      %ul
-        - @route.operators.each do |operator|
-          %li= operator.code
-  .terminuses
-    != terminus_text(@route)
+- cache do 
+  #map-col
+    #map
+    :javascript
+      var areaStops = #{location_stops_js([@route])}
+      jQuery(document).ready(function(){
+         area_init();
+      });
+    .extra-info
+      %ul.stops   
+        Stops:
+        - @route.stops.sort_by(&:name).each do |stop|
+          %li= link_to stop.full_name, stop_url(stop.locality, stop)
+  .route
+    %h3.name= @route.name
+    .details
+      %span.locality= "#{@route.area}."
+    .operators
+      - if @route.operators.empty? 
+        Operator unknown
+      - else
+        Operated by
+        %ul
+          - @route.operators.each do |operator|
+            %li= operator.code
+    .terminuses
+      != terminus_text(@route)
 = render :partial => 'shared/location_stories', :locals => {:location => @route}
