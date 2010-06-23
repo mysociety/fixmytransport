@@ -266,6 +266,7 @@ class Route < ActiveRecord::Base
   def description
     "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
   end
+  memoize :description
   
   def short_name
     name(from_stop=nil, short=true)

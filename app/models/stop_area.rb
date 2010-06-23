@@ -24,6 +24,8 @@
 #
 
 class StopArea < ActiveRecord::Base
+  extend ActiveSupport::Memoizable
+  
   has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships
   has_dag_links :link_class_name => 'StopAreaLink'
@@ -34,9 +36,7 @@ class StopArea < ActiveRecord::Base
   
   def self.full_find(id, scope)
     find(id, :scope => scope, 
-         :include => { :stops => [ {:route_segments_as_from_stop => :route},
-                                   {:route_segments_as_to_stop => :route}, 
-                                   :locality ] } )
+         :include => { :stops => [ {:routes_as_from_stop => :region}, {:routes_as_to_stop, :region}, :locality ] } )
   end
   
   def self.find_by_code(code)
@@ -60,5 +60,6 @@ class StopArea < ActiveRecord::Base
     end
     return nil
   end
+  memoize :area
   
 end
