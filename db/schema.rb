@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100617171322) do
+ActiveRecord::Schema.define(:version => 20100623134404) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -87,6 +87,9 @@ ActiveRecord::Schema.define(:version => 20100617171322) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "locality_links", ["ancestor_id"], :name => "index_locality_links_on_ancestor_id"
+  add_index "locality_links", ["descendant_id"], :name => "index_locality_links_on_descendant_id"
 
   create_table "location_searches", :force => true do |t|
     t.integer  "transport_mode_id"
@@ -176,8 +179,10 @@ ActiveRecord::Schema.define(:version => 20100617171322) do
     t.string   "type"
     t.string   "name"
     t.integer  "region_id"
+    t.string   "cached_slug"
   end
 
+  add_index "routes", ["cached_slug"], :name => "index_routes_on_cached_slug"
   add_index "routes", ["number"], :name => "index_routes_on_number"
   add_index "routes", ["region_id"], :name => "index_routes_on_region_id"
   add_index "routes", ["transport_mode_id"], :name => "index_routes_on_transport_mode_id"
@@ -203,6 +208,7 @@ ActiveRecord::Schema.define(:version => 20100617171322) do
   end
 
   add_index "slugs", ["name", "sluggable_type", "sequence", "scope"], :name => "index_slugs_on_n_s_s_and_s", :unique => true
+  add_index "slugs", ["sluggable_id", "sluggable_type"], :name => "index_stops_on_sluggable_id_and_sluggable_type"
   add_index "slugs", ["sluggable_id"], :name => "index_slugs_on_sluggable_id"
 
   create_table "stop_area_links", :force => true do |t|
