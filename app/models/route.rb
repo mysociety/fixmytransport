@@ -12,6 +12,8 @@
 #
 
 class Route < ActiveRecord::Base
+  extend ActiveSupport::Memoizable
+  
   has_many :route_operators, :dependent => :destroy
   has_many :operators, :through => :route_operators, :uniq => true
   has_many :route_segments, :dependent => :destroy
@@ -27,6 +29,12 @@ class Route < ActiveRecord::Base
   belongs_to :region
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   @@per_page = 20
+
+  def self.full_find(id, scope)
+    find(id, :scope => scope, 
+             :include => [{ :route_segments => [:to_stop => :locality, :from_stop => :locality] }, 
+                          { :route_operators => :operator }])
+  end
   
   # Return routes with this number and transport mode that have a stop or stop area in common with 
   # the route given
@@ -280,11 +288,8 @@ class Route < ActiveRecord::Base
   def stops
     route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }.flatten.uniq
   end
-  
-  def display_route_segments
-    route_segments
-  end
-  
+  memoize :stops
+    
   def next_stops(stop_id)
     outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == stop_id } 
     outgoing_segments.map{ |route_segment| route_segment.to_stop }
@@ -301,6 +306,7 @@ class Route < ActiveRecord::Base
     terminuses = from_terminuses.map{ |segment| segment.from_stop } + to_terminuses.map{ |segment| segment.to_stop }
     terminuses.uniq
   end
+  memoize :terminuses
   
   def name_by_terminuses(transport_mode, from_stop=nil, short=false)
     is_loop = false

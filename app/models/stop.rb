@@ -38,6 +38,8 @@
 
 
 class Stop < ActiveRecord::Base
+  extend ActiveSupport::Memoizable
+  
   named_scope :active, :conditions => { :status => 'act' }
   has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
@@ -50,6 +52,14 @@ class Stop < ActiveRecord::Base
   belongs_to :locality
   accepts_nested_attributes_for :stories
   has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality
+ 
+  def self.full_find(id, scope)
+    find(id, :scope => scope, 
+         :include => [ { :routes_as_from_stop => [:region, :route_segments] }, 
+                       { :routes_as_to_stop => [:region, :route_segments] }, 
+                       :locality,
+                       { :stop_areas => :locality } ])
+  end
   
   def routes
     (routes_as_from_stop | routes_as_to_stop).uniq.sort{ |a,b| a.name <=> b.name }
@@ -70,6 +80,7 @@ class Stop < ActiveRecord::Base
   def transport_modes
     StopType.transport_modes_for_code(stop_type)
   end
+ 
   
   def full_name
     "#{name_with_long_indicator}#{suffix}"
@@ -115,6 +126,7 @@ class Stop < ActiveRecord::Base
   def description
     "#{full_name} in #{area}"
   end
+  memoize :description
   
   def locality_name
     locality.name

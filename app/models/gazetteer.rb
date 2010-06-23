@@ -31,7 +31,7 @@ class Gazetteer
     stop_type_codes = StopType.codes_for_transport_mode(attributes[:transport_mode_id])
     query = 'stop_type in (?)'
     params = [stop_type_codes]
-    includes = nil
+    includes = [:locality]
     if !attributes[:postcode].blank?
       coord_info = coords_from_postcode(attributes[:postcode])
       if coord_info == :postcode_not_found
@@ -67,7 +67,8 @@ class Gazetteer
       if !route_results[:results].empty?
         query += ' AND route_segments.route_id in (?)'
         params << route_results[:results]
-        includes = :route_segments_as_from_stop, :route_segments_as_to_stop
+        includes << :route_segments_as_from_stop
+        includes << :route_segments_as_to_stop
       end
     end
     conditions = [query] + params
@@ -98,7 +99,7 @@ class Gazetteer
     routes = Route.find_from_attributes(attributes, limit=options[:limit])
     return {:results => routes, :errors => errors } if ! routes.empty?    
     
-    select_clause = 'SELECT distinct routes.*'
+    select_clause = 'SELECT distinct routes.id'
     from_clause = 'FROM routes'
     where_clause = 'WHERE transport_mode_id = ?'
     params = [attributes[:transport_mode_id]]
@@ -135,6 +136,9 @@ class Gazetteer
     params = ["#{select_clause} #{from_clause} #{where_clause}"] + params
     if errors.empty?
       routes = Route.find_by_sql(params)
+      routes = Route.find(:all, :conditions => ['id in (?)', routes], 
+                          :include => { :route_segments => [:from_stop => :locality, :to_stop => :locality], 
+                                        :route_operators => :operator } )
     end
     { :results => routes, :errors => errors }
   end

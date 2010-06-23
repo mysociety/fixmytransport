@@ -16,18 +16,31 @@
 class StopType < ActiveRecord::Base
   has_many :transport_mode_stop_types
   has_many :transport_modes, :through => :transport_mode_stop_types
+  @@modes_by_code = {}
+  @@codes_by_mode = {}
   
   def self.codes_for_transport_mode(transport_mode_id)
-    transport_mode_stop_types = TransportModeStopType.find(:all, :conditions => ['transport_mode_id = ?', transport_mode_id])
-    stop_type_ids = transport_mode_stop_types.map{|tmst| tmst.stop_type_id }
-    stop_types = find([stop_type_ids])
-    stop_types.map{ |stop_type| stop_type.code }
+    calculate_hashes if @@codes_by_mode.empty? 
+    @@codes_by_mode[transport_mode_id]
+  end
+  
+  def self.calculate_hashes
+    transport_mode_stop_types = TransportModeStopType.find(:all, :include => :stop_type)
+    transport_mode_stop_types.each do |tmst|
+      if ! @@codes_by_mode[tmst.transport_mode_id]
+        @@codes_by_mode[tmst.transport_mode_id] = []
+      end
+      @@codes_by_mode[tmst.transport_mode_id] << tmst.stop_type.code
+      if ! @@modes_by_code[tmst.stop_type.code]
+        @@modes_by_code[tmst.stop_type.code] = []
+      end
+      @@modes_by_code[tmst.stop_type.code] << tmst.transport_mode_id
+    end
   end
   
   def self.transport_modes_for_code(code)
-    modes = find(:first, :conditions => ['code = ?', code], 
-                 :include => { :transport_mode_stop_types => :transport_mode }).transport_modes
-    modes.map{ |mode| mode.name }
+    calculate_hashes if @@modes_by_code.empty?
+    @@modes_by_code[code]
   end
   
 end

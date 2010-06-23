@@ -32,6 +32,13 @@ class StopArea < ActiveRecord::Base
   belongs_to :locality
   has_friendly_id :name, :use_slug => true, :scope => :locality                                  
   
+  def self.full_find(id, scope)
+    find(id, :scope => scope, 
+         :include => { :stops => [ {:route_segments_as_from_stop => :route},
+                                   {:route_segments_as_to_stop => :route}, 
+                                   :locality ] } )
+  end
+  
   def self.find_by_code(code)
     find(:first, :conditions => ["lower(code) = ?", code.downcase])
   end

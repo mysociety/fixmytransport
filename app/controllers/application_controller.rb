@@ -29,8 +29,6 @@ class ApplicationController < ActionController::Base
   end
   
   def location_path(location)
-    # map any Route subclasses back to base class in order to pass to polymorphic_url
-    location = location.becomes(Route) if location.is_a? Route 
     if location.is_a? Stop
       return stop_path(location.locality, location)
     elsif location.is_a? StopArea
@@ -42,8 +40,6 @@ class ApplicationController < ActionController::Base
   end
   
   def location_url(location, attributes={})
-   # map any Route subclasses back to base class in order to pass to polymorphic_url
-   location = location.becomes(Route) if location.is_a? Route 
    if location.is_a? Stop
      return stop_url(location.locality, location, attributes)
    elsif location.is_a? StopArea

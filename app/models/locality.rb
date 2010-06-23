@@ -31,12 +31,19 @@ class Locality < ActiveRecord::Base
   has_friendly_id :name_and_qualifier_name, :use_slug => true
   
   def self.find_all_by_name(name)
-    localities = find(:all, :conditions => ['lower(localities.name) = ? 
-                                        or lower(admin_areas.name) = ? 
-                                        or lower(districts.name) = ?
-                                        or lower(regions.name) = ?', 
-                                        name.downcase, name.downcase, name.downcase, name.downcase],
-                       :include => [{:admin_area => :region}, :district])
+    localities = find_by_sql(['SELECT localities.* 
+                               FROM localities 
+                               LEFT OUTER JOIN admin_areas 
+                               ON admin_areas.id = localities.admin_area_id 
+                               LEFT OUTER JOIN regions
+                               ON regions.id = admin_areas.region_id 
+                               LEFT OUTER JOIN districts 
+                               ON districts.id = localities.district_id 
+                               WHERE (lower(localities.name) = ? 
+                               OR lower(admin_areas.name) = ? 
+                               OR lower(districts.name) = ?
+                               OR lower(regions.name) = ?)', 
+                               name.downcase, name.downcase, name.downcase, name.downcase])
     localities
   end
   
@@ -46,7 +53,11 @@ class Locality < ActiveRecord::Base
   
   def self.find_all_with_descendants(name)
     localities = find_all_by_name(name)
-    with_descendants = localities.map{ |locality| [locality, locality.descendants] }.flatten.uniq
+    descendents = find_by_sql(["SELECT localities.* 
+                               FROM localities INNER JOIN locality_links
+                               ON localities.id = locality_links.descendant_id 
+                               WHERE ((locality_links.ancestor_id in (?)))", localities])
+    with_descendants = localities + descendents
   end
   
   def self.find_by_coordinates(easting, northing)
