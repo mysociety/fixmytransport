@@ -525,7 +525,7 @@ borough_station:
   status: act
   lon: "-0.09409"
   northing: "179711"
-  locality_id: "19160"
+  locality: the_borough
   grid_type: U
   naptan_code: ""
   revision_number: "7"
@@ -552,7 +552,7 @@ staple_street:
   status: act
   lon: "-0.0876"
   northing: "179625"
-  locality_id: "19160"
+  locality: the_borough
   grid_type: U
   naptan_code: ""
   revision_number: "3"

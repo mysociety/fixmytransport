@@ -230,11 +230,8 @@ describe Route do
       existing_route = routes(:victoria_to_haywards_heath)
       existing_route.route_segments.size.should == 4
       Route.stub!(:find_existing).and_return([existing_route])
-      route_segment = mock_model(RouteSegment, :from_stop => Stop.new, 
-                                               :to_stop => Stop.new,
-                                               :from_terminus? => false,
-                                               :to_terminus? => false,
-                                               :destroy => true)
+      route_segment = RouteSegment.create(:from_stop => stops(:borough_station),
+                                          :to_stop => stops(:staple_street))
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
                         :route_segments => [route_segment])
