@@ -9,6 +9,10 @@ ActionController::Routing::Routes.draw do |map|
   map.confirm '/c/:email_token', :action => 'confirm', :controller => 'stories'
   
   # stops
+  map.random_stops "/stops/random.:format", :controller => "stops",
+                                            :action => "random", 
+                                            :conditions => { :method => :get }
+                                            
   map.stop "/stops/:scope/:id.:format", :controller => "stops", 
                                 :action => 'show', 
                                 :conditions => { :method => :get }
@@ -17,10 +21,11 @@ ActionController::Routing::Routes.draw do |map|
                                 :action => 'update', 
                                 :conditions => { :method => :put }
   
-  map.random_stops "/stops/random.:format", :controller => "stops",
-                                            :action => "random", 
-                                            :conditions => { :method => :get }
   # stop areas
+  map.random_stop_areas "/stop-areas/random.:format", :controller => "stop_areas",
+                                                      :action => "random", 
+                                                      :conditions => { :method => :get }  
+
   map.stop_area "/stop-areas/:scope/:id.:format", :controller => "stop_areas", 
                                                   :action => 'show', 
                                                   :conditions => { :method => :get }
@@ -29,11 +34,11 @@ ActionController::Routing::Routes.draw do |map|
                                                   :action => 'update', 
                                                   :conditions => { :method => :put }
   
-  map.random_stop_areas "/stop-areas/random.:format", :controller => "stop_areas",
-                                                      :action => "random", 
-                                                      :conditions => { :method => :get }  
-
   # routes 
+  map.random_routes "/routes/random.:format", :controller => "routes",
+                                              :action => "random", 
+                                              :conditions => { :method => :get }
+                                              
   map.route "/routes/:scope/:id.:format", :controller => "routes", 
                                           :action => 'show', 
                                           :conditions => { :method => :get }
@@ -42,9 +47,7 @@ ActionController::Routing::Routes.draw do |map|
                                           :action => 'update', 
                                           :conditions => { :method => :put }
   
-  map.routes "/routes/random.:format", :controller => "routes",
-                                       :action => "random", 
-                                       :conditions => { :method => :get }
+
 
   # static
   map.about '/about', :controller => 'static', :action => 'about'
