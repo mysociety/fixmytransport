@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100623145916) do
+ActiveRecord::Schema.define(:version => 20100624124129) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -180,10 +180,12 @@ ActiveRecord::Schema.define(:version => 20100623145916) do
     t.string   "name"
     t.integer  "region_id"
     t.string   "cached_slug"
+    t.string   "operator_code"
   end
 
   add_index "routes", ["cached_slug"], :name => "index_routes_on_cached_slug"
   add_index "routes", ["number"], :name => "index_routes_on_number"
+  add_index "routes", ["operator_code"], :name => "index_routes_on_operator_code"
   add_index "routes", ["region_id"], :name => "index_routes_on_region_id"
   add_index "routes", ["transport_mode_id"], :name => "index_routes_on_transport_mode_id"
   add_index "routes", ["type"], :name => "index_routes_on_type"

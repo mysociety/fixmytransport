@@ -36,13 +36,93 @@ class Parsers::NptdrParser
     return TransportMode.find_by_name(transport_mode_name)
   end
   
-  def parse_operators filepath
+  # existing_operator and new_operator are arrays of [short_name, legal_name]
+  # can merge if they have the same non-blank shortname and one has a blank
+  # legal name
+  def can_merge?(existing_operator, new_operator)
+    if !existing_operator[:short_form] or !new_operator[:short_form]
+      return false
+    end
+    if (existing_operator[:short_form] != new_operator[:short_form])
+      return false
+    end
+    if (!existing_operator[:legal_name].blank? and !new_operator[:legal_name].blank?) 
+      return false
+    end
+    return true
+  end
+  
+  def merge_operators(existing_operators, new_operator)
+    merged = false
+    existing_operators.each do |existing_operator|
+      if can_merge?(existing_operator, new_operator)
+        if existing_operator[:legal_name].blank?
+          existing_operator[:legal_name] = new_operator[:legal_name]
+        end
+        merged = true
+      end
+    end
+    return merged
+  end
+  
+  def preprocess_operators filepath
+    csv_data = convert_encoding(filepath)
+    operators_by_code = {}
+    FasterCSV.parse(csv_data, csv_options) do |row|
+      code = row['Operator'].strip
+      short_form = row['Operator Short Form'].strip
+      legal_name = row['Operator Legal Name'].strip
+      operator_info = { :short_form => short_form, :legal_name => legal_name }
+      if operators_by_code[code].nil?
+        operators_by_code[code] = []
+      end
+      if operators_by_code[code].empty?
+        operators_by_code[code] << operator_info
+      else 
+        if !operators_by_code[code].include? operator_info
+          merged = merge_operators(operators_by_code[code], operator_info)
+          if !merged
+            operators_by_code[code] << operator_info
+          end
+        end
+      end
+    end
+    write_operator_file(operators_by_code, filepath)
+  end
+
+  def write_operator_file(operators_by_code, filepath)
+    unique_outfile_path = "#{filepath}.unique"
+    num_total = 0
+    header_line = ["Code", "Short Name", "Name"].join("\t") + "\n"
+    File.open(unique_outfile_path, 'w') do |unique|
+      unique.write(header_line)
+      operators_by_code.each do |key, operators|
+        operators.each do |operator| 
+          line = ([key] + [operator[:short_form], operator[:legal_name]]).join("\t") + "\n"
+          unique.write(line)
+          num_total += 1
+        end
+      end
+      puts "Created #{num_total} rows"
+    end
+  end
+
+  def parse_operators(filepath)
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      transport_mode_name = row['Transport Mode']
-      transport_mode = TransportMode.find_by_name(transport_mode_name)
-      yield Operator.new(:code       => row['Operator Code'].strip, 
-                         :name       => row['Operator Name'].strip)
+      short_name = row['Short Name']
+      name = row['Name']
+      short_name = short_name.strip if short_name
+      name = name.strip if name
+      if name.blank? and !short_name.blank?
+        name = short_name
+      end
+      if short_name.blank? and !name.blank?
+        short_name = name
+      end
+      yield Operator.new(:code       => row['Code'].strip, 
+                         :short_name => short_name, 
+                         :name       => name)
     end
   end
 
@@ -70,7 +150,8 @@ class Parsers::NptdrParser
       next unless transport_mode.route_type
       route_type = transport_mode.route_type.constantize
       route = route_type.new(:number => route_number,
-                             :transport_mode => transport_mode)         
+                             :transport_mode => transport_mode,
+                             :operator_code => operator_code)         
       stop_codes.each_cons(2) do |from_stop_code,to_stop_code|
         options = {:includes => {:stop_area_memberships => :stop_area}}
         from_stop = Stop.find_by_atco_code(from_stop_code.strip, options)
@@ -97,9 +178,7 @@ class Parsers::NptdrParser
                                    :to_stop   => to_stop,
                                    :from_terminus => from_terminus, 
                                    :to_terminus  => to_terminus)
-      end
-      operator = Operator.find_or_create_by_code(operator_code)   
-      route.route_operators.build(:operator => operator)                  
+      end               
       yield route
     end
   end

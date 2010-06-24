@@ -33,17 +33,14 @@ namespace :nptdr do
   end
   
   namespace :load do
-       
-    desc "Loads operator data from a TSV file specified as FILE=filename"
+    
+    desc 'Loads operators data from the tsv file specified as FILE=filename'
     task :operators => :environment do 
-      check_for_file 
-      puts "Loading operators from #{ENV['FILE']}..."
+      check_for_file
+      puts "Loading operator names from #{ENV['FILE']}..."
       parser = Parsers::NptdrParser.new 
       parser.parse_operators(ENV['FILE']) do |operator| 
-        existing = Operator.find(:all, :conditions => ["lower(code) = ? and lower(name) = ? and lower(short_name) = ?",
-                                       operator.code.downcase, operator.name.downcase, operator.short_name.downcase])
-        next if !existing.empty?
-        operator.save! 
+        operator.save!
       end
     end
     
@@ -102,5 +99,20 @@ namespace :nptdr do
         route.save!
       end
     end
+  end
+  
+  namespace :temp do 
+    
+    desc 'Move operator_codes to routes'
+    task :move_operator_codes_to_routes => :environment do 
+      Route.find_each do |route|
+        # currently no route has more than one operator - that would make it a separate route
+        route.operator_code = route.operators.first.code
+        route.save!
+      end
+      RouteOperator.connection.execute("DELETE FROM route_operators")
+      Operator.connection.execute("DELETE FROM operators")
+    end
+  
   end
 end
