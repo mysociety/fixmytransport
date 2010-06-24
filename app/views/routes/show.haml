@@ -20,7 +20,7 @@
       %span.locality= "#{@route.area}."
     .operators
       - if @route.operators.empty? 
-        @route.operator_code
+        = @route.operator_code
       - else
         Operated by
         %ul
