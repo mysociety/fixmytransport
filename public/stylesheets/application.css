@@ -311,11 +311,11 @@ ul.stops {
     max-width: 45%;
 }
 
-form.new_story label{
+form.create_story label{
   width: 8em;  
 }
 
-form.new_story textarea, 
-form.new_story input[type=text] {
+form.create_story textarea, 
+form.create_story input[type=text] {
   width: 20em;
 }
