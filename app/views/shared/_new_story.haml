@@ -1,7 +1,13 @@
 %h3= t(:tell_us_your_story)
-- form_for location, :url => location_path(location) do |f| 
+- form_for location, :url => location_path(location), :html => {:class => 'new_story'} do |f| 
   .fieldset
     - f.fields_for :stories, @new_story do |story_fields|
+      - if @new_story.errors.on(:transport_mode_id)
+        .form-field-error= error_message_on @new_story, :transport_mode_id
+      %label{:for => 'transport_mode_id'}
+        =t(:transport_mode)
+      .transport-mode
+        != transport_mode_radio_buttons('new_story', location)
       - if location.errors.on('stories.category')
         .form-field-error= error_message_on location, 'stories.category'
       .form-field

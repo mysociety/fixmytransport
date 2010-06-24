@@ -311,17 +311,11 @@ ul.stops {
     max-width: 45%;
 }
 
-form.edit_route label,
-form.edit_stop label,
-form.edit_stop_area label{
-  width: 6em;  
+form.new_story label{
+  width: 8em;  
 }
 
-form.edit_route textarea, 
-form.edit_route input[type=text],
-form.edit_stop textarea, 
-form.edit_stop input[type=text],
-form.edit_stop_area textarea, 
-form.edit_stop_area input[type=text] {
+form.new_story textarea, 
+form.new_story input[type=text] {
   width: 20em;
 }

@@ -3,6 +3,7 @@ class RoutesController < LocationsController
   def show
     @route = Route.full_find(params[:id], params[:scope])
     @new_story = Story.new(:reporter => User.new)
+    @new_story.transport_mode_id = @route.transport_mode_id
     location_search.add_location(@route) if location_search
   end
   

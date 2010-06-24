@@ -11,4 +11,6 @@
 #
 
 class TransportModeStopAreaType < ActiveRecord::Base
+  belongs_to :stop_area_type
+  belongs_to :transport_mode
 end

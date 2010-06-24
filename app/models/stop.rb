@@ -78,10 +78,9 @@ class Stop < ActiveRecord::Base
   end
   
   def transport_modes
-    StopType.transport_modes_for_code(stop_type)
+    TransportMode.find(StopType.transport_modes_for_code(stop_type))
   end
  
-  
   def full_name
     "#{name_with_long_indicator}#{suffix}"
   end

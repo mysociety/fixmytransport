@@ -286,6 +286,10 @@ class Route < ActiveRecord::Base
     end
   end
   
+  def transport_modes
+    [transport_mode]
+  end
+  
   def stops
     route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }.flatten.uniq
   end

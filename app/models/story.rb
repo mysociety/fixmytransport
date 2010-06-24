@@ -15,7 +15,7 @@
 #  transport_mode_id :integer
 #
 class Story < ActiveRecord::Base
-  validates_presence_of :transport_mode_id, :unless => :location
+  validates_presence_of :transport_mode_id
   validates_presence_of :story, :title, :category, :if => :location
   validate :validate_location_attributes
   belongs_to :reporter, :class_name => 'User'

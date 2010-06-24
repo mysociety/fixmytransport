@@ -5,14 +5,25 @@ module ApplicationHelper
     MySociety::Config.get('GOOGLE_MAPS_API_KEY', '')
   end
   
-  def transport_mode_radio_buttons
+  def transport_mode_radio_buttons(model_name, location=nil)
     tags = []
-    TransportMode.active.find(:all).each do |transport_mode| 
-      tag = radio_button 'story', 'transport_mode_id', transport_mode.id, {:class => 'transport-mode'}
-      tag += transport_mode.name
-      tags << tag
+    if location
+      available_modes = location.transport_modes
+    else
+      available_modes = TransportMode.active.find(:all)
     end
-    tags.join("\n")
+    if available_modes.size == 1
+      input = hidden_field(model_name, 'transport_mode_id', :value => available_modes.first.id)
+      input += available_modes.first.name
+    else
+      available_modes.each do |transport_mode| 
+        tag = radio_button model_name, 'transport_mode_id', transport_mode.id, {:class => 'transport-mode'}
+        tag += transport_mode.name
+        tags << tag
+      end
+      input = tags.join("\n")
+    end
+    input
   end
   
   def location_param(param_name)
