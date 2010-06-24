@@ -1,6 +1,4 @@
 class StoriesController < ApplicationController
-
-  caches_page :new
   
   def new
     @stories = Story.find_recent(5)
@@ -52,7 +50,6 @@ class StoriesController < ApplicationController
     @story = Story.find_by_token(params[:email_token])
     if @story
       @story.update_attribute(:confirmed, true)
-      expire_page("/")
     else
       @error = t(:story_not_found)
     end
