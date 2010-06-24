@@ -41,7 +41,7 @@ namespace :db do
     Rake::Task['db:migrate'].execute
     
     puts "migrating up"
-    ENV['VERSION'] = ''
+    ENV.delete('VERSION')
     Rake::Task['db:migrate'].execute
 
     puts "deleting data"
