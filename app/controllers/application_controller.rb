@@ -17,8 +17,6 @@ class ApplicationController < ActionController::Base
   def admin_http_auth_user
     if request.env["REMOTE_USER"]
       return request.env["REMOTE_USER"]
-    elsif request.env["HTTP_X_FORWARDED_USER"]
-        return request.env["HTTP_X_FORWARDED_USER"]
     else
       return "*unknown*";
     end

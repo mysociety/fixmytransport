@@ -1,7 +1,6 @@
 %h2 Routes
 - TransportMode.active.find(:all).each do |transport_mode| 
   = link_to transport_mode.name, "?mode=#{transport_mode.id}"
-= request.env.inspect
 %table.routes
   %tr
     %th ID
