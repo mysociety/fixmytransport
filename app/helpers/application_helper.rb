@@ -17,8 +17,10 @@ module ApplicationHelper
       input += available_modes.first.name
     else
       available_modes.each do |transport_mode| 
-        tag = radio_button model_name, 'transport_mode_id', transport_mode.id, {:class => 'transport-mode'}
-        tag += transport_mode.name
+        tag = radio_button model_name, 'transport_mode_id', transport_mode.id, {:class => 'transport-mode', :onchange => "changeMode('#{transport_mode.css_name}')"}
+        tag += label model_name, "transport_mode_id_#{transport_mode.id}", transport_mode.name
+        # tag += %Q[<label for="#{model_name}_transport_mode_id_#{transport_mode.id}">#{transport_mode.name}</label>]
+        tag = %Q[<div class="transport-bg-#{transport_mode.css_name}"}>#{tag}</div>]
         tags << tag
       end
       input = tags.join("\n")

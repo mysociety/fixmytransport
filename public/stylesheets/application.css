@@ -95,12 +95,122 @@ ul.navigation li {
   text-align: center;
 }
 
-.homepage .story {
-  padding: 1em;
+.homepage .story, #transport-mode-radio {
+  padding: 8px;
+  margin: 0.5em 0;
+}
+
+.story-transport-none {
+  background-image: url('/images/transport_none.jpg');
+  background-repeat: no-repeat;
+}
+
+.story-transport-bus {
+  background-image: url('/images/transport_bus.jpg');
+  background-repeat: no-repeat;
+}
+
+.story-transport-coach {
+    background-image: url('/images/transport_coach.jpg');
+    background-repeat: no-repeat;
+}
+
+.story-transport-taxi {
+    background-image: url('/images/transport_taxi.jpg');
+    background-repeat: no-repeat;
+}
+
+.story-transport-air {
+    background-image: url('/images/transport_air.jpg');
+    background-repeat: no-repeat;
+}
+
+.story-transport-ferry {
+    background-image: url('/images/transport_ferry.jpg');
+    background-repeat: no-repeat;
+}
+
+.story-transport-train {
+    background-image: url('/images/transport_train.jpg');
+    background-repeat: no-repeat;
+}
+
+.story-transport-trammetro {
+    background-image: url('/images/transport_trammetro.jpg');
+    background-repeat: no-repeat;
 }
 
 .homepage input[type=text] {
   width: 15em;
+}
+
+.story-body {
+    background-color: #ffffff;
+    padding: 0.5em;
+    margin:28px 8px 8px 8px;
+}
+
+.transport-mode {
+    background-color: transparent;
+    padding: 0.1em;
+    margin:28px 8px 8px 8px;
+    min-height: 28px; /* should be content-driven */
+    text-align:center;
+}
+
+.transport-mode div {
+    display: block-inline;
+    margin: 0px;
+    padding:4px;
+    float: left;
+}
+
+#transport-mode-radio div label{
+    display: inline-block;
+    width: auto;    
+    margin: 0;
+    padding: 0;
+}
+#transport-mode-radio div input{
+    text-align: right;
+    float: left;
+    padding: 0;
+    margin: 4px 0.5em 0 0;
+}
+
+.transport-bg-bus {
+    background-color: #618e7c;
+    color: #ffffff;
+}
+
+.transport-bg-coach {
+    background-color: #b794cf;
+    color: #ffffff;
+}
+
+.transport-bg-taxi {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.transport-bg-air {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.transport-bg-ferry {
+    background-color: #4864a5;
+    color: #ffffff;
+}
+
+.transport-bg-train {
+    background-color: #963535;
+    color: #ffffff;
+}
+
+.transport-bg-trammetro {
+    background-color: #f79225;
+    color: #ffffff;
 }
 
 /* Story lists */
@@ -118,6 +228,8 @@ label {
 
 .form-field-error {
   color: #CC0000;
+  width: 400px;
+  margin: 0 1em 0 0;
 }
 
 
