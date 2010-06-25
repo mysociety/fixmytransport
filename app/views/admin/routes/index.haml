@@ -5,12 +5,12 @@
   %tr
     %th ID
     %th Name
-    %th 
+    %th Region
   -@routes.each do |route|
     %tr
       %td
         = link_to route.id, main_url(route_path(route.region, route))
         = link_to "(admin)", admin_url(admin_route_path(route.region, route))
       %td= route.name
-      %td
+      %td= route.region.name
 = will_paginate @routes, {:admin => true}

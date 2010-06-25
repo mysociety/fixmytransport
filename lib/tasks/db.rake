@@ -16,7 +16,11 @@ namespace :db do
     Rake::Task['naptan:geo:convert_stop_areas'].execute
     
     # Load Routes
-    ENV['DIR'] = File.join(MySociety::Config.get('NPTDR_DIR', ''), 'routes')
+    ENV['DIR'] = File.join(MySociety::Config.get('NPTDR_DERIVED_DIR', ''), 'routes')
+    Rake::Task['nptdr:load:routes'].execute
+    
+    # Load Operators
+    ENV['FILE'] = File.join(MySociety::Config.get('NPTDR_DERIVED_DIR', ''), 'Operators.tsv.unique')
     Rake::Task['nptdr:load:routes'].execute
     
     # Delete stop areas without stops, add locality 

@@ -20,14 +20,16 @@ class Route < ActiveRecord::Base
   has_many :from_stops, :through => :route_segments, :class_name => 'Stop' 
   has_many :to_stops, :through => :route_segments, :class_name => 'Stop'
   belongs_to :transport_mode
-  validates_presence_of :number
   has_many :stories, :as => :location, :order => 'created_at desc'
-  accepts_nested_attributes_for :stories
   has_many :route_localities, :dependent => :destroy
   has_many :localities, :through => :route_localities
-  cattr_reader :per_page
   belongs_to :region
+  accepts_nested_attributes_for :stories
+  validates_presence_of :number
+  cattr_reader :per_page
   has_friendly_id :short_name, :use_slug => true, :scope => :region
+  has_paper_trail
+  
   @@per_page = 20
 
   def self.full_find(id, scope)

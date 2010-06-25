@@ -13,8 +13,6 @@ describe Parsers::NptdrParser do
       TransportMode.stub!(:find_by_name).with('Bus').and_return(@transport_mode)
       @stop = mock_model(Stop, :atco_code => 'xxxxx')
       Stop.stub!(:find_by_atco_code).and_return{ |atco_code, options| mock_model(Stop, :atco_code => atco_code)}
-      @operator = mock_model(Operator, :code => 'ZZ')
-      Operator.stub!(:find_or_create_by_code).and_return(@operator)
       @parser = Parsers::NptdrParser.new
       @routes = []
       @parser.parse_routes(example_file("routes.tsv")){ |route| @routes << route }
@@ -34,8 +32,8 @@ describe Parsers::NptdrParser do
       @route.route_segments.first.to_stop.atco_code.should == 'bbbbbbbbb'
     end
     
-    it 'should add operators to the route' do 
-      @route.route_operators.first.operator.code.should == 'ZZ'
+    it 'should add an operator code to the route' do 
+      @route.operator_code.should == 'BL'
     end
     
     it 'should mark the route terminus stops' do 

@@ -1,0 +1,92 @@
+--- !ruby/object:Gem::Specification 
+name: paper_trail
+version: !ruby/object:Gem::Version 
+  prerelease: false
+  segments: 
+  - 1
+  - 5
+  - 1
+  version: 1.5.1
+platform: ruby
+authors: 
+- Andy Stewart
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2010-06-22 00:00:00 +01:00
+default_executable: 
+dependencies: []
+
+description: 
+email: boss@airbladesoftware.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: 
+- README.md
+files: 
+- .gitignore
+- MIT-LICENSE
+- README.md
+- Rakefile
+- VERSION
+- generators/paper_trail/USAGE
+- generators/paper_trail/paper_trail_generator.rb
+- generators/paper_trail/templates/create_versions.rb
+- init.rb
+- install.rb
+- lib/paper_trail.rb
+- lib/paper_trail/config.rb
+- lib/paper_trail/controller.rb
+- lib/paper_trail/has_paper_trail.rb
+- lib/paper_trail/version.rb
+- paper_trail.gemspec
+- tasks/paper_trail_tasks.rake
+- test/paper_trail_controller_test.rb
+- test/paper_trail_model_test.rb
+- test/paper_trail_schema_test.rb
+- test/schema.rb
+- test/schema_change.rb
+- test/test_helper.rb
+- test/thread_safe_test.rb
+- uninstall.rb
+has_rdoc: true
+homepage: http://github.com/airblade/paper_trail
+licenses: []
+
+post_install_message: 
+rdoc_options: 
+- --charset=UTF-8
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: 
+rubygems_version: 1.3.6
+signing_key: 
+specification_version: 3
+summary: Track changes to your models' data.  Good for auditing or versioning.
+test_files: 
+- test/paper_trail_controller_test.rb
+- test/paper_trail_model_test.rb
+- test/paper_trail_schema_test.rb
+- test/schema.rb
+- test/schema_change.rb
+- test/test_helper.rb
+- test/thread_safe_test.rb

@@ -13,4 +13,5 @@
 class RouteOperator < ActiveRecord::Base
   belongs_to :operator
   belongs_to :route
+  has_paper_trail
 end

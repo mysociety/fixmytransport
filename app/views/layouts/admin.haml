@@ -10,6 +10,7 @@
     %h2= t(:site_name)
     %ul.admin-navigation 
       %li=link_to "Location searches", admin_url(admin_location_searches_path)
+      / %li=link_to "Operators", admin_url(admin_operators_path)
       %li=link_to "Routes", admin_url(admin_routes_path)
     #main
       - [:notice, :error, :message].each do |key| 

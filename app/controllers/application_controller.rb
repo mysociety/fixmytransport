@@ -13,6 +13,19 @@ class ApplicationController < ActionController::Base
   
   private
   
+  # For administration interface, return display name of authenticated user
+  def admin_http_auth_user
+    if request.env["REMOTE_USER"]
+      return request.env["REMOTE_USER"]
+    else
+      return "*unknown*";
+    end
+  end
+  
+  def current_user
+    admin_http_auth_user
+  end
+  
   def initialize_feedback 
     @feedback = Feedback.new
   end

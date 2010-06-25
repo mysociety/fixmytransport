@@ -34,3 +34,11 @@ ul.admin-navigation li {
   margin: 1em;
   clear: both;
 }
+
+table.routes { 
+  padding: 0.5em;
+}
+
+table.routes td {
+  padding: 0.2em;
+}
