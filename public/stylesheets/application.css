@@ -424,7 +424,15 @@ ul.stops {
 }
 
 form.create_story label{
-  width: 8em;  
+  width: 6em;  
+}
+
+form.create_story .checkbox label{
+  float: none;
+}
+
+.fieldset div.checkbox{
+  padding-left: 6.5em;
 }
 
 form.create_story textarea, 
