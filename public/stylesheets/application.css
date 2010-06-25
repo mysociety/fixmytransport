@@ -180,30 +180,37 @@ ul.navigation li {
 
 .transport-bg-bus {
     background-color: #618e7c;
+    color: #ffffff;
 }
 
 .transport-bg-coach {
     background-color: #b794cf;
+    color: #ffffff;
 }
 
 .transport-bg-taxi {
     background-color: #ffffff;
+    color: #000000;
 }
 
 .transport-bg-air {
     background-color: #ffffff;
+    color: #000000;
 }
 
 .transport-bg-ferry {
     background-color: #4864a5;
+    color: #ffffff;
 }
 
 .transport-bg-train {
     background-color: #963535;
+    color: #ffffff;
 }
 
 .transport-bg-trammetro {
     background-color: #f79225;
+    color: #ffffff;
 }
 
 /* Story lists */
@@ -221,6 +228,8 @@ label {
 
 .form-field-error {
   color: #CC0000;
+  width: 400px;
+  margin: 0 1em 0 0;
 }
 
 
