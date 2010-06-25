@@ -5,7 +5,7 @@ module ApplicationHelper
     MySociety::Config.get('GOOGLE_MAPS_API_KEY', '')
   end
   
-  def transport_mode_radio_buttons(model_name, location=nil)
+  def transport_mode_radio_buttons(context, model_name, location=nil)
     tags = []
     if location
       available_modes = location.transport_modes
@@ -13,13 +13,12 @@ module ApplicationHelper
       available_modes = TransportMode.active.find(:all)
     end
     if available_modes.size == 1
-      input = hidden_field(model_name, 'transport_mode_id', :value => available_modes.first.id)
+      input = context.hidden_field('transport_mode_id', :value => available_modes.first.id)
       input += available_modes.first.name
     else
       available_modes.each do |transport_mode| 
-        tag = radio_button model_name, 'transport_mode_id', transport_mode.id, {:class => 'transport-mode', :onchange => "changeMode('#{transport_mode.css_name}')"}
-        tag += label model_name, "transport_mode_id_#{transport_mode.id}", transport_mode.name
-        # tag += %Q[<label for="#{model_name}_transport_mode_id_#{transport_mode.id}">#{transport_mode.name}</label>]
+        tag = context.radio_button 'transport_mode_id', transport_mode.id, {:class => 'transport-mode', :onchange => "changeMode('#{transport_mode.css_name}')"}
+        tag += context.label "transport_mode_id_#{transport_mode.id}", transport_mode.name
         tag = %Q[<div class="transport-bg-#{transport_mode.css_name}"}>#{tag}</div>]
         tags << tag
       end
@@ -99,6 +98,15 @@ module ApplicationHelper
       text += terminus_links.first
     end
     text += "."    
+  end
+  
+  def departures_link(stop)
+    modes = stop.transport_mode_names
+    if modes.include? 'Bus' or modes.include? 'Coach' or modes.include? 'Ferry'
+      return link_to t(:live_departures), "http://mytraveline.mobi/departureboard?stopCode=#{stop.atco_code}"
+    else
+      return ''
+    end
   end
   
 end

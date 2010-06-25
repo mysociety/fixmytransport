@@ -13,6 +13,7 @@
          stop_init();
       });
     .extra-info
+      = departures_link(@stop)
       =render :partial => "shared/route_list", :locals => {:stop => @stop}
   .stop
     %h3.name= "#{@stop.full_name}" 
