@@ -4,12 +4,14 @@
     - f.fields_for :stories, @new_story do |story_fields|
       - if @new_story.errors.on(:transport_mode_id)
         .form-field-error= error_message_on @new_story, :transport_mode_id
-      %label{:for => 'transport_mode_id'}
+      %label{:for => 'transport_mode_id', :style => 'display: none;'}
         =t(:transport_mode)
-      .transport-mode
-        != transport_mode_radio_buttons('new_story', location)
-      - if location.errors.on('stories.category')
-        .form-field-error= error_message_on location, 'stories.category'
+      #chosen-transport-mode{:class=>'story-transport-nil'}
+        #transport-mode-radio
+          .transport-mode
+            != transport_mode_radio_buttons('new_story', location)
+          - if location.errors.on('stories.category')
+            .form-field-error= error_message_on location, 'stories.category'
       .form-field
         = story_fields.label :category
         != story_fields.select("category", Story.categories, { :include_blank => true })

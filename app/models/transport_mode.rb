@@ -18,4 +18,14 @@ class TransportMode < ActiveRecord::Base
   has_many :transport_mode_stop_area_types
   has_many :stop_area_types, :through => :transport_mode_stop_area_types
   named_scope :active, :conditions => { :active => true }
+
+  def css_name
+    if self.name.blank?
+      return ""
+    else
+      return self.name.gsub(/\W/,"").downcase
+    end
+  end
+  
 end
+  

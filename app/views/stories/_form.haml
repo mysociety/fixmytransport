@@ -10,20 +10,25 @@
       .form-field-error= error_message_on @story, :transport_mode_id
     %label{:for => 'transport_mode_id', :style => 'display: none;'}
       =t(:transport_mode)
-    .transport-mode
-      != transport_mode_radio_buttons('story')
-    - if @story.errors.on(:location_attributes)
-      .form-field-error= error_message_on @story, :location_attributes
-    .form-field
-      != label_tag 'story[location_attributes][name]', t(:location_name)
-      != text_field_tag 'story[location_attributes][name]', location_param(:name)
-      #guidance-name{:class => 'guidance'} e.g. London Euston
-    .form-field
-      != label_tag 'story[location_attributes][route_number]', t(:route_number)
-      != text_field_tag 'story[location_attributes][route_number]', location_param(:route_number)
-      #guidance-route{:class => 'guidance'} e.g. C10, Cardiff to Exeter
-    .form-field
-      != label_tag 'story[location_attributes][area]', t(:area)
-      != text_field_tag 'story[location_attributes][area]', location_param(:area)
-      #guidance-area{:class => 'guidance'} e.g. Bristol
-
+    #chosen-transport-mode{:class=>"story-transport-#{@story.transport_mode_css_name}"}
+      #transport-mode-radio
+        .transport-mode
+          != transport_mode_radio_buttons('story')
+        - if @story.errors.on(:location_attributes)
+          .form-field-error= error_message_on @story, :location_attributes
+      .form-field
+        != label_tag 'story[location_attributes][name]', t(:location_name)
+        != text_field_tag 'story[location_attributes][name]', location_param(:name)
+        #guidance-name{:class => 'guidance'} e.g. London Euston
+      .form-field
+        != label_tag 'story[location_attributes][route_number]', t(:route_number)
+        != text_field_tag 'story[location_attributes][route_number]', location_param(:route_number)
+        #guidance-route{:class => 'guidance'} e.g. C10, Cardiff to Exeter
+      .form-field
+        != label_tag 'story[location_attributes][area]', t(:area)
+        != text_field_tag 'story[location_attributes][area]', location_param(:area)
+        #guidance-area{:class => 'guidance'} e.g. Bristol
+:javascript
+  function changeMode(modeCssName){
+    jQuery("#chosen-transport-mode").removeClass().addClass('story-transport-' + modeCssName)
+  }
