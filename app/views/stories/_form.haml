@@ -13,7 +13,7 @@
     #chosen-transport-mode{:class=>"story-transport-#{@story.transport_mode_css_name}"}
       #transport-mode-radio
         .transport-mode
-          != transport_mode_radio_buttons('story')
+          != transport_mode_radio_buttons(form, 'story')
         - if @story.errors.on(:location_attributes)
           .form-field-error= error_message_on @story, :location_attributes
       .form-field
