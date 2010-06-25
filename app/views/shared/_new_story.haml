@@ -36,5 +36,9 @@
           .form-field
             = reporter_fields.label :name
             != reporter_fields.text_field :name
+          .checkbox
+            != reporter_fields.check_box :wants_fmt_updates
+            = reporter_fields.label :wants_fmt_updates, t(:wants_fmt_updates, :link => link_to(t(:fixmytransport), "http://www.mysociety.org/2010/03/15/mysocietys-next-12-months-fixmytransport-and-project-fosbury/"))
       != submit_tag t(:go)      
+
  
