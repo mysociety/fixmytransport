@@ -99,4 +99,13 @@ module ApplicationHelper
     text += "."    
   end
   
+  def departures_link(stop)
+    modes = stop.transport_mode_names
+    if modes.include? 'Bus' or modes.include? 'Coach' or modes.include? 'Ferry'
+      return link_to t(:live_departures), "http://mytraveline.mobi/departureboard?stopCode=#{stop.atco_code}"
+    else
+      return ''
+    end
+  end
+  
 end
