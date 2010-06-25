@@ -1,0 +1,63 @@
+module PaperTrail
+  module Controller
+
+    def self.included(base)
+      base.before_filter :set_paper_trail_whodunnit
+      base.before_filter :set_paper_trail_controller_info
+    end
+
+    protected
+
+    # Returns the user who is responsible for any changes that occur.
+    # By default this calls `current_user` and returns the result.
+    # 
+    # Override this method in your controller to call a different
+    # method, e.g. `current_person`, or anything you like.
+    def user_for_paper_trail
+      current_user rescue nil
+    end
+
+    # Returns any information about the controller or request that you
+    # want PaperTrail to store alongside any changes that occur.  By
+    # default this returns an empty hash.
+    #
+    # Override this method in your controller to return a hash of any
+    # information you need.  The hash's keys must correspond to columns
+    # in your `versions` table, so don't forget to add any new columns
+    # you need.
+    #
+    # For example:
+    #
+    #     {:ip => request.remote_ip, :user_agent => request.user_agent}
+    #
+    # The columns `ip` and `user_agent` must exist in your `versions` # table.
+    #
+    # Use the `:meta` option to `PaperTrail::Model::ClassMethods.has_paper_trail`
+    # to store any extra model-level data you need.
+    def info_for_paper_trail
+      {}
+    end
+
+    private
+
+    # Tells PaperTrail who is responsible for any changes that occur.
+    def set_paper_trail_whodunnit
+      ::PaperTrail.whodunnit = user_for_paper_trail
+    end
+
+    # DEPRECATED: please use `set_paper_trail_whodunnit` instead.
+    def set_whodunnit
+      logger.warn '[PaperTrail]: the `set_whodunnit` controller method has been deprecated.  Please rename to `set_paper_trail_whodunnit`.'
+      set_paper_trail_whodunnit
+    end
+
+    # Tells PaperTrail any information from the controller you want
+    # to store alongside any changes that occur.
+    def set_paper_trail_controller_info
+      ::PaperTrail.controller_info = info_for_paper_trail
+    end
+
+  end
+end
+
+ActionController::Base.send :include, PaperTrail::Controller
