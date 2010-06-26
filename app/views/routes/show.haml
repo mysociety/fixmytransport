@@ -19,13 +19,11 @@
     .details
       %span.locality= "#{@route.area}."
     .operators
-      - if @route.operators.empty? 
-        = @route.operator_code
-      - else
+      - if !@route.operators.empty? 
         Operated by
         %ul
           - @route.operators.each do |operator|
-            %li= operator.name ? operator.name : operator.code
+            %li= operator.name 
     .terminuses
       != terminus_text(@route)
 = render :partial => 'shared/location_stories', :locals => {:location => @route}

@@ -418,22 +418,35 @@ ul.stops {
 
 .train-routes .onward-stops .stop-link, 
 .train-routes .final-destinations .stop-link {
-    font-size: 0.8em;
-    margin: 0.5em 0 0.5em 0;
-    padding: 0.2em;
+  font-size: 0.8em;
+  margin: 0.5em 0 0.5em 0;
+  padding: 0.2em;
 }
+
 .train-routes .onward-stops{
   float: left;
-    max-width: 45%;
+  max-width: 45%;
 }
 
 .train-routes .final-destinations {
   float: right;
-    max-width: 45%;
+  max-width: 45%;
 }
 
 form.create_story label{
-  width: 8em;  
+  width: 6em;  
+}
+
+form.create_story .checkbox label{
+  float: none;
+  display: block-inline;
+  font-size: 0.8em;
+
+}
+
+.fieldset div.checkbox{
+  padding-left: 6.5em;
+  width: 20em;
 }
 
 form.create_story textarea, 
