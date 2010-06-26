@@ -101,42 +101,42 @@ ul.navigation li {
 }
 
 .story-transport-none {
-  background-image: url('/images/transport_none.jpg');
+  background-image: url('/images/transport_none.gif');
   background-repeat: no-repeat;
 }
 
 .story-transport-bus {
-  background-image: url('/images/transport_bus.jpg');
+  background-image: url('/images/transport_bus.gif');
   background-repeat: no-repeat;
 }
 
 .story-transport-coach {
-    background-image: url('/images/transport_coach.jpg');
+    background-image: url('/images/transport_coach.gif');
     background-repeat: no-repeat;
 }
 
 .story-transport-taxi {
-    background-image: url('/images/transport_taxi.jpg');
+    background-image: url('/images/transport_taxi.gif');
     background-repeat: no-repeat;
 }
 
 .story-transport-air {
-    background-image: url('/images/transport_air.jpg');
+    background-image: url('/images/transport_air.gif');
     background-repeat: no-repeat;
 }
 
 .story-transport-ferry {
-    background-image: url('/images/transport_ferry.jpg');
+    background-image: url('/images/transport_ferry.gif');
     background-repeat: no-repeat;
 }
 
 .story-transport-train {
-    background-image: url('/images/transport_train.jpg');
+    background-image: url('/images/transport_train.gif');
     background-repeat: no-repeat;
 }
 
 .story-transport-trammetro {
-    background-image: url('/images/transport_trammetro.jpg');
+    background-image: url('/images/transport_trammetro.gif');
     background-repeat: no-repeat;
 }
 
@@ -161,7 +161,7 @@ ul.navigation li {
 .transport-mode div {
     display: block-inline;
     margin: 0px;
-    padding:4px;
+    padding:4px 4px;
     float: left;
 }
 
@@ -170,12 +170,14 @@ ul.navigation li {
     width: auto;    
     margin: 0;
     padding: 0;
+    line-height:1em;
+    height: 1em;
 }
 #transport-mode-radio div input{
     text-align: right;
     float: left;
     padding: 0;
-    margin: 4px 0.5em 0 0;
+    margin: 0px 0.5em 0 0;
 }
 
 .transport-bg-bus {
@@ -282,28 +284,35 @@ ul.location-list li{
 
 /* Feedback form */
 
-.feedback-tab {
+.feedback-panel-container {
   height: auto;
   left: 0px;
   position: absolute;
   text-align: left;
   top: 120px;
-  width: auto;
   z-index: 100;
-  background-color: #FFFFFF;
+  text-align: right;
+  display: block;
+  margin: 0;
+  padding:0;
+  width: auto;
 }
-
 .feedback-panel {
   height: auto;
-  left: 0px;
-  position: absolute;
-  text-align: left;
-  top: 120px;
-  border: 1px solid #CCCCCC;
+  border: 2px solid #CCCCCC;
   background-color: #FFFFFF;
+  text-align: left;
   width: auto;
-  z-index: 100;
   padding: 1em;
+  margin: 0px;
+}
+#feedback-tab{
+  background-image:url('/images/slide-button-left.gif');
+  width:27px;
+  height:137px;
+  padding:0px;
+  margin:0px;
+  display:block;
 }
 
 form.new_feedback label {

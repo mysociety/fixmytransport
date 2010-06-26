@@ -59,8 +59,13 @@ function addSearchGuidance() {
 // setup the cancel button to clear fields
 // and close the panel
 function setupFeedbackForm() {
-  jQuery('.feedback-tab').click(function() {
-    jQuery('.feedback-panel').show();
+  jQuery('#feedback-tab').click(function() {
+    var panel = jQuery('.feedback-panel');
+    if (panel.is(":hidden")){
+      panel.show(1500);      
+    } else {
+      hideFeedbackPanel()
+    }
     event.preventDefault();
   });
   var options = {
@@ -73,11 +78,15 @@ function setupFeedbackForm() {
   jQuery('#ajax-feedback').ajaxForm(options);
   
   jQuery('.feedback-cancel').click(function() {
-    jQuery('.feedback-panel').hide();
-    clearFormElements('#ajax-feedback');
-    jQuery('#ajax-feedback .form-field-error').html('');
+    hideFeedbackPanel();
     event.preventDefault();
   });  
+  
+  function hideFeedbackPanel(){
+    jQuery('.feedback-panel').hide('slow');
+    clearFormElements('#ajax-feedback');
+    jQuery('#ajax-feedback .form-field-error').html('');    
+  }
 }
 // Run jquery in no-conflict mode so it doesn't use jQuery()
 jQuery.noConflict();
