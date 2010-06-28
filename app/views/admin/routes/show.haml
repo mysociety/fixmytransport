@@ -1,8 +1,14 @@
 %h2= @route.name
-- if !@route.errors.empty?
-  .form-error
-    = t(:route_form_error)
+=link_to t(:route_on_main_site), main_url(route_path(@route.region, @route)), :target => '_blank'
+%p= "Region: #{@route.region.name}"
 - form_for [:admin, @route.becomes(Route)], :url => admin_url(admin_route_path(@route.region, @route)) do |f| 
+  - if !@route.errors.empty?
+    .form-error
+      = t(:route_form_error)
+  - if !@route.route_operators.empty?
+    %h3 Route Operators
+    - @route.route_operators.each do |route_operator|
+      .current-operator= route_operator.operator.name
   .form-field
   - if @route.errors.on(:name)
     .form-field-error= error_message_on @route, :name
