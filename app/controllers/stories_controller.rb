@@ -11,9 +11,12 @@ class StoriesController < ApplicationController
     @stories = Story.paginate( :page => params[:page], 
                                   :conditions => ['confirmed = ?', true],
                                   :order => 'created_at DESC' )
+    if !@stories.empty? 
+      @updated = @stories.first.updated_at
+    end
     respond_to do |format|
       format.html
-      format.atom { render :action => 'index.atom.builder', :layout => false }
+      format.atom { render :template => 'shared/stories.atom.builder', :layout => false }
     end
   end
   

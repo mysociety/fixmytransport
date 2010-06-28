@@ -1,4 +1,3 @@
-- @title = @route.name
 - content_for :javascript do 
   != map_javascript_include_tags
 - cache do 
@@ -16,14 +15,15 @@
           %li= link_to stop.full_name, stop_url(stop.locality, stop)
   .route
     %h3.name= @route.name
+    = link_to(t(:feed), route_url(@route.region, @route, :format => 'atom'))
     .details
       %span.locality= "#{@route.area}."
-    .operators
-      - if !@route.operators.empty? 
-        Operated by
-        %ul
-          - @route.operators.each do |operator|
-            %li= operator.name 
+      .operators
+        - if !@route.operators.empty? 
+          Operated by
+          %ul
+            - @route.operators.each do |operator|
+              %li= operator.name 
     .terminuses
       != terminus_text(@route)
 = render :partial => 'shared/location_stories', :locals => {:location => @route}

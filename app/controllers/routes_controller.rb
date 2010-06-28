@@ -5,6 +5,14 @@ class RoutesController < LocationsController
     @new_story = Story.new(:reporter => User.new)
     @new_story.transport_mode_id = @route.transport_mode_id
     location_search.add_location(@route) if location_search
+    @title = @route.name
+    respond_to do |format|
+      format.html
+      format.atom do  
+        @stories = @route.stories.confirmed
+        render :template => 'shared/stories.atom.builder', :layout => false 
+      end
+    end
   end
   
   def update
