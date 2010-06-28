@@ -57,6 +57,10 @@ class StopArea < ActiveRecord::Base
     TransportMode.find(StopAreaType.transport_modes_for_code(area_type))
   end
   
+  def transport_mode_ids
+    transport_modes.map{ |mode| mode.id }
+  end
+  
   def area
     areas = stops.map{ |stop| stop.area }.uniq
     if areas.size == 1

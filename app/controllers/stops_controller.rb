@@ -6,7 +6,9 @@ class StopsController < LocationsController
     @title = @stop.full_name
     if location_search
       location_search.add_location(@stop) 
-      @new_story.transport_mode_id = location_search.transport_mode_id 
+      if @stop.transport_mode_ids.include? location_search.transport_mode_id
+        @new_story.transport_mode_id = location_search.transport_mode_id 
+      end
     end
     respond_to do |format|
       format.html

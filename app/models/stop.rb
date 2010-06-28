@@ -81,6 +81,10 @@ class Stop < ActiveRecord::Base
     TransportMode.find(StopType.transport_modes_for_code(stop_type))
   end
   
+  def transport_mode_ids
+    transport_modes.map{ |mode| mode.id }
+  end
+  
   def transport_mode_names
     transport_modes.map{ |mode| mode.name }
   end

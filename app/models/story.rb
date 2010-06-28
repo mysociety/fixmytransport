@@ -82,7 +82,7 @@ class Story < ActiveRecord::Base
     find(:all, :order => 'created_at desc', :limit => number, :include => [:location, :reporter])
   end
   
-  # stories usuallys tart with no transport_mode
+  # stories usually start with no transport_mode
   def transport_mode_css_name
     return self.transport_mode.nil? ? 'none' : self.transport_mode.css_name
   end
