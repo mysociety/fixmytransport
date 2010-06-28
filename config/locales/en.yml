@@ -12,5 +12,5 @@ en:
   powered_by: "Powered by {{link}}"
   feedback: "Feedback"
   got_a_story: Got a public transport story? 
-  feed: Atom feed
-  
+  feed: Feed
+  stories_feed: Feed of stories that happened here

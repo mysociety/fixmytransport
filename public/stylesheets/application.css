@@ -54,6 +54,19 @@ textarea {
   font-family: verdana, sans-serif;
 }
 
+.rss-link {
+  text-decoration: none;
+}
+
+.rss-link img {
+  border: 0;
+  width: 16px;
+  height: 16px;
+}
+.rss-link span {
+  text-decoration: underline;
+}
+
 /* Navigation */
 
 ul.navigation {

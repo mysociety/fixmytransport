@@ -15,7 +15,6 @@
           %li= link_to stop.full_name, stop_url(stop.locality, stop)
   .route
     %h3.name= @route.name
-    = link_to(t(:feed), route_url(@route.region, @route, :format => 'atom'))
     .details
       %span.locality= "#{@route.area}."
       .operators

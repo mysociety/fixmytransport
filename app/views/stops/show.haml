@@ -16,7 +16,6 @@
       =render :partial => "shared/route_list", :locals => {:stop => @stop}
   .stop
     %h3.name= "#{@stop.full_name}" 
-    = link_to(t(:feed), stop_url(@stop.locality, @stop, :format => 'atom'))
     .details
       %span.locality= "In #{@stop.locality_name}"
       - if !@stop.landmark.blank?

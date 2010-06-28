@@ -1,4 +1,7 @@
 = render :partial => 'shared/new_story', :locals => { :location => location }
+%h3= t(:other_stories_here)
+%a{:href => location_url(location, :format => 'atom'), :class => 'rss-link'}
+  %span= t(:feed)
+  %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:stories_feed) }
 - if !location.stories.confirmed.empty?
-  %h3= t(:other_stories_here)
   = render :partial => 'shared/story', :collection => location.stories.confirmed, :locals => { :context => :location }
