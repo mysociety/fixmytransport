@@ -23,6 +23,6 @@
           %ul
             - @route.operators.each do |operator|
               %li= operator.name 
-    .terminuses
-      != terminus_text(@route)
+      .terminuses
+        != terminus_text(@route)
 = render :partial => 'shared/location_stories', :locals => {:location => @route}
