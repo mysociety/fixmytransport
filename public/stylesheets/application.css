@@ -284,35 +284,44 @@ ul.location-list li{
 
 /* Feedback form */
 
-.feedback-panel-container {
-  height: auto;
-  left: 0px;
-  position: absolute;
-  text-align: left;
-  top: 120px;
-  z-index: 100;
-  text-align: right;
-  display: block;
-  margin: 0;
-  padding:0;
-  width: auto;
+#feedback-panel-container {
+  padding:20px 20px 10px 20px;
+  width: 450px;
+  background: #737373;
+  border: 3px solid #333333;
+  position:absolute;
+  top:200px;
+  left:-496px;
+  text-align:center;
+  height:auto;
 }
-.feedback-panel {
+#feedback-panel {
   height: auto;
-  border: 2px solid #CCCCCC;
-  background-color: #FFFFFF;
+  display: block;
+  background-color: #ffffff;
   text-align: left;
-  width: auto;
+  width: 400px;
   padding: 1em;
-  margin: 0px;
+  margin: 0px auto;
 }
 #feedback-tab{
-  background-image:url('/images/slide-button-left.gif');
-  width:27px;
-  height:137px;
-  padding:0px;
-  margin:0px;
+  border-width: 1px 1px 1px 0;
   display:block;
+  height:137px;
+  left: 47px;
+  bottom: 23px;
+  position:relative;
+  float:right;
+  text-indent:-9999px;
+  width:27px;
+  outline:none;
+}
+
+.feedback-tab-closed{
+    background:transparent url('/images/feedback-tab.gif') no-repeat scroll 0 0;    
+}
+.feedback-tab-open{
+    background:transparent url('/images/feedback-tab.gif') no-repeat scroll -34px 0;    
 }
 
 form.new_feedback label {

@@ -21,11 +21,10 @@
       .content
         = yield
   - unless action_name == 'feedback'
-    / .feedback-tab= link_to t(:feedback), feedback_url
-    .feedback-panel-container
-      .feedback-panel{:style => 'display: none;'}
-        = render :partial => 'shared/feedback_form'
+    #feedback-panel-container
       #feedback-tab
+      #feedback-panel
+        = render :partial => 'shared/feedback_form'
     #footer
       %ul
         %li.footer-item!= link_to t(:about), about_path

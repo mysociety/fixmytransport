@@ -1,11 +1,13 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
+var feedbackTab;
+
 // Close the feedback form panel on success,
 // display error messages on failure
 function feedbackCallback(response) {
   if (response.success) {
-      jQuery('.feedback-panel').hide();
+      feedbackTab.hideTab();
    } else {
      jQuery('.form-field-error').html('');
      for (var key in response.errors){
@@ -58,16 +60,36 @@ function addSearchGuidance() {
 // make the form submit via AJAX,
 // setup the cancel button to clear fields
 // and close the panel
+ 
 function setupFeedbackForm() {
-  jQuery('#feedback-tab').click(function() {
-    var panel = jQuery('.feedback-panel');
-    if (panel.is(":hidden")){
-      panel.show(1500);      
-    } else {
-      hideFeedbackPanel()
-    }
-    event.preventDefault();
-  });
+  feedbackTab = {
+       speed:800,
+       containerWidth:jQuery('#feedback-panel-container').outerWidth(),
+       containerHeight:jQuery('#feedback-panel-container').outerHeight(),
+       tabWidth:jQuery('#feedback-tab').outerWidth(),
+       showTab:function(){
+         jQuery('#feedback-panel-container').animate({left:'0'},  feedbackTab.speed,  function(){jQuery('#feedback-tab').removeClass().addClass('feedback-tab-open')})
+       },
+       hideTab:function(){
+         jQuery('#feedback-panel-container').animate({left:"-" + feedbackTab.containerWidth}, feedbackTab.speed, function(){jQuery('#feedback-tab').removeClass().addClass('feedback-tab-closed')});
+         clearFormElements('#ajax-feedback');
+         jQuery('#ajax-feedback .form-field-error').html('')
+       },
+       init:function(){
+           jQuery('#feedback-tab').addClass('feedback-tab-closed');
+           jQuery('#feedback-panel-container').css('height',feedbackTab.containerHeight + 'px');
+           jQuery('#feedback-tab').click(function(event){
+               if (jQuery('#feedback-tab').hasClass('feedback-tab-open')) {
+                 feedbackTab.hideTab()
+               } else {
+                feedbackTab.showTab()
+               }
+               event.preventDefault();
+           });
+       }
+   };
+
+  feedbackTab.init();
   var options = {
      success: feedbackCallback,
      data: {
@@ -78,15 +100,10 @@ function setupFeedbackForm() {
   jQuery('#ajax-feedback').ajaxForm(options);
   
   jQuery('.feedback-cancel').click(function() {
-    hideFeedbackPanel();
+    feedbackTab.hideTab();
     event.preventDefault();
   });  
   
-  function hideFeedbackPanel(){
-    jQuery('.feedback-panel').hide('slow');
-    clearFormElements('#ajax-feedback');
-    jQuery('#ajax-feedback .form-field-error').html('');    
-  }
 }
 // Run jquery in no-conflict mode so it doesn't use jQuery()
 jQuery.noConflict();
