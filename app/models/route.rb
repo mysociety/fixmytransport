@@ -107,6 +107,11 @@ class Route < ActiveRecord::Base
     find_all_by_number_and_common_stop(new_route, operator_id)
   end
   
+  def self.find_without_operators(options={})
+    find(:all, :conditions => ['id not in (SELECT route_id FROM route_operators)'], 
+         :limit => options[:limit])
+  end
+  
   # Return train routes by the same operator that pass through the terminuses of this route, or
   # that have terminuses that this route passes through
   def Route.find_existing_train_routes(new_route)
