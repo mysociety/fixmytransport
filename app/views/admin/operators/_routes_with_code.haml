@@ -11,7 +11,7 @@
   - @routes.each do |route|
     - f.fields_for :route_operators, RouteOperator.new(:route => route) do |route_operator_fields|
       %tr
-        %td!= "#{link_to route.name, main_url(location_path(route)), :target => '_blank'} #{link_to("(#{t(:admin)})", admin_url(admin_route_path(route)))}"
+        %td!= "#{link_to route.name, main_url(location_path(route)), :target => '_blank'} #{link_to("(#{t(:admin)})", admin_url(admin_route_path(route.region, route)))}"
         %td= route.region.name
         %td.route-terminuses= route.area
         %td= link_to t(:external_search), external_search_link("#{route.name} #{route.area}"), :target => '_blank'
