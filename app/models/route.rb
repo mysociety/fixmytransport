@@ -184,7 +184,7 @@ class Route < ActiveRecord::Base
   
   def self.find_all_by_stop_names(first, last, attributes, limit=nil)
     stop_attributes = attributes.merge(:route_number => nil)
-    options = { :limit => limit, :stops_only => true }
+    options = { :stops_only => true }
     results = Gazetteer.find_stops_from_attributes(stop_attributes.merge(:area => first), options)
     first_stops = results[:results]
     results = Gazetteer.find_stops_from_attributes(stop_attributes.merge(:name => first), options)
