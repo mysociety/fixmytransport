@@ -1,3 +1,5 @@
 en:
-  route_updated: "Route updated."
-  route_problem: "There was a problem updating the route."
+  route_updated: Route updated.
+  route_problem: There was a problem updating this route.
+  operator_problem: There was a problem updating this operator.
+  operator_updated: Operator updated.
