@@ -35,10 +35,31 @@ ul.admin-navigation li {
   clear: both;
 }
 
-table.routes { 
+table { 
   padding: 0.5em;
 }
 
-table.routes td {
+table td {
   padding: 0.2em;
+}
+
+.admin-task-list {
+  margin: 1em;
+}
+
+/* Forms */
+
+.new-operator label{
+  display: inline-block;
+  width: 6em;
+}
+
+.form-field-error {
+  color: #CC0000;
+  width: 400px;
+  margin: 0.5em 1em 0 1em;
+}
+
+.fieldWithErrors {
+  display: inline;
 }

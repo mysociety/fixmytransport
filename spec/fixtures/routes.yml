@@ -17,21 +17,32 @@ victoria_to_haywards_heath:
   transport_mode_id: 6
   number: 1F50
   type: TrainRoute
+  operator_code: TRAIN
 number_807_bus: 
   transport_mode_id: 1
   number: 807
   type: BusRoute
+  operator_code: BUS
 aldershot_807_bus:
   number: "807"
   type: BusRoute
   transport_mode_id: "1"
+  operator_code: BUS
 borough_C10: 
   name: 
   number: C10
   type: BusRoute
   transport_mode_id: "1"
+  operator_code: LONDON_BUS
 metropolitan_line:
   name: Metropolitan Line
   number: MET0
   type: TramMetroRoute
   transport_mode_id: 7
+  operator_code: TUBE
+jubilee_line:
+  name: Jubilee Line
+  number: JUB0
+  type: TramMetroRoute
+  transport_mode_id: 7
+  operator_code: TUBE

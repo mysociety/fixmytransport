@@ -13,6 +13,15 @@
 
 class Operator < ActiveRecord::Base
   has_many :route_operators
-  has_many :routes, :through => :route_operator, :uniq => true
+  has_many :routes, :through => :route_operators, :uniq => true
+  validates_presence_of :name
+  accepts_nested_attributes_for :route_operators,  :reject_if => :route_operator_invalid
   has_paper_trail
+  cattr_reader :per_page
+  @@per_page = 20
+  
+  def route_operator_invalid(attributes)
+    attributes['_add'] != "1"
+  end
+  
 end

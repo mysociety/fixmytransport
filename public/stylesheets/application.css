@@ -172,7 +172,7 @@ ul.navigation li {
 }
 
 .transport-mode div {
-    display: block-inline;
+    display: inline-block;
     margin: 0px;
     padding:4px 4px;
     float: left;

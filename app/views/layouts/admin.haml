@@ -2,15 +2,17 @@
 %html{ :lang => I18n.locale }
   %head
     %title 
-      ="FixMyTransport admin #{yield :title}"
+      ="#{t(:site_name)} #{t(:admin)} #{yield :title}"
     %meta{ :content => "text/html; charset=utf-8", "http-equiv" => "Content-type" }
     = stylesheet_link_tag 'admin'
     = yield :javascript
+    != javascript_include_tag('jquery-1.4.2.min.js')
+    != javascript_include_tag('admin.js')
   %body
-    %h2= t(:site_name)
+    %h2= link_to_unless_current("#{t(:site_name)} #{t(:admin)}", admin_url(admin_root_path))
     %ul.admin-navigation 
       %li=link_to "Location searches", admin_url(admin_location_searches_path)
-      / %li=link_to "Operators", admin_url(admin_operators_path)
+      %li=link_to "Operators", admin_url(admin_operators_path)
       %li=link_to "Routes", admin_url(admin_routes_path)
     #main
       - [:notice, :error, :message].each do |key| 

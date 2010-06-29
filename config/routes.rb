@@ -70,6 +70,8 @@ ActionController::Routing::Routes.draw do |map|
     admin.route "/routes/:scope/:id.:format", :controller => "routes", 
                                                     :action => 'update', 
                                                     :conditions => { :method => :put }
+
+    admin.resources :operators
   end
   
 end

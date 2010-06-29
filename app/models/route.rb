@@ -25,6 +25,7 @@ class Route < ActiveRecord::Base
   has_many :localities, :through => :route_localities
   belongs_to :region
   accepts_nested_attributes_for :stories
+  accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => proc { |attributes| attributes['operator_id'].blank? }
   validates_presence_of :number
   cattr_reader :per_page
   has_friendly_id :short_name, :use_slug => true, :scope => :region
@@ -99,7 +100,7 @@ class Route < ActiveRecord::Base
                         :limit => limit).uniq
     # The joins in the query above cause it to return instances with missing segments - 
     # remap to clean route objects
-    Route.find(routes.map{|route| route.id})
+    Route.find(routes.map{ |route| route.id })
   end
   
   def self.find_existing_routes(new_route)
@@ -107,9 +108,41 @@ class Route < ActiveRecord::Base
     find_all_by_number_and_common_stop(new_route, operator_id)
   end
   
+  
   def self.find_without_operators(options={})
-    find(:all, :conditions => ['id not in (SELECT route_id FROM route_operators)'], 
+    query = 'id not in (SELECT route_id FROM route_operators)'
+    params = []
+    if options[:operator_code]
+      query += " AND operator_code = ?"
+      params << options[:operator_code]
+    end
+    params = [query] + params  
+    find(:all, :conditions => params, 
          :limit => options[:limit])
+  end
+  
+  def self.count_without_operators(options={})
+    count(:conditions => ['id not in (SELECT route_id FROM route_operators)'])
+  end
+  
+  def self.find_codes_without_operators(options={})
+    query = "SELECT operator_code, cnt FROM 
+               (SELECT operator_code, count(*) as cnt
+                FROM routes 
+                WHERE operator_code not in 
+                  (SELECT code 
+                   FROM operators) 
+                GROUP BY operator_code) as tmp
+             ORDER BY cnt desc"
+    if options[:limit]
+      query += " LIMIT #{options[:limit]}"
+    end
+    connection.select_rows(query)
+  end
+  
+  def self.count_codes_without_operators()
+    count(:select => 'distinct operator_code', 
+          :conditions => ['operator_code not in (SELECT code FROM operators)'])
   end
   
   # Return train routes by the same operator that pass through the terminuses of this route, or

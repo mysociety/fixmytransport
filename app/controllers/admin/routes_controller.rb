@@ -7,13 +7,29 @@ class Admin::RoutesController < ApplicationController
   end
   
   def index
+    query_clauses = []
     conditions = []
     if params[:mode]
-      conditions = ["transport_mode_id = ?", params[:mode]]
+      query_clauses << "transport_mode_id = ?"
+      conditions << params[:mode]
     end
+    if !params[:query].blank?
+      query = params[:query].downcase
+      query_clause = "(lower(name) like ? OR lower(number) = ?"
+      conditions << "%%#{query}%%" 
+      conditions << query
+      # numeric?
+      if query.to_i.to_s == query
+        query_clause += " OR id = ?"
+        conditions << query.to_i
+      end
+      query_clause += ")"
+      query_clauses << query_clause
+    end
+    conditions = [query_clauses.join(" AND ")] + conditions
     @routes = Route.paginate :page => params[:page], 
                              :conditions => conditions, 
-                             :order => 'created_at DESC'
+                             :order => 'number'
   end
   
   def update

@@ -103,10 +103,13 @@ module ApplicationHelper
   def departures_link(stop)
     modes = stop.transport_mode_names
     if modes.include? 'Bus' or modes.include? 'Coach' or modes.include? 'Ferry'
-      return link_to t(:live_departures), "http://mytraveline.mobi/departureboard?stopCode=#{stop.atco_code}"
+      return link_to(t(:live_departures), "http://mytraveline.mobi/departureboard?stopCode=#{stop.atco_code}")
     else
       return ''
     end
   end
   
+  def external_search_link(text)
+    "http://www.google.co.uk/search?ie=UTF-8&q=#{CGI.escape(text)}"
+  end
 end

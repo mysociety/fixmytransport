@@ -273,5 +273,28 @@ describe Route do
     
   end
 
+  describe "when counting routes without operators " do 
+    
+    it 'should return routes without route operators' do 
+      Route.count_without_operators.should == 3
+    end
+    
+  end
+  
+  describe 'when finding codes without operators' do 
+    
+    it 'should return codes (with counts) that are attached to routes but have no operators' do 
+      Route.find_codes_without_operators.should == [['TUBE', '2'], ['LONDON_BUS', '1']]
+    end
+    
+  end
+  
+  describe 'when counting codes without operators' do 
+  
+    it 'should return the number of operator codes in use for which there are no operators' do 
+      Route.count_codes_without_operators.should == 2
+    end
+    
+  end
   
 end
