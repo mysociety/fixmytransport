@@ -1,0 +1,10 @@
+en:
+  activerecord:
+    errors:
+      models:
+        operator:
+          attributes: 
+            name:
+              blank: "Please enter the operator name"
+  
+            

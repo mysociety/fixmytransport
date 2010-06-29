@@ -1,0 +1,8 @@
+en:
+  operators: Operators
+  name: Name
+  region: Region
+  short_name: Short name
+  id: ID
+  assign_to_operator: Assign to new operator?
+  add_an_operator: Add an operator

@@ -1,0 +1,24 @@
+%h2= t(:operators)
+= link_to t(:add_an_operator), admin_url(new_admin_operator_path)
+
+%form{ :method => "GET" }
+  .query
+    != label_tag t(:search)
+    != text_field_tag :query, params[:query]
+  != submit_tag t(:go)
+  
+%table.operators
+  %tr
+    %th= t(:id)
+    %th= t(:name)
+    %th= t(:short_name) 
+    %th= t(:routes)
+  -@operators.each do |operator|
+    %tr
+      %td
+        = operator.id
+        = link_to "(#{t(:admin)})", admin_url(admin_operator_path(operator))
+      %td= operator.name
+      %td= operator.short_name
+      %td= operator.routes.count
+= will_paginate @operators, {:admin => true}

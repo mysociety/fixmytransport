@@ -1,0 +1,18 @@
+%h3= t(:routes_with_code)
+=link_to t(:check_all), '', :id => 'assign-all-routes'
+=link_to t(:uncheck_all), '', :id => 'unassign-all-routes'
+%table.new-operator-routes
+  %tr
+    %th= t(:name)
+    %th= t(:region)
+    %th= t(:search) 
+    %th= t(:assign_to_operator)
+  - @routes.each do |route|
+    - f.fields_for :route_operators, RouteOperator.new(:route => route) do |route_operator_fields|
+      %tr
+        %td= link_to route.name, main_url(location_path(route)), :target => '_blank'
+        %td= route.region.name
+        %td= link_to t(:external_search), external_search_link("#{route.name} #{route.region.name}"), :target => '_blank'
+        %td
+          != route_operator_fields.hidden_field :route_id
+          != route_operator_fields.check_box :_add, :class => 'assign-route'

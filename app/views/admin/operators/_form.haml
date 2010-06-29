@@ -1,0 +1,12 @@
+.form-field
+  != f.label :code
+  != f.text_field :code
+.form-field
+  != f.label :short_name
+  != f.text_field :short_name
+.form-field
+  - if @operator.errors.on(:name)
+    .form-field-error= error_message_on @operator, :name
+  != f.label :name
+  != f.text_field :name
+!= submit_tag t(:go)
