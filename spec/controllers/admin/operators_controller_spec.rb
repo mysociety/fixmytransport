@@ -25,20 +25,21 @@ describe Admin::OperatorsController do
       get :index
     end
     
-    it 'should ask for operators with part of the name or short name matching the query' do 
+    it 'should ask for operators with part of the name or short name or the whole code matching the query' do 
+      query_string = '(lower(name) like ? OR lower(short_name) like ? OR lower(code) = ?)'
       Operator.should_receive(:paginate).with(:page => nil, 
-                                              :conditions => ['(lower(name) like ? OR lower(short_name) like ?)',
-                                              '%%something%%', '%%something%%'],
+                                              :conditions => [query_string,
+                                              '%%something%%', '%%something%%', 'something'],
                                               :order => 'name ASC')
       
       get :index, :query => 'Something'
     end
     
-    it 'should ask for operators with part of the name or short name or the whole id matching the query if it is numeric' do 
-      query_string = '(lower(name) like ? OR lower(short_name) like ? OR id = ?)'
+    it 'should ask for operators with part of the name or short name or the whole code or id matching the query if it is numeric' do 
+      query_string = '(lower(name) like ? OR lower(short_name) like ? OR lower(code) = ? OR id = ?)'
       Operator.should_receive(:paginate).with(:page => nil, 
                                               :conditions => [query_string,
-                                              '%%23%%', '%%23%%', 23],
+                                              '%%23%%', '%%23%%', '23', 23],
                                               :order => 'name ASC')
       
       get :index, :query => '23'

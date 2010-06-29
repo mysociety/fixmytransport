@@ -7,8 +7,9 @@ class Admin::OperatorsController < ApplicationController
     query_clauses = []
     if params[:query]
       query = params[:query].downcase
-      query_clause = "(lower(name) like ? OR lower(short_name) like ?"
+      query_clause = "(lower(name) like ? OR lower(short_name) like ? OR lower(code) = ?"
       2.times{ conditions << "%%#{query}%%" }
+      conditions << query
       # numeric?
       if query.to_i.to_s == query
         query_clause += " OR id = ?"

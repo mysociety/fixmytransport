@@ -12,6 +12,7 @@
     %th= t(:id)
     %th= t(:name)
     %th= t(:short_name) 
+    %th= t(:code)
     %th= t(:routes)
   -@operators.each do |operator|
     %tr
@@ -20,5 +21,6 @@
         = link_to "(#{t(:admin)})", admin_url(admin_operator_path(operator))
       %td= operator.name
       %td= operator.short_name
+      %td= operator.code
       %td= operator.routes.count
 = will_paginate @operators, {:admin => true}

@@ -2,6 +2,7 @@ en:
   operators: Operators
   name: Name
   region: Region
+  code: Code
   short_name: Short name
   id: ID
   assign_to_operator: Assign to new operator?
