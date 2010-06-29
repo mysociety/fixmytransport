@@ -42,7 +42,7 @@
     .form-field
       != label_tag :operator_name
       != text_field_tag :operator_name, '', { :id => 'operator_name', :size => 30 }
-      != hidden_field_tag :operator_name_autocomplete_url, "/admin/autocomplete_for_operator_name"
+      != hidden_field_tag :operator_name_autocomplete_url, admin_url("/admin/autocomplete_for_operator_name")
       != route_operator_fields.hidden_field :operator_id, { :id => 'operator-id' }
   != submit_tag t(:update)
   
