@@ -15,6 +15,8 @@ class Operator < ActiveRecord::Base
   has_many :route_operators
   has_many :routes, :through => :route_operators, :uniq => true
   validates_presence_of :name
+  validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$"), 
+                              :if => Proc.new { |operator| !operator.email.blank? }
   accepts_nested_attributes_for :route_operators,  :reject_if => :route_operator_invalid
   has_paper_trail
   cattr_reader :per_page

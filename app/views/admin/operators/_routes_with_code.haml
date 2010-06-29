@@ -13,7 +13,7 @@
       %tr
         %td= link_to route.name, main_url(location_path(route)), :target => '_blank'
         %td= route.region.name
-        %td.route-terminuses= route.terminuses.map{ |terminus| terminus.name }.to_sentence
+        %td.route-terminuses= route.area
         %td= link_to t(:external_search), external_search_link("#{route.name} #{route.region.name}"), :target => '_blank'
         %td
           != route_operator_fields.hidden_field :route_id

@@ -6,5 +6,7 @@ en:
           attributes: 
             name:
               blank: "Please enter the operator name"
+            email:
+              invalid: "Please check the format of the email address"
   
             

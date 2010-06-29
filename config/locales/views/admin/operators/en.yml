@@ -6,5 +6,5 @@ en:
   terminuses: Terminuses
   short_name: Short name
   id: ID
-  assign_to_operator: Assign to new operator?
+  assign_to_operator: Assign to operator?
   add_an_operator: Add an operator
