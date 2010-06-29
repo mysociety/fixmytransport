@@ -5,6 +5,7 @@
   %tr
     %th= t(:name)
     %th= t(:region)
+    %th= t(:terminuses)
     %th= t(:search) 
     %th= t(:assign_to_operator)
   - @routes.each do |route|
@@ -12,6 +13,7 @@
       %tr
         %td= link_to route.name, main_url(location_path(route)), :target => '_blank'
         %td= route.region.name
+        %td.route-terminuses= route.terminuses.map{ |terminus| terminus.name }.to_sentence
         %td= link_to t(:external_search), external_search_link("#{route.name} #{route.region.name}"), :target => '_blank'
         %td
           != route_operator_fields.hidden_field :route_id

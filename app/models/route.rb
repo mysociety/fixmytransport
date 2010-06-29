@@ -110,6 +110,9 @@ class Route < ActiveRecord::Base
   
   
   def self.find_without_operators(options={})
+    if !options.has_key?(:order)
+      options[:order] = 'number ASC'
+    end
     query = 'id not in (SELECT route_id FROM route_operators)'
     params = []
     if options[:operator_code]
@@ -118,7 +121,8 @@ class Route < ActiveRecord::Base
     end
     params = [query] + params  
     find(:all, :conditions => params, 
-         :limit => options[:limit])
+         :limit => options[:limit], 
+         :order => options[:order])
   end
   
   def self.count_without_operators(options={})

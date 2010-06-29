@@ -3,6 +3,7 @@ en:
   name: Name
   region: Region
   code: Code
+  terminuses: Terminuses
   short_name: Short name
   id: ID
   assign_to_operator: Assign to new operator?

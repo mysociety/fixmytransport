@@ -49,11 +49,6 @@ table td {
 
 /* Forms */
 
-.operator-form label{
-  display: inline-block;
-  width: 6em;
-}
-
 .form-field-error {
   color: #CC0000;
   width: 400px;
@@ -62,4 +57,14 @@ table td {
 
 .fieldWithErrors {
   display: inline;
+}
+
+.operator-form label{
+  display: inline-block;
+  width: 6em;
+}
+
+td.route-terminuses {
+  font-size: 0.8em;
+  max-width: 400px;
 }
