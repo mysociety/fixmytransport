@@ -5,9 +5,10 @@
       ="#{t(:site_name)} #{t(:admin)} #{yield :title}"
     %meta{ :content => "text/html; charset=utf-8", "http-equiv" => "Content-type" }
     = stylesheet_link_tag 'admin'
-    = yield :javascript
+    = yield :css
     != javascript_include_tag('jquery-1.4.2.min.js')
     != javascript_include_tag('admin.js')
+    = yield :javascript
   %body
     %h2= link_to_unless_current("#{t(:site_name)} #{t(:admin)}", admin_url(admin_root_path))
     %ul.admin-navigation 

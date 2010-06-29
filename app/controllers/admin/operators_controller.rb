@@ -64,4 +64,16 @@ class Admin::OperatorsController < ApplicationController
     end
   end
 
+  def autocomplete_for_name
+    query = params[:term].downcase
+    operators = Operator.find(:all, 
+                              :conditions => ["LOWER(name) LIKE ? 
+                                               OR LOWER(name) LIKE ? 
+                                               OR LOWER(short_name) LIKE ?
+                                               OR LOWER(short_name) LIKE ?", 
+                                              "#{query}%", "%#{query}%", "#{query}%", "%#{query}%" ],
+                              :limit => 20)
+    operators = operators.map{ |operator| {:id => operator.id, :name => operator.name}}
+    render :json => operators
+  end
 end

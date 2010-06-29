@@ -1,6 +1,11 @@
+- content_for :javascript do 
+  != javascript_include_tag('jquery-ui-1.8.2.custom.min.js')
+- content_for :css do 
+  != stylesheet_link_tag 'jquery-ui-1.8.2.custom.css'
 %h2= @route.name
 =link_to t(:on_main_site), main_url(route_path(@route.region, @route)), :target => '_blank'
 %p= "Region: #{@route.region.name}"
+%p= link_to t(:external_search), external_search_link("#{@route.name} #{@route.area}"), :target => '_blank'
 - form_for [:admin, @route.becomes(Route)], :url => admin_url(admin_route_path(@route.region, @route)) do |f| 
   - if !@route.errors.empty?
     .form-error
@@ -15,8 +20,7 @@
     - @route.route_operators.each do |route_operator|
       - f.fields_for :route_operators, route_operator do |route_operator_fields|
         .form-field
-          %b= route_operator.operator.name
-          %br
+          = link_to(route_operator.operator.name, admin_url(admin_operator_path(route_operator.operator)), :target => "_blank" )
           != route_operator_fields.label :_destroy, t(:remove_operator)
           != route_operator_fields.check_box :_destroy
           != route_operator_fields.hidden_field :id
@@ -33,4 +37,12 @@
       %p
         = t(:no_operators_for_code, :code => @route.operator_code)
         = link_to t(:add_operator), admin_url(new_admin_operator_path(:code => @route.operator_code))
+  %h3= t(:add_an_operator)
+  - f.fields_for :route_operators, RouteOperator.new do |route_operator_fields|
+    .form-field
+      != label_tag :operator_name
+      != text_field_tag :operator_name, '', { :id => 'operator_name', :size => 30 }
+      != hidden_field_tag :operator_name_autocomplete_url, "/admin/autocomplete_for_operator_name"
+      != route_operator_fields.hidden_field :operator_id, { :id => 'operator-id' }
   != submit_tag t(:update)
+  
