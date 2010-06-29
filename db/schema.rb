@@ -213,7 +213,7 @@ ActiveRecord::Schema.define(:version => 20100629120403) do
   end
 
   add_index "slugs", ["name", "sluggable_type", "sequence", "scope"], :name => "index_slugs_on_n_s_s_and_s", :unique => true
-  add_index "slugs", ["sluggable_id", "sluggable_type"], :name => "index_stops_on_sluggable_id_and_sluggable_type"
+  add_index "slugs", ["sluggable_id", "sluggable_type"], :name => "index_slugs_on_sluggable_id_and_sluggable_type"
   add_index "slugs", ["sluggable_id"], :name => "index_slugs_on_sluggable_id"
 
   create_table "stop_area_links", :force => true do |t|
