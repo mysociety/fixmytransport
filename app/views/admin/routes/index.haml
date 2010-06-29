@@ -14,6 +14,7 @@
     %th= t(:admin_route_number)
     %th= t(:name)
     %th= t(:generated_name)
+    %th= t(:operators)
     %th= t(:region)
   -@routes.each do |route|
     %tr
@@ -23,5 +24,6 @@
       %td= route.number  
       %td= route.read_attribute(:name)
       %td= route.name
+      %td!= route.operators.map{ |operator| link_to(operator.name, admin_url(admin_operator_path(operator))) }.join(" ")
       %td= route.region.name
 = will_paginate @routes, {:admin => true}
