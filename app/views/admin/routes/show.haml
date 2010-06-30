@@ -1,7 +1,3 @@
-- content_for :javascript do 
-  != javascript_include_tag('jquery-ui-1.8.2.custom.min.js')
-- content_for :css do 
-  != stylesheet_link_tag 'jquery-ui-1.8.2.custom.css'
 %h2= @route.name
 =link_to t(:on_main_site), main_url(route_path(@route.region, @route)), :target => '_blank'
 %p= "Region: #{@route.region.name}"
@@ -41,7 +37,7 @@
   - f.fields_for :route_operators, RouteOperator.new do |route_operator_fields|
     .form-field
       != label_tag :operator_name
-      != text_field_tag :operator_name, '', { :id => 'operator_name', :size => 30 }
+      != text_field_tag :operator_name, '', { :id => 'operator_name_auto', :size => 30 }
       != hidden_field_tag :operator_name_autocomplete_url, admin_url("/admin/autocomplete_for_operator_name")
       != route_operator_fields.hidden_field :operator_id, { :id => 'operator-id' }
   != submit_tag t(:update)

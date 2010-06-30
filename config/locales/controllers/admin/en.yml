@@ -3,3 +3,5 @@ en:
   route_problem: There was a problem updating this route.
   operator_problem: There was a problem updating this operator.
   operator_updated: Operator updated.
+  operator_destroyed: Operator was destroyed. 
+  destroy: Destroy

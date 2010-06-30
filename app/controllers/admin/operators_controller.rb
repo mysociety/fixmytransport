@@ -63,6 +63,13 @@ class Admin::OperatorsController < ApplicationController
       render :show
     end
   end
+  
+  def destroy 
+    @operator = Operator.find(params[:id])
+    @operator.destroy
+    flash[:notice] = t(:operator_destroyed)
+    redirect_to admin_url(admin_operators_path)
+  end
 
   def autocomplete_for_name
     query = params[:term].downcase
@@ -76,4 +83,5 @@ class Admin::OperatorsController < ApplicationController
     operators = operators.map{ |operator| {:id => operator.id, :name => operator.name}}
     render :json => operators
   end
+  
 end

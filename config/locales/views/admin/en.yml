@@ -8,3 +8,4 @@ en:
   external_search: Search for this route
   num_unmatched_routes: "{{number}} routes"
   search: Search
+  are_you_sure: "Are you sure?"
