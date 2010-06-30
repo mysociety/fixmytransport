@@ -4,17 +4,6 @@
   != submit_tag t(:destroy) 
 -form_for :operator, @operator, :url => admin_url(admin_operator_path(@operator)), :html => { :method => :put,  :class => 'operator-form' } do |f|
   = render :partial => 'form', :locals => { :f => f }
-  %table
-    %tr 
-      %th= t(:route)
-      %th= t(:admin)
-      %th= t(:on_main_site)
-      %th= t(:search)
-    - @operator.route_operators.each do |route_operator|
-      %tr
-        %td= route_operator.route.name
-        %td= link_to t(:admin), admin_url(admin_route_path(route_operator.route.region, route_operator.route)), {:target => '_blank'}
-        %td= link_to t(:on_main_site), main_url(location_path(route_operator.route)), {:target => '_blank'}
-        %td= link_to t(:external_search), external_search_link("#{route_operator.route.name} #{route_operator.route.region.name}"), :target => '_blank'
-  - if ! @routes.empty?
-    = render :partial => 'routes_with_code', :locals => { :f => f }
+  %p= link_to t(:external_search_operator), external_search_link(@operator.name), :target => '_blank' 
+  = render :partial => 'route_operators', :locals => { :f => f, :route_operators => @operator.route_operators, :title => t(:routes) }
+  = render :partial => 'route_operators', :locals => { :f => f, :route_operators => @route_operators, :title => t(:routes_with_code) }

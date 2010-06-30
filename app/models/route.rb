@@ -25,13 +25,17 @@ class Route < ActiveRecord::Base
   has_many :localities, :through => :route_localities
   belongs_to :region
   accepts_nested_attributes_for :stories
-  accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => proc { |attributes| attributes['operator_id'].blank? }
+  accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   validates_presence_of :number
   cattr_reader :per_page
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
   
   @@per_page = 20
+
+  def route_operator_invalid(attributes)
+    (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['operator_id'].blank?
+  end
 
   def self.full_find(id, scope)
     find(id, :scope => scope, 

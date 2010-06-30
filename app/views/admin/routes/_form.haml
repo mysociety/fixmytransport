@@ -1,0 +1,13 @@
+- if !@route.errors.empty?
+  .form-error
+    = t(:route_form_error)
+.pseudo-form-field
+  %span.pseudo-label= t(:region)
+  = @route.region.name
+.form-field
+  - if @route.errors.on(:name)
+    .form-field-error= error_message_on @route, :name
+  != label(:route, :name)
+  != f.text_field :name
+.form-field
+  != submit_tag t(:go)

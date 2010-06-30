@@ -7,4 +7,6 @@ en:
   short_name: Short name
   id: ID
   assign_to_operator: Assign to operator?
+  remove_from_operator: Remove from operator?
   add_an_operator: Add an operator
+  operator_has_no_routes: This operator has no routes

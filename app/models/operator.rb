@@ -17,13 +17,14 @@ class Operator < ActiveRecord::Base
   validates_presence_of :name
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$"), 
                               :if => Proc.new { |operator| !operator.email.blank? }
-  accepts_nested_attributes_for :route_operators,  :reject_if => :route_operator_invalid
+  accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   has_paper_trail
   cattr_reader :per_page
   @@per_page = 20
   
+  # we only accept new or delete existing associations
   def route_operator_invalid(attributes)
-    attributes['_add'] != "1"
+    (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['route_id'].blank?
   end
   
 end

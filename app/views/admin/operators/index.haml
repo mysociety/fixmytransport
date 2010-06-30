@@ -15,7 +15,7 @@
     %th= t(:code)
     %th= t(:routes)
   -@operators.each do |operator|
-    %tr
+    %tr{ :class => cycle('odd', 'even') }
       %td
         = operator.id
         = link_to "(#{t(:admin)})", admin_url(admin_operator_path(operator))

@@ -2,13 +2,13 @@
 jQuery.noConflict();
 
 function setupAssignAllAndNone(){
-  jQuery('#assign-all-routes').click(function(){
-    jQuery('.assign-route').attr('checked', true);
+  jQuery('.check-all-route-operators').click(function(){
+    jQuery(this).closest('.route-operators').find('.check-route-operator').attr('checked', true);
     event.preventDefault();
   })
   
-  jQuery('#unassign-all-routes').click(function(){
-    jQuery('.assign-route').attr('checked', false);
+  jQuery('.uncheck-all-route-operators').click(function(){
+    jQuery(this).closest('.route-operators').find('.check-route-operator').attr('checked', false);
     event.preventDefault();
   })
 }

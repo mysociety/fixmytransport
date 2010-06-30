@@ -4,6 +4,7 @@ class Admin::RoutesController < ApplicationController
 
   def show
     @route = Route.find(params[:id], :scope => params[:scope])
+    @route_operators = make_route_operators(@route.operator_code, @route)
   end
   
   def index
@@ -38,9 +39,20 @@ class Admin::RoutesController < ApplicationController
       flash[:notice] = t(:route_updated)
       redirect_to admin_url(admin_route_path(@route.region, @route))
     else
+      @route_operators = make_route_operators(@route.operator_code, @route)
       flash[:error] = t(:route_problem)
       render :show
     end
+  end
+  
+  private
+  
+  def make_route_operators code, route
+    operators = Operator.find(:all, :conditions => ["code = ? AND id not in 
+                                                       (SELECT operator_id
+                                                        FROM route_operators 
+                                                        WHERE route_id = ? )", code, route])
+    operators.map{ |operator| RouteOperator.new(:operator => operator) }
   end
 
 end

@@ -37,6 +37,11 @@ ul.admin-navigation li {
 
 table { 
   padding: 0.5em;
+  border: 1px solid #cccccc;
+}
+
+table tr.odd {
+  background-color: #cccccc;
 }
 
 table td {
@@ -45,6 +50,11 @@ table td {
 
 .admin-task-list {
   margin: 1em;
+}
+
+h2 {
+  display: inline-block;
+  margin-top: 0.2em;
 }
 
 /* Forms */
@@ -59,11 +69,25 @@ table td {
   display: inline;
 }
 
-.operator-form label{
+.form-field, .pseudo-form-field {
+  padding: 0.3em;
+}
+.operator-form label, 
+.route-form label,
+.route-form .pseudo-label {
   display: inline-block;
-  width: 6em;
+  width: 10em;
+  text-align: right;
 }
 
+.operator-form input[type="submit"], 
+.route-form input[type="submit"]{
+  margin-left: 30em;
+}
+
+.destroy-operator {
+  display :inline;
+}
 td.route-terminuses {
   font-size: 0.8em;
   max-width: 400px;

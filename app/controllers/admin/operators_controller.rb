@@ -27,9 +27,9 @@ class Admin::OperatorsController < ApplicationController
   def new
     @operator = Operator.new(:code => params[:code])
     if params[:code]
-      @routes = Route.find_without_operators(:operator_code => params[:code])
+      @route_operators = make_route_operators(params[:code])
     else
-      @routes = []
+      @route_operators = []
     end
   end
   
@@ -39,9 +39,9 @@ class Admin::OperatorsController < ApplicationController
       redirect_to admin_url(admin_operator_path(@operator))
     else 
       if params[:operator][:code]
-        @routes = Route.find_without_operators(:operator_code => params[:operator][:code])
+        @route_operators = make_route_operators(params[:operator][:code])
       else
-        @routes = []
+        @route_operators = []
       end
       render :new
     end
@@ -49,7 +49,7 @@ class Admin::OperatorsController < ApplicationController
   
   def show
     @operator = Operator.find(params[:id])
-    @routes = Route.find_without_operators(:operator_code => @operator.code)
+    @route_operators = make_route_operators(@operator.code)
   end
    
   def update
@@ -58,7 +58,7 @@ class Admin::OperatorsController < ApplicationController
       flash[:notice] = t(:operator_updated)
       redirect_to admin_url(admin_operator_path(@operator))
     else
-      @routes = Route.find_without_operators(:operator_code => @operator.code)
+      @route_operators = make_route_operators(@operator.code)
       flash[:error] = t(:operator_problem)
       render :show
     end
@@ -82,6 +82,12 @@ class Admin::OperatorsController < ApplicationController
                               :limit => 20)
     operators = operators.map{ |operator| {:id => operator.id, :name => operator.name}}
     render :json => operators
+  end
+  
+  private
+  
+  def make_route_operators code
+    Route.find_without_operators(:operator_code => code).map{ |route| RouteOperator.new(:route => route) }
   end
   
 end
