@@ -21,19 +21,23 @@ namespace :db do
     
     # Load Operators
     ENV['FILE'] = File.join(MySociety::Config.get('NPTDR_DERIVED_DIR', ''), 'Operators.tsv.unique')
-    Rake::Task['nptdr:load:routes'].execute
+    Rake::Task['nptdr:load:operators'].execute
     
     # Delete stop areas without stops, add locality 
     Rake::Task['naptan:post_load:delete_unpopulated_stop_areas'].execute
     Rake::Task['naptan:post_load:add_locality_to_stop_areas'].execute
     
-    # Delete routes with no stops, add localities and regions
+    # Delete routes with no stops, add localities and regions.
+    # Associate routes with operators
     Rake::Task['nptdr:post_load:delete_routes_without_stops'].execute
     Rake::Task['nptdr:post_load:add_route_localities'].execute
     Rake::Task['nptdr:post_load:add_route_regions'].execute
+    Rake::Task['nptdr:post_load:add_route_operators'].execute
     
     # Generate slugs
     Rake::Task['friendly_id:make_slugs'].execute
+    
+    
   end
   
   desc 'Load data from a Postgres binary dump'

@@ -10,3 +10,7 @@ en:
   remove_from_operator: Remove from operator?
   add_an_operator: Add an operator
   operator_has_no_routes: This operator has no routes
+  no_routes: There are no routes.
+  merging_operators: Merging Operators
+  email_confirmed: Email confirmed?
+  merge_to: Merge to

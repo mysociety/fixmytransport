@@ -27,4 +27,22 @@ class Operator < ActiveRecord::Base
     (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['route_id'].blank?
   end
   
+  # merge operator records to merge_to, transferring associations
+  def self.merge!(merge_to, operators)
+    transaction do
+      operators.each do |operator|
+        next if operator == merge_to
+        operator.route_operators.each do |route_operator|
+          merge_to.route_operators.build(:route => route_operator.route)
+        end
+        if !operator.email.blank? and merge_to.email.blank?
+          merge_to.email = operator.email
+          merge_to.email_confirmed = operator.email_confirmed
+        end
+        operator.destroy
+      end
+      merge_to.save!
+    end
+  end
+  
 end

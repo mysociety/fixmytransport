@@ -5,3 +5,4 @@ en:
   operator_updated: Operator updated.
   operator_destroyed: Operator was destroyed. 
   destroy: Destroy
+  operators_merged: The operators have been merged

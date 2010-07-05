@@ -44,6 +44,16 @@ table tr.odd {
   background-color: #cccccc;
 }
 
+table tr.footer  {
+  padding: 0;
+  margin: 0;
+}
+
+table tr.footer td {
+  border: 1px solid #cccccc; 
+  background-color: #CAD4E6; 
+}
+
 table td {
   padding: 0.2em;
 }
@@ -55,6 +65,20 @@ table td {
 h2 {
   display: inline-block;
   margin-top: 0.2em;
+}
+
+.pagination a {
+  padding: 0.3em;
+}
+
+.pagination {
+  margin: 0.3em 0 0.3em 0;
+}
+
+table.operators, 
+table.routes { 
+  width: 100%;
+  table-layout: fixed ;
 }
 
 /* Forms */
@@ -69,6 +93,9 @@ h2 {
   display: inline;
 }
 
+input {
+  font-size: 0.8em;
+}
 .form-field, .pseudo-form-field {
   padding: 0.3em;
 }
@@ -91,4 +118,14 @@ h2 {
 td.route-terminuses {
   font-size: 0.8em;
   max-width: 400px;
+}
+
+.admin-search-form input {
+  display: inline;
+}
+
+.admin-search-form {
+  margin: 1em 0 1em 0;
+  background-color: #CAD4E6;
+  padding: 0.2em;
 }

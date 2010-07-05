@@ -71,6 +71,17 @@ class Admin::OperatorsController < ApplicationController
     redirect_to admin_url(admin_operators_path)
   end
 
+  def merge
+    @operators = Operator.find(params[:operators])
+    if request.post? 
+      @merge_to = Operator.find(params[:merge_to])
+      Operator.merge!(@merge_to, @operators)
+      flash[:notice] = t(:operators_merged)
+      redirect_to admin_url(admin_operator_path(@merge_to))
+    end
+  end
+
+  # returns json operator info to be used in autocomplete widgets
   def autocomplete_for_name
     query = params[:term].downcase
     operators = Operator.find(:all, 

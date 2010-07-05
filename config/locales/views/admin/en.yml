@@ -10,4 +10,8 @@ en:
   num_unmatched_routes: "{{number}} routes"
   search: Search
   are_you_sure: "Are you sure?"
-  no_routes: There are no routes.
+  select: Select
+  selected_items: "Selected items:"
+  merge: Merge
+  all: All
+  none: None

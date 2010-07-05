@@ -71,7 +71,7 @@ ActionController::Routing::Routes.draw do |map|
                                                     :action => 'update', 
                                                     :conditions => { :method => :put }
 
-    admin.resources :operators
+    admin.resources :operators, :collection => { :merge => [:get, :post] }
     admin.connect "/autocomplete_for_operator_name", :controller => 'operators', 
                                                      :action => 'autocomplete_for_name'
   end

@@ -1,0 +1,31 @@
+%h2= t(:merging_operators)
+- if @merge_to
+  %h3= "MERGED TO #{@merge_to.name}"
+- form_tag(admin_url(merge_admin_operators_path), :method => "POST") do 
+  %table{ :class => 'operators merge-list' }
+    %tr
+      %th{ :width => "10%" }= t(:id)
+      %th{ :width => "20%" }= t(:name)
+      %th{ :width => "20%" }= t(:short_name) 
+      %th{ :width => "5%" }= t(:code)
+      %th{ :width => "20%" }= t(:email)
+      %th{ :width => "10%" }= t(:email_confirmed)
+      %th{ :width => "5%" }= t(:routes)
+      %th{ :width => "5%" }= t(:merge_to)
+    -@operators.each do |operator|
+      %tr{ :class => cycle('odd', 'even') }
+        %td
+          = operator.id
+          = link_to "(#{t(:admin)})", admin_url(admin_operator_path(operator)), {:target => "_blank"}
+        %td= operator.name
+        %td= operator.short_name
+        %td= operator.code
+        %td= operator.email
+        %td= operator.email_confirmed
+        %td= operator.routes.count
+        %td
+          != radio_button_tag "merge_to", operator.id, operator == @operators.first, { :class => "select-item" }
+          != hidden_field_tag "operators[]", operator.id
+    %tr{ :class => 'footer' }
+      %td{ :colspan => 8 }
+        != submit_tag t(:merge)

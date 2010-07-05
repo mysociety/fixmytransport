@@ -70,6 +70,18 @@ namespace :nptdr do
       end
     end
     
+    desc 'Deletes operators whose code has no routes'
+    task :delete_operator_codes_without_routes => :environment do 
+      deleted_count = 0
+      Operator.find_each do |operator|
+        if Route.count_by_operator_code(operator_code) == 0
+         puts "deleting #{operator.name} #{operator.code}"
+         deleted_count += 1
+        end
+      end
+      puts "Deleted #{deleted_count} operators"
+    end
+    
     desc 'Assigns routes to operators if the operator code of the route is unique'
     task :add_route_operators => :environment do 
       # Match up any codes where we only have one operator. Not foolproof as we know that

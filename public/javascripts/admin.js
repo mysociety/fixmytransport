@@ -13,6 +13,18 @@ function setupAssignAllAndNone(){
   })
 }
 
+function setupIndexSelectAllAndNone(){
+  jQuery('.index-select-all').click(function(){
+    jQuery('.index-list').find('.select-item').attr('checked', true);
+    event.preventDefault();
+  })
+
+  jQuery('.index-select-none').click(function(){
+    jQuery('.index-list').find('.select-item').attr('checked', false);
+    event.preventDefault();
+  })
+}
+
 function setupOperatorAutocomplete(){
   jQuery('input#operator_name_auto').autocomplete({
 		source: function(request, response) {
@@ -57,9 +69,8 @@ function setupDestroyOperator(){
 jQuery(document).ready(function() {
   
   setupAssignAllAndNone();
-  
+  setupIndexSelectAllAndNone();
   setupOperatorAutocomplete();
-  
   setupDestroyOperator();
 
 });
