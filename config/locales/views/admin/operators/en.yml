@@ -14,3 +14,4 @@ en:
   merging_operators: Merging Operators
   email_confirmed: Email confirmed?
   merge_to: Merge to
+  operator_form_error: There's a problem with this operator - please see below.

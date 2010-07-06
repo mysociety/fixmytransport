@@ -13,7 +13,7 @@
       });
     .extra-info
       = departures_link(@stop)
-      =render :partial => "shared/route_list", :locals => {:stop => @stop}
+      =render :partial => "shared/route_list", :locals => { :stop => @stop }
   .stop
     %h3.name= "#{@stop.full_name}" 
     .details
@@ -27,4 +27,4 @@
         Part of
         -@stop.stop_areas.each do |stop_area|
           %span.stop-area= link_to("#{stop_area.name} stop area", stop_area_url(stop_area.locality, stop_area))
-= render :partial => 'shared/location_stories', :locals => {:location => @stop}
+= render :partial => 'shared/location_stories', :locals => { :location => @stop }

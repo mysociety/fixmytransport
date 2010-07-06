@@ -59,21 +59,12 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace :admin do |admin|
     admin.root :controller => 'home'
     admin.resources :location_searches, :only => [:index, :show]
-    admin.routes "/routes/", :controller => "routes", 
-                                  :action => 'index', 
-                                  :conditions => { :method => :get }
-
-    admin.route "/routes/:scope/:id.:format", :controller => "routes", 
-                                                    :action => 'show', 
-                                                    :conditions => { :method => :get }
-
-    admin.route "/routes/:scope/:id.:format", :controller => "routes", 
-                                                    :action => 'update', 
-                                                    :conditions => { :method => :put }
-
+    admin.resources :routes
     admin.resources :operators, :collection => { :merge => [:get, :post] }
     admin.connect "/autocomplete_for_operator_name", :controller => 'operators', 
                                                      :action => 'autocomplete_for_name'
+    admin.connect "/autocomplete_for_stop_name", :controller => 'stops',
+                                                 :action => 'autocomplete_for_name'
   end
   
 end

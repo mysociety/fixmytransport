@@ -14,3 +14,12 @@ en:
   no_operators: There are no operators
   assign_an_operator: Assign an operator
   operator_code: Operator code
+  route_segments: Route segments
+  add_a_segment: Add a segment
+  from_stop: From stop
+  to_stop: To stop
+  terminus: Terminus?
+  order: Order
+  remove: Remove
+  add_a_route: Add a route
+  route_form_error: There's a problem with this route - please see below.

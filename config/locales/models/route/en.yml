@@ -1,0 +1,13 @@
+en:
+  activerecord:
+    errors:
+      models:
+        route:
+          attributes: 
+            number:
+              blank: Please enter the route number
+            region_id:
+              blank: Please enter the region
+            transport_mode_id: 
+              blank: Please enter the mode of transport
+  
