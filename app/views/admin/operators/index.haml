@@ -1,6 +1,10 @@
 %h2= t(:operators)
 = link_to t(:add_an_operator), admin_url(new_admin_operator_path)
-
+:javascript
+  jQuery(document).ready(function(){
+    setupIndexSelectAllAndNone();
+    setupItemSelection('.select-item');
+    });
 %form{ :class => "admin-search-form", :method => "GET" }
   %span.query
     != label_tag t(:search)

@@ -7,3 +7,10 @@
   %p= link_to t(:external_search_operator), external_search_link(@operator.name), :target => '_blank' 
   = render :partial => 'route_operators', :locals => { :f => f, :route_operators => @operator.route_operators, :title => t(:routes) }
   = render :partial => 'route_operators', :locals => { :f => f, :route_operators => @route_operators, :title => t(:routes_with_code) }
+:javascript
+  jQuery(document).ready(function(){
+    setupAssignAllAndNone();
+    setupDestroyOperator();
+    setupItemSelection('.check-route-operator');
+  });
+  

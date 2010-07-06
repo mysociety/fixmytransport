@@ -1,3 +1,6 @@
+- if !@operator.errors.empty?
+  .form-error
+    = t(:operator_form_error)
 .form-field
   != f.label :code
   != f.text_field :code

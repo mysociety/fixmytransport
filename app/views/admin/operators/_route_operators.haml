@@ -18,7 +18,7 @@
       - route_operators.each do |route_operator|
         - f.fields_for :route_operators, route_operator do |route_operator_fields|
           %tr{ :class => cycle('odd', 'even') }
-            %td!= "#{link_to route_operator.route.name, main_url(location_path(route_operator.route)), :target => '_blank'} #{link_to("(#{t(:admin)})", admin_url(admin_route_path(route_operator.route.region, route_operator.route)))}"
+            %td!= "#{link_to route_operator.route.name, main_url(location_path(route_operator.route)), :target => '_blank'} #{link_to("(#{t(:admin)})", admin_url(admin_route_path(route_operator.route.id)))}"
             %td= route_operator.route.region.name
             %td.route-terminuses= route_operator.route.area
             %td= link_to t(:external_search_route), external_search_link("#{route_operator.route.name} #{route_operator.route.area}"), :target => '_blank'
