@@ -1,9 +1,21 @@
 - if !@route.errors.empty?
   .form-error
     = t(:route_form_error)
-.pseudo-form-field
-  %span.pseudo-label= t(:region)
-  = @route.region.name
+.form-field
+  - if @route.errors.on(:region_id)
+    .form-field-error= error_message_on @route, :region_id
+  != label(:route, :region_id)
+  != f.collection_select :region_id, Region.find(:all), :id, :name, :prompt => true
+.form-field
+  - if @route.errors.on(:transport_mode_id)
+    .form-field-error= error_message_on @route, :transport_mode_id
+  != label(:route, :transport_mode_id)
+  != f.collection_select :transport_mode_id, TransportMode.active.find(:all), :id, :name, :prompt => true
+.form-field
+  - if @route.errors.on(:number)
+    .form-field-error= error_message_on @route, :number
+  != label(:route, :number)
+  != f.text_field :number
 .form-field
   - if @route.errors.on(:name)
     .form-field-error= error_message_on @route, :name

@@ -3,7 +3,7 @@
   %h3=t(:routes_without_operators_intro, :number => @routes_without_operators_total)
   %ul
     - @routes_without_operators.each do |route|
-      %li.route-link= link_to route.name, admin_url(admin_route_path(route.region, route))
+      %li.route-link= link_to route.name, admin_url(admin_route_path(route.id))
 .admin-task-list
   %h3=t(:codes_without_operators_intro, :number => @operator_codes_without_operators_total)
   %ul
