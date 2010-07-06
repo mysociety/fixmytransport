@@ -16,7 +16,7 @@ class Route < ActiveRecord::Base
   
   has_many :route_operators, :dependent => :destroy
   has_many :operators, :through => :route_operators, :uniq => true
-  has_many :route_segments, :dependent => :destroy
+  has_many :route_segments, :dependent => :destroy, :order => 'id asc'
   has_many :from_stops, :through => :route_segments, :class_name => 'Stop' 
   has_many :to_stops, :through => :route_segments, :class_name => 'Stop'
   belongs_to :transport_mode
@@ -26,7 +26,9 @@ class Route < ActiveRecord::Base
   belongs_to :region
   accepts_nested_attributes_for :stories
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
-  validates_presence_of :number
+  accepts_nested_attributes_for :route_segments, :allow_destroy => true, :reject_if => :route_segment_invalid
+  validates_presence_of :number, :transport_mode_id
+  validates_presence_of :region_id, :if => :loaded?
   cattr_reader :per_page
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
@@ -36,11 +38,20 @@ class Route < ActiveRecord::Base
   def route_operator_invalid(attributes)
     (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['operator_id'].blank?
   end
+  
+  def route_segment_invalid(attributes)
+    (attributes['_add'] != "1" and attributes['_destroy'] != "1") or \
+    attributes['from_stop_id'].blank? or attributes['to_stop_id'].blank?
+  end
 
   def self.full_find(id, scope)
     find(id, :scope => scope, 
              :include => [{ :route_segments => [:to_stop => :locality, :from_stop => :locality] }, 
                           { :route_operators => :operator }])
+  end
+  
+  def region_name
+    region ? region.name : nil
   end
   
   # Return routes with this number and transport mode that have a stop or stop area in common with 

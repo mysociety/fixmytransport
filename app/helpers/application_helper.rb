@@ -63,6 +63,13 @@ module ApplicationHelper
     "[#{stop.lat}, #{stop.lon}, #{stop.id}, '#{stop_url(stop.locality, stop)}', '#{escape_javascript(stop.description)}']"
   end
   
+  def route_segment_js(route)
+    segments_js = route.route_segments.map do |segment| 
+      "[#{stop_js_coords(segment.from_stop)}, #{stop_js_coords(segment.to_stop)}, #{segment.id}]"
+    end
+    "[#{segments_js.join(',')}]"
+  end
+  
   def location_stops_js locations
     array_content = []
     locations.each do |location|

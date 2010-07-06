@@ -18,7 +18,8 @@ describe Route do
   before(:each) do
     @valid_attributes = {
       :transport_mode_id => 1,
-      :number => "value for number"
+      :number => "value for number", 
+      :region_id => 1
     }
   end
 
@@ -26,6 +27,41 @@ describe Route do
     route = Route.new(@valid_attributes)
     route.valid?.should be_true
   end
+  
+  it 'should require a transport mode' do 
+    route = Route.new(@valid_attributes)
+    route.transport_mode_id = nil
+    route.valid?.should be_false
+  end
+  
+  describe 'when loading' do 
+    
+    before do 
+      @route = Route.new(@valid_attributes)
+      @route.loaded = false
+    end
+  
+    it 'should not require a region' do 
+      @route.region_id = nil
+      @route.valid?.should be_true
+    end
+  
+  end
+  
+  describe 'when loaded' do 
+  
+    before do 
+      @route = Route.new(@valid_attributes)
+      @route.loaded = true
+    end
+    
+    it 'should require a region' do 
+      @route.region_id = nil
+      @route.valid?.should be_false
+    end
+    
+  end
+  
   describe 'when giving its terminuses' do 
     
     it 'should return correct terminuses for an example route' do 
