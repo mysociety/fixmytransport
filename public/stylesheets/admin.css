@@ -44,6 +44,10 @@ table tr.odd {
   background-color: #cccccc;
 }
 
+table tr.selected {
+  background-color: #FF4040;
+}
+
 table tr.footer  {
   padding: 0;
   margin: 0;
@@ -67,6 +71,10 @@ h2 {
   margin-top: 0.2em;
 }
 
+h2.route-header {
+  max-width: 25em;
+}
+
 .pagination a {
   padding: 0.3em;
 }
@@ -81,7 +89,22 @@ table.routes {
   table-layout: fixed ;
 }
 
+/* Maps */
+
+#map {
+  width: 400px; 
+  height: 400px; 
+  padding-left: 20px; 
+  position:relative;
+  border: 1px solid #000000;
+  float: right;
+}
+
 /* Forms */
+
+.form-error {
+  color: #CC0000;
+}
 
 .form-field-error {
   color: #CC0000;

@@ -5,6 +5,19 @@ var proj = new OpenLayers.Projection("EPSG:4326");
 var selectControl;
 var openPopup;
 var stopsById = new Array();
+var segmentStyle =
+{
+  strokeColor: "#CC0000",
+  strokeOpacity: 0.7,
+  strokeWidth: 4
+};
+    
+var segmentSelectedStyle =
+{
+  strokeColor: "#000000",
+  strokeOpacity: 0.7,
+  strokeWidth: 4
+};
 
 function problem_init() {
   var problemCoords = new OpenLayers.LonLat(problem_lon, problem_lat).transform(proj, map.getProjectionObject());
@@ -48,28 +61,81 @@ function area_init() {
   map.zoomToExtent(bounds, false);
 }
 
+function route_init() {
+		  
+  createMap();
+  bounds = new OpenLayers.Bounds();
+  var markers = new OpenLayers.Layer.Markers( "Markers", {projection: proj});
+  var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer",{projection: proj});
+  map.addLayer(markers);
+  map.addLayer(vectorLayer);
+  addSelectedHandler(vectorLayer);
+  for (var i=0; i < routeSegments.length; i++){
+     var coords = routeSegments[i];
+     var fromCoords = new OpenLayers.LonLat(coords[0][1], coords[0][0]);
+     var toCoords = new OpenLayers.LonLat(coords[1][1], coords[1][0]);
+     fromCoords.transform(proj, map.getProjectionObject());
+     toCoords.transform(proj, map.getProjectionObject());     
+     var fromPoint = new OpenLayers.Geometry.Point(fromCoords.lon, fromCoords.lat);
+     var toPoint = new OpenLayers.Geometry.Point(toCoords.lon, toCoords.lat);
+     var points = [];
+     points.push(fromPoint);
+     points.push(toPoint)
+     bounds.extend(fromPoint);
+     bounds.extend(toPoint);
+     addRouteMarker(fromCoords, bounds, markers, coords[0][2], coords[0][3], coords[0][4], 0);
+     addRouteMarker(toCoords, bounds, markers, coords[1][2], coords[1][3], coords[1][4], 0);
+     lineString = new OpenLayers.Geometry.LineString(points);
+     lineFeature = new OpenLayers.Feature.Vector(lineString, {projection: proj}, segmentStyle);
+     lineFeature.segment_id = coords[2];
+     vectorLayer.addFeatures([lineFeature]);
+   }
+   map.zoomToExtent(bounds, false); 
+}
+
 function addSelectedHandler(vectorLayer) {
   vectorLayer.events.on({
-      'featureselected': stopSelected,
-      'featureunselected': stopUnselected
+      'featureselected': segmentSelected,
+      'featureunselected': segmentUnselected
   });
-  selectControl = new OpenLayers.Control.SelectFeature(vectorLayer);
+  selectControl = new OpenLayers.Control.SelectFeature(vectorLayer, {multiple: false,
+                                                                     toggleKey: "ctrlKey",
+                                                                     multipleKey: "shiftKey"});
   map.addControl(selectControl);
   selectControl.activate();
 }
 
+function segmentSelected(event) {
+  segment = event.feature;
+  segment.style = segmentSelectedStyle;
+  this.drawFeature(segment);
+  var row = jQuery("#route_segment_" + segment.segment_id);
+  row.toggleClass("selected");
+  row.find(".check-route-segment").attr('checked', 'true');
+}
+
+function segmentUnselected(event) {
+  segment = event.feature;
+  segment.style = segmentStyle;
+  this.drawFeature(segment);
+  jQuery("#route_segment_" + segment.segment_id).toggleClass("selected");
+  
+}
+
 function createMap() {
+
   var options = { 
-        projection: new OpenLayers.Projection("EPSG:900913"),
-        displayProjection: new OpenLayers.Projection("EPSG:4326"),
-        units: "m",
-        numZoomLevels: 18,
-        maxResolution: 156543.0339,
-        maxExtent: new OpenLayers.Bounds(-20037508, -20037508,
-                                          20037508, 20037508.34)
+        'projection': new OpenLayers.Projection("EPSG:900913"),
+        'units': "m",
+        'numZoomLevels': 18,
+        'maxResolution': 156543.0339,
+        'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
+                                          20037508.34, 20037508.34)
       };
   map = new OpenLayers.Map('map', options);
-  var gmap = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true});
+  var gmap = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true,
+                                                           'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
+                                                                                            20037508.34, 20037508.34)});
   map.addLayer(gmap); 
 }
 
