@@ -6,3 +6,5 @@ en:
   operator_destroyed: Operator was destroyed. 
   destroy: Destroy
   operators_merged: The operators have been merged
+  on_street: "on {{street}}"
+  in_locality: "in {{locality}}"
