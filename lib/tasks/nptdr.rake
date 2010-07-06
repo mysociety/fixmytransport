@@ -74,7 +74,7 @@ namespace :nptdr do
     task :delete_operator_codes_without_routes => :environment do 
       deleted_count = 0
       Operator.find_each do |operator|
-        if Route.count_by_operator_code(operator_code) == 0
+        if Route.count_by_sql(["SELECT count(*) from routes where operator_code = ?", operator.code]) == 0
          puts "deleting #{operator.name} #{operator.code}"
          deleted_count += 1
         end
@@ -125,18 +125,4 @@ namespace :nptdr do
     end
   end
   
-  namespace :temp do 
-    
-    desc 'Move operator_codes to routes'
-    task :move_operator_codes_to_routes => :environment do 
-      Route.find_each do |route|
-        # currently no route has more than one operator - that would make it a separate route
-        route.operator_code = route.operators.first.code
-        route.save!
-      end
-      RouteOperator.connection.execute("DELETE FROM route_operators")
-      Operator.connection.execute("DELETE FROM operators")
-    end
-  
-  end
 end
