@@ -144,31 +144,6 @@ dursley_road:
   indicator: ""
   locality: shirehampton
   coords: 0101000020346C0000000000005C8D154100000000C0850541
-victoria_bus_station_deleted: 
-  status: del
-  lon: "-0.14491"
-  lat: "51.49609"
-  easting: "528873"
-  northing: "179092"
-  grid_type: U
-  naptan_code: ""
-  revision_number: "0"
-  landmark: ---
-  common_name: Victoria Bus Station
-  administrative_area_code: 082
-  bearing: N
-  plate_code: ""
-  stop_type: BCT
-  locality_centre: f
-  suburb: ""
-  modification: del
-  bus_stop_type: MKD
-  crossing: --
-  short_common_name: ""
-  atco_code: "4900140501"
-  town: ""
-  street: VICTORIA BUS STATION
-  indicator: "1"
 clapham_junction: 
   status: act
   lon: "-0.17028"
@@ -470,7 +445,7 @@ tennis_street:
   status: act
   lon: "-0.09028"
   northing: "179733"
-  locality_id: "19160"
+  locality: the_borough
   grid_type: U
   naptan_code: ""
   revision_number: "4"
@@ -498,7 +473,7 @@ tennis_court_inn:
   status: act
   lon: "-2.48769"
   northing: "173634"
-  locality_id: "7794"
+  locality: kingswood
   grid_type: U
   naptan_code: sglgmpd
   revision_number: "0"
@@ -575,3 +550,32 @@ staple_street:
   indicator: Stop
   lat: "51.49997"
   easting: "532840"
+victoria_stop_s: 
+  status: act
+  lon: "-0.14351"
+  northing: "179112"
+  locality: victoria
+  grid_type: U
+  naptan_code: ""
+  revision_number: "26"
+  landmark: 
+  common_name: Victoria
+  administrative_area_code: 082
+  bearing: S
+  plate_code: ""
+  stop_type: BCT
+  locality_centre: f
+  suburb: ""
+  modification: rev
+  bus_stop_type: MKD
+  crossing: 
+  short_common_name: ""
+  atco_code: 490000248F
+  town: ""
+  street: TERMINUS PLACE
+  cached_slug: victoria-stop-f
+  coords: 0101000020346C000000000000942420410000000040DD0541
+  indicator: Stop F
+  loaded: t
+  lat: "51.49625"
+  easting: "528970"

@@ -292,3 +292,19 @@ the_borough:
   short_name: ""
   coords: 0101000020346C000000000000883F20410000000050EF0541
   easting: "532420"
+kingswood: 
+  northing: "254081"
+  source_locality_type: Lo
+  admin_area_id: "136"
+  national: 
+  name: Kingswood
+  grid_type: U
+  revision_number: "3"
+  code: E0038221
+  qualifier_name: Hereford
+  district_id: 
+  modification: rev
+  short_name: ""
+  cached_slug: kingswood-hereford
+  coords: 0101000020346C000000000000901A14410000000008040F41
+  easting: "329380"
