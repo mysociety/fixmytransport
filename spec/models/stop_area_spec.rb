@@ -48,6 +48,34 @@ describe StopArea do
     stop_area.valid?.should be_true
   end
   
+  describe 'when loading' do 
+    
+    before do 
+      @stop_area = StopArea.new(@valid_attributes)
+      @stop_area.loaded = false
+    end
+    
+    it 'should not require locality' do 
+      @stop_area.locality_id = nil
+      @stop_area.valid?.should be_true
+    end
+    
+  end
+  
+  describe 'when loaded' do 
+  
+    before do 
+      @stop_area = StopArea.new(@valid_attributes)
+      @stop_area.loaded = true
+    end
+    
+    it 'should require locality' do 
+      @stop_area.locality_id = nil
+      @stop_area.valid?.should be_false
+    end
+  
+  end
+  
   describe ' area ' do 
   
     describe 'for stop areas whose stops all share a locality' do

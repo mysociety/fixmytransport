@@ -33,6 +33,7 @@ class StopArea < ActiveRecord::Base
   accepts_nested_attributes_for :stories
   belongs_to :locality
   has_friendly_id :name, :use_slug => true, :scope => :locality                                  
+  validates_presence_of :locality, :if => :loaded?
   
   def self.full_find(id, scope)
     find(id, :scope => scope, 
