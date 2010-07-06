@@ -1,0 +1,13 @@
+%td
+%td
+  != label_tag :from_stop_name
+  != text_field_tag :from_stop_name, '', { :class => 'from_stop_name_auto', :size => 30 }  
+  != segment_fields.hidden_field :from_stop_id, { :class => 'from-stop-id' } 
+%td!= segment_fields.check_box :from_terminus
+%td
+  != label_tag :to_stop_name
+  != text_field_tag :to_stop_name, '', { :class => 'to_stop_name_auto', :size => 30 }  
+  != segment_fields.hidden_field :to_stop_id, { :class => 'to-stop-id' } 
+  != segment_fields.hidden_field :_add, { :value => "1" }
+%td!= segment_fields.check_box :to_terminus
+%td

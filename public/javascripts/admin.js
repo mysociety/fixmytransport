@@ -59,10 +59,10 @@ function setupStopAutocomplete(text_input_selector, url_input_selector, target_s
   		},
   		minLength: 0,
   		select: function(event, ui) {
-  			jQuery(target_selector).val(ui.item.id);
+  			jQuery(this).next(target_selector).val(ui.item.id);
   		},
   		search: function(event, ui) {
-  		  jQuery(target_selector).val('');
+  		  jQuery(this).next(target_selector).val('');
   		  if (jQuery(this).val().length == 0){
   		    return false;
   		  }
@@ -71,8 +71,8 @@ function setupStopAutocomplete(text_input_selector, url_input_selector, target_s
 }
 
 function setupStopAutocompletes(){
-  setupStopAutocomplete('input#from_stop_name_auto', "input#stop_name_autocomplete_url", 'input#from-stop-id');
-  setupStopAutocomplete('input#to_stop_name_auto', "input#stop_name_autocomplete_url", 'input#to-stop-id');
+  setupStopAutocomplete('input.from_stop_name_auto', "input#stop_name_autocomplete_url", 'input.from-stop-id');
+  setupStopAutocomplete('input.to_stop_name_auto', "input#stop_name_autocomplete_url", 'input.to-stop-id');
 }
 
 function setupOperatorAutocomplete(){
@@ -106,6 +106,42 @@ function setupOperatorAutocomplete(){
   }); 
 }
 
+// link to add new route segments 
+function setupAddSegmentLink(){
+  jQuery('.add-segment-link').click(function(){
+    // copy the hidden template
+    var template_segment_row = jQuery('.add-segment-template')
+    var new_segment_row = template_segment_row.clone();
+    new_segment_row.removeClass('add-segment-template');
+    new_segment_row.addClass('add-segment-row');
+    // set the display class
+    var last_segment_row = jQuery('.add-segment-row:last');
+    if (last_segment_row.hasClass('odd')){
+      new_segment_row.addClass('even');
+    } else {
+      new_segment_row.addClass('odd');
+    }
+    // insert into the DOM
+    last_segment_row.after(new_segment_row);
+    // make visible
+    new_segment_row.css('display', 'table-row');
+    // give fields a unique index 
+    var new_id = new Date().getTime();
+    var regexp = new RegExp("new_route_segment", "g");
+    new_segment_row.html(function(index, html){ 
+      return html.replace(regexp, new_id);
+    });
+    // add autocomplete events
+    setupStopAutocomplete(new_segment_row.find('input.from_stop_name_auto'), 
+                          "input#stop_name_autocomplete_url", 
+                          new_segment_row.find('input.from-stop-id'));
+    setupStopAutocomplete(new_segment_row.find('input.to_stop_name_auto'), 
+                          "input#stop_name_autocomplete_url", 
+                          new_segment_row.find('input.to-stop-id'));
+    event.preventDefault();
+  });
+}
+
 function setupDestroyOperator(){
   jQuery('.destroy-operator').submit(function(){
     if (confirm(jQuery('input#destroy_operator_confirmation').val())){
@@ -122,6 +158,7 @@ function setupShowRoute(){
   setupAssignAllAndNone();
   setupItemSelection('.check-route-operator');
   setupItemSelection('.check-route-segment');
+  setupAddSegmentLink();
   route_init();
 }
 
