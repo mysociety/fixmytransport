@@ -37,7 +37,8 @@ namespace :db do
     # Generate slugs
     Rake::Task['friendly_id:make_slugs'].execute
     
-    
+    # Mark records as loaded
+    Rake::Task['db:mark_loaded']
   end
   
   desc 'Mark records as loaded - triggers stricter validation'
