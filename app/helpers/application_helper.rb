@@ -111,6 +111,15 @@ module ApplicationHelper
     text += "."    
   end
   
+  def stop_name_for_admin(stop)
+    name = stop.full_name
+    if ! stop.street.blank?
+      name += " #{t(:on_street, :street => stop.street)}"
+    end 
+    name += " #{t(:in_locality, :locality => stop.locality_name)} (#{stop.id})"
+    name
+  end
+  
   def departures_link(stop)
     modes = stop.transport_mode_names
     if modes.include? 'Bus' or modes.include? 'Coach' or modes.include? 'Ferry'

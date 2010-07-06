@@ -168,4 +168,5 @@ function setupNewRoute(){
   setupAssignAllAndNone();
   setupItemSelection('.check-route-operator');
   setupItemSelection('.check-route-segment');  
+  setupAddSegmentLink();
 }
