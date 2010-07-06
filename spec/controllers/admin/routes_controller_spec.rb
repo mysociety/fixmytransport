@@ -53,5 +53,44 @@ describe Admin::RoutesController do
     end
   
   end
+  
+  describe "GET #new" do 
+  
+    it 'should create a new route' do 
+      Route.should_receive(:new)
+      get :new
+    end
+    
+    it 'should create an empty list of route operators' do 
+      get :new
+      assigns[:route_operators].should == []
+    end
+    
+  end
+
+  describe "POST #create" do 
+    
+    before do 
+      @route = mock_model(Route, :id => 400, :save => true)
+      Route.stub!(:new).and_return(@route)
+    end
+
+    it 'should create a new route with the route params' do 
+      Route.should_receive(:new).with('name' => 'a new route').and_return(@route)
+      post :create, { :route => { :name => 'a new route' } }
+    end
+
+    it 'should redirect to the admin route URL if the route can be saved' do 
+      post :create, { :route => { :name => 'a new route'} }
+      response.should redirect_to(controller.admin_url(admin_route_path(@route.id)))
+    end
+    
+    it 'should render the template "new" if the route cannot be saved' do 
+      @route.stub!(:save).and_return(false)
+      post :create, { :route => { :name => 'a new route'} }
+      response.should render_template('new')
+    end
+    
+  end
 
 end
