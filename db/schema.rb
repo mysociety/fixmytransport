@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100629120403) do
+ActiveRecord::Schema.define(:version => 20100706102840) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -184,6 +184,7 @@ ActiveRecord::Schema.define(:version => 20100629120403) do
     t.integer  "region_id"
     t.string   "cached_slug"
     t.string   "operator_code"
+    t.boolean  "loaded"
   end
 
   add_index "routes", ["cached_slug"], :name => "index_routes_on_cached_slug"
@@ -265,6 +266,7 @@ ActiveRecord::Schema.define(:version => 20100629120403) do
     t.float    "lon"
     t.float    "lat"
     t.integer  "locality_id"
+    t.boolean  "loaded"
   end
 
   add_index "stop_areas", ["coords"], :name => "index_stop_areas_on_coords", :spatial => true
@@ -312,6 +314,7 @@ ActiveRecord::Schema.define(:version => 20100629120403) do
     t.point    "coords",                   :srid => 27700
     t.integer  "locality_id"
     t.string   "cached_slug"
+    t.boolean  "loaded"
   end
 
   add_index "stops", ["cached_slug"], :name => "index_stops_on_cached_slug"

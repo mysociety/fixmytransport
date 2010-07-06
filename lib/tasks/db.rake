@@ -40,6 +40,16 @@ namespace :db do
     
   end
   
+  desc 'Mark records as loaded - triggers stricter validation'
+  task :mark_loaded => :environment do 
+    [Stop, StopArea, Route].each do |model_type|
+      model_type.find_each do |instance| 
+        instance.loaded = true
+        instance.save!
+      end
+    end
+  end
+  
   desc 'Load data from a Postgres binary dump'
   task :load_from_binary => :environment do 
     check_for_file
