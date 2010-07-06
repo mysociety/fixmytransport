@@ -46,9 +46,13 @@ module ApplicationHelper
     tags.join("\n")
   end
   
-  def map_javascript_include_tags
+  # options:
+  #  no_jquery - don't include a tag for the main jquery js file
+  def map_javascript_include_tags(options={})
     tags = []
-    tags << javascript_include_tag('jquery-1.4.2.min.js')
+    unless options[:no_jquery]
+      tags << javascript_include_tag('jquery-1.4.2.min.js')
+    end
     tags << javascript_include_tag('http://openlayers.org/api/OpenLayers.js')
     tags << "<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=#{google_maps_key}\" type=\"text/javascript\"></script>"
     tags << javascript_include_tag('map.js')
