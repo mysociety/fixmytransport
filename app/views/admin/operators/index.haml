@@ -1,16 +1,7 @@
 %h2= t(:operators)
 = link_to t(:add_an_operator), admin_url(new_admin_operator_path)
-:javascript
-  jQuery(document).ready(function(){
-    setupIndexSelectAllAndNone();
-    setupItemSelection('.select-item');
-    });
-%form{ :class => "admin-search-form", :method => "GET" }
-  %span.query
-    != label_tag t(:search)
-    != text_field_tag :query, params[:query]
-  != submit_tag t(:go)
-
+= render :partial => "admin/shared/index_js"
+= render :partial => "admin/shared/search_form", :locals => { :skip_transport_mode => true } 
 %form{ :method => "GET", :action => admin_url(merge_admin_operators_path)}
   = will_paginate @operators, {:admin => true}
   = t(:select)

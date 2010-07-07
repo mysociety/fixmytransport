@@ -30,6 +30,32 @@ class Locality < ActiveRecord::Base
   has_many :routes, :through => :route_localities
   has_friendly_id :name_and_qualifier_name, :use_slug => true
   
+  # instance methods
+  
+  def name_and_qualifier_name
+    "#{name} #{qualifier_name}"
+  end
+  
+  # class methods
+  
+  def self.find_by_name_or_id(query, limit=nil)
+    query_clauses = []
+    query_clause = "(LOWER(name) LIKE ? 
+                    OR LOWER(name) LIKE ?"
+    query_params = [ "#{query}%", "%#{query}%" ]
+    # numeric?
+    if query.to_i.to_s == query
+      query_clause += " OR id = ?"
+      query_params << query.to_i
+    end
+    query_clause += ")"
+    query_clauses << query_clause
+    conditions = [query_clauses.join(" AND ")] + query_params
+    find(:all, 
+         :conditions => conditions, 
+         :limit => limit)
+  end
+  
   def self.find_all_by_name(name)
     localities = find_by_sql(['SELECT localities.* 
                                FROM localities 
@@ -46,11 +72,7 @@ class Locality < ActiveRecord::Base
                                name.downcase, name.downcase, name.downcase, name.downcase])
     localities
   end
-  
-  def name_and_qualifier_name
-    "#{name} #{qualifier_name}"
-  end
-  
+
   def self.find_all_with_descendants(name)
     localities = find_all_by_name(name)
     descendents = find_by_sql(["SELECT localities.* 

@@ -34,13 +34,14 @@ class Admin::RoutesController < ApplicationController
   end
   
   def new
-    @route = Route.new
+    @route = Route.new(:loaded => true)
     @route_operators = []
   end
   
   def create
     @route = Route.new(params[:route])
     if @route.save
+      flash[:notice] = t(:route_created)
       redirect_to(admin_url(admin_route_path(@route.id)))
     else
       @route_operators = []
@@ -49,7 +50,7 @@ class Admin::RoutesController < ApplicationController
   end
   
   def update
-    @route = Route.find(params[:id], :scope => params[:scope])
+    @route = Route.find(params[:id])
     if @route.update_attributes(params[:route])
       flash[:notice] = t(:route_updated)
       redirect_to admin_url(admin_route_path(@route.id))

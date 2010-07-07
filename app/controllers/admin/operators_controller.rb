@@ -36,6 +36,7 @@ class Admin::OperatorsController < ApplicationController
   def create
     @operator = Operator.new(params[:operator])
     if @operator.save
+      flash[:notice] = t(:operator_created)
       redirect_to admin_url(admin_operator_path(@operator))
     else 
       if params[:operator][:code]

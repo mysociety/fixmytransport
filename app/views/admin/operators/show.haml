@@ -1,6 +1,6 @@
 %h2= @operator.name
-- form_for @operator, :url => admin_url(admin_operator_path(@operator)), :html => { :method => :delete, :class => 'destroy-operator' } do |f| 
-  != hidden_field_tag :confirmation, t(:are_you_sure), {:id => 'destroy_operator_confirmation'}
+- form_for @operator, :url => admin_url(admin_operator_path(@operator)), :html => { :method => :delete, :class => 'destroy-link' } do |f| 
+  != hidden_field_tag :confirmation, t(:are_you_sure), {:id => 'destroy_confirmation'}
   != submit_tag t(:destroy) 
 -form_for :operator, @operator, :url => admin_url(admin_operator_path(@operator)), :html => { :method => :put,  :class => 'operator-form' } do |f|
   = render :partial => 'form', :locals => { :f => f }
@@ -10,7 +10,7 @@
 :javascript
   jQuery(document).ready(function(){
     setupAssignAllAndNone();
-    setupDestroyOperator();
+    setupDestroyLink();
     setupItemSelection('.check-route-operator');
   });
   

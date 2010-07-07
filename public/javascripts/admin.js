@@ -39,7 +39,7 @@ function setupItemSelection(class_name){
   });
 }
 
-function setupStopAutocomplete(text_input_selector, url_input_selector, target_selector) {
+function setupAutocomplete(text_input_selector, url_input_selector, target_selector) {
   jQuery(text_input_selector).autocomplete({
     source: function(request, response){
       	jQuery.ajax({
@@ -71,40 +71,26 @@ function setupStopAutocomplete(text_input_selector, url_input_selector, target_s
 }
 
 function setupStopAutocompletes(){
-  setupStopAutocomplete('input.from_stop_name_auto', "input#stop_name_autocomplete_url", 'input.from-stop-id');
-  setupStopAutocomplete('input.to_stop_name_auto', "input#stop_name_autocomplete_url", 'input.to-stop-id');
+  setupAutocomplete('input.from_stop_name_auto', 
+                    'input#stop_name_autocomplete_url', 
+                    'input.from-stop-id');
+  setupAutocomplete('input.to_stop_name_auto', 
+                    'input#stop_name_autocomplete_url', 
+                    'input.to-stop-id');
 }
 
 function setupOperatorAutocomplete(){
-  jQuery('input#operator_name_auto').autocomplete({
-		source: function(request, response) {
-			jQuery.ajax({
-				url: jQuery("input#operator_name_autocomplete_url").val(),
-				dataType: "json",
-				data: { term: request.term },
-				success: function(data) {
-					response(jQuery.map(data, function(item) {
-						return {
-							label: item.name,
-							value: item.name,
-							id: item.id
-						}
-					}))
-				}
-			})
-		},
-    minLength: 0,
-		select: function(event, ui) {
-			jQuery('input#operator-id').val(ui.item.id);
-		},
-		search: function(event, ui) {
-		  jQuery('input#operator-id').val('');
-		  if (jQuery(this).val().length == 0){
-		    return false;
-		  }
-		}
-  }); 
+  setupAutocomplete('input.operator_name_auto', 
+                    'input#operator_name_autocomplete_url', 
+                    'input.operator-id');
 }
+
+function setupLocalityAutocomplete(){
+  setupAutocomplete('input.locality_name_auto', 
+                    'input#locality_name_autocomplete_url', 
+                    'input.locality-id');
+}
+
 
 // link to add new route segments 
 function setupAddSegmentLink(){
@@ -132,10 +118,10 @@ function setupAddSegmentLink(){
       return html.replace(regexp, new_id);
     });
     // add autocomplete events
-    setupStopAutocomplete(new_segment_row.find('input.from_stop_name_auto'), 
+    setupAutocomplete(new_segment_row.find('input.from_stop_name_auto'), 
                           "input#stop_name_autocomplete_url", 
                           new_segment_row.find('input.from-stop-id'));
-    setupStopAutocomplete(new_segment_row.find('input.to_stop_name_auto'), 
+    setupAutocomplete(new_segment_row.find('input.to_stop_name_auto'), 
                           "input#stop_name_autocomplete_url", 
                           new_segment_row.find('input.to-stop-id'));
     event.preventDefault();
@@ -157,19 +143,9 @@ function setupSectionControls() {
   });
 }
 
-function setupDestroyOperator(){
-  jQuery('.destroy-operator').submit(function(){
-    if (confirm(jQuery('input#destroy_operator_confirmation').val())){
-      return true;
-    }else{
-      return false;
-    }
-  });
-}
-
-function setupDestroyRoute(){
-  jQuery('.destroy-route').submit(function(){
-    if (confirm(jQuery('input#destroy_route_confirmation').val())){
+function setupDestroyLink(){
+  jQuery('.destroy-link').submit(function(){
+    if (confirm(jQuery('input#destroy_confirmation').val())){
       return true;
     }else{
       return false;
@@ -186,7 +162,7 @@ function setupShowRoute(){
   setupAddSegmentLink();
   route_init();
   setupSectionControls();
-  setupDestroyRoute();
+  setupDestroyLink();
 }
 
 function setupNewRoute(){
@@ -196,4 +172,13 @@ function setupNewRoute(){
   setupItemSelection('.check-route-operator');
   setupItemSelection('.check-route-segment');  
   setupAddSegmentLink();
+}
+
+function setupShowStop(){
+  setupLocalityAutocomplete();
+  setupDestroyLink();
+}
+
+function setupNewStop(){
+  setupLocalityAutocomplete();
 }
