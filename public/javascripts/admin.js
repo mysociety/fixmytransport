@@ -167,6 +167,16 @@ function setupDestroyOperator(){
   });
 }
 
+function setupDestroyRoute(){
+  jQuery('.destroy-route').submit(function(){
+    if (confirm(jQuery('input#destroy_route_confirmation').val())){
+      return true;
+    }else{
+      return false;
+    }
+  });
+}
+
 function setupShowRoute(){
   setupOperatorAutocomplete();
   setupStopAutocompletes();
@@ -176,6 +186,7 @@ function setupShowRoute(){
   setupAddSegmentLink();
   route_init();
   setupSectionControls();
+  setupDestroyRoute();
 }
 
 function setupNewRoute(){

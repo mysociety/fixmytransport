@@ -23,3 +23,4 @@ en:
   remove: Remove
   add_a_route: Add a route
   route_form_error: There's a problem with this route - please see below.
+  route_has_stories: This route cannot be deleted as there are stories associated with it. 

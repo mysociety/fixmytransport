@@ -8,3 +8,4 @@ en:
   operators_merged: The operators have been merged
   on_street: "on {{street}}"
   in_locality: "in {{locality}}"
+  route_destroyed: Route destroyed.

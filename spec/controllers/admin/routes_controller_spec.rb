@@ -92,5 +92,39 @@ describe Admin::RoutesController do
     end
     
   end
+  
+  describe "DELETE #destroy" do 
+ 
+    describe 'when the route has no stories' do 
+      
+      before do 
+        @route = mock_model(Route, :stories => [])
+        Route.stub!(:find).and_return(@route)
+      end
+      
+      it 'should destroy the route' do 
+        @route.should_receive(:destroy)
+        delete :destroy, :id => 33
+      end
+  
+    end
+    
+    describe 'when the route has stories' do 
+      
+      before do 
+        @route = mock_model(Route, :stories => [mock_model(Story)], 
+                                   :operator_code => 'TEST', 
+                                   :id => 33)
+        Route.stub!(:find).and_return(@route)
+      end
+      
+      it 'should not destroy the route' do 
+        @route.should_not_receive(:destroy)
+        delete :destroy, :id => 33
+      end
+
+    end
+ 
+  end
 
 end

@@ -3,7 +3,7 @@ class Admin::RoutesController < ApplicationController
   layout "admin" 
 
   def show
-    @route = Route.find(params[:id], :scope => params[:scope])
+    @route = Route.find(params[:id])
     @route_operators = make_route_operators(@route.operator_code, @route)
   end
   
@@ -60,13 +60,26 @@ class Admin::RoutesController < ApplicationController
     end
   end
   
+  def destroy 
+    @route = Route.find(params[:id])
+    if @route.stories.size > 0
+      flash[:error] = t(:route_has_stories)
+      @route_operators = make_route_operators(@route.operator_code, @route)
+      render :show
+    else
+      @route.destroy
+      flash[:notice] = t(:route_destroyed)
+      redirect_to admin_url(admin_routes_path)
+    end
+  end
+  
   private
   
   def make_route_operators code, route
     operators = Operator.find(:all, :conditions => ["code = ? AND id not in 
                                                        (SELECT operator_id
                                                         FROM route_operators 
-                                                        WHERE route_id = ? )", code, route])
+                                                        WHERE route_id = ? )", code, route.id])
     operators.map{ |operator| RouteOperator.new(:operator => operator) }
   end
 

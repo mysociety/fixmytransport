@@ -144,7 +144,7 @@ input {
   margin-left: 30em;
 }
 
-.destroy-operator {
+.destroy-operator, .destroy-route {
   display :inline;
 }
 td.route-terminuses {
