@@ -161,7 +161,7 @@ namespace :naptan do
   
   namespace :temp do 
     task :add_stop_sub_types => :environment do
-      types = { 'MKD' => 'MarkedPoint', 
+      types = { 'MKD'    => 'MarkedPoint', 
                 'CUS'    => 'UnmarkedPoint',
                 'HAR'    => 'HailAndRide', 
                 'FLX'    => 'FlexibleZone' }

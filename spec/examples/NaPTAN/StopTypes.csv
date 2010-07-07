@@ -1,3 +1,3 @@
-"Value","Description","Nat","On Street","Mode","Type","Version"
-"BCT","On-street Bus / Coach / Tram Stop",,"On street","BusCoach","MarkedPoint",1
-"FER","Ferry or Port Interchange Area",930,"Off street","Ferry / Ship","AccessArea",1
+"Value","Description","Nat","On Street","Mode","Type","SubType","Version"
+"BCT","On-street Bus / Coach / Tram Stop",,"On street","BusCoach","MarkedPoint","MKD",1
+"FER","Ferry or Port Interchange Area",930,"Off street","Ferry / Ship","AccessArea","",1
