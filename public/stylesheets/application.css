@@ -30,6 +30,7 @@ h1 {
     letter-spacing: 2px;
     width: 100%;
     font-size: 30px;
+    font-variant: small-caps;
     padding: 0;
     line-height: 60px;
     margin: 0 1em 0 0;
