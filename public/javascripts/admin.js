@@ -142,6 +142,21 @@ function setupAddSegmentLink(){
   });
 }
 
+function setupSectionControls() {
+  jQuery('.admin-section').hide();
+  jQuery('.admin-section-control').click(function(){
+    var section = jQuery(this).next('.admin-section');
+    var imgUrl = jQuery(this).toggleClass('active').css("background-image");
+    if (imgUrl.search(/close/) > 0){
+      imgUrl = imgUrl.replace('_close', '_open');
+    } else {
+      imgUrl = imgUrl.replace('_open', '_close'); 
+    }
+    jQuery(this).toggleClass('active').css("background-image", imgUrl);
+    section.slideToggle('slow');
+  });
+}
+
 function setupDestroyOperator(){
   jQuery('.destroy-operator').submit(function(){
     if (confirm(jQuery('input#destroy_operator_confirmation').val())){
@@ -160,6 +175,7 @@ function setupShowRoute(){
   setupItemSelection('.check-route-segment');
   setupAddSegmentLink();
   route_init();
+  setupSectionControls();
 }
 
 function setupNewRoute(){
