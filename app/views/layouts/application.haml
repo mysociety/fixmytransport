@@ -12,8 +12,9 @@
     != javascript_include_tag('jquery.form.js')
     != javascript_include_tag('application.js')
   %body
-    %h2= link_to_unless_current(t(:site_name), root_url) 
-    %span#site-tagline= t(:site_tagline)
+    #site-header
+      %h1= link_to_unless_current(t(:site_name), root_url) 
+      #site-tagline= t(:site_tagline)
     - [:notice, :error, :message].each do |key| 
       - unless flash[key].blank? 
         %p{ :class => "flash flash_#{key}" }!= flash[key]

@@ -10,7 +10,7 @@
       .form-field-error= error_message_on @story, :transport_mode_id
     %label{:for => 'transport_mode_id', :style => 'display: none;'}
       =t(:transport_mode)
-    #chosen-transport-mode{:class=>"story-transport-#{@story.transport_mode_css_name}"}
+    #chosen-transport-mode{:class=>"main-transport-#{@story.transport_mode_css_name}"}
       #transport-mode-radio
         .transport-mode
           != transport_mode_radio_buttons(form, 'story')
@@ -30,5 +30,5 @@
         #guidance-area{:class => 'guidance'} e.g. Bristol
 :javascript
   function changeMode(modeCssName){
-    jQuery("#chosen-transport-mode").removeClass().addClass('story-transport-' + modeCssName)
+    jQuery("#chosen-transport-mode").removeClass().addClass('main-transport-' + modeCssName)
   }
