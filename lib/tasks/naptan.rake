@@ -160,38 +160,16 @@ namespace :naptan do
   end
   
   namespace :temp do 
-    task :merge_tram_and_metro => :environment do 
-      
-      StopAreaType.connection.execute("DELETE FROM transport_mode_stop_area_types")      
-      StopAreaType.connection.execute("DELETE FROM stop_area_types")
-      StopType.connection.execute("DELETE FROM stop_types")
-      #delete tram from transport mode
-      TransportMode.connection.execute("DELETE FROM transport_modes
-                                        WHERE name = 'Tram'")
-      #update naptan name in transport_mode 
-      TransportMode.connection.execute("UPDATE transport_modes 
-                                        SET name = 'Tram/Metro', naptan_name = 'Tram / Metro', route_type = 'TramMetroRoute'
-                                        WHERE name = 'Metro'")
-      
-
-      ENV['FILE'] = File.join(RAILS_ROOT, 'data', 'NaPTAN', 'StopTypes.csv')
-      Rake::Task['naptan:load:stop_types'].execute
-      ENV['FILE'] = File.join(RAILS_ROOT, 'data', 'NaPTAN', 'StopAreaTypes.csv')
-      Rake::Task['naptan:load:stop_area_types'].execute
-      Route.connection.execute("UPDATE routes 
-                                SET type = 'TramMetroRoute'
-                                WHERE type = 'MetroRoute'")
-    end
-    
-    task :delete_bad_stop_area_memberships => :environment do
-      Stop.find(4).stop_area_memberships.each do |stop_area_membership|
-        StopAreaMembership.delete(stop_area_membership.id)
-      end
-      StopArea.find(4).stop_area_memberships.each do |stop_area_membership|
-        if stop_area_membership.stop_id != 6192
-          StopAreaMembership.delete(stop_area_membership.id)
-        end
-      end
+    task :add_stop_sub_types => :environment do
+      types = { 'MKD' => 'MarkedPoint', 
+                'CUS'    => 'UnmarkedPoint',
+                'HAR'    => 'HailAndRide', 
+                'FLX'    => 'FlexibleZone' }
+      types.each do |key, value|
+        StopType.connection.execute("UPDATE stop_types
+                                   SET sub_type = '#{key}' where code = 'BCT'
+                                   AND point_type = '#{value}'")
+      end                             
     end
   end
   
