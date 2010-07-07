@@ -15,6 +15,9 @@
       = departures_link(@stop)
       =render :partial => "shared/route_list", :locals => { :stop => @stop }
   .stop
+    %a{:href => location_url(@stop, :format => 'atom'), :class => 'rss-link story-rss'}
+      %span= t(:feed)
+      %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:stories_feed) }
     %h3.name= "#{@stop.full_name}" 
     .details
       %span.locality= "In #{@stop.locality_name}"
