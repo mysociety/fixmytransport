@@ -1,11 +1,11 @@
 .homepage
-  - cache do 
+  - cache('recent_stories') do 
     .latest-stories
       %a{:href => stories_url(:format => 'atom'), :class => 'rss-link'}
         %span= t(:feed)
         %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:stories_feed) }
       %h3= t(:latest_stories)
-      = render :partial => 'story', :collection => @stories
+      = render :partial => 'story', :collection => Story.find_recent(5)
       %span.more-link=link_to t(:more_recent_stories), stories_url
   .new-story
     %h3= t(:got_a_story) 

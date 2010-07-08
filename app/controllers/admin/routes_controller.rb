@@ -1,6 +1,7 @@
 class Admin::RoutesController < ApplicationController
   
   layout "admin" 
+  cache_sweeper :route_sweeper, :only => [:create, :update, :destroy]
 
   def show
     @route = Route.find(params[:id])

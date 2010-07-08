@@ -1,6 +1,6 @@
 - content_for :javascript do 
   != map_javascript_include_tags
-- cache do 
+- cache("route_#{@route.id}") do 
   #map-col
     #map
     :javascript
