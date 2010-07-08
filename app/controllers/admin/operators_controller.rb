@@ -74,6 +74,10 @@ class Admin::OperatorsController < ApplicationController
   end
 
   def merge
+    if params[:operators].blank?
+      redirect_to admin_url(admin_operators_path)
+      return
+    end
     @operators = Operator.find(params[:operators])
     if request.post? 
       @merge_to = Operator.find(params[:merge_to])

@@ -5,14 +5,14 @@ function setupAssignAllAndNone(){
   jQuery('.check-all-route-operators').click(function(){
     var operators = jQuery(this).closest('.route-operators').find('.check-route-operator')
     operators.attr('checked', true);
-    operators.parents('tr').toggleClass("selected");
+    operators.parents('tr').addClass("selected");
     event.preventDefault();
   })
   
   jQuery('.uncheck-all-route-operators').click(function(){
     var operators = jQuery(this).closest('.route-operators').find('.check-route-operator')
     operators.attr('checked', false);
-    operators.parents('tr').toggleClass("selected");
+    operators.parents('tr').removeClass("selected");
     event.preventDefault();
   })
 }
@@ -21,14 +21,14 @@ function setupIndexSelectAllAndNone(){
   jQuery('.index-select-all').click(function(){
     var items = jQuery('.index-list').find('.select-item');
     items.attr('checked', true);
-    items.parents('tr').toggleClass("selected");
+    items.parents('tr').addClass("selected");
     event.preventDefault();
   })
 
   jQuery('.index-select-none').click(function(){
     var items = jQuery('.index-list').find('.select-item');
     items.attr('checked', false);
-    items.parents('tr').toggleClass("selected");
+    items.parents('tr').removeClass("selected");
     event.preventDefault();
   })
 }

@@ -29,7 +29,8 @@ class Admin::RoutesController < ApplicationController
       query_clauses << query_clause
     end
     conditions = [query_clauses.join(" AND ")] + conditions
-    @routes = Route.paginate :page => params[:page], 
+    @routes = Route.paginate :select => "distinct routes.*",
+                             :page => params[:page], 
                              :conditions => conditions, 
                              :order => 'number'
   end
@@ -72,6 +73,20 @@ class Admin::RoutesController < ApplicationController
       @route.destroy
       flash[:notice] = t(:route_destroyed)
       redirect_to admin_url(admin_routes_path)
+    end
+  end
+  
+  def merge
+    if params[:routes].blank?
+      redirect_to admin_url(admin_routes_path)
+      return
+    end
+    @routes = Route.find(params[:routes])
+    if request.post? 
+      @merge_to = Route.find(params[:merge_to])
+      Route.merge!(@merge_to, @routes)
+      flash[:notice] = t(:routes_merged)
+      redirect_to admin_url(admin_route_path(@merge_to.id))
     end
   end
   

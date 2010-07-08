@@ -5,6 +5,12 @@
 - form_for @route, :url => admin_url(admin_route_path(@route.id)), :html => { :method => :delete, :class => 'destroy-link' } do |f| 
   != hidden_field_tag :confirmation, t(:are_you_sure), {:id => 'destroy_confirmation'}
   != submit_tag t(:destroy)
+%h3= t(:merge)  
+- form_tag admin_url(merge_admin_routes_path), :method => :get do 
+  != label_tag 'routes[]', t(:route_merge_label)
+  != text_field_tag 'routes[]', ''
+  != hidden_field_tag 'routes[]', @route.id
+  != submit_tag t(:route_merge_submit)
 - form_for [:admin, @route.becomes(Route)], :url => admin_url(admin_route_path(@route.id)), :html => { :class => 'route-form' } do |f| 
   = render :partial => "form", :locals => { :f => f }
   %h3.admin-section-control= t(:route_segments)

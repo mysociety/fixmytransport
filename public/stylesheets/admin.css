@@ -1,5 +1,5 @@
 /* General */
-body {
+html, body {
   font-family: verdana, sans-serif;
   margin: 0.5em;
 }
@@ -38,6 +38,8 @@ ul.admin-navigation li {
 table { 
   padding: 0.5em;
   border: 1px solid #cccccc;
+  margin: 0.5em;
+  font-size: 0.9em;
 }
 
 table tr.odd {
