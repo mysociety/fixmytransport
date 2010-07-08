@@ -285,6 +285,9 @@ class Route < ActiveRecord::Base
     count(:conditions => ['id not in (SELECT route_id FROM route_operators)'])
   end
   
+  # finds operator codes that are associated with routes 
+  # where the code isn't associated with an operator, 
+  # and the route doesn't have an operator
   def self.find_codes_without_operators(options={})
     query = "SELECT operator_code, cnt FROM 
                (SELECT operator_code, count(*) as cnt
@@ -292,7 +295,11 @@ class Route < ActiveRecord::Base
                 WHERE operator_code not in 
                   (SELECT code 
                    FROM operators) 
-                GROUP BY operator_code) as tmp
+                AND id not in 
+                  (SELECT route_id
+                   FROM route_operators)
+                GROUP BY operator_code)
+                 as tmp
              ORDER BY cnt desc"
     if options[:limit]
       query += " LIMIT #{options[:limit]}"
