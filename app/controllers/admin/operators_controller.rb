@@ -1,6 +1,7 @@
 class Admin::OperatorsController < ApplicationController
   
   layout "admin" 
+  cache_sweeper :operator_sweeper, :only => [:create, :update, :destroy, :merge]
   
   def index
     conditions = []
@@ -36,6 +37,7 @@ class Admin::OperatorsController < ApplicationController
   def create
     @operator = Operator.new(params[:operator])
     if @operator.save
+      flash[:notice] = t(:operator_created)
       redirect_to admin_url(admin_operator_path(@operator))
     else 
       if params[:operator][:code]
@@ -72,6 +74,10 @@ class Admin::OperatorsController < ApplicationController
   end
 
   def merge
+    if params[:operators].blank?
+      redirect_to admin_url(admin_operators_path)
+      return
+    end
     @operators = Operator.find(params[:operators])
     if request.post? 
       @merge_to = Operator.find(params[:merge_to])

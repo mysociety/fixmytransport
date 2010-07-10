@@ -84,6 +84,11 @@ describe Parsers::NaptanParser do
       @stop_types.second.code.should == 'FER'
     end
     
+    it 'should extract the sub-type code' do 
+      @stop_types.first.sub_type.should == 'MKD'
+      @stop_types.second.sub_type.should be_nil
+    end
+    
     it 'should set the "on_street" attribute correctly' do 
       @stop_types.first.on_street.should be_true
       @stop_types.second.on_street.should be_false

@@ -1,0 +1,10 @@
+%form{ :method => "GET", :class => "admin-search-form" }
+  %span.query
+    != label_tag t(:search)
+    != text_field_tag :query, params[:query]
+  - unless skip_transport_mode
+    %span.transport-mode
+      - TransportMode.active.find(:all).each do |transport_mode| 
+        != label_tag "mode_#{transport_mode.id}", transport_mode.name
+        != radio_button_tag :mode, transport_mode.id, transport_mode.id == params[:mode].to_i
+  != submit_tag t(:go)

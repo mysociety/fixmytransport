@@ -1,43 +1,36 @@
 %h2= t(:routes)
 = link_to t(:add_a_route), admin_url(new_admin_route_path)
-:javascript
-  jQuery(document).ready(function(){
-    setupIndexSelectAllAndNone();
-    setupItemSelection('.select-item');
-    });
-%form{ :method => "GET", :class => "admin-search-form" }
-  %span.query
-    != label_tag t(:search)
-    != text_field_tag :query, params[:query]
-  %span.transport-mode
-    - TransportMode.active.find(:all).each do |transport_mode| 
-      != label_tag "mode_#{transport_mode.id}", transport_mode.name
-      != radio_button_tag :mode, transport_mode.id
-  != submit_tag t(:go)  
-= will_paginate @routes, {:admin => true}
-= t(:select)
-= link_to(t(:all), '', { :class => "index-select-all" })
-= link_to(t(:none), '', { :class => "index-select-none" })
-%table{:class => "routes index-list"}
-  %tr
-    %th{:width => "12%"}= t(:id)
-    %th{:width => "5%"}= t(:admin_route_number)
-    %th{:width => "14%"}= t(:name)
-    %th{:width => "25%"}= t(:generated_name)
-    %th{:width => "23%"}= t(:operators)
-    %th{:width => "5%"}= t(:operator_code)
-    %th{:width => "10%"}= t(:region)
-    %th{:width => "5%"}= t(:select)
-  -@routes.each do |route|
-    %tr{ :class => cycle('odd', 'even') }
-      %td
-        = link_to route.id, main_url(route_path(route.region, route))
-        = link_to "(#{t(:admin)})", admin_url(admin_route_path(route.id))
-      %td= route.number  
-      %td= route.read_attribute(:name)
-      %td= route.name
-      %td!= route.operators.map{ |operator| link_to(operator.name, admin_url(admin_operator_path(operator))) }.join(" ")
-      %td= route.operator_code
-      %td= route.region.name
-      %td!=  check_box_tag "routes[]", route.id, false, { :class => "select-item" }
-= will_paginate @routes, {:admin => true}
+= render :partial => "admin/shared/index_js"
+= render :partial => "admin/shared/search_form", :locals => { :skip_transport_mode => false } 
+%form{ :method => "GET", :action => admin_url(merge_admin_routes_path)}
+  = will_paginate @routes, { :admin => true }
+  = t(:select)
+  = link_to(t(:all), '', { :class => "index-select-all" })
+  = link_to(t(:none), '', { :class => "index-select-none" })
+  %table{:class => "routes index-list"}
+    %tr
+      %th{:width => "12%"}= t(:id)
+      %th{:width => "5%"}= t(:admin_route_number)
+      %th{:width => "14%"}= t(:name)
+      %th{:width => "25%"}= t(:generated_name)
+      %th{:width => "23%"}= t(:operators)
+      %th{:width => "5%"}= t(:operator_code)
+      %th{:width => "10%"}= t(:region)
+      %th{:width => "5%"}= t(:select)
+    -@routes.each do |route|
+      %tr{ :class => cycle('odd', 'even') }
+        %td
+          = link_to route.id, main_url(route_path(route.region, route))
+          = link_to "(#{t(:admin)})", admin_url(admin_route_path(route.id))
+        %td= route.number  
+        %td= route.read_attribute(:name)
+        %td= route.name
+        %td!= route.operators.map{ |operator| link_to(operator.name, admin_url(admin_operator_path(operator))) }.join(" ")
+        %td= route.operator_code
+        %td= route.region.name
+        %td!=  check_box_tag "routes[]", route.id, false, { :class => "select-item" }
+    %tr{ :class => 'footer' }
+      %td{ :colspan => 8 }
+        = t(:selected_items)
+        != submit_tag t(:merge)
+  = will_paginate @routes, { :admin => true }

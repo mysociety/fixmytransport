@@ -79,7 +79,7 @@ class Story < ActiveRecord::Base
   end
   
   def self.find_recent(number)
-    find(:all, :order => 'created_at desc', :limit => number, :include => [:location, :reporter])
+    confirmed.find(:all, :order => 'created_at desc', :limit => number, :include => [:location, :reporter])
   end
   
   # stories usually start with no transport_mode

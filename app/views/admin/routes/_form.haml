@@ -21,5 +21,6 @@
     .form-field-error= error_message_on @route, :name
   != label(:route, :name)
   != f.text_field :name
+!= f.hidden_field :loaded
 .form-field
   != submit_tag t(:go)

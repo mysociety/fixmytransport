@@ -52,6 +52,7 @@ class Parsers::NaptanParser
                                :description       => row['Description'], 
                                :on_street         => row['On Street'] == 'On street' ? true : false, 
                                :point_type        => row['Type'], 
+                               :sub_type          => row['SubType'].blank? ? nil : row['SubType'],
                                :version           => row['Version'])                   
       transport_mode_names = row['Mode'].split(',')
       transport_mode_names.each do |transport_mode_name|

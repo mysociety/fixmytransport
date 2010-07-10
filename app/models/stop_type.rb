@@ -19,6 +19,19 @@ class StopType < ActiveRecord::Base
   @@modes_by_code = {}
   @@codes_by_mode = {}
   
+  def self.codes
+    connection.select_rows("SELECT DISTINCT description, code 
+                            FROM stop_types 
+                            ORDER BY code")
+  end
+  
+  def self.sub_types 
+    connection.select_rows("SELECT DISTINCT point_type, sub_type 
+                            FROM stop_types
+                            WHERE code = 'BCT'
+                            ORDER BY sub_type")
+  end
+  
   def self.codes_for_transport_mode(transport_mode_id)
     calculate_hashes if @@codes_by_mode.empty? 
     @@codes_by_mode[transport_mode_id]

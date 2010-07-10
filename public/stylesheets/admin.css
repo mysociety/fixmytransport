@@ -1,5 +1,5 @@
 /* General */
-body {
+html, body {
   font-family: verdana, sans-serif;
   margin: 0.5em;
 }
@@ -38,6 +38,8 @@ ul.admin-navigation li {
 table { 
   padding: 0.5em;
   border: 1px solid #cccccc;
+  margin: 0.5em;
+  font-size: 0.9em;
 }
 
 table tr.odd {
@@ -45,7 +47,7 @@ table tr.odd {
 }
 
 table tr.selected {
-  background-color: #FF4040;
+  background-color: #FFDA70;
 }
 
 table tr.footer  {
@@ -83,8 +85,7 @@ h2.route-header {
   margin: 0.3em 0 0.3em 0;
 }
 
-table.operators, 
-table.routes { 
+table.index-list { 
   width: 100%;
   table-layout: fixed ;
 }
@@ -101,6 +102,15 @@ table.routes {
 }
 
 /* Forms */
+
+.admin-section-control {
+ 	background-image: url('/images/admin/toggle_open.gif');
+	background-repeat: no-repeat;
+  text-indent: 15px;
+  padding: 0 0 0 10px;
+  width: 100%;
+  display: block;
+}
 
 .form-error {
   color: #CC0000;
@@ -124,7 +134,7 @@ input {
 }
 .operator-form label, 
 .route-form label,
-.route-form .pseudo-label {
+.stop-form label {
   display: inline-block;
   width: 10em;
   text-align: right;
@@ -135,7 +145,7 @@ input {
   margin-left: 30em;
 }
 
-.destroy-operator {
+.destroy-link {
   display :inline;
 }
 td.route-terminuses {

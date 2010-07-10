@@ -1,6 +1,6 @@
 - content_for :javascript do 
   != map_javascript_include_tags
-- cache do 
+- cache("route_#{@route.id}") do 
   #map-col
     #map
     :javascript
@@ -14,6 +14,9 @@
         - @route.stops.sort_by(&:name).each do |stop|
           %li= link_to stop.full_name, stop_url(stop.locality, stop)
   .route
+    %a{:href => location_url(@route, :format => 'atom'), :class => 'rss-link story-rss'}
+      %span= t(:feed)
+      %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:stories_feed) }
     %h3.name= @route.name
     .details
       %span.locality= "#{@route.area}."

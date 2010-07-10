@@ -2,10 +2,19 @@
   != map_javascript_include_tags(:no_jquery => true)
 #map
 %h2.route-header= @route.name
+- form_for @route, :url => admin_url(admin_route_path(@route.id)), :html => { :method => :delete, :class => 'destroy-link' } do |f| 
+  != hidden_field_tag :confirmation, t(:are_you_sure), {:id => 'destroy_confirmation'}
+  != submit_tag t(:destroy)
+%h3= t(:merge)  
+- form_tag admin_url(merge_admin_routes_path), :method => :get do 
+  != label_tag 'routes[]', t(:route_merge_label)
+  != text_field_tag 'routes[]', ''
+  != hidden_field_tag 'routes[]', @route.id
+  != submit_tag t(:route_merge_submit)
 - form_for [:admin, @route.becomes(Route)], :url => admin_url(admin_route_path(@route.id)), :html => { :class => 'route-form' } do |f| 
   = render :partial => "form", :locals => { :f => f }
-  %h3= t(:route_segments)
-  = render :partial => "route_segments", :locals => { :f => f }
+  %h3.admin-section-control= t(:route_segments)
+  .admin-section= render :partial => "route_segments", :locals => { :f => f }
   %p=link_to t(:on_main_site), main_url(route_path(@route.region, @route)), :target => '_blank'
   %p= link_to t(:external_search_route), external_search_link("#{@route.name} #{@route.area}"), :target => '_blank'  
   = render :partial => "route_operators", :locals => { :f => f, :route_operators => @route.route_operators, :title => t(:operators) }
@@ -14,9 +23,9 @@
   - f.fields_for :route_operators, RouteOperator.new do |route_operator_fields|
     .form-field
       != label_tag :operator_name
-      != text_field_tag :operator_name, '', { :id => 'operator_name_auto', :size => 30 }
       != hidden_field_tag :operator_name_autocomplete_url, admin_url("/admin/autocomplete_for_operator_name")
-      != route_operator_fields.hidden_field :operator_id, { :id => 'operator-id' }
+      != text_field_tag :operator_name, '', { :class => 'operator_name_auto', :size => 30 }
+      != route_operator_fields.hidden_field :operator_id, { :class => 'operator-id' }
       != route_operator_fields.hidden_field :_add, { :value => "1" }
 
 :javascript

@@ -6,6 +6,7 @@ describe Admin::RoutesController do
   
     it 'should ask for all routes, ordered by number, paginated by default' do 
       Route.should_receive(:paginate).with(:page => nil, 
+                                           :select=>"distinct routes.*",
                                            :conditions => [''], 
                                            :order => 'number')
       get :index
@@ -13,6 +14,7 @@ describe Admin::RoutesController do
     
     it 'should ask for routes with part of the name or the whole number matching the query param' do 
       Route.should_receive(:paginate).with(:page => nil, 
+                                           :select=>"distinct routes.*",
                                            :conditions => ['(lower(name) like ? OR lower(number) = ?)',
                                                            '%%something%%', 'something'],
                                            :order => 'number')
@@ -21,6 +23,7 @@ describe Admin::RoutesController do
     
     it 'should ask for routes with part of the name or the whole number or the id matching the query param if it is numeric' do
       Route.should_receive(:paginate).with(:page => nil, 
+                                           :select=>"distinct routes.*",
                                            :conditions => ['(lower(name) like ? OR lower(number) = ? OR id = ?)',
                                                             '%%34%%', '34', 34],
                                             :order => 'number')
@@ -29,6 +32,7 @@ describe Admin::RoutesController do
     
     it 'should ask for routes with the transport modes passed' do 
       Route.should_receive(:paginate).with(:page => nil, 
+                                           :select=>"distinct routes.*",
                                            :conditions => ['transport_mode_id = ?',
                                                             '1'],
                                             :order => 'number')
@@ -39,6 +43,7 @@ describe Admin::RoutesController do
     it 'should ask for routes matching both the transport mode and query params' do 
       query_string = 'transport_mode_id = ? AND (lower(name) like ? OR lower(number) = ?)'
       Route.should_receive(:paginate).with(:page => nil, 
+                                           :select=>"distinct routes.*",
                                            :conditions => [query_string,
                                                            '1', '%%something%%', 'something'],
                                             :order => 'number')
@@ -47,6 +52,7 @@ describe Admin::RoutesController do
     
     it 'should ask for routes by page' do 
       Route.should_receive(:paginate).with(:page => '3', 
+                                           :select=>"distinct routes.*",
                                            :conditions => [''], 
                                            :order => 'number')
       get :index, :page => '3'
@@ -91,6 +97,40 @@ describe Admin::RoutesController do
       response.should render_template('new')
     end
     
+  end
+  
+  describe "DELETE #destroy" do 
+ 
+    describe 'when the route has no stories' do 
+      
+      before do 
+        @route = mock_model(Route, :stories => [])
+        Route.stub!(:find).and_return(@route)
+      end
+      
+      it 'should destroy the route' do 
+        @route.should_receive(:destroy)
+        delete :destroy, :id => 33
+      end
+  
+    end
+    
+    describe 'when the route has stories' do 
+      
+      before do 
+        @route = mock_model(Route, :stories => [mock_model(Story)], 
+                                   :operator_code => 'TEST', 
+                                   :id => 33)
+        Route.stub!(:find).and_return(@route)
+      end
+      
+      it 'should not destroy the route' do 
+        @route.should_not_receive(:destroy)
+        delete :destroy, :id => 33
+      end
+
+    end
+ 
   end
 
 end

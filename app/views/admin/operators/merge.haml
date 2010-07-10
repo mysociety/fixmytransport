@@ -1,6 +1,4 @@
 %h2= t(:merging_operators)
-- if @merge_to
-  %h3= "MERGED TO #{@merge_to.name}"
 - form_tag(admin_url(merge_admin_operators_path), :method => "POST") do 
   %table{ :class => 'operators merge-list' }
     %tr

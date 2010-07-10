@@ -1,6 +1,62 @@
 class Admin::StopsController < ApplicationController
   
   layout "admin" 
+  cache_sweeper :stop_sweeper, :only => [:create, :update, :destroy]
+  
+  
+  def show 
+    @stop = Stop.find(params[:id])
+  end
+  
+  def index
+    conditions = []
+    if !params[:query].blank? or !params[:mode].blank?
+      conditions = Stop.name_or_id_conditions(params[:query], params[:mode])
+    end
+    @stops = Stop.paginate :page => params[:page], 
+                           :conditions => conditions, 
+                           :order => 'common_name'
+  end
+  
+  def new
+    @stop = Stop.new(:loaded => true)
+  end
+  
+  def create 
+    @stop = Stop.new(params[:stop])
+    if @stop.save
+      flash[:notice] = t(:stop_created)
+      redirect_to(admin_url(admin_stop_path(@stop.id)))
+    else
+      render :new
+    end
+  end
+  
+  def update
+    @stop = Stop.find(params[:id])
+    if @stop.update_attributes(params[:stop])
+      flash[:notice] = t(:stop_updated)
+      redirect_to admin_url(admin_stop_path(@stop.id))
+    else
+      flash[:error] = t(:stop_problem)
+      render :show
+    end
+  end
+  
+  def destroy
+    @stop = Stop.find(params[:id])
+    if @stop.stories.size > 0
+      flash[:error] = t(:stop_has_stories)
+      render :show
+    elsif @stop.routes.size > 0
+      flash[:error] = t(:stop_has_routes)
+      render :show
+    else
+      @stop.destroy
+      flash[:notice] = t(:stop_destroyed)
+      redirect_to admin_url(admin_stops_path)
+    end
+  end
   
   def autocomplete_for_name
     query = params[:term].downcase

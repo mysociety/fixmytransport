@@ -1,7 +1,8 @@
 class StoriesController < ApplicationController
   
+  cache_sweeper :story_sweeper, :only => :confirm
+  
   def new
-    @stories = Story.find_recent(5)
     @title = t :new_story
     @story = Story.new()
   end
@@ -26,7 +27,6 @@ class StoriesController < ApplicationController
     story_attributes[:location_search] = @location_search
     @story = Story.new(story_attributes)
     if !@story.valid? 
-      @stories = Story.find_recent(5)
       @title = t :new_story
       render :new
     else
@@ -39,7 +39,6 @@ class StoriesController < ApplicationController
         @title = t :multiple_locations
         render :choose_location
       else
-        @stories = Story.find_recent(5)
         @title = t :new_story
         render :new
       end

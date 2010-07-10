@@ -12,6 +12,7 @@ describe RouteSegment do
   end
 
   it "should create a new instance given valid attributes" do
-    RouteSegment.create!(@valid_attributes)
+    route_segment = RouteSegment.new(@valid_attributes)
+    route_segment.valid?.should be_true
   end
 end

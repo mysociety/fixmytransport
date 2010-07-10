@@ -50,9 +50,12 @@ class Stop < ActiveRecord::Base
   has_many :routes_as_from_stop, :through => :route_segments_as_from_stop, :source => 'route'
   has_many :routes_as_to_stop, :through => :route_segments_as_to_stop, :source => 'route'
   belongs_to :locality
-  validates_presence_of :locality, :if => :loaded?
+  validates_presence_of :locality_id, :lon, :lat, :if => :loaded?
   accepts_nested_attributes_for :stories
   has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality
+  has_paper_trail
+  
+  # instance methods
   
   def routes
     (routes_as_from_stop | routes_as_to_stop).uniq.sort{ |a,b| a.name <=> b.name }
@@ -129,8 +132,8 @@ class Stop < ActiveRecord::Base
   memoize :description
   
   def locality_name
-    locality.name
-  end
+    locality ? locality.name : nil
+ end
   
   def area
     locality_name
@@ -151,6 +154,8 @@ class Stop < ActiveRecord::Base
     text
   end
   
+  # class methods
+  
   def self.common_area(stops, transport_mode_id)
     stop_area_type_codes = StopAreaType.codes_for_transport_mode(transport_mode_id)
     stop_area_sets = stops.map{ |stop| stop.stop_areas.select{ |stop_area| stop_area_type_codes.include? stop_area.area_type } }
@@ -165,26 +170,33 @@ class Stop < ActiveRecord::Base
     return nil
   end
   
-  def self.find_by_name_or_id(query, transport_mode_id, limit)
-    query_clause = "(LOWER(common_name) LIKE ? 
-                    OR LOWER(common_name) LIKE ? 
-                    OR LOWER(street) LIKE ?
-                    OR LOWER(street) LIKE ?"
-    query_params = [ "#{query}%", "%#{query}%", "#{query}%", "%#{query}%" ]
-    # numeric?
-    if query.to_i.to_s == query
-      query_clause += " OR id = ?"
-      query_params << query.to_i
+  def self.name_or_id_conditions(query, transport_mode_id)
+    query_clauses = []
+    query_params = []
+    if ! query.blank? 
+      query = query.downcase
+      query_clause = "(LOWER(common_name) LIKE ? OR LOWER(common_name) LIKE ? OR LOWER(street) LIKE ? OR LOWER(street) LIKE ?"
+      query_params = [ "#{query}%", "%#{query}%", "#{query}%", "%#{query}%" ]
+      # numeric?
+      if query.to_i.to_s == query
+        query_clause += " OR id = ?"
+        query_params << query.to_i
+      end
+      query_clause += ")"
+      query_clauses << query_clause
     end
-    query_clause += ")"
+
     if !transport_mode_id.blank?
       stop_type_codes = StopType.codes_for_transport_mode(transport_mode_id.to_i)
-      query_clause += ' AND stop_type in (?)'
+      query_clauses << 'stop_type in (?)'
       query_params << stop_type_codes
     end
-    conditions = [query_clause] + query_params
+    conditions = [query_clauses.join(" AND ")] + query_params
+  end
+  
+  def self.find_by_name_or_id(query, transport_mode_id, limit)
     stops = find(:all, 
-                 :conditions => conditions,
+                 :conditions => name_or_id_conditions(query, transport_mode_id),
                  :limit => limit)
   end
     

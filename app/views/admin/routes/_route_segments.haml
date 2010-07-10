@@ -23,9 +23,9 @@
       - f.fields_for :route_segments, segment do |segment_fields|
         %tr{ :class => cycle('odd', 'even'), :id => "route_segment_#{segment.id}" }
           %td= segment.id
-          %td!= "#{segment.from_stop.name} (#{segment.from_stop.id}) #{link_to(t(:on_main_site), main_url(location_path(segment.from_stop)), :target => '_blank')}" 
+          %td!= "#{segment.from_stop.name} (#{link_to(segment.from_stop.id, admin_url(admin_stop_path(segment.from_stop)))}) #{link_to(t(:on_main_site), main_url(location_path(segment.from_stop)), :target => '_blank')}" 
           %td!= segment_fields.check_box :from_terminus 
-          %td!= "#{segment.to_stop.name} (#{segment.to_stop_id}) #{link_to(t(:on_main_site), main_url(location_path(segment.to_stop)), :target => '_blank')}" 
+          %td!= "#{segment.to_stop.name} (#{link_to(segment.to_stop.id, admin_url(admin_stop_path(segment.to_stop)))}) #{link_to(t(:on_main_site), main_url(location_path(segment.to_stop)), :target => '_blank')}" 
           %td!= segment_fields.check_box :to_terminus 
           %td
             != segment_fields.hidden_field :id

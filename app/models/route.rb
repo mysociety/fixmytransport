@@ -34,6 +34,8 @@ class Route < ActiveRecord::Base
   has_paper_trail
   
   @@per_page = 20
+  
+  # instance methods
 
   def route_operator_invalid(attributes)
     (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['operator_id'].blank?
@@ -43,15 +45,154 @@ class Route < ActiveRecord::Base
     (attributes['_add'] != "1" and attributes['_destroy'] != "1") or \
     attributes['from_stop_id'].blank? or attributes['to_stop_id'].blank?
   end
+  
+  def region_name
+    region ? region.name : nil
+  end
 
+  def unset_terminuses(stop_ids)
+     RouteSegment.update_all("from_terminus = 'f'", ["route_id = ? and from_stop_id in (?)", id, stop_ids])
+     RouteSegment.update_all("to_terminus = 'f'", ["route_id = ? and to_stop_id in (?)", id, stop_ids])
+   end
+  
+   def stop_codes
+     stops.map{ |stop| stop.atco_code }.uniq
+   end
+
+   def stop_area_codes
+     stop_areas = stops.map{ |stop| stop.stop_areas }.flatten
+     stop_areas.map{ |stop_area| stop_area.code }.uniq
+   end
+
+   def transport_mode_name
+     transport_mode.name
+   end
+
+   def area(lowercase=false)
+     area = ''
+     area_list = areas(all=false)
+     if area_list.size > 1
+       area = "Between #{area_list.to_sentence}"
+     else
+       area = "In #{area_list.first}" if !area_list.empty?
+     end
+     if !area.blank? && lowercase
+       area[0] = area.first.downcase
+     end
+     return area
+   end
+
+   def areas(all=true)
+     if all or terminuses.empty? 
+       route_stop_list = stops
+     else
+       route_stop_list = terminuses
+     end
+     areas = route_stop_list.map do |stop| 
+       if stop.locality.parents.empty?
+         stop.locality.name
+       else
+         stop.locality.parents.map{ |parent_locality| parent_locality.name }
+       end
+     end.flatten.uniq
+     areas
+   end
+
+   def description
+     "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
+   end
+   memoize :description
+
+   def short_name
+     name(from_stop=nil, short=true)
+   end
+
+   def name(from_stop=nil, short=false)
+     return self[:name] if !self[:name].blank?
+     default_name = "#{number}"
+     if from_stop
+       return default_name
+     else
+       if short
+         return default_name
+       else
+         return "#{transport_mode_name} #{default_name}"
+       end
+     end
+   end
+
+   def transport_modes
+     [transport_mode]
+   end
+
+   def stops
+     route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }.flatten.uniq
+   end
+    memoize :stops
+
+   def next_stops(stop_id)
+     outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == stop_id } 
+     outgoing_segments.map{ |route_segment| route_segment.to_stop }
+   end
+
+   def previous_stops(stop_id)
+     incoming_segments = route_segments.select{ |route_segment| route_segment.to_stop_id == stop_id }
+     incoming_segments.map{ |route_segment| route_segment.from_stop }
+   end
+
+   def terminuses
+     from_terminuses = route_segments.select{ |route_segment| route_segment.from_terminus? }
+     to_terminuses = route_segments.select{ |route_segment| route_segment.to_terminus? }
+     terminuses = from_terminuses.map{ |segment| segment.from_stop } + to_terminuses.map{ |segment| segment.to_stop }
+     terminuses.uniq
+   end
+   memoize :terminuses
+
+   def name_by_terminuses(transport_mode, from_stop=nil, short=false)
+     is_loop = false
+     if short
+       text = ""
+     else
+       text = transport_mode.name
+     end
+     if from_stop
+       if terminuses.size > 1
+         terminuses = self.terminuses.reject{ |terminus| terminus == from_stop }
+       else
+         is_loop = true
+         terminuses = self.terminuses
+       end
+       terminuses = terminuses.map{ |terminus| terminus.name_without_suffix(transport_mode) }.uniq
+       if terminuses.size == 1
+         if is_loop
+           text += " towards #{terminuses.to_sentence}"
+         else
+           text += " towards #{terminuses.to_sentence}"
+         end
+       else
+         text += " between #{terminuses.sort.to_sentence}"
+       end
+     else
+       terminuses = self.terminuses.map{ |terminus| terminus.name_without_suffix(transport_mode) }.uniq
+       if terminuses.size == 1
+         text += " from #{terminuses.to_sentence}"
+       else
+         if short
+           text += "#{terminuses.sort.join(' to ')}"     
+         else
+           text += " route between #{terminuses.sort.to_sentence}"     
+         end
+       end
+     end 
+     text
+   end
+  
+  # class methods
+  
   def self.full_find(id, scope)
     find(id, :scope => scope, 
              :include => [{ :route_segments => [:to_stop => :locality, :from_stop => :locality] }, 
                           { :route_operators => :operator }])
-  end
-  
-  def region_name
-    region ? region.name : nil
   end
   
   # Return routes with this number and transport mode that have a stop or stop area in common with 
@@ -144,6 +285,9 @@ class Route < ActiveRecord::Base
     count(:conditions => ['id not in (SELECT route_id FROM route_operators)'])
   end
   
+  # finds operator codes that are associated with routes 
+  # where the code isn't associated with an operator, 
+  # and the route doesn't have an operator
   def self.find_codes_without_operators(options={})
     query = "SELECT operator_code, cnt FROM 
                (SELECT operator_code, count(*) as cnt
@@ -151,7 +295,11 @@ class Route < ActiveRecord::Base
                 WHERE operator_code not in 
                   (SELECT code 
                    FROM operators) 
-                GROUP BY operator_code) as tmp
+                AND id not in 
+                  (SELECT route_id
+                   FROM route_operators)
+                GROUP BY operator_code)
+                 as tmp
              ORDER BY cnt desc"
     if options[:limit]
       query += " LIMIT #{options[:limit]}"
@@ -243,9 +391,13 @@ class Route < ActiveRecord::Base
     end
   end
   
-  def unset_terminuses(stop_ids)
-    RouteSegment.update_all("from_terminus = 'f'", ["route_id = ? and from_stop_id in (?)", id, stop_ids])
-    RouteSegment.update_all("to_terminus = 'f'", ["route_id = ? and to_stop_id in (?)", id, stop_ids])
+  def self.merge!(merge_to, routes)
+    transaction do
+      routes.each do |route|
+        next if route == merge_to
+        merge_duplicate_route(route, merge_to)
+      end
+    end
   end
   
   def self.merge_duplicate_route(duplicate, original)
@@ -279,136 +431,5 @@ class Route < ActiveRecord::Base
     original.save!
   end
 
-  def stop_codes
-    stops.map{ |stop| stop.atco_code }.uniq
-  end
-  
-  def stop_area_codes
-    stop_areas = stops.map{ |stop| stop.stop_areas }.flatten
-    stop_areas.map{ |stop_area| stop_area.code }.uniq
-  end
 
-  def transport_mode_name
-    transport_mode.name
-  end
-  
-  def area(lowercase=false)
-    area = ''
-    area_list = areas(all=false)
-    if area_list.size > 1
-      area = "Between #{area_list.to_sentence}"
-    else
-      area = "In #{area_list.first}" if !area_list.empty?
-    end
-    if !area.blank? && lowercase
-      area[0] = area.first.downcase
-    end
-    return area
-  end
-  
-  def areas(all=true)
-    if all or terminuses.empty? 
-      route_stop_list = stops
-    else
-      route_stop_list = terminuses
-    end
-    areas = route_stop_list.map do |stop| 
-      if stop.locality.parents.empty?
-        stop.locality.name
-      else
-        stop.locality.parents.map{ |parent_locality| parent_locality.name }
-      end
-    end.flatten.uniq
-    areas
-  end
-  
-  def description
-    "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
-  end
-  memoize :description
-  
-  def short_name
-    name(from_stop=nil, short=true)
-  end
-  
-  def name(from_stop=nil, short=false)
-    return self[:name] if !self[:name].blank?
-    default_name = "#{number}"
-    if from_stop
-      return default_name
-    else
-      if short
-        return default_name
-      else
-        return "#{transport_mode_name} #{default_name}"
-      end
-    end
-  end
-  
-  def transport_modes
-    [transport_mode]
-  end
-  
-  def stops
-    route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }.flatten.uniq
-  end
-   memoize :stops
-    
-  def next_stops(stop_id)
-    outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == stop_id } 
-    outgoing_segments.map{ |route_segment| route_segment.to_stop }
-  end
-  
-  def previous_stops(stop_id)
-    incoming_segments = route_segments.select{ |route_segment| route_segment.to_stop_id == stop_id }
-    incoming_segments.map{ |route_segment| route_segment.from_stop }
-  end
-  
-  def terminuses
-    from_terminuses = route_segments.select{ |route_segment| route_segment.from_terminus? }
-    to_terminuses = route_segments.select{ |route_segment| route_segment.to_terminus? }
-    terminuses = from_terminuses.map{ |segment| segment.from_stop } + to_terminuses.map{ |segment| segment.to_stop }
-    terminuses.uniq
-  end
-  memoize :terminuses
-  
-  def name_by_terminuses(transport_mode, from_stop=nil, short=false)
-    is_loop = false
-    if short
-      text = ""
-    else
-      text = transport_mode.name
-    end
-    if from_stop
-      if terminuses.size > 1
-        terminuses = self.terminuses.reject{ |terminus| terminus == from_stop }
-      else
-        is_loop = true
-        terminuses = self.terminuses
-      end
-      terminuses = terminuses.map{ |terminus| terminus.name_without_suffix(transport_mode) }.uniq
-      if terminuses.size == 1
-        if is_loop
-          text += " towards #{terminuses.to_sentence}"
-        else
-          text += " towards #{terminuses.to_sentence}"
-        end
-      else
-        text += " between #{terminuses.sort.to_sentence}"
-      end
-    else
-      terminuses = self.terminuses.map{ |terminus| terminus.name_without_suffix(transport_mode) }.uniq
-      if terminuses.size == 1
-        text += " from #{terminuses.to_sentence}"
-      else
-        if short
-          text += "#{terminuses.sort.join(' to ')}"     
-        else
-          text += " route between #{terminuses.sort.to_sentence}"     
-        end
-      end
-    end 
-    text
-  end
-  
 end

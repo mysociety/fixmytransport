@@ -1,0 +1,5 @@
+.form-field
+  - if @stop.errors.on(field)
+    .form-field-error= error_message_on @stop, field
+  != label(:stop, field)
+  != f.text_field field
