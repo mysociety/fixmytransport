@@ -12,19 +12,21 @@ module ApplicationHelper
     else
       available_modes = TransportMode.active.find(:all)
     end
+    tags << %Q[<div id="transport-mode-radio">]
     if available_modes.size == 1
-      input = context.hidden_field('transport_mode_id', :value => available_modes.first.id)
-      input += available_modes.first.name
+      tags << context.hidden_field('transport_mode_id', :value => available_modes.first.id)
     else
+      tags << %Q[<div class="transport-mode">] 
       available_modes.each do |transport_mode| 
         tag = context.radio_button 'transport_mode_id', transport_mode.id, {:class => 'transport-mode', :onchange => "changeMode('#{transport_mode.css_name}')"}
         tag += context.label "transport_mode_id_#{transport_mode.id}", transport_mode.name
-        tag = %Q[<div class="transport-bg-#{transport_mode.css_name}"}>#{tag}</div>]
+        tag = %Q[<div class="transport-bg-#{transport_mode.css_name}">#{tag}</div>]
         tags << tag
       end
-      input = tags.join("\n")
+      tags << "</div>"
     end
-    input
+    tags << "</div>"
+    tags.join("\n")
   end
   
   def location_param(param_name)

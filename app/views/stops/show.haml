@@ -12,7 +12,7 @@
          stop_init();
       });
     .extra-info
-      = departures_link(@stop)
+      .departures= departures_link(@stop)
       =render :partial => "shared/route_list", :locals => { :stop => @stop }
   .stop
     %a{:href => location_url(@stop, :format => 'atom'), :class => 'rss-link story-rss'}

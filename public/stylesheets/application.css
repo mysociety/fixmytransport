@@ -157,7 +157,7 @@ ul.navigation li {
   text-align: center;
 }
 
-#transport-mode-radio {
+#transport-mode-radio, .single-transport-mode {
   padding: 20px 0px;
   margin: 0.5em 0;
 }
@@ -404,6 +404,10 @@ ul.location-list li{
   clear: both;
 }
 
+.extra-info .departures {
+  font-size: 0.8em;
+  margin: 0.5em 0 0.8em 0;
+}
 
 /* Feedback form */
 
