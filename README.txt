@@ -1,5 +1,7 @@
-FixMyTransport
---------------
+FixMyTransport/Brief Encounters
+--------------------------------
+
+This codebase is for the Brief Encounters milestone of the FixMyTransport project
 
 If using PostGIS, the following commands need to be run following db creation:
 
