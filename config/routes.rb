@@ -46,8 +46,6 @@ ActionController::Routing::Routes.draw do |map|
   map.route "/routes/:scope/:id.:format", :controller => "routes", 
                                           :action => 'update', 
                                           :conditions => { :method => :put }
-  
-
 
   # static
   map.about '/about', :controller => 'static', :action => 'about'
