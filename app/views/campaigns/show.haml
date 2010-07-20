@@ -10,4 +10,8 @@
       });
   .campaign-info
     %h3= @campaign.title
+    
     %p.campaign= @campaign.description
+    %p.start-date
+      %b= t(:campaign_start_date)
+      =@campaign.created_at

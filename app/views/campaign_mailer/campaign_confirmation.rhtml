@@ -1,0 +1,22 @@
+Hi <%= @recipient.name %>,
+
+Please click on the link below to confirm the campaign you just
+added to FixMyTransport:
+
+<%= @link %>
+
+If your email program does not let you click on this link, copy
+and paste it into your web browser and press return.
+
+Your campaign had the title: <%= @campaign.title %>
+ 
+And text: <%= @campaign.description %>
+
+Your name will be shown as: <%= @recipient.name.blank? ? t(:anonymous) : @recipient.name %>
+
+<%- if @recipient.wants_fmt_updates? %>
+You asked to be updated on our progress in building FixMyTransport - we'll keep in touch!
+<%- end %>
+
+Yours,
+The mySociety team
