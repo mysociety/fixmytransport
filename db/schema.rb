@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100720141621) do
+ActiveRecord::Schema.define(:version => 20100720145907) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -51,6 +51,9 @@ ActiveRecord::Schema.define(:version => 20100720141621) do
     t.text     "description"
     t.boolean  "confirmed"
     t.integer  "transport_mode_id"
+    t.string   "category"
+    t.text     "token"
+    t.integer  "reporter_id"
   end
 
   create_table "districts", :force => true do |t|
