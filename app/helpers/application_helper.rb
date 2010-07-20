@@ -30,18 +30,18 @@ module ApplicationHelper
   end
   
   def location_param(param_name)
-    h(params[:story][:location_attributes][param_name]) rescue nil
+    h(params[:campaign][:location_attributes][param_name]) rescue nil
   end
   
-  def location_type_radio_buttons(story)
+  def location_type_radio_buttons(campaign)
     tags = []
     location_types = { 'Stop' => 'Stop', 
                        'StopArea' => 'Station', 
                        'Route' => 'Route'}
               
     location_types.keys.sort.each do |location_class|
-      checked = story.location_type == location_class
-      tag = radio_button 'story', 'location_type', location_class, {:class => 'location-type'}
+      checked = campaign.location_type == location_class
+      tag = radio_button 'campaign', 'location_type', location_class, {:class => 'location-type'}
       tag += location_types[location_class]
       tags << tag
     end

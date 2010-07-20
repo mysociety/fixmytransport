@@ -1,4 +1,0 @@
-= render :partial => 'shared/new_story', :locals => { :location => location }
-- if !location.stories.confirmed.empty?
-  %h3= t(:other_stories_here)
-  = render :partial => 'shared/story', :collection => location.stories.confirmed, :locals => { :context => :location }

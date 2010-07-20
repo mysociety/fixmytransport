@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   include MySociety::UrlMapper
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
-  helper_method :location_search, :location_url, :location_path, :respond_url, :main_url, :admin_url, :story_url
+  helper_method :location_search, :location_url, :location_path, :main_url, :admin_url
   url_mapper # See MySociety::UrlMapper
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
@@ -61,24 +61,6 @@ class ApplicationController < ActionController::Base
      return route_url(location.region, location, attributes)
    end
    raise "Unknown location type: #{location.class}"
-  end
-  
-  def story_url(story, attributes={})
-    attributes = attributes.merge(:anchor => "story_#{story.id}")
-    location_url(story.location, attributes)
-  end
-  
-  def respond_url(location, params)
-   case location
-   when Route
-     respond_route_url(location.locality, location, params)
-   when Stop
-     respond_stop_url(location.locality, location, params)
-   when StopArea
-     respond_stop_area_url(location.region, location, params)
-   else
-     raise "Unknown location type: #{location.class}"
-   end
   end
   
 end

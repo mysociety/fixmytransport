@@ -10,9 +10,6 @@ body {
     border-bottom: 2px solid gray;
     margin: 0 0 0.5em 0;
     background: #000000;
-    background-image:url('/images/waterloo_banner.jpg');
-    background-repeat: no-repeat;
-    background-position: 0 0;
     color: white;
     padding: 0.5em 0.5em 0.5em 120px;    
     position: relative;
@@ -129,20 +126,20 @@ ul.navigation li {
 
 /* Home page */
 
-.homepage .new-story, 
-.homepage .latest-stories {
+.homepage .new-campaign, 
+.homepage .latest-campaigns {
   width: 45%;
   margin-bottom: 2em;
 }
 
-.homepage .new-story { 
+.homepage .new-campaign { 
   margin-left: 4%;
   border: 1px solid #cccccc;
   padding: 0.5em;
   background-color: #ffffff;
 }
 
-.homepage .latest-stories {
+.homepage .latest-campaigns {
   margin-right: 4%;
   float: right;
   width: 42%;
@@ -151,7 +148,7 @@ ul.navigation li {
   background-color: #ffffff;
 }
 
-.homepage .latest-stories .more-link {
+.homepage .latest-campaigns .more-link {
   float: right;
 }
 
@@ -214,53 +211,53 @@ ul.navigation li {
     background-position: left top;
 }
 
-.homepage .story{
+.homepage .campaign{
   padding: 4px;
   margin: 0.5em 0;
 }
-.story-transport-none {
+.campaign-transport-none {
   background-image: url('/images/transport_none_small.gif');
   background-repeat: no-repeat;
   background-position: 50% top;
 }
 
-.story-transport-bus {
+.campaign-transport-bus {
   background-image: url('/images/transport_bus_small.gif');
   background-repeat: no-repeat;
   background-position: 16px top;
 }
 
-.story-transport-coach {
+.campaign-transport-coach {
     background-image: url('/images/transport_coach_small.gif');
     background-repeat: no-repeat;
     background-position: 16px top;
 }
 
-.story-transport-taxi {
+.campaign-transport-taxi {
     background-image: url('/images/transport_taxi_small.gif');
     background-repeat: no-repeat;
     background-position: 16px top;
 }
 
-.story-transport-air {
+.campaign-transport-air {
     background-image: url('/images/transport_air_small.gif');
     background-repeat: no-repeat;
     background-position: 16px top;
 }
 
-.story-transport-ferry {
+.campaign-transport-ferry {
     background-image: url('/images/transport_ferry_small.gif');
     background-repeat: no-repeat;
     background-position: 16px top;
 }
 
-.story-transport-train {
+.campaign-transport-train {
     background-image: url('/images/transport_train_small.gif');
     background-repeat: no-repeat;
     background-position: 16px top;
 }
 
-.story-transport-trammetro {
+.campaign-transport-trammetro {
     background-image: url('/images/transport_trammetro_small.gif');
     background-repeat: no-repeat;
     background-position: 16px top;
@@ -270,7 +267,7 @@ ul.navigation li {
   width: 15em;
 }
 
-.story-body {
+.campaign-body {
     background-color: #ffffff;
     padding: 0.25em 0.5em 0.5em 0.5em;
     margin:20px 8px 8px 8px;
@@ -342,9 +339,9 @@ ul.navigation li {
     color: #ffffff;
 }
 
-/* Story lists */
+/* Campaign lists */
 
-.story .details {
+.campaign .details {
   font-size: 0.8em;
 }
 /* Forms */
@@ -376,7 +373,7 @@ ul.location-list li{
   padding: 0.2em 0 0.2em 0;
 }
 
-/* Story page */
+/* Campaign page */
 
 #map-col {
   float: right; 
@@ -467,9 +464,9 @@ form.new_feedback label {
   list-style-type: none;
 }
 
-/* Adding a story */
+/* Adding a campaign */
 
-form.new_story label{
+form.new_campaign label{
   width: 10em;  
 }
 
@@ -573,11 +570,11 @@ ul.stops {
   max-width: 45%;
 }
 
-form.create_story label{
+form.create_campaign label{
   width: 6em;  
 }
 
-form.create_story .checkbox label{
+form.create_campaign .checkbox label{
   float: none;
   display: block-inline;
   font-size: 0.8em;
@@ -589,7 +586,7 @@ form.create_story .checkbox label{
   width: 20em;
 }
 
-form.create_story textarea, 
-form.create_story input[type=text] {
+form.create_campaign textarea, 
+form.create_campaign input[type=text] {
   width: 20em;
 }

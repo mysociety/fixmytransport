@@ -45,8 +45,8 @@ class Admin::StopsController < ApplicationController
   
   def destroy
     @stop = Stop.find(params[:id])
-    if @stop.stories.size > 0
-      flash[:error] = t(:stop_has_stories)
+    if @stop.campaigns.size > 0
+      flash[:error] = t(:stop_has_campaigns)
       render :show
     elsif @stop.routes.size > 0
       flash[:error] = t(:stop_has_routes)

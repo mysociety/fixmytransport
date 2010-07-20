@@ -1,12 +1,12 @@
 ActionController::Routing::Routes.draw do |map|
 
   # home page
-  map.root :controller => 'stories', :action => 'new'
+  map.root :controller => 'campaigns', :action => 'new'
 
   # resources
-  map.resources :stories, :except => [:update, :edit, :create], 
+  map.resources :campaigns, :except => [:update, :edit, :create], 
                           :collection => {:choose_location => :get, :find => :post}
-  map.confirm '/c/:email_token', :action => 'confirm', :controller => 'stories'
+  map.confirm '/c/:email_token', :action => 'confirm', :controller => 'campaigns'
   
   # stops
   map.random_stops "/stops/random.:format", :controller => "stops",

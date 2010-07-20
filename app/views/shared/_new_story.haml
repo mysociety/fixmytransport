@@ -1,38 +1,38 @@
-%h3= t(:tell_us_your_story)
-- form_for location, :url => location_path(location), :html => {:class => 'create_story'} do |f| 
+%h3= t(:tell_us_about_your_campaign)
+- form_for location, :url => location_path(location), :html => {:class => 'create_campaign'} do |f| 
   .fieldset
-    - f.fields_for :stories, @new_story do |story_fields|
-      - if @new_story.errors.on(:transport_mode_id)
-        .form-field-error= error_message_on @new_story, :transport_mode_id
+    - f.fields_for :campaigns, @new_campaign do |campaign_fields|
+      - if @new_campaign.errors.on(:transport_mode_id)
+        .form-field-error= error_message_on @new_campaign, :transport_mode_id
       %label{:for => 'transport_mode_id', :style => 'display: none;'}
         =t(:transport_mode)
-      #chosen-transport-mode{:class=>"main-transport-#{@new_story.transport_mode_css_name}"}
+      #chosen-transport-mode{:class=>"main-transport-#{@new_campaign.transport_mode_css_name}"}
         / #transport-mode-radio
         /   .transport-mode
-        != transport_mode_radio_buttons(story_fields, 'new_story', location)
-        - if location.errors.on('stories.category')
-          .form-field-error= error_message_on location, 'stories.category'
+        != transport_mode_radio_buttons(campaign_fields, 'new_campaign', location)
+        - if location.errors.on('campaigns.category')
+          .form-field-error= error_message_on location, 'campaigns.category'
         .form-field
-          = story_fields.label :category
-          != story_fields.select("category", Story.categories, { :include_blank => true })
-        - if location.errors.on('stories.title')
-          .form-field-error= error_message_on location, 'stories.title'
+          = campaign_fields.label :category
+          != campaign_fields.select("category", Campaign.categories, { :include_blank => true })
+        - if location.errors.on('campaigns.title')
+          .form-field-error= error_message_on location, 'campaigns.title'
         .form-field
-          = story_fields.label :title
-          != story_fields.text_field :title
-        - if location.errors.on('stories.story')
-          .form-field-error= error_message_on location, 'stories.story'
+          = campaign_fields.label :title
+          != campaign_fields.text_field :title
+        - if location.errors.on('campaigns.description')
+          .form-field-error= error_message_on location, 'campaigns.description'
         .form-field
-          = story_fields.label :story
-          != story_fields.text_area :story, {:rows => 5}
-        - story_fields.fields_for :reporter do |reporter_fields|
-          - if location.errors.on('stories.reporter.email')
-            .form-field-error= error_message_on location, 'stories.reporter.email'
+          = campaign_fields.label :campaign
+          != campaign_fields.text_area :campaign, {:rows => 5}
+        - campaign_fields.fields_for :reporter do |reporter_fields|
+          - if location.errors.on('campaigns.reporter.email')
+            .form-field-error= error_message_on location, 'campaigns.reporter.email'
           .form-field
             = reporter_fields.label :email
             != reporter_fields.text_field :email
-          - if location.errors.on('stories.reporter.name')
-            .form-field-error= error_message_on location, 'stories.reporter.name'
+          - if location.errors.on('campaigns.reporter.name')
+            .form-field-error= error_message_on location, 'campaigns.reporter.name'
           .form-field
             = reporter_fields.label :name
             != reporter_fields.text_field :name

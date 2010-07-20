@@ -1,10 +1,10 @@
-class StoryMailer < ActionMailer::Base
+class CampaignMailer < ActionMailer::Base
   
-  def story_confirmation(recipient, story, token)
+  def campaign_confirmation(recipient, campaign, token)
    recipients recipient.email
    from       MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
-   subject    "[Brief Encounters] Your transport story"
-   body :story => story, :recipient => recipient, :link => confirm_url(:email_token => token)
+   subject    "[Brief Encounters] Your transport campaign"
+   body :campaign => campaign, :recipient => recipient, :link => confirm_url(:email_token => token)
   end  
   
   def feedback(email_params)

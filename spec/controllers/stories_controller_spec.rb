@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe StoriesController do
+describe CampaignsController do
 
   describe 'GET #new' do 
     
@@ -8,9 +8,9 @@ describe StoriesController do
       get :new 
     end  
   
-    it 'should ask for a new story' do 
-      story = mock_model(Story, :build_reporter => true)
-      Story.should_receive(:new).and_return(story)
+    it 'should ask for a new campaign' do 
+      campaign = mock_model(Campaign, :build_reporter => true)
+      Campaign.should_receive(:new).and_return(campaign)
       make_request
     end
     
@@ -23,44 +23,44 @@ describe StoriesController do
   
     before do 
       @stop = mock_model(Stop, :locality => mock_model(Locality))
-      @story = mock_model(Story, :id => 8, 
-                                     :title => 'A test story', 
+      @campaign = mock_model(Campaign, :id => 8, 
+                                     :title => 'A test campaign', 
                                      :valid? => true, 
                                      :location_from_attributes => mock_model(Stop),
                                      :locations => [@stop], 
                                      :locations= => true,
                                      :location_attributes= => true,
                                      :location_type => 'Stop')
-      Story.stub!(:new).and_return(@story)
+      Campaign.stub!(:new).and_return(@campaign)
     end
     
     def make_request
-      post :find, {:story => {:transport_mode_id => 5, 
+      post :find, {:campaign => {:transport_mode_id => 5, 
                                 :location_attributes => 
                                   {:name => 'My stop', 
                                    :area => 'My town'}}}
     end
   
-    it 'should create a new story' do 
-      Story.should_receive(:new).and_return(@story)
+    it 'should create a new campaign' do 
+      Campaign.should_receive(:new).and_return(@campaign)
       make_request
     end
     
-    it 'should try and validate the new story' do 
-      @story.should_receive(:valid?)
+    it 'should try and validate the new campaign' do 
+      @campaign.should_receive(:valid?)
       make_request
     end
     
     it 'should render the "Choose location" view if more than one location is found' do 
-      @story.stub!(:valid?).and_return(true)
-      @story.stub!(:locations).and_return([mock_model(Route, :name => 'a test route'), 
+      @campaign.stub!(:valid?).and_return(true)
+      @campaign.stub!(:locations).and_return([mock_model(Route, :name => 'a test route'), 
                                              mock_model(Stop, :name => 'a test stop')])
       make_request
-      response.should render_template('stories/choose_location')
+      response.should render_template('campaigns/choose_location')
     end
     
-    it 'should redirect to the location page if the story is valid and the location found' do 
-      @story.stub!(:valid?).and_return(true)
+    it 'should redirect to the location page if the campaign is valid and the location found' do 
+      @campaign.stub!(:valid?).and_return(true)
       make_request
       response.should redirect_to(stop_url(@stop.locality, @stop))
     end
@@ -73,13 +73,13 @@ describe StoriesController do
       get :index
     end
     
-    it 'should render the stories/index template' do 
+    it 'should render the campaigns/index template' do 
       make_request
-      response.should render_template("stories/index")
+      response.should render_template("campaigns/index")
     end
     
-    it 'should ask for stories' do 
-      Story.should_receive(:find).and_return([])
+    it 'should ask for campaigns' do 
+      Campaign.should_receive(:find).and_return([])
       make_request
     end
   
@@ -88,21 +88,21 @@ describe StoriesController do
   describe 'GET #show' do 
   
     before do
-      @story = mock_model(Story, :id => 8, :title => 'A test story')
-      Story.stub!(:find).and_return(@story)
+      @campaign = mock_model(Campaign, :id => 8, :title => 'A test campaign')
+      Campaign.stub!(:find).and_return(@campaign)
     end
     
     def make_request
       get :show, :id => 8
     end
     
-    it 'should ask for the story by id' do 
-      Story.should_receive(:find).with('8').and_return(@story)
+    it 'should ask for the campaign by id' do 
+      Campaign.should_receive(:find).with('8').and_return(@campaign)
       make_request
     end
   
     it 'should return a "Not found" response for a request for an invalid ID' do
-      Story.stub!(:find).with('8').and_raise ActiveRecord::RecordNotFound 
+      Campaign.stub!(:find).with('8').and_raise ActiveRecord::RecordNotFound 
       make_request
       response.response_code.should == 404
     end

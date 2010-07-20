@@ -16,11 +16,11 @@
           - if !stop.routes.empty? 
             = render :partial => 'shared/route_list', :locals => {:stop => stop}
   .stop-area
-    %a{:href => location_url(@stop_area, :format => 'atom'), :class => 'rss-link story-rss'}
+    %a{:href => location_url(@stop_area, :format => 'atom'), :class => 'rss-link campaign-rss'}
       %span= t(:feed)
-      %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:stories_feed) }
+      %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:campaigns_feed) }
     %h3.name= "#{@stop_area.name} stop area"
     .details
       - if !@stop_area.area.blank?
         %span.locality= "In #{@stop_area.area}"
-= render :partial => 'shared/location_stories', :locals => {:location => @stop_area}
+= render :partial => 'shared/location_campaigns', :locals => {:location => @stop_area}

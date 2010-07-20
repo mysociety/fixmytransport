@@ -31,8 +31,8 @@ class StopArea < ActiveRecord::Base
   has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships
   has_dag_links :link_class_name => 'StopAreaLink'
-  has_many :stories, :as => :location, :order => 'created_at desc'
-  accepts_nested_attributes_for :stories
+  has_many :campaigns, :as => :location, :order => 'created_at desc'
+  accepts_nested_attributes_for :campaigns
   belongs_to :locality
   has_friendly_id :name, :use_slug => true, :scope => :locality                                  
   validates_presence_of :locality, :if => :loaded?

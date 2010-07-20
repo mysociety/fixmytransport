@@ -23,7 +23,7 @@ en:
   remove: Remove
   add_a_route: Add a route
   route_form_error: There's a problem with this route - please see below.
-  route_has_stories: This route cannot be deleted as there are stories associated with it. 
+  route_has_campaigns: This route cannot be deleted as there are campaigns associated with it. 
   merging_routes: Merging routes
   route_merge_label: ID of route to merge with
   route_merge_submit: Merge with another route

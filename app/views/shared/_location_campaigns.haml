@@ -1,0 +1,4 @@
+= render :partial => 'shared/new_campaign', :locals => { :location => location }
+- if !location.campaigns.confirmed.empty?
+  %h3= t(:other_campaigns_here)
+  = render :partial => 'shared/campaign', :collection => location.campaigns.confirmed, :locals => { :context => :location }

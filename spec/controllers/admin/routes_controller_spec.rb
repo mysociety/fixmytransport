@@ -101,10 +101,10 @@ describe Admin::RoutesController do
   
   describe "DELETE #destroy" do 
  
-    describe 'when the route has no stories' do 
+    describe 'when the route has no campaigns' do 
       
       before do 
-        @route = mock_model(Route, :stories => [])
+        @route = mock_model(Route, :campaigns => [])
         Route.stub!(:find).and_return(@route)
       end
       
@@ -115,10 +115,10 @@ describe Admin::RoutesController do
   
     end
     
-    describe 'when the route has stories' do 
+    describe 'when the route has campaigns' do 
       
       before do 
-        @route = mock_model(Route, :stories => [mock_model(Story)], 
+        @route = mock_model(Route, :campaigns => [mock_model(Campaign)], 
                                    :operator_code => 'TEST', 
                                    :id => 33)
         Route.stub!(:find).and_return(@route)

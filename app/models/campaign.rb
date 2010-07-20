@@ -1,26 +1,7 @@
-# == Schema Information
-# Schema version: 20100707152350
-#
-# Table name: stories
-#
-#  id                :integer         not null, primary key
-#  title             :text
-#  story             :text
-#  created_at        :datetime
-#  updated_at        :datetime
-#  reporter_id       :integer
-#  stop_area_id      :integer
-#  location_id       :integer
-#  location_type     :string(255)
-#  transport_mode_id :integer
-#  confirmed         :boolean
-#  token             :text
-#  category          :string(255)
-#
 
-class Story < ActiveRecord::Base
+class Campaign < ActiveRecord::Base
   validates_presence_of :transport_mode_id
-  validates_presence_of :story, :title, :category, :if => :location
+  validates_presence_of :description, :title, :category, :if => :location
   validate :validate_location_attributes
   belongs_to :reporter, :class_name => 'User'
   accepts_nested_attributes_for :reporter
@@ -32,11 +13,8 @@ class Story < ActiveRecord::Base
   named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
   cattr_reader :per_page, :categories
   @@per_page = 10
-  @@categories = {'Comic' => 'comic', 
-                  'Romantic' => 'romantic', 
-                  'Unfortunate' => 'unfortunate', 
-                  'Bizarre' => 'bizarre'}
-  
+  @@categories = ['New route', 'Keep route', 'Get repair', 'Adopt', 'Other']
+
   def validate_location_attributes
     return true if location
     if ! location_attributes_valid?
@@ -69,7 +47,7 @@ class Story < ActiveRecord::Base
     self.locations = results[:results]
     self.location_errors = results[:errors]
     if self.locations.empty? && self.location_errors.empty? 
-      self.location_errors << :story_location_not_found
+      self.location_errors << :campaign_location_not_found
     end
   end
   
@@ -79,14 +57,14 @@ class Story < ActiveRecord::Base
   end
   
   def send_confirmation_email
-    StoryMailer.deliver_story_confirmation(reporter, self, token)
+    CampaignMailer.deliver_campaign_confirmation(reporter, self, token)
   end
   
   def self.find_recent(number)
     confirmed.find(:all, :order => 'created_at desc', :limit => number, :include => [:location, :reporter])
   end
   
-  # stories usually start with no transport_mode
+  # campaigns usually start with no transport_mode
   def transport_mode_css_name
     return self.transport_mode.nil? ? 'none' : self.transport_mode.css_name
   end

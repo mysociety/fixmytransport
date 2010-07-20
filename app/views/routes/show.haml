@@ -14,9 +14,9 @@
         - @route.stops.sort_by(&:name).each do |stop|
           %li= link_to stop.full_name, stop_url(stop.locality, stop)
   .route
-    %a{:href => location_url(@route, :format => 'atom'), :class => 'rss-link story-rss'}
+    %a{:href => location_url(@route, :format => 'atom'), :class => 'rss-link campaign-rss'}
       %span= t(:feed)
-      %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:stories_feed) }
+      %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:campaigns_feed) }
     %h3.name= @route.name
     .details
       %span.locality= "#{@route.area}."
@@ -28,4 +28,4 @@
               %li= operator.name 
       .terminuses
         != terminus_text(@route)
-= render :partial => 'shared/location_stories', :locals => {:location => @route}
+= render :partial => 'shared/location_campaigns', :locals => {:location => @route}

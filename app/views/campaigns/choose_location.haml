@@ -3,11 +3,11 @@
 #map-col
   #map
   :javascript
-    var areaStops = #{location_stops_js(@story.locations)}
+    var areaStops = #{location_stops_js(@campaign.locations)}
     jQuery(document).ready(function(){
        area_init();
     });
 %p= t(:multiple_locations_intro, :num_locations => MAX_LOCATION_RESULTS)
 %ul.location-list
-  - @story.locations.each do |location|
+  - @campaign.locations.each do |location|
     %li= link_to location.description, location_url(location)

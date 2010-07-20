@@ -15,9 +15,9 @@
       .departures= departures_link(@stop)
       =render :partial => "shared/route_list", :locals => { :stop => @stop }
   .stop
-    %a{:href => location_url(@stop, :format => 'atom'), :class => 'rss-link story-rss'}
+    %a{:href => location_url(@stop, :format => 'atom'), :class => 'rss-link campaign-rss'}
       %span= t(:feed)
-      %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:stories_feed) }
+      %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:campaigns_feed) }
     %h3.name= "#{@stop.full_name}" 
     .details
       %span.locality= "In #{@stop.locality_name}"
@@ -30,4 +30,4 @@
         Part of
         -@stop.stop_areas.each do |stop_area|
           %span.stop-area= link_to("#{stop_area.name} stop area", stop_area_url(stop_area.locality, stop_area))
-= render :partial => 'shared/location_stories', :locals => { :location => @stop }
+= render :partial => 'shared/location_campaigns', :locals => { :location => @stop }

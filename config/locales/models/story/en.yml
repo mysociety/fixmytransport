@@ -2,14 +2,14 @@ en:
   activerecord:
     errors:
       models:
-        story:
+        campaign:
           attributes: 
             category: 
-              blank: "Please categorize your story so we can better appreciate it"
+              blank: "Please select a category for your campaign"
             title:
-              blank: "Please tell us the title of your story"
-            story:
-              blank: "Please tell us your story"
+              blank: "Please give your campaign a title"
+            description:
+              blank: "Please give a brief description of your campaign"
             transport_mode_id:
               blank: "Please select a transport type"
             location:

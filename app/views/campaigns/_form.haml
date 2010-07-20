@@ -1,0 +1,34 @@
+- if @campaign.location_errors and !@campaign.location_errors.empty? 
+  - @campaign.location_errors.each do |location_error|
+    .location-error= t(location_error)
+.fieldset
+  != form.hidden_field :location_id 
+  - if @campaign.errors.on(:location)
+    .form-field-error= error_message_on @campaign, :location  
+  .form-field
+    - if @campaign.errors.on(:transport_mode_id)
+      .form-field-error= error_message_on @campaign, :transport_mode_id
+    %label{:for => 'transport_mode_id', :style => 'display: none;'}
+      =t(:transport_mode)
+    #chosen-transport-mode{:class=>"main-transport-#{@campaign.transport_mode_css_name}"}
+      / #transport-mode-radio
+      /   .transport-mode
+      != transport_mode_radio_buttons(form, 'campaign')
+      - if @campaign.errors.on(:location_attributes)
+        .form-field-error= error_message_on @campaign, :location_attributes
+    .form-field
+      != label_tag 'campaign[location_attributes][name]', t(:location_name)
+      != text_field_tag 'campaign[location_attributes][name]', location_param(:name)
+      #guidance-name{:class => 'guidance'} e.g. London Euston
+    .form-field
+      != label_tag 'campaign[location_attributes][route_number]', t(:route_number)
+      != text_field_tag 'campaign[location_attributes][route_number]', location_param(:route_number)
+      #guidance-route{:class => 'guidance'} e.g. C10, Cardiff to Exeter
+    .form-field
+      != label_tag 'campaign[location_attributes][area]', t(:area)
+      != text_field_tag 'campaign[location_attributes][area]', location_param(:area)
+      #guidance-area{:class => 'guidance'} e.g. Bristol
+:javascript
+  function changeMode(modeCssName){
+    jQuery("#chosen-transport-mode").removeClass().addClass('main-transport-' + modeCssName)
+  }

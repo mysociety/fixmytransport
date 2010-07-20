@@ -25,11 +25,11 @@ class Route < ActiveRecord::Base
   has_many :from_stops, :through => :route_segments, :class_name => 'Stop' 
   has_many :to_stops, :through => :route_segments, :class_name => 'Stop'
   belongs_to :transport_mode
-  has_many :stories, :as => :location, :order => 'created_at desc'
+  has_many :campaigns, :as => :location, :order => 'created_at desc'
   has_many :route_localities, :dependent => :destroy
   has_many :localities, :through => :route_localities
   belongs_to :region
-  accepts_nested_attributes_for :stories
+  accepts_nested_attributes_for :campaigns
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   accepts_nested_attributes_for :route_segments, :allow_destroy => true, :reject_if => :route_segment_invalid
   validates_presence_of :number, :transport_mode_id
@@ -406,7 +406,7 @@ class Route < ActiveRecord::Base
   end
   
   def self.merge_duplicate_route(duplicate, original)
-    raise "Can't merge route with stories: #{duplicate.inspect}" if !duplicate.stories.empty?
+    raise "Can't merge route with campaigns: #{duplicate.inspect}" if !duplicate.campaigns.empty?
     duplicate.route_operators.each do |route_operator|
       if ! original.route_operators.detect { |existing| existing.operator == route_operator.operator }
         original.route_operators.build(:operator => route_operator.operator)

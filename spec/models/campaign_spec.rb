@@ -1,15 +1,14 @@
 # == Schema Information
 # Schema version: 20100506162135
 #
-# Table name: stories
+# Table name: campaigns
 #
 #  id                :integer         not null, primary key
 #  title             :text
-#  story             :text
+#  description       :text
 #  created_at        :datetime
 #  updated_at        :datetime
 #  reporter_id       :integer
-#  stop_area_id      :integer
 #  location_id       :integer
 #  location_type     :string(255)
 #  transport_mode_id :integer
@@ -17,45 +16,45 @@
 
 require 'spec_helper'
 
-describe Story do
+describe Campaign do
   
   it 'should be invalid without a description' do 
-    @story = Story.new(:transport_mode_id => 5, :location => Route.new)
-    @story.valid? 
-    @story.errors.on(:story).should == 'Please tell us your story'
+    @campaign = Campaign.new(:transport_mode_id => 5, :location => Route.new)
+    @campaign.valid? 
+    @campaign.errors.on(:description).should == 'Please give a brief description of your campaign'
   end
   
   it 'should be invalid without a title' do 
-    @story = Story.new(:transport_mode_id => 5, :location => Route.new)
-    @story.valid? 
-    @story.errors.on(:title).should == 'Please tell us the title of your story'
+    @campaign = Campaign.new(:transport_mode_id => 5, :location => Route.new)
+    @campaign.valid? 
+    @campaign.errors.on(:title).should == 'Please give your campaign a title'
   end
   
   describe "when finding a location by attributes" do 
         
     before do 
-      @story = Story.new(:transport_mode_id => 5)
+      @campaign = Campaign.new(:transport_mode_id => 5)
       StopType.stub!(:codes_for_transport_mode).and_return([])
     end
 
     def expect_location(attributes, location_type, location)
-      @story.location_type = location_type
-      @story.location_attributes = attributes
-      @story.location_from_attributes
-      @story.locations.should == [location]
+      @campaign.location_type = location_type
+      @campaign.location_attributes = attributes
+      @campaign.location_from_attributes
+      @campaign.locations.should == [location]
     end
     
     it 'should return nil if no location attributes have been set' do 
-      @story.location_attributes = nil
-      @story.location_from_attributes.should be_nil
+      @campaign.location_attributes = nil
+      @campaign.location_from_attributes.should be_nil
     end
     
     it 'should ask for the stop type codes for the transport mode given' do 
       StopType.should_receive(:codes_for_transport_mode).with(5).and_return(['TES'])
-      @story.location_type = 'Stop'
-      @story.location_attributes = { :name => 'My stop', 
+      @campaign.location_type = 'Stop'
+      @campaign.location_attributes = { :name => 'My stop', 
                                        :area => 'My town' }
-      @story.location_from_attributes                           
+      @campaign.location_from_attributes                           
     end
     
     it 'should return a route if one is uniquely identified by the number and transport mode' do 

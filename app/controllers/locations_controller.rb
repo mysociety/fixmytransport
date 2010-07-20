@@ -5,27 +5,15 @@ class LocationsController < ApplicationController
     instance = model_class.find :first, :offset => rand(model_class.count)
     redirect_to location_url(instance)
   end
-  
-  def respond
-    instance = model_class.find(params[:id], :scope => params[:scope])
-    location_search.add_response(instance, params[:response]) if location_search  
-    if params[:response] == 'success'
-     flash[:notice] = t(:location_search_success)
-    elsif params[:response] == 'fail'
-     flash[:notice] = t(:location_search_failure)
-    end
-    flash[:notice] += " <a href='#{new_story_url}'>#{t(:try_another)}</a>"
-    redirect_to location_url(instance)
-  end
 
   private
   
   def update_location(location, attributes)
-    if location.update_attributes(:stories_attributes => attributes[:stories_attributes])
+    if location.update_attributes(:campaigns_attributes => attributes[:campaigns_attributes])
       flash[:notice] = t(:confirmation_sent)
       redirect_to location_url(location)
     else
-      @new_story = location.stories.detect{ |story| story.new_record? }
+      @new_campaign = location.campaigns.detect{ |campaign| campaign.new_record? }
       render :show 
     end
   end

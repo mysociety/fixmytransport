@@ -2,15 +2,15 @@ class RoutesController < LocationsController
   
   def show
     @route = Route.full_find(params[:id], params[:scope])
-    @new_story = Story.new(:reporter => User.new)
-    @new_story.transport_mode_id = @route.transport_mode_id
+    @new_campaign = Campaign.new(:reporter => User.new)
+    @new_campaign.transport_mode_id = @route.transport_mode_id
     location_search.add_location(@route) if location_search
     @title = @route.name
     respond_to do |format|
       format.html
       format.atom do  
-        @stories = @route.stories.confirmed
-        render :template => 'shared/stories.atom.builder', :layout => false 
+        @campaigns = @route.campaigns.confirmed
+        render :template => 'shared/campaigns.atom.builder', :layout => false 
       end
     end
   end

@@ -6,7 +6,7 @@ class StaticController < ApplicationController
       respond_to do |format|
         format.html do
           if @feedback.valid? 
-            StoryMailer.deliver_feedback(params[:feedback])
+            CampaignMailer.deliver_feedback(params[:feedback])
             flash[:notice] = t(:feedback_thanks)
             redirect_to(root_url)
           else
@@ -16,7 +16,7 @@ class StaticController < ApplicationController
         format.json do 
           @json = {}
           if @feedback.valid? 
-            StoryMailer.deliver_feedback(params[:feedback])
+            CampaignMailer.deliver_feedback(params[:feedback])
             @json[:success] = true
           else
             @json[:success] = false
