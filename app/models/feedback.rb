@@ -1,3 +1,14 @@
+# == Schema Information
+# Schema version: 20100707152350
+#
+# Table name: feedbacks
+#
+#  email   :string
+#  name    :string
+#  subject :string
+#  message :string
+#
+
 class Feedback < ActiveRecord::BaseWithoutTable
   
   column :email, :string

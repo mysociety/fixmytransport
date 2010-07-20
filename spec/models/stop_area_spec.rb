@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100506162135
+# Schema version: 20100707152350
 #
 # Table name: stop_areas
 #
@@ -21,6 +21,8 @@
 #  coords                   :geometry
 #  lon                      :float
 #  lat                      :float
+#  locality_id              :integer
+#  loaded                   :boolean
 #
 
 require 'spec_helper'

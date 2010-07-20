@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100506162135
+# Schema version: 20100707152350
 #
 # Table name: routes
 #
@@ -9,6 +9,11 @@
 #  created_at        :datetime
 #  updated_at        :datetime
 #  type              :string(255)
+#  name              :string(255)
+#  region_id         :integer
+#  cached_slug       :string(255)
+#  operator_code     :string(255)
+#  loaded            :boolean
 #
 
 require 'spec_helper'

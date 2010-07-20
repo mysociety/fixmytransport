@@ -1,3 +1,15 @@
+# == Schema Information
+# Schema version: 20100707152350
+#
+# Table name: route_localities
+#
+#  id          :integer         not null, primary key
+#  locality_id :integer
+#  route_id    :integer
+#  created_at  :datetime
+#  updated_at  :datetime
+#
+
 require 'spec_helper'
 
 describe RouteLocality do

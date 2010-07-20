@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100506162135
+# Schema version: 20100707152350
 #
 # Table name: stop_types
 #
@@ -11,6 +11,7 @@
 #  version     :float
 #  created_at  :datetime
 #  updated_at  :datetime
+#  sub_type    :string(255)
 #
 
 class StopType < ActiveRecord::Base

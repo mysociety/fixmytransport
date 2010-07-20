@@ -1,14 +1,17 @@
 # == Schema Information
-# Schema version: 20100506162135
+# Schema version: 20100707152350
 #
 # Table name: operators
 #
-#  id         :integer         not null, primary key
-#  code       :string(255)
-#  name       :text
-#  created_at :datetime
-#  updated_at :datetime
-#  short_name :string(255)
+#  id              :integer         not null, primary key
+#  code            :string(255)
+#  name            :text
+#  created_at      :datetime
+#  updated_at      :datetime
+#  short_name      :string(255)
+#  email           :text
+#  email_confirmed :boolean
+#  notes           :text
 #
 
 class Operator < ActiveRecord::Base

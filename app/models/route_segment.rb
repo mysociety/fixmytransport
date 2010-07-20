@@ -1,3 +1,18 @@
+# == Schema Information
+# Schema version: 20100707152350
+#
+# Table name: route_segments
+#
+#  id            :integer         not null, primary key
+#  from_stop_id  :integer
+#  to_stop_id    :integer
+#  from_terminus :boolean
+#  to_terminus   :boolean
+#  route_id      :integer
+#  created_at    :datetime
+#  updated_at    :datetime
+#
+
 class RouteSegment < ActiveRecord::Base
   belongs_to :from_stop, :class_name => 'Stop'
   belongs_to :to_stop, :class_name => 'Stop'

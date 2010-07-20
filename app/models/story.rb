@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20100506162135
+# Schema version: 20100707152350
 #
 # Table name: stories
 #
@@ -13,7 +13,11 @@
 #  location_id       :integer
 #  location_type     :string(255)
 #  transport_mode_id :integer
+#  confirmed         :boolean
+#  token             :text
+#  category          :string(255)
 #
+
 class Story < ActiveRecord::Base
   validates_presence_of :transport_mode_id
   validates_presence_of :story, :title, :category, :if => :location

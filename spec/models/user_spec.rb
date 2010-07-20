@@ -1,13 +1,14 @@
 # == Schema Information
-# Schema version: 20100506162135
+# Schema version: 20100707152350
 #
 # Table name: users
 #
-#  id         :integer         not null, primary key
-#  name       :string(255)
-#  email      :string(255)
-#  created_at :datetime
-#  updated_at :datetime
+#  id                :integer         not null, primary key
+#  name              :string(255)
+#  email             :string(255)
+#  created_at        :datetime
+#  updated_at        :datetime
+#  wants_fmt_updates :boolean
 #
 
 require 'spec_helper'

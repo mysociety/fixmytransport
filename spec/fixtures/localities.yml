@@ -1,24 +1,28 @@
 # == Schema Information
-# Schema version: 20100506162135
+# Schema version: 20100707152350
 #
 # Table name: localities
 #
 #  id                    :integer         not null, primary key
 #  code                  :string(255)
-#  atco_code             :string(255)
 #  name                  :text
 #  short_name            :text
-#  country               :string(255)
-#  region_code           :string(255)
 #  national              :boolean
-#  contact_email         :string(255)
-#  contact_telephone     :string(255)
 #  creation_datetime     :datetime
 #  modification_datetime :datetime
 #  revision_number       :string(255)
 #  modification          :string(255)
 #  created_at            :datetime
 #  updated_at            :datetime
+#  admin_area_id         :integer
+#  qualifier_name        :string(255)
+#  source_locality_type  :string(255)
+#  grid_type             :string(255)
+#  northing              :float
+#  easting               :float
+#  coords                :geometry
+#  district_id           :integer
+#  cached_slug           :string(255)
 #
 
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
