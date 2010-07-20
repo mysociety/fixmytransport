@@ -123,6 +123,10 @@ ul.navigation li {
   display: inline-block;
 }
 
+.anchor-padding {
+  margin-bottom: 40em;
+}
+
 /* Home page */
 
 .homepage .new-story, 
