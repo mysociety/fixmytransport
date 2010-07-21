@@ -68,6 +68,8 @@ Rails::Initializer.run do |config|
   
   # Set the cache store
   config.cache_store = :file_store, File.join(RAILS_ROOT, 'cache')
+  
+  config.action_view.field_error_proc = Proc.new{ |html_tag, instance| html_tag }
 end
 
 # Tell HAML to escape HTML by default
