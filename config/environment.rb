@@ -19,7 +19,7 @@ load "mapit.rb"
 
 Rails::Initializer.run do |config|
   
-  # Load intial mySociety config
+  # Load initial mySociety config
   MySociety::Config.set_file(File.join(config.root_path, 'config', 'general'), true)
   MySociety::Config.load_default
   

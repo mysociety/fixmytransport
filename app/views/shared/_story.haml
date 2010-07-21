@@ -7,4 +7,4 @@
     - if context != :location
       %span.transport-location!= t(:story_location, :link => link_to(story.location.description, location_url(story.location)))
     %span.author= story.reporter.name.blank? ? t(:anonymously) : t(:story_by, :name => story.reporter.name)
-  %p.story= story.story
+  %p.story!= simple_format(story.story)
