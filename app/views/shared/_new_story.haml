@@ -7,8 +7,6 @@
       %label{:for => 'transport_mode_id', :style => 'display: none;'}
         =t(:transport_mode)
       #chosen-transport-mode{:class=>"main-transport-#{@new_story.transport_mode_css_name}"}
-        / #transport-mode-radio
-        /   .transport-mode
         != transport_mode_radio_buttons(story_fields, 'new_story', location)
         - if location.errors.on('stories.category')
           .form-field-error= error_message_on location, 'stories.category'

@@ -10,6 +10,9 @@ class StopAreasController < LocationsController
         @new_story.transport_mode_id = location_search.transport_mode_id
       end
     end
+    if @stop_area.transport_mode_ids.size == 1
+      @new_story.transport_mode_id = @stop_area.transport_mode_ids.first
+    end
     respond_to do |format|
       format.html
       format.atom do  
