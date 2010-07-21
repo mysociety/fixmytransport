@@ -11,7 +11,7 @@ class StoryMailer < ActionMailer::Base
     recipients MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
     from email_params[:email]
     subject "[Brief Encounters] " << email_params[:subject]
-    body :message => email_params[:message], :name => email_params[:name]
+    body :message => email_params[:message], :name => email_params[:name], :uri => email_params[:feedback_on_uri]
   end
   
 end

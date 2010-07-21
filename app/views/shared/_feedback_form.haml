@@ -20,6 +20,7 @@
     .form-field
       = form.label :message
       != form.text_area :message, {:rows => 5}
+    != hidden_field_tag 'feedback[feedback_on_uri]', request.request_uri 
     %input{:type=>"button", :value => t(:cancel), :class =>"feedback-cancel"}  
     != form.submit t(:send)
     
