@@ -18,7 +18,7 @@ module ApplicationHelper
     else
       tags << %Q[<div class="transport-mode">] 
       available_modes.each do |transport_mode| 
-        tag = context.radio_button 'transport_mode_id', transport_mode.id, {:class => 'transport-mode', :onchange => "changeMode('#{transport_mode.css_name}')"}
+        tag = context.radio_button 'transport_mode_id', transport_mode.id, {:class => 'transport-mode', :onclick => "changeMode('#{transport_mode.css_name}')"}
         tag += context.label "transport_mode_id_#{transport_mode.id}", transport_mode.name
         tag = %Q[<div class="transport-bg-#{transport_mode.css_name}">#{tag}</div>]
         tags << tag

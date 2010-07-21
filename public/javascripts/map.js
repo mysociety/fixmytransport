@@ -33,7 +33,7 @@ function stop_init() {
   bounds = new OpenLayers.Bounds();  
   var markers = new OpenLayers.Layer.Markers( "Markers" );
   map.addLayer(markers);  
-  addRouteMarker(stopCoords, bounds, markers, stop_id, '', stop_name, 0);
+  addRouteMarker(stopCoords, bounds, markers, stop_id, stop_url, stop_name, 0);
 }
 
 function area_init() {

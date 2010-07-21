@@ -7,6 +7,7 @@
       var stop_lon = #{@stop.lon};
       var stop_lat = #{@stop.lat};
       var stop_id = #{@stop.id};
+      var stop_url = "#{stop_url(@stop.locality, @stop)}";
       var stop_name = "#{@stop.full_name}";
       jQuery(document).ready(function(){
          stop_init();
