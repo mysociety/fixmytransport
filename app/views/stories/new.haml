@@ -14,4 +14,6 @@
     %p Where did it take place?
     - form_for @story, :url => find_stories_path do |form| 
       = render :partial => 'stories/form', :locals => { :form => form }
+      .advice You don't have to fill in all the fields, the station/stop name or route and perhaps an area should be enough.
       != submit_tag t(:go)
+

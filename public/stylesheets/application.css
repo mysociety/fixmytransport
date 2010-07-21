@@ -115,6 +115,10 @@ select {
   margin-bottom: 0.5em;
 }
 
+.advice {
+  font-size: 0.8em;
+}
+
 /* Navigation */
 
 ul.navigation {
