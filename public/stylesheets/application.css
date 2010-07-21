@@ -88,7 +88,8 @@ h2 {
 }
 
 input[type=text], 
-textarea {
+textarea, 
+select {
   font-size: 0.9em;
   font-family: verdana, sans-serif;
 }
@@ -136,7 +137,7 @@ ul.navigation li {
 
 .homepage .new-story, 
 .homepage .latest-stories {
-  width: 45%;
+  width: 48%;
   margin-bottom: 2em;
 }
 
@@ -150,7 +151,7 @@ ul.navigation li {
 .homepage .latest-stories {
   margin-right: 4%;
   float: right;
-  width: 42%;
+  width: 39%;
   border: 1px solid #cccccc;
   padding: 0.5em;
   background-color: #ffffff;
@@ -356,6 +357,7 @@ ul.navigation li {
 
 label {
   padding-right: 0.5em;
+  padding-top: 0.5em;
   text-align: right;
   float: left;
 }
@@ -367,7 +369,7 @@ label {
 }
 
 
-input, textarea {
+input, textarea, select {
   margin: 0.5em;
 }
 
@@ -422,12 +424,12 @@ ul.location-list li{
 
 #feedback-panel-container {
   padding:20px 20px 10px 20px;
-  width: 450px;
+  width: 480px;
   background: #737373;
   border: 3px solid #333333;
   position:absolute;
   top:200px;
-  left:-496px;
+  left:-526px;
   text-align:center;
   height:auto;
 }
@@ -436,10 +438,16 @@ ul.location-list li{
   display: block;
   background-color: #ffffff;
   text-align: left;
-  width: 400px;
+  width: 420px;
   padding: 1em;
   margin: 0px auto;
 }
+
+#feedback-panel textarea,
+#feedback-panel input[type=text] {
+  width: 20em;
+}
+
 #feedback-tab{
   border-width: 1px 1px 1px 0;
   display:block;
@@ -475,7 +483,7 @@ form.new_feedback label {
 /* Adding a story */
 
 form.new_story label{
-  width: 10em;  
+  width: 11em;  
 }
 
 .location-error {

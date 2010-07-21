@@ -84,7 +84,7 @@ function setupFeedbackForm() {
                } else {
                 feedbackTab.showTab()
                }
-               event.preventDefault();
+               if (event.preventDefault) event.preventDefault();
            });
        }
    };
@@ -101,7 +101,7 @@ function setupFeedbackForm() {
   
   jQuery('.feedback-cancel').click(function() {
     feedbackTab.hideTab();
-    event.preventDefault();
+    if (event.preventDefault) event.preventDefault();
   });  
   
 }
