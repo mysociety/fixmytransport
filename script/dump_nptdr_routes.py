@@ -182,7 +182,7 @@ class CSVDumpATCO(mysociety.atcocif.ATCO):
            mapping_file = open(self.stop_code_mapping_file)
            for line in mapping_file:
                data = line.split("\t")
-               self.stop_code_mappings[data[0]] = data[1] 
+               self.stop_code_mappings[data[0]] = data[1].strip() 
         return self.stop_code_mappings.get(stop_code, stop_code)
     
 def setup_atco(nptdr_files, outfilepath, stop_code_mapping_file=None):
@@ -242,13 +242,12 @@ def dump_stops():
                           outfilepath=outfilepath)      
         atco.dump_stops()
        
-def dump_routes():    
+def dump_routes():   
     for subdir in data_dirs():
         outfilepath = os.path.join(options.outdir, "%s.tsv" % subdir)
         if os.path.exists(outfilepath):
             continue
         nptdr_files = cif_files(subdir)
-        
         atco = setup_atco(nptdr_files=nptdr_files, 
                           outfilepath=outfilepath,
                           stop_code_mapping_file=options.stop_code_mapping_file)      
