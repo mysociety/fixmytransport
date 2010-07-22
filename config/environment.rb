@@ -68,6 +68,10 @@ Rails::Initializer.run do |config|
   
   # Set the cache store
   config.cache_store = :file_store, File.join(RAILS_ROOT, 'cache')
+  
+  # override default fieldWithError divs in model-associated forms
+  config.action_view.field_error_proc = Proc.new{ |html_tag, instance| html_tag }
+
 end
 
 # Tell HAML to escape HTML by default
@@ -80,3 +84,8 @@ end
 
 # Domain for URLs (so can work for scripts, not just web pages)
 ActionMailer::Base.default_url_options[:host] = MySociety::Config.get("DOMAIN", 'localhost:3000')
+
+# settings for exception notification
+ExceptionNotification::Notifier.exception_recipients = MySociety::Config.get("CONTACT_EMAIL", "")
+ExceptionNotification::Notifier.sender_address = %("Brief Encounters" <#{MySociety::Config.get("CONTACT_EMAIL", "")}>)
+ExceptionNotification::Notifier.email_prefix = "[Brief Encounters] "
