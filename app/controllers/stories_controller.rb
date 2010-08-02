@@ -1,5 +1,5 @@
 class StoriesController < ApplicationController
-  
+  protect_from_forgery :except => [:find]
   cache_sweeper :story_sweeper, :only => :confirm
   
   def new
