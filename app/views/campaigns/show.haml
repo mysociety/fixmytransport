@@ -14,3 +14,7 @@
     %p.start-date
       %b= t(:campaign_start_date)
       =@campaign.created_at.strftime("%d/%m/%Y") 
+      
+  %form{:action => 'http://localhost:4000/tasks', :method => "POST" }
+    %input{:type => 'hidden', :name => 'task[task_type_id]', :value => 'write-to-transport-operator'}
+    %input{:type => 'submit', :value => t(:write_to_operator)}
