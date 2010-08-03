@@ -41,6 +41,7 @@ define('OPTION_ADMIN_BASE_URL', 'http://example.com/secure/');
 
 // Service locations
 define('OPTION_MAPIT_URL', 'http://mapit.example.com');
+define('OPTION_FOSBURY_URL', 'http://fosbury.example.com');
 
 // Locations of transport data
 define('OPTION_NAPTAN_DIR', '/my/naptan/dir');

@@ -410,6 +410,12 @@ ul.location-list li{
   margin: 0.5em 0 0.8em 0;
 }
 
+.extra-info .transport-direct {
+  font-size: 0.8em;
+  float: right;
+  margin: 0.5em 0 0.8em 0;
+}
+
 /* Feedback form */
 
 #feedback-panel-container {

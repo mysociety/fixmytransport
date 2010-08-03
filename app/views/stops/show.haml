@@ -12,6 +12,7 @@
          stop_init();
       });
     .extra-info
+      .transport-direct= transport_direct_link(@stop)
       .departures= departures_link(@stop)
       =render :partial => "shared/route_list", :locals => { :stop => @stop }
   .stop

@@ -59,7 +59,7 @@ class CampaignsController < ApplicationController
   
   def show
     @campaign = Campaign.find(params[:id])
-    @title = @campaign.title
+    @title = @campaign.title    
   end
   
   private

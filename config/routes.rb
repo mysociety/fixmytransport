@@ -47,8 +47,13 @@ ActionController::Routing::Routes.draw do |map|
                                           :action => 'update', 
                                           :conditions => { :method => :put }
   
+  # operators
+  map.write_operator "/operators/write", :controller => "operators", 
+                                         :action => 'write', 
+                                         :conditions => { :method => [:get, :post] }
 
-
+  map.resources :assignments, :only => [:update]
+  
   # static
   map.about '/about', :controller => 'static', :action => 'about'
   map.feedback '/feedback', :controller => 'static', 

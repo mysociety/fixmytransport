@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100720145907) do
+ActiveRecord::Schema.define(:version => 20100803154356) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -40,6 +40,17 @@ ActiveRecord::Schema.define(:version => 20100720145907) do
     t.string   "modification"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "assignments", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "campaign_id"
+    t.integer  "task_id"
+    t.integer  "status_code"
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "task_type_name"
   end
 
   create_table "campaigns", :force => true do |t|

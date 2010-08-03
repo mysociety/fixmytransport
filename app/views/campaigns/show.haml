@@ -15,6 +15,14 @@
       %b= t(:campaign_start_date)
       =@campaign.created_at.strftime("%d/%m/%Y") 
       
-  %form{:action => 'http://localhost:4000/tasks', :method => "POST" }
-    %input{:type => 'hidden', :name => 'task[task_type_id]', :value => 'write-to-transport-operator'}
+  %form{:action => "#{MySociety::Config.get("FOSBURY_URL")}/tasks", :method => "POST" }
+    %input{:type => 'hidden', :name => 'task[task_type_id]', :value => @campaign.default_assignment.task_type_name }
+    %input{:type => 'hidden', :name => 'location_id', :value => @campaign.location.id}
+    %input{:type => 'hidden', :name => 'location_type', :value => @campaign.location.type }
+    %input{:type => 'hidden', :name => 'task[callback_url]', :value => assignment_url(@campaign.default_assignment) }
+    %input{:type => 'hidden', :name => 'task[callback_params][user_id]', :value => @campaign.reporter.id }
+    %input{:type => 'hidden', :name => 'task[callback_params][campaign_id]', :value => @campaign.id }
+    %input{:type => 'hidden', :name => 'task[callback_params][_method]', :value => 'put' }
+    %input{:type => 'hidden', :name => 'task[return_url]', :value => campaign_url(@campaign) }
     %input{:type => 'submit', :value => t(:write_to_operator)}
+    

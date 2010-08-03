@@ -131,6 +131,15 @@ module ApplicationHelper
     end
   end
   
+  def transport_direct_link(stop)
+    modes = stop.transport_mode_names
+    if modes.include? 'Bus' or modes.include? 'Coach' or modes.include? 'Ferry'
+      return link_to(t(:transport_direct), "http://www.transportdirect.info/web2/journeyplanning/StopInformationLandingPage.aspx?et=si&id=fixmytransport&st=n&sd=#{stop.atco_code}")
+    else
+      return ''
+    end
+  end
+  
   def external_search_link(text)
     "http://www.google.co.uk/search?ie=UTF-8&q=#{CGI.escape(text)}"
   end

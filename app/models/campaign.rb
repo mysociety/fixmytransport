@@ -7,8 +7,9 @@ class Campaign < ActiveRecord::Base
   accepts_nested_attributes_for :reporter
   belongs_to :location, :polymorphic => true
   belongs_to :transport_mode
+  has_many :assignments
   attr_accessor :location_attributes, :locations, :location_search, :location_errors
-  after_create :send_confirmation_email
+  after_create :send_confirmation_email, :add_default_assignment
   before_create :generate_confirmation_token
   named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
   cattr_reader :per_page, :categories
@@ -49,6 +50,14 @@ class Campaign < ActiveRecord::Base
     if self.locations.empty? && self.location_errors.empty? 
       self.location_errors << :campaign_location_not_found
     end
+  end
+  
+  def add_default_assignment
+    self.assignments.create(:user_id => reporter.id, :task_type_name => 'write-to-transport-operator')
+  end
+  
+  def default_assignment
+    self.assignments.first
   end
   
   # Makes a random token, suitable for using in URLs e.g confirmation messages.
