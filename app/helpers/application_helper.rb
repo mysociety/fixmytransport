@@ -127,17 +127,12 @@ module ApplicationHelper
     if modes.include? 'Bus' or modes.include? 'Coach' or modes.include? 'Ferry'
       return link_to(t(:live_departures), "http://mytraveline.mobi/departureboard?stopCode=#{stop.atco_code}")
     else
-      return ''
+      return "&nbsp;"
     end
   end
   
   def transport_direct_link(stop)
-    modes = stop.transport_mode_names
-    if modes.include? 'Bus' or modes.include? 'Coach' or modes.include? 'Ferry'
-      return link_to(t(:transport_direct), "http://www.transportdirect.info/web2/journeyplanning/StopInformationLandingPage.aspx?et=si&id=fixmytransport&st=n&sd=#{stop.atco_code}")
-    else
-      return ''
-    end
+    return link_to(t(:transport_direct), "http://www.transportdirect.info/web2/journeyplanning/StopInformationLandingPage.aspx?et=si&id=fixmytransport&st=n&sd=#{stop.atco_code}")
   end
   
   def external_search_link(text)
