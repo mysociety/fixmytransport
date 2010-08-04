@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100803154356) do
+ActiveRecord::Schema.define(:version => 20100804100334) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -297,6 +297,13 @@ ActiveRecord::Schema.define(:version => 20100803154356) do
   add_index "stop_areas", ["coords"], :name => "index_stop_areas_on_coords", :spatial => true
   add_index "stop_areas", ["locality_id"], :name => "index_stop_areas_on_locality_id"
 
+  create_table "stop_operators", :force => true do |t|
+    t.integer  "operator_id"
+    t.integer  "stop_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "stop_types", :force => true do |t|
     t.string   "code"
     t.string   "description"
@@ -417,6 +424,9 @@ ActiveRecord::Schema.define(:version => 20100803154356) do
 
   add_foreign_key "stop_area_memberships", "stop_areas", :name => "stop_area_memberships_stop_area_id_fk"
   add_foreign_key "stop_area_memberships", "stops", :name => "stop_area_memberships_stop_id_fk"
+
+  add_foreign_key "stop_operators", "operators", :name => "stop_operators_operator_id_fk", :dependent => :nullify
+  add_foreign_key "stop_operators", "stops", :name => "stop_operators_stop_id_fk", :dependent => :nullify
 
   add_foreign_key "stories", "users", :name => "problems_reporter_id_fk", :column => "reporter_id", :dependent => :nullify
 
