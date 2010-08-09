@@ -32,6 +32,7 @@ class Gazetteer
     query = 'stop_type in (?)'
     params = [stop_type_codes]
     includes = [:locality]
+    order = nil
     if !attributes[:postcode].blank?
       coord_info = coords_from_postcode(attributes[:postcode])
       if coord_info == :postcode_not_found
@@ -43,6 +44,10 @@ class Gazetteer
                   stops.coords) < 1000"
         params << coord_info['easting'].to_i
         params << coord_info['northing'].to_i
+        order = "ST_Distance(
+                  ST_GeomFromText('POINT(#{coord_info['easting'].to_i} #{coord_info['northing'].to_i})', 
+                  #{BRITISH_NATIONAL_GRID}), 
+                  stops.coords)"
       end
     end
     if !attributes[:area].blank?
@@ -75,7 +80,8 @@ class Gazetteer
     if errors.empty? 
       stops = Stop.find(:all, :conditions => conditions, 
                               :limit => options[:limit], 
-                              :include => includes)
+                              :include => includes,
+                              :order => order)
     end
     if !options[:stops_only] and stops.size > 1 
       stop_area = Stop.common_area(stops, attributes[:transport_mode_id])
