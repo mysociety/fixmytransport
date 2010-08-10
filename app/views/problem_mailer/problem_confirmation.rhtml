@@ -1,18 +1,18 @@
-Hi <%= @recipient.name %>,
+Hi <%= raw @recipient.name %>,
 
 Please click on the link below to confirm the problem you just
 added to FixMyTransport:
 
-<%= @link %>
+<%= raw @link %>
 
 If your email program does not let you click on this link, copy
 and paste it into your web browser and press return.
 
-Your problem had the subject: <%= @problem.subject %>
- 
-And description: <%= @problem.description %>
+Your problem had the subject: <%= raw @problem.subject %>
 
-Your name will be shown on the site as: <%= @recipient.anonymous? ? t(:anonymous) : @recipient.name %>
+And description: <%= raw @problem.description %>
+
+Your name will be shown on the site as: <%= raw (@recipient.anonymous? ? t(:anonymous) : @recipient.name) %>
 
 Yours,
 The mySociety team

@@ -1,41 +1,35 @@
-Dear <%= @problem.operator.name %>,
+Dear <%= raw @problem.operator.name %>,
 
-A user of FixMyTransport has submitted the following report of a 
-problem <%= on_or_at_the(@problem.location) %> <%= @problem.location.name %>
-<%= readable_location_type(@problem.location) %> that they believe might require your attention.
+A user of FixMyTransport has submitted the following report of a problem <%= on_or_at_the(@problem.location) %> 
+<%= raw @problem.location.name %> that they believe might require your attention.
  
-To view a map of the precise location of this issue, or to
-provide an update on the problem, please visit the following
-link:
+To view a map of the precise location of this issue, or to provide an update on the problem, 
+please visit the following link:
 
-<%= @problem_link %>
+<%= raw @problem_link %>
 
 ----------
 
-Name: <%= @problem.reporter.name %>
+Name: <%= raw @problem.reporter.name %>
 
-Email: <%= @problem.reporter.email %>
+Email: <%= raw @problem.reporter.email %>
 
-<%- if @problem.reporter.phone.blank? %>
-Phone: <%= @problem.reporter.phone %>
+<%- if !@problem.reporter.phone.blank? %>
+Phone: <%= raw @problem.reporter.phone %>
 
 <%- end %>
-Subject: <%= @problem.subject %>
+Subject: <%= raw @problem.subject %>
 
-Details: <%= @problem.description %>
+Details: <%= raw @problem.description %>
 
 ----------
 
-Replies to this email will go to the user who submitted the
-problem.
+Replies to this email will go to the user who submitted the problem.
 
 Yours,
 The FixMyTransport team
 
-[ This message was sent via FixMyTransport, a project of UKCOD,
-registered charity number 1076346. If there is a more
-appropriate email address for messages about this type of
-problem, please let us know by visiting
-<<%= @feedback_link %>>. This will help improve
-the service for people travelling. We also welcome any other
-feedback you may have. ]
+[ This message was sent via FixMyTransport, a project of UKCOD, registered charity number 1076346. 
+If there is a more appropriate email address for messages about this type of problem, please let us know 
+by visiting <<%= raw @feedback_link %>>. This will help improve the service for people travelling. We also 
+welcome any other feedback you may have. ]
