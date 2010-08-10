@@ -1,4 +1,4 @@
-class AddAnonymousAndPhoneToUsers < ActiveRecord::Migration
+class AddPublicAndPhoneToUsers < ActiveRecord::Migration
   def self.up
     add_column :users, :public, :boolean
     add_column :users, :phone, :string

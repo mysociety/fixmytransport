@@ -3,6 +3,7 @@ class Problem < ActiveRecord::Base
   belongs_to :reporter, :class_name => 'User'
   belongs_to :transport_mode
   belongs_to :operator
+  has_many :assignments
   accepts_nested_attributes_for :reporter
   validates_presence_of :transport_mode_id, :unless => :location
   validates_presence_of :description, :subject, :category, :if => :location
@@ -11,9 +12,9 @@ class Problem < ActiveRecord::Base
   cattr_accessor :categories
   after_create :send_confirmation_email
   before_create :generate_confirmation_token
-  named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
-  named_scope :unsent, :conditions => ['sent_at is null'], :order => 'created_at desc'
-  named_scope :with_operator, :conditions => ['operator_id is not null'], :order => 'created_at desc'
+  named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'confirmed_at desc'
+  named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
+  named_scope :with_operator, :conditions => ['operator_id is not null'], :order => 'confirmed_at desc'
   
   @@categories = ['New route', 'Keep route', 'Get repair', 'Lateness', 'Other']
   

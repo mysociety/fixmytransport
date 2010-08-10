@@ -32,10 +32,10 @@ describe ProblemsController do
     end
     
     def make_request
-      post :find, {:problem => {:transport_mode_id => 5, 
-                                :location_attributes => 
-                                  {:name => 'My stop', 
-                                   :area => 'My town'}}}
+      post :find, { :problem => { :transport_mode_id => 5, 
+                                  :location_attributes => 
+                                  { :name => 'My stop', 
+                                    :area => 'My town'} } }
     end
   
     it 'should create a new problem' do 
@@ -63,4 +63,90 @@ describe ProblemsController do
     end
     
   end
+  
+  describe "POST #create" do 
+
+    before do 
+      @stop = stops(:victoria_station_one)
+      @mock_user = mock_model(User)
+      @mock_problem = mock_model(Problem, :save => true, 
+                                          :location => @stop,
+                                          :reporter => @mock_user)
+      Problem.stub!(:new).and_return(@mock_problem)
+      @mock_assignment = mock_model(Assignment)
+      Assignment.stub!(:create_assignment).and_return(@mock_assignment)
+      @problem_attributes = {}
+    end
+    
+    def make_request
+      post :create, { :problem => @problem_attributes }
+    end
+    
+    it 'should create a new problem using the attributes passed to it' do 
+      Problem.should_receive(:new).with(@problem_attributes)
+      make_request
+    end
+    
+    it 'should try to save the problem' do 
+      @mock_problem.should_receive(:save)
+      make_request
+    end
+    
+    it 'should render the "new" template if the problem cannot be saved' do 
+      @mock_problem.stub!(:save).and_return(false)
+      make_request
+      response.should render_template('problems/new')
+    end
+    
+    it 'should show the confirmation notice if the problem can be saved' do 
+      make_request
+      flash[:notice].should == "We've sent you an email to confirm that you want to create this problem. We'll hold on to it while you're checking your email."
+    end
+    
+    it 'should redirect to the problem location page if the problem can be saved' do 
+      make_request
+      response.should redirect_to(stop_url(@stop.locality, @stop))
+    end
+    
+    it 'should create an "in-progress" "write-to-the-operator" assignment associated with the problem' do 
+      expected_attributes = { :status => :in_progress, 
+                              :task_type_name => 'write-to-transport-operator', 
+                              :user => @mock_user, 
+                              :problem => @mock_problem }
+      Assignment.should_receive(:create_assignment).with(expected_attributes).and_return(@mock_assignment)
+      make_request
+    end
+    
+  end
+  
+   describe "GET #confirm" do 
+     
+     before do 
+       @mock_assignment = mock_model(Assignment)
+       @mock_problem = mock_model(Problem, :update_attributes => true, :assignments => [@mock_assignment])
+       Problem.stub!(:find_by_token).and_return(@mock_problem)
+       Assignment.stub!(:complete_problem_assignment)
+     end
+     
+     def make_request
+       get :confirm, { :email_token => "my-test-token" }
+     end
+     
+     it 'should look for the problem by token' do 
+       Problem.should_receive(:find_by_token).with("my-test-token")
+       make_request
+     end
+     
+     it 'should set the confirmed flag and confirmed time on the problem' do 
+       @mock_problem.should_receive(:update_attributes).with(:confirmed => true, :confirmed_at => anything)
+       make_request
+     end
+     
+     it 'should set the "write-to-operator" assignment associated with this user and problem as complete' do 
+       Assignment.should_receive(:complete_problem_assignment).with(@mock_problem, 'write-to-transport-operator')
+       make_request
+     end
+     
+   end
+  
 end

@@ -2,6 +2,7 @@ class Assignment < ActiveRecord::Base
   belongs_to :campaign
   belongs_to :user
   serialize :data
+  belongs_to :problem
   
   STATUS_CODES = { 0 => 'In Progress', 
                    1 => 'Complete' }
@@ -22,7 +23,7 @@ class Assignment < ActiveRecord::Base
   def status=(symbol)
     code = SYMBOL_TO_STATUS_CODE[symbol]
     if code.nil? 
-      raise "Unknown status for task #{symbol}"
+      raise "Unknown status for assignment #{symbol}"
     end
     self.status_code = code
   end
@@ -36,11 +37,9 @@ class Assignment < ActiveRecord::Base
   end
   
   # class methods
+  
   def self.create_assignment(attributes)
-    assignment = create( :task_type_name => attributes[:task_type_name], 
-                         :user => attributes[:user], 
-                         :status => attributes[:status], 
-                         :data => attributes[:data] )
+    assignment = create(attributes)
     task_attributes = { :task_type_id => attributes[:task_type_name], 
                         :status => attributes[:status], 
                         :callback_params => { :assignment_id => assignment.id }}
@@ -49,6 +48,14 @@ class Assignment < ActiveRecord::Base
       assignment.task_id = task.id
       assignment.save
     end
+  end
+  
+  # Assumes that only the problem reporter ever gets assignments related to the problem
+  def self.complete_problem_assignment(problem, task_type_name)
+    assignment = find(:first, :conditions => ["task_type_name = ? and problem_id = ? and user_id = ?", 
+                                             task_type_name, problem.id, problem.reporter.id])
+    assignment.status = :complete
+    assignment.save
   end
   
 end

@@ -57,17 +57,18 @@ describe Assignment do
          @mock_assignment = mock_model(Assignment, :task_id= => true, 
                                                    :save => true, 
                                                    :id => 22)
+         @mock_problem = mock_model(Problem) 
          @attribute_hash = { :task_type_name => 'test-task-type-name', 
                              :user => @mock_user, 
                              :status => :complete, 
-                             :data => { :problem_id => 44} }
+                             :problem => @mock_problem }
        end
   
        it 'should create an assignment with the task type name, user and status values of the hash' do 
          Assignment.should_receive(:create).with(:task_type_name => 'test-task-type-name', 
                                                  :user => @mock_user, 
                                                  :status => :complete,
-                                                 :data => { :problem_id => 44 }).and_return(@mock_assignment)
+                                                 :problem => @mock_problem).and_return(@mock_assignment)
          Assignment.create_assignment(@attribute_hash)
        end
  
@@ -80,5 +81,33 @@ describe Assignment do
          Assignment.create_assignment(@attribute_hash)
        end
 
+    end
+    
+    describe "when completing a problem assignment" do 
+      
+      before do 
+        @mock_user = mock_model(User, :id => 44)
+        @mock_problem = mock_model(Problem, :reporter => @mock_user)
+        @mock_assignment = mock_model(Assignment, :status= => true, :save => true)
+        Assignment.stub!(:find).and_return(@mock_assignment)
+      end
+    
+      it 'should find the assignment associated with the problem, problem reporter and task type name' do 
+        expected_conditions = ["task_type_name = ? and problem_id = ? and user_id = ?", 
+                               'write-to-transport-operator', @mock_problem.id, @mock_user.id]
+        Assignment.should_receive(:find).with(:first, :conditions => expected_conditions)
+        Assignment.complete_problem_assignment(@mock_problem, 'write-to-transport-operator')
+      end
+      
+      it 'should mark the assignment as complete' do 
+        @mock_assignment.should_receive(:status=).with(:complete)
+        Assignment.complete_problem_assignment(@mock_problem, 'write-to-transport-operator')
+      end
+      
+      it 'should save the assignment' do 
+        @mock_assignment.should_receive(:save)
+        Assignment.complete_problem_assignment(@mock_problem, 'write-to-transport-operator')
+      end
+      
     end
 end

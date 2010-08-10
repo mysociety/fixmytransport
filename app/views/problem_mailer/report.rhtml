@@ -16,6 +16,10 @@ Name: <%= @problem.reporter.name %>
 
 Email: <%= @problem.reporter.email %>
 
+<%- if @problem.reporter.phone.blank? %>
+Phone: <%= @problem.reporter.phone %>
+
+<%- end %>
 Subject: <%= @problem.subject %>
 
 Details: <%= @problem.description %>

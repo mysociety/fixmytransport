@@ -8,7 +8,8 @@ describe ProblemMailer do
       @problem = mock_model(Problem, :subject => "My Problem", 
                                      :description => "Some description")
       @recipient = mock_model(User, :email => "problemreporter@example.com", 
-                                    :name => "Problem Reporter")
+                                    :name => "Problem Reporter", 
+                                    :anonymous? => false)
       @token = "test-token"
     end
   
@@ -40,7 +41,9 @@ describe ProblemMailer do
       @mock_operator = mock_model(Operator, :email => 'operator@example.com', 
                                             :name => 'Test Operator')
       @mock_user = mock_model(User, :name => 'Test User', 
-                                    :email => 'user@example.com')
+                                    :email => 'user@example.com', 
+                                    :phone => '123',
+                                    :anonymous? => false)
       @mock_problem = mock_model(Problem, :operator => @mock_operator, 
                                           :reporter => @mock_user,
                                           :subject => "Missing ticket machines", 

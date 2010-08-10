@@ -2,7 +2,7 @@ class ProblemsController < ApplicationController
   
   def new
     location = params[:location_type].constantize.find(params[:location_id])
-    @problem = Problem.new(:location => location)
+    @problem = Problem.new(:location => location, :reporter => User.new)
     if location.respond_to? :transport_mode_id
       @problem.transport_mode_id = location.transport_mode_id
     else
@@ -23,10 +23,11 @@ class ProblemsController < ApplicationController
     @problem = Problem.new(params[:problem])
     if @problem.save
       # create task assignment
-      Assignment.create_assignment(:task_type_name => 'write-to-transport-operator', 
-                                   :status => :in_progress,
-                                   :user => @problem.reporter,
-                                   :data => { :problem_id => @problem.id })
+      assignment_attributes = { :task_type_name => 'write-to-transport-operator', 
+                                :status => :in_progress,
+                                :user => @problem.reporter,
+                                :problem => @problem }
+      Assignment.create_assignment(assignment_attributes)
       flash[:notice] = t(:confirmation_sent)
       redirect_to location_url(@problem.location)
     else
@@ -41,8 +42,10 @@ class ProblemsController < ApplicationController
   def confirm
     @problem = Problem.find_by_token(params[:email_token])
     if @problem
-      @problem.update_attribute(:confirmed, true)
+      @problem.update_attributes(:confirmed => true,  
+                                 :confirmed_at => Time.now)
       # complete the assignment
+      assignment = Assignment.complete_problem_assignment(@problem, 'write-to-transport-operator')
     else
       @error = t(:problem_not_found)
     end
