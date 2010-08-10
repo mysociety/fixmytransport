@@ -1,0 +1,7 @@
+- content_for :javascript do 
+  != map_javascript_include_tags
+:javascript
+  var areaStops = #{location_stops_js(locations)}
+  jQuery(document).ready(function(){
+     area_init();
+  });

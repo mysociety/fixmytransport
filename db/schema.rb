@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100804100334) do
+ActiveRecord::Schema.define(:version => 20100809133812) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -138,6 +138,21 @@ ActiveRecord::Schema.define(:version => 20100804100334) do
     t.text     "email"
     t.boolean  "email_confirmed"
     t.text     "notes"
+  end
+
+  create_table "problems", :force => true do |t|
+    t.text     "subject"
+    t.text     "description"
+    t.integer  "location_id"
+    t.string   "location_type"
+    t.integer  "transport_mode_id"
+    t.string   "token"
+    t.integer  "reporter_id"
+    t.string   "category"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "operator_id"
+    t.boolean  "confirmed"
   end
 
   create_table "regions", :force => true do |t|

@@ -1,0 +1,28 @@
+- if @problem.location_errors and !@problem.location_errors.empty? 
+  - @problem.location_errors.each do |location_error|
+    .location-error= t(location_error)
+.fieldset
+  = @problem.errors.full_messages
+  - if @problem.errors.on(:location)
+    .form-field-error= error_message_on @problem, :location  
+  .form-field
+    - if @problem.errors.on(:transport_mode_id)
+      .form-field-error= error_message_on @problem, :transport_mode_id
+    %label{:for => 'transport_mode_id', :style => 'display: none;'}
+      =t(:transport_mode)
+    #chosen-transport-mode{:class=>"main-transport-#{@problem.transport_mode_css_name}"}
+      != transport_mode_radio_buttons(form, 'problem')
+      - if @problem.errors.on(:location_attributes)
+        .form-field-error= error_message_on @problem, :location_attributes
+    .form-field
+      != label_tag 'problem[location_attributes][name]', t(:location_name)
+      != text_field_tag 'problem[location_attributes][name]', location_param(:name)
+      #guidance-name{:class => 'guidance'} e.g. London Euston
+    .form-field
+      != label_tag 'problem[location_attributes][route_number]', t(:route_number)
+      != text_field_tag 'problem[location_attributes][route_number]', location_param(:route_number)
+      #guidance-route{:class => 'guidance'} e.g. C10, Cardiff to Exeter
+    .form-field
+      != label_tag 'problem[location_attributes][area]', t(:area)
+      != text_field_tag 'problem[location_attributes][area]', location_param(:area)
+      #guidance-area{:class => 'guidance'} e.g. Bristol

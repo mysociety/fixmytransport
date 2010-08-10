@@ -125,6 +125,21 @@ ul.navigation li {
 }
 
 /* Home page */
+p.site-description {
+  text-align: center;
+  font-size: 150%;
+}
+
+
+.problem-form-wrapper { 
+  text-align: center;
+}
+
+.problem-form {
+  width: 45%;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .homepage .new-campaign, 
 .homepage .latest-campaigns {
@@ -470,9 +485,9 @@ form.new_feedback label {
   list-style-type: none;
 }
 
-/* Adding a campaign */
+/* Adding a problem */
 
-form.new_campaign label{
+form.new_problem label{
   width: 10em;  
 }
 
@@ -576,11 +591,11 @@ ul.stops {
   max-width: 45%;
 }
 
-form.create_campaign label{
+form.create_problem label{
   width: 6em;  
 }
 
-form.create_campaign .checkbox label{
+form.create_problem .checkbox label{
   float: none;
   display: block-inline;
   font-size: 0.8em;

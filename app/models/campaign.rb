@@ -1,57 +1,15 @@
-
 class Campaign < ActiveRecord::Base
-  validates_presence_of :transport_mode_id
-  validates_presence_of :description, :title, :category, :if => :location
-  validate :validate_location_attributes
   belongs_to :reporter, :class_name => 'User'
-  accepts_nested_attributes_for :reporter
   belongs_to :location, :polymorphic => true
   belongs_to :transport_mode
   has_many :assignments
-  attr_accessor :location_attributes, :locations, :location_search, :location_errors
-  after_create :send_confirmation_email, :add_default_assignment
-  before_create :generate_confirmation_token
+  after_create :add_default_assignment
+  validates_presence_of :title, :description
   named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
   cattr_reader :per_page, :categories
   @@per_page = 10
   @@categories = ['New route', 'Keep route', 'Get repair', 'Adopt', 'Other']
 
-  def validate_location_attributes
-    return true if location
-    if ! location_attributes_valid?
-      errors.add(:location_attributes, ActiveRecord::Error.new(self, :location_attributes, :blank).to_s)
-    end
-  end
-  
-  def location_attributes_valid?
-    if ! location_attributes or (location_attributes[:name].blank? and
-                       location_attributes[:area].blank? and
-                       location_attributes[:route_number].blank?)
-      return false
-    else
-      return true
-    end
-  end
-  
-  def location_from_attributes
-    self.locations = []
-    return unless transport_mode_id
-    return unless location_attributes_valid?
-    location_attributes[:transport_mode_id] = transport_mode_id
-    if !location_attributes[:route_number].blank? and location_attributes[:name].blank?
-      location_search.add_method('Gazetteer.find_routes_from_attributes') if location_search
-      results = Gazetteer.find_routes_from_attributes(location_attributes, :limit => MAX_LOCATION_RESULTS)
-    else
-      location_search.add_method('Gazetteer.find_stops_from_attributes') if location_search
-      results = Gazetteer.find_stops_from_attributes(location_attributes, :limit => MAX_LOCATION_RESULTS)
-    end
-    self.locations = results[:results]
-    self.location_errors = results[:errors]
-    if self.locations.empty? && self.location_errors.empty? 
-      self.location_errors << :campaign_location_not_found
-    end
-  end
-  
   def add_default_assignment
     self.assignments.create(:user_id => reporter.id, :task_type_name => 'write-to-transport-operator')
   end
@@ -60,22 +18,8 @@ class Campaign < ActiveRecord::Base
     self.assignments.first
   end
   
-  # Makes a random token, suitable for using in URLs e.g confirmation messages.
-  def generate_confirmation_token
-    self.token = MySociety::Util.generate_token
-  end
-  
-  def send_confirmation_email
-    CampaignMailer.deliver_campaign_confirmation(reporter, self, token)
-  end
-  
   def self.find_recent(number)
     confirmed.find(:all, :order => 'created_at desc', :limit => number, :include => [:location, :reporter])
-  end
-  
-  # campaigns usually start with no transport_mode
-  def transport_mode_css_name
-    return self.transport_mode.nil? ? 'none' : self.transport_mode.css_name
   end
   
 end

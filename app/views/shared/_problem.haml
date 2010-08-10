@@ -1,0 +1,8 @@
+%a{:name => "problem_#{problem.id}"}
+.problem
+  %h4.subject= problem.subject 
+  .details
+    =t(:added)
+    %span.posted-time= t(:posted_time, :time => time_ago_in_words(problem.created_at))
+    %span.author= problem.reporter.name.blank? ? t(:anonymously) : t(:by, :name => problem.reporter.name)
+  %p.problem= problem.description

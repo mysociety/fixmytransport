@@ -1,6 +1,0 @@
-    
-%form{:action => "#{MySociety::Config.get("FOSBURY_URL")}/tasks/#{params[:task_id]}", :method => 'POST'}
-  %input{:type => 'hidden', :name => 'task[status]', :value => "complete" }
-  %input{:type => 'hidden', :name => 'task[data][email_content]', :value => "Don't close the C10, please." }
-  %input{:type => 'hidden', :name => '_method', :value => "put" }
-  %input{:type => 'submit', :value => t(:complete_task)}

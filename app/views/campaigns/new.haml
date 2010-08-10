@@ -1,14 +1,7 @@
 .homepage
-  - cache('recent_campaigns') do 
-    .latest-campaigns
-      %a{:href => campaigns_url(:format => 'atom'), :class => 'rss-link'}
-        %span= t(:feed)
-        %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:campaigns_feed) }
-      %h3= t(:latest_campaigns)
-      = render :partial => 'campaign', :collection => Campaign.find_recent(5)
-      %span.more-link=link_to t(:more_recent_campaigns), campaigns_url
-  .new-campaign
-    %h3= t(:browse_or_create_campaign) 
-    - form_for @campaign, :url => find_campaigns_path do |form| 
-      = render :partial => 'campaigns/form', :locals => { :form => form }
-      != submit_tag t(:go)
+  %p.site-description=t(:get_problems_fixed)
+  .campaign-form-wrapper
+    .campaign-form
+      - form_for @campaign, :url => find_campaigns_path do |form| 
+        = render :partial => 'campaigns/form', :locals => { :form => form }
+        != submit_tag t(:go)

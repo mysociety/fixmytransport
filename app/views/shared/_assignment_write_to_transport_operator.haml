@@ -1,0 +1,3 @@
+.complete-assignment
+  = "#{assignment.user.name} wrote to #{Operator.find(assignment.data['operator_id']).name}:"
+  .email-content= "#{assignment.data['email_content']}"                 

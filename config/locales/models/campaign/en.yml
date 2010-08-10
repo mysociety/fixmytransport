@@ -1,0 +1,10 @@
+en:
+  activerecord:
+    errors:
+      models:
+        campaign:
+          attributes: 
+            title:
+              blank: "Please give your campaign a title"
+            description:
+              blank: "Please give a brief description of your campaign"

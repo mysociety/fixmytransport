@@ -1,13 +1,9 @@
 - content_for :javascript do 
   != map_javascript_include_tags
 - cache("stop_area_#{@stop_area.id}") do 
+  = render :partial => 'shared/location_map_js', :locals => { :locations => [@stop_area] }
   #map-col
     #map
-    :javascript
-      var areaStops = #{location_stops_js(@stop_area.stops)}
-      jQuery(document).ready(function(){
-         area_init();
-      });
     .extra-info
       The following stops are here: 
       - @stop_area.stops.each do |stop|
@@ -23,4 +19,4 @@
     .details
       - if !@stop_area.area.blank?
         %span.locality= "In #{@stop_area.area}"
-= render :partial => 'shared/location_campaigns', :locals => {:location => @stop_area}
+= render :partial => 'shared/location_content', :locals => { :location => @stop_area }

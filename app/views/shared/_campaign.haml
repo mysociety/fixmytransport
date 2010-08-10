@@ -1,10 +1,10 @@
 %a{:name => "campaign_#{campaign.id}"}
 .campaign
-  %h3.title= campaign.title 
+  %h4.title= campaign.title 
   .details
     =t(:added)
-    %span.posted-time= t(:campaign_posted_time, :time => time_ago_in_words(campaign.created_at))
+    %span.posted-time= t(:posted_time, :time => time_ago_in_words(campaign.created_at))
     - if context != :location
       %span.transport-location!= t(:campaign_location, :link => link_to(campaign.location.description, location_url(campaign.location)))
-    %span.author= campaign.reporter.name.blank? ? t(:anonymously) : t(:campaign_by, :name => campaign.reporter.name)
+    %span.author= campaign.reporter.name.blank? ? t(:anonymously) : t(:by, :name => campaign.reporter.name)
   %p.campaign= campaign.description

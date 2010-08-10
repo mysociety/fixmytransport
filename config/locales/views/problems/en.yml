@@ -8,7 +8,7 @@ en:
   area: 'Town/area/postcode'
   route_number: 'Route'
   location_type: 'Stop, station or route'
-  campaign_location_not_found: "Sorry, we couldn't find that location."
+  problem_location_not_found: "Sorry, we couldn't find that location."
   postcode_not_found: "That postcode wasn't recognized."
   area_not_found: "We couldn't find a town or area that matches what you entered."
   go: Go!
@@ -19,11 +19,19 @@ en:
   try_another: "Try again?"
   location_response_yes: "Yes, this is what I was looking for"
   location_response_no: "No, this is not what I was looking for"
-  confirmation_sent: "We've sent you an email to confirm that you want to create this campaign. We'll hold on to it while you're checking your email."
-  campaign_not_found: "We couldn't locate your campaign in the database. If you've copied the URL from an email, please check that you copied it exactly."
-  campaign_posted_time: "{{time}} ago"
+  confirmation_sent: "We've sent you an email to confirm that you want to create this problem. We'll hold on to it while you're checking your email."
+  problem_not_found: "We couldn't locate your problem in the database. If you've copied the URL from an email, please check that you copied it exactly."
+  posted_time: "{{time}} ago"
   added: added
-  campaign_by: "by {{name}}"
+  by: "by {{name}}"
   anonymously: "anonymously"
   anonymous: "anonymous"
-  campaign_location: "to {{link}}"
+  problem_will_be_sent: "Your problem will be sent to {{operator}}"
+  no_operators_for_problem: "We don't currently know who is responsible for this {{location_type}}. Your problem will be shown on the site."
+  thanks_for_adding_problem: You've successfully confirmed your problem
+  see_your_problem: See your problem on the site
+  reported_at: "Reported at {{time}}"
+  problem_location: "to {{link}}"
+  report_a_problem_here: Report a problem here
+  report_a_problem: Report a problem
+  reporting_a_problem: "{{location}}: Reporting a problem"

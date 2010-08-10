@@ -1,12 +1,15 @@
 ActionController::Routing::Routes.draw do |map|
 
   # home page
-  map.root :controller => 'campaigns', :action => 'new'
+  map.root :controller => 'problems', :action => 'frontpage'
 
   # resources
-  map.resources :campaigns, :except => [:update, :edit, :create], 
-                          :collection => {:choose_location => :get, :find => :post}
-  map.confirm '/c/:email_token', :action => 'confirm', :controller => 'campaigns'
+  map.resources :campaigns, :only => [:index, :show]
+  
+  map.resources :problems, :only => [:new, :create, :show], 
+                           :collection => {:choose_location => :get, :find => :post}
+                           
+  map.confirm '/c/:email_token', :action => 'confirm', :controller => 'problems'
   
   # stops
   map.random_stops "/stops/random.:format", :controller => "stops",
@@ -52,8 +55,9 @@ ActionController::Routing::Routes.draw do |map|
                                          :action => 'write', 
                                          :conditions => { :method => [:get, :post] }
 
+  # assignments
   map.resources :assignments, :only => [:update]
-  
+
   # static
   map.about '/about', :controller => 'static', :action => 'about'
   map.feedback '/feedback', :controller => 'static', 

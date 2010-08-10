@@ -1,19 +1,12 @@
 - content_for :javascript do 
   != map_javascript_include_tags
 - cache("stop_#{@stop.id}") do 
+  = render :partial => 'shared/location_map_js', :locals => { :locations => [@stop] }
   #map-col
     #map
-    :javascript
-      var stop_lon = #{@stop.lon};
-      var stop_lat = #{@stop.lat};
-      var stop_id = #{@stop.id};
-      var stop_name = "#{@stop.full_name}";
-      jQuery(document).ready(function(){
-         stop_init();
-      });
     .extra-info
       .transport-direct= transport_direct_link(@stop)
-      .departures= departures_link(@stop)
+      .departures!= departures_link(@stop)
       =render :partial => "shared/route_list", :locals => { :stop => @stop }
   .stop
     %a{:href => location_url(@stop, :format => 'atom'), :class => 'rss-link campaign-rss'}
@@ -31,4 +24,4 @@
         Part of
         -@stop.stop_areas.each do |stop_area|
           %span.stop-area= link_to("#{stop_area.name} stop area", stop_area_url(stop_area.locality, stop_area))
-= render :partial => 'shared/location_campaigns', :locals => { :location => @stop }
+= render :partial => 'shared/location_content', :locals => { :location => @stop }

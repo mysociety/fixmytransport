@@ -4,6 +4,11 @@ describe AssignmentsController do
 
   describe 'responding to PUT #update' do 
   
+    before do 
+      mock_assignment = mock_model(Assignment, :id => 11)
+      Assignment.stub!(:find).and_return(mock_assignment)
+    end
+    
     def make_request
       put :update, { :id => 11,
                      :campaign_id => 22, 

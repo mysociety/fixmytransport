@@ -1,13 +1,9 @@
 - content_for :javascript do 
   != map_javascript_include_tags
 - cache("route_#{@route.id}") do 
+  = render :partial => 'shared/location_map_js', :locals => { :locations => [@route] }
   #map-col
     #map
-    :javascript
-      var areaStops = #{location_stops_js([@route])}
-      jQuery(document).ready(function(){
-         area_init();
-      });
     .extra-info
       %ul.stops   
         Stops:
@@ -28,4 +24,4 @@
               %li= operator.name 
       .terminuses
         != terminus_text(@route)
-= render :partial => 'shared/location_campaigns', :locals => {:location => @route}
+= render :partial => 'shared/location_content', :locals => { :location => @route }

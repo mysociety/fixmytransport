@@ -1,28 +1,21 @@
-- content_for :javascript do 
-  != map_javascript_include_tags
 - if @campaign.location
   #map-col
     #map
-    :javascript
-      var areaStops = #{location_stops_js([@campaign.location])}
-      jQuery(document).ready(function(){
-         area_init();
-      });
-  .campaign-info
-    %h3= @campaign.title
-    %p.campaign= @campaign.description
-    %p.start-date
-      %b= t(:campaign_start_date)
-      =@campaign.created_at.strftime("%d/%m/%Y") 
-      
-  %form{:action => "#{MySociety::Config.get("FOSBURY_URL")}/tasks", :method => "POST" }
-    %input{:type => 'hidden', :name => 'task[task_type_id]', :value => @campaign.default_assignment.task_type_name }
-    %input{:type => 'hidden', :name => 'location_id', :value => @campaign.location.id}
-    %input{:type => 'hidden', :name => 'location_type', :value => @campaign.location.type }
-    %input{:type => 'hidden', :name => 'task[callback_url]', :value => assignment_url(@campaign.default_assignment) }
-    %input{:type => 'hidden', :name => 'task[callback_params][user_id]', :value => @campaign.reporter.id }
-    %input{:type => 'hidden', :name => 'task[callback_params][campaign_id]', :value => @campaign.id }
-    %input{:type => 'hidden', :name => 'task[callback_params][_method]', :value => 'put' }
-    %input{:type => 'hidden', :name => 'task[return_url]', :value => campaign_url(@campaign) }
-    %input{:type => 'submit', :value => t(:write_to_operator)}
-    
+    = render :partial => 'shared/location_map_js', :locals => { :locations => [@campaign.location] }
+.campaign-info
+  %h3= @campaign.title
+  %p.campaign= @campaign.description
+  %p.start-date
+    %b= t(:campaign_start_date)
+    =@campaign.created_at.strftime("%d/%m/%Y") 
+- @campaign.assignments.completed.each do |assignment|
+  = render :partial => "shared/assignment_#{assignment.task_type}", :locals => { :assignment => assignment }
+- form_for(@task) do |f|
+  != f.hidden_field :task_type_id
+  != f.hidden_field :return_url
+  - f.fields_for :callback_params do |callback_fields|
+    != callback_fields.hidden_field :assignment_id, :value => @task.callback_params.assignment_id
+  - f.fields_for :params do |fields|
+    != fields.hidden_field :location_id, :value => @campaign.location_id
+    != fields.hidden_field :location_type, :value => @campaign.location_type
+  != submit_tag t(:write_to_operator)

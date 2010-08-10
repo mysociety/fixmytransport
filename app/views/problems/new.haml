@@ -1,0 +1,46 @@
+- @title = t(:reporting_a_problem, :location => @problem.location.name)
+#map-col
+  #map
+  = render :partial => 'shared/location_map_js', :locals => { :locations => [@problem.location] }
+%h3= @title
+- form_for @problem, :url => problems_url, :html => {:class => 'create_problem'} do |f| 
+  != f.hidden_field :location_id
+  != f.hidden_field :location_type
+  .fieldset
+    .form-field
+      - if @problem.location.operators.size > 1
+        - if @problem.errors.on('operator_id')
+          .form-field-error= error_message_on @problem, :operator_id
+        != f.select("operator_id", @problem.location.operators)
+      - elsif @problem.location.operators.size == 1
+        != f.hidden_field :operator_id, :value => @problem.location.operators.first.id
+        %p=t(:problem_will_be_sent, :operator => @problem.location.operators.first.name)
+      - else 
+        %p= t(:no_operators_for_problem, :location_type => @problem.location.type.to_s.humanize.downcase)
+    - if @problem.errors.on('category')
+      .form-field-error= error_message_on @problem, :category
+    .form-field
+      = f.label :category
+      != f.select("category", Problem.categories, { :include_blank => true })
+    - if @problem.errors.on('subject')
+      .form-field-error= error_message_on @problem, :subject
+    .form-field
+      = f.label :subject
+      != f.text_field :subject
+    - if @problem.errors.on('description')
+      .form-field-error= error_message_on @problem, :description
+    .form-field
+      = f.label :description
+      != f.text_area :description, {:rows => 5}
+    - f.fields_for :reporter_attributes do |reporter_fields|
+      - if @problem.errors.on('reporter.email')
+        .form-field-error= error_message_on @problem, 'reporter.email'
+      .form-field
+        = reporter_fields.label :email
+        != reporter_fields.text_field :email
+      - if @problem.errors.on('reporter.name')
+        .form-field-error= error_message_on @problem, 'reporter.name'
+      .form-field
+        = reporter_fields.label :name
+        != reporter_fields.text_field :name
+  != submit_tag t(:go)    

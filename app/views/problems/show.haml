@@ -1,0 +1,12 @@
+- @title = "#{@problem.location.name}: #{@problem.subject}"
+#map-col
+  #map
+  = render :partial => 'shared/location_map_js', :locals => { :locations => [@problem.location] }
+.problem
+  %h2.subject= @title
+  .details
+    =t(:added)
+    %span.posted-time= t(:posted_time, :time => time_ago_in_words(@problem.created_at))
+    %span.author= @problem.reporter.name.blank? ? t(:anonymously) : t(:by, :name => @problem.reporter.name)
+    %span.transport-location!= t(:problem_location, :link => link_to(@problem.location.description, location_url(@problem.location)))
+  %p.problem= @problem.description
