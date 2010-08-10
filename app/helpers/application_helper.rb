@@ -138,4 +138,17 @@ module ApplicationHelper
   def external_search_link(text)
     "http://www.google.co.uk/search?ie=UTF-8&q=#{CGI.escape(text)}"
   end
+  
+  def on_or_at_the(location)
+    if location.is_a? Route
+      return t(:on_the)
+    else 
+      return t(:at_the)
+    end
+  end
+  
+  def readable_location_type(location)
+    location.class.to_s.tableize.singularize.humanize.downcase
+  end
+  
 end

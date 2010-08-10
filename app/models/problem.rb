@@ -2,6 +2,7 @@ class Problem < ActiveRecord::Base
   belongs_to :location, :polymorphic => true
   belongs_to :reporter, :class_name => 'User'
   belongs_to :transport_mode
+  belongs_to :operator
   accepts_nested_attributes_for :reporter
   validates_presence_of :transport_mode_id, :unless => :location
   validates_presence_of :description, :subject, :category, :if => :location
@@ -11,6 +12,8 @@ class Problem < ActiveRecord::Base
   after_create :send_confirmation_email
   before_create :generate_confirmation_token
   named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
+  named_scope :unsent, :conditions => ['sent_at is null'], :order => 'created_at desc'
+  named_scope :with_operator, :conditions => ['operator_id is not null'], :order => 'created_at desc'
   
   @@categories = ['New route', 'Keep route', 'Get repair', 'Lateness', 'Other']
   
@@ -22,7 +25,6 @@ class Problem < ActiveRecord::Base
   def send_confirmation_email
     ProblemMailer.deliver_problem_confirmation(reporter, self, token)
   end
-  
   
   def validate_location_attributes
     return true if location
@@ -60,9 +62,11 @@ class Problem < ActiveRecord::Base
     end
   end
   
-  # campaigns usually start with no transport_mode
-  def transport_mode_css_name
-    return self.transport_mode.nil? ? 'none' : self.transport_mode.css_name
+  # class methods
+  # Sendable reports - confirmed, with operator, but not sent
+  def self.sendable
+    confirmed.with_operator.unsent
   end
+  
 
 end

@@ -1,0 +1,37 @@
+Dear <%= @problem.operator.name %>,
+
+A user of FixMyTransport has submitted the following report of a 
+problem <%= on_or_at_the(@problem.location) %> <%= @problem.location.name %>
+<%= readable_location_type(@problem.location) %> that they believe might require your attention.
+ 
+To view a map of the precise location of this issue, or to
+provide an update on the problem, please visit the following
+link:
+
+<%= @problem_link %>
+
+----------
+
+Name: <%= @problem.reporter.name %>
+
+Email: <%= @problem.reporter.email %>
+
+Subject: <%= @problem.subject %>
+
+Details: <%= @problem.description %>
+
+----------
+
+Replies to this email will go to the user who submitted the
+problem.
+
+Yours,
+The FixMyTransport team
+
+[ This message was sent via FixMyTransport, a project of UKCOD,
+registered charity number 1076346. If there is a more
+appropriate email address for messages about this type of
+problem, please let us know by visiting
+<<%= @feedback_link %>>. This will help improve
+the service for people travelling. We also welcome any other
+feedback you may have. ]

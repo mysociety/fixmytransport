@@ -16,7 +16,7 @@
         != f.hidden_field :operator_id, :value => @problem.location.operators.first.id
         %p=t(:problem_will_be_sent, :operator => @problem.location.operators.first.name)
       - else 
-        %p= t(:no_operators_for_problem, :location_type => @problem.location.type.to_s.humanize.downcase)
+        %p= t(:no_operators_for_problem, :location_type => readable_location_type(@problem.location))
     - if @problem.errors.on('category')
       .form-field-error= error_message_on @problem, :category
     .form-field

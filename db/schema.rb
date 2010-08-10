@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100809133812) do
+ActiveRecord::Schema.define(:version => 20100810091356) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -153,6 +153,7 @@ ActiveRecord::Schema.define(:version => 20100809133812) do
     t.datetime "updated_at"
     t.integer  "operator_id"
     t.boolean  "confirmed"
+    t.datetime "sent_at"
   end
 
   create_table "regions", :force => true do |t|

@@ -9,5 +9,36 @@ describe ApplicationHelper do
     end
     
   end
+  
+  describe 'when using "on the" or "at the" to describe a location' do 
+    
+    it 'should use "on the" for a route' do 
+      helper.on_or_at_the(Route.new).should == 'on the'
+    end
+    
+    it 'should use "at the" for a stop' do 
+      helper.on_or_at_the(Stop.new).should == 'at the'
+    end
+    
+    it 'should use "at the" for a stop area' do 
+      helper.on_or_at_the(StopArea.new).should == 'at the'
+    end
+  
+  end
+  
+  describe 'when returning the readable location type of a location' do 
+  
+    it 'should return "stop" for a stop' do 
+      helper.readable_location_type(Stop.new).should == 'stop'
+    end
+    it 'should return "route" for a route' do 
+      helper.readable_location_type(Route.new).should == 'route'
+    end
+    
+    it 'should return "stop area" for a stop area' do 
+      helper.readable_location_type(StopArea.new).should == 'stop area'
+    end
+    
+  end
 
 end

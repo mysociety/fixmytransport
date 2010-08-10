@@ -10,10 +10,9 @@
       .form-field-error= error_message_on @problem, :transport_mode_id
     %label{:for => 'transport_mode_id', :style => 'display: none;'}
       =t(:transport_mode)
-    #chosen-transport-mode{:class=>"main-transport-#{@problem.transport_mode_css_name}"}
-      != transport_mode_radio_buttons(form, 'problem')
-      - if @problem.errors.on(:location_attributes)
-        .form-field-error= error_message_on @problem, :location_attributes
+    != transport_mode_radio_buttons(form, 'problem')
+    - if @problem.errors.on(:location_attributes)
+      .form-field-error= error_message_on @problem, :location_attributes
     .form-field
       != label_tag 'problem[location_attributes][name]', t(:location_name)
       != text_field_tag 'problem[location_attributes][name]', location_param(:name)
