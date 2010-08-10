@@ -595,12 +595,15 @@ form.create_problem label{
   width: 6em;  
 }
 
-form.create_problem .checkbox label{
+form.create_problem .checkbox label, 
+form.create_problem .checkbox .label-note {
   float: none;
-  display: block-inline;
+  display: inline;
   font-size: 0.8em;
-
+  padding-right: 0;
 }
+
+
 
 .fieldset div.checkbox{
   padding-left: 6.5em;

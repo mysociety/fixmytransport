@@ -3,6 +3,7 @@
   #map
   = render :partial => 'shared/location_map_js', :locals => { :locations => [@problem.location] }
 %h3= @title
+= @problem.reporter.inspect
 - form_for @problem, :url => problems_url, :html => {:class => 'create_problem'} do |f| 
   != f.hidden_field :location_id
   != f.hidden_field :location_type
@@ -32,7 +33,7 @@
     .form-field
       = f.label :description
       != f.text_area :description, {:rows => 5}
-    - f.fields_for :reporter_attributes do |reporter_fields|
+    - f.fields_for :reporter do |reporter_fields|
       - if @problem.errors.on('reporter.email')
         .form-field-error= error_message_on @problem, 'reporter.email'
       .form-field
@@ -43,4 +44,13 @@
       .form-field
         = reporter_fields.label :name
         != reporter_fields.text_field :name
+      - if @problem.errors.on('reporter.phone')
+        .form-field-error= error_message_on @problem, 'reporter.phone'
+      .form-field
+        = reporter_fields.label :phone
+        != reporter_fields.text_field :phone
+      .checkbox
+        != reporter_fields.check_box :public
+        = reporter_fields.label :public, t(:ok_to_be_public)
+        .label-note= t(:never_show_email)
   != submit_tag t(:go)    

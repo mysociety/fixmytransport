@@ -12,7 +12,7 @@ Your problem had the subject: <%= @problem.subject %>
  
 And text: <%= @problem.description %>
 
-Your name will be shown as: <%= @recipient.name.blank? ? t(:anonymous) : @recipient.name %>
+Your name will be shown on the site as: <%= @recipient.anonymous? ? t(:anonymous) : @recipient.name %>
 
 Yours,
 The mySociety team

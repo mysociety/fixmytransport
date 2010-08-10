@@ -12,8 +12,17 @@
 #
 
 class User < ActiveRecord::Base
-  validates_presence_of :email
+  validates_presence_of :email, :name
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
-  attr_accessible :name, :email, :wants_fmt_updates
+  attr_accessible :name, :email, :wants_fmt_updates, :public
   has_many :assignments
+  
+  def anonymous
+    !public
+  end
+  
+  def anonymous?
+    !public?
+  end
+  
 end

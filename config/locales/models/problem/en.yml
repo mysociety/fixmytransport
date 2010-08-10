@@ -6,7 +6,7 @@ en:
           attributes: 
             category: 
               blank: "Please select a category for your problem"
-            title:
+            subject:
               blank: "Please give your problem a subject"
             description:
               blank: "Please give a brief description of your problem"

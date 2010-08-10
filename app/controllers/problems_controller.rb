@@ -15,16 +15,13 @@ class ProblemsController < ApplicationController
   end
   
   def frontpage
-    @title = t :new_campaign
+    @title = t(:get_problems_fixed)
     @problem = Problem.new()
   end
   
   def create
     @problem = Problem.new(params[:problem])
     if @problem.save
-      
-      # TODO: email the operator if there is one 
-      
       # create task assignment
       Assignment.create_assignment(:task_type_name => 'write-to-transport-operator', 
                                    :status => :in_progress,
