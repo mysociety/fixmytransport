@@ -30,7 +30,7 @@ module ApplicationHelper
   end
   
   def location_param(param_name)
-    h(params[:campaign][:location_attributes][param_name]) rescue nil
+    h(params[:problem][:location_attributes][param_name]) rescue nil
   end
   
   def location_type_radio_buttons(campaign)

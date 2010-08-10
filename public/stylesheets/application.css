@@ -501,6 +501,20 @@ form.new_problem label{
   margin-right: 2em;
 }
 
+/* Problem page */
+.problem-full .details {
+  font-size: 0.9em;
+}
+
+.problem-full .details span,
+.problem-full .details div {
+  line-height: 150%;
+}
+
+.problem-full .details .sent-time {
+  font-size: 0.8em;
+}
+
 /* Stop/stop area/route page */
 
 .stop, .stop-area, .route { 

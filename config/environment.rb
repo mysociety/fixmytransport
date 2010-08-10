@@ -16,6 +16,7 @@ load "url_mapper.rb"
 load "util.rb"
 load "validate.rb"
 load "mapit.rb"
+load "format.rb"
 
 Rails::Initializer.run do |config|
   

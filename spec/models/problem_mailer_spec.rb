@@ -80,7 +80,7 @@ describe ProblemMailer do
                                                  :name => "Emailable operator")
       @operator_without_mail = mock_model(Operator, :email => nil, 
                                                     :name => "Unemailable operator")
-      @mock_problem_one = mock_model(Problem, :operator => @operator_with_mail)
+      @mock_problem_one = mock_model(Problem, :operator => @operator_with_mail, :update_attribute => true)
       @mock_problem_two = mock_model(Problem, :operator => @operator_without_mail)
       Problem.stub!(:sendable).and_return([@mock_problem_one, @mock_problem_two])
       ProblemMailer.stub!(:deliver_report)
@@ -101,6 +101,11 @@ describe ProblemMailer do
       ProblemMailer.should_receive(:deliver_report).with(@mock_problem_one)
       ProblemMailer.send_reports
     end  
+    
+    it 'should set the sent at time on each problem reported' do 
+      @mock_problem_one.should_receive(:update_attribute).with(:sent_at, anything)
+      ProblemMailer.send_reports
+    end
     
   end
   

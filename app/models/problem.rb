@@ -63,6 +63,10 @@ class Problem < ActiveRecord::Base
     end
   end
   
+  def sending_interval
+    distance_of_time_in_words(sent_at, confirmed_at)
+  end
+  
   # class methods
   # Sendable reports - confirmed, with operator, but not sent
   def self.sendable

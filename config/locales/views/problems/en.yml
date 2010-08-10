@@ -37,3 +37,4 @@ en:
   reporting_a_problem: "{{location}}: Reporting a problem"
   ok_to_be_public: Can we show your name publicly? 
   never_show_email: (We never show your email address or phone number)
+  sent_time: "Sent to {{recipient}} {{interval}} later"

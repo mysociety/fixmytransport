@@ -35,6 +35,7 @@ class ProblemMailer < ActionMailer::Base
         missing_operator_emails[problem.operator.id] = problem.operator
       else
         deliver_report(problem)
+        problem.update_attribute(:sent_at, Time.now)
         sent_count += 1
       end
     end

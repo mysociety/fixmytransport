@@ -2,7 +2,7 @@ class ProblemsController < ApplicationController
   
   def new
     location = params[:location_type].constantize.find(params[:location_id])
-    @problem = Problem.new(:location => location, :reporter => User.new)
+    @problem = Problem.new(:location => location, :reporter => User.new(:public => true))
     if location.respond_to? :transport_mode_id
       @problem.transport_mode_id = location.transport_mode_id
     else
@@ -57,7 +57,7 @@ class ProblemsController < ApplicationController
     problem_attributes[:location_search] = @location_search
     @problem = Problem.new(problem_attributes)
     if !@problem.valid? 
-      @title = t :new_problem
+      @title = t :get_problems_fixed
       render :frontpage
     else
       @problem.location_from_attributes
@@ -69,7 +69,7 @@ class ProblemsController < ApplicationController
         @title = t :multiple_locations
         render :choose_location
       else
-        @title = t :new_problem
+        @title = t :get_problems_fixed
         render :frontpage
       end
     end
