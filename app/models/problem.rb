@@ -9,14 +9,15 @@ class Problem < ActiveRecord::Base
   validates_presence_of :description, :subject, :category, :if => :location
   validate :validate_location_attributes
   attr_accessor :location_attributes, :locations, :location_search, :location_errors
-  cattr_accessor :categories
+  cattr_accessor :route_categories, :stop_categories
   after_create :send_confirmation_email
   before_create :generate_confirmation_token
   named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'confirmed_at desc'
   named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
   named_scope :with_operator, :conditions => ['operator_id is not null'], :order => 'confirmed_at desc'
   
-  @@categories = ['New route', 'Keep route', 'Get repair', 'Lateness', 'Other']
+  @@route_categories = ['New route needed', 'Keep existing route', 'Crowding', 'Lateness', 'Other']
+  @@stop_categories = ['Repair needed', 'Facilities needed', 'Other']
   
   # Makes a random token, suitable for using in URLs e.g confirmation messages.
   def generate_confirmation_token
@@ -63,15 +64,43 @@ class Problem < ActiveRecord::Base
     end
   end
   
-  def sending_interval
-    distance_of_time_in_words(sent_at, confirmed_at)
+  def create_assignment
+    assignment_types = []
+    if assignments.empty? 
+      if operator 
+        if operator.email.blank?
+          assignment_types << ['find-transport-operator-contact-details', :new]
+          assignment_types << ['publish-problem', :in_progress]
+        else  
+          assignment_types << ['publish-problem', :in_progress]
+          assignment_types << ['write-to-transport-operator', :in_progress]
+        end
+      else
+        assignment_types << ['publish-problem', :in_progress]
+        assignment_types << ['find-transport-operator', :new]
+        assignment_types << ['find-transport-operator-contact-details', :new]
+      end
+    end
+    assignment_types.each do |assignment_type, status|
+      assignment_attributes = { :task_type_name => assignment_type, 
+                                :status => status,
+                                :user => reporter,
+                                :problem => self }
+      Assignment.create_assignment(assignment_attributes)
+    end
   end
-  
+   
   # class methods
   # Sendable reports - confirmed, with operator, but not sent
   def self.sendable
     confirmed.with_operator.unsent
   end
   
-
+  def self.categories(problem)
+    if problem.location.is_a? Route 
+      return route_categories
+    else
+      return stop_categories
+    end
+  end
 end

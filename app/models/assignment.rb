@@ -4,8 +4,9 @@ class Assignment < ActiveRecord::Base
   serialize :data
   belongs_to :problem
   
-  STATUS_CODES = { 0 => 'In Progress', 
-                   1 => 'Complete' }
+  STATUS_CODES = { 0 => 'New', 
+                   1 => 'In Progress', 
+                   2 => 'Complete' }
   
   SYMBOL_TO_STATUS_CODE = STATUS_CODES.inject({}) do |hash, (code, message)|
     hash[message.gsub(/ /, "").underscore.to_sym] = code
@@ -15,7 +16,8 @@ class Assignment < ActiveRecord::Base
   STATUS_CODE_TO_SYMBOL = SYMBOL_TO_STATUS_CODE.invert
 
   named_scope :completed, :conditions => ["status_code = ?", SYMBOL_TO_STATUS_CODE[:complete]]
-  
+  named_scope :incomplete, :conditions => ['status_code != ?',  SYMBOL_TO_STATUS_CODE[:complete]]
+
   def status
     STATUS_CODE_TO_SYMBOL[status_code]
   end
@@ -51,11 +53,22 @@ class Assignment < ActiveRecord::Base
   end
   
   # Assumes that only the problem reporter ever gets assignments related to the problem
-  def self.complete_problem_assignment(problem, task_type_name)
-    assignment = find(:first, :conditions => ["task_type_name = ? and problem_id = ? and user_id = ?", 
-                                             task_type_name, problem.id, problem.reporter.id])
-    assignment.status = :complete
-    assignment.save
+  def self.complete_problem_assignments(problem, task_type_names)
+    task_type_names.each do |task_type_name|
+      assignment = find(:first, :conditions => ["task_type_name = ? and problem_id = ? and user_id = ?", 
+                                                task_type_name, problem.id, problem.reporter.id])
+      if assignment
+        assignment.status = :complete
+        assignment.save
+        begin
+          task = Task.find(assignment.task_id)
+          task.status = :complete
+          task.save
+        rescue ActiveResource::ConnectionError
+        end
+      end
+    end
+   
   end
   
 end

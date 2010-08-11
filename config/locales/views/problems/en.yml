@@ -26,8 +26,12 @@ en:
   by: "by {{name}}"
   anonymously: "anonymously"
   anonymous: "anonymous"
-  problem_will_be_sent: "Your problem will be sent to {{operator}}"
-  no_operators_for_problem: "We don't currently know who is responsible for this {{location_type}}. Your problem will be shown on the site."
+  problem_will_be_sent: "Your problem will be sent to <strong>{{operator}}.</strong>"
+  problem_will_be_sent_multiple: "More than one company operates this {{location_type}}. Your problem <strong>will be sent to the operator</strong> you select below."
+  no_operators_for_problem: "We do not yet know who is responsible for this {{location_type}}. If you submit a problem here the subject and description of the problem will be public, but it will <strong>not</strong> be sent to the {{location_type}} operator until you provide their details (we'll help you do this)."
+  no_details_for_operator: "We do not yet have contact details for <strong>{{operator}}</strong>  If you submit a problem here the subject and description of the problem will be public, but it will <strong>not</strong> be sent to {{operator}} until you provide their contact details (we'll help you do this)."
+  no_details_for_operators: "We do not yet have contact details for the operators of this {{location_type}}.  If you submit a problem here the subject and description of the problem will be public, but it will <strong>not</strong> be sent to the operator you select until you provide their contact details (we'll help you do this)."
+  no_details_for_some_operators: "We do not yet have contact details for some of the operators of this {{location_type}}. If you submit a problem here relating to <strong>{{uncontactable}}</strong>, the subject and description of the problem will be public, but it will <strong>not</strong> be sent to the operator you select until you provide their contact details (we'll help you do this). If your problem relates to <strong>{{contactable}}</strong>, it will be sent straight away."
   thanks_for_adding_problem: You've successfully confirmed your problem
   see_your_problem: See your problem on the site
   reported_at: "Reported at {{time}}"
@@ -38,3 +42,12 @@ en:
   ok_to_be_public: Can we show your name publicly? 
   never_show_email: (We never show your email address or phone number)
   sent_time: "Sent to {{recipient}} {{interval}} later"
+  include_journey_detail: "If your problem relates to a specific journey, please include as much detail as possible about your journey:" 
+  where_to_and_from: where you were travelling to and from
+  time_and_date: the time and the date
+  driver_and_registration: "any other details you may have that will help identify the {{type}} (like its registration number) and the driver."
+  give_details: Please fill in the details of the problem below.
+  stop_include_details: "The {{location_type}} operator won't be able to help unless you give as much detail as you can about the problem, so please describe the exact nature of the problem, what it is, how long it has been there, etc."
+  pick_a_category: -- Pick a category --
+  select_operator: -- Choose the name of the company --
+  next_steps: Next steps

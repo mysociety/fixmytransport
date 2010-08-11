@@ -148,7 +148,23 @@ module ApplicationHelper
   end
   
   def readable_location_type(location)
+    if location.is_a? Stop or location.is_a? StopArea
+      transport_mode_names = location.transport_mode_names
+      if transport_mode_names.include? 'Train' or transport_mode_names.include? 'Tram/Metro'
+        return "station"
+      end
+    end
     location.class.to_s.tableize.singularize.humanize.downcase
+  end
+  
+  def contactable_operator_names(location, connector)
+    return '' unless location
+    location.operators.with_email.map{ |operator| operator.name }.to_sentence(:last_word_connector => connector)
+  end
+  
+  def uncontactable_operator_names(location, connector)
+    return '' unless location
+    location.operators.without_email.map{ |operator| operator.name }.to_sentence(:last_word_connector => connector)
   end
   
 end

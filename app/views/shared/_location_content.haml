@@ -4,6 +4,6 @@
   %h3= t(:other_campaigns_here)
   = render :partial => 'shared/campaign', :collection => location.campaigns.confirmed, :locals => { :context => :location }
 
-  - if !location.problems.confirmed.empty?
-    %h3= t(:other_problems_here)
-    = render :partial => 'shared/problem', :collection => location.problems.confirmed, :locals => { :context => :location }
+- if !location.problems.confirmed.empty?
+  %h3= t(:other_problems_here)
+  = render :partial => 'shared/problem', :collection => location.problems.confirmed, :locals => { :context => :location }

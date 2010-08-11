@@ -24,6 +24,8 @@ class Operator < ActiveRecord::Base
   has_paper_trail
   cattr_reader :per_page
   @@per_page = 20
+  named_scope :with_email, :conditions => ["email is not null and email != ''"]
+  named_scope :without_email, :conditions => ["email is null or email = ''"]
   
   # we only accept new or delete existing associations
   def route_operator_invalid(attributes)

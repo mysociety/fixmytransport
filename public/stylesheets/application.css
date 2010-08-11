@@ -354,6 +354,12 @@ p.site-description {
     color: #ffffff;
 }
 
+/* Problem lists */
+
+.problem .details {
+  font-size: 0.8em;
+}
+
 /* Campaign lists */
 
 .campaign .details {

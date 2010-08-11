@@ -44,5 +44,81 @@ describe Problem do
     end
   
   end
+  
+  describe 'when creating an assignment' do 
+    
+    before do 
+      @problem = Problem.new
+      @mock_user = mock_model(User)
+      @problem.stub!(:reporter).and_return(@mock_user)
+      @mock_operator = mock_model(Operator, :email => "operator@example.com")
+      @problem.stub!(:operator).and_return(@mock_operator)
+    end
+    
+    def expect_assignment(name, status)
+      Assignment.stub!(:create_assignment)
+      expected_attributes = { :status => status, 
+                              :task_type_name => name, 
+                              :user => @mock_user, 
+                              :problem => @problem }
+      Assignment.should_receive(:create_assignment).with(expected_attributes)
+    end
+  
+    describe 'when there are no assignments and the problem has an operator with an email address' do 
+      
+      it 'should create an in-progress assignment to write to the operator' do 
+        expect_assignment('write-to-transport-operator', :in_progress)
+        @problem.create_assignment
+      end
+      
+      it 'should create an in-progress assignment to publish the problem on the site' do 
+        expect_assignment('publish-problem', :in_progress)
+        @problem.create_assignment
+      end
+    
+    end
+    
+    describe 'when there are no assignments and the problem has an operator without an email address' do 
+      
+      before do 
+        @mock_operator.stub!(:email).and_return(nil)
+      end
+      
+      it 'should create an in-progress assignment to publish the problem on the site' do 
+        expect_assignment("publish-problem", :in_progress)
+        @problem.create_assignment        
+      end
+      
+      it "should create a new assignment to find the operator's email address" do 
+        expect_assignment("find-transport-operator-contact-details", :new)
+        @problem.create_assignment
+      end
+      
+    end
+    
+    describe 'when there are no assignments and the problem has no operator' do 
+    
+      before do 
+        @problem.stub!(:operator).and_return(nil)
+      end
+      
+      it 'should create an in-progress assignment to report the problem on the site' do 
+        expect_assignment("publish-problem", :in_progress)
+        @problem.create_assignment
+      end
+      
+      it 'should create a new assignment to find out who the operator is' do 
+        expect_assignment("find-transport-operator", :new)
+        @problem.create_assignment
+      end
+      
+      it "should create a new assignment to find the operator's email address" do 
+        expect_assignment("find-transport-operator-contact-details", :new)
+        @problem.create_assignment
+      end
+    
+    end
+    
+  end
 
 end

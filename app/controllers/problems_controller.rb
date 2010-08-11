@@ -12,6 +12,7 @@ class ProblemsController < ApplicationController
         end
       end
     end
+    setup_problem_advice
   end
   
   def frontpage
@@ -23,11 +24,7 @@ class ProblemsController < ApplicationController
     @problem = Problem.new(params[:problem])
     if @problem.save
       # create task assignment
-      assignment_attributes = { :task_type_name => 'write-to-transport-operator', 
-                                :status => :in_progress,
-                                :user => @problem.reporter,
-                                :problem => @problem }
-      Assignment.create_assignment(assignment_attributes)
+      @problem.create_assignment
       flash[:notice] = t(:confirmation_sent)
       redirect_to location_url(@problem.location)
     else
@@ -44,8 +41,9 @@ class ProblemsController < ApplicationController
     if @problem
       @problem.update_attributes(:confirmed => true,  
                                  :confirmed_at => Time.now)
-      # complete the assignment
-      assignment = Assignment.complete_problem_assignment(@problem, 'write-to-transport-operator')
+      # complete the relevant assignments
+      Assignment.complete_problem_assignments(@problem, ['write-to-transport-operator', 
+                                                         'publish-problem'])
     else
       @error = t(:problem_not_found)
     end
@@ -76,6 +74,39 @@ class ProblemsController < ApplicationController
   end
   
   def choose_location
+  end
+  
+  private 
+  
+  def setup_problem_advice
+    advice_params = { :location_type => @template.readable_location_type(@problem.location) }
+    num_operators = @problem.location.operators.size
+    num_operators_with_email = @problem.location.operators.with_email.size
+    # don't know who operates the location
+    if num_operators == 0
+      advice = :no_operators_for_problem
+    # all operators contactable
+    elsif num_operators == num_operators_with_email
+      if num_operators == 1
+        advice_params[:operator] = @problem.location.operators.first.name
+        advice = :problem_will_be_sent
+      else
+        advice = :problem_will_be_sent_multiple
+      end
+    # no operators contactable
+    elsif num_operators_with_email == 0
+      if num_operators == 1
+        advice = :no_details_for_operator
+      else
+        advice = :no_details_for_operators
+      end
+    # some operators contactable
+    else
+      advice_params[:contactable] = @template.contactable_operator_names(@problem.location, t(:or))
+      advice_params[:uncontactable] = @template.uncontactable_operator_names(@problem.location, t(:or)) 
+      advice = :no_details_for_some_operators
+    end
+    @sending_advice = t(advice, advice_params)
   end
   
   
