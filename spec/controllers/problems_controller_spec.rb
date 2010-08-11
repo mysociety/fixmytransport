@@ -71,7 +71,8 @@ describe ProblemsController do
       @mock_user = mock_model(User)
       @mock_problem = mock_model(Problem, :save => true, 
                                           :location => @stop,
-                                          :reporter => @mock_user)
+                                          :reporter => @mock_user, 
+                                          :create_assignment => true)
       Problem.stub!(:new).and_return(@mock_problem)
       @mock_assignment = mock_model(Assignment)
       Assignment.stub!(:create_assignment).and_return(@mock_assignment)
@@ -108,12 +109,8 @@ describe ProblemsController do
       response.should redirect_to(stop_url(@stop.locality, @stop))
     end
     
-    it 'should create an "in-progress" "write-to-the-operator" assignment associated with the problem' do 
-      expected_attributes = { :status => :in_progress, 
-                              :task_type_name => 'write-to-transport-operator', 
-                              :user => @mock_user, 
-                              :problem => @mock_problem }
-      Assignment.should_receive(:create_assignment).with(expected_attributes).and_return(@mock_assignment)
+    it 'should create an assignment associated with the problem' do 
+      @mock_problem.should_receive(:create_assignment).and_return(@mock_assignment)
       make_request
     end
     
@@ -125,7 +122,7 @@ describe ProblemsController do
        @mock_assignment = mock_model(Assignment)
        @mock_problem = mock_model(Problem, :update_attributes => true, :assignments => [@mock_assignment])
        Problem.stub!(:find_by_token).and_return(@mock_problem)
-       Assignment.stub!(:complete_problem_assignment)
+       Assignment.stub!(:complete_problem_assignments)
      end
      
      def make_request
@@ -142,8 +139,8 @@ describe ProblemsController do
        make_request
      end
      
-     it 'should set the "write-to-operator" assignment associated with this user and problem as complete' do 
-       Assignment.should_receive(:complete_problem_assignment).with(@mock_problem, 'write-to-transport-operator')
+     it 'should set the "write-to-operator" and the "publish-problem" assignments associated with this user and problem as complete' do 
+       Assignment.should_receive(:complete_problem_assignments).with(@mock_problem, ['write-to-transport-operator', 'publish-problem'])
        make_request
      end
      

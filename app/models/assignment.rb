@@ -15,8 +15,8 @@ class Assignment < ActiveRecord::Base
   
   STATUS_CODE_TO_SYMBOL = SYMBOL_TO_STATUS_CODE.invert
 
-  named_scope :completed, :conditions => ["status_code = ?", SYMBOL_TO_STATUS_CODE[:complete]]
-  named_scope :incomplete, :conditions => ['status_code != ?',  SYMBOL_TO_STATUS_CODE[:complete]]
+  named_scope :completed, :conditions => ["status_code = ?", SYMBOL_TO_STATUS_CODE[:complete]], :order => "updated_at"
+  named_scope :incomplete, :conditions => ['status_code != ?',  SYMBOL_TO_STATUS_CODE[:complete]], :order => "updated_at"
 
   def status
     STATUS_CODE_TO_SYMBOL[status_code]

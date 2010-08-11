@@ -9,7 +9,7 @@
     %b= t(:campaign_start_date)
     =@campaign.created_at.strftime("%d/%m/%Y") 
 - @campaign.assignments.completed.each do |assignment|
-  = render :partial => "shared/assignment_#{assignment.task_type}", :locals => { :assignment => assignment }
+  = render :partial => "shared/complete_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
 - form_for(@task) do |f|
   != f.hidden_field :task_type_id
   != f.hidden_field :return_url

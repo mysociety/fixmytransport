@@ -13,7 +13,11 @@
       .sent-time= t(:sent_time, :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.operator.name)
 
   %p.problem= @problem.description
+  
+  %h3= t(:story_so_far)
+  - @problem.assignments.completed.each do |assignment|
+    = render :partial => "shared/complete_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
   - if !@problem.assignments.incomplete.empty? 
     %h3= t(:next_steps)
     - @problem.assignments.incomplete.each do |assignment| 
-      = assignment.task_type_name
+      = render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
