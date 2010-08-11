@@ -507,6 +507,19 @@ form.new_problem label{
   margin-right: 2em;
 }
 
+form.create_problem label{
+  width: 6em;  
+}
+
+form.create_problem .checkbox label, 
+form.create_problem .checkbox .label-note {
+  float: none;
+  display: inline;
+  font-size: 0.8em;
+  padding-right: 0;
+}
+
+
 /* Problem page */
 .problem-full .details {
   font-size: 0.9em;
@@ -523,6 +536,9 @@ form.new_problem label{
 
 /* Stop/stop area/route page */
 
+.report-problem-link {
+  font-size: 1.5em;
+}
 .stop, .stop-area, .route { 
   padding: 0 .75em 0.5em 0;
 }
@@ -611,26 +627,7 @@ ul.stops {
   max-width: 45%;
 }
 
-form.create_problem label{
-  width: 6em;  
-}
-
-form.create_problem .checkbox label, 
-form.create_problem .checkbox .label-note {
-  float: none;
-  display: inline;
-  font-size: 0.8em;
-  padding-right: 0;
-}
-
-
-
 .fieldset div.checkbox{
   padding-left: 6.5em;
-  width: 20em;
-}
-
-form.create_campaign textarea, 
-form.create_campaign input[type=text] {
   width: 20em;
 }
