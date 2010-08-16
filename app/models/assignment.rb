@@ -3,37 +3,13 @@ class Assignment < ActiveRecord::Base
   belongs_to :user
   serialize :data
   belongs_to :problem
-  
-  STATUS_CODES = { 0 => 'New', 
-                   1 => 'In Progress', 
-                   2 => 'Complete' }
-  
-  SYMBOL_TO_STATUS_CODE = STATUS_CODES.inject({}) do |hash, (code, message)|
-    hash[message.gsub(/ /, "").underscore.to_sym] = code
-    hash
-  end
-  
-  STATUS_CODE_TO_SYMBOL = SYMBOL_TO_STATUS_CODE.invert
+  has_status({ 0 => 'New', 
+               1 => 'In Progress', 
+               2 => 'Complete' })
 
-  named_scope :completed, :conditions => ["status_code = ?", SYMBOL_TO_STATUS_CODE[:complete]], :order => "updated_at"
-  named_scope :incomplete, :conditions => ['status_code != ?',  SYMBOL_TO_STATUS_CODE[:complete]], :order => "updated_at"
+  named_scope :completed, :conditions => ["status_code = ?", self.symbol_to_status_code[:complete]], :order => "updated_at"
+  named_scope :incomplete, :conditions => ['status_code != ?',  self.symbol_to_status_code[:complete]], :order => "updated_at"
 
-  def status
-    STATUS_CODE_TO_SYMBOL[status_code]
-  end
-  
-  def status=(symbol)
-    code = SYMBOL_TO_STATUS_CODE[symbol]
-    if code.nil? 
-      raise "Unknown status for assignment #{symbol}"
-    end
-    self.status_code = code
-  end
-  
-  def status_description
-    STATUS_CODES[status_code]
-  end
-  
   def task_type
     task_type_name.underscore
   end

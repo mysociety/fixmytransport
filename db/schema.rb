@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100810151538) do
+ActiveRecord::Schema.define(:version => 20100816141213) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -153,9 +153,9 @@ ActiveRecord::Schema.define(:version => 20100810151538) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "operator_id"
-    t.boolean  "confirmed"
     t.datetime "sent_at"
     t.datetime "confirmed_at"
+    t.integer  "status_code"
   end
 
   create_table "regions", :force => true do |t|
@@ -282,6 +282,13 @@ ActiveRecord::Schema.define(:version => 20100810151538) do
 
   add_index "stop_area_memberships", ["stop_area_id"], :name => "index_stop_area_memberships_on_stop_area_id"
   add_index "stop_area_memberships", ["stop_id"], :name => "index_stop_area_memberships_on_stop_id"
+
+  create_table "stop_area_operators", :force => true do |t|
+    t.integer  "stop_area_id"
+    t.integer  "operator_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "stop_area_types", :force => true do |t|
     t.string   "code"
@@ -415,13 +422,15 @@ ActiveRecord::Schema.define(:version => 20100810151538) do
 
   create_table "updates", :force => true do |t|
     t.integer  "problem_id"
-    t.text     "title"
     t.integer  "reporter_id"
     t.text     "text"
-    t.boolean  "status_code"
     t.datetime "confirmed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "mark_fixed"
+    t.boolean  "mark_open"
+    t.string   "token"
+    t.integer  "status_code"
   end
 
   create_table "users", :force => true do |t|

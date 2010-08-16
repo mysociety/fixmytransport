@@ -6,10 +6,11 @@ ActionController::Routing::Routes.draw do |map|
   # resources
   map.resources :campaigns, :only => [:index, :show]
   
-  map.resources :problems, :only => [:new, :create, :show], 
+  map.resources :problems, :except => [:destroy], 
                            :collection => {:choose_location => :get, :find => :post}
                            
-  map.confirm '/c/:email_token', :action => 'confirm', :controller => 'problems'
+  map.confirm '/p/:email_token', :action => 'confirm', :controller => 'problems'
+  map.confirm_update '/u/:email_token', :action => 'confirm_update', :controller => 'problems'
   
   # stops
   map.random_stops "/stops/random.:format", :controller => "stops",
@@ -49,15 +50,6 @@ ActionController::Routing::Routes.draw do |map|
   map.route "/routes/:scope/:id.:format", :controller => "routes", 
                                           :action => 'update', 
                                           :conditions => { :method => :put }
-  
-  # operators
-  map.write_operator "/operators/write", :controller => "operators", 
-                                         :action => 'write', 
-                                         :conditions => { :method => [:get, :post] }
-
-  # assignments
-  map.resources :assignments, :only => [:update]
-
   # static
   map.about '/about', :controller => 'static', :action => 'about'
   map.feedback '/feedback', :controller => 'static', 

@@ -23,6 +23,7 @@ en:
   problem_not_found: "We couldn't locate your problem in the database. If you've copied the URL from an email, please check that you copied it exactly."
   posted_time: "{{time}} ago"
   added: added
+  reported: reported
   by: "by {{name}}"
   anonymously: "anonymously"
   anonymous: "anonymous"
@@ -52,3 +53,16 @@ en:
   select_operator: -- Choose the name of the company --
   next_steps: Next steps
   story_so_far: Story so far
+  provide_an_update: Provide an update
+  post: Post
+  mark_fixed: This problem has been fixed
+  update_confirmation_sent: "We've sent you an email to confirm that you want to add this update. We'll hold on to it while you're checking your email."
+  update_not_found: "We couldn't locate your update in the database. If you've copied the URL from an email, please check that you copied it exactly."
+  thanks_for_adding_update: You've successfully confirmed your update
+  see_your_update: See your update on the site
+  updates: Updates
+  posted: posted
+  update_help: "Please note that updates are not sent to the operator. If you leave your name it will be public. Your information will only be used in accordance with our {{privacy_link}}"
+  privacy_policy: privacy policy
+  problem_has_been_fixed: This problem has been fixed.
+  marked_as_fixed: marked as fixed

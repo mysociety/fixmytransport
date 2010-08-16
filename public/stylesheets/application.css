@@ -85,7 +85,7 @@ h2 {
 }
 
 input[type=text], 
-textarea {
+textarea, select {
   font-size: 0.9em;
   font-family: verdana, sans-serif;
 }
@@ -368,6 +368,7 @@ p.site-description {
 /* Forms */
 
 label {
+  margin: 0.4em 0;
   padding-right: 0.5em;
   text-align: right;
   float: left;
@@ -380,7 +381,7 @@ label {
 }
 
 
-input, textarea {
+input, textarea, select {
   margin: 0.5em;
 }
 
@@ -493,10 +494,6 @@ form.new_feedback label {
 
 /* Adding a problem */
 
-form.new_problem label{
-  width: 10em;  
-}
-
 .location-error {
   color: #CC0000;
 }
@@ -508,11 +505,15 @@ form.new_problem label{
 }
 
 form.create_problem label{
-  width: 6em;  
+  width: 7em;  
 }
 
-form.create_problem .checkbox label, 
-form.create_problem .checkbox .label-note {
+form.new_problem label {
+  width: 10em;
+}
+
+form .checkbox label, 
+form .checkbox .label-note {
   float: none;
   display: inline;
   font-size: 0.8em;
@@ -521,17 +522,53 @@ form.create_problem .checkbox .label-note {
 
 
 /* Problem page */
-.problem-full .details {
+.problem-full {
+  max-width: 50%;
+}
+
+.problem-full .fixed { 
+  background-color: #C6F490;
+  border: 2px solid #98E93B;
+  padding: 5px;
+  position: relative;
+  text-align: center;
+}
+
+.problem-full .details, 
+.updates .details {
   font-size: 0.9em;
+  font-style: italic;
+}
+
+.updates .update { 
+  margin: 1em 0;
 }
 
 .problem-full .details span,
-.problem-full .details div {
+.problem-full .details div,
+.updates .details span, 
+.updates .details div{
   line-height: 150%;
+}
+
+.update-help {
+  font-size: 0.8em;
+  margin-bottom: 0.8em;
 }
 
 .problem-full .details .sent-time {
   font-size: 0.8em;
+}
+
+form.new_update label {
+  width: 6em;
+}
+
+.new-assignment, .complete-assignment {
+  border: 1px dotted #cccccc;
+  margin: 0.5em;
+  padding: 0.5em;
+  width: auto;
 }
 
 /* Stop/stop area/route page */
@@ -627,7 +664,8 @@ ul.stops {
   max-width: 45%;
 }
 
-.fieldset div.checkbox{
+.fieldset div.checkbox, 
+div.submit{
   padding-left: 6.5em;
   width: 20em;
 }

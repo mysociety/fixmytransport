@@ -12,6 +12,13 @@ class ProblemMailer < ActionMailer::Base
    body :problem => problem, :recipient => recipient, :link => main_url(confirm_path(:email_token => token))
   end  
   
+  def update_confirmation(recipient, update, token)
+    recipients recipient.email
+    from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    subject "[FixMyTransport] Your transport update"
+    body :update => update, :recipient => recipient, :link => main_url(confirm_update_path(:email_token => token))
+  end
+  
   def feedback(email_params)
     recipients MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
     from email_params[:email]

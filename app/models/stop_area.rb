@@ -34,6 +34,8 @@ class StopArea < ActiveRecord::Base
   has_many :campaigns, :as => :location, :order => 'created_at desc'
   has_many :problems, :as => :location, :order => 'created_at desc'
   belongs_to :locality
+  has_many :stop_area_operators, :dependent => :destroy
+  has_many :operators, :through => :stop_area_operators, :uniq => true
   has_friendly_id :name, :use_slug => true, :scope => :locality                                  
   validates_presence_of :locality, :if => :loaded?
   

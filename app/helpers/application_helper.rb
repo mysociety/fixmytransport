@@ -167,4 +167,8 @@ module ApplicationHelper
     location.operators.without_email.map{ |operator| operator.name }.to_sentence(:last_word_connector => connector)
   end
   
+  def update_url(update)
+    problem_url(update.problem, :anchor => "update_#{update.id}")
+  end
+  
 end

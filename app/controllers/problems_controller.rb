@@ -34,18 +34,28 @@ class ProblemsController < ApplicationController
   
   def show
     @problem = Problem.find(params[:id])
+    @new_update = Update.new(:problem_id => @problem, :reporter => User.new)
   end
 
   def confirm
     @problem = Problem.find_by_token(params[:email_token])
     if @problem
-      @problem.update_attributes(:confirmed => true,  
+      @problem.update_attributes(:status => :confirmed,  
                                  :confirmed_at => Time.now)
       # complete the relevant assignments
       Assignment.complete_problem_assignments(@problem, ['write-to-transport-operator', 
                                                          'publish-problem'])
     else
       @error = t(:problem_not_found)
+    end
+  end
+  
+  def confirm_update
+    @update = Update.find_by_token(params[:email_token])
+    if @update
+      @update.confirm!
+    else
+      @error = t(:update_not_found)
     end
   end
   
@@ -74,6 +84,19 @@ class ProblemsController < ApplicationController
   end
   
   def choose_location
+  end
+  
+  def update
+    @problem = Problem.find(params[:id])
+    # just accept params for a new update for now
+    if @problem.update_attributes({ :updates_attributes => 
+                                    { "0" => params[:problem][:updates_attributes]["0"] } })
+      flash[:notice] = t(:update_confirmation_sent)
+      redirect_to problem_url(@problem)
+    else
+      @new_update = @problem.updates.detect{ |update| update.new_record? }
+      render :show
+    end
   end
   
   private 

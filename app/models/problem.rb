@@ -4,7 +4,9 @@ class Problem < ActiveRecord::Base
   belongs_to :transport_mode
   belongs_to :operator
   has_many :assignments
+  has_many :updates
   accepts_nested_attributes_for :reporter
+  accepts_nested_attributes_for :updates
   validates_presence_of :transport_mode_id, :unless => :location
   validates_presence_of :description, :subject, :category, :if => :location
   validate :validate_location_attributes
@@ -12,12 +14,19 @@ class Problem < ActiveRecord::Base
   cattr_accessor :route_categories, :stop_categories
   after_create :send_confirmation_email
   before_create :generate_confirmation_token
-  named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'confirmed_at desc'
+  has_status({ 0 => 'New', 
+               1 => 'Confirmed', 
+               2 => 'Fixed',
+               3 => 'Hidden' })
+  
+  named_scope :confirmed, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
   named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
   named_scope :with_operator, :conditions => ['operator_id is not null'], :order => 'confirmed_at desc'
   
   @@route_categories = ['New route needed', 'Keep existing route', 'Crowding', 'Lateness', 'Other']
   @@stop_categories = ['Repair needed', 'Facilities needed', 'Other']
+  
+  has_paper_trail
   
   # Makes a random token, suitable for using in URLs e.g confirmation messages.
   def generate_confirmation_token

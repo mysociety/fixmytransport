@@ -1,0 +1,5 @@
+- if @error
+  = @error
+- else
+  = t(:thanks_for_adding_update)
+  = link_to t(:see_your_update), update_url(@update)

@@ -17,6 +17,8 @@
 class Operator < ActiveRecord::Base
   has_many :route_operators, :dependent => :destroy
   has_many :routes, :through => :route_operators, :uniq => true
+  has_many :stop_operators, :dependent => :destroy
+  has_many :stops, :through => :stop_operators, :uniq => true
   validates_presence_of :name
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$"), 
                               :if => Proc.new { |operator| !operator.email.blank? }

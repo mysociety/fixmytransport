@@ -3,11 +3,13 @@
   #map
   = render :partial => 'shared/location_map_js', :locals => { :locations => [@problem.location] }
 .problem-full
+  - if @problem.status == :fixed
+    .fixed= t(:problem_has_been_fixed)
   %h2.subject= @title
   .details
-    =t(:added).titleize
+    =t(:reported).titleize
     %span.posted-time= t(:posted_time, :time => time_ago_in_words(@problem.confirmed_at))
-    %span.author= @problem.reporter.name.blank? ? t(:anonymously) : t(:by, :name => @problem.reporter.name)
+    %span.author= @problem.reporter.anonymous? ? t(:anonymously) : t(:by, :name => @problem.reporter.name)
     %span.transport-location!= t(:problem_location, :link => link_to(@problem.location.description, location_url(@problem.location)))
     - if @problem.sent_at
       .sent-time= t(:sent_time, :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.operator.name)
@@ -21,3 +23,15 @@
     %h3= t(:next_steps)
     - @problem.assignments.incomplete.each do |assignment| 
       = render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
+%h3= t(:updates)
+.updates
+  - @problem.updates.confirmed.each do |update| 
+    %a{:name => "update_#{update.id}"}
+    .details
+      = t(:posted)
+      %span.posted-time= t(:posted_time, :time => time_ago_in_words(update.confirmed_at))
+      %span.author= update.reporter.name.blank? ? t(:anonymously) : t(:by, :name => update.reporter.name)  
+      - if update.mark_fixed?
+        %span.fixed-text>= ", #{t(:marked_as_fixed)}"
+    .update= update.text
+  = render :partial => 'update_form'
