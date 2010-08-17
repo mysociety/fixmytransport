@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100816141213) do
+ActiveRecord::Schema.define(:version => 20100817114704) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -66,6 +66,16 @@ ActiveRecord::Schema.define(:version => 20100816141213) do
     t.string   "category"
     t.text     "token"
     t.integer  "reporter_id"
+  end
+
+  create_table "council_contacts", :force => true do |t|
+    t.integer  "area_id"
+    t.string   "category"
+    t.string   "email"
+    t.boolean  "confirmed"
+    t.text     "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "districts", :force => true do |t|
@@ -139,6 +149,20 @@ ActiveRecord::Schema.define(:version => 20100816141213) do
     t.text     "email"
     t.boolean  "email_confirmed"
     t.text     "notes"
+  end
+
+  create_table "passenger_transport_executive_areas", :force => true do |t|
+    t.integer  "area_id"
+    t.integer  "passenger_transport_executive_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "passenger_transport_executives", :force => true do |t|
+    t.string   "name"
+    t.string   "wikipedia_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "problems", :force => true do |t|
