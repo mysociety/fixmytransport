@@ -100,9 +100,12 @@ class Problem < ActiveRecord::Base
   end
    
   # class methods
-  # Sendable reports - confirmed, with operator, but not sent
+  
+  # Sendable reports - confirmed, with operator, PTE, or council, but not sent
   def self.sendable
-    confirmed.with_operator.unsent
+    confirmed.unsent.find(:all, :conditions => ['(operator_id is not null
+                                                  OR councils is not null
+                                                  OR public_transport_executive is not null)'])
   end
   
   def self.categories(problem)
