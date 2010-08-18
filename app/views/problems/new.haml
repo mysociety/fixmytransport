@@ -17,7 +17,6 @@
     - if @problem.errors.on('operator_id')
       .form-field-error= error_message_on @problem, :operator_id
     .form-field
-      = @problem.location.responsible_organizations.inspect
       - if @problem.location.operators_responsible? 
         - if @problem.location.operators.size > 1
           = f.label :operator
