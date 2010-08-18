@@ -34,6 +34,10 @@ class Operator < ActiveRecord::Base
     (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['route_id'].blank?
   end
   
+  def emailable?
+    !email.blank?
+  end
+  
   # merge operator records to merge_to, transferring associations
   def self.merge!(merge_to, operators)
     transaction do

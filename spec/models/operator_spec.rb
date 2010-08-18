@@ -49,4 +49,14 @@ describe Operator do
     operator.route_operators.size.should == 1
   end
   
+  it 'should respond to emailable? correctly' do 
+    operator = Operator.new
+    operator.email = "test email"
+    operator.emailable?.should be_true
+    operator.email = ''
+    operator.emailable?.should be_false
+    operator.email = nil
+    operator.emailable?.should be_false
+  end
+  
 end
