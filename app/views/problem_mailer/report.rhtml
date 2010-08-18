@@ -1,4 +1,4 @@
-Dear <%= raw @problem.operator.name %>,
+Dear <%= raw @recipient_models.map{ |recipient| recipient.name }.to_sentence %>,
 
 A user of FixMyTransport has submitted the following report of a problem <%= on_or_at_the(@problem.location) %> 
 <%= raw @problem.location.name %> that they believe might require your attention.
@@ -22,6 +22,15 @@ Subject: <%= raw @problem.subject %>
 
 Details: <%= raw @problem.description %>
 
+<%- if @problem.location.is_a? Stop and !@problem.location.atco_code.blank? %>
+Location ATCO code: <%= raw @problem.location.atco_code %>
+
+<%- end %>
+
+<%- if @problem.location.is_a? Stop and !@problem.location.plate_code.blank? %>
+Plate code: <%= raw @problem.location.plate_code %>
+
+<%- end %>
 ----------
 
 Replies to this email will go to the user who submitted the problem.
