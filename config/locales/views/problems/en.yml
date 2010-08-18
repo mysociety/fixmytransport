@@ -27,12 +27,15 @@ en:
   by: "by {{name}}"
   anonymously: "anonymously"
   anonymous: "anonymous"
-  problem_will_be_sent: "Your problem will be sent to <strong>{{operator}}.</strong>"
-  problem_will_be_sent_multiple: "More than one company operates this {{location_type}}. Your problem <strong>will be sent to the operator</strong> you select below."
-  no_operators_for_problem: "We do not yet know who is responsible for this {{location_type}}. If you submit a problem here the subject and description of the problem will be public, but it will <strong>not</strong> be sent to the {{location_type}} operator until you provide their details (we'll help you do this)."
-  no_details_for_operator: "We do not yet have contact details for <strong>{{operator}}</strong>  If you submit a problem here the subject and description of the problem will be public, but it will <strong>not</strong> be sent to {{operator}} until you provide their contact details (we'll help you do this)."
-  no_details_for_operators: "We do not yet have contact details for the operators of this {{location_type}}.  If you submit a problem here the subject and description of the problem will be public, but it will <strong>not</strong> be sent to the operator you select until you provide their contact details (we'll help you do this)."
-  no_details_for_some_operators: "We do not yet have contact details for some of the operators of this {{location_type}}. If you submit a problem here relating to <strong>{{uncontactable}}</strong>, the subject and description of the problem will be public, but it will <strong>not</strong> be sent to the operator you select until you provide their contact details (we'll help you do this). If your problem relates to <strong>{{contactable}}</strong>, it will be sent straight away."
+  pte_advice: "{{pte_link}} is responsible for public transport in this area."
+  problem_will_be_sent: "Your problem will be sent to {{organization}}. The subject and details of your problem will be public."
+  problem_will_be_sent_multiple_operators: "More than one company operates this {{location_type}}. Your problem <strong>will be sent to the operator</strong> you select below."
+  problem_will_be_sent_multiple: "Your problem will be sent to {{organizations}}. The subject and details of your problem will be public."
+  no_organizations_for_problem: "We do not yet know who is responsible for this {{location_type}}. If you submit a problem here the subject and description of the problem will be public, but it will <strong>not</strong> be sent to them until you provide their details (we'll help you do this)."
+  no_details_for_organization: "We do not yet have contact details for {{organization}}. If you submit a problem here the subject and description of the problem will be public, but it will <strong>not</strong> be sent to {{organization_unstrong}} until you provide their contact details (we'll help you do this)."
+  no_details_for_organizations: "We do not yet have contact details for {{organizations}}.  If you submit a problem here the subject and description of the problem will be public, but it will <strong>not</strong> be sent to them until you provide their contact details (we'll help you do this)."
+  no_details_for_some_operators: "We do not yet have all the contact details for this {{location_type}}. If you submit a problem here relating to {{uncontactable}}, the subject and description of the problem will be public, but it will <strong>not</strong> be sent until you provide their contact details (we'll help you do this). If your problem relates to {{contactable}}, it will be sent straight away."
+  no_details_for_some_organizations: "Your problem will be sent to {{contactable}}. The subject and description of the problem will be public. We do not yet have contact details for {{uncontactable}}, so your problem will not <strong>not</strong> be sent to them until you provide their contact details (we'll help you do this)."
   thanks_for_adding_problem: You've successfully confirmed your problem
   see_your_problem: See your problem on the site
   reported_at: "Reported at {{time}}"
@@ -48,7 +51,8 @@ en:
   time_and_date: the time and the date
   driver_and_registration: "any other details you may have that will help identify the {{type}} (like its registration number) and the driver."
   give_details: Please fill in the details of the problem below.
-  stop_include_details: "The {{location_type}} operator won't be able to help unless you give as much detail as you can about the problem, so please describe the exact nature of the problem, what it is, how long it has been there, etc."
+  the: The
+  stop_include_details: "{{responsible}} won't be able to help unless you give as much detail as you can about the problem, so please describe the exact nature of the problem, what it is, how long it has been there, etc."
   pick_a_category: -- Pick a category --
   select_operator: -- Choose the name of the company --
   next_steps: Next steps
@@ -66,3 +70,7 @@ en:
   privacy_policy: privacy policy
   problem_has_been_fixed: This problem has been fixed.
   marked_as_fixed: marked as fixed
+  or: or
+  council: council
+  passenger_transport_executive: Passenger Transport Executive
+  company: company

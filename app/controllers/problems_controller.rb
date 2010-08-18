@@ -113,6 +113,7 @@ class ProblemsController < ApplicationController
     end
     if num_organizations == 1
       advice_params[:organization] = @template.org_names(problem.location, :responsible_organizations, t(:or))
+      advice_params[:organization_unstrong] = @template.org_names(problem.location, :responsible_organizations, t(:or), '', '')
     elsif num_organizations > 1
       advice_params[:organizations] = @template.org_names(problem.location, :responsible_organizations, t(:or))
     end

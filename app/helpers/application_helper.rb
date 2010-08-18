@@ -171,4 +171,16 @@ module ApplicationHelper
     problem_url(update.problem, :anchor => "update_#{update.id}")
   end
   
+  def pte_link(pte)
+    link_to(pte.name, pte.wikipedia_url, :target => '_blank')
+  end
+  
+  def responsible_name_type(location)
+    if location.pte_responsible? 
+      responsible = location.passenger_transport_executive.name
+    else
+      responsible = "#{t(:the)} #{t(location.responsible_organization_type)}"
+    end
+  end
+  
 end

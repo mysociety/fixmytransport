@@ -225,8 +225,8 @@ describe ProblemsController do
       mock_problem = mock_model(Problem, :location => mock_stop)
       expected = ["We do not yet have contact details for <strong>Test Council</strong>.",
                   "If you submit a problem here the subject and description of the problem",
-                  "will be public, but it will <strong>not</strong> be sent to <strong>Test",
-                  "Council</strong> until you provide their contact details (we'll help you",
+                  "will be public, but it will <strong>not</strong> be sent to Test",
+                  "Council until you provide their contact details (we'll help you",
                   "do this)."].join(' ')
       expect_advice(mock_problem, expected)
     end
