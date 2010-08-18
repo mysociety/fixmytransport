@@ -18,7 +18,7 @@ module ApplicationHelper
     else
       tags << %Q[<div class="transport-mode">] 
       available_modes.each do |transport_mode| 
-        tag = context.radio_button 'transport_mode_id', transport_mode.id, {:class => 'transport-mode', :onchange => "changeMode('#{transport_mode.css_name}')"}
+        tag = context.radio_button 'transport_mode_id', transport_mode.id, {:class => 'transport-mode'}
         tag += context.label "transport_mode_id_#{transport_mode.id}", transport_mode.name
         tag = %Q[<div class="transport-bg-#{transport_mode.css_name}">#{tag}</div>]
         tags << tag
@@ -150,21 +150,21 @@ module ApplicationHelper
   def readable_location_type(location)
     if location.is_a? Stop or location.is_a? StopArea
       transport_mode_names = location.transport_mode_names
-      if transport_mode_names.include? 'Train' or transport_mode_names.include? 'Tram/Metro'
+      # some stops could be bus or tram/metro - call these stops
+      if transport_mode_names.include? 'Train' or transport_mode_names == ['Tram/Metro']
         return "station"
       end
+    end
+    if location.is_a? TramMetroRoute
+      return 'route'
     end
     location.class.to_s.tableize.singularize.humanize.downcase
   end
   
-  def contactable_operator_names(location, connector)
+  def org_names(location, method, connector)
     return '' unless location
-    location.operators.with_email.map{ |operator| operator.name }.to_sentence(:last_word_connector => connector)
-  end
-  
-  def uncontactable_operator_names(location, connector)
-    return '' unless location
-    location.operators.without_email.map{ |operator| operator.name }.to_sentence(:last_word_connector => connector)
+    names = location.send(method).map{ |org| org.name }
+    names.to_sentence(:last_word_connector => connector, :two_words_connector => " #{connector} ")
   end
   
   def update_url(update)

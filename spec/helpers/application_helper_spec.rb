@@ -31,8 +31,21 @@ describe ApplicationHelper do
     it 'should return "stop" for a stop' do 
       helper.readable_location_type(Stop.new(:stop_type => 'BCS')).should == 'stop'
     end
+    
+    it 'should return "stop" for a stop' do 
+      helper.readable_location_type(Stop.new(:stop_type => 'BCT')).should == 'stop'
+    end
+    
     it 'should return "route" for a route' do 
       helper.readable_location_type(Route.new).should == 'route'
+    end
+    
+    it 'should return "bus route" for a bus route' do 
+      helper.readable_location_type(BusRoute.new).should == 'bus route'
+    end
+    
+    it 'should return "route" for a metro/tram route' do 
+      helper.readable_location_type(TramMetroRoute.new).should == 'route'
     end
     
     it 'should return "stop area" for a stop area' do 
@@ -53,7 +66,9 @@ describe ApplicationHelper do
   
     it 'should return "station" for a metro/tram stop area' do 
       helper.readable_location_type(StopArea.new(:area_type => 'GTMU')).should == 'station'
-    end  
+    end 
+    
+
     
   end
 
