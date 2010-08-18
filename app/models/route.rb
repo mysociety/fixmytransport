@@ -191,6 +191,30 @@ class Route < ActiveRecord::Base
      end 
      text
    end
+   
+   def responsible_organizations
+     operators
+   end
+   
+   def emailable_organizations
+     responsible_organizations.select{ |organization| organization.emailable? }
+   end
+   
+   def unemailable_organizations
+     responsible_organizations.select{ |organization| !organization.emailable? }
+   end
+   
+   def councils_responsible? 
+     false
+   end
+
+   def pte_responsible? 
+     false
+   end
+
+   def operators_responsible?
+     true
+   end
   
   # class methods
   

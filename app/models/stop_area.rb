@@ -38,6 +38,8 @@ class StopArea < ActiveRecord::Base
   has_many :operators, :through => :stop_area_operators, :uniq => true
   has_friendly_id :name, :use_slug => true, :scope => :locality                                  
   validates_presence_of :locality, :if => :loaded?
+  # load common stop/stop area functions from stops_and_stop_areas
+  is_stop_or_stop_area
   
   def self.full_find(id, scope)
     find(id, :scope => scope, 

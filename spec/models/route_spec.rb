@@ -338,4 +338,24 @@ describe Route do
     
   end
   
+  describe 'when asked for responsible organizations' do 
+    
+    it 'should return the operators' do 
+      mock_operator = mock_model(Operator)
+      route = Route.new
+      route.stub!(:operators).and_return([mock_operator])
+      route.responsible_organizations.should == [mock_operator]
+    end
+     
+  end
+  
+  describe 'as a transport location' do 
+    
+    before do 
+      @instance = Route.new
+    end
+    
+    it_should_behave_like 'a transport location' 
+  
+  end
 end

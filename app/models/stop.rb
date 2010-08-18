@@ -56,6 +56,8 @@ class Stop < ActiveRecord::Base
   has_many :operators, :through => :stop_operators, :uniq => true
   belongs_to :locality
   validates_presence_of :locality_id, :lon, :lat, :if => :loaded?
+  # load common stop/stop area functions from stops_and_stop_areas
+  is_stop_or_stop_area
   has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality
   has_paper_trail
   
@@ -157,6 +159,7 @@ class Stop < ActiveRecord::Base
     text += " (#{bearing})" if ! bearing.blank?
     text
   end
+  
   
   # class methods
   

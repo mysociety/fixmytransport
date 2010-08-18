@@ -109,5 +109,15 @@ describe StopArea do
     end
   
   end 
+  
+  describe 'as a transport location' do 
+    
+    before do 
+      @instance = StopArea.new
+    end
+    
+    it_should_behave_like 'a transport location' 
+  
+  end
 
 end
