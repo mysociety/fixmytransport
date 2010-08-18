@@ -161,9 +161,9 @@ module ApplicationHelper
     location.class.to_s.tableize.singularize.humanize.downcase
   end
   
-  def org_names(location, method, connector)
+  def org_names(location, method, connector, wrapper_start='<strong>', wrapper_end='</strong>')
     return '' unless location
-    names = location.send(method).map{ |org| org.name }
+    names = location.send(method).map{ |org| "#{wrapper_start}#{org.name}#{wrapper_end}" }
     names.to_sentence(:last_word_connector => connector, :two_words_connector => " #{connector} ")
   end
   

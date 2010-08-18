@@ -12,7 +12,7 @@ class ProblemsController < ApplicationController
         end
       end
     end
-    setup_problem_advice
+    setup_problem_advice(@problem)
   end
   
   def frontpage
@@ -101,33 +101,53 @@ class ProblemsController < ApplicationController
   
   private 
   
-  def setup_problem_advice
-    advice_params = { :location_type => @template.readable_location_type(@problem.location) }
-    num_operators = @problem.location.operators.size
-    num_operators_with_email = @problem.location.operators.with_email.size
-    # don't know who operates the location
-    if num_operators == 0
-      advice = :no_operators_for_problem
-    # all operators contactable
-    elsif num_operators == num_operators_with_email
-      if num_operators == 1
-        advice_params[:operator] = @problem.location.operators.first.name
+  def setup_problem_advice(problem)
+    advice_params = { :location_type => @template.readable_location_type(problem.location) }
+    num_organizations = problem.location.responsible_organizations.size
+    num_organizations_with_email = 0
+   
+    problem.location.responsible_organizations.each do |organization| 
+      if organization.emailable?
+        num_organizations_with_email += 1
+      end
+    end
+    if num_organizations == 1
+      advice_params[:organization] = @template.org_names(problem.location, :responsible_organizations, t(:or))
+    elsif num_organizations > 1
+      advice_params[:organizations] = @template.org_names(problem.location, :responsible_organizations, t(:or))
+    end
+    # don't know who is responsible for the location
+    if num_organizations == 0
+      advice = :no_organizations_for_problem
+    # all responsible organizations contactable
+    elsif num_organizations == num_organizations_with_email
+      if num_organizations == 1
         advice = :problem_will_be_sent
       else
-        advice = :problem_will_be_sent_multiple
+        # for operators you get to choose which to email
+        if problem.location.operators_responsible? 
+          advice = :problem_will_be_sent_multiple_operators
+        else
+          # for councils, it goes to all or one depending on category
+          advice = :problem_will_be_sent_multiple
+        end
       end
-    # no operators contactable
-    elsif num_operators_with_email == 0
-      if num_operators == 1
-        advice = :no_details_for_operator
+    # no responsible organizations contactable
+    elsif num_organizations_with_email == 0
+      if num_organizations == 1
+        advice = :no_details_for_organization
       else
-        advice = :no_details_for_operators
+        advice = :no_details_for_organizations
       end
-    # some operators contactable
+    # some responsible organizations contactable
     else
-      advice_params[:contactable] = @template.contactable_operator_names(@problem.location, t(:or))
-      advice_params[:uncontactable] = @template.uncontactable_operator_names(@problem.location, t(:or)) 
-      advice = :no_details_for_some_operators
+      advice_params[:contactable] = @template.org_names(problem.location, :emailable_organizations, t(:or))
+      advice_params[:uncontactable] = @template.org_names(problem.location, :unemailable_organizations, t(:or)) 
+      if problem.location.operators_responsible? 
+        advice = :no_details_for_some_operators
+      else
+        advice = :no_details_for_some_organizations
+      end
     end
     @sending_advice = t(advice, advice_params)
   end

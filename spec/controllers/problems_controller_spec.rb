@@ -182,4 +182,144 @@ describe ProblemsController do
 
   end
   
+  describe 'when setting up problem advice' do 
+    
+    before do 
+      # set up the controller and template by making a request
+      get :frontpage
+    end
+    
+    def expect_advice(mock_problem, advice)
+      controller.send(:setup_problem_advice, mock_problem).should == advice
+    end
+  
+    it 'should generate advice text for a bus/coach stop covered by a PTE' do 
+      mock_pte = mock_model(PassengerTransportExecutive, :emailable? => true, 
+                                                         :name => 'test PTE')      
+      mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'],
+                                   :responsible_organizations => [mock_pte])
+      mock_problem = mock_model(Problem, :location => mock_stop)
+      expected = ["Your problem will be sent to <strong>test PTE</strong>.", 
+                  "The subject and details of your problem will be public."].join(' ')
+      expect_advice(mock_problem, expected)
+    end
+    
+    it 'should generate advice text for a bus/coach stop with multiple uncontactable councils' do 
+      mock_council_one = mock_model(Council, :emailable? => false, :name => "Test Council One")
+      mock_council_two = mock_model(Council, :emailable? => false, :name => "Test Council Two")      
+      mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'], 
+                                   :responsible_organizations => [mock_council_one, mock_council_two])
+      mock_problem = mock_model(Problem, :location => mock_stop)
+      expected = ["We do not yet have contact details for <strong>Test Council One</strong>",
+                  "or <strong>Test Council Two</strong>.  If you submit a problem here the",
+                  "subject and description of the problem will be public, but it will",
+                  "<strong>not</strong> be sent to them until you provide their contact details",
+                  "(we'll help you do this)."].join(' ')
+      expect_advice(mock_problem, expected)
+    end
+    
+    it 'should generate advice text for a bus/coach stop with one uncontactable council' do 
+      mock_council = mock_model(Council, :emailable? => false, :name => "Test Council")
+      mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'], 
+                                   :responsible_organizations => [mock_council])
+      mock_problem = mock_model(Problem, :location => mock_stop)
+      expected = ["We do not yet have contact details for <strong>Test Council</strong>.",
+                  "If you submit a problem here the subject and description of the problem",
+                  "will be public, but it will <strong>not</strong> be sent to <strong>Test",
+                  "Council</strong> until you provide their contact details (we'll help you",
+                  "do this)."].join(' ')
+      expect_advice(mock_problem, expected)
+    end
+    
+    it 'should generate advice text for a bus/coach stop with one contactable council' do 
+      mock_council = mock_model(Council, :emailable? => true, :name => "Test Council")
+      mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'], 
+                                   :responsible_organizations => [mock_council])
+      mock_problem = mock_model(Problem, :location => mock_stop)
+      expected = ["Your problem will be sent to <strong>Test Council</strong>.",
+                  "The subject and details of your problem will be public."].join(' ')
+      expect_advice(mock_problem, expected)
+    end
+    
+    it 'should generate advice text for a bus/coach stop with multiple contactable councils' do 
+      mock_council_one = mock_model(Council, :emailable? => true, :name => "Test Council One")
+      mock_council_two = mock_model(Council, :emailable? => true, :name => "Test Council Two")  
+      mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'], 
+                                   :responsible_organizations => [mock_council_one, mock_council_two],
+                                   :operators_responsible? => false)
+      mock_problem = mock_model(Problem, :location => mock_stop)
+      expected = ["Your problem will be sent to <strong>Test Council One</strong> or",
+                  "<strong>Test Council Two</strong>. The subject and details of your", 
+                  "problem will be public."].join(' ')
+      expect_advice(mock_problem, expected)
+    end
+    
+    it 'should generate advice text for a bus/coach stop with multiple councils, some contactable' do 
+      mock_council_one = mock_model(Council, :emailable? => false, :name => "Test Council One")
+      mock_council_two = mock_model(Council, :emailable? => true, :name => "Test Council Two")  
+      mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'], 
+                                   :responsible_organizations => [mock_council_one, mock_council_two],
+                                   :emailable_organizations => [mock_council_two], 
+                                   :unemailable_organizations => [mock_council_one],
+                                   :operators_responsible? => false)
+      mock_problem = mock_model(Problem, :location => mock_stop)
+      expected = ["Your problem will be sent to <strong>Test Council Two</strong>. The subject and",
+                  "description of the problem will be public. We do not yet have contact details for",
+                  "<strong>Test Council One</strong>, so your problem will not <strong>not</strong>",
+                  "be sent to them until you provide their contact details (we'll help you",
+                  "do this)."].join(' ')
+      expect_advice(mock_problem, expected)
+    end
+    
+    it 'should generate advice text for a bus/coach stop with no responsible organization' do 
+      mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'], 
+                                   :responsible_organizations => [])
+      mock_problem = mock_model(Problem, :location => mock_stop)
+      expected = ["We do not yet know who is responsible for this stop. If you submit a problem",
+                  "here the subject and description of the problem will be public, but it will",
+                  "<strong>not</strong> be sent to them until you provide their details (we'll",
+                  "help you do this)."].join(' ')
+      expect_advice(mock_problem, expected)
+    end
+    
+    it 'should generate advice text for a bus route with no operators' do
+      mock_route = mock_model(Route, :transport_mode_names => ['Bus'], 
+                                     :responsible_organizations => [])
+      mock_problem = mock_model(Problem, :location => mock_route)
+      expected = ["We do not yet know who is responsible for this route. If you submit a problem",
+                  "here the subject and description of the problem will be public, but it will",
+                  "<strong>not</strong> be sent to them until you provide their details (we'll",
+                  "help you do this)."].join(' ')
+      expect_advice(mock_problem, expected)
+    end
+    
+    it 'should generate advice text for a bus route with multiple operators, some emailable' do 
+      mock_operator_one = mock_model(Operator, :name => 'Test Operator One', :emailable? => true)
+      mock_operator_two = mock_model(Operator, :name => 'Test Operator Two', :emailable? => false)
+      mock_route = mock_model(Route, :transport_mode_names => ['Bus'], 
+                                     :responsible_organizations => [mock_operator_one, mock_operator_two],
+                                     :emailable_organizations => [mock_operator_one],
+                                     :unemailable_organizations => [mock_operator_two],
+                                     :operators_responsible? => true)
+      mock_problem = mock_model(Problem, :location => mock_route)
+      expected = ["We do not yet have all the contact details for this route. If you submit a problem",
+                  "here relating to <strong>Test Operator Two</strong>, the subject and description of",
+                  "the problem will be public, but it will <strong>not</strong> be sent until you provide",
+                  "their contact details (we'll help you do this). If your problem relates to <strong>Test",
+                  "Operator One</strong>, it will be sent straight away."].join(' ')
+      expect_advice(mock_problem, expected)
+    end
+        
+    it 'should generate advice text for a train station with no operators' do 
+      mock_station = mock_model(Stop, :transport_mode_names => ['Train'], 
+                                   :responsible_organizations => [])
+      mock_problem = mock_model(Problem, :location => mock_station)
+      expected = ["We do not yet know who is responsible for this station. If you submit a problem here",
+                  "the subject and description of the problem will be public, but it will <strong>not</strong>",
+                  "be sent to them until you provide their details (we'll help you do this)."].join(' ')
+      expect_advice(mock_problem, expected)
+    end
+    
+  end
+  
 end
