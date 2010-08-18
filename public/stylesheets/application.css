@@ -414,7 +414,7 @@ ul.location-list li{
 
 .extra-info {
   overflow: auto;
-  padding: 0.5em;
+  padding: 0.5em 0 0.5em 0;
 }
 
 .extra-info .stop, 
@@ -630,20 +630,20 @@ ul.stops {
   float: left;
   text-align: left;
   font-size: 0.8em;
-  max-width: 42.5%;
+  max-width: 32.5%;
 }
 
 .route-list .route-info .next-stops {
   float: right;
   text-align: right;
   font-size: 0.8em;
-  max-width: 42.5%;
+  max-width: 32.5%;
 }
 
 .route-list .route-info .route-name { 
   margin-left: auto;
   margin-right: auto;
-  width: 15%;
+  max-width: 35%;
   text-align: center;
 }
 
