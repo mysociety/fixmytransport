@@ -5,10 +5,10 @@ Dear <%= raw @recipient_models.map{ |recipient| recipient.name }.to_sentence %>,
 did not categorise it; please ignore it if you're not the correct council to deal with the issue, 
 or let us know what category of problem this is so we can add it to our system. ]
 <%- end %>
-<%- if @missing_recipient_models %>
+<%- if @missing_recipient_models.size > 0 %>
 
 [ We realise this problem might be the responsibility of 
-<%= raw @recipient_models.map{ |recipient| recipient.name }.to_sentence %>; however, we don't 
+<%= raw @missing_recipient_models.map{ |recipient| recipient.name }.to_sentence %>; however, we don't 
 currently have any contact details for them. If you know of an appropriate contact address, 
 please do get in touch. ]
 <%- end %>

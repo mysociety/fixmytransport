@@ -4,4 +4,5 @@ class Task < ActiveResource::Base
   self.user = MySociety::Config.get("FOSBURY_API_APPLICATION_NAME", '')
   self.password = MySociety::Config.get("FOSBURY_API_KEY", '')
   self.timeout = 5
+  
 end

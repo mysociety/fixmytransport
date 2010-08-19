@@ -3,6 +3,7 @@ class Problem < ActiveRecord::Base
   belongs_to :reporter, :class_name => 'User'
   belongs_to :transport_mode
   belongs_to :operator
+  belongs_to :passenger_transport_executive
   has_many :assignments
   has_many :updates
   accepts_nested_attributes_for :reporter
@@ -26,7 +27,7 @@ class Problem < ActiveRecord::Base
   [:responsible_organizations, 
    :emailable_organizations, 
    :unemailable_organizations, 
-   :council_responsible?,
+   :councils_responsible?,
    :pte_responsible?,
    :operators_responsible? ].each { |method| delegate method, :to => :location }
   
@@ -80,30 +81,67 @@ class Problem < ActiveRecord::Base
     end
   end
   
-  def create_assignment
+  def create_assignments
     assignment_types = []
     if assignments.empty? 
-      if operator 
-        if operator.email.blank?
-          assignment_types << ['find-transport-operator-contact-details', :new]
-          assignment_types << ['publish-problem', :in_progress]
-        else  
-          assignment_types << ['publish-problem', :in_progress]
-          assignment_types << ['write-to-transport-operator', :in_progress]
+      assignment_types << { :name => 'publish-problem',
+                            :status => :in_progress, 
+                            :data => {} }
+      if !responsible_organizations.empty? 
+        if emailable_organizations.size > 0
+          assignment_types << { :name => 'write-to-transport-organization', 
+                                :status => :in_progress, 
+                                :data => {:organizations => organization_info(:emailable_organizations) }}
+        end
+        if unemailable_organizations.size > 0
+          assignment_types << { :name => 'find-transport-organization-contact-details', 
+                                :status => :new, 
+                                :data => {:organizations => organization_info(:unemailable_organizations) }}
         end
       else
-        assignment_types << ['publish-problem', :in_progress]
-        assignment_types << ['find-transport-operator', :new]
-        assignment_types << ['find-transport-operator-contact-details', :new]
+        assignment_types << { :name => 'find-transport-organization', 
+                              :status => :new, 
+                              :data => {} }
       end
     end
-    assignment_types.each do |assignment_type, status|
-      assignment_attributes = { :task_type_name => assignment_type, 
-                                :status => status,
+    assignment_types.each do |data|
+      assignment_attributes = { :task_type_name => data[:name], 
+                                :status => data[:status],
                                 :user => reporter,
+                                :data => data[:data],
                                 :problem => self }
       Assignment.create_assignment(assignment_attributes)
     end
+  end
+  
+  def responsible_organizations
+    if operators_responsible? && operator
+      return [operator]
+    end
+    return location.responsible_organizations
+  end
+  
+  def emailable_organizations
+    responsible_organizations.select{ |organization| organization.emailable? }
+  end
+  
+  def unemailable_organizations
+    responsible_organizations.select{ |organization| !organization.emailable? }
+  end
+  
+  def organization_info(method)
+    self.send(method).map{ |organization| { :id => organization.id, 
+                                            :type => organization.class.to_s, 
+                                            :name => organization.name } }
+  end
+  
+  def first_sent_to
+    writing_assignment = assignments.completed.find(:first, 
+                                                    :conditions => ['task_type_name = ?',
+                                                                    'write-to-transport-organization'],
+                                                    :order => 'updated_at')
+    organization_names = writing_assignment.data[:organizations].map{ |organization| organization[:name] }
+    organization_names.to_sentence
   end
   
   # class methods
@@ -111,8 +149,8 @@ class Problem < ActiveRecord::Base
   # Sendable reports - confirmed, with operator, PTE, or council, but not sent
   def self.sendable
     confirmed.unsent.find(:all, :conditions => ['(operator_id is not null
-                                                  OR councils is not null
-                                                  OR public_transport_executive is not null)'])
+                                                  OR council_info is not null
+                                                  OR passenger_transport_executive_id is not null)'])
   end
   
   def self.categories(problem)

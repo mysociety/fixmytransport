@@ -45,14 +45,16 @@ describe Problem do
   
   end
   
-  describe 'when creating an assignment' do 
+  describe 'when creating assignments' do 
     
     before do 
       @problem = Problem.new
       @mock_user = mock_model(User)
       @problem.stub!(:reporter).and_return(@mock_user)
-      @mock_operator = mock_model(Operator, :email => "operator@example.com")
-      @problem.stub!(:operator).and_return(@mock_operator)
+      @mock_operator = mock_model(Operator, :name => 'emailable operator')
+      @problem.stub!(:responsible_organizations).and_return([@mock_operator])
+      @problem.stub!(:emailable_organizations).and_return([@mock_operator])
+      @problem.stub!(:unemailable_organizations).and_return([])
     end
     
     def expect_assignment(name, status)
@@ -60,61 +62,56 @@ describe Problem do
       expected_attributes = { :status => status, 
                               :task_type_name => name, 
                               :user => @mock_user, 
-                              :problem => @problem }
-      Assignment.should_receive(:create_assignment).with(expected_attributes)
+                              :problem => @problem  }
+      Assignment.should_receive(:create_assignment).with(hash_including(expected_attributes))
     end
   
-    describe 'when there are no assignments and the problem has an operator with an email address' do 
+    describe 'when there are no assignments and the problem has a responsible org. with an email address' do 
       
       it 'should create an in-progress assignment to write to the operator' do 
-        expect_assignment('write-to-transport-operator', :in_progress)
-        @problem.create_assignment
+        expect_assignment('write-to-transport-organization', :in_progress)
+        @problem.create_assignments
       end
       
       it 'should create an in-progress assignment to publish the problem on the site' do 
         expect_assignment('publish-problem', :in_progress)
-        @problem.create_assignment
+        @problem.create_assignments
       end
     
     end
     
-    describe 'when there are no assignments and the problem has an operator without an email address' do 
+    describe 'when there are no assignments and the problem has a responsible org. without an email address' do 
       
       before do 
-        @mock_operator.stub!(:email).and_return(nil)
+        @problem.stub!(:unemailable_organizations).and_return([@mock_operator])
       end
       
       it 'should create an in-progress assignment to publish the problem on the site' do 
         expect_assignment("publish-problem", :in_progress)
-        @problem.create_assignment        
+        @problem.create_assignments        
       end
       
-      it "should create a new assignment to find the operator's email address" do 
-        expect_assignment("find-transport-operator-contact-details", :new)
-        @problem.create_assignment
+      it "should create a new assignment to find the organization's email address" do 
+        expect_assignment("find-transport-organization-contact-details", :new)
+        @problem.create_assignments
       end
       
     end
     
-    describe 'when there are no assignments and the problem has no operator' do 
+    describe 'when there are no assignments and the problem has no responsible orgs.' do 
     
       before do 
-        @problem.stub!(:operator).and_return(nil)
+        @problem.stub!(:responsible_organizations).and_return([])
       end
       
       it 'should create an in-progress assignment to report the problem on the site' do 
         expect_assignment("publish-problem", :in_progress)
-        @problem.create_assignment
+        @problem.create_assignments
       end
       
-      it 'should create a new assignment to find out who the operator is' do 
-        expect_assignment("find-transport-operator", :new)
-        @problem.create_assignment
-      end
-      
-      it "should create a new assignment to find the operator's email address" do 
-        expect_assignment("find-transport-operator-contact-details", :new)
-        @problem.create_assignment
+      it 'should create a new assignment to find out who the responsible organization is' do 
+        expect_assignment("find-transport-organization", :new)
+        @problem.create_assignments
       end
     
     end

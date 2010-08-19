@@ -51,23 +51,27 @@ describe Assignment do
        before do
          # stub connection to Fosbury
          @mock_task = mock_model(Task, :save => true, 
-                                       :id => 33)
+                                       :id => 33, 
+                                       :task_data => {})
          Task.stub!(:new).and_return(@mock_task)
          @mock_user = mock_model(User)
          @mock_assignment = mock_model(Assignment, :task_id= => true, 
                                                    :save => true, 
-                                                   :id => 22)
+                                                   :id => 22,
+                                                   :data= => true)
          @mock_problem = mock_model(Problem) 
          @attribute_hash = { :task_type_name => 'test-task-type-name', 
                              :user => @mock_user, 
                              :status => :complete, 
-                             :problem => @mock_problem }
+                             :problem => @mock_problem,
+                             :data => {}}
        end
   
        it 'should create an assignment with the task type name, user and status values of the hash' do 
          Assignment.should_receive(:create).with(:task_type_name => 'test-task-type-name', 
                                                  :user => @mock_user, 
                                                  :status => :complete,
+                                                 :data => {},
                                                  :problem => @mock_problem).and_return(@mock_assignment)
          Assignment.create_assignment(@attribute_hash)
        end
@@ -76,6 +80,7 @@ describe Assignment do
          Assignment.stub!(:create).and_return(@mock_assignment)
          Task.should_receive(:new).with(:task_type_id => 'test-task-type-name', 
                                         :status => :complete, 
+                                        :task_data => {},
                                         :callback_params => {:assignment_id => 22}).and_return(@mock_task)
          @mock_assignment.should_receive(:task_id=).with(33)
          Assignment.create_assignment(@attribute_hash)
@@ -88,9 +93,15 @@ describe Assignment do
       before do 
         @mock_user = mock_model(User, :id => 44)
         @mock_problem = mock_model(Problem, :reporter => @mock_user)
-        @mock_assignment = mock_model(Assignment, :status= => true, :save => true, :task_id => 22)
+        @mock_assignment = mock_model(Assignment, :status= => true, 
+                                                  :save => true, 
+                                                  :task_id => 22, 
+                                                  :data= => true, 
+                                                  :data => {})
         Assignment.stub!(:find).and_return(@mock_assignment)
-        @mock_task = mock_model(Task, :save => true, :status= => true)
+        @mock_task = mock_model(Task, :save => true, 
+                                      :status= => true, 
+                                      :task_data= => true)
         Task.stub!(:find).and_return(@mock_task)
       end
     
@@ -98,28 +109,37 @@ describe Assignment do
         expected_conditions = ["task_type_name = ? and problem_id = ? and user_id = ?", 
                                'write-to-transport-operator', @mock_problem.id, @mock_user.id]
         Assignment.should_receive(:find).with(:first, :conditions => expected_conditions)
-        Assignment.complete_problem_assignments(@mock_problem, ['write-to-transport-operator'])
+        Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => {}})
       end
       
       it 'should mark the assignment as complete' do 
         @mock_assignment.should_receive(:status=).with(:complete)
-        Assignment.complete_problem_assignments(@mock_problem, ['write-to-transport-operator'])
+        Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => {}})
       end
       
       it 'should save the assignment' do 
         @mock_assignment.should_receive(:save)
-        Assignment.complete_problem_assignments(@mock_problem, ['write-to-transport-operator'])
+        Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => {}})
       end
       
       it 'should mark the task associated with the assignment as complete' do 
         @mock_task.should_receive(:status=).with(:complete)
-        Assignment.complete_problem_assignments(@mock_problem, ['write-to-transport-operator'])
+        Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => {}})
       end
       
+      it 'should update the data on the assignment' do
+         @mock_assignment.data.should_receive(:update).with(:x => :y)
+         Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => { :x => :y } })
+       end
+      
+      it 'should set the data on the task' do
+        @mock_task.should_receive(:task_data=).with(:x => :y)
+        Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => { :x => :y } })
+      end
       
       it 'should save the task' do 
         @mock_task.should_receive(:save)
-        Assignment.complete_problem_assignments(@mock_problem, ['write-to-transport-operator'])
+        Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => {}})
       end
       
     end

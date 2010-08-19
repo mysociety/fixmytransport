@@ -12,7 +12,7 @@
     %span.author= @problem.reporter.anonymous? ? t(:anonymously) : t(:by, :name => @problem.reporter.name)
     %span.transport-location!= t(:problem_location, :link => link_to(@problem.location.description, location_url(@problem.location)))
     - if @problem.sent_at
-      .sent-time= t(:sent_time, :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.operator.name)
+      .sent-time= t(:sent_time, :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.first_sent_to)
 
   %p.problem= @problem.description
   

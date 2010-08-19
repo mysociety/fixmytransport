@@ -24,7 +24,7 @@ class ProblemsController < ApplicationController
     @problem = Problem.new(params[:problem])
     if @problem.save
       # create task assignment
-      @problem.create_assignment
+      @problem.create_assignments
       flash[:notice] = t(:confirmation_sent)
       redirect_to location_url(@problem.location)
     else
@@ -43,8 +43,8 @@ class ProblemsController < ApplicationController
       @problem.update_attributes(:status => :confirmed,  
                                  :confirmed_at => Time.now)
       # complete the relevant assignments
-      Assignment.complete_problem_assignments(@problem, ['write-to-transport-operator', 
-                                                         'publish-problem'])
+      Assignment.complete_problem_assignments(@problem, {'write-to-transport-organization' => {}, 
+                                                         'publish-problem' => {}})
     else
       @error = t(:problem_not_found)
     end
@@ -103,19 +103,19 @@ class ProblemsController < ApplicationController
   
   def setup_problem_advice(problem)
     advice_params = { :location_type => @template.readable_location_type(problem.location) }
-    num_organizations = problem.location.responsible_organizations.size
+    num_organizations = problem.responsible_organizations.size
     num_organizations_with_email = 0
    
-    problem.location.responsible_organizations.each do |organization| 
+    problem.responsible_organizations.each do |organization| 
       if organization.emailable?
         num_organizations_with_email += 1
       end
     end
     if num_organizations == 1
-      advice_params[:organization] = @template.org_names(problem.location, :responsible_organizations, t(:or))
-      advice_params[:organization_unstrong] = @template.org_names(problem.location, :responsible_organizations, t(:or), '', '')
+      advice_params[:organization] = @template.org_names(problem, :responsible_organizations, t(:or))
+      advice_params[:organization_unstrong] = @template.org_names(problem, :responsible_organizations, t(:or), '', '')
     elsif num_organizations > 1
-      advice_params[:organizations] = @template.org_names(problem.location, :responsible_organizations, t(:or))
+      advice_params[:organizations] = @template.org_names(problem, :responsible_organizations, t(:or))
     end
     # don't know who is responsible for the location
     if num_organizations == 0
@@ -126,7 +126,7 @@ class ProblemsController < ApplicationController
         advice = :problem_will_be_sent
       else
         # for operators you get to choose which to email
-        if problem.location.operators_responsible? 
+        if problem.operators_responsible? 
           advice = :problem_will_be_sent_multiple_operators
         else
           # for councils, it goes to all or one depending on category
@@ -142,9 +142,9 @@ class ProblemsController < ApplicationController
       end
     # some responsible organizations contactable
     else
-      advice_params[:contactable] = @template.org_names(problem.location, :emailable_organizations, t(:or))
-      advice_params[:uncontactable] = @template.org_names(problem.location, :unemailable_organizations, t(:or)) 
-      if problem.location.operators_responsible? 
+      advice_params[:contactable] = @template.org_names(problem, :emailable_organizations, t(:or))
+      advice_params[:uncontactable] = @template.org_names(problem, :unemailable_organizations, t(:or)) 
+      if problem.operators_responsible? 
         advice = :no_details_for_some_operators
       else
         advice = :no_details_for_some_organizations
