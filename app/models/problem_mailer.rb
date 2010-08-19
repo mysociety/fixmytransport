@@ -1,6 +1,6 @@
 class ProblemMailer < ActionMailer::Base
   include MySociety::UrlMapper
-  cattr_accessor :sent_count
+  cattr_accessor :sent_count, :dryrun
   # include view helpers
   helper :application
   url_mapper # See MySociety::UrlMapper
@@ -38,20 +38,27 @@ class ProblemMailer < ActionMailer::Base
   end
   
   def self.send_report(problem, recipients, missing_recipients=[])
-    deliver_report(problem, recipients, missing_recipients)
-    problem.update_attribute(:sent_at, Time.now)
+    if self.dryrun
+      STDERR.puts("Would send the following:")
+      mail = create_report(problem, recipients, missing_recipients)
+      STDERR.puts(mail)
+    else
+      deliver_report(problem, recipients, missing_recipients)
+      problem.update_attribute(:sent_at, Time.now)
+    end
     self.sent_count += 1
   end
   
   def self.check_for_council_change(problem)
-    if problem.council_responsible? 
+    if problem.councils_responsible? 
       if problem.location.council_info != problem.council_info
         STDERR.puts "Councils changed for problem #{problem.id}. Was #{problem.council_info}, now #{problem.location.council_info}"
       end
     end
   end
   
-  def self.send_reports
+  def self.send_reports(dryrun=false)
+    self.dryrun = dryrun
     missing_emails = { :council => {},
                        :passenger_transport_executive => {},
                        :operator => {} }
