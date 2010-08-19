@@ -4,6 +4,6 @@ class RenameCouncilsToCouncilInfo < ActiveRecord::Migration
   end
 
   def self.down
-    rename_columns :problems, :council_info, :councils
+    rename_column :problems, :council_info, :councils
   end
 end

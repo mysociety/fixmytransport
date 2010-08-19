@@ -185,6 +185,7 @@ ActiveRecord::Schema.define(:version => 20100819101900) do
     t.integer  "status_code"
     t.string   "council_info"
     t.integer  "public_transport_executive_id"
+    t.integer  "passenger_transport_executive_id"
   end
 
   create_table "regions", :force => true do |t|
