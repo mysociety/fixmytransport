@@ -196,14 +196,6 @@ class Route < ActiveRecord::Base
      operators
    end
    
-   def emailable_organizations
-     responsible_organizations.select{ |organization| organization.emailable? }
-   end
-   
-   def unemailable_organizations
-     responsible_organizations.select{ |organization| !organization.emailable? }
-   end
-   
    def councils_responsible? 
      false
    end

@@ -13,9 +13,7 @@ module SharedBehaviours
                             :responsible_organizations,
                             :councils_responsible?, 
                             :pte_responsible?, 
-                            :operators_responsible?,
-                            :emailable_organizations,
-                            :unemailable_organizations]
+                            :operators_responsible?]
         required_methods.each do |method|
           @instance.should respond_to(method)
         end
