@@ -6,7 +6,7 @@
 - form_for @problem, :url => problems_url, :html => {:class => 'create_problem'} do |f| 
   != f.hidden_field :location_id
   != f.hidden_field :location_type
-  - if @problem.location.pte_responsible? 
+  - if @problem.pte_responsible? 
     != t(:pte_advice, :pte_link => pte_link(@problem.location.passenger_transport_executive))
   %p!= @sending_advice
   - if @problem.location.is_a? Route
@@ -17,16 +17,16 @@
     - if @problem.errors.on('operator_id')
       .form-field-error= error_message_on @problem, :operator_id
     .form-field
-      - if @problem.location.operators_responsible? 
+      - if @problem.operators_responsible? 
         - if @problem.location.operators.size > 1
           = f.label :operator
           != f.collection_select("operator_id", @problem.location.operators, :id, :name, :include_blank => t(:select_operator))
         - elsif @problem.location.operators.size == 1
           !=f.hidden_field :operator_id, :value => @problem.location.operators.first.id
-      - elsif @problem.location.pte_responsible? 
+      - elsif @problem.pte_responsible? 
         !=f.hidden_field :passenger_transport_executive_id, :value => @problem.location.passenger_transport_executive.id
-      - elsif @problem.location.councils_responsible?    
-        != f.hidden_field :councils, :value => @problem.location.council_info
+      - elsif @problem.councils_responsible?    
+        != f.hidden_field :council_info, :value => @problem.location.council_info
       
     - if @problem.errors.on('category')
       .form-field-error= error_message_on @problem, :category

@@ -73,13 +73,28 @@ describe ProblemMailer do
     
   end
   
+  describe 'when checking for a problem change' do 
+  
+    it 'should print a message if the council info for the problem location is different from that stored on the problem' do 
+      mock_stop = mock_model(Stop, :council_info => "33|44")
+      mock_problem = mock_model(Problem, :council_responsible? => true, 
+                                         :council_info => "33,44",
+                                         :location => mock_stop, 
+                                         :id => 22)
+      STDERR.should_receive(:puts).with("Councils changed for problem 22. Was 33,44, now 33|44")
+      ProblemMailer.check_for_council_change(mock_problem)
+    end
+  
+  end
+  
   describe 'when sending problem reports' do 
     
     before do
-      MySociety::MaPit.stub!(:call).and_return({ 22 => {'name' => 'Unemailable council one'}, 
-                                                 33 => {'name' => 'Unemailable council two'}, 
+      MySociety::MaPit.stub!(:call).and_return({ 22 => {'name' => 'Unemailable council'}, 
                                                  44 => {'name' => 'Emailable council'}})
-      @emailable_council = mock('Emailable council')
+      @emailable_council = mock_model(Council, :name => 'Emailable council')
+      @unemailable_council = mock_model(Council, :name => 'Unemailable council')
+      
       @operator_with_mail = mock_model(Operator, :email => 'operator@example.com', 
                                                  :name => "Emailable operator")
       @operator_without_mail = mock_model(Operator, :email => nil, 
@@ -88,18 +103,26 @@ describe ProblemMailer do
                                                                :name => 'Emailable PTE')
       @pte_without_mail = mock_model(PassengerTransportExecutive, :email => nil, 
                                                                   :name => 'Unemailable PTE')
-      @mock_problem_email_operator = mock_model(Problem, :operator => @operator_with_mail, 
+      @mock_problem_email_operator = mock_model(Problem, :responsible_organizations => [@operator_with_mail],
+                                                         :emailable_organizations => [@operator_with_mail],
+                                                         :unemailable_organizations => [],
                                                          :update_attribute => true)
-      @mock_problem_no_email_operator = mock_model(Problem, :operator => @operator_without_mail)
-      @mock_problem_email_pte = mock_model(Problem, :operator => nil, 
-                                                    :passenger_transport_executive => @pte_with_mail,
+      @mock_problem_no_email_operator = mock_model(Problem, :responsible_organizations => [@operator_without_mail],
+                                                            :emailable_organizations => [],
+                                                            :unemailable_organizations => [@operator_without_mail])
+      @mock_problem_email_pte = mock_model(Problem, :responsible_organizations => [@pte_with_mail],
+                                                    :emailable_organizations => [@pte_with_mail],
+                                                    :unemailable_organizations => [],
                                                     :update_attribute => true)
-      @mock_problem_no_email_pte = mock_model(Problem, :operator => nil, 
-                                                       :passenger_transport_executive => @pte_without_mail,
+      @mock_problem_no_email_pte = mock_model(Problem, :responsible_organizations => [@pte_without_mail],
+                                                       :emailable_organizations => [],
+                                                       :unemailable_organizations => [@pte_without_mail],
                                                        :update_attribute => true)
-      @mock_problem_some_council_mails = mock_model(Problem, :operator => nil,
-                                                             :passenger_transport_executive => nil, 
-                                                             :councils => '44|22,33')                    
+      @mock_problem_some_council_mails = mock_model(Problem, :responsible_organizations => [@emailable_council, 
+                                                                                            @unemailable_council], 
+                                                             :emailable_organizations => [@emailable_council],
+                                                             :unemailable_organizations => [@unemailable_council],
+                                                             :update_attribute => true)                    
       Problem.stub!(:sendable).and_return([@mock_problem_email_operator,
                                            @mock_problem_no_email_operator,
                                            @mock_problem_email_pte,
@@ -107,6 +130,7 @@ describe ProblemMailer do
                                            @mock_problem_some_council_mails])
       
       ProblemMailer.stub!(:deliver_report)
+      ProblemMailer.stub!(:check_for_council_change)
       STDERR.stub!(:puts)
     end
   
@@ -127,32 +151,43 @@ describe ProblemMailer do
     end
     
     it 'should print a list of councils with missing emails' do 
-      STDERR.should_receive(:puts).with("Unemailable council one")
-      STDERR.should_receive(:puts).with("Unemailable council two")
+      STDERR.should_receive(:puts).with("Unemailable council")
       STDERR.should_not_receive(:puts).with("Emailable council")
       ProblemMailer.send_reports
     end
     
     it 'should send a report email for a problem which has an operator email' do
-      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_operator, [@operator_with_mail])
+      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_operator, [@operator_with_mail], [])
       ProblemMailer.send_reports
     end  
     
     it 'should send a report for a problem with a PTE with an email address' do 
-      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_pte, [@pte_with_mail])
+      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_pte, [@pte_with_mail], [])
       ProblemMailer.send_reports
     end
     
     it 'should send a report for a problem with councils with email addresses' do 
-      Council.stub!(:from_hash).and_return(mock('council', :name => 'other council'))
+      Council.stub!(:from_hash).and_return(@unemailable_council)
       Council.stub!(:from_hash).with({ 'name' => 'Emailable council' }).and_return(@emailable_council)
-      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_some_council_mails, [@emailable_council])
+      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_some_council_mails, 
+                                                         [@emailable_council], 
+                                                         [@unemailable_council])
       ProblemMailer.send_reports
     end
     
     it 'should set the sent at time on each problem report delivered' do 
       @mock_problem_email_operator.should_receive(:update_attribute).with(:sent_at, anything)
       @mock_problem_email_pte.should_receive(:update_attribute).with(:sent_at, anything)
+      ProblemMailer.send_reports
+    end
+    
+    it 'should print the number of sent reports' do 
+      STDERR.should_receive(:puts).with("Sent 3 reports")
+      ProblemMailer.send_reports  
+    end
+    
+    it 'should check for a change in the councils for the problem' do 
+      ProblemMailer.should_receive(:check_for_council_change)
       ProblemMailer.send_reports
     end
     

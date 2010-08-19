@@ -23,6 +23,13 @@ class Problem < ActiveRecord::Base
   named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
   named_scope :with_operator, :conditions => ['operator_id is not null'], :order => 'confirmed_at desc'
   
+  [:responsible_organizations, 
+   :emailable_organizations, 
+   :unemailable_organizations, 
+   :council_responsible?,
+   :pte_responsible?,
+   :operators_responsible? ].each { |method| delegate method, :to => :location }
+  
   @@route_categories = ['New route needed', 'Keep existing route', 'Crowding', 'Lateness', 'Other']
   @@stop_categories = ['Repair needed', 'Facilities needed', 'Other']
   
@@ -98,7 +105,7 @@ class Problem < ActiveRecord::Base
       Assignment.create_assignment(assignment_attributes)
     end
   end
-   
+  
   # class methods
   
   # Sendable reports - confirmed, with operator, PTE, or council, but not sent

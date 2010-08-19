@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100817193959) do
+ActiveRecord::Schema.define(:version => 20100819101900) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -183,7 +183,7 @@ ActiveRecord::Schema.define(:version => 20100817193959) do
     t.datetime "sent_at"
     t.datetime "confirmed_at"
     t.integer  "status_code"
-    t.string   "councils"
+    t.string   "council_info"
     t.integer  "public_transport_executive_id"
   end
 

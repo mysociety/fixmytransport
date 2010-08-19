@@ -1,4 +1,17 @@
 Dear <%= raw @recipient_models.map{ |recipient| recipient.name }.to_sentence %>,
+<%- if @recipient_models.size > 1 %>
+
+[ This email has been sent to both councils covering the location of the problem, as the user 
+did not categorise it; please ignore it if you're not the correct council to deal with the issue, 
+or let us know what category of problem this is so we can add it to our system. ]
+<%- end %>
+<%- if @missing_recipient_models %>
+
+[ We realise this problem might be the responsibility of 
+<%= raw @recipient_models.map{ |recipient| recipient.name }.to_sentence %>; however, we don't 
+currently have any contact details for them. If you know of an appropriate contact address, 
+please do get in touch. ]
+<%- end %>
 
 A user of FixMyTransport has submitted the following report of a problem <%= on_or_at_the(@problem.location) %> 
 <%= raw @problem.location.name %> that they believe might require your attention.
