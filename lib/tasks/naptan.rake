@@ -116,6 +116,11 @@ namespace :naptan do
       end
     end
     
+    desc 'Add TIPLOC and CRS codes to stops'
+    task :add_stops_codes => :environment do 
+      parse('rail_references', Parsers::NaptanParser)
+    end
+    
   end
   
   namespace :geo do 

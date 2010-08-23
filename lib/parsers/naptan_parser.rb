@@ -19,6 +19,26 @@ class Parsers::NaptanParser
     Iconv.iconv('utf-8', 'ISO_8859-1', File.read(filepath)).join
   end
   
+  def parse_rail_references filepath
+    csv_data = convert_encoding(filepath)
+    FasterCSV.parse(csv_data, csv_options) do |row|
+      stop = Stop.find_by_atco_code(row['AtcoCode'])
+      if ! stop
+        puts "*** Missing #{row['AtcoCode']} ***"
+        next
+      end
+      stop.tiploc_code = row["TiplocCode"]
+      stop.crs_code = row["CrsCode"]
+      if stop.common_name == 'Dalston Junction Rail Station' and stop.crs_code == 'DKJ'
+        stop.crs_code = 'DLJ'
+        puts "*** Manual fix: Dalston Junction Rail Station DKJ -> DLJ"
+      end
+      # puts "#{stop.common_name} #{stop.tiploc_code} #{stop.crs_code}"
+    
+      yield stop
+    end
+  end
+  
   def parse_stop_area_hierarchy filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|

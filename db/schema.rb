@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100819101900) do
+ActiveRecord::Schema.define(:version => 20100823094838) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -403,10 +403,13 @@ ActiveRecord::Schema.define(:version => 20100819101900) do
     t.integer  "locality_id"
     t.string   "cached_slug"
     t.boolean  "loaded"
+    t.string   "tiploc_code"
+    t.string   "crs_code"
   end
 
   add_index "stops", ["cached_slug"], :name => "index_stops_on_cached_slug"
   add_index "stops", ["coords"], :name => "index_stops_on_coords", :spatial => true
+  add_index "stops", ["crs_code"], :name => "index_stops_on_crs_code"
   add_index "stops", ["locality_id", "stop_type"], :name => "index_stops_on_locality_and_stop_type"
   add_index "stops", ["locality_id"], :name => "index_stops_on_locality_id"
   add_index "stops", ["naptan_code"], :name => "index_stops_on_naptan_code"
