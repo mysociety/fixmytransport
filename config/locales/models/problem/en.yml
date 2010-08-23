@@ -20,6 +20,8 @@ en:
               blank: "Please give the station/stop, town/area or route"
               blank_stop: "Please give the stop or area"
               blank_route: "Please give the route or area"
+            reporter_name:
+              blank: "Please enter your name"
         stop:
           attributes: 
             common_name:

@@ -4,6 +4,8 @@ en:
   transport_mode: 'Transport type'
   email: 'Email'
   name: 'Name'
+  phone: Phone
+  optional: optional
   location_name: 'Station/stop name'
   area: 'Town/area/postcode'
   route_number: 'Route'
@@ -14,13 +16,9 @@ en:
   go: Go!
   multiple_locations: "More than one match"
   multiple_locations_intro: "We found more than one match for your description. We show up to {{num_locations}} matches, please try a different search if yours is not here."
-  location_search_failure: "Oh dear. We'll keep working on it. Thanks for playing!"
-  location_search_success: "Brill. Thanks for helping!"
-  try_another: "Try again?"
-  location_response_yes: "Yes, this is what I was looking for"
-  location_response_no: "No, this is not what I was looking for"
   confirmation_sent: "We've sent you an email to confirm that you want to create this problem. We'll hold on to it while you're checking your email."
   problem_not_found: "We couldn't locate your problem in the database. If you've copied the URL from an email, please check that you copied it exactly."
+  is_this_a_campaign: Is this a campaign?
   posted_time: "{{time}} ago"
   added: added
   reported: reported
@@ -66,7 +64,7 @@ en:
   see_your_update: See your update on the site
   updates: Updates
   posted: posted
-  update_help: "Please note that updates are not sent to the operator. If you leave your name it will be public. Your information will only be used in accordance with our {{privacy_link}}"
+  update_help: "Please note that updates are not sent to the organization responsible for this {{location_type}}. If you leave your name it will be public. Your information will only be used in accordance with our {{privacy_link}}"
   privacy_policy: privacy policy
   problem_has_been_fixed: This problem has been fixed.
   marked_as_fixed: marked as fixed

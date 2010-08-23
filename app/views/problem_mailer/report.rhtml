@@ -23,12 +23,12 @@ please visit the following link:
 
 ----------
 
-Name: <%= raw @problem.reporter.name %>
+Name: <%= raw @problem.reporter_name %>
 
 Email: <%= raw @problem.reporter.email %>
 
-<%- if !@problem.reporter.phone.blank? %>
-Phone: <%= raw @problem.reporter.phone %>
+<%- if !@problem.reporter_phone.blank? %>
+Phone: <%= raw @problem.reporter_phone %>
 
 <%- end %>
 Subject: <%= raw @problem.subject %>

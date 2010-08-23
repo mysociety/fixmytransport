@@ -520,6 +520,10 @@ form .checkbox .label-note {
   padding-right: 0;
 }
 
+form .optional-note {
+  font-size: 0.8em;
+}
+
 
 /* Problem page */
 .problem-full {

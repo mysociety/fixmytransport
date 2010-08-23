@@ -1,4 +1,4 @@
-Hi <%= raw @recipient.name %>,
+Hi <%= raw @problem.reporter_name %>,
 
 Please click on the link below to confirm the problem you just
 added to FixMyTransport:
@@ -12,7 +12,7 @@ Your problem had the subject: <%= raw @problem.subject %>
 
 And description: <%= raw @problem.description %>
 
-Your name will be shown on the site as: <%= raw (@recipient.anonymous? ? t(:anonymous) : @recipient.name) %>
+Your name will be shown on the site as: <%= raw (@problem.anonymous? ? t(:anonymous) : @problem.reporter_name) %>
 
 Yours,
 The mySociety team

@@ -2,5 +2,5 @@
     %span.title
       %b= campaign.title
     =t(:added)
-    %span.author= campaign.reporter.name.blank? ? t(:anonymously) : t(:by, :name => campaign.reporter.name)
+    %span.reporter=  t(:by, :name => campaign.reporter.name)
     %span.transport-location!= t(:campaign_location, :link => link_to(campaign.location.description, campaign_url(campaign)))

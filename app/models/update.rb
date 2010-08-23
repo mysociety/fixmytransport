@@ -1,9 +1,10 @@
 class Update < ActiveRecord::Base
   belongs_to :reporter, :class_name => 'User'
-  accepts_nested_attributes_for :reporter
   before_create :generate_confirmation_token
   after_create :send_confirmation_email
   belongs_to :problem
+  validates_associated :reporter
+  validates_presence_of :text
   has_paper_trail
   has_status({ 0 => 'New', 
                1 => 'Confirmed', 
@@ -17,6 +18,10 @@ class Update < ActiveRecord::Base
   
   def send_confirmation_email
     ProblemMailer.deliver_update_confirmation(reporter, self, token)
+  end
+  
+  def reporter_attributes=(attributes)
+    self.reporter = User.find_or_initialize_by_email(attributes[:email])
   end
   
   def confirm!

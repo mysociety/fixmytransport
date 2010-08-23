@@ -6,7 +6,7 @@ atom_feed do |feed|
       entry.title(h(campaign.title))
       entry.content(strip_tags(campaign.description))
       entry.author do |author|
-        author.name(campaign.reporter.name.blank? ? t(:anonymous) : campaign.reporter.name)
+        reporter.name(campaign.reporter.name)
       end
     end
   end

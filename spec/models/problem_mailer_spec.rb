@@ -6,10 +6,10 @@ describe ProblemMailer do
  
     before do
       @problem = mock_model(Problem, :subject => "My Problem", 
-                                     :description => "Some description")
-      @recipient = mock_model(User, :email => "problemreporter@example.com", 
-                                    :name => "Problem Reporter", 
-                                    :anonymous? => false)
+                                     :description => "Some description",
+                                     :reporter_name => "Problem Reporter", 
+                                     :anonymous? => false)
+      @recipient = mock_model(User, :email => "problemreporter@example.com")
       @token = "test-token"
     end
   
@@ -40,12 +40,12 @@ describe ProblemMailer do
     before do
       @mock_operator = mock_model(Operator, :email => 'operator@example.com', 
                                             :name => 'Test Operator')
-      @mock_user = mock_model(User, :name => 'Test User', 
-                                    :email => 'user@example.com', 
-                                    :phone => '123',
-                                    :anonymous? => false)
+      @mock_user = mock_model(User, :email => 'user@example.com')
       @mock_problem = mock_model(Problem, :operator => @mock_operator, 
                                           :reporter => @mock_user,
+                                          :reporter_name => 'Test User', 
+                                          :reporter_phone => '123',
+                                          :anonymous? => false,
                                           :subject => "Missing ticket machines", 
                                           :description => "Desperately need more.",
                                           :location => stops(:victoria_station_one))
@@ -96,7 +96,10 @@ describe ProblemMailer do
       mock_model(Problem, :responsible_organizations => emailable_orgs + unemailable_orgs,
                           :emailable_organizations => emailable_orgs,
                           :unemailable_organizations => unemailable_orgs,
-                          :update_attribute => true, 
+                          :update_attribute => true,
+                          :reporter_name => 'Test User', 
+                          :reporter_phone => '123',
+                          :anonymous? => false, 
                           :subject => 'A test problem',
                           :description => 'Some description',
                           :reporter => @reporter,

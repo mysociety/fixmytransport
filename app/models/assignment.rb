@@ -47,4 +47,14 @@ class Assignment < ActiveRecord::Base
    
   end
   
+  def user_name
+    if problem
+      if problem.anonymous?
+        I18n.t(:the_problem_reporter)
+      else
+        problem.reporter_name
+      end
+    end
+  end
+  
 end

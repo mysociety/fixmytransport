@@ -4,13 +4,14 @@ class Problem < ActiveRecord::Base
   belongs_to :transport_mode
   belongs_to :operator
   belongs_to :passenger_transport_executive
+  belongs_to :campaign
   has_many :assignments
   has_many :updates
-  accepts_nested_attributes_for :reporter
   accepts_nested_attributes_for :updates
   validates_presence_of :transport_mode_id, :unless => :location
-  validates_presence_of :description, :subject, :category, :if => :location
+  validates_presence_of :description, :subject, :category, :reporter_name, :if => :location
   validate :validate_location_attributes
+  validates_associated :reporter
   attr_accessor :location_attributes, :locations, :location_search, :location_errors
   cattr_accessor :route_categories, :stop_categories
   after_create :send_confirmation_email
@@ -144,6 +145,18 @@ class Problem < ActiveRecord::Base
     organization_names.to_sentence
   end
   
+  def reporter_attributes=(attributes)
+    self.reporter = User.find_or_initialize_by_email(attributes[:email])
+  end
+  
+  def anonymous
+    !reporter_public
+  end
+  
+  def anonymous?
+    !reporter_public?
+  end
+  
   # class methods
   
   # Sendable reports - confirmed, with operator, PTE, or council, but not sent
@@ -160,4 +173,5 @@ class Problem < ActiveRecord::Base
       return stop_categories
     end
   end
+  
 end

@@ -1,21 +1,22 @@
 %h3= t(:provide_an_update)
-.update-help!= t(:update_help, :privacy_link => link_to(t(:privacy_policy), about_url(:anchor => "privacy")))
+.update-help!= t(:update_help, :privacy_link => link_to(t(:privacy_policy), about_url(:anchor => "privacy")), :location_type => readable_location_type(@problem.location))
 - form_for @problem, :url => problem_path(@problem), :html => { :class => 'new_update' } do |f|
   .fieldset
     - f.fields_for :updates, @new_update do |update_fields|
+      - if @problem.errors.on('reporter_name')
+        .form-field-error= error_message_on @new_update, 'reporter_name'
+      .form-field
+        != update_fields.label :reporter_name, t(:name)
+        != update_fields.text_field :reporter_name
+        %span.optional-note= "(#{t(:optional)})"
       - update_fields.fields_for :reporter do |reporter_fields|
-        - if @new_update.errors.on('reporter.name')
-          .form-field-error= error_message_on @new_update, 'reporter.name'
-        .form-field
-          != reporter_fields.label :name
-          != reporter_fields.text_field :name
-        - if @new_update.errors.on('reporter.email')
-          .form-field-error= error_message_on @new_update, 'reporter.email'
+        - if @new_update.reporter.errors.on('email')
+          .form-field-error= error_message_on @new_update.reporter, 'email'
         .form-field
           != reporter_fields.label :email
           != reporter_fields.text_field :email
-      - if @new_update.errors.on(:title)
-        .form-field-error= error_message_on @new_update, :title
+      - if @new_update.errors.on(:text)
+        .form-field-error= error_message_on @new_update, :text
       .form-field
         != update_fields.label :text, t(:update)
         != update_fields.text_area :text, :rows => 5

@@ -2,7 +2,9 @@ class ProblemsController < ApplicationController
   
   def new
     location = params[:location_type].constantize.find(params[:location_id])
-    @problem = Problem.new(:location => location, :reporter => User.new(:public => true))
+    @problem = Problem.new(:location => location, 
+                           :reporter => User.new, 
+                           :reporter_public => true)
     if location.respond_to? :transport_mode_id
       @problem.transport_mode_id = location.transport_mode_id
     else
@@ -25,8 +27,8 @@ class ProblemsController < ApplicationController
     if @problem.save
       # create task assignment
       @problem.create_assignments
-      flash[:notice] = t(:confirmation_sent)
-      redirect_to location_url(@problem.location)
+      flash.now[:notice] = t(:confirmation_sent)
+      render :confirmation_sent
     else
       render :new
     end

@@ -3,6 +3,7 @@ class Campaign < ActiveRecord::Base
   belongs_to :location, :polymorphic => true
   belongs_to :transport_mode
   has_many :assignments
+  has_one :problem
   after_create :add_default_assignment
   validates_presence_of :title, :description
   named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'

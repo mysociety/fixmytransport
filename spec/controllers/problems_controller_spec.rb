@@ -101,12 +101,12 @@ describe ProblemsController do
     
     it 'should show the confirmation notice if the problem can be saved' do 
       make_request
-      flash[:notice].should == "We've sent you an email to confirm that you want to create this problem. We'll hold on to it while you're checking your email."
+      response.flash[:notice].should == "We've sent you an email to confirm that you want to create this problem. We'll hold on to it while you're checking your email."
     end
     
-    it 'should redirect to the problem location page if the problem can be saved' do 
+    it 'should render the "confirmation_sent" template if the problem can be saved' do 
       make_request
-      response.should redirect_to(stop_url(@stop.locality, @stop))
+      response.should render_template('problems/confirmation_sent')
     end
     
     it 'should create assignments associated with the problem' do 

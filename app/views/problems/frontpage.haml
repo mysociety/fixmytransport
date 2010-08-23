@@ -3,5 +3,5 @@
   .problem-form-wrapper
     .problem-form
       - form_for @problem, :url => find_problems_path do |form| 
-        = render :partial => 'problems/form', :locals => { :form => form }
+        = render :partial => 'problems/find_form', :locals => { :form => form }
         != submit_tag t(:go)
