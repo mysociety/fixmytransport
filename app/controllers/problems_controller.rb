@@ -24,6 +24,12 @@ class ProblemsController < ApplicationController
   
   def create
     @problem = Problem.new(params[:problem])
+    if params[:is_campaign]
+      @problem.build_campaign({ :location_id => params[:problem][:location_id], 
+                                :location_type => params[:problem][:location_type],
+                                :user => @problem.user })
+    end
+    
     if @problem.save
       # create task assignment
       @problem.create_assignments
@@ -93,8 +99,8 @@ class ProblemsController < ApplicationController
     # just accept params for a new update for now
     if @problem.update_attributes({ :updates_attributes => 
                                     { "0" => params[:problem][:updates_attributes]["0"] } })
-      flash[:notice] = t(:update_confirmation_sent)
-      redirect_to problem_url(@problem)
+      flash.now[:notice] = t(:update_confirmation_sent)
+      render :confirmation_sent
     else
       @new_update = @problem.updates.detect{ |update| update.new_record? }
       render :show

@@ -142,12 +142,12 @@ describe ProblemsController do
     
     it 'should show the confirmation message if the update is valid' do 
       make_request
-      flash[:notice].should == "We've sent you an email to confirm that you want to add this update. We'll hold on to it while you're checking your email."
+      response.flash[:notice].should == "We've sent you an email to confirm that you want to add this update. We'll hold on to it while you're checking your email."
     end
     
-    it 'should redirect to the problem page if the update is valid' do 
+    it 'should render the "confirmation_sent" template if the update is valid' do 
       make_request
-      response.should redirect_to(problem_url(@mock_problem))
+      response.should render_template('problems/confirmation_sent')
     end
     
   end
