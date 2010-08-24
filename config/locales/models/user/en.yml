@@ -9,3 +9,18 @@ en:
               invalid: "Please enter a valid email address"
             name:
               blank: "Please enter your name"
+  authlogic:
+    error_messages:
+      password_blank: "Please enter your password"
+      password_invalid: "Either your email address or password was not recognized. Please try again."
+      login_blank: "Please enter your email address"
+      login_not_found: "Either your email address or password was not recognized. Please try again."
+      no_authentication_details: "Please enter your email address and password"
+    models:
+      user_session: UserSession 
+    attributes:
+      user_session: 
+        login: login
+        email: email
+        password: password
+        remember_me: remember me
