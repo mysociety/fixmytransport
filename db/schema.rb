@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100823151351) do
+ActiveRecord::Schema.define(:version => 20100824135124) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -65,7 +65,8 @@ ActiveRecord::Schema.define(:version => 20100823151351) do
     t.integer  "transport_mode_id"
     t.string   "category"
     t.text     "token"
-    t.integer  "reporter_id"
+    t.integer  "initiator_id"
+    t.integer  "status_code"
   end
 
   create_table "council_contacts", :force => true do |t|
@@ -480,6 +481,15 @@ ActiveRecord::Schema.define(:version => 20100823151351) do
     t.boolean  "wants_fmt_updates"
     t.boolean  "public"
     t.string   "phone"
+    t.string   "crypted_password"
+    t.string   "password_salt"
+    t.string   "persistence_token"
+    t.integer  "login_count",        :default => 0,     :null => false
+    t.integer  "failed_login_count", :default => 0,     :null => false
+    t.datetime "last_request_at"
+    t.datetime "current_login_at"
+    t.datetime "last_login_at"
+    t.boolean  "registered",         :default => false, :null => false
   end
 
   create_table "versions", :force => true do |t|
