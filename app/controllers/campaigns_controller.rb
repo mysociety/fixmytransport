@@ -59,7 +59,7 @@ class CampaignsController < ApplicationController
           return true
         end
       else
-        flash[:notice] = "Login as #{@campaign.initiator.name} to confirm this campaign"
+        flash[:notice] = t(:login_to_confirm, :user => @campaign.initiator.name)
         store_location
         redirect_to login_url
         return false
@@ -72,7 +72,7 @@ class CampaignsController < ApplicationController
   
   def require_owner
     return true if current_user && current_user == @campaign.initiator
-    flash[:notice] = "Login as #{@campaign.initiator.name} to edit this campaign"
+    flash[:notice] = t(:login_to_edit, :user => @campaign.initiator.name)
     store_location
     redirect_to login_url
     return false

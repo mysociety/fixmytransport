@@ -5,3 +5,5 @@ en:
   campaign_start_date: Start date
   write_to_operator: Write to the operator
   campaign_location: "to {{link}}"
+  login_to_confirm: "Login as {{user}} to confirm this campaign"
+  login_to_edit: "Login as {{user}} to edit this campaign"
