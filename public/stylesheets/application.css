@@ -45,6 +45,11 @@ h2 {
   margin: 0.5em 0;
 }
 
+ul.navigation {
+  color: #dedede;
+  font-size: 0.8em;
+}
+
 #footer {
   clear: both; 
   text-align:center;

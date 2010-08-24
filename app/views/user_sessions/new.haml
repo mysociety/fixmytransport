@@ -1,0 +1,17 @@
+- form_for @user_session, :url => user_sessions_path do |f| 
+  - if @user_session.errors.on_base
+    .form-field-error= error_message_on @user_session, :base
+  .form-field
+    - if @user_session.errors.on('email')
+      .form-field-error= error_message_on @user_session, :email
+    =f.label :email 
+    != f.text_field :email 
+  .form-field
+    - if @user_session.errors.on('password')
+      .form-field-error= error_message_on @user_session, :password
+    = f.label :password 
+    != f.password_field :password 
+  .checkbox
+  != f.check_box :remember_me 
+  = f.label :remember_me 
+  != f.submit t(:login)

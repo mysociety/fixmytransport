@@ -18,6 +18,12 @@
     - [:notice, :error, :message].each do |key| 
       - unless flash[key].blank? 
         %p{ :class => "flash flash_#{key}" }!= flash[key]
+    %ul.navigation
+      - if current_user
+        %li= t(:logged_in_as, :name => current_user.name)
+        %li= link_to(t(:logout), logout_path)
+      - else
+        %li= link_to(t(:login), login_path)
     .wrapper
       .content
         = yield
