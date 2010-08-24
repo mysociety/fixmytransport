@@ -11,6 +11,11 @@ class Campaign < ActiveRecord::Base
   cattr_reader :per_page, :categories
   @@per_page = 10
   @@categories = ['New route', 'Keep route', 'Get repair', 'Adopt', 'Other']
+  
+  has_status({ 0 => 'New', 
+               1 => 'Confirmed', 
+               2 => 'Successful',
+               3 => 'Hidden' })
 
   def add_default_assignment
     self.assignments.create(:user_id => initiator.id, :task_type_name => 'write-to-transport-operator')
