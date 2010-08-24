@@ -68,6 +68,6 @@
       = f.label :reporter_public, t(:ok_to_be_public)
       .label-note= t(:never_show_email)
     .checkbox
-      !=check_box_tag 'is_campaign'
+      !=check_box_tag 'is_campaign', "1", params[:is_campaign]
       = f.label t(:is_this_a_campaign)
   != submit_tag t(:go)    

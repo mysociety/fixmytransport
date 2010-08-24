@@ -27,7 +27,7 @@ class ProblemsController < ApplicationController
     if params[:is_campaign]
       @problem.build_campaign({ :location_id => params[:problem][:location_id], 
                                 :location_type => params[:problem][:location_type],
-                                :user => @problem.user })
+                                :reporter => @problem.reporter })
     end
     
     if @problem.save

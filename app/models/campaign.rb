@@ -5,7 +5,7 @@ class Campaign < ActiveRecord::Base
   has_many :assignments
   has_one :problem
   after_create :add_default_assignment
-  validates_presence_of :title, :description
+  validates_presence_of :title, :description, :on => :update
   named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
   cattr_reader :per_page, :categories
   @@per_page = 10

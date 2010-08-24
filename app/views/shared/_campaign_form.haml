@@ -1,0 +1,12 @@
+- form_for campaign, :url => campaign_url(campaign), :html => { :class => 'update_campaign' } do |f| 
+  .fieldset
+    - if campaign.errors.on('title')
+      .form-field-error= error_message_on campaign, :title
+    .form-field
+      = f.label :title
+      != f.text_field :title
+    - if campaign.errors.on('description')
+      .form-field-error= error_message_on campaign, :description
+    .form-field
+      = f.label :description
+      != f.text_area :description, { :rows => 5 }   

@@ -18,17 +18,23 @@ require 'spec_helper'
 
 describe Campaign do
   
-  it 'should be invalid without a description' do 
-    @campaign = Campaign.new(:transport_mode_id => 5, :location => Route.new)
-    @campaign.valid? 
-    @campaign.errors.on(:description).should == 'Please give a brief description of your campaign'
+  describe ' validating on update' do 
+    
+    before do 
+      @campaign = Campaign.new
+      @campaign.stub!(:new_record?).and_return(false)
+      @campaign.update_attributes({})
+      @campaign.valid?
+    end
+    
+    it 'should be invalid without a description' do 
+      @campaign.errors.on(:description).should == 'Please give a brief description of your campaign'
+    end
+  
+    it 'should be invalid without a title' do 
+      @campaign.errors.on(:title).should == 'Please give your campaign a title'
+    end
+  
   end
   
-  it 'should be invalid without a title' do 
-    @campaign = Campaign.new(:transport_mode_id => 5, :location => Route.new)
-    @campaign.valid? 
-    @campaign.errors.on(:title).should == 'Please give your campaign a title'
-  end
-  
-
 end

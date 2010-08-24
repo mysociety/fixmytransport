@@ -4,7 +4,7 @@ class Problem < ActiveRecord::Base
   belongs_to :transport_mode
   belongs_to :operator
   belongs_to :passenger_transport_executive
-  belongs_to :campaign
+  belongs_to :campaign, :autosave => true
   has_many :assignments
   has_many :updates
   accepts_nested_attributes_for :updates
