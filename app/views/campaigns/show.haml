@@ -5,17 +5,7 @@
 .campaign-info
   %h3= @campaign.title
   %p.campaign= @campaign.description
+  .initiator= @campaign.initiator.name
   %p.start-date
     %b= t(:campaign_start_date)
     =@campaign.created_at.strftime("%d/%m/%Y") 
-- @campaign.assignments.completed.each do |assignment|
-  = render :partial => "shared/complete_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
-- form_for(@task) do |f|
-  != f.hidden_field :task_type_id
-  != f.hidden_field :return_url
-  - f.fields_for :callback_params do |callback_fields|
-    != callback_fields.hidden_field :assignment_id, :value => @task.callback_params.assignment_id
-  - f.fields_for :params do |fields|
-    != fields.hidden_field :location_id, :value => @campaign.location_id
-    != fields.hidden_field :location_type, :value => @campaign.location_type
-  != submit_tag t(:write_to_operator)
