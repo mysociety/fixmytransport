@@ -53,7 +53,8 @@ class CampaignsController < ApplicationController
     if params[:token] && params[:token] == @campaign.problem.token
       if !@campaign.initiator.registered?
         if current_user
-          render :template => "wrong_user"
+          store_location
+          render :template => "campaigns/wrong_user"
           return false
         else
           return true
