@@ -7,13 +7,56 @@ class ApplicationController < ActionController::Base
   include MySociety::UrlMapper
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
-  helper_method :location_search, :location_url, :location_path, :main_url, :admin_url
+  helper_method :location_search, 
+                :location_url, 
+                :location_path, 
+                :main_url, 
+                :admin_url, 
+                :current_user_session,
+                :current_user
   url_mapper # See MySociety::UrlMapper
-  # Scrub sensitive parameters from your log
-  # filter_parameter_logging :password
+  # Scrub sensitive parameters from the log
+  filter_parameter_logging :password, :password_confirmation
   before_filter :initialize_feedback
-  
+
   private
+
+  def current_user_session
+    return @current_user_session if defined?(@current_user_session)
+    @current_user_session = UserSession.find
+  end
+
+  def current_user
+    return @current_user if defined?(@current_user)
+    @current_user = current_user_session && current_user_session.record
+  end
+
+  def require_user
+    unless current_user
+      store_location
+      flash[:notice] = t(:must_be_logged_in)
+      redirect_to new_user_session_url
+      return false
+    end
+  end
+
+  def require_no_user
+    if current_user
+      store_location
+      flash[:notice] = t(:must_be_logged_out)
+      redirect_to root_url
+      return false
+    end
+  end
+
+  def store_location
+    session[:return_to] = request.request_uri
+  end
+
+  def redirect_back_or_default(default)
+    redirect_to(session[:return_to] || default)
+    session[:return_to] = nil
+  end
   
   # For administration interface, return display name of authenticated user
   def admin_http_auth_user
@@ -24,7 +67,7 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def current_user
+  def user_for_paper_trail
     admin_http_auth_user
   end
   
