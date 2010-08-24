@@ -7,3 +7,4 @@ en:
   campaign_location: "to {{link}}"
   login_to_confirm: "Login as {{user}} to confirm this campaign"
   login_to_edit: "Login as {{user}} to edit this campaign"
+  wrong_user: "To get started with this campaign, you'll need to logout"
