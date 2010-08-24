@@ -158,7 +158,8 @@ describe ProblemsController do
       @mock_assignment = mock_model(Assignment)
       @mock_problem = mock_model(Problem, :update_attributes => true, 
                                           :assignments => [@mock_assignment],
-                                          :emailable_organization_info => [])
+                                          :emailable_organization_info => [],
+                                          :campaign => nil)
       Problem.stub!(:find_by_token).and_return(@mock_problem)
       Assignment.stub!(:complete_problem_assignments)
     end
@@ -182,6 +183,18 @@ describe ProblemsController do
                            'publish-problem' => {} }
       Assignment.should_receive(:complete_problem_assignments).with(@mock_problem, assignment_data)
       make_request
+    end
+    
+    it 'should render the "confirm" view if there is no campaign associated with the problem' do 
+      make_request
+      response.should render_template("problems/confirm")
+    end
+    
+    it 'should redirect to the campaign edit page passing the token if there is a campaign associated with the problem' do 
+      @mock_campaign = mock_model(Campaign)
+      @mock_problem.stub!(:campaign).and_return(@mock_campaign)
+      make_request
+      response.should redirect_to(edit_campaign_url(@mock_campaign))
     end
 
   end

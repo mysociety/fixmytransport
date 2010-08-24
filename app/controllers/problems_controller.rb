@@ -56,6 +56,9 @@ class ProblemsController < ApplicationController
     else
       @error = t(:problem_not_found)
     end
+    if @problem.campaign
+      redirect_to edit_campaign_url(@problem.campaign, :token => params[:email_token])
+    end
   end
   
   def confirm_update
