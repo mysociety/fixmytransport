@@ -1,0 +1,29 @@
+- form_for campaign, :url => campaign_url(campaign), :html => { :class => 'update_campaign' } do |f| 
+  .fieldset
+    - if campaign.errors.on('title')
+      .form-field-error= error_message_on campaign, :title
+    .form-field
+      = f.label :title
+      != f.text_field :title
+    - if campaign.errors.on('description')
+      .form-field-error= error_message_on campaign, :description
+    .form-field
+      = f.label :description
+      != f.text_area :description, { :rows => 5 }   
+    - if ! campaign.initiator.registered? or campaign.initiator.registered_changed?
+      - fields_for campaign.initiator do |user_fields|
+        .form-field
+          != user_fields.hidden_field :name, :value => campaign.problem.reporter_name
+          != hidden_field_tag :token, params[:token]
+          - if campaign.initiator.errors.on('password')
+            .form-field-error= error_message_on campaign.initiator, :password
+          = user_fields.label :password
+          != user_fields.password_field :password
+        .form-field
+          - if campaign.initiator.errors.on('password_confirmation')
+            .form-field-error= error_message_on campaign.initiator, :password_confirmation
+          = user_fields.label :password_confirmation
+          != user_fields.password_field :password_confirmation
+    !=f.submit t(:go)
+
+          
