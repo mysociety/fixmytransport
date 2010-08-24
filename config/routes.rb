@@ -4,7 +4,7 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'problems', :action => 'frontpage'
 
   # resources
-  map.resources :campaigns, :only => [:index, :show]
+  map.resources :campaigns, :except => [:destroy]
   
   map.resources :problems, :except => [:destroy], 
                            :collection => { :choose_location => :get, 
@@ -51,6 +51,12 @@ ActionController::Routing::Routes.draw do |map|
   map.route "/routes/:scope/:id.:format", :controller => "routes", 
                                           :action => 'update', 
                                           :conditions => { :method => :put }
+  
+  # user sessions
+  map.login 'login', :controller => 'user_sessions', :action => 'new'  
+  map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
+  map.resources :user_sessions
+  
   # static
   map.about '/about', :controller => 'static', :action => 'about'
   map.feedback '/feedback', :controller => 'static', 
