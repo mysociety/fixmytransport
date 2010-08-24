@@ -27,10 +27,12 @@ class ProblemsController < ApplicationController
     if params[:is_campaign]
       @problem.build_campaign({ :location_id => params[:problem][:location_id], 
                                 :location_type => params[:problem][:location_type],
-                                :reporter => @problem.reporter })
+                                :status => :new, 
+                                :initiator => @problem.reporter })
     end
     
-    if @problem.save
+    if @problem.valid?
+      @problem.save_reporter && @problem.save
       # create task assignment
       @problem.create_assignments
       flash.now[:notice] = t(:confirmation_sent)
@@ -53,11 +55,11 @@ class ProblemsController < ApplicationController
       # complete the relevant assignments
       Assignment.complete_problem_assignments(@problem, {'write-to-transport-organization' => {}, 
                                                          'publish-problem' => {}})
+      if @problem.campaign
+        redirect_to edit_campaign_url(@problem.campaign, :token => params[:email_token])
+      end
     else
       @error = t(:problem_not_found)
-    end
-    if @problem.campaign
-      redirect_to edit_campaign_url(@problem.campaign, :token => params[:email_token])
     end
   end
   
@@ -100,12 +102,12 @@ class ProblemsController < ApplicationController
   def update
     @problem = Problem.find(params[:id])
     # just accept params for a new update for now
-    if @problem.update_attributes({ :updates_attributes => 
-                                    { "0" => params[:problem][:updates_attributes]["0"] } })
+    @new_update = @problem.updates.build(params[:problem][:updates_attributes]["0"])
+    if @new_update.valid?
+      @new_update.save_reporter && @new_update.save
       flash.now[:notice] = t(:update_confirmation_sent)
       render :confirmation_sent
     else
-      @new_update = @problem.updates.detect{ |update| update.new_record? }
       render :show
     end
   end

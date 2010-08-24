@@ -69,18 +69,20 @@ describe ProblemsController do
     before do 
       @stop = stops(:victoria_station_one)
       @mock_user = mock_model(User)
-      @mock_problem = mock_model(Problem, :save => true, 
+      @mock_problem = mock_model(Problem, :valid? => true, 
+                                          :save => true, 
+                                          :save_reporter => true,
                                           :location => @stop,
                                           :reporter => @mock_user, 
                                           :create_assignments => true)
       Problem.stub!(:new).and_return(@mock_problem)
       @mock_assignment = mock_model(Assignment)
       Assignment.stub!(:create_assignments).and_return(@mock_assignment)
-      @problem_attributes = {}
+      @problem_attributes = { "location_id" => 55, "location_type" => 'Stop' }
     end
     
-    def make_request
-      post :create, { :problem => @problem_attributes }
+    def make_request(is_campaign=nil)
+      post :create, { :problem => @problem_attributes, :is_campaign => is_campaign }
     end
     
     it 'should create a new problem using the attributes passed to it' do 
@@ -88,13 +90,18 @@ describe ProblemsController do
       make_request
     end
     
-    it 'should try to save the problem' do 
+    it 'should try to save the problem if it is valid' do 
       @mock_problem.should_receive(:save)
       make_request
     end
     
-    it 'should render the "new" template if the problem cannot be saved' do 
-      @mock_problem.stub!(:save).and_return(false)
+    it 'should try to save the reporter if the problem is valid' do 
+      @mock_problem.should_receive(:save_reporter)
+      make_request
+    end
+    
+    it 'should render the "new" template if the problem is not valid' do 
+      @mock_problem.stub!(:valid?).and_return(false)
       make_request
       response.should render_template('problems/new')
     end
@@ -114,12 +121,22 @@ describe ProblemsController do
       make_request
     end
     
+    it 'should create a campaign with status "New" associated with the problem if passed the parameter "is_campaign"' do 
+      @mock_problem.should_receive(:build_campaign).with({ :location_id => @problem_attributes["location_id"], 
+                                                           :location_type => @problem_attributes["location_type"],
+                                                           :status => :new, 
+                                                           :initiator => @mock_user })
+      make_request(is_campaign="1")
+    end
+    
   end
   
   describe "PUT #update" do 
   
     before do 
-      @mock_problem = mock_model(Problem, :update_attributes => true)
+      @mock_problem = mock_model(Problem, :updates => [])
+      @mock_update = mock_model(Update, :valid? => true, :save => true, :save_reporter => true)
+      @mock_problem.updates.stub!(:build).and_return(@mock_update)
       Problem.stub!(:find).and_return(@mock_problem)
     end
     
@@ -135,14 +152,23 @@ describe ProblemsController do
     end
     
     it 'should only pass on parameters for a new update' do 
-      @mock_problem.should_receive(:update_attributes).with({ :updates_attributes => 
-                                                              { '0' => { 'text' => 'test' }}})
+      @mock_problem.updates.should_receive(:build).with({ 'text' => 'test' })
       make_request
     end
     
     it 'should show the confirmation message if the update is valid' do 
       make_request
       response.flash[:notice].should == "We've sent you an email to confirm that you want to add this update. We'll hold on to it while you're checking your email."
+    end
+    
+    it 'should save the update it is valid' do 
+      @mock_update.should_receive(:save)
+      make_request
+    end
+    
+    it 'should save the update reporter if the update is valid' do 
+      @mock_update.should_receive(:save_reporter)
+      make_request
     end
     
     it 'should render the "confirmation_sent" template if the update is valid' do 
@@ -194,7 +220,7 @@ describe ProblemsController do
       @mock_campaign = mock_model(Campaign)
       @mock_problem.stub!(:campaign).and_return(@mock_campaign)
       make_request
-      response.should redirect_to(edit_campaign_url(@mock_campaign))
+      response.should redirect_to(edit_campaign_url(@mock_campaign, :token => 'my-test-token'))
     end
 
   end
