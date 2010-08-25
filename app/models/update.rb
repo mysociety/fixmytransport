@@ -20,8 +20,16 @@ class Update < ActiveRecord::Base
     ProblemMailer.deliver_update_confirmation(reporter, self, token)
   end
   
+  # create the user if it doesn't exist, but don't save it yet
   def reporter_attributes=(attributes)
     self.reporter = User.find_or_initialize_by_email(attributes[:email])
+  end
+  
+  # save the user account if it doesn't exist, but don't log it in
+  def save_reporter
+    if self.reporter.new_record?
+      self.reporter.save_without_session_maintenance
+    end
   end
   
   def confirm!

@@ -7,7 +7,6 @@ class Problem < ActiveRecord::Base
   belongs_to :campaign, :autosave => true
   has_many :assignments
   has_many :updates
-  accepts_nested_attributes_for :updates
   validates_presence_of :transport_mode_id, :unless => :location
   validates_presence_of :description, :subject, :category, :reporter_name, :if => :location
   validate :validate_location_attributes
@@ -145,8 +144,16 @@ class Problem < ActiveRecord::Base
     organization_names.to_sentence
   end
   
+  # if this email has never been used before, assign the name 
   def reporter_attributes=(attributes)
-    self.reporter = User.find_or_initialize_by_email(attributes[:email])
+    self.reporter = User.find_or_initialize_by_email(:email => attributes[:email], :name => reporter_name)
+  end
+  
+  # save the user account if none exists, but don't log it in 
+  def save_reporter
+    if self.reporter.new_record?
+      self.reporter.save_without_session_maintenance
+    end
   end
   
   def anonymous
