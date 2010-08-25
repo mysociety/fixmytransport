@@ -33,7 +33,8 @@ class ProblemsController < ApplicationController
     end
     
     if @problem.valid?
-      @problem.save_reporter && @problem.save
+      @problem.save_reporter
+      @problem.save
       # create task assignment
       @problem.create_assignments
       flash.now[:notice] = t(:confirmation_sent)
@@ -45,7 +46,9 @@ class ProblemsController < ApplicationController
   
   def show
     @problem = Problem.find(params[:id])
-    @new_update = Update.new(:problem_id => @problem, :reporter => User.new)
+    @new_update = Update.new(:problem_id => @problem, 
+                             :reporter => current_user ? current_user : User.new,
+                             :reporter_name => current_user ? current_user.name : '')
   end
 
   def confirm
@@ -103,9 +106,10 @@ class ProblemsController < ApplicationController
   def update
     @problem = Problem.find(params[:id])
     # just accept params for a new update for now
-    @new_update = @problem.updates.build(params[:problem][:updates_attributes]["0"])
-    if @new_update.valid?
-      @new_update.save_reporter && @new_update.save
+    @new_update = @problem.updates.build(params[:problem][:updates])
+    if @new_update.valid? 
+      @new_update.save_reporter
+      @new_update.save
       flash.now[:notice] = t(:update_confirmation_sent)
       render :confirmation_sent
     else

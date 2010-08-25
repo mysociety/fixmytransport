@@ -28,8 +28,9 @@ class Update < ActiveRecord::Base
   # save the user account if it doesn't exist, but don't log it in
   def save_reporter
     if self.reporter.new_record?
-      self.reporter.save_without_session_maintenance
+      return self.reporter.save_without_session_maintenance
     end
+    return true
   end
   
   def confirm!
