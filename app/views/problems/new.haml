@@ -45,12 +45,19 @@
       = f.label :description
       != f.text_area :description, {:rows => 5}
     - f.fields_for :reporter do |reporter_fields|
-      - if @problem.reporter.errors.on('email')
-        .form-field-error= error_message_on @problem.reporter, 'email'
-      .form-field
-        != reporter_fields.hidden_field :id
-        = reporter_fields.label :email
-        != reporter_fields.text_field :email
+      - if @problem.reporter == current_user
+        .form-field
+          != reporter_fields.hidden_field :id
+          != reporter_fields.hidden_field :email
+          .label= t(:email)
+          .form-value= @problem.reporter.email
+      - else
+        - if @problem.reporter.errors.on('email')
+          .form-field-error= error_message_on @problem.reporter, 'email'
+        .form-field
+          != reporter_fields.hidden_field :id
+          = reporter_fields.label :email
+          != reporter_fields.text_field :email
         
     - if @problem.errors.on('reporter_name')
       .form-field-error= error_message_on @problem, 'reporter_name'
@@ -70,4 +77,5 @@
     .checkbox
       !=check_box_tag 'is_campaign', "1", params[:is_campaign]
       = f.label t(:is_this_a_campaign)
-  != submit_tag t(:go)    
+  .submit
+    != submit_tag t(:submit)    
