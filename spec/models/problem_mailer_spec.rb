@@ -110,6 +110,7 @@ describe ProblemMailer do
       @reporter = mock_model(User, :name => "John Q User", 
                                    :email => 'john@example.com', 
                                    :phone => nil)
+      MySociety::Config.stub!(:getbool).with("STAGING_SITE", true).and_return(false)
       MySociety::MaPit.stub!(:call).and_return({ 22 => {'name' => 'Unemailable council'}, 
                                                  44 => {'name' => 'Emailable council'}})
                                                  

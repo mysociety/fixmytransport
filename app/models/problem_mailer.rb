@@ -59,6 +59,12 @@ class ProblemMailer < ActionMailer::Base
   
   def self.send_reports(dryrun=false)
     self.dryrun = dryrun
+    
+    # on a staging site, don't send live emails
+    if MySociety::Config.getbool('STAGING_SITE', true)
+      self.dryrun = true
+    end
+    
     missing_emails = { :council => {},
                        :passenger_transport_executive => {},
                        :operator => {} }
