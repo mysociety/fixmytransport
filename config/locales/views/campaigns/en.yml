@@ -1,5 +1,5 @@
 en:
-  now_add_campaign_info: "In order to get your campaign up and running, tell us a bit about it."
+  now_add_campaign_info: "Now, in order to get your campaign up and running, tell us a bit about it."
   other_campaigns_here: Campaigns
   fixmytransport: "FixMyTransport"
   campaign_start_date: Start date
@@ -8,3 +8,5 @@ en:
   login_to_confirm: "Login as {{user}} to confirm this campaign"
   login_to_edit: "Login as {{user}} to edit this campaign"
   wrong_user: "To get started with this campaign, you'll need to logout"
+  password_confirmation: Password (again)
+  add_password_to_update: "You'll need a password to be able to log back into the site and update your campaign. Enter one here. "

@@ -1,2 +1,4 @@
-= t(:now_add_campaign_info)
+- if params[:token]
+  = t(:thanks_for_adding_problem)
+  %p= t(:now_add_campaign_info)
 = render :partial => "form", :locals => { :campaign => @campaign }

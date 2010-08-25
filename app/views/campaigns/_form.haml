@@ -11,6 +11,7 @@
       = f.label :description
       != f.text_area :description, { :rows => 5 }   
     - if ! campaign.initiator.registered? or campaign.initiator.registered_changed?
+      = t(:add_password_to_update)
       - fields_for campaign.initiator do |user_fields|
         .form-field
           != user_fields.hidden_field :name, :value => campaign.problem.reporter_name
@@ -22,7 +23,7 @@
         .form-field
           - if campaign.initiator.errors.on('password_confirmation')
             .form-field-error= error_message_on campaign.initiator, :password_confirmation
-          = user_fields.label :password_confirmation
+          = user_fields.label :password_confirmation, t(:password_confirmation)
           != user_fields.password_field :password_confirmation
     !=f.submit t(:go)
 

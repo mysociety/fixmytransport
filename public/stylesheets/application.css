@@ -89,7 +89,8 @@ ul.navigation {
   padding: 0.5em;
 }
 
-input[type=text], 
+input[type=text],
+input[type=password], 
 textarea, select {
   font-size: 0.9em;
   font-family: verdana, sans-serif;
@@ -402,6 +403,11 @@ ul.location-list li{
 
 /* Campaign page */
 
+form.update_campaign label {
+  width: 10em;
+}
+
+/* Location column */
 #map-col {
   float: right; 
   max-width: 400px;
@@ -509,12 +515,13 @@ form.new_feedback label {
   margin-right: 2em;
 }
 
-form.create_problem label{
-  width: 7em;  
+form.new_problem label{
+  width: 10em;  
 }
 
-form.new_problem label {
-  width: 10em;
+form.create_problem label,
+form.create_problem .label{
+  width: 7em;  
 }
 
 form .checkbox label, 
@@ -529,6 +536,18 @@ form .optional-note {
   font-size: 0.8em;
 }
 
+form .label {
+  display: inline;
+  margin: 0.4em 0;
+  padding-right: 0.5em;
+  text-align: right;
+  float: left;
+}
+
+form .form-value {
+  margin: 0.5em;
+  display: inline-block;
+}
 
 /* Problem page */
 .problem-full {
@@ -569,7 +588,8 @@ form .optional-note {
   font-size: 0.8em;
 }
 
-form.new_update label {
+form.new_update label, 
+form.new_update .label{
   width: 6em;
 }
 
@@ -678,3 +698,10 @@ div.submit{
   padding-left: 6.5em;
   width: 20em;
 }
+
+/* Login */
+
+form.new_user_session label{
+  width: 7em;
+}
+

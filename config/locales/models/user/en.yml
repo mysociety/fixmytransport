@@ -20,7 +20,7 @@ en:
       user_session: UserSession 
     attributes:
       user_session: 
-        login: login
         email: email
         password: password
         remember_me: remember me
+        
