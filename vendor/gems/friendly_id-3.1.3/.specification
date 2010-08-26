@@ -1,0 +1,147 @@
+--- !ruby/object:Gem::Specification 
+name: friendly_id
+version: !ruby/object:Gem::Version 
+  prerelease: false
+  segments: 
+  - 3
+  - 1
+  - 3
+  version: 3.1.3
+platform: ruby
+authors: 
+- Norman Clarke
+- Adrian Mugnolo
+- Emilio Tagua
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2010-08-11 00:00:00 +01:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: babosa
+  prerelease: false
+  requirement: &id001 !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        segments: 
+        - 0
+        - 1
+        - 0
+        version: 0.1.0
+  type: :runtime
+  version_requirements: *id001
+description: "    FriendlyId is the \"Swiss Army bulldozer\" of slugging and permalink plugins\n    for Ruby on Rails. It allows you to create pretty URL\xE2\x80\x99s and work with\n    human-friendly strings as if they were numeric ids for ActiveRecord models.\n"
+email: 
+- norman@njclarke.com
+- adrian@mugnolo.com
+- miloops@gmail.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- lib/friendly_id/active_record.rb
+- lib/friendly_id/active_record_adapter/configuration.rb
+- lib/friendly_id/active_record_adapter/finders.rb
+- lib/friendly_id/active_record_adapter/relation.rb
+- lib/friendly_id/active_record_adapter/simple_model.rb
+- lib/friendly_id/active_record_adapter/slug.rb
+- lib/friendly_id/active_record_adapter/slugged_model.rb
+- lib/friendly_id/active_record_adapter/tasks.rb
+- lib/friendly_id/configuration.rb
+- lib/friendly_id/datamapper.rb
+- lib/friendly_id/railtie.rb
+- lib/friendly_id/sequel.rb
+- lib/friendly_id/slug_string.rb
+- lib/friendly_id/slugged.rb
+- lib/friendly_id/status.rb
+- lib/friendly_id/test.rb
+- lib/friendly_id/version.rb
+- lib/friendly_id.rb
+- lib/generators/friendly_id_generator.rb
+- lib/tasks/friendly_id.rake
+- Changelog.md
+- Contributors.md
+- Guide.md
+- README.md
+- LICENSE
+- Rakefile
+- rails/init.rb
+- generators/friendly_id/friendly_id_generator.rb
+- generators/friendly_id/templates/create_slugs.rb
+- test/active_record_adapter/ar_test_helper.rb
+- test/active_record_adapter/basic_slugged_model_test.rb
+- test/active_record_adapter/cached_slug_test.rb
+- test/active_record_adapter/core.rb
+- test/active_record_adapter/custom_normalizer_test.rb
+- test/active_record_adapter/custom_table_name_test.rb
+- test/active_record_adapter/optimistic_locking_test.rb
+- test/active_record_adapter/scoped_model_test.rb
+- test/active_record_adapter/simple_test.rb
+- test/active_record_adapter/slug_test.rb
+- test/active_record_adapter/slugged.rb
+- test/active_record_adapter/slugged_status_test.rb
+- test/active_record_adapter/sti_test.rb
+- test/active_record_adapter/support/database.jdbcsqlite3.yml
+- test/active_record_adapter/support/database.mysql.yml
+- test/active_record_adapter/support/database.postgres.yml
+- test/active_record_adapter/support/database.sqlite3.yml
+- test/active_record_adapter/support/database.yml
+- test/active_record_adapter/support/models.rb
+- test/active_record_adapter/tasks_test.rb
+- test/friendly_id_test.rb
+- test/test_helper.rb
+- extras/bench.rb
+- extras/extras.rb
+- extras/prof.rb
+- extras/README.txt
+- extras/template-gem.rb
+- extras/template-plugin.rb
+has_rdoc: true
+homepage: http://norman.github.com/friendly_id
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: friendly-id
+rubygems_version: 1.3.6
+signing_key: 
+specification_version: 3
+summary: A comprehensive slugging and pretty-URL plugin.
+test_files: 
+- test/active_record_adapter/basic_slugged_model_test.rb
+- test/active_record_adapter/cached_slug_test.rb
+- test/active_record_adapter/custom_normalizer_test.rb
+- test/active_record_adapter/custom_table_name_test.rb
+- test/active_record_adapter/optimistic_locking_test.rb
+- test/active_record_adapter/scoped_model_test.rb
+- test/active_record_adapter/simple_test.rb
+- test/active_record_adapter/slug_test.rb
+- test/active_record_adapter/slugged_status_test.rb
+- test/active_record_adapter/sti_test.rb
+- test/active_record_adapter/tasks_test.rb
+- test/friendly_id_test.rb
