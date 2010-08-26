@@ -2,7 +2,6 @@
   - @problem.location_errors.each do |location_error|
     .location-error= t(location_error)
 .fieldset
-  = @problem.errors.full_messages
   - if @problem.errors.on(:location)
     .form-field-error= error_message_on @problem, :location  
   .form-field
