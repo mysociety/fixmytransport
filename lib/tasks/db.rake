@@ -26,7 +26,7 @@ namespace :db do
     # Delete stop areas without stops, add locality, other references 
     Rake::Task['naptan:post_load:delete_unpopulated_stop_areas'].execute
     Rake::Task['naptan:post_load:add_locality_to_stop_areas'].execute
-    Rake::Task['nptdr:post_load:add_stop_codes'].execute
+    Rake::Task['naptan:post_load:add_stops_codes'].execute
     
     # Delete routes with no stops, add localities and regions.
     # Associate routes with operators
