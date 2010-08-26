@@ -8,7 +8,7 @@ describe Gazetteer do
                "coordsyst" => "G", 
                "wgs84_lat" => 51.5012344990976, 
                "northing" => "179760" }
-    MySociety::MaPit.stub!(:get_location).with('SE1 4PF').and_return(coords)
+    MySociety::MaPit.stub!(:call).and_return(coords)
   end
   
   describe 'when finding routes from attributes' do 
@@ -156,8 +156,7 @@ describe Gazetteer do
     end
     
     it 'should not return stops if the postcode is given but not found' do 
-      error = MySociety::RABX::RABXError.new(2002, "Postcode 'SE2 4PF' not found", nil)
-      MySociety::MaPit.stub!(:get_location).with('SE2 4PF').and_raise(error)
+      MySociety::MaPit.stub!(:call).and_return(:not_found)
       attributes = { :name => 'Tennis',
                      :area => 'SE2 4PF',
                      :route_number => 'C10', 
@@ -166,8 +165,7 @@ describe Gazetteer do
     end
     
     it 'should return an error if the postcode is given but not recognized' do 
-      error = MySociety::RABX::RABXError.new(2002, "Postcode 'SE2 4PF' not found", nil)
-      MySociety::MaPit.stub!(:get_location).with('SE2 4PF').and_raise(error)
+      MySociety::MaPit.stub!(:call).and_return(:bad_request)
       attributes = { :name => 'Tennis', 
                      :area => 'SE2 4PF',
                      :route_number => 'C10', 
