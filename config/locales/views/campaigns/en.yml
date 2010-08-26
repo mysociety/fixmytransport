@@ -9,4 +9,6 @@ en:
   login_to_edit: "Login as {{user}} to edit this campaign"
   wrong_user: "To get started with this campaign, you'll need to logout"
   password_confirmation: Password (again)
+  password_length_error: "Please enter a password that is at least {{length}} characters long"
+  password_match_error: "The password confirmation does not match the password"
   add_password_to_update: "You'll need a password to be able to log back into the site and update your campaign. Enter one here. "
