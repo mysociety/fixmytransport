@@ -143,7 +143,7 @@ describe ProblemsController do
     def make_request
       put :update, { :id => 55, 
                      :problem => { :title => 'a new title', 
-                                   :updates_attributes => { '0' => { :text => 'test' } } } }
+                                   :updates => { :text => 'test' } } }
     end
     
     it 'should find the problem by id' do 
