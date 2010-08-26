@@ -10,6 +10,7 @@ config/rails_env.rb
 config/httpd.conf
 config/httpd.conf.deployed
 public/down.html
+data/operators/*
 data/NPTDR/
 cache/*
 public/index.html
