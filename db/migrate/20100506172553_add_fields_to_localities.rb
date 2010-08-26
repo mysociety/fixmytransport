@@ -19,7 +19,6 @@ class AddFieldsToLocalities < ActiveRecord::Migration
     remove_column :localities, :qualifier_district
     remove_column :localities, :qualifier_locality
     remove_column :localities, :source_locality_type
-    remove_column :localities, :coords
     remove_column :localities, :easting
     remove_column :localities, :northing
     remove_column :localities, :grid_type
