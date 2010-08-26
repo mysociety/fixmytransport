@@ -8,6 +8,7 @@ class Campaign < ActiveRecord::Base
   validates_presence_of :title, :description, :on => :update
   validates_associated :initiator, :on => :update
   named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
+  has_friendly_id :title, :use_slug => true
   cattr_reader :per_page, :categories
   @@per_page = 10
   @@categories = ['New route', 'Keep route', 'Get repair', 'Adopt', 'Other']

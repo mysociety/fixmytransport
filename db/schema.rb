@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100824135124) do
+ActiveRecord::Schema.define(:version => 20100826111651) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -67,7 +67,10 @@ ActiveRecord::Schema.define(:version => 20100824135124) do
     t.text     "token"
     t.integer  "initiator_id"
     t.integer  "status_code"
+    t.string   "cached_slug"
   end
+
+  add_index "campaigns", ["cached_slug"], :name => "index_campaigns_on_cached_slug"
 
   create_table "council_contacts", :force => true do |t|
     t.integer  "area_id"
