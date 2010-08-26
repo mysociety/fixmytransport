@@ -22,9 +22,13 @@ class User < ActiveRecord::Base
   acts_as_authentic do |c|
     # we validate the email with activerecord validation above
     c.validate_email_field = false
-    c.merge_validates_confirmation_of_password_field_options({:unless => :unregistered?})
-    c.merge_validates_length_of_password_field_options({:unless => :unregistered?, :minimum => 3})
-    c.merge_validates_length_of_password_confirmation_field_options({:unless => :unregistered?, :minimum => 3})
+    c.merge_validates_confirmation_of_password_field_options({:unless => :unregistered?, 
+                                                              :message => I18n.translate(:password_match_error)})
+    password_min_length = 5
+    c.merge_validates_length_of_password_field_options({:unless => :unregistered?,
+                                                        :minimum => password_min_length,
+                                                        :message => I18n.translate(:password_length_error, 
+                                                                                   :length => password_min_length)})
   end 
   
   def unregistered?
