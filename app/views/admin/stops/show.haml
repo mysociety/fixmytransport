@@ -1,5 +1,6 @@
 - content_for :javascript do 
   != map_javascript_include_tags(:no_jquery => true)
+  = render :partial => 'shared/location_map_js', :locals => { :locations => [@stop] }
 #map
 %h2.stop-header= @stop.name
 - form_for @stop, :url => admin_url(admin_stop_path(@stop.id)), :html => { :method => :delete, :class => 'destroy-link' } do |f| 
@@ -7,12 +8,3 @@
   != submit_tag t(:destroy)
 - form_for [:admin, @stop], :url => admin_url(admin_stop_path(@stop.id)), :html => { :class => 'stop-form' } do |f| 
   = render :partial => "form", :locals => { :f => f }
-:javascript
-  var stop_lon = #{@stop.lon};
-  var stop_lat = #{@stop.lat};
-  var stop_id = #{@stop.id};
-  var stop_name = "#{@stop.full_name}";
-  jQuery(document).ready(function(){
-    setupShowStop();
-    stop_init();
-  });

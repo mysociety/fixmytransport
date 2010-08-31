@@ -19,23 +19,6 @@ var segmentSelectedStyle =
   strokeWidth: 4
 };
 
-function problem_init() {
-  var problemCoords = new OpenLayers.LonLat(problem_lon, problem_lat).transform(proj, map.getProjectionObject());
-  createMap();
-  map.setCenter(problemCoords, 12); 
-  addProblemMarker(problemCoords);
-}
-
-function stop_init() {
-  createMap();
-  var stopCoords = new OpenLayers.LonLat(stop_lon, stop_lat).transform(proj, map.getProjectionObject());
-  map.setCenter(stopCoords, 17); 
-  bounds = new OpenLayers.Bounds();  
-  var markers = new OpenLayers.Layer.Markers( "Markers" );
-  map.addLayer(markers);  
-  addRouteMarker(stopCoords, bounds, markers, stop_id, '', stop_name, 0);
-}
-
 function area_init() {
   createMap();
   var stopCoords;
@@ -91,6 +74,7 @@ function route_init() {
      vectorLayer.addFeatures([lineFeature]);
    }
    map.zoomToExtent(bounds, false); 
+
 }
 
 function addSelectedHandler(vectorLayer) {
@@ -185,18 +169,6 @@ function addRouteMarker(stopCoords, bounds, markers, id, url, name, index) {
   stopsById[id] = marker;
   marker.events.register("click", marker, stopSelected);
   markers.addMarker(marker);
-}
-
-function addProblemMarker(problemCoords) {
-  var problemIconWidth = 50;
-  var problemIconHeight = 38;
-  var markers = new OpenLayers.Layer.Markers( "Markers" );
-  map.addLayer(markers);
-  var size = new OpenLayers.Size(problemIconWidth, problemIconHeight);
-  var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-  var problemIcon = new OpenLayers.Icon('/images/warning-sign-sm.png', size, offset);
-  markers.addMarker(new OpenLayers.Marker(problemCoords, problemIcon));
-  
 }
 
 // Run jquery in no-conflict mode so it doesn't use $()
