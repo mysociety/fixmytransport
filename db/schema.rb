@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100826111651) do
+ActiveRecord::Schema.define(:version => 20100831125027) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -408,12 +408,13 @@ ActiveRecord::Schema.define(:version => 20100826111651) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.point    "coords",                   :srid => 27700
+    t.point    "coords",                                      :srid => 27700
     t.integer  "locality_id"
     t.string   "cached_slug"
     t.boolean  "loaded"
     t.string   "tiploc_code"
     t.string   "crs_code"
+    t.boolean  "metro_stop",               :default => false
   end
 
   add_index "stops", ["cached_slug"], :name => "index_stops_on_cached_slug"
@@ -421,6 +422,7 @@ ActiveRecord::Schema.define(:version => 20100826111651) do
   add_index "stops", ["crs_code"], :name => "index_stops_on_crs_code"
   add_index "stops", ["locality_id", "stop_type"], :name => "index_stops_on_locality_and_stop_type"
   add_index "stops", ["locality_id"], :name => "index_stops_on_locality_id"
+  add_index "stops", ["metro_stop"], :name => "index_stops_on_metro_stop"
   add_index "stops", ["naptan_code"], :name => "index_stops_on_naptan_code"
   add_index "stops", ["stop_type"], :name => "index_stops_on_stop_type"
 

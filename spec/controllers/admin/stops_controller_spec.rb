@@ -32,7 +32,7 @@ describe Admin::StopsController do
     it 'should ask for stops with the codes for the transport modes passed' do 
       Stop.should_receive(:paginate).with(:page => nil, 
                                           :conditions => ["stop_type in (?)", 
-                                          ["BCQ", "BCT", "BCT", "BCS", "BCT", "BST", "BCT", "BCE"]],
+                                          ["BCQ", "BCT", "BCS", "BST", "BCE"]],
                                           :order => 'common_name')
       get :index, :mode => '1'
     end
@@ -42,7 +42,7 @@ describe Admin::StopsController do
       query_string = '(LOWER(common_name) LIKE ? OR LOWER(common_name) LIKE ? OR LOWER(street) LIKE ? OR LOWER(street) LIKE ?) AND stop_type in (?)'
       Stop.should_receive(:paginate).with(:page => nil, 
                                            :conditions => [query_string,
-                                           "something%", "%something%", "something%", "%something%", ["BCQ", "BCT", "BCT", "BCS", "BCT", "BST", "BCT", "BCE"]],
+                                           "something%", "%something%", "something%", "%something%", ["BCQ", "BCT", "BCS", "BST", "BCE"]],
                                             :order => 'common_name')
       get :index, :mode => '1', :query => 'something'
     end

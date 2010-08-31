@@ -30,9 +30,7 @@ class Gazetteer
     errors = []
     stops = []
     self.postcode_from_area(attributes) if !attributes[:area].blank?
-    stop_type_codes = StopType.codes_for_transport_mode(attributes[:transport_mode_id])
-    query = 'stop_type in (?)'
-    params = [stop_type_codes]
+    query, params = StopType.conditions_for_transport_mode(attributes[:transport_mode_id])
     includes = [:locality]
     order = nil
     if !attributes[:postcode].blank?

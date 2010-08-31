@@ -121,6 +121,21 @@ namespace :naptan do
       parse('rail_references', Parsers::NaptanParser)
     end
     
+    desc 'Mark tram/metro stops - the BCT type is for bus, coach and metro and so metro searches always get swamped by bus stops'
+    task :mark_metro_stops => :environment do
+      # make sure default of false is set
+      sql = Stop.send(:sanitize_sql_array, ["UPDATE stops SET metro_stop = ?", false]) 
+      Stop.connection.execute(sql)
+      # set metro type stops
+      sql = Stop.send(:sanitize_sql_array, ["UPDATE stops SET metro_stop = ? WHERE stop_type in ('TMU', 'MET', 'PLT')", true]) 
+      Stop.connection.execute(sql)
+      # set stops on metro routes
+      TramMetroRoute.find_each do |route|
+        route.stops.each do |stop|
+          stop.update_attribute(:metro_stop, true)
+        end
+      end
+    end
   end
   
   namespace :geo do 

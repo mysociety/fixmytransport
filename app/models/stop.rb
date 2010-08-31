@@ -194,9 +194,9 @@ class Stop < ActiveRecord::Base
     end
 
     if !transport_mode_id.blank?
-      stop_type_codes = StopType.codes_for_transport_mode(transport_mode_id.to_i)
-      query_clauses << 'stop_type in (?)'
-      query_params << stop_type_codes
+      query_clause, query_param_list = StopType.conditions_for_transport_mode(transport_mode_id.to_i)
+      query_clauses << query_clause
+      query_params += query_param_list
     end
     conditions = [query_clauses.join(" AND ")] + query_params
   end
@@ -218,7 +218,7 @@ class Stop < ActiveRecord::Base
                           easting, northing, name, easting, distance, northing, distance])
     stops.empty? ? nil : stops.first
   end
-  
+
   def self.find_by_atco_code(atco_code, options={})
     includes = options[:includes] or {}
     find(:first, :conditions => ["lower(atco_code) = ?", atco_code.downcase], :include => includes)

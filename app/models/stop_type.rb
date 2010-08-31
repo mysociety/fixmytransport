@@ -35,7 +35,19 @@ class StopType < ActiveRecord::Base
   
   def self.codes_for_transport_mode(transport_mode_id)
     calculate_hashes if @@codes_by_mode.empty? 
-    @@codes_by_mode[transport_mode_id]
+    codes = @@codes_by_mode[transport_mode_id]
+  end
+  
+  def self.conditions_for_transport_mode(transport_mode_id)
+    if transport_mode_id == TransportMode.find_by_name("Tram/Metro").id
+      conditions = 'metro_stop = ?'
+      params = [true]
+    else
+      codes = codes_for_transport_mode(transport_mode_id)
+      conditions = 'stop_type in (?)'
+      params = [codes.uniq]
+    end
+    return [conditions, params]
   end
   
   def self.calculate_hashes
