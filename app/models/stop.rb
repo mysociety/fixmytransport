@@ -58,21 +58,13 @@ class Stop < ActiveRecord::Base
   validates_presence_of :locality_id, :lon, :lat, :if => :loaded?
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
-  has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality
+  has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality, :cache_column => false
   has_paper_trail
   
   # instance methods
   
   def routes
     (routes_as_from_stop | routes_as_to_stop).uniq.sort{ |a,b| a.name <=> b.name }
-  end
-
-  def next_stops
-    route_segments_as_from_stop.map{ |route_segment| route_segment.to_stop }.uniq.sort_by(&:name)
-  end
-  
-  def route_terminuses
-    routes.map{ |route| route.terminuses }.flatten.uniq.sort_by(&:name)
   end
   
   def name
@@ -167,6 +159,13 @@ class Stop < ActiveRecord::Base
       all_stop_areas += stop_area.ancestors 
     end
     all_stop_areas
+  end
+  
+  def root_stop_area
+    root_stop_areas = all_stop_areas.select{ |stop_area| stop_area.root? }.uniq
+    raise "More than one root stop area for stop #{id}" if root_stop_areas.size > 1
+    return nil if root_stop_areas.empty? 
+    return root_stop_areas.first
   end
   
   # class methods

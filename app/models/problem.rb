@@ -71,8 +71,8 @@ class Problem < ActiveRecord::Base
       location_search.add_method('Gazetteer.find_routes_from_attributes') if location_search
       results = Gazetteer.find_routes_from_attributes(location_attributes, :limit => MAX_LOCATION_RESULTS)
     else
-      location_search.add_method('Gazetteer.find_stops_from_attributes') if location_search
-      results = Gazetteer.find_stops_from_attributes(location_attributes, :limit => MAX_LOCATION_RESULTS)
+      location_search.add_method('Gazetteer.find_stops_and_stations_from_attributes') if location_search
+      results = Gazetteer.find_stops_and_stations_from_attributes(location_attributes, :limit => MAX_LOCATION_RESULTS)
     end
     self.locations = results[:results]
     self.location_errors = results[:errors]

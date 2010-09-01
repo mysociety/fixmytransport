@@ -1,4 +1,4 @@
-class RoutesController < LocationsController
+class RoutesController < ApplicationController
   
   def show
     @route = Route.full_find(params[:id], params[:scope])
@@ -11,12 +11,6 @@ class RoutesController < LocationsController
         render :template => 'shared/campaigns.atom.builder', :layout => false 
       end
     end
-  end
-  
-  private 
-  
-  def model_class
-    Route
   end
   
 end

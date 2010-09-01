@@ -36,7 +36,8 @@ namespace :db do
     Rake::Task['nptdr:post_load:add_route_localities'].execute
     Rake::Task['nptdr:post_load:add_route_regions'].execute
     Rake::Task['nptdr:post_load:add_route_operators'].execute
-    
+    Rake::Task['nptdr:post_load:add_stop_areas_to_route_segments'].execute
+        
     # Generate slugs
     Rake::Task['friendly_id:make_slugs'].execute
     

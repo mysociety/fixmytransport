@@ -19,75 +19,104 @@ class Gazetteer
   end
   
   # accepts attributes
-  # - name - stop name
+  # - name - stop/station name
   # - area - town/area
   # - transport_mode_id
   # - route_number - route number/name
   # options 
   # - limit - Number of results to return
-  # - stops_only - Don't return stop areas
-  def self.find_stops_from_attributes(attributes, options={})
+  # - stops_only - Don't return stations
+  def self.find_stops_and_stations_from_attributes(attributes, options={})
+    transport_mode = TransportMode.find(attributes[:transport_mode_id])
+    search_models = []
+    if options[:stops_only]
+      search_models << Stop
+    else
+      if ['Train', 'Tram/Metro', 'Ferry'].include? transport_mode.name
+        search_models << StopArea
+      end
+      if ['Bus', 'Coach', 'Tram/Metro'].include? transport_mode.name
+        search_models << Stop
+      end
+    end
     errors = []
-    stops = []
+    results = []
     self.postcode_from_area(attributes) if !attributes[:area].blank?
-    query, params = StopType.conditions_for_transport_mode(attributes[:transport_mode_id])
     includes = [:locality]
     order = nil
-    if !attributes[:postcode].blank?
-      coord_info = coords_from_postcode(attributes[:postcode])
-      if coord_info == :not_found or coord_info == :bad_request
-        errors << :postcode_not_found
-      else
-        query += " AND ST_Distance(
-                  ST_GeomFromText('POINT(? ?)', 
-                  #{BRITISH_NATIONAL_GRID}), 
-                  stops.coords) < 1000"
-        params << coord_info['easting'].to_i
-        params << coord_info['northing'].to_i
-        order = "ST_Distance(
-                  ST_GeomFromText('POINT(#{coord_info['easting'].to_i} #{coord_info['northing'].to_i})', 
-                  #{BRITISH_NATIONAL_GRID}), 
-                  stops.coords)"
+    search_models.each do |model_class|
+      type_class = "#{model_class}Type".constantize
+      query, params = type_class.conditions_for_transport_mode(attributes[:transport_mode_id])
+
+      if !attributes[:postcode].blank?
+        coord_info = coords_from_postcode(attributes[:postcode])
+        if coord_info == :not_found or coord_info == :bad_request
+          errors << :postcode_not_found
+        else
+          query += " AND ST_Distance(
+                    ST_GeomFromText('POINT(? ?)', 
+                    #{BRITISH_NATIONAL_GRID}), 
+                    #{model_class.table_name}.coords) < 1000"
+          params << coord_info['easting'].to_i
+          params << coord_info['northing'].to_i
+          order = "ST_Distance(
+                    ST_GeomFromText('POINT(#{coord_info['easting'].to_i} #{coord_info['northing'].to_i})', 
+                    #{BRITISH_NATIONAL_GRID}), 
+                    #{model_class.table_name}.coords)"
+        end
       end
-    end
-    if !attributes[:area].blank?
-      localities = Locality.find_all_with_descendants(attributes[:area])
-      if localities.empty?
-        errors << :area_not_found
-      else
-        query += ' AND locality_id in (?)'
-        params << localities
+      if !attributes[:area].blank?
+        localities = Locality.find_all_with_descendants(attributes[:area])
+        if localities.empty?
+          errors << :area_not_found
+        else
+          query += ' AND locality_id in (?)'
+          params << localities
+        end
       end
-    end
-    if !attributes[:name].blank? 
-      name = attributes[:name].downcase
-      query += ' AND (lower(common_name) like ? OR lower(street) = ? OR naptan_code = ?)'
-      params <<  "%#{name}%"
-      params << name
-      params << name
-    end
-    if !attributes[:route_number].blank?
-      route_results = find_routes_from_attributes(attributes)
-      errors += route_results[:errors]
-      if !route_results[:results].empty?
-        query += ' AND route_segments.route_id in (?)'
-        params << route_results[:results]
-        includes << :route_segments_as_from_stop
-        includes << :route_segments_as_to_stop
+      if !attributes[:name].blank? 
+        name = attributes[:name].downcase
+        if model_class == Stop
+          query += ' AND (lower(common_name) like ? OR lower(street) = ? OR naptan_code = ?)'
+          params <<  "%#{name}%"
+          params << name
+          params << name
+        else
+          query += " AND (lower(name) like ? OR code = ?)"
+          params <<  "%#{name}%"
+          params << name
+        end
       end
+      if !attributes[:route_number].blank?
+        route_results = find_routes_from_attributes(attributes)
+        errors += route_results[:errors]
+        if !route_results[:results].empty?
+          query += ' AND route_segments.route_id in (?)'
+          params << route_results[:results]
+          if model_class == Stop
+            includes << :route_segments_as_from_stop
+            includes << :route_segments_as_to_stop
+          else
+            includes << :route_segments_as_from_stop_area
+            includes << :route_segments_as_to_stop_area
+          end
+        end
+      end
+      conditions = [query] + params
+      model_results = []
+      if errors.empty? 
+        model_results = model_class.find(:all, :conditions => conditions, 
+                                         :limit => options[:limit], 
+                                         :include => includes,
+                                         :order => order)
+      end
+      # reduce redundant results for stop areas
+      if model_results.size > 1 && model_class == StopArea
+        model_results = StopArea.map_to_common_areas(model_results)
+      end
+      results += model_results
     end
-    conditions = [query] + params
-    if errors.empty? 
-      stops = Stop.find(:all, :conditions => conditions, 
-                              :limit => options[:limit], 
-                              :include => includes,
-                              :order => order)
-    end
-    if !options[:stops_only] and stops.size > 1 
-      stop_area = Stop.common_area(stops, attributes[:transport_mode_id])
-      stops = [stop_area] if stop_area
-    end
-    { :results => stops, :errors => errors.uniq }
+    { :results => results, :errors => errors.uniq }
   end
   
   # accepts 

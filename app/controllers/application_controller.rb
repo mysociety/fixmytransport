@@ -90,7 +90,13 @@ class ApplicationController < ActionController::Base
     if location.is_a? Stop
       return stop_path(location.locality, location)
     elsif location.is_a? StopArea
-      return stop_area_path(location.locality, location)
+      if StopAreaType.station_types.include?(location.area_type)
+         return station_path(location.locality, location, attributes)
+       elsif StopAreaType.ferry_terminal_types.include?(location.area_type)
+         return ferry_terminal_path(location.locality, location, attributes)
+       else
+         return stop_area_path(location.locality, location)
+      end
     elsif location.is_a? Route
       return route_path(location.region, location)
     end
@@ -101,7 +107,13 @@ class ApplicationController < ActionController::Base
    if location.is_a? Stop
      return stop_url(location.locality, location, attributes)
    elsif location.is_a? StopArea
-     return stop_area_url(location.locality, location, attributes)
+     if StopAreaType.station_types.include?(location.area_type)
+       return station_url(location.locality, location, attributes)
+     elsif StopAreaType.ferry_terminal_types.include?(location.area_type)
+       return ferry_terminal_url(location.locality, location, attributes)
+     else
+       return stop_area_url(location.locality, location, attributes)
+     end
    elsif location.is_a? Route
      return route_url(location.region, location, attributes)
    end

@@ -120,4 +120,12 @@ describe StopArea do
   
   end
 
+  describe 'when mapping a list of stop areas to common areas' do 
+    
+    it 'should return a list that does not include any member of the original list whose ancestor is also in the list' do 
+      stop_list = [stop_areas(:victoria_station_leaf), stop_areas(:victoria_station_root)]
+      StopArea.map_to_common_areas(stop_list).should == [stop_areas(:victoria_station_root)]
+    end
+  
+  end
 end

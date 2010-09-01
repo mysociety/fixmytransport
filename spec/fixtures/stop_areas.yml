@@ -36,6 +36,7 @@ victoria_station_root:
   code: 910GVICTRIC
   administrative_area_code: "110"
   modification: rev
+  locality: london
 victoria_station_leaf:
   status: act
   northing: "179000"
@@ -47,6 +48,7 @@ victoria_station_leaf:
   code: 910GVICTRIE
   administrative_area_code: "110"
   modification: rev
+  locality: london
 south_moor_and_arch: 
   easting: "418799"
   status: act

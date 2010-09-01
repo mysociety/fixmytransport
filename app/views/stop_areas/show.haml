@@ -5,18 +5,20 @@
   #map-col
     #map
     .extra-info
-      The following stops are here: 
-      - @stop_area.stops.each do |stop|
-        .stop
-          = link_to("#{stop.name_with_long_indicator}", stop_url(stop.locality, stop))
-          - if !stop.routes.empty? 
-            = render :partial => 'shared/route_list', :locals => {:stop => stop}
+      - if StopAreaType.primary_types.include? @stop_area.area_type
+        = render :partial => "shared/route_list", :locals => { :stop_or_station => @stop_area }
+      - else
+        The following stops are here: 
+        - @stop_area.stops.each do |stop|
+          .stop
+            = link_to("#{stop.name_with_long_indicator}", stop_url(stop.locality, stop))
+            - if !stop.routes.empty? 
+              = render :partial => 'shared/route_list', :locals => {:stop_or_station => stop}
   .stop-area
     %a{:href => location_url(@stop_area, :format => 'atom'), :class => 'rss-link campaign-rss'}
       %span= t(:feed)
       %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:campaigns_feed) }
-    %h3.name= "#{@stop_area.name} stop area"
+    %h3.name= @stop_area.full_name
     .details
       - if !@stop_area.area.blank?
         %span.locality= "In #{@stop_area.area}"
-= render :partial => 'shared/location_content', :locals => { :location => @stop_area }

@@ -7,7 +7,7 @@
     .extra-info
       .transport-direct= transport_direct_link(@stop)
       .departures!= departures_link(@stop)
-      =render :partial => "shared/route_list", :locals => { :stop => @stop }
+      = render :partial => "shared/route_list", :locals => { :stop_or_station => @stop }
   .stop
     %a{:href => location_url(@stop, :format => 'atom'), :class => 'rss-link campaign-rss'}
       %span= t(:feed)

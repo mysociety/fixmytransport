@@ -98,7 +98,7 @@ namespace :nptdr do
     task :add_route_regions => :environment do 
       great_britain = Region.find_by_name('Great Britain')
       Route.find_each do |route|
-        regions = route.localities.map{|locality| locality.admin_area.region }.uniq
+        regions = route.localities.map{ |locality| locality.admin_area.region }.uniq
         if regions.size > 1 
           regions = [great_britain]
         end
@@ -121,6 +121,27 @@ namespace :nptdr do
           route.route_localities.build(:locality => locality)
         end
         route.save!
+      end
+    end
+    
+    desc 'Adds stop_area_ids to route_segments for train, ferry and metro station interchange and platform stops' 
+    task :add_stop_areas_to_route_segments => :environment do 
+      conditions = ["stop_type in ('MET', 'RLY', 'FBT','FER','RPL', 'PLT')"]
+      interchange_stops = Stop.find_each(:conditions => conditions) do |interchange_stop|
+        station_stop_area = interchange_stop.root_stop_area
+        unless station_stop_area
+          puts  "No station for #{interchange_stop.name}" 
+          next
+        end
+        puts "Adding #{station_stop_area.name} to segments for #{interchange_stop.name}"
+        interchange_stop.route_segments_as_from_stop.each do |route_segment|
+          route_segment.from_stop_area_id = station_stop_area.id
+          route_segment.save!
+        end
+        interchange_stop.route_segments_as_to_stop.each do |route_segment|
+          route_segment.to_stop_area_id = station_stop_area.id
+          route_segment.save!
+        end
       end
     end
   end

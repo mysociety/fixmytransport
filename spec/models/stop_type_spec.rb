@@ -32,5 +32,16 @@ describe StopType do
     stop_type.valid?.should be_true
   end
   
+  describe 'when giving conditions for transport modes' do 
+    
+    it 'should return conditions specifying a set of stop types for buses' do 
+      StopType.conditions_for_transport_mode(1).should == ['stop_type in (?)', [["BCQ", "BCT", "BCS", "BST", "BCE"]]]
+    end
+  
+    it 'should return conditions specifying stop type "BCT" and metro_stop being true for tram/metro stops' do 
+      StopType.conditions_for_transport_mode(7).should == ["stop_type in (?) and metro_stop = ?", [["BCT"], true]]
+    end
+  
+  end
   
 end

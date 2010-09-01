@@ -118,6 +118,15 @@ describe Stop do
     
   end
   
+  describe 'when giving a root stop area' do 
+    
+    it 'should return the parent stop area if there are more than one' do 
+      stops(:victoria_station_one).root_stop_area.should == stop_areas(:victoria_station_root)
+      stops(:victoria_station_two).root_stop_area.should == stop_areas(:victoria_station_root)
+    end
+    
+  end
+  
   describe 'when giving name without suffix' do 
   
     it 'should remove "Rail Station" from the end of a train station name' do 

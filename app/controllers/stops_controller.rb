@@ -1,4 +1,4 @@
-class StopsController < LocationsController
+class StopsController < ApplicationController
   
   def show
     @stop = Stop.full_find(params[:id], params[:scope])
@@ -15,10 +15,4 @@ class StopsController < LocationsController
     end
   end
 
-  private
-  
-  def model_class
-    Stop
-  end
-  
 end

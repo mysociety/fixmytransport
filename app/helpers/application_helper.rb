@@ -62,7 +62,7 @@ module ApplicationHelper
   end
   
   def stop_js_coords(stop)
-    "[#{stop.lat}, #{stop.lon}, #{stop.id}, '#{stop_url(stop.locality, stop)}', '#{escape_javascript(stop.description)}']"
+    "[#{stop.lat}, #{stop.lon}, #{stop.id}, '#{location_url(stop)}', '#{escape_javascript(stop.description)}']"
   end
   
   def route_segment_js(route)
@@ -75,7 +75,7 @@ module ApplicationHelper
   def location_stops_js locations
     array_content = []
     locations.each do |location|
-      if location.is_a? Route or location.is_a? StopArea
+      if location.is_a? Route
         array_content <<  "[#{location.stops.map{ |stop| stop_js_coords(stop) }.join(',')}]" 
       else
        array_content << stop_js_coords(location) 
@@ -100,7 +100,7 @@ module ApplicationHelper
       if stop_name != stop_area
         link_text += " in #{stop_area}"
       end
-      terminus_links << link_to(link_text, stop_url(stop.locality, stop)) unless stop_names.include? link_text
+      terminus_links << link_to(link_text, location_url(stop)) unless stop_names.include? link_text
       stop_names << link_text
     end
     if terminus_links.size > 1

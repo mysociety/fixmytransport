@@ -7,8 +7,8 @@
     .extra-info
       %ul.stops   
         Stops:
-        - @route.stops.sort_by(&:name).each do |stop|
-          %li= link_to stop.full_name, stop_url(stop.locality, stop)
+        - @route.stops_or_stations.sort_by(&:name).each do |stop_or_station|
+          %li= link_to stop_or_station.full_name, location_url(stop_or_station)
   .route
     %a{:href => location_url(@route, :format => 'atom'), :class => 'rss-link campaign-rss'}
       %span= t(:feed)

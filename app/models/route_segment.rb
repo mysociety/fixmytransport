@@ -16,6 +16,8 @@
 class RouteSegment < ActiveRecord::Base
   belongs_to :from_stop, :class_name => 'Stop'
   belongs_to :to_stop, :class_name => 'Stop'
+  belongs_to :from_stop_area, :class_name => 'StopArea'
+  belongs_to :to_stop_area, :class_name => 'StopArea'
   belongs_to :route
   # virtual attribute used for adding new route segments
   attr_accessor :_add

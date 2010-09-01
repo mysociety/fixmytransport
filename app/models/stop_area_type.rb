@@ -15,6 +15,10 @@ class StopAreaType < ActiveRecord::Base
   has_many :transport_modes, :through => :transport_mode_stop_area_types
   @@codes_by_mode = {}
   @@modes_by_code = {}
+  @@station_types = ['GRLS', 'GTMU']
+  @@ferry_terminal_types = ['GFTD']
+  @@primary_types = @@station_types + @@ferry_terminal_types
+  cattr_accessor :station_types, :ferry_terminal_types, :primary_types
   
   def self.codes_for_transport_mode(transport_mode_id)
     calculate_hashes if @@codes_by_mode.empty? 
@@ -38,6 +42,15 @@ class StopAreaType < ActiveRecord::Base
   def self.transport_modes_for_code(code)
     calculate_hashes if @@modes_by_code.empty?
     @@modes_by_code[code]
+  end
+  
+  def self.conditions_for_transport_mode(transport_mode_id)
+    if transport_mode_id == TransportMode.find_by_name("Tram/Metro").id
+      codes = ['GTMU']
+    else
+      codes = codes_for_transport_mode(transport_mode_id).uniq
+    end
+    ['area_type in (?)', codes]
   end
   
 end

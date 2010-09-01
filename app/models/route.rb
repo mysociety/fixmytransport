@@ -35,7 +35,7 @@ class Route < ActiveRecord::Base
   validates_presence_of :number, :transport_mode_id
   validates_presence_of :region_id, :if => :loaded?
   cattr_reader :per_page
-  has_friendly_id :short_name, :use_slug => true, :scope => :region
+  has_friendly_id :short_name, :use_slug => true, :scope => :region, :cache_column => false
   has_paper_trail
   
   @@per_page = 20
@@ -130,25 +130,61 @@ class Route < ActiveRecord::Base
      [transport_mode]
    end
 
+   def stops_or_stations
+     route_segments.map do |route_segment|
+       if route_segment.from_stop_area 
+         from = route_segment.from_stop_area
+       else
+         from = route_segment.from_stop
+       end
+       if route_segment.to_stop_area
+         to = route_segment.to_stop_area
+       else
+         to = route_segment.to_stop
+       end
+       [from, to] 
+     end.flatten.uniq
+   end
+   
    def stops
      route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }.flatten.uniq
    end
     memoize :stops
 
-   def next_stops(stop_id)
-     outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == stop_id } 
-     outgoing_segments.map{ |route_segment| route_segment.to_stop }
+   def next_stops(current)
+     if current.is_a? StopArea
+       outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_area_id == current.id } 
+     else
+       outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == current.id } 
+     end
+     next_stops = outgoing_segments.map do |route_segment| 
+       route_segment.to_stop_area ? route_segment.to_stop_area : route_segment.to_stop 
+     end
+     next_stops.uniq
    end
 
-   def previous_stops(stop_id)
-     incoming_segments = route_segments.select{ |route_segment| route_segment.to_stop_id == stop_id }
-     incoming_segments.map{ |route_segment| route_segment.from_stop }
+   def previous_stops(current)
+     if current.is_a? StopArea
+       incoming_segments = route_segments.select{ |route_segment| route_segment.to_stop_area_id == current.id }
+     else
+       incoming_segments = route_segments.select{ |route_segment| route_segment.to_stop_id == current.id }
+     end
+     previous_stops = incoming_segments.map do |route_segment| 
+       route_segment.from_stop_area ? route_segment.from_stop_area : route_segment.from_stop 
+     end
+     previous_stops.uniq
    end
 
    def terminuses
      from_terminuses = route_segments.select{ |route_segment| route_segment.from_terminus? }
      to_terminuses = route_segments.select{ |route_segment| route_segment.to_terminus? }
-     terminuses = from_terminuses.map{ |segment| segment.from_stop } + to_terminuses.map{ |segment| segment.to_stop }
+     from_terminuses = from_terminuses.map do |segment| 
+       segment.from_stop_area ? segment.from_stop_area : segment.from_stop 
+     end
+     to_terminuses = to_terminuses.map do |segment|
+       segment.to_stop_area ? segment.to_stop_area : segment.to_stop 
+     end
+     terminuses = from_terminuses + to_terminuses
      terminuses.uniq
    end
    memoize :terminuses
@@ -211,9 +247,11 @@ class Route < ActiveRecord::Base
   # class methods
   
   def self.full_find(id, scope)
-    find(id, :scope => scope, 
-             :include => [{ :route_segments => [:to_stop => :locality, :from_stop => :locality] }, 
+    find(id, 
+         :scope => scope, 
+         :include => [{ :route_segments => [:to_stop => :locality, :from_stop => :locality] }, 
                           { :route_operators => :operator }])
+    
   end
   
   # Return routes with this number and transport mode that have a stop or stop area in common with 
@@ -369,13 +407,13 @@ class Route < ActiveRecord::Base
   def self.find_all_by_stop_names(first, last, attributes, limit=nil)
     stop_attributes = attributes.merge(:route_number => nil)
     options = { :stops_only => true }
-    results = Gazetteer.find_stops_from_attributes(stop_attributes.merge(:area => first), options)
+    results = Gazetteer.find_stops_and_stations_from_attributes(stop_attributes.merge(:area => first), options)
     first_stops = results[:results]
-    results = Gazetteer.find_stops_from_attributes(stop_attributes.merge(:name => first), options)
+    results = Gazetteer.find_stops_and_stations_from_attributes(stop_attributes.merge(:name => first), options)
     first_stops += results[:results]
-    results = Gazetteer.find_stops_from_attributes(stop_attributes.merge(:area => last), options)
+    results = Gazetteer.find_stops_and_stations_from_attributes(stop_attributes.merge(:area => last), options)
     last_stops = results[:results]
-    results = Gazetteer.find_stops_from_attributes(stop_attributes.merge(:name => last), options)
+    results = Gazetteer.find_stops_and_stations_from_attributes(stop_attributes.merge(:name => last), options)
     last_stops += results[:results]
     Route.find_all_by_stops([first_stops, last_stops], 
                             attributes[:transport_mode_id], 

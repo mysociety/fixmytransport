@@ -36,7 +36,12 @@ class StopArea < ActiveRecord::Base
   belongs_to :locality
   has_many :stop_area_operators, :dependent => :destroy
   has_many :operators, :through => :stop_area_operators, :uniq => true
-  has_friendly_id :name, :use_slug => true, :scope => :locality                                  
+  has_friendly_id :name, :use_slug => true, :scope => :locality, :cache_column => false    
+  has_many :route_segments_as_from_stop_area, :foreign_key => 'from_stop_area_id', :class_name => 'RouteSegment'
+  has_many :route_segments_as_to_stop_area, :foreign_key => 'to_stop_area_id', :class_name => 'RouteSegment'
+  has_many :routes_as_from_stop_area, :through => :route_segments_as_from_stop_area, :source => 'route'
+  has_many :routes_as_to_stop_area, :through => :route_segments_as_to_stop_area, :source => 'route'
+                                
   validates_presence_of :locality, :if => :loaded?
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
@@ -54,10 +59,35 @@ class StopArea < ActiveRecord::Base
     stops.map{ |stop| stop.routes }.flatten.uniq
   end
   
+  def route_terminuses
+    routes.map{ |route| route.terminuses }.flatten.uniq
+  end
+  
+  def next_stops
+    route_segments_as_from_stop_area.map{ |route_segment| route_segment.to_stop_area }.uniq.sort_by(&:name)
+  end
+  
   def description
     text = name
     text += " in #{area}" if area
     text  
+  end
+  
+  def full_name
+    if area_type == 'GRLS' or area_type == 'GTMU'
+      name
+    else
+      "#{name} stop area"
+    end
+  end
+  
+  def name_without_suffix(transport_mode)
+    if transport_mode.name == 'Train'
+      return name.gsub(' Rail Station', '')
+    elsif transport_mode.name == 'Tram/Metro'
+      return name.gsub(' Underground Station', '')
+    end
+    return name
   end
   
   def transport_modes
@@ -80,5 +110,16 @@ class StopArea < ActiveRecord::Base
     return nil
   end
   memoize :area
+  
+  # Take a list of stop areas and remove those that are descendents of areas already in the list
+  def self.map_to_common_areas(stop_areas)
+    area_list = []
+    stop_areas.each do |stop_area|
+      unless stop_area.ancestors.any?{ |ancestor| stop_areas.include?(ancestor) }
+        area_list << stop_area
+      end
+    end
+    area_list
+  end
   
 end
