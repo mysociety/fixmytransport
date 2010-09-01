@@ -160,12 +160,22 @@ class Stop < ActiveRecord::Base
     text
   end
   
+  def all_stop_areas
+    all_stop_areas = []
+    stop_areas.each do |stop_area|
+      all_stop_areas << stop_area
+      all_stop_areas += stop_area.ancestors 
+    end
+    all_stop_areas
+  end
   
   # class methods
-  
+  # Try to find a common stop area for a set of stops
   def self.common_area(stops, transport_mode_id)
     stop_area_type_codes = StopAreaType.codes_for_transport_mode(transport_mode_id)
-    stop_area_sets = stops.map{ |stop| stop.stop_areas.select{ |stop_area| stop_area_type_codes.include? stop_area.area_type } }
+    stop_area_sets = stops.map do |stop| 
+      stop.all_stop_areas.select{ |stop_area| stop_area_type_codes.include? stop_area.area_type } 
+    end
     stop_areas = stop_area_sets.inject{ |intersection_set,stop_area_set| intersection_set & stop_area_set }
     root_stop_areas = stop_areas.select{ |stop_area| stop_area.root? }
     if root_stop_areas.size == 1
@@ -218,7 +228,7 @@ class Stop < ActiveRecord::Base
                           easting, northing, name, easting, distance, northing, distance])
     stops.empty? ? nil : stops.first
   end
-
+  
   def self.find_by_atco_code(atco_code, options={})
     includes = options[:includes] or {}
     find(:first, :conditions => ["lower(atco_code) = ?", atco_code.downcase], :include => includes)
