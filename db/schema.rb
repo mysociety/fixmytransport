@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100831125027) do
+ActiveRecord::Schema.define(:version => 20100901122501) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -234,11 +234,13 @@ ActiveRecord::Schema.define(:version => 20100831125027) do
   create_table "route_segments", :force => true do |t|
     t.integer  "from_stop_id"
     t.integer  "to_stop_id"
-    t.boolean  "from_terminus", :default => false
-    t.boolean  "to_terminus",   :default => false
+    t.boolean  "from_terminus",     :default => false
+    t.boolean  "to_terminus",       :default => false
     t.integer  "route_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "from_stop_area_id"
+    t.integer  "to_stop_area_id"
   end
 
   add_index "route_segments", ["from_stop_id"], :name => "index_route_segments_on_from_stop_id"
@@ -298,6 +300,13 @@ ActiveRecord::Schema.define(:version => 20100831125027) do
   add_index "slugs", ["name", "sluggable_type", "sequence", "scope"], :name => "index_slugs_on_n_s_s_and_s", :unique => true
   add_index "slugs", ["sluggable_id", "sluggable_type"], :name => "index_slugs_on_sluggable_id_and_sluggable_type"
   add_index "slugs", ["sluggable_id"], :name => "index_slugs_on_sluggable_id"
+
+  create_table "stations", :force => true do |t|
+    t.string   "name"
+    t.string   "crs_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "stop_area_links", :force => true do |t|
     t.integer  "ancestor_id"
