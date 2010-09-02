@@ -1,0 +1,76 @@
+--- !ruby/object:Gem::Specification 
+name: babosa
+version: !ruby/object:Gem::Version 
+  prerelease: false
+  segments: 
+  - 0
+  - 2
+  - 0
+  version: 0.2.0
+platform: ruby
+authors: 
+- Norman Clarke
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2010-08-30 00:00:00 +01:00
+default_executable: 
+dependencies: []
+
+description: "    A library for creating slugs. Babosa an extraction and improvement of the\n    string code from FriendlyId, intended to help developers create similar\n    libraries or plugins.\n"
+email: norman@njclarke.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- lib/babosa/characters.rb
+- lib/babosa/identifier.rb
+- lib/babosa/utf8/active_support_proxy.rb
+- lib/babosa/utf8/dumb_proxy.rb
+- lib/babosa/utf8/java_proxy.rb
+- lib/babosa/utf8/mappings.rb
+- lib/babosa/utf8/proxy.rb
+- lib/babosa/utf8/unicode_proxy.rb
+- lib/babosa/version.rb
+- lib/babosa.rb
+- README.md
+- MIT-LICENSE
+- Rakefile
+- init.rb
+- test/babosa_test.rb
+has_rdoc: true
+homepage: http://norman.github.com/babosa
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: "[none]"
+rubygems_version: 1.3.6
+signing_key: 
+specification_version: 3
+summary: A library for creating slugs.
+test_files: 
+- test/babosa_test.rb
