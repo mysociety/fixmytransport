@@ -5,32 +5,20 @@ module ApplicationHelper
     MySociety::Config.get('GOOGLE_MAPS_API_KEY', '')
   end
   
-  def transport_mode_radio_buttons(context, model_name, location=nil)
+  def transport_mode_radio_buttons
     tags = []
-    if location
-      available_modes = location.transport_modes
-    else
-      available_modes = TransportMode.active.find(:all)
-    end
+    available_modes = TransportMode.active.find(:all)
     tags << %Q[<div id="transport-mode-radio">]
-    if available_modes.size == 1
-      tags << context.hidden_field('transport_mode_id', :value => available_modes.first.id)
-    else
-      tags << %Q[<div class="transport-mode">] 
-      available_modes.each do |transport_mode| 
-        tag = context.radio_button 'transport_mode_id', transport_mode.id, {:class => 'transport-mode'}
-        tag += context.label "transport_mode_id_#{transport_mode.id}", transport_mode.name
-        tag = %Q[<div class="transport-bg-#{transport_mode.css_name}">#{tag}</div>]
-        tags << tag
-      end
-      tags << "</div>"
+    tags << %Q[<div class="transport-mode">] 
+    available_modes.each do |transport_mode| 
+      tag = radio_button_tag 'transport_mode_id', transport_mode.id, params[:transport_mode_id] == transport_mode.id.to_s, {:class => 'transport-mode'}
+      tag += label_tag "transport_mode_id_#{transport_mode.id}", transport_mode.name
+      tag = %Q[<div class="transport-bg-#{transport_mode.css_name}">#{tag}</div>]
+      tags << tag
     end
     tags << "</div>"
+    tags << "</div>"
     tags.join("\n")
-  end
-  
-  def location_param(param_name)
-    h(params[:problem][:location_attributes][param_name]) rescue nil
   end
   
   def location_type_radio_buttons(campaign)

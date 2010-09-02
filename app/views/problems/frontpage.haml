@@ -2,6 +2,6 @@
   %p.site-description=t(:get_problems_fixed)
   .problem-form-wrapper
     .problem-form
-      - form_for @problem, :url => find_problems_path do |form| 
+      - form_for @problem, :url => find_problems_path,:html => { :method => 'GET' } do |form| 
         = render :partial => 'problems/find_form', :locals => { :form => form }
-        != submit_tag t(:go)
+        %input{:type => 'submit', :value => t(:go)}

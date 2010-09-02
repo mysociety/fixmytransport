@@ -78,8 +78,11 @@ class ProblemsController < ApplicationController
   
   def find
     @location_search = LocationSearch.new_search!(session_id, params)
-    problem_attributes = params[:problem]
-    problem_attributes[:location_search] = @location_search
+    problem_attributes = { :location_attributes => { :name              => params[:name], 
+                                                     :route_number      => params[:route_number], 
+                                                     :area              => params[:area] },
+                           :location_search   => @location_search, 
+                           :transport_mode_id => params[:transport_mode_id] }
     @problem = Problem.new(problem_attributes)
     if !@problem.valid? 
       @title = t :get_problems_fixed

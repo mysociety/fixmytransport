@@ -36,19 +36,19 @@ function clearFormElements(element) {
 // Put guidance text as default in search boxes
 function addSearchGuidance() {
   jQuery('#guidance-name').hide();
-  jQuery('#problem_location_attributes_name').autofill({
+  jQuery('.new_problem #name').autofill({
        value: jQuery('#guidance-name').text(),
        defaultTextColor: '#595454',
        activeTextColor: '#000000'
      });
   jQuery('#guidance-route').hide();
-  jQuery('#problem_location_attributes_route_number').autofill({
+  jQuery('.new_problem #route_number').autofill({
       value: jQuery('#guidance-route').text(),
       defaultTextColor: '#595454',
       activeTextColor: '#000000'
      });
   jQuery('#guidance-area').hide();
-  jQuery('#problem_location_attributes_area').autofill({
+  jQuery('.new_problem #area').autofill({
        value: jQuery('#guidance-area').text(),
        defaultTextColor: '#595454',
        activeTextColor: '#000000'

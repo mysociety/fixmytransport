@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :problems, :except => [:destroy], 
                            :collection => { :choose_location => :get, 
-                                            :find => :post }
+                                            :find => :get }
                            
   map.confirm '/p/:email_token', :action => 'confirm', :controller => 'problems'
   map.confirm_update '/u/:email_token', :action => 'confirm_update', :controller => 'problems'

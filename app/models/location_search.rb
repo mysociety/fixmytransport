@@ -33,9 +33,11 @@ class LocationSearch < ActiveRecord::Base
   
   def self.new_search!(session_id, params)
     close_session_searches(session_id)
-    attributes = params[:problem][:location_attributes]
-    attributes[:transport_mode_id] = params[:problem][:transport_mode_id]
-    attributes[:location_type] = params[:problem][:location_type]
+    attributes = { :name              => params[:name], 
+                   :route_number      => params[:route_number], 
+                   :area              => params[:area],
+                   :transport_mode_id => params[:transport_mode_id],
+                   :location_type     => params[:location_type] }
     attributes[:session_id] = session_id
     attributes[:active] = true
     attributes[:events] = []
