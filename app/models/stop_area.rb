@@ -46,15 +46,6 @@ class StopArea < ActiveRecord::Base
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
   
-  def self.full_find(id, scope)
-    find(id, :scope => scope, 
-         :include => { :stops => [ {:routes_as_from_stop => :region}, {:routes_as_to_stop, :region}, :locality ] } )
-  end
-  
-  def self.find_by_code(code)
-    find(:first, :conditions => ["lower(code) = ?", code.downcase])
-  end
-  
   def routes
     stops.map{ |stop| stop.routes }.flatten.uniq
   end
@@ -111,6 +102,45 @@ class StopArea < ActiveRecord::Base
       end
     end
     area_list
+  end
+  
+  def self.name_or_id_conditions(query, transport_mode_id)
+    query_clauses = []
+    query_params = []
+    if ! query.blank? 
+      query = query.downcase
+      query_clause = "(LOWER(name) LIKE ? OR LOWER(name) LIKE ?"
+      query_params = [ "#{query}%", "%#{query}%"]
+      # numeric?
+      if query.to_i.to_s == query
+        query_clause += " OR id = ?"
+        query_params << query.to_i
+      end
+      query_clause += ")"
+      query_clauses << query_clause
+    end
+
+    if !transport_mode_id.blank?
+      query_clause, query_param_list = StopAreaType.conditions_for_transport_mode(transport_mode_id.to_i)
+      query_clauses << query_clause
+      query_params += query_param_list
+    end
+    conditions = [query_clauses.join(" AND ")] + query_params
+  end
+  
+  def self.find_by_name_or_id(query, transport_mode_id, limit)
+    find(:all, 
+         :conditions => name_or_id_conditions(query, transport_mode_id),
+         :limit => limit)
+  end
+  
+  def self.full_find(id, scope)
+    find(id, :scope => scope, 
+         :include => { :stops => [ {:routes_as_from_stop => :region}, {:routes_as_to_stop, :region}, :locality ] } )
+  end
+  
+  def self.find_by_code(code)
+    find(:first, :conditions => ["lower(code) = ?", code.downcase])
   end
   
 end

@@ -1,0 +1,15 @@
+- content_for :javascript do 
+  != map_javascript_include_tags(:no_jquery => true)
+#map
+%h2.stop-area-header= @stop_area.name
+- form_for @stop_area, :url => admin_url(admin_stop_area_path(@stop_area.id)), :html => { :method => :delete, :class => 'destroy-link' } do |f| 
+  != hidden_field_tag :confirmation, t(:are_you_sure), {:id => 'destroy_confirmation'}
+  != submit_tag t(:destroy)
+- form_for [:admin, @stop_area], :url => admin_url(admin_stop_path(@stop_area.id)), :html => { :class => 'stop-area-form' } do |f| 
+  = render :partial => "form", :locals => { :f => f }
+:javascript
+  var areaStops = #{location_stops_js([@stop_area])}
+  jQuery(document).ready(function(){
+    setupShowStopArea();
+    area_init();
+  });

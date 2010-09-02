@@ -27,11 +27,11 @@ describe StopAreaType do
   describe "when giving conditions for transport modes" do 
   
     it 'should return conditions specifying a set of stop types for buses' do 
-      StopAreaType.conditions_for_transport_mode(1).should == ['area_type in (?)', ["GBCS", "GPBS", "GCLS"]]
+      StopAreaType.conditions_for_transport_mode(1).should == ['area_type in (?)', [["GBCS", "GPBS", "GCLS"]]]
     end
   
     it 'should return conditions specifying area type "GTMU" tram/metro stations (excluding the on-street area types)' do 
-      StopAreaType.conditions_for_transport_mode(7).should == ["area_type in (?)", ['GTMU']]
+      StopAreaType.conditions_for_transport_mode(7).should == ["area_type in (?)", [['GTMU']]]
     end
       
   end

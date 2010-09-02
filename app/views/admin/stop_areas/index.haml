@@ -1,0 +1,25 @@
+%h2= t(:stop_areas)
+= link_to t(:add_a_stop_area), admin_url(new_admin_stop_area_path)
+= render :partial => "admin/shared/index_js"
+= render :partial => "admin/shared/search_form", :locals => { :skip_transport_mode => false } 
+= will_paginate @stop_areas, { :admin => true }
+= t(:select)
+= link_to(t(:all), '', { :class => "index-select-all" })
+= link_to(t(:none), '', { :class => "index-select-none" })
+%table{:class => "stops index-list"}
+  %tr
+    %th{:width => "15%"}= t(:id)
+    %th{:width => "40%"}= t(:name)
+    %th{:width => "35%"}= t(:code)
+    %th{:width => "5%"}= t(:area_type)
+    %th{:width => "5%"}= t(:select)
+  -@stop_areas.each do |stop_area|
+    %tr{ :class => cycle('odd', 'even') }
+      %td
+        = link_to(stop_area.id, main_url(location_path(stop_area)), :target => '_blank')
+        = link_to("(#{t(:admin)})", admin_url(admin_stop_area_path(stop_area.id)), :target => '_blank')
+      %td= stop_area.name
+      %td= stop_area.code
+      %td= stop_area.area_type
+      %td!=  check_box_tag "stop_areas[]", stop_area.id, false, { :class => "select-item" }
+= will_paginate @stop_areas, { :admin => true }

@@ -1,0 +1,9 @@
+en:
+  street: Street
+  locality: Locality
+  area_type: Area type
+  indicator: Indicator
+  add_a_stop_area: Add a stop area
+  stop_area_form_error: There's a problem with this stop area - please see below.
+  stop_area_has_campaigns: This stop area cannot be deleted as there are campaigns associated with it. 
+  stop_area_has_routes: This stop area cannot be deleted as there are routes that go through it.

@@ -18,6 +18,7 @@
       %li=link_to t(:operators), admin_url(admin_operators_path)
       %li=link_to t(:routes), admin_url(admin_routes_path)
       %li=link_to t(:stops), admin_url(admin_stops_path)
+      %li=link_to t(:stop_areas), admin_url(admin_stop_areas_path)
     #main
       - [:notice, :error, :message].each do |key| 
         - unless flash[key].blank? 

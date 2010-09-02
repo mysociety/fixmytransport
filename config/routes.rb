@@ -58,6 +58,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :routes, :collection => { :merge => [:get, :post] }
     admin.resources :operators, :collection => { :merge => [:get, :post] }
     admin.resources :stops 
+    admin.resources :stop_areas 
     admin.connect "/autocomplete_for_operator_name", :controller => 'operators', 
                                                      :action => 'autocomplete_for_name'
     admin.connect "/autocomplete_for_stop_name", :controller => 'stops',

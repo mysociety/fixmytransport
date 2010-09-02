@@ -20,6 +20,12 @@ class StopAreaType < ActiveRecord::Base
   @@primary_types = @@station_types + @@ferry_terminal_types
   cattr_accessor :station_types, :ferry_terminal_types, :primary_types
   
+  def self.codes
+    connection.select_rows("SELECT DISTINCT description, code 
+                            FROM stop_area_types 
+                            ORDER BY code")
+  end
+  
   def self.codes_for_transport_mode(transport_mode_id)
     calculate_hashes if @@codes_by_mode.empty? 
     @@codes_by_mode[transport_mode_id]
@@ -50,7 +56,7 @@ class StopAreaType < ActiveRecord::Base
     else
       codes = codes_for_transport_mode(transport_mode_id).uniq
     end
-    ['area_type in (?)', codes]
+    ['area_type in (?)', [codes]]
   end
   
 end

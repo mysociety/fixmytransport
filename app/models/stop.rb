@@ -129,10 +129,6 @@ class Stop < ActiveRecord::Base
   end
   memoize :description
   
-  def locality_name
-    locality ? locality.name : nil
- end
-  
   def area
     locality_name
   end
@@ -203,9 +199,9 @@ class Stop < ActiveRecord::Base
   end
   
   def self.find_by_name_or_id(query, transport_mode_id, limit)
-    stops = find(:all, 
-                 :conditions => name_or_id_conditions(query, transport_mode_id),
-                 :limit => limit)
+    find(:all, 
+         :conditions => name_or_id_conditions(query, transport_mode_id),
+         :limit => limit)
   end
     
   def self.find_by_name_and_coords(name, easting, northing, distance)
@@ -218,6 +214,17 @@ class Stop < ActiveRecord::Base
                           LIMIT 1",
                           easting, northing, name, easting, distance, northing, distance])
     stops.empty? ? nil : stops.first
+  end
+  
+  def self.find_in_bounding_box
+    stops = find_by_sql(["SELECT *
+                          FROM stops
+                          WHERE stops.coords && ST_SetSRID(ST_MakeBox2D(
+                            ST_Point(?, ?),
+    	                      ST_Point(?, ?)), #{BRITISH_NATIONAL_GRID})",
+    	                      358941, 173524, 358935, 173519])
+  # -12039.543072383,6709347.2102621
+  # -11537.925074351,6709824.9416887
   end
   
   def self.find_by_atco_code(atco_code, options={})

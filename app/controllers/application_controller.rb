@@ -91,9 +91,9 @@ class ApplicationController < ActionController::Base
       return stop_path(location.locality, location)
     elsif location.is_a? StopArea
       if StopAreaType.station_types.include?(location.area_type)
-         return station_path(location.locality, location, attributes)
+         return station_path(location.locality, location)
        elsif StopAreaType.ferry_terminal_types.include?(location.area_type)
-         return ferry_terminal_path(location.locality, location, attributes)
+         return ferry_terminal_path(location.locality, location)
        else
          return stop_area_path(location.locality, location)
       end

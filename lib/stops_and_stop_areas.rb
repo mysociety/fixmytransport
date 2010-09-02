@@ -109,6 +109,10 @@ module FixMyTransport
         return name
       end
       
+      def locality_name
+        locality ? locality.name : nil
+      end
+      
     end
   end
   

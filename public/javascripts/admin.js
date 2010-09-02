@@ -182,3 +182,14 @@ function setupShowStop(){
 function setupNewStop(){
   setupLocalityAutocomplete();
 }
+
+
+function setupShowStopArea(){
+  setupLocalityAutocomplete();
+  setupDestroyLink();
+}
+
+function setupNewStopArea(){
+  setupLocalityAutocomplete();
+}
+

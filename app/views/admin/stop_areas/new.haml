@@ -1,0 +1,7 @@
+%h2.stop-area-header= @stop_area.name
+- form_for [:admin, @stop_area], :url => admin_url(admin_stop_areas_path), :html => { :class => 'stop-area-form' } do |f| 
+  = render :partial => "form", :locals => { :f => f }
+:javascript
+  jQuery(document).ready(function(){
+    setupNewStopArea();
+  });
