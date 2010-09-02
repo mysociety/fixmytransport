@@ -60,7 +60,7 @@ class StopArea < ActiveRecord::Base
   end
   
   def route_terminuses
-    routes.map{ |route| route.terminuses }.flatten.uniq
+    routes.map{ |route| route.terminuses }.flatten.uniq.sort_by(&:name)
   end
   
   def next_stops
