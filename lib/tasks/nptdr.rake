@@ -127,13 +127,19 @@ namespace :nptdr do
     desc 'Adds stop_area_ids to route_segments for train, ferry and metro station interchange and platform stops' 
     task :add_stop_areas_to_route_segments => :environment do 
       conditions = ["stop_type in ('MET', 'RLY', 'FBT','FER','RPL', 'PLT')"]
+      station_types = { 'MET' => 'GTMU',
+                        'RLY' => 'GRLS', 
+                        'FBT' => 'GFTD', 
+                        'FER' => 'GFTD', 
+                        'RPL' => 'GRLS', 
+                        'PLT' => 'GTMU' }
       interchange_stops = Stop.find_each(:conditions => conditions) do |interchange_stop|
-        station_stop_area = interchange_stop.root_stop_area
-        unless station_stop_area
+        station_stop_area = interchange_stop.root_stop_area(station_types[interchange_stop.stop_type])
+        if !station_stop_area
           puts  "No station for #{interchange_stop.name}" 
           next
         end
-        puts "Adding #{station_stop_area.name} to segments for #{interchange_stop.name}"
+        # puts "Adding #{station_stop_area.name} to segments for #{interchange_stop.name}"
         interchange_stop.route_segments_as_from_stop.each do |route_segment|
           route_segment.from_stop_area_id = station_stop_area.id
           route_segment.save!

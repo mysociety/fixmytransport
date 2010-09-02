@@ -7,7 +7,7 @@ class Parsers::OperatorsParser
   
   # Loads data from a file with tab-separated columns for CRS code, name, an unused field, and operator name
   # Loads name mappings from a file with tab-separated columns for alternative versions of names
-  def match_operators(filepath, mapping_file)
+  def match_operators(filepath, mapping_file, stop_area_type)
     operator_mappings = {}
     File.open(mapping_file).each_with_index do |line, index|
       next if index == 0
@@ -33,8 +33,13 @@ class Parsers::OperatorsParser
       raise "No operator #{operator_name}" if operators.empty?
       raise "Multiple operators #{operator_name}" if operators.size > 1
       operator = operators.first
-      stop.stop_operators.create(:operator => operator)
-      puts "#{stop.common_name} #{operator.name}"
+      stop_area = stop.root_stop_area(stop_area_type)
+      if ! stop_area
+        puts "No stop_area for stop #{stop.name}"
+        next
+      end
+      stop_area.stop_area_operators.create(:operator => operator)
+      puts "#{stop_area.name} #{operator.name}"
     end
   end
 end
