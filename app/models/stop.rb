@@ -58,7 +58,7 @@ class Stop < ActiveRecord::Base
   validates_presence_of :locality_id, :lon, :lat, :if => :loaded?
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
-  has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality, :cache_column => false
+  has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality
   has_paper_trail
   
   # instance methods

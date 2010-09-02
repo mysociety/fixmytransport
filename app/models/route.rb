@@ -35,7 +35,7 @@ class Route < ActiveRecord::Base
   validates_presence_of :number, :transport_mode_id
   validates_presence_of :region_id, :if => :loaded?
   cattr_reader :per_page
-  has_friendly_id :short_name, :use_slug => true, :scope => :region, :cache_column => false
+  has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
   
   @@per_page = 20

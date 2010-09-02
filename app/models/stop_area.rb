@@ -36,7 +36,7 @@ class StopArea < ActiveRecord::Base
   belongs_to :locality
   has_many :stop_area_operators, :dependent => :destroy
   has_many :operators, :through => :stop_area_operators, :uniq => true
-  has_friendly_id :name, :use_slug => true, :scope => :locality, :cache_column => false    
+  has_friendly_id :name, :use_slug => true, :scope => :locality  
   has_many :route_segments_as_from_stop_area, :foreign_key => 'from_stop_area_id', :class_name => 'RouteSegment'
   has_many :route_segments_as_to_stop_area, :foreign_key => 'to_stop_area_id', :class_name => 'RouteSegment'
   has_many :routes_as_from_stop_area, :through => :route_segments_as_from_stop_area, :source => 'route'
