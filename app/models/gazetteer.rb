@@ -1,19 +1,21 @@
 class Gazetteer 
   
   def self.postcode_from_area(attributes)
-    if MySociety::Validate.is_valid_postcode(attributes[:area])
+    if MySociety::Validate.is_valid_postcode(attributes[:area]) || 
+      MySociety::Validate.is_valid_partial_postcode(attributes[:area])
       attributes[:postcode] = attributes[:area]
       attributes[:area] = nil
     end
   end
   
   def self.coords_from_postcode(postcode)
-    begin
-      coord_info = MySociety::MaPit.get_location(postcode)
-    rescue MySociety::RABX::RABXError
-      return :postcode_not_found
+    postcode = postcode.gsub(/\s/, '')
+    if MySociety::Validate.is_valid_postcode(postcode)
+      return MySociety::MaPit.call('postcode', postcode)
+    else
+      return MySociety::MaPit.call('postcode', "partial/#{postcode}")
     end
-    return coord_info
+    
   end
   
   # accepts attributes
@@ -34,7 +36,7 @@ class Gazetteer
     includes = [:locality]
     if !attributes[:postcode].blank?
       coord_info = coords_from_postcode(attributes[:postcode])
-      if coord_info == :postcode_not_found
+      if coord_info == :not_found or coord_info == :bad_request
         errors << :postcode_not_found
       else
         query += " AND ST_Distance(
@@ -112,7 +114,7 @@ class Gazetteer
     end
     if !attributes[:postcode].blank?
       coord_info = coords_from_postcode(attributes[:postcode])
-      if coord_info == :postcode_not_found
+      if coord_info == :not_found or coord_info == :bad_request
         errors << :postcode_not_found
       else
         localities = Locality.find_by_coordinates(coord_info['easting'], coord_info['northing'])
