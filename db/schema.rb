@@ -188,10 +188,8 @@ ActiveRecord::Schema.define(:version => 20100901122501) do
     t.datetime "confirmed_at"
     t.integer  "status_code"
     t.string   "council_info"
-    t.integer  "public_transport_executive_id"
     t.integer  "passenger_transport_executive_id"
     t.integer  "campaign_id"
-    t.boolean  "public"
     t.string   "reporter_name"
     t.boolean  "reporter_public"
     t.string   "reporter_phone"
@@ -300,13 +298,6 @@ ActiveRecord::Schema.define(:version => 20100901122501) do
   add_index "slugs", ["name", "sluggable_type", "sequence", "scope"], :name => "index_slugs_on_n_s_s_and_s", :unique => true
   add_index "slugs", ["sluggable_id", "sluggable_type"], :name => "index_slugs_on_sluggable_id_and_sluggable_type"
   add_index "slugs", ["sluggable_id"], :name => "index_slugs_on_sluggable_id"
-
-  create_table "stations", :force => true do |t|
-    t.string   "name"
-    t.string   "crs_code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "stop_area_links", :force => true do |t|
     t.integer  "ancestor_id"
@@ -493,7 +484,6 @@ ActiveRecord::Schema.define(:version => 20100901122501) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "wants_fmt_updates"
-    t.boolean  "public"
     t.string   "phone"
     t.string   "crypted_password"
     t.string   "password_salt"
