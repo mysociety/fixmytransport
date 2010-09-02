@@ -137,15 +137,6 @@ class Stop < ActiveRecord::Base
     locality_name
   end
   
-  def name_without_suffix(transport_mode)
-    if transport_mode.name == 'Train'
-      return name.gsub(' Rail Station', '')
-    elsif transport_mode.name == 'Tram/Metro'
-      return name.gsub(' Underground Station', '')
-    end
-    return name
-  end
-  
   def name_and_bearing
     text = "#{name}"
     text += " (#{bearing})" if ! bearing.blank?

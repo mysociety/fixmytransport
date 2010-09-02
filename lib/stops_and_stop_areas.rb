@@ -100,6 +100,15 @@ module FixMyTransport
         [emailable_id_string, unemailable_id_string].join("|")
       end
       
+      def name_without_suffix(transport_mode)
+        if transport_mode.name == 'Train'
+          return name.gsub(' Rail Station', '')
+        elsif transport_mode.name == 'Tram/Metro'
+          return name.gsub(' Underground Station', '')
+        end
+        return name
+      end
+      
     end
   end
   

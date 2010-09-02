@@ -81,15 +81,6 @@ class StopArea < ActiveRecord::Base
     end
   end
   
-  def name_without_suffix(transport_mode)
-    if transport_mode.name == 'Train'
-      return name.gsub(' Rail Station', '')
-    elsif transport_mode.name == 'Tram/Metro'
-      return name.gsub(' Underground Station', '')
-    end
-    return name
-  end
-  
   def transport_modes
     TransportMode.find(StopAreaType.transport_modes_for_code(area_type))
   end
