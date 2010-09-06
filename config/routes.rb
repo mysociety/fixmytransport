@@ -4,8 +4,8 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'problems', :action => 'frontpage'
 
   # resources
+  map.resources :operators, :only => [:show]
   map.resources :campaigns, :except => [:destroy]
-  
   map.resources :problems, :except => [:destroy], 
                            :collection => { :choose_location => :get, 
                                             :find => :get }

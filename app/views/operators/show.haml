@@ -1,0 +1,7 @@
+%h2= @operator.name
+%table
+  - @operator.route_operators.each do |route_operator|
+    %tr
+      %td!= "#{link_to route_operator.route.name, main_url(location_path(route_operator.route)), :target => '_blank'}"
+      %td= route_operator.route.region.name
+      %td.route-terminuses= route_operator.route.area
