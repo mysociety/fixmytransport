@@ -8,7 +8,6 @@ namespace :data do
   task :create_organization_contact_spreadsheet => :environment do 
     
     include ActionController::UrlWriter
-    include ApplicationHelper
     ActionController.default_url_options[:host] = MySociety::Config.get("DOMAIN", 'localhost:3000')
     
     check_for_dir
@@ -22,18 +21,17 @@ namespace :data do
     
     puts "Writing operator contact spreadsheet to #{ENV['DIR']}..."
     File.open(File.join(ENV['DIR'], 'operators.tsv'), 'w') do |operator_file|
-      operator_file.write("ID\tOperator\tShort name\tContact email\tNotes\tRoute count\troutes\n")
+      operator_file.write("ID\tOperator\tShort name\tContact email\tNotes\tRoute count\tURL - has list of routes\n")
       
       Operator.find(:all, :order => 'name').each do |operator|
         if operator.routes.count > 0
-          routes = operator.routes.map{ |route| location_url(route) }.join(" ")
           operator_file.write([operator.id, 
                                operator.name, 
                                operator.short_name, 
                                operator.email,
                                operator.notes,
                                operator.routes.count, 
-                               routes].join("\t") + "\n")
+                               operator_url(operator)].join("\t") + "\n")
         end
       end
     end
