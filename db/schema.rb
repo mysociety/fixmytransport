@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(:version => 20100901122501) do
     t.integer  "user_id"
     t.integer  "campaign_id"
     t.integer  "task_id"
-    t.integer  "status_code"
+    t.integer  "status_code",    :default => 0
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -111,7 +111,7 @@ ActiveRecord::Schema.define(:version => 20100901122501) do
     t.string   "grid_type"
     t.float    "northing"
     t.float    "easting"
-    t.point    "coords",                :srid => 27700
+    t.geometry "coords"
     t.integer  "district_id"
     t.string   "cached_slug"
   end
@@ -351,7 +351,7 @@ ActiveRecord::Schema.define(:version => 20100901122501) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.point    "coords",                   :srid => 27700
+    t.geometry "coords"
     t.float    "lon"
     t.float    "lat"
     t.integer  "locality_id"
@@ -408,7 +408,7 @@ ActiveRecord::Schema.define(:version => 20100901122501) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.point    "coords",                                      :srid => 27700
+    t.geometry "coords"
     t.integer  "locality_id"
     t.string   "cached_slug"
     t.boolean  "loaded"
