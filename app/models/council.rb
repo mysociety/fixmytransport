@@ -15,5 +15,8 @@ class Council
   def emailable? 
     @emailable
   end
+  
+  def self.get_council
+  end
 
 end

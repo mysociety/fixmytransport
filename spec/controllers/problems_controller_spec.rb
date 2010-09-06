@@ -305,12 +305,10 @@ describe ProblemsController do
                                          :responsible_organizations => [mock_council_one, mock_council_two],
                                          :emailable_organizations => [mock_council_two], 
                                          :unemailable_organizations => [mock_council_one],
-                                         :operators_responsible? => false)
-      expected = ["Your problem will be sent to <strong>Test Council Two</strong>. The subject and",
-                  "description of the problem will be public. We do not yet have contact details for",
-                  "<strong>Test Council One</strong>, so your problem will not <strong>not</strong>",
-                  "be sent to them until you provide their contact details (we'll help you",
-                  "do this)."].join(' ')
+                                         :operators_responsible? => false, 
+                                         :councils_responsible? => true)
+      expected = ["Your problem will be sent to <strong>Test Council One</strong> or <strong>Test",
+                  "Council Two</strong>. The subject and description of the problem will be public."].join(' ')
       expect_advice(mock_problem, expected)
     end
     

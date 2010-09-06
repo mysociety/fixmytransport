@@ -90,7 +90,7 @@ class ProblemsController < ApplicationController
     else
       @problem.location_from_attributes
       if @problem.locations.size == 1
-         redirect_to location_url(@problem.locations.first)
+         redirect_to @template.location_url(@problem.locations.first)
       elsif !@problem.locations.empty?
         @problem.locations = @problem.locations.sort_by(&:name)
         location_search.add_choice(@problem.locations)
@@ -167,6 +167,9 @@ class ProblemsController < ApplicationController
       advice_params[:uncontactable] = @template.org_names(problem, :unemailable_organizations, t(:or)) 
       if problem.operators_responsible? 
         advice = :no_details_for_some_operators
+      elsif problem.councils_responsible?
+        advice_params[:councils] = @template.org_names(problem, :responsible_organizations, t(:or))
+        advice = :no_details_for_some_councils
       else
         advice = :no_details_for_some_organizations
       end

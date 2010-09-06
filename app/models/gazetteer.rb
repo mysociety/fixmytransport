@@ -1,6 +1,7 @@
 class Gazetteer 
   
   def self.postcode_from_area(attributes)
+    attributes[:area] = attributes[:area].strip
     if MySociety::Validate.is_valid_postcode(attributes[:area]) || 
       MySociety::Validate.is_valid_partial_postcode(attributes[:area])
       attributes[:postcode] = attributes[:area]

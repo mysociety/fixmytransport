@@ -7,9 +7,7 @@ class ApplicationController < ActionController::Base
   include MySociety::UrlMapper
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
-  helper_method :location_search, 
-                :location_url, 
-                :location_path, 
+  helper_method :location_search,
                 :main_url, 
                 :admin_url, 
                 :current_user_session,
@@ -86,38 +84,6 @@ class ApplicationController < ActionController::Base
     request.session_options[:id]
   end
   
-  def location_path(location)
-    if location.is_a? Stop
-      return stop_path(location.locality, location)
-    elsif location.is_a? StopArea
-      if StopAreaType.station_types.include?(location.area_type)
-         return station_path(location.locality, location)
-       elsif StopAreaType.ferry_terminal_types.include?(location.area_type)
-         return ferry_terminal_path(location.locality, location)
-       else
-         return stop_area_path(location.locality, location)
-      end
-    elsif location.is_a? Route
-      return route_path(location.region, location)
-    end
-    raise "Unknown location type: #{location.class}"
-  end
-  
-  def location_url(location, attributes={})
-   if location.is_a? Stop
-     return stop_url(location.locality, location, attributes)
-   elsif location.is_a? StopArea
-     if StopAreaType.station_types.include?(location.area_type)
-       return station_url(location.locality, location, attributes)
-     elsif StopAreaType.ferry_terminal_types.include?(location.area_type)
-       return ferry_terminal_url(location.locality, location, attributes)
-     else
-       return stop_area_url(location.locality, location, attributes)
-     end
-   elsif location.is_a? Route
-     return route_url(location.region, location, attributes)
-   end
-   raise "Unknown location type: #{location.class}"
-  end
+
   
 end
