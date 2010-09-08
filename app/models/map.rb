@@ -2,38 +2,6 @@
 # currently works with google maps
 class Map
   
-  def self.deg2rad(deg)
-  	(deg * Math::PI / 180)
-  end
-
-  def self.rad2deg(rad)
-  	(rad * 180 / Math::PI)
-  end
-  
-  # lon/lat to tile numbers
-  def self.lon_lat_to_tile_num(lat_deg, lon_deg, zoom)
-   lat_rad = deg2rad(lat_deg)
-   n = 2.0 ** zoom
-   xtile = ((lon_deg + 180.0) / 360.0 * n).to_i
-   ytile = ((1.0 - Math.log(Math.tan(lat_rad) + (1 / Math.cos(lat_rad))) / Math::PI) / 2.0 * n).to_i
-   return xtile, ytile
-  end
-  
-  # tile numbers to lon/lat
-  def self.num2deg(xtile, ytile, zoom)
-   n = 2.0 ** zoom
-   lon_deg = xtile / n * 360.0 - 180.0
-   lat_rad = math.atan(Math.sinh(math.pi * (1 - 2 * ytile / n)))
-   lat_deg = rad2deg(lat_rad)
-   return lat_deg, lon_deg
-  # This returns the NW-corner of the square. Use the function with xtile+1 and/or ytile+1 to get the other corners. With xtile+0.5 & ytile+0.5 it will return the center of the tile
-  end
-  
-  def self.tile_url(lat, lon, zoom)
-    x, y = deg2num(lat, lon, zoom)
-    return "http://tile.openstreetmap.org/#{zoom}/#{x}/#{y}.png"
-  end
-  
   def self.offset
     268435456 # half of the earth's circumference in pixels at zoom level 21
   end
