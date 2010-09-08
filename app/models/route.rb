@@ -125,6 +125,10 @@ class Route < ActiveRecord::Base
        end
      end
    end
+   
+   def points
+     stops_or_stations
+   end 
 
    def transport_modes
      [transport_mode]

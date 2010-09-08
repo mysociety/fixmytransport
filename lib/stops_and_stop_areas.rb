@@ -113,6 +113,10 @@ module FixMyTransport
         locality ? locality.name : nil
       end
       
+      def points
+        [self]
+      end
+      
     end
   end
   
