@@ -106,6 +106,42 @@ function segmentUnselected(event) {
   
 }
 
+/**
+ * @requires OpenLayers/Layer/XYZ.js
+ *
+ * Class: OpenLayers.Layer.StreetView
+ *
+ * Inherits from:
+ *  - <OpenLayers.Layer.XYZ>
+ */
+OpenLayers.Layer.StreetView = OpenLayers.Class(OpenLayers.Layer.XYZ, {
+    /**
+     * Constructor: OpenLayers.Layer.StreetView
+     *
+     * Parameters:
+     * name - {String}
+     * url - {String}
+     * options - {Object} Hashtable of extra options to tag onto the layer
+     */
+    initialize: function(name, options) {
+        var url = [
+            "http://a.os.openstreetmap.org/sv/${z}/${x}/${y}.png",
+            "http://b.os.openstreetmap.org/sv/${z}/${x}/${y}.png",
+            "http://c.os.openstreetmap.org/sv/${z}/${x}/${y}.png"
+        ];
+        options = OpenLayers.Util.extend({
+            numZoomLevels: 18,
+            transitionEffect: "resize",
+            sphericalMercator: true,
+            attribution: "Contains Ordnance Survey data © Crown copyright and database right 2010"
+        }, options);
+        var newArguments = [name, url, options];
+        OpenLayers.Layer.XYZ.prototype.initialize.apply(this, newArguments);
+    },
+
+    CLASS_NAME: "OpenLayers.Layer.StreetView"
+});
+
 function createMap() {
 
   var options = { 
@@ -116,11 +152,12 @@ function createMap() {
         'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
                                           20037508.34, 20037508.34)
       };
+  jQuery('.static-map-element').hide();    
   map = new OpenLayers.Map('map', options);
-  var gmap = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true,
+  var layer = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true,
                                                            'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
                                                                                             20037508.34, 20037508.34)});
-  map.addLayer(gmap); 
+  map.addLayer(layer); 
 }
 
 function onPopupClose(evt) {
