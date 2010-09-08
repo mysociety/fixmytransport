@@ -407,20 +407,6 @@ form.update_campaign label {
 }
 
 /* Location column */
-#map-col {
-  float: right; 
-  max-width: 400px;
-  margin-left: 0.5em;
-  margin-right: 2em;
-}
-
-#map {
-  width: 400px; 
-  height: 400px; 
-  padding-left: 20px; 
-  position:relative;
-  border: 1px solid #000000;
-}
 
 .extra-info {
   overflow: auto;
