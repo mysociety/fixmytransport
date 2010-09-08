@@ -1,9 +1,8 @@
 - content_for :javascript do 
   != map_javascript_include_tags
 - cache("stop_area_#{@stop_area.id}") do 
-  = render :partial => 'shared/location_map_js', :locals => { :locations => [@stop_area] }
   #map-col
-    #map
+    = render :partial => 'shared/map', :locals => { :locations => @stop_area.points }
     .extra-info
       - if StopAreaType.primary_types.include? @stop_area.area_type
         = render :partial => "shared/route_list", :locals => { :stop_or_station => @stop_area }

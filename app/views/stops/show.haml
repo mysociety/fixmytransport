@@ -1,9 +1,8 @@
 - content_for :javascript do 
   != map_javascript_include_tags
 - cache("stop_#{@stop.id}") do 
-  = render :partial => 'shared/location_map_js', :locals => { :locations => [@stop] }
   #map-col
-    #map
+    = render :partial => 'shared/map', :locals => { :locations => @stop.points }
     .extra-info
       / .transport-direct= transport_direct_link(@stop)
       .departures!= departures_link(@stop)
