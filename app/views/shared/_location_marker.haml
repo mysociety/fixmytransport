@@ -1,0 +1,5 @@
+- if location.is_a?(Route)
+  = render :partial => 'shared/location_marker', :collection => location.points, :as => :location, :locals => { :counter => location_marker_counter}
+- else
+  %a{:href => location_url(location)}
+    %img{:src => "/images/circle-icon-sm_#{defined?(counter) ? counter : location_marker_counter}.png", :alt => "#{location.name}", :style => "position: absolute; top: #{Map.lat_to_y_offset(@lat, location.lat, @zoom)}px; left: #{Map.lon_to_x_offset(@lon, location.lon, @zoom)}px;" }

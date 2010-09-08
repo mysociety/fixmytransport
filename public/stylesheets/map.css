@@ -1,0 +1,19 @@
+
+#map-col {
+  float: right; 
+  max-width: 400px;
+  margin-left: 0.5em;
+  margin-right: 2em;
+}
+
+#map {
+  width: 400px; 
+  height: 400px; 
+  position:relative;
+  border: 1px solid #000000;
+  overflow: hidden;
+}  
+
+#map img {
+    border: 0;
+}
