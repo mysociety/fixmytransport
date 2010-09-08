@@ -28,7 +28,8 @@ describe CampaignsController do
       @campaign = mock_model(Campaign, :id => 8, 
                                        :title => 'A test campaign',
                                        :default_assignment => mock_assignment,
-                                       :initiator_id => 44)
+                                       :initiator_id => 44, 
+                                       :location => mock_model(Stop, :points => [mock("point", :lat => 51, :lon => 0)]))
       Campaign.stub!(:find).and_return(@campaign)
     end
     

@@ -1,5 +1,7 @@
 class StopAreasController < ApplicationController
   
+  before_filter :process_map_params, :only => [:show]
+  
   def show
     @stop_area = StopArea.full_find(params[:id], params[:scope])
 
@@ -16,7 +18,9 @@ class StopAreasController < ApplicationController
       location_search.add_location(@stop_area) 
     end
     respond_to do |format|
-      format.html
+      format.html do
+        map_params_from_location(@stop_area.points)
+      end
       format.atom do  
         @campaigns = @stop_area.campaigns.confirmed
         render :template => 'shared/campaigns.atom.builder', :layout => false 

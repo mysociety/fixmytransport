@@ -1,5 +1,7 @@
 class ProblemsController < ApplicationController
   
+  before_filter :process_map_params, :only => [:show, :new, :find]
+  
   def new
     location = params[:location_type].constantize.find(params[:location_id])
     @problem = Problem.new(:location => location, 
@@ -15,6 +17,7 @@ class ProblemsController < ApplicationController
         end
       end
     end
+    map_params_from_location(@problem.location.points)
     setup_problem_advice(@problem)
   end
   
@@ -46,6 +49,7 @@ class ProblemsController < ApplicationController
   
   def show
     @problem = Problem.find(params[:id])
+    map_params_from_location(@problem.location.points)
     @new_update = Update.new(:problem_id => @problem, 
                              :reporter => current_user ? current_user : User.new,
                              :reporter_name => current_user ? current_user.name : '')
@@ -94,6 +98,7 @@ class ProblemsController < ApplicationController
       elsif !@problem.locations.empty?
         @problem.locations = @problem.locations.sort_by(&:name)
         location_search.add_choice(@problem.locations)
+        map_params_from_location(@problem.locations)
         @title = t :multiple_locations
         render :choose_location
       else

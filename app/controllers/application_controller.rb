@@ -84,6 +84,29 @@ class ApplicationController < ActionController::Base
     request.session_options[:id]
   end
   
-
+  def process_map_params
+    @zoom = params[:zoom].to_i if params[:zoom] && (MIN_ZOOM_LEVEL <= params[:zoom].to_i && params[:zoom].to_i <= MAX_VISIBLE_ZOOM)
+    @lon = params[:lon].to_f if params[:lon] 
+    @lat = params[:lat].to_f if params[:lat]
+  end
+  
+  # set the lat, lon and zoom based on the locations being shown
+  def map_params_from_location(locations)
+    # check for an array of routes
+    if locations.first.is_a?(Route)
+      locations = locations.map{ |location| location.points }.flatten
+    end
+    lons = locations.map{ |element| element.lon }
+    lats = locations.map{ |element| element.lat }
+    unless @lon
+      @lon = lons.inject(0){ |sum, lon| sum + lon } / lons.size
+    end
+    unless @lat
+      @lat = lats.inject(0){ |sum, lat| sum + lat } / lats.size
+    end
+    unless @zoom
+      @zoom = Map::zoom_to_coords(lons.min, lons.max, lats.min, lats.max)
+    end
+  end
   
 end

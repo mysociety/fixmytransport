@@ -1,5 +1,6 @@
 class CampaignsController < ApplicationController
-  
+
+  before_filter :process_map_params, :only => [:show]
   cache_sweeper :campaign_sweeper, :only => :confirm
   before_filter :find_campaign, :only => [:show, :edit, :update]
   before_filter :require_owner_or_token, :only => [:edit, :update]
@@ -13,13 +14,14 @@ class CampaignsController < ApplicationController
       @updated = @campaigns.first.updated_at
     end
     respond_to do |format|
-      format.html
+      format.html 
       format.atom { render :template => 'shared/campaigns.atom.builder', :layout => false }
     end
   end
   
   def show
     @title = @campaign.title
+    map_params_from_location(@campaign.location.points)
   end
   
   def update
