@@ -1,7 +1,6 @@
 - if @campaign.location
   #map-col
-    #map
-    = render :partial => 'shared/location_map_js', :locals => { :locations => [@campaign.location] }
+    = render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [] }
 .campaign-info
   %h3= @campaign.title
   %p.campaign= @campaign.description
@@ -9,6 +8,6 @@
   %p.start-date
     %b= t(:campaign_start_date)
     =@campaign.created_at.strftime("%d/%m/%Y") 
-:plain
-  <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical" data-via="fixmytransport">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+= link_to(t(:tweet_this), "http://twitter.com/share", {:class =>"twitter-share-button", 'data-count' => 'vertical', 'data-via' =>"fixmytransport"})
+%script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
+= link_to(t(:join_this_campaign), '')

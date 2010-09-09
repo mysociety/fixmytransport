@@ -90,8 +90,10 @@ class ApplicationController < ActionController::Base
     @lat = params[:lat].to_f if params[:lat]
   end
   
-  # set the lat, lon and zoom based on the locations being shown
-  def map_params_from_location(locations)
+  # set the lat, lon and zoom based on the locations being shown, and find other locations
+  # within the bounding box
+  def map_params_from_location(locations, find_other_locations=false)
+    @find_other_locations = find_other_locations
     # check for an array of routes
     if locations.first.is_a?(Route)
       locations = locations.map{ |location| location.points }.flatten
@@ -106,6 +108,11 @@ class ApplicationController < ActionController::Base
     end
     unless @zoom
       @zoom = Map::zoom_to_coords(lons.min, lons.max, lats.min, lats.max)
+    end
+    if find_other_locations
+      @other_locations = Map.other_locations(@lat, @lon, @zoom)
+    else
+      @other_locations = []
     end
   end
   

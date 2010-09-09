@@ -1,6 +1,6 @@
 - @title = "#{@problem.location.name}: #{@problem.subject}"
 #map-col
-  = render :partial => 'shared/map', :locals => { :locations => [@problem.location] }
+  = render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [] }
 .problem-full
   - if @problem.status == :fixed
     .fixed= t(:problem_has_been_fixed)

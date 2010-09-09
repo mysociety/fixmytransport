@@ -1,4 +1,4 @@
-= render :partial => 'shared/location_map_js', :locals => { :locations => locations }
+= render :partial => 'shared/location_map_js', :locals => { :locations => locations, :other_locations => other_locations }
 #map
   #drag
     %img{:class => 'static-map-element', :alt => "Map", :src => "#{Map.google_tile_url(@lat, @lon, @zoom)}", :style => "top:0px; left:0;"}      
@@ -24,4 +24,5 @@
       %a{:rel => 'nofollow', :href => url_for(params.merge(:zoom => Map.zoom_out(@zoom)))}
         %img{:style => "width: 18px; height: 18px; position: relative; ", :src => "http://openlayers.org/api/img/zoom-minus-mini.png"}
     %div#markers
-      = render :partial => 'shared/location_marker', :collection => locations, :as => :location
+      = render :partial => 'shared/location_marker', :collection => other_locations, :as => :location, :locals => {:small => true, :main => false }
+      = render :partial => 'shared/location_marker', :collection => locations, :as => :location, :locals => {:small => false, :main => true }

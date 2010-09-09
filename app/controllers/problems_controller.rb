@@ -17,7 +17,7 @@ class ProblemsController < ApplicationController
         end
       end
     end
-    map_params_from_location(@problem.location.points)
+    map_params_from_location(@problem.location.points, find_other_locations=false)
     setup_problem_advice(@problem)
   end
   
@@ -49,7 +49,7 @@ class ProblemsController < ApplicationController
   
   def show
     @problem = Problem.find(params[:id])
-    map_params_from_location(@problem.location.points)
+    map_params_from_location(@problem.location.points, find_other_locations=false)
     @new_update = Update.new(:problem_id => @problem, 
                              :reporter => current_user ? current_user : User.new,
                              :reporter_name => current_user ? current_user.name : '')
@@ -98,7 +98,7 @@ class ProblemsController < ApplicationController
       elsif !@problem.locations.empty?
         @problem.locations = @problem.locations.sort_by(&:name)
         location_search.add_choice(@problem.locations)
-        map_params_from_location(@problem.locations)
+        map_params_from_location(@problem.locations, find_other_locations=false)
         @title = t :multiple_locations
         render :choose_location
       else

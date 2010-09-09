@@ -1,7 +1,11 @@
 - content_for :javascript do 
   != map_javascript_include_tags
 :javascript
-  var areaStops = #{location_stops_js(locations)}
+  var zoom = #{@zoom};
+  var lat = #{@lat};
+  var lon = #{@lon};
+  var findOtherLocations = #{@find_other_locations};
+  var areaStops = #{location_stops_js(locations, main=true, small=false)}
   jQuery(document).ready(function(){
      area_init();
   });

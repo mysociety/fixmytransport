@@ -1,64 +1,96 @@
 // Mapping functions
 
 var map;
+var markers;
+var otherMarkers;
+var stopsById = new Array();
 var proj = new OpenLayers.Projection("EPSG:4326");
 var selectControl;
 var openPopup;
-var stopsById = new Array();
 var segmentStyle =
 {
   strokeColor: "#CC0000",
-  strokeOpacity: 0.7,
+  strokeOpacity: 0.2,
   strokeWidth: 4
 };
     
 var segmentSelectedStyle =
 {
   strokeColor: "#000000",
-  strokeOpacity: 0.7,
+  strokeOpacity: 0.5,
   strokeWidth: 4
 };
 
 function area_init() {
   createMap();
-  var stopCoords;
   bounds = new OpenLayers.Bounds();
-  var markers = new OpenLayers.Layer.Markers( "Markers" );
+  markers = new OpenLayers.Layer.Markers( "Markers" );
+  otherMarkers = new OpenLayers.Layer.Markers( "Other Markers" );
+  map.addLayer(otherMarkers);
   map.addLayer(markers);
-  for (var i=0; i < areaStops.length; i++){
-    var item = areaStops[i];
-    if (item[0] instanceof Array){
+  addMarkerList(areaStops, markers, false);
+  if (findOtherLocations == true) {
+    map.events.register('moveend', map, alertMoveEnd); 
+  }
+  centerCoords =  new OpenLayers.LonLat(lon, lat);
+  centerCoords.transform(proj, map.getProjectionObject());
+  map.setCenter( centerCoords, zoom);
+}
+
+function alertMoveEnd(event) {
+  center = map.getCenter();
+  center = center.transform(map.getProjectionObject(), proj);
+  OpenLayers.loadURL("/locations/" + map.getZoom() + "/" + center.lat + "/" + center.lon, {}, this, loadNewMarkers, markerFail);
+}
+
+function loadNewMarkers(response) {
+  json = new OpenLayers.Format.JSON();
+  newMarkers = json.read(response.responseText);
+  addMarkerList(newMarkers, otherMarkers, true);
+}
+
+function markerFail(){
+}
+
+function addMarkerList(list, markers, others) {
+  var stopCoords;
+
+  for (var i=0; i < list.length; i++){
+    var item = list[i];
+    if (item instanceof Array){
       for (var j=0; j < item.length; j++){
-        coords = item[j];
-        stopCoords = new OpenLayers.LonLat(coords[1], coords[0]).transform(proj, map.getProjectionObject());
-        addRouteMarker(stopCoords, bounds, markers, coords[2], coords[3], coords[4], i);
+        addMarker(item[j], bounds, markers, others);
       }
     }else{
-      coords = item;
-      stopCoords = new OpenLayers.LonLat(coords[1], coords[0]).transform(proj, map.getProjectionObject());
-      addRouteMarker(stopCoords, bounds, markers, coords[2], coords[3], coords[4], i);
+      addMarker(item, bounds, markers, others);
     }
-    
-    
   }
-  map.zoomToExtent(bounds, false);
+}
+
+function addMarker(current, bounds, layer, other){
+  stopCoords = pointCoords(current.lon, current.lat);
+  addRouteMarker(stopCoords, bounds, layer, current, other);
+}
+
+function pointCoords(lon, lat) {
+  return new OpenLayers.LonLat(lon, lat).transform(proj, map.getProjectionObject());
 }
 
 function route_init() {
 		  
   createMap();
   bounds = new OpenLayers.Bounds();
-  var markers = new OpenLayers.Layer.Markers( "Markers", {projection: proj});
+  
   var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer",{projection: proj});
-  map.addLayer(markers);
+  var markers = new OpenLayers.Layer.Markers( "Markers", {projection: proj});
   map.addLayer(vectorLayer);
+  map.addLayer(markers);
+  
   addSelectedHandler(vectorLayer);
   for (var i=0; i < routeSegments.length; i++){
      var coords = routeSegments[i];
-     var fromCoords = new OpenLayers.LonLat(coords[0][1], coords[0][0]);
-     var toCoords = new OpenLayers.LonLat(coords[1][1], coords[1][0]);
-     fromCoords.transform(proj, map.getProjectionObject());
-     toCoords.transform(proj, map.getProjectionObject());     
+     var fromCoords = pointCoords(coords[0].lon, coords[0].lat);
+     var toCoords = pointCoords(coords[1].lon, coords[1].lat);
      var fromPoint = new OpenLayers.Geometry.Point(fromCoords.lon, fromCoords.lat);
      var toPoint = new OpenLayers.Geometry.Point(toCoords.lon, toCoords.lat);
      var points = [];
@@ -66,8 +98,8 @@ function route_init() {
      points.push(toPoint)
      bounds.extend(fromPoint);
      bounds.extend(toPoint);
-     addRouteMarker(fromCoords, bounds, markers, coords[0][2], coords[0][3], coords[0][4], 0);
-     addRouteMarker(toCoords, bounds, markers, coords[1][2], coords[1][3], coords[1][4], 0);
+     addRouteMarker(fromCoords, bounds, markers, coords[0], false);
+     addRouteMarker(toCoords, bounds, markers, coords[1], false);
      lineString = new OpenLayers.Geometry.LineString(points);
      lineFeature = new OpenLayers.Feature.Vector(lineString, {projection: proj}, segmentStyle);
      lineFeature.segment_id = coords[2];
@@ -158,18 +190,20 @@ function selectStop(stop) {
   openPopup = popup;  
 }
 
-function addRouteMarker(stopCoords, bounds, markers, id, url, name, index) {
-  bounds.extend(stopCoords);
-  var size = new OpenLayers.Size(6, 6);
-  var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-  var stopIcon = new OpenLayers.Icon('/images/circle-icon-sm_'+index+'.png', size, offset);
-  var marker = new OpenLayers.Marker(stopCoords, stopIcon);
-  marker.url = url;
-  marker.name = name;
-  marker.id = id;
-  stopsById[id] = marker;
-  marker.events.register("click", marker, stopSelected);
-  markers.addMarker(marker);
+function addRouteMarker(stopCoords, bounds, markers, item, other) {
+  if (stopsById[item.id] == undefined) {
+    bounds.extend(stopCoords);
+    var size = new OpenLayers.Size(item.width, item.height);
+    var offset = new OpenLayers.Pixel(-(size.w/2), -size.h/2);
+    var stopIcon = new OpenLayers.Icon("/images/" + item.icon + ".png", size, offset);
+    var marker = new OpenLayers.Marker(stopCoords, stopIcon);
+    marker.url = item.url;
+    marker.name = item.description;
+    marker.id = item.id;
+    stopsById[item.id] = marker;
+    marker.events.register("click", marker, stopSelected);
+    markers.addMarker(marker);
+  }
 }
 
 // Run jquery in no-conflict mode so it doesn't use $()

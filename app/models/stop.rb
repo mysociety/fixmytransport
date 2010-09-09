@@ -216,15 +216,14 @@ class Stop < ActiveRecord::Base
     stops.empty? ? nil : stops.first
   end
   
-  def self.find_in_bounding_box
-    stops = find_by_sql(["SELECT *
+  def self.find_in_bounding_box(min_lat, min_lon, max_lat, max_lon)
+    stops = find_by_sql(["SELECT  *
                           FROM stops
-                          WHERE stops.coords && ST_SetSRID(ST_MakeBox2D(
+                          WHERE stops.stop_type in (?)
+                          AND stops.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
                             ST_Point(?, ?),
-    	                      ST_Point(?, ?)), #{BRITISH_NATIONAL_GRID})",
-    	                      358941, 173524, 358935, 173519])
-  # -12039.543072383,6709347.2102621
-  # -11537.925074351,6709824.9416887
+    	                      ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})",
+    	                     StopType.primary_types, min_lon, min_lat, max_lon, max_lat])
   end
   
   def self.find_by_atco_code(atco_code, options={})

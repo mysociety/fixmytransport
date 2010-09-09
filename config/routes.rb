@@ -14,31 +14,38 @@ ActionController::Routing::Routes.draw do |map|
   map.confirm_update '/u/:email_token', :action => 'confirm_update', :controller => 'problems'
   
   # stops                                   
-  map.stop "/stops/:scope/:id.:format", :controller => "stops", 
-                                :action => 'show', 
+  map.stop "/stops/:scope/:id.:format", :controller => "locations", 
+                                :action => 'show_stop', 
                                 :conditions => { :method => :get }
   
   # stop areas
-  map.stop_area "/stop-areas/:scope/:id.:format", :controller => "stop_areas", 
-                                                  :action => 'show', 
+  map.stop_area "/stop-areas/:scope/:id.:format", :controller => "locations", 
+                                                  :action => 'show_stop_area', 
                                                   :type => :stop_area,
                                                   :conditions => { :method => :get }
   
-  map.station "/stations/:scope/:id.:format", :controller => "stop_areas", 
-                                              :action => 'show', 
+  map.station "/stations/:scope/:id.:format", :controller => "locations", 
+                                              :action => 'show_stop_area', 
                                               :type => :station,
                                               :conditions => { :method => :get }
 
-  map.ferry_terminal "/ferry-terminals/:scope/:id.:format", :controller => "stop_areas", 
-                                                            :action => 'show', 
+  map.ferry_terminal "/ferry-terminals/:scope/:id.:format", :controller => "locations", 
+                                                            :action => 'show_stop_area', 
                                                             :type => :ferry_terminal,
                                                             :conditions => { :method => :get }
 
   # routes                                               
-  map.route "/routes/:scope/:id.:format", :controller => "routes", 
-                                          :action => 'show', 
+  map.route "/routes/:scope/:id.:format", :controller => "locations", 
+                                          :action => 'show_route', 
                                           :conditions => { :method => :get }
 
+  # other locations for maps
+  map.locations "/locations/:zoom/:lat/:lon", :controller => 'locations', 
+                                              :action => 'in_area',
+                                              :conditions => { :method => :get },
+                                              :requirements => { :zoom => /\d\d?/,
+                                                                 :lon => /[-+]?[0-9]*\.?[0-9]+/,
+                                                                 :lat => /[-+]?[0-9]*\.?[0-9]+/}
   
   # user sessions
   map.login 'login', :controller => 'user_sessions', :action => 'new'  

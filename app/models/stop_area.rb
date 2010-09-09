@@ -93,6 +93,17 @@ class StopArea < ActiveRecord::Base
   end
   memoize :area
   
+  def self.find_in_bounding_box(min_lat, min_lon, max_lat, max_lon)
+    stops = find_by_sql(["SELECT  *
+                          FROM stop_areas
+                          WHERE stop_areas.area_type in (?)
+                          AND stop_areas.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
+                            ST_Point(?, ?),
+      	                    ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})",
+    	                    StopAreaType.primary_types, min_lon, min_lat, max_lon, max_lat])
+  end
+  
+  
   # Take a list of stop areas and remove those that are descendents of areas already in the list
   def self.map_to_common_areas(stop_areas)
     area_list = []

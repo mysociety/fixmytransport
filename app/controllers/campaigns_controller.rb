@@ -20,7 +20,7 @@ class CampaignsController < ApplicationController
   
   def show
     @title = @campaign.title
-    map_params_from_location(@campaign.location.points)
+    map_params_from_location(@campaign.location.points, find_other_locations=false)
   end
   
   def update

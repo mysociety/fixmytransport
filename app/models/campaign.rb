@@ -1,5 +1,6 @@
 class Campaign < ActiveRecord::Base
   belongs_to :initiator, :class_name => 'User'
+  has_many :campaign_supporters
   belongs_to :location, :polymorphic => true
   belongs_to :transport_mode
   has_many :assignments

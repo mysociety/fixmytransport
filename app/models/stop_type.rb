@@ -20,6 +20,10 @@ class StopType < ActiveRecord::Base
   @@modes_by_code = {}
   @@codes_by_mode = {}
   
+  def self.primary_types
+    ['BCT', 'BST', 'BCS', 'BCQ']
+  end
+  
   def self.codes
     connection.select_rows("SELECT DISTINCT description, code 
                             FROM stop_types 

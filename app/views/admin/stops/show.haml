@@ -8,8 +8,12 @@
 - form_for [:admin, @stop], :url => admin_url(admin_stop_path(@stop.id)), :html => { :class => 'stop-form' } do |f| 
   = render :partial => "form", :locals => { :f => f }
 :javascript
-  var areaStops = #{location_stops_js([@stop])}
-  jQuery(document).ready(function(){
+  var zoom = #{MAX_VISIBLE_ZOOM - 1};
+  var lat = #{@stop.lat};
+  var lon = #{@stop.lon};
+  var findOtherLocations = false;
+  var areaStops = #{location_stops_js([@stop], main=true, small=false)}
+    jQuery(document).ready(function(){
     setupShowStop();
     area_init();
   });

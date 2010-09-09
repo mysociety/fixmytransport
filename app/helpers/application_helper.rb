@@ -49,27 +49,65 @@ module ApplicationHelper
     tags.join("\n")
   end
   
-  def stop_js_coords(stop)
-    "[#{stop.lat}, #{stop.lon}, #{stop.id}, '#{location_url(stop)}', '#{escape_javascript(stop.description)}']"
+  def icon_style(location, lon, lat, zoom, small)
+    top = Map.lat_to_y_offset(lat, location.lat, zoom) - (icon_height(small) / 2)
+    left = Map.lon_to_x_offset(lon, location.lon, zoom) - (icon_width(small) / 2)
+    "position: absolute; top: #{top}px; left: #{left}px;"
+  end
+  
+  def icon_height(small)
+    small ? SMALL_ICON_HEIGHT : LARGE_ICON_HEIGHT
+  end
+  
+  def icon_width(small)
+    small ? SMALL_ICON_WIDTH : LARGE_ICON_WIDTH
+  end
+  
+  def stop_js_coords(stop, main=true, small=false)
+    { :lat => stop.lat, 
+      :lon => stop.lon,
+      :id => stop.id, 
+      :url => location_url(stop),
+      :description => stop.description, 
+      :icon => stop_icon(stop, main, small),
+      :height => icon_height(small), 
+      :width => icon_width(small) }
+  end
+  
+  def stop_icon(stop, main=false, small=false)
+    name = ''
+    if stop.respond_to?(:area_type) && stop.area_type == 'GRLS'
+      name = 'train'
+    elsif stop.respond_to?(:area_type) && stop.area_type == 'GTMU'
+      name = 'tram'
+    elsif stop.respond_to?(:area_type) && stop.area_type == 'GFTD'
+      name = 'ferry'
+    else
+      name = 'bus'
+    end
+    name += '-main' if main
+    name += '-sm' if small 
+    return name
   end
   
   def route_segment_js(route)
     segments_js = route.route_segments.map do |segment| 
-      "[#{stop_js_coords(segment.from_stop)}, #{stop_js_coords(segment.to_stop)}, #{segment.id}]"
+      [stop_js_coords(segment.from_stop, main=true, small=true), 
+       stop_js_coords(segment.to_stop, main=true, small=true), segment.id]
     end
-    "[#{segments_js.join(',')}]"
+    segments_js.to_json
   end
   
-  def location_stops_js locations
+  def location_stops_js(locations, main, small)
     array_content = []
     locations.each do |location|
       if location.is_a? Route
-        array_content <<  "[#{location.stops.map{ |stop| stop_js_coords(stop) }.join(',')}]" 
+        array_content <<  location.stops.map{ |stop| stop_js_coords(stop, main, true) } 
       else
-       array_content << stop_js_coords(location) 
+       array_content << stop_js_coords(location, main, small) 
       end
     end
-    "[#{array_content.join(',')} ];"
+    array_content.to_json
   end
   
   def terminus_text(route)
