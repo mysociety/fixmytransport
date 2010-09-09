@@ -1,8 +1,6 @@
 class Admin::StopsController < ApplicationController
   
   layout "admin" 
-  cache_sweeper :stop_sweeper, :only => [:create, :update, :destroy]
-  
   
   def show 
     @stop = Stop.find(params[:id])

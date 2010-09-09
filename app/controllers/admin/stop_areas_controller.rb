@@ -1,7 +1,6 @@
 class Admin::StopAreasController < ApplicationController
   
   layout "admin" 
-  cache_sweeper :stop_area_sweeper, :only => [:create, :update, :destroy]
   
   def show 
     @stop_area = StopArea.find(params[:id])

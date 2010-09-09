@@ -1,7 +1,6 @@
 class CampaignsController < ApplicationController
 
   before_filter :process_map_params, :only => [:show]
-  cache_sweeper :campaign_sweeper, :only => :confirm
   before_filter :find_campaign, :only => [:show, :edit, :update]
   before_filter :require_owner_or_token, :only => [:edit, :update]
   

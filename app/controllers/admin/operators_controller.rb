@@ -1,7 +1,6 @@
 class Admin::OperatorsController < ApplicationController
   
   layout "admin" 
-  cache_sweeper :operator_sweeper, :only => [:create, :update, :destroy, :merge]
   
   def index
     conditions = []
