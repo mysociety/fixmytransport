@@ -99,4 +99,18 @@ class Map
     "http://maps.google.com/maps/api/staticmap?center=#{lat},#{lon}&zoom=#{zoom}&size=#{MAP_WIDTH_IN_PX}x#{MAP_WIDTH_IN_PX}&sensor=false"
   end
 
+  def self.other_locations(lat, lon, zoom)
+    if zoom >= MIN_ZOOM_FOR_OTHER_MARKERS
+      bottom = bottom(lat, zoom)
+      top = top(lat, zoom)
+      left = left(lon, zoom)
+      right = right(lon, zoom)
+      locations = Stop.find_in_bounding_box(bottom, left, top, right)
+      locations += StopArea.find_in_bounding_box(bottom, left, top, right)
+    else
+      locations = []
+    end
+    locations
+  end
+
 end
