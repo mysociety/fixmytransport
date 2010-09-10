@@ -149,11 +149,8 @@ class Problem < ActiveRecord::Base
     self.reporter = User.find_or_initialize_by_email(:email => attributes[:email], :name => reporter_name)
   end
   
-  # save the user account if none exists, but don't log it in 
   def save_reporter
-    if self.reporter.new_record?
-      self.reporter.save_without_session_maintenance
-    end
+    reporter.save_if_new
   end
   
   def anonymous

@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email
   attr_accessible :name, :email, :password, :password_confirmation
   has_many :assignments
+  has_many :campaign_supporters, :foreign_key => :supporter_id
+  has_many :campaigns, :through => :campaign_supporters
   
   acts_as_authentic do |c|
     # we validate the email with activerecord validation above
@@ -33,6 +35,13 @@ class User < ActiveRecord::Base
   
   def unregistered?
     !registered
+  end
+  
+  def save_if_new
+    if new_record?
+      save_without_session_maintenance
+    end
+    return true
   end
   
 end

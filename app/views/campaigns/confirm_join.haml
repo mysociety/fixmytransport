@@ -1,0 +1,4 @@
+- if @error
+  = @error
+- else
+  != t(:you_are_a_supporter, :campaign => link_to(@campaign_supporter.campaign.title, campaign_url(@campaign_supporter.campaign))) 

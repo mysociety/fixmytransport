@@ -25,12 +25,8 @@ class Update < ActiveRecord::Base
     self.reporter = User.find_or_initialize_by_email(attributes[:email])
   end
   
-  # save the user account if it doesn't exist, but don't log it in
   def save_reporter
-    if self.reporter.new_record?
-      return self.reporter.save_without_session_maintenance
-    end
-    return true
+    reporter.save_if_new
   end
   
   def confirm!

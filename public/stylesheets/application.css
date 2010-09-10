@@ -406,6 +406,10 @@ form.update_campaign label {
   width: 10em;
 }
 
+.campaign-info .details {
+  font-size: 0.8em;
+}
+
 /* Location column */
 
 .extra-info {

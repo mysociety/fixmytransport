@@ -1,6 +1,7 @@
 class Campaign < ActiveRecord::Base
   belongs_to :initiator, :class_name => 'User'
   has_many :campaign_supporters
+  has_many :supporters, :through => :campaign_supporters, :class_name => 'User'
   belongs_to :location, :polymorphic => true
   belongs_to :transport_mode
   has_many :assignments
@@ -25,6 +26,10 @@ class Campaign < ActiveRecord::Base
   
   def default_assignment
     self.assignments.first
+  end
+  
+  def supporter_count
+    campaign_supporters.confirmed.count
   end
   
   def self.find_recent(number)

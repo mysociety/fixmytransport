@@ -16,7 +16,6 @@ en:
   go: Go!
   multiple_locations: "More than one match"
   multiple_locations_intro: "We found more than one match for your description. We show up to {{num_locations}} matches, please try a different search if yours is not here."
-  confirmation_sent: "We've sent you an email to confirm that you want to create this problem. We'll hold on to it while you're checking your email."
   problem_not_found: "We couldn't locate your problem in the database. If you've copied the URL from an email, please check that you copied it exactly."
   is_this_a_campaign: Is this a campaign?
   posted_time: "{{time}} ago"
@@ -59,7 +58,6 @@ en:
   provide_an_update: Provide an update
   post: Post
   mark_fixed: This problem has been fixed
-  update_confirmation_sent: "We've sent you an email to confirm that you want to add this update. We'll hold on to it while you're checking your email."
   update_not_found: "We couldn't locate your update in the database. If you've copied the URL from an email, please check that you copied it exactly."
   thanks_for_adding_update: You've successfully confirmed your update
   see_your_update: See your update on the site
@@ -74,3 +72,7 @@ en:
   passenger_transport_executive: Passenger Transport Executive
   company: company
   submit: Submit
+  your_problem_will_not_be_posted: your problem will not be posted.
+  holding_on_to_problem: "we'll hold on to your problem while you check your email"
+  your_update_will_not_be_posted: your update will not be posted
+  holding_on_to_update: "we'll hold on to your update while you check your email"

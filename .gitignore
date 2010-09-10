@@ -11,6 +11,7 @@ config/httpd.conf
 config/httpd.conf.deployed
 public/down.html
 data/operators/*
+data/organizations/*
 data/NPTDR/
 cache/*
 public/index.html

@@ -3,11 +3,21 @@
     = render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [] }
 .campaign-info
   %h3= @campaign.title
+  .details
+    = t(:started_on, :date => @campaign.created_at.strftime("%d/%m/%Y"))
+    = t(:by, :name => @campaign.initiator.name)
+    .supporters= t(:campaign_has_n_supporters, :n => @campaign.supporter_count, :count => @campaign.supporter_count)
   %p.campaign= @campaign.description
-  .initiator= @campaign.initiator.name
-  %p.start-date
-    %b= t(:campaign_start_date)
-    =@campaign.created_at.strftime("%d/%m/%Y") 
 = link_to(t(:tweet_this), "http://twitter.com/share", {:class =>"twitter-share-button", 'data-count' => 'vertical', 'data-via' =>"fixmytransport"})
 %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
-= link_to(t(:join_this_campaign), '')
+
+- if !(current_user && current_user.campaigns.include?(@campaign))
+  - form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST' } do |f|
+    - if current_user
+      != hidden_field_tag "user_id", current_user.id
+      != submit_tag t(:join_this_campaign)
+    - else
+      .form-field
+        != label_tag :email, t(:enter_your_email_to_join)
+        != text_field_tag :email
+      != submit_tag t(:join)

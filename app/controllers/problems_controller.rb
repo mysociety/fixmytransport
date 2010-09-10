@@ -36,12 +36,14 @@ class ProblemsController < ApplicationController
     end
     
     if @problem.valid?
+      # save the user account if it doesn't exist, but don't log it in
       @problem.save_reporter
       @problem.save
       # create task assignment
       @problem.create_assignments
-      flash.now[:notice] = t(:confirmation_sent)
-      render :confirmation_sent
+      @action = t(:your_problem_will_not_be_posted)
+      @worry = t(:holding_on_to_problem)
+      render 'shared/confirmation_sent'
     else
       render :new
     end
@@ -116,10 +118,12 @@ class ProblemsController < ApplicationController
     # just accept params for a new update for now
     @new_update = @problem.updates.build(params[:problem][:updates])
     if @new_update.valid? 
+      # save the user account if it doesn't exist, but don't log it in
       @new_update.save_reporter
       @new_update.save
-      flash.now[:notice] = t(:update_confirmation_sent)
-      render :confirmation_sent
+      @action = t(:your_update_will_not_be_posted)
+      @worry = t(:holding_on_to_update)
+      render 'shared/confirmation_sent'
     else
       render :show
     end

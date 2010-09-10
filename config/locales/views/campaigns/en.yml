@@ -12,3 +12,15 @@ en:
   password_length_error: "Please enter a password that is at least {{length}} characters long"
   password_match_error: "The password confirmation does not match the password"
   add_password_to_update: "You'll need a password to be able to log back into the site and update your campaign. Enter one here. "
+  tweet_this: Tweet this
+  join_this_campaign: Join this campaign
+  you_are_a_supporter: "You're now a supporter of \"{{campaign}}\"!"
+  enter_your_email_to_join: Enter your email address to join this campaign
+  join: Join
+  back_to_campaign: "Go back to \"{{campaign}}\""
+  started_on: "Started on {{date}}"
+  campaign_has_n_supporters:
+    one: "This campaign has {{n}} supporter"
+    other: "This campaign has {{n}} supporters"
+  join_confirmation_sent: We've sent you an email to confirm that you want to join this campaign.
+  you_will_not_be_a_supporter: "you will not be added as a supporter of \"{{campaign}}\"."

@@ -288,5 +288,88 @@ describe CampaignsController do
     
   end
 
+  describe 'GET #join' do 
+    
+    before do 
+      Campaign.stub!(:find).and_return(mock_model(Campaign))
+    end
+    
+    def make_request
+      get :join, { :id => 44 }
+    end
+    
+    it "should render the 'join' template" do 
+      make_request
+      response.should render_template("campaigns/join")
+    end
+
+  end
+  
+  describe 'POST #join' do
+    
+    before do 
+      @mock_supporters =  mock('supporters', :create => true)
+      @mock_campaign = mock_model(Campaign, :campaign_supporters => @mock_supporters, 
+                                            :supporters => [], 
+                                            :title => 'A test title')
+      Campaign.stub!(:find).and_return(@mock_campaign)
+    end
+    
+    def make_request(params)
+      post :join, params
+    end
+    
+    describe 'when the current user has the same user id as that passed in the params' do 
+      
+      before do 
+        @user = mock_model(User, :id => 55)
+        @controller.stub!(:current_user).and_return(@user)
+      end
+      
+      it 'should make the user a confirmed campaign supporter' do
+        @mock_supporters.should_receive(:create).with(:supporter => @user, :confirmed_at => anything)
+        make_request({ :id => 44, :user_id => '55' })
+      end
+      
+      it 'should redirect them to the campaign URL' do 
+        make_request({ :id => 44, :user_id => '55' })
+        response.should redirect_to(campaign_url(@mock_campaign))
+      end
+    
+    end
+    
+    describe 'when an invalid email address is supplied' do 
+       
+      it 'should render the "join" template' do 
+        make_request({ :id => 44, :email => 'bad_email' })
+        response.should render_template('join')
+      end
+    
+    end
+    
+    describe 'when a valid email address is supplied' do 
+    
+      before do 
+        @mock_user = mock_model(User, :valid? => true, :save_if_new => true)
+        User.stub!(:find_or_initialize_by_email).and_return(@mock_user)
+      end
+      
+      it 'should save the user if new' do 
+        @mock_user.should_receive(:save_if_new)
+        make_request({ :id => 44, :email => 'goodemail' })
+      end
+      
+      it 'should make the user a campaign supporter' do 
+        @mock_supporters.should_receive(:create).with(:supporter => @mock_user)
+        make_request({ :id => 44, :email => 'goodemail' })
+      end
+      
+      it 'should render the "confirmation_sent" template' do
+        make_request({ :id => 44, :email => 'goodemail' })
+        response.should render_template('shared/confirmation_sent')
+      end
+      
+    end
+  end
   
 end

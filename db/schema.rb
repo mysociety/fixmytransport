@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100901122501) do
+ActiveRecord::Schema.define(:version => 20100910132651) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -46,12 +46,21 @@ ActiveRecord::Schema.define(:version => 20100901122501) do
     t.integer  "user_id"
     t.integer  "campaign_id"
     t.integer  "task_id"
-    t.integer  "status_code",    :default => 0
+    t.integer  "status_code"
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "task_type_name"
     t.integer  "problem_id"
+  end
+
+  create_table "campaign_supporters", :force => true do |t|
+    t.integer  "campaign_id"
+    t.integer  "supporter_id"
+    t.datetime "confirmed_at"
+    t.text     "token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "campaigns", :force => true do |t|

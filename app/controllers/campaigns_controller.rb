@@ -1,7 +1,7 @@
 class CampaignsController < ApplicationController
 
   before_filter :process_map_params, :only => [:show]
-  before_filter :find_campaign, :only => [:show, :edit, :update]
+  before_filter :find_campaign, :only => [:show, :edit, :update, :join]
   before_filter :require_owner_or_token, :only => [:edit, :update]
   
   def index
@@ -15,6 +15,39 @@ class CampaignsController < ApplicationController
     respond_to do |format|
       format.html 
       format.atom { render :template => 'shared/campaigns.atom.builder', :layout => false }
+    end
+  end
+  
+  def join
+    if request.post? 
+      if current_user && params[:user_id] && current_user.id == params[:user_id].to_i
+        # don't send a confirmation mail - already logged in
+        if ! @campaign.supporters.include? (current_user)
+          @campaign.campaign_supporters.create(:supporter => current_user, :confirmed_at => Time.now)
+        end
+        flash[:notice] = t(:you_are_a_supporter, :campaign => @campaign.title)
+        redirect_to campaign_url(@campaign)
+      elsif params[:email]
+        @user = User.find_or_initialize_by_email(params[:email])
+        if @user.valid? 
+          # save the user account if it doesn't exist, but don't log it in
+          @user.save_if_new
+          @campaign.campaign_supporters.create(:supporter => @user)
+          @action = t(:you_will_not_be_a_supporter, :campaign => @campaign.title)
+          render 'shared/confirmation_sent'
+        else 
+          render :join
+        end
+      end
+    end
+  end
+  
+  def confirm_join
+    @campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
+    if @campaign_supporter
+      @campaign_supporter.confirm!
+    else
+      @error = t(:update_not_found)
     end
   end
   

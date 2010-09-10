@@ -5,14 +5,17 @@ ActionController::Routing::Routes.draw do |map|
 
   # resources
   map.resources :operators, :only => [:show]
-  map.resources :campaigns, :except => [:destroy]
+  map.resources :campaigns, :except => [:destroy], 
+                            :member => { :join => [:get, :post] }
+  map.confirm_join '/s/:email_token', :action => 'confirm_join', :controller => 'campaigns'
+
   map.resources :problems, :except => [:destroy], 
                            :collection => { :choose_location => :get, 
                                             :find => :get }
                            
   map.confirm '/p/:email_token', :action => 'confirm', :controller => 'problems'
   map.confirm_update '/u/:email_token', :action => 'confirm_update', :controller => 'problems'
-  
+
   # stops                                   
   map.stop "/stops/:scope/:id.:format", :controller => "locations", 
                                 :action => 'show_stop', 

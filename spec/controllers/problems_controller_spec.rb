@@ -109,14 +109,9 @@ describe ProblemsController do
       response.should render_template('problems/new')
     end
     
-    it 'should show the confirmation notice if the problem can be saved' do 
-      make_request
-      response.flash[:notice].should == "We've sent you an email to confirm that you want to create this problem. We'll hold on to it while you're checking your email."
-    end
-    
     it 'should render the "confirmation_sent" template if the problem can be saved' do 
       make_request
-      response.should render_template('problems/confirmation_sent')
+      response.should render_template('shared/confirmation_sent')
     end
     
     it 'should create assignments associated with the problem' do 
@@ -159,11 +154,6 @@ describe ProblemsController do
       make_request
     end
     
-    it 'should show the confirmation message if the update is valid' do 
-      make_request
-      response.flash[:notice].should == "We've sent you an email to confirm that you want to add this update. We'll hold on to it while you're checking your email."
-    end
-    
     it 'should save the update it is valid' do 
       @mock_update.should_receive(:save)
       make_request
@@ -176,7 +166,7 @@ describe ProblemsController do
     
     it 'should render the "confirmation_sent" template if the update is valid' do 
       make_request
-      response.should render_template('problems/confirmation_sent')
+      response.should render_template('shared/confirmation_sent')
     end
     
   end
