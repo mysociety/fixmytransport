@@ -308,10 +308,9 @@ describe CampaignsController do
   describe 'POST #join' do
     
     before do 
-      @mock_supporters =  mock('supporters', :create => true)
-      @mock_campaign = mock_model(Campaign, :campaign_supporters => @mock_supporters, 
-                                            :supporters => [], 
-                                            :title => 'A test title')
+      @mock_campaign = mock_model(Campaign, :supporters => [], 
+                                            :title => 'A test title',
+                                            :add_supporter => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
     end
     
@@ -327,7 +326,7 @@ describe CampaignsController do
       end
       
       it 'should make the user a confirmed campaign supporter' do
-        @mock_supporters.should_receive(:create).with(:supporter => @user, :confirmed_at => anything)
+        @mock_campaign.should_receive(:add_supporter).with(@user, confirmed=true)
         make_request({ :id => 44, :user_id => '55' })
       end
       
@@ -360,7 +359,7 @@ describe CampaignsController do
       end
       
       it 'should make the user a campaign supporter' do 
-        @mock_supporters.should_receive(:create).with(:supporter => @mock_user)
+        @mock_campaign.should_receive(:add_supporter).with(@mock_user, confirmed=false)
         make_request({ :id => 44, :email => 'goodemail' })
       end
       

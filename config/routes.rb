@@ -6,7 +6,8 @@ ActionController::Routing::Routes.draw do |map|
   # resources
   map.resources :operators, :only => [:show]
   map.resources :campaigns, :except => [:destroy], 
-                            :member => { :join => [:get, :post] }
+                            :member => { :join => [:get, :post], 
+                                         :leave => [:post] }
   map.confirm_join '/s/:email_token', :action => 'confirm_join', :controller => 'campaigns'
 
   map.resources :problems, :except => [:destroy], 

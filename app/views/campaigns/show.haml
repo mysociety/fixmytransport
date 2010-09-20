@@ -11,7 +11,12 @@
 = link_to(t(:tweet_this), "http://twitter.com/share", {:class =>"twitter-share-button", 'data-count' => 'vertical', 'data-via' =>"fixmytransport"})
 %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
 
-- if !(current_user && current_user.campaigns.include?(@campaign))
+- if current_user && current_user.campaigns.include?(@campaign)
+  = t(:you_support_this_campaign)
+  - form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f|
+    != hidden_field_tag "user_id", current_user.id
+    != submit_tag t(:leave_this_campaign)
+- else
   - form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST' } do |f|
     - if current_user
       != hidden_field_tag "user_id", current_user.id

@@ -1,7 +1,7 @@
 class CampaignsController < ApplicationController
 
   before_filter :process_map_params, :only => [:show]
-  before_filter :find_campaign, :only => [:show, :edit, :update, :join]
+  before_filter :find_campaign, :only => [:show, :edit, :update, :join, :leave]
   before_filter :require_owner_or_token, :only => [:edit, :update]
   
   def index
@@ -21,10 +21,8 @@ class CampaignsController < ApplicationController
   def join
     if request.post? 
       if current_user && params[:user_id] && current_user.id == params[:user_id].to_i
-        # don't send a confirmation mail - already logged in
-        if ! @campaign.supporters.include? (current_user)
-          @campaign.campaign_supporters.create(:supporter => current_user, :confirmed_at => Time.now)
-        end
+        # don't need to send a confirmation mail - already logged in
+        @campaign.add_supporter(current_user, confirmed=true)
         flash[:notice] = t(:you_are_a_supporter, :campaign => @campaign.title)
         redirect_to campaign_url(@campaign)
       elsif params[:email]
@@ -32,13 +30,21 @@ class CampaignsController < ApplicationController
         if @user.valid? 
           # save the user account if it doesn't exist, but don't log it in
           @user.save_if_new
-          @campaign.campaign_supporters.create(:supporter => @user)
+          @campaign.add_supporter(@user, confirmed=false)
           @action = t(:you_will_not_be_a_supporter, :campaign => @campaign.title)
           render 'shared/confirmation_sent'
         else 
           render :join
         end
       end
+    end
+  end
+  
+  def leave
+    if current_user && params[:user_id] && current_user.id == params[:user_id].to_i
+      @campaign.remove_supporter(current_user)
+      flash[:notice] = t(:you_are_no_longer_a_supporter, :campaign => @campaign.title)
+      redirect_to campaign_url(@campaign)
     end
   end
   

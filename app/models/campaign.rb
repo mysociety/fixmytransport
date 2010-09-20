@@ -32,6 +32,22 @@ class Campaign < ActiveRecord::Base
     campaign_supporters.confirmed.count
   end
   
+  def add_supporter(user, confirmed=false)
+    if ! supporters.include?(user)
+      supporter_attributes = { :supporter => user }
+      if confirmed 
+        supporter_attributes[:confirmed_at] = Time.now
+      end
+      campaign_supporters.create(supporter_attributes)
+    end
+  end
+  
+  def remove_supporter(user)
+    if supporters.include?(user)
+      supporters.delete(user)
+    end
+  end
+  
   def self.find_recent(number)
     confirmed.find(:all, :order => 'created_at desc', :limit => number, :include => [:location, :initiator])
   end
