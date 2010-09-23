@@ -46,6 +46,7 @@ describe ProblemMailer do
                                           :reporter_name => 'Test User', 
                                           :reporter_phone => '123',
                                           :anonymous? => false,
+                                          :campaign => nil,
                                           :subject => "Missing ticket machines", 
                                           :description => "Desperately need more.",
                                           :location => stops(:victoria_station_one))
@@ -103,7 +104,8 @@ describe ProblemMailer do
                           :subject => 'A test problem',
                           :description => 'Some description',
                           :reporter => @reporter,
-                          :location => mock_location)
+                          :location => mock_location, 
+                          :campaign => nil)
     end
     
     before do
@@ -191,6 +193,14 @@ describe ProblemMailer do
                                                          [@unemailable_council])
       ProblemMailer.send_reports
     end
+    
+    it "shouldn't send a report email for a problem which has an operator email but is associated with a campaign with no title" do
+      mock_campaign = mock_model(Campaign, :title => nil)
+      @mock_problem_email_operator.stub!(:campaign).and_return(mock_campaign)
+      ProblemMailer.should_not_receive(:deliver_report).with(@mock_problem_email_operator, [@operator_with_mail], [])
+      ProblemMailer.send_reports
+    end  
+    
     
     it 'should set the "sent at" time on each problem report delivered' do 
       @mock_problem_email_operator.should_receive(:update_attribute).with(:sent_at, anything)
