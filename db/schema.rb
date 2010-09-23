@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100910132651) do
+ActiveRecord::Schema.define(:version => 20100922142818) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(:version => 20100910132651) do
     t.integer  "user_id"
     t.integer  "campaign_id"
     t.integer  "task_id"
-    t.integer  "status_code"
+    t.integer  "status_code",    :default => 0
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -103,6 +103,14 @@ ActiveRecord::Schema.define(:version => 20100910132651) do
     t.datetime "updated_at"
   end
 
+  create_table "incoming_messages", :force => true do |t|
+    t.text     "subject"
+    t.integer  "campaign_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "raw_email_id"
+  end
+
   create_table "localities", :force => true do |t|
     t.string   "code"
     t.text     "name"
@@ -120,7 +128,7 @@ ActiveRecord::Schema.define(:version => 20100910132651) do
     t.string   "grid_type"
     t.float    "northing"
     t.float    "easting"
-    t.geometry "coords"
+    t.point    "coords",                :srid => 27700
     t.integer  "district_id"
     t.string   "cached_slug"
   end
@@ -202,6 +210,12 @@ ActiveRecord::Schema.define(:version => 20100910132651) do
     t.string   "reporter_name"
     t.boolean  "reporter_public"
     t.string   "reporter_phone"
+  end
+
+  create_table "raw_emails", :force => true do |t|
+    t.binary   "data_binary"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "regions", :force => true do |t|
@@ -360,7 +374,7 @@ ActiveRecord::Schema.define(:version => 20100910132651) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.geometry "coords"
+    t.point    "coords",                   :srid => 27700
     t.float    "lon"
     t.float    "lat"
     t.integer  "locality_id"
@@ -417,7 +431,7 @@ ActiveRecord::Schema.define(:version => 20100910132651) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.geometry "coords"
+    t.point    "coords",                                      :srid => 27700
     t.integer  "locality_id"
     t.string   "cached_slug"
     t.boolean  "loaded"
@@ -503,6 +517,7 @@ ActiveRecord::Schema.define(:version => 20100910132651) do
     t.datetime "current_login_at"
     t.datetime "last_login_at"
     t.boolean  "registered",         :default => false, :null => false
+    t.string   "email_local_part"
   end
 
   create_table "versions", :force => true do |t|
