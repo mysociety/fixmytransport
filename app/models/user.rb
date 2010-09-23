@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   has_many :assignments
   has_many :campaign_supporters, :foreign_key => :supporter_id
   has_many :campaigns, :through => :campaign_supporters
+  before_save :generate_email_local_part, :unless => :unregistered?
   
   acts_as_authentic do |c|
     # we validate the email with activerecord validation above
@@ -42,6 +43,16 @@ class User < ActiveRecord::Base
       save_without_session_maintenance
     end
     return true
+  end
+  
+  def generate_email_local_part
+    # don't overwrite an existing value
+    return true if email_local_part
+    self.email_local_part = name.strip.downcase.gsub(' ', '.')
+  end
+  
+  def campaign_email_address(campaign)
+    return "#{email_local_part}@#{campaign.domain}"
   end
   
 end
