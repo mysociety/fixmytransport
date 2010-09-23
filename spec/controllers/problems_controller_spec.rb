@@ -334,8 +334,7 @@ describe ProblemsController do
                                          :operators_responsible? => true)
       expected = ["We do not yet have all the contact details for this route. If you submit a problem",
                   "here relating to <strong>Test Operator Two</strong>, the subject and description of",
-                  "the problem will be public, but it will <strong>not</strong> be sent until you provide",
-                  "their contact details (we'll help you do this). If your problem relates to <strong>Test",
+                  "the problem will be public, but it will <strong>not</strong> be sent to them. If your problem relates to <strong>Test",
                   "Operator One</strong>, it will be sent straight away."].join(' ')
       expect_advice(mock_problem, expected)
     end
@@ -346,7 +345,7 @@ describe ProblemsController do
                                          :responsible_organizations => [])
       expected = ["We do not yet know who is responsible for this station. If you submit a problem here",
                   "the subject and description of the problem will be public, but it will <strong>not</strong>",
-                  "be sent to them until you provide their details (we'll help you do this)."].join(' ')
+                  "be sent to them."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
