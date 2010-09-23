@@ -6,6 +6,7 @@ class Campaign < ActiveRecord::Base
   belongs_to :transport_mode
   has_many :assignments
   has_one :problem
+  has_many :incoming_messages
   after_create :add_default_assignment
   validates_presence_of :title, :description, :on => :update
   validates_associated :initiator, :on => :update
@@ -19,6 +20,8 @@ class Campaign < ActiveRecord::Base
                1 => 'Confirmed', 
                2 => 'Successful',
                3 => 'Hidden' })
+
+  # instance methods
 
   def add_default_assignment
     self.assignments.create(:user_id => initiator.id, :task_type_name => 'write-to-transport-operator')
@@ -48,8 +51,30 @@ class Campaign < ActiveRecord::Base
     end
   end
   
+  def subdomain
+    to_param
+  end
+  
+  def domain  
+    return "#{subdomain}.#{Campaign.email_domain}"
+  end
+
+  # class methods
+  
+  def self.find_by_campaign_email(email)
+    local_part, domain = email.split("@")
+    subdomain = domain.gsub(/\.#{email_domain}$/, '')
+    campaign = find(:first, :conditions => ['cached_slug = ?', subdomain]) 
+  end
+  
+  def self.email_domain
+    MySociety::Config.get('INCOMING_EMAIL_DOMAIN', 'localhost')
+  end
+  
   def self.find_recent(number)
-    confirmed.find(:all, :order => 'created_at desc', :limit => number, :include => [:location, :initiator])
+    confirmed.find(:all, :order => 'created_at desc', 
+                         :limit => number, 
+                         :include => [:location, :initiator])
   end
   
 end

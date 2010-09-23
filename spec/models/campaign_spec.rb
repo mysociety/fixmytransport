@@ -37,4 +37,14 @@ describe Campaign do
   
   end
   
+  describe 'when finding a campaign by campaign email' do 
+    
+    it 'should look for a campaign whose cached slug is the subdomain of the email' do 
+      Campaign.stub!(:email_domain).and_return("example.com")
+      Campaign.should_receive(:find).with(:first, :conditions => ["cached_slug = ?", "campaign"])
+      Campaign.find_by_campaign_email("test@campaign.example.com")
+    end
+  
+  end
+  
 end
