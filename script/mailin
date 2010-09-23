@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Wire this script to receive incoming email for request responses.
+
+INPUT=/tmp/fmt-mailin-mail-$RANDOM$RANDOM$RANDOM$RANDOM.txt
+OUTPUT=/tmp/fmt-mailin-output-$RANDOM$RANDOM$RANDOM$RANDOM.txt
+
+cat >$INPUT
+
+cd `dirname $0`
+cd ../
+source commonlib/shlib/deployfns
+
+read_conf config/general
+
+(cat $INPUT | ./script/runner 'CampaignMailer.receive(STDIN.read)') >$OUTPUT 2>&1
+ERROR_CODE=$?
+if [ ! "$ERROR_CODE" = "0" ]
+then
+    # we should never get an error here, unless the database is down or similar
+
+    # send error to administators (use mutt for MIME encoding)
+    SUBJ="Mail import error for $OPTION_DOMAIN"
+    BODY="There was an error code $ERROR_CODE returned by the CampaignMailer.receive command in script/mailin. See attached for details. This might be quite serious, such as the database was down, or might be an email with corrupt headers that Rails is choking on. The email was returned with an exit code 75, which for Exim at least means the MTA will try again later. A well configured installation of this code will separately have had Exim make a backup copy of the email in a separate mailbox, just in case."
+    echo "$BODY" | /usr/bin/mutt -s "$SUBJ" -a $OUTPUT -a $INPUT $OPTION_CONTACT_EMAIL
+
+    # tell exim error was temporary, so try again later (no point bouncing message to sender)
+    rm -f $OUTPUT
+    rm -f $INPUT
+    exit 75 
+fi
+
+cat $OUTPUT
+rm -f $OUTPUT
+rm -f $INPUT
+exit 0
