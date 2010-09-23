@@ -249,8 +249,7 @@ describe ProblemsController do
       expected = ["We do not yet have contact details for <strong>Test Council One</strong>",
                   "or <strong>Test Council Two</strong>.  If you submit a problem here the",
                   "subject and description of the problem will be public, but it will",
-                  "<strong>not</strong> be sent to them until you provide their contact details",
-                  "(we'll help you do this)."].join(' ')
+                  "<strong>not</strong> be sent to them."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -262,8 +261,7 @@ describe ProblemsController do
       expected = ["We do not yet have contact details for <strong>Test Council</strong>.",
                   "If you submit a problem here the subject and description of the problem",
                   "will be public, but it will <strong>not</strong> be sent to Test",
-                  "Council until you provide their contact details (we'll help you",
-                  "do this)."].join(' ')
+                  "Council."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -311,8 +309,7 @@ describe ProblemsController do
                                          :responsible_organizations => [])
       expected = ["We do not yet know who is responsible for this stop. If you submit a problem",
                   "here the subject and description of the problem will be public, but it will",
-                  "<strong>not</strong> be sent to them until you provide their details (we'll",
-                  "help you do this)."].join(' ')
+                  "<strong>not</strong> be sent to them."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -322,8 +319,7 @@ describe ProblemsController do
                                          :responsible_organizations => [])
       expected = ["We do not yet know who is responsible for this route. If you submit a problem",
                   "here the subject and description of the problem will be public, but it will",
-                  "<strong>not</strong> be sent to them until you provide their details (we'll",
-                  "help you do this)."].join(' ')
+                  "<strong>not</strong> be sent to them."].join(' ')
       expect_advice(mock_problem, expected)
     end
     

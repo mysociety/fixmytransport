@@ -15,13 +15,6 @@
 
   %p.problem= @problem.description
   
-  %h3= t(:story_so_far)
-  - @problem.assignments.completed.each do |assignment|
-    = render :partial => "shared/complete_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
-  - if !@problem.assignments.incomplete.empty? 
-    %h3= t(:next_steps)
-    - @problem.assignments.incomplete.each do |assignment| 
-      = render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
 %h3= t(:updates)
 .updates
   - @problem.updates.confirmed.each do |update| 

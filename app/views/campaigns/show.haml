@@ -8,9 +8,22 @@
     = t(:by, :name => @campaign.initiator.name)
     .supporters= t(:campaign_has_n_supporters, :n => @campaign.supporter_count, :count => @campaign.supporter_count)
   %p.campaign= @campaign.description
+%h3= t(:story_so_far)
+- @campaign.problem.assignments.completed.each do |assignment|
+  = render :partial => "shared/complete_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
+- if !@campaign.problem.assignments.incomplete.empty? 
+  %h3= t(:next_steps)
+  - @campaign.problem.assignments.incomplete.each do |assignment| 
+    = render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
 = link_to(t(:tweet_this), "http://twitter.com/share", {:class =>"twitter-share-button", 'data-count' => 'vertical', 'data-via' =>"fixmytransport"})
 %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
 
+.campaign-emails
+  - @campaign.incoming_messages.each do |incoming_message|
+    =t(:campaign_received_email)
+    .campaign-email
+      .email-subject= incoming_message.subject
+      .email-body= incoming_message.get_body_for_html_display
 - if current_user && current_user.campaigns.include?(@campaign)
   = t(:you_support_this_campaign)
   - form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f|

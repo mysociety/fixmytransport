@@ -1,6 +1,8 @@
 libopenssl-ruby1.8
 libpgsql-ruby1.8
 libjson-ruby
+mahoro-ruby1.8 | libmahoro-ruby1.8
 rake (>= 0.8.4-1)
 ruby1.8
 rubygems
+tnef (>= 1.4.5)

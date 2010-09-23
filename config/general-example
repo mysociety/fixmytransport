@@ -51,4 +51,6 @@ define('OPTION_NPTDR_DIR', '/my/nptdr/dir');
 define('OPTION_NPTG_DIR', '/my/nptg/dir');
 define('OPTION_NPTG_DERIVED_DIR', '/my/nptdr-derived/dir');
 
+// Incoming email
+define('OPTION_INCOMING_EMAIL_DOMAIN', 'localhost'); // e.g. 'fixmytransport.com'
 ?>

@@ -27,3 +27,4 @@ en:
   you_support_this_campaign: "You are a supporter of this campaign"
   leave_this_campaign: "Leave this campaign"
   you_are_no_longer_a_supporter: "You are no longer a supporter of \"{{campaign}}\""
+  campaign_received_email: "The campaign received the following email:"
