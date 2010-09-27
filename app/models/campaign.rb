@@ -77,7 +77,8 @@ class Campaign < ActiveRecord::Base
   # class methods
   
   def self.mail_conf_staging_dir
-    "#{RAILS_ROOT}/data/mail_conf"
+    dir = "#{RAILS_ROOT}/data/mail_conf"
+    FileUtils.mkdir_p(dir) 
   end
   
   def self.sync_mail_confs
