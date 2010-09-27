@@ -65,6 +65,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def write_mail_conf
+    reload
     local_user = MySociety::Config.get('INCOMING_EMAIL_LOCAL_USER')
     virtual_domain_file = File.join(Campaign.mail_conf_staging_dir, domain)
     File.open(virtual_domain_file, 'w') do |mail_config_file|
