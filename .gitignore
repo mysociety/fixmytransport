@@ -13,5 +13,6 @@ public/down.html
 data/operators/*
 data/organizations/*
 data/NPTDR/
+data/mail_conf
 cache/*
 public/index.html
