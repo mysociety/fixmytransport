@@ -1,7 +1,8 @@
 class CampaignsController < ApplicationController
 
   before_filter :process_map_params, :only => [:show]
-  before_filter :find_campaign, :only => [:show, :edit, :update, :join, :leave]
+  before_filter :find_campaign, :only => [:edit, :update]
+  before_filter :find_confirmed_campaign, :only => [:show, :join, :leave]
   before_filter :require_owner_or_token, :only => [:edit, :update]
   
   def index
@@ -85,6 +86,15 @@ class CampaignsController < ApplicationController
     @campaign = Campaign.find(params[:id])
   end
   
+  def find_confirmed_campaign
+    @campaign = Campaign.confirmed.find(params[:id])
+    unless @campaign
+      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+      return false
+    end
+    return true
+  end
+  
   def require_owner_or_token
     return require_owner if @campaign.status != :new
     return true if current_user && current_user == @campaign.initiator
@@ -106,7 +116,7 @@ class CampaignsController < ApplicationController
         return false
       end
     else
-      render :file => "#{Rails.root}/public/404.html", :status => :not_found
+      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
     end
     return false
   end

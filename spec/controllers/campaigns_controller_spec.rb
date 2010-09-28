@@ -42,6 +42,14 @@ describe CampaignsController do
       make_request
     end
     
+    it 'should not display a campaign that has not been confirmed' do 
+      mock_confirmed_campaigns = mock("confirmed campaigns")
+      Campaign.stub!(:confirmed).and_return(mock_confirmed_campaigns)
+      mock_confirmed_campaigns.stub!(:find).and_return(nil)
+      make_request
+      response.status.should == '404 Not Found'
+    end
+    
   end
   
   shared_examples_for "an action that requires the campaign owner or a token" do 
