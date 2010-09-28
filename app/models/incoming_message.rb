@@ -27,6 +27,12 @@ class IncomingMessage < ActiveRecord::Base
     text = MySociety::Format.make_clickable(text, :contract => 1)
     return MySociety::Email.clean_linebreaks(text)
   end
+    
+  # Return date mail was sent
+  def sent_at
+    # Use date it arrived (created_at) if mail itself doesn't have Date: header
+    self.mail.date || self.created_at
+  end
   
   # class methods
   def self.create_from_tmail(tmail, raw_email_data, campaign)

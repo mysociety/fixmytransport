@@ -694,3 +694,17 @@ form.new_user_session label{
   width: 7em;
 }
 
+/* Campaign emails */
+.campaign-email{
+  border: 1px solid #cccccc;
+  padding: 0.5em;
+}
+
+.campaign-email h2{
+  text-align: right;
+  font-size: 1em;
+}
+
+.campaign-email .body{
+  padding: 0.5em 0;
+}

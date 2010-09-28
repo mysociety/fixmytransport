@@ -92,7 +92,7 @@ class Campaign < ActiveRecord::Base
   def self.sync_mail_confs
     find(:all).each{ |campaign| campaign.write_mail_conf }
     mail_conf_live_dir = MySociety::Config.get('MAIL_CONF_LIVE_DIR')
-    mailservers = MySociety::Config.get('MAILSERVERS').split('|')
+    mailservers = MySociety::Config.get('MAILSERVERS', '').split('|').compact
     mailservers.each do |mailserver|
       system("rsync -r #{mail_conf_staging_dir}/ #{mailserver}:#{mail_conf_live_dir}")
     end
