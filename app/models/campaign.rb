@@ -85,6 +85,7 @@ class Campaign < ActiveRecord::Base
   # Synchronize the local mail_conf dir with the live mail conf dirs
   # on the mail servers
   def self.sync_mail_confs
+    find(:all).each{ |campaign| campaign.write_mail_conf }
     mail_conf_live_dir = MySociety::Config.get('MAIL_CONF_LIVE_DIR')
     mailservers = MySociety::Config.get('MAILSERVERS').split('|')
     mailservers.each do |mailserver|
