@@ -24,7 +24,7 @@ class CampaignMailer < ActionMailer::Base
       campaign = Campaign.find_by_campaign_email(address)
       incoming_message = IncomingMessage.create_from_tmail(email, raw_email, campaign)
       recipient = campaign.get_recipient(address)
-      deliver_new_message(recipient, incoming_message)
+      CampaignMailer.deliver_new_message(recipient, incoming_message, campaign)
     end
   end  
   
