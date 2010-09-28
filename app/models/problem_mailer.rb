@@ -68,6 +68,8 @@ class ProblemMailer < ActionMailer::Base
     if MySociety::Config.getbool('STAGING_SITE', true)
       self.dryrun = true
     end
+    # make sure the mail confs are up to date
+    Campaign.sync_mail_confs
     
     missing_emails = { :council => {},
                        :passenger_transport_executive => {},

@@ -10,7 +10,7 @@ class Campaign < ActiveRecord::Base
   after_create :add_default_assignment
   validates_presence_of :title, :description, :on => :update
   validates_associated :initiator, :on => :update
-  after_save :write_mail_conf, :on => :update
+  after_save :write_mail_conf, :on => :update, :if => :subdomain
   named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
   has_friendly_id :title, :use_slug => true, :allow_nil => true
   cattr_reader :per_page, :categories
@@ -53,7 +53,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def subdomain
-    to_param
+    slug.to_friendly_id
   end
   
   def domain  
@@ -65,7 +65,6 @@ class Campaign < ActiveRecord::Base
   end
 
   def write_mail_conf
-    reload
     local_user = MySociety::Config.get('INCOMING_EMAIL_LOCAL_USER')
     virtual_domain_file = File.join(Campaign.mail_conf_staging_dir, domain)
     File.open(virtual_domain_file, 'w') do |mail_config_file|
@@ -74,7 +73,6 @@ class Campaign < ActiveRecord::Base
         mail_config_file.write("#{local_part}:\t#{local_user}\n")
       end
     end
-    Campaign.sync_mail_confs
   end
   
   # class methods
