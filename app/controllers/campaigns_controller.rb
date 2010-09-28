@@ -68,6 +68,7 @@ class CampaignsController < ApplicationController
     if params[:user] and params[:token] == @campaign.problem.token
       @campaign.initiator.attributes=(params[:user])
       @campaign.initiator.registered = true
+      @campaign.confirmed = true
     end
     if @campaign.valid? 
       @campaign.save && @campaign.initiator.save

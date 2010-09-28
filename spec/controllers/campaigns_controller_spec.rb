@@ -203,6 +203,7 @@ describe CampaignsController do
                                             :initiator => @campaign_user, 
                                             :attributes= => true, 
                                             :valid? => true, 
+                                            :confirmed= => true,
                                             :save => true, 
                                             :status => :new)
       Campaign.stub!(:find).and_return(@mock_campaign)
@@ -234,6 +235,11 @@ describe CampaignsController do
       
       it 'should set the registered flag on the user' do 
         @campaign_user.should_receive(:registered=).with(true)
+        make_request(token=@mock_problem.token)
+      end
+      
+      it 'should set the confirmed flag on the campaign' do
+        @mock_campaign.should_receive(:confirmed=).with(true)
         make_request(token=@mock_problem.token)
       end
     
