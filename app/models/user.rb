@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
   
   def generate_email_local_part
     # don't overwrite an existing value
-    return true if email_local_part
+    return true if !email_local_part.blank?
     self.email_local_part = name.strip.downcase.gsub(' ', '.')
   end
   
