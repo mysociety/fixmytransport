@@ -1,0 +1,8 @@
+.campaign-email
+  %h2
+    .from= @incoming_message.mail.friendly_from
+    .date= short_date(@incoming_message.sent_at)
+  .subject
+    %b= "#{t(:subject)}:"
+    = @incoming_message.subject
+  .body!= @incoming_message.get_body_for_html_display

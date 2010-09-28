@@ -63,6 +63,10 @@ class Campaign < ActiveRecord::Base
     [initiator.email_local_part]
   end
 
+  def get_recipient(email_address)
+    initiator
+  end
+
   def write_mail_conf
     return false unless subdomain
     local_user = MySociety::Config.get('INCOMING_EMAIL_LOCAL_USER')
@@ -74,6 +78,7 @@ class Campaign < ActiveRecord::Base
       end
     end
   end
+
   
   # class methods
   

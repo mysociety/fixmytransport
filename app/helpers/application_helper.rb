@@ -242,4 +242,8 @@ module ApplicationHelper
    end
    raise "Unknown location type: #{location.class}"
   end
+  
+  def short_date(date)
+    return date.strftime("%e %B %Y").strip
+  end
 end

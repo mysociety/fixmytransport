@@ -11,15 +11,20 @@ class CampaignMailer < ActionMailer::Base
     body :campaign => campaign, :recipient => recipient, :link => main_url(confirm_join_path(:email_token => token))
   end
   
+  def new_message(recipient, incoming_message, campaign)
+    recipients recipient.email
+    from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    subject "[FixMyTransport] New message to \"#{campaign.title}\""
+    body :campaign => campaign, :recipient => recipient, :link => main_url(incoming_message_path(incoming_message))
+  end
+  
   def receive(email, raw_email)
-    campaigns = []
     addresses = (email.to || []) + (email.cc || [])
     addresses.each do |address|
       campaign = Campaign.find_by_campaign_email(address)
-      campaigns << campaign if campaign
-    end
-    campaigns.each do |campaign|
-      IncomingMessage.create_from_tmail(email, raw_email, campaign)
+      incoming_message = IncomingMessage.create_from_tmail(email, raw_email, campaign)
+      recipient = campaign.get_recipient(address)
+      deliver_new_message(recipient, incoming_message)
     end
   end  
   
