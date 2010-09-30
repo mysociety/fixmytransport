@@ -15,7 +15,7 @@ class IncomingMessage < ActiveRecord::Base
   end
   
   def get_main_body_text_internal
-    main_part = MySociety::Email.get_main_body_text_part(self.mail)
+    main_part_text = MySociety::Email.get_main_body_text_part(self.mail).body
   end
   
   # Returns body text as HTML with quotes flattened, and emails removed.
