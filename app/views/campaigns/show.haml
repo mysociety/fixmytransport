@@ -18,13 +18,6 @@
 = link_to(t(:tweet_this), "http://twitter.com/share", {:class =>"twitter-share-button", 'data-count' => 'vertical', 'data-via' =>"fixmytransport"})
 %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
 
-.campaign-emails
-  - @campaign.incoming_messages.each do |incoming_message|
-    =t(:campaign_received_email)
-    .campaign-email
-      .email-id= incoming_message.id
-      .email-subject= incoming_message.subject
-      .email-body!= incoming_message.get_body_for_html_display
 - if current_user && current_user.campaigns.include?(@campaign)
   = t(:you_support_this_campaign)
   - form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f|
