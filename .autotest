@@ -1,0 +1,6 @@
+# Add autotest mappings for commonlib files
+Autotest.add_hook :initialize do |at|
+  at.add_mapping(%r%^commonlib/rblib/([^/]*)\.rb$%) { |_, m|
+	["commonlib/rblib/tests/#{m[1]}_test.rb"]
+  }
+end
