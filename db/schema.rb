@@ -109,6 +109,7 @@ ActiveRecord::Schema.define(:version => 20100922142818) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "raw_email_id"
+    t.string   "from"
   end
 
   create_table "localities", :force => true do |t|

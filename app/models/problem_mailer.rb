@@ -28,11 +28,7 @@ class ProblemMailer < ActionMailer::Base
   
   def report(problem, recipient_models, missing_recipient_models=[])
     recipients recipient_models.map{ |recipient| recipient.email } + [MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')]
-    if problem.campaign
-      from problem.reporter.campaign_email_address(problem.campaign)
-    else
-      from problem.reporter.email
-    end
+    from problem.reply_email
     subject "Problem Report: #{problem.subject}" 
     body({ :problem => problem, 
            :problem_link => main_url(problem_path(problem)), 

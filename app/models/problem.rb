@@ -87,12 +87,10 @@ class Problem < ActiveRecord::Base
       assignment_types << { :name => 'publish-problem',
                             :status => :in_progress, 
                             :data => {} }
+      assignment_types << { :name => 'write-to-transport-organization', 
+                            :status => :in_progress, 
+                            :data => {:organizations => organization_info(:emailable_organizations) }}
       if !responsible_organizations.empty? 
-        if emailable_organizations.size > 0
-          assignment_types << { :name => 'write-to-transport-organization', 
-                                :status => :in_progress, 
-                                :data => {:organizations => organization_info(:emailable_organizations) }}
-        end
         if unemailable_organizations.size > 0
           assignment_types << { :name => 'find-transport-organization-contact-details', 
                                 :status => :new, 
@@ -159,6 +157,14 @@ class Problem < ActiveRecord::Base
   
   def anonymous?
     !reporter_public?
+  end
+  
+  def reply_email
+    if campaign
+      reporter.campaign_email_address(campaign)
+    else
+      reporter.email
+    end
   end
   
   # class methods

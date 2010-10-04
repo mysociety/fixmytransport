@@ -17,7 +17,12 @@
     = render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
 = link_to(t(:tweet_this), "http://twitter.com/share", {:class =>"twitter-share-button", 'data-count' => 'vertical', 'data-via' =>"fixmytransport"})
 %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
-
+- if !@campaign.incoming_messages.empty?
+  %h3= t(:campaign_received_emails)
+  - @campaign.incoming_messages.each do |message|
+    .message-link
+      = link_to(message.subject, incoming_message_path(message))
+      =t(:message_from, :sender => message.from)
 - if current_user && current_user.campaigns.include?(@campaign)
   = t(:you_support_this_campaign)
   - form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f|
