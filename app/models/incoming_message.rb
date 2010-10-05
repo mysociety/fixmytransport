@@ -14,13 +14,28 @@ class IncomingMessage < ActiveRecord::Base
     @mail
   end
   
-  def get_main_body_text_internal
-    main_part_text = MySociety::Email.get_main_body_text_part(self.mail).body
+  def main_body_text
+    main_part = MySociety::Email.get_main_body_text_part(self.mail)
+    if main_part.nil?
+      text = I18n.translate(:no_body)
+    else
+      text = main_part.body
+      # convert html to formatted plain text as we escape all html later
+      if main_part.content_type == 'text/html'
+        text = MySociety::Email._get_attachment_text_internal_one_file(main_part.content_type, text)
+      end
+    end
+    text
+  end
+  
+  def find_attachment(url_part_number)
+    attachments = MySociety::Email.get_display_attachments(mail)
+    attachment = MySociety::Email.get_attachment_by_url_part_number(attachments, url_part_number)
   end
   
   # Returns body text as HTML with emails removed.
   def get_body_for_html_display(collapse_quoted_sections = true)
-    text = get_main_body_text_internal
+    text = main_body_text
     text = remove_privacy_sensitive_things(text)
     text = MySociety::Format.simplify_angle_bracketed_urls(text)
     text = CGI.escapeHTML(text)
