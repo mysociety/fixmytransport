@@ -39,7 +39,7 @@ describe IncomingMessage do
       mock_part = mock('email part', :content_type => 'text/html', 
                                      :body => 'this is <b>really</b> important')
       MySociety::Email.stub!(:get_main_body_text_part).and_return(mock_part)
-      @incoming_message.main_body_text.should == 'this is really important\n\n\n'
+      @incoming_message.main_body_text.should == '   this is really important\n\n\n'
     end
     
   end

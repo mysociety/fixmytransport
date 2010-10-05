@@ -16,8 +16,11 @@ ActionController::Routing::Routes.draw do |map|
   map.confirm '/p/:email_token', :action => 'confirm', :controller => 'problems'
   map.confirm_update '/u/:email_token', :action => 'confirm_update', :controller => 'problems'
   
+  map.attachment '/incoming_messages/:id/attach/:url_part_number', :action => 'show_attachment', 
+                                                                   :controller => 'incoming_messages'
   map.resources :incoming_messages, :only => [:show]
 
+  
   # stops                                   
   map.stop "/stops/:scope/:id.:format", :controller => "locations", 
                                 :action => 'show_stop', 

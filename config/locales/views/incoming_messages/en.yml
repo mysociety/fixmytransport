@@ -1,2 +1,3 @@
 en:
   subject: Subject
+  no_body:  "[ Email has no body, please see attachments ]"

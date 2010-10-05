@@ -87,6 +87,7 @@ class CampaignsController < ApplicationController
     @campaign = Campaign.find(params[:id])
   end
   
+  # filter method for finding a confirmed campaign
   def find_confirmed_campaign
     @campaign = Campaign.confirmed.find(params[:id])
     unless @campaign
