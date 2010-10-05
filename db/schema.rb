@@ -110,6 +110,8 @@ ActiveRecord::Schema.define(:version => 20100922142818) do
     t.datetime "updated_at"
     t.integer  "raw_email_id"
     t.string   "from"
+    t.text     "main_body_text"
+    t.text     "main_body_text_folded"
   end
 
   create_table "localities", :force => true do |t|

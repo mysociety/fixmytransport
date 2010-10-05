@@ -16,18 +16,25 @@ describe IncomingMessage do
   
   describe 'when getting body for html display' do 
     
-    it 'should remove privacy sensitive things' do
-      @incoming_message.stub!(:main_body_text).and_return("test text") 
-      @incoming_message.should_receive(:remove_privacy_sensitive_things).and_return("test text")
-      @incoming_message.get_body_for_html_display
-    end
+
   
   end
   
   describe 'when getting main body text' do 
     
     before do 
+      @mock_campaign = mock_model(Campaign)
+      @mock_raw_email = mock_model(RawEmail)
+      @mock_mail = mock('mail object', :total_part_count= => true, 
+                                       :body => 'test text', 
+                                       :content_type => 'text/plain')
       @incoming_message = IncomingMessage.new
+      @incoming_message.stub!(:campaign).and_return(@mock_campaign)
+      @incoming_message.stub!(:raw_email).and_return(@mock_raw_email)
+      @incoming_message.stub!(:remove_privacy_sensitive_things).and_return{ |text| text }
+      @incoming_message.stub!(:mail).and_return(@mock_mail)
+      @incoming_message.stub!(:save!).and_return(true)
+      MySociety::Email.stub!(:get_main_body_text_part).and_return(@mock_mail)
     end
     
     it 'should return a note if there is no main body' do 
@@ -35,11 +42,16 @@ describe IncomingMessage do
       @incoming_message.main_body_text.should == '[ Email has no body, please see attachments ]'
     end
     
+    it 'should remove privacy sensitive things' do
+      @incoming_message.should_receive(:remove_privacy_sensitive_things).and_return("test text")
+      @incoming_message.main_body_text
+    end
+    
     it 'should return plain text if the main body part is html' do 
       mock_part = mock('email part', :content_type => 'text/html', 
                                      :body => 'this is <b>really</b> important')
       MySociety::Email.stub!(:get_main_body_text_part).and_return(mock_part)
-      @incoming_message.main_body_text.should == '   this is really important\n\n\n'
+      @incoming_message.main_body_text.should == "   this is really important\n\n\n"
     end
     
   end

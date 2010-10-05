@@ -6,6 +6,7 @@ class IncomingMessagesController < ApplicationController
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end
+    @collapse_quotes = params[:unfold] ? false : true
   end
   
   def show_attachment

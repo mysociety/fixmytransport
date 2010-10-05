@@ -14,7 +14,21 @@ class IncomingMessage < ActiveRecord::Base
     @mail
   end
   
-  def main_body_text
+  def main_body_text(regenerate=false)
+    if read_attribute(:main_body_text).nil? or reload
+      generate_main_body_text
+    end
+    return read_attribute(:main_body_text)
+  end
+  
+  def main_body_text_folded(regenerate=false)
+    if read_attribute(:main_body_text_folded).nil? or reload
+      generate_main_body_text
+    end
+    return read_attribute(:main_body_text_folded)
+  end
+  
+  def generate_main_body_text
     main_part = MySociety::Email.get_main_body_text_part(self.mail)
     if main_part.nil?
       text = I18n.translate(:no_body)
@@ -25,6 +39,18 @@ class IncomingMessage < ActiveRecord::Base
         text = MySociety::Email._get_attachment_text_internal_one_file(main_part.content_type, text)
       end
     end
+   
+    text = MySociety::Email.strip_uudecode_attachments(text)
+        
+    if text.size > 1000000 # 1 MB ish
+      raise "main body text more than 1 MB, need to implement clipping like for attachment text, or there is some other MIME decoding problem or similar"
+    end
+    
+    text = remove_privacy_sensitive_things(text)
+    folded_quoted_text = MySociety::Email.remove_quoting(text, 'FOLDED_QUOTED_SECTION')
+    self.main_body_text = text
+    self.main_body_text_folded = folded_quoted_text
+    self.save!
     text
   end
   
@@ -36,10 +62,31 @@ class IncomingMessage < ActiveRecord::Base
   # Returns body text as HTML with emails removed.
   def get_body_for_html_display(collapse_quoted_sections = true)
     text = main_body_text
-    text = remove_privacy_sensitive_things(text)
+    folded_quoted_text = main_body_text_folded
+    # Remove quoted sections, adding HTML. XXX The FOLDED_QUOTED_SECTION is
+    # a nasty hack so we can escape other HTML before adding the unfold
+    # links, without escaping them. 
+    if collapse_quoted_sections
+      text = folded_quoted_text
+    end
     text = MySociety::Format.simplify_angle_bracketed_urls(text)
     text = CGI.escapeHTML(text)
     text = MySociety::Format.make_clickable(text, :contract => 1)
+    
+    if collapse_quoted_sections
+      text.strip!
+      # if there is nothing but quoted stuff, then show the subject
+      if text == "FOLDED_QUOTED_SECTION"
+        text = "[Subject only] " + CGI.escapeHTML(self.subject) + text
+      end
+      # and display link for quoted stuff
+      text = text.gsub(/FOLDED_QUOTED_SECTION/, "\n\n" + '<span class="unfold_link"><a href="?unfold=1">show quoted sections</a></span>' + "\n\n")
+    else
+      if folded_quoted_text.include?('FOLDED_QUOTED_SECTION')
+        text = text + "\n\n" + '<span class="unfold_link"><a href="?">hide quoted sections</a></span>'
+      end
+    end
+    text.strip!
     return MySociety::Email.clean_linebreaks(text)
   end
   
