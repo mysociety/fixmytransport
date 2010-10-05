@@ -52,7 +52,7 @@ describe TrainRoute do
         
         it 'should be of the form "Train to London Victoria"' do 
           route = routes(:victoria_to_haywards_heath)
-          route.name(stops(:haywards_heath_station_interchange)).should == 'Train towards London Victoria'
+          route.name(stop_areas(:haywards_heath_station)).should == 'Train towards London Victoria'
         end
         
       end
