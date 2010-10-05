@@ -27,7 +27,7 @@ Name: <%= raw @problem.reporter_name %>
 
 Email: <%= raw @problem.reply_email %>
 
-<%- if !@problem.reporter_phone.blank? %>
+<%- if !@problem.reporter_phone.blank? && !@problem.campaign %>
 Phone: <%= raw @problem.reporter_phone %>
 
 <%- end %>
@@ -45,9 +45,13 @@ Plate code: <%= raw @problem.location.plate_code %>
 
 <%- end %>
 ----------
+<%- if @problem.campaign %>
+Replies to this email will be published online at <%= raw @campaign_link %>
 
+<%- else %>
 Replies to this email will go to the user who submitted the problem.
 
+<%- end %>
 Yours,
 The FixMyTransport team
 
