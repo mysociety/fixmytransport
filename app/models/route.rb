@@ -285,10 +285,10 @@ class Route < ActiveRecord::Base
     routes_with_same_stops
   end
   
-  # Accepts an array of stops or an array of arrays of stops as first parameter.
-  # If passed the latter, will find routes that pass through at least one stop in
+  # Accepts an array of stops or an array of arrays of locations (stops or stop areas) as first parameter.
+  # If passed the latter, will find routes that pass through at least one location in
   # each array.
-  def self.find_all_by_stops(stops, transport_mode_id, as_terminus=false, limit=nil)
+  def self.find_all_by_locations(stops, transport_mode_id, as_terminus=false, limit=nil)
     from_terminus_clause = ''
     to_terminus_clause = ''
     condition_string = 'transport_mode_id = ?' 
@@ -302,12 +302,22 @@ class Route < ActiveRecord::Base
       end
       if item.is_a? Array
         stop_id_criteria = "in (?)"
+        if item.all?{ |location| location.is_a?(StopArea) }
+          location_key = 'stop_area_id'
+        else
+          location_key = 'stop_id'
+        end
       else
         stop_id_criteria = "= ?"
+        if item.is_a?(StopArea)
+          location_key = 'stop_area_id'
+        else
+          location_key = 'stop_id'
+        end
       end
       joins += " inner join route_segments rs#{index} on routes.id = rs#{index}.route_id"
-      condition_string += " and ((#{from_terminus_clause} rs#{index}.from_stop_id #{stop_id_criteria})"
-      condition_string += " or (#{to_terminus_clause} rs#{index}.to_stop_id #{stop_id_criteria}))"
+      condition_string += " and ((#{from_terminus_clause} rs#{index}.from_#{location_key} #{stop_id_criteria})"
+      condition_string += " or (#{to_terminus_clause} rs#{index}.to_#{location_key} #{stop_id_criteria}))"
       params << item
       params << item
     end
@@ -380,19 +390,19 @@ class Route < ActiveRecord::Base
   def Route.find_existing_train_routes(new_route)
     operator_id = new_route.route_operators.first.operator.id
     terminuses = new_route.terminuses
-    stops = new_route.stops
+    stops_or_stations = new_route.stops_or_stations
     routes = []
     possible_routes = Route.find(:all, 
                                  :conditions => [ 'route_operators.operator_id = ?
                                                    and transport_mode_id = ?', 
                                                    operator_id, new_route.transport_mode_id],
-                                 :include => [:route_operators, {:route_segments => [:from_stop, :to_stop]}])                                    
+                                 :include => [:route_operators, {:route_segments => [:from_stop_area, :to_stop_area]}])                                    
     possible_routes.each do |route|
-      if route.terminuses.all?{ |terminus| stops.include? terminus } 
+      if route.terminuses.all?{ |terminus| stops_or_stations.include? terminus } 
         routes << route
       end
-      route_stops = route.stops
-      if terminuses.all?{ |terminus| route_stops.include? terminus }
+      route_stops_or_stations = route.stops_or_stations
+      if terminuses.all?{ |terminus| route_stops_or_stations.include? terminus }
         routes << route
       end
     end
@@ -410,7 +420,7 @@ class Route < ActiveRecord::Base
   
   def self.find_all_by_stop_names(first, last, attributes, limit=nil)
     stop_attributes = attributes.merge(:route_number => nil)
-    options = { :stops_only => true }
+    options = {}
     results = Gazetteer.find_stops_and_stations_from_attributes(stop_attributes.merge(:area => first), options)
     first_stops = results[:results]
     results = Gazetteer.find_stops_and_stations_from_attributes(stop_attributes.merge(:name => first), options)
@@ -419,7 +429,7 @@ class Route < ActiveRecord::Base
     last_stops = results[:results]
     results = Gazetteer.find_stops_and_stations_from_attributes(stop_attributes.merge(:name => last), options)
     last_stops += results[:results]
-    Route.find_all_by_stops([first_stops, last_stops], 
+    Route.find_all_by_locations([first_stops, last_stops], 
                             attributes[:transport_mode_id], 
                             as_terminus=false, 
                             limit=limit)

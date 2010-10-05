@@ -97,7 +97,7 @@ describe Stop do
     
     it 'should only return a stop whose name matches and whose coordinates are less than the specified distance away from the given stop' do 
       stop = Stop.find_by_name_and_coords('Haywards Heath Rail Station', 533030, 124583, 10)  
-      stop.should == stops(:haywards_heath_station)
+      stop.should == stops(:haywards_heath_station_interchange)
       stop = Stop.find_by_name_and_coords('Haywards Heath Rail Station', 533030, 124594, 10)  
       stop.should be_nil
     end

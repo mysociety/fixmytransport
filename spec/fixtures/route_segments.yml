@@ -19,24 +19,32 @@ one:
   route: victoria_to_haywards_heath
   from_stop: victoria_station_one
   to_stop: clapham_junction
+  from_stop_area: victoria_station_root
+  to_stop_area: clapham_junction
   from_terminus: t
   to_terminus: f
 two:
   route: victoria_to_haywards_heath
   from_stop: clapham_junction
   to_stop: croydon_station
+  from_stop_area: clapham_junction
+  to_stop_area: east_croydon_station
   from_terminus: f
   to_terminus: f
 three:
   route: victoria_to_haywards_heath
   from_stop: croydon_station
   to_stop: gatwick_airport_station
+  from_stop_area: east_croydon_station
+  to_stop_area: gatwick_airport_station
   from_terminus: f
   to_terminus: f
 four:
   route: victoria_to_haywards_heath  
   from_stop: gatwick_airport_station
-  to_stop: haywards_heath_station
+  to_stop: haywards_heath_station_interchange
+  from_stop_area: gatwick_airport_station
+  to_stop_area: haywards_heath_station
   from_terminus: f
   to_terminus: t
 five: 
@@ -74,4 +82,10 @@ ten:
   from_stop: staple_street
   to_stop: tennis_street
   from_terminus: f
-  to_terminus: f      
+  to_terminus: f     
+eleven:
+  route: jubilee_line
+  from_stop: baker_st_station_plat
+  to_stop: finchley_road_station_plat
+  from_stop_area: baker_st_station
+  to_stop_area: finchley_road_station 

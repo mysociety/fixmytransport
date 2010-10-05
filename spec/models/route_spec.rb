@@ -70,7 +70,7 @@ describe Route do
   describe 'when giving its terminuses' do 
     
     it 'should return correct terminuses for an example route' do 
-      routes(:victoria_to_haywards_heath).terminuses.should == [stops(:victoria_station_one), stops(:haywards_heath_station)]
+      routes(:victoria_to_haywards_heath).terminuses.should == [stop_areas(:victoria_station_root), stop_areas(:haywards_heath_station)]
     end
     
   end
@@ -96,8 +96,8 @@ describe Route do
   end
   
   describe 'when finding from attributes' do 
-    
-    it "should find a route described by it's terminuses" do 
+  
+    it "should find a route described by its terminuses" do 
       attributes = { :transport_mode_id => 6, 
                      :route_number => 'London to Haywards Heath', 
                      :area => '' }
@@ -105,6 +105,14 @@ describe Route do
       routes.should include(routes(:victoria_to_haywards_heath))
     end
     
+    it 'should find a metro route described by its stop areas' do 
+      attributes = { :transport_mode_id => 7, 
+                     :route_number => 'baker street to finchley road', 
+                     :area => ''}
+      routes = Route.find_from_attributes(attributes)
+      routes.should include(routes(:jubilee_line))
+    end
+ 
   end
   
   describe 'when finding existing routes' do 
@@ -156,11 +164,15 @@ describe Route do
       @terminus_segments.each do |route_segment|
         @route.route_segments.build(:from_stop => route_segment.from_stop,
                                     :to_stop => route_segment.to_stop, 
+                                    :from_stop_area => route_segment.from_stop_area,
+                                    :to_stop_area => route_segment.to_stop_area,
                                     :from_terminus => route_segment.from_terminus?,
                                     :to_terminus => route_segment.to_terminus?)
       end
       @route.route_segments.build(:from_stop => stops(:victoria_station_one), 
                                   :to_stop => stops(:victoria_station_two), 
+                                  :from_stop_area => stop_areas(:victoria_station_root),
+                                  :to_stop_area => stop_areas(:victoria_station_root),
                                   :from_terminus => false,
                                   :to_terminus => false)
       Route.find_existing_train_routes(@route).should include(@existing_route)
@@ -187,10 +199,14 @@ describe Route do
       new_route_end = non_terminus_segments.second
       @route.route_segments.build(:from_stop => new_route_start.from_stop, 
                                   :to_stop => new_route_start.to_stop, 
+                                  :from_stop_area => new_route_start.from_stop_area,
+                                  :to_stop_area => new_route_start.to_stop_area,
                                   :from_terminus => true,
                                   :to_terminus => false)
       @route.route_segments.build(:from_stop => new_route_end.from_stop, 
                                   :to_stop => new_route_end.to_stop, 
+                                  :from_stop_area => new_route_end.from_stop_area,
+                                  :to_stop_area => new_route_end.to_stop_area, 
                                   :from_terminus => false,
                                   :to_terminus => true)                            
       Route.find_existing_train_routes(@route).should include(@existing_route)
@@ -201,17 +217,23 @@ describe Route do
       @terminus_segments.each do |route_segment|
         @route.route_segments.build(:from_stop => route_segment.from_stop,
                                     :to_stop => route_segment.to_stop, 
+                                    :from_stop_area => route_segment.from_stop_area, 
+                                    :to_stop_area => route_segment.to_stop_area,
                                     :from_terminus => false,
                                     :to_terminus => false)
       end
       # and has a couple of non-matching terminuses
       @route.route_segments.build(:from_stop => stops(:victoria_station_two),
                                   :to_stop => stops(:victoria_station_one), 
+                                  :from_stop_area => stop_areas(:victoria_station_root),
+                                  :to_stop_area => stop_areas(:victoria_station_root),
                                   :from_terminus => true,
                                   :to_terminus => false)
                                   
-      @route.route_segments.build(:from_stop => stops(:haywards_heath_station), 
+      @route.route_segments.build(:from_stop => stops(:haywards_heath_station_interchange), 
                                   :to_stop => stops(:gatwick_airport_station), 
+                                  :from_stop_area => stop_areas(:haywards_heath_station),
+                                  :to_stop_area => stop_areas(:gatwick_airport_station),
                                   :from_terminus => false, 
                                   :to_terminus => true)
       Route.find_existing_train_routes(@route).should include(@existing_route)

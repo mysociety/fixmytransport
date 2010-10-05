@@ -60,4 +60,100 @@ south_moor_and_arch:
   code: 130G1612
   administrative_area_code: 078
   modification: rev
-
+baker_st_station: 
+  lon: "-0.157093118648171"
+  name: Baker Street Underground Station
+  locality_id: "19233"
+  area_type: GTMU
+  code: 940GZZLUBST
+  administrative_area_code: "147"
+  revision_number: "0"
+  loaded: t
+  easting: "527952"
+  modification: new
+  lat: "51.5230790773262"
+  status: act
+  northing: "182072"
+  coords: 0101000020346C000000000000A01C204100000000C0390641
+  grid_type: U
+finchley_road_station:
+  lon: "-0.179844589111084"
+  name: Finchley Road Underground Station
+  locality_id: "19326"
+  area_type: GTMU
+  code: 940GZZLUFYR
+  administrative_area_code: "147"
+  revision_number: "0"
+  loaded: t
+  easting: "526308"
+  modification: new
+  lat: "51.5468236428004"
+  status: act
+  northing: "184673"
+  coords: 0101000020346C000000000000C80F204100000000088B0641
+  grid_type: U
+clapham_junction:
+  lon: "-0.17029289004327"
+  name: Clapham Junction Rail Station
+  locality_id: "19210"
+  area_type: GRLS
+  code: 910GCLPHMJC
+  updated_at: 2010-07-06 12:27:56.199897
+  administrative_area_code: "110"
+  revision_number: "4"
+  loaded: t
+  easting: "527200"
+  modification: rev
+  lat: "51.4641869935754"
+  status: act
+  northing: "175500"
+  coords: 0101000020346C000000000000C016204100000000606C0541
+  grid_type: U
+east_croydon_station:
+  lon: "-0.0927791545283177"
+  name: East Croydon Rail Station
+  locality_id: "18683"
+  area_type: GRLS
+  code: 910GECROYDN
+  administrative_area_code: "110"
+  revision_number: "1"
+  loaded: t
+  easting: "532841"
+  modification: rev
+  lat: "51.3754527464971"
+  status: act
+  northing: "165770"
+  coords: 0101000020346C000000000000D242204100000000503C0441
+  grid_type: U
+gatwick_airport_station:
+  lon: "-0.161041009511314"
+  name: Gatwick Airport Rail Station
+  locality_id: "35655"
+  area_type: GRLS
+  code: 910GGTWK
+  administrative_area_code: "110"
+  revision_number: "1"
+  loaded: t
+  easting: "528700"
+  modification: rev
+  lat: "51.1564896073302"
+  status: act
+  northing: "141300"
+  coords: 0101000020346C0000000000007822204100000000A03F0141
+  grid_type: U
+haywards_heath_station:
+  lon: "-0.10530812512724"
+  name: Haywards Heath Rail Station
+  locality: haywards_heath
+  area_type: GRLS
+  code: 910GHYWRDSH
+  administrative_area_code: "110"
+  revision_number: "0"
+  loaded: t
+  easting: "533030"
+  modification: new
+  lat: "51.0052615799489"
+  status: act
+  northing: "124583"
+  coords: 0101000020346C0000000000004C44204100000000706AFE40
+  grid_type: U

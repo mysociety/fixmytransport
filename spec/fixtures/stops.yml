@@ -227,7 +227,7 @@ gatwick_airport_station:
   indicator: ""
   locality: gatwick_airport
   coords: 0101000020346C0000000000007822204100000000A03F0141
-haywards_heath_station: 
+haywards_heath_station_interchange: 
   status: act
   lon: "-0.10531"
   northing: "124583"
@@ -581,3 +581,67 @@ victoria_stop_s:
   loaded: t
   lat: "51.49625"
   easting: "528970"
+baker_st_station_plat:
+  lon: "-0.15683"
+  common_name: Baker Street Underground Station
+  crs_code: 
+  locality_id: "19233"
+  landmark: ""
+  plate_code: ""
+  administrative_area_code: "147"
+  locality_centre: f
+  revision_number: "3"
+  crossing: ""
+  atco_code: 9400ZZLUBST7
+  stop_type: PLT
+  suburb: ""
+  bearing: ""
+  street: 
+  bus_stop_type: ""
+  indicator: ""
+  tiploc_code: 
+  loaded: t
+  easting: "527971"
+  metro_stop: t
+  cached_slug: baker-street-underground-station--8
+  modification: rev
+  short_common_name: ""
+  status: act
+  lat: "51.52286"
+  northing: "182047"
+  town: ""
+  coords: 0101000020346C000000000000C61C204100000000F8380641
+  grid_type: U
+  naptan_code: ""
+finchley_road_station_plat:
+  lon: "-0.18025"
+  common_name: Finchley Road Underground Station
+  crs_code: 
+  locality_id: "19326"
+  landmark: ""
+  plate_code: ""
+  administrative_area_code: "147"
+  locality_centre: f
+  revision_number: "3"
+  crossing: ""
+  atco_code: 9400ZZLUFYR3
+  stop_type: PLT
+  suburb: ""
+  bearing: ""
+  street: 
+  bus_stop_type: ""
+  indicator: ""
+  tiploc_code: 
+  loaded: t
+  easting: "526279"
+  metro_stop: t
+  cached_slug: finchley-road-underground-station--5
+  modification: rev
+  short_common_name: ""
+  status: act
+  lat: "51.54718"
+  northing: "184711"
+  town: ""
+  coords: 0101000020346C0000000000008E0F204100000000388C0641
+  grid_type: U
+  naptan_code: ""
