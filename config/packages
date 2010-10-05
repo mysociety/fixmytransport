@@ -1,8 +1,9 @@
+elinks
 libopenssl-ruby1.8
 libpgsql-ruby1.8
 libjson-ruby
-mahoro-ruby1.8 | libmahoro-ruby1.8
 libzip-ruby1.8
+mahoro-ruby1.8 | libmahoro-ruby1.8
 rake (>= 0.8.4-1)
 ruby1.8
 rubygems
