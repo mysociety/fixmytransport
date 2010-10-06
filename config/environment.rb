@@ -47,7 +47,6 @@ Rails::Initializer.run do |config|
   config.gem "friendly_id", :version => '3.1.6'
   config.gem 'paper_trail', :version => '1.5.1'
   config.gem 'authlogic', :version => '2.1.6'
-  config.gem 'ruby-msg', :version => '1.4.0'
   
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
