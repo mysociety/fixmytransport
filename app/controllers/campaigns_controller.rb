@@ -98,7 +98,8 @@ class CampaignsController < ApplicationController
   
   # filter method for finding a confirmed campaign
   def find_confirmed_campaign
-    find_campaign
+    found = find_campaign
+    return false unless @campaign
     unless @campaign.confirmed
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
