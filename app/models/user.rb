@@ -49,6 +49,12 @@ class User < ActiveRecord::Base
     # don't overwrite an existing value
     return true if !email_local_part.blank?
     self.email_local_part = name.strip.downcase.gsub(' ', '.')
+    self.email_local_part = self.email_local_part.gsub(/[^A-Za-z\-\.]/, '')
+    self.email_local_part = self.email_local_part[0...64]
+    self.email_local_part = self.email_local_part.gsub(/^[\.-]/, '')
+    self.email_local_part = self.email_local_part.gsub(/[\.-]$/, '')
+    self.email_local_part = I18n.translate('campaign') if self.email_local_part == ''
+    self.email_local_part
   end
   
   def campaign_email_address(campaign)
