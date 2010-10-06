@@ -55,6 +55,7 @@ describe Problem do
     
     it 'should add an error if the name is some variant of "anon"' do 
       ['anon', 'anonymous', 'anonymos', 'anonymously'].each do |anon_variant|
+        @problem.errors.clear
         @problem.reporter_name = anon_variant
         @problem.validate_reporter_name
         @problem.errors.on(:reporter_name).should == @full_name_error
@@ -63,15 +64,17 @@ describe Problem do
     
     it 'should add an error if the name is less than 5 characters' do 
       @problem.reporter_name = 'A B'
-      @problem.validate_reporter_name
+      @problem.valid?
       @problem.errors.on(:reporter_name).should == @full_name_error
     end
     
     it 'should add an error if the name does not have a non space, followed by a space, followed by a non space' do 
       ['Firstname ', ' Lastname'].each do |no_space|
-      @problem.reporter_name = no_space
-      @problem.validate_reporter_name
-      @problem.errors.on(:reporter_name).should == @full_name_error
+        @problem.errors.clear
+        @problem.reporter_name = no_space
+        @problem.validate_reporter_name
+        @problem.errors.on(:reporter_name).should == @full_name_error
+      end
     end
     
   end
