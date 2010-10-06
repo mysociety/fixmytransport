@@ -29,6 +29,7 @@ describe CampaignsController do
                                        :title => 'A test campaign',
                                        :default_assignment => mock_assignment,
                                        :initiator_id => 44, 
+                                       :confirmed => true,
                                        :location => mock_model(Stop, :points => [mock("point", :lat => 51, :lon => 0)]))
       Campaign.stub!(:find).and_return(@campaign)
     end
@@ -43,9 +44,7 @@ describe CampaignsController do
     end
     
     it 'should not display a campaign that has not been confirmed' do 
-      mock_confirmed_campaigns = mock("confirmed campaigns")
-      Campaign.stub!(:confirmed).and_return(mock_confirmed_campaigns)
-      mock_confirmed_campaigns.stub!(:find).and_return(nil)
+      @campaign.stub!(:confirmed).and_return(false)
       make_request
       response.status.should == '404 Not Found'
     end
@@ -305,7 +304,7 @@ describe CampaignsController do
   describe 'GET #join' do 
     
     before do 
-      Campaign.stub!(:find).and_return(mock_model(Campaign))
+      Campaign.stub!(:find).and_return(mock_model(Campaign, :confirmed => true))
     end
     
     def make_request
@@ -324,6 +323,7 @@ describe CampaignsController do
     before do 
       @mock_campaign = mock_model(Campaign, :supporters => [], 
                                             :title => 'A test title',
+                                            :confirmed => true,
                                             :add_supporter => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
     end

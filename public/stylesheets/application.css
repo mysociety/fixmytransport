@@ -403,10 +403,14 @@ ul.location-list li{
 /* Campaign page */
 
 form.update_campaign label {
-  width: 10em;
+  width: 20em;
 }
 
 .campaign-info .details {
+  font-size: 0.8em;
+}
+
+form.update_campaign .label-note { 
   font-size: 0.8em;
 }
 

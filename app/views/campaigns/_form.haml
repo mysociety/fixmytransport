@@ -10,6 +10,12 @@
     .form-field
       = f.label :description
       != f.text_area :description, { :rows => 5 }   
+    - if campaign.errors.on('subdomain')
+      .form-field-error= error_message_on campaign, :subdomain
+    .form-field
+      = f.label :subdomain, t(:choose_a_short_name)
+      != f.text_field :subdomain, :size => 16
+      %span.label-note= t(:easy_web_address, :url => "http://#{MySociety::Config.get('DOMAIN', 'localhost')}/savetheC10")
     - if ! campaign.initiator.registered? or campaign.initiator.registered_changed?
       = t(:add_password_to_update)
       - fields_for campaign.initiator do |user_fields|

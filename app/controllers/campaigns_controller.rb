@@ -84,13 +84,22 @@ class CampaignsController < ApplicationController
   private
   
   def find_campaign
-    @campaign = Campaign.find(params[:id])
+    if params[:id].to_i.to_s == params[:id]
+      @campaign = Campaign.find(params[:id])
+    else 
+      @campaign = Campaign.find_by_subdomain(params[:id])
+    end
+    unless @campaign
+      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+      return false
+    end
+    return true
   end
   
   # filter method for finding a confirmed campaign
   def find_confirmed_campaign
-    @campaign = Campaign.confirmed.find(params[:id])
-    unless @campaign
+    find_campaign
+    unless @campaign.confirmed
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end

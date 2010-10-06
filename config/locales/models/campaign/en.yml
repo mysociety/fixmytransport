@@ -8,3 +8,10 @@ en:
               blank: "Please give your campaign a title"
             description:
               blank: "Please give a brief description of your campaign"
+            subdomain:
+              blank: "Please give your campaign a short name"
+              too_short: 'The short name must be at least 6 characters long'
+              too_long: 'The short name must be 16 characters or less'
+              need_one_letter: 'The short name must contain at least one letter'
+              only_letters_and_numbers: 'The short name can only contain letters and numbers'
+              taken: 'That short name has already been taken'

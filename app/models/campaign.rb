@@ -9,9 +9,22 @@ class Campaign < ActiveRecord::Base
   has_many :incoming_messages
   after_create :add_default_assignment
   validates_presence_of :title, :description, :on => :update
+  validates_presence_of :subdomain, :on => :update
+  validates_format_of :subdomain, :with => /^[a-zA-Z0-9]+[a-zA-Z0-9]*$/, 
+                                  :on => :update, 
+                                  :allow_nil => true,
+                                  :message => :only_letters_and_numbers
+  validates_format_of :subdomain, :with => /[a-zA-Z]+/, 
+                                  :on => :update, 
+                                  :allow_nil => true,
+                                  :message => :need_one_letter
+  validates_length_of :subdomain, :within => 6..16, 
+                                  :on => :update, 
+                                  :allow_nil => true
+  validates_uniqueness_of :subdomain, :on => :update,
+                                      :case_sensitive => false
   validates_associated :initiator, :on => :update
   named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
-  has_friendly_id :title, :use_slug => true, :allow_nil => true
   cattr_reader :per_page, :categories
   @@per_page = 10
   @@categories = ['New route', 'Keep route', 'Get repair', 'Adopt', 'Other']
@@ -51,8 +64,8 @@ class Campaign < ActiveRecord::Base
     end
   end
   
-  def subdomain
-    slug ? slug.to_friendly_id : nil
+  def to_param
+    subdomain ? subdomain : id.to_s
   end
   
   def domain  
@@ -101,7 +114,7 @@ class Campaign < ActiveRecord::Base
   def self.find_by_campaign_email(email)
     local_part, domain = email.split("@")
     subdomain = domain.gsub(/\.#{email_domain}$/, '')
-    campaign = find(:first, :conditions => ['cached_slug = ?', subdomain]) 
+    campaign = find(:first, :conditions => ['subdomain = ?', subdomain]) 
   end
   
   def self.email_domain

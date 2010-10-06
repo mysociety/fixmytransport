@@ -1,5 +1,5 @@
 en:
-  now_add_campaign_info: "Now, in order to get your campaign up and running, tell us a bit about it. We'll hold on to your problem until you've given your campaign a name"
+  now_add_campaign_info: "Now, in order to get your campaign up and running, tell us a bit about it. We'll hold on to your problem until you've given your campaign a title."
   other_campaigns_here: Campaigns
   fixmytransport: "FixMyTransport"
   campaign_start_date: Start date
@@ -30,3 +30,5 @@ en:
   campaign_received_emails: "The campaign has received the following emails:"
   message_from: "from {{sender}}"
   campaign: campaign
+  choose_a_short_name: Choose a short name for your campaign (6 to 16 lowercase letters)
+  easy_web_address: This gives your campaign an easy web address. e.g. {{url}}
