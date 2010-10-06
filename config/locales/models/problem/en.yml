@@ -21,7 +21,9 @@ en:
               blank_stop: "Please give the stop or area"
               blank_route: "Please give the route or area"
             reporter_name:
-              blank: "Please enter your name"
+              blank: "Please enter your full name (if you do not wish your name to be shown on the site, untick the 'Can we show your name publicly' box)"
+              invalid: "Please enter your full name (if you do not wish your name to be shown on the site, untick the 'Can we show your name publicly' box)"
+              too_short:  "Please enter your full name (if you do not wish your name to be shown on the site, untick the 'Can we show your name publicly' box)"
         stop:
           attributes: 
             common_name:

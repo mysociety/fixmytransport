@@ -9,7 +9,8 @@ class Problem < ActiveRecord::Base
   has_many :updates
   validates_presence_of :transport_mode_id, :unless => :location
   validates_presence_of :description, :subject, :category, :reporter_name, :if => :location
-  validate :validate_location_attributes
+  validates_length_of :reporter_name, :minimum => 5, :if => :location
+  validate :validate_location_attributes, :validate_reporter_name
   validates_associated :reporter
   attr_accessor :location_attributes, :locations, :location_search, :location_errors
   cattr_accessor :route_categories, :stop_categories
@@ -49,6 +50,14 @@ class Problem < ActiveRecord::Base
     return true if location
     if ! location_attributes_valid?
       errors.add(:location_attributes, ActiveRecord::Error.new(self, :location_attributes, :blank).to_s)
+    end
+  end
+  
+  def validate_reporter_name
+    return true unless reporter_name
+    return true unless location
+    if /\ba\s*n+on+((y|o)mo?u?s)?(ly)?\b/i.match(reporter_name) or ! /\S\s\S/.match(reporter_name)
+      errors.add(:reporter_name, ActiveRecord::Error.new(self, :reporter_name, :invalid).to_s)
     end
   end
   
