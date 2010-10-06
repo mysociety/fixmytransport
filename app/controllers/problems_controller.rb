@@ -45,6 +45,7 @@ class ProblemsController < ApplicationController
       @worry = t(:holding_on_to_problem)
       render 'shared/confirmation_sent'
     else
+      map_params_from_location(@problem.location.points, find_other_locations=false)
       render :new
     end
   end
