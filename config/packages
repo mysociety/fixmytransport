@@ -1,10 +1,19 @@
+catdoc
 elinks
 libopenssl-ruby1.8
 libpgsql-ruby1.8
 libjson-ruby
 libzip-ruby1.8
 mahoro-ruby1.8 | libmahoro-ruby1.8
+mutt
+pdftk (> 1.41+dfsg-1) | pdftk (< 1.41+dfsg-1) # that version has a non-functionining uncompress option
+poppler-utils
 rake (>= 0.8.4-1)
 ruby1.8
 rubygems
 tnef (>= 1.4.5)
+unrtf
+unzip
+vpim
+wv
+xlhtml
