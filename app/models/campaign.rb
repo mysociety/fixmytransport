@@ -121,6 +121,10 @@ class Campaign < ActiveRecord::Base
     MySociety::Config.get('INCOMING_EMAIL_DOMAIN', 'localhost')
   end
   
+  def self.find_by_subdomain(subdomain)
+    find(:first, :conditions => ['lower(subdomain) = ?', subdomain.downcase])
+  end
+  
   def self.find_recent(number)
     confirmed.find(:all, :order => 'created_at desc', 
                          :limit => number, 

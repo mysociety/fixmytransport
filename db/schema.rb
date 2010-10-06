@@ -81,7 +81,6 @@ ActiveRecord::Schema.define(:version => 20101006154957) do
   end
 
   add_index "campaigns", ["cached_slug"], :name => "index_campaigns_on_cached_slug"
-  add_index "campaigns", ["subdomain"], :name => "index_campaigns_on_subdomain"
 
   create_table "council_contacts", :force => true do |t|
     t.integer  "area_id"
