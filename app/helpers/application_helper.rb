@@ -244,7 +244,7 @@ module ApplicationHelper
   end
   
   def short_date(date)
-    return date.strftime("%e %B %Y").strip
+    return date.strftime("%e %b %Y").strip
   end
   
 end

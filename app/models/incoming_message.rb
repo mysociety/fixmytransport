@@ -2,6 +2,7 @@ class IncomingMessage < ActiveRecord::Base
   belongs_to :campaign
   belongs_to :raw_email
   validates_presence_of :campaign, :raw_email
+  has_many :campaign_updates
   
   def mail 
     @mail ||= if raw_email.nil?
@@ -15,14 +16,14 @@ class IncomingMessage < ActiveRecord::Base
   end
   
   def main_body_text(regenerate=false)
-    if read_attribute(:main_body_text).nil? or reload
+    if read_attribute(:main_body_text).nil? or regenerate
       generate_main_body_text
     end
     return read_attribute(:main_body_text)
   end
   
   def main_body_text_folded(regenerate=false)
-    if read_attribute(:main_body_text_folded).nil? or reload
+    if read_attribute(:main_body_text_folded).nil? or regenerate
       generate_main_body_text
     end
     return read_attribute(:main_body_text_folded)

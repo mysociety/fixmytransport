@@ -2,8 +2,9 @@ class CampaignsController < ApplicationController
 
   before_filter :process_map_params, :only => [:show]
   before_filter :find_campaign, :only => [:edit, :update]
-  before_filter :find_confirmed_campaign, :only => [:show, :join, :leave]
+  before_filter :find_confirmed_campaign, :only => [:show, :join, :leave, :add_update]
   before_filter :require_owner_or_token, :only => [:edit, :update]
+  before_filter :require_owner, :only => [:add_update]
   
   def index
     @title = t(:recent_campaigns)
@@ -61,6 +62,10 @@ class CampaignsController < ApplicationController
   def show
     @title = @campaign.title
     map_params_from_location(@campaign.location.points, find_other_locations=false)
+    if current_user && current_user == @campaign.initiator
+      @campaign_update = CampaignUpdate.new(:campaign => @campaign, 
+                                            :user => current_user)
+    end
   end
   
   def update
@@ -79,6 +84,14 @@ class CampaignsController < ApplicationController
   end
   
   def edit
+  end
+  
+  def add_update
+    @campaign_update = @campaign.campaign_updates.build(params[:campaign_update])
+    if @campaign_update.save
+      flash[:notice] = t(:update_added)
+    end
+    redirect_to campaign_url(@campaign)
   end
   
   private

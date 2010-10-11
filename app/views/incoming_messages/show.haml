@@ -8,3 +8,14 @@
   - MySociety::Email.get_display_attachments(@incoming_message.mail).each do |attachment|
     = link_to(attachment.display_filename, attachment_url(:id => @incoming_message, :url_part_number => attachment.url_part_number))
   .body!= @incoming_message.get_body_for_html_display(@collapse_quotes)
+- if current_user && current_user == @incoming_message.campaign.initiator
+  - form_for @campaign_update, :url => add_update_campaign_url(@incoming_message.campaign) do |f|
+    .fieldset
+      - if @campaign_update.errors.on('text')
+        .form-field-error= error_message_on @campaign_update, :text
+      .form-field
+        =f.label :text, t(:what_does_this_mean)
+        != f.hidden_field :incoming_message_id
+        != f.hidden_field :user_id
+        !=f.text_area :text, :cols => 40, :rows => 5
+        !=f.submit t(:add_update)

@@ -406,6 +406,14 @@ form.update_campaign label {
   width: 20em;
 }
 
+.campaign-info {
+  max-width: 50%;
+}
+
+.campaign-info h2 {
+  margin-top: 0px;
+}
+
 .campaign-info .details {
   font-size: 0.8em;
 }
@@ -413,6 +421,13 @@ form.update_campaign label {
 form.update_campaign .label-note { 
   font-size: 0.8em;
 }
+
+/* Adding a campaign update */
+form.new_campaign_update label {
+  width: 20em;
+}
+
+message-campaign-update
 
 /* Location column */
 
@@ -586,11 +601,23 @@ form.new_update .label{
   width: 6em;
 }
 
-.new-assignment, .complete-assignment {
+.new-assignment, .campaign-event {
   border: 1px dotted #cccccc;
   margin: 0.5em;
   padding: 0.5em;
   width: auto;
+}
+
+.campaign-event .date {
+  font-size: 0.8em;
+  color: #707070;
+}
+
+.campaign-event .message-campaign-update {
+  background-color: #ffff99;
+  border: 1px solid #cccccc;
+  margin: 0.5em;
+  padding: 0.5em;
 }
 
 /* Stop/stop area/route page */

@@ -6,6 +6,11 @@ class IncomingMessagesController < ApplicationController
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end
+    if current_user && current_user == @incoming_message.campaign.initiator
+      @campaign_update = CampaignUpdate.new(:incoming_message => @incoming_message, 
+                                            :campaign => @campaign, 
+                                            :user => current_user)
+    end
     @collapse_quotes = params[:unfold] ? false : true
   end
   

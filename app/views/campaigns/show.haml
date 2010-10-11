@@ -2,39 +2,41 @@
   #map-col
     = render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [] }
 .campaign-info
-  %h3= @campaign.title
+  %h2= @campaign.title
   .details
     = t(:started_on, :date => @campaign.created_at.strftime("%d/%m/%Y"))
     = t(:by, :name => @campaign.initiator.name)
     .supporters= t(:campaign_has_n_supporters, :n => @campaign.supporter_count, :count => @campaign.supporter_count)
   %p.campaign= @campaign.description
-%h3= t(:story_so_far)
-- @campaign.problem.assignments.completed.each do |assignment|
-  = render :partial => "shared/complete_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
-- if !@campaign.problem.assignments.incomplete.empty? 
-  %h3= t(:next_steps)
-  - @campaign.problem.assignments.incomplete.each do |assignment| 
-    = render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
-= link_to(t(:tweet_this), "http://twitter.com/share", {:class =>"twitter-share-button", 'data-count' => 'vertical', 'data-via' =>"fixmytransport"})
-%script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
-- if !@campaign.incoming_messages.empty?
-  %h3= t(:campaign_received_emails)
-  - @campaign.incoming_messages.each do |message|
-    .message-link
-      = link_to(message.subject, incoming_message_path(message))
-      =t(:message_from, :sender => message.from)
-- if current_user && current_user.campaigns.include?(@campaign)
-  = t(:you_support_this_campaign)
-  - form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f|
-    != hidden_field_tag "user_id", current_user.id
-    != submit_tag t(:leave_this_campaign)
-- else
-  - form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST' } do |f|
-    - if current_user
-      != hidden_field_tag "user_id", current_user.id
-      != submit_tag t(:join_this_campaign)
+  - if current_user && current_user == @campaign.initiator
+    = render :partial => 'update_form'
+  %h3= t(:latest_news)
+  - @campaign.events.each do |event|
+    - if event.is_a?(Assignment)
+      = render :partial => "shared/complete_assignments/#{event.task_type}", :locals => { :assignment => event }
+    - elsif event.is_a?(CampaignUpdate)
+      = render :partial => 'campaign_update', :locals => { :update => event }
     - else
-      .form-field
-        != label_tag :email, t(:enter_your_email_to_join)
-        != text_field_tag :email
-      != submit_tag t(:join)
+      = render :partial => 'incoming_message', :locals => { :message => event }
+  - if !@campaign.problem.assignments.incomplete.empty? 
+    %h3= t(:next_steps)
+    - @campaign.problem.assignments.incomplete.each do |assignment| 
+      = render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
+  = link_to(t(:tweet_this), "http://twitter.com/share", {:class =>"twitter-share-button", 'data-count' => 'vertical', 'data-via' =>"fixmytransport"})
+  %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
+  
+  - if current_user && current_user.campaigns.include?(@campaign)
+    = t(:you_support_this_campaign)
+    - form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f|
+      != hidden_field_tag "user_id", current_user.id
+      != submit_tag t(:leave_this_campaign)
+  - else
+    - form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST' } do |f|
+      - if current_user
+        != hidden_field_tag "user_id", current_user.id
+        != submit_tag t(:join_this_campaign)
+      - else
+        .form-field
+          != label_tag :email, t(:enter_your_email_to_join)
+          != text_field_tag :email
+        != submit_tag t(:join)

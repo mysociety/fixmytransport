@@ -1,3 +1,5 @@
 en:
   subject: Subject
   no_body:  "[ Email has no body, please see attachments ]"
+  what_does_this_mean: What does this message mean for your campaign? 
+  add_update: "Add update"

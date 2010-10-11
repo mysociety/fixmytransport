@@ -318,6 +318,68 @@ describe CampaignsController do
 
   end
   
+  shared_examples_for "an action that requires the campaign initiator" do 
+  
+    describe 'when the current user is not the campaign initiator' do
+
+      before do 
+        @campaign_user = mock_model(User, :name => "Campaign User")
+        @mock_campaign = mock_model(Campaign, :initiator => @campaign_user,
+                                              :confirmed => true)
+        Campaign.stub!(:find).and_return(@mock_campaign)
+      end
+            
+      it 'should redirect to the login page with a message' do 
+        controller.stub!(:current_user).and_return(mock_model(User))
+        make_request({:id => 55})
+        response.should redirect_to(login_url)
+        flash[:notice].should == "Login as Campaign User to edit this campaign"
+      end
+      
+    end
+  end  
+
+  describe 'POST #add_update' do 
+
+    before do 
+      @user = mock_model(User, :id => 55)
+      @controller.stub!(:current_user).and_return(@user)
+      @mock_update = mock_model(CampaignUpdate, :save => true)
+      @mock_updates = mock('campaign updates', :build => @mock_update)
+      @mock_campaign = mock_model(Campaign, :supporters => [], 
+                                            :title => 'A test title',
+                                            :confirmed => true,
+                                            :add_supporter => true,
+                                            :campaign_updates => @mock_updates, 
+                                            :initiator => @user)
+      Campaign.stub!(:find).and_return(@mock_campaign)
+    end
+    
+    def make_request(params)
+      post :add_update, params
+    end
+    
+    it_should_behave_like "an action that requires the campaign initiator"
+    
+    it 'should redirect to the campaign url' do 
+      make_request(:id => 55)
+      response.should redirect_to(campaign_url(@mock_campaign))
+    end
+    
+    it 'should try and save the new campaign update' do 
+      @mock_updates.should_receive(:build).and_return(@mock_update)
+      @mock_update.should_receive(:save).and_return(true)
+      make_request(:id => 55)
+    end
+    
+    it 'should display a notice if the new update was successfully saved' do 
+      @mock_update.stub!(:save).and_return(true)
+      make_request(:id => 55)
+      flash[:notice].should == 'Your update has been added.'
+    end
+    
+  end
+
   describe 'POST #join' do
     
     before do 

@@ -1,0 +1,5 @@
+.campaign-event
+  %span.date= short_date(update.created_at)
+  %span.general-campaign-update
+    != t(:user_says, :name => update.user.name)
+    != update.text

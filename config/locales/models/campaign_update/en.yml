@@ -1,0 +1,9 @@
+en:
+  activerecord:
+    errors:
+      models:
+        campaign_update:
+          attributes: 
+            text:
+              blank: "Please enter an update"
+  
