@@ -10,7 +10,7 @@ class Campaign < ActiveRecord::Base
   after_create :add_default_assignment
   validates_presence_of :title, :description, :on => :update
   validates_presence_of :subdomain, :on => :update
-  validates_format_of :subdomain, :with => /^[a-zA-Z0-9]+[a-zA-Z0-9]*$/, 
+  validates_format_of :subdomain, :with => /^[a-z0-9]+[a-z0-9]*$/, 
                                   :on => :update, 
                                   :allow_nil => true,
                                   :message => :only_letters_and_numbers
@@ -65,7 +65,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def to_param
-    subdomain ? subdomain : id.to_s
+    (subdomain && !subdomain_changed?) ? subdomain : id.to_s
   end
   
   def domain  

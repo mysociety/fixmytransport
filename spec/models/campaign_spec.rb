@@ -60,7 +60,13 @@ describe Campaign do
     it 'should be invalid if the subdomain contains non alphanumeric characters' do
       @campaign.subdomain = '%testtest'
       @campaign.valid?
-      @campaign.errors.on(:subdomain).should == 'The short name can only contain letters and numbers'
+      @campaign.errors.on(:subdomain).should == 'The short name can only contain lowercase letters and numbers'
+    end
+    
+    it 'should be invalid if it contains uppercase letters' do 
+      @campaign.subdomain = 'TESTtest'
+      @campaign.valid? 
+      @campaign.errors.on(:subdomain).should == 'The short name can only contain lowercase letters and numbers'
     end
   
   end
