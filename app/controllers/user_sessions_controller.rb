@@ -3,6 +3,9 @@ class UserSessionsController < ApplicationController
   before_filter :require_user, :only => :destroy
 
   def new
+    if params[:redirect] and params[:redirect].starts_with('/')
+      session[:return_to] = params[:redirect]
+    end
     @user_session = UserSession.new
   end
 
