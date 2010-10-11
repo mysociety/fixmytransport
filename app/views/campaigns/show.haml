@@ -2,6 +2,8 @@
   #map-col
     = render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [] }
 .campaign-info
+  = link_to(t(:tweet_this), "http://twitter.com/share", {:class =>"twitter-share-button", 'data-count' => 'vertical', 'data-via' =>"fixmytransport"})
+  %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
   %h2= @campaign.title
   .details
     = t(:started_on, :date => @campaign.created_at.strftime("%d/%m/%Y"))
@@ -10,6 +12,10 @@
   %p.campaign= @campaign.description
   - if current_user && current_user == @campaign.initiator
     = render :partial => 'update_form'
+  - if !@campaign.problem.assignments.incomplete.empty? 
+    %h3= t(:next_steps)
+    - @campaign.problem.assignments.incomplete.each do |assignment| 
+      = render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
   %h3= t(:latest_news)
   - @campaign.events.each do |event|
     - if event.is_a?(Assignment)
@@ -18,13 +24,6 @@
       = render :partial => 'campaign_update', :locals => { :update => event }
     - else
       = render :partial => 'incoming_message', :locals => { :message => event }
-  - if !@campaign.problem.assignments.incomplete.empty? 
-    %h3= t(:next_steps)
-    - @campaign.problem.assignments.incomplete.each do |assignment| 
-      = render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
-  = link_to(t(:tweet_this), "http://twitter.com/share", {:class =>"twitter-share-button", 'data-count' => 'vertical', 'data-via' =>"fixmytransport"})
-  %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
-  
   - if current_user && current_user.campaigns.include?(@campaign)
     = t(:you_support_this_campaign)
     - form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f|

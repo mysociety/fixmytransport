@@ -421,6 +421,9 @@ form.update_campaign label {
 form.update_campaign .label-note { 
   font-size: 0.8em;
 }
+.twitter-share-button {
+  float: right;
+}
 
 /* Adding a campaign update */
 form.new_campaign_update label {
