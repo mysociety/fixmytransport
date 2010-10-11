@@ -3,3 +3,5 @@ en:
   no_body:  "[ Email has no body, please see attachments ]"
   what_does_this_mean: What does this message mean for your campaign? 
   add_update: "Add update"
+  login_as: "Login as {{user}}"
+  login_to_add_update: "{{link}} to add an update about this message to \"{{campaign}}\""

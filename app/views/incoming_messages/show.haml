@@ -19,3 +19,5 @@
         != f.hidden_field :user_id
         !=f.text_area :text, :cols => 40, :rows => 5
         !=f.submit t(:add_update)
+- else 
+  != t(:login_to_add_update, :link => link_to(t(:login_as, :user => @incoming_message.campaign.initiator.name), login_url), :campaign => @incoming_message.campaign.title)
