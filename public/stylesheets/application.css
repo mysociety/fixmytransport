@@ -10,9 +10,9 @@ body {
     margin: 0 0 0.5em 0;
     background: #000000;
     color: white;
-    padding: 0.5em 0.5em 0.5em 120px;    
+    padding: 0.5em 0.5em 0.5em 0.5em;    
     position: relative;
-    height: 60px;
+    height: 30px;
 }
 #site-header a{
     color: white;
@@ -23,19 +23,17 @@ body {
 }
 h1 {
     font-weight: bold;
-    letter-spacing: 2px;
     width: 100%;
     font-size: 30px;
-    font-variant: small-caps;
     padding: 0;
-    line-height: 60px;
+    line-height: 30px;
     margin: 0 1em 0 0;
     float: left;
     width: auto;
 }
 #site-tagline{
-    line-height: 60px;
-    font-style: italic;
+    line-height: 40px;
+    font-style: bold;
     color: #dedede;
 }
 
