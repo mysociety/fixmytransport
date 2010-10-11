@@ -8,6 +8,7 @@
       != t(:got_important_message, :link => link_to(message.subject, incoming_message_path(message)), :sender => message.from)
       - message.campaign_updates.each do |update|
         .message-campaign-update
+          %span.date= short_date(update.created_at)
           != t(:user_says, :name => update.user.name)
           != update.text
   

@@ -1,12 +1,15 @@
 require 'spec_helper'
 
-describe IncomingMessageController do
+describe IncomingMessagesController do
   
   describe 'GET #show' do
     
     before do 
       @campaign_user = mock_model(User)
-      @mock_campaign = mock_model(Campaign, :initiator => @campaign_user)
+      @mock_campaign = mock_model(Campaign, :initiator => @campaign_user, 
+                                            :confirmed? => true)
+      @mock_incoming_message = mock_model(IncomingMessage, :campaign => @mock_campaign)
+      IncomingMessage.stub!(:find).and_return(@mock_incoming_message)
     end
     
     def make_request(params)
@@ -29,7 +32,7 @@ describe IncomingMessageController do
     describe 'if the current user is not the campaign initiator' do
     
       it 'should not create a campaign update' do 
-        CampaignUpdate.should_not_reveive(:new)
+        CampaignUpdate.should_not_receive(:new)
         make_request(:id => 55)
       end
       
