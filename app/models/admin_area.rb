@@ -20,6 +20,7 @@
 #
 
 class AdminArea < ActiveRecord::Base
+  
   belongs_to :region
   has_friendly_id :short_name, :use_slug => true
   
