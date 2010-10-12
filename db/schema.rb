@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(:version => 20101007090303) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  
+
   create_table "campaigns", :force => true do |t|
     t.integer  "location_id"
     t.string   "location_type"
