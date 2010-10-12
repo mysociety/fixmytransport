@@ -37,6 +37,13 @@ h1 {
     color: #dedede;
 }
 
+.staging-banner {
+  padding: 5px;
+  margin: 5px;
+  background-color: #FFE973;
+  border: 1px solid #FFD700;
+  text-align: center;
+}
 
 h2 {
   margin: 0.5em 0;

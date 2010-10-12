@@ -15,6 +15,9 @@
     #site-header
       %h1= link_to_unless_current(t(:site_name), root_url) 
       #site-tagline= t(:site_tagline)
+    - if MySociety::Config.getbool('STAGING_SITE', true)
+      .staging-banner
+        =t(:development_site)
     - [:notice, :error, :message].each do |key| 
       - unless flash[key].blank? 
         %p{ :class => "flash flash_#{key}" }!= flash[key]
