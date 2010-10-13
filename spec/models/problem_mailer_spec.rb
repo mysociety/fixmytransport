@@ -50,13 +50,14 @@ describe ProblemMailer do
                                           :campaign => nil,
                                           :subject => "Missing ticket machines", 
                                           :description => "Desperately need more.",
+                                          :emailable_organizations => [@mock_operator],
                                           :location => stops(:victoria_station_one))
     end
    
     describe "when creating a problem report" do
 
       it "should render successfully" do
-        lambda { ProblemMailer.create_report(@mock_problem, [@mock_operator.email], [@mock_operator]) }.should_not raise_error
+        lambda { ProblemMailer.create_report(@mock_problem, [@mock_operator]) }.should_not raise_error
       end
       
     end
@@ -64,7 +65,7 @@ describe ProblemMailer do
     describe 'when delivering a problem report' do 
     
       before do 
-        @mailer = ProblemMailer.create_report(@mock_problem, [@mock_operator.email], [@mock_operator])
+        @mailer = ProblemMailer.create_report(@mock_problem, [@mock_operator])
       end
       
       it 'should deliver successfully' do
@@ -180,12 +181,12 @@ describe ProblemMailer do
     end
     
     it 'should send a report email for a problem which has an operator email' do
-      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_operator,[@operator_with_mail.email],[@operator_with_mail], [])
+      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_operator, [@operator_with_mail], [])
       ProblemMailer.send_reports
     end  
     
     it 'should send a report for a problem with a PTE with an email address' do 
-      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_pte, [@pte_with_mail.email], [@pte_with_mail], [])
+      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_pte, [@pte_with_mail], [])
       ProblemMailer.send_reports
     end
     
@@ -193,7 +194,6 @@ describe ProblemMailer do
       Council.stub!(:from_hash).and_return(@unemailable_council)
       Council.stub!(:from_hash).with({ 'name' => 'Emailable council' }).and_return(@emailable_council)
       ProblemMailer.should_receive(:deliver_report).with(@mock_problem_some_council_mails, 
-                                                         ['council@example.com'],
                                                          [@emailable_council], 
                                                          [@unemailable_council])
       ProblemMailer.send_reports

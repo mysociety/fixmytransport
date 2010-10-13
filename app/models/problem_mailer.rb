@@ -26,7 +26,8 @@ class ProblemMailer < ActionMailer::Base
     body :message => email_params[:message], :name => email_params[:name]
   end
   
-  def report(problem, recipient_emails, recipient_models, missing_recipient_models=[])
+  def report(problem, recipient_models, missing_recipient_models=[])
+    recipient_emails = ProblemMailer.get_report_recipients(problem)
     recipients recipient_emails + [MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')]
     from problem.reply_email
     subject "Problem Report: #{problem.subject}" 
@@ -39,13 +40,13 @@ class ProblemMailer < ActionMailer::Base
            :missing_recipient_models => missing_recipient_models })
   end
   
-  def self.send_report(problem, recipient_emails, recipients, missing_recipients=[])
+  def self.send_report(problem, recipients, missing_recipients=[])
     if self.dryrun
       STDERR.puts("Would send the following:")
-      mail = create_report(problem, recipient_emails, recipients, missing_recipients)
+      mail = create_report(problem, recipients, missing_recipients)
       STDERR.puts(mail)
     else
-      deliver_report(problem, recipient_emails, recipients, missing_recipients)
+      deliver_report(problem, recipients, missing_recipients)
       problem.update_attribute(:sent_at, Time.now)
     end
     self.sent_count += 1
@@ -93,8 +94,7 @@ class ProblemMailer < ActionMailer::Base
       check_for_council_change(problem)
       
       if !problem.emailable_organizations.empty?
-        recipient_emails = get_report_recipients(problem)
-        send_report(problem, recipient_emails, problem.emailable_organizations, problem.unemailable_organizations)
+        send_report(problem, problem.emailable_organizations, problem.unemailable_organizations)
       end
       
       problem.unemailable_organizations.each do |organization|
