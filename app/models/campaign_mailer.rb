@@ -22,9 +22,13 @@ class CampaignMailer < ActionMailer::Base
     addresses = (email.to || []) + (email.cc || [])
     addresses.each do |address|
       campaign = Campaign.find_by_campaign_email(address)
-      incoming_message = IncomingMessage.create_from_tmail(email, raw_email, campaign)
-      recipient = campaign.get_recipient(address)
-      CampaignMailer.deliver_new_message(recipient, incoming_message, campaign)
+      if campaign
+        incoming_message = IncomingMessage.create_from_tmail(email, raw_email, campaign)
+        recipient = campaign.get_recipient(address)
+        CampaignMailer.deliver_new_message(recipient, incoming_message, campaign)
+      else
+        logger.info "Undeliverable mail to #{address}"
+      end
     end
   end  
   
