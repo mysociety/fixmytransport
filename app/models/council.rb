@@ -16,7 +16,16 @@ class Council
     @emailable
   end
   
-  def self.get_council
+  # return the appropriate email address for a particular category of problem
+  def email_for_category(category)
+    contacts = CouncilContact.find(:all, :conditions => ['area_id = ?', self.id])
+    if category_contact = contacts.detect{ |contact| contact.category == category }
+      return category_contact.email
+    elsif other_contact = contacts.detect{ |contact| contact.category == 'Other' }
+      return other_contact.email
+    else
+      raise "No \"Other\" category contact for #{self.name}"
+    end
   end
 
 end

@@ -56,7 +56,7 @@ describe ProblemMailer do
     describe "when creating a problem report" do
 
       it "should render successfully" do
-        lambda { ProblemMailer.create_report(@mock_problem, [@mock_operator]) }.should_not raise_error
+        lambda { ProblemMailer.create_report(@mock_problem, [@mock_operator.email], [@mock_operator]) }.should_not raise_error
       end
       
     end
@@ -64,7 +64,7 @@ describe ProblemMailer do
     describe 'when delivering a problem report' do 
     
       before do 
-        @mailer = ProblemMailer.create_report(@mock_problem, [@mock_operator])
+        @mailer = ProblemMailer.create_report(@mock_problem, [@mock_operator.email], [@mock_operator])
       end
       
       it 'should deliver successfully' do
@@ -106,6 +106,7 @@ describe ProblemMailer do
                           :subject => 'A test problem',
                           :description => 'Some description',
                           :reporter => @reporter,
+                          :category => 'Other',
                           :location => mock_location, 
                           :campaign => nil)
     end
@@ -118,8 +119,9 @@ describe ProblemMailer do
       MySociety::MaPit.stub!(:call).and_return({ 22 => {'name' => 'Unemailable council'}, 
                                                  44 => {'name' => 'Emailable council'}})
                                                  
-      @emailable_council = mock_model(Council, :name => 'Emailable council', 
-                                               :email => 'council@example.com')
+      @emailable_council = mock_model(Council, :name => 'Emailable council')
+      @emailable_council.stub!(:email_for_category).and_return('council@example.com')
+      
       @unemailable_council = mock_model(Council, :name => 'Unemailable council')
       
       @operator_with_mail = mock_model(Operator, :email => 'operator@example.com', 
@@ -178,12 +180,12 @@ describe ProblemMailer do
     end
     
     it 'should send a report email for a problem which has an operator email' do
-      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_operator, [@operator_with_mail], [])
+      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_operator,[@operator_with_mail.email],[@operator_with_mail], [])
       ProblemMailer.send_reports
     end  
     
     it 'should send a report for a problem with a PTE with an email address' do 
-      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_pte, [@pte_with_mail], [])
+      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_pte, [@pte_with_mail.email], [@pte_with_mail], [])
       ProblemMailer.send_reports
     end
     
@@ -191,13 +193,14 @@ describe ProblemMailer do
       Council.stub!(:from_hash).and_return(@unemailable_council)
       Council.stub!(:from_hash).with({ 'name' => 'Emailable council' }).and_return(@emailable_council)
       ProblemMailer.should_receive(:deliver_report).with(@mock_problem_some_council_mails, 
+                                                         ['council@example.com'],
                                                          [@emailable_council], 
                                                          [@unemailable_council])
       ProblemMailer.send_reports
     end
     
-    it "shouldn't send a report email for a problem which has an operator email but is associated with a campaign with no title" do
-      mock_campaign = mock_model(Campaign, :title => nil)
+    it "shouldn't send a report email for a problem which has an operator email but is associated with a campaign with no subdomain" do
+      mock_campaign = mock_model(Campaign, :subdomain => nil)
       @mock_problem_email_operator.stub!(:campaign).and_return(mock_campaign)
       ProblemMailer.should_not_receive(:deliver_report).with(@mock_problem_email_operator, [@operator_with_mail], [])
       ProblemMailer.send_reports

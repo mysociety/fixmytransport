@@ -26,8 +26,8 @@ class ProblemMailer < ActionMailer::Base
     body :message => email_params[:message], :name => email_params[:name]
   end
   
-  def report(problem, recipient_models, missing_recipient_models=[])
-    recipients recipient_models.map{ |recipient| recipient.email } + [MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')]
+  def report(problem, recipient_emails, recipient_models, missing_recipient_models=[])
+    recipients recipient_emails + [MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')]
     from problem.reply_email
     subject "Problem Report: #{problem.subject}" 
     campaign_link = problem.campaign ? main_url(campaign_path(problem.campaign)) : nil
@@ -39,13 +39,13 @@ class ProblemMailer < ActionMailer::Base
            :missing_recipient_models => missing_recipient_models })
   end
   
-  def self.send_report(problem, recipients, missing_recipients=[])
+  def self.send_report(problem, recipient_emails, recipients, missing_recipients=[])
     if self.dryrun
       STDERR.puts("Would send the following:")
-      mail = create_report(problem, recipients, missing_recipients)
+      mail = create_report(problem, recipient_emails, recipients, missing_recipients)
       STDERR.puts(mail)
     else
-      deliver_report(problem, recipients, missing_recipients)
+      deliver_report(problem, recipient_emails, recipients, missing_recipients)
       problem.update_attribute(:sent_at, Time.now)
     end
     self.sent_count += 1
@@ -57,6 +57,18 @@ class ProblemMailer < ActionMailer::Base
         STDERR.puts "Councils changed for problem #{problem.id}. Was #{problem.council_info}, now #{problem.location.council_info}"
       end
     end
+  end
+  
+  def self.get_report_recipients(problem)
+    recipients = []
+    problem.emailable_organizations.each do |emailable_organization|
+      if emailable_organization.is_a?(Council)
+        recipients << emailable_organization.email_for_category(problem.category)
+      else
+        recipients << emailable_organization.email
+      end
+    end
+    recipients
   end
   
   def self.send_reports(dryrun=false)
@@ -74,13 +86,15 @@ class ProblemMailer < ActionMailer::Base
                        :operator => {} }
     self.sent_count = 0
     Problem.sendable.each do |problem|
+
+      # if campaign mail, wait until the campaign has a subdomain
+      next if problem.campaign and !problem.campaign.subdomain
       
       check_for_council_change(problem)
-      # if campaign mail, wait until the campaign has a title and therefore an email address
-      next if problem.campaign and !problem.campaign.title
       
       if !problem.emailable_organizations.empty?
-        send_report(problem, problem.emailable_organizations, problem.unemailable_organizations)
+        recipient_emails = get_report_recipients(problem)
+        send_report(problem, recipient_emails, problem.emailable_organizations, problem.unemailable_organizations)
       end
       
       problem.unemailable_organizations.each do |organization|
