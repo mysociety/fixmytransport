@@ -168,17 +168,35 @@ module ApplicationHelper
   def on_or_at_the(location)
     if location.is_a? Route
       return t(:on_the)
+    elsif location.is_a?(StopArea) && ['GRLS', 'GTMU'].include?(location.area_type)
+      return t(:at)
     else 
       return t(:at_the)
     end
+  end
+  
+  def at_the_location(location)
+    location_string = "#{on_or_at_the(location)} #{location.name}"
+    if location.is_a?(Stop) && location.transport_mode_names.include?('Bus')
+      location_string += " bus/tram stop"
+    end
+    location_string
   end
   
   def readable_location_type(location)
     if location.is_a? Stop or location.is_a? StopArea
       transport_mode_names = location.transport_mode_names
       # some stops could be bus or tram/metro - call these stops
+      if location.is_a?(StopArea) 
+        if location.area_type == 'GBCS'
+          return 'bus/coach station'
+        end
+      end
       if transport_mode_names.include? 'Train' or transport_mode_names == ['Tram/Metro']
         return "station"
+      end
+      if transport_mode_names.include? 'Bus'
+        return "stop"
       end
     end
     if location.is_a? TramMetroRoute

@@ -111,6 +111,10 @@ class Route < ActiveRecord::Base
    def short_name
      name(from_stop=nil, short=true)
    end
+   
+   def full_name
+     "#{name} route" 
+   end
 
    def name(from_stop=nil, short=false)
      return self[:name] if !self[:name].blank?
