@@ -207,7 +207,7 @@ describe ProblemsController do
     it 'should set the "write-to-transport-organization" assignment associated with this user and problem as complete if ' do 
       @mock_problem.stub!(:emailable_organizations).and_return([mock_model(Operator)])
       @mock_problem.stub!(:organization_info).and_return({ :data => 'data' })
-      assignment_data ={ 'write-to-transport-organization' => { :data => 'data' } }
+      assignment_data ={ 'write-to-transport-organization' => { :organizations => {:data => 'data'} } }
       Assignment.should_receive(:complete_problem_assignments).with(@mock_problem, assignment_data)
       make_request
     end
