@@ -8,7 +8,6 @@ class Campaign < ActiveRecord::Base
   has_one :problem
   has_many :incoming_messages
   has_many :campaign_updates
-  after_create :add_default_assignment
   validates_presence_of :title, :description, :on => :update
   validates_presence_of :subdomain, :on => :update
   validates_format_of :subdomain, :with => /^[a-z0-9]+[a-z0-9]*$/, 
@@ -36,14 +35,6 @@ class Campaign < ActiveRecord::Base
                3 => 'Hidden' })
 
   # instance methods
-
-  def add_default_assignment
-    self.assignments.create(:user_id => initiator.id, :task_type_name => 'write-to-transport-operator')
-  end
-  
-  def default_assignment
-    self.assignments.first
-  end
   
   def supporter_count
     campaign_supporters.confirmed.count

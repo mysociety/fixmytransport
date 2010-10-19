@@ -64,8 +64,11 @@ class ProblemsController < ApplicationController
       @problem.update_attributes(:status => :confirmed,  
                                  :confirmed_at => Time.now)
       # complete the relevant assignments
-      Assignment.complete_problem_assignments(@problem, {'write-to-transport-organization' => {}, 
-                                                         'publish-problem' => {}})
+      Assignment.complete_problem_assignments(@problem, {'publish-problem' => {}})
+      if !@problem.emailable_organizations.empty?
+        data = {:organizations => @problem.organization_info(:emailable_organizations) }
+        Assignment.complete_problem_assignments(@problem, {'write-to-transport-organization' => data })
+      end
       if @problem.campaign
         redirect_to edit_campaign_url(@problem.campaign, :token => params[:email_token])
       end

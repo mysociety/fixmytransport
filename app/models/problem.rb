@@ -98,7 +98,7 @@ class Problem < ActiveRecord::Base
                             :data => {} }
       assignment_types << { :name => 'write-to-transport-organization', 
                             :status => :in_progress, 
-                            :data => {:organizations => organization_info(:emailable_organizations) }}
+                            :data => {:organizations => organization_info(:responsible_organizations) }}
       if !responsible_organizations.empty? 
         if unemailable_organizations.size > 0
           assignment_types << { :name => 'find-transport-organization-contact-details', 

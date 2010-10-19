@@ -178,6 +178,7 @@ describe ProblemsController do
       @mock_problem = mock_model(Problem, :update_attributes => true, 
                                           :assignments => [@mock_assignment],
                                           :emailable_organization_info => [],
+                                          :emailable_organizations => [], 
                                           :campaign => nil)
       Problem.stub!(:find_by_token).and_return(@mock_problem)
       Assignment.stub!(:complete_problem_assignments)
@@ -197,10 +198,25 @@ describe ProblemsController do
       make_request
     end
 
-    it 'should set the "write-to-transport-organization" and the "publish-problem" assignments associated with this user and problem as complete' do 
-      assignment_data =  { 'write-to-transport-organization' => {}, 
-                           'publish-problem' => {} }
+    it 'should set the "publish-problem" assignments associated with this user and problem as complete' do 
+      assignment_data =  { 'publish-problem' => {} }
       Assignment.should_receive(:complete_problem_assignments).with(@mock_problem, assignment_data)
+      make_request
+    end
+    
+    it 'should set the "write-to-transport-organization" assignment associated with this user and problem as complete if ' do 
+      @mock_problem.stub!(:emailable_organizations).and_return([mock_model(Operator)])
+      @mock_problem.stub!(:organization_info).and_return({ :data => 'data' })
+      assignment_data ={ 'write-to-transport-organization' => { :data => 'data' } }
+      Assignment.should_receive(:complete_problem_assignments).with(@mock_problem, assignment_data)
+      make_request
+    end
+    
+    it 'should not get the "write-to-transport-organization" assignment associated with this user and problem as complete if there are no emailable organizations' do 
+      @mock_problem.stub!(:emailable_organizations).and_return([])
+      @mock_problem.stub!(:organization_info).and_return({ :data => 'data' })
+      assignment_data ={ 'write-to-transport-organization' => { :data => 'data' } }
+      Assignment.should_not_receive(:complete_problem_assignments).with(@mock_problem, hash_including({'write-to-transport-organization'=> { :data => 'data' } }))
       make_request
     end
     

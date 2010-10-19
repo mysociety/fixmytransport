@@ -27,7 +27,6 @@ describe CampaignsController do
       mock_assignment = mock_model(Assignment, :task_type_name => 'A test task')
       @campaign = mock_model(Campaign, :id => 8, 
                                        :title => 'A test campaign',
-                                       :default_assignment => mock_assignment,
                                        :initiator_id => 44, 
                                        :confirmed => true,
                                        :location => mock_model(Stop, :points => [mock("point", :lat => 51, :lon => 0)]))
