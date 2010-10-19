@@ -92,5 +92,5 @@ ActionMailer::Base.default_url_options[:host] = MySociety::Config.get("DOMAIN", 
 
 # settings for exception notification
 ExceptionNotification::Notifier.exception_recipients = MySociety::Config.get("BUGS_EMAIL", "")
-ExceptionNotification::Notifier.sender_address = %("FixMyTransport" <#{MySociety::Config.get("BUGS_EMAIL", "")}>)
+ExceptionNotification::Notifier.sender_address = [MySociety::Config.get("BUGS_EMAIL", "")]
 ExceptionNotification::Notifier.email_prefix = "[FixMyTransport] "
