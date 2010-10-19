@@ -47,6 +47,11 @@ Location ATCO code: <%= raw @problem.location.atco_code %>
 Plate code: <%= raw @problem.location.plate_code %>
 
 <%- end %>
+<%- if @problem.location.is_a? Stop and !@problem.location.naptan_code.blank? %>
+NaPTAN code: <%= raw @problem.location.naptan_code %>
+
+<%- end %>
+
 <%- if @problem.location.is_a? Stop and !@problem.location.landmark.blank? %>
 Landmark: <%= raw @problem.location.landmark %>
 
