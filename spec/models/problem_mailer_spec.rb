@@ -95,7 +95,16 @@ describe ProblemMailer do
     def make_mock_problem(emailable_orgs, unemailable_orgs)
       mock_location = mock_model(Stop, :name => 'A test stop',
                                        :atco_code => 'abc', 
-                                       :plate_code => 'def')
+                                       :plate_code => 'def', 
+                                       :naptan_code => nil, 
+                                       :landmark => nil, 
+                                       :street => nil, 
+                                       :crossing => nil, 
+                                       :indicator => nil, 
+                                       :bearing => nil, 
+                                       :easting => 444.44, 
+                                       :northing => 555.55,
+                                       :transport_mode_names => ['Bus', 'Tram/Metro'])
       mock_model(Problem, :responsible_organizations => emailable_orgs + unemailable_orgs,
                           :emailable_organizations => emailable_orgs,
                           :unemailable_organizations => unemailable_orgs,
@@ -117,6 +126,7 @@ describe ProblemMailer do
                                    :email => 'john@example.com', 
                                    :phone => nil)
       MySociety::Config.stub!(:getbool).with("STAGING_SITE", true).and_return(false)
+      MySociety::Config.stub!(:getbool).with("SITE_VISIBLE", true).and_return(true)
       MySociety::MaPit.stub!(:call).and_return({ 22 => {'name' => 'Unemailable council'}, 
                                                  44 => {'name' => 'Emailable council'}})
                                                  
