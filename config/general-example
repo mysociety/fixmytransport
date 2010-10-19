@@ -62,4 +62,6 @@ define('OPTION_MAIL_CONF_LIVE_DIR', '/my/live/conf/dir');
 define('OPTION_INCOMING_EMAIL_LOCAL_USER', 'fmt');
 define('OPTION_MAILSERVERS', 'email_one|email_two');
 
+// Is the site currently visible? 
+define('OPTION_SITE_VISIBLE', 1);
 ?>
