@@ -44,11 +44,11 @@ Location ATCO code: <%= raw @problem.location.atco_code %>
 
 <%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.plate_code.blank? %>
-Plate code: <%= raw @problem.location.plate_code %>
+Location plate code: <%= raw @problem.location.plate_code %>
 
 <%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.naptan_code.blank? %>
-NaPTAN code: <%= raw @problem.location.naptan_code %>
+Location NaPTAN code: <%= raw @problem.location.naptan_code %>
 
 <%- end %>
 

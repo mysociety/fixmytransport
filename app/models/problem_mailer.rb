@@ -28,7 +28,7 @@ class ProblemMailer < ActionMailer::Base
   
   def report(problem, recipient_models, missing_recipient_models=[])
     recipient_emails = ProblemMailer.get_report_recipients(problem)
-    recipients recipient_emails + [MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')]
+    recipients recipient_emails
     from problem.reply_email
     subject "Problem Report: #{problem.subject}" 
     campaign_link = problem.campaign ? main_url(campaign_path(problem.campaign)) : nil
