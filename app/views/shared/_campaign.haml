@@ -1,6 +1,6 @@
 %a{:name => "campaign_#{campaign.id}"}
 .campaign
-  %h4.title= campaign.title 
+  %h4.title= link_to(campaign.title, campaign_url(campaign)) 
   .details
     =t(:added)
     %span.posted-time= t(:posted_time, :time => time_ago_in_words(campaign.created_at))

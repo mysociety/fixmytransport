@@ -1,6 +1,6 @@
 %a{:name => "problem_#{problem.id}"}
 .problem
-  %h4.subject= problem.subject 
+  %h4.subject= link_to(problem.subject, problem_url(problem)) 
   .details
     =t(:added)
     %span.posted-time= t(:posted_time, :time => time_ago_in_words(problem.created_at))
