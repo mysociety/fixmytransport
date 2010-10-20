@@ -43,7 +43,7 @@ module ApplicationHelper
     unless options[:no_jquery]
       tags << javascript_include_tag('jquery-1.4.2.min.js')
     end
-    tags << javascript_include_tag('http://openlayers.org/api/OpenLayers.js')
+    tags << javascript_include_tag('OpenLayers.js')
     tags << "<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=#{google_maps_key}\" type=\"text/javascript\"></script>"
     tags << javascript_include_tag('map.js')
     tags.join("\n")

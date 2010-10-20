@@ -16,3 +16,5 @@ data/NPTDR/
 data/mail_conf
 cache/*
 public/index.html
+moo.txt
+rdoc
