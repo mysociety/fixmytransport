@@ -154,28 +154,37 @@ namespace :naptan do
       end  
     end
     
-    desc "Converts stop area coords from OS OSGB36 6-digit eastings and northings to WGS-84 lat/lons and saves the result on the model"
-    task :convert_stop_areas => :environment do 
+    def convert_coords(class_name, task_name)
       spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
       adapter = ActiveRecord::Base.configurations[RAILS_ENV]['adapter']
       if ! spatial_extensions or ! adapter == 'postgresql'
-        usage_message 'rake naptan:geo:convert_stop_areas requires PostgreSQL with PostGIS'
+        usage_message "rake naptan:geo:#{task_name} requires PostgreSQL with PostGIS"
       end
-      StopArea.find_each do |stop_area|
+      class_name.constantize.find_each do |instance|
         conn = ActiveRecord::Base.connection
         lon_lats = conn.execute("SELECT st_X(st_transform(coords,#{WGS_84})) as lon, 
                                         st_Y(st_transform(coords,#{WGS_84})) as lat 
-                                 FROM stop_areas 
-                                 WHERE id = #{stop_area.id}")
+                                 FROM #{class_name.tableize} 
+                                 WHERE id = #{instance.id}")
         lon_lat = lon_lats[0]
         if lon_lat.is_a? Hash
-          stop_area.lon = lon_lat["lon"]
-          stop_area.lat = lon_lat["lat"]
+          instance.lon = lon_lat["lon"]
+          instance.lat = lon_lat["lat"]
         else  
-          stop_area.lon, stop_area.lat = lon_lat
+          instance.lon, instance.lat = lon_lat
         end
-        stop_area.save!
+        instance.save!
       end
+    end
+    
+    desc "Converts stop area coords from OS OSGB36 6-digit eastings and northings to WGS-84 lat/lons and saves the result on the model"
+    task :convert_stop_areas => :environment do 
+      convert_coords("StopArea", "convert_stop_areas")
+    end
+    
+    desc "Converts locality coords from OS OSGB36 6-digit eastings and northings to WGS-84 lat/lons and saves the result on the model"
+    task :convert_localities => :environment do 
+      convert_coords("Locality", "convert_localities")
     end
   end
   
