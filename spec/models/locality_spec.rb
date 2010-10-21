@@ -55,7 +55,7 @@ describe Locality do
     describe 'when a name with a comma is given' do 
     
       it 'should search for a locality with name and qualifier' do 
-        expected_conditions = ['LOWER(name) = ? and LOWER(qualifier_name = ?)', 'euston', 'london']
+        expected_conditions = ['LOWER(name) = ? AND LOWER(qualifier_name) = ?', 'euston', 'london']
         Locality.should_receive(:find).with(:all, :conditions => expected_conditions)
         Locality.find_by_lower_name('Euston, London')
       end
