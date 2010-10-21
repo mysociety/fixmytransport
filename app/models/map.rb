@@ -93,7 +93,11 @@ class Map
     return MAX_VISIBLE_ZOOM - 1 if diff == 0
     diff_over_width = diff / MAP_WIDTH_IN_PX
     zoom = MAX_ZOOM_LEVEL - (Math::log(diff_over_width) / Math::log(2)).ceil 
+    if zoom > MAX_VISIBLE_ZOOM
+      zoom = MAX_VISIBLE_ZOOM
     end
+    zoom
+  end
   
   def self.google_tile_url(lat, lon, zoom)
     "http://maps.google.com/maps/api/staticmap?center=#{lat},#{lon}&zoom=#{zoom}&size=#{MAP_WIDTH_IN_PX}x#{MAP_WIDTH_IN_PX}&sensor=false"
