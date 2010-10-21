@@ -23,7 +23,6 @@ class ProblemsController < ApplicationController
   
   def frontpage
     @title = t(:get_problems_fixed)
-    @problem = Problem.new()
   end
   
   def create
@@ -77,7 +76,7 @@ class ProblemsController < ApplicationController
     end
   end
   
-  def confirm_update
+  def confirm_update  
     @update = Update.find_by_token(params[:email_token])
     if @update
       @update.confirm!
@@ -86,30 +85,50 @@ class ProblemsController < ApplicationController
     end
   end
   
-  def find
-    @location_search = LocationSearch.new_search!(session_id, params)
-    problem_attributes = { :location_attributes => { :name              => params[:name], 
-                                                     :route_number      => params[:route_number], 
-                                                     :area              => params[:area] },
-                           :location_search   => @location_search, 
-                           :transport_mode_id => params[:transport_mode_id] }
-    @problem = Problem.new(problem_attributes)
-    if !@problem.valid? 
-      @title = t :get_problems_fixed
-      render :frontpage
-    else
-      @problem.location_from_attributes
-      if @problem.locations.size == 1
-         redirect_to @template.location_url(@problem.locations.first)
-      elsif !@problem.locations.empty?
-        @problem.locations = @problem.locations.sort_by(&:name)
-        location_search.add_choice(@problem.locations)
-        map_params_from_location(@problem.locations, find_other_locations=false)
-        @title = t :multiple_locations
+  def find_stop
+    @title = t(:find_a_stop_or_station)
+    if params[:name]
+      stop_info = Gazetteer.place_from_name(params[:name])
+      # got back areas
+      if stop_info[:localities]
+        if stop_info[:localities].size > 1
+          @localities = stop_info[:localities]
+          render :choose_locality
+          return
+        else
+          map_params_from_location(stop_info[:localities], find_other_locations=true)
+          @locations = []
+          render :choose_location
+          return
+        end
+      # got back stops/stations
+      elsif stop_info[:locations]
+        map_params_from_location(stop_info[:locations], find_other_locations=true)
+        @locations = stop_info[:locations]
         render :choose_location
+        return
+      # got back postcode info
+      elsif stop_info[:postcode_info]
+        postcode_info = stop_info[:postcode_info]
+        if postcode_info[:error]
+          @error_message = t(:postcode_not_found)
+          render :find_stop
+          return
+        else
+          @lat = postcode_info[:lat]
+          @lon = postcode_info[:lon]
+          @zoom = postcode_info[:zoom]
+          @other_locations = Map.other_locations(@lat, @lon, @zoom)
+          @locations = []
+          @find_other_locations = true
+          render :choose_location
+          return
+        end
       else
-        @title = t :get_problems_fixed
-        render :frontpage
+        # didn't find anything
+        @error_message = t(:area_not_found)
+        render :find_stop
+        return
       end
     end
   end
