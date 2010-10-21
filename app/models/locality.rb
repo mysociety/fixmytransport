@@ -60,6 +60,24 @@ class Locality < ActiveRecord::Base
          :limit => limit)
   end
   
+  def self.find_by_lower_name(name)
+    name = name.downcase
+    name_parts = name.split(',', 2)
+    if name_parts.size == 2
+      name = name_parts.first.strip
+      qualifier_name = name_parts.second.strip
+    else
+      qualifier_name = nil
+    end
+    query_clause = "LOWER(name) = ?"
+    query_params = [ name ]
+    if qualifier_name
+      query_clause += " AND LOWER(qualifier_name) = ?"
+      query_params << qualifier_name
+    end
+    find(:all, :conditions => [query_clause] + query_params)
+  end
+  
   def self.find_all_by_name(name)
     localities = find_by_sql(['SELECT localities.* 
                                FROM localities 
