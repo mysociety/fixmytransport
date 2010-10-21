@@ -14,8 +14,8 @@ en:
   postcode_not_found: "That postcode wasn't recognized."
   area_not_found: "We couldn't find a town or area that matches what you entered."
   go: Go!
-  multiple_locations: "More than one match"
-  multiple_locations_intro: "We found more than one match for your description. We show up to {{num_locations}} matches, please try a different search if yours is not here."
+  multiple_localities: "We found more than one place matching \"{{name}}\". Please select one, or try a different search if yours is not here:"
+  multiple_locations_intro: "Choose a stop or station by clicking on it, or zoom in on an area to see other stops and stations."
   problem_not_found: "We couldn't locate your problem in the database. If you've copied the URL from an email, please check that you copied it exactly."
   is_this_a_campaign: Is this a campaign?
   posted_time: "{{time}} ago"

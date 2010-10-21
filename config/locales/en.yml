@@ -22,3 +22,8 @@ en:
   login_successful: "Login successful!"
   logout_successful: "Logout successful!"
   development_site: "This is a developer site; things might break at any time, and the database will be periodically deleted."
+  do_you_want_to_report: Do you want to report a problem at a
+  stop_or_station: Stop or station
+  or_on_a: or on a 
+  find_a_stop_or_station: Finding a stop or station
+  where_is_it: Where is it?

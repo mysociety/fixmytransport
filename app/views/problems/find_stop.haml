@@ -1,0 +1,10 @@
+%h2.main-header=t(:where_is_it)
+.problem-form-wrapper
+  - form_tag find_stop_problems_path, :id => 'stop_name_form', :method => 'GET' do 
+    - if @error_message
+      .form-field-error
+        = @error_message
+    #guidance-name{:class => 'guidance'} Enter an area, town or postcode
+    != text_field_tag 'name', params[:name], :size => 60
+    %input{:type => 'submit', :value => t(:go)}
+      
