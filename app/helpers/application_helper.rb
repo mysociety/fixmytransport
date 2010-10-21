@@ -250,6 +250,8 @@ module ApplicationHelper
    elsif location.is_a? StopArea
      if StopAreaType.station_types.include?(location.area_type)
        return station_url(location.locality, location, attributes)
+     elsif StopAreaType.bus_station_types.include?(location.area_type)
+       return bus_station_url(location.locality, location, attributes)
      elsif StopAreaType.ferry_terminal_types.include?(location.area_type)
        return ferry_terminal_url(location.locality, location, attributes)
      else

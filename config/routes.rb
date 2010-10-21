@@ -33,6 +33,11 @@ ActionController::Routing::Routes.draw do |map|
                                                   :type => :stop_area,
                                                   :conditions => { :method => :get }
   
+  map.bus_station "/bus-stations/:scope/:id.:format", :controller => "locations", 
+                                                      :action => 'show_stop_area', 
+                                                      :type => :bus_station,
+                                                      :conditions => { :method => :get }
+  
   map.station "/stations/:scope/:id.:format", :controller => "locations", 
                                               :action => 'show_stop_area', 
                                               :type => :station,

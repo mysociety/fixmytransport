@@ -3,7 +3,7 @@
 #map-col
   = render :partial => 'shared/map', :locals => { :locations => @stop_area.points, :other_locations => @other_locations }
   .extra-info
-    - if StopAreaType.primary_types.include? @stop_area.area_type
+    - if StopAreaType.atomic_types.include? @stop_area.area_type
       = render :partial => "shared/route_list", :locals => { :stop_or_station => @stop_area }
     - else
       The following stops are here: 
