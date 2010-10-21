@@ -60,7 +60,7 @@ class Locality < ActiveRecord::Base
          :limit => limit)
   end
   
-  def self.find_by_lower_name(name)
+  def self.find_all_by_lower_name(name)
     name = name.downcase
     name_parts = name.split(',', 2)
     if name_parts.size == 2

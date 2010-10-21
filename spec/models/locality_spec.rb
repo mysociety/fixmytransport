@@ -49,7 +49,7 @@ describe Locality do
     
     it 'should query for the name ignoring case' do 
       Locality.should_receive(:find).with(:all, :conditions => ['LOWER(name) = ?', 'london'])
-      Locality.find_by_lower_name('London')
+      Locality.find_all_by_lower_name('London')
     end
     
     describe 'when a name with a comma is given' do 
@@ -57,7 +57,7 @@ describe Locality do
       it 'should search for a locality with name and qualifier' do 
         expected_conditions = ['LOWER(name) = ? AND LOWER(qualifier_name) = ?', 'euston', 'london']
         Locality.should_receive(:find).with(:all, :conditions => expected_conditions)
-        Locality.find_by_lower_name('Euston, London')
+        Locality.find_all_by_lower_name('Euston, London')
       end
     end
   end
