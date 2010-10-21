@@ -30,14 +30,14 @@ function area_init() {
   map.addLayer(markers);
   addMarkerList(areaStops, markers, false);
   if (findOtherLocations == true) {
-    map.events.register('moveend', map, alertMoveEnd); 
+    map.events.register('moveend', map, updateLocations); 
   }
   centerCoords =  new OpenLayers.LonLat(lon, lat);
   centerCoords.transform(proj, map.getProjectionObject());
-  map.setCenter( centerCoords, zoom);
+  map.setCenter(centerCoords, zoom);
 }
 
-function alertMoveEnd(event) {
+function updateLocations(event) {
   center = map.getCenter();
   center = center.transform(map.getProjectionObject(), proj);
   OpenLayers.loadURL("/locations/" + map.getZoom() + "/" + center.lat + "/" + center.lon, {}, this, loadNewMarkers, markerFail);
