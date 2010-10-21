@@ -13,10 +13,51 @@ class Gazetteer
     postcode = postcode.gsub(/\s/, '')
     if MySociety::Validate.is_valid_postcode(postcode)
       return MySociety::MaPit.call('postcode', postcode)
-    else
+    elsif MySociety::Validate.is_valid_partial_postcode(postcode)
       return MySociety::MaPit.call('postcode', "partial/#{postcode}")
     end
+    return :not_postcode
+  end
+  
+  # Accepts a name, full or partial postcode. Will return a hash of coord info about a postcode,
+  # if a full or partial postcode is passed.
+  # Otherwise, a list of localities matching the area name if any do. If not, a list of stops or stations
+  # matching the name if any do. 
+  def self.place_from_name(name)
+    errors = []
+    # is it a postcode/partial postcode
+    coord_info = self.coords_from_postcode(name)
+    if ![:not_found, :bad_request, :not_postcode].include?(coord_info)
+      zoom = MySociety::Validate.is_valid_postcode(name) ? MAX_VISIBLE_ZOOM : MAX_VISIBLE_ZOOM - 1
+      return { :postcode_info => {:lat => coord_info['wgs84_lat'],
+                                  :lon => coord_info['wgs84_lon'],
+                                  :zoom => zoom }}
+    elsif [:not_found, :bad_request].include?(coord_info)
+      return { :postcode_info => {:error => coord_info }}
+    end
+    # is there an area with this name? 
+    name = name.downcase
+    localities = Locality.find_all_by_lower_name(name)
+    if !localities.empty?
+      return { :localities => localities }
+    end
+    # is there a stop/station with this name? 
+    stops = Stop.find(:all, :conditions => ['(lower(common_name) like ? 
+                                              OR lower(street) = ? 
+                                              OR naptan_code = ?)
+                                              AND stop_type in (?)',
+                                            name, name, name, StopType.primary_types] )
     
+    stations = StopArea.find(:all, :conditions => ["(lower(name) like ? 
+                                                    OR lower(name) like ? 
+                                                    OR lower(name) like ? 
+                                                    OR code = ?)
+                                                    AND area_type in (?)",
+                                            name, "#{name} %", "% #{name}", name, StopAreaType.primary_types])
+    if !stops.empty? or !stations.empty?
+      return { :locations => stops + stations }
+    end
+    return {}
   end
   
   # accepts attributes
