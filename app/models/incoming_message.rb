@@ -100,7 +100,14 @@ class IncomingMessage < ActiveRecord::Base
   # Converts email addresses we know about into textual descriptions of them
   def mask_special_emails(text)
     campaign.problem.emailable_organizations.each do |organization|
-      text.gsub!(organization.email, "[#{organization.name} problem reporting email]")
+      if organization.is_a? Council
+        emails = [organization.email_for_category(campaign.problem.category)]
+      else
+        email = organization.emails 
+      end
+      emails.each do |email|
+        text.gsub!(email, "[#{organization.name} problem reporting email]")
+      end
     end
     campaign.valid_local_parts.each do |local_part|
       text.gsub!("#{local_part}@#{campaign.domain}", "[#{campaign.title} email]")
