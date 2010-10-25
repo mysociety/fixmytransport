@@ -27,5 +27,10 @@ class Council
       raise "No \"Other\" category contact for #{self.name}"
     end
   end
+  
+  def emails
+    contacts = CouncilContact.find(:all, :conditions => ['area_id = ?', self.id])
+    emails = contacts.map{ |contact| contact.email }.uniq.compact
+  end
 
 end
