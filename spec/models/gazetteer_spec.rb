@@ -32,7 +32,7 @@ describe Gazetteer do
     describe 'if given a partial postcode' do 
     
       it 'should look for localities within 5km of the partial postcode centroid' do 
-        Locality.should_receive(:find_by_coordinates).with("532578", "179760", 5000).and_return(@coords)
+        Locality.should_receive(:find_by_coordinates).with("532578", "179760", 5000).and_return([])
         Gazetteer.bus_route_from_route_number('C10', 'ZZ9', 10)
       end
       
@@ -41,7 +41,7 @@ describe Gazetteer do
     describe 'if given a full postcode' do 
     
       it 'should look for localities within 1km of the postcode point' do
-        Locality.should_receive(:find_by_coordinates).with("532578", "179760", 1000).and_return(@coords)
+        Locality.should_receive(:find_by_coordinates).with("532578", "179760", 1000).and_return([])
         Gazetteer.bus_route_from_route_number('C10', 'ZZ9 9ZZ', 10)
       end
       
