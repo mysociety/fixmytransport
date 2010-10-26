@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101020152126) do
+ActiveRecord::Schema.define(:version => 20101025181456) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -307,6 +307,9 @@ ActiveRecord::Schema.define(:version => 20101020152126) do
     t.string   "cached_slug"
     t.string   "operator_code"
     t.boolean  "loaded"
+    t.float    "lat"
+    t.float    "lon"
+    t.text     "cached_description"
   end
 
   add_index "routes", ["cached_slug"], :name => "index_routes_on_cached_slug"
