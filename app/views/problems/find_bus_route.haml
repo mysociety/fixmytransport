@@ -1,0 +1,15 @@
+%h2.main-header=t(:what_was_the_number_and_area)
+.problem-form-wrapper
+  - form_tag find_bus_route_problems_path, :id => 'bus_route_form', :method => 'GET' do 
+    - if @error_message
+      .form-field-error
+        = @error_message
+    .form-field
+      != label_tag t(:enter_route_number)
+      != text_field_tag 'route_number', params[:route_number]
+      #guidance-route-number{:class => 'guidance'} e.g. C10
+    .form-field
+      != label_tag t(:enter_town_or_area)
+      != text_field_tag 'area', params[:area]
+      #guidance-area{:class => 'guidance'} e.g. Bristol 
+    %input{:type => 'submit', :value => t(:go)}
