@@ -14,12 +14,6 @@ describe IncomingMessage do
     @incoming_message.stub!(:campaign).and_return(@mock_campaign)
   end
   
-  describe 'when getting body for html display' do 
-    
-
-  
-  end
-  
   describe 'when getting main body text' do 
     
     before do 
