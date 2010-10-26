@@ -250,7 +250,27 @@ input, textarea, select {
 
 #stop_name_form input {
   display:inline;
+  font-size: 1.2em;
 }
+
+/* Finding a route */
+
+#bus_route_form {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.2em;
+}
+
+#bus_route_form label {
+  width: 8em;
+}
+
+#bus_route_form input[type=text] {
+  width: 15em;
+}
+
+
 /* Choosing a location */
 
 ul.location-list li{
