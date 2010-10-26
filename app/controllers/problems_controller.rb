@@ -88,6 +88,11 @@ class ProblemsController < ApplicationController
   def find_stop
     @title = t(:find_a_stop_or_station)
     if params[:name]
+      if params[:name].blank?
+        @error_message = t(:please_enter_an_area)
+        render :find_stop
+        return
+      end
       stop_info = Gazetteer.place_from_name(params[:name])
       # got back areas
       if stop_info[:localities]
@@ -129,6 +134,36 @@ class ProblemsController < ApplicationController
         @error_message = t(:area_not_found)
         render :find_stop
         return
+      end
+    end
+  end
+  
+  def find_route
+  end
+  
+  def find_bus_route
+    @title = t(:finding_a_bus_route)
+    if params[:route_number]
+      if params[:route_number].blank? or params[:area].blank?
+        @error_message = t(:please_enter_route_number_and_area)
+        render :find_bus_route 
+        return
+      end
+      route_info = Gazetteer.bus_route_from_route_number(params[:route_number], params[:area], limit=10)
+      if route_info[:routes].empty? 
+        @error_message = t(:route_not_found)
+      elsif route_info[:routes].size == 1
+        redirect_to @template.location_url(route_info[:routes].first)
+      else 
+        @error_message = route_info[:error]
+        @locations = []
+        route_info[:routes].each do |route|
+          route.show_as_point = true
+          @locations << route
+        end
+        map_params_from_location(@locations, find_other_locations=false)        
+        render :choose_route
+        return 
       end
     end
   end

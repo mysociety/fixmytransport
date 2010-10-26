@@ -10,10 +10,33 @@ describe ProblemsController do
     
   end
   
-  describe "GET #find_stop" do 
-
-    before do
+  describe "GET #find_bus_route" do 
+  
+    def make_request(params={})
+      get :find_bus_route, params
     end
+    
+    describe 'when a route_number parameter is not supplied' do 
+  
+      it 'should render the template "find_bus_route"' do 
+        make_request
+        response.should render_template('find_bus_route')
+      end
+  
+    end
+    
+    describe 'when a route_number parameter is supplied' do 
+      
+      it 'should ask the gazetteer for up to ten routes from the route_number and area' do 
+        Gazetteer.should_receive(:bus_route_from_route_number).with('C10', 'London', 10).and_return({ :routes => [] })
+        make_request(:route_number => 'C10', :area => 'London')
+      end
+      
+    end
+    
+  end
+  
+  describe "GET #find_stop" do 
   
     def make_request(params={})
       get :find_stop, params
