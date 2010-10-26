@@ -3,14 +3,52 @@ require 'spec_helper'
 describe Gazetteer do
 
   def stub_postcode_finder
-    coords = { "wgs84_lon" => -0.091, 
+    @coords = { "wgs84_lon" => -0.091, 
                "easting" => "532578", 
                "coordsyst" => "G", 
                "wgs84_lat" => 51.50, 
                "northing" => "179760" }
-    MySociety::MaPit.stub!(:call).and_return(coords)
+    MySociety::MaPit.stub!(:call).and_return(@coords)
   end
   
+  describe 'when finding a route from a route number and area' do 
+  
+    before do 
+      stub_postcode_finder
+    end
+    
+    describe 'when the postcode finder returns an error' do 
+    
+      before do 
+        MySociety::MaPit.stub!(:call).and_return(:not_found)        
+      end
+      
+      it 'should return the error :postcode_not_found in the results hash' do 
+        Gazetteer.bus_route_from_route_number('C10', 'ZZ9 9ZZ', 10)[:error].should == :postcode_not_found
+      end
+      
+    end
+  
+    describe 'if given a partial postcode' do 
+    
+      it 'should look for localities within 5km of the partial postcode centroid' do 
+        Locality.should_receive(:find_by_coordinates).with("532578", "179760", 5000).and_return(@coords)
+        Gazetteer.bus_route_from_route_number('C10', 'ZZ9', 10)
+      end
+      
+    end
+    
+    describe 'if given a full postcode' do 
+    
+      it 'should look for localities within 1km of the postcode point' do
+        Locality.should_receive(:find_by_coordinates).with("532578", "179760", 1000).and_return(@coords)
+        Gazetteer.bus_route_from_route_number('C10', 'ZZ9 9ZZ', 10)
+      end
+      
+    end
+    
+  end
+
   describe 'when finding a place from a name' do 
     
     before do 

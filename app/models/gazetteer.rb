@@ -42,11 +42,12 @@ class Gazetteer
       return { :localities => localities }
     end
     # is there a stop/station with this name? 
-    stops = Stop.find(:all, :conditions => ['(lower(common_name) like ? 
+    stops = Stop.find(:all, :conditions => ['(lower(common_name) = ? 
+                                              OR lower(common_name) like ? 
                                               OR lower(street) = ? 
                                               OR naptan_code = ?)
                                               AND stop_type in (?)',
-                                            name, name, name, StopType.primary_types] )
+                                            name, "#{name} %", name, name, StopType.primary_types] )
     
     stations = StopArea.find(:all, :conditions => ["(lower(name) like ? 
                                                     OR lower(name) like ? 
@@ -58,6 +59,54 @@ class Gazetteer
       return { :locations => stops + stations }
     end
     return {}
+  end
+  
+  def self.bus_route_from_route_number(route_number, area, limit, ignore_area=false)
+    error = nil
+    select_clause = 'SELECT distinct routes.id'
+    from_clause = 'FROM routes'
+    params = []
+    route_number = route_number.downcase
+    where_clause = "WHERE (lower(routes.number) = ? OR lower(routes.name) like ?) "
+    params << route_number
+    params << "%#{route_number}%"
+    localities = []  
+    if ignore_area
+      error = :route_not_found_in_area
+    else
+      # area is postcode
+      coord_info = self.coords_from_postcode(area)
+      if coord_info == :not_found or coord_info == :bad_request
+        error = :postcode_not_found
+      elsif coord_info == :not_postcode
+        localities = Locality.find_all_with_descendants(area)
+      else
+        if MySociety::Validate.is_valid_partial_postcode(area)
+          distance = 5000
+        else
+          distance = 1000
+        end
+        localities = Locality.find_by_coordinates(coord_info['easting'], coord_info['northing'], distance)
+      end
+      if localities.empty? and !error
+        error = :area_not_found
+      else
+        from_clause += ", route_localities"
+        where_clause += " AND route_localities.route_id = routes.id
+                          AND route_localities.locality_id in (?)"
+        params << localities
+      end    
+    end
+    if limit 
+      where_clause += " limit #{limit}"
+    end
+    params = ["#{select_clause} #{from_clause} #{where_clause}"] + params
+    routes = Route.find_by_sql(params)
+    routes = Route.find(:all, :conditions => ['id in (?)', routes] )
+    if routes.empty? and !ignore_area and !localities.empty?
+      return bus_route_from_route_number(route_number, area, limit, ignore_area=true)
+    end
+    return { :routes => routes, :error => error }
   end
   
   # accepts attributes
