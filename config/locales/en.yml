@@ -26,4 +26,14 @@ en:
   stop_or_station: Stop or station
   or_on_a: or on a 
   find_a_stop_or_station: Finding a stop or station
+  find_a_route: Finding a route
   where_is_it: Where is it?
+  bus_or_coach_route: bus or coach route
+  what_was_the_number_and_area: "What was the route number and town or area?"
+  is_it_on_a: Is it on a
+  train_or_metro_route: train, tram, ferry or metro route?
+  enter_route_number: Route number
+  enter_town_or_area: Town/Area
+  finding_a_bus_route: Finding a bus route
+  please_enter_an_area: "Please enter an area, town or postcode"
+  please_enter_route_number_and_area: "Please enter the route number and area"

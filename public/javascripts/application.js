@@ -41,6 +41,19 @@ function addSearchGuidance() {
        defaultTextColor: '#595454',
        activeTextColor: '#000000'
      });
+  jQuery('#guidance-route-number').hide();
+  jQuery('#bus_route_form #route_number').autofill({
+      value: jQuery('#guidance-route-number').text(),
+      defaultTextColor: '#595454',
+      activeTextColor: '#000000'
+    });
+  jQuery('#guidance-area').hide();
+  jQuery('#bus_route_form #area').autofill({
+      value: jQuery('#guidance-area').text(),
+      defaultTextColor: '#595454',
+      activeTextColor: '#000000'
+    });
+    
 }
 
 // Make the feedback tab popup the form, 
