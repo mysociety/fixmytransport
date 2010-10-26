@@ -97,6 +97,9 @@ class Locality < ActiveRecord::Base
 
   def self.find_all_with_descendants(name)
     localities = find_all_by_name(name)
+    if localities.empty? 
+      return []
+    end
     descendents = find_by_sql(["SELECT localities.* 
                                FROM localities INNER JOIN locality_links
                                ON localities.id = locality_links.descendant_id 
@@ -104,12 +107,12 @@ class Locality < ActiveRecord::Base
     with_descendants = localities + descendents
   end
   
-  def self.find_by_coordinates(easting, northing)
+  def self.find_by_coordinates(easting, northing, distance=1000)
     distance_clause = "ST_Distance(
                        ST_GeomFromText('POINT(#{easting} #{northing})', #{BRITISH_NATIONAL_GRID}), 
                        localities.coords)"
-    localities = find(:all, :conditions => ["#{distance_clause} < 1000"], 
-                      :order => "#{distance_clause} asc", :limit => 1)
+    localities = find(:all, :conditions => ["#{distance_clause} < ?", distance], 
+                      :order => "#{distance_clause} asc")
   end
   
 end
