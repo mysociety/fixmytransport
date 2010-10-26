@@ -35,8 +35,9 @@ class Route < ActiveRecord::Base
   validates_presence_of :number, :transport_mode_id
   validates_presence_of :region_id, :if => :loaded?
   cattr_reader :per_page
-  has_friendly_id :short_name, :use_slug => true, :scope => :region
+  # has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
+  attr_accessor :show_as_point
   
   @@per_page = 20
   
@@ -104,9 +105,10 @@ class Route < ActiveRecord::Base
    end
 
    def description
+     return cached_description if cached_description
      "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
    end
-   memoize :description
+
 
    def short_name
      name(from_stop=nil, short=true)
