@@ -162,9 +162,7 @@ class ProblemsController < ApplicationController
         end
         @locations = []
         route_info[:routes].each do |route|
-          if route.lat and route.lon
-            route.show_as_point = true
-          end
+          #route.show_as_point = true
           @locations << route
         end
         map_params_from_location(@locations, find_other_locations=false)        
