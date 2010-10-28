@@ -135,9 +135,8 @@ ul.navigation li {
 }
 
 /* Home page */
-p.site-description {
+h2.main-header{
   text-align: center;
-  font-size: 150%;
 }
 
 
@@ -151,31 +150,6 @@ p.site-description {
   margin-right: auto;
 }
 
-.homepage .new-campaign, 
-.homepage .latest-campaigns {
-  width: 45%;
-  margin-bottom: 2em;
-}
-
-.homepage .new-campaign { 
-  margin-left: 4%;
-  border: 1px solid #cccccc;
-  padding: 0.5em;
-  background-color: #ffffff;
-}
-
-.homepage .latest-campaigns {
-  margin-right: 4%;
-  float: right;
-  width: 42%;
-  border: 1px solid #cccccc;
-  padding: 0.5em;
-  background-color: #ffffff;
-}
-
-.homepage .latest-campaigns .more-link {
-  float: right;
-}
 
 .homepage  h3,
 .about h3 {
@@ -188,104 +162,9 @@ p.site-description {
   margin: 0.5em 0;
 }
 
-.main-transport-none {
-  background-image: url('/images/transport_none.gif');
-  background-repeat: no-repeat;
-  background-position: left top;
-}
-
-.main-transport-bus {
-  background-image: url('/images/transport_bus.gif');
-  background-repeat: no-repeat;
-  background-position: left top;
-}
-
-.main-transport-coach {
-    background-image: url('/images/transport_coach.gif');
-    background-repeat: no-repeat;
-    background-position: left top;
-}
-
-.main-transport-taxi {
-    background-image: url('/images/transport_taxi.gif');
-    background-repeat: no-repeat;
-    background-position: left top;
-}
-
-.main-transport-air {
-    background-image: url('/images/transport_air.gif');
-    background-repeat: no-repeat;
-    background-position: left top;
-}
-
-.main-transport-ferry {
-    background-image: url('/images/transport_ferry.gif');
-    background-repeat: no-repeat;
-    background-position: left top;
-}
-
-.main-transport-train {
-    background-image: url('/images/transport_train.gif');
-    background-repeat: no-repeat;
-    background-position: left top;
-}
-
-.main-transport-trammetro {
-    background-image: url('/images/transport_trammetro.gif');
-    background-repeat: no-repeat;
-    background-position: left top;
-}
-
 .homepage .campaign{
   padding: 4px;
   margin: 0.5em 0;
-}
-.campaign-transport-none {
-  background-image: url('/images/transport_none_small.gif');
-  background-repeat: no-repeat;
-  background-position: 50% top;
-}
-
-.campaign-transport-bus {
-  background-image: url('/images/transport_bus_small.gif');
-  background-repeat: no-repeat;
-  background-position: 16px top;
-}
-
-.campaign-transport-coach {
-    background-image: url('/images/transport_coach_small.gif');
-    background-repeat: no-repeat;
-    background-position: 16px top;
-}
-
-.campaign-transport-taxi {
-    background-image: url('/images/transport_taxi_small.gif');
-    background-repeat: no-repeat;
-    background-position: 16px top;
-}
-
-.campaign-transport-air {
-    background-image: url('/images/transport_air_small.gif');
-    background-repeat: no-repeat;
-    background-position: 16px top;
-}
-
-.campaign-transport-ferry {
-    background-image: url('/images/transport_ferry_small.gif');
-    background-repeat: no-repeat;
-    background-position: 16px top;
-}
-
-.campaign-transport-train {
-    background-image: url('/images/transport_train_small.gif');
-    background-repeat: no-repeat;
-    background-position: 16px top;
-}
-
-.campaign-transport-trammetro {
-    background-image: url('/images/transport_trammetro_small.gif');
-    background-repeat: no-repeat;
-    background-position: 16px top;
 }
 
 .homepage input[type=text] {
@@ -329,40 +208,6 @@ p.site-description {
     margin: 0px 0.5em 0 0;
 }
 
-.transport-bg-bus {
-    background-color: #618e7c;
-    color: #ffffff;
-}
-
-.transport-bg-coach {
-    background-color: #b794cf;
-    color: #ffffff;
-}
-
-.transport-bg-taxi {
-    background-color: #ffffff;
-    color: #000000;
-}
-
-.transport-bg-air {
-    background-color: #ffffff;
-    color: #000000;
-}
-
-.transport-bg-ferry {
-    background-color: #4864a5;
-    color: #ffffff;
-}
-
-.transport-bg-train {
-    background-color: #963535;
-    color: #ffffff;
-}
-
-.transport-bg-trammetro {
-    background-color: #f79225;
-    color: #ffffff;
-}
 
 /* Problem lists */
 
@@ -386,10 +231,12 @@ label {
 
 .form-field-error {
   color: #CC0000;
-  width: 400px;
   margin: 0.5em 1em 0 1em;
 }
 
+.form-field-error .formError {
+  width: 400px;  
+}
 
 input, textarea, select {
   margin: 0.5em;
@@ -398,6 +245,51 @@ input, textarea, select {
 .fieldWithErrors {
   display: inline;
 }
+
+/* Finding a stop/station */
+
+#stop_name_form input {
+  display:inline;
+  font-size: 1.2em;
+}
+
+.problem-options {
+  font-size: 1.2em;
+}
+
+/* Finding a route */
+
+#bus_route_form {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.2em;
+}
+
+#train_route_form {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.2em;
+}
+
+#bus_route_form label {
+  width: 8em;
+}
+
+
+#train_route_form label {
+  width: 14em;
+}
+#bus_route_form  input[type=text], 
+#train_route_form input[type=text] {
+  width: 15em;
+}
+
+#train_route_form .form-field{
+  text-align: left;
+}
+
 
 /* Choosing a location */
 

@@ -16,9 +16,15 @@ class StopAreaType < ActiveRecord::Base
   @@codes_by_mode = {}
   @@modes_by_code = {}
   @@station_types = ['GRLS', 'GTMU']
+  @@bus_station_types = ['GBCS']
   @@ferry_terminal_types = ['GFTD']
-  @@primary_types = @@station_types + @@ferry_terminal_types
-  cattr_accessor :station_types, :ferry_terminal_types, :primary_types
+  @@primary_types = @@station_types + @@ferry_terminal_types + @@bus_station_types
+  @@atomic_types = @@station_types + @@ferry_terminal_types
+  cattr_accessor :station_types, 
+                 :ferry_terminal_types, 
+                 :bus_station_types, 
+                 :primary_types, 
+                 :atomic_types
   
   def self.codes
     connection.select_rows("SELECT DISTINCT description, code 

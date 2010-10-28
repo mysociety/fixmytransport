@@ -1,0 +1,22 @@
+%h2.main-header=t(:where_did_you_get_on_and_off)
+.problem-form-wrapper
+  - form_tag find_train_route_problems_path, :id => 'train_route_form', :method => 'GET' do 
+    - if @error_message
+      .form-field-error
+        = @error_message
+    .form-field
+      != label_tag t(:where_did_you_get_on)
+      != text_field_tag 'from', params[:from]
+      #guidance-from{:class => 'guidance'} e.g. London Euston
+    .form-field
+      != label_tag t(:where_did_you_get_off)
+      != text_field_tag 'to', params[:to]
+      #guidance-to{:class => 'guidance'} e.g. Birmingham New Street
+    .form-field
+      != label_tag t(:what_time_did_you_get_on)
+      != text_field_tag 'time', params[:time]
+      %span.optional-note= "(#{t(:optional)})"
+      #guidance-time{:class => 'guidance'} e.g. 13:24
+    %input{:type => 'submit', :value => t(:go)}
+      
+      

@@ -22,3 +22,26 @@ en:
   login_successful: "Login successful!"
   logout_successful: "Logout successful!"
   development_site: "This is a developer site; things might break at any time, and the database will be periodically deleted."
+  do_you_want_to_report: Do you want to report a problem at a
+  stop_or_station: Stop or station
+  or_on_a: or on a 
+  find_a_stop_or_station: Finding a stop or station
+  find_a_route: Finding a route
+  where_is_it: Where is it?
+  bus_or_coach_route: bus or coach route
+  what_was_the_number_and_area: "What was the route number and town or area?"
+  is_it_on_a: Is it on a
+  train_or_metro_route: "train, tram, ferry or metro route?"
+  enter_route_number: Route number
+  enter_town_or_area: Town/Area
+  finding_a_bus_route: Finding a bus route
+  please_enter_an_area: "Please enter an area, town or postcode"
+  please_enter_route_number_and_area: "Please enter the route number and area"
+  postcode_not_found_routes: "The postcode you entered wasn't recognized."
+  area_not_found_routes: "We could not find the area you entered."
+  where_did_you_get_on_and_off: Where did you get on and off?
+  where_did_you_get_on: Where did you get on?
+  where_did_you_get_off: Where did you get off? 
+  what_time_did_you_get_on: What time did you get on?
+  please_enter_from_and_to: Please enter the names of the stations where you got on and off the train. 
+  route_not_found: "We could not find the route you entered."

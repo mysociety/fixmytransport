@@ -74,16 +74,28 @@ module ApplicationHelper
       :width => icon_width(small) }
   end
   
-  def stop_icon(stop, main=false, small=false)
+  def stop_icon(location, main=false, small=false)
     name = ''
-    if stop.respond_to?(:area_type) && stop.area_type == 'GRLS'
-      name = 'train'
-    elsif stop.respond_to?(:area_type) && stop.area_type == 'GTMU'
-      name = 'tram'
-    elsif stop.respond_to?(:area_type) && stop.area_type == 'GFTD'
-      name = 'ferry'
+    if location.is_a? Route
+      if location.transport_mode_name == 'Train'
+        name = 'train'
+      elsif location.transport_mode_name == 'Tram/Metro'
+        name = 'tram'
+      elsif location.transport_mode_name == 'Ferry' 
+        name = 'ferry'
+      else
+        name = 'bus'
+      end
     else
-      name = 'bus'
+      if location.respond_to?(:area_type) && location.area_type == 'GRLS'
+        name = 'train'
+      elsif location.respond_to?(:area_type) && location.area_type == 'GTMU'
+        name = 'tram'
+      elsif location.respond_to?(:area_type) && location.area_type == 'GFTD'
+        name = 'ferry'
+      else
+        name = 'bus'
+      end
     end
     name += '-main' if main
     name += '-sm' if small 
@@ -102,7 +114,11 @@ module ApplicationHelper
     array_content = []
     locations.each do |location|
       if location.is_a? Route
-        array_content <<  location.stops.map{ |stop| stop_js_coords(stop, main, true) } 
+        if location.show_as_point
+          array_content << stop_js_coords(location, main, false)
+        else
+          array_content <<  location.stops.map{ |stop| stop_js_coords(stop, main, true) } 
+        end
       else
        array_content << stop_js_coords(location, main, small) 
       end
@@ -250,6 +266,8 @@ module ApplicationHelper
    elsif location.is_a? StopArea
      if StopAreaType.station_types.include?(location.area_type)
        return station_url(location.locality, location, attributes)
+     elsif StopAreaType.bus_station_types.include?(location.area_type)
+       return bus_station_url(location.locality, location, attributes)
      elsif StopAreaType.ferry_terminal_types.include?(location.area_type)
        return ferry_terminal_url(location.locality, location, attributes)
      else

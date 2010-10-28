@@ -36,24 +36,44 @@ function clearFormElements(element) {
 // Put guidance text as default in search boxes
 function addSearchGuidance() {
   jQuery('#guidance-name').hide();
-  jQuery('.new_problem #name').autofill({
+  jQuery('#stop_name_form #name').autofill({
        value: jQuery('#guidance-name').text(),
        defaultTextColor: '#595454',
        activeTextColor: '#000000'
      });
-  jQuery('#guidance-route').hide();
-  jQuery('.new_problem #route_number').autofill({
-      value: jQuery('#guidance-route').text(),
+  jQuery('#guidance-route-number').hide();
+  jQuery('#bus_route_form #route_number').autofill({
+      value: jQuery('#guidance-route-number').text(),
       defaultTextColor: '#595454',
       activeTextColor: '#000000'
-     });
+    });
   jQuery('#guidance-area').hide();
-  jQuery('.new_problem #area').autofill({
-       value: jQuery('#guidance-area').text(),
-       defaultTextColor: '#595454',
-       activeTextColor: '#000000'
-     });
-  
+  jQuery('#bus_route_form #area').autofill({
+      value: jQuery('#guidance-area').text(),
+      defaultTextColor: '#595454',
+      activeTextColor: '#000000'
+    });
+    
+  jQuery('#guidance-to').hide();
+  jQuery('#train_route_form #to').autofill({
+      value: jQuery('#guidance-to').text(),
+      defaultTextColor: '#595454',
+      activeTextColor: '#000000'
+    });
+
+  jQuery('#guidance-from').hide();
+  jQuery('#train_route_form #from').autofill({
+      value: jQuery('#guidance-from').text(),
+      defaultTextColor: '#595454',
+      activeTextColor: '#000000'
+    });
+
+  jQuery('#guidance-time').hide();
+  jQuery('#train_route_form #time').autofill({
+      value: jQuery('#guidance-time').text(),
+      defaultTextColor: '#595454',
+      activeTextColor: '#000000'
+    });
 }
 
 // Make the feedback tab popup the form, 

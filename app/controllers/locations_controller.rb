@@ -26,6 +26,9 @@ class LocationsController < ApplicationController
     if params[:type] != :station && StopAreaType.station_types.include?(@stop_area.area_type)
       redirect_to @template.location_url(@stop_area) and return false
     end
+    if params[:type] != :bus_station && StopAreaType.bus_station_types.include?(@stop_area.area_type)
+      redirect_to @template.location_url(@stop_area) and return false
+    end    
     if params[:type] != :ferry_terminal && StopAreaType.ferry_terminal_types.include?(@stop_area.area_type)
       redirect_to @template.location_url(@stop_area) and return false
     end

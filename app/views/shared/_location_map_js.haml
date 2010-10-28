@@ -5,7 +5,7 @@
   var lat = #{@lat};
   var lon = #{@lon};
   var findOtherLocations = #{@find_other_locations};
-  var areaStops = #{location_stops_js(locations, main=true, small=false)}
+  var areaStops = #{location_stops_js(locations, main=true, small=false)};
   jQuery(document).ready(function(){
      area_init();
   });

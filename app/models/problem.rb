@@ -10,7 +10,7 @@ class Problem < ActiveRecord::Base
   validates_presence_of :transport_mode_id, :unless => :location
   validates_presence_of :description, :subject, :category, :reporter_name, :if => :location
   validates_length_of :reporter_name, :minimum => 5, :if => :location
-  validate :validate_location_attributes, :validate_reporter_name
+  validate :validate_reporter_name
   validates_associated :reporter
   attr_accessor :location_attributes, :locations, :location_search, :location_errors
   cattr_accessor :route_categories, :stop_categories
@@ -46,13 +46,6 @@ class Problem < ActiveRecord::Base
     ProblemMailer.deliver_problem_confirmation(reporter, self, token)
   end
   
-  def validate_location_attributes
-    return true if location
-    if ! location_attributes_valid?
-      errors.add(:location_attributes, ActiveRecord::Error.new(self, :location_attributes, :blank).to_s)
-    end
-  end
-  
   def validate_reporter_name
     return true unless reporter_name
     return true unless location
@@ -60,36 +53,7 @@ class Problem < ActiveRecord::Base
       errors.add(:reporter_name, ActiveRecord::Error.new(self, :reporter_name, :invalid).to_s)
     end
   end
-  
-  def location_attributes_valid?
-    if ! location_attributes or (location_attributes[:name].blank? and
-                       location_attributes[:area].blank? and
-                       location_attributes[:route_number].blank?)
-      return false
-    else
-      return true
-    end
-  end
-  
-  def location_from_attributes
-    self.locations = []
-    return unless transport_mode_id
-    return unless location_attributes_valid?
-    location_attributes[:transport_mode_id] = transport_mode_id
-    if !location_attributes[:route_number].blank? and location_attributes[:name].blank?
-      location_search.add_method('Gazetteer.find_routes_from_attributes') if location_search
-      results = Gazetteer.find_routes_from_attributes(location_attributes, :limit => MAX_LOCATION_RESULTS)
-    else
-      location_search.add_method('Gazetteer.find_stops_and_stations_from_attributes') if location_search
-      results = Gazetteer.find_stops_and_stations_from_attributes(location_attributes, :limit => MAX_LOCATION_RESULTS)
-    end
-    self.locations = results[:results]
-    self.location_errors = results[:errors]
-    if self.locations.empty? && self.location_errors.empty? 
-      self.location_errors << :problem_location_not_found
-    end
-  end
-  
+
   def create_assignments
     assignment_types = []
     if assignments.empty? 

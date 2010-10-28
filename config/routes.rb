@@ -13,7 +13,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :problems, :except => [:destroy], 
                            :collection => { :choose_location => :get, 
-                                            :find => :get }                           
+                                            :find_stop => :get,
+                                            :find_route => :get, 
+                                            :find_bus_route => :get,
+                                            :find_train_route => :get }                           
   map.confirm '/p/:email_token', :action => 'confirm', :controller => 'problems'
   map.confirm_update '/u/:email_token', :action => 'confirm_update', :controller => 'problems'
   
@@ -32,6 +35,11 @@ ActionController::Routing::Routes.draw do |map|
                                                   :action => 'show_stop_area', 
                                                   :type => :stop_area,
                                                   :conditions => { :method => :get }
+  
+  map.bus_station "/bus-stations/:scope/:id.:format", :controller => "locations", 
+                                                      :action => 'show_stop_area', 
+                                                      :type => :bus_station,
+                                                      :conditions => { :method => :get }
   
   map.station "/stations/:scope/:id.:format", :controller => "locations", 
                                               :action => 'show_stop_area', 

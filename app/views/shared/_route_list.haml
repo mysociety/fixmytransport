@@ -16,9 +16,9 @@
         .route-info
           .next-stops
             - route.next_stops(stop_or_station).each do |next_stop|
-              .stop-link= link_to(next_stop.name_without_suffix(route.transport_mode), location_url(next_stop))
+              .stop-link= link_to(next_stop.name_without_suffix(route.transport_mode.name), location_url(next_stop))
           .previous-stops
             - route.previous_stops(stop_or_station).each do |previous_stop|
-              .stop-link= link_to(previous_stop.name_without_suffix(route.transport_mode), location_url(previous_stop))
+              .stop-link= link_to(previous_stop.name_without_suffix(route.transport_mode.name), location_url(previous_stop))
           .route-name= link_to(route.name(from_stop=stop_or_station, short=true), location_url(route))
         

@@ -7,64 +7,301 @@ describe ProblemsController do
     def make_request
       get :frontpage 
     end  
+    
+  end
   
-    it 'should ask for a new problem' do 
-      problem = mock_model(Problem, :build_reporter => true)
-      Problem.should_receive(:new).and_return(problem)
-      make_request
+  describe "GET #find_train_route" do 
+  
+    def make_request(params={})
+      get :find_train_route, params
+    end
+  
+    before do 
+      @mock_route = mock_model(Route, :region => mock_model(Region, :name => 'Great Britain'))
+    end
+    
+    describe 'when the "to" or "from" param is present but empty' do 
+    
+      it 'should render the "find_train_route" template' do 
+        make_request({:to => '', :from => ''})
+        response.should render_template("find_train_route")
+      end
+      
+      it 'should display an error message' do 
+        make_request({:to => '', :from => ''})
+        assigns[:error_message].should == 'Please enter the names of the stations where you got on and off the train.'
+      end
+      
+    end
+    
+    describe 'when the "to" and "from" params are supplied' do
+    
+      it 'should ask the gazetteer for routes' do 
+        Gazetteer.should_receive(:train_route_from_stations_and_time).and_return({:routes => []})
+        make_request({:to => "london euston", :from => 'birmingham new street'})
+      end
+      
+      describe 'when one route is returned' do 
+      
+        it 'should redirect to that route' do 
+          Gazetteer.stub!(:train_route_from_stations_and_time).and_return(:routes => [@mock_route])
+          make_request({:to => "london euston", :from => 'birmingham new street'})
+          response.should redirect_to(route_url(@mock_route.region, @mock_route))
+        end
+        
+      end
+      
+      describe 'when no routes are returned' do 
+      
+        it 'should display an error message' do 
+          Gazetteer.stub!(:train_route_from_stations_and_time).and_return(:routes => [])
+          make_request({:to => "london euston", :from => 'birmingham new street'})
+          assigns[:error_message].should == 'We could not find the route you entered.'
+        end
+        
+      end
+    
+      describe 'when multiple routes are returned' do 
+
+        before do 
+          Gazetteer.stub!(:train_route_from_stations_and_time).and_return(:routes => [@mock_route, @mock_route])
+        end
+        
+        it 'should assign the routes to the template as locations' do 
+          make_request({:to => "london euston", :from => 'birmingham new street'})
+          assigns[:locations].should == [@mock_route, @mock_route]
+        end
+        
+        it 'should render the template "choose train route"' do 
+          make_request({:to => "london euston", :from => 'birmingham new street'})
+          response.should render_template("choose_train_route")
+        end
+        
+      end
+      
     end
     
   end
   
-  describe 'POST #find' do 
+  describe "GET #find_bus_route" do 
   
-    before do 
-      @mock_stop = mock_model(Stop, :locality => mock_model(Locality))
-      @mock_problem = mock_model(Problem, :id => 8, 
-                                     :subject => 'A test problem', 
-                                     :valid? => true, 
-                                     :location_from_attributes => mock_model(Stop),
-                                     :locations => [@mock_stop], 
-                                     :locations= => true,
-                                     :location_attributes= => true,
-                                     :location_type => 'Stop')
-      Problem.stub!(:new).and_return(@mock_problem)
+    def make_request(params={})
+      get :find_bus_route, params
     end
     
-    def make_request
-      post :find, { :problem => { :transport_mode_id => 5, 
-                                  :location_attributes => 
-                                  { :name => 'My stop', 
-                                    :area => 'My town'} } }
-    end
+    describe 'when a route_number parameter is not supplied' do 
   
-    it 'should create a new problem' do 
-      Problem.should_receive(:new).and_return(@mock_problem)
-      make_request
+      it 'should render the template "find_bus_route"' do 
+        make_request
+        response.should render_template('find_bus_route')
+      end
+  
     end
     
-    it 'should try and validate the new problem' do 
-      @mock_problem.should_receive(:valid?)
-      make_request
+    describe 'when a route_number parameter is supplied' do 
+      
+      it 'should ask the gazetteer for up to ten routes from the route_number and area' do 
+        Gazetteer.should_receive(:bus_route_from_route_number).with('C10', 'London', 10).and_return({ :routes => [] })
+        make_request(:route_number => 'C10', :area => 'London')
+      end
+      
     end
     
-    it 'should render the "Choose location" view if more than one location is found' do 
-      @mock_problem.stub!(:valid?).and_return(true)
-      route = mock_model(Route, :name => 'a test route',
-                                :points => [mock('point', :lat => 51, :lon => 0)])
-      stop = mock_model(Stop, :name => 'a test stop',
-                              :points => [mock('point', :lat => 51, :lon => 0)])
-      @mock_problem.stub!(:locations).and_return([route, stop])
-      make_request
-      response.should render_template('problems/choose_location')
+    describe 'when the gazetteer finds multiple routes' do 
+    
+      before do 
+        @mock_route = mock_model(Route, :show_as_point= => true, 
+                                        :show_as_point => true,
+                                        :lat => 51.1,
+                                        :lon => 0.1)
+        Gazetteer.stub!(:bus_route_from_route_number).and_return({ :routes => [@mock_route, @mock_route]})
+      end
+    
+      it 'should show the choose route template' do 
+        make_request(:route_number => 'C10', :area => 'London')
+        response.should render_template("choose_route")
+      end
+      
+      describe 'if there is an error' do 
+      
+        it 'should pass an appropriate error message to the template' do 
+          Gazetteer.stub!(:bus_route_from_route_number).and_return( { :routes => [@mock_route, @mock_route], 
+                                                                      :error => :postcode_not_found })
+          make_request(:route_number => 'C10', :area => 'London')
+          assigns[:error_message].should == "The postcode you entered wasn't recognized."
+        end
+      
+      end
+    
+      it 'should set the "display as point" flag on each route' do
+        @mock_route.should_receive(:show_as_point=).with(true).exactly(2).times
+        make_request(:route_number => 'C10', :area => 'London')
+      end
+      
+      it 'should set the map params from the routes' do 
+        @controller.should_receive(:map_params_from_location).with([@mock_route, @mock_route], find_other_locations=false)
+        make_request(:route_number => 'C10', :area => 'London')
+      end
+      
     end
     
-    it 'should redirect to the location page if the problem is valid and the location found' do 
-      @mock_problem.stub!(:valid?).and_return(true)
-      make_request
-      response.should redirect_to(stop_url(@mock_stop.locality, @mock_stop))
+  end
+  
+  describe "GET #find_stop" do 
+  
+    def make_request(params={})
+      get :find_stop, params
     end
     
+    describe 'when a name parameter is not supplied' do 
+      
+      it 'should render the template "find_stop"' do 
+        make_request
+        response.should render_template('find_stop')
+      end
+      
+    end
+    
+    describe 'when a name parameter is supplied' do 
+      
+      it 'should ask the Gazetteer for a place from the name' do 
+        Gazetteer.should_receive(:place_from_name).with('Euston').and_return({})
+        make_request({:name => 'Euston'})
+      end
+      
+      describe 'when localities are returned by the gazetteer' do 
+                
+        describe 'when there is only one locality returned' do 
+        
+          before do
+            @mock_locality = mock_model(Locality, :lat => 51.1, :lon => 0.01)
+            Gazetteer.stub!(:place_from_name).and_return({:localities => [@mock_locality]})
+          end
+            
+          it 'should set map params based on the locality' do 
+            @controller.should_receive(:map_params_from_location).with([@mock_locality], find_other_locations=true)
+            make_request({:name => 'Euston'})
+          end
+        
+          it 'should set the list of primary locations to display to empty' do 
+            make_request({:name => 'Euston'})
+            assigns[:locations].should == []
+          end
+    
+          it 'should render the "choose_location" template' do 
+            make_request({:name => 'Euston'})
+            response.should render_template('problems/choose_location')
+          end
+        
+        end
+        
+        describe 'when there is more than one locality returned' do 
+          
+          before do 
+            @mock_locality = mock_model(Locality, :lat => 51.1, :lon => 0.01)
+            Gazetteer.stub!(:place_from_name).and_return({:localities => [@mock_locality, @mock_locality]})
+          end
+          
+          it 'should render the "choose_locality" template' do 
+            make_request({:name => 'Euston'})
+            response.should render_template('choose_locality')
+          end
+          
+          it 'should assign the localities for the view' do 
+            make_request({:name => 'Euston'})
+            assigns[:localities].should == [@mock_locality, @mock_locality]
+          end
+        
+        end
+        
+        describe 'when locations are returned by the gazetteer' do 
+          
+          before do 
+            @mock_stop = mock_model(Stop, :lat => 51.1, :lon => 0.01)
+            Gazetteer.stub!(:place_from_name).and_return({:locations => [@mock_stop]})
+          end
+          
+          it 'should set the map params based on the locations' do 
+            @controller.should_receive(:map_params_from_location).with([@mock_stop], find_other_locations=true)
+            make_request({:name => 'Euston'})
+          end
+          
+          it 'should set the list of primary locations to display to the locations' do 
+            make_request({:name => 'Euston'})
+            assigns[:locations].should == [@mock_stop]
+          end
+          
+          it 'should render the "choose_location" template' do 
+            make_request({:name => 'Euston'})
+            response.should render_template('choose_location')
+          end
+          
+        end
+        
+        describe 'when the gazeteer returns postcode information' do 
+        
+          describe 'when the postcode information includes an error' do 
+         
+            before do 
+              Gazetteer.stub!(:place_from_name).and_return({:postcode_info => {:error => :bad_request }})
+            end
+            
+            it 'should render the "find_stop" template' do 
+              make_request({:name => 'ZZ9 9ZZ'})
+              response.should render_template('find_stop')
+            end
+             
+            it 'should display an appropriate error message' do 
+              make_request({:name => 'ZZ9 9ZZ'})
+              assigns[:error_message].should == "That postcode wasn't recognized."
+            end
+
+          end
+          
+          describe 'when the postcode information includes a lat value' do 
+            
+            before do 
+              Gazetteer.stub!(:place_from_name).and_return({:postcode_info => {:lat => 51.1, 
+                                                                               :lon => 0.10, 
+                                                                               :zoom => 15}})
+            end
+            
+            it 'should assign the lat, lon and zoom for the view based on the postcode info' do 
+              make_request({:name => 'ZZ9 9ZZ'})
+              assigns[:lat].should == 51.1
+              assigns[:lon].should == 0.10
+              assigns[:zoom].should == 15
+            end
+            
+            it 'should assign the list of primary locations to display to empty' do 
+              make_request({:name => 'ZZ9 9ZZ'})
+              assigns[:locations].should == []              
+            end
+            
+            it 'should set the other locations based on the lat lon and zoom for the postcode' do 
+              mock_location = mock('location')
+              Map.should_receive(:other_locations).with(51.1, 0.10, 15).and_return([mock_location])
+              make_request({:name => 'ZZ9 9ZZ'})
+              assigns[:other_locations].should == [mock_location]
+            end
+            
+            it 'should ask the view to find other locations' do 
+              make_request({:name => 'ZZ9 9ZZ'})
+              assigns[:find_other_locations].should be_true
+            end
+            
+            it 'should render the "choose_locations" template' do 
+              make_request({:name => 'ZZ9 9ZZ'})
+              response.should render_template("problems/choose_location")
+            end
+            
+          end
+        end
+        
+      end
+      
+    end
+
   end
   
   describe "POST #create" do 

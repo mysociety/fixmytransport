@@ -95,8 +95,8 @@ class ApplicationController < ActionController::Base
   def map_params_from_location(locations, find_other_locations=false)
     @find_other_locations = find_other_locations
     # check for an array of routes
-    if locations.first.is_a?(Route)
-      locations = locations.map{ |location| location.points }.flatten
+    if locations.first.is_a?(Route) && !locations.first.show_as_point
+      locations = locations.map{ |location| location.points }.flatten  
     end
     lons = locations.map{ |element| element.lon }
     lats = locations.map{ |element| element.lat }

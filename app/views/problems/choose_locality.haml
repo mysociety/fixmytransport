@@ -1,0 +1,4 @@
+= t(:multiple_localities, :name => params[:name])
+%ul.locality-list
+  - @localities.each do |locality|
+    %li.locality= link_to("#{locality.name}, #{locality.qualifier_name}", find_stop_problems_url(:name => "#{locality.name}, #{locality.qualifier_name}"))

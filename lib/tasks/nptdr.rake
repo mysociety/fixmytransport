@@ -124,6 +124,34 @@ namespace :nptdr do
       end
     end
     
+    desc 'Adds lats and lons to routes calculated from stops'
+    task :add_route_coords => :environment do 
+      Route.paper_trail_off
+      Route.find_each(:conditions => ['lat is null']) do |route|
+        puts route.name
+        if ! route.lat
+          lons = route.stops.map{ |element| element.lon }
+          lats = route.stops.map{ |element| element.lat }
+          lon = lons.min + ((lons.max - lons.min)/2)
+          lat = lats.min + ((lats.max - lats.min)/2)
+          route.lat = lat
+          route.lon = lon
+          route.save!
+        end
+      end
+      Route.paper_trail_on
+    end
+    
+    desc 'Cache route descriptions'
+    task :cache_route_descriptions => :environment do 
+      Route.paper_trail_off
+      Route.find_each(:conditions => ["cached_description is null"]) do |route|
+        route.cached_description = route.description
+        route.save!
+      end
+      Route.paper_trail_on
+    end
+      
     desc 'Adds stop_area_ids to route_segments for train, ferry and metro station interchange and platform stops' 
     task :add_stop_areas_to_route_segments => :environment do 
       conditions = ["stop_type in ('MET', 'RLY', 'FBT','FER','RPL', 'PLT')"]

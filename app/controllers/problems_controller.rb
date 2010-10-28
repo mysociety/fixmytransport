@@ -23,7 +23,6 @@ class ProblemsController < ApplicationController
   
   def frontpage
     @title = t(:get_problems_fixed)
-    @problem = Problem.new()
   end
   
   def create
@@ -77,7 +76,7 @@ class ProblemsController < ApplicationController
     end
   end
   
-  def confirm_update
+  def confirm_update  
     @update = Update.find_by_token(params[:email_token])
     if @update
       @update.confirm!
@@ -86,30 +85,108 @@ class ProblemsController < ApplicationController
     end
   end
   
-  def find
-    @location_search = LocationSearch.new_search!(session_id, params)
-    problem_attributes = { :location_attributes => { :name              => params[:name], 
-                                                     :route_number      => params[:route_number], 
-                                                     :area              => params[:area] },
-                           :location_search   => @location_search, 
-                           :transport_mode_id => params[:transport_mode_id] }
-    @problem = Problem.new(problem_attributes)
-    if !@problem.valid? 
-      @title = t :get_problems_fixed
-      render :frontpage
-    else
-      @problem.location_from_attributes
-      if @problem.locations.size == 1
-         redirect_to @template.location_url(@problem.locations.first)
-      elsif !@problem.locations.empty?
-        @problem.locations = @problem.locations.sort_by(&:name)
-        location_search.add_choice(@problem.locations)
-        map_params_from_location(@problem.locations, find_other_locations=false)
-        @title = t :multiple_locations
+  def find_stop
+    @title = t(:find_a_stop_or_station)
+    if params[:name]
+      if params[:name].blank?
+        @error_message = t(:please_enter_an_area)
+        render :find_stop
+        return
+      end
+      stop_info = Gazetteer.place_from_name(params[:name])
+      # got back areas
+      if stop_info[:localities]
+        if stop_info[:localities].size > 1
+          @localities = stop_info[:localities]
+          render :choose_locality
+          return
+        else
+          map_params_from_location(stop_info[:localities], find_other_locations=true)
+          @locations = []
+          render :choose_location
+          return
+        end
+      # got back stops/stations
+      elsif stop_info[:locations]
+        map_params_from_location(stop_info[:locations], find_other_locations=true)
+        @locations = stop_info[:locations]
         render :choose_location
+        return
+      # got back postcode info
+      elsif stop_info[:postcode_info]
+        postcode_info = stop_info[:postcode_info]
+        if postcode_info[:error]
+          @error_message = t(:postcode_not_found)
+          render :find_stop
+          return
+        else
+          @lat = postcode_info[:lat]
+          @lon = postcode_info[:lon]
+          @zoom = postcode_info[:zoom]
+          @other_locations = Map.other_locations(@lat, @lon, @zoom)
+          @locations = []
+          @find_other_locations = true
+          render :choose_location
+          return
+        end
       else
-        @title = t :get_problems_fixed
-        render :frontpage
+        # didn't find anything
+        @error_message = t(:area_not_found)
+        render :find_stop
+        return
+      end
+    end
+  end
+  
+  def find_route
+  end
+  
+  def find_bus_route
+    @title = t(:finding_a_bus_route)
+    if params[:route_number]
+      if params[:route_number].blank? or params[:area].blank?
+        @error_message = t(:please_enter_route_number_and_area)
+        render :find_bus_route 
+        return
+      end
+      route_info = Gazetteer.bus_route_from_route_number(params[:route_number], params[:area], limit=10)
+      if route_info[:routes].empty? 
+        @error_message = t(:route_not_found)
+      elsif route_info[:routes].size == 1
+        redirect_to @template.location_url(route_info[:routes].first)
+      else 
+        if route_info[:error] == :area_not_found
+          @error_message = t(:area_not_found_routes)
+        elsif route_info[:error] == :postcode_not_found
+          @error_message = t(:postcode_not_found_routes)
+        end
+        @locations = []
+        route_info[:routes].each do |route|
+          route.show_as_point = true
+          @locations << route
+        end
+        map_params_from_location(@locations, find_other_locations=false)        
+        render :choose_route
+        return 
+      end
+    end
+  end
+  
+  def find_train_route
+    if params[:to]
+      if params[:to].blank? or params[:from].blank?
+        @error_message = t(:please_enter_from_and_to)
+      else
+        route_info = Gazetteer.train_route_from_stations_and_time(params[:from], params[:to], params[:time])
+        if route_info[:routes].empty? 
+          @error_message = t(:route_not_found)
+        elsif route_info[:routes].size == 1
+          redirect_to @template.location_url(route_info[:routes].first)
+        else
+          @locations = route_info[:routes]
+          render :choose_train_route
+          return 
+        end
       end
     end
   end

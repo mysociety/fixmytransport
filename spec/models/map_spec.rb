@@ -22,5 +22,9 @@ describe Map do
     Map.zoom_to_coords(51.5057200938463,51.5010403096676, -0.0914398192630478, -0.0888722778623277).should == 16
   end
   
+  it 'should give the max visible zoom level if the real zoom level for the coords is higher than the max visible level' do
+    Map.zoom_to_coords(51.50104, 51.50098, -0.09144, -0.09028).should == MAX_VISIBLE_ZOOM
+  end
+  
   
 end
