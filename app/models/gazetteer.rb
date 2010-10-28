@@ -141,7 +141,7 @@ class Gazetteer
     results = train_list.search('li')
     matches = []
     results.each do |result|
-      matches << result if /#{time} –/.match(result.inner_text)
+      matches << result if /#{time} (&ndash;|&#8211;)/.match(result.inner_html)
     end
     return [] if matches.empty?
     matches.each do |match|
