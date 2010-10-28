@@ -133,7 +133,7 @@ class Gazetteer
     from_name = CGI::escape(from_stop)
     to_name = CGI::escape(to_stop)
     time = time.gsub('.', ':')
-    agent = Mechanize.new
+    agent = WWW::Mechanize.new
     traintimes = agent.get("http://traintimes.org.uk/#{from_name}/#{to_name}/#{time}")
     train_list = traintimes.search('ul')[1]
     return [] unless train_list
