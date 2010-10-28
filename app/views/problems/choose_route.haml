@@ -1,9 +1,8 @@
-- if @error_message
-  .form-field-error
-    = @error_message
 #map-col
   = render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => [] }
-%p= t(:multiple_locations_intro, :num_locations => MAX_LOCATION_RESULTS)
+%p
+  = @error_message
+  = t(:multiple_routes_intro, :num_locations => MAX_LOCATION_RESULTS)
 %ul.location-list
   - @locations.each do |location|
     %li= link_to location.description, location_url(location)

@@ -95,26 +95,6 @@ describe Route do
     
   end
   
-  describe 'when finding from attributes' do 
-  
-    it "should find a route described by its terminuses" do 
-      attributes = { :transport_mode_id => 6, 
-                     :route_number => 'London to Haywards Heath', 
-                     :area => '' }
-      routes = Route.find_from_attributes(attributes)
-      routes.should include(routes(:victoria_to_haywards_heath))
-    end
-    
-    it 'should find a metro route described by its stop areas' do 
-      attributes = { :transport_mode_id => 7, 
-                     :route_number => 'baker street to finchley road', 
-                     :area => ''}
-      routes = Route.find_from_attributes(attributes)
-      routes.should include(routes(:jubilee_line))
-    end
- 
-  end
-  
   describe 'when finding existing routes' do 
   
     it 'should include routes with the same number and one stop in common with the new route' do 

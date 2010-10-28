@@ -54,6 +54,26 @@ function addSearchGuidance() {
       activeTextColor: '#000000'
     });
     
+  jQuery('#guidance-to').hide();
+  jQuery('#train_route_form #to').autofill({
+      value: jQuery('#guidance-to').text(),
+      defaultTextColor: '#595454',
+      activeTextColor: '#000000'
+    });
+
+  jQuery('#guidance-from').hide();
+  jQuery('#train_route_form #from').autofill({
+      value: jQuery('#guidance-from').text(),
+      defaultTextColor: '#595454',
+      activeTextColor: '#000000'
+    });
+
+  jQuery('#guidance-time').hide();
+  jQuery('#train_route_form #time').autofill({
+      value: jQuery('#guidance-time').text(),
+      defaultTextColor: '#595454',
+      activeTextColor: '#000000'
+    });
 }
 
 // Make the feedback tab popup the form, 

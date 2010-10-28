@@ -1,3 +1,5 @@
+require 'mechanize'
+
 class Gazetteer 
   
   def self.postcode_from_area(attributes)
@@ -109,164 +111,71 @@ class Gazetteer
     return { :routes => routes, :error => error }
   end
   
-  # accepts attributes
-  # - name - stop/station name
-  # - area - town/area
-  # - transport_mode_id
-  # - route_number - route number/name
-  # options 
-  # - limit - Number of results to return
-  # - stops_only - Don't return stations
-  def self.find_stops_and_stations_from_attributes(attributes, options={})
-    transport_mode = TransportMode.find(attributes[:transport_mode_id])
-    search_models = []
-    if options[:stops_only]
-      search_models << Stop
-    else
-      if ['Train', 'Tram/Metro', 'Ferry'].include? transport_mode.name
-        search_models << StopArea
-      end
-      if ['Bus', 'Coach', 'Tram/Metro'].include? transport_mode.name
-        search_models << Stop
-      end
+  def self.train_route_from_stations_and_time(from, to, time)    
+    from_stops = Gazetteer.find_stations_from_name(from)
+    to_stops = Gazetteer.find_stations_from_name(to)
+    operators = []
+    if !time.blank?
+      operators = lookup_train(from, to, time)
     end
-    errors = []
-    results = []
-    self.postcode_from_area(attributes) if !attributes[:area].blank?
-    includes = [:locality]
-    order = nil
-    search_models.each do |model_class|
-      type_class = "#{model_class}Type".constantize
-      query, params = type_class.conditions_for_transport_mode(attributes[:transport_mode_id])
-
-      if !attributes[:postcode].blank?
-        coord_info = coords_from_postcode(attributes[:postcode])
-        if coord_info == :not_found or coord_info == :bad_request
-          errors << :postcode_not_found
-        else
-          query += " AND ST_Distance(
-                    ST_GeomFromText('POINT(? ?)', 
-                    #{BRITISH_NATIONAL_GRID}), 
-                    #{model_class.table_name}.coords) < 1000"
-          params << coord_info['easting'].to_i
-          params << coord_info['northing'].to_i
-          order = "ST_Distance(
-                    ST_GeomFromText('POINT(#{coord_info['easting'].to_i} #{coord_info['northing'].to_i})', 
-                    #{BRITISH_NATIONAL_GRID}), 
-                    #{model_class.table_name}.coords)"
-        end
-      end
-      if !attributes[:area].blank?
-        localities = Locality.find_all_with_descendants(attributes[:area])
-        if localities.empty?
-          errors << :area_not_found
-        else
-          query += ' AND locality_id in (?)'
-          params << localities
-        end
-      end
-      if !attributes[:name].blank? 
-        name = attributes[:name].downcase
-        if model_class == Stop
-          query += ' AND (lower(common_name) like ? OR lower(street) = ? OR naptan_code = ?)'
-          params <<  "%#{name}%"
-          params << name
-          params << name
-        else
-          query += " AND (lower(name) like ? OR code = ?)"
-          params <<  "%#{name}%"
-          params << name
-        end
-      end
-      if !attributes[:route_number].blank?
-        route_results = find_routes_from_attributes(attributes)
-        errors += route_results[:errors]
-        if !route_results[:results].empty?
-          query += ' AND route_segments.route_id in (?)'
-          params << route_results[:results]
-          if model_class == Stop
-            includes << :route_segments_as_from_stop
-            includes << :route_segments_as_to_stop
-          else
-            includes << :route_segments_as_from_stop_area
-            includes << :route_segments_as_to_stop_area
-          end
-        end
-      end
-      conditions = [query] + params
-      model_results = []
-      if errors.empty? 
-        model_results = model_class.find(:all, :conditions => conditions, 
-                                         :limit => options[:limit], 
-                                         :include => includes,
-                                         :order => order)
-      end
-      # reduce redundant results for stop areas
-      if model_results.size > 1 && model_class == StopArea
-        model_results = StopArea.map_to_common_areas(model_results)
-      end
-      results += model_results
+    routes = Route.find_all_by_locations([from_stops, to_stops], 
+                                         TransportMode.station_modes_transport_ids , 
+                                         as_terminus=false, 
+                                         limit=nil)
+    if !operators.empty? 
+      routes = routes.select{ |route| operators.include? route.operator_text }
     end
-    { :results => results, :errors => errors.uniq }
+    return { :routes => routes } 
   end
   
-  # accepts 
-  # - name - stop name
-  # - area - town/area
-  # - transport_mode_id
-  # - route_number - route number/name
+  def self.lookup_train(from_stop, to_stop, time)
+    operators = []
+    from_name = CGI::escape(from_stop)
+    to_name = CGI::escape(to_stop)
+    time = time.gsub('.', ':')
+    agent = Mechanize.new
+    traintimes = agent.get("http://traintimes.org.uk/#{from_name}/#{to_name}/#{time}")
+    train_list = traintimes.search('ul')[1]
+    return [] unless train_list
+    # check time
+    results = train_list.search('li')
+    matches = []
+    results.each do |result|
+      matches << result if /#{time} –/.match(result.inner_text)
+    end
+    return [] if matches.empty?
+    matches.each do |match|
+      stops_link = match.at('a')
+      next if stops_link.inner_text != 'stops/details'
+      stop_url = stops_link.attributes['href']
+      stop_info = agent.get(stop_url)
+      operator = stop_info.search('a').last.inner_text
+      operators << operator
+    end
+    operators
+  end
+  
+  # - name - stop/station name
   # options 
   # - limit - Number of results to return
-  def self.find_routes_from_attributes(attributes, options={})
-    errors = []
-    routes = []
-    self.postcode_from_area(attributes) if !attributes[:area].blank?
-    # finding by stop names 
-    routes = Route.find_from_attributes(attributes, limit=options[:limit])
-    return {:results => routes, :errors => errors } if ! routes.empty?    
-    
-    select_clause = 'SELECT distinct routes.id'
-    from_clause = 'FROM routes'
-    where_clause = 'WHERE transport_mode_id = ?'
-    params = [attributes[:transport_mode_id]]
-    localities = []
-    if !attributes[:area].blank?
-      localities = Locality.find_all_with_descendants(attributes[:area])
-      if localities.empty?
-        errors << :area_not_found
-      end
-    end
-    if !attributes[:postcode].blank?
-      coord_info = coords_from_postcode(attributes[:postcode])
-      if coord_info == :not_found or coord_info == :bad_request
-        errors << :postcode_not_found
-      else
-        localities = Locality.find_by_coordinates(coord_info['easting'], coord_info['northing'])
-      end
-    end
-    if !localities.empty?
-      from_clause += ", route_localities"
-      where_clause += " AND route_localities.route_id = routes.id
-                        AND route_localities.locality_id in (?)"
-      params << localities
-    end
-    if !attributes[:route_number].blank?
-      route_number = attributes[:route_number].downcase
-      where_clause += " AND (lower(routes.number) = ? OR lower(routes.name) like ?)"
-      params << route_number
-      params << "%#{route_number}%"
-    end
-    if limit 
-      where_clause += " limit #{options[:limit]}"
-    end
-    params = ["#{select_clause} #{from_clause} #{where_clause}"] + params
-    if errors.empty?
-      routes = Route.find_by_sql(params)
-      routes = Route.find(:all, :conditions => ['id in (?)', routes], 
-                          :include => { :route_segments => [:from_stop => :locality, :to_stop => :locality], 
-                                        :route_operators => :operator } )
-    end
-    { :results => routes, :errors => errors }
+  def self.find_stations_from_name(name, options={})
+    query = 'area_type in (?)'
+    params = [StopAreaType.atomic_types]   
+    name = name.downcase 
+    query += " AND (lower(name) like ? 
+               OR lower(name) like ? 
+               OR lower(name) like ? 
+               OR lower(name) like ? 
+               OR code = ?)"
+    params <<  "#{name}"
+    params <<  "#{name} %"
+    params <<  "% #{name} %"
+    params <<  "% #{name}"
+    params << name
+    conditions = [query] + params
+    StopArea.find(:all, :conditions => conditions, 
+                        :limit => options[:limit])    
   end
+  
 
 end

@@ -27,5 +27,9 @@ class TransportMode < ActiveRecord::Base
     end
   end
   
+  def self.station_modes_transport_ids
+    return connection.select_values("select id from transport_modes where name in ('Train', 'Ferry', 'Tram/Metro')")
+  end
+    
 end
   

@@ -253,6 +253,10 @@ input, textarea, select {
   font-size: 1.2em;
 }
 
+.problem-options {
+  font-size: 1.2em;
+}
+
 /* Finding a route */
 
 #bus_route_form {
@@ -262,12 +266,28 @@ input, textarea, select {
   font-size: 1.2em;
 }
 
+#train_route_form {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.2em;
+}
+
 #bus_route_form label {
   width: 8em;
 }
 
-#bus_route_form input[type=text] {
+
+#train_route_form label {
+  width: 14em;
+}
+#bus_route_form  input[type=text], 
+#train_route_form input[type=text] {
   width: 15em;
+}
+
+#train_route_form .form-field{
+  text-align: left;
 }
 
 

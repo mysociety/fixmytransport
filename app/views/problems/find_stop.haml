@@ -5,6 +5,6 @@
       .form-field-error
         = @error_message
     #guidance-name{:class => 'guidance'} Enter an area, town or postcode
-    != text_field_tag 'name', params[:name], :size => 60
+    != text_field_tag 'name', params[:name], :size => 40
     %input{:type => 'submit', :value => t(:go)}
       

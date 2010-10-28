@@ -182,7 +182,7 @@ class Route < ActiveRecord::Base
      previous_stops = incoming_segments.map do |route_segment| 
        route_segment.from_stop_area ? route_segment.from_stop_area : route_segment.from_stop 
      end
-     previous_stops.uniq
+     previous_stops.uniq - next_stops(current)
    end
 
    def terminuses
@@ -236,6 +236,18 @@ class Route < ActiveRecord::Base
        end
      end 
      text
+   end
+   
+   def description_with_operators
+     text = "#{description}"
+     if operators 
+       text += " (#{operator_text})"
+     end
+     text
+   end
+   
+   def operator_text
+    operators.map{ |operator| operator.name }.to_sentence
    end
    
    def responsible_organizations
@@ -297,9 +309,13 @@ class Route < ActiveRecord::Base
   def self.find_all_by_locations(stops, transport_mode_id, as_terminus=false, limit=nil)
     from_terminus_clause = ''
     to_terminus_clause = ''
-    condition_string = 'transport_mode_id = ?' 
+    if transport_mode_id.respond_to?(:each)
+      condition_string = 'transport_mode_id in (?)'
+    else
+      condition_string = 'transport_mode_id = ?' 
+    end
     params = [transport_mode_id]
-    include_param = [{ :route_segments => [:from_stop, :to_stop] }]
+    include_param = [:route_segments]
     joins = ''
     stops.each_with_index do |item,index|
       if as_terminus
@@ -413,32 +429,6 @@ class Route < ActiveRecord::Base
       end
     end
     routes
-  end
-  
-  def self.find_from_attributes(attributes, limit=nil)
-    routes = []
-    if terminuses = get_terminuses(attributes[:route_number])
-      first, last = terminuses
-      routes = find_all_by_stop_names(first, last, attributes, limit)
-    end
-    routes
-  end
-  
-  def self.find_all_by_stop_names(first, last, attributes, limit=nil)
-    stop_attributes = attributes.merge(:route_number => nil)
-    options = {}
-    results = Gazetteer.find_stops_and_stations_from_attributes(stop_attributes.merge(:area => first), options)
-    first_stops = results[:results]
-    results = Gazetteer.find_stops_and_stations_from_attributes(stop_attributes.merge(:name => first), options)
-    first_stops += results[:results]
-    results = Gazetteer.find_stops_and_stations_from_attributes(stop_attributes.merge(:area => last), options)
-    last_stops = results[:results]
-    results = Gazetteer.find_stops_and_stations_from_attributes(stop_attributes.merge(:name => last), options)
-    last_stops += results[:results]
-    Route.find_all_by_locations([first_stops, last_stops], 
-                            attributes[:transport_mode_id], 
-                            as_terminus=false, 
-                            limit=limit)
   end
   
   def self.get_terminuses(route_name)

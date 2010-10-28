@@ -155,7 +155,11 @@ class ProblemsController < ApplicationController
       elsif route_info[:routes].size == 1
         redirect_to @template.location_url(route_info[:routes].first)
       else 
-        @error_message = route_info[:error]
+        if route_info[:error] == :area_not_found
+          @error_message = t(:area_not_found_routes)
+        elsif route_info[:error] == :postcode_not_found
+          @error_message = t(:postcode_not_found_routes)
+        end
         @locations = []
         route_info[:routes].each do |route|
           route.show_as_point = true
@@ -164,6 +168,25 @@ class ProblemsController < ApplicationController
         map_params_from_location(@locations, find_other_locations=false)        
         render :choose_route
         return 
+      end
+    end
+  end
+  
+  def find_train_route
+    if params[:to]
+      if params[:to].blank? or params[:from].blank?
+        @error_message = t(:please_enter_from_and_to)
+      else
+        route_info = Gazetteer.train_route_from_stations_and_time(params[:from], params[:to], params[:time])
+        if route_info[:routes].empty? 
+          @error_message = t(:route_not_found)
+        elsif route_info[:routes].size == 1
+          redirect_to @template.location_url(route_info[:routes].first)
+        else
+          @locations = route_info[:routes]
+          render :choose_train_route
+          return 
+        end
       end
     end
   end
