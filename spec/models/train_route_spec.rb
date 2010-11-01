@@ -23,36 +23,36 @@ describe TrainRoute do
   
   describe 'description' do
   
-    it 'should be of the form "Train route between Haywards Heath and London Victoria"' do 
+    it 'should be of the form "train route between Haywards Heath and London Victoria"' do 
       route = routes(:victoria_to_haywards_heath)
-      route.description.should == 'Train route between Haywards Heath and London Victoria'
+      route.description.should == 'train route between London Victoria and Haywards Heath'
     end
     
   end
   
   describe 'name' do 
   
-    it 'should be of the form "Train route between Haywards Heath and London Victoria"' do 
+    it 'should be of the form "train route between Haywards Heath and London Victoria"' do 
       route = routes(:victoria_to_haywards_heath)
-      route.name.should == 'Train route between Haywards Heath and London Victoria'
+      route.name.should == 'train route between London Victoria and Haywards Heath'
     end
     
     describe 'when given a stop to start from' do 
       
       describe 'if the stop is not a terminus' do 
         
-        it 'should be of the form "Train between Haywards Heath and London Victoria"' do 
+        it 'should be of the form "train between Haywards Heath and London Victoria"' do 
           route = routes(:victoria_to_haywards_heath)
-          route.name(stops(:gatwick_airport_station)).should == 'Train between Haywards Heath and London Victoria'
+          route.name(stops(:gatwick_airport_station)).should == 'train between Haywards Heath and London Victoria'
         end
         
       end
       
       describe 'if the stop is a terminus' do 
         
-        it 'should be of the form "Train to London Victoria"' do 
+        it 'should be of the form "train to London Victoria"' do 
           route = routes(:victoria_to_haywards_heath)
-          route.name(stop_areas(:haywards_heath_station)).should == 'Train towards London Victoria'
+          route.name(stop_areas(:haywards_heath_station)).should == 'train towards London Victoria'
         end
         
       end

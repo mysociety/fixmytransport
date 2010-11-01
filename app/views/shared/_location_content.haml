@@ -1,4 +1,4 @@
-.report-problem-link= link_to(t(:report_a_problem_here), new_problem_url(:location_id => location.id, :location_type => location.type))
+.report-problem-link= link_to(t(:report_a_problem_here), new_problem_url(:location_id => location.id, :location_type => location.type, :to => params[:to], :from => params[:from]))
 
 - if !location.campaigns.confirmed.empty?
   %h3= t(:other_campaigns_here)

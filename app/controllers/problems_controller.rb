@@ -162,7 +162,7 @@ class ProblemsController < ApplicationController
         end
         @locations = []
         route_info[:routes].each do |route|
-          #route.show_as_point = true
+          route.show_as_point = true
           @locations << route
         end
         map_params_from_location(@locations, find_other_locations=false)        
@@ -173,18 +173,56 @@ class ProblemsController < ApplicationController
   end
   
   def find_train_route
+    @error_messages = []
+    if params[:to]
+      if params[:to].blank? or params[:from].blank?
+        @error_messages = [t(:please_enter_from_and_to)]
+      else
+        route_info = Gazetteer.train_route_from_stations_and_time(params[:from], params[:to], params[:time])
+        if route_info[:errors]
+          if route_info[:errors].include?(:ambiguous_from_stop)
+            @error_messages << t(:ambiguous_from_stop)
+          end
+          if route_info[:errors].include?(:ambiguous_to_stop)
+            @error_messages << t(:ambiguous_to_stop)
+          end
+          @from_stops = route_info[:from_stops]
+          @to_stops = route_info[:to_stops]
+          render :find_train_route
+          return
+        elsif route_info[:routes].empty? 
+          @from_stops = [route_info[:from_stop]]
+          @to_stops = [route_info[:to_stop]]
+          @error_messages = [t(:route_not_found)]
+        else
+          #create the subroute
+          sub_route = SubRoute.make_sub_route(route_info[:from_stop], 
+                                              route_info[:to_stop],
+                                              params[:time],
+                                              TransportMode.find_by_name('Train'))
+          route_info[:routes].each do |route|
+            RouteSubRoute.create!(:route => route, 
+                                  :sub_route => sub_route)
+          end
+          redirect_to new_problem_url(:location_id => sub_route.id, :location_type => sub_route.type)
+        end
+      end
+    end
+  end
+  
+  def find_other_route
     if params[:to]
       if params[:to].blank? or params[:from].blank?
         @error_message = t(:please_enter_from_and_to)
       else
-        route_info = Gazetteer.train_route_from_stations_and_time(params[:from], params[:to], params[:time])
+        route_info = Gazetteer.other_route_from_stations(params[:from], params[:to])
         if route_info[:routes].empty? 
           @error_message = t(:route_not_found)
         elsif route_info[:routes].size == 1
           redirect_to @template.location_url(route_info[:routes].first)
         else
           @locations = route_info[:routes]
-          render :choose_train_route
+          render :choose_route
           return 
         end
       end

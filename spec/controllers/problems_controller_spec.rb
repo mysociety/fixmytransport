@@ -29,7 +29,8 @@ describe ProblemsController do
       
       it 'should display an error message' do 
         make_request({:to => '', :from => ''})
-        assigns[:error_message].should == 'Please enter the names of the stations where you got on and off the train.'
+        expected_message = 'Please enter the names of the stations where you got on and off the train.'
+        assigns[:error_messages].should == [expected_message]
       end
       
     end
@@ -41,40 +42,39 @@ describe ProblemsController do
         make_request({:to => "london euston", :from => 'birmingham new street'})
       end
       
-      describe 'when one route is returned' do 
-      
-        it 'should redirect to that route' do 
-          Gazetteer.stub!(:train_route_from_stations_and_time).and_return(:routes => [@mock_route])
-          make_request({:to => "london euston", :from => 'birmingham new street'})
-          response.should redirect_to(route_url(@mock_route.region, @mock_route))
-        end
-        
-      end
-      
       describe 'when no routes are returned' do 
       
         it 'should display an error message' do 
           Gazetteer.stub!(:train_route_from_stations_and_time).and_return(:routes => [])
           make_request({:to => "london euston", :from => 'birmingham new street'})
-          assigns[:error_message].should == 'We could not find the route you entered.'
+          assigns[:error_messages].should == ['We could not find the route you entered.']
         end
         
       end
     
-      describe 'when multiple routes are returned' do 
+      describe 'when one or more routes are returned' do 
 
         before do 
-          Gazetteer.stub!(:train_route_from_stations_and_time).and_return(:routes => [@mock_route, @mock_route])
+          @from_stop = mock_model(StopArea)
+          @to_stop = mock_model(StopArea)
+          @sub_route = mock_model(SubRoute, :type => SubRoute)
+          SubRoute.stub!(:make_sub_route).and_return(@sub_route)
+          RouteSubRoute.stub!(:create!).and_return(true)
+          @transport_mode = mock_model(TransportMode)
+          TransportMode.stub!(:find).and_return(@transport_mode)
+          Gazetteer.stub!(:train_route_from_stations_and_time).and_return(:routes => [@mock_route, @mock_route],
+                                                                          :from_stop => @from_stop,
+                                                                          :to_stop => @to_stop)
         end
         
-        it 'should assign the routes to the template as locations' do 
+        it 'should find or create a sub-route for the stations' do 
+          SubRoute.should_receive(:make_sub_route).with(@from_stop, @to_stop, nil, @transport_mode)
           make_request({:to => "london euston", :from => 'birmingham new street'})
-          assigns[:locations].should == [@mock_route, @mock_route]
         end
         
-        it 'should render the template "choose train route"' do 
+        it 'should redirect to the new problem URL, passing the sub-route ID and type' do 
           make_request({:to => "london euston", :from => 'birmingham new street'})
-          response.should render_template("choose_train_route")
+          response.should redirect_to(new_problem_url(:location_id => @sub_route.id, :location_type => 'SubRoute'))
         end
         
       end
@@ -565,7 +565,17 @@ describe ProblemsController do
                   "<strong>not</strong> be sent to them."].join(' ')
       expect_advice(mock_problem, expected)
     end
-    
+
+    it 'should generate advice text for a sub route with no operators' do
+      mock_sub_route = mock_model(SubRoute, :transport_mode_names => ['Train'])
+      mock_problem = mock_model(Problem, :location => mock_sub_route, 
+                                         :responsible_organizations => [])
+      expected = ["We do not yet know who is responsible for this route. If you submit a problem",
+                  "here the subject and description of the problem will be public, but it will",
+                  "<strong>not</strong> be sent to them."].join(' ')
+      expect_advice(mock_problem, expected)
+    end
+        
     it 'should generate advice text for a bus route with no operators' do
       mock_route = mock_model(Route, :transport_mode_names => ['Bus'])
       mock_problem = mock_model(Problem, :location => mock_route, 

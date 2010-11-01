@@ -51,7 +51,7 @@ class LocationsController < ApplicationController
   def show_route
     @route = Route.full_find(params[:id], params[:scope])
     location_search.add_location(@route) if location_search
-    @title = @route.name
+    @title = MySociety::Format.ucfirst(@route.name)
     respond_to do |format|
       format.html do 
         map_params_from_location(@route.points, find_other_locations=false)

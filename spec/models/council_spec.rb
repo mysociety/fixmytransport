@@ -41,7 +41,7 @@ describe Council do
     
     it 'should raise an error if there is no contact for the category or for "other"' do 
       CouncilContact.stub!(:find).and_return([@unrelated_contact])
-      lambda{ @council.email_for_category('Test category') }.should raise_error('No "Other" category contact for A Test Council')
+      lambda{ @council.email_for_category('Test category') }.should raise_error('No "Other" category contact for A Test Council (area ID: 22)')
     end
     
   end

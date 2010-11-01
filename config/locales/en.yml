@@ -31,7 +31,8 @@ en:
   bus_or_coach_route: bus or coach route
   what_was_the_number_and_area: "What was the route number and town or area?"
   is_it_on_a: Is it on a
-  train_or_metro_route: "train, tram, ferry or metro route?"
+  train_route: "train route"
+  tram_metro_ferry_route: "tram, metro or ferry route?"
   enter_route_number: Route number
   enter_town_or_area: Town/Area
   finding_a_bus_route: Finding a bus route
@@ -45,3 +46,7 @@ en:
   what_time_did_you_get_on: What time did you get on?
   please_enter_from_and_to: Please enter the names of the stations where you got on and off the train. 
   route_not_found: "We could not find the route you entered."
+  ambiguous_from_stop: The station you got on at is ambiguous. Please select a station below. 
+  ambiguous_to_stop: The station you got off at is ambiguous. Please select a station below.
+  latest_problems: Latest problems
+  campaign_updates: Campaign updates 

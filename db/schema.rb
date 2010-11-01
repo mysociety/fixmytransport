@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101025181456) do
+ActiveRecord::Schema.define(:version => 20101101110913) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -296,6 +296,13 @@ ActiveRecord::Schema.define(:version => 20101025181456) do
   add_index "route_stops", ["route_id"], :name => "index_route_stops_on_route_id"
   add_index "route_stops", ["stop_id"], :name => "index_route_stops_on_stop_id"
 
+  create_table "route_sub_routes", :force => true do |t|
+    t.integer  "route_id"
+    t.integer  "sub_route_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+  
   create_table "routes", :force => true do |t|
     t.integer  "transport_mode_id"
     t.string   "number"
@@ -484,6 +491,15 @@ ActiveRecord::Schema.define(:version => 20101025181456) do
     t.string   "category"
   end
 
+  create_table "sub_routes", :force => true do |t|
+    t.integer  "from_station_id"
+    t.integer  "to_station_id"
+    t.string   "departure_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "transport_mode_id"
+  end
+  
   create_table "transport_mode_stop_area_types", :force => true do |t|
     t.integer  "transport_mode_id"
     t.integer  "stop_area_type_id"

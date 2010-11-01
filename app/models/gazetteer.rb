@@ -111,48 +111,60 @@ class Gazetteer
     return { :routes => routes, :error => error }
   end
   
-  def self.train_route_from_stations_and_time(from, to, time)    
-    from_stops = Gazetteer.find_stations_from_name(from)
-    to_stops = Gazetteer.find_stations_from_name(to)
-    operators = []
-    if !time.blank?
-      operators = lookup_train(from, to, time)
+  def other_route_from_stations(from, to)
+    errors = []  
+    station_types = ['GTMU', 'GFTD']
+    from_stops = Gazetteer.find_stations_from_name(from, :types => station_types)
+    to_stops = Gazetteer.find_stations_from_name(to, :types => station_types)
+    if from_stops.size > 1
+      errors << :ambiguous_from_stop
+    end
+    if to_stops.size > 1
+      errors << :ambiguous_to_stop
+    end
+    if ! errors.empty? 
+      return { :errors => errors, 
+               :from_stops => from_stops,
+               :to_stops => to_stops }
     end
     routes = Route.find_all_by_locations([from_stops, to_stops], 
-                                         TransportMode.station_modes_transport_ids , 
+                                         [TransportMode.find_by_name('Ferry').id, TransportMode.find_by_name('Tram/Metro').id], 
                                          as_terminus=false, 
                                          limit=nil)
-    if !operators.empty? 
-      routes = routes.select{ |route| operators.include? route.operator_text }
-    end
-    return { :routes => routes } 
+    return { :routes => routes, :from_stop => from_stops.first, :to_stop => to_stops.first }
   end
   
-  def self.lookup_train(from_stop, to_stop, time)
-    operators = []
-    from_name = CGI::escape(from_stop)
-    to_name = CGI::escape(to_stop)
-    time = time.gsub('.', ':')
-    agent = WWW::Mechanize.new
-    traintimes = agent.get("http://traintimes.org.uk/#{from_name}/#{to_name}/#{time}")
-    train_list = traintimes.search('ul')[1]
-    return [] unless train_list
-    # check time
-    results = train_list.search('li')
-    matches = []
-    results.each do |result|
-      matches << result if /#{time} (&ndash;|&#8211;)/.match(result.inner_html)
+  def self.train_route_from_stations_and_time(from, to, time=nil)  
+    errors = []  
+    
+    if /^\d+$/.match(from)
+      from_stops = [StopArea.find(from)]
+    else
+      from_stops = Gazetteer.find_stations_from_name(from, :types => ['GRLS'])
     end
-    return [] if matches.empty?
-    matches.each do |match|
-      stops_link = match.at('a')
-      next if stops_link.inner_text != 'stops/details'
-      stop_url = stops_link.attributes['href']
-      stop_info = agent.get(stop_url)
-      operator = stop_info.search('a').last.inner_text
-      operators << operator
+    
+    if /^\d+$/.match(to)
+      to_stops = [StopArea.find(to)]
+    else
+      to_stops = Gazetteer.find_stations_from_name(to, :types => ['GRLS'])
     end
-    operators
+    
+    if from_stops.size > 1
+      errors << :ambiguous_from_stop
+    end
+    if to_stops.size > 1
+      errors << :ambiguous_to_stop
+    end
+    if ! errors.empty? 
+      return { :errors => errors, 
+               :from_stops => from_stops,
+               :to_stops => to_stops }
+    end
+    routes = Route.find_all_by_locations([from_stops, to_stops], 
+                                         TransportMode.find_by_name('Train').id, 
+                                         as_terminus=false, 
+                                         limit=nil)
+    return { :routes => routes, :from_stop => from_stops.first, :to_stop => to_stops.first } 
   end
   
   # - name - stop/station name
@@ -160,7 +172,7 @@ class Gazetteer
   # - limit - Number of results to return
   def self.find_stations_from_name(name, options={})
     query = 'area_type in (?)'
-    params = [StopAreaType.atomic_types]   
+    params = [options[:types]]   
     name = name.downcase 
     query += " AND (lower(name) like ? 
                OR lower(name) like ? 
@@ -173,8 +185,12 @@ class Gazetteer
     params <<  "% #{name}"
     params << name
     conditions = [query] + params
-    StopArea.find(:all, :conditions => conditions, 
-                        :limit => options[:limit])    
+    results = StopArea.find(:all, :conditions => conditions, 
+                                  :limit => options[:limit])  
+    # reduce redundant results for stop areas
+    if results.size > 1 
+      results = StopArea.map_to_common_areas(results)
+    end                      
   end
   
 

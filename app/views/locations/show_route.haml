@@ -11,7 +11,7 @@
   %a{:href => location_url(@route, :format => 'atom'), :class => 'rss-link campaign-rss'}
     %span= t(:feed)
     %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:campaigns_feed) }
-  %h3.name= @route.name
+  %h3.name= MySociety::Format.ucfirst(@route.name)
   .details
     %span.locality= "#{@route.area}."
     .operators

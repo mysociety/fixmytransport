@@ -1,0 +1,16 @@
+%h2.main-header=t(:where_did_you_get_on_and_off)
+.problem-form-wrapper
+  - form_tag find_other_route_problems_path, :id => 'other_route_form', :method => 'GET' do 
+    - if @error_message
+      .form-field-error
+        = @error_message
+    .form-field
+      != label_tag t(:where_did_you_get_on)
+      != text_field_tag 'from', params[:from]
+      #guidance-from{:class => 'guidance'} e.g. Leicester Square
+    .form-field
+      != label_tag t(:where_did_you_get_off)
+      != text_field_tag 'to', params[:to]
+      #guidance-to{:class => 'guidance'} e.g. Picadilly Circus
+    %input{:type => 'submit', :value => t(:go)}
+      

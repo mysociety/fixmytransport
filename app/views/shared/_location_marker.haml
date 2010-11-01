@@ -1,7 +1,7 @@
-- if location.is_a?(Route)
+- if location.is_a?(Route) or location.is_a?(SubRoute)
   - if location.show_as_point
-    / %a{:href => location_url(location)}
-    /      %img{:src => "/images/#{stop_icon(location, main, small)}.png", :title => "#{location.description}", :alt => "#{location.description}", :style => icon_style(location, @lon, @lat, @zoom, small) }
+    %a{:href => location_url(location)}
+      %img{:src => "/images/#{stop_icon(location, main, small)}.png", :title => "#{location.description}", :alt => "#{location.description}", :style => icon_style(location, @lon, @lat, @zoom, small) }
   - else
     = render :partial => 'shared/location_marker', :collection => location.points, :as => :location, :locals => { :small => true, :main => main }
 - else

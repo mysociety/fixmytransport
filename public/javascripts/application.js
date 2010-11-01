@@ -33,47 +33,27 @@ function clearFormElements(element) {
   });
 }
 
-// Put guidance text as default in search boxes
-function addSearchGuidance() {
-  jQuery('#guidance-name').hide();
-  jQuery('#stop_name_form #name').autofill({
-       value: jQuery('#guidance-name').text(),
+function addGuidanceField(guidance_selector, field_selector){
+  jQuery(guidance_selector).hide();
+  jQuery(field_selector).autofill({
+       value: jQuery(guidance_selector).text(),
        defaultTextColor: '#595454',
        activeTextColor: '#000000'
-     });
-  jQuery('#guidance-route-number').hide();
-  jQuery('#bus_route_form #route_number').autofill({
-      value: jQuery('#guidance-route-number').text(),
-      defaultTextColor: '#595454',
-      activeTextColor: '#000000'
-    });
-  jQuery('#guidance-area').hide();
-  jQuery('#bus_route_form #area').autofill({
-      value: jQuery('#guidance-area').text(),
-      defaultTextColor: '#595454',
-      activeTextColor: '#000000'
-    });
-    
-  jQuery('#guidance-to').hide();
-  jQuery('#train_route_form #to').autofill({
-      value: jQuery('#guidance-to').text(),
-      defaultTextColor: '#595454',
-      activeTextColor: '#000000'
-    });
+     });  
+}
 
-  jQuery('#guidance-from').hide();
-  jQuery('#train_route_form #from').autofill({
-      value: jQuery('#guidance-from').text(),
-      defaultTextColor: '#595454',
-      activeTextColor: '#000000'
-    });
-
-  jQuery('#guidance-time').hide();
-  jQuery('#train_route_form #time').autofill({
-      value: jQuery('#guidance-time').text(),
-      defaultTextColor: '#595454',
-      activeTextColor: '#000000'
-    });
+// Put guidance text as default in search boxes
+function addSearchGuidance() {
+  
+  addGuidanceField('#guidance-name', '#stop_name_form #name');
+  addGuidanceField('#guidance-route-number', '#bus_route_form #route_number');
+  addGuidanceField('#guidance-area', '#bus_route_form #area');
+  addGuidanceField('#guidance-to', '#train_route_form #to');
+  addGuidanceField('#guidance-to', '#other_route_form #to');
+  addGuidanceField('#guidance-from', '#train_route_form #from');
+  addGuidanceField('#guidance-from', '#other_route_form #from');
+  addGuidanceField('#guidance-time', '#train_route_form #time');
+  
 }
 
 // Make the feedback tab popup the form, 

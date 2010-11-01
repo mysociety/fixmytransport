@@ -24,7 +24,7 @@ class Council
     elsif other_contact = contacts.detect{ |contact| contact.category == 'Other' }
       return other_contact.email
     else
-      raise "No \"Other\" category contact for #{self.name}"
+      raise "No \"Other\" category contact for #{self.name} (area ID: #{self.id})" 
     end
   end
   

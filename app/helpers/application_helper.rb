@@ -113,11 +113,11 @@ module ApplicationHelper
   def location_stops_js(locations, main, small)
     array_content = []
     locations.each do |location|
-      if location.is_a? Route
+      if location.is_a? Route or location.is_a? SubRoute
         if location.show_as_point
           array_content << stop_js_coords(location, main, false)
         else
-          array_content <<  location.stops.map{ |stop| stop_js_coords(stop, main, true) } 
+          array_content <<  location.points.map{ |stop| stop_js_coords(stop, main, true) } 
         end
       else
        array_content << stop_js_coords(location, main, small) 
@@ -182,7 +182,7 @@ module ApplicationHelper
   end
   
   def on_or_at_the(location)
-    if location.is_a? Route
+    if location.is_a? Route or location.is_a? SubRoute
       return t(:on_the)
     elsif location.is_a?(StopArea) && ['GRLS', 'GTMU'].include?(location.area_type)
       return t(:at)
@@ -216,6 +216,9 @@ module ApplicationHelper
       end
     end
     if location.is_a? TramMetroRoute
+      return 'route'
+    end
+    if location.is_a? SubRoute
       return 'route'
     end
     location.class.to_s.tableize.singularize.humanize.downcase

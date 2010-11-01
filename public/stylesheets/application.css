@@ -157,9 +157,30 @@ h2.main-header{
   text-align: center;
 }
 
-#transport-mode-radio, .single-transport-mode {
-  padding: 0px 0px;
-  margin: 0.5em 0;
+.homepage .latest{
+  max-width: 60em;
+}
+
+.homepage .latest-problems{
+  border: 1px solid #D9D9D6;
+  padding: 10px;
+  margin: 20px 10px 10px 10px;
+  text-align:center;
+}
+
+.homepage .campaign-updates{
+  border: 1px solid #D9D9D6;
+  padding: 10px;
+  margin: 20px 10px 10px 10px;
+  text-align:center;
+}
+
+.homepage ul {
+  margin: 0;
+  padding: 0;
+}
+.homepage li {
+  list-style-type: none;
 }
 
 .homepage .campaign{
@@ -176,38 +197,6 @@ h2.main-header{
     padding: 0.25em 0.5em 0.5em 0.5em;
     margin:20px 8px 8px 8px;
 }
-
-.transport-mode {
-    background-color: transparent;
-    padding: 0.1em;
-    margin:22px 8px 8px 8px;
-    min-height: 28px; /* should be content-driven */
-    text-align:center;
-}
-
-.transport-mode div {
-    display: inline-block;
-    margin: 0px;
-    padding:8px 4px;
-    float: left;
-}
-
-
-#transport-mode-radio div label{
-    display: inline-block;
-    width: auto;    
-    margin: 0;
-    padding: 0;
-    line-height:1em;
-    height: 1em;
-}
-#transport-mode-radio div input{
-    text-align: right;
-    float: left;
-    padding: 0;
-    margin: 0px 0.5em 0 0;
-}
-
 
 /* Problem lists */
 
@@ -266,7 +255,7 @@ input, textarea, select {
   font-size: 1.2em;
 }
 
-#train_route_form {
+#train_route_form, #other_route_form {
   width: 70%;
   margin-left: auto;
   margin-right: auto;
@@ -278,15 +267,18 @@ input, textarea, select {
 }
 
 
-#train_route_form label {
+#train_route_form label,
+#other_route_form label {
   width: 14em;
 }
 #bus_route_form  input[type=text], 
-#train_route_form input[type=text] {
+#train_route_form input[type=text],
+#other_route_form input[type=text] {
   width: 15em;
 }
 
-#train_route_form .form-field{
+#train_route_form .form-field, 
+#other_route_form .form-field {
   text-align: left;
 }
 

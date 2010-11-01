@@ -19,6 +19,8 @@
 class Route < ActiveRecord::Base
   extend ActiveSupport::Memoizable
   
+  has_many :route_sub_routes
+  has_many :sub_routes, :through => :route_sub_routes
   has_many :route_operators, :dependent => :destroy
   has_many :operators, :through => :route_operators, :uniq => true
   has_many :route_segments, :dependent => :destroy, :order => 'id asc'
@@ -35,9 +37,10 @@ class Route < ActiveRecord::Base
   validates_presence_of :number, :transport_mode_id
   validates_presence_of :region_id, :if => :loaded?
   cattr_reader :per_page
-  # has_friendly_id :short_name, :use_slug => true, :scope => :region
+  has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
   attr_accessor :show_as_point
+  is_route_or_sub_route
   
   @@per_page = 20
   
@@ -57,214 +60,184 @@ class Route < ActiveRecord::Base
   end
 
   def unset_terminuses(stop_ids)
-     RouteSegment.update_all("from_terminus = 'f'", ["route_id = ? and from_stop_id in (?)", id, stop_ids])
-     RouteSegment.update_all("to_terminus = 'f'", ["route_id = ? and to_stop_id in (?)", id, stop_ids])
-   end
+    RouteSegment.update_all("from_terminus = 'f'", ["route_id = ? and from_stop_id in (?)", id, stop_ids])
+    RouteSegment.update_all("to_terminus = 'f'", ["route_id = ? and to_stop_id in (?)", id, stop_ids])
+  end
   
-   def stop_codes
-     stops.map{ |stop| stop.atco_code }.uniq
-   end
+  def stop_codes
+    stops.map{ |stop| stop.atco_code }.uniq
+  end
 
-   def stop_area_codes
-     stop_areas = stops.map{ |stop| stop.stop_areas }.flatten
-     stop_areas.map{ |stop_area| stop_area.code }.uniq
-   end
+  def stop_area_codes
+    stop_areas = stops.map{ |stop| stop.stop_areas }.flatten
+    stop_areas.map{ |stop_area| stop_area.code }.uniq
+  end
 
-   def transport_mode_name
-     transport_mode.name
-   end
+  def transport_mode_name
+    transport_mode.name
+  end
 
-   def area(lowercase=false)
-     area = ''
-     area_list = areas(all=false)
-     if area_list.size > 1
-       area = "Between #{area_list.to_sentence}"
-     else
-       area = "In #{area_list.first}" if !area_list.empty?
-     end
-     if !area.blank? && lowercase
-       area[0] = area.first.downcase
-     end
-     return area
-   end
+  def area(lowercase=false)
+    area = ''
+    area_list = areas(all=false)
+    if area_list.size > 1
+      area = "Between #{area_list.to_sentence}"
+    else
+      area = "In #{area_list.first}" if !area_list.empty?
+    end
+    if !area.blank? && lowercase
+      area[0] = area.first.downcase
+    end
+    return area
+  end
 
-   def areas(all=true)
-     if all or terminuses.empty? 
-       route_stop_list = stops
-     else
-       route_stop_list = terminuses
-     end
-     areas = route_stop_list.map do |stop| 
-       if stop.locality.parents.empty?
-         stop.locality.name
-       else
-         stop.locality.parents.map{ |parent_locality| parent_locality.name }
-       end
-     end.flatten.uniq
-     areas
-   end
+  def areas(all=true)
+    if all or terminuses.empty? 
+      route_stop_list = stops
+    else
+      route_stop_list = terminuses
+    end
+    areas = route_stop_list.map do |stop| 
+      if stop.locality.parents.empty?
+        stop.locality.name
+      else
+        stop.locality.parents.map{ |parent_locality| parent_locality.name }
+      end
+    end.flatten.uniq
+    areas
+  end
 
-   def description
-     return cached_description if cached_description
-     "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
-   end
+  def description
+    return cached_description if cached_description
+    "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
+  end
 
+  def short_name
+    name(from_stop=nil, short=true)
+  end
 
-   def short_name
-     name(from_stop=nil, short=true)
-   end
-   
-   def full_name
-     "#{name} route" 
-   end
+  def full_name
+    "#{name} route" 
+  end
 
-   def name(from_stop=nil, short=false)
-     return self[:name] if !self[:name].blank?
-     default_name = "#{number}"
-     if from_stop
-       return default_name
-     else
-       if short
-         return default_name
-       else
-         return "#{transport_mode_name} #{default_name}"
-       end
-     end
-   end
-   
-   def points
-     stops_or_stations
-   end 
+  def name(from_stop=nil, short=false)
+    return self[:name] if !self[:name].blank?
+    default_name = "#{number}"
+    if from_stop
+      return default_name
+    else
+      if short
+        return default_name
+      else
+       return "#{transport_mode_name} #{default_name}"
+      end
+    end
+  end
 
-   def transport_modes
-     [transport_mode]
-   end
+  def points
+    stops_or_stations
+  end 
 
-   def stops_or_stations
-     route_segments.map do |route_segment|
-       if route_segment.from_stop_area 
-         from = route_segment.from_stop_area
-       else
-         from = route_segment.from_stop
-       end
-       if route_segment.to_stop_area
-         to = route_segment.to_stop_area
-       else
-         to = route_segment.to_stop
-       end
-       [from, to] 
-     end.flatten.uniq
-   end
-   
-   def stops
-     route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }.flatten.uniq
-   end
-    memoize :stops
+  def transport_modes
+    [transport_mode]
+  end
 
-   def next_stops(current)
-     if current.is_a? StopArea
-       outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_area_id == current.id } 
-     else
-       outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == current.id } 
-     end
-     next_stops = outgoing_segments.map do |route_segment| 
-       route_segment.to_stop_area ? route_segment.to_stop_area : route_segment.to_stop 
-     end
-     next_stops.uniq
-   end
+  def stops_or_stations
+    route_segments.map do |route_segment|
+      if route_segment.from_stop_area 
+        from = route_segment.from_stop_area
+      else
+        from = route_segment.from_stop
+      end
+      if route_segment.to_stop_area
+        to = route_segment.to_stop_area
+      else
+        to = route_segment.to_stop
+      end
+      [from, to] 
+    end.flatten.uniq
+  end
+ 
+  def stops
+    route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }.flatten.uniq
+  end
+  memoize :stops
 
-   def previous_stops(current)
-     if current.is_a? StopArea
-       incoming_segments = route_segments.select{ |route_segment| route_segment.to_stop_area_id == current.id }
-     else
-       incoming_segments = route_segments.select{ |route_segment| route_segment.to_stop_id == current.id }
-     end
-     previous_stops = incoming_segments.map do |route_segment| 
-       route_segment.from_stop_area ? route_segment.from_stop_area : route_segment.from_stop 
-     end
-     previous_stops.uniq - next_stops(current)
-   end
+  def next_stops(current)
+    if current.is_a? StopArea
+      outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_area_id == current.id } 
+    else
+      outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == current.id } 
+    end
+    next_stops = outgoing_segments.map do |route_segment| 
+      route_segment.to_stop_area ? route_segment.to_stop_area : route_segment.to_stop 
+    end
+    next_stops.uniq
+  end
 
-   def terminuses
-     from_terminuses = route_segments.select{ |route_segment| route_segment.from_terminus? }
-     to_terminuses = route_segments.select{ |route_segment| route_segment.to_terminus? }
-     from_terminuses = from_terminuses.map do |segment| 
-       segment.from_stop_area ? segment.from_stop_area : segment.from_stop 
-     end
-     to_terminuses = to_terminuses.map do |segment|
-       segment.to_stop_area ? segment.to_stop_area : segment.to_stop 
-     end
-     terminuses = from_terminuses + to_terminuses
-     terminuses.uniq
-   end
-   memoize :terminuses
+  def previous_stops(current)
+    if current.is_a? StopArea
+      incoming_segments = route_segments.select{ |route_segment| route_segment.to_stop_area_id == current.id }
+    else
+      incoming_segments = route_segments.select{ |route_segment| route_segment.to_stop_id == current.id }
+    end
+    previous_stops = incoming_segments.map do |route_segment| 
+      route_segment.from_stop_area ? route_segment.from_stop_area : route_segment.from_stop 
+    end
+    previous_stops.uniq - next_stops(current)
+  end
 
-   def name_by_terminuses(transport_mode, from_stop=nil, short=false)
-     is_loop = false
-     if short
-       text = ""
-     else
-       text = transport_mode.name
-     end
-     if from_stop
-       if terminuses.size > 1
-         terminuses = self.terminuses.reject{ |terminus| terminus == from_stop }
-       else
-         is_loop = true
-         terminuses = self.terminuses
-       end
-       terminuses = terminuses.map{ |terminus| terminus.name_without_suffix(transport_mode) }.uniq
-       if terminuses.size == 1
-         if is_loop
-           text += " towards #{terminuses.to_sentence}"
-         else
-           text += " towards #{terminuses.to_sentence}"
-         end
-       else
-         text += " between #{terminuses.sort.to_sentence}"
-       end
-     else
-       terminuses = self.terminuses.map{ |terminus| terminus.name_without_suffix(transport_mode) }.uniq
-       if terminuses.size == 1
-         text += " from #{terminuses.to_sentence}"
-       else
-         if short
-           text += "#{terminuses.sort.join(' to ')}"     
-         else
-           text += " route between #{terminuses.sort.to_sentence}"     
-         end
-       end
-     end 
-     text
-   end
-   
-   def description_with_operators
-     text = "#{description}"
-     if operators 
-       text += " (#{operator_text})"
-     end
-     text
-   end
-   
-   def operator_text
+  def terminuses
+    from_terminuses = route_segments.select{ |route_segment| route_segment.from_terminus? }
+    to_terminuses = route_segments.select{ |route_segment| route_segment.to_terminus? }
+    from_terminuses = from_terminuses.map do |segment| 
+      segment.from_stop_area ? segment.from_stop_area : segment.from_stop 
+    end
+    to_terminuses = to_terminuses.map do |segment|
+      segment.to_stop_area ? segment.to_stop_area : segment.to_stop 
+    end
+    terminuses = from_terminuses + to_terminuses
+    terminuses.uniq
+  end
+  memoize :terminuses
+
+  def description_with_operators
+    text = "#{description}"
+    if operators 
+      text += " (#{operator_text})"
+    end
+    text
+  end
+
+  def operator_text
     operators.map{ |operator| operator.name }.to_sentence
-   end
-   
-   def responsible_organizations
-     operators
-   end
-   
-   def councils_responsible? 
-     false
-   end
+  end
 
-   def pte_responsible? 
-     false
-   end
+  def responsible_organizations
+    operators
+  end
 
-   def operators_responsible?
-     true
-   end
+  def councils_responsible? 
+    false
+  end
+
+  def pte_responsible? 
+    false
+  end
+
+  def operators_responsible?
+    true
+  end
+
+  def sub_route_problems
+    problem_list = sub_routes.map{ |sub_route| sub_route.problems }
+    if operators
+      problem_list = problem_list.select{ |problem| operators.include?(problem.operator) }
+    end
+    problem_list
+  end
+
+   
   
   # class methods
   

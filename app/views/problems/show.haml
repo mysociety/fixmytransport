@@ -1,4 +1,4 @@
-- @title = "#{@problem.location.name}: #{@problem.subject}"
+- @title = "#{MySociety::Format.ucfirst(@problem.location.name)}: #{@problem.subject}"
 #map-col
   = render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [] }
 .problem-full
@@ -9,7 +9,8 @@
     =t(:reported).titleize
     %span.posted-time= t(:posted_time, :time => time_ago_in_words(@problem.confirmed_at))
     %span.author= @problem.anonymous? ? t(:anonymously) : t(:by, :name => @problem.reporter_name)
-    %span.transport-location!= t(:problem_location, :link => link_to(@problem.location.description, location_url(@problem.location)))
+    - unless @problem.location.is_a?(SubRoute)
+      %span.transport-location!= t(:problem_location, :link => link_to(@problem.location.description, location_url(@problem.location)))
     - if @problem.sent_at
       .sent-time= t(:sent_time, :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.first_sent_to)
 

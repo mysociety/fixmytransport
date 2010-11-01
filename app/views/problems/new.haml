@@ -1,4 +1,4 @@
-- @title = t(:reporting_a_problem, :location => @problem.location.name)
+- @title = t(:reporting_a_problem, :location => MySociety::Format.ucfirst(@problem.location.name))
 #map-col
   = render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [] }
 %h3= @title

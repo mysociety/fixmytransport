@@ -141,6 +141,9 @@ class Problem < ActiveRecord::Base
   end
   
   # class methods
+  def self.latest(limit)
+    confirmed.find(:all, :limit => limit)
+  end
   
   # Sendable reports - confirmed, with operator, PTE, or council, but not sent
   def self.sendable
