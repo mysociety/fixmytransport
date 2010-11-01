@@ -302,7 +302,7 @@ ActiveRecord::Schema.define(:version => 20101101110913) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  
+
   create_table "routes", :force => true do |t|
     t.integer  "transport_mode_id"
     t.string   "number"
@@ -499,7 +499,7 @@ ActiveRecord::Schema.define(:version => 20101101110913) do
     t.datetime "updated_at"
     t.integer  "transport_mode_id"
   end
-  
+
   create_table "transport_mode_stop_area_types", :force => true do |t|
     t.integer  "transport_mode_id"
     t.integer  "stop_area_type_id"
