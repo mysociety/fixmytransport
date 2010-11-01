@@ -190,7 +190,8 @@ class Gazetteer
     # reduce redundant results for stop areas
     if results.size > 1 
       results = StopArea.map_to_common_areas(results)
-    end                      
+    end     
+    # results                 
   end
   
 
