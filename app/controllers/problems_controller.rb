@@ -211,13 +211,25 @@ class ProblemsController < ApplicationController
   end
   
   def find_other_route
+    @error_messages = []
     if params[:to]
       if params[:to].blank? or params[:from].blank?
-        @error_message = t(:please_enter_from_and_to)
+        @error_messages << t(:please_enter_from_and_to)
       else
         route_info = Gazetteer.other_route_from_stations(params[:from], params[:to])
-        if route_info[:routes].empty? 
-          @error_message = t(:route_not_found)
+        if route_info[:errors]
+          if route_info[:errors].include?(:ambiguous_from_stop)
+            @error_messages << t(:ambiguous_from_stop)
+          end
+          if route_info[:errors].include?(:ambiguous_to_stop)
+            @error_messages << t(:ambiguous_to_stop)
+          end
+          @from_stops = route_info[:from_stops]
+          @to_stops = route_info[:to_stops]
+          render :find_other_route
+          return
+        elsif route_info[:routes].empty? 
+          @error_messages << t(:route_not_found)
         elsif route_info[:routes].size == 1
           redirect_to @template.location_url(route_info[:routes].first)
         else

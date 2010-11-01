@@ -1,7 +1,7 @@
 /* General */
 
 body {
-  font-family: verdana, sans-serif;
+  font: normal normal normal 110%/1.25 Arial, Helvetica, sans-serif;
   margin: 0 0;
 }
 
@@ -31,6 +31,11 @@ h1 {
     float: left;
     width: auto;
 }
+
+h3{
+  margin: 0 0 1em 0;
+}
+
 #site-tagline{
     line-height: 40px;
     font-style: bold;
@@ -90,14 +95,14 @@ ul.navigation {
   max-width: 60em;
   position: relative;
   width: 100%;
-  padding: 0.5em;
+  padding: 0.5em 2em;
 }
 
 input[type=text],
 input[type=password], 
 textarea, select {
-  font-size: 0.9em;
-  font-family: verdana, sans-serif;
+  font-size: 1em;
+  font: normal normal normal Arial, Helvetica, sans-serif;
 }
 
 .rss-link {
@@ -157,21 +162,28 @@ h2.main-header{
   text-align: center;
 }
 
-.homepage .latest{
-  max-width: 60em;
-}
 
 .homepage .latest-problems{
   border: 1px solid #D9D9D6;
   padding: 10px;
-  margin: 20px 10px 10px 10px;
+  margin: 1em 2em 1em 4em;
+}
+
+.homepage .left-col{
+  float: left;
+  width: 50%;
   text-align:center;
 }
 
 .homepage .campaign-updates{
   border: 1px solid #D9D9D6;
   padding: 10px;
-  margin: 20px 10px 10px 10px;
+  margin: 1em 4em 1em 2em;
+}
+
+.homepage .right-col{
+  float: right;
+  width: 50%;
   text-align:center;
 }
 
@@ -212,7 +224,7 @@ h2.main-header{
 /* Forms */
 
 label {
-  margin: 0.4em 0;
+  margin: 0.5em 0 0 0;
   padding-right: 0.5em;
   text-align: right;
   float: left;
@@ -392,7 +404,7 @@ message-campaign-update
 }
 
 form.new_feedback label {
-  width: 6em;
+  width: 5em;
 }
 
 /* Problem list */
@@ -421,7 +433,7 @@ form.new_problem label{
 
 form.create_problem label,
 form.create_problem .label{
-  width: 7em;  
+  width: 6em;  
 }
 
 form .checkbox label, 

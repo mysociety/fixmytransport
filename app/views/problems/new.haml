@@ -32,7 +32,6 @@
     .form-field
       = f.label :category
       != f.select("category", Problem.categories(@problem), { :include_blank => t(:pick_a_category) })
-      %br
     - if @problem.errors.on('subject')
       .form-field-error= error_message_on @problem, :subject
     .form-field
@@ -42,7 +41,7 @@
       .form-field-error= error_message_on @problem, :description
     .form-field
       = f.label :description
-      != f.text_area :description, {:rows => 5}
+      != f.text_area :description, {:rows => 5, :cols => 30}
     - f.fields_for :reporter do |reporter_fields|
       - if @problem.reporter == current_user
         .form-field

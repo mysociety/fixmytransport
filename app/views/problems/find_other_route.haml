@@ -1,9 +1,9 @@
 %h2.main-header=t(:where_did_you_get_on_and_off)
 .problem-form-wrapper
   - form_tag find_other_route_problems_path, :id => 'other_route_form', :method => 'GET' do 
-    - if @error_message
+    - @error_messages.each do |error_message|
       .form-field-error
-        = @error_message
+        = error_message
     .form-field
       != label_tag t(:where_did_you_get_on)
       != text_field_tag 'from', params[:from]

@@ -111,7 +111,7 @@ class Gazetteer
     return { :routes => routes, :error => error }
   end
   
-  def other_route_from_stations(from, to)
+  def self.other_route_from_stations(from, to)
     errors = []  
     station_types = ['GTMU', 'GFTD']
     from_stops = Gazetteer.find_stations_from_name(from, :types => station_types)
