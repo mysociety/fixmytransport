@@ -40,6 +40,7 @@ Spec::Runner.configure do |config|
                            :transport_mode_stop_area_types,
                            :stops, 
                            :stop_areas, 
+                           :regions,
                            :routes, 
                            :stop_area_memberships, 
                            :stop_area_links, 

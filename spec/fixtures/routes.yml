@@ -23,6 +23,7 @@ victoria_to_haywards_heath:
   number: 1F50
   type: TrainRoute
   operator_code: TRAIN
+  region: great_britain
 number_807_bus: 
   transport_mode_id: 1
   number: 807

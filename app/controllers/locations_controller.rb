@@ -50,6 +50,10 @@ class LocationsController < ApplicationController
   
   def show_route
     @route = Route.full_find(params[:id], params[:scope])
+    if @route.friendly_id_status.numeric?
+      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+      return false
+    end
     location_search.add_location(@route) if location_search
     @title = MySociety::Format.ucfirst(@route.name)
     respond_to do |format|

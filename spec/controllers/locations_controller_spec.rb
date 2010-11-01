@@ -30,4 +30,22 @@ describe LocationsController do
     end
     
   end
+  
+  describe 'GET #show_route' do 
+  
+    before do 
+      @route = routes(:victoria_to_haywards_heath)
+    end
+    
+    def make_request(params)
+      get :show_route, params
+    end
+    
+    it 'should not find a route by its id' do 
+      make_request({:id => @route.id, :scope => 'great-britain'})
+      response.status.should == '404 Not Found'
+    end
+    
+  end
+  
 end

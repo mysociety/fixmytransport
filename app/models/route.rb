@@ -40,6 +40,7 @@ class Route < ActiveRecord::Base
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
   attr_accessor :show_as_point
+  before_save :cache_route_description
   is_route_or_sub_route
   
   @@per_page = 20
@@ -237,7 +238,9 @@ class Route < ActiveRecord::Base
     problem_list
   end
 
-   
+  def cache_route_description
+    self.cached_description = self.description
+  end
   
   # class methods
   

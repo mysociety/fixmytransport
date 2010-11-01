@@ -17,14 +17,14 @@
 
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
+great_britain:
   code: MyString
-  name: MyText
+  name: Great Britain
   creation_datetime: 2010-05-06 17:57:58
   modification_datetime: 2010-05-06 17:57:58
   revision_number: MyString
   modification: MyString
-
+  cached_slug: great-britain
 two:
   code: MyString
   name: MyText
