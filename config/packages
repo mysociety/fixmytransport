@@ -12,6 +12,7 @@ poppler-utils
 rake (>= 0.8.4-1)
 ruby1.8
 rubygems
+sharutils
 tnef (>= 1.4.5)
 unrtf
 unzip
