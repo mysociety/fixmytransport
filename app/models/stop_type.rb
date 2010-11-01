@@ -24,6 +24,19 @@ class StopType < ActiveRecord::Base
     ['BCT', 'BST', 'BCS', 'BCQ']
   end
   
+  def self.station_part_types
+    ['MET', 'RLY', 'FBT','FER','RPL', 'PLT']
+  end
+  
+  def self.station_part_types_to_station_types
+    { 'MET' => 'GTMU',
+      'RLY' => 'GRLS', 
+      'FBT' => 'GFTD', 
+      'FER' => 'GFTD', 
+      'RPL' => 'GRLS', 
+      'PLT' => 'GTMU' }
+  end
+  
   def self.codes
     connection.select_rows("SELECT DISTINCT description, code 
                             FROM stop_types 
