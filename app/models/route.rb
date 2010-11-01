@@ -40,7 +40,7 @@ class Route < ActiveRecord::Base
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
   attr_accessor :show_as_point
-  before_save :cache_route_description
+  before_save :cache_route_description, :cache_route_coords
   is_route_or_sub_route
   
   @@per_page = 20
@@ -240,6 +240,15 @@ class Route < ActiveRecord::Base
 
   def cache_route_description
     self.cached_description = self.description
+  end
+  
+  def cache_route_coords
+    lons = self.stops.map{ |element| element.lon }
+    lats = self.stops.map{ |element| element.lat }
+    lon = lons.min + ((lons.max - lons.min)/2)
+    lat = lats.min + ((lats.max - lats.min)/2)
+    self.lat = lat
+    self.lon = lon
   end
   
   # class methods
