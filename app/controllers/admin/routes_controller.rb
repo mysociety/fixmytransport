@@ -40,12 +40,19 @@ class Admin::RoutesController < ApplicationController
   end
   
   def create
-    @route = Route.new(params[:route])
+    @route_operators = []
+    if params[:route][:transport_mode_id].blank?
+      @route = Route.new(params[:route])
+      render :new
+      return
+    end
+    transport_mode = TransportMode.find(params[:route][:transport_mode_id])
+    route_type = transport_mode.route_type.constantize
+    @route = route_type.new(params[:route])
     if @route.save
       flash[:notice] = t(:route_created)
       redirect_to(admin_url(admin_route_path(@route.id)))
     else
-      @route_operators = []
       render :new
     end
   end

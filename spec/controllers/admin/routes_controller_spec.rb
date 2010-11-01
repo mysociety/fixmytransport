@@ -79,15 +79,16 @@ describe Admin::RoutesController do
     before do 
       @route = mock_model(Route, :id => 400, :save => true)
       Route.stub!(:new).and_return(@route)
+      TrainRoute.stub!(:new).and_return(@route)
     end
 
     it 'should create a new route with the route params' do 
-      Route.should_receive(:new).with('name' => 'a new route').and_return(@route)
-      post :create, { :route => { :name => 'a new route' } }
+      TrainRoute.should_receive(:new).with('name' => 'a new route', 'transport_mode_id' => '6').and_return(@route)
+      post :create, { :route => { :name => 'a new route', :transport_mode_id => '6' } }
     end
 
     it 'should redirect to the admin route URL if the route can be saved' do 
-      post :create, { :route => { :name => 'a new route'} }
+      post :create, { :route => { :name => 'a new route', :transport_mode_id => '6'} }
       response.should redirect_to(controller.admin_url(admin_route_path(@route.id)))
     end
     
