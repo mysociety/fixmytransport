@@ -191,7 +191,7 @@ class Gazetteer
     if results.size > 1 
       results = StopArea.map_to_common_areas(results)
     end     
-    # results                 
+    results                 
   end
   
 
