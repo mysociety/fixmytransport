@@ -19,12 +19,11 @@ class Parsers::NptgParser
   def parse_regions filepath
     csv_data = convert_encoding(filepath)
      FasterCSV.parse(csv_data, csv_options) do |row|
-       next if row['Modification'] == 'del'
-       yield Region.new(:code =>                  row['RegionCode'],
-                        :name =>                  row['RegionName'], 
-                        :creation_datetime =>     row["CreationDateTime"],
+       yield Region.new(:code =>                  (row['RegionCode'] or row['Traveline Region ID']),
+                        :name =>                  (row['RegionName'] or row['Region Name']), 
+                        :creation_datetime =>     (row["CreationDateTime"] or row['Date of Issue']),
                         :modification_datetime => row["ModificationDateTime"],
-                        :revision_number =>       row["RevisionNumber"],
+                        :revision_number =>       (row["RevisionNumber"] or row['Issue Version']),
                         :modification =>          row["Modification"])
      end
   end
@@ -32,18 +31,17 @@ class Parsers::NptgParser
   def parse_admin_areas filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      next if row['Modification'] == 'del'
-      region = Region.find_by_code(row['RegionCode'])
-      yield AdminArea.new(:code =>                  row['AdministrativeAreaCode'],
-                          :atco_code =>             row['AtcoAreaCode'], 
-                          :name =>                  row['AreaName'], 
+      region = Region.find_by_code((row['RegionCode'] or row['Traveline Region ID']))
+      yield AdminArea.new(:code =>                  (row['AdministrativeAreaCode'] or row['Admin Area ID']),
+                          :atco_code =>             (row['AtcoAreaCode'] or row['ATCO Code']), 
+                          :name =>                  (row['AreaName'] or row['Admin Area Name']), 
                           :short_name =>            row['ShortName'], 
                           :country =>               row['Country'], 
                           :region =>                region, 
                           :national =>              row['National'], 
-                          :creation_datetime =>     row["CreationDateTime"],
+                          :creation_datetime =>     (row["CreationDateTime"] or row['Date of Issue']),
                           :modification_datetime => row["ModificationDateTime"],
-                          :revision_number =>       row["RevisionNumber"],
+                          :revision_number =>       (row["RevisionNumber"] or row['Issue Version']),
                           :modification =>          row["Modification"])
     end
   end
@@ -52,14 +50,13 @@ class Parsers::NptgParser
   def parse_districts filepath
     csv_data = convert_encoding(filepath)
      FasterCSV.parse(csv_data, csv_options) do |row|
-       next if row['Modification'] == 'del'
        admin_area = AdminArea.find_by_code(row['AdministrativeAreaCode'])
-       yield District.new(:code =>                  row['DistrictCode'],
-                          :name =>                  row['DistrictName'], 
+       yield District.new(:code =>                  (row['DistrictCode'] or row['District ID']),
+                          :name =>                  (row['DistrictName'] or row['District Name']), 
                           :admin_area =>            admin_area, 
-                          :creation_datetime =>     row["CreationDateTime"],
+                          :creation_datetime =>     (row["CreationDateTime"] or row['Date of Issue']),
                           :modification_datetime => row["ModificationDateTime"],
-                          :revision_number =>       row["RevisionNumber"],
+                          :revision_number =>       (row["RevisionNumber"] or row['Issue Version']),
                           :modification =>          row["Modification"])
      end
   end
@@ -68,28 +65,27 @@ class Parsers::NptgParser
     csv_data = convert_encoding(filepath)
     spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
     FasterCSV.parse(csv_data, csv_options) do |row|
-      next if row['Modification'] == 'del'
       if spatial_extensions
         coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
       else
         coords = nil
       end
-      admin_area = AdminArea.find_by_code(row['AdministrativeAreaCode'])
-      district = District.find_by_code(row['NptgDistrictCode'])
-      yield Locality.new(:code                      => row['NptgLocalityCode'],
-                         :name                      => row['LocalityName'], 
+      admin_area = AdminArea.find_by_code((row['AdministrativeAreaCode'] or row['Admin Area ID'])) 
+      district = District.find_by_code((row['NptgDistrictCode'] or row['District ID']))
+      yield Locality.new(:code                      => (row['NptgLocalityCode'] or row['National Gazetteer ID']),
+                         :name                      => (row['LocalityName'] or row['Locality Name']), 
                          :short_name                => row['ShortName'], 
                          :qualifier_name            => row['QualifierName'], 
                          :admin_area                => admin_area, 
                          :district                  => district, 
-                         :source_locality_type      => row['SourceLocalityType'], 
+                         :source_locality_type      => (row['SourceLocalityType'] or row['LocalityType']), 
                          :grid_type                 => row['GridType'], 
                          :easting                   => row['Easting'],
                          :northing                  => row['Northing'],
                          :coords                    => coords,
-                         :creation_datetime         => row['CreationDateTime'],
-                         :modification_datetime     => row['ModificationDateTime'],
-                         :revision_number           => row['RevisionNumber'],
+                         :creation_datetime         => (row["CreationDateTime"] or row['Date of Issue']),
+                         :modification_datetime     => (row['ModificationDateTime'] or row['Date of Last Change']),
+                         :revision_number           => (row["RevisionNumber"] or row['Issue Version']),
                          :modification              => row['Modification'])
     end
   end
@@ -97,9 +93,8 @@ class Parsers::NptgParser
   def parse_locality_hierarchy filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      next if row['Modification'] == 'del'
-      ancestor = Locality.find_by_code(row['ParentNptgLocalityCode'])
-      descendant = Locality.find_by_code(row['ChildNptgLocalityCode'])
+      ancestor = Locality.find_by_code((row['ParentNptgLocalityCode'] or row['Parent ID']))
+      descendant = Locality.find_by_code((row['ChildNptgLocalityCode'] or row['Child ID']))
       yield LocalityLink.build_edge(ancestor, descendant)
     end
   end
@@ -107,8 +102,7 @@ class Parsers::NptgParser
   def parse_locality_alternative_names filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      next if row['Modification'] == 'del'
-      locality = Locality.find_by_code(row['NptgLocalityCode'])
+      locality = Locality.find_by_code((row['NptgLocalityCode'] or row['Primary ID']))
       yield AlternativeName.new(:name                  => row['LocalityName'],
                                 :locality              => locality, 
                                 :short_name            => row['ShortName'], 
