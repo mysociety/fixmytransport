@@ -114,13 +114,21 @@ class Gazetteer
   def self.other_route_from_stations(from, to)
     errors = []  
     station_types = ['GTMU', 'GFTD']
-    from_stops = Gazetteer.find_stations_from_name(from, :types => station_types)
-    to_stops = Gazetteer.find_stations_from_name(to, :types => station_types)
+    
+    from_stops = Gazetteer.find_stations_from_name(from.strip, :types => station_types)
+    to_stops = Gazetteer.find_stations_from_name(to.strip, :types => station_types)
+
     if from_stops.size > 1
       errors << :ambiguous_from_stop
     end
     if to_stops.size > 1
       errors << :ambiguous_to_stop
+    end
+    if from_stops.size == 0
+      errors << :from_stop_not_found
+    end
+    if to_stops.size == 0
+      errors << :to_stop_not_found
     end
     if ! errors.empty? 
       return { :errors => errors, 
@@ -131,29 +139,26 @@ class Gazetteer
                                          [TransportMode.find_by_name('Ferry').id, TransportMode.find_by_name('Tram/Metro').id], 
                                          as_terminus=false, 
                                          limit=nil)
-    return { :routes => routes, :from_stop => from_stops.first, :to_stop => to_stops.first }
+    return { :routes => routes, :from_stops => from_stops, :to_stops => to_stops }
   end
   
   def self.train_route_from_stations_and_time(from, to, time=nil)  
     errors = []  
     
-    if /^\d+$/.match(from)
-      from_stops = [StopArea.find(from)]
-    else
-      from_stops = Gazetteer.find_stations_from_name(from, :types => ['GRLS'])
-    end
-    
-    if /^\d+$/.match(to)
-      to_stops = [StopArea.find(to)]
-    else
-      to_stops = Gazetteer.find_stations_from_name(to, :types => ['GRLS'])
-    end
+    from_stops = Gazetteer.find_stations_from_name(from.strip, :types => ['GRLS'])
+    to_stops = Gazetteer.find_stations_from_name(to.strip, :types => ['GRLS'])
     
     if from_stops.size > 1
       errors << :ambiguous_from_stop
     end
     if to_stops.size > 1
       errors << :ambiguous_to_stop
+    end
+    if from_stops.size == 0
+      errors << :from_stop_not_found
+    end
+    if to_stops.size == 0
+      errors << :to_stop_not_found
     end
     if ! errors.empty? 
       return { :errors => errors, 
@@ -164,7 +169,7 @@ class Gazetteer
                                          TransportMode.find_by_name('Train').id, 
                                          as_terminus=false, 
                                          limit=nil)
-    return { :routes => routes, :from_stop => from_stops.first, :to_stop => to_stops.first } 
+    return { :routes => routes, :from_stops => from_stops, :to_stops => to_stops } 
   end
   
   # - name - stop/station name

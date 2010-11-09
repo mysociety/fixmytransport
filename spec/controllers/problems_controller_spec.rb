@@ -38,14 +38,18 @@ describe ProblemsController do
     describe 'when the "to" and "from" params are supplied' do
     
       it 'should ask the gazetteer for routes' do 
-        Gazetteer.should_receive(:train_route_from_stations_and_time).and_return({:routes => []})
+        Gazetteer.should_receive(:train_route_from_stations_and_time).and_return({:routes => [], 
+                                                                                  :from_stops => [],
+                                                                                  :to_stops => []})
         make_request({:to => "london euston", :from => 'birmingham new street'})
       end
       
       describe 'when no routes are returned' do 
       
         it 'should display an error message' do 
-          Gazetteer.stub!(:train_route_from_stations_and_time).and_return(:routes => [])
+          Gazetteer.stub!(:train_route_from_stations_and_time).and_return(:routes => [],
+                                                                          :from_stops => [], 
+                                                                          :to_stops => [])
           make_request({:to => "london euston", :from => 'birmingham new street'})
           assigns[:error_messages].should == ['We could not find the route you entered.']
         end
@@ -55,16 +59,16 @@ describe ProblemsController do
       describe 'when one or more routes are returned' do 
 
         before do 
-          @from_stop = mock_model(StopArea)
-          @to_stop = mock_model(StopArea)
+          @from_stop = mock_model(StopArea, :name => 'London Euston')
+          @to_stop = mock_model(StopArea, :name => 'Birmingham New Street')
           @sub_route = mock_model(SubRoute, :type => SubRoute)
           SubRoute.stub!(:make_sub_route).and_return(@sub_route)
           RouteSubRoute.stub!(:create!).and_return(true)
           @transport_mode = mock_model(TransportMode)
           TransportMode.stub!(:find).and_return(@transport_mode)
           Gazetteer.stub!(:train_route_from_stations_and_time).and_return(:routes => [@mock_route, @mock_route],
-                                                                          :from_stop => @from_stop,
-                                                                          :to_stop => @to_stop)
+                                                                          :from_stops => [@from_stop],
+                                                                          :to_stops => [@to_stop])
         end
         
         it 'should find or create a sub-route for the stations' do 

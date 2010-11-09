@@ -50,3 +50,5 @@ en:
   ambiguous_to_stop: The station you got off at is ambiguous. Please select a station below.
   latest_problems: Latest problems
   campaign_updates: Campaign updates 
+  from_stop_not_found: We didn't recognize the name of the stop you got on at. 
+  to_stop_not_found: We didn't recognize the name of the stop you got off at. 

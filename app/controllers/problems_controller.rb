@@ -175,29 +175,23 @@ class ProblemsController < ApplicationController
   def find_train_route
     @error_messages = []
     if params[:to]
-      if params[:to].blank? or params[:from].blank?
+      @from_stop = params[:from]
+      @to_stop = params[:to]
+      if @to_stop.blank? or @from_stop.blank?
         @error_messages = [t(:please_enter_from_and_to)]
       else
-        route_info = Gazetteer.train_route_from_stations_and_time(params[:from], params[:to], params[:time])
+        route_info = Gazetteer.train_route_from_stations_and_time(@from_stop, @to_stop, params[:time])
+        setup_from_and_to_stops(route_info)
         if route_info[:errors]
-          if route_info[:errors].include?(:ambiguous_from_stop)
-            @error_messages << t(:ambiguous_from_stop)
-          end
-          if route_info[:errors].include?(:ambiguous_to_stop)
-            @error_messages << t(:ambiguous_to_stop)
-          end
-          @from_stops = route_info[:from_stops]
-          @to_stops = route_info[:to_stops]
+          @error_messages = route_info[:errors].map{ |message| t(message) }
           render :find_train_route
           return
         elsif route_info[:routes].empty? 
-          @from_stops = [route_info[:from_stop]]
-          @to_stops = [route_info[:to_stop]]
           @error_messages = [t(:route_not_found)]
         else
           #create the subroute
-          sub_route = SubRoute.make_sub_route(route_info[:from_stop], 
-                                              route_info[:to_stop],
+          sub_route = SubRoute.make_sub_route(route_info[:from_stops].first, 
+                                              route_info[:to_stops].first,
                                               params[:time],
                                               TransportMode.find_by_name('Train'))
           route_info[:routes].each do |route|
@@ -213,19 +207,16 @@ class ProblemsController < ApplicationController
   def find_other_route
     @error_messages = []
     if params[:to]
-      if params[:to].blank? or params[:from].blank?
+      @from_stop = params[:from]
+      @to_stop = params[:to]
+      if @from_stop.blank? or @to_stop.blank?
         @error_messages << t(:please_enter_from_and_to)
       else
-        route_info = Gazetteer.other_route_from_stations(params[:from], params[:to])
+        route_info = Gazetteer.other_route_from_stations(@from_stop, @to_stop)
+        setup_from_and_to_stops(route_info)
+        
         if route_info[:errors]
-          if route_info[:errors].include?(:ambiguous_from_stop)
-            @error_messages << t(:ambiguous_from_stop)
-          end
-          if route_info[:errors].include?(:ambiguous_to_stop)
-            @error_messages << t(:ambiguous_to_stop)
-          end
-          @from_stops = route_info[:from_stops]
-          @to_stops = route_info[:to_stops]
+          @error_messages = route_info[:errors].map{ |message| t(message) }
           render :find_other_route
           return
         elsif route_info[:routes].empty? 
@@ -262,6 +253,20 @@ class ProblemsController < ApplicationController
   
   private 
   
+  def setup_from_and_to_stops(route_info)
+    if route_info[:from_stops].size > 1
+      @from_stops = route_info[:from_stops] 
+    elsif route_info[:from_stops].size == 1
+      @from_stop = route_info[:from_stops].first.name
+    end
+    
+    if route_info[:to_stops].size > 1
+      @to_stops = route_info[:to_stops]
+    elsif route_info[:to_stops].size == 1
+      @to_stop = route_info[:to_stops].first.name
+    end
+  end
+
   def setup_problem_advice(problem)
     advice_params = { :location_type => @template.readable_location_type(problem.location) }
     num_organizations = problem.responsible_organizations.size
@@ -316,6 +321,5 @@ class ProblemsController < ApplicationController
     end
     @sending_advice = t(advice, advice_params)
   end
-  
   
 end
