@@ -8,6 +8,7 @@
       != label_tag t(:where_did_you_get_on)
       - if @from_stops
         != select_tag 'from', options_from_collection_for_select(@from_stops, 'name', 'name')
+        != hidden_field_tag 'from_exact', true
       - else
         != text_field_tag 'from', @from_stop
       #guidance-from{:class => 'guidance'} e.g. London Euston
@@ -15,8 +16,9 @@
       != label_tag t(:where_did_you_get_off)
       - if @to_stops
         != select_tag 'to', options_from_collection_for_select(@to_stops, 'name', 'name')
+        != hidden_field_tag 'to_exact', true
       - else
-        != text_field_tag 'to', @to_stop
+        != text_field_tag 'to', @to_stop        
       #guidance-to{:class => 'guidance'} e.g. Birmingham New Street
     .form-field
       != label_tag t(:what_time_did_you_get_on)
