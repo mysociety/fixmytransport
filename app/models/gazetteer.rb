@@ -196,7 +196,7 @@ class Gazetteer
     end
     conditions = [query] + params
     results = StopArea.find(:all, :conditions => conditions, 
-                                  :limit => options[:limit])  
+                                  :limit => options[:limit], :order => 'name')  
     # reduce redundant results for stop areas
     if results.size > 1 
       results = StopArea.map_to_common_areas(results)
