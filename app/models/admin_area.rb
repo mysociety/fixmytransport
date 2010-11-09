@@ -22,6 +22,10 @@
 class AdminArea < ActiveRecord::Base
   
   belongs_to :region
-  has_friendly_id :short_name, :use_slug => true
+  has_friendly_id :slug_name, :use_slug => true
   
+  def slug_name
+    return short_name if short_name 
+    return name
+  end
 end
