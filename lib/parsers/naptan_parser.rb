@@ -42,7 +42,6 @@ class Parsers::NaptanParser
   def parse_stop_area_hierarchy filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      next if row['Modification'] == 'del'
       ancestor = StopArea.find_by_code(row['ParentStopAreaCode'])
       descendant = StopArea.find_by_code(row['ChildStopAreaCode'])
       yield StopAreaLink.build_edge(ancestor, descendant)
@@ -86,7 +85,6 @@ class Parsers::NaptanParser
   def parse_stop_area_memberships filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      next if row['Modification'] == 'del'
       stop = Stop.find_by_atco_code(row['AtcoCode'])
       stop_area = StopArea.find_by_code(row['StopAreaCode'])
       if stop and stop_area
@@ -103,7 +101,6 @@ class Parsers::NaptanParser
   def parse_stop_areas filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      next if row['Modification'] == 'del'
       spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
       if spatial_extensions
         coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
@@ -135,18 +132,17 @@ class Parsers::NaptanParser
       else
         coords = nil
       end
-      next if row['Modification'] == 'del'
-      locality = Locality.find_by_code(row['NptgLocalityCode'])
-      yield Stop.new( :atco_code                  => row['AtcoCode'],
-                      :naptan_code                => row['NaptanCode'],
+      locality = Locality.find_by_code((row['NptgLocalityCode'] or row['NatGazID']))
+      yield Stop.new( :atco_code                  => (row['AtcoCode'] or row['ATCOCode']),
+                      :naptan_code                => (row['NaptanCode'] or row['SMSNumber']),
                       :plate_code                 => row['PlateCode'], 
                       :common_name                => row['CommonName'], 
                       :short_common_name          => row['ShortCommonName'], 
                       :landmark                   => clean_field(:landmark, row['Landmark']), 
                       :street                     => clean_field(:street, row['Street']),
                       :crossing                   => clean_field(:crossing, row['Crossing']), 
-                      :indicator                  => clean_field(:indicator, row['Indicator']), 
-                      :bearing                    => row['Bearing'], 
+                      :indicator                  => clean_field(:indicator, (row['Indicator'] or row['Identifier'])), 
+                      :bearing                    => (row['Bearing'] or row['Direction']), 
                       :locality                   => locality,
                       :town                       => row['Town'],
                       :suburb                     => row['Suburb'],
@@ -155,16 +151,16 @@ class Parsers::NaptanParser
                       :easting                    => row['Easting'],
                       :northing                   => row['Northing'],
                       :coords                     => coords,
-                      :lon                        => row['Longitude'],
-                      :lat                        => row['Latitude'],
+                      :lon                        => (row['Longitude'] or row['Lon']),
+                      :lat                        => (row['Latitude'] or row ['Lat']),
                       :stop_type                  => row['StopType'],
                       :bus_stop_type              => row['BusStopType'],
                       :administrative_area_code   => row['AdministrativeAreaCode'],
                       :creation_datetime          => row['CreationDateTime'],
-                      :modification_datetime      => row['ModificationDateTime'],
+                      :modification_datetime      => (row['ModificationDateTime'] or row['LastChanged']),
                       :revision_number            => row['RevisionNumber'],
                       :modification               => row['Modification'],
-                      :status                     => row['Status'])
+                      :status                     => (row['Status'] or row['RecordStatus']))
     end
   end
 
