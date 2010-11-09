@@ -101,8 +101,7 @@ ul.navigation {
 input[type=text],
 input[type=password], 
 textarea, select {
-  font-size: 1em;
-  font: normal normal normal Arial, Helvetica, sans-serif;
+  font: inherit;
 }
 
 .rss-link {
@@ -268,7 +267,7 @@ input, textarea, select {
 }
 
 #train_route_form, #other_route_form {
-  width: 70%;
+  width: 80%;
   margin-left: auto;
   margin-right: auto;
   font-size: 1.2em;
@@ -286,7 +285,7 @@ input, textarea, select {
 #bus_route_form  input[type=text], 
 #train_route_form input[type=text],
 #other_route_form input[type=text] {
-  width: 15em;
+  width: 20em;
 }
 
 #train_route_form .form-field, 

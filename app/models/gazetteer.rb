@@ -111,12 +111,12 @@ class Gazetteer
     return { :routes => routes, :error => error }
   end
   
-  def self.other_route_from_stations(from, to)
+  def self.other_route_from_stations(from, from_exact, to, to_exact)
     errors = []  
     station_types = ['GTMU', 'GFTD']
     
-    from_stops = Gazetteer.find_stations_from_name(from.strip, :types => station_types)
-    to_stops = Gazetteer.find_stations_from_name(to.strip, :types => station_types)
+    from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => station_types)
+    to_stops = Gazetteer.find_stations_from_name(to.strip, to_exact, :types => station_types)
 
     if from_stops.size > 1
       errors << :ambiguous_from_stop
@@ -142,11 +142,11 @@ class Gazetteer
     return { :routes => routes, :from_stops => from_stops, :to_stops => to_stops }
   end
   
-  def self.train_route_from_stations_and_time(from, to, time=nil)  
+  def self.train_route_from_stations_and_time(from, from_exact, to, to_exact, time=nil)  
     errors = []  
     
-    from_stops = Gazetteer.find_stations_from_name(from.strip, :types => ['GRLS'])
-    to_stops = Gazetteer.find_stations_from_name(to.strip, :types => ['GRLS'])
+    from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => ['GRLS'])
+    to_stops = Gazetteer.find_stations_from_name(to.strip, to_exact, :types => ['GRLS'])
     
     if from_stops.size > 1
       errors << :ambiguous_from_stop
@@ -175,20 +175,25 @@ class Gazetteer
   # - name - stop/station name
   # options 
   # - limit - Number of results to return
-  def self.find_stations_from_name(name, options={})
+  def self.find_stations_from_name(name, exact, options={})
     query = 'area_type in (?)'
     params = [options[:types]]   
     name = name.downcase 
-    query += " AND (lower(name) like ? 
-               OR lower(name) like ? 
-               OR lower(name) like ? 
-               OR lower(name) like ? 
-               OR code = ?)"
-    params <<  "#{name}"
-    params <<  "#{name} %"
-    params <<  "% #{name} %"
-    params <<  "% #{name}"
-    params << name
+    if exact
+      query += " AND lower(name) = ?"
+      params << name
+    else
+      query += " AND (lower(name) like ? 
+                 OR lower(name) like ? 
+                 OR lower(name) like ? 
+                 OR lower(name) like ? 
+                 OR code = ?)"
+      params <<  "#{name}"
+      params <<  "#{name} %"
+      params <<  "% #{name} %"
+      params <<  "% #{name}"
+      params << name
+    end
     conditions = [query] + params
     results = StopArea.find(:all, :conditions => conditions, 
                                   :limit => options[:limit])  

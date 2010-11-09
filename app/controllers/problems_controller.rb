@@ -180,7 +180,11 @@ class ProblemsController < ApplicationController
       if @to_stop.blank? or @from_stop.blank?
         @error_messages = [t(:please_enter_from_and_to)]
       else
-        route_info = Gazetteer.train_route_from_stations_and_time(@from_stop, @to_stop, params[:time])
+        route_info = Gazetteer.train_route_from_stations_and_time(@from_stop, 
+                                                                  params[:from_exact],
+                                                                  @to_stop, 
+                                                                  params[:to_exact],
+                                                                  params[:time])
         setup_from_and_to_stops(route_info)
         if route_info[:errors]
           @error_messages = route_info[:errors].map{ |message| t(message) }
@@ -212,7 +216,10 @@ class ProblemsController < ApplicationController
       if @from_stop.blank? or @to_stop.blank?
         @error_messages << t(:please_enter_from_and_to)
       else
-        route_info = Gazetteer.other_route_from_stations(@from_stop, @to_stop)
+        route_info = Gazetteer.other_route_from_stations(@from_stop, 
+                                                         params[:from_exact], 
+                                                         @to_stop,
+                                                         params[:to_exact])
         setup_from_and_to_stops(route_info)
         
         if route_info[:errors]
@@ -225,6 +232,7 @@ class ProblemsController < ApplicationController
           redirect_to @template.location_url(route_info[:routes].first)
         else
           @locations = route_info[:routes]
+          map_params_from_location(@locations, find_other_locations=false)                  
           render :choose_route
           return 
         end
