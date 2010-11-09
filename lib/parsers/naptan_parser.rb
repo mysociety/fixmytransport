@@ -107,16 +107,18 @@ class Parsers::NaptanParser
       else
         coords = nil
       end
-      yield StopArea.new( :code                      => row['StopAreaCode'],
-                          :name                      => row['Name'],
+      yield StopArea.new( :code                      => (row['StopAreaCode'] or row['GroupID']),
+                          :name                      => (row['Name'] or row['GroupName']),
                           :administrative_area_code  => row['AdministrativeAreaCode'], 
-                          :area_type                 => row['StopAreaType'], 
+                          :area_type                 => (row['StopAreaType'] or row['Type']), 
                           :grid_type                 => row['GridType'], 
                           :easting                   => row['Easting'],
                           :northing                  => row['Northing'],
                           :coords                    => coords,
+                          :lon                       => row['Lon'],
+                          :lat                       => row['Lat'],
                           :creation_datetime         => row['CreationDateTime'],
-                          :modification_datetime     => row['ModificationDateTime'],
+                          :modification_datetime     => (row['ModificationDateTime'] or row['LastChanged']),
                           :revision_number           => row['RevisionNumber'],
                           :modification              => row['Modification'],
                           :status                    => row['Status'])
