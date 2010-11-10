@@ -42,8 +42,8 @@ class Parsers::NaptanParser
   def parse_stop_area_hierarchy filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      ancestor = StopArea.find_by_code(row['ParentStopAreaCode'])
-      descendant = StopArea.find_by_code(row['ChildStopAreaCode'])
+      ancestor = StopArea.find_by_code((row['ParentStopAreaCode'] or row['ParentID']))
+      descendant = StopArea.find_by_code((row['ChildStopAreaCode'] or row['ChildID']))
       yield StopAreaLink.build_edge(ancestor, descendant)
     end
   end
