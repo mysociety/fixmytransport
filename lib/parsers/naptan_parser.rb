@@ -85,8 +85,8 @@ class Parsers::NaptanParser
   def parse_stop_area_memberships filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      stop = Stop.find_by_atco_code(row['AtcoCode'])
-      stop_area = StopArea.find_by_code(row['StopAreaCode'])
+      stop = Stop.find_by_atco_code((row['AtcoCode'] or row['ATCOCode']))
+      stop_area = StopArea.find_by_code((row['StopAreaCode'] or row['GroupID']))
       if stop and stop_area
         yield StopAreaMembership.new( :stop_id                => stop.id,
                                       :stop_area_id           => stop_area.id,
