@@ -26,7 +26,7 @@ module DataLoader
     parser.send("parse_#{model}".to_sym, ENV['FILE']) do |model| 
       begin
         model.save! 
-      rescue ActiveRecord::RecordInvalid => validation_error
+      rescue ActiveRecord::RecordInvalid, FriendlyId::SlugGenerationError => validation_error
         if skip_invalid
           puts validation_error
           puts model.inspect
