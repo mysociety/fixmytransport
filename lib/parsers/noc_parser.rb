@@ -24,7 +24,6 @@ class Parsers::NocParser
     FasterCSV.parse(csv_data, csv_options) do |row|
       next if row['VehicleMode'] == 'Airline'
       
-      noc_code = clean_operator_code(row['NOCCODE'])
       region_codes = { "WA" => "W", 
                        "YO" => "Y", 
                        "SC" => "S" }
@@ -41,7 +40,7 @@ class Parsers::NocParser
           code = (region_codes[region_code] or region_code)
           region = Region.find_by_code(code)
           raise "Couldn't find region for #{code}" unless region
-          operator.operator_codes.build(:code => row[region_code], 
+          operator.operator_codes.build(:code => clean_operator_code(row[region_code]), 
                                         :region => region)
         end
       end
