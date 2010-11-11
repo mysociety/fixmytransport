@@ -30,27 +30,32 @@ namespace :nptdr do
       puts "Unmatched: #{unmatched_count}"
     end 
     
-    desc 'Process routes from a tsv file specified as FILE=filename and output operator match information'
+    desc 'Process routes from tsv files in a dir specified as DIR=dirname and outputs operator match information'
     task :check_operators => :environment do 
-      check_for_file
-      puts "Checking routes in #{ENV['FILE']}..."
+      check_for_dir
+      puts "Checking routes in #{ENV['DIR']}..."
       parser = Parsers::NptdrParser.new
-      file = ENV['FILE']
-      unmatched_codes = {}
-      parser.parse_routes(file) do |route|
-        if route.route_operators.size != 1
-          if ! unmatched_codes[route.operator_code]
-            unmatched_codes[route.operator_code] = {}
+      dir = ENV['DIR']
+      files = Dir.glob(File.join(ENV['DIR'], "*.tsv"))
+      files.each do |file|
+        unmatched_codes = {}
+        parser.parse_routes(file) do |route|
+          if route.route_operators.size != 1
+            if ! unmatched_codes[route.operator_code]
+              unmatched_codes[route.operator_code] = {}
+            end
+            if ! unmatched_codes[route.operator_code][route.transport_mode_id]
+              unmatched_codes[route.operator_code][route.transport_mode_id] = 0
+            end
+            unmatched_codes[route.operator_code][route.transport_mode_id] += 1
           end
-          if ! unmatched_codes[route.operator_code][route.transport_mode_id]
-            unmatched_codes[route.operator_code][route.transport_mode_id] = 0
-          end
-          unmatched_codes[route.operator_code][route.transport_mode_id] += 1
         end
-      end
-      unmatched_codes.each do |code, modes|
-        modes.each do |mode, count|
-          puts "#{code}\t#{TransportMode.find(mode).name}\t#{count}"
+        admin_area = parser.admin_area_from_filepath(file)
+        puts "File: #{file} Region:#{admin_area.region.name} Admin area: #{admin_area.name}"
+        unmatched_codes.each do |code, modes|
+          modes.each do |mode, count|
+            puts "#{code}\t#{TransportMode.find(mode).name}\t#{count}"
+          end
         end
       end
     end

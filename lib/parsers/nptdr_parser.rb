@@ -136,12 +136,20 @@ class Parsers::NptdrParser
     end
   end
   
-  def parse_routes filepath
-    csv_data = File.read(filepath)
+  def region_from_filepath(filepath)
+    admin_area = self.admin_area_from_filepath(filepath)
+    region = admin_area.region
+  end
+  
+  def admin_area_from_filepath(filepath)
     filename = File.basename(filepath, '.tsv')
     admin_area_code = filename.split('_').last
-    admin_area = AdminArea.find_by_atco_code(admin_area_code)
-    region = admin_area.region
+    admin_area = AdminArea.find_by_atco_code(admin_area_code)  
+  end
+
+  def parse_routes filepath
+    csv_data = File.read(filepath)
+    region = self.region_from_filepath(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
       route_number = row['Route Number']
       vehicle_code = row['Vehicle Code']
