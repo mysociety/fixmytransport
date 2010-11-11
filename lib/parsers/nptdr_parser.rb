@@ -138,9 +138,9 @@ class Parsers::NptdrParser
   
   def parse_routes filepath
     csv_data = File.read(filepath)
-    filename = File.basename(filepath, 'tsv')
+    filename = File.basename(filepath, '.tsv')
     admin_area_code = filename.split('_').last
-    admin_area = AdminArea.find_by_code(admin_area_code)
+    admin_area = AdminArea.find_by_atco_code(admin_area_code)
     region = admin_area.region
     FasterCSV.parse(csv_data, csv_options) do |row|
       route_number = row['Route Number']
