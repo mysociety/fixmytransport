@@ -15,6 +15,7 @@ import datetime
 import time
 import mx.DateTime
 import csv
+import zipfile
 
 sys.path.extend(["../commonlib/pylib"])
 import mysociety.config
@@ -77,12 +78,34 @@ class CSVDumpATCO(mysociety.atcocif.ATCO):
         self.stop_code_mapping_file = stop_code_mapping_file
         self.stop_code_mappings = {}
 
-    def read_files(self, files):
-        '''Loads in multiple ATCO-CIF files.'''
-        for file in files:
+        
+    def read(self, f):
+        '''Loads an ATCO-CIF file from a file.
+
+        >>> import tempfile
+        >>> n = tempfile.NamedTemporaryFile()
+        >>> n.write('ATCO-CIF0510      Buckinghamshire - COACH             ATCOPT20080126111426')
+        >>> n.flush()
+        >>> atco = ATCO()
+        >>> atco.read(n.name)
+        >>> n.close()
+
+        Will also read CIF files from within a ZIP file.
+        '''
+
+        # See if it is a zip file, in which case load each file within it
+        if zipfile.is_zipfile(f):
+            zf = zipfile.ZipFile(f, 'r')
+            for zipfilename in zf.namelist():
+                data = zf.read(zipfilename)
+                # XXX won't recurse into zip files in zip files, but so what
+                self.input_filename = zipfilename
+                self.read_string(data)
+        else:
+            # Otherwise, just read it
             self.input_filename = file
-            self.read(file)
-            
+            return self.read_file_handle(open(f), os.stat(f)[6])
+    
     # reload all ATCO files, setting load function to given one
     def read_all(self, func):
         # reset file number counter
@@ -142,22 +165,36 @@ class CSVDumpATCO(mysociety.atcocif.ATCO):
         
     def noop(self, item):
         return 
-        
+    
+    def transport_mode_mappings(self):
+        mappings = { "BUS" : "B",
+	                 "COACH": 'C',
+                     "FERRY": 'F',
+                     "AIR"  : 'A',
+                     "TRAIN": 'T',
+                     "METRO": 'M' }
+        return mappings
+                     
     def dump_routes_to_file(self, item):
         if not isinstance(item, mysociety.atcocif.JourneyHeader):
             return
         assert item.transaction_type == 'N'
         if item.vehicle_type != '':
-            vehicle_code = item.vehicle_code(self)
-            default_code = False
+            try:
+                vehicle_code = item.vehicle_code(self)
+                default_code = False
+            except:
+                vehicle_code = self.transport_mode_mappings[item.vehicle_type]
+                default_code = True
         else:
             vehicle_code = self.vehicle_code_from_filename()
             default_code = True
         identifier = item.route_number + vehicle_code + item.operator
         locations = []
         for hop in item.hops:
-            location = self.new_stop_code(hop.location)
-            locations.append(location)
+            if hop.is_set_down() or hop.is_pick_up():
+                location = self.new_stop_code(hop.location)
+                locations.append(location)
         if not locations in self.route_locations.setdefault(identifier, []):
             self.route_locations[identifier].append(locations)
             self.outfile.writerow([vehicle_code, 
@@ -169,13 +206,7 @@ class CSVDumpATCO(mysociety.atcocif.ATCO):
     def vehicle_code_from_filename(self):
         basename, ext = os.path.splitext(self.input_filename)
         name_parts = basename.split("_")
-        name_mappings = { "BUS"  : 'B',
-                         "COACH": 'C',
-                         "FERRY": 'F',
-                         "AIR"  : 'A', 
-                         "TRAIN": 'T', 
-                         "METRO": 'M' }
-        return name_mappings[name_parts[-1]]
+        return self.transport_mode_mappings[name_parts[-1]]
 
     def new_stop_code(self, stop_code):
         if not self.stop_code_mappings:
@@ -224,7 +255,7 @@ def data_dirs():
 def cif_files(directory):
     # get cif files in this dir and one level down
     full_dir = os.path.join(options.datadir, directory)
-    return glob.glob(os.path.join(full_dir, "*.CIF")) + glob.glob(os.path.join(full_dir, "*", "*.CIF"))
+    return glob.glob(os.path.join(full_dir, "*.CIF")) + glob.glob(os.path.join(full_dir, "*", "*.CIF")) + glob.glob(os.path.join(full_dir, "*.zip"))  + glob.glob(os.path.join(full_dir, "*", "*.zip"))
 
 def dump_stops():
     for subdir in data_dirs():
@@ -238,7 +269,7 @@ def dump_stops():
        
 def dump_routes():   
     for subdir in data_dirs():
-        outfilepath = os.path.join(options.outdir, "%s.tsv" % subdir)
+	outfilepath = os.path.join(options.outdir, "%s.tsv" % subdir)
         if os.path.exists(outfilepath):
             continue
         nptdr_files = cif_files(subdir)
