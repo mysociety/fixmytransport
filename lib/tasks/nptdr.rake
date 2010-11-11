@@ -33,7 +33,7 @@ namespace :nptdr do
     desc 'Process routes from a tsv file specified as FILE=filename and output operator match information'
     task :check_operators => :environment do 
       check_for_file
-      puts "Checking routes in #{ENV['DIR']}..."
+      puts "Checking routes in #{ENV['FILE']}..."
       parser = Parsers::NptdrParser.new
       file = ENV['FILE']
       unmatched_codes = {}
