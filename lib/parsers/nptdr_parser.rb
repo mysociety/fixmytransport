@@ -150,6 +150,7 @@ class Parsers::NptdrParser
   def parse_routes filepath
     csv_data = File.read(filepath)
     region = self.region_from_filepath(filepath)
+    missing_stops = {}
     FasterCSV.parse(csv_data, csv_options) do |row|
       route_number = row['Route Number']
       vehicle_code = row['Vehicle Code']
@@ -182,11 +183,25 @@ class Parsers::NptdrParser
         from_stop = Stop.find_by_atco_code(from_stop_code.strip, options)
         to_stop = Stop.find_by_atco_code(to_stop_code.strip, options)
         if ! from_stop
-          puts "Can't find stop #{from_stop_code} for route #{route.inspect}" 
+          if ! missing_stops[from_stop_code]
+            missing_stops[from_stop_code] = []
+          end
+          route_string = "#{route.type} #{route.number}"
+          if ! missing_stops[from_stop_code].include?(route_string)
+            missing_stops[from_stop_code] << route_string
+          end
+          # puts "Can't find stop #{from_stop_code} for route #{route.inspect}" 
           next
         end
         if ! to_stop
-          puts "Can't find stop #{to_stop_code} for route #{route.inspect}"
+          if ! missing_stops[to_stop_code]
+            missing_stops[to_stop_code] = []
+          end
+          route_string = "#{route.type} #{route.number}"
+          if ! missing_stops[to_stop_code].include?(route_string)
+            missing_stops[to_stop_code] << route_string
+          end
+          # puts "Can't find stop #{to_stop_code} for route #{route.inspect}"
           next
         end
         if from_stop.atco_code == stop_codes.first 
@@ -207,6 +222,7 @@ class Parsers::NptdrParser
       
       yield route
     end
+    return missing_stops
   end
 
 end

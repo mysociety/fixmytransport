@@ -39,7 +39,7 @@ namespace :nptdr do
       files = Dir.glob(File.join(ENV['DIR'], "*.tsv"))
       files.each do |file|
         unmatched_codes = {}
-        parser.parse_routes(file) do |route|
+        missing_stops = parser.parse_routes(file) do |route|
           if route.route_operators.size != 1
             if ! unmatched_codes[route.operator_code]
               unmatched_codes[route.operator_code] = {}
@@ -52,10 +52,15 @@ namespace :nptdr do
         end
         admin_area = parser.admin_area_from_filepath(file)
         puts "File: #{file} Region:#{admin_area.region.name} Admin area: #{admin_area.name}"
+        puts "Unmatched operator codes"
         unmatched_codes.each do |code, modes|
           modes.each do |mode, count|
             puts "#{code}\t#{TransportMode.find(mode).name}\t#{count}"
           end
+        end
+        puts "Missing stops"
+        missing_stops.each do |stop_code, route_list|
+          puts "#{stop_code} #{route_list.inspect}"
         end
       end
     end
