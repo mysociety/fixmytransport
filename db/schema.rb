@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101101110913) do
+ActiveRecord::Schema.define(:version => 20101111080848) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -176,6 +176,14 @@ ActiveRecord::Schema.define(:version => 20101101110913) do
     t.datetime "updated_at"
   end
 
+  create_table "operator_codes", :force => true do |t|
+    t.integer  "region_id"
+    t.integer  "operator_id"
+    t.string   "code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+  
   create_table "operators", :force => true do |t|
     t.string   "code"
     t.text     "name"
@@ -185,6 +193,12 @@ ActiveRecord::Schema.define(:version => 20101101110913) do
     t.text     "email"
     t.boolean  "email_confirmed"
     t.text     "notes"
+    t.string   "noc_code"
+    t.string   "reference_name"
+    t.string   "vosa_license_name"
+    t.string   "parent"
+    t.string   "vehicle_mode"
+    t.string   "ultimate_parent"
   end
 
   create_table "passenger_transport_executive_areas", :force => true do |t|
@@ -317,6 +331,7 @@ ActiveRecord::Schema.define(:version => 20101101110913) do
     t.float    "lat"
     t.float    "lon"
     t.text     "cached_description"
+    t.integer  "source_admin_area_id"
   end
 
   add_index "routes", ["cached_slug"], :name => "index_routes_on_cached_slug"
@@ -465,6 +480,8 @@ ActiveRecord::Schema.define(:version => 20101101110913) do
     t.string   "tiploc_code"
     t.string   "crs_code"
     t.boolean  "metro_stop",               :default => false
+    t.integer  "generation_high"
+    t.integer  "generation_low"
   end
 
   add_index "stops", ["cached_slug"], :name => "index_stops_on_cached_slug"
@@ -566,6 +583,13 @@ ActiveRecord::Schema.define(:version => 20101101110913) do
   end
 
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
+
+  create_table "vosa_licenses", :force => true do |t|
+    t.integer  "operator_id"
+    t.string   "number"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   add_foreign_key "route_operators", "operators", :name => "route_operators_operator_id_fk", :dependent => :nullify
   add_foreign_key "route_operators", "routes", :name => "route_operators_route_id_fk", :dependent => :nullify

@@ -11,6 +11,12 @@ describe Parsers::NptdrParser do
     before(:each) do 
       @transport_mode = mock_model(TransportMode, :route_type => "BusRoute")
       TransportMode.stub!(:find_by_name).with('Bus').and_return(@transport_mode)
+      @region = mock_model(Region, :name => "South East")
+      @admin_area = mock_model(AdminArea, :region => @region)
+      AdminArea.stub!(:find_by_code).and_return(@admin_area)
+      @operator = mock_model(Operator, :name => 'A Test Operator')
+      @operator_code = mock_model(OperatorCode, :operator => @operator)
+      OperatorCode.stub!(:find_all_by_code_and_region_id).and_return([@operator_code])
       @stop = mock_model(Stop, :atco_code => 'xxxxx')
       Stop.stub!(:find_by_atco_code).and_return{ |atco_code, options| mock_model(Stop, :atco_code => atco_code)}
       @parser = Parsers::NptdrParser.new

@@ -214,12 +214,6 @@ def setup_atco(nptdr_files, outfilepath, stop_code_mapping_file=None):
         '000000023708',
         '000000023748',
         '000000023749',
-        # appears in Lincolnshire files, area 270, for long distance bus from
-        # Victoria, but has no coordinates. Is near Victoria anyway.
-        '000000004387',
-        '000000003300',
-        '000000002403',
-        '000000002805',
     ])
     return atco
     

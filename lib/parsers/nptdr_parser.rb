@@ -138,13 +138,17 @@ class Parsers::NptdrParser
   
   def parse_routes filepath
     csv_data = File.read(filepath)
+    filename = File.basename(filepath, 'tsv')
+    admin_area_code = filename.split('_').last
+    admin_area = AdminArea.find_by_code(admin_area_code)
+    region = admin_area.region
     FasterCSV.parse(csv_data, csv_options) do |row|
       route_number = row['Route Number']
       vehicle_code = row['Vehicle Code']
       operator_code = row['Operator Code']
       route_number.strip! if route_number 
       vehicle_code.strip! if vehicle_code
-      operator_code.strip! if operator_code   
+      operator_code.strip! if operator_code  
       stop_codes = row['Locations'].split(',')
       transport_mode = vehicle_codes_to_transport_modes(vehicle_code)
       next unless transport_mode.route_type
@@ -152,6 +156,11 @@ class Parsers::NptdrParser
       route = route_type.new(:number => route_number,
                              :transport_mode => transport_mode,
                              :operator_code => operator_code)         
+      # If the code is unambiguous for the region, add the operator
+      operator_codes = OperatorCode.find_all_by_code_and_region_id(operator_code, region)
+      if operator_codes.size == 1
+        route.route_operators.build({:operator => operator_codes.first.operator})
+      end
       stop_codes.each_cons(2) do |from_stop_code,to_stop_code|
         options = {:includes => {:stop_area_memberships => :stop_area}}
         from_stop = Stop.find_by_atco_code(from_stop_code.strip, options)
@@ -179,6 +188,7 @@ class Parsers::NptdrParser
                                    :from_terminus => from_terminus, 
                                    :to_terminus  => to_terminus)
       end               
+      
       yield route
     end
   end

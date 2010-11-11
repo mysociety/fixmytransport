@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  region_id: 1
+  operator_id: 1
+  code: MyString
+
+two:
+  region_id: 1
+  operator_id: 1
+  code: MyString
