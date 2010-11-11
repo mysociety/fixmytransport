@@ -30,8 +30,8 @@ namespace :nptdr do
       puts "Unmatched: #{unmatched_count}"
     end 
     
-    desc 'Process routes from tsv files in a dir specified as DIR=dirname and outputs operator match information'
-    task :check_operators => :environment do 
+    desc 'Process routes from tsv files in a dir specified as DIR=dirname and output operator match and missing stop information'
+    task :check_routes => :environment do 
       check_for_dir
       puts "Checking routes in #{ENV['DIR']}..."
       parser = Parsers::NptdrParser.new
