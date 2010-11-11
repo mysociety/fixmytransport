@@ -29,6 +29,26 @@ namespace :nptdr do
       end
       puts "Unmatched: #{unmatched_count}"
     end 
+    
+    desc 'Process routes from a tsv file specified as FILE=filename and output operator match information'
+    task :check_operators => :environment do 
+      check_for_file
+      puts "Checking routes in #{ENV['DIR']}..."
+      parser = Parsers::NptdrParser.new
+      file = ENV['FILE']
+      unmatched_codes = {}
+      parser.parse_routes(file) do |route|
+        if route.route_operators.size != 1
+          if ! unmatched_codes[route.operator_code]
+            unmatched_codes[route.operator_code] = 0
+          end
+          unmatched_codes[route.operator_code] += 1
+        end
+      end
+      unmatched_codes.each do |code, count|
+        puts "#{code}\t#{count}"
+      end
+    end
 
   end
   
