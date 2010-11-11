@@ -160,6 +160,14 @@ class Parsers::NptdrParser
       operator_codes = OperatorCode.find_all_by_code_and_region_id(operator_code, region)
       if operator_codes.size == 1
         route.route_operators.build({:operator => operator_codes.first.operator})
+      elsif operator_codes.size == 0
+        # Is it an ATOC train code? 
+        if transport_mode.name == 'Train' and operator_code.size == 2
+          operators = Operator.find_all_by_noc_code("=#{operator_code}")
+          if operators.size == 1
+            route.route_operators.build({:operator => operators.first})
+          end
+        end
       end
       stop_codes.each_cons(2) do |from_stop_code,to_stop_code|
         options = {:includes => {:stop_area_memberships => :stop_area}}
