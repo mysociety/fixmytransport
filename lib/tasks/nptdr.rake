@@ -40,13 +40,18 @@ namespace :nptdr do
       parser.parse_routes(file) do |route|
         if route.route_operators.size != 1
           if ! unmatched_codes[route.operator_code]
-            unmatched_codes[route.operator_code] = 0
+            unmatched_codes[route.operator_code] = {}
           end
-          unmatched_codes[route.operator_code] += 1
+          if ! unmatched_codes[route.operator_code][route.transport_mode_id]
+            unmatched_codes[route.operator_code][route.transport_mode_id] = 0
+          end
+          unmatched_codes[route.operator_code][route.transport_mode_id] += 1
         end
       end
-      unmatched_codes.each do |code, count|
-        puts "#{code}\t#{count}"
+      unmatched_codes.each do |code, modes|
+        modes.each do |mode, count|
+          puts "#{code}\t#{TransportMode.find(mode).name}\t#{count}"
+        end
       end
     end
 
