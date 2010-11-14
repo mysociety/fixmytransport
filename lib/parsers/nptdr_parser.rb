@@ -149,6 +149,7 @@ class Parsers::NptdrParser
 
   def parse_routes filepath
     csv_data = File.read(filepath)
+    admin_area = self.admin_area_from_filepath(filepath)
     region = self.region_from_filepath(filepath)
     missing_stops = {}
     FasterCSV.parse(csv_data, csv_options) do |row|
@@ -164,7 +165,8 @@ class Parsers::NptdrParser
       route_type = transport_mode.route_type.constantize
       route = route_type.new(:number => route_number,
                              :transport_mode => transport_mode,
-                             :operator_code => operator_code)         
+                             :operator_code => operator_code,
+                             :source_admin_area => admin_area)         
       # If the code is unambiguous for the region, add the operator
       operator_codes = OperatorCode.find_all_by_code_and_region_id(operator_code, region)
       if operator_codes.size == 1
