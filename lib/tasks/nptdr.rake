@@ -36,7 +36,7 @@ namespace :nptdr do
       puts "Checking routes in #{ENV['DIR']}..."
       parser = Parsers::NptdrParser.new
       dir = ENV['DIR']
-      files = Dir.glob(File.join(ENV['DIR'], "*.tsv"))
+      files = Dir.glob(File.join(ENV['DIR'], "Admin_Area*.tsv"))
       files.each do |file|
         unmatched_codes = {}
         missing_stops = parser.parse_routes(file) do |route|
