@@ -28,7 +28,7 @@ describe CampaignMailer do
       it 'should create a sent email model for each update email sent' do 
         SentEmail.should_receive(:create!).with(:recipient => @mock_user, 
                                                 :campaign => @mock_campaign, 
-                                                :update => @mock_update)
+                                                :campaign_update => @mock_update)
         CampaignMailer.send_update(@mock_update)
       end
     
