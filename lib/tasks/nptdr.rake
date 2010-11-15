@@ -78,25 +78,21 @@ namespace :nptdr do
         puts "File: #{file} Region:#{admin_area.region.name} Admin area: #{admin_area.name}"
         puts "Unmatched operator codes"
         unmatched_codes.each do |code, route_list|
-          modes.each do |mode, count|
-            values = [admin_area.region.name, 
-                      admin_area.name, 
-                      code, 
-                      "missing",
-                      route_list.join(", ")]
-            operators_outfile.write(values.join("\t") + "\n")
-          end
+          values = [admin_area.region.name, 
+                    admin_area.name, 
+                    code, 
+                    "missing",
+                    route_list.join(", ")]
+          operators_outfile.write(values.join("\t") + "\n")
         end
         puts "Ambiguous operator codes"        
         ambiguous_codes.each do |code, route_list|
-          modes.each do |mode, count|
-            values = [admin_area.region.name, 
-                      admin_area.name, 
-                      code, 
-                      "ambiguous in region",
-                      route_list.join(", ")]
-            operators_outfile.write(values.join("\t") + "\n")
-          end
+          values = [admin_area.region.name, 
+                    admin_area.name, 
+                    code, 
+                    "ambiguous in region",
+                    route_list.join(", ")]
+          operators_outfile.write(values.join("\t") + "\n")
         end
         puts "Missing stops"
         missing_stops.each do |stop_code, route_list|
