@@ -36,7 +36,7 @@ namespace :nptdr do
       puts "Checking routes in #{ENV['DIR']}..."
       parser = Parsers::NptdrParser.new
       dir = ENV['DIR']
-      operators_outfile = File.open("#{RAILS_ROOT}/data/nptdr/unmatched_operators.tsv")
+      operators_outfile = File.open("#{RAILS_ROOT}/data/nptdr/unmatched_operators.tsv", 'w')
       operators_headings = ["NPTDR File Region", 
                             "NPTDR File Admin Area", 
                             "NPTDR Operator Code",
@@ -44,7 +44,7 @@ namespace :nptdr do
                             "NPTDR Route Numbers"]
       operators_outfile.write(operators_headings.join("\t") + "\n")
       
-      stops_outfile = File.open("#{RAILS_ROOT}/data/nptdr/missing_stops.tsv")
+      stops_outfile = File.open("#{RAILS_ROOT}/data/nptdr/missing_stops.tsv", 'w')
       stops_headings = ["NPTDR File Region", 
                         "NPTDR File Admin Area", 
                         "ATCO Code", 
