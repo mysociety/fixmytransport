@@ -28,11 +28,12 @@ class ProblemsController < ApplicationController
   def create
     # fix for https://rails.lighthouseapp.com/projects/8994/tickets/4346
     # from http://www.ruby-forum.com/topic/100815
-    if params[:problem][:time] && ! params[:time][:hour].blank? && !
-    params[:time][:minute].blank?
-      params[:problem][:time] = "#{params[:time][:hour]}:#{params[:time][:minute]}:00"
-    else
-      params[:problem][:time] = nil
+    if params[:problem]['time(4i)'] && ! params[:problem]['time(4i)'].blank? && 
+      params[:problem]['time(5i)'] && !params[:problem]['time(5i)'].blank?
+      params[:problem][:time] = "#{params['time(4i)']}:#{params['time(5i)']}:00"
+    end
+    (1..5).each do |num|
+      params[:problem].delete("time(#{num}i)")
     end
     @problem = Problem.new(params[:problem])
     if params[:is_campaign]
