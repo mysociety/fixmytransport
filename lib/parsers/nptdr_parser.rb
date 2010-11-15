@@ -169,14 +169,15 @@ class Parsers::NptdrParser
                              :source_admin_area => admin_area)         
       # If the code is unambiguous for the region, add the operator
       operator_codes = OperatorCode.find_all_by_code_and_region_id(operator_code, region)
-      if operator_codes.size == 1
-        route.route_operators.build({:operator => operator_codes.first.operator})
-      elsif operator_codes.size == 0
+      operator_codes.each do |op_code|
+        route.route_operators.build({:operator => op_code.operator})
+      end
+      if operator_codes.size == 0
         # Is it an ATOC train code? 
         if transport_mode.name == 'Train' and operator_code.size == 2
           operators = Operator.find_all_by_noc_code("=#{operator_code}")
-          if operators.size == 1
-            route.route_operators.build({:operator => operators.first})
+          operators.each do |oper|
+            route.route_operators.build({:operator => oper})
           end
         end
       end

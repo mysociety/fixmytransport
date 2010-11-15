@@ -36,33 +36,79 @@ namespace :nptdr do
       puts "Checking routes in #{ENV['DIR']}..."
       parser = Parsers::NptdrParser.new
       dir = ENV['DIR']
+      operators_outfile = File.open("#{RAILS_ROOT}/data/nptdr/unmatched_operators.tsv")
+      operators_headings = ["NPTDR File Region", 
+                            "NPTDR File Admin Area", 
+                            "NPTDR Operator Code",
+                            "Code Problem",
+                            "NPTDR Route Numbers"]
+      operators_outfile.write(operators_headings.join("\t") + "\n")
+      
+      stops_outfile = File.open("#{RAILS_ROOT}/data/nptdr/missing_stops.tsv")
+      stops_headings = ["NPTDR File Region", 
+                        "NPTDR File Admin Area", 
+                        "ATCO Code", 
+                        "NPTDR Route Numbers"]
+      stops_outfile.write(stops_headings.join("\t") + "\n")                  
+      
       files = Dir.glob(File.join(ENV['DIR'], "Admin_Area*.tsv"))
       files.each do |file|
         unmatched_codes = {}
+        ambiguous_codes = {}
         missing_stops = parser.parse_routes(file) do |route|
-          if route.route_operators.size != 1
+          route_string = "#{route.type} #{route.number}"
+          if route.route_operators.size == 0
             if ! unmatched_codes[route.operator_code]
-              unmatched_codes[route.operator_code] = {}
+              unmatched_codes[route.operator_code] = []
             end
-            if ! unmatched_codes[route.operator_code][route.transport_mode_id]
-              unmatched_codes[route.operator_code][route.transport_mode_id] = 0
+            if ! unmatched_codes[route.operator_code].include?(route_string)
+              unmatched_codes[route.operator_code] << route_string
             end
-            unmatched_codes[route.operator_code][route.transport_mode_id] += 1
+          elsif route.route_operators.size > 1
+            if ! ambiguous_codes[route.operator_code]
+              ambiguous_codes[route.operator_code] = []
+            end
+            if ! ambiguous_codes[route.operator_code].include?(route_string)
+              ambiguous_codes[route.operator_code] << route_string
+            end
           end
         end
         admin_area = parser.admin_area_from_filepath(file)
+        
         puts "File: #{file} Region:#{admin_area.region.name} Admin area: #{admin_area.name}"
         puts "Unmatched operator codes"
-        unmatched_codes.each do |code, modes|
+        unmatched_codes.each do |code, route_list|
           modes.each do |mode, count|
-            puts "#{code}\t#{TransportMode.find(mode).name}\t#{count}"
+            values = [admin_area.region.name, 
+                      admin_area.name, 
+                      code, 
+                      "missing"
+                      route_list.join(", ")]
+            operators_outfile.write(values.join("\t") + "\n")
+          end
+        end
+        puts "Ambiguous operator codes"        
+        ambiguous_codes.each do |code, route_list|
+          modes.each do |mode, count|
+            values = [admin_area.region.name, 
+                      admin_area.name, 
+                      code, 
+                      "ambiguous in region"
+                      route_list.join(", ")]
+            operators_outfile.write(values.join("\t") + "\n")
           end
         end
         puts "Missing stops"
         missing_stops.each do |stop_code, route_list|
-          puts "#{stop_code} #{route_list.inspect}"
+          values = [admin_area.region.name, 
+                    admin_area.name, 
+                    stop_code, 
+                    route_list.join(", ")]
+          stops_outfile.write(values.join("\t") + "\n")
         end
       end
+      operators_outfile.close
+      stops_outfile.close
     end
 
   end
