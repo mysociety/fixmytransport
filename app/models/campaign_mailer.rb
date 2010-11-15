@@ -2,6 +2,7 @@ class CampaignMailer < ActionMailer::Base
   include MySociety::UrlMapper
   # include view helpers
   helper :application
+  cattr_accessor :sent_count, :dryrun
   url_mapper # See MySociety::UrlMapper
   
   def supporter_confirmation(recipient, campaign, token)
@@ -16,6 +17,17 @@ class CampaignMailer < ActionMailer::Base
     from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
     subject "[FixMyTransport] New message to \"#{campaign.title}\""
     body :campaign => campaign, :recipient => recipient, :link => main_url(incoming_message_path(incoming_message))
+  end
+  
+  def update(recipient, campaign, supporter, update)
+    recipients recipient.email
+    from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    subject "[FixMyTransport] Campaign update on \"#{campaign.title}\""
+    body({ :campaign => campaign, 
+           :recipient => recipient, 
+           :update => update, 
+           :link => main_url(campaign_path(campaign)),
+           :unsubscribe_link => main_url(confirm_leave_path(:email_token => supporter.token)) })
   end
   
   def receive(email, raw_email)
@@ -40,4 +52,43 @@ class CampaignMailer < ActionMailer::Base
     new.receive(mail, raw_email)
   end
   
+  def self.send_update(update)
+    campaign = update.campaign
+    sent_emails = SentEmail.find(:all, :conditions => ['campaign_update_id = ?', update])
+    sent_recipients = sent_emails.map{ |sent_email| sent_email.recipient }
+    supporters = campaign.campaign_supporters.confirmed
+    supporters = supporters.select{ |supporter| !sent_recipients.include? supporter.supporter }
+    supporters.each do |supporter|
+      recipient = supporter.supporter
+      # don't send an email to the person who created the update
+      next if recipient == update.user
+      if self.dryrun
+        STDERR.puts("Would send the following:")
+        mail = create_update(recipient, campaign, supporter, update)
+        STDERR.puts(mail)
+      else
+        deliver_update(recipient, campaign, supporter, update)
+        SentEmail.create!(:recipient => recipient, 
+                          :campaign => campaign, 
+                          :update => update)
+      end
+    end
+    update.update_attribute(:sent_at, Time.now)
+    self.sent_count += 1
+  end
+  
+  def self.send_updates(dryrun=false)
+    self.dryrun = dryrun
+    
+    # on a staging site, don't send live emails
+    if MySociety::Config.getbool('STAGING_SITE', true)
+      self.dryrun = true
+    end
+    
+    self.sent_count = 0
+    
+    CampaignUpdate.sendable.each do |campaign_update|
+      send_update(campaign_update)
+    end
+  end
 end

@@ -1,0 +1,12 @@
+Hi<%= raw " #{@recipient.name}" %>,
+
+<%= raw @update.user.name %> has added a new update to the FixMyTransport campaign "<%= link_to(@campaign.title, @link) %>"<%- if @update.incoming_message %> in response to an email with the subject "<%=@update.incoming_message.subject%>"<%- if !@update.incoming_message.from.blank? %> received from <%=@update.incoming_message.from %><%- end %><%- end %>.
+
+<%= raw @update.user.name %> says:
+
+"<%= @update.text %>"
+
+Yours,
+The FixMyTransport team
+
+To leave this campaign and stop receiving updates, please follow this link: <%= @unsubscribe_link %>
