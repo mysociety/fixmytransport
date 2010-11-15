@@ -26,6 +26,14 @@ class ProblemsController < ApplicationController
   end
   
   def create
+    # fix for https://rails.lighthouseapp.com/projects/8994/tickets/4346
+    # from http://www.ruby-forum.com/topic/100815
+    if params[:problem][:time] && ! params[:time][:hour].blank? && !
+    params[:time][:minute].blank?
+      params[:problem][:time] = "#{params[:time][:hour]}:#{params[:time][:minute]}:00"
+    else
+      params[:problem][:time] = nil
+    end
     @problem = Problem.new(params[:problem])
     if params[:is_campaign]
       @problem.build_campaign({ :location_id => params[:problem][:location_id], 
