@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(:version => 20101114165116) do
     t.text     "text"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "sent_at"
   end
 
   create_table "campaigns", :force => true do |t|
@@ -183,7 +184,7 @@ ActiveRecord::Schema.define(:version => 20101114165116) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  
+
   create_table "operators", :force => true do |t|
     t.string   "code"
     t.text     "name"
