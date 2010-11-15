@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101114165116) do
+ActiveRecord::Schema.define(:version => 20101115143827) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -240,6 +240,8 @@ ActiveRecord::Schema.define(:version => 20101114165116) do
     t.string   "reporter_name"
     t.boolean  "reporter_public"
     t.string   "reporter_phone"
+    t.time     "time"
+    t.date     "date"
   end
 
   create_table "raw_emails", :force => true do |t|

@@ -42,6 +42,14 @@
     .form-field
       = f.label :description
       != f.text_area :description, {:rows => 5, :cols => 30}
+    .form-field
+      = f.label :time
+      != f.time_select :time, { :ignore_date => true, :include_blank => true }
+      %span.optional-note= "(#{t(:optional)})"
+    .form-field 
+      = f.label :date
+      != f.date_select :date, { :include_blank => true, :start_year => Time.now.year - 1, :end_year => Time.now.year }
+      %span.optional-note= "(#{t(:optional)})"
     - f.fields_for :reporter do |reporter_fields|
       - if @problem.reporter == current_user
         .form-field
