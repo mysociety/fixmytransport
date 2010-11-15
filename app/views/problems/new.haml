@@ -44,7 +44,7 @@
       != f.text_area :description, {:rows => 5, :cols => 30}
     .form-field
       = f.label :time
-      != f.time_select :time, { :ignore_date => true, :include_blank => true }
+      != f.time_select :time, {:include_blank => true}
       %span.optional-note= "(#{t(:optional)})"
     .form-field 
       = f.label :date
