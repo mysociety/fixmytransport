@@ -73,7 +73,9 @@ class CampaignMailer < ActionMailer::Base
                           :update => update)
       end
     end
-    update.update_attribute(:sent_at, Time.now)
+    if ! self.dryrun
+      update.update_attribute(:sent_at, Time.now)
+    end
     self.sent_count += 1
   end
   
