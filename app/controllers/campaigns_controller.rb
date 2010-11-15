@@ -84,6 +84,12 @@ class CampaignsController < ApplicationController
   end
   
   def edit
+    if @campaign.title.blank?
+      @campaign.title = @campaign.problem.subject
+    end
+    if @campaign.description.blank?
+      @campaign.description = @campaign.problem.description
+    end
   end
   
   def add_update

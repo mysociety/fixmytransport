@@ -284,7 +284,9 @@ describe CampaignsController do
       @campaign_user = mock_model(User, :name => "Campaign User")
       @mock_problem = mock_model(Problem, :token => 'problem-token')
       @mock_campaign = mock_model(Campaign, :problem => @mock_problem, 
-                                            :initiator => @campaign_user)
+                                            :initiator => @campaign_user, 
+                                            :title => 'A test campaign', 
+                                            :description => 'Campaign description')
       Campaign.stub!(:find).and_return(@mock_campaign)
     end
     
