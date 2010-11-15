@@ -311,7 +311,7 @@ describe ProblemsController do
   describe "POST #create" do 
 
     before do 
-      @stop = stops(:victoria_station_one)
+      @stop = mock_model(Stop, :points => [mock_model(Stop, :lat => 50, :lon => 0)])
       @mock_user = mock_model(User)
       @mock_problem = mock_model(Problem, :valid? => true, 
                                           :save => true, 

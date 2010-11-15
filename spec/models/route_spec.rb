@@ -69,6 +69,8 @@ describe Route do
   
   describe 'when giving its terminuses' do 
     
+    fixtures default_fixtures
+    
     it 'should return correct terminuses for an example route' do 
       routes(:victoria_to_haywards_heath).terminuses.should == [stop_areas(:victoria_station_root), stop_areas(:haywards_heath_station)]
     end
@@ -77,6 +79,8 @@ describe Route do
   
   describe 'when giving its areas' do 
   
+    fixtures default_fixtures
+    
     describe 'when asked for only terminuses' do
       
       it 'should return a unique list of the names of the parent localities/localities of the terminuses' do 
@@ -96,6 +100,8 @@ describe Route do
   end
   
   describe 'when finding existing routes' do 
+  
+    fixtures default_fixtures
   
     it 'should include routes with the same number and one stop in common with the new route' do 
       route = Route.new(:number => '807', 
@@ -130,6 +136,8 @@ describe Route do
   end
   
   describe 'when finding existing train routes' do 
+    
+    fixtures default_fixtures
     
     before do 
       @route = Route.new(:transport_mode => transport_modes(:train))
@@ -231,6 +239,8 @@ describe Route do
   end
   
   describe 'when adding a route' do 
+  
+    fixtures default_fixtures
   
     it 'should raise an exception if a route to be merged has campaigns associated with it' do
       Route.stub!(:find_existing).and_return([routes(:victoria_to_haywards_heath)])

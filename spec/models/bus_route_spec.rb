@@ -20,8 +20,10 @@ require 'spec_helper'
 require 'route_spec_helper'
 
 describe BusRoute do
-  
+
   describe 'when finding existing routes' do 
+  
+    fixtures default_fixtures
   
     it 'should include in the results returned a route with the same number, mode of transport and stop codes' do 
       atco_codes = ['13001288E', '13001612B', '13001612B']
@@ -37,7 +39,7 @@ describe BusRoute do
   describe 'name (in short form)' do 
   
     it 'should be of the form "807 bus"' do 
-      route = routes(:number_807_bus)
+      route = BusRoute.new(:number => '807')
       route.name(from_stop=nil, short=true).should == '807 bus'
     end
   

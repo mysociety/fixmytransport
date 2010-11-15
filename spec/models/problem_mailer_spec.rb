@@ -2,6 +2,21 @@ require 'spec_helper'
 
 describe ProblemMailer do
   
+  before do 
+    @mock_stop = mock_model(Stop, :name => 'A test stop',
+                                  :atco_code => 'abc', 
+                                  :plate_code => 'def', 
+                                  :naptan_code => nil, 
+                                  :landmark => nil, 
+                                  :street => nil, 
+                                  :crossing => nil, 
+                                  :indicator => nil, 
+                                  :bearing => nil, 
+                                  :easting => 444.44, 
+                                  :northing => 555.55,
+                                  :transport_mode_names => ['Bus', 'Tram/Metro'])
+  end
+  
   describe 'when sending problem confirmations' do
  
     before do
@@ -36,7 +51,7 @@ describe ProblemMailer do
   end
   
   describe 'when sending problem reports' do 
-    
+        
     before do
       @mock_operator = mock_model(Operator, :email => 'operator@example.com', 
                                             :name => 'Test Operator')
@@ -51,7 +66,7 @@ describe ProblemMailer do
                                           :subject => "Missing ticket machines", 
                                           :description => "Desperately need more.",
                                           :emailable_organizations => [@mock_operator],
-                                          :location => stops(:victoria_station_one))
+                                          :location => @mock_stop)
     end
    
     describe "when creating a problem report" do
@@ -93,18 +108,6 @@ describe ProblemMailer do
   describe 'when sending problem reports' do 
     
     def make_mock_problem(emailable_orgs, unemailable_orgs)
-      mock_location = mock_model(Stop, :name => 'A test stop',
-                                       :atco_code => 'abc', 
-                                       :plate_code => 'def', 
-                                       :naptan_code => nil, 
-                                       :landmark => nil, 
-                                       :street => nil, 
-                                       :crossing => nil, 
-                                       :indicator => nil, 
-                                       :bearing => nil, 
-                                       :easting => 444.44, 
-                                       :northing => 555.55,
-                                       :transport_mode_names => ['Bus', 'Tram/Metro'])
       mock_model(Problem, :responsible_organizations => emailable_orgs + unemailable_orgs,
                           :emailable_organizations => emailable_orgs,
                           :unemailable_organizations => unemailable_orgs,
@@ -117,7 +120,7 @@ describe ProblemMailer do
                           :description => 'Some description',
                           :reporter => @reporter,
                           :category => 'Other',
-                          :location => mock_location, 
+                          :location => @mock_stop, 
                           :campaign => nil)
     end
     

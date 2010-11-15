@@ -87,6 +87,8 @@ describe Stop do
   
   describe 'when finding by ATCO code' do 
 
+    fixtures default_fixtures
+
     it 'should ignore case' do 
       Stop.find_by_atco_code('9100VICTric').should == stops(:victoria_station_one)
     end
@@ -94,6 +96,8 @@ describe Stop do
   end
   
   describe 'when finding by name and coordinates' do 
+
+    fixtures default_fixtures
     
     it 'should only return a stop whose name matches and whose coordinates are less than the specified distance away from the given stop' do 
       stop = Stop.find_by_name_and_coords('Haywards Heath Rail Station', 533030, 124583, 10)  
@@ -105,6 +109,8 @@ describe Stop do
   end
   
   describe 'when finding a common area' do 
+
+    fixtures default_fixtures
     
     it 'should return a common root stop area that all stops in the list belong to' do 
       stops = [stops(:victoria_station_one), stops(:victoria_station_two)]
@@ -119,6 +125,8 @@ describe Stop do
   end
   
   describe 'when giving a root stop area' do 
+
+    fixtures default_fixtures
     
     it 'should return the parent stop area if there are more than one' do 
       stops(:victoria_station_one).root_stop_area('GRLS').should == stop_areas(:victoria_station_root)
@@ -128,13 +136,18 @@ describe Stop do
   end
   
   describe 'when giving name without suffix' do 
-  
+    
+    before do 
+      @train_mode = mock_model(TransportMode, :name => 'Train')
+      @tram_mode = mock_model(TransportMode, :name => 'Tram/Metro')
+    end
+    
     it 'should remove "Rail Station" from the end of a train station name' do 
-      Stop.new(:common_name => "Kensington Rail Station").name_without_suffix(transport_modes(:train)).should == "Kensington"
+      Stop.new(:common_name => "Kensington Rail Station").name_without_suffix(@train_mode).should == "Kensington"
     end
     
     it 'should remove "Underground Station" from the end of the name' do 
-      Stop.new(:common_name => "Kensington Underground Station").name_without_suffix(transport_modes(:tram_metro)).should == "Kensington"
+      Stop.new(:common_name => "Kensington Underground Station").name_without_suffix(@tram_mode).should == "Kensington"
     end
     
   end

@@ -21,6 +21,8 @@ require 'route_spec_helper'
 
 describe TrainRoute do
   
+  fixtures default_fixtures
+  
   describe 'description' do
   
     it 'should be of the form "train route between Haywards Heath and London Victoria"' do 

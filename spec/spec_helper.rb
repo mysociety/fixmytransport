@@ -31,23 +31,7 @@ Spec::Runner.configure do |config|
   # do so right here. Just uncomment the next line and replace the fixture
   # names with your fixtures.
   #
-  config.global_fixtures = :transport_modes,
-                           :localities,
-                           :locality_links,
-                           :stop_types,
-                           :stop_area_types,
-                           :transport_mode_stop_types,
-                           :transport_mode_stop_area_types,
-                           :stops, 
-                           :stop_areas, 
-                           :regions,
-                           :routes, 
-                           :stop_area_memberships, 
-                           :stop_area_links, 
-                           :route_segments,
-                           :operators,
-                           :route_operators,
-                           :route_localities
+  # config.global_fixtures = []
   #
   # If you declare global fixtures, be aware that they will be declared
   # for all of your examples, even those that don't use them.
@@ -71,3 +55,22 @@ Spec::Runner.configure do |config|
   
 end
 
+def default_fixtures
+  [:transport_modes,
+  :localities,
+  :locality_links,
+  :stop_types,
+  :stop_area_types,
+  :transport_mode_stop_types,
+  :transport_mode_stop_area_types,
+  :stops, 
+  :stop_areas, 
+  :regions,
+  :routes, 
+  :stop_area_memberships, 
+  :stop_area_links, 
+  :route_segments,
+  :operators,
+  :route_operators,
+  :route_localities]
+end

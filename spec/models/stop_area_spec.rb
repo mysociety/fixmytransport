@@ -79,6 +79,8 @@ describe StopArea do
   end
   
   describe ' area ' do 
+    
+    fixtures default_fixtures
   
     describe 'for stop areas whose stops all share a locality' do
       
@@ -102,6 +104,8 @@ describe StopArea do
     
     describe 'for stop areas with an area attribute' do 
   
+      fixtures default_fixtures
+    
       it 'should be of the form "name in area" ' do 
         stop_areas(:victoria_station_leaf).description.should == "London Victoria Rail Station in Victoria"
       end
@@ -121,6 +125,8 @@ describe StopArea do
   end
 
   describe 'when mapping a list of stop areas to common areas' do 
+    
+    fixtures default_fixtures
     
     it 'should return a list that does not include any member of the original list whose ancestor is also in the list' do 
       stop_list = [stop_areas(:victoria_station_leaf), stop_areas(:victoria_station_root)]

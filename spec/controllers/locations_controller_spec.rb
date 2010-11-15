@@ -32,7 +32,9 @@ describe LocationsController do
   end
   
   describe 'GET #show_route' do 
-  
+    
+    fixtures default_fixtures
+    
     before do 
       @route = routes(:victoria_to_haywards_heath)
     end
