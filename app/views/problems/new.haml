@@ -5,13 +5,6 @@
 - form_for @problem, :url => problems_url, :html => {:class => 'create_problem'} do |f| 
   != f.hidden_field :location_id
   != f.hidden_field :location_type
-  - if @problem.pte_responsible? 
-    != t(:pte_advice, :pte_link => pte_link(@problem.location.passenger_transport_executive))
-  %p!= @sending_advice
-  - if @problem.location.is_a? Route
-    = render :partial => 'route_advice'
-  - else
-    = render :partial => 'stop_advice'
   .fieldset
     - if @problem.errors.on('operator_id')
       .form-field-error= error_message_on @problem, :operator_id
