@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101111080848) do
+ActiveRecord::Schema.define(:version => 20101114165116) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -340,6 +340,14 @@ ActiveRecord::Schema.define(:version => 20101111080848) do
   add_index "routes", ["region_id"], :name => "index_routes_on_region_id"
   add_index "routes", ["transport_mode_id"], :name => "index_routes_on_transport_mode_id"
   add_index "routes", ["type"], :name => "index_routes_on_type"
+
+  create_table "sent_emails", :force => true do |t|
+    t.integer  "campaign_id"
+    t.integer  "campaign_update_id"
+    t.integer  "recipient_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false

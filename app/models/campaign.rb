@@ -46,7 +46,7 @@ class Campaign < ActiveRecord::Base
       if confirmed 
         supporter_attributes[:confirmed_at] = Time.now
       end
-      campaign_supporters.create(supporter_attributes)
+      campaign_supporters.create!(supporter_attributes)
     end
   end
   

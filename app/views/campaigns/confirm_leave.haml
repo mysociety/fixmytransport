@@ -1,0 +1,4 @@
+- if @error
+  != t(@error, :link => link_to(t(:let_us_know), feedback_path))
+- else
+  != t(:you_are_no_longer_a_supporter, :campaign => link_to(@campaign.title, campaign_url(@campaign))) 

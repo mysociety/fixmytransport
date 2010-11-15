@@ -42,12 +42,24 @@ class CampaignsController < ApplicationController
     end
   end
   
+  def confirm_leave
+    @campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
+    if @campaign_supporter
+      @campaign = @campaign_supporter.campaign
+      @campaign.remove_supporter(@campaign_supporter.supporter)
+    else
+      @error = :error_on_leave
+    end
+  end
+  
   def leave
     if current_user && params[:user_id] && current_user.id == params[:user_id].to_i
       @campaign.remove_supporter(current_user)
       flash[:notice] = t(:you_are_no_longer_a_supporter, :campaign => @campaign.title)
       redirect_to campaign_url(@campaign)
     end
+    render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+    return false
   end
   
   def confirm_join
@@ -55,7 +67,7 @@ class CampaignsController < ApplicationController
     if @campaign_supporter
       @campaign_supporter.confirm!
     else
-      @error = t(:update_not_found)
+      @error = :error_on_join
     end
   end
   
