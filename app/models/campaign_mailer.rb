@@ -70,7 +70,7 @@ class CampaignMailer < ActionMailer::Base
         deliver_update(recipient, campaign, supporter, update)
         SentEmail.create!(:recipient => recipient, 
                           :campaign => campaign, 
-                          :update => update)
+                          :campaign_update => update)
       end
     end
     if ! self.dryrun
