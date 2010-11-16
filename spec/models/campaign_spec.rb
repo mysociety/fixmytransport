@@ -28,15 +28,15 @@ describe Campaign do
     end
     
     it 'should be invalid without a description' do 
-      @campaign.errors.on(:description).should == 'Please give a brief description of your campaign'
+      @campaign.errors.on(:description).should == 'Please give a brief description of your issue'
     end
   
     it 'should be invalid without a title' do 
-      @campaign.errors.on(:title).should == 'Please give your campaign a title'
+      @campaign.errors.on(:title).should == 'Please give your page a title'
     end
     
     it 'should be invalid without a subdomain' do 
-      @campaign.errors.on(:subdomain).should == 'Please give your campaign a short name'
+      @campaign.errors.on(:subdomain).should == 'Please give your page a short name'
     end
     
     it 'should be invalid if the subdomain is longer than 16 characters' do 
