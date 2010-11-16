@@ -6,7 +6,7 @@ atom_feed do |feed|
       entry.title(h(campaign.title))
       entry.content(strip_tags(campaign.description))
       entry.author do |author|
-        initiator.name(campaign.initiator.name)
+        author.name(campaign.initiator.name)
       end
     end
   end
