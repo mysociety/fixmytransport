@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101115143827) do
+ActiveRecord::Schema.define(:version => 20101116113825) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -522,7 +522,6 @@ ActiveRecord::Schema.define(:version => 20101115143827) do
   create_table "sub_routes", :force => true do |t|
     t.integer  "from_station_id"
     t.integer  "to_station_id"
-    t.string   "departure_time"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "transport_mode_id"

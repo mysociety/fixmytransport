@@ -142,7 +142,7 @@ class Gazetteer
     return { :routes => routes, :from_stops => from_stops, :to_stops => to_stops }
   end
   
-  def self.train_route_from_stations_and_time(from, from_exact, to, to_exact, time=nil)  
+  def self.train_route_from_stations_and_time(from, from_exact, to, to_exact)  
     errors = []  
     
     from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => ['GRLS'])

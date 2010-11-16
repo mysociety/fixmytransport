@@ -50,16 +50,14 @@ class SubRoute < ActiveRecord::Base
     name
   end
   
-  def self.make_sub_route(from_station, to_station, time, transport_mode)
+  def self.make_sub_route(from_station, to_station, transport_mode)
     exists = find(:first, :conditions => ['from_station_id = ? 
                                           AND to_station_id = ? 
-                                          AND departure_time = ?
                                           AND transport_mode_id = ?', 
-                          from_station, to_station, time, transport_mode])
+                          from_station, to_station, transport_mode])
     return exists if exists
     created = create!({:from_station => from_station, 
                        :to_station => to_station, 
-                       :departure_time => time, 
                        :transport_mode => transport_mode})
     return created
   end

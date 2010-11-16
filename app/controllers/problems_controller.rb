@@ -192,8 +192,7 @@ class ProblemsController < ApplicationController
         route_info = Gazetteer.train_route_from_stations_and_time(@from_stop, 
                                                                   params[:from_exact],
                                                                   @to_stop, 
-                                                                  params[:to_exact],
-                                                                  params[:time])
+                                                                  params[:to_exact])
         setup_from_and_to_stops(route_info)
         if route_info[:errors]
           @error_messages = route_info[:errors].map{ |message| t(message) }
@@ -205,7 +204,6 @@ class ProblemsController < ApplicationController
           #create the subroute
           sub_route = SubRoute.make_sub_route(route_info[:from_stops].first, 
                                               route_info[:to_stops].first,
-                                              params[:time],
                                               TransportMode.find_by_name('Train'))
           route_info[:routes].each do |route|
             RouteSubRoute.create!(:route => route, 
@@ -230,7 +228,6 @@ class ProblemsController < ApplicationController
                                                          @to_stop,
                                                          params[:to_exact])
         setup_from_and_to_stops(route_info)
-        
         if route_info[:errors]
           @error_messages = route_info[:errors].map{ |message| t(message) }
           render :find_other_route
