@@ -5,11 +5,11 @@ en:
         campaign:
           attributes: 
             title:
-              blank: "Please give your campaign a title"
+              blank: "Please give your page a title"
             description:
-              blank: "Please give a brief description of your campaign"
+              blank: "Please give a brief description of your issue"
             subdomain:
-              blank: "Please give your campaign a short name"
+              blank: "Please give your page a short name"
               too_short: 'The short name must be at least 6 characters long'
               too_long: 'The short name must be 16 characters or less'
               need_one_letter: 'The short name must contain at least one letter'

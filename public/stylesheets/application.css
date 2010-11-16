@@ -439,6 +439,14 @@ form.new_problem label{
   width: 10em;  
 }
 
+form.create_problem label.radiobutton_label {
+  float: none;
+  display: inline-block;
+  margin: 0.5em 0;
+  text-align: left;
+  width: auto;
+}
+
 form.create_problem label,
 form.create_problem .label{
   width: 6em;  

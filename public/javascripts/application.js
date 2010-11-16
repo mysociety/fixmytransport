@@ -55,6 +55,23 @@ function addSearchGuidance() {
   
 }
 
+// For an ongoing issue, don't show the date and time fields
+function hideProblemDateTimeForOngoing() {
+  if (jQuery('#is_campaign_1').is(':checked')){
+    jQuery('#date-field').hide();
+    jQuery('#time-field').hide();    
+  }
+  jQuery('input[name=is_campaign]').click(function(){
+    if (jQuery('#is_campaign_1').is(':checked')){
+      jQuery('#date-field').hide();
+      jQuery('#time-field').hide();
+    }else{
+      jQuery('#date-field').show();
+      jQuery('#time-field').show();
+    }
+  })
+}
+
 // Make the feedback tab popup the form, 
 // make the form submit via AJAX,
 // setup the cancel button to clear fields
@@ -111,5 +128,6 @@ jQuery(document).ready(function() {
   
   addSearchGuidance();  
   setupFeedbackForm();
+  hideProblemDateTimeForOngoing();
 });
 

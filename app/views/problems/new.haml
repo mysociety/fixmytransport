@@ -19,7 +19,12 @@
         !=f.hidden_field :passenger_transport_executive_id, :value => @problem.location.passenger_transport_executive.id
       - elsif @problem.councils_responsible?    
         != f.hidden_field :council_info, :value => @problem.location.council_info
-      
+      .form-field
+        = f.label :is_campaign, t(:is_this)
+        !=radio_button_tag 'is_campaign', "0", (params[:is_campaign] == "0" or not params[:is_campaign])
+        = label_tag 'is_campaign_0', t(:a_one_off), :class => 'radiobutton_label'
+        !=radio_button_tag 'is_campaign', "1", params[:is_campaign] == "1" 
+        = label_tag 'is_campaign_1', t(:an_ongoing_problem), :class => 'radiobutton_label'
     - if @problem.errors.on('category')
       .form-field-error= error_message_on @problem, :category
     .form-field
@@ -35,11 +40,11 @@
     .form-field
       = f.label :description
       != f.text_area :description, {:rows => 5, :cols => 30}
-    .form-field
+    .form-field{:id => 'time-field'}
       = f.label :time
       != f.time_select :time, {:include_blank => true}
       %span.optional-note= "(#{t(:optional)})"
-    .form-field 
+    .form-field{:id => 'date-field'} 
       = f.label :date
       != f.date_select :date, { :include_blank => true, :start_year => Time.now.year - 1, :end_year => Time.now.year }
       %span.optional-note= "(#{t(:optional)})"
@@ -73,8 +78,5 @@
       != f.check_box :reporter_public
       = f.label :reporter_public, t(:ok_to_be_public)
       .label-note= t(:never_show_email)
-    .checkbox
-      !=check_box_tag 'is_campaign', "1", params[:is_campaign]
-      = f.label t(:is_this_a_campaign)
   .submit
     != submit_tag t(:submit)    

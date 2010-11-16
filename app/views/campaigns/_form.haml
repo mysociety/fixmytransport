@@ -1,4 +1,4 @@
-- form_for campaign, :url => campaign_url(campaign), :html => { :class => 'update_campaign' } do |f| 
+- form_for campaign, :url => campaign_url(campaign, :token => params[:token]), :html => { :class => 'update_campaign' } do |f| 
   .fieldset
     - if campaign.errors.on('title')
       .form-field-error= error_message_on campaign, :title
@@ -15,6 +15,7 @@
     .form-field
       = f.label :subdomain, t(:choose_a_short_name)
       != f.text_field :subdomain, :size => 16
+      %br
       %span.label-note= t(:easy_web_address, :url => "http://#{MySociety::Config.get('DOMAIN', 'localhost')}/savethec10")
     - if ! campaign.initiator.registered? or campaign.initiator.registered_changed?
       = t(:add_password_to_update)

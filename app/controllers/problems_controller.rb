@@ -41,7 +41,7 @@ class ProblemsController < ApplicationController
       params[:problem].delete("time(#{num}i)")
     end
     @problem = Problem.new(params[:problem])
-    if params[:is_campaign]
+    if params[:is_campaign] == "1"
       @problem.build_campaign({ :location_id => params[:problem][:location_id], 
                                 :location_type => params[:problem][:location_type],
                                 :status => :new, 
