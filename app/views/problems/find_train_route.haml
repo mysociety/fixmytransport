@@ -20,11 +20,6 @@
       - else
         != text_field_tag 'to', @to_stop        
       #guidance-to{:class => 'guidance'} e.g. Birmingham New Street
-    .form-field
-      != label_tag t(:what_time_did_you_get_on)
-      != text_field_tag 'time', params[:time]
-      %span.optional-note= "(#{t(:optional)})"
-      #guidance-time{:class => 'guidance'} e.g. 13:24
     %input{:type => 'submit', :value => t(:go)}
       
       

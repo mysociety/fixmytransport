@@ -17,3 +17,18 @@
 #map img {
     border: 0;
 }
+
+#large-map {
+  width: 500px;
+  margin:auto;
+}
+
+#large-map #map{
+  text-align: center;
+  width: 500px; 
+  height: 500px;
+  margin: auto;
+  position:relative;
+  border: 1px solid #000000;
+  overflow: hidden;
+}

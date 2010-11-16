@@ -52,7 +52,6 @@ function addSearchGuidance() {
   addGuidanceField('#guidance-to', '#other_route_form #to');
   addGuidanceField('#guidance-from', '#train_route_form #from');
   addGuidanceField('#guidance-from', '#other_route_form #from');
-  addGuidanceField('#guidance-time', '#train_route_form #time');
   
 }
 

@@ -40,7 +40,9 @@ function area_init() {
 function updateLocations(event) {
   center = map.getCenter();
   center = center.transform(map.getProjectionObject(), proj);
-  OpenLayers.loadURL("/locations/" + map.getZoom() + "/" + center.lat + "/" + center.lon, {}, this, loadNewMarkers, markerFail);
+  url = "/locations/" + map.getZoom() + "/" + center.lat + "/" + center.lon + "/" + linkType;
+  params = "?height=" + jQuery('#map').height() + "&width=" + jQuery('#map').width();
+  OpenLayers.loadURL(url + params, {}, this, loadNewMarkers, markerFail);
 }
 
 function loadNewMarkers(response) {

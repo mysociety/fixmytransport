@@ -12,6 +12,7 @@
   var lat = #{@stop_area.lat};
   var lon = #{@stop_area.lon};
   var findOtherLocations = false;
+  var linkType = 'location';
   var areaStops = #{location_stops_js([@stop_area], main=true, small=false)}
   jQuery(document).ready(function(){
     setupShowStopArea();

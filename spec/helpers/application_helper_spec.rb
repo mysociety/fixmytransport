@@ -69,11 +69,13 @@ describe ApplicationHelper do
   describe 'when returning the readable location type of a location' do 
   
     it 'should return "stop" for a stop' do 
-      helper.readable_location_type(Stop.new(:stop_type => 'BCS')).should == 'stop'
+      location = mock_model(Stop, :stop_type => 'BCS', :transport_mode_names => ['Bus', 'Coach', 'Tram/Metro'])
+      helper.readable_location_type(location).should == 'stop'
     end
     
     it 'should return "stop" for a stop' do 
-      helper.readable_location_type(Stop.new(:stop_type => 'BCT')).should == 'stop'
+      location = mock_model(Stop, :stop_type => 'BCT', :transport_mode_names => ['Bus', 'Coach', 'Tram/Metro'])      
+      helper.readable_location_type(location).should == 'stop'
     end
     
     it 'should return "route" for a route' do 
@@ -89,23 +91,28 @@ describe ApplicationHelper do
     end
     
     it 'should return "stop area" for a stop area' do 
-      helper.readable_location_type(StopArea.new(:area_type => 'GBCS')).should == 'bus/coach station'
+      location = mock_model(StopArea, :area_type => 'GBCS', :transport_mode_names => ['Bus', 'Coach', 'Tram/Metro'])
+      helper.readable_location_type(location).should == 'bus/coach station'
     end
     
     it 'should return "station" for a train stop' do 
-      helper.readable_location_type(Stop.new(:stop_type => 'RLY')).should == 'station'
+      location = mock_model(Stop, :stop_type => 'RLY', :transport_mode_names => ['Train'])
+      helper.readable_location_type(location).should == 'station'
     end
     
     it 'should return "station" for a train stop area' do 
-      helper.readable_location_type(StopArea.new(:area_type => 'GRLS')).should == 'station'
+      location = mock_model(StopArea, :area_type => 'GRLS', :transport_mode_names => ['Train'])
+      helper.readable_location_type(location).should == 'station'
     end
   
     it 'should return "station" for a metro/tram stop' do 
-      helper.readable_location_type(Stop.new(:stop_type => 'TMU')).should == 'station'
+      location = mock_model(Stop, :stop_type => 'TMU', :transport_mode_names => ['Tram/Metro'])
+      helper.readable_location_type(location).should == 'station'
     end
   
     it 'should return "station" for a metro/tram stop area' do 
-      helper.readable_location_type(StopArea.new(:area_type => 'GTMU')).should == 'station'
+      location = mock_model(StopArea, :area_type => 'GTMU', :transport_mode_names => ['Tram/Metro'])
+      helper.readable_location_type(location).should == 'station'
     end 
     
 

@@ -1,6 +1,11 @@
 class ProblemsController < ApplicationController
   
-  before_filter :process_map_params, :only => [:show, :new, :find]
+  before_filter :process_map_params, :only => [:show, 
+                                               :new, 
+                                               :find_stop, 
+                                               :find_bus_route, 
+                                               :find_train_route, 
+                                               :find_other_route]
   
   def new
     location = params[:location_type].constantize.find(params[:location_id])
@@ -110,14 +115,20 @@ class ProblemsController < ApplicationController
           render :choose_locality
           return
         else
-          map_params_from_location(stop_info[:localities], find_other_locations=true)
+          map_params_from_location(stop_info[:localities], 
+                                   find_other_locations=true, 
+                                   LARGE_MAP_HEIGHT,
+                                   LARGE_MAP_WIDTH)
           @locations = []
           render :choose_location
           return
         end
       # got back stops/stations
       elsif stop_info[:locations]
-        map_params_from_location(stop_info[:locations], find_other_locations=true)
+        map_params_from_location(stop_info[:locations],
+                                 find_other_locations=true, 
+                                 LARGE_MAP_HEIGHT,
+                                 LARGE_MAP_WIDTH)
         @locations = stop_info[:locations]
         render :choose_location
         return
@@ -129,10 +140,10 @@ class ProblemsController < ApplicationController
           render :find_stop
           return
         else
-          @lat = postcode_info[:lat]
-          @lon = postcode_info[:lon]
-          @zoom = postcode_info[:zoom]
-          @other_locations = Map.other_locations(@lat, @lon, @zoom)
+          @lat = postcode_info[:lat] unless @lat
+          @lon = postcode_info[:lon] unless @lon
+          @zoom = postcode_info[:zoom] unless @zoom
+          @other_locations = Map.other_locations(@lat, @lon, @zoom, LARGE_MAP_HEIGHT, LARGE_MAP_WIDTH)
           @locations = []
           @find_other_locations = true
           render :choose_location
@@ -162,7 +173,8 @@ class ProblemsController < ApplicationController
       if route_info[:routes].empty? 
         @error_message = t(:route_not_found)
       elsif route_info[:routes].size == 1
-        redirect_to @template.location_url(route_info[:routes].first)
+        location = route_info[:routes].first
+        redirect_to @template.new_problem_url(:location_id => location.id, :location_type => location.type)
       else 
         if route_info[:error] == :area_not_found
           @error_message = t(:area_not_found_routes)
@@ -235,7 +247,8 @@ class ProblemsController < ApplicationController
         elsif route_info[:routes].empty? 
           @error_messages << t(:route_not_found)
         elsif route_info[:routes].size == 1
-          redirect_to @template.location_url(route_info[:routes].first)
+          location = route_info[:routes].first
+          redirect_to @template.new_problem_url(:location_id => location.id, :location_type => location.type)
         else
           @locations = route_info[:routes]
           map_params_from_location(@locations, find_other_locations=false)                  

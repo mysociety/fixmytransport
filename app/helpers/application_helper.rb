@@ -49,9 +49,9 @@ module ApplicationHelper
     tags.join("\n")
   end
   
-  def icon_style(location, lon, lat, zoom, small)
-    top = Map.lat_to_y_offset(lat, location.lat, zoom) - (icon_height(small) / 2)
-    left = Map.lon_to_x_offset(lon, location.lon, zoom) - (icon_width(small) / 2)
+  def icon_style(location, lon, lat, zoom, small, map_height, map_width)
+    top = Map.lat_to_y_offset(lat, location.lat, zoom, map_height) - (icon_height(small) / 2)
+    left = Map.lon_to_x_offset(lon, location.lon, zoom, map_width) - (icon_width(small) / 2)
     "position: absolute; top: #{top}px; left: #{left}px;"
   end
   
@@ -63,12 +63,13 @@ module ApplicationHelper
     small ? SMALL_ICON_WIDTH : LARGE_ICON_WIDTH
   end
   
-  def stop_js_coords(stop, main=true, small=false)
+  def stop_js_coords(stop, main=true, small=false, link_type=:location, location=nil)
+    location = (location or stop)
     { :lat => stop.lat, 
       :lon => stop.lon,
       :id => stop.id, 
-      :url => location_url(stop),
-      :description => stop.description, 
+      :url => map_link_url(location, link_type),
+      :description => location.description, 
       :icon => stop_icon(stop, main, small),
       :height => icon_height(small), 
       :width => icon_width(small) }
@@ -110,17 +111,19 @@ module ApplicationHelper
     segments_js.to_json
   end
   
-  def location_stops_js(locations, main, small)
+  def location_stops_js(locations, main, small, link_type)
     array_content = []
     locations.each do |location|
       if location.is_a? Route or location.is_a? SubRoute
         if location.show_as_point
-          array_content << stop_js_coords(location, main, false)
-        else
-          array_content <<  location.points.map{ |stop| stop_js_coords(stop, main, true) } 
+          array_content << stop_js_coords(location, main, false, link_type)
+        elsif location.is_a? Route and link_type == :problem
+          array_content <<  location.points.map{ |stop| stop_js_coords(stop, main, true, link_type, location) } 
+        else 
+          array_content <<  location.points.map{ |stop| stop_js_coords(stop, main, true, link_type) } 
         end
       else
-       array_content << stop_js_coords(location, main, small) 
+       array_content << stop_js_coords(location, main, small, link_type) 
       end
     end
     array_content.to_json
@@ -201,13 +204,14 @@ module ApplicationHelper
   
   def readable_location_type(location)
     if location.is_a? Stop or location.is_a? StopArea
-      transport_mode_names = location.transport_mode_names
+      
       # some stops could be bus or tram/metro - call these stops
       if location.is_a?(StopArea) 
         if location.area_type == 'GBCS'
           return 'bus/coach station'
         end
       end
+      transport_mode_names = location.transport_mode_names
       if transport_mode_names.include? 'Train' or transport_mode_names == ['Tram/Metro']
         return "station"
       end
@@ -280,6 +284,16 @@ module ApplicationHelper
      return route_url(location.region, location, attributes)
    end
    raise "Unknown location type: #{location.class}"
+  end
+  
+  def map_link_url(location, link_type)
+    if link_type == :location
+      return location_url(location)
+    elsif link_type == :problem
+      return new_problem_url(:location_id => location.id, :location_type => location.type)
+    else
+      raise "Unknown link_type in map_link_url: #{link_type}"
+    end
   end
   
   def short_date(date)

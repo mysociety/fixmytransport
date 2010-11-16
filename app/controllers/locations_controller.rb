@@ -68,8 +68,13 @@ class LocationsController < ApplicationController
   end
   
   def in_area
-    other_locations =  Map.other_locations(params[:lat].to_f, params[:lon].to_f, params[:zoom].to_i)
-    render :json => "#{@template.location_stops_js(other_locations, main=false, small=true)}"
+    map_height = (params[:height].to_i or MAP_HEIGHT)
+    map_width = (params[:width].to_i or MAP_WIDTH)
+    map_height = MAP_HEIGHT if ! [MAP_HEIGHT, LARGE_MAP_HEIGHT].include? map_height
+    map_width = MAP_WIDTH if ! [MAP_WIDTH, LARGE_MAP_WIDTH].include? map_width
+    other_locations =  Map.other_locations(params[:lat].to_f, params[:lon].to_f, params[:zoom].to_i, map_height, map_width)
+    link_type = params[:link_type].to_sym
+    render :json => "#{@template.location_stops_js(other_locations, main=false, small=true, link_type)}"
   end
 
 end

@@ -92,7 +92,7 @@ class ApplicationController < ActionController::Base
   
   # set the lat, lon and zoom based on the locations being shown, and find other locations
   # within the bounding box
-  def map_params_from_location(locations, find_other_locations=false)
+  def map_params_from_location(locations, find_other_locations=false, height=MAP_HEIGHT, width=MAP_WIDTH)
     @find_other_locations = find_other_locations
     # check for an array of routes
     if locations.first.is_a?(Route) && !locations.first.show_as_point
@@ -107,10 +107,10 @@ class ApplicationController < ActionController::Base
       @lat = lats.inject(0){ |sum, lat| sum + lat } / lats.size
     end
     unless @zoom
-      @zoom = Map::zoom_to_coords(lons.min, lons.max, lats.min, lats.max)
+      @zoom = Map::zoom_to_coords(lons.min, lons.max, lats.min, lats.max, width)
     end
     if find_other_locations
-      @other_locations = Map.other_locations(@lat, @lon, @zoom)
+      @other_locations = Map.other_locations(@lat, @lon, @zoom, height, width)
     else
       @other_locations = []
     end

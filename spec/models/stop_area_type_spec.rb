@@ -25,6 +25,8 @@ describe StopAreaType do
   end
   
   describe "when giving conditions for transport modes" do 
+    
+    fixtures default_fixtures
   
     it 'should return conditions specifying a set of stop types for buses' do 
       StopAreaType.conditions_for_transport_mode(1).should == ['area_type in (?)', [["GBCS", "GPBS", "GCLS"]]]

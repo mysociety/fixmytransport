@@ -38,7 +38,7 @@ class Gazetteer
       return { :postcode_info => {:error => coord_info }}
     end
     # is there an area with this name? 
-    name = name.downcase
+    name = name.downcase.strip
     localities = Locality.find_all_by_lower_name(name)
     if !localities.empty?
       return { :localities => localities }
@@ -68,7 +68,7 @@ class Gazetteer
     select_clause = 'SELECT distinct routes.id'
     from_clause = 'FROM routes'
     params = []
-    route_number = route_number.downcase
+    route_number = route_number.downcase.strip
     where_clause = "WHERE (lower(routes.number) = ? OR lower(routes.name) like ?) "
     params << route_number
     params << "%#{route_number}%"
@@ -76,6 +76,7 @@ class Gazetteer
     if ignore_area
       error = :route_not_found_in_area
     else
+      area = area.strip
       # area is postcode
       coord_info = self.coords_from_postcode(area)
       if coord_info == :not_found or coord_info == :bad_request
@@ -178,7 +179,7 @@ class Gazetteer
   def self.find_stations_from_name(name, exact, options={})
     query = 'area_type in (?)'
     params = [options[:types]]   
-    name = name.downcase 
+    name = name.downcase.strip
     if exact
       query += " AND lower(name) = ?"
       params << name

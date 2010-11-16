@@ -1,6 +1,6 @@
 - @title = t(:reporting_a_problem, :location => MySociety::Format.ucfirst(@problem.location.name))
 #map-col
-  = render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [] }
+  = render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH  }
 %h3= @title
 - form_for @problem, :url => problems_url, :html => {:class => 'create_problem'} do |f| 
   != f.hidden_field :location_id

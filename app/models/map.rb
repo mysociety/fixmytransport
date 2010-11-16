@@ -18,12 +18,12 @@ class Map
     (zoom > MIN_ZOOM_LEVEL) ? zoom.to_i-1 : MIN_ZOOM_LEVEL
   end
   
-  def self.top(lon, zoom)
-    adjust_lon_by_pixels(lon, zoom, MAP_HEIGHT_IN_PX/2)
+  def self.top(lon, zoom, map_height)
+    adjust_lon_by_pixels(lon, zoom, map_height/2)
   end
 
-  def self.bottom(lon, zoom)
-    adjust_lon_by_pixels(lon, zoom, -MAP_HEIGHT_IN_PX/2)
+  def self.bottom(lon, zoom, map_height)
+    adjust_lon_by_pixels(lon, zoom, -(map_height/2))
   end
   
   def self.adjust_lon_by_pixels(lon, zoom, delta)
@@ -38,12 +38,12 @@ class Map
     (offset +  lon * (radius * (Math::PI / 180.0))).round
   end
   
-  def self.left(lat, zoom)
-    adjust_lat_by_pixels(lat, zoom, MAP_WIDTH_IN_PX/2)
+  def self.left(lat, zoom, map_width)
+    adjust_lat_by_pixels(lat, zoom, map_width/2)
   end
   
-  def self.right(lat, zoom)
-    adjust_lat_by_pixels(lat, zoom, -MAP_WIDTH_IN_PX/2)
+  def self.right(lat, zoom, map_width)
+    adjust_lat_by_pixels(lat, zoom, -map_width/2)
   end
   
   def self.adjust_lat_by_pixels(lat, zoom, delta)
@@ -58,19 +58,19 @@ class Map
     (Math::PI / 2 - 2 * Math::atan(Math::exp((y.round - offset) / radius))) * 180 / Math::PI
   end
   
-  def self.lat_to_y_offset(center_lat, lat, zoom)
+  def self.lat_to_y_offset(center_lat, lat, zoom, map_height)
     center_y = lat_to_y(center_lat)
     target_y = lat_to_y(lat)
     delta_y  = (target_y - center_y) >> (MAX_ZOOM_LEVEL - zoom)
-    center_offset_y = MAP_HEIGHT_IN_PX / 2 
+    center_offset_y = map_height / 2 
     return center_offset_y + delta_y
   end
   
-  def self.lon_to_x_offset(center_lon, lon, zoom)
+  def self.lon_to_x_offset(center_lon, lon, zoom, map_width)
     center_x = lon_to_x(center_lon)
     target_x = lon_to_x(lon)
     delta_x  = (target_x - center_x) >> (MAX_ZOOM_LEVEL - zoom)
-    center_offset_x = MAP_WIDTH_IN_PX / 2
+    center_offset_x = map_width / 2
     return center_offset_x + delta_x
   end
   
@@ -82,7 +82,7 @@ class Map
     ((x.round - offset) / radius) * 180 / Math::PI 
   end
     
-  def self.zoom_to_coords(min_lon, max_lon, min_lat, max_lat)
+  def self.zoom_to_coords(min_lon, max_lon, min_lat, max_lat, width)
     min_x = lon_to_x(min_lon)
     max_x = lon_to_x(max_lon)
     min_y = lat_to_y(min_lat)
@@ -91,7 +91,7 @@ class Map
     y_diff = (max_y - min_y).abs
     diff = [x_diff, y_diff].max
     return MAX_VISIBLE_ZOOM - 1 if diff == 0
-    diff_over_width = diff / MAP_WIDTH_IN_PX
+    diff_over_width = diff / width
     zoom = MAX_ZOOM_LEVEL - (Math::log(diff_over_width) / Math::log(2)).ceil 
     if zoom > MAX_VISIBLE_ZOOM
       zoom = MAX_VISIBLE_ZOOM
@@ -99,16 +99,16 @@ class Map
     zoom
   end
   
-  def self.google_tile_url(lat, lon, zoom)
-    "http://maps.google.com/maps/api/staticmap?center=#{lat},#{lon}&zoom=#{zoom}&size=#{MAP_WIDTH_IN_PX}x#{MAP_WIDTH_IN_PX}&sensor=false"
+  def self.google_tile_url(lat, lon, zoom, map_height, map_width)
+    "http://maps.google.com/maps/api/staticmap?center=#{lat},#{lon}&zoom=#{zoom}&size=#{map_width}x#{map_height}&sensor=false"
   end
 
-  def self.other_locations(lat, lon, zoom)
+  def self.other_locations(lat, lon, zoom, map_height, map_width)
     if zoom >= MIN_ZOOM_FOR_OTHER_MARKERS
-      bottom = bottom(lat, zoom)
-      top = top(lat, zoom)
-      left = left(lon, zoom)
-      right = right(lon, zoom)
+      bottom = bottom(lat, zoom, map_height)
+      top = top(lat, zoom, map_height)
+      left = left(lon, zoom, map_width)
+      right = right(lon, zoom, map_width)
       locations = Stop.find_in_bounding_box(bottom, left, top, right)
       locations += StopArea.find_in_bounding_box(bottom, left, top, right)
     else

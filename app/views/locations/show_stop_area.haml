@@ -1,7 +1,7 @@
 - content_for :javascript do 
   != map_javascript_include_tags
 #map-col
-  = render :partial => 'shared/map', :locals => { :locations => @stop_area.points, :other_locations => @other_locations }
+  = render :partial => 'shared/map', :locals => { :locations => @stop_area.points, :other_locations => @other_locations, :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH  }
   .extra-info
     - if StopAreaType.atomic_types.include? @stop_area.area_type
       = render :partial => "shared/route_list", :locals => { :stop_or_station => @stop_area }

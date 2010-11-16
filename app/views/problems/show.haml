@@ -1,6 +1,6 @@
 - @title = "#{MySociety::Format.ucfirst(@problem.location.name)}: #{@problem.subject}"
 #map-col
-  = render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [] }
+  = render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH }
 .problem-full
   - if @problem.status == :fixed
     .fixed= t(:problem_has_been_fixed)

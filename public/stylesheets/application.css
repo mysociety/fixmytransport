@@ -248,6 +248,11 @@ input, textarea, select {
 
 /* Finding a stop/station */
 
+#stop_name_form{
+  width: 50%;
+  margin: auto;
+}
+
 #stop_name_form input {
   display:inline;
   font-size: 1.2em;
@@ -257,17 +262,21 @@ input, textarea, select {
   font-size: 1.2em;
 }
 
+.large-map-intro {
+  text-align: center;
+}
+
 /* Finding a route */
 
 #bus_route_form {
-  width: 50%;
+  width: 70%;
   margin-left: auto;
   margin-right: auto;
   font-size: 1.2em;
 }
 
 #train_route_form, #other_route_form {
-  width: 80%;
+  width: 90%;
   margin-left: auto;
   margin-right: auto;
   font-size: 1.2em;

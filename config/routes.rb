@@ -59,12 +59,13 @@ ActionController::Routing::Routes.draw do |map|
                                           :conditions => { :method => :get }
 
   # other locations for maps
-  map.locations "/locations/:zoom/:lat/:lon", :controller => 'locations', 
+  map.locations "/locations/:zoom/:lat/:lon/:link_type", :controller => 'locations', 
                                               :action => 'in_area',
                                               :conditions => { :method => :get },
                                               :requirements => { :zoom => /\d\d?/,
                                                                  :lon => /[-+]?[0-9]*\.?[0-9]+/,
-                                                                 :lat => /[-+]?[0-9]*\.?[0-9]+/}
+                                                                 :lat => /[-+]?[0-9]*\.?[0-9]+/,
+                                                                 :link_type => /(problem|location)/}
   
   # user sessions
   map.login 'login', :controller => 'user_sessions', :action => 'new'  

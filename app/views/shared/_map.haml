@@ -1,19 +1,19 @@
-= render :partial => 'shared/location_map_js', :locals => { :locations => locations, :other_locations => other_locations }
+= render :partial => 'shared/location_map_js', :locals => { :locations => locations, :other_locations => other_locations, :link_type => link_type }
 #map
   %noscript
     #drag
-      %img{:class => 'static-map-element', :alt => "Map", :src => "#{Map.google_tile_url(@lat, @lon, @zoom)}", :style => "top:0px; left:0;"}      
+      %img{:class => 'static-map-element', :alt => "Map", :src => "#{Map.google_tile_url(@lat, @lon, @zoom, height, width)}", :style => "top:0px; left:0;"}      
       %div{:id => "pan_up", :class => 'map-control static-map-element', :style => "left: 13px; top: 4px; width: 18px; height: 18px; position: absolute; "}
-        %a{:rel => 'nofollow', :href => url_for(params.merge(:lat => Map.top(@lat, @zoom)))}
+        %a{:rel => 'nofollow', :href => url_for(params.merge(:lat => Map.top(@lat, @zoom, height)))}
           %img{:style => "width: 18px; height: 18px; position: relative; ", :src => "http://openlayers.org/api/img/north-mini.png"}   
       %div{:id => "pan_left", :class => 'map-control static-map-element', :style => "left: 4px; top: 22px; width: 18px; height: 18px; position: absolute; "}
-        %a{:rel => 'nofollow', :href => url_for(params.merge(:lon => Map.left(@lon, @zoom)))}
+        %a{:rel => 'nofollow', :href => url_for(params.merge(:lon => Map.left(@lon, @zoom, width)))}
           %img{:style => "width: 18px; height: 18px; position: relative; ", :src => "http://openlayers.org/api/img/west-mini.png"}   
       %div{:id => "pan_right", :class => 'map-control static-map-element', :style => "left: 22px; top: 22px; width: 18px; height: 18px; position: absolute; "}
-        %a{:rel => 'nofollow', :href => url_for(params.merge(:lon => Map.right(@lon, @zoom)))}
+        %a{:rel => 'nofollow', :href => url_for(params.merge(:lon => Map.right(@lon, @zoom, width)))}
           %img{:style => "width: 18px; height: 18px; position: relative; ", :src => "http://openlayers.org/api/img/east-mini.png"}   
       %div{:id => "pan_down", :class => 'map-control static-map-element', :style => "left: 13px; top: 40px; width: 18px; height: 18px; position: absolute; "}
-        %a{:rel => 'nofollow', :href => url_for(params.merge(:lat => Map.bottom(@lat, @zoom)))}
+        %a{:rel => 'nofollow', :href => url_for(params.merge(:lat => Map.bottom(@lat, @zoom, height)))}
           %img{:style => "width: 18px; height: 18px; position: relative; ", :src => "http://openlayers.org/api/img/south-mini.png"}  
       %div{:id => "zoom_in", :class => 'map-control static-map-element', :style => "left: 13px; top: 63px; width: 18px; height: 18px; position: absolute; "}
         %a{:rel => 'nofollow', :href => url_for(params.merge(:zoom => Map.zoom_in(@zoom)))}
@@ -25,5 +25,5 @@
         %a{:rel => 'nofollow', :href => url_for(params.merge(:zoom => Map.zoom_out(@zoom)))}
           %img{:style => "width: 18px; height: 18px; position: relative; ", :src => "http://openlayers.org/api/img/zoom-minus-mini.png"}
       %div#markers
-        = render :partial => 'shared/location_marker', :collection => other_locations, :as => :location, :locals => {:small => true, :main => false }
-        = render :partial => 'shared/location_marker', :collection => locations, :as => :location, :locals => {:small => false, :main => true }
+        = render :partial => 'shared/location_marker', :collection => other_locations, :as => :location, :locals => {:small => true, :main => false, :link_type => link_type, :height => height, :width => width }
+        = render :partial => 'shared/location_marker', :collection => locations, :as => :location, :locals => {:small => false, :main => true, :link_type => link_type, :height => height, :width => width }

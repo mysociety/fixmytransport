@@ -72,7 +72,7 @@ describe ProblemsController do
         end
         
         it 'should find or create a sub-route for the stations' do 
-          SubRoute.should_receive(:make_sub_route).with(@from_stop, @to_stop, nil, @transport_mode)
+          SubRoute.should_receive(:make_sub_route).with(@from_stop, @to_stop, @transport_mode)
           make_request({:to => "london euston", :from => 'birmingham new street'})
         end
         
@@ -183,7 +183,10 @@ describe ProblemsController do
           end
             
           it 'should set map params based on the locality' do 
-            @controller.should_receive(:map_params_from_location).with([@mock_locality], find_other_locations=true)
+            @controller.should_receive(:map_params_from_location).with([@mock_locality], 
+                                                                        find_other_locations=true,
+                                                                        LARGE_MAP_HEIGHT,
+                                                                        LARGE_MAP_WIDTH)
             make_request({:name => 'Euston'})
           end
         
@@ -226,7 +229,10 @@ describe ProblemsController do
           end
           
           it 'should set the map params based on the locations' do 
-            @controller.should_receive(:map_params_from_location).with([@mock_stop], find_other_locations=true)
+            @controller.should_receive(:map_params_from_location).with([@mock_stop], 
+                                                                       find_other_locations=true,
+                                                                       LARGE_MAP_HEIGHT,
+                                                                       LARGE_MAP_WIDTH)
             make_request({:name => 'Euston'})
           end
           
@@ -284,7 +290,7 @@ describe ProblemsController do
             
             it 'should set the other locations based on the lat lon and zoom for the postcode' do 
               mock_location = mock('location')
-              Map.should_receive(:other_locations).with(51.1, 0.10, 15).and_return([mock_location])
+              Map.should_receive(:other_locations).with(51.1, 0.10, 15, LARGE_MAP_HEIGHT, LARGE_MAP_WIDTH).and_return([mock_location])
               make_request({:name => 'ZZ9 9ZZ'})
               assigns[:other_locations].should == [mock_location]
             end
