@@ -26,7 +26,7 @@ class CampaignMailer < ActionMailer::Base
     body({ :campaign => campaign, 
            :recipient => recipient, 
            :update => update, 
-           :link => main_url(add_comment_campaign_url(campaign, :update_id => update.id)),
+           :link => main_url(campaign_path(campaign, :anchor => "update_#{update.id}")),
            :unsubscribe_link => main_url(confirm_leave_path(:email_token => supporter.token)) })
   end
   
@@ -36,7 +36,7 @@ class CampaignMailer < ActionMailer::Base
     subject "[FixMyTransport] Advice request from \"#{campaign.title}\""
     body({ :campaign => campaign, 
            :advice_request => advice_request, 
-           :link => main_url(add_comment_campaign_url(campaign, :update_id => advice_request.id)) })
+           :link => main_url(campaign_path(campaign, :anchor => "update_#{advice_request.id}")) })
   end
   
   def advice_request(recipient, campaign, supporter, advice_request)
@@ -118,11 +118,6 @@ class CampaignMailer < ActionMailer::Base
   
   def self.send_updates(dryrun=false)
     self.dryrun = dryrun
-    
-    # on a staging site, don't send live emails
-    if MySociety::Config.getbool('STAGING_SITE', true)
-      self.dryrun = true
-    end
     
     self.sent_count = 0
     
