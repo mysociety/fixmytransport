@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101116113825) do
+ActiveRecord::Schema.define(:version => 20101117113427) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -53,6 +53,15 @@ ActiveRecord::Schema.define(:version => 20101116113825) do
     t.string   "task_type_name"
     t.integer  "problem_id"
   end
+  
+  create_table "campaign_comments", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "campaign_update_id"
+    t.integer  "campaign_id"
+    t.text     "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "campaign_supporters", :force => true do |t|
     t.integer  "campaign_id"
@@ -71,6 +80,7 @@ ActiveRecord::Schema.define(:version => 20101116113825) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "sent_at"
+    t.boolean  "is_advice_request"
   end
 
   create_table "campaigns", :force => true do |t|
