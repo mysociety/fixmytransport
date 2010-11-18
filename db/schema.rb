@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(:version => 20101117113427) do
     t.string   "task_type_name"
     t.integer  "problem_id"
   end
-  
+
   create_table "campaign_comments", :force => true do |t|
     t.integer  "user_id"
     t.integer  "campaign_update_id"
