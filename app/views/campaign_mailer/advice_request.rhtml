@@ -1,0 +1,14 @@
+Hi<%= raw " #{@recipient.name}" %>,
+
+<%= raw @advice_request.user.name %> would like some advice about the FixMyTransport campaign "<%= @campaign.title %>" (<%= @link %>).
+
+<%= raw @advice_request.user.name %> says:
+
+"<%= @advice_request.text %>"
+
+To give some advice, follow this link: <%= @link %>
+
+Yours,
+The FixMyTransport team
+
+To leave this campaign and stop receiving updates, please follow this link: <%= @unsubscribe_link %>

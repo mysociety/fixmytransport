@@ -22,7 +22,8 @@ describe CampaignMailer do
                                                   :user => @mock_update_user,
                                                   :update_attribute => true, 
                                                   :incoming_message => nil,
-                                                  :text => 'an update')
+                                                  :text => 'an update', 
+                                                  :is_advice_request? => false)
       end
       
       it 'should create a sent email model for each update email sent' do 
@@ -30,6 +31,22 @@ describe CampaignMailer do
                                                 :campaign => @mock_campaign, 
                                                 :campaign_update => @mock_update)
         CampaignMailer.send_update(@mock_update)
+      end
+    
+      it 'should send an advice request email and an expert advice request mail if the update is an advice request' do 
+        @mock_update.stub!(:is_advice_request?).and_return(true)
+        ActionMailer::Base.deliveries.clear
+        CampaignMailer.send_update(@mock_update)
+        ActionMailer::Base.deliveries.size.should == 2
+        expert_mail = ActionMailer::Base.deliveries.first
+        expert_mail.body.should match(/Hi transport experts/)
+        expert_mail.body.should match(/would like some advice/)    
+        expert_mail.body.should_not match(/stop receiving update/) 
+       
+        supporter_mail = ActionMailer::Base.deliveries.second
+        supporter_mail.body.should match(/Hi Supporter/)
+        supporter_mail.body.should match(/would like some advice/)
+        supporter_mail.body.should match(/stop receiving updates/) 
       end
     
       it 'should not send an email to a recipient who has already received an email for this update' do 

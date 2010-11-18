@@ -31,6 +31,9 @@ define('OPTION_DOMAIN', '127.0.0.1:3000');
 // Address that email comes from
 define('OPTION_CONTACT_EMAIL', 'contact@localhost');
 
+// Expert advice address
+define('OPTION_EXPERT_EMAIL', 'contact@localhost');
+
 // Address for errors
 define('OPTION_BUGS_EMAIL', 'bugs@localhost');
 

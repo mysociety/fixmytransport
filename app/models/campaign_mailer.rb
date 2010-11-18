@@ -26,7 +26,27 @@ class CampaignMailer < ActionMailer::Base
     body({ :campaign => campaign, 
            :recipient => recipient, 
            :update => update, 
-           :link => main_url(campaign_path(campaign)),
+           :link => main_url(add_comment_campaign_url(campaign, :update_id => update.id)),
+           :unsubscribe_link => main_url(confirm_leave_path(:email_token => supporter.token)) })
+  end
+  
+  def expert_advice_request(campaign, advice_request)
+    recipients MySociety::Config.get('EXPERT_EMAIL', 'contact@localhost')
+    from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    subject "[FixMyTransport] Advice request from \"#{campaign.title}\""
+    body({ :campaign => campaign, 
+           :advice_request => advice_request, 
+           :link => main_url(add_comment_campaign_url(campaign, :update_id => advice_request.id)) })
+  end
+  
+  def advice_request(recipient, campaign, supporter, advice_request)
+    recipients recipient.email
+    from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    subject "[FixMyTransport] Advice request from \"#{campaign.title}\""
+    body({ :campaign => campaign, 
+           :recipient => recipient, 
+           :advice_request => advice_request, 
+           :link => main_url(add_comment_campaign_url(campaign, :update_id => advice_request.id)),
            :unsubscribe_link => main_url(confirm_leave_path(:email_token => supporter.token)) })
   end
   
@@ -56,6 +76,15 @@ class CampaignMailer < ActionMailer::Base
     campaign = update.campaign
     sent_emails = SentEmail.find(:all, :conditions => ['campaign_update_id = ?', update])
     sent_recipients = sent_emails.map{ |sent_email| sent_email.recipient }
+    if update.is_advice_request? 
+      if self.dryrun
+        STDERR.puts("Would send the following:")
+        mail = create_expert_advice_request(campaign, update)
+        STDERR.puts(mail)
+      else
+        deliver_expert_advice_request(campaign, update)
+      end
+    end
     supporters = campaign.campaign_supporters.confirmed
     supporters = supporters.select{ |supporter| !sent_recipients.include? supporter.supporter }
     supporters.each do |supporter|
@@ -64,10 +93,18 @@ class CampaignMailer < ActionMailer::Base
       next if recipient == update.user
       if self.dryrun
         STDERR.puts("Would send the following:")
-        mail = create_update(recipient, campaign, supporter, update)
+        if update.is_advice_request? 
+          mail = create_advice_request(recipient, campaign, supporter, update)
+        else
+          mail = create_update(recipient, campaign, supporter, update)
+        end
         STDERR.puts(mail)
       else
-        deliver_update(recipient, campaign, supporter, update)
+        if update.is_advice_request? 
+          deliver_advice_request(recipient, campaign, supporter, update)
+        else
+          deliver_update(recipient, campaign, supporter, update)
+        end
         SentEmail.create!(:recipient => recipient, 
                           :campaign => campaign, 
                           :campaign_update => update)
