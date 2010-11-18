@@ -111,6 +111,7 @@ class Problem < ActiveRecord::Base
                                                     :conditions => ['task_type_name = ?',
                                                                     'write-to-transport-organization'],
                                                     :order => 'updated_at')
+    return nil if not writing_assignment
     organization_names = writing_assignment.data[:organizations].map{ |organization| organization[:name] }
     organization_names.to_sentence
   end
@@ -138,6 +139,11 @@ class Problem < ActiveRecord::Base
     else
       reporter.email
     end
+  end
+  
+  def optional_assignments
+    [:write_to_transport_organization, 
+     :ask_for_advice]
   end
   
   # class methods
