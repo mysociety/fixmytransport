@@ -98,14 +98,14 @@ describe CampaignsController do
             controller.stub!(:current_user).and_return(mock_model(User))
             make_request(token=@mock_problem.token)
             response.should redirect_to(login_url)
-            flash[:notice].should == "Login as Campaign User to confirm this campaign"
+            flash[:notice].should == "Login as Campaign User to confirm this problem"
           end
           
           it 'should redirect to the login page with a message if there is no current user' do 
             controller.stub!(:current_user).and_return(nil)
             make_request(token=@mock_problem.token)
             response.should redirect_to(login_url)
-            flash[:notice].should == "Login as Campaign User to confirm this campaign"          
+            flash[:notice].should == "Login as Campaign User to confirm this problem"          
           end
         
         end
@@ -169,7 +169,7 @@ describe CampaignsController do
           controller.stub!(:current_user).and_return(mock_model(User))
           make_request(token=@mock_problem.token)
           response.should redirect_to(login_url)
-          flash[:notice].should == "Login as Campaign User to edit this campaign"
+          flash[:notice].should == "Login as Campaign User to access this page"
         end
         
       end
@@ -180,7 +180,7 @@ describe CampaignsController do
           controller.stub!(:current_user).and_return(nil)
           make_request(token=@mock_problem.token)
           response.should redirect_to(login_url)
-          flash[:notice].should == "Login as Campaign User to edit this campaign"
+          flash[:notice].should == "Login as Campaign User to access this page"
         end
 
       end
@@ -334,10 +334,117 @@ describe CampaignsController do
         controller.stub!(:current_user).and_return(mock_model(User))
         make_request({:id => 55})
         response.should redirect_to(login_url)
-        flash[:notice].should == "Login as Campaign User to edit this campaign"
+        flash[:notice].should == "Login as Campaign User to access this page"
       end
       
     end
+  end 
+  
+  describe 'GET #add_update' do 
+    
+    before do 
+      @campaign_user = mock_model(User, :name => "Campaign User")
+      @mock_campaign = mock_model(Campaign, :confirmed => true, 
+                                            :initiator => @campaign_user,
+                                            :campaign_updates => mock('update', :build => true))
+      Campaign.stub!(:find).and_return(@mock_campaign)
+      @controller.stub!(:current_user).and_return(@campaign_user)
+    end
+  
+    def make_request params
+      get :add_update, params
+    end
+    
+    it 'should assign a campaign update to the view' do
+      make_request({:id => 55})
+      assigns[:campaign_update].should_not be_nil
+    end 
+    
+    it_should_behave_like "an action that requires the campaign initiator"
+  end
+  
+  describe 'GET #add_comment' do 
+
+    before do 
+      @mock_campaign = mock_model(Campaign,  :confirmed => true)
+      Campaign.stub!(:find).and_return(@mock_campaign)
+      @mock_update = mock_model(CampaignUpdate)
+      CampaignUpdate.stub!(:find).and_return(@mock_update)
+      @mock_user = mock_model(User)
+      @controller.stub!(:current_user).and_return(@mock_user)
+    end
+        
+    def make_request
+      get :add_comment, { :id => 55, :update_id => '33' }
+    end
+    
+    it 'should render the template "add_comment"' do 
+      make_request
+      response.should render_template('add_comment')
+    end
+    
+    describe 'when no campaign update can be found' do
+    
+      before do 
+        @mock_user = mock_model(User, :campaigns => [@mock_campaign])
+        @controller.stub!(:current_user).and_return(@mock_user)
+        CampaignUpdate.stub!(:find).and_return(nil)
+      end
+      
+      it 'should return a "not found" response' do 
+        make_request
+        response.status.should == '404 Not Found'
+      end
+    
+    end
+    
+
+  end
+
+  describe 'POST #add_comment' do 
+    
+    before do 
+      @mock_user = mock_model(User)
+      @mock_campaign = mock_model(Campaign, :confirmed => true)
+      Campaign.stub!(:find).and_return(@mock_campaign)
+      @controller.stub!(:current_user).and_return(@mock_user)
+      @mock_comment = mock_model(CampaignComment, :save => true,
+                                                  :campaign_update_id => 66,
+                                                  :text => 'comment text')
+      @mock_update = mock_model(CampaignUpdate, :comments => mock('comments', :build => @mock_comment))
+      CampaignUpdate.stub!(:find).and_return(@mock_update)
+    end
+    
+    def make_request params
+      post :add_comment, params
+    end
+    
+    it 'should create a comment associated with the update' do 
+      @mock_update.comments.should_receive(:build)
+      make_request( :id => 55, :campaign_comment => {:update_id => 66} )      
+    end
+    
+    it 'should save the comment' do 
+      @mock_comment.should_receive(:save).and_return(true)
+      make_request( :id => 55, :campaign_comment => {:update_id => 66} )
+    end
+    
+    it 'should assign a comment to the view' do 
+      make_request( :id => 55, :campaign_comment => {:update_id => 66} )
+      assigns[:comment].should_not be_nil
+    end
+  
+    describe 'when handling an AJAX request' do 
+      
+      it 'should return a json hash containing the update_id and comment html' do 
+        xhr :post, :add_comment, { :id => 55, :campaign_comment => {:update_id => 66} }
+        json_hash = JSON.parse(response.body)
+        json_hash['update_id'].should == 66
+        json_hash['html'].should_not be_nil
+      end
+    
+    end
+
   end  
 
   describe 'POST #add_update' do 
@@ -345,7 +452,8 @@ describe CampaignsController do
     before do 
       @user = mock_model(User, :id => 55)
       @controller.stub!(:current_user).and_return(@user)
-      @mock_update = mock_model(CampaignUpdate, :save => true)
+      @mock_update = mock_model(CampaignUpdate, :save => true, 
+                                                :is_advice_request? => false)
       @mock_updates = mock('campaign updates', :build => @mock_update)
       @mock_campaign = mock_model(Campaign, :supporters => [], 
                                             :title => 'A test title',
@@ -377,6 +485,16 @@ describe CampaignsController do
       @mock_update.stub!(:save).and_return(true)
       make_request(:id => 55)
       flash[:notice].should == 'Your update has been added.'
+    end
+    
+    describe 'when handling an AJAX request' do 
+    
+      it 'should return a json hash with a key "html"' do 
+        xhr :post, :add_update, {:id => 55}
+        json_hash = JSON.parse(response.body)
+        json_hash['html'].should_not be_nil
+      end
+      
     end
     
   end

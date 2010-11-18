@@ -2,9 +2,13 @@ class CampaignsController < ApplicationController
 
   before_filter :process_map_params, :only => [:show]
   before_filter :find_campaign, :only => [:edit, :update]
-  before_filter :find_confirmed_campaign, :only => [:show, :join, :leave, :add_update]
+  before_filter :find_confirmed_campaign, :only => [:show, :join, 
+                                                    :leave, :add_update, 
+                                                    :request_advice, :add_comment]
   before_filter :require_owner_or_token, :only => [:edit, :update]
-  before_filter :require_owner, :only => [:add_update]
+  before_filter :require_owner, :only => [:add_update, :request_advice]
+  before_filter :require_user, :only => [:add_comment]
+  before_filter :find_update, :only => [:add_comment]
   
   def index
     @title = t(:recent_campaigns)
@@ -105,11 +109,35 @@ class CampaignsController < ApplicationController
   end
   
   def add_update
-    @campaign_update = @campaign.campaign_updates.build(params[:campaign_update])
-    if @campaign_update.save
-      flash[:notice] = t(:update_added)
+    if request.post? 
+      @campaign_update = @campaign.campaign_updates.build(params[:campaign_update])
+      if @campaign_update.save
+        if request.xhr? 
+          render :json => { :html => render_to_string(:partial => 'campaign_event', :locals => { :event => @campaign_update, :always_show_commentbox => false })}
+          return 
+        else
+          flash[:notice] = @campaign_update.is_advice_request? ? t(:advice_request_added) : t(:update_added)
+        end
+      end
+      redirect_to campaign_url(@campaign)
+    else
+      @campaign_update = @campaign.campaign_updates.build(:is_advice_request => params[:is_advice_request],
+                                                          :user_id => current_user.id)
     end
-    redirect_to campaign_url(@campaign)
+  end
+  
+  def add_comment
+    if request.post? 
+      @comment = @campaign_update.comments.build(params[:campaign_comment])
+      if @comment.save
+        if request.xhr? 
+          render :json => { :html => render_to_string(:partial => 'update_comment', :locals => {:comment => @comment}),
+                            :update_id => @comment.campaign_update_id }
+          return
+        end  
+      end
+      redirect_to campaign_url(@campaign, :anchor => "update_#{@comment.campaign_update_id}")
+    end
   end
   
   private
@@ -132,6 +160,16 @@ class CampaignsController < ApplicationController
     found = find_campaign
     return false unless @campaign
     unless @campaign.confirmed
+      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+      return false
+    end
+    return true
+  end
+  
+  def find_update
+    update_param = (params[:update_id] or params[:campaign_comment][:campaign_update_id])
+    @campaign_update = CampaignUpdate.find(update_param)
+    if ! @campaign_update
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end
@@ -171,5 +209,4 @@ class CampaignsController < ApplicationController
     redirect_to login_url
     return false
   end
-  
 end
