@@ -62,11 +62,16 @@ class ProblemMailer < ActionMailer::Base
   
   def self.get_report_recipients(problem)
     recipients = []
-    problem.emailable_organizations.each do |emailable_organization|
-      if emailable_organization.is_a?(Council)
-        recipients << emailable_organization.email_for_category(problem.category)
-      else
-        recipients << emailable_organization.email
+    # on a staging site, don't send live emails
+    if MySociety::Config.getbool('STAGING_SITE', true)
+      recipients = MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    else
+      problem.emailable_organizations.each do |emailable_organization|
+        if emailable_organization.is_a?(Council)
+          recipients << emailable_organization.email_for_category(problem.category)
+        else
+          recipients << emailable_organization.email
+        end
       end
     end
     recipients
@@ -75,10 +80,6 @@ class ProblemMailer < ActionMailer::Base
   def self.send_reports(dryrun=false)
     self.dryrun = dryrun
     
-    # on a staging site, don't send live emails
-    if MySociety::Config.getbool('STAGING_SITE', true)
-      self.dryrun = true
-    end
     # make sure the mail confs are up to date
     Campaign.sync_mail_confs
     
