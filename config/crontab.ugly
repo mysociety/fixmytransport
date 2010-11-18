@@ -7,7 +7,11 @@
 # 
 
 PATH=/usr/local/bin:/usr/bin:/bin
+!!(* if ($vhost eq 'www.fixmytransport.com') { *)!!
 MAILTO=cron-fixmytransport@mysociety.org
+!!(* } else { *)!!
+MAILTO=louise@mysociety.org
+!!(* } *)!!
 
 # Every 5 minutes
 */5 * * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/send-problem-reports.lock /data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-problem-reports || echo "stalled?"
