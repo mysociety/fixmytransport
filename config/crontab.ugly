@@ -18,3 +18,5 @@ MAILTO=louise@mysociety.org
 
 # Every 11 minutes
 */11 * * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/send-campaign-updates.lock /data/vhost/!!(*= $vhost *)!!/fixmytransport/script/campaign-updates || echo "stalled?"
+
+
