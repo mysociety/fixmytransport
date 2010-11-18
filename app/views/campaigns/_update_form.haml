@@ -1,7 +1,22 @@
-%h3= t(:add_an_update)
-- form_for @campaign_update, :url => add_update_campaign_url(@campaign) do |f|
-  .fieldset
-    .form-field
-      != f.hidden_field :user_id
-      !=f.text_area :text, :cols => 40, :rows => 5
-      !=f.submit t(:add_update)
+- style = ''
+- if hidden 
+  - style = 'display:none;'  
+- if update.is_advice_request?
+  - id = 'advice-request-form'
+  - text = t(:ask_our_expert_panel)
+- else
+  - id = 'campaign-update-form'
+  - text = t(:add_an_update)
+.campaign-updates{:style => style, :id => id}
+  = text
+  - form_for update, :url => add_update_campaign_url(@campaign) do |f|
+    .fieldset
+      .form-field
+        != f.hidden_field :user_id
+        != f.hidden_field :is_advice_request
+        !=f.text_area :text, :cols => 40, :rows => 3
+        - if update.is_advice_request
+          !=f.submit t(:request_advice)
+        - else
+          !=f.submit t(:add_update)
+        

@@ -1,0 +1,3 @@
+- if !@campaign.problem.first_sent_to.blank?
+  .optional-assignment
+    =link_to("Write to #{@campaign.problem.first_sent_to} again", "")

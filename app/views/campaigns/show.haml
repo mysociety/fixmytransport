@@ -11,20 +11,8 @@
     .supporters= t(:campaign_has_n_supporters, :n => @campaign.supporter_count, :count => @campaign.supporter_count)
   %p.campaign= @campaign.description
   - if current_user && current_user == @campaign.initiator
-    = render :partial => 'update_form'
-  - if !@campaign.problem.assignments.incomplete.empty? 
-    %h3= t(:next_steps)
-    - @campaign.problem.assignments.incomplete.each do |assignment| 
-      = render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }
-  %h3= t(:latest_news)
-  - @campaign.events.each do |event|
-    - if event.is_a?(Assignment)
-      = render :partial => "shared/complete_assignments/#{event.task_type}", :locals => { :assignment => event }
-    - elsif event.is_a?(CampaignUpdate)
-      = render :partial => 'campaign_update', :locals => { :update => event }
-    - else
-      = render :partial => 'incoming_message', :locals => { :message => event }
-  - if current_user && current_user.campaigns.include?(@campaign)
+    = render :partial => 'update_form', :locals => {  :hidden => false, :update => CampaignUpdate.new(:user_id => current_user.id) }
+  - elsif current_user && current_user.campaigns.include?(@campaign)
     = t(:you_support_this_campaign)
     - form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f|
       != hidden_field_tag "user_id", current_user.id
@@ -39,3 +27,18 @@
           != label_tag :email, t(:enter_your_email_to_join)
           != text_field_tag :email
         != submit_tag t(:join)
+  - if !@campaign.problem.optional_assignments.empty? 
+    %h3= t(:next_steps)
+    .optional-assignments
+      - @campaign.problem.optional_assignments.each do |assignment_type| 
+        = render :partial => "shared/optional_assignments/#{assignment_type}"
+      .optional-assignment-end
+      - if current_user && current_user == @campaign.initiator
+        = render :partial => 'update_form', :locals => { :hidden => true, :update => CampaignUpdate.new(:is_advice_request => true, :user_id => current_user.id) }
+  %h3.latest-news= t(:latest_news)
+  - @campaign.events.each do |event|
+    - if event.is_a?(Assignment)
+      = render :partial => "shared/complete_assignments/#{event.task_type}", :locals => { :assignment => event }
+    - else
+      = render :partial => 'campaign_event', :locals => { :event => event, :always_show_commentbox => false }
+

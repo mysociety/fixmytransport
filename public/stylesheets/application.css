@@ -521,6 +521,26 @@ form.new_update .label{
   width: 6em;
 }
 
+.optional-assignment {
+  border-radius: 10px;
+  background-color: #951919;
+  font-style: bold;
+  margin: 0 0.5em 0.5em 0.5em;
+  padding: 0.5em;
+  width: auto;
+  float: left;
+  cursor: pointer;
+}
+
+.optional-assignment a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.optional-assignment-end {
+  clear: left;
+}
+
 .new-assignment, .campaign-event {
   border: 1px dotted #cccccc;
   margin: 0.5em;
@@ -528,17 +548,42 @@ form.new_update .label{
   width: auto;
 }
 
+.campaign-event .campaign-comment-link {
+  font-size: 0.8em;
+  float: right;
+}
+
+.campaign-event .campaign-comments {
+  list-style-type: none;
+  color: #333;
+  margin: 0.5em 0;
+}
+
+.campaign-event .campaign-comment {
+  list-style-type: none;
+  color: #333;
+  margin: 0.5em 0;
+}
+.campaign-commentbox {
+  margin: 0.5em 2em;
+}
+
+.new_campaign_comment input[type=submit] {
+  float: right;  
+}
+
 .campaign-event .date {
   font-size: 0.8em;
   color: #707070;
 }
 
-.campaign-event .message-campaign-update {
+.campaign-event .campaign-event {
   background-color: #ffff99;
   border: 1px solid #cccccc;
   margin: 0.5em;
   padding: 0.5em;
 }
+
 
 /* Stop/stop area/route page */
 

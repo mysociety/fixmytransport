@@ -72,6 +72,62 @@ function hideProblemDateTimeForOngoing() {
   })
 }
 
+// Add listeners for link click events
+function addLinkActions() {
+  jQuery('#ask-advice-link').click(function(){
+    if(jQuery('#advice-request-form').length == 0){
+      return true;
+    }else{
+      jQuery('#advice-request-form').show();
+      return false;
+    }
+  })
+  jQuery('.campaign-comment-link').live('click', function(){
+    id = jQuery(this).attr('id').split('_')[1];
+    if(jQuery('#commentbox_' + id).length == 0) {
+      return true;
+    }else{
+      jQuery('#commentbox_' + id).show();
+      return false;
+    }
+  })
+
+  setupForm('.campaign-info .new_campaign_comment', updateCommentCallback);
+  setupForm('.campaign-info #campaign-update-form form', updateCallback);
+  setupForm('.campaign-info #advice-request-form form', adviceCallback);
+}
+
+function setupForm(selector, callback) {
+  var options = {
+    success: callback,
+    data: {  _method: 'post' },
+    dataType: 'json'
+    };
+  jQuery(selector).ajaxForm(options);
+}
+
+function adviceCallback(response){
+  jQuery('.latest-news').after(response.html);
+  jQuery('#advice-request-form textarea').val('');
+  jQuery('#advice-request-form').hide();
+  setupForm('.new_campaign_comment', updateCommentCallback);
+}
+
+function updateCallback(response){
+  jQuery('.latest-news').after(response.html);
+  jQuery('#campaign-update-form textarea').val('');
+  setupForm('.new_campaign_comment', updateCommentCallback);
+}
+
+function updateCommentCallback(response){
+  commentbox_div = jQuery('#commentbox_' + response.update_id);
+  commentbox = jQuery("#campaign_comment_text_" + response.update_id);
+  commentbox.val("");
+  comments_ul = commentbox_div.prev('.campaign-comments');
+  comments_ul.append(response.html);  
+}
+
+
 // Make the feedback tab popup the form, 
 // make the form submit via AJAX,
 // setup the cancel button to clear fields
@@ -121,13 +177,22 @@ function setupFeedbackForm() {
   });  
   
 }
-// Run jquery in no-conflict mode so it doesn't use jQuery()
+
+// Always send the authenticity_token with ajax
+$(document).ajaxSend(function(event, request, settings) {
+  if ( settings.type == 'post' ) {
+      settings.data = (settings.data ? settings.data + "&" : "")
+          + "authenticity_token=" + encodeURIComponent( AUTH_TOKEN );
+  }
+});
+
+// Run jquery in no-conflict mode so it doesn't use $()
 jQuery.noConflict();
 
 jQuery(document).ready(function() {
-  
   addSearchGuidance();  
   setupFeedbackForm();
   hideProblemDateTimeForOngoing();
+  addLinkActions();
 });
 

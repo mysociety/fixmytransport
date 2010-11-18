@@ -1,0 +1,3 @@
+%li.campaign-comment
+  = "#{comment.user.name}: #{comment.text}"
+  .date= t(:ago, :time => time_ago_in_words(comment.created_at))

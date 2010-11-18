@@ -4,8 +4,7 @@ describe SubRoute do
   before(:each) do
     @valid_attributes = {
       :from_station_id => 1,
-      :to_station_id => 1,
-      :departure_time => "value for departure_time"
+      :to_station_id => 1
     }
   end
 

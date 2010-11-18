@@ -1,0 +1,45 @@
+.campaign-event
+  - if event.is_a? IncomingMessage
+    %span.date= t(:ago, :time => time_ago_in_words(event.created_at))
+    - if event.campaign_updates.empty? 
+      %span.message-link
+        != t(:got_a_message, :link => link_to(event.subject, incoming_message_path(event)), :sender => event.from)
+    - else
+      %span.important-message-link
+        != t(:got_important_message, :link => link_to(event.subject, incoming_message_path(event)), :sender => event.from)
+      - event.campaign_updates.each do |update|
+        = render :partial => 'campaign_event', :locals => {:event => update, :always_show_commentbox => always_show_commentbox}
+  - else 
+    %a{:id => "update_#{event.id}"}
+    
+    - if event.is_advice_request? 
+      - text = :user_requested_advice
+      - class_name = 'advice-request'
+    - else 
+      - text = :user_says
+      - class_name = 'general-campaign-update'
+    %span{ :class => class_name }
+      != t(text, :name => event.user.name)
+      != "\"#{event.text}\""
+    .actions
+      %span.date= t(:ago, :time => time_ago_in_words(event.created_at))
+      - if (! current_user or event.comments.empty?) and !always_show_commentbox
+        .campaign-comment-link{:id => "commentlink_#{event.id}"}= link_to( t(:add_comment), add_comment_campaign_url(@campaign, :update_id => event.id))
+    
+    %ul.campaign-comments
+      - event.comments.each do |comment|
+        = render :partial => 'update_comment', :locals => { :comment => comment }
+      - if (current_user && !event.comments.empty?) or always_show_commentbox
+        - style = ''
+      - else
+        - style = 'display:none;'
+    - if current_user
+      .campaign-commentbox{:style => style, :id => "commentbox_#{event.id}"}
+        - form_for CampaignComment.new(:user_id => current_user.id, :campaign => @campaign, :campaign_update => event), :url => add_comment_campaign_url(@campaign) do |f|
+          = f.text_area :text, :rows => 2, :cols => 40,:id => "campaign_comment_text_#{event.id}"
+          != f.hidden_field :campaign_update_id, :id => "campaign_comment_campaign_update_id_#{event.id}"
+          != f.hidden_field :campaign_id, :id => "campaign_comment_campaign_id_#{event.id}"
+          != f.hidden_field :user_id, :id => "campaign_comment_user_id_#{event.id}"
+          != f.submit t(:add_comment), :id => "campaign_comment_submit_#{event.id}"
+
+    %div{:style => "clear:both;"}

@@ -6,8 +6,8 @@ en:
   campaign_start_date: Start date
   write_to_operator: Write to the operator
   campaign_location: "to {{link}}"
-  login_to_confirm: "Login as {{user}} to confirm this campaign"
-  login_to_edit: "Login as {{user}} to edit this campaign"
+  login_to_confirm: "Login as {{user}} to confirm this problem"
+  login_to_edit: "Login as {{user}} to access this page"
   wrong_user: "To get started with this campaign, you'll need to logout"
   password_confirmation: Password (again)
   password_length_error: "Please enter a password that is at least {{length}} characters long"
@@ -36,5 +36,12 @@ en:
   update_added: Your update has been added. 
   error_adding_update: "Sorry, there's been a problem adding your update. Please use the feedback form to let us know what happened."
   got_important_message: "The campaign received a message {{link}} from {{sender}}"
-  user_says: "{{name}} says:"
-  add_an_update: Add an update
+  user_says: "{{name}} said:"
+  add_an_update: 'Add an update:'
+  request_advice: Ask for advice
+  ask_our_expert_panel: 'Ask your supporters and our expert panel what to do next:'
+  user_requested_advice: "{{name}} solicited feedback from the campaign's supporters and FixMyTransport's expert panel:"
+  advice_request_added: Your advice request will be sent to your supporters and the panel.
+  add_comment: comment
+  ago: "{{time}} ago"
+  login_to_comment_if_supporter: "Only campaign supporters can comment on updates. If you're a supporter of this campaign, please login to comment"

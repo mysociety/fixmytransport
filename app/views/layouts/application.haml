@@ -12,6 +12,7 @@
     != javascript_include_tag('jquery.form.js')
     != javascript_include_tag('application.js')
   %body
+    = javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery?
     #site-header
       %h1= link_to_unless_current(t(:site_name), root_url) 
       #site-tagline= t(:site_tagline)
