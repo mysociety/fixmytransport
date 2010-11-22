@@ -573,7 +573,8 @@ form.new_update .label{
   float: right;  
 }
 
-.campaign-event .date {
+.campaign-event .date, 
+.campaign-event .status{
   font-size: 0.8em;
   color: #707070;
 }

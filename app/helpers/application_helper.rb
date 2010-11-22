@@ -300,4 +300,10 @@ module ApplicationHelper
     return date.strftime("%e %b %Y").strip
   end
   
+  def campaign_status(user, campaign)
+    return t(:initiator) if user == campaign.initiator
+    return t(:expert) if user.is_expert?
+    return t(:supporter) if campaign.supporters.include?(user)
+    return ""  
+  end
 end

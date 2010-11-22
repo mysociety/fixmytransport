@@ -1,7 +1,7 @@
 class Campaign < ActiveRecord::Base
   belongs_to :initiator, :class_name => 'User'
   has_many :campaign_supporters
-  has_many :supporters, :through => :campaign_supporters, :class_name => 'User'
+  has_many :supporters, :through => :campaign_supporters, :class_name => 'User', :conditions => ['campaign_supporters.confirmed_at is not null']
   belongs_to :location, :polymorphic => true
   belongs_to :transport_mode
   has_many :assignments

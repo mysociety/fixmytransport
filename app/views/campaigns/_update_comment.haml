@@ -1,3 +1,4 @@
 %li.campaign-comment
+  %span.status=campaign_status(comment.user, @campaign)
   = "#{comment.user.name}: #{comment.text}"
   .date= t(:ago, :time => time_ago_in_words(comment.created_at))

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101117113427) do
+ActiveRecord::Schema.define(:version => 20101122124148) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -591,6 +591,7 @@ ActiveRecord::Schema.define(:version => 20101117113427) do
     t.datetime "last_login_at"
     t.boolean  "registered",         :default => false, :null => false
     t.string   "email_local_part"
+    t.boolean  "is_expert"
   end
 
   create_table "versions", :force => true do |t|
