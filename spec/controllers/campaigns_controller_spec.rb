@@ -566,4 +566,76 @@ describe CampaignsController do
     end
   end
   
+  describe '#GET confirm_join' do 
+    
+    before do 
+      @mock_user = mock_model(User)
+      @mock_supporter = mock_model(CampaignSupporter, :supporter => @mock_user,
+                                                      :confirm! => true)
+      CampaignSupporter.stub!(:find_by_token).and_return(@mock_supporter)
+    end
+  
+    def make_request
+      get :confirm_join, { :email_token => 'mytoken' }
+    end
+  
+    it 'should assign an error to the view if the campaign supporter cannot be found' do 
+      CampaignSupporter.stub!(:find_by_token).and_return(nil)
+      make_request
+      assigns[:error].should == :error_on_join
+    end
+    
+    it 'should assign the user to the view' do 
+      make_request
+      assigns[:user].should == @mock_user
+    end
+    
+    it 'should confirm the campaign supporter' do 
+      @mock_supporter.should_receive(:confirm!)
+      make_request
+    end
+    
+  end
+  
+  describe '#PUT confirm_join' do 
+    
+    before do 
+      @mock_user = mock_model(User,  :attributes= => true, 
+                                     :registered= => true,
+                                     :save => true)
+      @mock_campaign = mock_model(Campaign)
+      @mock_supporter = mock_model(CampaignSupporter, :supporter => @mock_user,
+                                                      :confirm! => true,
+                                                      :campaign => @mock_campaign)
+      CampaignSupporter.stub!(:find_by_token).and_return(@mock_supporter)
+    end
+    
+    def make_request
+      put :confirm_join, { :email_token => 'mytoken' }
+    end
+    
+    it 'should assign an error to the view if the campaign supporter cannot be found' do 
+      CampaignSupporter.stub!(:find_by_token).and_return(nil)
+      make_request
+      assigns[:error].should == :error_on_register
+    end
+    
+    it 'should assign the user to the view' do 
+      make_request
+      assigns[:user].should == @mock_user
+    end
+    
+    it 'should redirect to the campaign url if the user model can be saved' do 
+      make_request
+      response.should redirect_to(campaign_url(@mock_campaign))
+    end
+    
+    it 'should not redirect to the campaign url if the user model cannot be saved' do 
+      @mock_user.stub!(:save).and_return(false)
+      make_request
+      response.should_not redirect_to(campaign_url(@mock_campaign))
+    end
+    
+  end
+  
 end

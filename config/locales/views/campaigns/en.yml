@@ -44,4 +44,7 @@ en:
   advice_request_added: Your advice request will be sent to your supporters and the panel.
   add_comment: comment
   ago: "{{time}} ago"
+  as_a_supporter: "As a campaign supporter, you can make comments on the progress of the campaign."
+  login_to_comment: "You'll need to {{link}} to comment"
+  add_details_to_comment: "Please your name as you'd like it to appear, and a password so you can log back into the site anytime."
   login_to_comment_if_supporter: "Only campaign supporters can comment on updates. If you're a supporter of this campaign, please login to comment"

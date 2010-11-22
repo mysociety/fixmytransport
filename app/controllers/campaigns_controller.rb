@@ -68,10 +68,26 @@ class CampaignsController < ApplicationController
   
   def confirm_join
     @campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
-    if @campaign_supporter
-      @campaign_supporter.confirm!
-    else
-      @error = :error_on_join
+    # GET request with token from confirmation email
+    if request.get? 
+      if @campaign_supporter
+        @user = @campaign_supporter.supporter
+        @campaign_supporter.confirm!
+      else
+        @error = :error_on_join
+      end
+    # POST request from form displayed on confirmation
+    elsif request.put?
+      if @campaign_supporter
+        @user = @campaign_supporter.supporter
+        @user.attributes = params[:user]
+        @user.registered = true
+        if @user.save 
+          redirect_to campaign_url(@campaign_supporter.campaign)
+        end
+      else
+        @error = :error_on_register
+      end
     end
   end
   
