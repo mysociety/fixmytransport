@@ -24,7 +24,7 @@ describe IncomingMessagesController do
     
       it 'should create a campaign update' do 
         CampaignUpdate.should_receive(:new)
-        make_request(:id => 55)
+        make_request(:id => 55, :campaign_id => @mock_campaign.id)
       end
     
     end
@@ -33,7 +33,7 @@ describe IncomingMessagesController do
     
       it 'should not create a campaign update' do 
         CampaignUpdate.should_not_receive(:new)
-        make_request(:id => 55)
+        make_request(:id => 55, :campaign_id => @mock_campaign.id)
       end
       
     end

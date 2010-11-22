@@ -97,7 +97,7 @@ describe CampaignsController do
           it 'should render the "wrong_user" template with appropriate message params if the current user is not the campaign initiator' do 
             controller.stub!(:current_user).and_return(mock_model(User))
             make_request(token=@mock_problem.token)
-            response.should render_template("wrong_user")
+            response.should render_template("shared/wrong_user")
             assigns[:name].should == 'Campaign User'
             assigns[:access_message].should == @expected_access_message
           end
@@ -139,7 +139,7 @@ describe CampaignsController do
           it 'should render the "wrong_user" template if there is a current user' do 
             controller.stub!(:current_user).and_return(mock_model(User))
             make_request(token=@mock_problem.token)
-            response.should render_template("campaigns/wrong_user")
+            response.should render_template("shared/wrong_user")
           end
           
         end
@@ -169,7 +169,7 @@ describe CampaignsController do
         it 'should render the "wrong_user" template' do 
           controller.stub!(:current_user).and_return(mock_model(User))
           make_request(token=@mock_problem.token)
-          response.should render_template('wrong_user')
+          response.should render_template('shared/wrong_user')
         end
         
         it 'should assign variables for an appropriate message' do 
@@ -329,37 +329,7 @@ describe CampaignsController do
     end
 
   end
-  
-  shared_examples_for "an action that requires the campaign initiator" do 
-  
-    describe 'when the current user is not the campaign initiator' do
-
-      before do 
-        @campaign_user = mock_model(User, :name => "Campaign User")
-        @mock_campaign = mock_model(Campaign, :initiator => @campaign_user,
-                                              :confirmed => true)
-        Campaign.stub!(:find).and_return(@mock_campaign)
-      end
-      
-      describe 'when there is a current user' do 
-            
-        it 'should render the "wrong user template"' do 
-          controller.stub!(:current_user).and_return(mock_model(User))
-          make_request({:id => 55, :update_id => '33'})
-          response.should render_template("wrong_user")
-        end
-        
-        it 'should show an appropriate message' do 
-          controller.stub!(:current_user).and_return(mock_model(User))
-          make_request({:id => 55, :update_id => '33'})
-          assigns[:access_message].should == @expected_access_message 
-        end
-      
-      end
-      
-    end
-  end 
-  
+    
   describe 'GET #add_update' do 
     
     before do 
@@ -371,6 +341,7 @@ describe CampaignsController do
       @controller.stub!(:current_user).and_return(@campaign_user)
       @expected_wrong_user_message = "add an update"
       @expected_access_message = :add_update_access_message
+      @default_params = { :id => 55, :update_id => '33' }
     end
   
     def make_request params
@@ -486,6 +457,7 @@ describe CampaignsController do
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_wrong_user_message = 'Add an update'
       @expected_access_message = :add_update_access_message
+      @default_params = { :id => 55, :update_id => '33' }
     end
     
     def make_request(params)

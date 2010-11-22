@@ -29,6 +29,7 @@ class ApplicationController < ActionController::Base
     @current_user = current_user_session && current_user_session.record
   end
 
+  # filter method for requiring a logged-in user
   def require_user
     unless current_user
       store_location
@@ -38,6 +39,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # filter method for requiring no logged-in user
   def require_no_user
     if current_user
       store_location
@@ -46,7 +48,53 @@ class ApplicationController < ActionController::Base
       return false
     end
   end
-
+  
+  # filter method for finding a campaign (not neccessarily confirmed)
+  def find_campaign
+    if self.class == CampaignsController
+      param = :id
+    else
+      param = :campaign_id
+    end
+    if params[param].to_i.to_s == params[param]
+      @campaign = Campaign.find(params[param])
+    else 
+      @campaign = Campaign.find_by_subdomain(params[param])
+    end
+    unless @campaign
+      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+      return false
+    end
+    return true
+  end
+  
+  # filter method for finding a confirmed campaign
+  def find_confirmed_campaign
+    found = find_campaign
+    return false unless @campaign
+    unless @campaign.confirmed
+      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+      return false
+    end
+    return true
+  end
+  
+  # filter method for requiring that the campaign initiator be logged in
+  def require_campaign_initiator
+    return true if current_user && current_user == @campaign.initiator
+    @access_message = "#{@action_name}_access_message".to_sym
+    @name = @campaign.initiator.name
+    if current_user
+      store_location
+      render :template => "shared/wrong_user"
+      return false
+    end
+    flash[:notice] = t(:login_to, :user => @name, :requested_action => t(@access_message))
+    store_location
+    redirect_to login_url
+    return false
+  end
+  
   def store_location
     session[:return_to] = request.request_uri
   end

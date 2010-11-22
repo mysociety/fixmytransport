@@ -13,7 +13,9 @@ ActionController::Routing::Routes.draw do |map|
     campaign.resources :incoming_messages, :only => [:show]
     campaign.attachment '/incoming_messages/:id/attach/:url_part_number', :action => 'show_attachment', 
                                                                           :controller => 'incoming_messages'
+    campaign.resources :outgoing_messages, :only => [:new, :show, :create]
   end                                       
+  
   map.confirm_join '/c/:email_token', :action => 'confirm_join', :controller => 'campaigns'
   map.confirm_leave '/l/:email_token', :action => 'confirm_leave', :controller => 'campaigns'
 

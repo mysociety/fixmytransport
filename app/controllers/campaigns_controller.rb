@@ -5,8 +5,8 @@ class CampaignsController < ApplicationController
   before_filter :find_confirmed_campaign, :only => [:show, :join, 
                                                     :leave, :add_update, 
                                                     :request_advice, :add_comment]
-  before_filter :require_owner_or_token, :only => [:edit, :update]
-  before_filter :require_owner, :only => [:add_update, :request_advice]
+  before_filter :require_campaign_initiator_or_token, :only => [:edit, :update]
+  before_filter :require_campaign_initiator, :only => [:add_update, :request_advice]
   before_filter :require_user, :only => [:add_comment]
   before_filter :find_update, :only => [:add_comment]
   
@@ -172,30 +172,6 @@ class CampaignsController < ApplicationController
   
   private
   
-  def find_campaign
-    if params[:id].to_i.to_s == params[:id]
-      @campaign = Campaign.find(params[:id])
-    else 
-      @campaign = Campaign.find_by_subdomain(params[:id])
-    end
-    unless @campaign
-      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
-      return false
-    end
-    return true
-  end
-  
-  # filter method for finding a confirmed campaign
-  def find_confirmed_campaign
-    found = find_campaign
-    return false unless @campaign
-    unless @campaign.confirmed
-      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
-      return false
-    end
-    return true
-  end
-  
   def find_update
     update_param = (params[:update_id] or params[:campaign_comment][:campaign_update_id])
     @campaign_update = CampaignUpdate.find(update_param)
@@ -206,8 +182,8 @@ class CampaignsController < ApplicationController
     return true
   end
   
-  def require_owner_or_token
-    return require_owner if @campaign.status != :new
+  def require_campaign_initiator_or_token
+    return require_campaign_initiator if @campaign.status != :new
     return true if current_user && current_user == @campaign.initiator
     # if campaign initiator not yet registered, allow access by token
     if params[:token] && params[:token] == @campaign.problem.token
@@ -215,26 +191,12 @@ class CampaignsController < ApplicationController
         return true
       else
         # user is registered, but person making request is logged in as someone else
-        return require_owner 
+        return require_campaign_initiator 
       end
     else
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
     end
     return false
   end
-  
-  def require_owner
-    return true if current_user && current_user == @campaign.initiator
-    @access_message = "#{@action_name}_access_message".to_sym
-    @name = @campaign.initiator.name
-    if current_user
-      store_location
-      render :template => "campaigns/wrong_user"
-      return false
-    end
-    flash[:notice] = t(:login_to, :user => @name, :requested_action => t(@access_message))
-    store_location
-    redirect_to login_url
-    return false
-  end
+
 end

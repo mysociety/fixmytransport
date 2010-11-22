@@ -15,6 +15,7 @@ en:
   tweet_this: Tweet this
   add_update_access_message: "ask for advice on this campaign"
   update_access_message: "confirm this problem"
+  new_access_message: "write messages on behalf of this campaign"
   edit_access_message: "confirm this problem"
   join_this_campaign: Join this campaign
   you_are_a_supporter: "You're now a supporter of \"{{campaign}}\"!"
