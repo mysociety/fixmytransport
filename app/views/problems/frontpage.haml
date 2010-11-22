@@ -8,7 +8,7 @@
           =link_to(t(:stop_or_station), find_stop_problems_url)
         =t(:or_on_a)
         %span.link-button
-          =link_to(t(:route), find_route_problems_url)
+          !=link_to(t(:frontpage_route), find_route_problems_url) + '?'
   .latest
     .right-col
       .campaign-updates

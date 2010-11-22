@@ -146,6 +146,7 @@ h2.main-header{
 
 .problem-form-wrapper { 
   text-align: center;
+  padding: 1em;
 }
 
 .problem-form {
@@ -163,8 +164,8 @@ h2.main-header{
 
 
 .homepage .latest-problems{
-  border: 1px solid #D9D9D6;
   padding: 10px;
+  color: #777777;
   margin: 1em 2em 1em 4em;
 }
 
@@ -175,8 +176,8 @@ h2.main-header{
 }
 
 .homepage .campaign-updates{
-  border: 1px solid #D9D9D6;
   padding: 10px;
+  color: #777777;
   margin: 1em 4em 1em 2em;
 }
 
@@ -259,7 +260,7 @@ input, textarea, select {
 }
 
 .problem-options {
-  font-size: 1.2em;
+ font-size: 1.8em;
 }
 
 .large-map-intro {
@@ -689,6 +690,21 @@ div.submit{
 form.new_user_session label{
   width: 7em;
 }
+
+/* Editing user info */
+.edit_user{
+  width: 50%;
+  margin: auto;
+}
+
+.edit_user label{
+  width: 8em;
+}
+
+.edit_user input[type=submit] {
+  float: right;  
+}
+
 
 /* Campaign emails */
 .campaign-email{
