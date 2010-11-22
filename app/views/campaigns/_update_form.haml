@@ -11,6 +11,9 @@
   = text
   - form_for update, :url => add_update_campaign_url(@campaign) do |f|
     .fieldset
+      - if @empty_update
+        .form-field-error
+          =t(:please_enter_some_text)
       .form-field
         != f.hidden_field :user_id
         != f.hidden_field :is_advice_request

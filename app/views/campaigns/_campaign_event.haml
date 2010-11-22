@@ -36,6 +36,9 @@
     - if current_user
       .campaign-commentbox{:style => style, :id => "commentbox_#{event.id}"}
         - form_for CampaignComment.new(:user_id => current_user.id, :campaign => @campaign, :campaign_update => event), :url => add_comment_campaign_url(@campaign) do |f|
+          - if @empty_comment
+            .form-field-error
+              = t(:please_enter_some_text)
           = f.text_area :text, :rows => 2, :cols => 40,:id => "campaign_comment_text_#{event.id}"
           != f.hidden_field :campaign_update_id, :id => "campaign_comment_campaign_update_id_#{event.id}"
           != f.hidden_field :campaign_id, :id => "campaign_comment_campaign_id_#{event.id}"

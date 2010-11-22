@@ -101,10 +101,22 @@ function setupForm(selector, callback) {
   var options = {
     success: callback,
     data: {  _method: 'post' },
-    dataType: 'json'
-    };
+    dataType: 'json',
+    beforeSubmit: highlightEmptyTextArea
+  };
   jQuery(selector).ajaxForm(options);
 }
+
+function highlightEmptyTextArea(arr, form, options){
+  textarea = jQuery('textarea', form);
+  if (jQuery.trim(textarea.val()) == ''){
+    textarea.parent().prepend('<div class="form-field-error">Please enter some text</div>')
+    return false;  
+  }else {
+    return true; 
+  }  
+}
+
 
 function adviceCallback(response){
   jQuery('.latest-news').after(response.html);
@@ -125,6 +137,7 @@ function updateCommentCallback(response){
   commentbox.val("");
   comments_ul = commentbox_div.prev('.campaign-comments');
   comments_ul.append(response.html);  
+  
 }
 
 

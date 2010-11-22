@@ -86,6 +86,7 @@ class CampaignsController < ApplicationController
         if @user.save 
           redirect_to campaign_url(@campaign_supporter.campaign)
         end
+        @user.registered = false
       else
         @error = :error_on_register
       end
@@ -135,8 +136,11 @@ class CampaignsController < ApplicationController
         else
           flash[:notice] = @campaign_update.is_advice_request? ? t(:advice_request_added) : t(:update_added)
         end
+        redirect_to campaign_url(@campaign)
+        return
+      else
+        @empty_update = true
       end
-      redirect_to campaign_url(@campaign)
     else
       @campaign_update = @campaign.campaign_updates.build(:is_advice_request => params[:is_advice_request],
                                                           :user_id => current_user.id)
@@ -152,8 +156,17 @@ class CampaignsController < ApplicationController
                             :update_id => @comment.campaign_update_id }
           return
         end  
+        redirect_to campaign_url(@campaign, :anchor => "update_#{@comment.campaign_update_id}")
+      else
+        if request.xhr?
+          render :json => { :errors => @comment.errors, 
+                            :update_id => @comment.campaign_update_id }
+        else
+          @campaign_update.comments.delete(@comment)
+          @empty_comment = true
+        end
       end
-      redirect_to campaign_url(@campaign, :anchor => "update_#{@comment.campaign_update_id}")
+      
     end
   end
   

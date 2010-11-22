@@ -6,8 +6,8 @@
   - if @user.registered? && ! current_user
     != t(:login_to_comment, :link => link_to(t(:login), login_path))
   - elsif ! @user.registered? 
+    %p= t(:add_details_to_comment)
     - form_for @user, :url => confirm_join_path(:email_token => params[:email_token]) do |f|
-      %p= t(:add_details_to_comment)
       .form-field
         - if @user.errors.on('name')
           .form-field-error= error_message_on @user, :name
@@ -24,5 +24,6 @@
           .form-field-error= error_message_on @user, :password_confirmation
         = f.label :password_confirmation, t(:password_confirmation)
         != f.password_field :password_confirmation
-      !=f.submit t(:go)
+      .form-field
+        !=f.submit t(:go)
     
