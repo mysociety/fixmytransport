@@ -3,15 +3,14 @@
     %span.date= t(:ago, :time => time_ago_in_words(event.created_at))
     - if event.campaign_updates.empty? 
       %span.message-link
-        != t(:got_a_message, :link => link_to(event.subject, incoming_message_path(event)), :sender => event.from)
+        != t(:got_a_message, :link => link_to(event.subject, campaign_incoming_message_path(@campaign, event)), :sender => event.from)
     - else
       %span.important-message-link
-        != t(:got_important_message, :link => link_to(event.subject, incoming_message_path(event)), :sender => event.from)
+        != t(:got_important_message, :link => link_to(event.subject, campaign_incoming_message_path(@campaign, event)), :sender => event.from)
       - event.campaign_updates.each do |update|
         = render :partial => 'campaign_event', :locals => {:event => update, :always_show_commentbox => always_show_commentbox}
   - else 
     %a{:id => "update_#{event.id}"}
-    
     - if event.is_advice_request? 
       - text = :user_requested_advice
       - class_name = 'advice-request'

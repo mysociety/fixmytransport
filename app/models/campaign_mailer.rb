@@ -16,7 +16,8 @@ class CampaignMailer < ActionMailer::Base
     recipients recipient.email
     from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
     subject "[FixMyTransport] New message to \"#{campaign.title}\""
-    body :campaign => campaign, :recipient => recipient, :link => main_url(incoming_message_path(incoming_message))
+    url = main_url(campaign_incoming_message_path(campaign,incoming_message))
+    body :campaign => campaign, :recipient => recipient, :link => url
   end
   
   def update(recipient, campaign, supporter, update)

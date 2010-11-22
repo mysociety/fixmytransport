@@ -9,7 +9,11 @@ ActionController::Routing::Routes.draw do |map|
                             :member => { :join => [:get, :post], 
                                          :leave => [:post], 
                                          :add_update => [:get, :post],
-                                         :add_comment => [:get, :post] }
+                                         :add_comment => [:get, :post] } do |campaign|
+    campaign.resources :incoming_messages, :only => [:show]
+    campaign.attachment '/incoming_messages/:id/attach/:url_part_number', :action => 'show_attachment', 
+                                                                          :controller => 'incoming_messages'
+  end                                       
   map.confirm_join '/c/:email_token', :action => 'confirm_join', :controller => 'campaigns'
   map.confirm_leave '/l/:email_token', :action => 'confirm_leave', :controller => 'campaigns'
 
@@ -22,11 +26,6 @@ ActionController::Routing::Routes.draw do |map|
                                             :find_other_route => :get }                           
   map.confirm '/p/:email_token', :action => 'confirm', :controller => 'problems'
   map.confirm_update '/u/:email_token', :action => 'confirm_update', :controller => 'problems'
-  
-  map.attachment '/incoming_messages/:id/attach/:url_part_number', :action => 'show_attachment', 
-                                                                   :controller => 'incoming_messages'
-  map.resources :incoming_messages, :only => [:show]
-
   
   # stops                                   
   map.stop "/stops/:scope/:id.:format", :controller => "locations", 
