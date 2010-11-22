@@ -61,6 +61,7 @@ class CampaignsController < ApplicationController
       @campaign.remove_supporter(current_user)
       flash[:notice] = t(:you_are_no_longer_a_supporter, :campaign => @campaign.title)
       redirect_to campaign_url(@campaign)
+      return
     end
     render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
     return false
