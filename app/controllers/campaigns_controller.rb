@@ -209,22 +209,13 @@ class CampaignsController < ApplicationController
   def require_owner_or_token
     return require_owner if @campaign.status != :new
     return true if current_user && current_user == @campaign.initiator
-    
     # if campaign initiator not yet registered, allow access by token
     if params[:token] && params[:token] == @campaign.problem.token
-      if !@campaign.initiator.registered?
-        if current_user
-          store_location
-          render :template => "campaigns/wrong_user"
-          return false
-        else
-          return true
-        end
+      if !@campaign.initiator.registered? and !current_user
+        return true
       else
-        flash[:notice] = t(:login_to_confirm, :user => @campaign.initiator.name)
-        store_location
-        redirect_to login_url
-        return false
+        # user is registered, but person making request is logged in as someone else
+        return require_owner 
       end
     else
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
@@ -234,7 +225,14 @@ class CampaignsController < ApplicationController
   
   def require_owner
     return true if current_user && current_user == @campaign.initiator
-    flash[:notice] = t(:login_to_edit, :user => @campaign.initiator.name)
+    @access_message = "#{@action_name}_access_message".to_sym
+    @name = @campaign.initiator.name
+    if current_user
+      store_location
+      render :template => "campaigns/wrong_user"
+      return false
+    end
+    flash[:notice] = t(:login_to, :user => @name, :requested_action => t(@access_message))
     store_location
     redirect_to login_url
     return false

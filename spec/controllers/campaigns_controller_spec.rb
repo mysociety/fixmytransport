@@ -50,7 +50,7 @@ describe CampaignsController do
     
   end
   
-  shared_examples_for "an action that requires the campaign owner or a token" do 
+  shared_examples_for "an action that requires the campaign initiator or a token" do 
         
     describe 'when the campaign is new' do
 
@@ -94,18 +94,19 @@ describe CampaignsController do
             response.should do_default_behaviour
           end
           
-          it 'should redirect to the login page with a message if the current user is not the campaign initiator' do 
+          it 'should render the "wrong_user" template with appropriate message params if the current user is not the campaign initiator' do 
             controller.stub!(:current_user).and_return(mock_model(User))
             make_request(token=@mock_problem.token)
-            response.should redirect_to(login_url)
-            flash[:notice].should == "Login as Campaign User to confirm this problem"
+            response.should render_template("wrong_user")
+            assigns[:name].should == 'Campaign User'
+            assigns[:access_message].should == @expected_access_message
           end
           
           it 'should redirect to the login page with a message if there is no current user' do 
             controller.stub!(:current_user).and_return(nil)
             make_request(token=@mock_problem.token)
             response.should redirect_to(login_url)
-            flash[:notice].should == "Login as Campaign User to confirm this problem"          
+            flash[:notice].should == "Login as Campaign User to #{@expected_wrong_user_message}"          
           end
         
         end
@@ -165,11 +166,17 @@ describe CampaignsController do
       
       describe 'and the current user is not the campaign initiator' do
         
-        it 'should redirect to the login page with a message' do 
+        it 'should render the "wrong_user" template' do 
           controller.stub!(:current_user).and_return(mock_model(User))
           make_request(token=@mock_problem.token)
-          response.should redirect_to(login_url)
-          flash[:notice].should == "Login as Campaign User to access this page"
+          response.should render_template('wrong_user')
+        end
+        
+        it 'should assign variables for an appropriate message' do 
+          controller.stub!(:current_user).and_return(mock_model(User))
+          make_request(token=@mock_problem.token)
+          assigns[:name].should == 'Campaign User'
+          assigns[:access_message].should == @expected_access_message
         end
         
       end
@@ -180,7 +187,7 @@ describe CampaignsController do
           controller.stub!(:current_user).and_return(nil)
           make_request(token=@mock_problem.token)
           response.should redirect_to(login_url)
-          flash[:notice].should == "Login as Campaign User to access this page"
+          flash[:notice].should == "Login as Campaign User to confirm this problem"
         end
 
       end
@@ -205,6 +212,8 @@ describe CampaignsController do
                                             :save => true, 
                                             :status => :new)
       Campaign.stub!(:find).and_return(@mock_campaign)
+      @expected_wrong_user_message = "confirm this problem"
+      @expected_access_message = :update_access_message
     end
     
     def make_request(token=nil)
@@ -217,7 +226,7 @@ describe CampaignsController do
       redirect_to(campaign_url(@mock_campaign))
     end
     
-    it_should_behave_like "an action that requires the campaign owner or a token"
+    it_should_behave_like "an action that requires the campaign initiator or a token"
     
     it 'should update the campaign with the campaign params passed' do 
       @mock_campaign.should_receive(:attributes=).with("title" => 'Test Campaign')
@@ -288,6 +297,8 @@ describe CampaignsController do
                                             :title => 'A test campaign', 
                                             :description => 'Campaign description')
       Campaign.stub!(:find).and_return(@mock_campaign)
+      @expected_wrong_user_message = "confirm this problem"
+      @expected_access_message = :edit_access_message
     end
     
     def make_request(token=nil)
@@ -298,7 +309,7 @@ describe CampaignsController do
       render_template("campaigns/edit")
     end
 
-    it_should_behave_like "an action that requires the campaign owner or a token"
+    it_should_behave_like "an action that requires the campaign initiator or a token"
     
   end
 
@@ -329,12 +340,21 @@ describe CampaignsController do
                                               :confirmed => true)
         Campaign.stub!(:find).and_return(@mock_campaign)
       end
+      
+      describe 'when there is a current user' do 
             
-      it 'should redirect to the login page with a message' do 
-        controller.stub!(:current_user).and_return(mock_model(User))
-        make_request({:id => 55})
-        response.should redirect_to(login_url)
-        flash[:notice].should == "Login as Campaign User to access this page"
+        it 'should render the "wrong user template"' do 
+          controller.stub!(:current_user).and_return(mock_model(User))
+          make_request({:id => 55, :update_id => '33'})
+          response.should render_template("wrong_user")
+        end
+        
+        it 'should show an appropriate message' do 
+          controller.stub!(:current_user).and_return(mock_model(User))
+          make_request({:id => 55, :update_id => '33'})
+          assigns[:access_message].should == @expected_access_message 
+        end
+      
       end
       
     end
@@ -349,6 +369,8 @@ describe CampaignsController do
                                             :campaign_updates => mock('update', :build => true))
       Campaign.stub!(:find).and_return(@mock_campaign)
       @controller.stub!(:current_user).and_return(@campaign_user)
+      @expected_wrong_user_message = "add an update"
+      @expected_access_message = :add_update_access_message
     end
   
     def make_request params
@@ -374,8 +396,9 @@ describe CampaignsController do
       @controller.stub!(:current_user).and_return(@mock_user)
     end
         
-    def make_request
-      get :add_comment, { :id => 55, :update_id => '33' }
+    def make_request(params=nil)
+      params = { :id => 55, :update_id => '33' } if !params
+      get :add_comment, params
     end
     
     it 'should render the template "add_comment"' do 
@@ -398,7 +421,6 @@ describe CampaignsController do
     
     end
     
-
   end
 
   describe 'POST #add_comment' do 
@@ -444,7 +466,7 @@ describe CampaignsController do
       end
     
     end
-
+        
   end  
 
   describe 'POST #add_update' do 
@@ -462,6 +484,8 @@ describe CampaignsController do
                                             :campaign_updates => @mock_updates, 
                                             :initiator => @user)
       Campaign.stub!(:find).and_return(@mock_campaign)
+      @expected_wrong_user_message = 'Add an update'
+      @expected_access_message = :add_update_access_message
     end
     
     def make_request(params)
