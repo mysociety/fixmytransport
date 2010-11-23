@@ -1,4 +1,4 @@
-Dear <%= raw @recipient_models.map{ |recipient| recipient.name }.to_sentence %>,
+Dear <%= raw @recipient.name %>,
 <%- if @recipient_models.size > 1 %>
 
 [ This email has been sent to both councils covering the location of the problem; 

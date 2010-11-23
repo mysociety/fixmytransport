@@ -7,6 +7,8 @@ class Problem < ActiveRecord::Base
   belongs_to :campaign, :autosave => true
   has_many :assignments
   has_many :updates
+  has_many :sent_emails
+  has_many :recipients, :through => :sent_emails
   validates_presence_of :transport_mode_id, :unless => :location
   validates_presence_of :description, :subject, :category, :reporter_name, :if => :location
   validates_length_of :reporter_name, :minimum => 5, :if => :location
@@ -106,14 +108,8 @@ class Problem < ActiveRecord::Base
                                             :name => organization.name } }
   end
   
-  def first_sent_to
-    writing_assignment = assignments.completed.find(:first, 
-                                                    :conditions => ['task_type_name = ?',
-                                                                    'write-to-transport-organization'],
-                                                    :order => 'updated_at')
-    return nil if not writing_assignment
-    organization_names = writing_assignment.data[:organizations].map{ |organization| organization[:name] }
-    organization_names.to_sentence
+  def recipients
+    self.sent_emails.collect { |sent_email| sent_email.recipient }
   end
   
   # if this email has never been used before, assign the name 

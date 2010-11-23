@@ -213,7 +213,7 @@ describe CampaignsController do
                                             :status => :new)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_wrong_user_message = "confirm this problem"
-      @expected_access_message = :update_access_message
+      @expected_access_message = :campaigns_update_access_message
     end
     
     def make_request(token=nil)
@@ -298,7 +298,7 @@ describe CampaignsController do
                                             :description => 'Campaign description')
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_wrong_user_message = "confirm this problem"
-      @expected_access_message = :edit_access_message
+      @expected_access_message = :campaigns_edit_access_message
     end
     
     def make_request(token=nil)
@@ -340,7 +340,7 @@ describe CampaignsController do
       Campaign.stub!(:find).and_return(@mock_campaign)
       @controller.stub!(:current_user).and_return(@campaign_user)
       @expected_wrong_user_message = "add an update"
-      @expected_access_message = :add_update_access_message
+      @expected_access_message = :campaigns_add_update_access_message
       @default_params = { :id => 55, :update_id => '33' }
     end
   
@@ -456,7 +456,7 @@ describe CampaignsController do
                                             :initiator => @user)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_wrong_user_message = 'Add an update'
-      @expected_access_message = :add_update_access_message
+      @expected_access_message = :campaigns_add_update_access_message
       @default_params = { :id => 55, :update_id => '33' }
     end
     
@@ -562,7 +562,7 @@ describe CampaignsController do
     end
   end
   
-  describe '#GET confirm_join' do 
+  describe 'GET #confirm_join' do 
     
     before do 
       @mock_user = mock_model(User)

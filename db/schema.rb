@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101122124148) do
+ActiveRecord::Schema.define(:version => 20101123162926) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(:version => 20101122124148) do
     t.datetime "updated_at"
     t.datetime "sent_at"
     t.boolean  "is_advice_request"
+    t.integer  "outgoing_message_id"
   end
 
   create_table "campaigns", :force => true do |t|
@@ -210,6 +211,19 @@ ActiveRecord::Schema.define(:version => 20101122124148) do
     t.string   "parent"
     t.string   "vehicle_mode"
     t.string   "ultimate_parent"
+  end
+
+  create_table "outgoing_messages", :force => true do |t|
+    t.integer  "campaign_id"
+    t.integer  "status_code"
+    t.integer  "author_id"
+    t.text     "body"
+    t.datetime "sent_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "recipient_id"
+    t.string   "recipient_type"
+    t.string   "subject"
   end
 
   create_table "passenger_transport_executive_areas", :force => true do |t|
@@ -360,6 +374,9 @@ ActiveRecord::Schema.define(:version => 20101122124148) do
     t.integer  "recipient_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "problem_id"
+    t.string   "recipient_type"
+    t.integer  "outgoing_message_id"
   end
 
   create_table "sessions", :force => true do |t|

@@ -1,0 +1,25 @@
+!=t(:this_message_was_sent_by, :campaign => link_to(@outgoing_message.campaign.title, campaign_path(@outgoing_message.campaign)), :recipient => @outgoing_message.recipient.name)
+.campaign-email
+  %h2
+    .from= @outgoing_message.author.name
+    - if @outgoing_message.sent_at
+      .date= short_date(@outgoing_message.sent_at)
+    - else
+      .date= t(:not_yet_sent)
+  .subject
+    %b= "#{t(:subject)}:"
+    = @outgoing_message.subject
+  .body!= @outgoing_message.body
+- if current_user && current_user == @outgoing_message.author
+  - form_for @campaign_update, :url => add_update_campaign_url(@outgoing_message.campaign) do |f|
+    .fieldset
+      - if @campaign_update.errors.on('text')
+        .form-field-error= error_message_on @campaign_update, :text
+      .form-field
+        =f.label :text, t(:what_does_this_mean)
+        != f.hidden_field :outgoing_message_id
+        != f.hidden_field :user_id
+        !=f.text_area :text, :cols => 40, :rows => 5
+        !=f.submit t(:add_update)
+- else 
+  != t(:login_to_add_update, :link => link_to(t(:login_as, :user => @outgoing_message.campaign.initiator.name), login_url(:redirect => request.request_uri)), :campaign => @outgoing_message.campaign.title)

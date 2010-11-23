@@ -18,7 +18,7 @@ en:
   login: Login
   logout: Logout
   must_be_logged_in: "You must be logged in to {{requested_action}}"
-  add_comment_access_message: "add a comment"
+  campaigns_add_comment_access_message: "add a comment"
   must_be_logged_out: "You must be logged out to access this page"
   login_successful: "Login successful!"
   logout_successful: "Logout successful!"
@@ -58,3 +58,4 @@ en:
   supporter: supporter
   initiator: initiator
   logout_link: logout
+  your_message_has_been_sent: Your message has been sent on its way.

@@ -1,0 +1,10 @@
+en:
+  activerecord:
+    errors:
+      models:
+        outgoing_message:
+          attributes: 
+            body:
+              blank: "Please write your message"
+            recipient:
+              invalid: "Sorry, there's been an error creating your message. Please use the feedback form to let us know what happened."

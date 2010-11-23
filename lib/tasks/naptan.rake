@@ -55,6 +55,57 @@ namespace :naptan do
       Rake::Task['naptan:load:stop_area_hierarchy'].execute   
     end
     
+    desc 'Load new stop data from CSV file specified as FILE=filename'
+    task :new_stops => :environment do 
+      check_for_file
+      puts "Loading new stops from #{ENV['FILE']}..."
+      parser = Parsers::NaptanParser.new 
+      stop_attributes = [:atco_code,
+                         :naptan_code,
+  		                   :plate_code,
+                         :common_name,
+                         :landmark,
+                         :street,
+                         :indicator,
+                         :bearing,
+                         :locality,
+                         :town,
+                         :suburb,
+                         :locality_centre,
+                         :easting,
+                         :northing,
+                         :lon,
+                         :lat,
+                         :stop_type,
+                         :bus_stop_type, 
+  		                   :modification_datetime, 
+  		                   :status,
+  		                   :notes]
+      parser.send("parse_stops".to_sym, ENV['FILE']) do |new_stop|         
+        existing_stop = Stop.find_by_atco_code(new_stop.atco_code)
+        if existing_stop
+          changed_attributes = []
+          stop_attributes.each do |stop_attribute|
+            new_value = new_stop.send(stop_attribute)
+            old_value = existing_stop.send(stop_attribute)
+            continue if (new_value.blank? && old_value.blank?) 
+            continue if (new_value && old_value && new_value.to_s.downcase == old_value.to_s.downcase)
+            if new_value != old_value
+              changed_attributes << stop_attribute
+            end
+          end
+          if !changed_attributes.empty? 
+            puts "Found #{existing_stop.common_name} for #{new_stop.common_name}"
+            changed_attributes.each do |attribute|
+              puts "#{attribute}: old: #{existing_stop.send(attribute)}, new: #{new_stop.send(attribute)}"
+            end
+          end
+        else
+          puts "New stop #{new_stop.common_name}"
+        end
+          
+      end
+    end
   end
   
   namespace :post_load do 
@@ -185,20 +236,6 @@ namespace :naptan do
     desc "Converts locality coords from OS OSGB36 6-digit eastings and northings to WGS-84 lat/lons and saves the result on the model"
     task :convert_localities => :environment do 
       convert_coords("Locality", "convert_localities")
-    end
-  end
-  
-  namespace :temp do 
-    task :add_stop_sub_types => :environment do
-      types = { 'MKD'    => 'MarkedPoint', 
-                'CUS'    => 'UnmarkedPoint',
-                'HAR'    => 'HailAndRide', 
-                'FLX'    => 'FlexibleZone' }
-      types.each do |key, value|
-        StopType.connection.execute("UPDATE stop_types
-                                   SET sub_type = '#{key}' where code = 'BCT'
-                                   AND point_type = '#{value}'")
-      end                             
     end
   end
   

@@ -721,3 +721,26 @@ form.new_user_session label{
 .campaign-email .body{
   padding: 0.5em 0;
 }
+
+
+/* Outgoing messages */
+
+.outgoing-message-form { 
+  padding: 1em;
+  text-align: center;
+}
+.create_outgoing_message {
+  margin: auto;
+  width: 80%;
+}
+.create_outgoing_message label {
+  width: 8em;
+}
+
+.create_outgoing_message input[type=text], 
+.create_outgoing_message textarea {
+  width: 70%;
+}
+.create_outgoing_message input[type=submit] {
+  float: right;  
+}

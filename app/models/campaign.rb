@@ -7,6 +7,7 @@ class Campaign < ActiveRecord::Base
   has_many :assignments
   has_one :problem
   has_many :incoming_messages
+  has_many :outgoing_messages
   has_many :campaign_updates
   validates_presence_of :title, :description, :on => :update
   validates_presence_of :subdomain, :on => :update
@@ -87,10 +88,14 @@ class Campaign < ActiveRecord::Base
   end
 
   def events
-    events = problem.assignments.completed + incoming_messages + campaign_updates.general
+    events = problem.assignments.completed + incoming_messages + outgoing_messages + campaign_updates.general
     events = events.sort_by(&:updated_at)
     events = events.reverse
     events
+  end
+  
+  def existing_recipients
+    problem.recipients
   end
   
   # class methods

@@ -18,7 +18,7 @@ describe Council do
     @council.emailable?.should be_false
   end
   
-  describe 'when asked for an email address for a problem category' do 
+  describe 'when asked for a contact for a problem category' do 
   
     before do 
       @other_contact = mock_model(CouncilContact, :category => 'Other',
@@ -29,19 +29,19 @@ describe Council do
                                                      :email => 'test@example.com')
     end
   
-    it 'should return the email address for the contact for the category if there is one' do 
+    it 'should return the contact for the contact for the category if there is one' do 
       CouncilContact.stub!(:find).and_return([@unrelated_contact, @category_contact, @other_contact])
-      @council.email_for_category('Test category').should == 'test@example.com'
+      @council.contact_for_category('Test category').should == @category_contact
     end
     
-    it 'should return the email address for the contact for category "other" if there is no contact for the category passed' do 
+    it 'should return the contact for the contact for category "other" if there is no contact for the category passed' do 
       CouncilContact.stub!(:find).and_return([@unrelated_contact, @other_contact])
-      @council.email_for_category('Test category').should == 'other@example.com'
+      @council.contact_for_category('Test category').should == @other_contact
     end
     
     it 'should raise an error if there is no contact for the category or for "other"' do 
       CouncilContact.stub!(:find).and_return([@unrelated_contact])
-      lambda{ @council.email_for_category('Test category') }.should raise_error('No "Other" category contact for A Test Council (area ID: 22)')
+      lambda{ @council.contact_for_category('Test category') }.should raise_error('No "Other" category contact for A Test Council (area ID: 22)')
     end
     
   end

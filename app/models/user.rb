@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   has_many :assignments
   has_many :campaign_supporters, :foreign_key => :supporter_id
   has_many :campaigns, :through => :campaign_supporters
+  has_many :sent_emails, :as => :recipient
   before_save :generate_email_local_part, :unless => :unregistered?
   
   acts_as_authentic do |c|

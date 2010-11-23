@@ -33,8 +33,7 @@ class ApplicationController < ActionController::Base
   def require_user
     unless current_user
       store_location
-      @access_message = "#{@action_name}_access_message".to_sym
-      flash[:notice] = t(:must_be_logged_in, :requested_action => t(@access_message))
+      flash[:notice] = t(:must_be_logged_in, :requested_action => t(access_message_key))
       redirect_to new_user_session_url
       return false
     end
@@ -83,7 +82,7 @@ class ApplicationController < ActionController::Base
   # filter method for requiring that the campaign initiator be logged in
   def require_campaign_initiator
     return true if current_user && current_user == @campaign.initiator
-    @access_message = "#{@action_name}_access_message".to_sym
+    @access_message = access_message_key
     @name = @campaign.initiator.name
     if current_user
       store_location
@@ -103,6 +102,10 @@ class ApplicationController < ActionController::Base
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
+  end
+  
+  def access_message_key
+    "#{controller_name}_#{@action_name}_access_message".to_sym
   end
   
   # For administration interface, return display name of authenticated user

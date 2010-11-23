@@ -13,10 +13,10 @@ en:
   password_match_error: "The password confirmation does not match the password"
   add_password_to_update: "You'll need a password to be able to log back into the site and update your campaign. Enter one here. "
   tweet_this: Tweet this
-  add_update_access_message: "ask for advice on this campaign"
-  update_access_message: "confirm this problem"
-  new_access_message: "write messages on behalf of this campaign"
-  edit_access_message: "confirm this problem"
+  campaigns_add_update_access_message: "ask for advice on this campaign"
+  campaigns_update_access_message: "confirm this problem"
+  campaigns_edit_access_message: "confirm this problem"
+  outgoing_messages_new_access_message: "write messages on behalf of this campaign"
   join_this_campaign: Join this campaign
   you_are_a_supporter: "You're now a supporter of \"{{campaign}}\"!"
   enter_your_email_to_join: Enter your email address to join this campaign
@@ -33,12 +33,12 @@ en:
   you_are_no_longer_a_supporter: "You are no longer a supporter of \"{{campaign}}\""
   campaign_received_emails: "The campaign has received the following emails:"
   got_a_message: "The campaign received a message {{link}} from {{sender}}"
+  wrote_a_message: "{{sender}} wrote a message {{link}} to {{recipient}}"
   campaign: campaign
   choose_a_short_name: Choose a short name (6 to 16 lowercase letters)
   easy_web_address: This gives your page an easy web address. e.g. {{url}}
   update_added: Your update has been added. 
   error_adding_update: "Sorry, there's been a problem adding your update. Please use the feedback form to let us know what happened."
-  got_important_message: "The campaign received a message {{link}} from {{sender}}"
   user_says: "{{name}} said:"
   add_an_update: 'Add an update:'
   request_advice: Ask for advice

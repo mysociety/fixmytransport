@@ -72,7 +72,7 @@ describe ProblemMailer do
     describe "when creating a problem report" do
 
       it "should render successfully" do
-        lambda { ProblemMailer.create_report(@mock_problem, [@mock_operator]) }.should_not raise_error
+        lambda { ProblemMailer.create_report(@mock_problem, @mock_operator, [@mock_operator]) }.should_not raise_error
       end
       
     end
@@ -80,7 +80,7 @@ describe ProblemMailer do
     describe 'when delivering a problem report' do 
     
       before do 
-        @mailer = ProblemMailer.create_report(@mock_problem, [@mock_operator])
+        @mailer = ProblemMailer.create_report(@mock_problem, @mock_operator, [@mock_operator])
       end
       
       it 'should deliver successfully' do
@@ -134,7 +134,8 @@ describe ProblemMailer do
                                                  44 => {'name' => 'Emailable council'}})
                                                  
       @emailable_council = mock_model(Council, :name => 'Emailable council')
-      @emailable_council.stub!(:email_for_category).and_return('council@example.com')
+      @council_contact = mock_model(CouncilContact, :email => 'council@example.com')
+      @emailable_council.stub!(:contact_for_category).and_return(@council_contact)
       
       @unemailable_council = mock_model(Council, :name => 'Unemailable council')
       
@@ -168,6 +169,7 @@ describe ProblemMailer do
       
       ProblemMailer.stub!(:deliver_report)
       ProblemMailer.stub!(:check_for_council_change)
+      SentEmail.stub!(:create!)
       STDERR.stub!(:puts)
     end
   
@@ -194,12 +196,12 @@ describe ProblemMailer do
     end
     
     it 'should send a report email for a problem which has an operator email' do
-      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_operator, [@operator_with_mail], [])
+      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_operator, @operator_with_mail, [@operator_with_mail], [])
       ProblemMailer.send_reports
     end  
     
     it 'should send a report for a problem with a PTE with an email address' do 
-      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_pte, [@pte_with_mail], [])
+      ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_pte, @pte_with_mail, [@pte_with_mail], [])
       ProblemMailer.send_reports
     end
     
@@ -207,6 +209,7 @@ describe ProblemMailer do
       Council.stub!(:from_hash).and_return(@unemailable_council)
       Council.stub!(:from_hash).with({ 'name' => 'Emailable council' }).and_return(@emailable_council)
       ProblemMailer.should_receive(:deliver_report).with(@mock_problem_some_council_mails, 
+                                                         @emailable_council,
                                                          [@emailable_council], 
                                                          [@unemailable_council])
       ProblemMailer.send_reports
@@ -215,10 +218,17 @@ describe ProblemMailer do
     it "shouldn't send a report email for a problem which has an operator email but is associated with a campaign with no subdomain" do
       mock_campaign = mock_model(Campaign, :subdomain => nil)
       @mock_problem_email_operator.stub!(:campaign).and_return(mock_campaign)
-      ProblemMailer.should_not_receive(:deliver_report).with(@mock_problem_email_operator, [@operator_with_mail], [])
+      ProblemMailer.should_not_receive(:deliver_report).with(@mock_problem_email_operator, @operator_with_mail, [@operator_with_mail], [])
       ProblemMailer.send_reports
     end  
     
+    it 'should create a sent email record for each problem report delivered' do 
+      SentEmail.should_receive(:create!).with(:problem => @mock_problem_email_operator, 
+                                              :recipient => @operator_with_mail)
+      SentEmail.should_receive(:create!).with(:problem => @mock_problem_email_pte, 
+                                              :recipient => @pte_with_mail)
+      ProblemMailer.send_reports
+    end
     
     it 'should set the "sent at" time on each problem report delivered' do 
       @mock_problem_email_operator.should_receive(:update_attribute).with(:sent_at, anything)
