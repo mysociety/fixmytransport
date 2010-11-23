@@ -17,7 +17,8 @@ en:
   logged_in_as: "Logged in as {{name}}"
   login: Login
   logout: Logout
-  must_be_logged_in: "You must be logged in to access this page"
+  must_be_logged_in: "You must be logged in to {{requested_action}}"
+  add_comment_access_message: "add a comment"
   must_be_logged_out: "You must be logged out to access this page"
   login_successful: "Login successful!"
   logout_successful: "Logout successful!"

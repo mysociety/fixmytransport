@@ -1,6 +1,5 @@
 class UserSessionsController < ApplicationController
   before_filter :require_no_user, :only => [:new, :create]
-  before_filter :require_user, :only => :destroy
 
   def new
     if params[:redirect] and params[:redirect].starts_with('/')
@@ -20,6 +19,10 @@ class UserSessionsController < ApplicationController
   end
 
   def destroy
+    if !current_user
+      redirect_to login_path
+      return
+    end
     current_user_session.destroy
     flash[:notice] = t(:logout_successful)
     redirect_back_or_default login_path
