@@ -2,11 +2,16 @@ class OutgoingMessagesController < ApplicationController
 
   before_filter :find_confirmed_campaign, :only => [:new, :create]
   before_filter :require_campaign_initiator, :only => [:new, :create]
-  
+
   def new
-    @recipient = params[:recipient_type].constantize.find(params[:recipient_id])
+    if params[:recipient_type] and params[:recipient_id]
+      @recipient = params[:recipient_type].constantize.find(params[:recipient_id])
+    elsif params[:incoming_message_id]
+      @incoming_message = @campaign.incoming_messages.find(params[:incoming_message_id])
+    end
     @outgoing_message = @campaign.outgoing_messages.build(:author => current_user, 
-                                                          :recipient => @recipient)
+                                                          :recipient => @recipient, 
+                                                          :incoming_message => @incoming_message)                                                    
   end
   
   def create

@@ -1,4 +1,7 @@
-!=t(:this_message_was_sent_by, :campaign => link_to(@outgoing_message.campaign.title, campaign_path(@outgoing_message.campaign)), :recipient => @outgoing_message.recipient.name)
+- if @outgoing_message.incoming_message
+  - extra =  t(:in_reply_to, :incoming => link_to(@outgoing_message.incoming_message.subject, campaign_incoming_message_path(@outgoing_message.campaign, @outgoing_message.incoming_message)))
+!=t(:this_message_was_sent_by, :campaign => link_to(@outgoing_message.campaign.title, campaign_path(@outgoing_message.campaign)), :recipient => @outgoing_message.recipient_name, :extra => extra)
+
 .campaign-email
   %h2
     .from= @outgoing_message.author.name
@@ -9,7 +12,7 @@
   .subject
     %b= "#{t(:subject)}:"
     = @outgoing_message.subject
-  .body!= @outgoing_message.body
+  .body!= simple_format(@outgoing_message.body)
 - if current_user && current_user == @outgoing_message.author
   - form_for @campaign_update, :url => add_update_campaign_url(@outgoing_message.campaign) do |f|
     .fieldset

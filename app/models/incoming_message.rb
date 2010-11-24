@@ -15,6 +15,13 @@ class IncomingMessage < ActiveRecord::Base
     @mail
   end
   
+  def body_for_quoting
+    text = main_body_text_folded
+    text.gsub!("FOLDED_QUOTED_SECTION", " ")
+    text.strip!
+    return text
+  end
+  
   def main_body_text(regenerate=false)
     if read_attribute(:main_body_text).nil? or regenerate
       generate_main_body_text

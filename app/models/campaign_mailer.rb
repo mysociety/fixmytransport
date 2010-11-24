@@ -52,7 +52,7 @@ class CampaignMailer < ActionMailer::Base
   end
   
   def outgoing_message(outgoing_message)
-    recipients outgoing_message.recipient.email
+    recipients outgoing_message.recipient_email
     from outgoing_message.reply_email
     subject outgoing_message.subject
     body({ :outgoing_message => outgoing_message, 

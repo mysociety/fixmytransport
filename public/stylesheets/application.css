@@ -235,10 +235,6 @@ label {
   margin: 0.5em 1em 0 1em;
 }
 
-.form-field-error .formError {
-  width: 400px;  
-}
-
 input, textarea, select {
   margin: 0.5em;
 }
@@ -712,6 +708,7 @@ form.new_user_session label{
   border: 1px solid #cccccc;
   padding: 1em;
   margin: 1em 0;
+  overflow: auto;
 }
 
 .campaign-email h2{
@@ -723,6 +720,9 @@ form.new_user_session label{
   padding: 0.5em 0;
 }
 
+.campaign-email .reply-link {
+  float: right;
+}
 
 /* Outgoing messages */
 

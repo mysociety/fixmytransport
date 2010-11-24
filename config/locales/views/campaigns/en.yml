@@ -43,11 +43,13 @@ en:
   add_an_update: 'Add an update:'
   request_advice: Ask for advice
   ask_our_expert_panel: 'Ask your supporters and our expert panel what to do next:'
-  user_requested_advice: "{{name}} solicited feedback from the campaign's supporters and FixMyTransport's expert panel:"
+  user_requested_advice: "{{name}} asked for feedback from the campaign's supporters and FixMyTransport's expert panel:"
   advice_request_added: Your advice request will be sent to your supporters and the panel.
   add_comment: comment
   please_enter_some_text: Please enter some text
   ago: "{{time}} ago"
   as_a_supporter: "As a campaign supporter, you can make comments on the progress of this and other campaigns."
   login_to_comment: "You'll need to {{link}} to comment"
+  write_again: "Write to {{name}} again"
+  reply_to_this_message: "Reply to this message"
   add_details_to_comment: "Please enter your name as you'd like it to appear, and create a password so you can log back into the site anytime."
