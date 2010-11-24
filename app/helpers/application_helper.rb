@@ -306,4 +306,26 @@ module ApplicationHelper
     return t(:supporter) if campaign.supporters.include?(user)
     return ""  
   end
+
+  def update_text(update, link)
+    extra_parts = []
+    if update.incoming_message
+      extra_parts << t(:in_response_to, :subject => update.incoming_message.subject)
+      if !update.incoming_message.from.blank?
+        extra_parts << t(:received_from, :from => update.incoming_message.from)
+      end
+    end
+    if update.outgoing_message
+      extra_parts << t(:about_email, :name => update.outgoing_message.recipient_name)
+      extra_parts << t(:with_subject, :subject => update.outgoing_message.subject)
+    end
+    if extra_parts.empty? 
+      extra = ''
+    else 
+      extra = " " + extra_parts.join(" ")
+    end
+    text = t(:new_update, :name => update.user.name, 
+                          :title => update.campaign.title, 
+                          :link => link, :extra => extra)
+  end
 end

@@ -2,6 +2,7 @@ class CampaignMailer < ActionMailer::Base
   include MySociety::UrlMapper
   # include view helpers
   helper :application
+  add_template_helper(ApplicationHelper)
   cattr_accessor :sent_count, :dryrun
   url_mapper # See MySociety::UrlMapper
   
