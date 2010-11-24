@@ -50,7 +50,7 @@ class CampaignMailer < ApplicationMailer
   
   def outgoing_message(outgoing_message)
     recipients outgoing_message.recipient_email
-    from outgoing_message.reply_email
+    from outgoing_message.reply_name_and_email
     subject outgoing_message.subject
     body({ :outgoing_message => outgoing_message, 
            :privacy_link => main_url(about_path(:anchor => "privacy")), 

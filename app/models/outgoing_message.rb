@@ -45,8 +45,8 @@ class OutgoingMessage < ActiveRecord::Base
     end
   end
   
-  def reply_email
-    author.campaign_email_address(campaign)
+  def reply_name_and_email
+    author.campaign_name_and_email_address
   end
   
   def send_message

@@ -131,6 +131,14 @@ class Problem < ActiveRecord::Base
   
   def reply_email
     if campaign
+      reporter.campaign_email_address(campaign)
+    else
+      reporter.email
+    end
+  end
+  
+  def reply_name_and_email
+    if campaign
       reporter.campaign_name_and_email_address(campaign)
     else
       reporter.name_and_email

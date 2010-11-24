@@ -26,7 +26,7 @@ class ProblemMailer < ApplicationMailer
   def report(problem, recipient, recipient_models, missing_recipient_models=[])
     recipient_email = ProblemMailer.get_recipient_email(recipient, problem)
     recipients recipient_email
-    from problem.reply_email
+    from problem.reply_name_and_email
     subject "Problem Report: #{problem.subject}" 
     campaign_link = problem.campaign ? main_url(campaign_path(problem.campaign)) : nil
     body({ :problem => problem, 
