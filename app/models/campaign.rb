@@ -89,7 +89,7 @@ class Campaign < ActiveRecord::Base
 
   def events
     events = problem.assignments.completed + incoming_messages + outgoing_messages + campaign_updates.general
-    events = events.sort_by(&:updated_at)
+    events = events.sort_by(&:sort_date)
     events = events.reverse
     events
   end

@@ -22,6 +22,10 @@ class IncomingMessage < ActiveRecord::Base
     return text
   end
   
+  def sort_date
+    created_at
+  end
+  
   def main_body_text(regenerate=false)
     if read_attribute(:main_body_text).nil? or regenerate
       generate_main_body_text

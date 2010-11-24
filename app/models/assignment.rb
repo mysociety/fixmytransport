@@ -14,6 +14,20 @@ class Assignment < ActiveRecord::Base
     task_type_name.underscore
   end
   
+  def user_name
+    if problem
+      if problem.anonymous?
+        I18n.t(:the_problem_reporter)
+      else
+        problem.reporter_name
+      end
+    end
+  end
+  
+  def sort_date
+    updated_at
+  end
+  
   # class methods
   
   def self.create_assignment(attributes)
@@ -45,16 +59,6 @@ class Assignment < ActiveRecord::Base
       end
     end
    
-  end
-  
-  def user_name
-    if problem
-      if problem.anonymous?
-        I18n.t(:the_problem_reporter)
-      else
-        problem.reporter_name
-      end
-    end
   end
   
 end

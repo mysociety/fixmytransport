@@ -23,6 +23,10 @@ class OutgoingMessage < ActiveRecord::Base
     end
   end
   
+  def sort_date
+    created_at
+  end
+  
   def recipient_in_existing_campaign_recipients
     if recipient && !campaign.existing_recipients.include?(recipient)
       errors.add(:recipient, ActiveRecord::Error.new(self, :recipient, :invalid).to_s)
