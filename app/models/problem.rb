@@ -144,7 +144,7 @@ class Problem < ActiveRecord::Base
   
   # class methods
   def self.latest(limit)
-    confirmed.find(:all, :limit => limit)
+    confirmed.find(:all, :conditions => ["campaign_id is null"], :limit => limit)
   end
   
   # Sendable reports - confirmed, with operator, PTE, or council, but not sent
