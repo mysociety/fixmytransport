@@ -15,5 +15,15 @@ class OutgoingMessage < ActiveRecord::Base
       errors.add(:recipient, ActiveRecord::Error.new(self, :recipient, :invalid).to_s)
     end
   end
-
+  
+  def reply_email
+    author.campaign_email_address(campaign)
+  end
+  
+  def send_message
+    CampaignMailer.deliver_outgoing_message(self)
+    self.sent_at = Time.now
+    self.save
+  end
+  
 end

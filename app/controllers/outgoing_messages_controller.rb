@@ -13,6 +13,7 @@ class OutgoingMessagesController < ApplicationController
     @outgoing_message = @campaign.outgoing_messages.build(params[:outgoing_message])
     @recipient = @outgoing_message.recipient
     if @outgoing_message.save
+      @outgoing_message.send_message
       flash[:notice] = t(:your_message_has_been_sent)
       redirect_to campaign_outgoing_message_path(@campaign, @outgoing_message)
     else

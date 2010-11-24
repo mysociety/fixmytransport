@@ -47,8 +47,17 @@ class CampaignMailer < ActionMailer::Base
     body({ :campaign => campaign, 
            :recipient => recipient, 
            :advice_request => advice_request, 
-           :link => main_url(add_comment_campaign_url(campaign, :update_id => advice_request.id)),
+           :link => main_url(add_comment_campaign_path(campaign, :update_id => advice_request.id)),
            :unsubscribe_link => main_url(confirm_leave_path(:email_token => supporter.token)) })
+  end
+  
+  def outgoing_message(outgoing_message)
+    recipients outgoing_message.recipient.email
+    from outgoing_message.reply_email
+    subject outgoing_message.subject
+    body({ :outgoing_message => outgoing_message, 
+           :privacy_link => main_url(about_path(:anchor => "privacy")), 
+           :feedback_link => main_url(feedback_path) })
   end
   
   def receive(email, raw_email)

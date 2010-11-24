@@ -94,16 +94,17 @@ The FixMyTransport team
 
 <%- if MySociety::Config.getbool('SITE_VISIBLE', true) %> 
 
-[ This message was sent via FixMyTransport, a project of UKCOD, registered charity number 1076346. 
-If there is a more appropriate email address for messages about this type of problem, please let us know 
-by visiting <<%= raw @feedback_link %>>. This will help improve the service for people travelling. We also 
-welcome any other feedback you may have. ]
+[ This message was sent via FixMyTransport, a project of UKCOD, registered charity number 1076346. Replies 
+to this email will be public. Our privacy policy: <<%= raw @privacy_link %>>. If there is a more appropriate 
+email address for messages about this type of problem, please let us know by visiting 
+<<%= raw @feedback_link %>>. This will help improve the service for people travelling. We also welcome any 
+other feedback you may have. ]
 
 <%- else %>
 
-[ This message was sent via FixMyTransport, a project of UKCOD, registered charity number 1076346. 
-If there is a more appropriate email address for messages about this type of problem, please let us know 
-by emailing <%=MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')%>. This will help improve the 
-service for people travelling. We also welcome any other feedback you may have. ]
+[ This message was sent via FixMyTransport, a project of UKCOD, registered charity number 1076346. Replies 
+to this email will be public. If there is a more appropriate email address for messages about this type of 
+problem, please let us know by emailing <%=MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')%>. 
+This will help improve the service for people travelling. We also welcome any other feedback you may have. ]
 
 <%- end %>

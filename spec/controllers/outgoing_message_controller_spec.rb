@@ -6,7 +6,8 @@ describe OutgoingMessagesController do
     @campaign_user = mock_model(User, :name => "Campaign User")
     @mock_council_contact = mock_model(CouncilContact)
     @mock_outgoing_message = mock_model(OutgoingMessage, :save => true, 
-                                                         :recipient => @mock_council_contact)
+                                                         :recipient => @mock_council_contact, 
+                                                         :send_message => true)
     @outgoing_messages_mock = mock('outgoing message association', :build => @mock_outgoing_message)
     @mock_campaign = mock_model(Campaign, :confirmed => true,
                                           :initiator => @campaign_user,
@@ -69,6 +70,12 @@ describe OutgoingMessagesController do
         @mock_outgoing_message.stub!(:save).and_return(true)
         make_request(@default_params)
         response.should redirect_to(campaign_outgoing_message_path(@mock_campaign, @mock_outgoing_message))
+      end
+      
+      it 'should send the outgoing message' do 
+        @mock_outgoing_message.stub!(:save).and_return(true)
+        @mock_outgoing_message.should_receive(:send_message)
+        make_request(@default_params)
       end
     
     end
