@@ -1,0 +1,6 @@
+en:
+  new_update: '{{name}} has added a new update to the FixMyTransport campaign "{{title}}" ({{link}}){{extra}}.'
+  in_response_to: "in response to an email with the subject \"{{subject}}\""
+  received_from: "received from {{from}}"
+  about_email: "about an email they sent to {{name}}"
+  with_subject: "with the subject \"{{subject}}\""
