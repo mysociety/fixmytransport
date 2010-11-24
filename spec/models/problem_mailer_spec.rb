@@ -24,7 +24,8 @@ describe ProblemMailer do
                                      :description => "Some description",
                                      :reporter_name => "Problem Reporter", 
                                      :anonymous? => false)
-      @recipient = mock_model(User, :email => "problemreporter@example.com")
+      @recipient = mock_model(User, :email => "problemreporter@example.com", 
+                                    :name_and_email => "Problem Reporter <problemreporter@example.com>")
       @token = "test-token"
     end
   

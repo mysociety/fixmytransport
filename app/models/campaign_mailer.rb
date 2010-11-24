@@ -1,29 +1,25 @@
-class CampaignMailer < ActionMailer::Base
-  include MySociety::UrlMapper
-  # include view helpers
-  helper :application
-  add_template_helper(ApplicationHelper)
+class CampaignMailer < ApplicationMailer
+
   cattr_accessor :sent_count, :dryrun
-  url_mapper # See MySociety::UrlMapper
   
   def supporter_confirmation(recipient, campaign, token)
-    recipients recipient.email
-    from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    recipients recipient.name_and_email
+    from contact_from_name_and_email
     subject "[FixMyTransport] Confirm that you want to join \"#{campaign.title}\""
     body :campaign => campaign, :recipient => recipient, :link => main_url(confirm_join_path(:email_token => token))
   end
   
   def new_message(recipient, incoming_message, campaign)
-    recipients recipient.email
-    from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    recipients recipient.name_and_email
+    from contact_from_name_and_email
     subject "[FixMyTransport] New message to \"#{campaign.title}\""
     url = main_url(campaign_incoming_message_path(campaign,incoming_message))
     body :campaign => campaign, :recipient => recipient, :link => url
   end
   
   def update(recipient, campaign, supporter, update)
-    recipients recipient.email
-    from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    recipients recipient.name_and_email
+    from contact_from_name_and_email
     subject "[FixMyTransport] Campaign update on \"#{campaign.title}\""
     body({ :campaign => campaign, 
            :recipient => recipient, 
@@ -33,8 +29,8 @@ class CampaignMailer < ActionMailer::Base
   end
   
   def expert_advice_request(campaign, advice_request)
-    recipients MySociety::Config.get('EXPERT_EMAIL', 'contact@localhost')
-    from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    recipients experts_from_name_and_email
+    from contact_from_name_and_email
     subject "[FixMyTransport] Advice request from \"#{campaign.title}\""
     body({ :campaign => campaign, 
            :advice_request => advice_request, 
@@ -42,8 +38,8 @@ class CampaignMailer < ActionMailer::Base
   end
   
   def advice_request(recipient, campaign, supporter, advice_request)
-    recipients recipient.email
-    from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    recipients recipient.name_and_email
+    from contact_from_name_and_email
     subject "[FixMyTransport] Advice request from \"#{campaign.title}\""
     body({ :campaign => campaign, 
            :recipient => recipient, 

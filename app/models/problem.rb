@@ -131,9 +131,9 @@ class Problem < ActiveRecord::Base
   
   def reply_email
     if campaign
-      reporter.campaign_email_address(campaign)
+      reporter.campaign_name_and_email_address(campaign)
     else
-      reporter.email
+      reporter.name_and_email
     end
   end
   

@@ -1,27 +1,24 @@
-class ProblemMailer < ActionMailer::Base
-  include MySociety::UrlMapper
+class ProblemMailer < ApplicationMailer
+
   cattr_accessor :sent_count, :dryrun
-  # include view helpers
-  helper :application
-  url_mapper # See MySociety::UrlMapper
   
   def problem_confirmation(recipient, problem, token)
-   recipients recipient.email
-   from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+   recipients recipient.name_and_email
+   from contact_from_name_and_email
    subject "[FixMyTransport] Your transport problem"
    body :problem => problem, :recipient => recipient, :link => main_url(confirm_path(:email_token => token))
   end  
   
   def update_confirmation(recipient, update, token)
-    recipients recipient.email
-    from MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    recipients recipient.name_and_email
+    from contact_from_name_and_email
     subject "[FixMyTransport] Your transport update"
     body :update => update, :recipient => recipient, :link => main_url(confirm_update_path(:email_token => token))
   end
   
   def feedback(email_params)
-    recipients MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
-    from email_params[:email]
+    recipients contact_from_name_and_email
+    from email_params[:name] + " <" + email_params[:email] + ">"
     subject "[FixMyTransport] " << email_params[:subject]
     body :message => email_params[:message], :name => email_params[:name]
   end

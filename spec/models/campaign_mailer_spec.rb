@@ -11,7 +11,8 @@ describe CampaignMailer do
         CampaignMailer.stub!(:sent_count).and_return(0)
         SentEmail.stub!(:find).and_return([])
         SentEmail.stub!(:create!)
-        @mock_user = mock_model(User, :email => 'supporter@example.com', :name => 'Supporter')
+        @mock_user = mock_model(User, :email => 'supporter@example.com', :name => 'Supporter',
+                                      :name_and_email => 'Supporter <supporter@example.com>')
         @mock_update_user = mock_model(User, :name => 'Update Sender')
         @mock_supporter = mock_model(CampaignSupporter, :supporter => @mock_user, 
                                                         :token => 'mytoken')
@@ -22,6 +23,7 @@ describe CampaignMailer do
                                                   :user => @mock_update_user,
                                                   :update_attribute => true, 
                                                   :incoming_message => nil,
+                                                  :outgoing_message => nil,
                                                   :text => 'an update', 
                                                   :is_advice_request? => false)
       end

@@ -44,15 +44,15 @@ describe Problem do
       @problem.stub!(:reporter).and_return(@mock_reporter)
     end
     
-    it 'should give the email address of the reporter if there is no associated campaign' do 
-      @mock_reporter.should_receive(:email)
+    it 'should give the name and email address of the reporter if there is no associated campaign' do 
+      @mock_reporter.should_receive(:name_and_email)
       @problem.reply_email
     end
     
-    it 'should give the campaign email address of the reporter if there is an associated campaign' do 
+    it 'should give the name and campaign email address of the reporter if there is an associated campaign' do 
       mock_campaign = mock_model(Campaign)
       @problem.stub!(:campaign).and_return(mock_campaign)
-      @mock_reporter.should_receive(:campaign_email_address).with(mock_campaign)
+      @mock_reporter.should_receive(:campaign_name_and_email_address).with(mock_campaign)
       @problem.reply_email
     end
     
