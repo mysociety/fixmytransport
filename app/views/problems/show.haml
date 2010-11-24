@@ -12,7 +12,7 @@
     - unless @problem.location.is_a?(SubRoute)
       %span.transport-location!= t(:problem_location, :link => link_to(@problem.location.description, location_url(@problem.location)))
     - if @problem.sent_at
-      .sent-time= t(:sent_time, :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.recipients.to_sentence)
+      .sent-time= t(:sent_time, :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.recipients.map{ |recipient| recipient.name }.to_sentence)
 
   %p.problem= @problem.description
   
