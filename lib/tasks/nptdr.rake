@@ -23,7 +23,7 @@ namespace :nptdr do
             unmatched_count += 1
           end
           if existing and existing.atco_code != stop.atco_code
-            outfile.write "#{stop.atco_code}\t#{existing.atco_code}\t{stop.common_name}\t#{stop.easting}\t#{stop.northing}\n"
+            outfile.write "#{stop.atco_code}\t#{existing.atco_code}\t#{stop.common_name}\t#{stop.easting}\t#{stop.northing}\n"
           end
         end        
       end
