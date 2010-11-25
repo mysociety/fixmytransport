@@ -226,7 +226,11 @@ def setup_atco(nptdr_files, outfilepath, stop_code_mapping_file=None):
 
         # Caythorpe in Lincolnshire doesn't have coordinate
         "QBN000000023750                Caythorpe                                       " :
-        "QBN000000023750493907  347547  Caythorpe                                       "
+        "QBN000000023750493907  347547  Caythorpe                                       ",
+
+        # Extra quotes in a note in the ATCO_Extras.cif file in the 2009 data set
+        "\"QNB    Timings shown after Stevenage Bus Station are for guidance only, as the \"":
+        "QNB    Timings shown after Stevenage Bus Station are for guidance only, as the "
     })
 
     atco.register_locations_to_ignore( [
