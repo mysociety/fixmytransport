@@ -13,7 +13,7 @@ namespace :nptdr do
       files = Dir.glob(File.join(ENV['DIR'], "*.tsv"))
       outfile = File.open(File.join(ENV['DIR'], "stop_mappings.tsv"), 'w')
       puts "Writing old to new mappings to #{outfile}"
-      outfile.write("Old ATCO code\tNew ATCO code\n")
+      outfile.write("Old ATCO code\tNew ATCO code\tOld name\tOld Easting\tOld Northing\n")
       unmatched_count = 0
       files.each do |file|
         puts file
@@ -23,7 +23,7 @@ namespace :nptdr do
             unmatched_count += 1
           end
           if existing and existing.atco_code != stop.atco_code
-            outfile.write "#{stop.atco_code}\t#{existing.atco_code}\n"
+            outfile.write "#{stop.atco_code}\t#{existing.atco_code}\t{stop.common_name}\t#{stop.easting}\t#{stop.northing}\n"
           end
         end        
       end
