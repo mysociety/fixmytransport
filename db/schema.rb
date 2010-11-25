@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101124104158) do
+ActiveRecord::Schema.define(:version => 20101125100624) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -327,17 +327,6 @@ ActiveRecord::Schema.define(:version => 20101124104158) do
   add_index "route_segments", ["to_stop_area_id"], :name => "index_route_segments_on_to_stop_area_id"
   add_index "route_segments", ["to_stop_id"], :name => "index_route_segments_on_to_stop_id"
 
-  create_table "route_stops", :force => true do |t|
-    t.integer  "route_id"
-    t.integer  "stop_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "terminus"
-  end
-
-  add_index "route_stops", ["route_id"], :name => "index_route_stops_on_route_id"
-  add_index "route_stops", ["stop_id"], :name => "index_route_stops_on_stop_id"
-
   create_table "route_sub_routes", :force => true do |t|
     t.integer  "route_id"
     t.integer  "sub_route_id"
@@ -464,13 +453,6 @@ ActiveRecord::Schema.define(:version => 20101124104158) do
 
   add_index "stop_areas", ["coords"], :name => "index_stop_areas_on_coords", :spatial => true
   add_index "stop_areas", ["locality_id"], :name => "index_stop_areas_on_locality_id"
-
-  create_table "stop_operators", :force => true do |t|
-    t.integer  "operator_id"
-    t.integer  "stop_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "stop_types", :force => true do |t|
     t.string   "code"
@@ -633,16 +615,10 @@ ActiveRecord::Schema.define(:version => 20101124104158) do
   add_foreign_key "route_operators", "operators", :name => "route_operators_operator_id_fk", :dependent => :nullify
   add_foreign_key "route_operators", "routes", :name => "route_operators_route_id_fk", :dependent => :nullify
 
-  add_foreign_key "route_stops", "routes", :name => "route_stops_route_id_fk"
-  add_foreign_key "route_stops", "stops", :name => "route_stops_stop_id_fk"
-
   add_foreign_key "routes", "transport_modes", :name => "routes_transport_mode_id_fk", :dependent => :nullify
 
   add_foreign_key "stop_area_memberships", "stop_areas", :name => "stop_area_memberships_stop_area_id_fk"
   add_foreign_key "stop_area_memberships", "stops", :name => "stop_area_memberships_stop_id_fk"
-
-  add_foreign_key "stop_operators", "operators", :name => "stop_operators_operator_id_fk", :dependent => :nullify
-  add_foreign_key "stop_operators", "stops", :name => "stop_operators_stop_id_fk", :dependent => :nullify
 
   add_foreign_key "stories", "users", :name => "problems_reporter_id_fk", :column => "reporter_id", :dependent => :nullify
 

@@ -52,8 +52,6 @@ class Stop < ActiveRecord::Base
   has_many :route_segments_as_to_stop, :foreign_key => 'to_stop_id', :class_name => 'RouteSegment'
   has_many :routes_as_from_stop, :through => :route_segments_as_from_stop, :source => 'route'
   has_many :routes_as_to_stop, :through => :route_segments_as_to_stop, :source => 'route'
-  has_many :stop_operators, :dependent => :destroy
-  has_many :operators, :through => :stop_operators, :uniq => true
   belongs_to :locality
   validates_presence_of :locality_id, :lon, :lat, :if => :loaded?
   # load common stop/stop area functions from stops_and_stop_areas
