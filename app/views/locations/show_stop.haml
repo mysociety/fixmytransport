@@ -3,7 +3,6 @@
 #map-col
   = render :partial => 'shared/map', :locals => { :locations => @stop.points, :other_locations => @other_locations, :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH  }
   .extra-info
-    / .transport-direct= transport_direct_link(@stop)
     .departures!= departures_link(@stop)
     = render :partial => "shared/route_list", :locals => { :stop_or_station => @stop }
 .stop
@@ -17,6 +16,8 @@
       %span.landmark= "near #{@stop.landmark}"
     - if !@stop.street.blank? 
       %span.street= "on #{@stop.street}"
+    - if @stop.status == 'del'
+      .status= "This stop has been marked as inactive."
   .stop-areas
     - if !@stop.stop_areas.empty?
       Part of
