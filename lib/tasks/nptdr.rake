@@ -11,9 +11,8 @@ namespace :nptdr do
       puts "Checking stops in #{ENV['DIR']}..."
       parser = Parsers::NptdrParser.new
       files = Dir.glob(File.join(ENV['DIR'], "*.tsv"))
-      outfile = File.open(File.join(ENV['DIR'], "stop_mappings.tsv"), 'w')
       missing_file = File.open(File.join(ENV['DIR'], 'unmapped_stops.tsv'), 'w')
-      missing_file.write("ATCO code\tName\tEasting\tNorthing\n")
+      missing_file.write("ATCO code\tName\tEasting\tNorthing\tLocality ID\n")
       unmatched_codes = {}
       unmatched_count = 0
       files.each do |file|
@@ -26,7 +25,7 @@ namespace :nptdr do
         end        
       end
       unmatched_codes.each do |atco_code, stop|
-        missing_file.write("#{stop.atco_code}\t#{stop.common_name}\t#{stop.easting}\t#{stop.northing}\n")
+        missing_file.write("#{stop.atco_code}\t#{stop.common_name}\t#{stop.easting}\t#{stop.northing}\t#{stop.locality.id}\n")
       end
       puts "Unmatched: #{unmatched_codes.keys.size}"
     end 
