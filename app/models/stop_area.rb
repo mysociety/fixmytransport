@@ -55,7 +55,9 @@ class StopArea < ActiveRecord::Base
   end
   
   def next_stops
-    route_segments_as_from_stop_area.map{ |route_segment| route_segment.to_stop_area or route_segment.to_stop }.uniq.sort_by(&:name)
+    route_segments_as_from_stop_area.map do |route_segment| 
+      route_segment.to_stop_area or route_segment.to_stop 
+    end.uniq.sort_by(&:name)
   end
   
   def description
