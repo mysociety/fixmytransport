@@ -64,7 +64,7 @@ class ProblemsController < ApplicationController
   end
   
   def show
-    @problem = Problem.confirmed.find(params[:id])
+    @problem = Problem.one_off.confirmed.find(params[:id])
     map_params_from_location(@problem.location.points, find_other_locations=false)
     @new_update = Update.new(:problem_id => @problem, 
                              :reporter => current_user ? current_user : User.new,

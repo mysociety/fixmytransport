@@ -26,7 +26,7 @@ class Problem < ActiveRecord::Base
   named_scope :confirmed, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
   named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
   named_scope :with_operator, :conditions => ['operator_id is not null'], :order => 'confirmed_at desc'
-  
+  named_scope :one_off, :conditions => ['campaign_id is null']
   [:responsible_organizations, 
    :emailable_organizations, 
    :unemailable_organizations, 
@@ -152,7 +152,7 @@ class Problem < ActiveRecord::Base
   
   # class methods
   def self.latest(limit)
-    confirmed.find(:all, :conditions => ["campaign_id is null"], :limit => limit)
+    one_off.confirmed.find(:all, :limit => limit)
   end
   
   # Sendable reports - confirmed, with operator, PTE, or council, but not sent

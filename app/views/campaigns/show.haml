@@ -8,7 +8,12 @@
   .details
     = t(:started_on, :date => @campaign.created_at.strftime("%d/%m/%Y"))
     = t(:by, :name => @campaign.initiator.name)
-    .supporters= t(:campaign_has_n_supporters, :n => @campaign.supporter_count, :count => @campaign.supporter_count)
+    .location-and-supporters
+      - if @campaign.problem.location.is_a?(SubRoute)
+        %span.transport-location!= t(:campaign_location, :link => @campaign.problem.location.description)
+      - else
+        %span.transport-location!= t(:campaign_location, :link => link_to(@campaign.problem.location.description, location_url(@campaign.problem.location)))
+      %span.supporters= t(:campaign_has_n_supporters, :n => @campaign.supporter_count, :count => @campaign.supporter_count)
   %p.campaign!= simple_format(@campaign.description)
   - if current_user && current_user == @campaign.initiator
     = render :partial => 'update_form', :locals => {  :hidden => false, :update => CampaignUpdate.new(:user_id => current_user.id) }

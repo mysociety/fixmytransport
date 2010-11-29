@@ -6,4 +6,4 @@
 
 - if !location.problems.confirmed.empty?
   %h3= t(:other_problems_here)
-  = render :partial => 'shared/problem', :collection => location.problems.confirmed, :locals => { :context => :location }
+  = render :partial => 'shared/problem', :collection => location.problems.one_off.confirmed, :locals => { :context => :location }

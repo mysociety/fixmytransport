@@ -324,6 +324,10 @@ form.update_campaign label {
   font-size: 0.8em;
 }
 
+.campaign-info .location-and-supporters{
+  padding: 0.8em 0 0 0;
+}
+
 form.update_campaign .label-note { 
   font-size: 0.8em;
 }

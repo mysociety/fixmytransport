@@ -10,6 +10,26 @@ describe ProblemsController do
     
   end
   
+  describe 'GET #show' do 
+  
+    def make_request(params={})
+      get :show, params
+    end
+    
+    it 'should look for a confirmed one-off problem with the id passed' do 
+      one_off_problems = mock('one off problems')
+      confirmed_problems = mock('confirmed problems')
+      mock_problem = mock_model(Problem, :location => mock_model(Stop, :points => []),
+                                         :to_i => 22)
+      @controller.stub!(:map_params_from_location)
+      Problem.should_receive(:one_off).and_return(one_off_problems)
+      one_off_problems.should_receive(:confirmed).and_return(confirmed_problems)
+      confirmed_problems.should_receive(:find).with('22').and_return(mock_problem)
+      make_request(:id => "22")
+    end
+  
+  end
+  
   describe "GET #find_train_route" do 
   
     def make_request(params={})
