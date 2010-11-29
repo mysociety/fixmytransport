@@ -129,6 +129,11 @@ class Parsers::NptdrParser
   def parse_stops filepath
     csv_data = File.read(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
+      gazetteer_code = row['Gazeteer Code']
+      gazetteer_id = row['National Gazetteer ID']
+      district_name = row['District Name']
+      town_name = row['Town Name']
+      puts "gazetteer code #{gazetteer_code} gazetteer id #{gazetteer_id}"
       yield Stop.new(:atco_code => row['Location Code'],
                      :common_name => row['Name'], 
                      :easting => row['Easting'], 

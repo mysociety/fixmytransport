@@ -13,22 +13,15 @@ namespace :nptdr do
       files = Dir.glob(File.join(ENV['DIR'], "*.tsv"))
       outfile = File.open(File.join(ENV['DIR'], "stop_mappings.tsv"), 'w')
       missing_file = File.open(File.join(ENV['DIR'], 'unmapped_stops.tsv'), 'w')
-      puts "Writing old to new mappings to #{outfile}"
-      outfile.write("Old ATCO code\tNew ATCO code\tOld name\tOld Easting\tOld Northing\n")
       missing_file.write("ATCO code\tName\tEasting\tNorthing\n")
       unmatched_codes = {}
       unmatched_count = 0
       files.each do |file|
         puts file
         parser.parse_stops(file) do |stop|
-          existing = Stop.match_old_stop(stop)
-          if ! existing
-            if !unmatched_codes[stop.atco_code]
-              unmatched_codes[stop.atco_code] = stop
-            end
-          end
-          if existing and existing.atco_code != stop.atco_code
-            outfile.write "#{stop.atco_code}\t#{existing.atco_code}\t#{stop.common_name}\t#{stop.easting}\t#{stop.northing}\n"
+          existing = Stop.find_by_atco_code(stop.atco_code) 
+          if ! existing && !unmatched_codes[stop.atco_code]
+            unmatched_codes[stop.atco_code] = stop
           end
         end        
       end
@@ -142,6 +135,55 @@ namespace :nptdr do
         end
       end
     end
+    
+    desc 'Loads stops referenced by routes in NPTDR, but not present in the database'
+    task :missing_stops => :environment do 
+      all_missing_stops_file = "#{RAILS_ROOT}/data/nptdr/unmapped_stops.csv"
+      missing_route_stops_file = "#{RAILS_ROOT}/data/nptdr/missing_stops.csv"
+      csv_options = { :quote_char => '"', 
+                      :col_sep => "\t", 
+                      :row_sep =>:auto, 
+                      :return_headers => false,
+                      :headers => :first_row,
+                      :encoding => 'U' }
+      all_stops = {}
+      FasterCSV.parse(File.read(all_missing_stops_file), csv_options) do |row|
+        all_stops[row['ATCO code']] = { :name => row['Name'], 
+                                        :easting => row['Easting'], 
+                                        :northing => row['Northing'] }
+      end
+      route_stops = {}
+      FasterCSV.parse( File.read(missing_route_stops_file), csv_options) do |row|
+        if route_stops[row['ATCO Code']]
+          route_stops[row['ATCO Code']][:regions] << row['NPTDR File Region']
+          route_stops[row['ATCO Code']][:admin_areas] << row['NPTDR File Admin Area']
+          route_stops[row['ATCO Code']][:route_numbers] << row['NPTDR Route Numbers']
+        else
+          route_stops[row['ATCO Code']] = { :regions => [row['NPTDR File Region']], 
+                                            :admin_areas => [row['NPTDR File Admin Area']], 
+                                            :route_numbers => [row['NPTDR Route Numbers']] }
+        end
+      end
+      
+      all_stops.each do |atco_code, stop_info|
+        if spatial_extensions
+          coords = Point.from_x_y(stop_info[:easting], stop_info[:northing], BRITISH_NATIONAL_GRID)
+        else
+          coords = nil
+        end
+        locality = Locality.find_by_code((row['NptgLocalityCode'] or row['NatGazID']))
+        
+        if route_stops[atco_code] and stop_info[:easting] != '-1' and !stop_info[:name].blank?
+          stop = Stop.new(:atco_code => atco_code, 
+                          :common_name => stop_info[:name], 
+                          :easting => stop_info[:easting], 
+                          :northing => stop_info[:northing], 
+                          :coords => coords
+                          )
+        end
+      end
+
+    end
   
   end
   
@@ -212,7 +254,7 @@ namespace :nptdr do
     desc 'Adds lats and lons to routes calculated from stops'
     task :add_route_coords => :environment do 
       Route.paper_trail_off
-      Route.find_each(:conditions => ['lat is null']) do |route|
+      Route.find_each(:conditions => ["lat is null"]) do |route|
         puts route.name
         if ! route.lat
           lons = route.stops.map{ |element| element.lon }
