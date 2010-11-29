@@ -12,22 +12,30 @@ namespace :nptdr do
       parser = Parsers::NptdrParser.new
       files = Dir.glob(File.join(ENV['DIR'], "*.tsv"))
       outfile = File.open(File.join(ENV['DIR'], "stop_mappings.tsv"), 'w')
+      missing_file = File.open(File.join(ENV['DIR'], 'unmapped_stops.tsv'), 'w')
       puts "Writing old to new mappings to #{outfile}"
       outfile.write("Old ATCO code\tNew ATCO code\tOld name\tOld Easting\tOld Northing\n")
+      missing_file.write("ATCO code\tName\tEasting\tNorthing\n")
+      unmatched_codes = {}
       unmatched_count = 0
       files.each do |file|
         puts file
         parser.parse_stops(file) do |stop|
           existing = Stop.match_old_stop(stop)
           if ! existing
-            unmatched_count += 1
+            if !unmatched_codes[stop.atco_code]
+              unmatched_codes[stop.atco_code] = stop
+            end
           end
           if existing and existing.atco_code != stop.atco_code
             outfile.write "#{stop.atco_code}\t#{existing.atco_code}\t#{stop.common_name}\t#{stop.easting}\t#{stop.northing}\n"
           end
         end        
       end
-      puts "Unmatched: #{unmatched_count}"
+      unmatched_codes.each do |atco_code, stop|
+        missing_file.write("#{stop.atco_code}\t#{stop.common_name}\t#{stop.easting}\t#{stop.northing}\n")
+      end
+      puts "Unmatched: #{unmatched_codes.keys.size}"
     end 
     
     desc 'Process routes from tsv files in a dir specified as DIR=dirname and output operator match and missing stop information'
