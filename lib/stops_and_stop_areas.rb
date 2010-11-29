@@ -22,7 +22,7 @@ module FixMyTransport
       def responsible_organizations
         responsible = []
         # train stations are run by operators
-        if transport_mode_names.include? 'Train'
+        if transport_mode_names.include? 'Train' and self.respond_to?(:operators)
           responsible = operators
           @responsible_organization_type = :company
         # but for bus, coach, tram, metro and ferry stops
@@ -81,7 +81,8 @@ module FixMyTransport
       end
 
       def operators_responsible?
-        responsible_organizations == operators
+        return true if self.respond_to?(:operators) && responsible_organizations == operators
+        return false
       end
 
       def emailable_councils
