@@ -9,6 +9,7 @@ require 'spec/rails'
 #require 'webrat/integrations/rspec-rails'
 require 'spec/shared/transport_location_helpers'
 require 'spec/shared/controller_helpers'
+require 'spec/initializers/actionmailer_smtp_format_patch_spec'
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
