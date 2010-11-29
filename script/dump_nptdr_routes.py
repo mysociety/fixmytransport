@@ -167,7 +167,7 @@ class CSVDumpATCO(mysociety.atcocif.ATCO):
         return 
     
     def transport_mode_mappings(self):
-        mappings = { "BUS" : "B",
+        mappings = { "BUS" :  'B',
 	                 "COACH": 'C',
                      "FERRY": 'F',
                      "AIR"  : 'A',
