@@ -9,7 +9,7 @@
     = t(:started_on, :date => @campaign.created_at.strftime("%d/%m/%Y"))
     = t(:by, :name => @campaign.initiator.name)
     .supporters= t(:campaign_has_n_supporters, :n => @campaign.supporter_count, :count => @campaign.supporter_count)
-  %p.campaign= @campaign.description
+  %p.campaign!= simple_format(@campaign.description)
   - if current_user && current_user == @campaign.initiator
     = render :partial => 'update_form', :locals => {  :hidden => false, :update => CampaignUpdate.new(:user_id => current_user.id) }
   - elsif current_user && current_user.campaigns.include?(@campaign)
