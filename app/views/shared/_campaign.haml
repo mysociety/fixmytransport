@@ -7,4 +7,4 @@
     - if context != :location
       %span.transport-location!= t(:campaign_location, :link => link_to(campaign.location.description, location_url(campaign.location)))
     %span.author= t(:by, :name => campaign.initiator.name)
-  %p.campaign= campaign.description
+  %p.campaign!= simple_format(campaign.description)

@@ -14,7 +14,7 @@
     - if @problem.sent_at
       .sent-time= t(:sent_time, :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.recipients.map{ |recipient| recipient.name }.to_sentence)
 
-  %p.problem= @problem.description
+  %p.problem!= simple_format(@problem.description)
   
 %h3= t(:updates)
 .updates
