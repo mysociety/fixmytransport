@@ -164,7 +164,7 @@ namespace :nptdr do
                                             :route_numbers => [row['NPTDR Route Numbers']] }
         end
       end
-      
+      spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
       all_stops.each do |code, stop_info|
         if spatial_extensions
           coords = Point.from_x_y(stop_info[:easting], stop_info[:northing], BRITISH_NATIONAL_GRID)
