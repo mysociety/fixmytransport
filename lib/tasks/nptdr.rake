@@ -177,13 +177,26 @@ namespace :nptdr do
           locality = nearest_stop.locality
         end
         if route_stops[code] and stop_info[:easting] != '-1.0' and !stop_info[:name].blank?
+          route_numbers = route_stops[code][:route_numbers].split(',')
+          route_types = route_numbers.map{ |route_number| route_number.split(' ').first }.uniq
+          stop_type = nil
+          if route_types.size == 1
+            if route_types.first == 'BusRoute' or route_types.first == 'CoachRoute'
+              stop_type = 'BCT'
+            else
+              "different route type #{route_types.first}"
+            end
+          else
+            raise "more than one route type #{route_types.inspect}"
+          end
           puts "Loading #{code} #{stop_info[:name]} #{locality.name}"
-          stop = Stop.create!(:other_code => code, 
-                              :common_name => stop_info[:name], 
-                              :easting => stop_info[:easting], 
-                              :northing => stop_info[:northing], 
-                              :coords => coords, 
-                              :locality => locality)
+          stop = Stop.new(:other_code => code, 
+                          :common_name => stop_info[:name], 
+                          :easting => stop_info[:easting], 
+                          :northing => stop_info[:northing], 
+                          :coords => coords, 
+                          :locality => locality, 
+                          :stop_type => stop_type)
         end
       end
       # Add lats and lons 
