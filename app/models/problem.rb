@@ -16,13 +16,13 @@ class Problem < ActiveRecord::Base
   validates_associated :reporter
   attr_accessor :location_attributes, :locations, :location_search, :location_errors
   cattr_accessor :route_categories, :stop_categories
+  attr_protected :confirmed_at
   after_create :send_confirmation_email
   before_create :generate_confirmation_token
   has_status({ 0 => 'New', 
                1 => 'Confirmed', 
                2 => 'Fixed',
                3 => 'Hidden' })
-  
   named_scope :confirmed, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
   named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
   named_scope :with_operator, :conditions => ['operator_id is not null'], :order => 'confirmed_at desc'
@@ -84,6 +84,7 @@ class Problem < ActiveRecord::Base
                                 :data => data[:data],
                                 :problem => self }
       Assignment.create_assignment(assignment_attributes)
+      
     end
   end
   

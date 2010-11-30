@@ -42,10 +42,10 @@ class ProblemsController < ApplicationController
     end
     @problem = Problem.new(params[:problem])
     if params[:is_campaign] == "1"
-      @problem.build_campaign({ :location_id => params[:problem][:location_id], 
-                                :location_type => params[:problem][:location_type],
-                                :status => :new, 
-                                :initiator => @problem.reporter })
+      campaign = @problem.build_campaign({ :location_id => params[:problem][:location_id], 
+                                           :location_type => params[:problem][:location_type],
+                                           :initiator => @problem.reporter })
+      campaign.status = :new
     end
     
     if @problem.valid?
@@ -74,8 +74,8 @@ class ProblemsController < ApplicationController
   def confirm
     @problem = Problem.find_by_token(params[:email_token])
     if @problem
-      @problem.update_attributes(:status => :confirmed,  
-                                 :confirmed_at => Time.now)
+      @problem.status = :confirmed
+      @problem.confirmed_at = Time.now
       # complete the relevant assignments
       Assignment.complete_problem_assignments(@problem, {'publish-problem' => {}})
       data = {:organizations => @problem.organization_info(:responsible_organizations) }

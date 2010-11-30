@@ -387,10 +387,11 @@ describe ProblemsController do
     end
     
     it 'should create a campaign with status "New" associated with the problem if passed the parameter "is_campaign"' do 
+      mock_campaign = mock_model(Campaign)
       @mock_problem.should_receive(:build_campaign).with({ :location_id => @problem_attributes["location_id"], 
                                                            :location_type => @problem_attributes["location_type"],
-                                                           :status => :new, 
-                                                           :initiator => @mock_user })
+                                                           :initiator => @mock_user }).and_return(mock_campaign)
+      mock_campaign.should_receive(:status=).with(:new)
       make_request(is_campaign="1")
     end
     
@@ -442,11 +443,12 @@ describe ProblemsController do
      
     before do 
       @mock_assignment = mock_model(Assignment)
-      @mock_problem = mock_model(Problem, :update_attributes => true, 
-                                          :assignments => [@mock_assignment],
+      @mock_problem = mock_model(Problem, :assignments => [@mock_assignment],
                                           :organization_info => [],
                                           :responsible_organizations => [], 
-                                          :campaign => nil)
+                                          :campaign => nil, 
+                                          :status= => true, 
+                                          :confirmed_at= => true)
       Problem.stub!(:find_by_token).and_return(@mock_problem)
       Assignment.stub!(:complete_problem_assignments)
     end
@@ -461,7 +463,8 @@ describe ProblemsController do
     end
 
     it 'should set the status to confirmed and set the confirmed time on the problem' do 
-      @mock_problem.should_receive(:update_attributes).with(:status => :confirmed, :confirmed_at => anything)
+      @mock_problem.should_receive(:confirmed_at=).with(anything)
+      @mock_problem.should_receive(:status=).with(:confirmed)
       make_request
     end
 

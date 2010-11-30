@@ -18,7 +18,8 @@ describe Assignment do
   describe 'when accepting a status update' do 
 
      it "should update its status code" do 
-       assignment = Assignment.new( :status_code => 1 )
+       assignment = Assignment.new
+       assignment.status_code = 1 
        assignment.status = :complete
        assignment.status_code.should == 2
      end
@@ -28,7 +29,8 @@ describe Assignment do
    describe 'when asked for its status' do 
 
      it 'should return the correct symbol for its status code' do 
-       assignment = Assignment.new( :status_code => 1 )
+       assignment = Assignment.new
+       assignment.status_code = 1
        assignment.status.should == :in_progress
        assignment.status_code = 2
        assignment.status.should == :complete
@@ -38,7 +40,8 @@ describe Assignment do
    describe 'when asked for its status description' do 
 
      it 'should return the correct description for its status code' do 
-       assignment = Assignment.new( :status_code => 1 )
+       assignment = Assignment.new
+       assignment.status_code = 1
        assignment.status_description.should == 'In Progress'
        assignment.status_code = 2
        assignment.status_description.should == 'Complete'
@@ -50,13 +53,13 @@ describe Assignment do
  
        before do
          # stub connection to Fosbury
-         @mock_task = mock_model(Task, :save => true, 
+         @mock_task = mock_model(Task, :save! => true, 
                                        :id => 33, 
                                        :task_data => {})
          Task.stub!(:new).and_return(@mock_task)
          @mock_user = mock_model(User)
          @mock_assignment = mock_model(Assignment, :task_id= => true, 
-                                                   :save => true, 
+                                                   :save! => true, 
                                                    :id => 22,
                                                    :data= => true)
          @mock_problem = mock_model(Problem) 
@@ -68,21 +71,24 @@ describe Assignment do
        end
   
        it 'should create an assignment with the task type name, user and status values of the hash' do 
-         Assignment.should_receive(:create).with(:task_type_name => 'test-task-type-name', 
+         Assignment.should_receive(:new).with(:task_type_name => 'test-task-type-name', 
                                                  :user => @mock_user, 
-                                                 :status => :complete,
                                                  :data => {},
                                                  :problem => @mock_problem).and_return(@mock_assignment)
+         @mock_assignment.should_receive(:status=).with(:complete)
+         @mock_assignment.should_receive(:save!)
+         @mock_task.should_receive(:status=).with(:complete)
          Assignment.create_assignment(@attribute_hash)
        end
  
        it 'should create and save a task and set the task id on the assignment and the assignment id on the task' do 
-         Assignment.stub!(:create).and_return(@mock_assignment)
+         Assignment.stub!(:new).and_return(@mock_assignment)
          Task.should_receive(:new).with(:task_type_id => 'test-task-type-name', 
-                                        :status => :complete, 
                                         :task_data => {},
                                         :callback_params => {:assignment_id => 22}).and_return(@mock_task)
+         @mock_task.should_receive(:status=).with(:complete)
          @mock_assignment.should_receive(:task_id=).with(33)
+         @mock_assignment.should_receive(:status=).with(:complete)
          Assignment.create_assignment(@attribute_hash)
        end
 

@@ -31,15 +31,18 @@ class Assignment < ActiveRecord::Base
   # class methods
   
   def self.create_assignment(attributes)
-    assignment = create(attributes)
+    status = attributes.delete(:status)
+    assignment = new(attributes)
+    assignment.status = status
+    assignment.save!
     task_attributes = { :task_type_id => attributes[:task_type_name], 
-                        :status => attributes[:status], 
                         :callback_params => { :assignment_id => assignment.id },
                         :task_data => attributes[:data] }
     task = Task.new(task_attributes) 
-    if task.save
+    task.status = status
+    if task.save!
       assignment.task_id = task.id
-      assignment.save
+      assignment.save!
     end
   end
   

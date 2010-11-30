@@ -20,6 +20,7 @@ module FixMyTransport
   
       def has_status(status_codes)
         cattr_accessor :status_codes, :symbol_to_status_code, :status_code_to_symbol
+        attr_protected :status_code
         self.status_codes = status_codes
         self.symbol_to_status_code = status_codes.inject({}) do |hash, (code, message)|
           hash[message.gsub(/ /, "").underscore.to_sym] = code
