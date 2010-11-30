@@ -138,6 +138,24 @@ ul.navigation li {
   margin-bottom: 40em;
 }
 
+/* 404/500 */
+.not-found-message, .error-message{
+  text-align: center;
+}
+
+.not-found-options, .error-options{
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  width: 55%;
+}
+
+.not-found-options li, 
+.error-options li {
+  padding: 0.5em 0;
+}
+
+
 /* Home page */
 h2.main-header{
   text-align: center;
