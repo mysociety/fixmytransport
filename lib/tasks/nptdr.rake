@@ -184,7 +184,7 @@ namespace :nptdr do
             if route_types.first == 'BusRoute' or route_types.first == 'CoachRoute'
               stop_type = 'BCT'
             else
-              "different route type #{route_types.first}"
+              raise "unhandled route type #{route_types.first}"
             end
           else
             raise "more than one route type #{route_types.inspect}"
