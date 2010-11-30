@@ -177,7 +177,7 @@ namespace :nptdr do
           locality = nearest_stop.locality
         end
         if route_stops[code] and stop_info[:easting] != '-1.0' and !stop_info[:name].blank?
-          puts "Loading #{code} #{name} #{locality.name}"
+          puts "Loading #{code} #{stop_info[:name]} #{locality.name}"
           stop = Stop.create!(:other_code => code, 
                               :common_name => stop_info[:name], 
                               :easting => stop_info[:easting], 
