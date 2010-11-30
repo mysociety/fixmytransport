@@ -2,25 +2,6 @@ require 'spec_helper'
 
 describe CampaignsController do
 
-  
-  describe 'GET #index' do
-
-    def make_request
-      get :index
-    end
-    
-    it 'should render the campaigns/index template' do 
-      make_request
-      response.should render_template("campaigns/index")
-    end
-    
-    it 'should ask for campaigns' do 
-      Campaign.should_receive(:find).and_return([])
-      make_request
-    end
-  
-  end
-  
   describe 'GET #show' do 
   
     before do
