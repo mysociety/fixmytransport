@@ -25,8 +25,8 @@ namespace :nptdr do
         end        
       end
       unmatched_codes.each do |atco_code, stop|
-        missing_file.write("#{stop.atco_code}\t#{stop.common_name}\t#{stop.easting}\t#{stop.northing}\t#{stop.locality.id}\n")
-      end
+        locality_id = (stop.locality ? stop.locality.id : nil)
+        missing_file.write("#{stop.atco_code}\t#{stop.common_name}\t#{stop.easting}\t#{stop.northing}\t#{locality_id}\n")      end
       puts "Unmatched: #{unmatched_codes.keys.size}"
     end 
     
