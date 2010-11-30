@@ -157,11 +157,11 @@ namespace :nptdr do
         if route_stops[row['ATCO Code']]
           route_stops[row['ATCO Code']][:regions] << row['NPTDR File Region']
           route_stops[row['ATCO Code']][:admin_areas] << row['NPTDR File Admin Area']
-          route_stops[row['ATCO Code']][:route_numbers] << row['NPTDR Route Numbers']
+          route_stops[row['ATCO Code']][:route_numbers] += row['NPTDR Route Numbers'].split(',')
         else
           route_stops[row['ATCO Code']] = { :regions => [row['NPTDR File Region']], 
                                             :admin_areas => [row['NPTDR File Admin Area']], 
-                                            :route_numbers => [row['NPTDR Route Numbers']] }
+                                            :route_numbers => row['NPTDR Route Numbers'].split(',') }
         end
       end
       spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
