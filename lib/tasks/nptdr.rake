@@ -149,7 +149,8 @@ namespace :nptdr do
       FasterCSV.parse(File.read(all_missing_stops_file), csv_options) do |row|
         all_stops[row['ATCO code']] = { :name => row['Name'], 
                                         :easting => row['Easting'], 
-                                        :northing => row['Northing'] }
+                                        :northing => row['Northing'],
+                                        :locality => row['Locality ID'] }
       end
       route_stops = {}
       FasterCSV.parse( File.read(missing_route_stops_file), csv_options) do |row|
@@ -170,7 +171,7 @@ namespace :nptdr do
         else
           coords = nil
         end
-        locality = Locality.find_by_code((row['Locality ID']))
+        locality = Locality.find_by_code((stop_info[:locality_id]))
         if locality.blank?
           nearest_stop = Stop.find_nearest(stop_info[:easting], stop_info[:northing])
           locality = nearest_stop.locality
