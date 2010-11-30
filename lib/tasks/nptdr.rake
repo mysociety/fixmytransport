@@ -164,24 +164,29 @@ namespace :nptdr do
         end
       end
       
-      all_stops.each do |atco_code, stop_info|
+      all_stops.each do |code, stop_info|
         if spatial_extensions
           coords = Point.from_x_y(stop_info[:easting], stop_info[:northing], BRITISH_NATIONAL_GRID)
         else
           coords = nil
         end
-        locality = Locality.find_by_code((row['NptgLocalityCode'] or row['NatGazID']))
-        
-        if route_stops[atco_code] and stop_info[:easting] != '-1' and !stop_info[:name].blank?
-          stop = Stop.new(:atco_code => atco_code, 
-                          :common_name => stop_info[:name], 
-                          :easting => stop_info[:easting], 
-                          :northing => stop_info[:northing], 
-                          :coords => coords
-                          )
+        locality = Locality.find_by_code((row['Locality ID']))
+        if locality.blank?
+          nearest_stop = Stop.find_nearest(stop_info[:easting], stop_info[:northing])
+          locality = nearest_stop.locality
+        end
+        if route_stops[code] and stop_info[:easting] != '-1.0' and !stop_info[:name].blank?
+          puts "Loading #{code} #{name} #{locality.name}"
+          stop = Stop.create!(:other_code => code, 
+                              :common_name => stop_info[:name], 
+                              :easting => stop_info[:easting], 
+                              :northing => stop_info[:northing], 
+                              :coords => coords, 
+                              :locality => locality)
         end
       end
-
+      # Add lats and lons 
+      Rake::Task['naptan:geo:convert_stops'].execute
     end
   
   end

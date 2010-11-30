@@ -239,6 +239,13 @@ class Stop < ActiveRecord::Base
      return nil
   end
   
+  # find the nearest stop to a set of National Grid coordinates
+  def self.find_nearest(easting, northing)
+    stops = find(:first, :order => "ST_Distance(
+                       ST_GeomFromText('POINT(#{easting} #{northing})', #{BRITISH_NATIONAL_GRID}), 
+                       stops.coords) asc")
+  end
+  
   def self.full_find(id, scope)
     find(id, :scope => scope, 
          :include => [ { :routes_as_from_stop => [:region, :route_segments] }, 

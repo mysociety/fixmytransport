@@ -205,13 +205,13 @@ namespace :naptan do
       end  
     end
     
-    def convert_coords(class_name, task_name)
+    def convert_coords(class_name, task_name, conditions = nil)
       spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
       adapter = ActiveRecord::Base.configurations[RAILS_ENV]['adapter']
       if ! spatial_extensions or ! adapter == 'postgresql'
         usage_message "rake naptan:geo:#{task_name} requires PostgreSQL with PostGIS"
       end
-      class_name.constantize.find_each do |instance|
+      class_name.constantize.find_each(:conditions => conditions) do |instance|
         conn = ActiveRecord::Base.connection
         lon_lats = conn.execute("SELECT st_X(st_transform(coords,#{WGS_84})) as lon, 
                                         st_Y(st_transform(coords,#{WGS_84})) as lat 
@@ -226,6 +226,11 @@ namespace :naptan do
         end
         instance.save!
       end
+    end
+    
+    desc "Adds lat/lons for any stops without them by converting from OS OSGB36 6-digit eastings and northings"
+    task :convert_stops => :environment do 
+      convert_coords("Stop", "convert_stops", 'lat is null')
     end
     
     desc "Converts stop area coords from OS OSGB36 6-digit eastings and northings to WGS-84 lat/lons and saves the result on the model"

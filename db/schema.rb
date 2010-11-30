@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101125100624) do
+ActiveRecord::Schema.define(:version => 20101130093116) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -503,6 +503,7 @@ ActiveRecord::Schema.define(:version => 20101125100624) do
     t.boolean  "metro_stop",               :default => false
     t.integer  "generation_high"
     t.integer  "generation_low"
+    t.string   "other_code"
   end
 
   add_index "stops", ["cached_slug"], :name => "index_stops_on_cached_slug"

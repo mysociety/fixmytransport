@@ -133,7 +133,11 @@ class Parsers::NptdrParser
       gazetteer_id = row['National Gazetteer ID']
       district_name = row['District Name']
       town_name = row['Town Name']
-      locality = Locality.find_by_code(gazetteer_code)
+      if !gazetteer_code.blank?
+        locality = Locality.find_by_code(gazetteer_code)
+      else
+        locality = nil
+      end
       yield Stop.new(:atco_code => row['Location Code'],
                      :common_name => row['Name'], 
                      :easting => row['Easting'], 
