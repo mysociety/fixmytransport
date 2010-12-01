@@ -12,6 +12,15 @@ Your problem had the subject: <%= raw @problem.subject %>
 
 And description: <%= raw @problem.description %>
 
+<%- if @problem.time %>
+Time: <%= @problem.time.strftime("%I:%M%p") %>
+
+<%- end %>
+
+<%- if @problem.date %>
+Date: <%= @problem.date.strftime("%a, %d %b %Y") %>
+
+<%- end %>
 Your name will be shown on the site as: <%= @problem.reporter_name %>
 
 Yours,

@@ -42,7 +42,7 @@
       != f.text_area :description, {:rows => 5, :cols => 30}
     .form-field{:id => 'time-field'}
       = f.label :time
-      != f.time_select :time, {:include_blank => true}
+      != f.time_select :time, { :include_blank => true }
       %span.optional-note= "(#{t(:optional)})"
     .form-field{:id => 'date-field'} 
       = f.label :date

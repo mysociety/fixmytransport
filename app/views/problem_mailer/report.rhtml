@@ -37,6 +37,14 @@ Subject: <%= raw @problem.subject %>
 
 Details: <%= raw @problem.description %>
 
+<%- if @problem.time %>
+Time: <%= @problem.time.strftime("%I:%M %p") %>
+<%- end %>
+
+<%- if @problem.date %>
+Date: <%= @problem.date.strftime("%a, %d %b %Y") %>
+<%- end %>
+
 Location name: <%= raw MySociety::Format.ucfirst(@problem.location.name) %>
 
 <%- if @problem.location.is_a? Stop and !@problem.location.atco_code.blank? %>

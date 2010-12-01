@@ -364,7 +364,7 @@ class ProblemsController < ApplicationController
     # from http://www.ruby-forum.com/topic/100815
     if params[:problem]['time(4i)'] && ! params[:problem]['time(4i)'].blank? && 
       params[:problem]['time(5i)'] && !params[:problem]['time(5i)'].blank?
-      params[:problem][:time] = "#{params['time(4i)']}:#{params['time(5i)']}:00"
+      params[:problem][:time] = "#{params[:problem]['time(4i)']}:#{params[:problem]['time(5i)']}:00"
     end
     (1..5).each do |num|
       params[:problem].delete("time(#{num}i)")
