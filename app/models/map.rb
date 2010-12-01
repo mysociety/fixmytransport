@@ -92,6 +92,7 @@ class Map
     diff = [x_diff, y_diff].max
     return MAX_VISIBLE_ZOOM - 1 if diff == 0
     diff_over_width = diff / width
+    return MAX_VISIBLE_ZOOM if diff_over_width == 0
     zoom = MAX_ZOOM_LEVEL - (Math::log(diff_over_width) / Math::log(2)).ceil 
     if zoom > MAX_VISIBLE_ZOOM
       zoom = MAX_VISIBLE_ZOOM
