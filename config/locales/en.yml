@@ -59,3 +59,5 @@ en:
   initiator: initiator
   logout_link: logout
   your_message_has_been_sent: Your message has been sent on its way.
+  at_time: "at {{time}}"
+  on_date: "on {{date}}"

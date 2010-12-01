@@ -24,7 +24,7 @@ class Problem < ActiveRecord::Base
                3 => 'Hidden' })
   named_scope :confirmed, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
   named_scope :visible, :conditions => ["status_code in (?)", [self.symbol_to_status_code[:confirmed], 
-                                                              self.symbol_to_status_code[:fixed]]]
+                                                              self.symbol_to_status_code[:fixed]]], :order => "confirmed_at desc"
   named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
   named_scope :with_operator, :conditions => ['operator_id is not null'], :order => 'confirmed_at desc'
   named_scope :one_off, :conditions => ['campaign_id is null']

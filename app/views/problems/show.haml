@@ -4,7 +4,7 @@
 .problem-full
   - if @problem.status == :fixed
     .fixed= t(:problem_has_been_fixed)
-  %h2.subject= @title
+  %h2.name= @title
   .details
     =t(:reported).titleize
     %span.posted-time= t(:posted_time, :time => time_ago_in_words(@problem.confirmed_at))
@@ -15,7 +15,8 @@
       .sent-time= t(:sent_time, :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.recipients.map{ |recipient| recipient.name }.to_sentence)
 
   %p.problem!= simple_format(@problem.description)
-
+  - if @problem.date or @problem.time
+    .problem-datetime= t(:problem_occurred, :date_and_time => problem_date_and_time(@problem))
   %h3= t(:updates)
   .updates
     - @problem.updates.visible.each do |update| 

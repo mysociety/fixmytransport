@@ -82,3 +82,4 @@ en:
   holding_on_to_update: "we'll hold on to your update while you check your email"
   problem_created: Thanks! Your problem report has been created.
   thanks_for_update: Thanks for adding an update!
+  problem_occurred: "This problem occurred {{date_and_time}}"

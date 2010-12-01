@@ -22,7 +22,9 @@ describe ProblemMailer do
     before do
       @problem = mock_model(Problem, :subject => "My Problem", 
                                      :description => "Some description",
-                                     :reporter_name => "Problem Reporter")
+                                     :reporter_name => "Problem Reporter",
+                                     :time => nil, 
+                                     :date => nil)
       @recipient = mock_model(User, :email => "problemreporter@example.com", 
                                     :name_and_email => "Problem Reporter <problemreporter@example.com>")
       @token = "test-token"
@@ -63,6 +65,8 @@ describe ProblemMailer do
                                           :reply_email => @mock_user.email,
                                           :reply_name_and_email => "Test User <#{@mock_user.email}>",
                                           :campaign => nil,
+                                          :time => nil,
+                                          :date => nil,
                                           :subject => "Missing ticket machines", 
                                           :description => "Desperately need more.",
                                           :emailable_organizations => [@mock_operator],
@@ -121,6 +125,8 @@ describe ProblemMailer do
                           :reporter => @reporter,
                           :category => 'Other',
                           :location => @mock_stop, 
+                          :time => nil, 
+                          :date => nil,
                           :campaign => nil)
     end
     

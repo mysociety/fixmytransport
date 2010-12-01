@@ -38,11 +38,11 @@ Subject: <%= raw @problem.subject %>
 Details: <%= raw @problem.description %>
 
 <%- if @problem.time %>
-Time: <%= @problem.time.strftime("%H:%M") %>
+Time: <%= @problem.time.to_s(:standard) %>
 <%- end %>
 
 <%- if @problem.date %>
-Date: <%= @problem.date.strftime("%a, %d %b %Y") %>
+Date: <%= @problem.date.to_s(:standard) %>
 <%- end %>
 
 Location name: <%= raw MySociety::Format.ucfirst(@problem.location.name) %>

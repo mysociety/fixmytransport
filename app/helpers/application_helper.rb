@@ -306,6 +306,17 @@ module ApplicationHelper
     return t(:supporter) if campaign.supporters.include?(user)
     return ""  
   end
+  
+  def problem_date_and_time(problem)
+    datetime_parts = []
+    if problem.time
+      datetime_parts << t(:at_time, :time => problem.time.to_s(:standard))
+    end
+    if problem.date 
+      datetime_parts << t(:on_date, :date => problem.date.to_s(:standard))
+    end
+    return datetime_parts.join(" ")
+  end
 
   def update_text(update, link)
     extra_parts = []

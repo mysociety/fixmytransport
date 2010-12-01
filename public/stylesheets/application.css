@@ -32,7 +32,7 @@ h1 {
     width: auto;
 }
 
-h3{
+h3.name{
   margin: 0 0 1em 0;
 }
 
@@ -334,7 +334,7 @@ form.update_campaign label {
   max-width: 50%;
 }
 
-.campaign-info h2 {
+.campaign-info h2, .problem-full h2 {
   margin-top: 0;
 }
 
@@ -513,6 +513,10 @@ form .form-value {
 .updates .details {
   font-size: 0.9em;
   font-style: italic;
+}
+
+.problem-datetime {
+  font-size: 0.9em;
 }
 
 .updates .update { 
