@@ -186,19 +186,19 @@ namespace :nptdr do
             elsif route_types.first == 'FerryRoute'
               stop_type = 'FER'
             else
-              raise "unhandled route type #{route_types.first}"
+              raise "Unhandled route type #{route_types.first} for #{code}"
             end
           else
-            raise "more than one route type #{route_types.inspect}"
+            raise "More than one route type #{route_types.inspect} for #{code}"
           end
           puts "Loading #{code} #{stop_info[:name]} #{locality.name}"
-          stop = Stop.new(:other_code => code, 
-                          :common_name => stop_info[:name], 
-                          :easting => stop_info[:easting], 
-                          :northing => stop_info[:northing], 
-                          :coords => coords, 
-                          :locality => locality, 
-                          :stop_type => stop_type)
+          stop = Stop.create!(:other_code => code, 
+                              :common_name => stop_info[:name], 
+                              :easting => stop_info[:easting], 
+                              :northing => stop_info[:northing], 
+                              :coords => coords, 
+                              :locality => locality, 
+                              :stop_type => stop_type)
         end
       end
       # Add lats and lons 
