@@ -106,16 +106,7 @@ class IncomingMessage < ActiveRecord::Base
   
   # Converts email addresses we know about into textual descriptions of them
   def mask_special_emails(text)
-    campaign.problem.emailable_organizations.each do |organization|
-      if organization.is_a? Council
-        emails = organization.emails
-      else
-        emails = [organization.email]
-      end
-      emails.each do |email|
-        text.gsub!(email, "[#{organization.name} problem reporting email]")
-      end
-    end
+    mask_organization_emails(text)
     campaign.valid_local_parts.each do |local_part|
       text.gsub!("#{local_part}@#{campaign.domain}", "[#{campaign.title} email]")
     end
@@ -123,9 +114,27 @@ class IncomingMessage < ActiveRecord::Base
     text
   end
   
+  def mask_organization_emails(text, &block)
+    campaign.problem.emailable_organizations.each do |organization|
+      if organization.is_a? Council
+        emails = organization.emails
+      else
+        emails = [organization.email]
+      end
+      emails.each do |email|
+        if block_given?
+         text = yield [organization, email, text]
+        else
+          text.gsub!(email, "[#{organization.name} problem reporting email]")
+        end
+      end
+    end
+    text
+  end
+  
   def safe_from
-    safe_from_text = mask_special_emails(self.from)
-    safe_from_text = MySociety::Mask.mask_emails(safe_from_text)
+    text = mask_organization_emails(self.from){ |organization, email, text| text.gsub(email, organization.name) }
+    text = MySociety::Mask.mask_emails(text)
   end
     
   # Return date mail was sent

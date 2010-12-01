@@ -65,7 +65,25 @@ describe IncomingMessage do
       @incoming_message.mask_special_emails(text).should == expected_text
     end
 
-
+  end
+  
+  describe 'when asked for a safe from address' do 
+  
+    it 'should return a name untouched' do 
+      @incoming_message.stub!(:from).and_return("Bob Jones")
+      @incoming_message.safe_from.should == 'Bob Jones'
+    end
+    
+    it 'should substitute the organization name for a known organization email' do 
+      @mock_problem.stub!(:emailable_organizations).and_return([@mock_organization])
+      @incoming_message.stub!(:from).and_return("organization@example.com")
+      @incoming_message.safe_from.should == 'a test organization'
+    end
+    
+    it 'should mask an unknown email' do 
+      @incoming_message.stub!(:from).and_return("unknown@example.com")
+      @incoming_message.safe_from.should == '[email address]'
+    end
   end
 
 end

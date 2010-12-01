@@ -2,7 +2,7 @@
   - if event.is_a? IncomingMessage
     %span.date= t(:ago, :time => time_ago_in_words(event.created_at))
     %span.message-link
-      != t(:got_a_message, :link => link_to(event.subject, campaign_incoming_message_path(@campaign, event)), :sender => event.from)
+      != t(:got_a_message, :link => link_to(event.subject, campaign_incoming_message_path(@campaign, event)), :sender => event.safe_from)
       - event.campaign_updates.each do |update|
         = render :partial => 'campaign_event', :locals => {:event => update, :always_show_commentbox => always_show_commentbox}
   - elsif event.is_a? OutgoingMessage
