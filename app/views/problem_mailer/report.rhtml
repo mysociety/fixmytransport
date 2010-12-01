@@ -38,7 +38,7 @@ Subject: <%= raw @problem.subject %>
 Details: <%= raw @problem.description %>
 
 <%- if @problem.time %>
-Time: <%= @problem.time.strftime("%I:%M %p") %>
+Time: <%= @problem.time.strftime("%H:%M") %>
 <%- end %>
 
 <%- if @problem.date %>

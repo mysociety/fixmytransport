@@ -13,7 +13,7 @@ Your problem had the subject: <%= raw @problem.subject %>
 And description: <%= raw @problem.description %>
 
 <%- if @problem.time %>
-Time: <%= @problem.time.strftime("%I:%M%p") %>
+Time: <%= @problem.time.strftime("%H:%M") %>
 
 <%- end %>
 
