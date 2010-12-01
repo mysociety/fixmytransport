@@ -8,9 +8,9 @@ en:
   random_stop_area: "Random stop area"
   update: "Update"
   about: "About"
-  built_by: "Built by {{link}}"
-  powered_by: "Powered by {{link}}"
+  built_by: "Built by {{mysociety_link}}, which is supported by the {{indigo_link}}, the {{esmee_link}}, and many {{donor_link}}."
   feedback: "Feedback"
+  small_donors: small donors
   browse_or_create_campaign: Browse the transport network or create a campaign
   feed: Feed
   campaigns_feed: Feed of campaigns

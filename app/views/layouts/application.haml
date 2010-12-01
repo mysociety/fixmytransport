@@ -40,6 +40,5 @@
       %ul
         %li.footer-item!= link_to t(:about), about_path
         %li.footer-item!= link_to t(:feedback), feedback_path
-        %li.footer-item!= t(:built_by, :link => link_to('mySociety', 'http://mysociety.org'))
-        %li.footer-item!= t(:powered_by, :link => link_to('Easynet', 'http://www.easynet.com'))  
+      .support-links!= t(:built_by, :mysociety_link => link_to('mySociety', 'http://mysociety.org'), :indigo_link => link_to('Indigo Trust', 'http://indigotrust.wordpress.com/'), :donor_link => link_to(t(:small_donors), 'http://mysociety.org/donate'), :esmee_link => link_to('Esmée Fairbairn Foundation', 'http://www.esmeefairbairn.org.uk'))
     .anchor-padding= " "

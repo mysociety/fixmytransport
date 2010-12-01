@@ -71,6 +71,10 @@ ul.navigation {
   display: inline;
   padding: 0 1em 0 1em;
 }
+#footer .support-links {
+  font-size: 0.8em;
+  color: #777;
+}
 
 .flash_notice {
   padding: 5px;
