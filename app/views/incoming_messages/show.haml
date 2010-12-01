@@ -1,7 +1,7 @@
 !=t(:this_message_was_sent_to, :campaign => link_to(@incoming_message.campaign.title, campaign_path(@incoming_message.campaign)))
 .campaign-email
   %h2
-    .from= @incoming_message.mail.friendly_from
+    .from= @incoming_message.safe_from
     .date= short_date(@incoming_message.sent_at)
   .subject
     %b= "#{t(:subject)}:"

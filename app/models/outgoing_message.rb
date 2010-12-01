@@ -83,7 +83,7 @@ class OutgoingMessage < ActiveRecord::Base
     if recipient
       return recipient.name
     elsif incoming_message
-      return incoming_message.mail.friendly_from
+      return incoming_message.from
     else
       return nil
     end

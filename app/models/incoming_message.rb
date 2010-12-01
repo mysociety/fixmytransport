@@ -122,6 +122,11 @@ class IncomingMessage < ActiveRecord::Base
     text.gsub!(MySociety::Config.get("CONTACT_EMAIL", 'contact@localhost'), "[FixMyTransport contact email]")
     text
   end
+  
+  def safe_from
+    safe_from_text = mask_special_emails(self.from)
+    safe_from_text = MySociety::Mask.mask_emails(safe_from_text)
+  end
     
   # Return date mail was sent
   def sent_at
