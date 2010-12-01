@@ -1,10 +1,10 @@
 class CampaignsController < ApplicationController
 
   before_filter :process_map_params, :only => [:show]
-  before_filter :find_campaign, :only => [:edit, :update]
-  before_filter :find_confirmed_campaign, :only => [:show, :join, 
-                                                    :leave, :add_update, 
-                                                    :request_advice, :add_comment]
+  before_filter :find_editable_campaign, :only => [:edit, :update]
+  before_filter :find_visible_campaign, :only => [:show, :join, 
+                                                  :leave, :add_update, 
+                                                  :request_advice, :add_comment]
   before_filter :require_campaign_initiator_or_token, :only => [:edit, :update]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice]
   before_filter :require_user, :only => [:add_comment]
@@ -90,7 +90,7 @@ class CampaignsController < ApplicationController
   
   def update
     @campaign.attributes=(params[:campaign])
-    @campaign.confirmed = true
+    @campaign.confirm
     if params[:user] and params[:token] == @campaign.problem.token
       @campaign.initiator.attributes=(params[:user])
       @campaign.initiator.registered = true

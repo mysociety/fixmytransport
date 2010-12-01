@@ -53,7 +53,7 @@ describe Assignment do
  
        before do
          # stub connection to Fosbury
-         @mock_task = mock_model(Task, :save! => true, 
+         @mock_task = mock_model(Task, :save => true, 
                                        :id => 33, 
                                        :task_data => {})
          Task.stub!(:new).and_return(@mock_task)

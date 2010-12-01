@@ -290,7 +290,7 @@ module ApplicationHelper
     if link_type == :location
       return location_url(location)
     elsif link_type == :problem
-      return new_problem_url(:location_id => location.id, :location_type => location.type)
+      return new_problem_url(:location_id => location.id, :location_type => location.class)
     else
       raise "Unknown link_type in map_link_url: #{link_type}"
     end

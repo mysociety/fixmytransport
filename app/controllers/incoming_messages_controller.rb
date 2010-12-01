@@ -1,8 +1,10 @@
 class IncomingMessagesController < ApplicationController
     
+  before_filter :find_visible_campaign, :only => [:show, :show_attachment]
+  
   def show
     @incoming_message = IncomingMessage.find(params[:id])
-    if ! @incoming_message.campaign.confirmed? 
+    if @campaign != @incoming_message.campaign 
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end
@@ -16,7 +18,7 @@ class IncomingMessagesController < ApplicationController
   
   def show_attachment
     @incoming_message = IncomingMessage.find(params[:id])
-    if ! @incoming_message.campaign.confirmed? 
+    if @campaign != @incoming_message.campaign 
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end

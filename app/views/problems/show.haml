@@ -8,23 +8,23 @@
   .details
     =t(:reported).titleize
     %span.posted-time= t(:posted_time, :time => time_ago_in_words(@problem.confirmed_at))
-    %span.author= @problem.anonymous? ? t(:anonymously) : t(:by, :name => @problem.reporter_name)
+    %span.author=  t(:by, :name => @problem.reporter_name)
     - unless @problem.location.is_a?(SubRoute)
       %span.transport-location!= t(:problem_location, :link => link_to(@problem.location.description, location_url(@problem.location)))
     - if @problem.sent_at
       .sent-time= t(:sent_time, :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.recipients.map{ |recipient| recipient.name }.to_sentence)
 
   %p.problem!= simple_format(@problem.description)
-  
-%h3= t(:updates)
-.updates
-  - @problem.updates.confirmed.each do |update| 
-    %a{:name => "update_#{update.id}"}
-    .details
-      = t(:posted)
-      %span.posted-time= t(:posted_time, :time => time_ago_in_words(update.confirmed_at))
-      %span.author= update.reporter_name.blank? ? t(:anonymously) : t(:by, :name => update.reporter_name)  
-      - if update.mark_fixed?
-        %span.fixed-text>= ", #{t(:marked_as_fixed)}"
-    .update= update.text
-  = render :partial => 'update_form'
+
+  %h3= t(:updates)
+  .updates
+    - @problem.updates.visible.each do |update| 
+      .problem-event
+        %a{:name => "update_#{update.id}"}
+        %span.date= t(:posted_time, :time => time_ago_in_words(update.confirmed_at))
+        %span.update
+          = t(:user_updates, :name => update.reporter_name)  
+          = "\"#{update.text}\""
+        - if update.mark_fixed?
+          %span.fixed-text>= ", #{t(:marked_as_fixed)}"
+    = render :partial => 'update_form'

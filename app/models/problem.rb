@@ -17,13 +17,14 @@ class Problem < ActiveRecord::Base
   attr_accessor :location_attributes, :locations, :location_search, :location_errors
   cattr_accessor :route_categories, :stop_categories
   attr_protected :confirmed_at
-  after_create :send_confirmation_email
   before_create :generate_confirmation_token
   has_status({ 0 => 'New', 
                1 => 'Confirmed', 
                2 => 'Fixed',
                3 => 'Hidden' })
   named_scope :confirmed, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
+  named_scope :visible, :conditions => ["status_code in (?)", [self.symbol_to_status_code[:confirmed], 
+                                                              self.symbol_to_status_code[:fixed]]]
   named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
   named_scope :with_operator, :conditions => ['operator_id is not null'], :order => 'confirmed_at desc'
   named_scope :one_off, :conditions => ['campaign_id is null']
@@ -118,16 +119,19 @@ class Problem < ActiveRecord::Base
     self.reporter = User.find_or_initialize_by_email(:email => attributes[:email], :name => reporter_name)
   end
   
+  def confirm!
+    return unless self.status == :new
+    # complete the relevant assignments
+    Assignment.complete_problem_assignments(self, {'publish-problem' => {}})
+    data = {:organizations => self.organization_info(:responsible_organizations) }
+    Assignment.complete_problem_assignments(self, {'write-to-transport-organization' => data })
+    # save new values without validation - don't want to validate any associated campaign yet
+    self.update_attribute('status', :confirmed)
+    self.update_attribute('confirmed_at', Time.now)
+  end
+  
   def save_reporter
     reporter.save_if_new
-  end
-  
-  def anonymous
-    !reporter_public
-  end
-  
-  def anonymous?
-    !reporter_public?
   end
   
   def reply_email
@@ -153,7 +157,7 @@ class Problem < ActiveRecord::Base
   
   # class methods
   def self.latest(limit)
-    one_off.confirmed.find(:all, :limit => limit)
+    one_off.visible.find(:all, :limit => limit)
   end
   
   # Sendable reports - confirmed, with operator, PTE, or council, but not sent

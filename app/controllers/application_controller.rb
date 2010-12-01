@@ -49,8 +49,8 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  # filter method for finding a campaign (not neccessarily confirmed)
-  def find_campaign
+  # filter method for finding an editable campaign (not neccessarily visible)
+  def find_editable_campaign
     if self.class == CampaignsController
       param = :id
     else
@@ -61,18 +61,18 @@ class ApplicationController < ActionController::Base
     else 
       @campaign = Campaign.find_by_subdomain(params[param])
     end
-    unless @campaign
+    unless @campaign && @campaign.editable?
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end
     return true
   end
   
-  # filter method for finding a confirmed campaign
-  def find_confirmed_campaign
-    found = find_campaign
-    return false unless @campaign
-    unless @campaign.confirmed
+  # filter method for finding a visible campaign
+  def find_visible_campaign
+    found = find_editable_campaign
+    return false unless found
+    unless @campaign.visible? 
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end

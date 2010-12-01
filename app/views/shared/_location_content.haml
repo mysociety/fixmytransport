@@ -1,9 +1,9 @@
 .report-problem-link= link_to(t(:report_a_problem_here), new_problem_url(:location_id => location.id, :location_type => location.type, :to => params[:to], :from => params[:from]))
 
-- if !location.campaigns.confirmed.empty?
+- if !location.campaigns.visible.empty?
   %h3= t(:other_campaigns_here)
-  = render :partial => 'shared/campaign', :collection => location.campaigns.confirmed, :locals => { :context => :location }
+  = render :partial => 'shared/campaign', :collection => location.campaigns.visible, :locals => { :context => :location }
 
-- if !location.problems.confirmed.empty?
+- if !location.problems.visible.empty?
   %h3= t(:other_problems_here)
-  = render :partial => 'shared/problem', :collection => location.problems.one_off.confirmed, :locals => { :context => :location }
+  = render :partial => 'shared/problem', :collection => location.problems.one_off.visible, :locals => { :context => :location }

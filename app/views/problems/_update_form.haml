@@ -3,12 +3,11 @@
 - form_for @problem, :url => problem_path(@problem), :html => { :class => 'new_update' } do |f|
   .fieldset
     - f.fields_for :updates, @new_update do |update_fields|
-      - if @problem.errors.on('reporter_name')
+      - if @new_update.errors.on('reporter_name')
         .form-field-error= error_message_on @new_update, 'reporter_name'
       .form-field
         != update_fields.label :reporter_name, t(:name)
         != update_fields.text_field :reporter_name
-        %span.optional-note= "(#{t(:optional)})"
       - update_fields.fields_for :reporter do |reporter_fields|
         - if current_user == @new_update.reporter
           .form-field
@@ -22,6 +21,7 @@
           .form-field
             != reporter_fields.label :email
             != reporter_fields.text_field :email
+            != reporter_fields.hidden_field :id
       - if @new_update.errors.on(:text)
         .form-field-error= error_message_on @new_update, :text
       .form-field

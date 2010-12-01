@@ -1,15 +1,15 @@
 class Update < ActiveRecord::Base
   belongs_to :reporter, :class_name => 'User'
   before_create :generate_confirmation_token
-  after_create :send_confirmation_email
   belongs_to :problem
   validates_associated :reporter
-  validates_presence_of :text
+  validates_presence_of :text, :reporter_name
+  
   has_paper_trail
   has_status({ 0 => 'New', 
                1 => 'Confirmed', 
                2 => 'Hidden' })
-  named_scope :confirmed, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
+  named_scope :visible, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
 
   # Makes a random token, suitable for using in URLs e.g confirmation messages.
   def generate_confirmation_token
@@ -22,7 +22,7 @@ class Update < ActiveRecord::Base
   
   # create the user if it doesn't exist, but don't save it yet
   def reporter_attributes=(attributes)
-    self.reporter = User.find_or_initialize_by_email(attributes[:email])
+    self.reporter = User.find_or_initialize_by_email(attributes[:email], :name => reporter_name)
   end
   
   def save_reporter
@@ -30,6 +30,7 @@ class Update < ActiveRecord::Base
   end
   
   def confirm!
+    return unless self.status == :new
     self.status = :confirmed
     self.confirmed_at = Time.now
     if problem 

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101130093116) do
+ActiveRecord::Schema.define(:version => 20101201102200) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(:version => 20101130093116) do
     t.integer  "status_code"
     t.string   "cached_slug"
     t.string   "subdomain"
+    t.datetime "confirmed_at"
   end
 
   add_index "campaigns", ["cached_slug"], :name => "index_campaigns_on_cached_slug"
@@ -263,7 +264,6 @@ ActiveRecord::Schema.define(:version => 20101130093116) do
     t.integer  "passenger_transport_executive_id"
     t.integer  "campaign_id"
     t.string   "reporter_name"
-    t.boolean  "reporter_public"
     t.string   "reporter_phone"
     t.time     "time"
     t.date     "date"

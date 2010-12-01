@@ -16,15 +16,15 @@ describe ProblemsController do
       get :show, params
     end
     
-    it 'should look for a confirmed one-off problem with the id passed' do 
+    it 'should look for a visible one-off problem with the id passed' do 
       one_off_problems = mock('one off problems')
-      confirmed_problems = mock('confirmed problems')
+      visible_problems = mock('visible problems')
       mock_problem = mock_model(Problem, :location => mock_model(Stop, :points => []),
                                          :to_i => 22)
       @controller.stub!(:map_params_from_location)
       Problem.should_receive(:one_off).and_return(one_off_problems)
-      one_off_problems.should_receive(:confirmed).and_return(confirmed_problems)
-      confirmed_problems.should_receive(:find).with('22').and_return(mock_problem)
+      one_off_problems.should_receive(:visible).and_return(visible_problems)
+      visible_problems.should_receive(:find).with('22').and_return(mock_problem)
       make_request(:id => "22")
     end
   
@@ -344,6 +344,10 @@ describe ProblemsController do
                                           :save_reporter => true,
                                           :location => @stop,
                                           :reporter => @mock_user, 
+                                          :confirm! => true,
+                                          :campaign => nil,
+                                          :status= => true,
+                                          :send_confirmation_email => true,
                                           :create_assignments => true)
       Problem.stub!(:new).and_return(@mock_problem)
       @mock_assignment = mock_model(Assignment)
@@ -357,6 +361,11 @@ describe ProblemsController do
     
     it 'should create a new problem using the attributes passed to it' do 
       Problem.should_receive(:new).with(@problem_attributes)
+      make_request
+    end
+    
+    it 'should set the status of the problem to :new' do 
+      @mock_problem.should_receive(:status=).with(:new)
       make_request
     end
     
@@ -376,9 +385,62 @@ describe ProblemsController do
       response.should render_template('problems/new')
     end
     
-    it 'should render the "confirmation_sent" template if the problem can be saved' do 
-      make_request
-      response.should render_template('shared/confirmation_sent')
+    describe 'if there is no logged in user' do 
+      
+      it 'should render the "confirmation_sent" template if the problem can be saved' do 
+        make_request
+        response.should render_template('shared/confirmation_sent')
+      end
+      
+      it 'should send a confirmation email' do 
+        @mock_problem.should_receive(:send_confirmation_email)
+        make_request
+      end
+    
+    end
+    
+    describe 'if there is a logged in user' do 
+      
+      before do 
+        @controller.stub!(:current_user).and_return(@mock_user)
+      end
+      
+      it 'should set the problem status to confirmed' do 
+        @mock_problem.should_receive(:confirm!)
+        make_request
+      end
+       
+      describe 'if the problem is associated with a campaign' do 
+        
+        before do
+          @mock_campaign = mock_model(Campaign)
+          @mock_problem.stub!(:campaign).and_return(@mock_campaign)
+        end
+        
+        it 'should redirect to the campaign edit url' do 
+          make_request
+          response.should redirect_to(edit_campaign_url(@mock_campaign))
+        end
+      end
+      
+      describe 'if the problem is not associated with a campaign' do 
+
+        before do
+          @mock_problem.stub!(:campaign).and_return(nil)
+        end
+        
+        it 'should show a message that the problem has been created' do 
+          make_request
+          flash[:notice].should == 'Thanks! Your problem report has been created.'
+        end
+        
+        it 'should redirect to the problem page' do 
+          make_request
+          response.should redirect_to(problem_url(@mock_problem))
+        end
+        
+      end
+      
     end
     
     it 'should create assignments associated with the problem' do 
@@ -401,7 +463,12 @@ describe ProblemsController do
   
     before do 
       @mock_problem = mock_model(Problem, :updates => [])
-      @mock_update = mock_model(Update, :valid? => true, :save => true, :save_reporter => true)
+      @mock_update = mock_model(Update, :valid? => true, 
+                                        :save => true, 
+                                        :save_reporter => true,
+                                        :status= => true,
+                                        :send_confirmation_email => true,
+                                        :confirm! => true)
       @mock_problem.updates.stub!(:build).and_return(@mock_update)
       Problem.stub!(:find).and_return(@mock_problem)
     end
@@ -422,19 +489,60 @@ describe ProblemsController do
       make_request
     end
     
-    it 'should save the update it is valid' do 
-      @mock_update.should_receive(:save)
+    it 'should set the update status to :new' do 
+      @mock_update.should_receive(:status=).with(:new)
       make_request
     end
     
-    it 'should save the update reporter if the update is valid' do 
-      @mock_update.should_receive(:save_reporter)
-      make_request
-    end
+    describe 'if the update is valid' do 
     
-    it 'should render the "confirmation_sent" template if the update is valid' do 
-      make_request
-      response.should render_template('shared/confirmation_sent')
+      it 'should save the update' do 
+        @mock_update.should_receive(:save)
+        make_request
+      end
+    
+      it 'should save the update reporter' do 
+        @mock_update.should_receive(:save_reporter)
+        make_request
+      end
+      
+      describe 'if the user is logged in' do 
+        
+        before do 
+          @controller.stub!(:current_user).and_return(mock_model(User))
+        end
+        
+        it 'should confirm the update' do 
+          @mock_update.should_receive(:confirm!)
+          make_request
+        end
+        
+        it 'should show the user a message' do 
+          make_request
+          flash[:notice].should == "Thanks for adding an update!"
+        end
+        
+        it 'should redirect to the problem page' do 
+          make_request
+          @response.should redirect_to(problem_url(@mock_problem))
+        end
+        
+      end
+      
+      describe 'if the user is not logged in' do 
+        
+        it 'should render the "confirmation_sent" template ' do 
+          make_request
+          response.should render_template('shared/confirmation_sent')
+        end
+        
+        it 'should send a confirmation email' do 
+          @mock_update.should_receive(:send_confirmation_email)
+          make_request
+        end
+        
+      end
+      
     end
     
   end
@@ -443,14 +551,9 @@ describe ProblemsController do
      
     before do 
       @mock_assignment = mock_model(Assignment)
-      @mock_problem = mock_model(Problem, :assignments => [@mock_assignment],
-                                          :organization_info => [],
-                                          :responsible_organizations => [], 
-                                          :campaign => nil, 
-                                          :status= => true, 
-                                          :confirmed_at= => true)
+      @mock_problem = mock_model(Problem, :campaign => nil, 
+                                          :confirm! => true)
       Problem.stub!(:find_by_token).and_return(@mock_problem)
-      Assignment.stub!(:complete_problem_assignments)
     end
 
     def make_request
@@ -461,32 +564,9 @@ describe ProblemsController do
       Problem.should_receive(:find_by_token).with("my-test-token")
       make_request
     end
-
-    it 'should set the status to confirmed and set the confirmed time on the problem' do 
-      @mock_problem.should_receive(:confirmed_at=).with(anything)
-      @mock_problem.should_receive(:status=).with(:confirmed)
-      make_request
-    end
-
-    it 'should set the "publish-problem" assignments associated with this user and problem as complete' do 
-      assignment_data =  { 'publish-problem' => {} }
-      Assignment.should_receive(:complete_problem_assignments).with(@mock_problem, assignment_data)
-      make_request
-    end
     
-    it 'should set the "write-to-transport-organization" assignment associated with this user and problem as complete' do 
-      @mock_problem.stub!(:responsible_organizations).and_return([mock_model(Operator)])
-      @mock_problem.stub!(:organization_info).and_return({ :data => 'data' })
-      assignment_data ={ 'write-to-transport-organization' => { :organizations => {:data => 'data'} } }
-      Assignment.should_receive(:complete_problem_assignments).with(@mock_problem, assignment_data)
-      make_request
-    end
-    
-    it 'should not set the "write-to-transport-organization" assignment associated with this user and problem as complete if there are no responsible organizations' do 
-      @mock_problem.stub!(:responsible_organizations).and_return([])
-      @mock_problem.stub!(:organization_info).and_return({ :data => 'data' })
-      assignment_data ={ 'write-to-transport-organization' => { :data => 'data' } }
-      Assignment.should_not_receive(:complete_problem_assignments).with(@mock_problem, hash_including({'write-to-transport-organization'=> { :data => 'data' } }))
+    it 'should confirm the problem' do
+      @mock_problem.should_receive(:confirm!)
       make_request
     end
     

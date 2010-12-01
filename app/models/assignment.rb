@@ -16,11 +16,7 @@ class Assignment < ActiveRecord::Base
   
   def user_name
     if problem
-      if problem.anonymous?
-        I18n.t(:the_problem_reporter)
-      else
-        problem.reporter_name
-      end
+      problem.reporter_name
     end
   end
   
@@ -40,7 +36,7 @@ class Assignment < ActiveRecord::Base
                         :task_data => attributes[:data] }
     task = Task.new(task_attributes) 
     task.status = status
-    if task.save!
+    if task.save
       assignment.task_id = task.id
       assignment.save!
     end

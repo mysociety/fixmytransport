@@ -503,7 +503,7 @@ form .form-value {
 
 .problem-full .fixed { 
   background-color: #C6F490;
-  border: 2px solid #98E93B;
+  border: 1px solid #98E93B;
   padding: 5px;
   position: relative;
   text-align: center;
@@ -560,7 +560,7 @@ form.new_update .label{
   clear: left;
 }
 
-.new-assignment, .campaign-event {
+.new-assignment, .campaign-event, .problem-event {
   border: 1px dotted #cccccc;
   margin: 0.5em;
   padding: 0.5em;
@@ -591,6 +591,7 @@ form.new_update .label{
   float: right;  
 }
 
+.problem-event .date,
 .campaign-event .date, 
 .campaign-event .status{
   font-size: 0.8em;

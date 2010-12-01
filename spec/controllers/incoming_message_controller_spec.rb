@@ -7,9 +7,11 @@ describe IncomingMessagesController do
     before do 
       @campaign_user = mock_model(User)
       @mock_campaign = mock_model(Campaign, :initiator => @campaign_user, 
-                                            :confirmed? => true)
+                                            :visible? => true, 
+                                            :editable? => true)
       @mock_incoming_message = mock_model(IncomingMessage, :campaign => @mock_campaign)
       IncomingMessage.stub!(:find).and_return(@mock_incoming_message)
+      Campaign.stub!(:find).and_return(@mock_campaign)
     end
     
     def make_request(params)

@@ -7,7 +7,7 @@ describe Problem do
     before do 
       @problem = Problem.new()
       @problem.stub!(:location).and_return(mock('location'))
-      @full_name_error = "Please enter your full name (if you do not wish your name to be shown on the site, untick the 'Can we show your name publicly' box)"
+      @full_name_error = "Please enter your full name"
     end
     
     it 'should add an error if the name is some variant of "anon"' do 
@@ -34,6 +34,66 @@ describe Problem do
       end
     end
     
+  end
+  
+  describe 'when confirming' do 
+    
+    before do
+      @problem = Problem.new
+      @problem.status = :new
+      @confirmation_time = Time.now - 5.days
+      @problem.confirmed_at = @confirmation_time
+      @problem.stub!(:save!).and_return(true)
+      @problem.stub!(:organization_info).and_return([])
+      Assignment.stub!(:complete_problem_assignments)
+    end
+    
+    describe 'when the status is not new' do 
+      
+      before do 
+        @problem.status = :hidden
+      end
+      
+      it 'should not change the status or set the confirmed time' do 
+        @problem.confirm!
+        @problem.status.should == :hidden
+        @problem.confirmed_at.should == @confirmation_time
+      end
+    
+    end
+    
+    describe 'when the status is new' do 
+      
+      it 'should set the status to confirmed and set the confirmed time on the problem' do 
+        @problem.confirm!
+        @problem.status.should == :confirmed
+        @problem.confirmed_at.should > @confirmation_time
+      end
+
+      it 'should set the "publish-problem" assignments associated with this user and problem as complete' do 
+        assignment_data =  { 'publish-problem' => {} }
+        Assignment.should_receive(:complete_problem_assignments).with(@problem, assignment_data)
+        @problem.confirm!
+      end
+    
+      it 'should set the "write-to-transport-organization" assignment associated with this user and problem as complete' do 
+        @problem.stub!(:responsible_organizations).and_return([mock_model(Operator)])
+        @problem.stub!(:organization_info).and_return({ :data => 'data' })
+        assignment_data = { 'write-to-transport-organization' => { :organizations => {:data => 'data'} } }
+        Assignment.should_receive(:complete_problem_assignments).with(@problem, assignment_data)
+        @problem.confirm!
+      end
+    
+      it 'should not set the "write-to-transport-organization" assignment associated with this user and problem as complete if there are no responsible organizations' do 
+        @problem.stub!(:responsible_organizations).and_return([])
+        @problem.stub!(:organization_info).and_return({ :data => 'data' })
+        assignment_data ={ 'write-to-transport-organization' => { :data => 'data' } }
+        Assignment.should_not_receive(:complete_problem_assignments).with(@problem, hash_including({'write-to-transport-organization'=> { :data => 'data' } }))
+        @problem.confirm!
+      end
+    
+    end
+  
   end
   
   describe 'when asked for a reply name and email or reply email' do 

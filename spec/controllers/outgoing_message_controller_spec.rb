@@ -10,7 +10,8 @@ describe OutgoingMessagesController do
                                                          :send_message => true)
     @outgoing_messages_mock = mock('outgoing message association', :build => @mock_outgoing_message)
     @incoming_messages_mock = mock('incoming message association', :find => nil)
-    @mock_campaign = mock_model(Campaign, :confirmed => true,
+    @mock_campaign = mock_model(Campaign, :editable? => true,
+                                          :visible? => true,
                                           :initiator => @campaign_user,
                                           :outgoing_messages => @outgoing_messages_mock,
                                           :incoming_messages => @incoming_messages_mock)

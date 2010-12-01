@@ -13,8 +13,8 @@ class LocationsController < ApplicationController
         map_params_from_location(@stop.points, find_other_locations=true)
       end
       format.atom do  
-        @campaigns = @stop.campaigns.confirmed
-        render :template => 'shared/campaigns.atom.builder', :layout => false 
+        campaign_feed(@stop)
+        return
       end
     end
   end
@@ -42,8 +42,8 @@ class LocationsController < ApplicationController
         map_params_from_location(@stop_area.points, find_other_locations=true)
       end
       format.atom do  
-        @campaigns = @stop_area.campaigns.confirmed
-        render :template => 'shared/campaigns.atom.builder', :layout => false 
+        campaign_feed(@stop_area)
+        return 
       end
     end
   end
@@ -61,8 +61,8 @@ class LocationsController < ApplicationController
         map_params_from_location(@route.points, find_other_locations=false)
       end
       format.atom do  
-        @campaigns = @route.campaigns.confirmed
-        render :template => 'shared/campaigns.atom.builder', :layout => false 
+        campaign_feed(@route)
+        return
       end
     end
   end
@@ -75,6 +75,13 @@ class LocationsController < ApplicationController
     other_locations =  Map.other_locations(params[:lat].to_f, params[:lon].to_f, params[:zoom].to_i, map_height, map_width)
     link_type = params[:link_type].to_sym
     render :json => "#{@template.location_stops_js(other_locations, main=false, small=true, link_type)}"
+  end
+
+  private
+  
+  def campaign_feed(source)
+    @campaigns = source.campaigns.visible
+    render :template => 'shared/campaigns.atom.builder', :layout => false
   end
 
 end

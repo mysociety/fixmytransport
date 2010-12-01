@@ -25,7 +25,6 @@ class Campaign < ActiveRecord::Base
   validates_uniqueness_of :subdomain, :on => :update,
                                       :case_sensitive => false
   validates_associated :initiator, :on => :update
-  named_scope :confirmed, :conditions => ['confirmed = ?', true], :order => 'created_at desc'
   cattr_reader :per_page, :categories
   @@per_page = 10
   @@categories = ['New route', 'Keep route', 'Get repair', 'Adopt', 'Other']
@@ -34,17 +33,32 @@ class Campaign < ActiveRecord::Base
                1 => 'Confirmed', 
                2 => 'Successful',
                3 => 'Hidden' })
+  named_scope :visible, :conditions => ["status_code in (?)", [self.symbol_to_status_code[:confirmed], 
+                                                               self.symbol_to_status_code[:successful]]]
 
   # instance methods
+  def confirm
+    return unless self.status == :new
+    self.status = :confirmed
+    self.confirmed_at = Time.now
+  end
+  
+  def visible?
+    [:confirmed, :successful].include?(self.status)
+  end
+  
+  def editable?
+    [:new, :confirmed, :successful].include?(self.status)
+  end
   
   def supporter_count
     campaign_supporters.confirmed.count
   end
   
-  def add_supporter(user, confirmed=false)
+  def add_supporter(user, supporter_confirmed=false)
     if ! supporters.include?(user)
       supporter_attributes = { :supporter => user }
-      if confirmed 
+      if supporter_confirmed 
         supporter_attributes[:confirmed_at] = Time.now
       end
       campaign_supporters.create!(supporter_attributes)
@@ -131,9 +145,9 @@ class Campaign < ActiveRecord::Base
   end
   
   def self.find_recent(number)
-    confirmed.find(:all, :order => 'created_at desc', 
-                         :limit => number, 
-                         :include => [:location, :initiator])
+    visible.find(:all, :order => 'created_at desc', 
+                       :limit => number, 
+                       :include => [:location, :initiator])
   end
   
 end

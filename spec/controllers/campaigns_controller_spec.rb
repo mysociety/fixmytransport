@@ -9,7 +9,8 @@ describe CampaignsController do
       @campaign = mock_model(Campaign, :id => 8, 
                                        :title => 'A test campaign',
                                        :initiator_id => 44, 
-                                       :confirmed => true,
+                                       :editable? => true, 
+                                       :visible? => true,
                                        :location => mock_model(Stop, :points => [mock("point", :lat => 51, :lon => 0)]))
       Campaign.stub!(:find).and_return(@campaign)
     end
@@ -23,16 +24,35 @@ describe CampaignsController do
       make_request
     end
     
-    it 'should not display a campaign that has not been confirmed' do 
-      @campaign.stub!(:confirmed).and_return(false)
+    it 'should not display a campaign that is not visible' do 
+      @campaign.stub!(:visible?).and_return(false)
       make_request
       response.status.should == '404 Not Found'
+    end
+    
+    it 'should display a campaign that has been successful' do 
+      @campaign.stub!(:visible?).and_return(true)
+      make_request
+      response.status.should == '200 OK'
     end
     
   end
   
   shared_examples_for "an action that requires the campaign initiator or a token" do 
         
+    describe 'when the campaign is hidden' do 
+
+      before do 
+        @mock_campaign.stub!(:visible?).and_return(false)
+      end    
+      
+      it 'should return a 404' do 
+        make_request
+        response.status.should == '404 Not Found'
+      end
+      
+    end
+    
     describe 'when the campaign is new' do
 
       before do 
@@ -189,9 +209,11 @@ describe CampaignsController do
                                             :initiator => @campaign_user, 
                                             :attributes= => true, 
                                             :valid? => true, 
-                                            :confirmed= => true,
-                                            :save => true, 
-                                            :status => :new)
+                                            :editable? => true, 
+                                            :visible? => false,
+                                            :status => :new,
+                                            :confirm => true,
+                                            :save => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_wrong_user_message = "confirm this problem"
       @expected_access_message = :campaigns_update_access_message
@@ -226,8 +248,8 @@ describe CampaignsController do
         make_request(token=@mock_problem.token)
       end
       
-      it 'should set the confirmed flag on the campaign' do
-        @mock_campaign.should_receive(:confirmed=).with(true)
+      it 'should confirm the campaign' do
+        @mock_campaign.should_receive(:confirm)
         make_request(token=@mock_problem.token)
       end
     
@@ -276,6 +298,8 @@ describe CampaignsController do
       @mock_campaign = mock_model(Campaign, :problem => @mock_problem, 
                                             :initiator => @campaign_user, 
                                             :title => 'A test campaign', 
+                                            :editable? => true,
+                                            :status => :new,
                                             :description => 'Campaign description')
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_wrong_user_message = "confirm this problem"
@@ -297,7 +321,7 @@ describe CampaignsController do
   describe 'GET #join' do 
     
     before do 
-      Campaign.stub!(:find).and_return(mock_model(Campaign, :confirmed => true))
+      Campaign.stub!(:find).and_return(mock_model(Campaign, :visible? => true, :editable? => true))
     end
     
     def make_request
@@ -315,7 +339,8 @@ describe CampaignsController do
     
     before do 
       @campaign_user = mock_model(User, :name => "Campaign User")
-      @mock_campaign = mock_model(Campaign, :confirmed => true, 
+      @mock_campaign = mock_model(Campaign, :visible? => true,
+                                            :editable? => true,
                                             :initiator => @campaign_user,
                                             :campaign_updates => mock('update', :build => true))
       Campaign.stub!(:find).and_return(@mock_campaign)
@@ -340,7 +365,7 @@ describe CampaignsController do
   describe 'GET #add_comment' do 
 
     before do 
-      @mock_campaign = mock_model(Campaign,  :confirmed => true)
+      @mock_campaign = mock_model(Campaign, :visible? => true, :editable? => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @mock_update = mock_model(CampaignUpdate)
       CampaignUpdate.stub!(:find).and_return(@mock_update)
@@ -379,7 +404,7 @@ describe CampaignsController do
     
     before do 
       @mock_user = mock_model(User)
-      @mock_campaign = mock_model(Campaign, :confirmed => true)
+      @mock_campaign = mock_model(Campaign, :visible? => true, :editable? => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @controller.stub!(:current_user).and_return(@mock_user)
       @mock_comment = mock_model(CampaignComment, :save => true,
@@ -431,7 +456,8 @@ describe CampaignsController do
       @mock_updates = mock('campaign updates', :build => @mock_update)
       @mock_campaign = mock_model(Campaign, :supporters => [], 
                                             :title => 'A test title',
-                                            :confirmed => true,
+                                            :visible? => true, 
+                                            :editable? => true,
                                             :add_supporter => true,
                                             :campaign_updates => @mock_updates, 
                                             :initiator => @user)
@@ -481,7 +507,8 @@ describe CampaignsController do
     before do 
       @mock_campaign = mock_model(Campaign, :supporters => [], 
                                             :title => 'A test title',
-                                            :confirmed => true,
+                                            :visible? => true, 
+                                            :editable? => true,
                                             :add_supporter => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
     end

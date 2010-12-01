@@ -6,12 +6,12 @@ class ProblemsController < ApplicationController
                                                :find_bus_route, 
                                                :find_train_route, 
                                                :find_other_route]
+  before_filter :find_visible_problem, :only => [:show, :update]
   
   def new
     location = params[:location_type].constantize.find(params[:location_id])
     @problem = Problem.new(:location => location, 
                            :reporter => current_user ? current_user : User.new, 
-                           :reporter_public => true, 
                            :reporter_name => current_user ? current_user.name : '')
     if location.respond_to? :transport_mode_id
       @problem.transport_mode_id = location.transport_mode_id
@@ -31,16 +31,9 @@ class ProblemsController < ApplicationController
   end
   
   def create
-    # fix for https://rails.lighthouseapp.com/projects/8994/tickets/4346
-    # from http://www.ruby-forum.com/topic/100815
-    if params[:problem]['time(4i)'] && ! params[:problem]['time(4i)'].blank? && 
-      params[:problem]['time(5i)'] && !params[:problem]['time(5i)'].blank?
-      params[:problem][:time] = "#{params['time(4i)']}:#{params['time(5i)']}:00"
-    end
-    (1..5).each do |num|
-      params[:problem].delete("time(#{num}i)")
-    end
+    cleanup_time_params
     @problem = Problem.new(params[:problem])
+    @problem.status = :new
     if params[:is_campaign] == "1"
       campaign = @problem.build_campaign({ :location_id => params[:problem][:location_id], 
                                            :location_type => params[:problem][:location_type],
@@ -54,9 +47,21 @@ class ProblemsController < ApplicationController
       @problem.save
       # create task assignment
       @problem.create_assignments
-      @action = t(:your_problem_will_not_be_posted)
-      @worry = t(:holding_on_to_problem)
-      render 'shared/confirmation_sent'
+      if current_user
+        @problem.confirm!
+        if @problem.campaign
+          redirect_to edit_campaign_url(@problem.campaign)
+        else
+          flash[:notice] = t(:problem_created)
+          redirect_to problem_url(@problem)
+        end
+      else
+        @problem.send_confirmation_email
+        @action = t(:your_problem_will_not_be_posted)
+        @worry = t(:holding_on_to_problem)
+        render 'shared/confirmation_sent'
+        return
+      end
     else
       map_params_from_location(@problem.location.points, find_other_locations=false)
       render :new
@@ -64,7 +69,6 @@ class ProblemsController < ApplicationController
   end
   
   def show
-    @problem = Problem.one_off.confirmed.find(params[:id])
     map_params_from_location(@problem.location.points, find_other_locations=false)
     @new_update = Update.new(:problem_id => @problem, 
                              :reporter => current_user ? current_user : User.new,
@@ -74,17 +78,37 @@ class ProblemsController < ApplicationController
   def confirm
     @problem = Problem.find_by_token(params[:email_token])
     if @problem
-      @problem.status = :confirmed
-      @problem.confirmed_at = Time.now
-      # complete the relevant assignments
-      Assignment.complete_problem_assignments(@problem, {'publish-problem' => {}})
-      data = {:organizations => @problem.organization_info(:responsible_organizations) }
-      Assignment.complete_problem_assignments(@problem, {'write-to-transport-organization' => data })
+      @problem.confirm!
       if @problem.campaign
         redirect_to edit_campaign_url(@problem.campaign, :token => params[:email_token])
       end
     else
       @error = t(:problem_not_found)
+    end
+  end
+  
+  def update
+    # just accept params for a new update for now
+    @new_update = @problem.updates.build(params[:problem][:updates])
+    @new_update.status = :new
+    if @new_update.valid? 
+      # save the user account if it doesn't exist, but don't log it in
+      @new_update.save_reporter
+      @new_update.save
+      if current_user
+        @new_update.confirm!
+        flash[:notice] = t(:thanks_for_update)
+        redirect_to problem_url(@problem)
+      else
+        @new_update.send_confirmation_email
+        @action = t(:your_update_will_not_be_posted)
+        @worry = t(:holding_on_to_update)
+        render 'shared/confirmation_sent'
+        return
+      end
+    else
+      map_params_from_location(@problem.location.points, find_other_locations=false)
+      render :show
     end
   end
   
@@ -260,23 +284,11 @@ class ProblemsController < ApplicationController
   def choose_location
   end
   
-  def update
-    @problem = Problem.find(params[:id])
-    # just accept params for a new update for now
-    @new_update = @problem.updates.build(params[:problem][:updates])
-    if @new_update.valid? 
-      # save the user account if it doesn't exist, but don't log it in
-      @new_update.save_reporter
-      @new_update.save
-      @action = t(:your_update_will_not_be_posted)
-      @worry = t(:holding_on_to_update)
-      render 'shared/confirmation_sent'
-    else
-      render :show
-    end
-  end
-  
   private 
+  
+  def find_visible_problem
+    @problem = Problem.one_off.visible.find(params[:id])
+  end
   
   def setup_from_and_to_stops(route_info)
     if route_info[:from_stops].size > 1
@@ -347,4 +359,15 @@ class ProblemsController < ApplicationController
     @sending_advice = t(advice, advice_params)
   end
   
+  def cleanup_time_params
+    # fix for https://rails.lighthouseapp.com/projects/8994/tickets/4346
+    # from http://www.ruby-forum.com/topic/100815
+    if params[:problem]['time(4i)'] && ! params[:problem]['time(4i)'].blank? && 
+      params[:problem]['time(5i)'] && !params[:problem]['time(5i)'].blank?
+      params[:problem][:time] = "#{params['time(4i)']}:#{params['time(5i)']}:00"
+    end
+    (1..5).each do |num|
+      params[:problem].delete("time(#{num}i)")
+    end
+  end
 end

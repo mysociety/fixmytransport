@@ -6,3 +6,5 @@ en:
           attributes: 
             text: 
               blank: "Please enter your update"
+            reporter_name:
+              blank: "Please enter your name"

@@ -22,8 +22,7 @@ describe ProblemMailer do
     before do
       @problem = mock_model(Problem, :subject => "My Problem", 
                                      :description => "Some description",
-                                     :reporter_name => "Problem Reporter", 
-                                     :anonymous? => false)
+                                     :reporter_name => "Problem Reporter")
       @recipient = mock_model(User, :email => "problemreporter@example.com", 
                                     :name_and_email => "Problem Reporter <problemreporter@example.com>")
       @token = "test-token"
@@ -63,7 +62,6 @@ describe ProblemMailer do
                                           :reporter_phone => '123',
                                           :reply_email => @mock_user.email,
                                           :reply_name_and_email => "Test User <#{@mock_user.email}>",
-                                          :anonymous? => false,
                                           :campaign => nil,
                                           :subject => "Missing ticket machines", 
                                           :description => "Desperately need more.",
@@ -118,7 +116,6 @@ describe ProblemMailer do
                           :reply_name_and_email => "Test User <#{@reporter.email}>",
                           :reporter_name => 'Test User', 
                           :reporter_phone => '123',
-                          :anonymous? => false, 
                           :subject => 'A test problem',
                           :description => 'Some description',
                           :reporter => @reporter,

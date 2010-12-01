@@ -74,9 +74,5 @@
       = f.label :reporter_phone, t(:phone)
       != f.text_field :reporter_phone
       %span.optional-note= "(#{t(:optional)})"
-    .checkbox
-      != f.check_box :reporter_public
-      = f.label :reporter_public, t(:ok_to_be_public)
-      .label-note= t(:never_show_email)
   .submit
     != submit_tag t(:submit)    

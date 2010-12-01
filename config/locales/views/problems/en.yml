@@ -25,8 +25,6 @@ en:
   added: added
   reported: reported
   by: "by {{name}}"
-  anonymously: "anonymously"
-  anonymous: "anonymous"
   pte_advice: "{{pte_link}} is responsible for public transport in this area."
   problem_will_be_sent: "Your problem will be sent to {{organization}}. The subject and details of your problem will be public."
   problem_will_be_sent_multiple_operators: "More than one company operates this {{location_type}}. Your problem <strong>will be sent to the operator</strong> you select below."
@@ -45,7 +43,6 @@ en:
   report_a_problem_here: Report a problem here
   report_a_problem: Report a problem
   reporting_a_problem: "{{location}}: Reporting a problem"
-  ok_to_be_public: Can we show your name publicly? 
   never_show_email: (We never show your email address or phone number)
   sent_time: "Sent to {{recipient}} {{interval}} later"
   include_journey_detail: "If your problem relates to a specific journey, please include as much detail as possible about your journey:" 
@@ -69,11 +66,11 @@ en:
   thanks_for_adding_update: You've successfully confirmed your update
   see_your_update: See your update on the site
   updates: Updates
-  posted: posted
-  update_help: "Please note that updates are not sent to the organization responsible for this {{location_type}}. If you leave your name it will be public. Your information will only be used in accordance with our {{privacy_link}}."
+  user_updates: "{{name}} added an update: "
+  update_help: "Please note that updates are not sent to the organization responsible for this {{location_type}}. Your name will be public. Your information will only be used in accordance with our {{privacy_link}}."
   privacy_policy: privacy policy
   problem_has_been_fixed: This problem has been fixed.
-  marked_as_fixed: marked as fixed
+  marked_as_fixed: and marked the problem as fixed.
   or: or
   council: council
   passenger_transport_executive: Passenger Transport Executive
@@ -83,3 +80,5 @@ en:
   holding_on_to_problem: "we'll hold on to your problem while you check your email"
   your_update_will_not_be_posted: your update will not be posted
   holding_on_to_update: "we'll hold on to your update while you check your email"
+  problem_created: Thanks! Your problem report has been created.
+  thanks_for_update: Thanks for adding an update!

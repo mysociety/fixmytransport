@@ -4,5 +4,5 @@
   .details
     =t(:added)
     %span.posted-time= t(:posted_time, :time => time_ago_in_words(problem.created_at))
-    %span.reporter= problem.anonymous? ? t(:anonymously) : t(:by, :name => problem.reporter_name)
+    %span.reporter= t(:by, :name => problem.reporter_name)
   %p.problem= problem.description
