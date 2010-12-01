@@ -176,7 +176,7 @@ namespace :nptdr do
           nearest_stop = Stop.find_nearest(stop_info[:easting], stop_info[:northing])
           locality = nearest_stop.locality
         end
-        if route_stops[code] and stop_info[:easting] != '-1.0' and !stop_info[:name].blank? and !stop_info[:name].strip == '-'
+        if route_stops[code] and stop_info[:easting] != '-1.0' and !stop_info[:name].blank? and stop_info[:name].strip != '-'
           route_numbers = route_stops[code][:route_numbers]
           route_types = route_numbers.map{ |route_number| route_number.split(' ').first }.uniq
           stop_type = nil
