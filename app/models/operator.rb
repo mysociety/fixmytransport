@@ -53,9 +53,9 @@ class Operator < ActiveRecord::Base
                                                 AND noccode = ?", vehicle_modes, "=#{code}"])
       end
       #  There's a missing trailing number from Welsh codes ending in '00' in 2009 NPTDR
-      if /[A-Z][A-Z]00/.match(operator_code) and vehicle_code == 'B'
+      if /[A-Z][A-Z]00/.match(code) and vehicle_code == 'B'
         # find any code in the region that consists of the truncated code plus one other character
-        code_with_wildcard = "#{truncated_code}_"
+        code_with_wildcard = "#{code}_"
         operators = find(:all, :conditions => ["vehicle_mode in (?)
                                                 operator_codes.code like ?
                                                 AND region_id = ?", 
