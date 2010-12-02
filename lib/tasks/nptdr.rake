@@ -132,6 +132,10 @@ namespace :nptdr do
       files.each do |file|
         puts "Loading routes from #{file}"
         parser.parse_routes(file) do |route| 
+          # don't save ambiguous operators
+          if route.route_operators.size > 1
+            route.route_operators.clear
+          end
           route.class.add!(route, verbose=true)
         end
       end
