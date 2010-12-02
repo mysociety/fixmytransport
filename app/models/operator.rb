@@ -57,7 +57,7 @@ class Operator < ActiveRecord::Base
         # find any code in the region that consists of the truncated code plus one other character
         code_with_wildcard = "#{code}_"
         operators = find(:all, :conditions => ["vehicle_mode in (?)
-                                                operator_codes.code like ?
+                                                AND operator_codes.code like ?
                                                 AND region_id = ?", 
                                                 vehicle_modes, code_with_wildcard, region])
       end
