@@ -18,7 +18,8 @@ describe Parsers::NptdrParser do
       @operator_code = mock_model(OperatorCode, :operator => @operator)
       OperatorCode.stub!(:find_all_by_code_and_region_id).and_return([@operator_code])
       @stop = mock_model(Stop, :atco_code => 'xxxxx')
-      Stop.stub!(:find_by_atco_code).and_return{ |atco_code, options| mock_model(Stop, :atco_code => atco_code)}
+      Stop.stub!(:find_by_code).and_return{ |atco_code, options| mock_model(Stop, :atco_code => atco_code, 
+                                                                                  :other_code => nil)}
       @parser = Parsers::NptdrParser.new
       @routes = []
       @parser.parse_routes(example_file("routes.tsv")){ |route| @routes << route }

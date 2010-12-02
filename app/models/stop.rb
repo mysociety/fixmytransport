@@ -54,6 +54,8 @@ class Stop < ActiveRecord::Base
   has_many :routes_as_to_stop, :through => :route_segments_as_to_stop, :source => 'route'
   belongs_to :locality
   validates_presence_of :locality_id, :lon, :lat, :if => :loaded?
+  validates_uniqueness_of :atco_code, :allow_nil => true
+  validates_uniqueness_of :other_code, :allow_nil => true
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
   has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality
@@ -227,6 +229,13 @@ class Stop < ActiveRecord::Base
   def self.find_by_atco_code(atco_code, options={})
     includes = options[:includes] or {}
     find(:first, :conditions => ["lower(atco_code) = ?", atco_code.downcase], :include => includes)
+  end
+  
+  def self.find_by_code(code, options={})
+    includes = options[:includes] or {}
+    atco_match = self.find_by_atco_code(code)
+    return atco_match if atco_match
+    find(:first, :conditions => ["lower(other_code) = ?"])
   end
   
   def self.match_old_stop(stop)

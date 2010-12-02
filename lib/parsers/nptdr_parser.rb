@@ -194,8 +194,8 @@ class Parsers::NptdrParser
       end
       stop_codes.each_cons(2) do |from_stop_code,to_stop_code|
         options = {:includes => {:stop_area_memberships => :stop_area}}
-        from_stop = Stop.find_by_atco_code(from_stop_code.strip, options)
-        to_stop = Stop.find_by_atco_code(to_stop_code.strip, options)
+        from_stop = Stop.find_by_code(from_stop_code.strip, options)
+        to_stop = Stop.find_by_code(to_stop_code.strip, options)
         if ! from_stop
           if ! missing_stops[from_stop_code]
             missing_stops[from_stop_code] = []
@@ -218,12 +218,12 @@ class Parsers::NptdrParser
           # puts "Can't find stop #{to_stop_code} for route #{route.inspect}"
           next
         end
-        if from_stop.atco_code == stop_codes.first 
+        if (from_stop.atco_code == stop_codes.first) or (from_stop.other_code == stop_codes.first) 
           from_terminus = true
         else
           from_terminus = false
         end
-        if to_stop.atco_code == stop_codes.last
+        if (to_stop.atco_code == stop_codes.last) or (to_stop.other_code == stop_codes.last)
           to_terminus = true
         else
           to_terminus = false
