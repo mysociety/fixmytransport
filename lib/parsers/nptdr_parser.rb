@@ -162,6 +162,7 @@ class Parsers::NptdrParser
     csv_data = File.read(filepath)
     admin_area = self.admin_area_from_filepath(filepath)
     region = self.region_from_filepath(filepath)
+    wales_region = Region.find_by_name('Wales')
     missing_stops = {}
     FasterCSV.parse(csv_data, csv_options) do |row|
       route_number = row['Route Number']
@@ -178,11 +179,13 @@ class Parsers::NptdrParser
                              :transport_mode => transport_mode,
                              :operator_code => operator_code,
                              :source_admin_area => admin_area)         
-      # If the code is unambiguous for the region, add the operator
+
+      # add the operators for the region
       operator_codes = OperatorCode.find_all_by_code_and_region_id(operator_code, region)
       operator_codes.each do |op_code|
         route.route_operators.build({:operator => op_code.operator})
       end
+
       if operator_codes.size == 0
         # Is it an ATOC train code? 
         if transport_mode.name == 'Train' and operator_code.size == 2
@@ -191,7 +194,23 @@ class Parsers::NptdrParser
             route.route_operators.build({:operator => oper})
           end
         end
+        #  There's a missing trailing number from Welsh codes ending in '00' in 2009 NPTDR
+        if /[A-Z][A-Z]00/.match(operator_code) 
+          operator_codes = OperatorCode.find_all_by_truncated_code_and_region_id(operator_code, wales_region)
+          operator_codes.each do |op_code|
+            route.route_operators.build({:operator => op_code.operator})
+          end
+        end
       end
+      
+      # if no operators, add any operators with this code
+      if operator_codes.size == 0
+        operator_codes = OperatorCode.find_all_by_code(operator_code)
+        operator_codes.each do |op_code|
+          route.route_operators.build({:operator => op_code.operator})
+        end
+      end
+      
       stop_codes.each_cons(2) do |from_stop_code,to_stop_code|
         options = {:includes => {:stop_area_memberships => :stop_area}}
         from_stop = Stop.find_by_code(from_stop_code.strip, options)

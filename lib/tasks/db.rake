@@ -15,14 +15,14 @@ namespace :db do
     ENV['DIR'] = MySociety::Config.get('NAPTAN_DIR', '')
     Rake::Task['naptan:load:all'].execute
     Rake::Task['naptan:geo:convert_stop_areas'].execute
+
+    # Load Operators
+    ENV['FILE'] = File.join(MySociety::Config.get('NOC_DIR', ''), 'NOC_DB_31-03-2010.csv')
+    Rake::Task['noc:load:operators'].execute
     
     # Load Routes
     ENV['DIR'] = File.join(MySociety::Config.get('NPTDR_DERIVED_DIR', ''), 'routes')
     Rake::Task['nptdr:load:routes'].execute
-    
-    # Load Operators
-    ENV['FILE'] = File.join(MySociety::Config.get('NPTDR_DERIVED_DIR', ''), 'Operators.tsv.unique')
-    Rake::Task['nptdr:load:operators'].execute
     
     # Delete stop areas without stops, add locality, other references 
     Rake::Task['naptan:post_load:delete_unpopulated_stop_areas'].execute

@@ -26,7 +26,8 @@ class Parsers::NocParser
       
       region_codes = { "WA" => "W", 
                        "YO" => "Y", 
-                       "SC" => "S" }
+                       "SC" => "S", 
+                       "LO" => "L" }
       operator = Operator.new(:noc_code => row['NOCCODE'], 
                               :name => row['OperatorPublicName'], 
                               :reference_name => row['OperatorReferenceName '], 
@@ -50,6 +51,7 @@ class Parsers::NocParser
         mdv_code = row['MDV']
         owner_region_code = row['TravelineOwner'].strip
         if ['EA', 'EM', 'SE', 'LO'].include?(owner_region_code)
+          owner_region_code = (region_codes[owner_region_code] or owner_region_code)
           region = Region.find_by_code(owner_region_code)
           raise "Couldn't find region for Traveline Owner #{owner_region_code}" unless region
           operator.operator_codes.build(:code => clean_operator_code(mdv_code),
