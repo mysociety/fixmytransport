@@ -105,16 +105,19 @@ describe Route do
   
     it 'should include routes with the same number and one stop in common with the new route' do 
       route = Route.new(:number => '807', 
-                        :transport_mode => transport_modes(:bus))
-      route.route_operators.build(:operator => operators(:a_bus_company))
+                        :transport_mode => transport_modes(:bus),
+                        :operator_code => 'BUS')
       new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
-      route.route_segments.build(:from_stop => stops(:arch_ne), :to_stop => new_stop, :from_terminus => true)
+      route.route_segments.build(:from_stop => stops(:arch_ne), 
+                                 :to_stop => new_stop, 
+                                 :from_terminus => true)
       Route.find_existing_routes(route).should include(routes(:number_807_bus))
     end
     
-    it 'should include routes with the same number, no stops in common, but one stop area in common with the new route and the same operator' do
-      route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
-      route.route_operators.build(:operator => operators(:a_bus_company))
+    it 'should include routes with the same number, no stops in common, but one stop area in common with the new route and the same operator code' do
+      route = Route.new(:number => '807', 
+                        :transport_mode => transport_modes(:bus), 
+                        :operator_code => 'BUS')
       new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
       route.route_segments.build(:from_stop => stops(:arch_sw), 
                                  :to_stop => new_stop,
@@ -140,7 +143,7 @@ describe Route do
     fixtures default_fixtures
     
     before do 
-      @route = Route.new(:transport_mode => transport_modes(:train))
+      @route = Route.new(:transport_mode => transport_modes(:train), :operator_code => 'TRAIN')
       @route.route_operators.build(:operator => operators(:a_train_company))
       @existing_route = routes(:victoria_to_haywards_heath)
       @terminus_segments = @existing_route.route_segments.select do |segment| 

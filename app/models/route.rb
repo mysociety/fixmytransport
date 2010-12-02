@@ -265,13 +265,13 @@ class Route < ActiveRecord::Base
   
   # Return routes with this number and transport mode that have a stop or stop area in common with 
   # the route given
-  def self.find_all_by_number_and_common_stop(new_route, operator_id)
+  def self.find_all_by_number_and_common_stop(new_route)
     stop_codes = new_route.stop_codes
     stop_area_codes = new_route.stop_area_codes
     routes = Route.find(:all, :conditions => ['number = ? 
-                                         and transport_mode_id = ? 
-                                         and route_operators.operator_id = ?', 
-                                         new_route.number, new_route.transport_mode.id, operator_id],
+                                               and transport_mode_id = ? 
+                                               and operator_code = ?', 
+                                              new_route.number, new_route.transport_mode.id, new_route.operator_code],
                         :include => [{ :route_segments => [:from_stop, :to_stop] }, :route_operators])
     routes_with_same_stops = []
     routes.each do |route|
@@ -342,8 +342,7 @@ class Route < ActiveRecord::Base
   end
   
   def self.find_existing_routes(new_route)
-    operator_id = new_route.route_operators.first.operator.id
-    find_all_by_number_and_common_stop(new_route, operator_id)
+    find_all_by_number_and_common_stop(new_route)
   end
   
   
@@ -397,14 +396,14 @@ class Route < ActiveRecord::Base
   # Return train routes by the same operator that pass through the terminuses of this route, or
   # that have terminuses that this route passes through
   def Route.find_existing_train_routes(new_route)
-    operator_id = new_route.route_operators.first.operator.id
+    operator_code = new_route.operator_code
     terminuses = new_route.terminuses
     stops_or_stations = new_route.stops_or_stations
     routes = []
     possible_routes = Route.find(:all, 
-                                 :conditions => [ 'route_operators.operator_id = ?
+                                 :conditions => [ 'operator_code = ?
                                                    and transport_mode_id = ?', 
-                                                   operator_id, new_route.transport_mode_id],
+                                                   operator_code, new_route.transport_mode_id],
                                  :include => [:route_operators, {:route_segments => [:from_stop_area, :to_stop_area]}])                                    
     possible_routes.each do |route|
       if route.terminuses.all?{ |terminus| stops_or_stations.include? terminus } 
