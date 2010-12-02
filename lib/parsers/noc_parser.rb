@@ -46,19 +46,6 @@ class Parsers::NocParser
         end
       end
       
-      # Four regions (EA, EM, SE, LO) use the MDV system
-      if !row['MDV'].blank?
-        mdv_code = row['MDV']
-        owner_region_code = row['TravelineOwner'].strip
-        if ['EA', 'EM', 'SE', 'LO'].include?(owner_region_code)
-          owner_region_code = (region_codes[owner_region_code] or owner_region_code)
-          region = Region.find_by_code(owner_region_code)
-          raise "Couldn't find region for Traveline Owner #{owner_region_code}" unless region
-          operator.operator_codes.build(:code => clean_operator_code(mdv_code),
-                                        :region => region)
-        end
-      end
-      
       
       (1..8).each do |num|
         license_field = "VOSALicenceNo#{num}"

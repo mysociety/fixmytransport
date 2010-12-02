@@ -71,11 +71,6 @@ describe Parsers::NocParser do
       @operators.first.operator_codes.first.region.name.should == 'West Midlands'
       @operators.first.operator_codes.first.code.should == 'AMG'
     end
-    
-    it 'should create an operator_code model for the MDV field, if populated, with the region being the traveline owner' do 
-      @operators.first.operator_codes.second.region.name.should == 'East Midlands'
-      @operators.first.operator_codes.second.code.should == 'AMF'
-    end
      
   end
 
