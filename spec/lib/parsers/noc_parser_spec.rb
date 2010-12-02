@@ -10,8 +10,10 @@ describe Parsers::NocParser do
     
     before(:each) do 
       @parser = Parsers::NocParser.new
-      mock_region = mock_model(Region, :name => 'West Midlands')
-      Region.stub!(:find_by_code).with('WM').and_return(mock_region)
+      mock_wm_region = mock_model(Region, :name => 'West Midlands')
+      mock_em_region = mock_model(Region, :name => 'East Midlands')
+      Region.stub!(:find_by_code).with('WM').and_return(mock_wm_region)
+      Region.stub!(:find_by_code).with('EM').and_return(mock_em_region)
       @operators = []
       @parser.parse_operators(example_file("operators.tsv")){ |operator| @operators << operator }
     end
@@ -50,9 +52,13 @@ describe Parsers::NocParser do
     end
     
     it 'should create operator_code models for each populated region code field' do 
-      @operators.first.operator_codes.size.should == 1
       @operators.first.operator_codes.first.region.name.should == 'West Midlands'
       @operators.first.operator_codes.first.code.should == 'AMG'
+    end
+    
+    it 'should create an operator_code model for the MDV field, if populated, with the region being the traveline owner' do 
+      @operators.first.operator_codes.second.region.name.should == 'East Midlands'
+      @operators.first.operator_codes.second.code.should == 'AMF'
     end
      
   end
