@@ -21,7 +21,7 @@ class Route < ActiveRecord::Base
   
   has_many :route_sub_routes
   has_many :sub_routes, :through => :route_sub_routes
-  has_many :route_operators, :dependent => :destroy
+  has_many :route_operators, :dependent => :destroy, :uniq => true
   has_many :operators, :through => :route_operators, :uniq => true
   has_many :route_segments, :dependent => :destroy, :order => 'id asc'
   has_many :from_stops, :through => :route_segments, :class_name => 'Stop' 

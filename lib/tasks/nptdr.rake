@@ -94,6 +94,7 @@ namespace :nptdr do
                     route_list.join(", ")]
           operators_outfile.write(values.join("\t") + "\n")
         end
+        operators.outfile.flush
         puts "Missing stops"
         missing_stops.each do |stop_code, route_list|
           values = [admin_area.region.name, 
@@ -102,6 +103,7 @@ namespace :nptdr do
                     route_list.join(", ")]
           stops_outfile.write(values.join("\t") + "\n")
         end
+        stops_outfile.flush
       end
       operators_outfile.close
       stops_outfile.close
