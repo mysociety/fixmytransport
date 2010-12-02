@@ -51,7 +51,7 @@ class Operator < ActiveRecord::Base
     if operators.empty?
       if vehicle_code == 'T'
         operators = find(:all, :conditions => ["vehicle_mode in (?)
-                                                AND noccode = ?", vehicle_modes, "=#{code}"])
+                                                AND noc_code = ?", vehicle_modes, "=#{code}"])
       end
       #  There's a missing trailing number from Welsh codes ending in '00' in 2009 NPTDR
       if /[A-Z][A-Z]00/.match(code) and vehicle_code == 'B'
