@@ -41,7 +41,7 @@ class Operator < ActiveRecord::Base
   end
   
   def self.find_all_by_nptdr_code(vehicle_code, code, region)
-    vehicle_modes = vehicle_codes_to_noc_vehicle_modes(vehicle_code)
+    vehicle_modes, similar_vehicle_modes = vehicle_codes_to_noc_vehicle_modes(vehicle_code)
     operators = find(:all, :include => :operator_codes, 
                            :conditions => ['vehicle_mode in (?) 
                                             AND operator_codes.code = ?
@@ -72,17 +72,26 @@ class Operator < ActiveRecord::Base
                                               vehicle_modes, code],
                              :include => :operator_codes)
     end
+    if operators.empty? 
+      # look for the code in the region with a similar vehicle mode
+      operators = find(:all, :conditions => ["vehicle_mode in (?)
+                                              AND operator_codes.code = ?
+                                              AND region_id = ?", 
+                                              similar_vehicle_modes, code, region], 
+                             :include => :operator_codes)
+    end
+    
     operators
   end
   
   # mapping from NPTDR vehicle codes to NOC vehicle modes 
   def self.vehicle_codes_to_noc_vehicle_modes(vehicle_code)
-    codes_to_modes = { 'T' => ['Rail'], 
-                       'B' => ['Bus'], 
-                       'C' => ['Coach'], 
-                       'M' => ['Metro', 'Underground', 'Tram'], 
-                       'A' => ['Air'], 
-                       'F' => ['Ferry'] }
+    codes_to_modes = { 'T' => [['Rail'], []], 
+                       'B' => [['Bus'], ['Coach', 'DRT']], 
+                       'C' => [['Coach'], ['Bus', 'DRT']], 
+                       'M' => [['Metro', 'Underground', 'Tram'], []], 
+                       'A' => [['Air'], []], 
+                       'F' => [['Ferry'], []]}
     vehicle_mode_list = codes_to_modes[vehicle_code]
   end
   
