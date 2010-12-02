@@ -227,11 +227,13 @@ class Stop < ActiveRecord::Base
   end
   
   def self.find_by_atco_code(atco_code, options={})
+    return nil if atco_code.blank?
     includes = options[:includes] or {}
     find(:first, :conditions => ["lower(atco_code) = ?", atco_code.downcase], :include => includes)
   end
   
   def self.find_by_code(code, options={})
+    return nil if code.blank?
     includes = options[:includes] or {}
     atco_match = self.find_by_atco_code(code)
     return atco_match if atco_match

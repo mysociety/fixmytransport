@@ -93,6 +93,20 @@ describe Stop do
       Stop.find_by_atco_code('9100VICTric').should == stops(:victoria_station_one)
     end
     
+    it 'should return nil if the code passed is blank' do 
+      Stop.stub!(:find).and_return(mock_model(Stop))
+      Stop.find_by_atco_code('').should be_nil
+    end
+    
+  end
+  
+  describe 'when finding by code' do 
+  
+    it 'should return nil if the code passed is blank' do 
+      Stop.stub!(:find).and_return(mock_model(Stop))
+      Stop.find_by_code('').should be_nil
+    end
+    
   end
   
   describe 'when finding by name and coordinates' do 
