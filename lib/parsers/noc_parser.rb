@@ -15,7 +15,7 @@ class Parsers::NocParser
   end
 
   def clean_operator_code(code)
-    code = code.gsub(Regexp.new('/*|=/'), '') 
+    code = code.gsub(/\*|=/, '') 
     code
   end
 

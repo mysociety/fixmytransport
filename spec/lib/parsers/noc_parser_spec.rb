@@ -6,6 +6,22 @@ describe Parsers::NocParser do
     File.join(RAILS_ROOT, 'spec', 'examples', 'NOC', filename)
   end
   
+  describe 'when cleaning operator codes' do 
+  
+    before do 
+      @parser = Parsers::NocParser.new
+    end
+    
+    it 'should remove a leading "*"' do 
+      @parser.clean_operator_code("*NX").should == 'NX'
+    end
+    
+    it 'should remove a leading "="' do 
+      @parser.clean_operator_code("=MW").should == 'MW'
+    end
+  
+  end
+  
   describe 'when parsing an example CSV file of stop area data' do 
     
     before(:each) do 

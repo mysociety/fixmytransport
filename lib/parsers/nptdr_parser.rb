@@ -158,7 +158,6 @@ class Parsers::NptdrParser
     csv_data = File.read(filepath)
     admin_area = self.admin_area_from_filepath(filepath)
     region = self.region_from_filepath(filepath)
-    wales_region = Region.find_by_name('Wales')
     missing_stops = {}
     transport_modes_to_vehicle_modes = {'Train', 
                                         ''}
