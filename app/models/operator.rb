@@ -42,10 +42,11 @@ class Operator < ActiveRecord::Base
   
   def self.find_all_by_nptdr_code(vehicle_code, code, region)
     vehicle_modes = vehicle_codes_to_noc_vehicle_modes(vehicle_code)
-    operators = find(:all, :include => :operator_codes, :conditions => ['vehicle_mode in (?) 
-                                                                         AND operator_codes.code = ?
-                                                                         AND operator_codes.region_id = ?', 
-                                                                         vehicle_modes, code, region])
+    operators = find(:all, :include => :operator_codes, 
+                           :conditions => ['vehicle_mode in (?) 
+                                            AND operator_codes.code = ?
+                                            AND operator_codes.region_id = ?', 
+                                            vehicle_modes, code, region])
     # try specific lookups
     if operators.empty?
       if vehicle_code == 'T'
@@ -59,7 +60,8 @@ class Operator < ActiveRecord::Base
         operators = find(:all, :conditions => ["vehicle_mode in (?)
                                                 AND operator_codes.code like ?
                                                 AND region_id = ?", 
-                                                vehicle_modes, code_with_wildcard, region])
+                                                vehicle_modes, code_with_wildcard, region],
+                               :include => :operator_codes)
       end
     end 
     
@@ -67,7 +69,8 @@ class Operator < ActiveRecord::Base
       # if no operators, add any operators with this code with the right vehicle mode    
       operators = find(:all, :conditions => ["vehicle_mode in (?)
                                               AND operator_codes.code = ?", 
-                                              vehicle_modes, code])
+                                              vehicle_modes, code],
+                             :include => :operator_codes)
     end
     operators
   end
