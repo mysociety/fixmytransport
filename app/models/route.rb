@@ -489,7 +489,7 @@ class Route < ActiveRecord::Base
       end
     end
     original.unset_terminuses(non_terminuses)
-    duplicate.destroy
+    duplicate.destroy unless duplicate.new_record?
     original.save!
   end
 
