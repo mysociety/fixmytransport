@@ -60,7 +60,7 @@ class Operator < ActiveRecord::Base
         operators = find(:all, :conditions => ["vehicle_mode in (?)
                                                 AND operator_codes.code like ?
                                                 AND region_id = ?", 
-                                                vehicle_modes, code_with_wildcard, region],
+                                                vehicle_modes, code_with_wildcard, Region.find_by_name('Wales')],
                                :include => :operator_codes)
       end
     end 
