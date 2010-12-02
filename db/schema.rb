@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101201131411) do
+ActiveRecord::Schema.define(:version => 20101202130852) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -326,6 +326,16 @@ ActiveRecord::Schema.define(:version => 20101201131411) do
   add_index "route_segments", ["to_stop_area_id"], :name => "index_route_segments_on_to_stop_area_id"
   add_index "route_segments", ["to_stop_id"], :name => "index_route_segments_on_to_stop_id"
 
+  create_table "route_source_admin_areas", :force => true do |t|
+    t.integer  "route_id"
+    t.integer  "source_admin_area_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "route_source_admin_areas", ["route_id"], :name => "index_route_source_admin_areas_on_route_id"
+  add_index "route_source_admin_areas", ["source_admin_area_id"], :name => "index_route_source_admin_areas_on_source_admin_area_id"
+  
   create_table "route_sub_routes", :force => true do |t|
     t.integer  "route_id"
     t.integer  "sub_route_id"
@@ -347,7 +357,6 @@ ActiveRecord::Schema.define(:version => 20101201131411) do
     t.float    "lat"
     t.float    "lon"
     t.text     "cached_description"
-    t.integer  "source_admin_area_id"
   end
 
   add_index "routes", ["cached_slug"], :name => "index_routes_on_cached_slug"

@@ -267,6 +267,18 @@ describe Route do
       existing_route.route_operators.size.should == 2
     end 
     
+    it 'should transfer route source admin area associations when merging overlapping routes' do 
+      existing_route = routes(:victoria_to_haywards_heath)
+      existing_route.route_source_admin_areas.size.should == 0
+      Route.stub!(:find_existing).and_return([existing_route])
+      route_source_admin_area = RouteSourceAdminArea.new(:source_admin_area => AdminArea.new(:name => 'Kently'))
+      route = Route.new(:transport_mode_id => 5, 
+                        :number => '43', 
+                        :route_source_admin_areas => [route_source_admin_area])
+      Route.add!(route)
+      existing_route.route_source_admin_areas.size.should == 1
+    end
+    
     it 'should not add duplicate route operator associations when merging overlapping routes' do 
       existing_route = routes(:victoria_to_haywards_heath)
       existing_operator = existing_route.operators.first

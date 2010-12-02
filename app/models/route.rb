@@ -32,7 +32,8 @@ class Route < ActiveRecord::Base
   has_many :route_localities, :dependent => :destroy
   has_many :localities, :through => :route_localities
   belongs_to :region
-  belongs_to :source_admin_area, :class_name => 'AdminArea'
+  has_many :route_source_admin_areas
+  has_many :source_admin_areas, :through => :route_source_admin_areas, :class_name => 'AdminArea'
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   accepts_nested_attributes_for :route_segments, :allow_destroy => true, :reject_if => :route_segment_invalid
   validates_presence_of :number, :transport_mode_id
@@ -461,6 +462,11 @@ class Route < ActiveRecord::Base
     duplicate.route_operators.each do |route_operator|
       if ! original.route_operators.detect { |existing| existing.operator == route_operator.operator }
         original.route_operators.build(:operator => route_operator.operator)
+      end
+    end
+    duplicate.route_source_admin_areas.each do |route_source_admin_area|
+      if ! original.route_source_admin_areas.detect{ |existing| existing.source_admin_area == route_source_admin_area.source_admin_area }
+        original.route_source_admin_areas.build(:source_admin_area => route_source_admin_area.source_admin_area)
       end
     end
     non_terminuses = []
