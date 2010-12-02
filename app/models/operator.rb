@@ -66,7 +66,7 @@ class Operator < ActiveRecord::Base
     if operators.empty?
       # if no operators, add any operators with this code with the right vehicle mode    
       operators = find(:all, :conditions => ["vehicle_mode in (?)
-                                              operator_codes.code = ?", 
+                                              AND operator_codes.code = ?", 
                                               vehicle_modes, code])
     end
     operators
