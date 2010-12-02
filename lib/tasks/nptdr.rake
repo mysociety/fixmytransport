@@ -90,7 +90,7 @@ namespace :nptdr do
           values = [admin_area.region.name, 
                     admin_area.name, 
                     code, 
-                    "ambiguous in region",
+                    "ambiguous",
                     route_list.join(", ")]
           operators_outfile.write(values.join("\t") + "\n")
         end

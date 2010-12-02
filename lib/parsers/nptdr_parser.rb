@@ -18,23 +18,19 @@ class Parsers::NptdrParser
   end
   
   def vehicle_codes_to_transport_modes(vehicle_code)
-    if vehicle_code == 'T'
-      transport_mode_name = 'Train'
-    elsif vehicle_code == 'B'
-      transport_mode_name = 'Bus'
-    elsif vehicle_code == 'C'
-      transport_mode_name = 'Coach'
-    elsif vehicle_code == 'M'
-      transport_mode_name = 'Tram/Metro'
-    elsif vehicle_code == 'A'
-      transport_mode_name = 'Air'
-    elsif vehicle_code == 'F'
-      transport_mode_name = 'Ferry'
-    else
+    codes_to_modes = {'T' => 'Train', 
+                      'B' => 'Bus', 
+                      'C' => 'Coach', 
+                      'M' => 'Tram/Metro', 
+                      'A' => 'Air', 
+                      'F' => 'Ferry'}
+    transport_mode_name = codes_to_modes[vehicle_code]
+    if ! transport_mode_name
       raise "Unknown vehicle code '#{vehicle_code}'"
     end
     return TransportMode.find_by_name(transport_mode_name)
   end
+
   
   # existing_operator and new_operator are arrays of [short_name, legal_name]
   # can merge if they have the same non-blank shortname and one has a blank
@@ -164,6 +160,9 @@ class Parsers::NptdrParser
     region = self.region_from_filepath(filepath)
     wales_region = Region.find_by_name('Wales')
     missing_stops = {}
+    transport_modes_to_vehicle_modes = {'Train', 
+                                        ''}
+    
     FasterCSV.parse(csv_data, csv_options) do |row|
       route_number = row['Route Number']
       vehicle_code = row['Vehicle Code']
@@ -179,37 +178,12 @@ class Parsers::NptdrParser
                              :transport_mode => transport_mode,
                              :operator_code => operator_code)         
       route.route_source_admin_areas.build({:source_admin_area => admin_area })
-      # add the operators for the region
-      operator_codes = OperatorCode.find_all_by_code_and_region_id(operator_code, region)
-      operator_codes.each do |op_code|
-        route.route_operators.build({:operator => op_code.operator})
+      
+      operators = Operator.find_all_by_nptdr_code(vehicle_code, operator_code, region)
+      operators.each do |operator|
+        route.route_operators.build({ :operator => operator })
       end
 
-      if operator_codes.size == 0
-        # Is it an ATOC train code? 
-        if transport_mode.name == 'Train' and operator_code.size == 2
-          operators = Operator.find_all_by_noc_code("=#{operator_code}")
-          operators.each do |oper|
-            route.route_operators.build({:operator => oper})
-          end
-        end
-        #  There's a missing trailing number from Welsh codes ending in '00' in 2009 NPTDR
-        if /[A-Z][A-Z]00/.match(operator_code) 
-          operator_codes = OperatorCode.find_all_by_truncated_code_and_region_id(operator_code, wales_region)
-          operator_codes.each do |op_code|
-            route.route_operators.build({:operator => op_code.operator})
-          end
-        end
-      end
-      
-      # if no operators, add any operators with this code
-      if operator_codes.size == 0
-        operator_codes = OperatorCode.find_all_by_code(operator_code)
-        operator_codes.each do |op_code|
-          route.route_operators.build({:operator => op_code.operator})
-        end
-      end
-      
       stop_codes.each_cons(2) do |from_stop_code,to_stop_code|
         options = {:includes => {:stop_area_memberships => :stop_area}}
         from_stop = Stop.find_by_code(from_stop_code.strip, options)

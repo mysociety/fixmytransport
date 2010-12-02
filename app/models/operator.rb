@@ -40,6 +40,49 @@ class Operator < ActiveRecord::Base
     !email.blank?
   end
   
+  def self.find_all_by_nptdr_code(vehicle_code, code, region)
+    vehicle_modes = vehicle_codes_to_noc_vehicle_modes(vehicle_code)
+    operators = find(:all, :include => :operator_codes, :conditions => ['vehicle_mode in (?) 
+                                                                         AND operator_codes.code = ?
+                                                                         AND operator_codes.region_id = ?', 
+                                                                         vehicle_modes, code, region])
+    # try specific lookups
+    if operators.empty?
+      if vehicle_code == 'T'
+        operators = find(:all, :conditions => ["vehicle_mode in (?)
+                                                AND noccode = ?", vehicle_modes, "=#{code}"])
+      end
+      #  There's a missing trailing number from Welsh codes ending in '00' in 2009 NPTDR
+      if /[A-Z][A-Z]00/.match(operator_code) and vehicle_code == 'B'
+        # find any code in the region that consists of the truncated code plus one other character
+        code_with_wildcard = "#{truncated_code}_"
+        operators = find(:all, :conditions => ["vehicle_mode in (?)
+                                                operator_codes.code like ?
+                                                AND region_id = ?", 
+                                                vehicle_modes, code_with_wildcard, region])
+      end
+    end 
+    
+    if operators.empty?
+      # if no operators, add any operators with this code with the right vehicle mode    
+      operators = find(:all, :conditions => ["vehicle_mode in (?)
+                                              operator_codes.code = ?", 
+                                              vehicle_modes, code])
+    end
+    operators
+  end
+  
+  # mapping from NPTDR vehicle codes to NOC vehicle modes 
+  def self.vehicle_codes_to_noc_vehicle_modes(vehicle_code)
+    codes_to_modes = { 'T' => ['Rail'], 
+                       'B' => ['Bus'], 
+                       'C' => ['Coach'], 
+                       'M' => ['Metro', 'Underground', 'Tram'], 
+                       'A' => ['Air'], 
+                       'F' => ['Ferry'] }
+    vehicle_mode_list = codes_to_modes[vehicle_code]
+  end
+  
   # merge operator records to merge_to, transferring associations
   def self.merge!(merge_to, operators)
     transaction do

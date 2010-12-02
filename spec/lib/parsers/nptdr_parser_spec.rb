@@ -17,12 +17,7 @@ describe Parsers::NptdrParser do
       Region.stub!(:find_by_name).with('Wales').and_return(@welsh_region)
       AdminArea.stub!(:find_by_atco_code).and_return(@admin_area)
       @operator = mock_model(Operator, :name => 'A Test Operator')
-      @another_operator = mock_model(Operator, :name => 'Another Operator')
-      @operator_code = mock_model(OperatorCode, :operator => @operator)
-      @corrected_operator_code = mock_model(OperatorCode, :operator => @another_operator)
-      OperatorCode.stub!(:find_all_by_code_and_region_id).with('BL', @region).and_return([@operator_code])
-      OperatorCode.stub!(:find_all_by_code_and_region_id).with("BL00", @region).and_return([])
-      OperatorCode.stub!(:find_all_by_truncated_code_and_region_id).with("BL00", @welsh_region).and_return([@corrected_operator_code])
+      Operator.stub!(:find_all_by_nptdr_code).and_return([@operator])
       @stop = mock_model(Stop, :atco_code => 'xxxxx')
       Stop.stub!(:find_by_code).and_return{ |atco_code, options| mock_model(Stop, :atco_code => atco_code, 
                                                                                   :other_code => nil)}
@@ -30,7 +25,6 @@ describe Parsers::NptdrParser do
       @routes = []
       @parser.parse_routes(example_file("routes.tsv")){ |route| @routes << route }
       @route = @routes.first
-      @third_route = @routes.third
     end
     
     it 'should extract the route number' do 
@@ -55,10 +49,6 @@ describe Parsers::NptdrParser do
       @route.route_segments.last.to_terminus?.should be_true
       @route.route_segments.first.to_terminus?.should be_false
       @route.route_segments.last.from_terminus?.should be_false
-    end
-    
-    it 'should correct a truncated code of the format BL00' do 
-      @third_route.route_operators.first.operator.should == @another_operator
     end
     
   end
