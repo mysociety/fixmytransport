@@ -237,7 +237,7 @@ class Stop < ActiveRecord::Base
     includes = options[:includes] or {}
     atco_match = self.find_by_atco_code(code)
     return atco_match if atco_match
-    find(:first, :conditions => ["lower(other_code) = ?"])
+    find(:first, :conditions => ["lower(other_code) = ?", code.downcase], :include => includes)
   end
   
   def self.match_old_stop(stop)
