@@ -101,7 +101,7 @@ class Route < ActiveRecord::Base
       route_stop_list = terminuses
     end
     areas = route_stop_list.map do |stop| 
-      continue if ! stop.locality
+      next if ! stop.locality
       if stop.locality.parents.empty?
         stop.locality.name
       else
