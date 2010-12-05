@@ -20,7 +20,8 @@ describe Parsers::NptdrParser do
       Operator.stub!(:find_all_by_nptdr_code).and_return([@operator])
       @stop = mock_model(Stop, :atco_code => 'xxxxx')
       Stop.stub!(:find_by_code).and_return{ |atco_code, options| mock_model(Stop, :atco_code => atco_code, 
-                                                                                  :other_code => nil)}
+                                                                                  :other_code => nil,
+                                                                                  :stop_type => 'BCS')}
       @parser = Parsers::NptdrParser.new
       @routes = []
       @parser.parse_routes(example_file("routes.tsv")){ |route| @routes << route }

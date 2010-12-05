@@ -127,19 +127,29 @@ namespace :nptdr do
     task :routes => :environment do 
       check_for_dir
       puts "Loading routes from #{ENV['DIR']}..."
-      parser = Parsers::NptdrParser.new 
       files = Dir.glob(File.join(ENV['DIR'], "*.tsv"))
       files.each do |file|
         puts "Loading routes from #{file}"
-        parser.parse_routes(file) do |route| 
-          # don't save ambiguous operators
-          if route.route_operators.size > 1
-            route.route_operators.clear
-          end
-          route.class.add!(route, verbose=true)
-        end
+        command = "rake RAILS_ENV=#{ENV['RAILS_ENV']} nptdr:load:routes_from_file FILE=#{file}"
+        run_in_shell(command, file)
       end
     end
+    
+    desc 'Loads route data from a TSV file specified as FILE=filename'
+    task :routes_from_file => :environment do 
+      check_for_file 
+      file = ENV['FILE']
+      puts "Loading routes from #{file}"
+      parser = Parsers::NptdrParser.new 
+      parser.parse_routes(file) do |route| 
+        # don't save ambiguous operators
+        if route.route_operators.size > 1
+          route.route_operators.clear
+        end
+        route.class.add!(route, verbose=true)
+      end
+    end
+    
     
     desc 'Loads stops referenced by routes in NPTDR, but not present in the database'
     task :missing_stops => :environment do 

@@ -19,6 +19,15 @@ module DataLoader
     end
   end
   
+  def run_in_shell(command, index)
+    shell = Session::Shell.new
+    shell.outproc = lambda{ |out| puts "process-#{index}: #{ out }" }
+    shell.errproc = lambda{ |err| puts err }
+    puts "Starting process #{index}"
+    puts command
+    shell.execute(command)
+  end
+  
   def parse(model, parser_class, skip_invalid=true)
     check_for_file
     puts "Loading #{model} from #{ENV['FILE']}..."

@@ -159,9 +159,7 @@ class Parsers::NptdrParser
     admin_area = self.admin_area_from_filepath(filepath)
     region = self.region_from_filepath(filepath)
     missing_stops = {}
-    transport_modes_to_vehicle_modes = {'Train', 
-                                        ''}
-    
+
     FasterCSV.parse(csv_data, csv_options) do |row|
       route_number = row['Route Number']
       vehicle_code = row['Vehicle Code']
@@ -219,10 +217,11 @@ class Parsers::NptdrParser
         else
           to_terminus = false
         end
-        route.route_segments.build(:from_stop => from_stop, 
-                                   :to_stop   => to_stop,
-                                   :from_terminus => from_terminus, 
-                                   :to_terminus  => to_terminus)
+        route_segment = route.route_segments.build(:from_stop => from_stop, 
+                                                   :to_stop   => to_stop,
+                                                   :from_terminus => from_terminus, 
+                                                   :to_terminus  => to_terminus)
+        route_segment.set_stop_areas
       end               
       
       yield route
