@@ -491,7 +491,7 @@ class Route < ActiveRecord::Base
         non_terminuses << route_segment.to_stop.id if !route_segment.to_terminus?
       else
         to_terminus = self.match_terminus(route_segment, original, :to)
-        from_terminus = self.match_terminus(route_segment, original, :to)
+        from_terminus = self.match_terminus(route_segment, original, :from)
         non_terminuses << route_segment.to_stop.id if !to_terminus          
         non_terminuses << route_segment.from_stop.id if !from_terminus
         original.route_segments.build(:from_stop => route_segment.from_stop, 
