@@ -5,6 +5,7 @@ class AddGenerationToStops < ActiveRecord::Migration
   end
 
   def self.down
-    remove_column :stops, :generation
+    remove_column :stops, :generation_low
+    remove_column :stops, :generation_high
   end
 end
