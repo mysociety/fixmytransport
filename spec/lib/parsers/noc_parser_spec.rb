@@ -28,8 +28,8 @@ describe Parsers::NocParser do
       @parser = Parsers::NocParser.new
       mock_wm_region = mock_model(Region, :name => 'West Midlands')
       mock_em_region = mock_model(Region, :name => 'East Midlands')
+      Region.stub!(:find_by_code).and_return(mock_em_region)
       Region.stub!(:find_by_code).with('WM').and_return(mock_wm_region)
-      Region.stub!(:find_by_code).with('EM').and_return(mock_em_region)
       @operators = []
       @parser.parse_operators(example_file("operators.tsv")){ |operator| @operators << operator }
     end
@@ -71,6 +71,12 @@ describe Parsers::NocParser do
       @operators.first.operator_codes.first.region.name.should == 'West Midlands'
       @operators.first.operator_codes.first.code.should == 'AMG'
     end
+    
+    it 'should create an operator_code model for the MDV field, if populated, for each of the MDV regions' do 
+      @operators.first.operator_codes.second.region.name.should == 'East Midlands'
+      @operators.first.operator_codes.second.code.should == 'AMF'
+    end
+    
      
   end
 

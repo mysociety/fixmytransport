@@ -45,6 +45,18 @@ class Parsers::NocParser
                                         :region => region)
         end
       end
+      # Four regions (EA, EM, SE, LO) use the MDV system
+      mdv_regions = ['EA', 'EM', 'SE', 'LO']
+      if !row['MDV'].blank?
+        mdv_code = row['MDV']
+        mdv_regions.each do |region_code|
+          region_code = (region_codes[region_code] or region_code)
+          region = Region.find_by_code(region_code)
+          raise "Couldn't find region for MDV region #{region_code}" unless region
+          operator.operator_codes.build(:code => clean_operator_code(mdv_code),
+                                        :region => region)
+        end
+      end
       
       
       (1..8).each do |num|
