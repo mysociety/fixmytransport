@@ -294,7 +294,7 @@ class Route < ActiveRecord::Base
   # Accepts an array of stops or an array of arrays of locations (stops or stop areas) as first parameter.
   # If passed the latter, will find routes that pass through at least one location in
   # each array.
-  def self.find_all_by_locations(stops, transport_mode_id, as_terminus=false, limit=nil)
+  def self.find_all_by_locations(stops, transport_mode_id, as_terminus=false, limit=nil, operator_code=nil)
     from_terminus_clause = ''
     to_terminus_clause = ''
     if transport_mode_id.respond_to?(:each)
@@ -303,6 +303,12 @@ class Route < ActiveRecord::Base
       condition_string = 'transport_mode_id = ?' 
     end
     params = [transport_mode_id]
+    
+    if operator_code
+      condition_string += " AND operator_code = ? "
+      params << operator_code
+    end
+   
     include_param = [:route_segments]
     joins = ''
     stops.each_with_index do |item,index|
@@ -394,28 +400,18 @@ class Route < ActiveRecord::Base
           :conditions => ['operator_code not in (SELECT code FROM operators)'])
   end
   
-  # Return train routes by the same operator that pass through the terminuses of this route, or
-  # that have terminuses that this route passes through
+  # Return train routes by the same operator that have the same terminuses
   def Route.find_existing_train_routes(new_route)
     operator_code = new_route.operator_code
-    terminuses = new_route.terminuses
-    stops_or_stations = new_route.stops_or_stations
-    routes = []
-    possible_routes = Route.find(:all, 
-                                 :conditions => [ 'operator_code = ?
-                                                   and transport_mode_id = ?', 
-                                                   operator_code, new_route.transport_mode_id],
-                                 :include => [:route_operators, {:route_segments => [:from_stop_area, :to_stop_area]}])                                    
-    possible_routes.each do |route|
-      if route.terminuses.all?{ |terminus| stops_or_stations.include? terminus } 
-        routes << route
-      end
-      route_stops_or_stations = route.stops_or_stations
-      if terminuses.all?{ |terminus| route_stops_or_stations.include? terminus }
-        routes << route
-      end
-    end
-    routes
+    from_terminus_segments = new_route.route_segments.select{ |route_segment| route_segment.from_terminus? }
+    to_terminus_segments = new_route.route_segments.select{ |route_segment| route_segment.to_terminus? }
+    from_terminuses = from_terminus_segments.map{ |route_segment| route_segment.from_stop_area }
+    to_terminuses = to_terminus_segments.map{ |route_segment| route_segment.to_stop_area }
+    routes = Route.find_all_by_locations([from_terminuses, to_terminuses], 
+                                          new_route.transport_mode_id,
+                                          as_terminus=true, 
+                                          limit=nil, 
+                                          operator_code)
   end
   
   def self.get_terminuses(route_name)
@@ -436,8 +432,8 @@ class Route < ActiveRecord::Base
     puts "got existing" if verbose
     original = existing_routes.first
     duplicates = existing_routes - [original] 
-    merge_duplicate_route(route, original)
     puts "merging new" if verbose
+    merge_duplicate_route(route, original)
     duplicates.each do |duplicate| 
       original = Route.find(original.id)
       puts "merging duplicates" if verbose

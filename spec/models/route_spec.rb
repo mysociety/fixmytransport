@@ -179,57 +179,7 @@ describe Route do
                                     :to_terminus => route_segment.to_terminus?)
       end
       Route.find_existing_train_routes(@route).should_not include(@existing_route)
-    end
-    
-    it "should include a route that passes through the new route's terminuses and has the same operator" do 
-      non_terminus_segments = @existing_route.route_segments.select do |segment| 
-        !segment.from_terminus? && !segment.to_terminus? 
-      end
-      # new route starts and ends in the middle of the existing route
-      new_route_start = non_terminus_segments.first
-      new_route_end = non_terminus_segments.second
-      @route.route_segments.build(:from_stop => new_route_start.from_stop, 
-                                  :to_stop => new_route_start.to_stop, 
-                                  :from_stop_area => new_route_start.from_stop_area,
-                                  :to_stop_area => new_route_start.to_stop_area,
-                                  :from_terminus => true,
-                                  :to_terminus => false)
-      @route.route_segments.build(:from_stop => new_route_end.from_stop, 
-                                  :to_stop => new_route_end.to_stop, 
-                                  :from_stop_area => new_route_end.from_stop_area,
-                                  :to_stop_area => new_route_end.to_stop_area, 
-                                  :from_terminus => false,
-                                  :to_terminus => true)                            
-      Route.find_existing_train_routes(@route).should include(@existing_route)
-    end
-    
-    it 'should include a route whose terminuses the new route stops at that has the same operator' do 
-      # new route stops at the terminuses of the existing route but doesn't terminate there
-      @terminus_segments.each do |route_segment|
-        @route.route_segments.build(:from_stop => route_segment.from_stop,
-                                    :to_stop => route_segment.to_stop, 
-                                    :from_stop_area => route_segment.from_stop_area, 
-                                    :to_stop_area => route_segment.to_stop_area,
-                                    :from_terminus => false,
-                                    :to_terminus => false)
-      end
-      # and has a couple of non-matching terminuses
-      @route.route_segments.build(:from_stop => stops(:victoria_station_two),
-                                  :to_stop => stops(:victoria_station_one), 
-                                  :from_stop_area => stop_areas(:victoria_station_root),
-                                  :to_stop_area => stop_areas(:victoria_station_root),
-                                  :from_terminus => true,
-                                  :to_terminus => false)
-                                  
-      @route.route_segments.build(:from_stop => stops(:haywards_heath_station_interchange), 
-                                  :to_stop => stops(:gatwick_airport_station), 
-                                  :from_stop_area => stop_areas(:haywards_heath_station),
-                                  :to_stop_area => stop_areas(:gatwick_airport_station),
-                                  :from_terminus => false, 
-                                  :to_terminus => true)
-      Route.find_existing_train_routes(@route).should include(@existing_route)
-    end
-  
+    end 
   end
   
   
