@@ -22,7 +22,7 @@ module DataLoader
   def run_in_shell(command, index)
     shell = Session::Shell.new
     shell.outproc = lambda{ |out| puts "process-#{index}: #{ out }" }
-    shell.errproc = lambda{ |err| puts err }
+    shell.errproc = lambda{ |err| raise err }
     puts "Starting process #{index}"
     puts command
     shell.execute(command)
