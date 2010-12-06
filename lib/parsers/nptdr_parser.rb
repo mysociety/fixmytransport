@@ -172,9 +172,9 @@ class Parsers::NptdrParser
       next unless transport_mode.route_type
       route_type = transport_mode.route_type.constantize
       route = route_type.new(:number => route_number,
-                             :transport_mode => transport_mode,
-                             :operator_code => operator_code)         
-      route.route_source_admin_areas.build({:source_admin_area => admin_area })
+                             :transport_mode => transport_mode)         
+      route.route_source_admin_areas.build({:source_admin_area => admin_area, 
+                                            :operator_code => operator_code})
       
       operators = Operator.find_all_by_nptdr_code(vehicle_code, operator_code, region)
       operators.each do |operator|

@@ -41,8 +41,8 @@ describe Parsers::NptdrParser do
       @route.route_segments.first.to_stop.atco_code.should == 'bbbbbbbbb'
     end
     
-    it 'should add an operator code to the route' do 
-      @route.operator_code.should == 'BL'
+    it 'should add an operator code to the route source admin area' do 
+      @route.route_source_admin_areas.first.operator_code.should == 'BL'
     end
     
     it 'should mark the route terminus stops' do 

@@ -26,6 +26,12 @@ class AddGenerationsToTables < ActiveRecord::Migration
     add_column :route_operators, :generation_high, :integer, :default => 1, :null => false
     add_column :operators, :generation_low, :integer, :default => 1, :null => false
     add_column :operators, :generation_high, :integer, :default => 1, :null => false
+    add_column :operator_codes, :generation_low, :integer, :default => 1, :null => false
+    add_column :operator_codes, :generation_high, :integer, :default => 1, :null => false
+    add_column :stop_area_operators, :generation_low, :integer, :default => 1, :null => false
+    add_column :stop_area_operators, :generation_high, :integer, :default => 1, :null => false
+    add_column :vosa_licenses, :generation_low, :integer, :default => 1, :null => false
+    add_column :vosa_licenses, :generation_high, :integer, :default => 1, :null => false
   end
 
   def self.down
@@ -55,5 +61,11 @@ class AddGenerationsToTables < ActiveRecord::Migration
     remove_column :route_operators, :generation_high
     remove_column :operators, :generation_low
     remove_column :operators, :generation_high
+    remove_column :operator_codes, :generation_low
+    remove_column :operator_codes, :generation_high
+    remove_column :stop_area_operators, :generation_low
+    remove_column :stop_area_operators, :generation_high
+    remove_column :vosa_licenses, :generation_low
+    remove_column :vosa_licenses, :generation_high
   end
 end
