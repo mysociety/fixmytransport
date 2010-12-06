@@ -31,4 +31,23 @@ class TrainRoute < Route
     name
   end
   
+  def self.identical_segment(route_segment, route)
+    direct_match = route.route_segments.detect do |existing| 
+      (existing.from_stop_area == route_segment.from_stop_area && 
+       existing.to_stop_area == route_segment.to_stop_area)
+    end
+  end
+  
+  def self.match_terminus(route_segment, route, type)
+    if type == :to
+      (route_segment.to_terminus? && 
+      (route.terminuses.include? route_segment.to_stop_area or 
+      !route.stops_or_stations.include? route_segment.to_stop_area))
+    elsif type == :from
+      (route_segment.from_terminus? && 
+      (route.terminuses.include? route_segment.from_stop_area or 
+      !route.stops_or_stations.include? route_segment.from_stop_area))
+    end
+  end
+  
 end

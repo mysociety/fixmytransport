@@ -452,6 +452,24 @@ class Route < ActiveRecord::Base
     end
   end
   
+  def self.identical_segment(route_segment, route)
+    direct_match = route.route_segments.detect do |existing| 
+      (existing.from_stop == route_segment.from_stop && existing.to_stop == route_segment.to_stop)
+    end
+  end
+  
+  def self.match_terminus(route_segment, route, type)
+    if type == :to
+      (route_segment.to_terminus? && 
+      (route.terminuses.include? route_segment.to_stop or 
+      !route.stops.include? route_segment.to_stop))
+    elsif type == :from
+      (route_segment.from_terminus? && 
+      (route.terminuses.include? route_segment.from_stop or 
+      !route.stops.include? route_segment.from_stop))
+    end
+  end
+  
   def self.merge_duplicate_route(duplicate, original)
     raise "Can't merge route with campaigns: #{duplicate.inspect}" if !duplicate.campaigns.empty?
     raise "Can't merge route with problems: #{duplicate.inspect}" if !duplicate.problems.empty?
@@ -467,15 +485,13 @@ class Route < ActiveRecord::Base
     end
     non_terminuses = []
     duplicate.route_segments.each do |route_segment|
-      direct_match = original.route_segments.detect do |existing| 
-        (existing.from_stop == route_segment.from_stop && existing.to_stop == route_segment.to_stop)
-      end     
+      direct_match = self.identical_segment(route_segment, original)  
       if direct_match    
         non_terminuses << route_segment.from_stop.id if !route_segment.from_terminus?
         non_terminuses << route_segment.to_stop.id if !route_segment.to_terminus?
       else
-        to_terminus = (route_segment.to_terminus? && (original.terminuses.include? route_segment.to_stop or !original.stops.include? route_segment.to_stop))
-        from_terminus = (route_segment.from_terminus? && (original.terminuses.include? route_segment.from_stop or !original.stops.include? route_segment.from_stop))
+        to_terminus = self.match_terminus(route_segment, original, :to)
+        from_terminus = self.match_terminus(route_segment, original, :to)
         non_terminuses << route_segment.to_stop.id if !to_terminus          
         non_terminuses << route_segment.from_stop.id if !from_terminus
         original.route_segments.build(:from_stop => route_segment.from_stop, 
