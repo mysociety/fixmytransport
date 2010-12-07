@@ -33,8 +33,10 @@ en:
   leave_this_campaign: "Leave this campaign"
   you_are_no_longer_a_supporter: "You are no longer a supporter of \"{{campaign}}\""
   campaign_received_emails: "The campaign has received the following emails:"
-  got_a_message: "The campaign received a message {{link}} from {{sender}}"
-  wrote_a_message: "{{sender}} wrote a message {{link}} to {{recipient}}"
+  got_a_message: "{{sender}} sent {{campaigner}} {{link}}"
+  a_reply: a reply
+  wrote_a_message: "{{sender}} sent {{link}} to {{recipient}}"
+  another_message: another message
   campaign: campaign
   choose_a_short_name: Choose a short name (6 to 16 lowercase letters)
   easy_web_address: This gives your page an easy web address. e.g. {{url}}
