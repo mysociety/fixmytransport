@@ -133,6 +133,7 @@ class IncomingMessage < ActiveRecord::Base
   end
   
   def safe_from
+    return nil unless self.from
     text = mask_organization_emails(self.from){ |organization, email, text| text.gsub(email, organization.name) }
     text = MySociety::Mask.mask_emails(text)
   end
