@@ -207,7 +207,7 @@ class Route < ActiveRecord::Base
 
   def description_with_operators
     text = "#{description}"
-    if operators 
+    if !operators.empty?
       text += " (#{operator_text})"
     end
     text
