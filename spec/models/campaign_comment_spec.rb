@@ -5,7 +5,8 @@ describe CampaignComment do
     @valid_attributes = {
       :user_id => 1,
       :campaign_update_id => 1,
-      :text => "value for text"
+      :text => "value for text",
+      :user_name => 'A name'
     }
   end
 

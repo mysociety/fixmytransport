@@ -1,0 +1,10 @@
+en:
+  activerecord:
+    errors:
+      models:
+        campaign_comment:
+          attributes: 
+            text: 
+              blank: "Please enter your comment"
+            user_name:
+              blank: "Please enter your name"

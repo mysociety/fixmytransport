@@ -15,6 +15,7 @@ ActionController::Routing::Routes.draw do |map|
                                                                           :controller => 'incoming_messages'
     campaign.resources :outgoing_messages, :only => [:new, :show, :create]
   end                                       
+  map.confirm_comment '/o/:email_token', :action => 'confirm_comment', :controller => 'campaigns'
   
   map.confirm_join '/c/:email_token', :action => 'confirm_join', :controller => 'campaigns'
   map.confirm_leave '/l/:email_token', :action => 'confirm_leave', :controller => 'campaigns'

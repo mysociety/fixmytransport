@@ -7,7 +7,6 @@ class CampaignsController < ApplicationController
                                                   :request_advice, :add_comment]
   before_filter :require_campaign_initiator_or_token, :only => [:edit, :update]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice]
-  before_filter :require_user, :only => [:add_comment]
   before_filter :find_update, :only => [:add_comment]
   
   def join
@@ -133,20 +132,50 @@ class CampaignsController < ApplicationController
     end
   end
   
+  def confirm_comment
+    @comment = CampaignComment.find_by_token(params[:email_token])
+    if @comment
+      @comment.confirm!
+    else
+      @error = t(:comment_not_found)
+    end
+  end
+  
   def add_comment
     if request.post? 
       @comment = @campaign_update.comments.build(params[:campaign_comment])
-      if @comment.save
+      @comment.status = :new
+      if @comment.valid?
+        @comment.save_user
+        @comment.save
+        if current_user
+          @comment.confirm!
+        else
+          @comment.send_confirmation_email
+          @action = t(:your_update_will_not_be_posted)
+          @worry = t(:holding_on_to_update)
+          render 'shared/confirmation_sent'
+          return
+        end
         if request.xhr? 
-          render :json => { :html => render_to_string(:partial => 'update_comment', :locals => {:comment => @comment}),
-                            :update_id => @comment.campaign_update_id }
+          render :json => { :html => render_to_string(:partial => 'update_comment', 
+                                                      :locals => {:comment => @comment}),
+                            :update_id => @comment.campaign_update_id,
+                            :success => true }
           return
         end  
         redirect_to campaign_url(@campaign, :anchor => "update_#{@comment.campaign_update_id}")
       else
         if request.xhr?
-          render :json => { :errors => @comment.errors, 
-                            :update_id => @comment.campaign_update_id }
+          @json = { :update_id => @comment.campaign_update_id,
+                    :success => false }
+          @json[:errors] = {}
+          [@comment.errors, @comment.user.errors].each do |errors|
+            errors.each do |attribute,message|
+              @json[:errors][attribute] = message
+            end
+          end
+          render :json => @json
         else
           @campaign_update.comments.delete(@comment)
           @empty_comment = true

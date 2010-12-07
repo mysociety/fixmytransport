@@ -1,0 +1,16 @@
+Hi<%= raw " #{@comment.user_name}" %>,
+
+Please click on the link below to confirm the comment you just
+added to FixMyTransport:
+
+<%= raw @link %>
+
+If your email program does not let you click on this link, copy
+and paste it into your web browser and press return.
+
+Your update reads: <%= raw @comment.text %>
+
+Your name will be shown on the site as: <%= @comment.user_name %>
+
+Yours,
+The FixMyTransport team

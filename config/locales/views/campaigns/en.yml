@@ -26,6 +26,8 @@ en:
   campaign_has_n_supporters:
     one: "and has {{n}} supporter."
     other: "and has {{n}} supporters."
+  thanks_for_adding_comment: You've successfully confirmed your comment.
+  see_your_comment: See your comment
   campaign_location: This campaign concerns the {{link}}
   join_confirmation_sent: We've sent you an email to confirm that you want to join this campaign.
   you_will_not_be_a_supporter: "you will not be added as a supporter of \"{{campaign}}\"."

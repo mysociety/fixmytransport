@@ -408,8 +408,12 @@ describe CampaignsController do
       Campaign.stub!(:find).and_return(@mock_campaign)
       @controller.stub!(:current_user).and_return(@mock_user)
       @mock_comment = mock_model(CampaignComment, :save => true,
+                                                  :valid? => true,
+                                                  :save_user => true,
                                                   :campaign_update_id => 66,
-                                                  :text => 'comment text')
+                                                  :text => 'comment text',
+                                                  :confirm! => true,
+                                                  :status= => true)
       @mock_update = mock_model(CampaignUpdate, :comments => mock('comments', :build => @mock_comment))
       CampaignUpdate.stub!(:find).and_return(@mock_update)
     end
@@ -426,6 +430,16 @@ describe CampaignsController do
     it 'should save the comment' do 
       @mock_comment.should_receive(:save).and_return(true)
       make_request( :id => 55, :campaign_comment => {:update_id => 66} )
+    end
+    
+    it 'should save the associated user' do
+      @mock_comment.should_receive(:save_user).and_return(true)
+      make_request( :id => 55, :campaign_comment => {:update_id => 66} )
+    end
+    
+    it 'should set the status of the comment to new' do 
+      @mock_comment.should_receive(:status=).with(:new)
+      make_request( :id => 55, :campaign_comment => {:update_id => 66} )      
     end
     
     it 'should assign a comment to the view' do 

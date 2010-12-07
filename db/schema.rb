@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101206162550) do
+ActiveRecord::Schema.define(:version => 20101207143408) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -65,6 +65,10 @@ ActiveRecord::Schema.define(:version => 20101206162550) do
     t.text     "text"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "user_name"
+    t.datetime "confirmed_at"
+    t.integer  "status_code"
+    t.string   "token"
   end
 
   create_table "campaign_supporters", :force => true do |t|
@@ -351,6 +355,7 @@ ActiveRecord::Schema.define(:version => 20101206162550) do
     t.integer  "source_admin_area_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "operator_code"
   end
 
   add_index "route_source_admin_areas", ["route_id"], :name => "index_route_source_admin_areas_on_route_id"

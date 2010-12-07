@@ -92,7 +92,7 @@ function addLinkActions() {
     }
   })
 
-  setupForm('.campaign-info .new_campaign_comment', updateCommentCallback);
+  setupForm('.campaign-info .ajax_new_campaign_comment', updateCommentCallback);
   setupForm('.campaign-info #campaign-update-form form', updateCallback);
   setupForm('.campaign-info #advice-request-form form', adviceCallback);
 }
@@ -117,6 +117,9 @@ function highlightEmptyTextArea(arr, form, options){
   }  
 }
 
+function show_error(element, message){
+  element.parent().prepend('<div class="form-field-error">'+message+'</div>');
+}
 
 function adviceCallback(response){
   jQuery('.latest-news').after(response.html);
@@ -134,10 +137,18 @@ function updateCallback(response){
 function updateCommentCallback(response){
   commentbox_div = jQuery('#commentbox_' + response.update_id);
   commentbox = jQuery("#campaign_comment_text_" + response.update_id);
-  commentbox.val("");
-  comments_ul = commentbox_div.prev('.campaign-comments');
-  comments_ul.append(response.html);  
+  jQuery('.form-field-error', commentbox_div).remove();
   
+  if (response.success){
+    commentbox.val("");
+    comments_ul = commentbox_div.prev('.campaign-comments');
+    comments_ul.append(response.html);  
+  } else {
+   
+    for (var key in response.errors){
+      show_error(jQuery('#campaign_comment_'+ key + '_' + response.update_id), response.errors[key] );
+    }
+  }
 }
 
 
