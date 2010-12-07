@@ -103,10 +103,11 @@ describe Route do
   
     fixtures default_fixtures
   
-    it 'should include routes with the same number and one stop in common with the new route' do 
+    it 'should include routes with the same number and one stop in common with the new route, with the same operator in the same admin area' do 
       route = Route.new(:number => '807', 
-                        :transport_mode => transport_modes(:bus),
-                        :operator_code => 'BUS')
+                        :transport_mode => transport_modes(:bus))
+      route.route_source_admin_areas.build({:operator_code => 'BUS', 
+                                            :source_admin_area => admin_areas(:london)})
       new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
       route.route_segments.build(:from_stop => stops(:arch_ne), 
                                  :to_stop => new_stop, 
@@ -114,10 +115,22 @@ describe Route do
       Route.find_existing_routes(route).should include(routes(:number_807_bus))
     end
     
-    it 'should include routes with the same number, no stops in common, but one stop area in common with the new route and the same operator code' do
+    it 'should include routes with the same number and one stop in common with the new route, with the same route operator' do 
       route = Route.new(:number => '807', 
-                        :transport_mode => transport_modes(:bus), 
-                        :operator_code => 'BUS')
+                        :transport_mode => transport_modes(:bus))
+      route.route_operators.build({:operator => operators(:a_bus_company)})
+      new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
+      route.route_segments.build(:from_stop => stops(:arch_ne), 
+                                 :to_stop => new_stop, 
+                                 :from_terminus => true)
+      Route.find_existing_routes(route).should include(routes(:number_807_bus))      
+    end
+    
+    it 'should include routes with the same number, no stops in common, but one stop area in common with the new route and the same operator code from the same admin area' do
+      route = Route.new(:number => '807', 
+                        :transport_mode => transport_modes(:bus))
+      route.route_source_admin_areas.build({:operator_code => 'BUS', 
+                                            :source_admin_area => admin_areas(:london)})
       new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
       route.route_segments.build(:from_stop => stops(:arch_sw), 
                                  :to_stop => new_stop,
@@ -126,8 +139,10 @@ describe Route do
       Route.find_existing_routes(route).should include(routes(:number_807_bus))
     end
     
-    it 'should not include routes with the same number, no stops in common, but one stop area in common with the new route and a different operator' do
+    it 'should not include routes with the same number, no stops in common, but one stop area in common with the new route and a different operator from the same admin area' do
       route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
+      route.route_source_admin_areas.build({:operator_code => 'ABUS', 
+                                            :source_admin_area => admin_areas(:london)})
       route.route_operators.build(:operator => operators(:another_bus_company))
       new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
       route.route_segments.build(:from_stop => stops(:arch_sw), 
@@ -169,7 +184,7 @@ describe Route do
       Route.find_existing_train_routes(@route).should include(@existing_route)
     end
     
-    it 'should not include an identical route with a different operator' do 
+    it 'should not include a route with the same terminus segments but with a different operator' do 
       @route.route_operators.clear
       @route.route_operators.build(:operator => operators(:another_train_company))
       @terminus_segments.each do |route_segment|
@@ -180,6 +195,18 @@ describe Route do
       end
       Route.find_existing_train_routes(@route).should_not include(@existing_route)
     end 
+    
+    it 'should include route with the same terminus segments with the same operator code from the same admin area' do 
+      @route.route_operators.clear
+      @route.route_source_admin_areas.build(:source_admin_area => admin_areas(:london), :operator_code => "TRAIN")
+      @terminus_segments.each do |route_segment|
+        @route.route_segments.build(:from_stop => route_segment.from_stop,
+                                    :to_stop => route_segment.to_stop, 
+                                    :from_terminus => route_segment.from_terminus?,
+                                    :to_terminus => route_segment.to_terminus?)
+      end
+      Route.find_existing_train_routes(@route).should_not include(@existing_route)
+    end
   end
   
   
@@ -222,14 +249,14 @@ describe Route do
     
     it 'should transfer route source admin area associations when merging overlapping routes' do 
       existing_route = routes(:victoria_to_haywards_heath)
-      existing_route.route_source_admin_areas.size.should == 0
+      existing_route.route_source_admin_areas.size.should == 1
       Route.stub!(:find_existing).and_return([existing_route])
       route_source_admin_area = RouteSourceAdminArea.new(:source_admin_area => AdminArea.new(:name => 'Kently'))
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43', 
                         :route_source_admin_areas => [route_source_admin_area])
       Route.add!(route)
-      existing_route.route_source_admin_areas.size.should == 1
+      existing_route.route_source_admin_areas.size.should == 2
     end
     
     it 'should not add duplicate route operator associations when merging overlapping routes' do 

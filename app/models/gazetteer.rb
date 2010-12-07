@@ -136,10 +136,10 @@ class Gazetteer
                :from_stops => from_stops,
                :to_stops => to_stops }
     end
-    routes = Route.find_all_by_locations([from_stops, to_stops], 
-                                         [TransportMode.find_by_name('Ferry').id, TransportMode.find_by_name('Tram/Metro').id], 
-                                         as_terminus=false, 
-                                         limit=nil)
+    find_options = { :transport_modes => [TransportMode.find_by_name('Ferry').id, 
+                                          TransportMode.find_by_name('Tram/Metro').id],
+                     :as_terminus => false }
+    routes = Route.find_all_by_locations([from_stops, to_stops], find_options)
     return { :routes => routes, :from_stops => from_stops, :to_stops => to_stops }
   end
   
@@ -166,10 +166,9 @@ class Gazetteer
                :from_stops => from_stops,
                :to_stops => to_stops }
     end
-    routes = Route.find_all_by_locations([from_stops, to_stops], 
-                                         TransportMode.find_by_name('Train').id, 
-                                         as_terminus=false, 
-                                         limit=nil)
+    find_options = { :transport_modes => [TransportMode.find_by_name('Train').id],
+                     :as_terminus => false }
+    routes = Route.find_all_by_locations([from_stops, to_stops], find_options)
     return { :routes => routes, :from_stops => from_stops, :to_stops => to_stops } 
   end
   

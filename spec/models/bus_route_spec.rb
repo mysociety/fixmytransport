@@ -25,11 +25,12 @@ describe BusRoute do
   
     fixtures default_fixtures
   
-    it 'should include in the results returned a route with the same number, mode of transport and stop codes' do 
+    it 'should include in the results returned a route with the same number, mode of transport, operator code and stop codes' do 
       atco_codes = ['13001288E', '13001612B', '13001612B']
       route = BusRoute.new(:number => '807', 
-                           :transport_mode_id => 1, 
-                           :operator_code => 'BUS')
+                           :transport_mode_id => 1)
+      route.route_source_admin_areas.build({:operator_code => 'BUS', 
+                                           :source_admin_area => admin_areas(:london)})
       add_stops_from_list route, atco_codes
       BusRoute.find_existing(route).include?(routes(:number_807_bus)).should be_true
     end

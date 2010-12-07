@@ -21,29 +21,22 @@
 
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  code: MyString
-  atco_code: MyString
-  short_name: MyText
-  country: MyString
-  region_code: MyString
+aldershot:
+  code: "303"
+  atco_code: "404"
+  short_name: Aldershot
+  country: Great Britain
   national: false
-  contact_email: MyString
-  contact_telephone: MyString
   creation_datetime: 2010-05-06 17:21:35
   modification_datetime: 2010-05-06 17:21:35
   revision_number: MyString
   modification: MyString
-
-two:
-  code: MyString
-  atco_code: MyString
-  short_name: MyText
-  country: MyString
-  region_code: MyString
+london:
+  code: "505"
+  atco_code: "606"
+  short_name: London
+  country: Great Britain
   national: false
-  contact_email: MyString
-  contact_telephone: MyString
   creation_datetime: 2010-05-06 17:21:35
   modification_datetime: 2010-05-06 17:21:35
   revision_number: MyString

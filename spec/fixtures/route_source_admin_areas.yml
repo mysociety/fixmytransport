@@ -1,0 +1,12 @@
+aldershot_bus:
+  operator_code: "BUS"
+  source_admin_area: aldershot
+  route: aldershot_807_bus
+london_bus: 
+  operator_code: "BUS"
+  source_admin_area: london
+  route: number_807_bus
+victoria_to_haywards_heath:
+  operator_code: "TRAIN"
+  source_admin_area: london
+  route: victoria_to_haywards_heath

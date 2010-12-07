@@ -260,7 +260,7 @@ class Route < ActiveRecord::Base
     find(id, 
          :scope => scope, 
          :include => [{ :route_segments => [:to_stop => :locality, :from_stop => :locality] }, 
-                          { :route_operators => :operator }])
+                      { :route_operators => :operator }])
     
   end
   
@@ -268,12 +268,26 @@ class Route < ActiveRecord::Base
   # the route given
   def self.find_all_by_number_and_common_stop(new_route)
     stop_codes = new_route.stop_codes
+    # do we think we know the operator for this route? If so, return any route with the same operator that 
+    # meets our other criteria. Otherwise, only return operators with the same operator code from the same
+    # admin area
+    if new_route.route_operators.size == 1
+      operator_clause = "AND route_operators.operator_id = ? "
+      operator_params = [new_route.route_operators.first.operator_id]
+    else
+      operator_clause = "AND route_source_admin_areas.source_admin_area_id = ?
+                         AND route_source_admin_areas.operator_code = ? "
+      operator_params = [new_route.route_source_admin_areas.first.source_admin_area_id, 
+                         new_route.route_source_admin_areas.first.operator_code]
+    end
     stop_area_codes = new_route.stop_area_codes
-    routes = Route.find(:all, :conditions => ['number = ? 
-                                               and transport_mode_id = ? 
-                                               and operator_code = ?', 
-                                              new_route.number, new_route.transport_mode.id, new_route.operator_code],
-                        :include => [{ :route_segments => [:from_stop, :to_stop] }, :route_operators])
+    condition_string = "number = ? AND transport_mode_id = ? #{operator_clause}"
+    conditions = [condition_string, new_route.number, new_route.transport_mode.id]
+    conditions += operator_params
+    routes = Route.find(:all, :conditions => conditions,
+                        :include => [{ :route_segments => [:from_stop, :to_stop] }, 
+                                       :route_operators, 
+                                       :route_source_admin_areas ])
     routes_with_same_stops = []
     routes.each do |route|
       route_stop_codes = route.stop_codes
@@ -288,31 +302,43 @@ class Route < ActiveRecord::Base
         routes_with_same_stops << route
       end
     end
-    routes_with_same_stops
+    # requery fresh objects as the joins we used in the find query may result in only some associations
+    # being eagerly loaded
+    Route.find(routes_with_same_stops.map{ |route| route.id })
   end
   
   # Accepts an array of stops or an array of arrays of locations (stops or stop areas) as first parameter.
   # If passed the latter, will find routes that pass through at least one location in
-  # each array.
-  def self.find_all_by_locations(stops, transport_mode_id, as_terminus=false, limit=nil, operator_code=nil)
+  # each array. Additional params to constrain the search can be passed as options.
+  def self.find_all_by_locations(stops, options)
     from_terminus_clause = ''
     to_terminus_clause = ''
-    if transport_mode_id.respond_to?(:each)
-      condition_string = 'transport_mode_id in (?)'
-    else
-      condition_string = 'transport_mode_id = ?' 
+    params = []
+    include_params = []
+    condition_string = ''
+    if options[:transport_modes]
+      condition_string += 'transport_mode_id in (?)'
+      params << options[:transport_modes]
     end
-    params = [transport_mode_id]
     
-    if operator_code
-      condition_string += " AND operator_code = ? "
-      params << operator_code
+    if options[:operator_id]
+      condition_string += " AND route_operators.operator_id = ? "
+      params << options[:operator_id]
+      include_params << :route_operators
+    end
+    
+    if options[:source_admin_area]
+      condition_string += " AND route_source_admin_areas.operator_code = ? 
+                            AND route_source_admin_areas.source_admin_area_id = ?"
+      params << options[:source_admin_area].operator_code
+      params << options[:source_admin_area].source_admin_area_id
+      include_params << :route_source_admin_areas
     end
    
-    include_param = [:route_segments]
+    include_params << :route_segments
     joins = ''
     stops.each_with_index do |item,index|
-      if as_terminus
+      if options[:as_terminus]
         from_terminus_clause = "rs#{index}.from_terminus = 't' and"
         to_terminus_clause = "rs#{index}.to_terminus = 't' and"
       end
@@ -341,8 +367,8 @@ class Route < ActiveRecord::Base
     routes = find(:all, :select => "distinct routes.id",
                         :joins => joins, 
                         :conditions => conditions, 
-                        :include => include_param, 
-                        :limit => limit).uniq
+                        :include => include_params, 
+                        :limit => options[:limit]).uniq
     # The joins in the query above cause it to return instances with missing segments - 
     # remap to clean route objects
     Route.find(routes.map{ |route| route.id })
@@ -407,11 +433,15 @@ class Route < ActiveRecord::Base
     to_terminus_segments = new_route.route_segments.select{ |route_segment| route_segment.to_terminus? }
     from_terminuses = from_terminus_segments.map{ |route_segment| route_segment.from_stop_area }
     to_terminuses = to_terminus_segments.map{ |route_segment| route_segment.to_stop_area }
-    routes = Route.find_all_by_locations([from_terminuses, to_terminuses], 
-                                          new_route.transport_mode_id,
-                                          as_terminus=true, 
-                                          limit=nil, 
-                                          operator_code)
+    options = { :as_terminus => true, 
+                :transport_modes => [new_route.transport_mode_id] }
+    if new_route.route_operators.size == 1
+      options[:operator_id] = new_route.route_operators.first.operator_id
+    else
+      source_admin_area = new_route.route_source_admin_areas.first
+      options[:source_admin_area => source_admin_area]
+    end           
+    routes = Route.find_all_by_locations([from_terminuses, to_terminuses], options)
   end
   
   def self.get_terminuses(route_name)
