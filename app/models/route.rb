@@ -246,6 +246,7 @@ class Route < ActiveRecord::Base
   end
   
   def cache_route_coords
+    return if stops.empty?
     lons = self.stops.map{ |element| element.lon }
     lats = self.stops.map{ |element| element.lat }
     lon = lons.min + ((lons.max - lons.min)/2)

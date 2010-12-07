@@ -22,9 +22,10 @@ describe Parsers::NptdrParser do
       Stop.stub!(:find_by_code).and_return{ |atco_code, options| mock_model(Stop, :atco_code => atco_code, 
                                                                                   :other_code => nil,
                                                                                   :stop_type => 'BCS')}
+      Stop.stub!(:find_by_code).with('eeeeeeee', anything()).and_return(nil)
       @parser = Parsers::NptdrParser.new
       @routes = []
-      @parser.parse_routes(example_file("routes.tsv")){ |route| @routes << route }
+      @missing = @parser.parse_routes(example_file("routes.tsv")){ |route| @routes << route }
       @route = @routes.first
     end
     
@@ -50,6 +51,15 @@ describe Parsers::NptdrParser do
       @route.route_segments.last.to_terminus?.should be_true
       @route.route_segments.first.to_terminus?.should be_false
       @route.route_segments.last.from_terminus?.should be_false
+    end
+    
+    it 'should return a list of missing stops' do 
+      @missing.should == { "eeeeeeee" => ["BusRoute 376", "BusRoute 378"] }
+    end
+    
+    it 'should return routes where missing stops have been skipped and the surrounding stops joined' do
+      @routes.last.route_segments.last.from_stop.atco_code.should == 'cccccccc'
+      @routes.last.route_segments.last.to_stop.atco_code.should == 'ddddddddd'
     end
     
   end

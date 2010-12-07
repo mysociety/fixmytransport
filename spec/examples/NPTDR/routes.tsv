@@ -1,5 +1,5 @@
 Vehicle Code	Route Number	Operator Code	Locations
-B	376 	BL	aaaaaaaa,bbbbbbbbb,cccccccc
+B	376 	BL	aaaaaaaa,bbbbbbbbb,cccccccc,eeeeeeee
 B	376 	BL	cccccccc,ddddddddd
 B	378 	BL00	aaaaaaaa,bbbbbbbbb,cccccccc
-B	378 	BL00	cccccccc,ddddddddd
+B	378 	BL00	cccccccc,eeeeeeee,ddddddddd

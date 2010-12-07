@@ -154,6 +154,18 @@ class Parsers::NptdrParser
     admin_area = AdminArea.find_by_atco_code(admin_area_code)  
   end
 
+
+  def mark_stop_code_missing(missing_stops, stop_code, route)
+    if ! missing_stops[stop_code]
+      missing_stops[stop_code] = []
+    end
+    route_string = "#{route.type} #{route.number}"
+    if ! missing_stops[stop_code].include?(route_string)
+      missing_stops[stop_code] << route_string
+    end
+    return missing_stops
+  end
+  
   def parse_routes filepath
     csv_data = File.read(filepath)
     admin_area = self.admin_area_from_filepath(filepath)
@@ -180,39 +192,23 @@ class Parsers::NptdrParser
       operators.each do |operator|
         route.route_operators.build({ :operator => operator })
       end
-
-      stop_codes.each_cons(2) do |from_stop_code,to_stop_code|
-        options = {:includes => {:stop_area_memberships => :stop_area}}
+      # Which ones are in the db
+      options = {:includes => {:stop_area_memberships => :stop_area}}
+      found, missing = stop_codes.partition{ |stop_code| Stop.find_by_code(stop_code.strip, options) }
+      
+      missing.each do |missing_stop_code|  
+        missing_stops = self.mark_stop_code_missing(missing_stops, missing_stop_code, route) 
+      end
+      
+      found.each_cons(2) do |from_stop_code,to_stop_code|
         from_stop = Stop.find_by_code(from_stop_code.strip, options)
         to_stop = Stop.find_by_code(to_stop_code.strip, options)
-        if ! from_stop
-          if ! missing_stops[from_stop_code]
-            missing_stops[from_stop_code] = []
-          end
-          route_string = "#{route.type} #{route.number}"
-          if ! missing_stops[from_stop_code].include?(route_string)
-            missing_stops[from_stop_code] << route_string
-          end
-          # puts "Can't find stop #{from_stop_code} for route #{route.inspect}" 
-          next
-        end
-        if ! to_stop
-          if ! missing_stops[to_stop_code]
-            missing_stops[to_stop_code] = []
-          end
-          route_string = "#{route.type} #{route.number}"
-          if ! missing_stops[to_stop_code].include?(route_string)
-            missing_stops[to_stop_code] << route_string
-          end
-          # puts "Can't find stop #{to_stop_code} for route #{route.inspect}"
-          next
-        end
-        if (from_stop.atco_code == stop_codes.first) or (from_stop.other_code == stop_codes.first) 
+        if (from_stop.atco_code == found.first) or (from_stop.other_code == found.first) 
           from_terminus = true
         else
           from_terminus = false
         end
-        if (to_stop.atco_code == stop_codes.last) or (to_stop.other_code == stop_codes.last)
+        if (to_stop.atco_code == found.last) or (to_stop.other_code == found.last)
           to_terminus = true
         else
           to_terminus = false
