@@ -40,7 +40,7 @@
         - form_class = "ajax_new_campaign_comment" 
       - else
         - form_class = "new_campaign_comment"
-      - form_for @campaign_comment = CampaignComment.new(:user => current_user ? current_user : User.new, :campaign => @campaign, :campaign_update => event), :url => add_comment_campaign_url(@campaign), :class => form_class do |f|
+      - form_for @campaign_comment = CampaignComment.new(:user => current_user ? current_user : User.new, :campaign => @campaign, :campaign_update => event), :url => add_comment_campaign_url(@campaign), :html => {:class => form_class} do |f|
         - if @empty_comment
           .form-field-error
             = t(:please_enter_some_text)

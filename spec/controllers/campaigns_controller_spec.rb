@@ -422,35 +422,41 @@ describe CampaignsController do
       post :add_comment, params
     end
     
+    def default_params
+      { :id => 55, 
+        :campaign_comment => { :update_id => 66, 
+                               :user_attributes => {:email => 'test@example.com'}} }
+    end
+    
     it 'should create a comment associated with the update' do 
       @mock_update.comments.should_receive(:build)
-      make_request( :id => 55, :campaign_comment => {:update_id => 66} )      
+      make_request(default_params)      
     end
     
     it 'should save the comment' do 
       @mock_comment.should_receive(:save).and_return(true)
-      make_request( :id => 55, :campaign_comment => {:update_id => 66} )
+      make_request(default_params)
     end
     
     it 'should save the associated user' do
       @mock_comment.should_receive(:save_user).and_return(true)
-      make_request( :id => 55, :campaign_comment => {:update_id => 66} )
+      make_request(default_params)
     end
     
     it 'should set the status of the comment to new' do 
       @mock_comment.should_receive(:status=).with(:new)
-      make_request( :id => 55, :campaign_comment => {:update_id => 66} )      
+      make_request(default_params)      
     end
     
     it 'should assign a comment to the view' do 
-      make_request( :id => 55, :campaign_comment => {:update_id => 66} )
+      make_request(default_params)
       assigns[:comment].should_not be_nil
     end
   
     describe 'when handling an AJAX request' do 
       
       it 'should return a json hash containing the update_id and comment html' do 
-        xhr :post, :add_comment, { :id => 55, :campaign_comment => {:update_id => 66} }
+        xhr :post, :add_comment, default_params
         json_hash = JSON.parse(response.body)
         json_hash['update_id'].should == 66
         json_hash['html'].should_not be_nil

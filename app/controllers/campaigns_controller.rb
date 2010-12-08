@@ -137,7 +137,7 @@ class CampaignsController < ApplicationController
     if @comment
       @comment.confirm!
     else
-      @error = t(:comment_not_found)
+      @error = t(:update_not_found)
     end
   end
   
@@ -145,6 +145,10 @@ class CampaignsController < ApplicationController
     if request.post? 
       @comment = @campaign_update.comments.build(params[:campaign_comment])
       @comment.status = :new
+      if params[:campaign_comment].has_key?(:user_id) && 
+        current_user.id != params[:campaign_comment][:user_id].to_i
+        raise "Comment added with user_id that isn't logged in user"
+      end
       if @comment.valid?
         @comment.save_user
         @comment.save

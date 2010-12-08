@@ -2,28 +2,25 @@
 .update-help!= t(:update_help, :privacy_link => link_to(t(:privacy_policy), about_url(:anchor => "privacy")), :location_type => readable_location_type(@problem.location))
 - form_for @problem, :url => problem_path(@problem), :html => { :class => 'new_update' } do |f|
   .fieldset
-    - f.fields_for :updates, @new_update do |update_fields|
-      - if @new_update.errors.on('reporter_name')
-        .form-field-error= error_message_on @new_update, 'reporter_name'
-      .form-field
-        != update_fields.label :reporter_name, t(:name)
-        != update_fields.text_field :reporter_name
-      - update_fields.fields_for :reporter do |reporter_fields|
-        - if current_user == @new_update.reporter
+    - f.fields_for :campaign_comments, @new_comment do |update_fields|
+      - update_fields.fields_for :user do |user_fields|
+        - if current_user && current_user == @new_comment.user
           .form-field
-            != reporter_fields.hidden_field :id
-            != reporter_fields.hidden_field :email
-            .label= t(:email)
-            .form-value= @new_update.reporter.email
+            != user_fields.hidden_field :id
         - else
-          - if @new_update.reporter.errors.on('email')
-            .form-field-error= error_message_on @new_update.reporter, 'email'
+          - if @new_comment.errors.on('user_name')
+            .form-field-error= error_message_on @new_comment, 'user_name'
           .form-field
-            != reporter_fields.label :email
-            != reporter_fields.text_field :email
-            != reporter_fields.hidden_field :id
-      - if @new_update.errors.on(:text)
-        .form-field-error= error_message_on @new_update, :text
+            != update_fields.label :user_name, t(:name)
+            != update_fields.text_field :user_name
+          - if @new_comment.user.errors.on('email')
+            .form-field-error= error_message_on @new_comment.user, 'email'
+          .form-field
+            != user_fields.label :email
+            != user_fields.text_field :email
+            != user_fields.hidden_field :id
+      - if @new_comment.errors.on(:text)
+        .form-field-error= error_message_on @new_comment, :text
       .form-field
         != update_fields.label :text, t(:update)
         != update_fields.text_area :text, :rows => 5

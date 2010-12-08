@@ -9,4 +9,25 @@ namespace :temp do
     end
   end
   
+  desc 'Transfer existing updates to campaign comments'
+  task :transfer_updates_to_campaign_comments => :environment do
+    Update.find_each do |update|
+      puts update.inspect
+      campaign_comment = CampaignComment.new(:problem_id   => update.problem_id, 
+                                             :user_id      => update.reporter_id, 
+                                             :text         => update.text, 
+                                             :confirmed_at => update.confirmed_at, 
+                                             :created_at   => update.created_at, 
+                                             :updated_at   => update.updated_at, 
+                                             :mark_fixed   => update.mark_fixed,
+                                             :mark_open    => update.mark_open, 
+                                             :token        => update.token, 
+                                             :status_code  => update.status_code, 
+                                             :user_name    => update.reporter_name)
+      campaign_comment.save!
+      campaign_comment.token = update.token
+      campaign_comment.save!
+    end
+  end
+  
 end

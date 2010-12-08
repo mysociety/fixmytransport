@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101207143408) do
+ActiveRecord::Schema.define(:version => 20101208085140) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -69,6 +69,9 @@ ActiveRecord::Schema.define(:version => 20101207143408) do
     t.datetime "confirmed_at"
     t.integer  "status_code"
     t.string   "token"
+    t.integer  "problem_id"
+    t.boolean  "mark_fixed"
+    t.boolean  "mark_open"
   end
 
   create_table "campaign_supporters", :force => true do |t|

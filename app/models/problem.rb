@@ -6,7 +6,7 @@ class Problem < ActiveRecord::Base
   belongs_to :passenger_transport_executive
   belongs_to :campaign, :autosave => true
   has_many :assignments
-  has_many :updates
+  has_many :campaign_comments
   has_many :sent_emails
   has_many :recipients, :through => :sent_emails
   validates_presence_of :transport_mode_id, :unless => :location

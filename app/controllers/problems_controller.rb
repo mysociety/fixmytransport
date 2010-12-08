@@ -70,9 +70,9 @@ class ProblemsController < ApplicationController
   
   def show
     map_params_from_location(@problem.location.points, find_other_locations=false)
-    @new_update = Update.new(:problem_id => @problem, 
-                             :reporter => current_user ? current_user : User.new,
-                             :reporter_name => current_user ? current_user.name : '')
+    @new_comment = CampaignComment.new(:problem_id => @problem.id, 
+                                       :user => current_user ? current_user : User.new,
+                                       :user_name => current_user ? current_user.name : '')
   end
 
   def confirm
@@ -88,19 +88,23 @@ class ProblemsController < ApplicationController
   end
   
   def update
-    # just accept params for a new update for now
-    @new_update = @problem.updates.build(params[:problem][:updates])
-    @new_update.status = :new
-    if @new_update.valid? 
+    # just accept params for a new comment for now
+    if params[:problem][:campaign_comments][:user_attributes].has_key?(:id) && 
+      current_user.id != params[:problem][:campaign_comments][:user_attributes][:id].to_i
+      raise "Comment added with user_id that isn't logged in user"
+    end
+    @new_comment = @problem.campaign_comments.build(params[:problem][:campaign_comments])
+    @new_comment.status = :new
+    if @new_comment.valid? 
       # save the user account if it doesn't exist, but don't log it in
-      @new_update.save_reporter
-      @new_update.save
+      @new_comment.save_user
+      @new_comment.save
       if current_user
-        @new_update.confirm!
+        @new_comment.confirm!
         flash[:notice] = t(:thanks_for_update)
         redirect_to problem_url(@problem)
       else
-        @new_update.send_confirmation_email
+        @new_comment.send_confirmation_email
         @action = t(:your_update_will_not_be_posted)
         @worry = t(:holding_on_to_update)
         render 'shared/confirmation_sent'
@@ -109,15 +113,6 @@ class ProblemsController < ApplicationController
     else
       map_params_from_location(@problem.location.points, find_other_locations=false)
       render :show
-    end
-  end
-  
-  def confirm_update  
-    @update = Update.find_by_token(params[:email_token])
-    if @update
-      @update.confirm!
-    else
-      @error = t(:update_not_found)
     end
   end
   

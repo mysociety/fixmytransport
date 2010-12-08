@@ -1,5 +1,9 @@
 - if @error
   = @error
 - else
-  = t(:thanks_for_adding_comment)
-  = link_to t(:see_your_comment), campaign_url(@comment.campaign, :anchor => "comment_#{@comment.id}")
+  - if @comment.problem
+    = t(:thanks_for_adding_update)
+    = link_to t(:see_your_update), comment_url(@comment)
+  - else  
+    = t(:thanks_for_adding_comment)
+    = link_to t(:see_your_comment), comment_url(@comment)

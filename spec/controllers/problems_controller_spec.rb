@@ -462,21 +462,26 @@ describe ProblemsController do
   describe "PUT #update" do 
   
     before do 
-      @mock_problem = mock_model(Problem, :updates => [])
-      @mock_update = mock_model(Update, :valid? => true, 
-                                        :save => true, 
-                                        :save_reporter => true,
-                                        :status= => true,
-                                        :send_confirmation_email => true,
-                                        :confirm! => true)
-      @mock_problem.updates.stub!(:build).and_return(@mock_update)
+      @mock_problem = mock_model(Problem, :campaign_comments => [])
+      @mock_comment = mock_model(CampaignComment, :valid? => true, 
+                                                  :save => true, 
+                                                  :save_user => true,
+                                                  :status= => true,
+                                                  :send_confirmation_email => true,
+                                                  :confirm! => true)
+      @mock_problem.campaign_comments.stub!(:build).and_return(@mock_comment)
       Problem.stub!(:find).and_return(@mock_problem)
     end
     
     def make_request
-      put :update, { :id => 55, 
-                     :problem => { :title => 'a new title', 
-                                   :updates => { :text => 'test' } } }
+      put :update, default_params
+    end
+    
+    def default_params
+      { :id => 55, 
+        :problem => { :title => 'a new title', 
+                      :campaign_comments => { 'text' => 'test',
+                                              'user_attributes' => {'email' => 'test@example.com'} } } }
     end
     
     it 'should find the problem by id' do 
@@ -485,24 +490,24 @@ describe ProblemsController do
     end
     
     it 'should only pass on parameters for a new update' do 
-      @mock_problem.updates.should_receive(:build).with({ 'text' => 'test' })
+      @mock_problem.campaign_comments.should_receive(:build).with(default_params[:problem][:campaign_comments])
       make_request
     end
     
     it 'should set the update status to :new' do 
-      @mock_update.should_receive(:status=).with(:new)
+      @mock_comment.should_receive(:status=).with(:new)
       make_request
     end
     
     describe 'if the update is valid' do 
     
       it 'should save the update' do 
-        @mock_update.should_receive(:save)
+        @mock_comment.should_receive(:save)
         make_request
       end
     
-      it 'should save the update reporter' do 
-        @mock_update.should_receive(:save_reporter)
+      it 'should save the update user' do 
+        @mock_comment.should_receive(:save_user)
         make_request
       end
       
@@ -513,7 +518,7 @@ describe ProblemsController do
         end
         
         it 'should confirm the update' do 
-          @mock_update.should_receive(:confirm!)
+          @mock_comment.should_receive(:confirm!)
           make_request
         end
         
@@ -537,7 +542,7 @@ describe ProblemsController do
         end
         
         it 'should send a confirmation email' do 
-          @mock_update.should_receive(:send_confirmation_email)
+          @mock_comment.should_receive(:send_confirmation_email)
           make_request
         end
         

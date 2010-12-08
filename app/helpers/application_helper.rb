@@ -234,8 +234,12 @@ module ApplicationHelper
     names.to_sentence(:last_word_connector => connector, :two_words_connector => " #{connector} ")
   end
   
-  def update_url(update)
-    problem_url(update.problem, :anchor => "update_#{update.id}")
+  def comment_url(comment)
+    if comment.problem
+      problem_url(comment.problem, :anchor => "comment_#{comment.id}")
+    else
+      campaign_url(comment.campaign, :anchor => "comment_#{comment.id}")
+    end
   end
   
   def pte_link(pte)
