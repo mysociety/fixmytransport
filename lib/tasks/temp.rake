@@ -24,7 +24,7 @@ namespace :temp do
                                              :token        => update.token,
                                              :user_name    => update.reporter_name)
       campaign_comment.save!
-      campaign.status = update.status
+      campaign_comment.status = update.status
       campaign_comment.token = update.token
       campaign_comment.save!
     end
