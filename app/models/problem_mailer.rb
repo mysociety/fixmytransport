@@ -108,21 +108,22 @@ class ProblemMailer < ApplicationMailer
     
     if sent_count > 0
       STDERR.puts "Sent #{sent_count} reports"
-    end
+
     
-    if missing_emails[:operator].size > 0
-      STDERR.puts "Operator emails that need to be found:"
-      missing_emails[:operator].each{ |operator_id, operator| STDERR.puts operator.name }
-    end
+      if missing_emails[:operator].size > 0
+        STDERR.puts "Operator emails that need to be found:"
+        missing_emails[:operator].each{ |operator_id, operator| STDERR.puts operator.name }
+      end
     
-    if missing_emails[:passenger_transport_executive].size > 0
-      STDERR.puts "PTE emails that need to be found:"
-      missing_emails[:passenger_transport_executive].each{ |pte_id, pte| STDERR.puts pte.name } 
-    end
+      if missing_emails[:passenger_transport_executive].size > 0
+        STDERR.puts "PTE emails that need to be found:"
+        missing_emails[:passenger_transport_executive].each{ |pte_id, pte| STDERR.puts pte.name } 
+      end
     
-    if missing_emails[:council].size > 0
-      STDERR.puts "Council emails that need to be found:"
-      missing_emails[:council].each{ |council_id, council| STDERR.puts council.name }
+      if missing_emails[:council].size > 0
+        STDERR.puts "Council emails that need to be found:"
+        missing_emails[:council].each{ |council_id, council| STDERR.puts council.name }
+      end
     end
   end
   
