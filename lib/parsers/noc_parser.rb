@@ -28,13 +28,17 @@ class Parsers::NocParser
                        "YO" => "Y", 
                        "SC" => "S", 
                        "LO" => "L" }
+      vehicle_mode = row['VehicleMode']
+      
+      transport_mode = Operator.vehicle_mode_to_transport_mode(vehicle_mode)       
       operator = Operator.new(:noc_code => row['NOCCODE'], 
                               :name => row['OperatorPublicName'], 
                               :reference_name => row['OperatorReferenceName '], 
                               :vosa_license_name => row['VOSA_PSVLicenseName'],
                               :parent => row['Parent'], 
                               :ultimate_parent => row['UltimateParent'], 
-                              :vehicle_mode => row['VehicleMode'])
+                              :vehicle_mode => vehicle_mode,
+                              :transport_mode => transport_mode)
       
       ["SW", "WM", "WA", "YO", "NW", "NE", "SC"].each do |region_code|
         if !row[region_code].blank?

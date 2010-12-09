@@ -22,7 +22,7 @@ describe Parsers::NocParser do
   
   end
   
-  describe 'when parsing an example CSV file of stop area data' do 
+  describe 'when parsing an example CSV file of operator data' do 
     
     before(:each) do 
       @parser = Parsers::NocParser.new
@@ -30,6 +30,8 @@ describe Parsers::NocParser do
       mock_em_region = mock_model(Region, :name => 'East Midlands')
       Region.stub!(:find_by_code).and_return(mock_em_region)
       Region.stub!(:find_by_code).with('WM').and_return(mock_wm_region)
+      @mock_transport_mode = mock_model(TransportMode, :name => 'Train')
+      Operator.stub!(:vehicle_mode_to_transport_mode).and_return(@mock_transport_mode)
       @operators = []
       @parser.parse_operators(example_file("operators.tsv")){ |operator| @operators << operator }
     end
@@ -60,6 +62,10 @@ describe Parsers::NocParser do
     
     it 'should extract the vehicle mode' do 
       @operators.first.vehicle_mode.should == 'Bus'
+    end
+    
+    it 'should set the transport mode' do
+      @operators.first.transport_mode.name.should == 'Train'
     end
     
     it 'should create vosa_license models for each populated VOSA license field' do

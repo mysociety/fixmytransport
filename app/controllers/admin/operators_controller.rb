@@ -103,6 +103,7 @@ class Admin::OperatorsController < ApplicationController
   private
   
   def make_route_operators code
+    return [] if code.blank?
     Route.find_without_operators(:operator_code => code).map{ |route| RouteOperator.new(:route => route) }
   end
   

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101208085140) do
+ActiveRecord::Schema.define(:version => 20101209103633) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -58,22 +58,6 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
     t.integer  "problem_id"
   end
 
-  create_table "campaign_comments", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "campaign_update_id"
-    t.integer  "campaign_id"
-    t.text     "text"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "user_name"
-    t.datetime "confirmed_at"
-    t.integer  "status_code"
-    t.string   "token"
-    t.integer  "problem_id"
-    t.boolean  "mark_fixed"
-    t.boolean  "mark_open"
-  end
-
   create_table "campaign_supporters", :force => true do |t|
     t.integer  "campaign_id"
     t.integer  "supporter_id"
@@ -113,6 +97,22 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
   end
 
   add_index "campaigns", ["cached_slug"], :name => "index_campaigns_on_cached_slug"
+
+  create_table "comments", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "campaign_update_id"
+    t.integer  "campaign_id"
+    t.text     "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "user_name"
+    t.datetime "confirmed_at"
+    t.integer  "status_code"
+    t.string   "token"
+    t.integer  "problem_id"
+    t.boolean  "mark_fixed"
+    t.boolean  "mark_open"
+  end
 
   create_table "council_contacts", :force => true do |t|
     t.integer  "area_id"
@@ -166,7 +166,7 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
     t.string   "grid_type"
     t.float    "northing"
     t.float    "easting"
-    t.geometry "coords"
+    t.point    "coords",                                               :srid => 27700
     t.integer  "district_id"
     t.string   "cached_slug"
     t.float    "lat"
@@ -185,8 +185,8 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
     t.integer  "count"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
+    t.integer  "generation_low",  :default => 1, :null => false
+    t.integer  "generation_high", :default => 1, :null => false
   end
 
   add_index "locality_links", ["ancestor_id"], :name => "index_locality_links_on_ancestor_id"
@@ -211,8 +211,6 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
     t.string   "code"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
   end
 
   create_table "operators", :force => true do |t|
@@ -230,8 +228,9 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
     t.string   "parent"
     t.string   "vehicle_mode"
     t.string   "ultimate_parent"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
+    t.integer  "generation_low",    :default => 1, :null => false
+    t.integer  "generation_high",   :default => 1, :null => false
+    t.integer  "transport_mode_id"
   end
 
   create_table "outgoing_messages", :force => true do |t|
@@ -326,8 +325,8 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
     t.integer  "route_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
+    t.integer  "generation_low",  :default => 1, :null => false
+    t.integer  "generation_high", :default => 1, :null => false
   end
 
   add_index "route_operators", ["operator_id"], :name => "index_route_operators_on_operator_id"
@@ -343,8 +342,8 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
     t.datetime "updated_at"
     t.integer  "from_stop_area_id"
     t.integer  "to_stop_area_id"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
+    t.integer  "generation_low",    :default => 1,     :null => false
+    t.integer  "generation_high",   :default => 1,     :null => false
   end
 
   add_index "route_segments", ["from_stop_area_id"], :name => "index_route_segments_on_from_stop_area_id"
@@ -363,7 +362,7 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
 
   add_index "route_source_admin_areas", ["route_id"], :name => "index_route_source_admin_areas_on_route_id"
   add_index "route_source_admin_areas", ["source_admin_area_id"], :name => "index_route_source_admin_areas_on_source_admin_area_id"
-  
+
   create_table "route_sub_routes", :force => true do |t|
     t.integer  "route_id"
     t.integer  "sub_route_id"
@@ -385,8 +384,8 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
     t.float    "lat"
     t.float    "lon"
     t.text     "cached_description"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
+    t.integer  "generation_low",     :default => 1, :null => false
+    t.integer  "generation_high",    :default => 1, :null => false
   end
 
   add_index "routes", ["cached_slug"], :name => "index_routes_on_cached_slug"
@@ -437,8 +436,8 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
     t.integer  "count"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
+    t.integer  "generation_low",  :default => 1, :null => false
+    t.integer  "generation_high", :default => 1, :null => false
   end
 
   create_table "stop_area_memberships", :force => true do |t|
@@ -462,8 +461,6 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
     t.integer  "operator_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
   end
 
   create_table "stop_area_types", :force => true do |t|
@@ -488,13 +485,13 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.geometry "coords"
+    t.point    "coords",                                                  :srid => 27700
     t.float    "lon"
     t.float    "lat"
     t.integer  "locality_id"
     t.boolean  "loaded"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
+    t.integer  "generation_low",           :default => 1, :null => false
+    t.integer  "generation_high",          :default => 1, :null => false
   end
 
   add_index "stop_areas", ["coords"], :name => "index_stop_areas_on_coords", :spatial => true
@@ -540,7 +537,7 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.geometry "coords"
+    t.point    "coords",                                      :srid => 27700
     t.integer  "locality_id"
     t.string   "cached_slug"
     t.boolean  "loaded"
@@ -657,8 +654,6 @@ ActiveRecord::Schema.define(:version => 20101208085140) do
     t.string   "number"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
   end
 
   add_foreign_key "route_operators", "operators", :name => "route_operators_operator_id_fk", :dependent => :nullify

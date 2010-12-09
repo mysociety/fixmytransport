@@ -31,7 +31,13 @@ class SubRoute < ActiveRecord::Base
   end
   
   def operators
-    routes.map{ |route| route.operators }.flatten.uniq
+    route_operators = routes.map{ |route| route.operators }.flatten.uniq
+    if route_operators.empty?
+      mode = TransportMode.find_by_name('Train')
+      route_operators = Operator.find(:all, :conditions => ['transport_mode_id = ?', mode.id], 
+                                            :order => 'name asc')
+    end
+    route_operators
   end
   
   def responsible_organization_type

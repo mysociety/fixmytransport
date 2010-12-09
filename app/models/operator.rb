@@ -21,6 +21,7 @@ class Operator < ActiveRecord::Base
   has_many :operator_codes
   has_many :sent_emails, :as => :recipient
   has_many :outgoing_messages, :as => :recipient
+  belongs_to :transport_mode
   validates_presence_of :name
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$"), 
                               :if => Proc.new { |operator| !operator.email.blank? }
@@ -82,6 +83,19 @@ class Operator < ActiveRecord::Base
     end
     
     operators
+  end
+  
+  def self.vehicle_mode_to_transport_mode(vehicle_mode)
+    modes_to_modes = {  'bus'         => 'Bus',
+                        'coach'       => 'Coach',
+                        'drt'         => 'Bus',
+                        'ferry'       => 'Ferry',
+                        'metro'       => 'Tram/Metro',
+                        'other'       => 'Bus',
+                        'rail'        => 'Train',
+                        'tram'        => 'Tram/Metro',
+                        'underground' => 'Tram/Metro' }
+    TransportMode.find_by_name(modes_to_modes[vehicle_mode.downcase])                    
   end
   
   # mapping from NPTDR vehicle codes to NOC vehicle modes 
