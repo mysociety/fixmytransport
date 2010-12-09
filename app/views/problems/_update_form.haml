@@ -2,7 +2,7 @@
 .update-help!= t(:update_help, :privacy_link => link_to(t(:privacy_policy), about_url(:anchor => "privacy")), :location_type => readable_location_type(@problem.location))
 - form_for @problem, :url => problem_path(@problem), :html => { :class => 'new_update' } do |f|
   .fieldset
-    - f.fields_for :campaign_comments, @new_comment do |update_fields|
+    - f.fields_for :comments, @new_comment do |update_fields|
       - update_fields.fields_for :user do |user_fields|
         - if current_user && current_user == @new_comment.user
           .form-field

@@ -407,13 +407,13 @@ describe CampaignsController do
       @mock_campaign = mock_model(Campaign, :visible? => true, :editable? => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @controller.stub!(:current_user).and_return(@mock_user)
-      @mock_comment = mock_model(CampaignComment, :save => true,
-                                                  :valid? => true,
-                                                  :save_user => true,
-                                                  :campaign_update_id => 66,
-                                                  :text => 'comment text',
-                                                  :confirm! => true,
-                                                  :status= => true)
+      @mock_comment = mock_model(Comment, :save => true,
+                                          :valid? => true,
+                                          :save_user => true,
+                                          :campaign_update_id => 66,
+                                          :text => 'comment text',
+                                          :confirm! => true,
+                                          :status= => true)
       @mock_update = mock_model(CampaignUpdate, :comments => mock('comments', :build => @mock_comment))
       CampaignUpdate.stub!(:find).and_return(@mock_update)
     end
@@ -424,8 +424,8 @@ describe CampaignsController do
     
     def default_params
       { :id => 55, 
-        :campaign_comment => { :update_id => 66, 
-                               :user_attributes => {:email => 'test@example.com'}} }
+        :comment => { :update_id => 66, 
+                      :user_attributes => {:email => 'test@example.com'}} }
     end
     
     it 'should create a comment associated with the update' do 

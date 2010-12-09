@@ -133,7 +133,7 @@ class CampaignsController < ApplicationController
   end
   
   def confirm_comment
-    @comment = CampaignComment.find_by_token(params[:email_token])
+    @comment = Comment.find_by_token(params[:email_token])
     if @comment
       @comment.confirm!
     else
@@ -143,10 +143,10 @@ class CampaignsController < ApplicationController
   
   def add_comment
     if request.post? 
-      @comment = @campaign_update.comments.build(params[:campaign_comment])
+      @comment = @campaign_update.comments.build(params[:comment])
       @comment.status = :new
-      if params[:campaign_comment].has_key?(:user_id) && 
-        current_user.id != params[:campaign_comment][:user_id].to_i
+      if params[:comment].has_key?(:user_id) && 
+        current_user.id != params[:comment][:user_id].to_i
         raise "Comment added with user_id that isn't logged in user"
       end
       if @comment.valid?
@@ -192,7 +192,7 @@ class CampaignsController < ApplicationController
   private
   
   def find_update
-    update_param = (params[:update_id] or params[:campaign_comment][:campaign_update_id])
+    update_param = (params[:update_id] or params[:comment][:campaign_update_id])
     @campaign_update = CampaignUpdate.find(update_param)
     if ! @campaign_update
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found

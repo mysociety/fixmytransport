@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CampaignComment do
+describe Comment do
   before(:each) do
     @valid_attributes = {
       :user_id => 1,
@@ -11,6 +11,6 @@ describe CampaignComment do
   end
 
   it "should create a new instance given valid attributes" do
-    CampaignComment.create!(@valid_attributes)
+    Comment.create!(@valid_attributes)
   end
 end

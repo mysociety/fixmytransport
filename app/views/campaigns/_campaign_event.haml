@@ -40,27 +40,27 @@
         - form_class = "ajax_new_campaign_comment" 
       - else
         - form_class = "new_campaign_comment"
-      - form_for @campaign_comment = CampaignComment.new(:user => current_user ? current_user : User.new, :campaign => @campaign, :campaign_update => event), :url => add_comment_campaign_url(@campaign), :html => {:class => form_class} do |f|
+      - form_for @comment = Comment.new(:user => current_user ? current_user : User.new, :campaign => @campaign, :campaign_update => event), :url => add_comment_campaign_url(@campaign), :html => {:class => form_class} do |f|
         - if @empty_comment
           .form-field-error
             = t(:please_enter_some_text)
-        = f.text_area :text, :rows => 2, :cols => 40,:id => "campaign_comment_text_#{event.id}"
-        != f.hidden_field :campaign_update_id, :id => "campaign_comment_campaign_update_id_#{event.id}"
-        != f.hidden_field :campaign_id, :id => "campaign_comment_campaign_id_#{event.id}"
+        = f.text_area :text, :rows => 2, :cols => 40,:id => "comment_text_#{event.id}"
+        != f.hidden_field :campaign_update_id, :id => "comment_campaign_update_id_#{event.id}"
+        != f.hidden_field :campaign_id, :id => "comment_campaign_id_#{event.id}"
         - if current_user
-          != f.hidden_field :user_id, :id => "campaign_comment_user_id_#{event.id}"
+          != f.hidden_field :user_id, :id => "comment_user_id_#{event.id}"
         - else
-          - if @campaign_comment.errors.on('user_name')
-            .form-field-error= error_message_on @campaign_comment, 'user_name'
+          - if @comment.errors.on('user_name')
+            .form-field-error= error_message_on @comment, 'user_name'
           .form-field
             != f.label :user_name, t(:name)
-            != f.text_field :user_name, :id => "campaign_comment_user_name_#{event.id}"
+            != f.text_field :user_name, :id => "comment_user_name_#{event.id}"
           - f.fields_for :user do |user_fields|
-            - if @campaign_comment.user.errors.on('email')
-              .form-field-error= error_message_on @campaign_comment.user, "email"
+            - if @comment.user.errors.on('email')
+              .form-field-error= error_message_on @comment.user, "email"
             .form-field
               != user_fields.label :email
-              != user_fields.text_field :email, :id => "campaign_comment_email_#{event.id}"
-        != f.submit t(:add_comment), :id => "campaign_comment_submit_#{event.id}"
+              != user_fields.text_field :email, :id => "comment_email_#{event.id}"
+        != f.submit t(:add_comment), :id => "comment_submit_#{event.id}"
 
     %div{:style => "clear:both;"}

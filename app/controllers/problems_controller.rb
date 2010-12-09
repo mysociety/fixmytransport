@@ -70,9 +70,9 @@ class ProblemsController < ApplicationController
   
   def show
     map_params_from_location(@problem.location.points, find_other_locations=false)
-    @new_comment = CampaignComment.new(:problem_id => @problem.id, 
-                                       :user => current_user ? current_user : User.new,
-                                       :user_name => current_user ? current_user.name : '')
+    @new_comment = Comment.new(:problem_id => @problem.id, 
+                               :user => current_user ? current_user : User.new,
+                               :user_name => current_user ? current_user.name : '')
   end
 
   def confirm
@@ -89,11 +89,11 @@ class ProblemsController < ApplicationController
   
   def update
     # just accept params for a new comment for now
-    if params[:problem][:campaign_comments][:user_attributes].has_key?(:id) && 
-      current_user.id != params[:problem][:campaign_comments][:user_attributes][:id].to_i
+    if current_user && params[:problem][:comments][:user_attributes].has_key?(:id) && 
+      current_user.id != params[:problem][:comments][:user_attributes][:id].to_i
       raise "Comment added with user_id that isn't logged in user"
     end
-    @new_comment = @problem.campaign_comments.build(params[:problem][:campaign_comments])
+    @new_comment = @problem.comments.build(params[:problem][:comments])
     @new_comment.status = :new
     if @new_comment.valid? 
       # save the user account if it doesn't exist, but don't log it in
@@ -227,8 +227,6 @@ class ProblemsController < ApplicationController
           @error_messages = route_info[:errors].map{ |message| t(message) }
           render :find_train_route
           return
-        elsif route_info[:routes].empty? 
-          @error_messages = [t(:route_not_found)]
         else
           #create the subroute
           sub_route = SubRoute.make_sub_route(route_info[:from_stops].first, 
@@ -238,7 +236,7 @@ class ProblemsController < ApplicationController
             RouteSubRoute.create!(:route => route, 
                                   :sub_route => sub_route)
           end
-          redirect_to new_problem_url(:location_id => sub_route.id, :location_type => sub_route.type)
+          redirect_to new_problem_url(:location_id => sub_route.id, :location_type => sub_route.class.to_s)
         end
       end
     end

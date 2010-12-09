@@ -19,7 +19,7 @@
     .problem-datetime= t(:problem_occurred, :date_and_time => problem_date_and_time(@problem))
   %h3= t(:updates)
   .updates
-    - @problem.campaign_comments.visible.each do |comment| 
+    - @problem.comments.visible.each do |comment| 
       .problem-event
         %a{:name => "update_#{comment.id}"}
         %span.date= t(:posted_time, :time => time_ago_in_words(comment.confirmed_at))

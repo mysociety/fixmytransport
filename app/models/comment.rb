@@ -1,4 +1,4 @@
-class CampaignComment < ActiveRecord::Base
+class Comment < ActiveRecord::Base
   belongs_to :user
   belongs_to :campaign_update
   belongs_to :campaign
@@ -36,7 +36,7 @@ class CampaignComment < ActiveRecord::Base
   
   # create the user if it doesn't exist, but don't save it yet
   def user_attributes=(attributes)
-    if attributes[:id] 
+    if !attributes[:id].blank?
       self.user = User.find(attributes[:id])
     else
       self.user = User.find_or_initialize_by_email(attributes[:email], :name => user_name)

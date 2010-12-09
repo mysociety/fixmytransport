@@ -136,7 +136,7 @@ function updateCallback(response){
 
 function updateCommentCallback(response){
   commentbox_div = jQuery('#commentbox_' + response.update_id);
-  commentbox = jQuery("#campaign_comment_text_" + response.update_id);
+  commentbox = jQuery("#comment_text_" + response.update_id);
   jQuery('.form-field-error', commentbox_div).remove();
   
   if (response.success){
@@ -146,7 +146,7 @@ function updateCommentCallback(response){
   } else {
    
     for (var key in response.errors){
-      show_error(jQuery('#campaign_comment_'+ key + '_' + response.update_id), response.errors[key] );
+      show_error(jQuery('#comment_'+ key + '_' + response.update_id), response.errors[key] );
     }
   }
 }

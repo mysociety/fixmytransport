@@ -2,7 +2,7 @@ en:
   activerecord:
     errors:
       models:
-        campaign_comment:
+        comment:
           attributes: 
             text: 
               blank: "Please enter your comment"

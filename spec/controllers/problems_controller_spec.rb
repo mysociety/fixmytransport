@@ -64,19 +64,7 @@ describe ProblemsController do
         make_request({:to => "london euston", :from => 'birmingham new street'})
       end
       
-      describe 'when no routes are returned' do 
-      
-        it 'should display an error message' do 
-          Gazetteer.stub!(:train_route_from_stations_and_time).and_return(:routes => [],
-                                                                          :from_stops => [], 
-                                                                          :to_stops => [])
-          make_request({:to => "london euston", :from => 'birmingham new street'})
-          assigns[:error_messages].should == ['We could not find the route you entered.']
-        end
-        
-      end
-    
-      describe 'when one or more routes are returned' do 
+      describe 'when no errors are returned' do 
 
         before do 
           @from_stop = mock_model(StopArea, :name => 'London Euston')
@@ -462,14 +450,14 @@ describe ProblemsController do
   describe "PUT #update" do 
   
     before do 
-      @mock_problem = mock_model(Problem, :campaign_comments => [])
-      @mock_comment = mock_model(CampaignComment, :valid? => true, 
-                                                  :save => true, 
-                                                  :save_user => true,
-                                                  :status= => true,
-                                                  :send_confirmation_email => true,
-                                                  :confirm! => true)
-      @mock_problem.campaign_comments.stub!(:build).and_return(@mock_comment)
+      @mock_problem = mock_model(Problem, :comments => [])
+      @mock_comment = mock_model(Comment, :valid? => true, 
+                                          :save => true, 
+                                          :save_user => true,
+                                          :status= => true,
+                                          :send_confirmation_email => true,
+                                          :confirm! => true)
+      @mock_problem.comments.stub!(:build).and_return(@mock_comment)
       Problem.stub!(:find).and_return(@mock_problem)
     end
     
@@ -480,8 +468,8 @@ describe ProblemsController do
     def default_params
       { :id => 55, 
         :problem => { :title => 'a new title', 
-                      :campaign_comments => { 'text' => 'test',
-                                              'user_attributes' => {'email' => 'test@example.com'} } } }
+                      :comments => { 'text' => 'test',
+                                     'user_attributes' => {'email' => 'test@example.com'} } } }
     end
     
     it 'should find the problem by id' do 
@@ -490,7 +478,7 @@ describe ProblemsController do
     end
     
     it 'should only pass on parameters for a new update' do 
-      @mock_problem.campaign_comments.should_receive(:build).with(default_params[:problem][:campaign_comments])
+      @mock_problem.comments.should_receive(:build).with(default_params[:problem][:comments])
       make_request
     end
     
