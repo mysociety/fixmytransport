@@ -21,10 +21,10 @@ namespace :temp do
                                              :updated_at   => update.updated_at, 
                                              :mark_fixed   => update.mark_fixed,
                                              :mark_open    => update.mark_open, 
-                                             :token        => update.token, 
-                                             :status_code  => update.status_code, 
+                                             :token        => update.token,
                                              :user_name    => update.reporter_name)
       campaign_comment.save!
+      campaign.status = update.status
       campaign_comment.token = update.token
       campaign_comment.save!
     end
