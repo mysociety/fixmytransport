@@ -2,8 +2,8 @@
   #map-col
     = render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH }
 .campaign-info
-  = link_to(t(:tweet_this), "http://twitter.com/share", {:class =>"twitter-share-button", 'data-count' => 'vertical', 'data-via' =>"fixmytransport"})
-  %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
+  / = link_to(t(:tweet_this), "http://twitter.com/share", {:class =>"twitter-share-button", 'data-count' => 'vertical', 'data-via' =>"fixmytransport"})
+  / %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
   %h2= @campaign.title
   .details
     = t(:started_on, :date => @campaign.created_at.strftime("%d/%m/%Y"))
