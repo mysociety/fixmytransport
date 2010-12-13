@@ -311,7 +311,7 @@ class Route < ActiveRecord::Base
   # Accepts an array of stops or an array of arrays of locations (stops or stop areas) as first parameter.
   # If passed the latter, will find routes that pass through at least one location in
   # each array. Additional params to constrain the search can be passed as options.
-  def self.find_all_by_locations(stops, options)
+  def self.find_all_by_locations(stops_or_stop_areas, options)
     from_terminus_clause = ''
     to_terminus_clause = ''
     params = []
@@ -338,7 +338,7 @@ class Route < ActiveRecord::Base
    
     include_params << :route_segments
     joins = ''
-    stops.each_with_index do |item,index|
+    stops_or_stop_areas.each_with_index do |item,index|
       if options[:as_terminus]
         from_terminus_clause = "rs#{index}.from_terminus = 't' and"
         to_terminus_clause = "rs#{index}.to_terminus = 't' and"
