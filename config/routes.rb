@@ -5,7 +5,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # resources
   map.resources :operators, :only => [:show]
-  map.resources :campaigns, :except => [:destroy, :index], 
+  map.resources :campaigns, :except => [:destroy], 
                             :member => { :join => [:get, :post], 
                                          :leave => [:post], 
                                          :add_update => [:get, :post],

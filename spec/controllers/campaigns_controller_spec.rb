@@ -2,6 +2,25 @@ require 'spec_helper'
 
 describe CampaignsController do
 
+  describe 'GET #index' do 
+  
+    def make_request
+      get :index
+    end
+    
+    it 'should render the index template' do 
+      make_request
+      response.should render_template('index')
+    end
+    
+    it 'should ask for recent campaigns' do 
+      Campaign.should_receive(:find_recent).and_return([])
+      make_request
+    end
+  
+  end
+  
+
   describe 'GET #show' do 
   
     before do

@@ -5,7 +5,6 @@ en:
   fixmytransport: "FixMyTransport"
   campaign_start_date: Start date
   write_to_operator: Write to the operator
-  campaign_location: "to {{link}}"
   login_to: "Login as {{user}} to {{requested_action}}"
   wrong_user: "To {{requested_action}}, you'll need to {{logout_link}}, and login as {{name}}"
   password_confirmation: Password (again)

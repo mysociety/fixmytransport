@@ -144,10 +144,11 @@ class Campaign < ActiveRecord::Base
     find(:first, :conditions => ['lower(subdomain) = ?', subdomain.downcase])
   end
   
-  def self.find_recent(number)
+  def self.find_recent(number, options={})
     visible.find(:all, :order => 'created_at desc', 
                        :limit => number, 
-                       :include => [:location, :initiator])
+                       :include => [:location, :initiator],
+                       :offset => options[:offset])
   end
   
 end

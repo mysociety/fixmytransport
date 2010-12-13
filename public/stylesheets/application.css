@@ -38,7 +38,6 @@ h3.name{
 
 #site-tagline{
     line-height: 40px;
-    font-style: bold;
     color: #dedede;
 }
 
@@ -232,8 +231,12 @@ h2.main-header{
 
 .campaign-body {
     background-color: #ffffff;
-    padding: 0.25em 0.5em 0.5em 0.5em;
-    margin:20px 8px 8px 8px;
+    padding: 0.25em 0 0.5em 0;
+}
+
+.campaign-body .title {
+  font-weight: bold;
+  padding: 0 0 0.25em 0;
 }
 
 /* Problem lists */
@@ -247,6 +250,7 @@ h2.main-header{
 .campaign .details {
   font-size: 0.8em;
 }
+
 /* Forms */
 
 label {

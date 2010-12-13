@@ -1,6 +1,7 @@
-  .campaign-body
-    %span.title
-      %b= campaign.title
-    =t(:added)
-    %span.initiator=  t(:by, :name => campaign.initiator.name)
-    %span.transport-location!= t(:campaign_location, :link => link_to(campaign.location.description, campaign_url(campaign)))
+.campaign-body
+  .title=link_to(campaign.title, campaign_url(campaign))
+  .details
+    = t(:started_on, :date => campaign.created_at.strftime("%d/%m/%Y"))
+    = t(:by, :name => campaign.initiator.name)
+    = on_or_at_the(campaign.location)
+    = link_to("#{campaign.location.description}", campaign_url(campaign))

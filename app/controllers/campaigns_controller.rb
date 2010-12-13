@@ -9,6 +9,19 @@ class CampaignsController < ApplicationController
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice]
   before_filter :find_update, :only => [:add_comment]
   
+  def index
+    @campaigns = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
+      campaigns = Campaign.find_recent(pager.per_page, :offset => pager.offset)
+      # inject the result array into the paginated collection:
+      pager.replace(campaigns)
+
+      unless pager.total_entries
+        # the pager didn't manage to guess the total count, do it manually
+        pager.total_entries = Campaign.visible.count
+      end
+    end
+  end
+  
   def join
     if request.post? 
       if current_user && params[:user_id] && current_user.id == params[:user_id].to_i
