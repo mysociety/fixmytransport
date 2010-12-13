@@ -173,7 +173,7 @@ class Gazetteer
   end
   
   def self.normalize_station_name(name)
-    name.gsub(/(( train| railway| rail)? station)$/i, '')
+    name.gsub(/(( train| railway| rail| tube)? station)$/i, '')
   end
   
   # - name - stop/station name
@@ -183,11 +183,11 @@ class Gazetteer
     query = 'area_type in (?)'
     params = [options[:types]]   
     name = name.downcase.strip
-    name = self.normalize_station_name(name)
     if exact
       query += " AND lower(name) = ?"
       params << name
     else
+      name = self.normalize_station_name(name)
       query += " AND (lower(name) like ? 
                  OR lower(name) like ? 
                  OR lower(name) like ? 
@@ -199,6 +199,7 @@ class Gazetteer
       params <<  "% #{name}"
       params << name
     end
+    query += " AND status != 'del'"
     conditions = [query] + params
     results = StopArea.find(:all, :conditions => conditions, 
                                   :limit => options[:limit], :order => 'name')  
