@@ -136,5 +136,23 @@ describe Gazetteer do
     
   end
   
+  describe 'when normalizing station names' do 
+  
+    it 'should strip off the word "station" at the end of the search phrase' do 
+      Gazetteer.normalize_station_name('Euston station').should == 'Euston'
+    end
+    
+    it 'should strip off the phrase "train station" at the end of the search phrase' do 
+      Gazetteer.normalize_station_name('Euston Train Station').should == 'Euston'
+    end
+    
+    it 'should strip off the phrase "railway station" at the end of the search phrase' do 
+      Gazetteer.normalize_station_name('Euston railway station').should == 'Euston'
+    end
+    
+    it 'should strip off the phrase "rail station" at the end of the search phrase' do 
+      Gazetteer.normalize_station_name('Euston rail station').should == 'Euston'
+    end
+  end
   
 end

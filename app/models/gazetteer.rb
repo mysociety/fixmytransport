@@ -172,6 +172,10 @@ class Gazetteer
     return { :routes => routes, :from_stops => from_stops, :to_stops => to_stops } 
   end
   
+  def self.normalize_station_name(name)
+    name.gsub(/(( train| railway| rail)? station)$/i, '')
+  end
+  
   # - name - stop/station name
   # options 
   # - limit - Number of results to return
@@ -179,6 +183,7 @@ class Gazetteer
     query = 'area_type in (?)'
     params = [options[:types]]   
     name = name.downcase.strip
+    name = self.normalize_station_name(name)
     if exact
       query += " AND lower(name) = ?"
       params << name

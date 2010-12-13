@@ -53,8 +53,6 @@
         .form-field
           != reporter_fields.hidden_field :id
           != reporter_fields.hidden_field :email
-          .label= t(:email)
-          .form-value= @problem.reporter.email
       - else
         - if @problem.reporter.errors.on('email')
           .form-field-error= error_message_on @problem.reporter, 'email'
