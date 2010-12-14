@@ -20,3 +20,7 @@ en:
   routes_merged: The routes have been merged
   on_street: "on {{street}}"
   in_locality: "in {{locality}}"
+  ptes: PTEs
+  wikipedia_url: Wikipedia URL
+  pte_problem: There was a problem updating this PTE. 
+  pte_updated: PTE updated.

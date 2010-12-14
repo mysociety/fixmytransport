@@ -135,7 +135,8 @@ input {
 .operator-form label, 
 .route-form label,
 .stop-form label,
-.stop-area-form label {
+.stop-area-form label, 
+.pte-form label{
   display: inline-block;
   width: 10em;
   text-align: right;
@@ -144,7 +145,8 @@ input {
 .operator-form input[type="submit"], 
 .route-form input[type="submit"],
 .stop-form input[type="submit"],
-.stop-area-form input[type="submit"] {
+.stop-area-form input[type="submit"],
+.pte-form input[type="submit"] {
   margin-left: 30em;
 }
 
