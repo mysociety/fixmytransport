@@ -24,3 +24,6 @@ en:
   wikipedia_url: Wikipedia URL
   pte_problem: There was a problem updating this PTE. 
   pte_updated: PTE updated.
+  council_contact_updated: Council contact updated. 
+  council_contact_problem: There was a problem updating this council contact.
+  council_contact_created: Council contact created.

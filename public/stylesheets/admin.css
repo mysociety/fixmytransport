@@ -136,7 +136,8 @@ input {
 .route-form label,
 .stop-form label,
 .stop-area-form label, 
-.pte-form label{
+.pte-form label, 
+.council-contact-form label{
   display: inline-block;
   width: 10em;
   text-align: right;
@@ -146,7 +147,8 @@ input {
 .route-form input[type="submit"],
 .stop-form input[type="submit"],
 .stop-area-form input[type="submit"],
-.pte-form input[type="submit"] {
+.pte-form input[type="submit"],
+.council-contact-form input[type="submit"]{
   margin-left: 30em;
 }
 

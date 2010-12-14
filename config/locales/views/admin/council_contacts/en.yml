@@ -1,0 +1,15 @@
+en:
+  council_contacts: Council contacts
+  council_contacts_for: Council contacts for {{council}}
+  category: Category
+  confirmed: Confirmed
+  last_editor: Last editor
+  notes: Notes
+  updated_at: Updated at
+  council_contact_form_error: There's been a problem editing this contact. Please see below for details. 
+  history: History
+  editor: Editor
+  add_a_council_contact: Add a council contact
+  contact_count:
+    one: "{{n}} contact"
+    other: "{{n}} contacts"

@@ -1,0 +1,19 @@
+%h2= t(:council_contacts_for, :council => @council.name)
+= link_to t(:add_a_council_contact), admin_url(new_admin_council_contact_path(:area_id => @council.id))
+%table{ :class => 'council-contacts index-list' }
+  %tr
+    %th{:width => "14%"}= t(:category)
+    %th{:width => "34%"}= t(:email)
+    %th{:width => "6%"}= t(:confirmed) 
+    %th{:width => "30%"}= t(:last_editor) 
+    %th{:width => "38%"}= t(:notes)
+    %th{:width => "34%"}= t(:updated_at) 
+  -@council.contacts.each do |contact|
+    %tr{ :class => cycle('odd', 'even') }
+      %td
+        = link_to contact.category, admin_url(admin_council_contact_path(contact))
+      %td= contact.email
+      %td= contact.confirmed
+      %td= contact.last_editor
+      %td= contact.notes
+      %td= contact.updated_at

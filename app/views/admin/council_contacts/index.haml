@@ -1,0 +1,4 @@
+- @councils.each do |council|
+  .council
+    = link_to(council.name, admin_url(admin_council_contacts_path(:area_id => council.id)))
+    = t(:contact_count, :n => council.contacts.count, :count => council.contacts.count)

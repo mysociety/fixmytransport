@@ -1,0 +1,3 @@
+%h2=t(:add_a_council_contact)
+-form_for :council_contact, @council_contact, :url => admin_url(admin_council_contacts_path), :html => { :class => 'council-contact-form' } do |f|
+  = render :partial => 'form', :locals => { :f => f } 
