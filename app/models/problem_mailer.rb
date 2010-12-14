@@ -79,7 +79,7 @@ class ProblemMailer < ApplicationMailer
     end
   end
   
-  def self.send_reports(dryrun=false)
+  def self.send_reports(dryrun=false, verbose=false)
     self.dryrun = dryrun
     
     # make sure the mail confs are up to date
@@ -110,20 +110,33 @@ class ProblemMailer < ApplicationMailer
       STDERR.puts "Sent #{sent_count} reports"
     end
     
-    if missing_emails[:operator].size > 0
-      STDERR.puts "Operator emails that need to be found:"
-      missing_emails[:operator].each{ |operator_id, operator| STDERR.puts operator.name }
-    end
+    if verbose
+      if missing_emails[:operator].size > 0
+        STDERR.puts "Operator emails that need to be found:"
+        missing_emails[:operator].each{ |operator_id, operator| STDERR.puts operator.name }
+      end
   
-    if missing_emails[:passenger_transport_executive].size > 0
-      STDERR.puts "PTE emails that need to be found:"
-      missing_emails[:passenger_transport_executive].each{ |pte_id, pte| STDERR.puts pte.name } 
-    end
+      if missing_emails[:passenger_transport_executive].size > 0
+        STDERR.puts "PTE emails that need to be found:"
+        missing_emails[:passenger_transport_executive].each{ |pte_id, pte| STDERR.puts pte.name } 
+      end
   
-    if missing_emails[:council].size > 0
-      STDERR.puts "Council emails that need to be found:"
-      missing_emails[:council].each{ |council_id, council| STDERR.puts council.name }
+      if missing_emails[:council].size > 0
+        STDERR.puts "Council emails that need to be found:"
+        missing_emails[:council].each{ |council_id, council| STDERR.puts council.name }
+      end
+      
+      unsendable_problems = Problem.unsendable
+      if unsendable_problems.size > 0
+        STDERR.puts "Organisations need to be found for the following problem locations:"
+        unsendable_problems.each do |problem|
+          location = problem.location_type.constantize.find(problem.location_id)
+          STDERR.puts "Problem #{problem.id}: #{location.class} '#{location.name}' (id #{location.id})"
+        end
+      end
     end
+    
+    
   end
   
 end

@@ -2,6 +2,12 @@
 
 LOC=`dirname $0`
 
-$LOC/runner 'ProblemMailer.send_reports'
+if [ $1 == 'verbose' ]
+    then 
+    $LOC/runner 'ProblemMailer.send_reports(dryrun=false, verbose=true)'
+    else
+    $LOC/runner 'ProblemMailer.send_reports(dryrun=false)'
+fi 
+
 
 

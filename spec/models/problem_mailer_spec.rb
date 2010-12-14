@@ -125,6 +125,8 @@ describe ProblemMailer do
                           :reporter => @reporter,
                           :category => 'Other',
                           :location => @mock_stop, 
+                          :location_type => 'Stop',
+                          :location_id => @mock_stop.id,
                           :time => nil, 
                           :date => nil,
                           :campaign => nil)
@@ -159,7 +161,8 @@ describe ProblemMailer do
       @mock_problem_no_email_operator = make_mock_problem([], [@operator_without_mail]) 
       @mock_problem_email_pte =  make_mock_problem([@pte_with_mail], [])
       @mock_problem_no_email_pte = make_mock_problem([], [@pte_without_mail])
-      @mock_problem_some_council_mails = make_mock_problem([@emailable_council], [@unemailable_council])                 
+      @mock_problem_some_council_mails = make_mock_problem([@emailable_council], [@unemailable_council]) 
+      @mock_problem_no_orgs = make_mock_problem([],[])                
       
       @sendable = [@mock_problem_email_operator, 
                    @mock_problem_email_pte, 
@@ -173,6 +176,8 @@ describe ProblemMailer do
                                            @mock_problem_no_email_pte,
                                            @mock_problem_some_council_mails])
       
+      Problem.stub!(:unsendable).and_return([@mock_problem_no_orgs])
+      Stop.stub!(:find).with(@mock_stop.id).and_return(@mock_stop)
       ProblemMailer.stub!(:deliver_report)
       ProblemMailer.stub!(:check_for_council_change)
       SentEmail.stub!(:create!)
@@ -185,22 +190,26 @@ describe ProblemMailer do
       ProblemMailer.send_reports
     end
     
-    it 'should print a list of operators with missing emails' do 
-      STDERR.should_receive(:puts).with("Unemailable operator")
-      ProblemMailer.send_reports
-    end
+    describe 'when being verbose' do 
     
-    it 'should print a list of PTEs with missing emails' do 
-      STDERR.should_receive(:puts).with("Unemailable PTE")
-      ProblemMailer.send_reports
-    end
+      it 'should print a list of operators with missing emails' do 
+        STDERR.should_receive(:puts).with("Unemailable operator")
+        ProblemMailer.send_reports(dryrun=false, verbose=true)
+      end
     
-    it 'should print a list of councils with missing emails' do 
-      STDERR.should_receive(:puts).with("Unemailable council")
-      STDERR.should_not_receive(:puts).with("Emailable council")
-      ProblemMailer.send_reports
-    end
+      it 'should print a list of PTEs with missing emails' do 
+        STDERR.should_receive(:puts).with("Unemailable PTE")
+        ProblemMailer.send_reports(dryrun=false, verbose=true)
+      end
     
+      it 'should print a list of councils with missing emails' do 
+        STDERR.should_receive(:puts).with("Unemailable council")
+        STDERR.should_not_receive(:puts).with("Emailable council")
+        ProblemMailer.send_reports(dryrun=false, verbose=true)
+      end
+    
+    end
+  
     it 'should send a report email for a problem which has an operator email' do
       ProblemMailer.should_receive(:deliver_report).with(@mock_problem_email_operator, @operator_with_mail, [@operator_with_mail], [])
       ProblemMailer.send_reports

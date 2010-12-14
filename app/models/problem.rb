@@ -167,6 +167,12 @@ class Problem < ActiveRecord::Base
                                                   OR passenger_transport_executive_id is not null)'])
   end
   
+  def self.unsendable
+    confirmed.unsent.find(:all, :conditions => ['(operator_id is null 
+                                                  AND council_info is null 
+                                                  AND passenger_transport_executive_id is null)'])
+  end
+  
   def self.categories(problem)
     if problem.location.is_a? Route 
       return route_categories
