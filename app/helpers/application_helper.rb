@@ -238,7 +238,7 @@ module ApplicationHelper
     if comment.problem
       problem_url(comment.problem, :anchor => "comment_#{comment.id}")
     else
-      campaign_url(comment.campaign, :anchor => "comment_#{comment.id}")
+      campaign_url(comment.campaign_update.campaign, :anchor => "comment_#{comment.id}")
     end
   end
   
