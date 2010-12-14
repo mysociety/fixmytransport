@@ -69,6 +69,7 @@ class IncomingMessage < ActiveRecord::Base
   def find_attachment(url_part_number)
     attachments = MySociety::Email.get_display_attachments(mail)
     attachment = MySociety::Email.get_attachment_by_url_part_number(attachments, url_part_number)
+    attachment.body= remove_privacy_sensitive_things(attachment.body)
   end
   
   # Returns body text as HTML with emails removed.
