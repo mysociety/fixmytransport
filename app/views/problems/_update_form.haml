@@ -27,4 +27,6 @@
       .checkbox
         != update_fields.check_box :mark_fixed
         != update_fields.label :mark_fixed, t(:mark_fixed)
+      != update_fields.hidden_field :commented_id
+      != update_fields.hidden_field :commented_type
   .submit!= submit_tag t(:post)      

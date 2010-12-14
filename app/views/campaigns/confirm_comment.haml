@@ -1,7 +1,7 @@
 - if @error
   = @error
 - else
-  - if @comment.problem
+  - if @comment.commented.is_a? Problem
     = t(:thanks_for_adding_update)
     = link_to t(:see_your_update), comment_url(@comment)
   - else  

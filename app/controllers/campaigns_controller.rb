@@ -177,14 +177,16 @@ class CampaignsController < ApplicationController
         if request.xhr? 
           render :json => { :html => render_to_string(:partial => 'update_comment', 
                                                       :locals => {:comment => @comment}),
-                            :update_id => @comment.campaign_update_id,
+                            :commented_id => @comment.commented_id,
+                            :commented_type => @comment.commented_type,
                             :success => true }
           return
         end  
-        redirect_to campaign_url(@campaign, :anchor => "update_#{@comment.campaign_update_id}")
+        redirect_to campaign_url(@campaign, :anchor => "comment_#{@comment.id}")
       else
         if request.xhr?
-          @json = { :update_id => @comment.campaign_update_id,
+          @json = { :commented_id => @comment.commented_id,
+                    :commented_type => @comment.commented_type, 
                     :success => false }
           @json[:errors] = {}
           [@comment.errors, @comment.user.errors].each do |errors|
@@ -205,7 +207,7 @@ class CampaignsController < ApplicationController
   private
   
   def find_update
-    update_param = (params[:update_id] or params[:comment][:campaign_update_id])
+    update_param = (params[:update_id] or params[:comment][:commented_id])
     @campaign_update = CampaignUpdate.find(update_param)
     if ! @campaign_update
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found

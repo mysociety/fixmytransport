@@ -70,7 +70,7 @@ class ProblemsController < ApplicationController
   
   def show
     map_params_from_location(@problem.location.points, find_other_locations=false)
-    @new_comment = Comment.new(:problem_id => @problem.id, 
+    @new_comment = Comment.new(:commented => @problem, 
                                :user => current_user ? current_user : User.new,
                                :user_name => current_user ? current_user.name : '')
   end

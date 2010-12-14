@@ -429,7 +429,8 @@ describe CampaignsController do
       @mock_comment = mock_model(Comment, :save => true,
                                           :valid? => true,
                                           :save_user => true,
-                                          :campaign_update_id => 66,
+                                          :commented_id => 66,
+                                          :commented_type => 'CampaignUpdate',
                                           :text => 'comment text',
                                           :confirm! => true,
                                           :status= => true)
@@ -443,7 +444,8 @@ describe CampaignsController do
     
     def default_params
       { :id => 55, 
-        :comment => { :update_id => 66, 
+        :comment => { :commentable_id => 66,
+                      :commentable_type => 'CampaignUpdate', 
                       :user_attributes => {:email => 'test@example.com'}} }
     end
     
@@ -474,10 +476,11 @@ describe CampaignsController do
   
     describe 'when handling an AJAX request' do 
       
-      it 'should return a json hash containing the update_id and comment html' do 
+      it 'should return a json hash containing the commented_id, commented_type and comment html' do 
         xhr :post, :add_comment, default_params
         json_hash = JSON.parse(response.body)
-        json_hash['update_id'].should == 66
+        json_hash['commented_id'].should == 66
+        json_hash['commented_type'].should == 'CampaignUpdate'
         json_hash['html'].should_not be_nil
       end
     

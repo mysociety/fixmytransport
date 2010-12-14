@@ -1,7 +1,7 @@
 class Comment < ActiveRecord::Base
   belongs_to :user
-  belongs_to :campaign_update
-  belongs_to :problem
+  # belongs_to :campaign_update
+  # belongs_to :problem
   belongs_to :commented, :polymorphic => true
   validates_presence_of :text, :user_name
   validates_associated :user
@@ -21,7 +21,7 @@ class Comment < ActiveRecord::Base
   end
   
   def send_confirmation_email
-    if problem
+    if commented.is_a? Problem
       ProblemMailer.deliver_comment_confirmation(user, self, token)
     else
       CampaignMailer.deliver_comment_confirmation(user, self, token)
@@ -51,12 +51,12 @@ class Comment < ActiveRecord::Base
     return unless self.status == :new
     self.status = :confirmed
     self.confirmed_at = Time.now
-    if problem 
+    if commented.is_a? Problem 
       if mark_fixed
-        problem.status = :fixed
+        commented.status = :fixed
       end
-      problem.updated_at = Time.now
-      problem.save!
+      commented.updated_at = Time.now
+      commented.save!
     end
     save!  
   end
