@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101209103633) do
+ActiveRecord::Schema.define(:version => 20101214163049) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -112,6 +112,8 @@ ActiveRecord::Schema.define(:version => 20101209103633) do
     t.integer  "problem_id"
     t.boolean  "mark_fixed"
     t.boolean  "mark_open"
+    t.string   "commented_type"
+    t.integer  "commented_id"
   end
 
   create_table "council_contacts", :force => true do |t|

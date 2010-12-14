@@ -1,8 +1,8 @@
 class Comment < ActiveRecord::Base
   belongs_to :user
   belongs_to :campaign_update
-  belongs_to :campaign
   belongs_to :problem
+  belongs_to :commented, :polymorphic => true
   validates_presence_of :text, :user_name
   validates_associated :user
   before_create :generate_confirmation_token

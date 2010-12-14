@@ -1,13 +1,17 @@
 namespace :temp do
-
-  desc 'Populate the transport_mode_id column in existing operator records'
-  task :populate_operator_transport_mode_id => :environment do 
-    Operator.find_each do |operator|
-      if !operator.vehicle_mode.blank?
-        operator.transport_mode = Operator.vehicle_mode_to_transport_mode(operator.vehicle_mode)
-        puts "Setting transport mode to #{operator.transport_mode.name} for #{operator.vehicle_mode}"
-        operator.save!
+  
+  desc 'Move the associations on comments to a polymorphic field'
+  task :make_comments_polymorphic => :environment do 
+    Comment.find_each do |comment|
+      puts "#{comment.id} #{comment.user_name}"
+      if comment.campaign_update
+        comment.commented = comment.campaign_update
+      elsif comment.problem
+        comment.commented = comment.problem
+      else
+        raise "Unknown commentable for comment #{comment.id}"
       end
+      comment.save!
     end
   end
   
