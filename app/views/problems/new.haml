@@ -76,11 +76,15 @@
           != reporter_fields.hidden_field :id
           = reporter_fields.label :email
           != reporter_fields.text_field :email
+          %span.optional-note
+            = link_to("?", about_url(:anchor => "privacy"), :target => '_blank')
     - if @problem.errors.on('reporter_phone')
       .form-field-error= error_message_on @problem, 'reporter_phone'
     .form-field
       = f.label :reporter_phone, t(:phone)
       != f.text_field :reporter_phone
-      %span.optional-note= "(#{t(:optional)})"
+      %span.optional-note
+        = "(#{t(:optional)})"
+        = link_to("?", about_url(:anchor => "privacy"), :target => '_blank')
   .submit
     != submit_tag t(:submit)    

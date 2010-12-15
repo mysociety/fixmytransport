@@ -62,7 +62,7 @@ en:
   see_your_update: See your update on the site
   updates: Updates
   user_updates: "{{name}} added an update: "
-  update_help: "Please note that updates are not sent to the organization responsible for this {{location_type}}. Your name will be public. Your information will only be used in accordance with our {{privacy_link}}."
+  update_help: "Please note that updates are not sent to the organisation responsible for this {{location_type}}. Your name will be public. Your information will only be used in accordance with our {{privacy_link}}."
   privacy_policy: privacy policy
   problem_has_been_fixed: This problem has been fixed.
   marked_as_fixed: and marked the problem as fixed.
