@@ -16,6 +16,7 @@ class Admin::CouncilContactsController < ApplicationController
   end
   
   def new
+    @council = Council.find_by_id(params[:area_id])
     @council_contact = CouncilContact.new(:area_id => params[:area_id])
   end
   
@@ -38,21 +39,6 @@ class Admin::CouncilContactsController < ApplicationController
       flash[:error] = t(:council_contact_problem)
       render :show
     end
-  end
-  
-  def destroy
-    # @stop = Stop.find(params[:id])
-    # if @stop.campaigns.size > 0
-    #   flash[:error] = t(:stop_has_campaigns)
-    #   render :show
-    # elsif @stop.routes.size > 0
-    #   flash[:error] = t(:stop_has_routes)
-    #   render :show
-    # else
-    #   @stop.destroy
-    #   flash[:notice] = t(:stop_destroyed)
-    #   redirect_to admin_url(admin_stops_path)
-    # end
   end
   
 end

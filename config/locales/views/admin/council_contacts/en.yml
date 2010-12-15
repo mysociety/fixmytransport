@@ -10,6 +10,7 @@ en:
   history: History
   editor: Editor
   add_a_council_contact: Add a council contact
+  adding_a_council_contact: Adding a council contact for {{council}}
   contact_count:
     one: "{{n}} contact"
     other: "{{n}} contacts"
