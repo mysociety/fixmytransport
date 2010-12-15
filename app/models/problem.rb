@@ -12,7 +12,7 @@ class Problem < ActiveRecord::Base
   validates_presence_of :description, :subject, :category, :reporter_name, :if => :location
   validates_length_of :reporter_name, :minimum => 5, :if => :location
   validate :validate_reporter_name
-  validate :validate_is_campaign, :on => :create
+  validate_on_create :validate_is_campaign
   validates_associated :reporter
   attr_accessor :location_attributes, :locations, :location_search, :is_campaign
   cattr_accessor :route_categories, :stop_categories
