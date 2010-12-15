@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101215153223) do
+ActiveRecord::Schema.define(:version => 20101215180659) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -100,8 +100,6 @@ ActiveRecord::Schema.define(:version => 20101215153223) do
 
   create_table "comments", :force => true do |t|
     t.integer  "user_id"
-    t.integer  "campaign_update_id"
-    t.integer  "campaign_id"
     t.text     "text"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -109,7 +107,6 @@ ActiveRecord::Schema.define(:version => 20101215153223) do
     t.datetime "confirmed_at"
     t.integer  "status_code"
     t.string   "token"
-    t.integer  "problem_id"
     t.boolean  "mark_fixed"
     t.boolean  "mark_open"
     t.string   "commented_type"
