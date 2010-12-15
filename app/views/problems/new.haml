@@ -23,7 +23,7 @@
     - if @problem.errors.on('subject')
       .form-field-error= error_message_on @problem, :subject
     .form-field
-      = f.label "Email subject"
+      = f.label t(:subject)
       != f.text_field :subject
     - if @problem.errors.on('description')
       .form-field-error= error_message_on @problem, :description
