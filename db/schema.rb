@@ -25,8 +25,6 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "region_id"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
   end
 
   create_table "alternative_names", :force => true do |t|
@@ -42,8 +40,6 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.string   "modification"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
   end
 
   create_table "assignments", :force => true do |t|
@@ -133,8 +129,6 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.string   "modification"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
   end
 
   create_table "incoming_messages", :force => true do |t|
@@ -165,13 +159,11 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.string   "grid_type"
     t.float    "northing"
     t.float    "easting"
-    t.point    "coords",                                               :srid => 27700
+    t.geometry "coords"
     t.integer  "district_id"
     t.string   "cached_slug"
     t.float    "lat"
     t.float    "lon"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
   end
 
   add_index "localities", ["cached_slug"], :name => "index_localities_on_cached_slug"
@@ -184,8 +176,6 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.integer  "count"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "generation_low",  :default => 1, :null => false
-    t.integer  "generation_high", :default => 1, :null => false
   end
 
   add_index "locality_links", ["ancestor_id"], :name => "index_locality_links_on_ancestor_id"
@@ -230,8 +220,6 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.string   "parent"
     t.string   "vehicle_mode"
     t.string   "ultimate_parent"
-    t.integer  "generation_low",    :default => 1, :null => false
-    t.integer  "generation_high",   :default => 1, :null => false
     t.integer  "transport_mode_id"
   end
 
@@ -306,8 +294,6 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "cached_slug"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
   end
 
   add_index "regions", ["cached_slug"], :name => "index_regions_on_cached_slug"
@@ -327,8 +313,6 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.integer  "route_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "generation_low",  :default => 1, :null => false
-    t.integer  "generation_high", :default => 1, :null => false
   end
 
   add_index "route_operators", ["operator_id"], :name => "index_route_operators_on_operator_id"
@@ -344,8 +328,6 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.datetime "updated_at"
     t.integer  "from_stop_area_id"
     t.integer  "to_stop_area_id"
-    t.integer  "generation_low",    :default => 1,     :null => false
-    t.integer  "generation_high",   :default => 1,     :null => false
   end
 
   add_index "route_segments", ["from_stop_area_id"], :name => "index_route_segments_on_from_stop_area_id"
@@ -386,8 +368,6 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.float    "lat"
     t.float    "lon"
     t.text     "cached_description"
-    t.integer  "generation_low",     :default => 1, :null => false
-    t.integer  "generation_high",    :default => 1, :null => false
   end
 
   add_index "routes", ["cached_slug"], :name => "index_routes_on_cached_slug"
@@ -438,8 +418,6 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.integer  "count"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "generation_low",  :default => 1, :null => false
-    t.integer  "generation_high", :default => 1, :null => false
   end
 
   create_table "stop_area_memberships", :force => true do |t|
@@ -451,8 +429,6 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.string   "modification"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "generation_low",        :default => 1, :null => false
-    t.integer  "generation_high",       :default => 1, :null => false
   end
 
   add_index "stop_area_memberships", ["stop_area_id"], :name => "index_stop_area_memberships_on_stop_area_id"
@@ -487,13 +463,11 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.point    "coords",                                                  :srid => 27700
+    t.geometry "coords"
     t.float    "lon"
     t.float    "lat"
     t.integer  "locality_id"
     t.boolean  "loaded"
-    t.integer  "generation_low",           :default => 1, :null => false
-    t.integer  "generation_high",          :default => 1, :null => false
   end
 
   add_index "stop_areas", ["coords"], :name => "index_stop_areas_on_coords", :spatial => true
@@ -539,7 +513,7 @@ ActiveRecord::Schema.define(:version => 20101215180659) do
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.point    "coords",                                      :srid => 27700
+    t.geometry "coords"
     t.integer  "locality_id"
     t.string   "cached_slug"
     t.boolean  "loaded"
