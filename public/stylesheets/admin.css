@@ -101,6 +101,12 @@ table.index-list {
   float: right;
 }
 
+/* Location searches */
+
+.failed-search {
+  background-color: #FF7373;
+}
+
 /* Forms */
 
 .admin-section-control {

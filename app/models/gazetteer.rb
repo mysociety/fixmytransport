@@ -27,6 +27,7 @@ class Gazetteer
   # matching the name if any do. 
   def self.place_from_name(name)
     errors = []
+    
     # is it a postcode/partial postcode
     coord_info = self.coords_from_postcode(name)
     if ![:not_found, :bad_request, :not_postcode].include?(coord_info)

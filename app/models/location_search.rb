@@ -37,7 +37,9 @@ class LocationSearch < ActiveRecord::Base
                    :route_number      => params[:route_number], 
                    :area              => params[:area],
                    :transport_mode_id => params[:transport_mode_id],
-                   :location_type     => params[:location_type] }
+                   :location_type     => params[:location_type], 
+                   :from              => params[:from],
+                   :to                => params[:to] }
     attributes[:session_id] = session_id
     attributes[:active] = true
     attributes[:events] = []
@@ -49,10 +51,16 @@ class LocationSearch < ActiveRecord::Base
     descriptors << transport_mode.name if transport_mode
     descriptors << location_type.tableize.singularize.humanize.downcase if location_type
     if !route_number.blank?
-      descriptors << "'#{route_number}'"
+      descriptors << "route '#{route_number}'"
     end
     if !name.blank?
-      descriptors << "called '#{name}'"
+      descriptors << "called/in '#{name}'"
+    end
+    if !from.blank?
+      descriptors << "from #{from}"
+    end
+    if !to.blank?
+      descriptors << "to #{to}"
     end
     if !area.blank?
       descriptors << "in #{area}"
@@ -62,43 +70,27 @@ class LocationSearch < ActiveRecord::Base
   
   def add_choice(locations)
     self.events << { :type => :choice, 
-                     :locations => locations.size } 
-    save
+                     :locations => locations.size,
+                     :location_type => locations.first.class.to_s } 
+    self.save
   end
   
   def add_location(location)
     self.events << { :type => :result, 
                      :location => identifying_info(location) }
-    save
-  end
-  
-  def add_response(location, response)
-    response = 'invalid' unless ['success', 'fail'].include? response
-    response = response.to_sym
-    self.events << { :type => :response, 
-                     :location => identifying_info(location),
-                     :response => response }
-    save
-    close if response == :success
+    self.save
   end
   
   def add_method(method)
     self.events << { :type => :method, 
                      :method => method }
-    self.save!
+    self.save
   end
   
-  def responded?(location)
-    if self.events.detect{ |event| event[:type] == :response && event_about_location?(event, location) }
-      return true
-    else
-      return false
-    end
-  end
-  
-  def event_about_location?(event, location)
-    return true if event[:location] == identifying_info(location)
-    return false 
+  def fail()
+    self.failed = true
+    self.save
+    self.close()
   end
   
   def close

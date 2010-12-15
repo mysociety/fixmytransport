@@ -1,7 +1,8 @@
 #map-col
   = render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => [], :link_type => :problem, :height => MAP_HEIGHT, :width => MAP_WIDTH  }
+- if @error_message
+  .location-error= @error_message
 %p
-  = @error_message
   = t(:multiple_routes_intro, :num_locations => MAX_LOCATION_RESULTS)
 %ul.location-list
   - @locations.each do |location|

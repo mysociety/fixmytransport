@@ -124,6 +124,8 @@ class ProblemsController < ApplicationController
         render :find_stop
         return
       end
+      location_search = LocationSearch.new_search!(session_id, :name => params[:name], 
+                                                               :location_type => 'Stop/station')
       stop_info = Gazetteer.place_from_name(params[:name])
       # got back areas
       if stop_info[:localities]
@@ -153,6 +155,7 @@ class ProblemsController < ApplicationController
       elsif stop_info[:postcode_info]
         postcode_info = stop_info[:postcode_info]
         if postcode_info[:error]
+          location_search.fail
           @error_message = t(:postcode_not_found)
           render :find_stop
           return
@@ -168,6 +171,7 @@ class ProblemsController < ApplicationController
         end
       else
         # didn't find anything
+        location_search.fail
         @error_message = t(:area_not_found)
         render :find_stop
         return
@@ -186,8 +190,11 @@ class ProblemsController < ApplicationController
         render :find_bus_route 
         return
       end
+      location_search = LocationSearch.new_search!(session_id, :route_number => params[:route_number], 
+                                                               :location_type => 'Bus route')
       route_info = Gazetteer.bus_route_from_route_number(params[:route_number], params[:area], limit=10)
       if route_info[:routes].empty? 
+        location_search.fail
         @error_message = t(:route_not_found)
       elsif route_info[:routes].size == 1
         location = route_info[:routes].first
@@ -218,12 +225,16 @@ class ProblemsController < ApplicationController
       if @to_stop.blank? or @from_stop.blank?
         @error_messages = [t(:please_enter_from_and_to)]
       else
+        location_search = LocationSearch.new_search!(session_id, :from => @from_stop,
+                                                                 :to => @to_stop, 
+                                                                 :location_type => 'Train route')
         route_info = Gazetteer.train_route_from_stations(@from_stop, 
                                                          params[:from_exact],
                                                          @to_stop, 
                                                          params[:to_exact])
         setup_from_and_to_stops(route_info)
         if route_info[:errors]
+          location_search.fail
           @error_messages = route_info[:errors].map{ |message| t(message) }
           render :find_train_route
           return
@@ -250,6 +261,9 @@ class ProblemsController < ApplicationController
       if @from_stop.blank? or @to_stop.blank?
         @error_messages << t(:please_enter_from_and_to)
       else
+        location_search = LocationSearch.new_search!(session_id, :from => @from_stop,
+                                                                 :to => @to_stop, 
+                                                                 :location_type => 'Other route')
         route_info = Gazetteer.other_route_from_stations(@from_stop, 
                                                          params[:from_exact], 
                                                          @to_stop,
@@ -257,9 +271,11 @@ class ProblemsController < ApplicationController
         setup_from_and_to_stops(route_info)
         if route_info[:errors]
           @error_messages = route_info[:errors].map{ |message| t(message) }
+          location_search.fail
           render :find_other_route
           return
         elsif route_info[:routes].empty? 
+          location_search.fail
           @error_messages << t(:route_not_found)
         elsif route_info[:routes].size == 1
           location = route_info[:routes].first

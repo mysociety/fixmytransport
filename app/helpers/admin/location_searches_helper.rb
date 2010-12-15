@@ -3,13 +3,20 @@ module Admin::LocationSearchesHelper
   def render_event event
     case event[:type]
     when :result
-      text = "Showed result #{location_link(event[:location])}" 
-    when :response
-      text = "Result #{location_link(event[:location])} was #{event[:response] == :success ? "correct" : "not correct"}"
+      if event[:result] == :failure
+        text = "Failed to find results"
+      else
+        text = "Showed result #{location_link(event[:location])}" 
+      end
     when :method
       text = "Got result set using #{event[:method]}"
     when :choice
-      text = "Showed a choice of #{event[:locations]} locations" 
+      if event[:location_type]
+        things = event[:location_type]
+      else
+        things = 'locations'
+      end
+      text = "Showed a choice of #{event[:locations]} #{things}" 
     end
     return text
   end
