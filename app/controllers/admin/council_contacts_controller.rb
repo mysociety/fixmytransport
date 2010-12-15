@@ -26,6 +26,7 @@ class Admin::CouncilContactsController < ApplicationController
       flash[:notice] = t(:council_contact_created)
       redirect_to(admin_url(admin_council_contact_path(@council_contact.id)))
     else
+      @council = Council.find_by_id(params[:council_contact][:area_id])
       render :new
     end
   end

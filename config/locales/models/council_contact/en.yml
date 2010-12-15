@@ -1,0 +1,10 @@
+en:
+  activerecord:
+    errors:
+      models:
+        council_contact:
+          attributes: 
+            category:
+              blank: "Please enter a category"
+            email:
+              invalid: "Please enter a valid email address"

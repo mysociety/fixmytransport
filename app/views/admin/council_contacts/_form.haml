@@ -3,6 +3,8 @@
     = t(:council_contact_form_error)
 != f.hidden_field :area_id
 .form-field
+  - if @council_contact.errors.on(:category)
+    .form-field-error= error_message_on @council_contact, :category
   != f.label :category
   - if @council_contact.new_record? 
     != f.text_field :category
