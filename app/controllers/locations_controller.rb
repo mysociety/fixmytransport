@@ -5,9 +5,6 @@ class LocationsController < ApplicationController
   def show_stop
     @stop = Stop.full_find(params[:id], params[:scope])
     @title = @stop.full_name
-    if location_search
-      location_search.add_location(@stop) 
-    end
     respond_to do |format|
       format.html do 
         map_params_from_location(@stop.points, find_other_locations=true)
@@ -34,9 +31,6 @@ class LocationsController < ApplicationController
     end
     
     @title = @stop_area.name
-    if location_search
-      location_search.add_location(@stop_area) 
-    end
     respond_to do |format|
       format.html do
         map_params_from_location(@stop_area.points, find_other_locations=true)
@@ -54,7 +48,6 @@ class LocationsController < ApplicationController
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end
-    location_search.add_location(@route) if location_search
     @title = MySociety::Format.ucfirst(@route.name)
     respond_to do |format|
       format.html do 

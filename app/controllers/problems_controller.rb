@@ -13,15 +13,6 @@ class ProblemsController < ApplicationController
     @problem = Problem.new(:location => location, 
                            :reporter => current_user ? current_user : User.new, 
                            :reporter_name => current_user ? current_user.name : '')
-    if location.respond_to? :transport_mode_id
-      @problem.transport_mode_id = location.transport_mode_id
-    else
-      if location_search
-        if location.transport_mode_ids.include? location_search.transport_mode_id
-          @problem.transport_mode_id = location_search.transport_mode_id
-        end
-      end
-    end
     map_params_from_location(@problem.location.points, find_other_locations=false)
     setup_problem_advice(@problem)
   end
