@@ -6,6 +6,7 @@
   != f.hidden_field :location_id
   != f.hidden_field :location_type
   .fieldset
+    .sending-advice!= @sending_advice
     - if @problem.errors.on('operator_id')
       .form-field-error= error_message_on @problem, :operator_id
     .form-field
@@ -19,35 +20,50 @@
         !=f.hidden_field :passenger_transport_executive_id, :value => @problem.location.passenger_transport_executive.id
       - elsif @problem.councils_responsible?    
         != f.hidden_field :council_info, :value => @problem.location.council_info
-      .form-field
-        = f.label :is_campaign, t(:is_this)
-        !=radio_button_tag 'is_campaign', "0", (params[:is_campaign] == "0" or not params[:is_campaign])
-        = label_tag 'is_campaign_0', t(:a_one_off), :class => 'radiobutton_label'
-        !=radio_button_tag 'is_campaign', "1", params[:is_campaign] == "1" 
-        = label_tag 'is_campaign_1', t(:an_ongoing_problem), :class => 'radiobutton_label'
-    - if @problem.errors.on('category')
-      .form-field-error= error_message_on @problem, :category
-    .form-field
-      = f.label :category
-      != f.select("category", Problem.categories(@problem), { :include_blank => t(:pick_a_category) })
     - if @problem.errors.on('subject')
       .form-field-error= error_message_on @problem, :subject
     .form-field
-      = f.label :subject
+      = f.label "Email subject"
       != f.text_field :subject
     - if @problem.errors.on('description')
       .form-field-error= error_message_on @problem, :description
     .form-field
       = f.label :description
-      != f.text_area :description, {:rows => 5, :cols => 30}
+      != f.text_area :description, {:rows => 8, :cols => 32 }
+    - if @problem.categories.size > 1
+      - if @problem.errors.on('category')
+        .form-field-error= error_message_on @problem, :category
+      .form-field
+        = f.label :category
+        != f.select("category", @problem.categories, { :include_blank => t(:pick_a_category) })
+    - else
+      != f.hidden_field :category, :value => "Other"
+    - if @problem.errors.on('is_campaign')
+      .form-field-error= error_message_on @problem, :is_campaign
+    .form-field
+      .campaign-choices-label
+        = f.label :is_campaign, t(:is_this), {:id => 'is-campaign-label'}
+      .campaign-choices
+        .campaign-choice
+          != f.radio_button 'is_campaign', "0", {:id => 'is-campaign-0'}
+          = f.label 'is_campaign_0', t(:a_one_off), :class => 'radiobutton_label'
+        .campaign-choice
+          !=f.radio_button 'is_campaign', "1", {:id => 'is-campaign-1'}
+          = f.label 'is_campaign_1', t(:an_ongoing_problem), :class => 'radiobutton_label'
+
     .form-field{:id => 'time-field'}
-      = f.label :time
+      = f.label :time, t(:problem_time)
       != f.time_select :time, { :include_blank => true }
       %span.optional-note= "(#{t(:optional)})"
     .form-field{:id => 'date-field'} 
-      = f.label :date
+      = f.label :date, t(:problem_date)
       != f.date_select :date, { :include_blank => true, :start_year => Time.now.year - 1, :end_year => Time.now.year }
       %span.optional-note= "(#{t(:optional)})"
+    - if @problem.errors.on('reporter_name')
+      .form-field-error= error_message_on @problem, 'reporter_name'
+    .form-field
+      = f.label :reporter_name, t(:name)
+      != f.text_field :reporter_name
     - f.fields_for :reporter do |reporter_fields|
       - if @problem.reporter == current_user
         .form-field
@@ -60,12 +76,6 @@
           != reporter_fields.hidden_field :id
           = reporter_fields.label :email
           != reporter_fields.text_field :email
-        
-    - if @problem.errors.on('reporter_name')
-      .form-field-error= error_message_on @problem, 'reporter_name'
-    .form-field
-      = f.label :reporter_name, t(:name)
-      != f.text_field :reporter_name
     - if @problem.errors.on('reporter_phone')
       .form-field-error= error_message_on @problem, 'reporter_phone'
     .form-field

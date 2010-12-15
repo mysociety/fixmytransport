@@ -34,7 +34,7 @@ class ProblemsController < ApplicationController
     cleanup_time_params
     @problem = Problem.new(params[:problem])
     @problem.status = :new
-    if params[:is_campaign] == "1"
+    if @problem.is_campaign == "1"
       campaign = @problem.build_campaign({ :location_id => params[:problem][:location_id], 
                                            :location_type => params[:problem][:location_type],
                                            :initiator => @problem.reporter })
@@ -300,55 +300,18 @@ class ProblemsController < ApplicationController
   def setup_problem_advice(problem)
     advice_params = { :location_type => @template.readable_location_type(problem.location) }
     num_organizations = problem.responsible_organizations.size
-    num_organizations_with_email = 0
-   
-    problem.responsible_organizations.each do |organization| 
-      if organization.emailable?
-        num_organizations_with_email += 1
-      end
-    end
     if num_organizations == 1
-      advice_params[:organization] = @template.org_names(problem, :responsible_organizations, t(:or))
-      advice_params[:organization_unstrong] = @template.org_names(problem, :responsible_organizations, t(:or), '', '')
-    elsif num_organizations > 1
-      advice_params[:organizations] = @template.org_names(problem, :responsible_organizations, t(:or))
+      advice_params[:organization] = @template.org_names(problem, :responsible_organizations, t(:and))
+    elsif num_organizations > 1      
+      if problem.operators_responsible?
+        advice_params[:organization] = "the operator you select"
+      else
+        advice_params[:organization] = @template.org_names(problem, :responsible_organizations, t(:or))
+      end
+    elsif num_organizations == 0
+      advice_params[:organization] = "the organization responsible for this #{@template.readable_location_type(problem.location)}"
     end
-    # don't know who is responsible for the location
-    if num_organizations == 0
-      advice = :no_organizations_for_problem
-    # all responsible organizations contactable
-    elsif num_organizations == num_organizations_with_email
-      if num_organizations == 1
-        advice = :problem_will_be_sent
-      else
-        # for operators you get to choose which to email
-        if problem.operators_responsible? 
-          advice = :problem_will_be_sent_multiple_operators
-        else
-          # for councils, it goes to all or one depending on category
-          advice = :problem_will_be_sent_multiple
-        end
-      end
-    # no responsible organizations contactable
-    elsif num_organizations_with_email == 0
-      if num_organizations == 1
-        advice = :no_details_for_organization
-      else
-        advice = :no_details_for_organizations
-      end
-    # some responsible organizations contactable
-    else
-      advice_params[:contactable] = @template.org_names(problem, :emailable_organizations, t(:or))
-      advice_params[:uncontactable] = @template.org_names(problem, :unemailable_organizations, t(:or)) 
-      if problem.operators_responsible? 
-        advice = :no_details_for_some_operators
-      elsif problem.councils_responsible?
-        advice_params[:councils] = @template.org_names(problem, :responsible_organizations, t(:or))
-        advice = :no_details_for_some_councils
-      else
-        advice = :no_details_for_some_organizations
-      end
-    end
+    advice = :problem_will_be_sent
     @sending_advice = t(advice, advice_params)
   end
   

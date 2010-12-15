@@ -9,12 +9,12 @@ class Problem < ActiveRecord::Base
   has_many :comments, :as => :commented
   has_many :sent_emails
   has_many :recipients, :through => :sent_emails
-  validates_presence_of :transport_mode_id, :unless => :location
   validates_presence_of :description, :subject, :category, :reporter_name, :if => :location
   validates_length_of :reporter_name, :minimum => 5, :if => :location
   validate :validate_reporter_name
+  validate :validate_is_campaign, :on => :create
   validates_associated :reporter
-  attr_accessor :location_attributes, :locations, :location_search, :location_errors
+  attr_accessor :location_attributes, :locations, :location_search, :is_campaign
   cattr_accessor :route_categories, :stop_categories
   attr_protected :confirmed_at
   before_create :generate_confirmation_token
@@ -57,6 +57,11 @@ class Problem < ActiveRecord::Base
     end
   end
 
+  def validate_is_campaign
+    return true if ['0','1'].include?(self.is_campaign)
+    errors.add(:is_campaign, ActiveRecord::Error.new(self, :is_campaign, :blank).to_s)
+  end
+  
   def create_assignments
     assignment_types = []
     if assignments.empty? 
@@ -108,6 +113,10 @@ class Problem < ActiveRecord::Base
     self.send(method).map{ |organization| { :id => organization.id, 
                                             :type => organization.class.to_s, 
                                             :name => organization.name } }
+  end
+  
+  def categories
+    responsible_organizations.map{ |organization| organization.categories }.flatten.uniq
   end
   
   def recipients
@@ -171,14 +180,6 @@ class Problem < ActiveRecord::Base
     confirmed.unsent.find(:all, :conditions => ['(operator_id is null 
                                                   AND council_info is null 
                                                   AND passenger_transport_executive_id is null)'])
-  end
-  
-  def self.categories(problem)
-    if problem.location.is_a? Route 
-      return route_categories
-    else
-      return stop_categories
-    end
   end
   
 end

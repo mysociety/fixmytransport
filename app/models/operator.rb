@@ -41,6 +41,10 @@ class Operator < ActiveRecord::Base
     !email.blank?
   end
   
+  def categories
+    ['Other']
+  end
+  
   def self.find_all_by_nptdr_code(vehicle_code, code, region)
     vehicle_modes, similar_vehicle_modes = vehicle_codes_to_noc_vehicle_modes(vehicle_code)
     operators = find(:all, :include => :operator_codes, 

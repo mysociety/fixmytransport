@@ -8,5 +8,9 @@ class PassengerTransportExecutive < ActiveRecord::Base
   def emailable? 
     !email.blank?
   end
-    
+  
+  def categories
+    ['Other']
+  end
+  
 end

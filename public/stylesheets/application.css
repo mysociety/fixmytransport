@@ -436,14 +436,22 @@ message-campaign-update
 }
 
 .feedback-tab-closed{
-    background:transparent url('/images/feedback-tab.gif') no-repeat scroll 0 0;    
+  background:transparent url('/images/feedback-tab.gif') no-repeat scroll 0 0;    
 }
 .feedback-tab-open{
-    background:transparent url('/images/feedback-tab.gif') no-repeat scroll -34px 0;    
+  background:transparent url('/images/feedback-tab.gif') no-repeat scroll -34px 0;    
+}
+
+form.new_feedback {
+  overflow: auto;
 }
 
 form.new_feedback label {
   width: 5em;
+}
+
+form.new_feedback .feedback-buttons {
+  float:right;
 }
 
 /* Problem list */
@@ -472,15 +480,45 @@ form.new_problem label{
 
 form.create_problem label.radiobutton_label {
   float: none;
-  display: inline-block;
   margin: 0.5em 0;
   text-align: left;
   width: auto;
 }
 
+form.create_problem .campaign-choices-label {
+  height: 100%;
+  width: 8em;
+  text-align: right;
+  display: inline-block;
+  margin: auto;
+}
+
+form.create_problem .campaign-choices {
+  display: inline-block;
+  margin: 0 0 0 0.5em ;
+}
+
+.sending-advice {
+  margin: 0.5em 0; 
+}
+
+form.create_problem .campaign-choices-label {
+  vertical-align: top;
+}
+
+form.create_problem .campaign-choice {
+  width: 100%;
+  overflow: auto;
+}
+
 form.create_problem label,
 form.create_problem .label{
-  width: 6em;  
+  width: 8em;  
+}
+
+form.create_problem input[type=submit] {
+  float: right;
+  margin: 0;
 }
 
 form .checkbox label, 
@@ -603,6 +641,7 @@ form.new_update .label{
   margin: 0.5em 2em;
 }
 
+.ajax_new_campaign_comment input[type=submit],
 .new_campaign_comment input[type=submit] {
   float: right;  
 }

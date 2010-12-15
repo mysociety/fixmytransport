@@ -24,6 +24,8 @@ en:
               blank: "Please enter your full name"
               invalid: "Please enter your full name"
               too_short:  "Please enter your full name"
+            is_campaign:
+              blank: "Please tell us whether this is an ongoing problem"
         stop:
           attributes: 
             common_name:

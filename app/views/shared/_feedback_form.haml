@@ -20,6 +20,7 @@
     .form-field
       = form.label :message
       != form.text_area :message, {:rows => 5, :cols => 30}
-    %input{:type=>"button", :value => t(:cancel), :class =>"feedback-cancel"}  
-    != form.submit t(:send)
+    .feedback-buttons
+      %input{:type=>"button", :value => t(:cancel), :class =>"feedback-cancel"}  
+      != form.submit t(:send)
     

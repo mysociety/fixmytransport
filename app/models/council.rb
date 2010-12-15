@@ -16,6 +16,10 @@ class Council
     @emailable
   end
   
+  def categories
+    categories = contacts.map{ |contact| contact.category }
+  end
+  
   # return the appropriate contact for a particular type of problem
   def contact_for_category(category)
     if category_contact = contacts.detect{ |contact| contact.category == category }

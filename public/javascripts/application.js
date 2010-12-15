@@ -57,17 +57,17 @@ function addSearchGuidance() {
 
 // For an ongoing issue, don't show the date and time fields
 function hideProblemDateTimeForOngoing() {
-  if (jQuery('#is_campaign_1').is(':checked')){
+  if (jQuery('#is-campaign-0').is(':not(:checked)')){
     jQuery('#date-field').hide();
     jQuery('#time-field').hide();    
   }
-  jQuery('input[name=is_campaign]').click(function(){
-    if (jQuery('#is_campaign_1').is(':checked')){
-      jQuery('#date-field').hide();
-      jQuery('#time-field').hide();
+  jQuery('input[name=problem[is_campaign]]').click(function(){
+    if (jQuery('#is-campaign-1').is(':checked')){
+      jQuery('#date-field').hide("slow");
+      jQuery('#time-field').hide("slow");
     }else{
-      jQuery('#date-field').show();
-      jQuery('#time-field').show();
+      jQuery('#date-field').show("slow");
+      jQuery('#time-field').show("slow");
     }
   })
 }

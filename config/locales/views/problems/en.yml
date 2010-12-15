@@ -19,22 +19,17 @@ en:
   multiple_routes_intro: "Choose a route by clicking on it, or try a different search if yours is not here: "
   problem_not_found: "We couldn't locate your problem in the database. If you've copied the URL from an email, please check that you copied it exactly."
   is_this: This is
-  a_one_off: a one off
-  an_ongoing_problem: an ongoing problem
+  a_one_off: a problem relating to a particular journey
+  an_ongoing_problem: an ongoing problem that affects many journeys
   posted_time: "{{time}} ago"
+  and: and
   added: added
   reported: reported
+  problem_time: Journey time
+  problem_date: Journey date
   by: "by {{name}}"
   pte_advice: "{{pte_link}} is responsible for public transport in this area."
-  problem_will_be_sent: "Your problem will be sent to {{organization}}. The subject and details of your problem will be public."
-  problem_will_be_sent_multiple_operators: "More than one company operates this {{location_type}}. Your problem <strong>will be sent to the operator</strong> you select below."
-  problem_will_be_sent_multiple: "Your problem will be sent to {{organizations}}. The subject and details of your problem will be public."
-  no_organizations_for_problem: "We do not yet know who is responsible for this {{location_type}}. If you submit a problem here the subject and description of the problem will be public, but it will <strong>not</strong> be sent to them."
-  no_details_for_organization: "We do not yet have contact details for {{organization}}. If you submit a problem here the subject and description of the problem will be public, but it will <strong>not</strong> be sent to {{organization_unstrong}}."
-  no_details_for_organizations: "We do not yet have contact details for {{organizations}}.  If you submit a problem here the subject and description of the problem will be public, but it will <strong>not</strong> be sent to them."
-  no_details_for_some_operators: "We do not yet have all the contact details for this {{location_type}}. If you submit a problem here relating to {{uncontactable}}, the subject and description of the problem will be public, but it will <strong>not</strong> be sent to them. If your problem relates to {{contactable}}, it will be sent straight away."
-  no_details_for_some_organizations: "Your problem will be sent to {{contactable}}. The subject and description of the problem will be public. We do not yet have contact details for {{uncontactable}}, so your problem will not <strong>not</strong> be sent to them."
-  no_details_for_some_councils: "Your problem will be sent to {{councils}}. The subject and description of the problem will be public."
+  problem_will_be_sent: "Your problem will be sent to {{organization}} by email. The problem will also be displayed on the site, with your name."
   thanks_for_adding_problem: "Thanks, you've successfully confirmed your problem. "
   nearly_ready: "Brilliant! We're nearly ready to send your message."
   see_your_problem: See your problem on the site
