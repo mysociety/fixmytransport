@@ -190,7 +190,7 @@ class ProblemsController < ApplicationController
         @error_message = t(:route_not_found)
       elsif route_info[:routes].size == 1
         location = route_info[:routes].first
-        redirect_to @template.new_problem_url(:location_id => location.id, :location_type => location.type)
+        redirect_to new_problem_url(:location_id => location.id, :location_type => location.type)
       else 
         if route_info[:error] == :area_not_found
           @error_message = t(:area_not_found_routes)
@@ -271,7 +271,7 @@ class ProblemsController < ApplicationController
           @error_messages << t(:route_not_found)
         elsif route_info[:routes].size == 1
           location = route_info[:routes].first
-          redirect_to @template.new_problem_url(:location_id => location.id, :location_type => location.type)
+          redirect_to new_problem_url(:location_id => location.id, :location_type => location.type)
         else
           @locations = route_info[:routes]
           map_params_from_location(@locations, find_other_locations=false)                  
