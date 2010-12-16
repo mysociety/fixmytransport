@@ -182,7 +182,8 @@ class ProblemsController < ApplicationController
         return
       end
       location_search = LocationSearch.new_search!(session_id, :route_number => params[:route_number], 
-                                                               :location_type => 'Bus route')
+                                                               :location_type => 'Bus route',
+                                                               :area => params[:area])
       route_info = Gazetteer.bus_route_from_route_number(params[:route_number], params[:area], limit=10)
       if route_info[:routes].empty? 
         location_search.fail
