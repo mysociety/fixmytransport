@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  operator_id: 1
+  location_id: 1
+  location_type: MyString
+  category: MyString
+  email: MyString
+  confirmed: false
+  notes: MyString
+
+two:
+  operator_id: 1
+  location_id: 1
+  location_type: MyString
+  category: MyString
+  email: MyString
+  confirmed: false
+  notes: MyString
