@@ -9,6 +9,7 @@ en:
   council_contact_form_error: There's been a problem editing this contact. Please see below for details. 
   history: History
   editor: Editor
+  deleted: Deleted
   add_a_council_contact: Add a council contact
   adding_a_council_contact: Adding a council contact for {{council}}
   contact_count:

@@ -6,9 +6,10 @@
 %h3= t(:history)
 %table{ :class => 'history index-list' }
   %tr
-    %th{:width => "24%"}= t(:updated_at)
-    %th{:width => "24%"}= t(:email)
-    %th{:width => "6%"}= t(:confirmed) 
+    %th{:width => "20%"}= t(:updated_at)
+    %th{:width => "20%"}= t(:email)
+    %th{:width => "7%"}= t(:confirmed) 
+    %th{:width => "7%"}= t(:deleted) 
     %th{:width => "10%"}= t(:editor) 
     %th{:width => "10%"}= t(:location) 
     %th{:width => "28%"}= t(:notes)
@@ -16,6 +17,7 @@
     %td= @operator_contact.updated_at
     %td= @operator_contact.email
     %td= @operator_contact.confirmed
+    %td= @operator_contact.deleted
     %td= @operator_contact.last_editor
     - if @operator_contact.location
       %td= @operator_contact.location.name
@@ -29,5 +31,6 @@
         %td= version.created_at
         %td= contact.email
         %td= contact.confirmed
+        %td= contact.deleted
         %td= version.whodunnit
         %td= contact.notes

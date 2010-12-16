@@ -36,7 +36,7 @@ class Council
   end
   
   def contacts
-    CouncilContact.find(:all, :conditions => ['area_id = ?', self.id])
+    CouncilContact.find(:all, :conditions => ['area_id = ? and deleted = ?', self.id, false])
   end
   
   def self.find_by_id(id)

@@ -18,6 +18,9 @@
 .form-field
   != f.label :confirmed
   != f.check_box :confirmed
+.form-field
+  != f.label :deleted
+  != f.check_box :deleted
 - if !@operator_contact.operator.stop_areas.empty?
   .form-field
     != f.label :location

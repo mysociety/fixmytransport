@@ -1,3 +1,4 @@
 - @campaign.problem.recipients.each do |recipient|
-  .optional-assignment
-    =link_to(t(:write_again, :name => recipient.name), new_campaign_outgoing_message_path(@campaign, :recipient_type => recipient.type, :recipient_id => recipient.id))
+  -if ! recipient.deleted? 
+    .optional-assignment
+      =link_to(t(:write_again, :name => recipient.name), new_campaign_outgoing_message_path(@campaign, :recipient_type => recipient.type, :recipient_id => recipient.id))

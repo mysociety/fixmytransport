@@ -6,15 +6,17 @@
 %h3= t(:history)
 %table{ :class => 'history index-list' }
   %tr
-    %th{:width => "34%"}= t(:updated_at)
-    %th{:width => "34%"}= t(:email)
-    %th{:width => "6%"}= t(:confirmed) 
-    %th{:width => "30%"}= t(:editor) 
+    %th{:width => "30%"}= t(:updated_at)
+    %th{:width => "30%"}= t(:email)
+    %th{:width => "10%"}= t(:confirmed) 
+    %th{:width => "10%"}= t(:deleted) 
+    %th{:width => "20%"}= t(:editor) 
     %th{:width => "38%"}= t(:notes)
   %tr{ :class => cycle('odd', 'even') }
     %td= @council_contact.updated_at
     %td= @council_contact.email
     %td= @council_contact.confirmed
+    %td= @council_contact.deleted
     %td= @council_contact.last_editor
     %td= @council_contact.notes  
   -@council_contact.versions.each do |version|
@@ -24,5 +26,6 @@
         %td= version.created_at
         %td= contact.email
         %td= contact.confirmed
+        %td= contact.deleted
         %td= version.whodunnit
         %td= contact.notes

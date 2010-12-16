@@ -9,6 +9,7 @@ en:
   operator_contact_form_error: There's been a problem editing this contact. Please see below for details. 
   history: History
   editor: Editor
+  deleted: Deleted
   add_an_operator_contact: Add an operator contact
   adding_an_operator_contact: Adding an operator contact for {{operator}}
   contact_count:

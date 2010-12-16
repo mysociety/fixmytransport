@@ -13,4 +13,8 @@ class PassengerTransportExecutive < ActiveRecord::Base
     ['Other']
   end
   
+  def deleted? 
+    false
+  end
+  
 end

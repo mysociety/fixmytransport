@@ -19,13 +19,11 @@ class Operator < ActiveRecord::Base
   has_many :routes, :through => :route_operators, :uniq => true
   has_many :vosa_licenses
   has_many :operator_codes
-  has_many :sent_emails, :as => :recipient
-  has_many :outgoing_messages, :as => :recipient
   has_many :stop_area_operators, :dependent => :destroy
   has_many :stop_areas, :through => :stop_area_operators, :dependent => :destroy
   belongs_to :transport_mode
   validates_presence_of :name
-  has_many :operator_contacts
+  has_many :operator_contacts, :conditions => ['deleted = ?', false]
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$"), 
                               :if => Proc.new { |operator| !operator.email.blank? }
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid

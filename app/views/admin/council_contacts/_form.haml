@@ -19,6 +19,9 @@
   != f.label :confirmed
   != f.check_box :confirmed
 .form-field
+  != f.label :deleted
+  != f.check_box :deleted
+.form-field
   != f.label :notes
   != f.text_area :notes, :cols => 50, :rows => 4
 != submit_tag t(:go)
