@@ -51,7 +51,7 @@ module FixMyTransport
         councils = council_data.values.map{ |council_info| Council.from_hash(council_info) }
         # Do we have contact information? 
         councils.each do |council|
-          council_contacts = CouncilContact.find_all_by_area_id(council.id)
+          council_contacts = council.contacts
           if council_contacts.empty? 
             council.emailable = false
           else
