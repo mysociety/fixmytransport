@@ -191,12 +191,12 @@ describe Stop do
     
     it 'should set the councils as emailable if contact details are held for them' do 
       CouncilContact.stub!(:find_all_by_area_id).and_return([mock_model(CouncilContact)])
-      @stop.councils.first.emailable?.should be_true
+      @stop.councils.first.emailable?(@stop).should be_true
     end
     
     it 'should set the councils as not emailable if contact details are not held for them' do 
       CouncilContact.stub!(:find_all_by_area_id).and_return([])
-      @stop.councils.first.emailable?.should be_false
+      @stop.councils.first.emailable?(@stop).should be_false
     end
 
   end

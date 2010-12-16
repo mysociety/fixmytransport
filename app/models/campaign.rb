@@ -25,9 +25,8 @@ class Campaign < ActiveRecord::Base
   validates_uniqueness_of :subdomain, :on => :update,
                                       :case_sensitive => false
   validates_associated :initiator, :on => :update
-  cattr_reader :per_page, :categories
+  cattr_reader :per_page
   @@per_page = 10
-  @@categories = ['New route', 'Keep route', 'Get repair', 'Adopt', 'Other']
   
   has_status({ 0 => 'New', 
                1 => 'Confirmed', 

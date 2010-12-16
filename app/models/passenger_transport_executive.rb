@@ -5,11 +5,11 @@ class PassengerTransportExecutive < ActiveRecord::Base
   
   has_paper_trail
   
-  def emailable? 
+  def emailable?(location)
     !email.blank?
   end
   
-  def categories
+  def categories(location)
     ['Other']
   end
   

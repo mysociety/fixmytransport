@@ -21,6 +21,8 @@ class Operator < ActiveRecord::Base
   has_many :operator_codes
   has_many :sent_emails, :as => :recipient
   has_many :outgoing_messages, :as => :recipient
+  has_many :stop_area_operators, :dependent => :destroy
+  has_many :stop_areas, :through => :stop_area_operators, :dependent => :destroy
   belongs_to :transport_mode
   validates_presence_of :name
   has_many :operator_contacts
@@ -38,12 +40,60 @@ class Operator < ActiveRecord::Base
     (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['route_id'].blank?
   end
   
-  def emailable?
-    !email.blank?
+  def emailable?(location)
+    general_contacts = self.operator_contacts.find(:all, :conditions => ["category = 'Other' 
+                                                                          AND (location_id is null 
+                                                                          OR (location_id = ?
+                                                                          AND location_type = ?))", 
+                                                                          location.id, location.class.to_s])
+    return false if general_contacts.empty?
+    return true
   end
   
-  def categories
-    ['Other']
+  def contacts_for_location(location)
+    self.operator_contacts.find(:all, :conditions => ['location_id = ? 
+                                                       AND location_type = ?', 
+                                                       location.id, location.class.to_s])
+  end
+  
+  def general_contacts
+    self.operator_contacts.find(:all, :conditions => ['location_id is null 
+                                                       AND location_type is null'])
+  end
+  
+  def categories(location)
+    contacts = self.contacts_for_location(location)
+    if contacts.empty?
+      contacts = self.general_contacts
+    end
+    contacts.map{ |contact| contact.category }
+  end
+  
+  def contact_for_category(contact_list, category)
+    contact_list.detect{ |contact| contact.category == category }
+  end
+  
+  # return the appropriate contact for a particular type of problem
+  def contact_for_category_and_location(category, location)
+    location_contacts = self.contacts_for_location(location)
+    if category_contact = contact_for_category(location_contacts, category)
+      return category_contact
+    elsif other_contact = contact_for_category(location_contacts, "Other")
+      return other_contact
+    else
+      general_contacts = self.general_contacts
+      if category_contact = contact_for_category(general_contacts, category)
+        return category_contact
+      elsif other_contact = contact_for_category(general_contacts, "Other")
+        return other_contact
+      else
+        raise "No \"Other\" category contact for #{self.name} (operator ID: #{self.id})" 
+      end
+    end
+  end
+  
+  def emails
+    self.operator_contacts.map{ |contact| contact.email }.uniq.compact
   end
   
   def self.find_all_by_nptdr_code(vehicle_code, code, region)

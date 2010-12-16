@@ -12,11 +12,11 @@ class Council
                     :name => attributes['name'])
   end
   
-  def emailable? 
+  def emailable?(location)
     @emailable
   end
   
-  def categories
+  def categories(location)
     categories = contacts.map{ |contact| contact.category }
   end
   

@@ -87,15 +87,15 @@ module FixMyTransport
 
       def emailable_councils
         return [] unless self.councils
-        self.councils.select{ |council| council.emailable? }
+        self.councils.select{ |council| council.emailable?(self) }
       end
 
       def unemailable_councils
         return [] unless self.councils
-        self.councils.select{ |council| ! council.emailable? }
+        self.councils.select{ |council| ! council.emailable?(self) }
       end
 
-      def council_info  
+      def council_info
         emailable_id_string = emailable_councils.map{ |council| council.id }.join(',')
         unemailable_id_string = unemailable_councils.map{ |council| council.id }.join(',')
         [emailable_id_string, unemailable_id_string].join("|")

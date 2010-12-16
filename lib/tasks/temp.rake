@@ -1,18 +1,27 @@
 namespace :temp do
   
-  desc 'Move the associations on comments to a polymorphic field'
-  task :make_comments_polymorphic => :environment do 
-    Comment.find_each do |comment|
-      puts "#{comment.id} #{comment.user_name}"
-      if comment.campaign_update
-        comment.commented = comment.campaign_update
-      elsif comment.problem
-        comment.commented = comment.problem
-      else
-        raise "Unknown commentable for comment #{comment.id}"
+  desc "Populate the operator contacts table with emails from operators" 
+  task :populate_operator_contacts => :environment do 
+    Operator.find_each(:conditions => "email is not null") do |operator|      
+      if ! operator.email.blank? 
+        puts operator.inspect
+        operator_contact = OperatorContact.new(:email => operator.email, 
+                                               :confirmed => operator.email_confirmed,
+                                               :operator => operator, 
+                                               :category => 'Other', 
+                                               :notes => operator.notes)
+        operator_contact.save!
+        
+        # transfer the sent email and outgoing message associations
+        operator.sent_emails.each do |sent_email|
+          sent_email.recipient = operator_contact
+          sent_email.save!
+        end
+        operator.outgoing_messages.each do |outgoing_message|
+          outgoing_message.recipient = operator_contact
+          outgoing_message.save!
+        end
       end
-      comment.save!
     end
   end
-  
 end

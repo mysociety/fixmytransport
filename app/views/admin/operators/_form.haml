@@ -13,14 +13,6 @@
   != f.label :name
   != f.text_field :name
 .form-field
-  - if @operator.errors.on(:email)
-    .form-field-error= error_message_on @operator, :email
-  != f.label :email
-  != f.text_field :email
-.form-field
-  != f.label :email_confirmed
-  != f.check_box :email_confirmed
-.form-field
   != f.label :notes
   != f.text_field :notes
 != submit_tag t(:go)

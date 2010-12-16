@@ -147,10 +147,12 @@ describe ProblemMailer do
       
       @unemailable_council = mock_model(Council, :name => 'Unemailable council')
       
-      @operator_with_mail = mock_model(Operator, :email => 'operator@example.com', 
-                                                 :name => "Emailable operator")
-      @operator_without_mail = mock_model(Operator, :email => nil, 
-                                                    :name => "Unemailable operator")
+      @operator_with_mail = mock_model(Operator, :name => "Emailable operator")
+      @operator_contact = mock_model(OperatorContact, :email => 'operator@example.com')
+      @operator_with_mail.stub!(:contact_for_category_and_location).and_return(@operator_contact)
+      
+      @operator_without_mail = mock_model(Operator, :name => "Unemailable operator")
+      @operator_without_mail.stub!(:contact_for_category_and_location).and_return(nil)
       
       @pte_with_mail = mock_model(PassengerTransportExecutive, :email => 'pte@example.com', 
                                                                :name => 'Emailable PTE')
@@ -239,7 +241,7 @@ describe ProblemMailer do
     
     it 'should create a sent email record for each problem report delivered' do 
       SentEmail.should_receive(:create!).with(:problem => @mock_problem_email_operator, 
-                                              :recipient => @operator_with_mail)
+                                              :recipient => @operator_contact)
       SentEmail.should_receive(:create!).with(:problem => @mock_problem_email_pte, 
                                               :recipient => @pte_with_mail)
       ProblemMailer.send_reports

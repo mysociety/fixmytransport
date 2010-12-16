@@ -15,7 +15,6 @@ class Problem < ActiveRecord::Base
   validate_on_create :validate_is_campaign
   validates_associated :reporter
   attr_accessor :location_attributes, :locations, :location_search, :is_campaign
-  cattr_accessor :route_categories, :stop_categories
   attr_protected :confirmed_at
   before_create :generate_confirmation_token
   has_status({ 0 => 'New', 
@@ -34,10 +33,7 @@ class Problem < ActiveRecord::Base
    :councils_responsible?,
    :pte_responsible?,
    :operators_responsible? ].each { |method| delegate method, :to => :location }
-  
-  @@route_categories = ['New route needed', 'Keep existing route', 'Crowding', 'Lateness', 'Other']
-  @@stop_categories = ['Repair needed', 'Facilities needed', 'Other']
-  
+    
   has_paper_trail
   
   # Makes a random token, suitable for using in URLs e.g confirmation messages.
@@ -102,11 +98,11 @@ class Problem < ActiveRecord::Base
   end
   
   def emailable_organizations
-    responsible_organizations.select{ |organization| organization.emailable? }
+    responsible_organizations.select{ |organization| organization.emailable?(self.location) }
   end
   
   def unemailable_organizations
-    responsible_organizations.select{ |organization| !organization.emailable? }
+    responsible_organizations.select{ |organization| !organization.emailable?(self.location) }
   end
   
   def organization_info(method)
@@ -116,9 +112,9 @@ class Problem < ActiveRecord::Base
   end
   
   def categories
-    responsible_organizations.map{ |organization| organization.categories }.flatten.uniq
+    responsible_organizations.map{ |organization| organization.categories(self.location) }.flatten.uniq
   end
-  
+
   def recipients
     self.sent_emails.collect { |sent_email| sent_email.recipient }
   end

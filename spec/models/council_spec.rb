@@ -13,9 +13,9 @@ describe Council do
   
   it 'should be able to respond to calls to emailable?' do 
     @council.emailable = true
-    @council.emailable?.should be_true
+    @council.emailable?(mock_model(Stop)).should be_true
     @council.emailable = false
-    @council.emailable?.should be_false
+    @council.emailable?(mock_model(Stop)).should be_false
   end
   
   describe 'when asked for a contact for a problem category' do 

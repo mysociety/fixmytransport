@@ -4,7 +4,8 @@ describe Comment do
   before(:each) do
     @valid_attributes = {
       :user_id => 1,
-      :campaign_update_id => 1,
+      :commented_id => 1,
+      :commented_type => 'CampaignUpdate',
       :text => "value for text",
       :user_name => 'A name'
     }

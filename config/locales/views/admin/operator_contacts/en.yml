@@ -1,0 +1,17 @@
+en:
+  operator_contacts: Operator contacts
+  operator_contacts_for: Operator contacts for {{operator}}
+  category: Category
+  confirmed: Confirmed
+  last_editor: Last editor
+  notes: Notes
+  updated_at: Updated at
+  operator_contact_form_error: There's been a problem editing this contact. Please see below for details. 
+  history: History
+  editor: Editor
+  add_an_operator_contact: Add an operator contact
+  adding_an_operator_contact: Adding an operator contact for {{operator}}
+  contact_count:
+    one: "{{n}} contact"
+    other: "{{n}} contacts"
+  location: Location

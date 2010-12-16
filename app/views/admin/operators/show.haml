@@ -2,6 +2,25 @@
 - form_for @operator, :url => admin_url(admin_operator_path(@operator)), :html => { :method => :delete, :class => 'destroy-link' } do |f| 
   != hidden_field_tag :confirmation, t(:are_you_sure), {:id => 'destroy_confirmation'}
   != submit_tag t(:destroy) 
+
+%h3= t(:operator_contacts)
+= link_to(t(:add_an_operator_contact), admin_url(new_admin_operator_contact_path(:operator_id => @operator)))
+
+- if !@operator.operator_contacts.empty? 
+  %table{ :class => 'operators index-list' }
+    %tr
+      %th{:width => "33%"}= t(:category)
+      %th{:width => "33%"}= t(:email)
+      %th{:width => "34%"}= t(:location)
+    - @operator.operator_contacts.each do |contact|
+      %tr{ :class => cycle('odd', 'even') }
+        %td
+          = link_to(contact.category, admin_url(admin_operator_contact_path(contact)))
+        %td
+          = contact.email
+        %td
+          - if contact.location
+            = contact.location.name
 %h3= t(:merge)  
 - form_tag admin_url(merge_admin_operators_path), :method => :get do 
   != label_tag 'operators[]', t(:operator_merge_label)

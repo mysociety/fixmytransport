@@ -14,10 +14,11 @@ describe PassengerTransportExecutive do
   it 'should respond to emailable? correctly' do 
     pte = PassengerTransportExecutive.new
     pte.email = "test email"
-    pte.emailable?.should be_true
+    mock_stop = mock_model(Stop)
+    pte.emailable?(mock_stop).should be_true
     pte.email = ''
-    pte.emailable?.should be_false
+    pte.emailable?(mock_stop).should be_false
     pte.email = nil
-    pte.emailable?.should be_false
+    pte.emailable?(mock_stop).should be_false
   end
 end
