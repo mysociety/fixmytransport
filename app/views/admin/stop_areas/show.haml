@@ -13,7 +13,7 @@
   var lon = #{@stop_area.lon};
   var findOtherLocations = false;
   var linkType = 'location';
-  var areaStops = #{location_stops_js([@stop_area], main=true, small=false)}
+  var areaStops = #{location_stops_js([@stop_area], main=true, small=false, :location)}
   jQuery(document).ready(function(){
     setupShowStopArea();
     area_init();
