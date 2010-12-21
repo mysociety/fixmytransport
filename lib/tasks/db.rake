@@ -24,12 +24,12 @@ namespace :db do
     ENV['DIR'] = File.join(MySociety::Config.get('NPTDR_DERIVED_DIR', ''), 'routes')
     Rake::Task['nptdr:load:routes'].execute
     
-    # Delete stop areas without stops, add locality, other references 
+    # Delete stop areas without stops, add locality, other references, double-metaphone
     Rake::Task['naptan:post_load:delete_unpopulated_stop_areas'].execute
     Rake::Task['naptan:post_load:add_locality_to_stop_areas'].execute
     Rake::Task['naptan:post_load:add_stops_codes'].execute
     Rake::Task['naptan:post_load:mark_metro_stops'].execute
-
+    Rake::Task['naptan:post_load:add_station_double_metaphones'].execute
     
     # Delete routes with no stops, add localities and regions.
     # Associate routes with operators

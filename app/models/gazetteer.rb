@@ -177,6 +177,18 @@ class Gazetteer
     name.gsub(/(( train| railway| rail| tube)? station)$/i, '')
   end
   
+  def self.find_stations_by_double_metaphone(name, options={})
+    query = 'area_type in (?)'
+    params = [options[:types]]   
+    double_metaphone_string = Text::Metaphone.double_metaphone(name).join("|")
+    query += ' AND double_metaphone = ?'
+    params << double_metaphone_string
+    query += " AND status != 'del'"
+    conditions = [query] + params
+    results = StopArea.find(:all, :conditions => conditions, 
+                                  :limit => options[:limit], :order => 'name')
+  end
+  
   # - name - stop/station name
   # options 
   # - limit - Number of results to return
@@ -204,6 +216,11 @@ class Gazetteer
     conditions = [query] + params
     results = StopArea.find(:all, :conditions => conditions, 
                                   :limit => options[:limit], :order => 'name')  
+    
+    if results.empty? and !exact
+      results = self.find_stations_by_double_metaphone(name, options)
+    end
+    
     # reduce redundant results for stop areas
     if results.size > 1 
       results = StopArea.map_to_common_areas(results)

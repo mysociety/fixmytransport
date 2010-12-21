@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101216183304) do
+ActiveRecord::Schema.define(:version => 20101221103609) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -482,9 +482,11 @@ ActiveRecord::Schema.define(:version => 20101216183304) do
     t.float    "lat"
     t.integer  "locality_id"
     t.boolean  "loaded"
+    t.string   "double_metaphone"
   end
 
   add_index "stop_areas", ["coords"], :name => "index_stop_areas_on_coords", :spatial => true
+  add_index "stop_areas", ["double_metaphone"], :name => "index_stop_areas_on_double_metaphone"
   add_index "stop_areas", ["locality_id"], :name => "index_stop_areas_on_locality_id"
 
   create_table "stop_types", :force => true do |t|
