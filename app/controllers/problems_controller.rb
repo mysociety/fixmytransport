@@ -122,6 +122,8 @@ class ProblemsController < ApplicationController
       if stop_info[:localities]
         if stop_info[:localities].size > 1
           @localities = stop_info[:localities]
+          @link_type = :find_stop
+          @name = params[:name]
           render :choose_locality
           return
         else
@@ -189,7 +191,18 @@ class ProblemsController < ApplicationController
       location_search = LocationSearch.new_search!(session_id, :route_number => params[:route_number], 
                                                                :location_type => 'Bus route',
                                                                :area => params[:area])
-      route_info = Gazetteer.bus_route_from_route_number(params[:route_number], params[:area], @limit)
+      route_info = Gazetteer.bus_route_from_route_number(params[:route_number], 
+                                                         params[:area], 
+                                                         @limit, 
+                                                         ignore_area=false,
+                                                         params[:area_type])
+      if route_info[:areas]
+        @areas = route_info[:areas]
+        @link_type = :find_bus_route
+        @name = params[:area]
+        render :choose_area
+        return
+      end
       if route_info[:routes].empty? 
         location_search.fail
         @error_message = t(:route_not_found)
@@ -198,9 +211,12 @@ class ProblemsController < ApplicationController
         redirect_to new_problem_url(:location_id => location.id, :location_type => location.type)
       else 
         if route_info[:error] == :area_not_found
-          @error_message = t(:area_not_found_routes)
+          @error_message = t(:area_not_found_routes, :area => params[:area])
         elsif route_info[:error] == :postcode_not_found
           @error_message = t(:postcode_not_found_routes)
+        elsif route_info[:error] == :route_not_found_in_area
+          @error_message = t(:route_not_found_in_area, :area => params[:area], 
+                                                       :route_number => params[:route_number])
         end
         @locations = []
         route_info[:routes].each do |route|

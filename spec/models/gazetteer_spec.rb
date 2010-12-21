@@ -24,7 +24,11 @@ describe Gazetteer do
       end
       
       it 'should return the error :postcode_not_found in the results hash' do 
-        Gazetteer.bus_route_from_route_number('C10', 'ZZ9 9ZZ', 10)[:error].should == :postcode_not_found
+        Gazetteer.bus_route_from_route_number('C10', 
+                                              'ZZ9 9ZZ', 
+                                              10, 
+                                              ignore_area=false,
+                                              area_type=nil)[:error].should == :postcode_not_found
       end
       
     end
@@ -96,7 +100,7 @@ describe Gazetteer do
       
       before do 
         @mock_locality = mock_model(Locality)
-        Locality.stub!(:find_all_by_lower_name).and_return([@mock_locality])
+        Locality.stub!(:find_all_by_full_name).and_return([@mock_locality])
       end
       
       it 'should return the localities in a hash with the key :localities' do 
@@ -108,7 +112,7 @@ describe Gazetteer do
     describe 'when no localities, but some stops or stations match the name' do
       
       before do 
-        Locality.stub!(:find_all_by_lower_name).and_return([])
+        Locality.stub!(:find_all_by_full_name).and_return([])
         @mock_stop = mock_model(Stop)
         Stop.stub!(:find).and_return([@mock_stop])
         StopArea.stub!(:find).and_return([])
@@ -123,7 +127,7 @@ describe Gazetteer do
     describe 'when nothing matches the name' do 
       
       before do 
-        Locality.stub!(:find_all_by_lower_name).and_return([])
+        Locality.stub!(:find_all_by_full_name).and_return([])
         Stop.stub!(:find).and_return([])
         StopArea.stub!(:find).and_return([])
       end

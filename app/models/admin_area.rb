@@ -22,10 +22,51 @@
 class AdminArea < ActiveRecord::Base
   
   belongs_to :region
+  has_many :localities
   has_friendly_id :slug_name, :use_slug => true
+  
+  # instance methods
   
   def slug_name
     return short_name if short_name 
     return name
   end
+  
+  def full_name
+    text = name
+    if !region.blank?
+      text += ", #{region.name}"
+    end
+    text
+  end
+  
+  # class methods 
+  
+  def self.get_name_and_region_name(name)
+    name = name.downcase
+     name_parts = name.split(',', 2)
+     if name_parts.size == 2
+       name = name_parts.first.strip
+       region_name = name_parts.second.strip
+     else
+       region_name = nil
+     end
+     [name, region_name]
+  end
+  
+  def self.find_all_by_full_name(name)
+    name, region_name = self.get_name_and_region_name(name)
+    query_string = "LOWER(admin_areas.name) = ?"
+    params = [name]
+    includes = []
+    if region_name
+      query_string += " AND LOWER(regions.name) = ?"
+      params << region_name
+      includes << :region
+    end
+    conditions = [query_string] + params
+    self.find(:all, :conditions => conditions, 
+                    :include => includes)
+  end
+  
 end

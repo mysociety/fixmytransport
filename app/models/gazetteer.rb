@@ -40,7 +40,7 @@ class Gazetteer
     end
     # is there an area with this name? 
     name = name.downcase.strip
-    localities = Locality.find_all_by_lower_name(name)
+    localities = Locality.find_all_by_full_name(name)
 
     if !localities.empty?
       return { :localities => localities }
@@ -66,7 +66,7 @@ class Gazetteer
     return {}
   end
   
-  def self.bus_route_from_route_number(route_number, area, limit, ignore_area=false)
+  def self.bus_route_from_route_number(route_number, area, limit, ignore_area=false, area_type=nil)
     error = nil
     select_clause = 'SELECT distinct routes.id, routes.cached_description'
     from_clause = 'FROM routes'
@@ -77,7 +77,7 @@ class Gazetteer
     params << "%#{route_number}%"
     where_clause += " AND transport_mode_id in (?)"
     params << [TransportMode.find_by_name('Bus'), TransportMode.find_by_name('Coach')]
-    localities = []  
+    areas = []  
     if ignore_area
       error = :route_not_found_in_area
     else
@@ -87,18 +87,23 @@ class Gazetteer
       if coord_info == :not_found or coord_info == :bad_request
         error = :postcode_not_found
       elsif coord_info == :not_postcode
-        localities = Locality.find_all_with_descendants(area)
+        areas = Locality.find_areas_by_name(area, area_type)
+        if areas.size > 1
+          return { :areas => areas }
+        end
       else
         if MySociety::Validate.is_valid_partial_postcode(area)
           distance = 5000
         else
           distance = 1000
         end
-        localities = Locality.find_by_coordinates(coord_info['easting'], coord_info['northing'], distance)
+        areas = Locality.find_by_coordinates(coord_info['easting'], coord_info['northing'], distance)
       end
-      if localities.empty? and !error
+      if areas.empty? and !error
         error = :area_not_found
-      else
+      end
+      if !areas.empty?
+        localities = Locality.find_with_descendants(areas.first)
         from_clause += ", route_localities"
         where_clause += " AND route_localities.route_id = routes.id
                           AND route_localities.locality_id in (?)"
@@ -112,7 +117,7 @@ class Gazetteer
     params = ["#{select_clause} #{from_clause} #{where_clause}"] + params
     routes = Route.find_by_sql(params)
     routes = Route.find(:all, :conditions => ['id in (?)', routes], :order => 'cached_description' )
-    if routes.empty? and !ignore_area and !localities.empty?
+    if routes.empty? and !ignore_area and !areas.empty?
       return bus_route_from_route_number(route_number, area, limit, ignore_area=true)
     end
     return { :routes => routes, :error => error }

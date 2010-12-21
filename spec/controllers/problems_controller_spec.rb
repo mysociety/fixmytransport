@@ -113,7 +113,11 @@ describe ProblemsController do
     describe 'when a route_number parameter is supplied' do 
       
       it 'should ask the gazetteer for up to ten routes from the route_number and area' do 
-        Gazetteer.should_receive(:bus_route_from_route_number).with('C10', 'London', 10).and_return({ :routes => [] })
+        Gazetteer.should_receive(:bus_route_from_route_number).with('C10', 
+                                                                    'London', 
+                                                                    10, 
+                                                                    ignore_area=false,
+                                                                    area_type=nil).and_return({ :routes => [] })
         make_request(:route_number => 'C10', :area => 'London')
       end
       

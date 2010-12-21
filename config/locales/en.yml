@@ -41,7 +41,8 @@ en:
   please_enter_an_area: "Please enter an area, town or postcode"
   please_enter_route_number_and_area: "Please enter the route number and area"
   postcode_not_found_routes: "The postcode you entered wasn't recognized."
-  area_not_found_routes: "We could not find the area you entered."
+  area_not_found_routes: "We could not find an area called {{area}}."
+  route_not_found_in_area: "We couldn't find a route number {{route_number}} in {{area}}."
   where_did_you_get_on_and_off: Where did you get on and off?
   where_did_you_get_on: Where did you get on?
   where_did_you_get_off: Where did you get off? 

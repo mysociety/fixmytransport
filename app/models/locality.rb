@@ -40,6 +40,22 @@ class Locality < ActiveRecord::Base
     "#{name} #{qualifier_name}"
   end
   
+  def name_and_qualifier_name_with_comma
+    text = name 
+    if !qualifier_name.blank?
+      text += ", #{qualifier_name}"
+    elsif !district.blank?
+      text += ", #{district.name}"
+    elsif !admin_area.blank?
+      text += ", #{admin_area.name}"
+    end
+    text
+  end
+  
+  def full_name
+    name_and_qualifier_name_with_comma
+  end
+  
   # class methods
   
   def self.find_by_name_or_id(query, limit=nil)
@@ -60,15 +76,19 @@ class Locality < ActiveRecord::Base
          :limit => limit)
   end
   
-  def self.find_all_by_lower_name(name)
+  def self.find_all_by_full_name(name)
     name, qualifier_name = self.get_name_and_qualifier(name)
-    query_clause = "LOWER(name) = ?"
+    query_clause = "LOWER(localities.name) = ?"
     query_params = [ name ]
+    includes = [:admin_area, :district]
     if qualifier_name
-      query_clause += " AND LOWER(qualifier_name) = ?"
-      query_params << qualifier_name
+      query_clause += " AND (LOWER(qualifier_name) = ?
+                         OR LOWER(districts.name) = ?
+                         OR LOWER(admin_areas.name) = ?)"
+      3.times{ query_params << qualifier_name }
     end
-    find(:all, :conditions => [query_clause] + query_params)
+    find(:all, :conditions => [query_clause] + query_params,
+               :include => includes)
   end
   
   def self.get_name_and_qualifier(name)
@@ -83,35 +103,38 @@ class Locality < ActiveRecord::Base
      [name, qualifier_name]
   end
   
-  def self.find_all_by_name(name)
-    name, qualifier_name = self.get_name_and_qualifier(name)
-    localities = find_by_sql(['SELECT localities.* 
-                               FROM localities 
-                               LEFT OUTER JOIN admin_areas 
-                               ON admin_areas.id = localities.admin_area_id 
-                               LEFT OUTER JOIN regions
-                               ON regions.id = admin_areas.region_id 
-                               LEFT OUTER JOIN districts 
-                               ON districts.id = localities.district_id 
-                               WHERE (lower(localities.name) = ? 
-                               OR lower(admin_areas.name) = ? 
-                               OR lower(districts.name) = ?
-                               OR lower(regions.name) = ?)', 
-                               name, name, name, name])
-    localities
+  def self.find_areas_by_name(name, area_type)
+    areas = []
+    if area_type 
+      areas = area_type.constantize.find_all_by_full_name(name)
+      return areas
+    end
+    [Locality, AdminArea, District, Region].each do |area_type|
+      areas += area_type.find_all_by_full_name(name)
+    end
+    areas.each do |area|
+      if area.is_a?(Locality) && (areas.include?(area.admin_area.region) || areas.include?(area.admin_area))
+        areas.delete(area)
+      end
+    end
+    if areas.empty? 
+      areas += self.find_by_double_metaphone(name)
+    end
+    areas
   end
   
   def self.find_by_double_metaphone(name)
     name, qualifier_name = self.get_name_and_qualifier(name)
     primary_metaphone, secondary_metaphone = Text::Metaphone.double_metaphone(name)
-    results = Locality.find(:all, :conditions => ['primary_metaphone = ?', primary_metaphone])
+    results = Locality.find(:all, :conditions => ['primary_metaphone = ?', primary_metaphone],
+                                  :order => 'name')
   end
 
-  def self.find_all_with_descendants(name)
-    localities = find_all_by_name(name)
-    if localities.empty? 
-      localities = self.find_by_double_metaphone(name)
-      return [] if localities.empty?
+  def self.find_with_descendants(area)
+    if area.class != Locality
+      localities = area.localities
+    else
+      localities = [area]
     end
     descendents = find_by_sql(["SELECT localities.* 
                                FROM localities INNER JOIN locality_links
