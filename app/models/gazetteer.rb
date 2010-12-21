@@ -44,6 +44,7 @@ class Gazetteer
     if !localities.empty?
       return { :localities => localities }
     end
+    
     # is there a stop/station with this name? 
     stops = Stop.find(:all, :conditions => ['(lower(common_name) = ? 
                                               OR lower(common_name) like ? 
@@ -52,12 +53,7 @@ class Gazetteer
                                               AND stop_type in (?)',
                                             name, "#{name} %", name, name, StopType.primary_types] )
     
-    stations = StopArea.find(:all, :conditions => ["(lower(name) like ? 
-                                                    OR lower(name) like ? 
-                                                    OR lower(name) like ? 
-                                                    OR code = ?)
-                                                    AND area_type in (?)",
-                                            name, "#{name} %", "% #{name}", name, StopAreaType.primary_types])
+    stations = self.find_stations_from_name(name, exact=false, {:types => StopAreaType.primary_types})
     if !stops.empty? or !stations.empty?
       return { :locations => stops + stations }
     end
