@@ -173,7 +173,7 @@ ActiveRecord::Schema.define(:version => 20101221150154) do
   add_index "localities", ["coords"], :name => "index_localities_on_coords", :spatial => true
   add_index "localities", ["primary_metaphone"], :name => "index_localities_on_primary_metaphone"
   add_index "localities", ["secondary_metaphone"], :name => "index_localities_on_secondary_metaphone"
-  
+
   create_table "locality_links", :force => true do |t|
     t.integer  "ancestor_id"
     t.integer  "descendant_id"
@@ -494,7 +494,7 @@ ActiveRecord::Schema.define(:version => 20101221150154) do
   add_index "stop_areas", ["locality_id"], :name => "index_stop_areas_on_locality_id"
   add_index "stop_areas", ["primary_metaphone"], :name => "index_stop_areas_on_primary_metaphone"
   add_index "stop_areas", ["secondary_metaphone"], :name => "index_stop_areas_on_secondary_metaphone"
-  
+
   create_table "stop_types", :force => true do |t|
     t.string   "code"
     t.string   "description"
