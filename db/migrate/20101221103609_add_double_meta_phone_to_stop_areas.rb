@@ -6,6 +6,5 @@ class AddDoubleMetaPhoneToStopAreas < ActiveRecord::Migration
 
   def self.down
     remove_column :stop_areas, :double_metaphone
-    remove_index :stop_areas, :double_metaphone
   end
 end

@@ -61,14 +61,7 @@ class Locality < ActiveRecord::Base
   end
   
   def self.find_all_by_lower_name(name)
-    name = name.downcase
-    name_parts = name.split(',', 2)
-    if name_parts.size == 2
-      name = name_parts.first.strip
-      qualifier_name = name_parts.second.strip
-    else
-      qualifier_name = nil
-    end
+    name, qualifier_name = self.get_name_and_qualifier(name)
     query_clause = "LOWER(name) = ?"
     query_params = [ name ]
     if qualifier_name
@@ -78,7 +71,20 @@ class Locality < ActiveRecord::Base
     find(:all, :conditions => [query_clause] + query_params)
   end
   
+  def self.get_name_and_qualifier(name)
+    name = name.downcase
+     name_parts = name.split(',', 2)
+     if name_parts.size == 2
+       name = name_parts.first.strip
+       qualifier_name = name_parts.second.strip
+     else
+       qualifier_name = nil
+     end
+     [name, qualifier_name]
+  end
+  
   def self.find_all_by_name(name)
+    name, qualifier_name = self.get_name_and_qualifier(name)
     localities = find_by_sql(['SELECT localities.* 
                                FROM localities 
                                LEFT OUTER JOIN admin_areas 
@@ -91,14 +97,21 @@ class Locality < ActiveRecord::Base
                                OR lower(admin_areas.name) = ? 
                                OR lower(districts.name) = ?
                                OR lower(regions.name) = ?)', 
-                               name.downcase, name.downcase, name.downcase, name.downcase])
+                               name, name, name, name])
     localities
+  end
+  
+  def self.find_by_double_metaphone(name)
+    name, qualifier_name = self.get_name_and_qualifier(name)
+    primary_metaphone, secondary_metaphone = Text::Metaphone.double_metaphone(name)
+    results = Locality.find(:all, :conditions => ['primary_metaphone = ?', primary_metaphone])
   end
 
   def self.find_all_with_descendants(name)
     localities = find_all_by_name(name)
     if localities.empty? 
-      return []
+      localities = self.find_by_double_metaphone(name)
+      return [] if localities.empty?
     end
     descendents = find_by_sql(["SELECT localities.* 
                                FROM localities INNER JOIN locality_links

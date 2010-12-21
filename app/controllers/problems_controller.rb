@@ -175,6 +175,11 @@ class ProblemsController < ApplicationController
   
   def find_bus_route
     @title = t(:finding_a_bus_route)
+    if params[:show_all]
+      @limit = nil
+    else
+      @limit = 10
+    end
     if params[:route_number]
       if params[:route_number].blank? or params[:area].blank?
         @error_message = t(:please_enter_route_number_and_area)
@@ -184,7 +189,7 @@ class ProblemsController < ApplicationController
       location_search = LocationSearch.new_search!(session_id, :route_number => params[:route_number], 
                                                                :location_type => 'Bus route',
                                                                :area => params[:area])
-      route_info = Gazetteer.bus_route_from_route_number(params[:route_number], params[:area], limit=10)
+      route_info = Gazetteer.bus_route_from_route_number(params[:route_number], params[:area], @limit)
       if route_info[:routes].empty? 
         location_search.fail
         @error_message = t(:route_not_found)

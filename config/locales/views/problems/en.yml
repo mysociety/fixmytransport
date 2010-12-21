@@ -12,7 +12,7 @@ en:
   location_type: 'Stop, station or route'
   problem_location_not_found: "Sorry, we couldn't find that location."
   postcode_not_found: "That postcode wasn't recognized."
-  area_not_found: "We couldn't find a town or area that matches what you entered."
+  area_not_found: "We couldn't find a town, area or postcode that matches what you entered."
   go: Go!
   multiple_localities: "We found more than one place matching \"{{name}}\". Please select one, or try a different search if yours is not here:"
   multiple_locations_intro: "Choose a stop or station by clicking on it, or zoom in on an area to see other stops and stations."
@@ -78,3 +78,4 @@ en:
   problem_created: Thanks! Your problem report has been created.
   thanks_for_update: Thanks for adding an update!
   problem_occurred: "This problem occurred {{date_and_time}}"
+  show_all: Show all results

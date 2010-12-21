@@ -189,14 +189,26 @@ namespace :naptan do
     end
     
     desc 'Add double metaphone values to stations'
-    task :add_station_double_metaphones => :environment do 
+    task :add_station_metaphones => :environment do 
       station_types = StopAreaType.atomic_types
       StopArea.find_each(:conditions => ["area_type in (?)", station_types]) do |station|
-        metaphone_list = Text::Metaphone.double_metaphone(station.name)
-        metaphone_string = metaphone_list.join("|")
-        puts "#{station.name} #{metaphone_string}"
-        station.double_metaphone = metaphone_string
+        primary_metaphone, secondary_metaphone = Text::Metaphone.double_metaphone(station.name)
+        puts "#{station.name} #{primary_metaphone} #{secondary_metaphone}"
+        station.primary_metaphone = primary_metaphone
+        station.secondary_metaphone = secondary_metaphone
         station.save!
+      end
+    end
+    
+    
+    desc 'Add double metaphone values to localities'
+    task :add_locality_metaphones => :environment do 
+      Locality.find_each do |locality|
+        primary_metaphone, secondary_metaphone = Text::Metaphone.double_metaphone(locality.name)
+        puts "#{locality.name} #{primary_metaphone} #{secondary_metaphone}"
+        locality.primary_metaphone = primary_metaphone
+        locality.secondary_metaphone = secondary_metaphone
+        locality.save!
       end
     end
     
