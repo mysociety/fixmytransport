@@ -1,8 +1,10 @@
 catdoc
 elinks
+irb
 libopenssl-ruby1.8
 libpgsql-ruby1.8
 libjson-ruby
+libtmail-ruby1.8
 libwww-mechanize-ruby1.8
 libzip-ruby1.8
 mahoro-ruby1.8 | libmahoro-ruby1.8
