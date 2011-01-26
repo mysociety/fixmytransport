@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101221150154) do
+ActiveRecord::Schema.define(:version => 20110125172044) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -639,7 +639,7 @@ ActiveRecord::Schema.define(:version => 20101221150154) do
 
   add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
-  
+
   create_table "versions", :force => true do |t|
     t.string   "item_type",  :null => false
     t.integer  "item_id",    :null => false
