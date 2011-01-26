@@ -22,9 +22,9 @@ class PasswordResetsController < ApplicationController
   end
   
   def update
+    @user.ignore_blank_passwords = false
     @user.password = params[:user][:password]  
     @user.password_confirmation = params[:user][:password_confirmation]  
-    @user.registered = true
     if @user.save  
       flash[:notice] = t(:password_updated)
       redirect_back_or_default root_path
@@ -37,7 +37,7 @@ class PasswordResetsController < ApplicationController
   
   def load_user_using_perishable_token 
     @user = User.find_using_perishable_token(params[:id])  
-    unless @user  
+    unless @user && @user.registered?
       flash[:notice] = t(:could_not_find_account)
       redirect_to root_url  
     end  

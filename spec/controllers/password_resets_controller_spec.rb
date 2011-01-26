@@ -50,7 +50,7 @@ describe PasswordResetsController do
     describe 'if a user can be found using the perishable token param' do
     
       before do 
-        User.stub!(:find_using_perishable_token).with('1').and_return(mock_model(User))
+        User.stub!(:find_using_perishable_token).with('1').and_return(mock_model(User, :registered? => true))
       end
     
       it 'should render the "edit" template' do 
@@ -116,7 +116,8 @@ describe PasswordResetsController do
   describe 'PUT #update' do 
   
     def make_request(session_info = {})
-      put :update, { :id => '1', :user => { :password => 'boo', :password_confirmation => 'booagain' } }, session_info
+      put :update, { :id => '1', :user => { :password => 'boo', 
+                                            :password_confirmation => 'booagain' } }, session_info
     end
 
     it_should_behave_like "an action requiring a perishable token"
@@ -126,7 +127,8 @@ describe PasswordResetsController do
       before do 
         @user = mock_model(User, :password= => true, 
                                  :password_confirmation= => true,
-                                 :registered= => true,
+                                 :registered? => true,
+                                 :ignore_blank_passwords= => true, 
                                  :save => true)
         User.stub!(:find_using_perishable_token).and_return(@user)
       end
@@ -134,11 +136,6 @@ describe PasswordResetsController do
       it 'should set the password and password confirmation on the user' do 
         @user.should_receive(:password=).with('boo')
         @user.should_receive(:password_confirmation=).with('booagain')
-        make_request
-      end
-      
-      it 'should set the user to registered' do 
-        @user.should_receive(:registered=).with(true)
         make_request
       end
       

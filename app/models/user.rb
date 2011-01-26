@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
   has_many :campaigns, :through => :campaign_supporters
   has_many :sent_emails, :as => :recipient
   before_save :generate_email_local_part, :unless => :unregistered?
+  attr_accessor :ignore_blank_passwords
   
   acts_as_authentic do |c|
     # we validate the email with activerecord validation above
@@ -34,6 +35,12 @@ class User < ActiveRecord::Base
                                                         :message => I18n.translate(:password_length_error, 
                                                                                    :length => password_min_length)})
   end 
+  
+  # object level attribute overrides the config level
+  # attribute
+  def ignore_blank_passwords?
+    ignore_blank_passwords.nil? ? super : (ignore_blank_passwords == true)
+  end
   
   def unregistered?
     !registered
