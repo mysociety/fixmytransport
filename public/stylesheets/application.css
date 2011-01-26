@@ -84,6 +84,7 @@ ul.navigation {
   margin: 5px;
   background-color: #B9C7DD;
   border: 1px solid #437DD4;
+  text-align: center;
 }
 
 .flash_error {
@@ -91,6 +92,7 @@ ul.navigation {
   margin: 5px;
   background-color: #FFADB9;
   border: 1px solid #CC0000;
+  text-align: center;
 }
 
 .wrapper {
@@ -762,8 +764,37 @@ div.submit{
 
 /* Login */
 
-form.new_user_session label{
+.new_user_session {
+  width: 50%;
+  margin: auto;
+}
+
+.new_user_session label{
   width: 7em;
+}
+
+.new_user_session input[type=submit] { 
+  float: right;
+}
+
+.password-reset-link {
+  margin-left: 10em;
+  font-size: 0.8em;
+  padding: 0.6em 0;
+}
+
+/* Password reset */
+.password_reset_email {
+  width: 50%;
+  margin: auto;
+}
+
+.password_reset_email label {
+  width: 7em;
+}
+
+.password_reset_email .instructions {
+  padding: 0.5em 0;
 }
 
 /* Editing user info */
@@ -779,6 +810,7 @@ form.new_user_session label{
 .edit_user input[type=submit] {
   float: right;  
 }
+
 
 
 /* Campaign emails */

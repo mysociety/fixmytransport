@@ -634,8 +634,12 @@ ActiveRecord::Schema.define(:version => 20101221150154) do
     t.boolean  "registered",         :default => false, :null => false
     t.string   "email_local_part"
     t.boolean  "is_expert"
+    t.string   "perishable_token",   :default => "",    :null => false
   end
 
+  add_index "users", ["email"], :name => "index_users_on_email"
+  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
+  
   create_table "versions", :force => true do |t|
     t.string   "item_type",  :null => false
     t.integer  "item_id",    :null => false

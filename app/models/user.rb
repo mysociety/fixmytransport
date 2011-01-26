@@ -70,4 +70,9 @@ class User < ActiveRecord::Base
     return "#{email_local_part}@#{campaign.domain}"
   end
   
+  def deliver_password_reset_instructions!
+    reset_perishable_token!
+    UserMailer.deliver_password_reset_instructions(self)
+  end
+
 end

@@ -12,7 +12,5 @@ class ReAddMetaphonesToStopAreas < ActiveRecord::Migration
     add_index :stop_areas, :double_metaphone
     remove_column :stop_areas, :primary_metaphone
     remove_column :stop_areas, :secondary_metaphone
-    remove_index :stop_areas, :primary_metaphone
-    remove_index :stop_areas, :secondary_metaphone
   end
 end
