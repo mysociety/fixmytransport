@@ -81,5 +81,15 @@ class User < ActiveRecord::Base
     reset_perishable_token!
     UserMailer.deliver_password_reset_instructions(self)
   end
+  
+  def deliver_new_account_confirmation!
+    reset_perishable_token!
+    UserMailer.deliver_new_account_confirmation(self)
+  end
+  
+  def deliver_already_registered!
+    reset_perishable_token!
+    UserMailer.deliver_already_registered(self)
+  end
 
 end

@@ -808,6 +808,21 @@ div.submit{
   padding: 1em 0;
 }
 
+/* Creating an account */
+
+.create_account {
+  width: 50%;
+  margin: auto;
+}
+
+.create_account label{
+  width: 11em;
+}
+
+.create_account input[type=submit] {
+  float: right;  
+}
+
 /* Updating account */ 
 .edit_account {
   width: 62%;

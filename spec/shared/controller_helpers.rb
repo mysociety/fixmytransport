@@ -30,6 +30,6 @@ module SharedBehaviours
 
         end
       end
-    end 
+    end
   end
 end

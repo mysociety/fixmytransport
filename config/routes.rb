@@ -27,7 +27,7 @@ ActionController::Routing::Routes.draw do |map|
                                             :find_bus_route => :get,
                                             :find_train_route => :get,
                                             :find_other_route => :get }                           
-  map.confirm '/p/:email_token', :action => 'confirm', :controller => 'problems'
+  map.confirm_problem '/p/:email_token', :action => 'confirm', :controller => 'problems'
   
   # stops                                   
   map.stop "/stops/:scope/:id.:format", :controller => "locations", 
@@ -73,8 +73,11 @@ ActionController::Routing::Routes.draw do |map|
   map.login 'login', :controller => 'user_sessions', :action => 'new'  
   map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
   map.resources :user_sessions
+  
+  # accounts
   map.resources :password_resets, :except => [:show, :destroy, :index]
-  map.resource :account, :only => [:show, :edit, :update]
+  map.resource :account, :except => [:index, :destroy]
+  map.confirm_account '/a/:email_token', :action => 'confirm', :controller => 'accounts'
   
   # static
   map.about '/about', :controller => 'static', :action => 'about'

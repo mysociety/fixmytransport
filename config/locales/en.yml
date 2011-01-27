@@ -69,3 +69,5 @@ en:
   access_this_page: "access this page."
   could_not_find_account: "We're sorry, but we could not locate your account. If you are having issues try copying and pasting the URL from your email into your browser or restarting the reset password process."
   account_updated: "Your account has been updated."
+  signup: Sign up
+  successfully_confirmed_account: You have successfully confirmed your account.

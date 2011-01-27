@@ -3,7 +3,9 @@ require 'spec_helper'
 describe UserMailer do
 
   before do 
-    @user = mock_model(User, :email => 'user@example.com', :perishable_token => 'mytoken')
+    @user = mock_model(User, :email => 'user@example.com', 
+                             :perishable_token => 'mytoken',
+                             :name => 'User Name')
   end
 
   describe "when creating password reset instructions" do

@@ -6,7 +6,7 @@ class ProblemMailer < ApplicationMailer
    recipients recipient.name_and_email
    from contact_from_name_and_email
    subject "[FixMyTransport] Your transport problem"
-   body :problem => problem, :recipient => recipient, :link => main_url(confirm_path(:email_token => token))
+   body :problem => problem, :recipient => recipient, :link => main_url(confirm_problem_path(:email_token => token))
   end  
   
   def comment_confirmation(recipient, comment, token)

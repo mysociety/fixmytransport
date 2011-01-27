@@ -33,10 +33,11 @@ class PasswordResetsController < ApplicationController
     end
   end
   
-  private  
+  private
   
   def load_user_using_perishable_token 
-    @user = User.find_using_perishable_token(params[:id])  
+    # not currently using a timeout on the tokens
+    @user = User.find_using_perishable_token(params[:id], token_age=0)  
     unless @user && @user.registered?
       flash[:notice] = t(:could_not_find_account)
       redirect_to root_url  

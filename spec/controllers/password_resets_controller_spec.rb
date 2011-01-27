@@ -1,30 +1,47 @@
 require 'spec_helper'
 
 describe PasswordResetsController do
-
+  
   shared_examples_for "an action requiring a perishable token" do 
-    
+
     it 'should look for a user by perishable token' do 
       User.should_receive(:find_using_perishable_token)
       make_request
     end
     
-    describe 'if no user can be found using the perishable token param' do 
-      
+    describe 'if an unregisted user is found using the perishable token' do 
+
+      before do 
+        User.stub!(:find_using_perishable_token).with('1', 0).and_return(mock_model(User, :registered? => false))
+      end
+
       it 'should show a notice saying that the account cannot be found' do 
         make_request
         flash[:notice].should == "We're sorry, but we could not locate your account. If you are having issues try copying and pasting the URL from your email into your browser or restarting the reset password process."
       end
-      
+
       it 'should redirect to the root url' do 
         make_request
         response.should redirect_to(root_url)
       end
-      
-    end
     
+    end
+
+    describe 'if no user can be found using the perishable token param' do 
+
+      it 'should show a notice saying that the account cannot be found' do 
+        make_request
+        flash[:notice].should == "We're sorry, but we could not locate your account. If you are having issues try copying and pasting the URL from your email into your browser or restarting the reset password process."
+      end
+
+      it 'should redirect to the root url' do 
+        make_request
+        response.should redirect_to(root_url)
+      end
+
+    end
+
   end
-  
   
   describe 'GET #new' do
     
@@ -46,11 +63,11 @@ describe PasswordResetsController do
     end
   
     it_should_behave_like "an action requiring a perishable token"
-    
-    describe 'if a user can be found using the perishable token param' do
+
+    describe 'if a registered user can be found using the perishable token param' do
     
       before do 
-        User.stub!(:find_using_perishable_token).with('1').and_return(mock_model(User, :registered? => true))
+        User.stub!(:find_using_perishable_token).with('1', 0).and_return(mock_model(User, :registered? => true))
       end
     
       it 'should render the "edit" template' do 
