@@ -79,7 +79,9 @@ class CampaignsController < ApplicationController
     elsif request.put?
       if @campaign_supporter
         @user = @campaign_supporter.supporter
-        @user.attributes = params[:user]
+        @user.name = params[:user][:name]
+        @user.password = params[:user][:password]
+        @user.password_confirmation = params[:user][:password_confirmation]
         @user.registered = true
         if @user.save 
           redirect_to campaign_url(@campaign_supporter.campaign)
@@ -104,7 +106,9 @@ class CampaignsController < ApplicationController
     @campaign.attributes=(params[:campaign])
     @campaign.confirm
     if params[:user] and params[:token] == @campaign.problem.token
-      @campaign.initiator.attributes=(params[:user])
+      @campaign.initiator.name = params[:user][:name]
+      @campaign.initiator.password = params[:user][:password]
+      @campaign.initiator.password_confirmation = params[:user][:password_confirmation]
       @campaign.initiator.registered = true
     end
     if @campaign.valid? 

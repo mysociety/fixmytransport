@@ -222,7 +222,10 @@ describe CampaignsController do
                                         :save => true, 
                                         :registered? => false, 
                                         :attributes= => true, 
-                                        :registered= => true)
+                                        :registered= => true,
+                                        :name= => true, 
+                                        :password= => true,
+                                        :password_confirmation= => true)
       @mock_problem = mock_model(Problem, :token => 'problem-token')
       @mock_campaign = mock_model(Campaign, :problem => @mock_problem, 
                                             :initiator => @campaign_user, 
@@ -241,7 +244,9 @@ describe CampaignsController do
     def make_request(token=nil)
       put :update, { :id => 33, :token => token, 
                                 :campaign => { :title => 'Test Campaign' }, 
-                                :user => { :password => 'A password' } }
+                                :user => { :password => 'A password', 
+                                           :password_confirmation => 'A password confirmation', 
+                                           :name => 'A name'} }
     end   
     
     def do_default_behaviour
@@ -258,7 +263,9 @@ describe CampaignsController do
     describe 'if a valid token and user params are supplied' do 
       
       it 'should update the campaign initiator with the user params' do 
-        @campaign_user.should_receive(:attributes=).with("password" => 'A password')
+        @campaign_user.should_receive(:password=).with('A password')
+        @campaign_user.should_receive(:password_confirmation=).with('A password confirmation')    
+        @campaign_user.should_receive(:name=).with('A name')    
         make_request(token=@mock_problem.token)
       end
       
@@ -648,6 +655,9 @@ describe CampaignsController do
     before do 
       @mock_user = mock_model(User,  :attributes= => true, 
                                      :registered= => true,
+                                     :name= => true, 
+                                     :password= => true, 
+                                     :password_confirmation= => true,
                                      :save => true)
       @mock_campaign = mock_model(Campaign)
       @mock_supporter = mock_model(CampaignSupporter, :supporter => @mock_user,
@@ -657,7 +667,7 @@ describe CampaignsController do
     end
     
     def make_request
-      put :confirm_join, { :email_token => 'mytoken' }
+      put :confirm_join, { :email_token => 'mytoken', :user => {} }
     end
     
     it 'should assign an error to the view if the campaign supporter cannot be found' do 

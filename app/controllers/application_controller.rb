@@ -33,6 +33,7 @@ class ApplicationController < ActionController::Base
   def require_user
     unless current_user
       store_location
+      access_message_key = :access_this_page
       flash[:notice] = t(:must_be_logged_in, :requested_action => t(access_message_key))
       redirect_to new_user_session_url
       return false

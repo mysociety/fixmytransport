@@ -23,9 +23,10 @@ describe User do
   describe 'when saving a registered user' do 
     
     before do 
-      @user = User.new(:email => "test@example.com", 
-                       :password => 'password',
-                       :password_confirmation => 'password')
+      @user = User.new
+      @user.email = 'test@example.com'
+      @user.password = 'password'
+      @user.password_confirmation = 'password'
       @user.registered = true
     end
     

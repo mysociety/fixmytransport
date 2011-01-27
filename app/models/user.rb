@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   validates_presence_of :name, :unless => :unregistered?
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
   validates_uniqueness_of :email
-  attr_accessible :name, :email, :password, :password_confirmation
+  attr_protected :password, :password_confirmation
   has_many :assignments
   has_many :campaign_supporters, :foreign_key => :supporter_id
   has_many :campaigns, :through => :campaign_supporters

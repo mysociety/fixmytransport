@@ -73,7 +73,6 @@
         - if @problem.reporter.errors.on('email')
           .form-field-error= error_message_on @problem.reporter, 'email'
         .form-field
-          != reporter_fields.hidden_field :id
           = reporter_fields.label :email
           != reporter_fields.text_field :email
           %span.optional-note

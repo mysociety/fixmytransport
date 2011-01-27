@@ -797,6 +797,31 @@ div.submit{
   padding: 0.5em 0;
 }
 
+/* Account info*/
+.account-info {
+  width: 60%;
+  margin: auto;
+  text-align: center;
+}
+
+.account-edit-link {
+  padding: 1em 0;
+}
+
+/* Updating account */ 
+.edit_account {
+  width: 62%;
+  margin: auto;
+}
+
+.edit_account label{
+  width: 8em;
+}
+
+.edit_account input[type=submit] {
+  float: right;  
+}
+
 /* Editing user info */
 .edit_user{
   width: 50%;

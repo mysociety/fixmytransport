@@ -1,0 +1,21 @@
+%h2.main-header= t(:your_account)
+
+- form_for(current_user, :url => account_path, :html => {:method => :put, :class => 'edit_account'}) do |f|
+  .fieldset
+    .form-field
+      - if current_user.errors.on('email')
+        .form-field-error= error_message_on current_user, :email
+      = f.label :email
+      != f.text_field :email
+    .form-field  
+      - if current_user.errors.on('password')
+        .form-field-error= error_message_on current_user, :password
+      = f.label :password
+      != f.password_field :password
+      %span.optional-note= "(#{t(:only_needed_if_want_to_change)})"
+    .form-field
+      - if current_user.errors.on('password_confirmation')
+        .form-field-error= error_message_on current_user, :password_confirmation
+      = f.label :password_confirmation 
+      != f.password_field :password_confirmation 
+    != f.submit t(:update_account)
