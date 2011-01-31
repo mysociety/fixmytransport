@@ -9,6 +9,9 @@ config/general.deployed
 config/rails_env.rb
 config/httpd.conf
 config/httpd.conf.deployed
+config/logrotate
+config/logrotate.deployed
+tmp/restart.txt
 public/down.html
 data/operators/*
 data/organizations/*
