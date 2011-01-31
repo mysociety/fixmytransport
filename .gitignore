@@ -9,6 +9,8 @@ config/general.deployed
 config/rails_env.rb
 config/httpd.conf
 config/httpd.conf.deployed
+config/logrotate
+config/logrotate.deployed
 public/down.html
 data/NPTDR/
 cache/*
