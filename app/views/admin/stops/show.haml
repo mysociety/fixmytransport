@@ -1,5 +1,5 @@
 - content_for :javascript do 
-  != map_javascript_include_tags(:no_jquery => true)
+  != map_javascript_include_tags(:admin => true)
 #map
 %h2.stop-header= @stop.name
 - form_for @stop, :url => admin_url(admin_stop_path(@stop.id)), :html => { :method => :delete, :class => 'destroy-link' } do |f| 

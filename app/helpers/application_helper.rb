@@ -5,22 +5,6 @@ module ApplicationHelper
     MySociety::Config.get('GOOGLE_MAPS_API_KEY', '')
   end
   
-  def transport_mode_radio_buttons
-    tags = []
-    available_modes = TransportMode.active.find(:all)
-    tags << %Q[<div id="transport-mode-radio">]
-    tags << %Q[<div class="transport-mode">] 
-    available_modes.each do |transport_mode| 
-      tag = radio_button_tag 'transport_mode_id', transport_mode.id, params[:transport_mode_id] == transport_mode.id.to_s, {:class => 'transport-mode'}
-      tag += label_tag "transport_mode_id_#{transport_mode.id}", transport_mode.name
-      tag = %Q[<div class="transport-bg-#{transport_mode.css_name}">#{tag}</div>]
-      tags << tag
-    end
-    tags << "</div>"
-    tags << "</div>"
-    tags.join("\n")
-  end
-  
   def location_type_radio_buttons(campaign)
     tags = []
     location_types = { 'Stop' => 'Stop', 
@@ -40,10 +24,11 @@ module ApplicationHelper
   #  no_jquery - don't include a tag for the main jquery js file
   def map_javascript_include_tags(options={})
     tags = []
-    unless options[:no_jquery]
-      tags << javascript_include_tag('jquery-1.4.2.min.js')
+    if options[:admin]
+      tags << javascript_include_tag('OpenLayers-admin.js')
+    else
+      tags << javascript_include_tag('OpenLayers.js')
     end
-    tags << javascript_include_tag('OpenLayers.js')
     tags << "<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=#{google_maps_key}\" type=\"text/javascript\"></script>"
     tags << javascript_include_tag('map.js')
     tags.join("\n")

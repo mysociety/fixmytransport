@@ -6,10 +6,10 @@
     %meta{ :content => "text/html; charset=utf-8", "http-equiv" => "Content-type" }
     =yield :feeds
     = stylesheet_link_tag 'application', 'map'
-    = yield :javascript
     != javascript_include_tag('jquery-1.4.2.min.js')
     != javascript_include_tag('jquery.autofill.js')
     != javascript_include_tag('jquery.form.js')
+    = yield :javascript
     != javascript_include_tag('application.js')
   %body
     = javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery?

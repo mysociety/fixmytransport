@@ -203,7 +203,7 @@ function setupFeedbackForm() {
 }
 
 // Always send the authenticity_token with ajax
-$(document).ajaxSend(function(event, request, settings) {
+jQuery(document).ajaxSend(function(event, request, settings) {
   if ( settings.type == 'post' ) {
       settings.data = (settings.data ? settings.data + "&" : "")
           + "authenticity_token=" + encodeURIComponent( AUTH_TOKEN );
