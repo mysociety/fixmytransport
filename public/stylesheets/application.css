@@ -197,10 +197,6 @@ h2.main-header{
   overflow: auto;
 }
 
-.homepage .latest-problems .more {
-  float: right;
-}
-
 .homepage .left-col{
   float: left;
   width: 50%;
@@ -213,8 +209,9 @@ h2.main-header{
   overflow: auto;
 }
 
-.homepage .latest-campaigns .more {
+.homepage .more {
   float: right;
+  font-size: 0.8em;
 }
 
 .homepage ul{
@@ -223,6 +220,9 @@ h2.main-header{
   list-style-type: none;
 }
 
+.homepage li{
+  padding: 0.1em 0;
+}
 
 .homepage .right-col{
   float: right;
