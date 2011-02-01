@@ -204,32 +204,33 @@ h2.main-header{
 .homepage .left-col{
   float: left;
   width: 50%;
-  text-align:center;
 }
 
-.homepage .campaign-updates{
+.homepage .latest-campaigns{
   padding: 10px;
   border: 1px solid #dee0d4;
   margin: 1em 4em 1em 2em;
   overflow: auto;
 }
 
-.homepage .campaign-updates .more {
+.homepage .latest-campaigns .more {
   float: right;
 }
+
+.homepage ul{
+  width: 80%;
+  margin: auto;
+  list-style-type: none;
+}
+
 
 .homepage .right-col{
   float: right;
   width: 50%;
-  text-align:center;
 }
 
-.homepage ul {
-  margin: 0;
-  padding: 0;
-}
-.homepage li {
-  list-style-type: none;
+.transport-modes-note {
+  font-size: 0.8em;
 }
 
 .homepage .campaign{

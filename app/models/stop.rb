@@ -72,7 +72,11 @@ class Stop < ActiveRecord::Base
   end
   
   def transport_modes
-    TransportMode.find(StopType.transport_modes_for_code(stop_type))
+    modes = (routes_as_from_stop | routes_as_to_stop).map{ |route| route.transport_mode }.uniq
+    if modes.empty?
+      modes = TransportMode.find(StopType.transport_modes_for_code(stop_type))
+    end
+    modes
   end
   
   def transport_mode_ids

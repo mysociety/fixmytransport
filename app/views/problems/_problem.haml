@@ -1,5 +1,7 @@
 .problem-body
-  .subject=link_to(problem.subject, problem_url(problem))
+  %span.subject
+    =link_to(problem.subject, problem_url(problem))
+  %span.transport-modes-note=problem.transport_mode_text
   .details
     = t(:reported_on, :date => problem.created_at.strftime("%d/%m/%Y"))
     = t(:by, :name => problem.reporter_name)

@@ -159,6 +159,10 @@ class Problem < ActiveRecord::Base
      :ask_for_advice]
   end
   
+  def transport_mode_text
+    location.transport_modes.map{ |transport_mode| transport_mode.name }.join(", ")
+  end
+  
   # class methods
   def self.latest(limit, options={})
     visible.find(:all, 

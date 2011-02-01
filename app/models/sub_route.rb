@@ -14,6 +14,10 @@ class SubRoute < ActiveRecord::Base
     [from_station, to_station]
   end
   
+  def transport_modes
+    [TransportMode.find_by_name('Train')]
+  end
+  
   def terminuses
     points
   end

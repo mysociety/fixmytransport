@@ -19,16 +19,20 @@
           %embed{:src=>"http://www.youtube.com/v/LGYEfOm_28I?fs=1&amp;hl=en_US", :type=>"application/x-shockwave-flash", :allowscriptaccess=>"always", :allowfullscreen=>"true", :width=>"320", :height=>"192"}
   .latest
     .right-col
-      .campaign-updates
+      .latest-campaigns
         %h3=t(:latest_campaigns)
         %ul
           - Campaign.find_recent(5).each do |campaign|
-            %li.campaign-update= link_to(campaign.title, campaign_url(campaign))
+            %li.campaign-update
+              = link_to(campaign.title, campaign_url(campaign))
+              %span.transport-modes-note=campaign.transport_mode_text
         .more= link_to(t(:more_campaigns), campaigns_path)
     .left-col
       .latest-problems
         %h3=t(:latest_problems)
         %ul
           - Problem.latest(5).each do |problem|
-            %li.problem= link_to(problem.subject, problem_url(problem))
+            %li.problem
+              = link_to(problem.subject, problem_url(problem))
+              %span.transport-modes-note=problem.transport_mode_text
         .more= link_to(t(:more_problems), problems_path)

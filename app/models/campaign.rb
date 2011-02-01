@@ -26,6 +26,8 @@ class Campaign < ActiveRecord::Base
                                       :case_sensitive => false
   validates_associated :initiator, :on => :update
   cattr_reader :per_page
+  delegate :transport_mode_text, :to => :problem
+  
   @@per_page = 10
   
   has_status({ 0 => 'New', 
@@ -150,4 +152,5 @@ class Campaign < ActiveRecord::Base
                        :offset => options[:offset])
   end
   
+
 end

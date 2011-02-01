@@ -1,7 +1,10 @@
 .campaign-body
-  .title=link_to(campaign.title, campaign_url(campaign))
+  %span.title
+    =link_to(campaign.title, campaign_url(campaign))
+  %span.transport-modes-note=campaign.transport_mode_text
   .details
     = t(:started_on, :date => campaign.created_at.strftime("%d/%m/%Y"))
     = t(:by, :name => campaign.initiator.name)
     = on_or_at_the(campaign.location)
     = link_to("#{campaign.location.description}", campaign_url(campaign))
+    
