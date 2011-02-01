@@ -22,11 +22,10 @@ class Problem < ActiveRecord::Base
                2 => 'Fixed',
                3 => 'Hidden' })
   named_scope :confirmed, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
-  named_scope :visible, :conditions => ["status_code in (?)", [self.symbol_to_status_code[:confirmed], 
+  named_scope :visible, :conditions => ["status_code in (?) and campaign_id is null", [self.symbol_to_status_code[:confirmed], 
                                                               self.symbol_to_status_code[:fixed]]], :order => "confirmed_at desc"
   named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
   named_scope :with_operator, :conditions => ['operator_id is not null'], :order => 'confirmed_at desc'
-  named_scope :one_off, :conditions => ['campaign_id is null']
   [:responsible_organizations, 
    :emailable_organizations, 
    :unemailable_organizations, 
@@ -161,8 +160,11 @@ class Problem < ActiveRecord::Base
   end
   
   # class methods
-  def self.latest(limit)
-    one_off.visible.find(:all, :limit => limit)
+  def self.latest(limit, options={})
+    visible.find(:all, 
+                 :limit => limit, 
+                 :include => [:location],
+                 :offset => options[:offset])
   end
   
   # Sendable reports - confirmed, with operator, PTE, or council, but not sent

@@ -10,20 +10,37 @@ describe ProblemsController do
     
   end
   
+  describe 'GET #index' do 
+  
+    def make_request
+      get :index
+    end
+    
+    it 'should render the index template' do 
+      make_request
+      response.should render_template('index')
+    end
+    
+    it 'should ask for latest problems' do 
+      Problem.should_receive(:latest).and_return([])
+      make_request
+    end
+  
+  end
+  
+  
   describe 'GET #show' do 
   
     def make_request(params={})
       get :show, params
     end
     
-    it 'should look for a visible one-off problem with the id passed' do 
-      one_off_problems = mock('one off problems')
+    it 'should look for a visible problem with the id passed' do 
       visible_problems = mock('visible problems')
       mock_problem = mock_model(Problem, :location => mock_model(Stop, :points => []),
                                          :to_i => 22)
       @controller.stub!(:map_params_from_location)
-      Problem.should_receive(:one_off).and_return(one_off_problems)
-      one_off_problems.should_receive(:visible).and_return(visible_problems)
+      Problem.should_receive(:visible).and_return(visible_problems)
       visible_problems.should_receive(:find).with('22').and_return(mock_problem)
       make_request(:id => "22")
     end

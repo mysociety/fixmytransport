@@ -54,6 +54,7 @@ en:
   provide_an_update: Provide an update
   post: Post
   mark_fixed: This problem has been fixed
+  reported_on: "Reported on {{date}}"
   update_not_found: "We couldn't locate your comment or update in the database. If you've copied the URL from an email, please check that you copied it exactly."
   error_on_join: "Sorry, we couldn't locate your membership of this campaign in the database. If you've copied the URL from an email, please check that you copied it exactly - if you have, please {{link}} what happened."
   error_on_leave: "Sorry, we couldn't locate your membership of this campaign in the database. If you've copied the URL from an email, please check that you copied it exactly - if you have, please {{link}} what happened."

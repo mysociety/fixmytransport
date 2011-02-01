@@ -6,4 +6,4 @@
 
 - if !location.problems.visible.empty?
   %h3= t(:other_problems_here)
-  = render :partial => 'shared/problem', :collection => location.problems.one_off.visible, :locals => { :context => :location }
+  = render :partial => 'shared/problem', :collection => location.problems.visible, :locals => { :context => :location }
