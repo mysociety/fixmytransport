@@ -8,6 +8,19 @@ class ProblemsController < ApplicationController
                                                :find_other_route]
   before_filter :find_visible_problem, :only => [:show, :update]
   
+  def index
+    @problems = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
+      problems = Problem.latest(pager.per_page, :offset => pager.offset)
+      # inject the result array into the paginated collection:
+      pager.replace(problems)
+
+      unless pager.total_entries
+        # the pager didn't manage to guess the total count, do it manually
+        pager.total_entries = Problem.visible.count
+      end
+    end
+  end
+  
   def new
     location = params[:location_type].constantize.find(params[:location_id])
     @problem = Problem.new(:location => location, 
@@ -309,7 +322,7 @@ class ProblemsController < ApplicationController
   private 
   
   def find_visible_problem
-    @problem = Problem.one_off.visible.find(params[:id])
+    @problem = Problem.visible.find(params[:id])
   end
   
   def setup_from_and_to_stops(route_info)
