@@ -7,6 +7,7 @@ var stopsById = new Array();
 var proj = new OpenLayers.Projection("EPSG:4326");
 var selectControl;
 var openPopup;
+var openHover;
 var segmentStyle =
 {
   strokeColor: "#CC0000",
@@ -158,38 +159,52 @@ function createMap() {
   map.addLayer(layer); 
 }
 
-function onPopupClose(evt) {
-  stopUnselected(this.stop);
-}
-
-function stopUnselected(stop) {
-  if (stop && stop.popup) {
-      popup.stop = null;
-      map.removePopup(stop.popup);
-      stop.popup.destroy();
-      stop.popup = null;
-  }
-}
 function stopSelected () {
-  selectStop(this);
+  this.icon.imageDiv.style.cursor = 'wait';
+  document.location = this.url;
 }
 
-function selectStop(stop) {
-  if (openPopup){
-    stopUnselected(openPopup.stop);
-    openPopup = null;
+function stopHovered() {
+  hoverStop(this);
+}
+
+function hoverStop(stop) {
+  if (openHover){
+    stopUnhovered(openHover.stop);
+    openHover = null;
   }
-  popup = new OpenLayers.Popup.AnchoredBubble("stopPopup",
-                                            stop.lonlat,
-                                            new OpenLayers.Size(50,50),
-                                            '<a href="' + stop.url + '">'+
-                                            stop.name + '</a>',
-                                            null, true, onPopupClose);
-  popup.autoSize = true;
-  stop.popup = popup;
-  popup.stop = stop;
-  map.addPopup(popup);
-  openPopup = popup;  
+  tooltip_position = map.getPixelFromLonLat(stop.lonlat).offset(new OpenLayers.Pixel(0, 10));
+  tooltip_lonlat = map.getLonLatFromPixel(tooltip_position);
+  var tooltipPopup = new OpenLayers.Popup("activetooltip",
+                                          tooltip_lonlat,
+                                          new OpenLayers.Size(100,12),
+                                          stop.name,
+                                          false);
+  // this class needs to appear in the css with the same font-size to get
+  // the tooltip to resize correctly
+  tooltipPopup.contentDisplayClass = 'tooltip-popup-content';
+  tooltipPopup.displayClass = 'tooltip-popup';
+  tooltipPopup.backgroundColor='#FFFCCF';
+  tooltipPopup.border='1px solid #CDCDC1';
+  tooltipPopup.div.style.fontSize='0.7em';  
+  tooltipPopup.contentDiv.style.overflow='hidden';
+  tooltipPopup.closeOnMove = true;
+  tooltipPopup.autoSize = true;
+  tooltipPopup.updateSize();
+  stop.popup = tooltipPopup;
+  openHover = tooltipPopup;
+  tooltipPopup.stop = stop;
+  map.addPopup(tooltipPopup);
+}
+
+function stopUnhovered() {
+  unHoverStop(this);
+}
+
+function unHoverStop(stop) {
+  if (stop != null && stop.popup != null){
+    map.removePopup(stop.popup);
+  }  
 }
 
 function addRouteMarker(stopCoords, bounds, markers, item, other) {
@@ -198,12 +213,15 @@ function addRouteMarker(stopCoords, bounds, markers, item, other) {
     var size = new OpenLayers.Size(item.width, item.height);
     var offset = new OpenLayers.Pixel(-(size.w/2), -size.h/2);
     var stopIcon = new OpenLayers.Icon("/images/" + item.icon + ".png", size, offset);
+    stopIcon.imageDiv.style.cursor = 'pointer';
     var marker = new OpenLayers.Marker(stopCoords, stopIcon);
     marker.url = item.url;
     marker.name = item.description;
     marker.id = item.id;
     stopsById[item.id] = marker;
     marker.events.register("click", marker, stopSelected);
+    marker.events.register("mouseover", marker, stopHovered);
+    marker.events.register("mouseout", marker, stopUnhovered);
     markers.addMarker(marker);
   }
 }

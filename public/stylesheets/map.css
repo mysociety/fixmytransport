@@ -32,3 +32,11 @@
   border: 1px solid #000000;
   overflow: hidden;
 }
+
+.tooltip-popup {
+  padding: 0;
+  background-color: #fffccf;
+}
+.tooltip-popup-content{
+  font-size: 0.7em;
+}
