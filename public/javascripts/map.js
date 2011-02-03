@@ -173,7 +173,8 @@ function hoverStop(stop) {
     stopUnhovered(openHover.stop);
     openHover = null;
   }
-  tooltip_position = map.getPixelFromLonLat(stop.lonlat).offset(new OpenLayers.Pixel(0, 10));
+  offset = (stop.icon.size.h/2)
+  tooltip_position = map.getPixelFromLonLat(stop.lonlat).offset(new OpenLayers.Pixel(0, offset + 5));
   tooltip_lonlat = map.getLonLatFromPixel(tooltip_position);
   var tooltipPopup = new OpenLayers.Popup("activetooltip",
                                           tooltip_lonlat,
@@ -211,7 +212,7 @@ function addRouteMarker(stopCoords, bounds, markers, item, other) {
   if (stopsById[item.id] == undefined) {
     bounds.extend(stopCoords);
     var size = new OpenLayers.Size(item.width, item.height);
-    var offset = new OpenLayers.Pixel(-(size.w/2), -size.h/2);
+    var offset = new OpenLayers.Pixel(-(size.w/2), -(size.h/2));
     var stopIcon = new OpenLayers.Icon("/images/" + item.icon + ".png", size, offset);
     stopIcon.imageDiv.style.cursor = 'pointer';
     var marker = new OpenLayers.Marker(stopCoords, stopIcon);
