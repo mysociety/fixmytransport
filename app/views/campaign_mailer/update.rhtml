@@ -4,7 +4,7 @@ Hi<%= " #{@recipient.name}" %>,
 
 <%= @update.user.name %> says:
 
-"<%= sanitize @update.text %>"
+"<%= sanitize(raw(@update.text)) %>"
 
 To comment on this update, please follow this link: <%= @link %>
 
