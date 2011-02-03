@@ -19,7 +19,7 @@
         Operated by
         %ul
           - @route.operators.each do |operator|
-            %li= operator.name 
+            %li!= link_to(operator.name, operator_path(operator)) 
     .terminuses
       != terminus_text(@route)
 = render :partial => 'shared/location_content', :locals => { :location => @route }

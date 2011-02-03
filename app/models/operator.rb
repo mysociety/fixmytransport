@@ -16,11 +16,11 @@
 
 class Operator < ActiveRecord::Base
   has_many :route_operators, :dependent => :destroy
-  has_many :routes, :through => :route_operators, :uniq => true
+  has_many :routes, :through => :route_operators, :uniq => true, :order => 'routes.number asc'
   has_many :vosa_licenses
   has_many :operator_codes
   has_many :stop_area_operators, :dependent => :destroy
-  has_many :stop_areas, :through => :stop_area_operators, :dependent => :destroy
+  has_many :stop_areas, :through => :stop_area_operators, :dependent => :destroy, :uniq => true
   belongs_to :transport_mode
   validates_presence_of :name
   has_many :operator_contacts, :conditions => ['deleted = ?', false]
@@ -32,6 +32,7 @@ class Operator < ActiveRecord::Base
   @@per_page = 20
   named_scope :with_email, :conditions => ["email is not null and email != ''"]
   named_scope :without_email, :conditions => ["email is null or email = ''"]
+  has_friendly_id :name, :use_slug => true
   
   # we only accept new or delete existing associations
   def route_operator_invalid(attributes)

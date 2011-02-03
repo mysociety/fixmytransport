@@ -20,4 +20,6 @@
   .details
     - if !@stop_area.area.blank?
       %span.locality= "In #{@stop_area.area}"
+    - if !@stop_area.operators.empty? 
+      .operators!= t(:operated_by, :operators => @stop_area.operators.map{ |operator| link_to(operator.name, operator_path(operator)) }.join(", "))
 = render :partial => 'shared/location_content', :locals => { :location => @stop_area }

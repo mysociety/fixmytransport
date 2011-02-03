@@ -1,3 +1,4 @@
 en:
   live_departures: Next departures from here
   other_problems_here: Problems
+  operated_by: Operated by {{operators}}
