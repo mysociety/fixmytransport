@@ -5,4 +5,4 @@
     =t(:added)
     %span.posted-time= t(:posted_time, :time => time_ago_in_words(problem.created_at))
     %span.reporter= t(:by, :name => problem.reporter_name)
-  %p.problem= problem.description
+  %p.problem!= sanitize(problem.description)

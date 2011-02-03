@@ -24,7 +24,7 @@
         %ul
           - Campaign.find_recent(5).each do |campaign|
             %li.campaign-update
-              = link_to(campaign.title, campaign_url(campaign))
+              = link_to(h(campaign.title), campaign_url(campaign))
               %span.transport-modes-note=campaign.transport_mode_text
         .more= link_to(t(:more_campaigns), campaigns_path)
     .left-col
@@ -33,6 +33,6 @@
         %ul
           - Problem.latest(5).each do |problem|
             %li.problem
-              = link_to(problem.subject, problem_url(problem))
+              = link_to(h(problem.subject), problem_url(problem))
               %span.transport-modes-note=problem.transport_mode_text
         .more= link_to(t(:more_problems), problems_path)

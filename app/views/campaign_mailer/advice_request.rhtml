@@ -1,10 +1,10 @@
-Hi<%= raw " #{@recipient.name}" %>,
+Hi<%= " #{@recipient.name}" %>,
 
-<%= raw @advice_request.user.name %> would like some advice about the FixMyTransport campaign "<%= @campaign.title %>" (<%= @link %>).
+<%= @advice_request.user.name %> would like some advice about the FixMyTransport campaign "<%= @campaign.title %>" (<%= @link %>).
 
-<%= raw @advice_request.user.name %> says:
+<%= @advice_request.user.name %> says:
 
-"<%= @advice_request.text %>"
+"<%= sanitize @advice_request.text %>"
 
 To give some advice, follow this link: <%= @link %>
 

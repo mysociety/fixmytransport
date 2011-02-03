@@ -1,10 +1,10 @@
-Hi<%= raw " #{@recipient.name}" %>,
+Hi<%= " #{@recipient.name}" %>,
 
-<%= raw update_text(@update, @link) %> 
+<%= update_text(@update, @link) %> 
 
-<%= raw @update.user.name %> says:
+<%= @update.user.name %> says:
 
-"<%= @update.text %>"
+"<%= sanitize @update.text %>"
 
 To comment on this update, please follow this link: <%= @link %>
 

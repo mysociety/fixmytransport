@@ -24,7 +24,7 @@
         %p{ :class => "flash flash_#{key}" }!= flash[key]
     %ul.navigation
       - if current_user
-        %li!= t(:logged_in_as, :name => link_to(current_user.name, account_path))
+        %li!= t(:logged_in_as, :name => link_to(h(current_user.name), account_path))
         %li= link_to(t(:logout), logout_path)
       - else
         %li= link_to(t(:login), login_path)

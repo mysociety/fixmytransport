@@ -1,4 +1,4 @@
-!=t(:this_message_was_sent_to, :campaign => link_to(@incoming_message.campaign.title, campaign_path(@incoming_message.campaign)))
+!=t(:this_message_was_sent_to, :campaign => link_to(h(@incoming_message.campaign.title), campaign_path(@incoming_message.campaign)))
 .campaign-email
   %h2
     .from= t(:from, :sender => @incoming_message.safe_from)
@@ -22,4 +22,4 @@
         !=f.text_area :text, :cols => 40, :rows => 5
         !=f.submit t(:add_update)
 - else 
-  != t(:login_to_add_update, :link => link_to(t(:login_as, :user => @incoming_message.campaign.initiator.name), login_url(:redirect => request.request_uri)), :campaign => @incoming_message.campaign.title)
+  != t(:login_to_add_update, :link => link_to(t(:login_as, :user => h(@incoming_message.campaign.initiator.name)), login_url(:redirect => request.request_uri)), :campaign => h(@incoming_message.campaign.title))

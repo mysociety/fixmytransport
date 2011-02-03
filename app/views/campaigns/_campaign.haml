@@ -1,6 +1,6 @@
 .campaign-body
   %span.title
-    =link_to(campaign.title, campaign_url(campaign))
+    =link_to(h(campaign.title), campaign_url(campaign))
   %span.transport-modes-note=campaign.transport_mode_text
   .details
     = t(:started_on, :date => campaign.created_at.strftime("%d/%m/%Y"))
