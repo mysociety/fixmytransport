@@ -88,7 +88,7 @@ class Locality < ActiveRecord::Base
       3.times{ query_params << qualifier_name }
     end
     find(:all, :conditions => [query_clause] + query_params,
-               :include => includes)
+               :include => includes, :order => "localities.name asc")
   end
   
   def self.get_name_and_qualifier(name)

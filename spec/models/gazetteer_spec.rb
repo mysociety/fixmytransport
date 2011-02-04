@@ -4,10 +4,10 @@ describe Gazetteer do
 
   def stub_postcode_finder
     @coords = { "wgs84_lon" => -0.091, 
-               "easting" => "532578", 
-               "coordsyst" => "G", 
-               "wgs84_lat" => 51.50, 
-               "northing" => "179760" }
+                "easting" => "532578", 
+                "coordsyst" => "G", 
+                "wgs84_lat" => 51.50, 
+                "northing" => "179760" }
     MySociety::MaPit.stub!(:call).and_return(@coords)
   end
   
@@ -107,6 +107,21 @@ describe Gazetteer do
         Gazetteer.place_from_name('London').should == {:localities => [@mock_locality]}
       end
       
+    end
+    
+    describe 'when one locality matches the name and a stop name has been passed' do 
+    
+      before do 
+        mock_locality = mock_model(Locality)
+        Locality.stub!(:find_all_by_full_name).and_return([mock_locality])
+      end
+      
+      it 'should look for stops and stations in that locality matching the stop name' do 
+        Stop.should_receive(:find).and_return([])
+        Gazetteer.should_receive(:find_stations_from_name).and_return([])
+        Gazetteer.place_from_name('London', 'Camden Road')      
+      end
+    
     end
     
     describe 'when no localities, but some stops or stations match the name' do

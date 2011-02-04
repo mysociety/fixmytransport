@@ -130,12 +130,13 @@ class ProblemsController < ApplicationController
       end
       location_search = LocationSearch.new_search!(session_id, :name => params[:name], 
                                                                :location_type => 'Stop/station')
-      stop_info = Gazetteer.place_from_name(params[:name])
+      stop_info = Gazetteer.place_from_name(params[:name], params[:stop_name])
       # got back areas
       if stop_info[:localities]
         if stop_info[:localities].size > 1
           @localities = stop_info[:localities]
           @link_type = :find_stop
+          @matched_stops_or_stations = stop_info[:matched_stops_or_stations]
           @name = params[:name]
           render :choose_locality
           return

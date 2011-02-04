@@ -25,7 +25,7 @@ class Gazetteer
   # if a full or partial postcode is passed.
   # Otherwise, a list of localities matching the area name if any do. If not, a list of stops or stations
   # matching the name if any do. 
-  def self.place_from_name(name)
+  def self.place_from_name(name, stop_name=nil)
     errors = []
     
     # is it a postcode/partial postcode
@@ -42,6 +42,22 @@ class Gazetteer
     name = name.downcase.strip
     localities = Locality.find_all_by_full_name(name)
 
+    # we've been passed a unique place name and a stop name
+    if localities.size == 1 and !stop_name.nil?
+      stops = Stop.find(:all, :conditions => ['(lower(common_name) = ? 
+                                                OR lower(common_name) like ? 
+                                                OR lower(street) = ? 
+                                                OR naptan_code = ?)
+                                                AND stop_type in (?)
+                                                AND locality_id = ?',
+                                              stop_name, "#{stop_name} %", stop_name, stop_name, 
+                                              StopType.primary_types, localities.first] )
+      stations = self.find_stations_from_name(stop_name, exact=false, {:types => StopAreaType.primary_types, 
+                                                                       :locality => localities.first})
+
+      return { :locations => stops + stations }
+    end
+      
     if !localities.empty?
       return { :localities => localities }
     end
@@ -55,6 +71,15 @@ class Gazetteer
                                             name, "#{name} %", name, name, StopType.primary_types] )
     
     stations = self.find_stations_from_name(name, exact=false, {:types => StopAreaType.primary_types})
+    candidates = stops + stations
+    # are the stops/stations in multiple areas? 
+    if stops.size > 1 or stations.size > 1 
+      localities = candidates.map{ |stop_or_station| stop_or_station.locality }.uniq.sort_by(&:name)
+      if localities.size > 1 and localities.size < candidates.size
+        return { :localities => localities, :matched_stops_or_stations => true}
+      end
+    end
+    
     if !stops.empty? or !stations.empty?
       return { :locations => stops + stations }
     end
@@ -193,6 +218,10 @@ class Gazetteer
     primary_metaphone, secondary_metaphone = Text::Metaphone.double_metaphone(name)
     query += ' AND primary_metaphone = ?'
     params << primary_metaphone
+    if options[:locality]
+      query += ' AND locality_id = ?'
+      params << options[:locality]
+    end
     query += " AND status != 'del'"
     conditions = [query] + params
     results = StopArea.find(:all, :conditions => conditions, 
@@ -222,6 +251,12 @@ class Gazetteer
       params <<  "% #{name}"
       params << name
     end
+    
+    if options[:locality]
+      query += " AND locality_id = ?"
+      params << options[:locality]
+    end
+    
     query += " AND status != 'del'"
     conditions = [query] + params
     results = StopArea.find(:all, :conditions => conditions, 

@@ -198,7 +198,7 @@ describe ProblemsController do
     describe 'when a name parameter is supplied' do 
       
       it 'should ask the Gazetteer for a place from the name' do 
-        Gazetteer.should_receive(:place_from_name).with('Euston').and_return({})
+        Gazetteer.should_receive(:place_from_name).with('Euston', nil).and_return({})
         make_request({:name => 'Euston'})
       end
       

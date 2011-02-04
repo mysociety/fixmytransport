@@ -344,6 +344,10 @@ input, textarea, select {
   text-align: left;
 }
 
+/* Choosing a locality */ 
+ul.locality-list li{
+  padding: 0.2em 0 0.2em 0;
+}
 
 /* Choosing a location */
 
