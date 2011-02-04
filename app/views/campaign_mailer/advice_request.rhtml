@@ -1,6 +1,6 @@
 Hi<%= " #{@recipient.name}" %>,
 
-<%= @advice_request.user.name %> would like some advice about the FixMyTransport campaign "<%= @campaign.title %>" (<%= @link %>).
+<%= @advice_request.user.name %> would like some advice about the FixMyTransport campaign "<%= sanitize(raw(@campaign.title)) %>" (<%= @link %>).
 
 <%= @advice_request.user.name %> says:
 

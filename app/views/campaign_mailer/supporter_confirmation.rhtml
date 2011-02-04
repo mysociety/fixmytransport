@@ -1,7 +1,7 @@
 Hi<%= " #{@recipient.name}" %>,
 
 Please click on the link below to confirm that you want to join the campaign
-"<%= @campaign.title %>":
+"<%= sanitize(raw(@campaign.title)) %>":
 
 <%= @link %>
 

@@ -1,6 +1,6 @@
 Hi<%= " #{@recipient.name}" %>,
 
-<%= update_text(@update, @link) %> 
+<%= sanitize(raw(update_text(@update, @link))) %> 
 
 <%= @update.user.name %> says:
 

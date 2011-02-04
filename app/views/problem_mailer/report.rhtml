@@ -33,7 +33,7 @@ Email: <%= @problem.reply_email %>
 Phone: <%= @problem.reporter_phone %>
 
 <%- end %>
-Subject: <%= @problem.subject %>
+Subject: <%= sanitize(raw(@problem.subject)) %>
 
 Details: <%= sanitize(raw(@problem.description)) %>
 
@@ -61,19 +61,19 @@ Location NaPTAN code: <%= @problem.location.naptan_code %>
 <%- end %>
 
 <%- if @problem.location.is_a? Stop and !@problem.location.landmark.blank? %>
-Landmark: <%= @problem.location.landmark %>
+Landmark: <%= sanitize(raw(@problem.location.landmark)) %>
 
 <%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.street.blank? %>
-Street: <%= @problem.location.street %>
+Street: <%= sanitize(raw(@problem.location.street)) %>
 
 <%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.crossing.blank? %>
-Crossing: <%= @problem.location.crossing %>
+Crossing: <%= sanitize(raw(@problem.location.crossing)) %>
 
 <%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.indicator.blank? %>
-Indicator: <%= @problem.location.indicator %>
+Indicator: <%= sanitize(raw(@problem.location.indicator)) %>
 
 <%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.bearing.blank? %>
