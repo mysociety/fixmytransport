@@ -1,4 +1,4 @@
-Dear <%= @recipient.name %>,
+Dear <%= raw @recipient.name %>,
 <%- if @recipient_models.size > 1 %>
 
 [ This email has been sent to both councils covering the location of the problem; 
@@ -8,12 +8,12 @@ or let us know so we can add the information to our system. ]
 <%- if @missing_recipient_models.size > 0 %>
 
 [ We realise this problem might be the responsibility of 
-<%= @missing_recipient_models.map{ |recipient| recipient.name }.to_sentence %>; however, we don't 
+<%= raw @missing_recipient_models.map{ |recipient| recipient.name }.to_sentence %>; however, we don't 
 currently have any contact details for them. If you know of an appropriate contact address, 
 please do get in touch. ]
 <%- end %>
 
-A user of FixMyTransport has submitted the following report of a problem <%= at_the_location(@problem.location) %> 
+A user of FixMyTransport has submitted the following report of a problem <%= raw at_the_location(@problem.location) %> 
 that they believe might require your attention.
  
 <%- if MySociety::Config.getbool('SITE_VISIBLE', true) %> 
@@ -25,67 +25,67 @@ please visit the following link:
 
 ----------
 
-Name: <%=  @problem.reporter_name %>
+Name: <%= raw @problem.reporter_name %>
 
-Email: <%= @problem.reply_email %>
+Email: <%= raw @problem.reply_email %>
 
 <%- if !@problem.reporter_phone.blank? && !@problem.campaign %>
-Phone: <%= @problem.reporter_phone %>
+Phone: <%= raw @problem.reporter_phone %>
 
 <%- end %>
-Subject: <%= sanitize(raw(@problem.subject)) %>
+Subject: <%= raw(@problem.subject) %>
 
-Details: <%= sanitize(raw(@problem.description)) %>
+Details: <%= raw(@problem.description) %>
 
 <%- if @problem.time %>
-Time: <%= @problem.time.to_s(:standard) %>
+Time: <%= raw @problem.time.to_s(:standard) %>
 <%- end %>
 
 <%- if @problem.date %>
-Date: <%= @problem.date.to_s(:standard) %>
+Date: <%= raw @problem.date.to_s(:standard) %>
 <%- end %>
 
 Location name: <%= raw MySociety::Format.ucfirst(@problem.location.name) %>
 
 <%- if @problem.location.is_a? Stop and !@problem.location.atco_code.blank? %>
-Location ATCO code: <%= @problem.location.atco_code %>
+Location ATCO code: <%= raw @problem.location.atco_code %>
 
 <%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.plate_code.blank? %>
-Location plate code: <%= @problem.location.plate_code %>
+Location plate code: <%= raw @problem.location.plate_code %>
 
 <%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.naptan_code.blank? %>
-Location NaPTAN code: <%= @problem.location.naptan_code %>
+Location NaPTAN code: <%= raw @problem.location.naptan_code %>
 
 <%- end %>
 
 <%- if @problem.location.is_a? Stop and !@problem.location.landmark.blank? %>
-Landmark: <%= sanitize(raw(@problem.location.landmark)) %>
+Landmark: <%= raw(@problem.location.landmark) %>
 
 <%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.street.blank? %>
-Street: <%= sanitize(raw(@problem.location.street)) %>
+Street: <%= raw(@problem.location.street) %>
 
 <%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.crossing.blank? %>
-Crossing: <%= sanitize(raw(@problem.location.crossing)) %>
+Crossing: <%= raw(@problem.location.crossing) %>
 
 <%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.indicator.blank? %>
-Indicator: <%= sanitize(raw(@problem.location.indicator)) %>
+Indicator: <%= raw(@problem.location.indicator) %>
 
 <%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.bearing.blank? %>
-Bearing: <%= @problem.location.bearing %>
+Bearing: <%= raw @problem.location.bearing %>
 
 <%- end %>
 <%- if @problem.location.respond_to?(:easting) %>
-Easting: <%= @problem.location.easting %>
+Easting: <%= raw @problem.location.easting %>
 
 <%- end %>
 <%- if @problem.location.respond_to?(:northing) %>
-Northing: <%= @problem.location.northing %>
+Northing: <%= raw @problem.location.northing %>
 
 <%- end %>
 ----------
@@ -98,6 +98,7 @@ Replies to this email will be public, and will go to the user who submitted the 
 
 <%- end %>
 Yours,
+
 The FixMyTransport team
 
 <%- if MySociety::Config.getbool('SITE_VISIBLE', true) %> 

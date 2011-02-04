@@ -1,12 +1,12 @@
 Hi transport experts!
 
-<%= @advice_request.user.name %> would like some advice about the FixMyTransport campaign "<%= sanitize(raw(@campaign.title)) %>" (<%= @link %>).
+<%= raw(@advice_request.user.name) %> would like some advice about the FixMyTransport campaign "<%= raw(@campaign.title) %>" (<%= raw @link %>).
 
-<%= @advice_request.user.name %> says:
+<%= raw @advice_request.user.name %> says:
 
-"<%= sanitize(raw(@advice_request.text)) %>"
+"<%= raw(@advice_request.text) %>"
 
-To give some advice, follow this link: <%= @link %>
+To give some advice, follow this link: <%= raw @link %>
 
 Yours,
 

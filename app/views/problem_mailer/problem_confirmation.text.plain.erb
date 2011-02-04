@@ -1,4 +1,4 @@
-Hi <%= @problem.reporter_name %>,
+Hi <%= raw @problem.reporter_name %>,
 
 Please click on the link below to confirm the problem you just
 added to FixMyTransport:
@@ -8,20 +8,21 @@ added to FixMyTransport:
 If your email program does not let you click on this link, copy
 and paste it into your web browser and press return.
 
-Your problem had the subject: <%= sanitize(raw(@problem.subject)) %>
+Your problem had the subject: <%= raw(@problem.subject) %>
 
-And description: <%= sanitize(raw(@problem.description)) %>
+And description: <%= raw(@problem.description) %>
 
 <%- if @problem.time %>
-Time: <%= @problem.time.to_s(:standard) %>
+Time: <%= raw @problem.time.to_s(:standard) %>
 
 <%- end %>
 
 <%- if @problem.date %>
-Date: <%= @problem.date.to_s(:standard) %>
+Date: <%= raw @problem.date.to_s(:standard) %>
 
 <%- end %>
-Your name will be shown on the site as: <%= @problem.reporter_name %>
+Your name will be shown on the site as: <%= raw @problem.reporter_name %>
 
 Yours,
+
 The FixMyTransport team

@@ -1,14 +1,14 @@
-Hi<%= " #{@recipient.name}" %>,
+Hi<%= " #{raw @recipient.name}" %>,
 
-<%= sanitize(raw(update_text(@update, @link))) %> 
+<%= raw(update_text(@update, @link)) %> 
 
-<%= @update.user.name %> says:
+<%= raw @update.user.name %> says:
 
-"<%= sanitize(raw(@update.text)) %>"
+"<%= raw(@update.text) %>"
 
-To comment on this update, please follow this link: <%= @link %>
+To comment on this update, please follow this link: <%= raw @link %>
 
 Yours,
 The FixMyTransport team
 
-To leave this campaign and stop receiving updates, please follow this link: <%= @unsubscribe_link %>
+To leave this campaign and stop receiving updates, please follow this link: <%= raw @unsubscribe_link %>

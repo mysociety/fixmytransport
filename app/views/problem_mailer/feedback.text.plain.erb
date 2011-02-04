@@ -1,5 +1,5 @@
-Feedback from <%= @name %>:
+Feedback from <%= raw @name %>:
 
 ---
-<%= sanitize(raw(@message)) %>
+<%= raw(@message) %>
 ---

@@ -1,14 +1,14 @@
-Hi<%= " #{@recipient.name}" %>,
+Hi<%= raw " #{@recipient.name}" %>,
 
-<%= @advice_request.user.name %> would like some advice about the FixMyTransport campaign "<%= sanitize(raw(@campaign.title)) %>" (<%= @link %>).
+<%= raw @advice_request.user.name %> would like some advice about the FixMyTransport campaign "<%= raw(@campaign.title) %>" (<%= raw(@link) %>).
 
-<%= @advice_request.user.name %> says:
+<%= raw @advice_request.user.name %> says:
 
 "<%= sanitize(raw(@advice_request.text)) %>"
 
-To give some advice, follow this link: <%= @link %>
+To give some advice, follow this link: <%= raw @link %>
 
 Yours,
 The FixMyTransport team
 
-To leave this campaign and stop receiving updates, please follow this link: <%= @unsubscribe_link %>
+To leave this campaign and stop receiving updates, please follow this link: <%= raw @unsubscribe_link %>

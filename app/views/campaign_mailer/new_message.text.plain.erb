@@ -1,10 +1,11 @@
-Hi<%= " #{@recipient.name}" %>,
+Hi<%= " #{raw @recipient.name}" %>,
 
 A new message has arrived for your FixMyTransport campaign
-"<%= sanitize(raw(@campaign.title)) %>":
+"<%= raw(@campaign.title) %>":
 
 To see this message and tell your fellow campaigners what's in it, click on the link below
-<%= @link %>
+<%= raw @link %>
 
 Yours,
+
 The FixMyTransport team
