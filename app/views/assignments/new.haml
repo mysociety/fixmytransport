@@ -1,0 +1,35 @@
+=t(:new_assignment_help, :user => @initiator.name, :campaign => @campaign.title)
+
+- form_for [@campaign, @assignment] do |f|
+  
+  .fieldset
+  
+    .form-field
+      = label_tag :subject, t(:subject_line_for_email)
+      != text_field_tag :subject
+      %span.optional-note= t(:for_advice_email, :user => @initiator.first_name)
+    
+    .form-field
+      - if @assignment.errors.on('name')
+        .form-field-error= @assignment.errors.on(:name)
+      = label_tag :name, t(:name)
+      != text_field_tag :name, @assignment.data[:name]
+      %span.optional-note= t(:name_of_the_person_to_write_to, :user => @initiator.first_name)
+    .form-field
+      - if @assignment.errors.on('email')
+        .form-field-error= @assignment.errors.on(:email)
+      = label_tag :email, t(:email)
+      != text_field_tag :email, @assignment.data[:email]
+      %span.optional-note= t(:email_of_the_person_to_write_to, :user => @initiator.first_name)
+    .form-field
+      - if @assignment.errors.on('reason')
+        .form-field-error= @assignment.errors.on(:reason)
+      = label_tag :reason, t(:reason)
+      != text_area_tag :reason, @assignment.data[:reason], :cols => 40, :rows => 5
+      %span.optional-note= t(:why_write_to_this_person, :user => @initiator.first_name)
+    .form-field
+      = label_tag :draft_text, t(:draft_text)
+      != text_area_tag :draft_text, @assignment.data[:draft_text], :cols => 40, :rows => 5
+      %span.optional-note= t(:text_to_get_them_started, :user => @initiator.first_name)
+    .form-field
+      !=f.submit t(:send_advice)

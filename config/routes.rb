@@ -3,8 +3,10 @@ ActionController::Routing::Routes.draw do |map|
   # home page
   map.root :controller => 'problems', :action => 'frontpage'
 
-  # resources
+  # operator pages
   map.resources :operators, :only => [:show]
+
+  # campaigns
   map.resources :campaigns, :except => [:destroy], 
                             :member => { :join => [:get, :post], 
                                          :leave => [:post], 
@@ -14,9 +16,11 @@ ActionController::Routing::Routes.draw do |map|
     campaign.attachment '/incoming_messages/:id/attach/:url_part_number', :action => 'show_attachment', 
                                                                           :controller => 'incoming_messages'
     campaign.resources :outgoing_messages, :only => [:new, :show, :create]
-  end                                       
+    campaign.resources :assignments, :only => [:new, :create]
+  end
+
+  # confirmation URLs
   map.confirm_comment '/u/:email_token', :action => 'confirm_comment', :controller => 'campaigns'
-  
   map.confirm_join '/c/:email_token', :action => 'confirm_join', :controller => 'campaigns'
   map.confirm_leave '/l/:email_token', :action => 'confirm_leave', :controller => 'campaigns'
 

@@ -18,6 +18,7 @@ en:
   login: Login
   logout: Logout
   must_be_logged_in: "You must be logged in to {{requested_action}}"
+  a_fixmytransport_boffin: "a FixMyTransport boffin"
   campaigns_add_comment_access_message: "add a comment"
   must_be_logged_out: "You must be logged out to access this page"
   login_successful: "Login successful!"

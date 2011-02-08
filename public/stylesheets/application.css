@@ -871,6 +871,7 @@ div.submit{
 
 
 /* Campaign emails */
+
 .campaign-email{
   border: 1px solid #cccccc;
   padding: 1em;
@@ -913,6 +914,20 @@ div.submit{
   float: right;  
 }
 
+/* Campaign assignments */
+
+.new_assignment {
+  margin: auto;
+  width: 90%;
+}
+
+.new_assignment label{
+  width: 10em;
+}
+
+.new_assignment input[type=submit] {
+  float: right;
+}
 /* Pagination */
 
 .pagination {

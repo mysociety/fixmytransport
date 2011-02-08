@@ -42,19 +42,15 @@ describe CampaignsController do
       Campaign.should_receive(:find).with('8').and_return(@campaign)
       make_request
     end
-    
-    it 'should not display a campaign that is not visible' do 
-      @campaign.stub!(:visible?).and_return(false)
-      make_request
-      response.status.should == '404 Not Found'
-    end
-    
+
     it 'should display a campaign that has been successful' do 
       @campaign.stub!(:visible?).and_return(true)
       make_request
       response.status.should == '200 OK'
     end
-    
+
+    it_should_behave_like "an action requiring a visible campaign"
+        
   end
   
   shared_examples_for "an action that requires the campaign initiator or a token" do 

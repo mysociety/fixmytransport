@@ -6,7 +6,7 @@ en:
   campaign_start_date: Start date
   write_to_operator: Write to the operator
   login_to: "Login as {{user}} to {{requested_action}}"
-  wrong_user: "To {{requested_action}}, you'll need to {{logout_link}}, and login as {{name}}"
+  wrong_user: "To {{requested_action}}, you'll need to {{logout_link}}, and login as {{name}}."
   password_confirmation: Password (again)
   password_length_error: "Please enter a password that is at least {{length}} characters long"
   password_match_error: "The password confirmation does not match the password"
@@ -16,6 +16,8 @@ en:
   campaigns_update_access_message: "confirm this problem"
   campaigns_edit_access_message: "confirm this problem"
   outgoing_messages_new_access_message: "write messages on behalf of this campaign"
+  assignments_new_access_message: "create an assignment for this campaign"
+  assignments_create_access_message: "create an assignment for this campaign"
   join_this_campaign: Join this campaign
   you_are_a_supporter: "You're now a supporter of \"{{campaign}}\"!"
   enter_your_email_to_join: Enter your email address to join this campaign

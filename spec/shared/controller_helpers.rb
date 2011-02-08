@@ -31,5 +31,18 @@ module SharedBehaviours
         end
       end
     end
+    
+    shared_examples_for "an action requiring a visible campaign" do 
+    
+      it 'should return a 404 for a campaign that is not visible' do 
+        @invisible_campaign = mock_model(Campaign, :editable? => true, 
+                                         :visible? => false)
+        Campaign.stub!(:find).and_return(@invisible_campaign)
+        make_request
+        response.status.should == '404 Not Found'
+      end
+      
+    end
+    
   end
 end
