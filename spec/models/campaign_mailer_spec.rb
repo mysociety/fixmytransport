@@ -67,5 +67,41 @@ describe CampaignMailer do
     end
     
   end
+
+  def setup_write_to_other_data
+    @campaign = mock_model(Campaign, :title => "Transport campaign")
+    @user = mock_model(User, :name => 'Joe Campaign')
+    @expert = mock_model(User, :name => 'Bob Expert', 
+                               :first_name => 'Bob')
+    @assignment = mock_model(Assignment, :campaign => @campaign, 
+                                         :user => @user, 
+                                         :data => {:name => 'Ken Transport'})
+    @subject = "What you should do now"
+  end
+  
+  describe "when creating a 'write-to-other' assignment" do
+
+    before do 
+      setup_write_to_other_data
+    end
+    
+    it "should render successfully" do
+      lambda { CampaignMailer.create_write_to_other_assignment(@assignment, @expert, @subject) }.should_not raise_error
+    end
+    
+  end
+  
+  describe "when delivering a 'write-to-other' assignment" do 
+  
+    before do 
+      setup_write_to_other_data
+      @mailer = CampaignMailer.create_write_to_other_assignment(@assignment, @expert, @subject)
+    end
+    
+    it 'should deliver successfully' do
+      lambda { CampaignMailer.deliver(@mailer) }.should_not raise_error
+    end
+    
+  end
   
 end
