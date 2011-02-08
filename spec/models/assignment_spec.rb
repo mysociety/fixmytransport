@@ -52,11 +52,6 @@ describe Assignment do
     describe 'when creating an assignment from an attribute hash' do 
  
        before do
-         # stub connection to Fosbury
-         @mock_task = mock_model(Task, :save => true, 
-                                       :id => 33, 
-                                       :task_data => {})
-         Task.stub!(:new).and_return(@mock_task)
          @mock_user = mock_model(User)
          @mock_assignment = mock_model(Assignment, :task_id= => true, 
                                                    :save! => true, 
@@ -77,20 +72,9 @@ describe Assignment do
                                                  :problem => @mock_problem).and_return(@mock_assignment)
          @mock_assignment.should_receive(:status=).with(:complete)
          @mock_assignment.should_receive(:save!)
-         @mock_task.should_receive(:status=).with(:complete)
          Assignment.create_assignment(@attribute_hash)
        end
- 
-       it 'should create and save a task and set the task id on the assignment and the assignment id on the task' do 
-         Assignment.stub!(:new).and_return(@mock_assignment)
-         Task.should_receive(:new).with(:task_type_id => 'test-task-type-name', 
-                                        :task_data => {},
-                                        :callback_params => {:assignment_id => 22}).and_return(@mock_task)
-         @mock_task.should_receive(:status=).with(:complete)
-         @mock_assignment.should_receive(:task_id=).with(33)
-         @mock_assignment.should_receive(:status=).with(:complete)
-         Assignment.create_assignment(@attribute_hash)
-       end
+
 
     end
     
@@ -101,14 +85,9 @@ describe Assignment do
         @mock_problem = mock_model(Problem, :reporter => @mock_user)
         @mock_assignment = mock_model(Assignment, :status= => true, 
                                                   :save => true, 
-                                                  :task_id => 22, 
                                                   :data= => true, 
                                                   :data => {})
         Assignment.stub!(:find).and_return(@mock_assignment)
-        @mock_task = mock_model(Task, :save => true, 
-                                      :status= => true, 
-                                      :task_data= => true)
-        Task.stub!(:find).and_return(@mock_task)
       end
     
       it 'should find the assignment associated with the problem, problem reporter and task type name' do 
@@ -128,25 +107,40 @@ describe Assignment do
         Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => {}})
       end
       
-      it 'should mark the task associated with the assignment as complete' do 
-        @mock_task.should_receive(:status=).with(:complete)
-        Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => {}})
-      end
-      
       it 'should update the data on the assignment' do
          @mock_assignment.data.should_receive(:update).with(:x => :y)
          Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => { :x => :y } })
        end
       
-      it 'should set the data on the task' do
-        @mock_task.should_receive(:task_data=).with(:x => :y)
-        Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => { :x => :y } })
-      end
-      
-      it 'should save the task' do 
-        @mock_task.should_receive(:save)
-        Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => {}})
-      end
-      
     end
+    
+    describe 'an assignment to write to someone about a problem' do 
+    
+      def expect_validation_message(field, message)
+        assignment = Assignment.new(:task_type_name => 'write-to-other')
+        assignment.valid?.should be_false
+        assignment.errors.on(field).should == message   
+      end
+      
+      it 'should be invalid without a name to write to' do 
+        expect_validation_message(:name, 'Please give the name of the person or organisation to write to')
+      end
+      
+      it 'should be invalid without an email address to write to' do 
+        expect_validation_message(:email, 'Please give the email address to write to')
+      end
+      
+      it 'should be invalid without a reason to write to the person/organization' do 
+        expect_validation_message(:reason, 'Please give a reason for writing to this person or organisation')
+      end
+      
+      it 'should be invalid if the email address is not in the correct format' do 
+        assignment = Assignment.new(:task_type_name => 'write-to-other', 
+                                    :data => {:email => 'invalid_email'})
+        assignment.valid?.should be_false
+        assignment.errors.on(:email).should == 'Please check the format of the email address'   
+      end
+
+    end
+
 end

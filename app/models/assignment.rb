@@ -9,6 +9,19 @@ class Assignment < ActiveRecord::Base
 
   named_scope :completed, :conditions => ["status_code = ?", self.symbol_to_status_code[:complete]], :order => "updated_at"
   named_scope :incomplete, :conditions => ['status_code != ?',  self.symbol_to_status_code[:complete]], :order => "updated_at"
+  validate :validate_write_to_other_fields, :if => Proc.new { |assignment| assignment.task_type_name == 'write-to-other'}
+
+  # Validation of assignment data for the write-to-other task type
+  def validate_write_to_other_fields
+    [:name, :email, :reason].each do |field|
+      if data.nil? or data[field].blank?
+        errors.add(field, ActiveRecord::Error.new(self, field, :blank).to_s)
+      end
+    end
+    if !data.nil? and !data[:email].blank? and data[:email].to_s !~ Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
+      errors.add(:email, ActiveRecord::Error.new(self, :email, :invalid).to_s)
+    end
+  end
 
   def task_type
     task_type_name.underscore

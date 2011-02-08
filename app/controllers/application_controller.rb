@@ -80,11 +80,22 @@ class ApplicationController < ActionController::Base
     return true
   end
   
+  def require_expert
+    return true if current_user && current_user.is_expert? 
+    @access_message = access_message_key
+    @name = t(:a_fixmytransport_boffin)
+    return redirect_bad_user
+  end
+  
   # filter method for requiring that the campaign initiator be logged in
   def require_campaign_initiator
     return true if current_user && current_user == @campaign.initiator
     @access_message = access_message_key
     @name = @campaign.initiator.name
+    return redirect_bad_user
+  end
+  
+  def redirect_bad_user
     if current_user
       store_location
       render :template => "shared/wrong_user"
