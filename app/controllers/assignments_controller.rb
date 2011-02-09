@@ -15,6 +15,7 @@ class AssignmentsController < ApplicationController
                         :draft_text => params[:draft_text], 
                         :reason => params[:reason] }
     assignment_attributes = { :user => @initiator, 
+                              :creator => current_user,
                               :problem => @campaign.problem,
                               :campaign => @campaign,
                               :status => :new, 
@@ -23,7 +24,7 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.assignment_from_attributes(assignment_attributes)                          
     if @assignment.save
       # send an email to the campaign initiator
-      CampaignMailer.deliver_write_to_other_assignment(@assignment, current_user, params[:subject])
+      CampaignMailer.deliver_write_to_other_assignment(@assignment, params[:subject])
       # add an event to the campaign
       @campaign.campaign_events.create!(:event_type => 'assignment_given',
                                         :described => @assignment)

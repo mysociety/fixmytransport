@@ -1,3 +1,2 @@
-.campaign-event
-  %span.date= short_date(assignment.updated_at)
-  = "#{assignment.user_name} wrote to #{assignment.data[:organizations].map{ |organization| organization[:name] }.to_sentence}"          
+= "#{assignment.user_name} wrote to #{assignment.data[:organizations].map{ |organization| organization[:name] }.to_sentence}"          
+%span.date= t(:ago, :time => time_ago_in_words(event.created_at))

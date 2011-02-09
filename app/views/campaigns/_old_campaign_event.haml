@@ -1,0 +1,66 @@
+.campaign-event
+  - if event.is_a? IncomingMessage
+    %span.date= t(:ago, :time => time_ago_in_words(event.created_at))
+    %span.message-link
+      != t(:got_a_message, :link => link_to(t(:a_reply), campaign_incoming_message_path(@campaign, event)), :sender => event.safe_from, :campaigner => h(@campaign.initiator.name))
+      - event.campaign_updates.each do |update|
+        = render :partial => 'campaign_event', :locals => {:event => update, :always_show_commentbox => always_show_commentbox}
+  - elsif event.is_a? OutgoingMessage
+    %span.date= t(:ago, :time => time_ago_in_words(event.created_at))
+    %span.message-link
+      != t(:wrote_a_message, :link => link_to(t(:wrote_to), campaign_outgoing_message_path(@campaign, event)), :sender => h(event.author.name), :recipient => h(event.recipient_name))
+      - event.campaign_updates.each do |update|
+        = render :partial => 'campaign_event', :locals => {:event => update, :always_show_commentbox => always_show_commentbox}
+  - else 
+    %a{:id => "update_#{event.id}"}
+    - if event.is_advice_request? 
+      - text = :user_requested_advice
+      - class_name = 'advice-request'
+    - else 
+      - text = :user_says
+      - class_name = 'general-campaign-update'
+    %span{ :class => class_name }
+      != t(text, :name => h(event.user.name))
+      != sanitize("\"#{event.text}\"")
+    .actions
+      %span.date= t(:ago, :time => time_ago_in_words(event.created_at))
+      - if (! current_user or event.comments.empty?) and !always_show_commentbox
+        .campaign-comment-link{:id => "commentlink_#{event.id}"}= link_to( t(:add_comment), add_comment_campaign_url(@campaign, :update_id => event.id))
+    
+    %ul.campaign-comments
+      - event.comments.visible.each do |comment|
+        %a{:id => "comment_#{comment.id}"}
+        = render :partial => 'update_comment', :locals => { :comment => comment }
+      - if (current_user && !event.comments.empty?) or always_show_commentbox
+        - style = ''
+      - else
+        - style = 'display:none;'
+    .campaign-commentbox{:style => style, :id => "commentbox_#{event.id}"}
+      -if current_user
+        - form_class = "ajax_new_campaign_comment" 
+      - else
+        - form_class = "new_campaign_comment"
+      - form_for @comment = Comment.new(:user => current_user ? current_user : User.new, :commented => event), :url => add_comment_campaign_url(@campaign), :html => {:class => form_class} do |f|
+        - if @empty_comment
+          .form-field-error
+            = t(:please_enter_some_text)
+        = f.text_area :text, :rows => 2, :cols => 40,:id => "comment_text_#{event.id}"
+        != f.hidden_field :commented_id, :id => "comment_commented_id_#{event.id}"
+        != f.hidden_field :commented_type, :id => "comment_commented_type_#{event.id}"
+        - if current_user
+          != f.hidden_field :user_id, :id => "comment_user_id_#{event.id}"
+        - else
+          - if @comment.errors.on('user_name')
+            .form-field-error= error_message_on @comment, 'user_name'
+          .form-field
+            != f.label :user_name, t(:name)
+            != f.text_field :user_name, :id => "comment_user_name_#{event.id}"
+          - f.fields_for :user do |user_fields|
+            - if @comment.user.errors.on('email')
+              .form-field-error= error_message_on @comment.user, "email"
+            .form-field
+              != user_fields.label :email
+              != user_fields.text_field :email, :id => "comment_email_#{event.id}"
+        != f.submit t(:add_comment), :id => "comment_submit_#{event.id}"
+
+    %div{:style => "clear:both;"}

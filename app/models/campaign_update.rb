@@ -9,10 +9,6 @@ class CampaignUpdate < ActiveRecord::Base
   named_scope :general, :conditions => ['incoming_message_id is null and outgoing_message_id is null']
   named_scope :unsent, :conditions => ['sent_at is null']
 
-  def sort_date
-    created_at
-  end
-
   # Sendable updates - not sent 
   def self.sendable
     unsent.find(:all)

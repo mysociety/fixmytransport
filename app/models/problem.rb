@@ -115,7 +115,7 @@ class Problem < ActiveRecord::Base
   end
 
   def recipients
-    self.sent_emails.collect { |sent_email| sent_email.recipient }
+    self.sent_emails.collect { |sent_email| sent_email.recipient }.uniq
   end
   
   # if this email has never been used before, assign the name 

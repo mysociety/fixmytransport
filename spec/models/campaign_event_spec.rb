@@ -6,7 +6,7 @@ describe CampaignEvent do
       :event_type => "comment_added",
       :campaign_id => 1,
       :described_type => "Comment",
-      :described_type => 1
+      :described_id => 1
     }
   end
 

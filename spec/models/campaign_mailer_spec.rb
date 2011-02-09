@@ -78,6 +78,7 @@ describe CampaignMailer do
                                :first_name => 'Bob')
     @assignment = mock_model(Assignment, :campaign => @campaign, 
                                          :user => @user, 
+                                         :creator => @expert,
                                          :data => {:name => 'Ken Transport'})
     @subject = "What you should do now"
   end
@@ -89,7 +90,7 @@ describe CampaignMailer do
     end
     
     it "should render successfully" do
-      lambda { CampaignMailer.create_write_to_other_assignment(@assignment, @expert, @subject) }.should_not raise_error
+      lambda { CampaignMailer.create_write_to_other_assignment(@assignment, @subject) }.should_not raise_error
     end
     
   end
@@ -98,7 +99,7 @@ describe CampaignMailer do
   
     before do 
       setup_write_to_other_data
-      @mailer = CampaignMailer.create_write_to_other_assignment(@assignment, @expert, @subject)
+      @mailer = CampaignMailer.create_write_to_other_assignment(@assignment, @subject)
     end
     
     it 'should deliver successfully' do

@@ -1,21 +1,21 @@
 class CampaignEvent < ActiveRecord::Base
   belongs_to :campaign
   belongs_to :described, :polymorphic => true
-  validates_inclusion_of :event_type, :in => ['problem_report_sent', 
-                                              'outgoing_message_sent', 
+  validates_inclusion_of :event_type, :in => ['outgoing_message_sent', 
                                               'incoming_message_received', 
                                               'campaign_update_added', 
                                               'assignment_given', 
                                               'assignment_completed', 
                                               'comment_added']
   
-  after_initialize :set_visibility
+  named_scope :visible, :conditions => ["visible = ?", true], :order => 'created_at desc'
+  before_validation :set_visibility
   
   def set_visibility
     case self.event_type
     when 'assignment_completed'
-      # all assignment completions are visible except problem publishing
-      if self.described.task_type_name == 'publish-problem'
+      # all assignment completions are visible except publish-problem, write-to-other
+      if ['publish-problem', 'write-to-other'].include?(self.described.task_type_name)
         self.visible = false
       else 
         self.visible = true
@@ -33,6 +33,7 @@ class CampaignEvent < ActiveRecord::Base
     else  
       self.visible = true
     end
+    return true
   end
                                           
 end

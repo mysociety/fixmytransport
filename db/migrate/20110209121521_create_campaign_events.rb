@@ -4,7 +4,7 @@ class CreateCampaignEvents < ActiveRecord::Migration
       t.string :event_type
       t.integer :campaign_id
       t.string :described_type
-      t.integer :described_type
+      t.integer :described_id
       t.boolean :visible, :default => false
       t.timestamps
     end

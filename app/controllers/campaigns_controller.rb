@@ -132,10 +132,10 @@ class CampaignsController < ApplicationController
     if request.post? 
       @campaign_update = @campaign.campaign_updates.build(params[:campaign_update])
       if @campaign_update.save
-        @campaign.campaign_events.create!(:event_type => 'campaign_update_added',
-                                          :described => @campaign_update)
+        @campaign_event = @campaign.campaign_events.create!(:event_type => 'campaign_update_added',
+                                                            :described => @campaign_update)
         if request.xhr? 
-          render :json => { :html => render_to_string(:partial => 'campaign_event', :locals => { :event => @campaign_update, :always_show_commentbox => false })}
+          render :json => { :html => render_to_string(:partial => 'campaign_event', :locals => { :event => @campaign_event, :always_show_commentbox => false })}
           return 
         else
           flash[:notice] = @campaign_update.is_advice_request? ? t(:advice_request_added) : t(:update_added)

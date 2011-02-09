@@ -1,6 +1,7 @@
 class Assignment < ActiveRecord::Base
   belongs_to :campaign
   belongs_to :user
+  belongs_to :creator, :class_name => 'User'
   serialize :data
   belongs_to :problem
   has_many :campaign_events, :as => :described
@@ -32,10 +33,6 @@ class Assignment < ActiveRecord::Base
     if problem
       problem.reporter_name
     end
-  end
-  
-  def sort_date
-    updated_at
   end
   
   # complete an assignment, updating its data with any data passed

@@ -41,9 +41,5 @@
       - if current_user && current_user == @campaign.initiator
         = render :partial => 'update_form', :locals => { :hidden => true, :update => CampaignUpdate.new(:is_advice_request => true, :user_id => current_user.id) }
   %h3.latest-news= t(:latest_news)
-  - @campaign.events.each do |event|
-    - if event.is_a?(Assignment)
-      = render :partial => "shared/complete_assignments/#{event.task_type}", :locals => { :assignment => event }
-    - else
-      = render :partial => 'campaign_event', :locals => { :event => event, :always_show_commentbox => false }
-
+  - @campaign.campaign_events.visible.each do |campaign_event|
+    = render :partial => 'campaign_event', :locals => { :always_show_commentbox => false, :event => campaign_event }

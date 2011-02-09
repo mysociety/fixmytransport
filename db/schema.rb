@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110209121521) do
+ActiveRecord::Schema.define(:version => 20110209193129) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(:version => 20110209121521) do
     t.datetime "updated_at"
     t.string   "task_type_name"
     t.integer  "problem_id"
+    t.integer  "creator_id"
   end
 
   create_table "campaign_events", :force => true do |t|

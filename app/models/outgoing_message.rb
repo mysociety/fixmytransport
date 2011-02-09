@@ -14,11 +14,7 @@ class OutgoingMessage < ActiveRecord::Base
   has_status({ 0 => 'New', 
                1 => 'Sent', 
                2 => 'Hidden' })
-  
-  def sort_date
-    created_at
-  end
-  
+               
   def recipient_in_existing_campaign_recipients
     if recipient && !campaign.existing_recipients.include?(recipient)
       errors.add(:recipient, ActiveRecord::Error.new(self, :recipient, :invalid).to_s)

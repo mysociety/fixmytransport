@@ -38,7 +38,7 @@ en:
   campaign_received_emails: "The campaign has received the following emails:"
   got_a_message: "{{sender}} sent {{campaigner}} {{link}}"
   a_reply: a reply
-  wrote_a_message: "{{sender}} {{link}} to {{recipient}}"
+  wrote_a_message: "{{sender}} {{link}} to {{recipient}}{{assignment_text}}"
   wrote_to: wrote to
   campaign: campaign
   choose_a_short_name: Choose a short name (6 to 16 lowercase letters)
@@ -51,6 +51,8 @@ en:
   ask_our_expert_panel: 'Ask your supporters and our expert panel what to do next:'
   user_requested_advice: "{{name}} asked for feedback from the campaign's supporters and FixMyTransport's expert panel:"
   advice_request_added: Your advice request will be sent to your supporters and the panel.
+  expert_advised_writing: "{{expert}} advised {{user}} to write to {{recipient}}. {{expert}} said: \"{{reason}}\""
+  following_experts_advice: " following {{expert}}'s advice."
   add_comment: comment
   please_enter_some_text: Please enter some text
   ago: "{{time}} ago"

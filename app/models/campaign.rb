@@ -9,7 +9,7 @@ class Campaign < ActiveRecord::Base
   has_many :incoming_messages
   has_many :outgoing_messages
   has_many :campaign_updates
-  has_many :campaign_events
+  has_many :campaign_events, :order => 'created_at desc'
   validates_presence_of :title, :description, :on => :update
   validates_presence_of :subdomain, :on => :update
   validates_format_of :subdomain, :with => /^[a-z0-9]+[a-z0-9]*$/, 
@@ -101,13 +101,6 @@ class Campaign < ActiveRecord::Base
         mail_config_file.write("#{local_part}:\t#{local_user}@#{base_domain}\n")
       end
     end
-  end
-
-  def events
-    events = problem.assignments.completed + incoming_messages + outgoing_messages + campaign_updates.general
-    events = events.sort_by(&:sort_date)
-    events = events.reverse
-    events
   end
   
   def existing_recipients

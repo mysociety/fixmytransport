@@ -118,6 +118,7 @@ describe AssignmentsController do
                                                                     :data => expected_data, 
                                                                     :problem => @campaign.problem,
                                                                     :status => :new, 
+                                                                    :creator => @expert_user,
                                                                     :task_type_name => 'write-to-other',
                                                                     :user => @campaign.initiator)
         make_request
