@@ -1,12 +1,18 @@
 Hi transport experts!
 
-<%= raw(@advice_request.user.name) %> would like some advice about the FixMyTransport campaign "<%= raw(@campaign.title) %>" (<%= raw @link %>).
+<%= raw(@advice_request.user.name) %> would like some advice about the FixMyTransport campaign "<%= raw(@campaign.title) %>" (<%= raw @advice_link %>).
 
-<%= raw @advice_request.user.name %> says:
+<%= raw @advice_request.user.first_name %> says:
 
 "<%= raw(@advice_request.text) %>"
 
-To give some advice, follow this link: <%= raw @link %>
+About the campaign:
+
+"<%= raw @campaign.description %>"
+
+To give some advice, follow this link: <%= raw @advice_link %>
+
+To suggest the next person or organisation that <%= raw @advice_request.user.first_name %> should contact, follow this link: <%= raw @assignment_link %>
 
 Yours,
 

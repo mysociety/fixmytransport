@@ -11,14 +11,17 @@ describe CampaignMailer do
         CampaignMailer.stub!(:sent_count).and_return(0)
         SentEmail.stub!(:find).and_return([])
         SentEmail.stub!(:create!)
-        @mock_user = mock_model(User, :email => 'supporter@example.com', :name => 'Supporter',
+        @mock_user = mock_model(User, :email => 'supporter@example.com', 
+                                      :name => 'Supporter',
                                       :name_and_email => 'Supporter <supporter@example.com>')
-        @mock_update_user = mock_model(User, :name => 'Update Sender')
+        @mock_update_user = mock_model(User, :name => 'Update Sender',
+                                             :first_name => 'Update')
         @mock_supporter = mock_model(CampaignSupporter, :supporter => @mock_user, 
                                                         :token => 'mytoken')
         @mock_supporter_association = mock('supporter association', :confirmed => [@mock_supporter])
         @mock_campaign = mock_model(Campaign, :campaign_supporters => @mock_supporter_association,
-                                              :title => "A test campaign")
+                                              :title => "A test campaign",
+                                              :description => 'Some description')
         @mock_update = mock_model(CampaignUpdate, :campaign => @mock_campaign, 
                                                   :user => @mock_update_user,
                                                   :update_attribute => true, 

@@ -9,4 +9,4 @@ en:
   send_advice: Send advice
   reason: Reason
   draft_text: "Draft text"
-  sent_your_advice: "We've sent your advice to {{user}}"
+  sent_your_advice: "Thanks! We've sent your advice to {{user}}"

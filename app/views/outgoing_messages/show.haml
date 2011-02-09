@@ -1,6 +1,6 @@
 - if @outgoing_message.incoming_message
   - extra =  t(:in_reply_to, :incoming => link_to(@outgoing_message.incoming_message.subject, campaign_incoming_message_path(@outgoing_message.campaign, @outgoing_message.incoming_message)))
-=t(:this_message_was_sent_by, :campaign => link_to(@outgoing_message.campaign.title, campaign_path(@outgoing_message.campaign)), :recipient => @outgoing_message.recipient_name, :extra => extra)
+!=t(:this_message_was_sent_by, :campaign => link_to(h(@outgoing_message.campaign.title), campaign_path(@outgoing_message.campaign)), :recipient => h(@outgoing_message.recipient_name), :extra => extra)
 
 .campaign-email
   %h2

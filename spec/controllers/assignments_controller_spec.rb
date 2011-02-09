@@ -144,7 +144,7 @@ describe AssignmentsController do
         
         it 'should show a notice saying that the user has been notified' do 
           make_request
-          flash[:notice].should == "We've sent your advice to Joe Bloggs"
+          flash[:notice].should == "Thanks! We've sent your advice to Joe Bloggs"
         end
     
       end

@@ -3,25 +3,16 @@ class OutgoingMessage < ActiveRecord::Base
   belongs_to :author, :class_name => 'User'
   belongs_to :recipient, :polymorphic => :true
   belongs_to :incoming_message
+  belongs_to :assignment
   has_many :campaign_updates
   validate :recipient_in_existing_campaign_recipients, 
            :incoming_message_in_campaign_messages,
-           :incoming_message_or_recipient
+           :incoming_message_or_recipient_or_assignment
   validates_presence_of :campaign, :body, :subject
 
   has_status({ 0 => 'New', 
                1 => 'Sent', 
                2 => 'Hidden' })
-                 
-                 
-  def after_initialize
-    if self.body.nil?
-      self.body = quoted_incoming_message
-    end
-    if self.subject.nil?
-      self.subject = reply_to_incoming_subject
-    end
-  end
   
   def sort_date
     created_at
@@ -39,8 +30,8 @@ class OutgoingMessage < ActiveRecord::Base
     end
   end
   
-  def incoming_message_or_recipient
-    if !incoming_message && !recipient
+  def incoming_message_or_recipient_or_assignment
+    if !incoming_message && !recipient && !assignment
       errors.add(:base, ActiveRecord::Error.new(self, :base, :missing_recipient).to_s)
     end
   end
@@ -76,6 +67,8 @@ class OutgoingMessage < ActiveRecord::Base
       return recipient.email
     elsif incoming_message
       return incoming_message.mail.from_addrs[0].address
+    elsif assignment
+      return assignment.data[:email]
     end
   end
   
@@ -84,9 +77,30 @@ class OutgoingMessage < ActiveRecord::Base
       return recipient.name
     elsif incoming_message
       return incoming_message.from
+    elsif assignment 
+      return assignment.data[:name]
     else
       return nil
     end
+  end
+  
+  # class methods
+  def self.message_from_attributes(campaign, user, attrs)
+    message = self.new(:campaign => campaign,
+                       :author => user)
+    if attrs[:recipient_type] and attrs[:recipient_id]
+      message.recipient = attrs[:recipient_type].constantize.find(attrs[:recipient_id])
+    elsif attrs[:incoming_message_id]
+      incoming_message = campaign.incoming_messages.find(attrs[:incoming_message_id])
+      message.incoming_message = incoming_message
+      message.body = message.quoted_incoming_message
+      message.subject = message.reply_to_incoming_subject
+    elsif attrs[:assignment_id]
+      assignment = campaign.assignments.find(attrs[:assignment_id])
+      message.assignment = assignment
+      message.body = assignment.data[:draft_text]
+    end
+    message
   end
   
 end

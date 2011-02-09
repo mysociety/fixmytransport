@@ -17,9 +17,10 @@
   .form-field  
     = f.label :body, t(:message)
     != f.text_area :body, :rows => 12, :cols => 40
-    - if @recipient
+    - if @outgoing_message.recipient
       != f.hidden_field :recipient_id
       != f.hidden_field :recipient_type
     != f.hidden_field :incoming_message_id
     != f.hidden_field :author_id
+    != f.hidden_field :assignment_id
   != submit_tag t(:submit)

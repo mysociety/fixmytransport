@@ -8,7 +8,7 @@
   - elsif event.is_a? OutgoingMessage
     %span.date= t(:ago, :time => time_ago_in_words(event.created_at))
     %span.message-link
-      != t(:wrote_a_message, :link => link_to(t(:another_message), campaign_outgoing_message_path(@campaign, event)), :sender => h(event.author.name), :recipient => h(event.recipient_name))
+      != t(:wrote_a_message, :link => link_to(t(:wrote_to), campaign_outgoing_message_path(@campaign, event)), :sender => h(event.author.name), :recipient => h(event.recipient_name))
       - event.campaign_updates.each do |update|
         = render :partial => 'campaign_event', :locals => {:event => update, :always_show_commentbox => always_show_commentbox}
   - else 

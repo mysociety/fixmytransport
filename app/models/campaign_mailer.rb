@@ -34,7 +34,8 @@ class CampaignMailer < ApplicationMailer
     subject "[FixMyTransport] Advice request from \"#{campaign.title}\""
     body({ :campaign => campaign, 
            :advice_request => advice_request, 
-           :link => main_url(campaign_path(campaign, :anchor => "update_#{advice_request.id}")) })
+           :assignment_link => main_url(new_campaign_assignment_path(campaign)),
+           :advice_link => main_url(campaign_path(campaign, :anchor => "update_#{advice_request.id}")) })
   end
   
   def advice_request(recipient, campaign, supporter, advice_request)
