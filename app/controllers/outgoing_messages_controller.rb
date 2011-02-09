@@ -10,6 +10,9 @@ class OutgoingMessagesController < ApplicationController
   def create
     @outgoing_message = @campaign.outgoing_messages.build(params[:outgoing_message])
     if @outgoing_message.save
+      if @outgoing_message.assignment
+        @outgoing_message.assignment.complete!
+      end
       @outgoing_message.send_message
       flash[:notice] = t(:your_message_has_been_sent)
       redirect_to campaign_outgoing_message_path(@campaign, @outgoing_message)

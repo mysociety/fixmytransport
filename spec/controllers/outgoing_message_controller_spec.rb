@@ -10,12 +10,16 @@ describe OutgoingMessagesController do
                                                          :incoming_message= => true,
                                                          :assignment= => true,
                                                          :body= => true,
-                                                         :send_message => true)
+                                                         :send_message => true, 
+                                                         :assignment => nil)
+    @mock_campaign_event = mock_model(CampaignEvent)
     @outgoing_messages_mock = mock('outgoing message association', :build => @mock_outgoing_message)
+    @campaign_events_mock = mock('campaign events association', :create! => @mock_campaign_event)
     @mock_campaign = mock_model(Campaign, :editable? => true,
                                           :visible? => true,
                                           :initiator => @campaign_user,
-                                          :outgoing_messages => @outgoing_messages_mock)
+                                          :outgoing_messages => @outgoing_messages_mock, 
+                                          :campaign_events => @campaign_events_mock)
     @controller.stub!(:current_user).and_return(@campaign_user)
     Campaign.stub!(:find).and_return(@mock_campaign)
     OutgoingMessage.stub!(:new).and_return(@mock_outgoing_message)
@@ -80,6 +84,13 @@ describe OutgoingMessagesController do
       it 'should send the outgoing message' do 
         @mock_outgoing_message.stub!(:save).and_return(true)
         @mock_outgoing_message.should_receive(:send_message)
+        make_request(@default_params)
+      end
+      
+      it 'should complete the assignment if the message has one' do 
+        @mock_assignment = mock_model(Assignment)
+        @mock_outgoing_message.stub!(:assignment).and_return(@mock_assignment)
+        @mock_assignment.should_receive(:complete!)
         make_request(@default_params)
       end
     

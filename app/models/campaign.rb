@@ -9,6 +9,7 @@ class Campaign < ActiveRecord::Base
   has_many :incoming_messages
   has_many :outgoing_messages
   has_many :campaign_updates
+  has_many :campaign_events
   validates_presence_of :title, :description, :on => :update
   validates_presence_of :subdomain, :on => :update
   validates_format_of :subdomain, :with => /^[a-z0-9]+[a-z0-9]*$/, 

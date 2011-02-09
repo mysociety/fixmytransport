@@ -24,6 +24,9 @@ class AssignmentsController < ApplicationController
     if @assignment.save
       # send an email to the campaign initiator
       CampaignMailer.deliver_write_to_other_assignment(@assignment, current_user, params[:subject])
+      # add an event to the campaign
+      @campaign.campaign_events.create!(:event_type => 'assignment_given',
+                                        :described => @assignment)
       flash[:notice] = t(:sent_your_advice, :user => @initiator.name)
       redirect_to campaign_path(@campaign)
     else

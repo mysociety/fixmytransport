@@ -78,10 +78,12 @@ describe AssignmentsController do
     before do
       @expert_user = mock_model(User, :is_expert? => true)
       @initiator = mock_model(User, :name => 'Joe Bloggs')
+      @campaign_events_mock = mock('campaign events association', :create! => nil)
       @campaign = mock_model(Campaign, :visible? => true,
                                        :editable? => true, 
                                        :initiator => @initiator,
-                                       :problem => mock_model(Problem))
+                                       :problem => mock_model(Problem),
+                                       :campaign_events => @campaign_events_mock)
       Campaign.stub!(:find).and_return(@campaign)
       @expected_access_message = :assignments_create_access_message
       @assignment = mock_model(Assignment, :save => true, :user => @initiator)
@@ -145,6 +147,12 @@ describe AssignmentsController do
         it 'should show a notice saying that the user has been notified' do 
           make_request
           flash[:notice].should == "Thanks! We've sent your advice to Joe Bloggs"
+        end
+
+        it 'should add an "assignment_given" event to the campaign' do
+          @campaign_events_mock.should_receive(:create!).with({ :event_type => 'assignment_given',
+                                                                :described => @assignment })
+          make_request
         end
     
       end

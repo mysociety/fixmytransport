@@ -499,12 +499,14 @@ describe CampaignsController do
       @mock_update = mock_model(CampaignUpdate, :save => true, 
                                                 :is_advice_request? => false)
       @mock_updates = mock('campaign updates', :build => @mock_update)
+      @mock_events = mock('campaign events', :create! => true)
       @mock_campaign = mock_model(Campaign, :supporters => [], 
                                             :title => 'A test title',
                                             :visible? => true, 
                                             :editable? => true,
                                             :add_supporter => true,
                                             :campaign_updates => @mock_updates, 
+                                            :campaign_events => @mock_events,
                                             :initiator => @user)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_wrong_user_message = 'Add an update'
@@ -529,10 +531,23 @@ describe CampaignsController do
       make_request(:id => 55)
     end
     
-    it 'should display a notice if the new update was successfully saved' do 
-      @mock_update.stub!(:save).and_return(true)
-      make_request(:id => 55)
-      flash[:notice].should == 'Your update has been added.'
+    describe 'if the update was successfully saved' do
+      
+      before do 
+        @mock_update.stub!(:save).and_return(true)
+      end
+      
+      it 'should display a notice' do 
+        make_request(:id => 55)
+        flash[:notice].should == 'Your update has been added.'
+      end
+    
+      it "should add a 'campaign_update_added' event" do
+        @mock_events.should_receive(:create!).with(:event_type => 'campaign_update_added', 
+                                                   :described => @mock_update)
+        make_request(:id => 55)
+      end
+    
     end
     
     describe 'when handling an AJAX request' do 

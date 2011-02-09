@@ -3,6 +3,7 @@ class Assignment < ActiveRecord::Base
   belongs_to :user
   serialize :data
   belongs_to :problem
+  has_many :campaign_events, :as => :described
   has_status({ 0 => 'New', 
                1 => 'In Progress', 
                2 => 'Complete' })
@@ -37,6 +38,25 @@ class Assignment < ActiveRecord::Base
     updated_at
   end
   
+  # complete an assignment, updating its data with any data passed
+  def complete!(assignment_data={})
+    self.status = :complete
+    if self.data
+      self.data.update(assignment_data)
+    else
+      self.data = assignment_data
+    end
+    ActiveRecord::Base.transaction do
+      self.save!
+      # if this is an assignment for a campaign, create a campaign event
+      if self.problem.campaign
+        self.problem.campaign.campaign_events.create!(:event_type => 'assignment_completed', 
+                                                      :described => self)
+      end
+    end
+    self
+  end
+
   # class methods
   
   def self.assignment_from_attributes(attributes)
@@ -57,12 +77,9 @@ class Assignment < ActiveRecord::Base
       assignment = find(:first, :conditions => ["task_type_name = ? and problem_id = ? and user_id = ?", 
                                                 task_type_name, problem.id, problem.reporter.id])
       if assignment
-        assignment.status = :complete
-        assignment.data.update(assignment_data)
-        assignment.save
+       assignment.complete!(assignment_data)
       end
     end
-   
   end
   
 end

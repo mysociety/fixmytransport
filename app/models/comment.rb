@@ -1,12 +1,11 @@
 class Comment < ActiveRecord::Base
   belongs_to :user
-  # belongs_to :campaign_update
-  # belongs_to :problem
   belongs_to :commented, :polymorphic => true
   validates_presence_of :text, :user_name
   validates_associated :user
   before_create :generate_confirmation_token
   before_validation_on_create :populate_user_name
+  has_many :campaign_events, :as => :described
   
   has_paper_trail
   has_status({ 0 => 'New', 
@@ -49,16 +48,21 @@ class Comment < ActiveRecord::Base
   
   def confirm!
     return unless self.status == :new
-    self.status = :confirmed
-    self.confirmed_at = Time.now
-    if commented.is_a? Problem 
-      if mark_fixed
-        commented.status = :fixed
+    ActiveRecord::Base.transaction do
+      self.status = :confirmed
+      self.confirmed_at = Time.now
+      if commented.is_a? Problem
+        if mark_fixed
+          commented.status = :fixed
+        end
+        commented.updated_at = Time.now
+        commented.save!
+      else
+        commented.campaign.campaign_events.create!(:event_type => 'comment_added',
+                                                   :described => self)
       end
-      commented.updated_at = Time.now
-      commented.save!
+      save!  
     end
-    save!  
   end
   
 end

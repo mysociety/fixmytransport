@@ -5,6 +5,7 @@ class OutgoingMessage < ActiveRecord::Base
   belongs_to :incoming_message
   belongs_to :assignment
   has_many :campaign_updates
+  has_many :campaign_events, :as => :described
   validate :recipient_in_existing_campaign_recipients, 
            :incoming_message_in_campaign_messages,
            :incoming_message_or_recipient_or_assignment
@@ -41,9 +42,13 @@ class OutgoingMessage < ActiveRecord::Base
   end
   
   def send_message
-    CampaignMailer.deliver_outgoing_message(self)
-    self.sent_at = Time.now
-    self.save
+    ActiveRecord::Base.transaction do
+      self.sent_at = Time.now
+      CampaignMailer.deliver_outgoing_message(self)
+      self.save!
+      self.campaign.campaign_events.create!(:event_type => 'outgoing_message_sent',
+                                            :described => self)
+    end
   end
   
   def quoted_incoming_message

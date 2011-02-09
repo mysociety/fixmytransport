@@ -30,6 +30,34 @@ describe OutgoingMessage do
   
   end
 
+  describe 'when sending a message' do
+  
+    before do
+      @mock_campaign_events = mock('campaign events', :create! => true)
+      @mock_campaign = mock_model(Campaign, :campaign_events => @mock_campaign_events)
+      @outgoing_message = OutgoingMessage.new(:campaign => @mock_campaign)
+      CampaignMailer.stub!(:deliver_outgoing_message)
+      @outgoing_message.stub!(:save!)
+    end
+    
+    it 'should deliver the message' do
+      CampaignMailer.should_receive(:deliver_outgoing_message)
+      @outgoing_message.send_message
+    end
+    
+    it 'should create an "outgoing_message_sent" campaign event' do
+      @mock_campaign_events.should_receive(:create!).with(:event_type => 'outgoing_message_sent', 
+                                                          :described => @outgoing_message)
+      @outgoing_message.send_message
+    end
+    
+    it 'should save the message' do 
+      @outgoing_message.should_receive(:save!)
+      @outgoing_message.send_message
+    end
+    
+  end
+
   describe 'when creating a message from attributes' do 
     
     before do

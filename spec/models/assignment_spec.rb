@@ -17,36 +17,74 @@ describe Assignment do
   
   describe 'when accepting a status update' do 
 
-     it "should update its status code" do 
-       assignment = Assignment.new
-       assignment.status_code = 1 
-       assignment.status = :complete
-       assignment.status_code.should == 2
-     end
+    it "should update its status code" do
+     assignment = Assignment.new
+     assignment.status_code = 1
+     assignment.status = :complete
+     assignment.status_code.should == 2
+    end
 
-   end
+  end
 
-   describe 'when asked for its status' do 
+  describe 'when asked for its status' do
 
-     it 'should return the correct symbol for its status code' do 
-       assignment = Assignment.new
-       assignment.status_code = 1
-       assignment.status.should == :in_progress
-       assignment.status_code = 2
-       assignment.status.should == :complete
-     end
-   end
+    it 'should return the correct symbol for its status code' do
+      assignment = Assignment.new
+      assignment.status_code = 1
+      assignment.status.should == :in_progress
+      assignment.status_code = 2
+      assignment.status.should == :complete
+    end
+  
+  end
 
-   describe 'when asked for its status description' do 
+  describe 'when asked for its status description' do 
 
-     it 'should return the correct description for its status code' do 
-       assignment = Assignment.new
-       assignment.status_code = 1
-       assignment.status_description.should == 'In Progress'
-       assignment.status_code = 2
-       assignment.status_description.should == 'Complete'
-     end
+    it 'should return the correct description for its status code' do
+      assignment = Assignment.new
+      assignment.status_code = 1
+      assignment.status_description.should == 'In Progress'
+      assignment.status_code = 2
+      assignment.status_description.should == 'Complete'
+    end
 
+  end
+   
+  describe 'when completing' do 
+    
+    before do 
+      @mock_problem = mock_model(Problem, :campaign => nil)
+      @assignment = Assignment.new(:data => {},
+                                   :problem => @mock_problem)
+      @assignment.stub!(:save!).and_return(true)
+    end
+   
+    it 'should update the data on the assignment' do
+      @assignment.data.should_receive(:update).with(:x => :y)
+      @assignment.complete!({ :x => :y })
+    end
+
+    it 'should set the status to complete' do
+      @assignment.should_receive(:status=).with(:complete)
+      @assignment.complete!
+    end
+
+    it 'should save the assignment' do
+      @assignment.should_receive(:save!)
+      @assignment.complete!
+    end
+   
+    describe 'if the problem associated with the assignment has a campaign' do
+    
+      it 'should create an "assignment_completed" campaign event' do
+        @mock_campaign = mock_model(Campaign, :campaign_events => [])
+        @mock_problem.stub!(:campaign).and_return(@mock_campaign)
+        @mock_campaign.campaign_events.should_receive(:create!).with(:event_type => 'assignment_completed', 
+                                                                     :described => @assignment)
+        @assignment.complete!
+      end
+    end
+    
    end
    
     describe 'when creating an assignment from an attribute hash' do 
@@ -84,9 +122,10 @@ describe Assignment do
         @mock_user = mock_model(User, :id => 44)
         @mock_problem = mock_model(Problem, :reporter => @mock_user)
         @mock_assignment = mock_model(Assignment, :status= => true, 
-                                                  :save => true, 
+                                                  :save! => true,
                                                   :data= => true, 
-                                                  :data => {})
+                                                  :data => {},
+                                                  :complete! => nil)
         Assignment.stub!(:find).and_return(@mock_assignment)
       end
     
@@ -97,20 +136,10 @@ describe Assignment do
         Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => {}})
       end
       
-      it 'should mark the assignment as complete' do 
-        @mock_assignment.should_receive(:status=).with(:complete)
+      it 'should complete the assignment' do
+        @mock_assignment.should_receive(:complete!).with({})
         Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => {}})
       end
-      
-      it 'should save the assignment' do 
-        @mock_assignment.should_receive(:save)
-        Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => {}})
-      end
-      
-      it 'should update the data on the assignment' do
-         @mock_assignment.data.should_receive(:update).with(:x => :y)
-         Assignment.complete_problem_assignments(@mock_problem, {'write-to-transport-operator' => { :x => :y } })
-       end
       
     end
     

@@ -86,4 +86,38 @@ describe IncomingMessage do
     end
   end
 
+  describe 'when creating a message from a tmail instance' do 
+  
+    before do 
+      @mock_tmail = mock("TMail instance", :subject => 'a subject',
+                                           :friendly_from => "test@example.com")
+      @raw_email_data = {}
+      @campaign = mock_model(Campaign, :campaign_events => mock('campaign events', :create! => true))
+      @raw_email = mock_model(RawEmail)
+      RawEmail.stub!(:create!).and_return(@raw_email)
+      @incoming_message = mock_model(IncomingMessage)
+      IncomingMessage.stub!(:create!).and_return(@incoming_message)
+    end
+    
+    it 'should create a raw email' do 
+      RawEmail.should_receive(:create!).with(:data => @raw_email_data)
+      IncomingMessage.create_from_tmail(@mock_tmail, @raw_email_data, @campaign)
+    end
+    
+    it 'should create an incoming message' do 
+      IncomingMessage.should_receive(:create!).with(:subject => 'a subject', 
+                                                    :campaign => @campaign, 
+                                                    :raw_email => @raw_email,
+                                                    :from => 'test@example.com')
+      IncomingMessage.create_from_tmail(@mock_tmail, @raw_email_data, @campaign)
+    end
+    
+    it 'should create an "incoming_message_received" campaign event' do 
+      @campaign.campaign_events.should_receive(:create!).with(:event_type => 'incoming_message_received', 
+                                                              :described => @incoming_message)
+      IncomingMessage.create_from_tmail(@mock_tmail, @raw_email_data, @campaign)      
+    end
+    
+  end
+  
 end

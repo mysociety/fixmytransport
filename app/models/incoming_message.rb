@@ -3,6 +3,7 @@ class IncomingMessage < ActiveRecord::Base
   belongs_to :raw_email
   validates_presence_of :campaign, :raw_email
   has_many :campaign_updates
+  has_many :campaign_events, :as => :described
   
   def mail 
     @mail ||= if raw_email.nil?
@@ -149,11 +150,13 @@ class IncomingMessage < ActiveRecord::Base
   # class methods
   def self.create_from_tmail(tmail, raw_email_data, campaign)
     ActiveRecord::Base.transaction do
-      raw_email = RawEmail.create(:data => raw_email_data)
-      incoming_message = create(:subject => tmail.subject, 
-                                :campaign => campaign, 
-                                :raw_email => raw_email,
-                                :from => tmail.friendly_from)
+      raw_email = RawEmail.create!(:data => raw_email_data)
+      incoming_message = create!(:subject => tmail.subject, 
+                                 :campaign => campaign, 
+                                 :raw_email => raw_email,
+                                 :from => tmail.friendly_from)
+      campaign.campaign_events.create!(:event_type => 'incoming_message_received', 
+                                       :described => incoming_message)
     end
   end
   
