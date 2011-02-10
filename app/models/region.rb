@@ -24,7 +24,7 @@ class Region < ActiveRecord::Base
   has_many :routes
   has_many :bus_routes
   has_many :train_routes, :order => 'cached_slug asc'
-  has_many :coach_routes
+  has_many :coach_routes, :order => 'number asc'
   has_many :tram_metro_routes
   has_many :ferry_routes
   
