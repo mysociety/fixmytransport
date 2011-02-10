@@ -2,14 +2,10 @@
 
 <%- if MySociety::Config.getbool('SITE_VISIBLE', true) %>
 
-[ This message was sent via FixMyTransport, a project of UKCOD, registered charity number 1076346. 
-Replies to this email will be public. Our privacy policy: <<%= raw @privacy_link %>>. To give feedback 
-on FixMyTransport, please visit <<%= raw @feedback_link %>>. ]
+[ This message was sent via FixMyTransport, a project of UKCOD, registered charity number 1076346. Replies to this email will be public. Our privacy policy: <<%= raw @privacy_link %>>. To give feedback on FixMyTransport, please visit <<%= raw @feedback_link %>>. ]
 
 <%- else %>
 
-[ This message was sent via FixMyTransport, a project of UKCOD, registered charity number 1076346. 
-Replies to this email will be public. To give feedback on FixMyTransport, please email 
-<%=MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')%>. ]
+[ This message was sent via FixMyTransport, a project of UKCOD, registered charity number 1076346. Replies to this email will be public. To give feedback on FixMyTransport, please email  <%=MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')%>. ]
 
 <%- end %>
