@@ -5,7 +5,7 @@
 %h3= t(:bus_routes, :count => @region.bus_routes.count)
 - @region.bus_route_letters.each do |first|
   %h4.first= first
-  - @region.bus_routes_by_letter[first].each do |route|
+  - @region.bus_routes_by_letter[first].sort_by(&:number).each do |route|
     .bus-route= link_to(route.number, location_url(route)) 
 
 %h3= t(:train_routes, :count => @region.train_routes.count)
