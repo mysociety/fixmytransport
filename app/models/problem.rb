@@ -156,6 +156,7 @@ class Problem < ActiveRecord::Base
   
   def optional_assignments
     [:write_to_transport_organization, 
+     :write_to_other,
      :ask_for_advice]
   end
   

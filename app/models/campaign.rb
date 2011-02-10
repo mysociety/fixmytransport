@@ -107,6 +107,12 @@ class Campaign < ActiveRecord::Base
     problem.recipients
   end
   
+  # get an array of assignment, recipient name arrays for the 'write-to-other' assignments 
+  # associated with this campaign
+  def write_to_other_assignments
+    assignments.find(:all, :conditions => ['task_type_name = ?', 'write-to-other'])
+  end
+  
   # class methods
   
   def self.mail_conf_staging_dir

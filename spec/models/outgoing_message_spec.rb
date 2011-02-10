@@ -123,7 +123,7 @@ describe OutgoingMessage do
     describe 'if an assignment id is included in the attributes' do 
     
       before do 
-        @mock_assignment = mock_model(Assignment, :data => { :draft_text => 'hi' })
+        @mock_assignment = mock_model(Assignment, :status => :new, :data => { :draft_text => 'hi' })
         @attributes = { :assignment_id => 77 }
         @mock_campaign.assignments.stub!(:find).and_return(@mock_assignment)
       end
@@ -137,12 +137,25 @@ describe OutgoingMessage do
         outgoing_message = OutgoingMessage.message_from_attributes(@mock_campaign, @mock_user, @attributes)
         outgoing_message.assignment.should == @mock_assignment
       end
+
+      describe 'if the assignment is not complete' do 
       
-      it 'should set the body of the outgoing message to the draft text' do 
-        outgoing_message = OutgoingMessage.message_from_attributes(@mock_campaign, @mock_user, @attributes)
-        outgoing_message.body.should == "hi"
+        it 'should set the body of the outgoing message to the draft text' do 
+          outgoing_message = OutgoingMessage.message_from_attributes(@mock_campaign, @mock_user, @attributes)
+          outgoing_message.body.should == "hi"
+        end
+
       end
       
+      describe 'if the assignment is complete (so someone is writing again to an assignment recipient)' do 
+     
+        it 'should not set the body of the outgoing message to the draft text' do
+          @mock_assignment.stub!(:status).and_return(:complete) 
+          outgoing_message = OutgoingMessage.message_from_attributes(@mock_campaign, @mock_user, @attributes)
+          outgoing_message.body.should be_nil
+        end
+      
+      end
     end
     
   end

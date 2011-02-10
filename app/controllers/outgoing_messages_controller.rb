@@ -10,7 +10,7 @@ class OutgoingMessagesController < ApplicationController
   def create
     @outgoing_message = @campaign.outgoing_messages.build(params[:outgoing_message])
     if @outgoing_message.save
-      if @outgoing_message.assignment
+      if @outgoing_message.assignment and @outgoing_message.assignment.status != :complete
         @outgoing_message.assignment.complete!
       end
       @outgoing_message.send_message

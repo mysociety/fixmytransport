@@ -1,5 +1,5 @@
 %span.message-link
-  - if message.assignment 
+  - if message.completed_assignment 
     - assignment_text = t(:following_experts_advice, :expert => message.assignment.creator.name)
   - else
     - assignment_text = ''

@@ -85,6 +85,18 @@ class OutgoingMessage < ActiveRecord::Base
     end
   end
   
+  # returns the assignment that this message completed (if any)
+  def completed_assignment
+    if self.assignment and self.assignment.status == :complete
+      assignment_first_message = OutgoingMessage.find(:first, :conditions => ['assignment_id = ?', self.assignment],
+                                                              :order => 'created_at asc')
+      if self == assignment_first_message
+        return self.assignment
+      end
+    end
+    return nil
+  end
+  
   # class methods
   def self.message_from_attributes(campaign, user, attrs)
     message = self.new(:campaign => campaign,
@@ -99,7 +111,10 @@ class OutgoingMessage < ActiveRecord::Base
     elsif attrs[:assignment_id]
       assignment = campaign.assignments.find(attrs[:assignment_id])
       message.assignment = assignment
-      message.body = assignment.data[:draft_text]
+      # don't show the draft text if this recipient has already been written to
+      if assignment.status != :complete
+        message.body = assignment.data[:draft_text]
+      end
     end
     message
   end

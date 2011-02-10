@@ -87,11 +87,32 @@ describe OutgoingMessagesController do
         make_request(@default_params)
       end
       
-      it 'should complete the assignment if the message has one' do 
-        @mock_assignment = mock_model(Assignment)
-        @mock_outgoing_message.stub!(:assignment).and_return(@mock_assignment)
-        @mock_assignment.should_receive(:complete!)
-        make_request(@default_params)
+      describe 'if the outgoing message belongs to a complete assignment' do 
+      
+        before do 
+          @mock_assignment = mock_model(Assignment, :status => :complete)
+        end
+        
+        it 'should not complete the assignment' do 
+          @mock_outgoing_message.stub!(:assignment).and_return(@mock_assignment)
+          @mock_assignment.should_not_receive(:complete!)
+          make_request(@default_params)
+        end
+        
+      end
+      
+      describe 'if the outgoing message belongs to an assignment that is not complete' do 
+      
+        before do 
+          @mock_assignment = mock_model(Assignment, :status => :new)
+        end
+        
+        it 'should complete the assignment' do 
+          @mock_outgoing_message.stub!(:assignment).and_return(@mock_assignment)
+          @mock_assignment.should_receive(:complete!)
+          make_request(@default_params)
+        end
+      
       end
     
     end

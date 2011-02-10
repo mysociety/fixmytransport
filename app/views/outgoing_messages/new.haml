@@ -1,4 +1,7 @@
-- @title = t(:new_message_to, :organization => @outgoing_message.recipient_name)
+- if @outgoing_message.assignment && @outgoing_message.assignment.status != :complete
+  - @title = t(:message_to, :organization => @outgoing_message.recipient_name)
+- else
+  - @title = t(:new_message_to, :organization => @outgoing_message.recipient_name)
 %h2.main-header= @title
 - form_for [@campaign, @outgoing_message], :html => {:class => 'create_outgoing_message'} do |f| 
   - if @outgoing_message.errors.on('recipient')
