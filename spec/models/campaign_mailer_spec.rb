@@ -73,7 +73,7 @@ describe CampaignMailer do
 
   def setup_write_to_other_data
     @campaign = mock_model(Campaign, :title => "Transport campaign")
-    @user = mock_model(User, :name => 'Joe Campaign')
+    @user = mock_model(User, :name => 'Joe Campaign', :name_and_email => '')
     @expert = mock_model(User, :name => 'Bob Expert', 
                                :first_name => 'Bob')
     @assignment = mock_model(Assignment, :campaign => @campaign, 
