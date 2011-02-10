@@ -2,3 +2,11 @@ en:
   live_departures: Next departures from here
   other_problems_here: Problems
   operated_by: Operated by {{operators}}
+  routes_in: "Public transport routes in the {{region}} region"
+  total_routes: "{{count}} routes in total"
+  bus_routes: "{{count}} bus routes"
+  ferry_routes: "{{count}} ferry routes"
+  train_routes: "{{count}} train routes"
+  tram_routes: "{{count}} tram, metro or underground routes"
+  coach_routes: "{{count}} coach routes"
+  

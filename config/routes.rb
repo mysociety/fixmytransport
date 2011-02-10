@@ -60,10 +60,20 @@ ActionController::Routing::Routes.draw do |map|
                                                             :conditions => { :method => :get }
 
   # routes                                               
+
+
+  map.routes "/routes/", :controller => 'locations', 
+                         :action => "show_route_regions"
+                         
+  map.route_region "/routes/:id.:format", :controller => "locations", 
+                                              :action => 'show_route_region',
+                                              :conditions => { :method => :get }
+
   map.route "/routes/:scope/:id.:format", :controller => "locations", 
                                           :action => 'show_route', 
                                           :conditions => { :method => :get }
 
+  
   # other locations for maps
   map.locations "/locations/:zoom/:lat/:lon/:link_type", :controller => 'locations', 
                                               :action => 'in_area',

@@ -1,0 +1,25 @@
+%h2.main-header= t(:routes_in, :region => @region.name)
+
+%h3= t(:total_routes, :count =>  @region.routes.count)
+
+%h3= t(:bus_routes, :count => @region.bus_routes.count)
+- @region.bus_route_letters.each do |first|
+  %h4.first= first
+  - @region.bus_routes_by_letter[first].each do |route|
+    .bus-route= link_to(route.number, location_url(route)) 
+
+%h3= t(:train_routes, :count => @region.train_routes.count)
+- @region.train_routes.each do |train_route|
+  .train-route= link_to(train_route.name(from_stop=nil, short=true), location_url(train_route))
+
+%h3= t(:tram_routes, :count => @region.tram_metro_routes.count)
+- @region.tram_metro_routes.each do |tram_metro_route|
+  .tram-metro-route= link_to(tram_metro_route.name(from_stop=nil, short=true), location_url(tram_metro_route))
+
+%h3= t(:ferry_routes, :count => @region.ferry_routes.count)
+- @region.ferry_routes.each do |ferry_route|
+  .ferry-route= link_to(ferry_route.name(from_stop=nil, short=true), location_url(ferry_route))
+
+%h3= t(:coach_routes, :count => @region.coach_routes.count)
+- @region.coach_routes.each do |coach_route|
+  .coach-route= link_to(coach_route.number, location_url(coach_route))

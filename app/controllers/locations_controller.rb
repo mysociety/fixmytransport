@@ -60,6 +60,14 @@ class LocationsController < ApplicationController
     end
   end
   
+  def show_route_region
+    @region = Region.find(params[:id])
+  end
+  
+  def show_route_regions
+    @regions = Region.find(:all, :order => 'name asc')
+  end
+  
   def in_area
     map_height = (params[:height].to_i or MAP_HEIGHT)
     map_width = (params[:width].to_i or MAP_WIDTH)

@@ -6,7 +6,7 @@
   
     .form-field
       = label_tag :subject, t(:subject_line_for_email)
-      != text_field_tag :subject
+      != text_field_tag :subject, "", :size => 35
       %span.optional-note= t(:for_advice_email, :user => @initiator.first_name)
     
     .form-field
