@@ -50,7 +50,7 @@ class CampaignMailer < ApplicationMailer
   end
   
   def write_to_other_assignment(assignment, custom_subject)
-    recipients assignment.user
+    recipients assignment.user.name_and_email
     from contact_from_name_and_email
     if !custom_subject.blank?
       subject "[FixMyTransport] #{custom_subject}"
