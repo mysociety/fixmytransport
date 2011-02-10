@@ -1,9 +1,10 @@
-%span.date= t(:ago, :time => time_ago_in_words(event.created_at))
 %span.message-link
   - if message.assignment 
     - assignment_text = t(:following_experts_advice, :expert => message.assignment.creator.name)
   - else
     - assignment_text = ''
   != t(:wrote_a_message, :link => link_to(t(:wrote_to), campaign_outgoing_message_path(@campaign, message)), :sender => h(message.author.name), :recipient => h(message.recipient_name), :assignment_text => assignment_text)
+  %span.date= t(:ago, :time => time_ago_in_words(event.created_at))
+
   - message.campaign_updates.each do |update|
     = render :partial => 'campaign_update', :locals => { :update => update, :always_show_commentbox => always_show_commentbox }
