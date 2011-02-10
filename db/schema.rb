@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(:version => 20110209193129) do
     t.string   "event_type"
     t.integer  "campaign_id"
     t.string   "described_type"
+    t.integer  "described_id"
     t.boolean  "visible",        :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -263,7 +264,7 @@ ActiveRecord::Schema.define(:version => 20110209193129) do
     t.string   "recipient_type"
     t.string   "subject"
     t.integer  "incoming_message_id"
-    t.integer  "assignment_id"  
+    t.integer  "assignment_id"
   end
 
   create_table "passenger_transport_executive_areas", :force => true do |t|
