@@ -919,6 +919,8 @@ div.submit{
 .new_assignment {
   margin: auto;
   width: 90%;
+  padding: 1em;
+  overflow: auto;
 }
 
 .new_assignment label{
@@ -927,7 +929,21 @@ div.submit{
 
 .new_assignment input[type=submit] {
   float: right;
+  margin-right: 20em;
 }
+
+.new_assignment .textarea-optional-note {
+  vertical-align: top;
+  font-size: 0.8em;
+  max-width: 15em;
+  margin-top: 0.5em;
+  display: inline-block;
+}
+
+.new_assignment .optional-note {
+  display: inline-block;
+}
+
 /* Pagination */
 
 .pagination {

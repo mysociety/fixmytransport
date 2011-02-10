@@ -26,10 +26,10 @@
         .form-field-error= @assignment.errors.on(:reason)
       = label_tag :reason, t(:reason)
       != text_area_tag :reason, @assignment.data[:reason], :cols => 40, :rows => 5
-      %span.optional-note= t(:why_write_to_this_person, :user => @initiator.first_name)
+      %span.textarea-optional-note= t(:why_write_to_this_person, :user => @initiator.first_name)
     .form-field
       = label_tag :draft_text, t(:draft_text)
       != text_area_tag :draft_text, @assignment.data[:draft_text], :cols => 40, :rows => 5
-      %span.optional-note= t(:text_to_get_them_started, :user => @initiator.first_name)
+      %span.textarea-optional-note= t(:text_to_get_them_started, :user => @initiator.first_name)
     .form-field
       !=f.submit t(:send_advice)
