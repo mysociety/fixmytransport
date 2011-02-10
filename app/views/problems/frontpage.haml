@@ -20,12 +20,13 @@
   .latest
     .right-col
       .latest-campaigns
-        %h3=t(:latest_campaigns)
+        %h3=t(:recently_active_campaigns)
         %ul
           - Campaign.find_recent(5).each do |campaign|
             %li.campaign-update
               = link_to(h(campaign.title), campaign_url(campaign))
               %span.transport-modes-note=campaign.transport_mode_text
+              %span.event-type-note= "(#{event_type_note(campaign.campaign_events.first)})"
         .more= link_to(t(:more_campaigns), campaigns_path)
     .left-col
       .latest-problems

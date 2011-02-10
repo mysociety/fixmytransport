@@ -10,6 +10,11 @@ class CampaignEvent < ActiveRecord::Base
   
   named_scope :visible, :conditions => ["visible = ?", true], :order => 'created_at desc'
   before_validation :set_visibility
+  after_save :update_campaign_latest_event_at
+  
+  def update_campaign_latest_event_at
+    self.campaign.update_attribute('latest_event_at', self.created_at)
+  end
   
   def set_visibility
     case self.event_type
@@ -35,5 +40,5 @@ class CampaignEvent < ActiveRecord::Base
     end
     return true
   end
-                                          
+
 end

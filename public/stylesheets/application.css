@@ -229,7 +229,8 @@ h2.main-header{
   width: 50%;
 }
 
-.transport-modes-note {
+.transport-modes-note,
+.event-type-note {
   font-size: 0.8em;
 }
 

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110209193129) do
+ActiveRecord::Schema.define(:version => 20110210151320) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(:version => 20110209193129) do
     t.string   "cached_slug"
     t.string   "subdomain"
     t.datetime "confirmed_at"
+    t.datetime "latest_event_at"
   end
 
   add_index "campaigns", ["cached_slug"], :name => "index_campaigns_on_cached_slug"

@@ -146,9 +146,9 @@ class Campaign < ActiveRecord::Base
   end
   
   def self.find_recent(number, options={})
-    visible.find(:all, :order => 'created_at desc', 
+    visible.find(:all, :order => 'latest_event_at desc',
                        :limit => number, 
-                       :include => [:location, :initiator],
+                       :include => [:location, :initiator, :campaign_events],
                        :offset => options[:offset])
   end
   

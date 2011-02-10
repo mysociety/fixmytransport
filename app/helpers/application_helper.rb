@@ -328,4 +328,28 @@ module ApplicationHelper
                           :title => update.campaign.title, 
                           :link => link, :extra => extra)
   end
+
+  def event_type_note(campaign_event)
+    case campaign_event.event_type
+    when 'outgoing_message_sent'
+      return t(:new_message)
+    when 'incoming_message_received'
+      return t(:new_reply)
+    when 'campaign_update_added'
+      return t(:new_update)
+    when 'assignment_given'
+      return t(:new_assignment)
+    when 'assignment_completed'
+      case campaign_event.described.task_type_name
+      when 'write-to-other'
+        return t(:new_message)
+      when 'publish-problem'
+        return t(:new_campaign)
+      when 'write-to-transport-organization'
+        return t(:new_problem_reported)
+    end
+    when 'comment_added'
+      return t(:new_comment)
+    end
+  end
 end

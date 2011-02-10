@@ -6,11 +6,12 @@ describe CampaignEvent do
       :event_type => "comment_added",
       :campaign_id => 1,
       :described_type => "Comment",
-      :described_id => 1
-    }
+      :described_id => 1    
+      }
   end
 
   it "should create a new instance given valid attributes" do
-    CampaignEvent.create!(@valid_attributes)
+    campaign = CampaignEvent.new(@valid_attributes)
+    campaign.valid?.should be_true
   end
 end
