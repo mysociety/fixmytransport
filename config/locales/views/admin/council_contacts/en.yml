@@ -1,6 +1,6 @@
 en:
   council_contacts: Council contacts
-  council_contacts_for: Council contacts for {{council}}
+  council_contacts_for: Council contacts for %{council}
   category: Category
   confirmed: Confirmed
   last_editor: Last editor
@@ -11,7 +11,7 @@ en:
   editor: Editor
   deleted: Deleted
   add_a_council_contact: Add a council contact
-  adding_a_council_contact: Adding a council contact for {{council}}
+  adding_a_council_contact: Adding a council contact for %{council}
   contact_count:
-    one: "{{n}} contact"
-    other: "{{n}} contacts"
+    one: "%{n} contact"
+    other: "%{n} contacts"

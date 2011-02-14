@@ -14,40 +14,40 @@ en:
   postcode_not_found: "That postcode wasn't recognized."
   area_not_found: "We couldn't find a town, area or postcode that matches what you entered."
   go: Go!
-  multiple_localities: "We found more than one place matching \"{{name}}\". Please select one, or try a different search if yours is not here:"
-  within_multiple_localities: "We found more than one place with matches for \"{{name}}\". Please select one, or try a different search if yours is not here:"
+  multiple_localities: "We found more than one place matching \"%{name}\". Please select one, or try a different search if yours is not here:"
+  within_multiple_localities: "We found more than one place with matches for \"%{name}\". Please select one, or try a different search if yours is not here:"
   multiple_locations_intro: "Choose a stop or station by clicking on it, or zoom in on an area to see other stops and stations."
   multiple_routes_intro: "Choose a route by clicking on it, or try a different search if yours is not here: "
   problem_not_found: "We couldn't locate your problem in the database. If you've copied the URL from an email, please check that you copied it exactly."
   is_this: This is
   a_one_off: a problem relating to a particular journey
   an_ongoing_problem: an ongoing problem that affects many journeys
-  posted_time: "{{time}} ago"
+  posted_time: "%{time} ago"
   and: and
   added: added
   reported: reported
   problem_time: Journey time
   problem_date: Journey date
-  by: "by {{name}}"
-  pte_advice: "{{pte_link}} is responsible for public transport in this area."
-  problem_will_be_sent: "Your problem will be sent by email to {{organization}}. It will also be displayed on the site, with your name."
+  by: "by %{name}"
+  pte_advice: "%{pte_link} is responsible for public transport in this area."
+  problem_will_be_sent: "Your problem will be sent by email to %{organization}. It will also be displayed on the site, with your name."
   thanks_for_adding_problem: "Thanks, you've successfully confirmed your problem. "
   nearly_ready: "Brilliant! We're nearly ready to send your message."
   see_your_problem: See your problem on the site
-  reported_at: "Reported at {{time}}"
-  problem_location: "to {{link}}"
+  reported_at: "Reported at %{time}"
+  problem_location: "to %{link}"
   report_a_problem_here: Report a problem here
   report_a_problem: Report a problem
-  reporting_a_problem: "{{location}}: Reporting a problem"
+  reporting_a_problem: "%{location}: Reporting a problem"
   never_show_email: (We never show your email address or phone number)
-  sent_time: "Sent to {{recipient}} {{interval}} later"
+  sent_time: "Sent to %{recipient} %{interval} later"
   include_journey_detail: "If your problem relates to a specific journey, please include as much detail as possible about your journey:" 
   where_to_and_from: where you were travelling to and from
   time_and_date: the time and the date
-  driver_and_registration: "any other details you may have that will help identify the {{type}} (like its registration number) and the driver."
+  driver_and_registration: "any other details you may have that will help identify the %{type} (like its registration number) and the driver."
   give_details: Please fill in the details of the problem below.
   the: The
-  stop_include_details: "{{responsible}} won't be able to help unless you give as much detail as you can about the problem, so please describe the exact nature of the problem, what it is, how long it has been there, etc."
+  stop_include_details: "%{responsible} won't be able to help unless you give as much detail as you can about the problem, so please describe the exact nature of the problem, what it is, how long it has been there, etc."
   pick_a_category: -- Pick a category --
   select_operator: -- Choose the name of the company --
   next_steps: Next steps
@@ -55,16 +55,16 @@ en:
   provide_an_update: Provide an update
   post: Post
   mark_fixed: This problem has been fixed
-  reported_on: "Reported on {{date}}"
+  reported_on: "Reported on %{date}"
   update_not_found: "We couldn't locate your comment or update in the database. If you've copied the URL from an email, please check that you copied it exactly."
-  error_on_join: "Sorry, we couldn't locate your membership of this campaign in the database. If you've copied the URL from an email, please check that you copied it exactly - if you have, please {{link}} what happened."
-  error_on_leave: "Sorry, we couldn't locate your membership of this campaign in the database. If you've copied the URL from an email, please check that you copied it exactly - if you have, please {{link}} what happened."
+  error_on_join: "Sorry, we couldn't locate your membership of this campaign in the database. If you've copied the URL from an email, please check that you copied it exactly - if you have, please %{link} what happened."
+  error_on_leave: "Sorry, we couldn't locate your membership of this campaign in the database. If you've copied the URL from an email, please check that you copied it exactly - if you have, please %{link} what happened."
   let_us_know: let us know
   thanks_for_adding_update: You've successfully confirmed your update.
   see_your_update: See your update on the site
   updates: Updates
-  user_updates: "{{name}} added an update: "
-  update_help: "Please note that updates are not sent to the organisation responsible for this {{location_type}}. Your name will be public. Your information will only be used in accordance with our {{privacy_link}}."
+  user_updates: "%{name} added an update: "
+  update_help: "Please note that updates are not sent to the organisation responsible for this %{location_type}. Your name will be public. Your information will only be used in accordance with our %{privacy_link}."
   privacy_policy: privacy policy
   problem_has_been_fixed: This problem has been fixed.
   marked_as_fixed: and marked the problem as fixed.
@@ -79,5 +79,5 @@ en:
   holding_on_to_update: "we'll hold on to your update while you check your email"
   problem_created: Thanks! Your problem report has been created.
   thanks_for_update: Thanks for adding an update!
-  problem_occurred: "This problem occurred {{date_and_time}}"
+  problem_occurred: "This problem occurred %{date_and_time}"
   show_all: Show all results

@@ -5,10 +5,10 @@ en:
   fixmytransport: "FixMyTransport"
   campaign_start_date: Start date
   write_to_operator: Write to the operator
-  login_to: "Login as {{user}} to {{requested_action}}"
-  wrong_user: "To {{requested_action}}, you'll need to {{logout_link}}, and login as {{name}}."
+  login_to: "Login as %{user} to %{requested_action}"
+  wrong_user: "To %{requested_action}, you'll need to %{logout_link}, and login as %{name}."
   password_confirmation: Password (again)
-  password_length_error: "Please enter a password that is at least {{length}} characters long"
+  password_length_error: "Please enter a password that is at least %{length} characters long"
   password_match_error: "The password confirmation does not match the password"
   add_password_to_update: "You'll need a password to be able to log back into the site and update your campaign. Enter one here. "
   tweet_this: Tweet this
@@ -19,46 +19,46 @@ en:
   assignments_new_access_message: "create an assignment for this campaign"
   assignments_create_access_message: "create an assignment for this campaign"
   join_this_campaign: Join this campaign
-  you_are_a_supporter: "You're now a supporter of \"{{campaign}}\"!"
+  you_are_a_supporter: "You're now a supporter of \"%{campaign}\"!"
   enter_your_email_to_join: Enter your email address to join this campaign
   join: Join
-  back_to_campaign: "Go back to \"{{campaign}}\""
-  started_on: "Started on {{date}}"
+  back_to_campaign: "Go back to \"%{campaign}\""
+  started_on: "Started on %{date}"
   campaign_has_n_supporters:
-    one: "and has {{n}} supporter."
-    other: "and has {{n}} supporters."
+    one: "and has %{n} supporter."
+    other: "and has %{n} supporters."
   thanks_for_adding_comment: You've successfully confirmed your comment.
   see_your_comment: See your comment
-  campaign_location: This campaign concerns the {{link}}
+  campaign_location: This campaign concerns the %{link}
   join_confirmation_sent: We've sent you an email to confirm that you want to join this campaign.
-  you_will_not_be_a_supporter: "you will not be added as a supporter of \"{{campaign}}\"."
+  you_will_not_be_a_supporter: "you will not be added as a supporter of \"%{campaign}\"."
   you_support_this_campaign: "You are a supporter of this campaign"
   leave_this_campaign: "Leave this campaign"
-  you_are_no_longer_a_supporter: "You are no longer a supporter of \"{{campaign}}\""
+  you_are_no_longer_a_supporter: "You are no longer a supporter of \"%{campaign}\""
   campaign_received_emails: "The campaign has received the following emails:"
-  got_a_message: "{{sender}} sent {{campaigner}} {{link}}"
+  got_a_message: "%{sender} sent %{campaigner} %{link}"
   a_reply: a reply
-  wrote_a_message: "{{sender}} {{link}} to {{recipient}}{{assignment_text}}"
+  wrote_a_message: "%{sender} %{link} to %{recipient}%{assignment_text}"
   wrote_to: wrote to
   campaign: campaign
   choose_a_short_name: Choose a short name (6 to 16 lowercase letters)
-  easy_web_address: This gives your page an easy web address. e.g. {{url}}
+  easy_web_address: This gives your page an easy web address. e.g. %{url}
   update_added: Your update has been added. 
   error_adding_update: "Sorry, there's been a problem adding your update. Please use the feedback form to let us know what happened."
-  user_says: "{{name}} said:"
+  user_says: "%{name} said:"
   add_an_update: 'Add an update:'
   request_advice: Ask for advice
   ask_our_expert_panel: 'Ask your supporters and our expert panel what to do next:'
-  user_requested_advice: "{{name}} asked for feedback from the campaign's supporters and FixMyTransport's expert panel:"
+  user_requested_advice: "%{name} asked for feedback from the campaign's supporters and FixMyTransport's expert panel:"
   advice_request_added: Your advice request will be sent to your supporters and the panel.
-  expert_advised_writing: "{{expert}} advised {{user}} to write to {{recipient}}. {{expert}} said: \"{{reason}}\""
-  following_experts_advice: " following {{expert}}'s advice."
+  expert_advised_writing: "%{expert} advised %{user} to write to %{recipient}. %{expert} said: \"%{reason}\""
+  following_experts_advice: " following %{expert}'s advice."
   add_comment: comment
   please_enter_some_text: Please enter some text
-  ago: "{{time}} ago"
+  ago: "%{time} ago"
   as_a_supporter: "As a campaign supporter, you can make comments on the progress of this and other campaigns."
-  login_to_comment: "You'll need to {{link}} to comment"
-  write_again: "Write to {{name}} again"
-  write_first_time: "Write to {{name}}"
+  login_to_comment: "You'll need to %{link} to comment"
+  write_again: "Write to %{name} again"
+  write_first_time: "Write to %{name}"
   reply_to_this_message: "Reply to this message"
   add_details_to_comment: "Please enter your name as you'd like it to appear, and create a password so you can log back into the site anytime."

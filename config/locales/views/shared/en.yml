@@ -2,5 +2,5 @@ en:
   nearly_done: Nearly Done! Now check your email...
   please_be_patient: "The confirmation email <strong>may</strong> take a few minutes to arrive &mdash; <em>please</em> be patient."
   check_your_junkmail_filters: "If you use web-based email or have 'junk mail' filters, you may wish to check your bulk/spam mail folders: sometimes, our messages are marked that way."
-  click_the_link: "You must now click the link in the email we've just sent you &mdash; if you do not, {{action}}"
-  dont_worry: "(Don't worry &mdash; {{worry}})"
+  click_the_link: "You must now click the link in the email we've just sent you &mdash; if you do not, %{action}"
+  dont_worry: "(Don't worry &mdash; %{worry})"

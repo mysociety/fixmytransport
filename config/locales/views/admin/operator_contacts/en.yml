@@ -1,6 +1,6 @@
 en:
   operator_contacts: Operator contacts
-  operator_contacts_for: Operator contacts for {{operator}}
+  operator_contacts_for: Operator contacts for %{operator}
   category: Category
   confirmed: Confirmed
   last_editor: Last editor
@@ -11,8 +11,8 @@ en:
   editor: Editor
   deleted: Deleted
   add_an_operator_contact: Add an operator contact
-  adding_an_operator_contact: Adding an operator contact for {{operator}}
+  adding_an_operator_contact: Adding an operator contact for %{operator}
   contact_count:
-    one: "{{n}} contact"
-    other: "{{n}} contacts"
+    one: "%{n} contact"
+    other: "%{n} contacts"
   location: Location

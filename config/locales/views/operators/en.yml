@@ -1,8 +1,8 @@
 en:
   send_message: Send this message
   operates_routes: 
-    one: "{{operator}} runs {{count}} route:"
-    other: "{{operator}} runs {{count}} routes:"
+    one: "%{operator} runs %{count} route:"
+    other: "%{operator} runs %{count} routes:"
   is_responsible_for_stations: 
-    one: "{{operator}} is responsible for {{count}} stations:"
-    other: "{{operator}} is responsible for {{count}} station:"
+    one: "%{operator} is responsible for %{count} stations:"
+    other: "%{operator} is responsible for %{count} station:"

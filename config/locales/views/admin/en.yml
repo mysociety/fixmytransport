@@ -1,13 +1,13 @@
 en:
   admin: admin
   things_to_do: Things to do
-  routes_without_operators_intro: "Find the operators of the following routes (total {{number}})"
-  codes_without_operators_intro: "Find the operator(s) for the following codes (total {{number}})"
+  routes_without_operators_intro: "Find the operators of the following routes (total %{number})"
+  codes_without_operators_intro: "Find the operator(s) for the following codes (total %{number})"
   on_main_site: Public page
   routes_with_code: Routes with this operator code and no operators
   external_search_route: Search for this route
   external_search_operator: Search for this operator
-  num_unmatched_routes: "{{number}} routes"
+  num_unmatched_routes: "%{number} routes"
   search: Search
   are_you_sure: "Are you sure?"
   select: Select

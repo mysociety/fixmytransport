@@ -1,12 +1,12 @@
 en:
-  new_assignment_help: "Use this form to suggest the next person that {{user}} should contact to keep \"{{campaign}}\" moving."
-  name_of_the_person_to_write_to: "Who should {{user}} write to?"
+  new_assignment_help: "Use this form to suggest the next person that %{user} should contact to keep \"%{campaign}\" moving."
+  name_of_the_person_to_write_to: "Who should %{user} write to?"
   email_of_the_person_to_write_to: "What's their email address?"
-  why_write_to_this_person: "Why should {{user}} write to this person?"
+  why_write_to_this_person: "Why should %{user} write to this person?"
   subject_line_for_email: "Subject"
-  for_advice_email: "Optional - subject line for the email we'll send to {{user}}"
-  text_to_get_them_started: "Optional - give {{user}} some draft text for their email"
+  for_advice_email: "Optional - subject line for the email we'll send to %{user}"
+  text_to_get_them_started: "Optional - give %{user} some draft text for their email"
   send_advice: Send advice
   reason: Reason
   draft_text: "Draft text"
-  sent_your_advice: "Thanks! We've sent your advice to {{user}}"
+  sent_your_advice: "Thanks! We've sent your advice to %{user}"
