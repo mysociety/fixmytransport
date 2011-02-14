@@ -5,3 +5,4 @@ en:
   change_your_password: Change your password
   update_password_and_login: "Update my password and log me in"
   logged_in_longer: (keeps you signed in longer; do not use on a public computer)
+  password: Password

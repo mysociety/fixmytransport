@@ -6,12 +6,12 @@
     .form-field
       - if @user_session.errors.on('email')
         .form-field-error= error_message_on @user_session, :email
-      =f.label :email 
+      =f.label :email, t(:email)
       != f.text_field :email 
     .form-field
       - if @user_session.errors.on('password')
         .form-field-error= error_message_on @user_session, :password
-      = f.label :password 
+      = f.label :password, t(:password)
       != f.password_field :password 
     .form-field
       .password-reset-link!= link_to t(:forgot_your_password), new_password_reset_path
