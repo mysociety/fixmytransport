@@ -118,6 +118,10 @@ describe IncomingMessage do
       IncomingMessage.create_from_tmail(@mock_tmail, @raw_email_data, @campaign)      
     end
     
+    it 'should return the incoming message' do
+      IncomingMessage.create_from_tmail(@mock_tmail, @raw_email_data, @campaign).should == @incoming_message 
+    end
+
   end
   
 end
