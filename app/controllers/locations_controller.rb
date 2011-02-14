@@ -1,6 +1,7 @@
 class LocationsController < ApplicationController
   
   before_filter :process_map_params, :except => [:in_area]
+  include ApplicationHelper
   
   def show_stop
     @stop = Stop.full_find(params[:id], params[:scope])
@@ -75,7 +76,7 @@ class LocationsController < ApplicationController
     map_width = MAP_WIDTH if ! [MAP_WIDTH, LARGE_MAP_WIDTH].include? map_width
     other_locations =  Map.other_locations(params[:lat].to_f, params[:lon].to_f, params[:zoom].to_i, map_height, map_width)
     link_type = params[:link_type].to_sym
-    render :json => "#{@template.location_stops_js(other_locations, main=false, small=true, link_type)}"
+    render :json => "#{location_stops_js(other_locations, main=false, small=true, link_type)}"
   end
 
   private

@@ -202,18 +202,15 @@ function setupFeedbackForm() {
   
 }
 
-// Always send the authenticity_token with ajax
-jQuery(document).ajaxSend(function(event, request, settings) {
-  if ( settings.type == 'post' ) {
-      settings.data = (settings.data ? settings.data + "&" : "")
-          + "authenticity_token=" + encodeURIComponent( AUTH_TOKEN );
-  }
-});
 
 // Run jquery in no-conflict mode so it doesn't use $()
 jQuery.noConflict();
 
 jQuery(document).ready(function() {
+  // Always send the authenticity_token with ajax
+  jQuery.ajaxSetup({
+    'beforeSend': function(xhr) { xhr.setRequestHeader('X-CSRF-Token', jQuery('meta[name=csrf-token]').attr('content')); }
+  });
   addSearchGuidance();  
   setupFeedbackForm();
   hideProblemDateTimeForOngoing();

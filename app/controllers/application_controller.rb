@@ -148,6 +148,12 @@ class ApplicationController < ActionController::Base
     request.session_options[:id]
   end
   
+  # make sure user data is cleared
+  def handle_unverified_request
+    super
+    cookies.delete 'user_credentials'
+  end
+
   def process_map_params
     @zoom = params[:zoom].to_i if params[:zoom] && (MIN_ZOOM_LEVEL <= params[:zoom].to_i && params[:zoom].to_i <= MAX_VISIBLE_ZOOM)
     @lon = params[:lon].to_f if params[:lon] 
