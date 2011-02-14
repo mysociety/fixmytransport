@@ -15,7 +15,7 @@ module SharedBehaviours
                             :pte_responsible?, 
                             :operators_responsible?]
         required_methods.each do |method|
-          @instance.should respond_to(method)
+          @instance.respond_to?(method).should(be_true)
         end
       end
             
