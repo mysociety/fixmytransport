@@ -1,8 +1,0 @@
---readme          README.md
---markup          markdown
---markup-provider maruku
---default-return  ""
---hide-void-return
---protected
---no-private
---no-highlight
