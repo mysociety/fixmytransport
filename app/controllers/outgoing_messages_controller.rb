@@ -5,6 +5,9 @@ class OutgoingMessagesController < ApplicationController
 
   def new
     @outgoing_message = OutgoingMessage.message_from_attributes(@campaign, current_user, params)
+    if !@outgoing_message.incoming_message_or_recipient_or_assignment
+      redirect_to campaign_url(@campaign)
+    end
   end
   
   def create

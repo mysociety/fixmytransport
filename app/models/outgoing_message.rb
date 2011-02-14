@@ -30,7 +30,9 @@ class OutgoingMessage < ActiveRecord::Base
   def incoming_message_or_recipient_or_assignment
     if !incoming_message && !recipient && !assignment
       errors.add(:base, ActiveRecord::Error.new(self, :base, :missing_recipient).to_s)
+      return false
     end
+    return true
   end
   
   def reply_name_and_email

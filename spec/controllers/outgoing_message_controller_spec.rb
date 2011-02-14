@@ -11,7 +11,8 @@ describe OutgoingMessagesController do
                                                          :assignment= => true,
                                                          :body= => true,
                                                          :send_message => true, 
-                                                         :assignment => nil)
+                                                         :assignment => nil,
+                                                         :incoming_message_or_recipient_or_assignment => true)
     @mock_campaign_event = mock_model(CampaignEvent)
     @outgoing_messages_mock = mock('outgoing message association', :build => @mock_outgoing_message)
     @campaign_events_mock = mock('campaign events association', :create! => @mock_campaign_event)
@@ -42,6 +43,19 @@ describe OutgoingMessagesController do
       response.should render_template('new')
     end
 
+    describe 'if the outgoing message does not have a recipient or an assignment or an incoming message' do 
+    
+      before do
+        @mock_outgoing_message.stub!(:incoming_message_or_recipient_or_assignment).and_return(false)
+      end
+      
+      it 'should redirect to the campaign page' do 
+        make_request @default_params
+        response.should redirect_to(campaign_url(@mock_campaign))
+      end
+      
+    end
+    
     it_should_behave_like "an action that requires the campaign initiator"
   
   end
