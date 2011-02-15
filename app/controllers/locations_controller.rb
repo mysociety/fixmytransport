@@ -63,6 +63,7 @@ class LocationsController < ApplicationController
   
   def show_route_region
     @region = Region.find(params[:id])
+    @national_region = Region.find_by_name('Great Britain')
   end
   
   def show_route_regions
