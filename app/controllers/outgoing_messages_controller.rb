@@ -1,6 +1,6 @@
 class OutgoingMessagesController < ApplicationController
 
-  before_filter :find_visible_campaign, :only => [:new, :create]
+  before_filter :find_visible_campaign, :only => [:new, :create, :show]
   before_filter :require_campaign_initiator, :only => [:new, :create]
 
   def new

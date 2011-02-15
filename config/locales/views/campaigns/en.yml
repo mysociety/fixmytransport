@@ -51,9 +51,11 @@ en:
   ask_our_expert_panel: 'Ask your supporters and our expert panel what to do next:'
   user_requested_advice: "%{name} asked for feedback from the campaign's supporters and FixMyTransport's expert panel:"
   advice_request_added: Your advice request will be sent to your supporters and the panel.
-  expert_advised_writing: "%{expert} advised %{user} to write to %{recipient}. %{expert} said:"
+  expert_advised_writing: "%{expert} %{advised} %{user} to write to %{recipient}. %{expert} said:"
   following_experts_advice: " following %{expert}'s advice."
   add_comment: comment
+  advised: advised
+  message_from_expert: "This is a message from FixMyTransport boffin %{expert} to %{user} on their next step for keeping the %{campaign} campaign moving."
   please_enter_some_text: Please enter some text
   ago: "%{time} ago"
   as_a_supporter: "As a campaign supporter, you can make comments on the progress of this and other campaigns."

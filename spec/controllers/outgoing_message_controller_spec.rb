@@ -37,7 +37,7 @@ describe OutgoingMessagesController do
     def make_request params
       get :new, params 
     end
-    
+        
     it 'should render the template "new"' do 
       make_request @default_params
       response.should render_template('new')
@@ -140,21 +140,33 @@ describe OutgoingMessagesController do
     before do 
       @mock_outgoing_message = mock_model(OutgoingMessage)
       OutgoingMessage.stub!(:find).and_return(@mock_outgoing_message)
+      @campaign = mock_model(Campaign, :visible? => true, 
+                                       :editable? => true)
       @default_params = { :campaign_id => 55, :id => 33 }
     end
   
-    def make_request params
+    def make_request(params=@default_params)
       get :show, params
     end
     
-    it 'should render the "show" template' do 
-      make_request(@default_params)
-      response.should render_template('show')
-    end
+    it_should_behave_like "an action requiring a visible campaign"
     
-    it 'should get the incoming message' do 
-      OutgoingMessage.should_receive(:find).with('33')
-      make_request(@default_params)
+    describe 'when there is a visible campaign' do
+      
+      before do 
+        Campaign.stub!(:find).and_return(@campaign)
+      end
+    
+      it 'should render the "show" template' do 
+        make_request
+        response.should render_template('show')
+      end
+    
+      it 'should get the incoming message' do 
+        OutgoingMessage.should_receive(:find).with('33')
+        make_request
+      end
+      
     end
     
   end

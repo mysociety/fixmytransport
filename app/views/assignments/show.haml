@@ -1,0 +1,10 @@
+!=t(:message_from_expert, :expert => h(@assignment.creator.name), :campaign => link_to(h(@assignment.campaign.title), campaign_path(@assignment.campaign)), :user => h(@assignment.user.name))
+
+.campaign-email
+  %h2
+    .from= @assignment.creator.name
+    .date= short_date(@assignment.created_at)
+  .subject
+    %b= "#{t(:subject)}:"
+    = @assignment.data[:subject]
+  .body!= simple_format(h(@assignment.data[:reason]))

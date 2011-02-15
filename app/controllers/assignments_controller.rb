@@ -1,7 +1,7 @@
 class AssignmentsController < ApplicationController
   
   before_filter :find_visible_campaign
-  before_filter :require_expert
+  before_filter :require_expert, :only => [:new, :create]
   
   def new
     @initiator = @campaign.initiator
@@ -38,6 +38,14 @@ class AssignmentsController < ApplicationController
       return
     end
 
+  end
+  
+  def show
+    @assignment = @campaign.assignments.find(params[:id])
+    if @assignment.task_type_name != 'write-to-other'
+      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+      return false
+    end
   end
   
 end

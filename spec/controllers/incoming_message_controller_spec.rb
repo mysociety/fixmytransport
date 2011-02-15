@@ -12,11 +12,14 @@ describe IncomingMessagesController do
       @mock_incoming_message = mock_model(IncomingMessage, :campaign => @mock_campaign)
       IncomingMessage.stub!(:find).and_return(@mock_incoming_message)
       Campaign.stub!(:find).and_return(@mock_campaign)
+      @default_params = { :id => 55, :campaign_id => @mock_campaign.id }
     end
     
-    def make_request(params)
+    def make_request(params=@default_params)
       get :show, params
     end
+    
+    it_should_behave_like "an action requiring a visible campaign"
     
     describe 'if the current user is the campaign initiator' do 
       
@@ -26,7 +29,7 @@ describe IncomingMessagesController do
     
       it 'should create a campaign update' do 
         CampaignUpdate.should_receive(:new)
-        make_request(:id => 55, :campaign_id => @mock_campaign.id)
+        make_request
       end
     
     end
@@ -35,7 +38,7 @@ describe IncomingMessagesController do
     
       it 'should not create a campaign update' do 
         CampaignUpdate.should_not_receive(:new)
-        make_request(:id => 55, :campaign_id => @mock_campaign.id)
+        make_request
       end
       
     end

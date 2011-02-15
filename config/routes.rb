@@ -16,7 +16,7 @@ ActionController::Routing::Routes.draw do |map|
     campaign.attachment '/incoming_messages/:id/attach/:url_part_number', :action => 'show_attachment', 
                                                                           :controller => 'incoming_messages'
     campaign.resources :outgoing_messages, :only => [:new, :show, :create]
-    campaign.resources :assignments, :only => [:new, :create]
+    campaign.resources :assignments, :only => [:new, :create, :show]
   end
 
   # confirmation URLs
