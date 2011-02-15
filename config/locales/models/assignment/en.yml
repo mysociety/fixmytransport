@@ -12,4 +12,6 @@ en:
               invalid: "Please check the format of the email address"
             reason:
               blank: "Please give a reason for writing to this person or organisation"
+            subject:
+              blank: "Please give a subject line for your message"
               

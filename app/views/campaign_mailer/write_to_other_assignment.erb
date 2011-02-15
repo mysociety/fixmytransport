@@ -1,15 +1,7 @@
-Hi<%= " #{raw @recipient.name}" %>,
-
-<%= raw @expert.name %> has some advice for you on your campaign "<%= raw @campaign.title %>". <%= @expert.first_name %> thinks you should write to <%= raw @assignment.data[:name] %> and has dug out their email address for you. 
-
-<%= raw @expert.first_name %> says: 
-
-"<%= @assignment.data[:reason] %>"
+<%= @assignment.data[:reason] %>
 
 To write to <%= raw @assignment.data[:name] %>, click on the link below:
 
 <%= raw @link %>
 
-Yours,
-
-The FixMyTransport team
+[ This message was sent via FixMyTransport. Replies will go to all our transport boffins. ]

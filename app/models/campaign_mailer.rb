@@ -49,18 +49,11 @@ class CampaignMailer < ApplicationMailer
            :unsubscribe_link => main_url(confirm_leave_path(:email_token => supporter.token)) })
   end
   
-  def write_to_other_assignment(assignment, custom_subject)
+  def write_to_other_assignment(assignment, subject)
     recipients assignment.user.name_and_email
-    from contact_from_name_and_email
-    if !custom_subject.blank?
-      subject "[FixMyTransport] #{custom_subject}"
-    else
-      subject "[FixMyTransport] Suggestion from #{assignment.creator.name}"
-    end
-    body({ :campaign => assignment.campaign,
-           :expert => assignment.creator,
-           :recipient => assignment.user,
-           :assignment => assignment,
+    from experts_from_name_and_email
+    subject subject
+    body({ :assignment => assignment,
            :link => main_url(new_campaign_outgoing_message_path(assignment.campaign, :assignment_id => assignment))})
   end
 

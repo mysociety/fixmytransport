@@ -641,6 +641,9 @@ form.new_update .label{
   width: auto;
 }
 
+.campaign-event .writing-advice {
+  font-size: 0.8em;
+}
 .campaign-event .campaign-comment-link {
   font-size: 0.8em;
   float: right;

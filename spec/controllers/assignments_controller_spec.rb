@@ -40,8 +40,10 @@ describe AssignmentsController do
   describe 'GET #new' do
     
     before do 
-      @expert_user = mock_model(User, :is_expert? => true)
-      @initiator = mock_model(User, :name => 'Joe Bloggs')
+      @expert_user = mock_model(User, :is_expert? => true,
+                                      :name => 'Ken Expert')
+      @initiator = mock_model(User, :name => 'Joe Bloggs',
+                                    :first_name => 'Joe')
       mock_assignments = mock('assignments', :build => true)
       @campaign = mock_model(Campaign, :visible? => true,
                                        :editable? => true, 
@@ -96,6 +98,7 @@ describe AssignmentsController do
                       :name => 'A name', 
                       :email => 'An email', 
                       :reason => 'A reason', 
+                      :subject => 'subject',
                       :draft_text => 'Some draft text' } 
     end
     
@@ -113,6 +116,7 @@ describe AssignmentsController do
         expected_data = { :name => 'A name', 
                           :email => 'An email', 
                           :reason => 'A reason', 
+                          :subject => 'subject',
                           :draft_text => 'Some draft text' }
         Assignment.should_receive(:assignment_from_attributes).with(:campaign => @campaign, 
                                                                     :data => expected_data, 

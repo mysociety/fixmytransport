@@ -5,7 +5,9 @@ class AssignmentsController < ApplicationController
   
   def new
     @initiator = @campaign.initiator
-    @assignment = @campaign.assignments.build(:user => @initiator, :data => {})
+    reason =  t(:default_reason_text, :user => @initiator.first_name,
+                                      :expert => current_user.name)
+    @assignment = @campaign.assignments.build(:user => @initiator, :data => {:reason => reason})
   end
   
   def create
@@ -13,7 +15,8 @@ class AssignmentsController < ApplicationController
     assignment_data = { :name => params[:name], 
                         :email => params[:email], 
                         :draft_text => params[:draft_text], 
-                        :reason => params[:reason] }
+                        :reason => params[:reason], 
+                        :subject => params[:subject] }
     assignment_attributes = { :user => @initiator, 
                               :creator => current_user,
                               :problem => @campaign.problem,
