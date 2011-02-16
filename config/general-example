@@ -47,9 +47,6 @@ define('OPTION_ADMIN_BASE_URL', 'http://example.com/secure/');
 
 // Service locations
 define('OPTION_MAPIT_URL', 'http://mapit.example.com');
-define('OPTION_FOSBURY_URL', 'http://fosbury.example.com');
-define('OPTION_FOSBURY_API_KEY', 'fosbury-api-key');
-define('OPTION_FOSBURY_API_APPLICATION_NAME', 'FixMyTransport');
 
 // Locations of transport data
 define('OPTION_NAPTAN_DIR', '/my/naptan/dir');
