@@ -32,14 +32,20 @@
           != label_tag :email, t(:enter_your_email_to_join)
           != text_field_tag :email
         != submit_tag t(:join)
-  - if !@campaign.problem.optional_assignments.empty? 
+  - if !@campaign.problem.optional_assignments.empty?
     %h3= t(:next_steps)
     .optional-assignments
-      - @campaign.problem.optional_assignments.each do |assignment_type| 
+      - @campaign.problem.optional_assignments.each do |assignment_type|
         = render :partial => "shared/optional_assignments/#{assignment_type}"
       .optional-assignment-end
       - if current_user && current_user == @campaign.initiator
         = render :partial => 'update_form', :locals => { :hidden => true, :update => CampaignUpdate.new(:is_advice_request => true, :user_id => current_user.id) }
+  - if current_user && current_user.is_expert?
+    %h3= t(:transport_experts)
+    .expert-actions
+      .optional-assignment
+        = link_to(t(:tell_to_write, :user => @campaign.initiator.first_name), new_campaign_assignment_path(@campaign))
+      .optional-assignment-end
   %h3.latest-news= t(:latest_news)
   - @campaign.campaign_events.visible.each do |campaign_event|
     = render :partial => 'campaign_event', :locals => { :always_show_commentbox => false, :event => campaign_event }

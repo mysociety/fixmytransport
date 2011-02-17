@@ -63,4 +63,6 @@ en:
   write_again: "Write to %{name} again"
   write_first_time: "Write to %{name}"
   reply_to_this_message: "Reply to this message"
+  tell_to_write: "Tell %{user} who to write to next"
+  transport_experts: "Transport experts"
   add_details_to_comment: "Please enter your name as you'd like it to appear, and create a password so you can log back into the site anytime."
