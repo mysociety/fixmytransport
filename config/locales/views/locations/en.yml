@@ -3,10 +3,12 @@ en:
   other_problems_here: Problems
   operated_by: Operated by %{operators}
   routes_in: "Public transport routes in the %{region} region"
-  total_routes: "%{count} routes in total"
-  bus_routes: "%{count} bus routes"
-  ferry_routes: "%{count} ferry routes"
-  train_routes: "%{count} train routes"
-  tram_routes: "%{count} tram, metro or underground routes"
-  coach_routes: "%{count} coach routes"
-  
+  bus_routes: "%{count} bus routes %{national}"
+  ferry_routes: "%{count} ferry routes %{national}"
+  train_routes: "%{count} train routes %{national}"
+  tram_routes: "%{count} tram, metro or underground routes %{national}"
+  coach_routes: "%{count} coach routes %{national}"
+  routes_by_region: Public transport routes by region
+  see_also_national_routes: "(see also %{national})"
+  national_routes: national routes
+  national_routes_title: National public transport routes

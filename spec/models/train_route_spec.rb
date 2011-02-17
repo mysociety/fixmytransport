@@ -27,7 +27,7 @@ describe TrainRoute do
   
     it 'should be of the form "train route between Haywards Heath and London Victoria"' do 
       route = routes(:victoria_to_haywards_heath)
-      route.description.should == 'train route between London Victoria and Haywards Heath'
+      route.description.should == 'train route between Haywards Heath and London Victoria'
     end
     
   end
@@ -36,7 +36,7 @@ describe TrainRoute do
   
     it 'should be of the form "train route between Haywards Heath and London Victoria"' do 
       route = routes(:victoria_to_haywards_heath)
-      route.name.should == 'train route between London Victoria and Haywards Heath'
+      route.name.should == 'train route between Haywards Heath and London Victoria'
     end
     
     describe 'when given a stop to start from' do 

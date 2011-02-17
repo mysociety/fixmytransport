@@ -17,7 +17,10 @@ module FixMyTransport
 
     module InstanceMethods
       
-      def name_by_terminuses(transport_mode, from_stop=nil, short=false)
+      # as train routes are named by terminus, they have more than one name, depending on how you
+      # order the terminuses - if the first_letter param is given, it specifies that terminus names
+      # starting with that letter should be given first
+      def name_by_terminuses(transport_mode, from_stop=nil, short=false, first_letter=nil)
         is_loop = false
         if short
           text = ""
@@ -42,7 +45,16 @@ module FixMyTransport
             text += " between #{terminuses.sort.to_sentence}"
           end
         else
-          terminuses = self.terminuses.map{ |terminus| terminus.name_without_suffix(transport_mode) }.uniq
+          if first_letter
+            letter_terminuses, other_terminuses = self.terminuses.partition do |terminus| 
+              terminus.name.start_with? first_letter 
+            end
+            terminuses = (letter_terminuses + other_terminuses).map do |terminus|
+               terminus.name_without_suffix(transport_mode) 
+            end.uniq
+          else
+            terminuses = self.terminuses.map{ |terminus| terminus.name_without_suffix(transport_mode) }.uniq.sort
+          end
           if terminuses.size == 1
             text += " from #{terminuses.to_sentence}"
           else

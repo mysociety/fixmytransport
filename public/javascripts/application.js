@@ -202,6 +202,16 @@ function setupFeedbackForm() {
   
 }
 
+function tabifyRouteLists() {
+    if (jQuery('#tabs').length > 0){
+      jQuery("#tabs").tabs();
+      jQuery("#tabs-bus").tabs();
+      jQuery("#tabs-coach").tabs();
+      jQuery("#tabs-train").tabs();
+      jQuery("#tabs-ferry").tabs();
+      jQuery("#tabs-metro").tabs();
+    }
+}
 
 // Run jquery in no-conflict mode so it doesn't use $()
 jQuery.noConflict();
@@ -211,6 +221,7 @@ jQuery(document).ready(function() {
   jQuery.ajaxSetup({
     'beforeSend': function(xhr) { xhr.setRequestHeader('X-CSRF-Token', jQuery('meta[name=csrf-token]').attr('content')); }
   });
+  tabifyRouteLists();
   addSearchGuidance();  
   setupFeedbackForm();
   hideProblemDateTimeForOngoing();

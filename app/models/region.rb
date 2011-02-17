@@ -39,25 +39,49 @@ class Region < ActiveRecord::Base
     name = name.gsub(/ region$/, '')
     find(:all, :conditions => ["LOWER(name) = ?", name])
   end
-  
+
   def bus_route_letters
     bus_routes_by_letter.keys.sort
   end
   memoize :bus_route_letters
-  
+
   def bus_routes_by_letter
-    by_letter(bus_routes)
+    by_letter(bus_routes){ |route| route.number }
   end
   memoize :bus_routes_by_letter
-  
+
+  def coach_route_letters
+    coach_routes_by_letter.keys.sort
+  end
+  memoize :coach_route_letters
+
+  def coach_routes_by_letter
+    by_letter(coach_routes){ |route| route.number }
+  end
+  memoize :coach_routes_by_letter
+
+  def train_route_letters
+    train_routes_by_letter.keys.sort
+  end
+  memoize :train_route_letters
+
+  # train routes get indexed by the first letter of each terminus
+  def train_routes_by_letter
+    by_letter(train_routes){ |route| route.terminuses.map{ |terminus| terminus.name } }
+  end
+  memoize :train_routes_by_letter
+
   def by_letter(routes)
     routes_by_first = {}
-    self.bus_routes.each do |route| 
-      first = route.number.first
-      if !routes_by_first[first]
-        routes_by_first[first] = []
+    routes.each do |route|
+      descriptors = yield route
+      firsts = descriptors.map{ |descriptor| descriptor.first }
+      firsts.each do |first|
+        if !routes_by_first[first]
+          routes_by_first[first] = []
+        end
+        routes_by_first[first] << route
       end
-      routes_by_first[first] << route 
     end
     routes_by_first
   end

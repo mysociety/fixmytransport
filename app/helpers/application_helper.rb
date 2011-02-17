@@ -4,13 +4,13 @@ module ApplicationHelper
   def google_maps_key
     MySociety::Config.get('GOOGLE_MAPS_API_KEY', '')
   end
-  
+
   def location_type_radio_buttons(campaign)
     tags = []
-    location_types = { 'Stop' => 'Stop', 
-                       'StopArea' => 'Station', 
+    location_types = { 'Stop' => 'Stop',
+                       'StopArea' => 'Station',
                        'Route' => 'Route'}
-              
+
     location_types.keys.sort.each do |location_class|
       checked = campaign.location_type == location_class
       tag = radio_button 'campaign', 'location_type', location_class, {:class => 'location-type'}
@@ -19,7 +19,7 @@ module ApplicationHelper
     end
     tags.join("\n")
   end
-  
+
   # options:
   #  no_jquery - don't include a tag for the main jquery js file
   def map_javascript_include_tags(options={})
@@ -33,33 +33,33 @@ module ApplicationHelper
     tags << javascript_include_tag('map.js')
     tags.join("\n")
   end
-  
+
   def icon_style(location, lon, lat, zoom, small, map_height, map_width)
     top = Map.lat_to_y_offset(lat, location.lat, zoom, map_height) - (icon_height(small) / 2)
     left = Map.lon_to_x_offset(lon, location.lon, zoom, map_width) - (icon_width(small) / 2)
     "position: absolute; top: #{top}px; left: #{left}px;"
   end
-  
+
   def icon_height(small)
     small ? SMALL_ICON_HEIGHT : LARGE_ICON_HEIGHT
   end
-  
+
   def icon_width(small)
     small ? SMALL_ICON_WIDTH : LARGE_ICON_WIDTH
   end
-  
+
   def stop_js_coords(stop, main=true, small=false, link_type=:location, location=nil)
     location = (location or stop)
-    { :lat => stop.lat, 
+    { :lat => stop.lat,
       :lon => stop.lon,
-      :id => stop.id, 
+      :id => stop.id,
       :url => map_link_url(location, link_type),
-      :description => location.description, 
+      :description => location.description,
       :icon => stop_icon(stop, main, small),
-      :height => icon_height(small), 
+      :height => icon_height(small),
       :width => icon_width(small) }
   end
-  
+
   def stop_icon(location, main=false, small=false)
     name = ''
     if location.is_a? Route
@@ -67,7 +67,7 @@ module ApplicationHelper
         name = 'train'
       elsif location.transport_mode_name == 'Tram/Metro'
         name = 'tram'
-      elsif location.transport_mode_name == 'Ferry' 
+      elsif location.transport_mode_name == 'Ferry'
         name = 'ferry'
       else
         name = 'bus'
@@ -84,18 +84,18 @@ module ApplicationHelper
       end
     end
     name += '-main' if main
-    name += '-sm' if small 
+    name += '-sm' if small
     return name
   end
-  
+
   def route_segment_js(route)
-    segments_js = route.route_segments.map do |segment| 
-      [stop_js_coords(segment.from_stop, main=true, small=true), 
+    segments_js = route.route_segments.map do |segment|
+      [stop_js_coords(segment.from_stop, main=true, small=true),
        stop_js_coords(segment.to_stop, main=true, small=true), segment.id]
     end
     segments_js.to_json
   end
-  
+
   def location_stops_js(locations, main, small, link_type)
     array_content = []
     locations.each do |location|
@@ -103,17 +103,17 @@ module ApplicationHelper
         if location.show_as_point
           array_content << stop_js_coords(location, main, false, link_type)
         elsif location.is_a? Route and link_type == :problem
-          array_content <<  location.points.map{ |stop| stop_js_coords(stop, main, true, link_type, location) } 
-        else 
-          array_content <<  location.points.map{ |stop| stop_js_coords(stop, main, true, link_type) } 
+          array_content <<  location.points.map{ |stop| stop_js_coords(stop, main, true, link_type, location) }
+        else
+          array_content <<  location.points.map{ |stop| stop_js_coords(stop, main, true, link_type) }
         end
       else
-       array_content << stop_js_coords(location, main, small, link_type) 
+       array_content << stop_js_coords(location, main, small, link_type)
       end
     end
     array_content.to_json
   end
-  
+
   def terminus_text(route)
     text = ''
     return text if route.stops.empty?
@@ -123,7 +123,7 @@ module ApplicationHelper
     end
     stop_names = []
     terminus_links = []
-    terminuses.each do |stop| 
+    terminuses.each do |stop|
       stop_name = stop.name_without_suffix(route.transport_mode)
       stop_area = stop.area
       link_text = stop_name
@@ -134,24 +134,24 @@ module ApplicationHelper
       stop_names << link_text
     end
     if terminus_links.size > 1
-      text += "Between " 
-      text += terminus_links.to_sentence(:last_word_connector => ' and ') 
+      text += "Between "
+      text += terminus_links.to_sentence(:last_word_connector => ' and ')
     else
       text += "From "
       text += terminus_links.first
     end
-    text += "."    
+    text += "."
   end
-  
+
   def stop_name_for_admin(stop)
     name = stop.full_name
     if ! stop.street.blank?
       name += " #{t(:on_street, :street => stop.street)}"
-    end 
+    end
     name += " #{t(:in_locality, :locality => stop.locality_name)} (#{stop.id})"
     name
   end
-  
+
   def departures_link(stop)
     modes = stop.transport_mode_names
     if modes.include? 'Bus' or modes.include? 'Coach' or modes.include? 'Ferry'
@@ -160,25 +160,25 @@ module ApplicationHelper
       return "&nbsp;"
     end
   end
-  
+
   def transport_direct_link(stop)
     return link_to(t(:transport_direct), "http://www.transportdirect.info/web2/journeyplanning/StopInformationLandingPage.aspx?et=si&id=fixmytransport&st=n&sd=#{stop.atco_code}")
   end
-  
+
   def external_search_link(text)
     "http://www.google.co.uk/search?ie=UTF-8&q=#{CGI.escape(text)}"
   end
-  
+
   def on_or_at_the(location)
     if location.is_a? Route or location.is_a? SubRoute
       return t(:on_the)
     elsif location.is_a?(StopArea) && ['GRLS', 'GTMU'].include?(location.area_type)
       return t(:at)
-    else 
+    else
       return t(:at_the)
     end
   end
-  
+
   def at_the_location(location)
     location_string = "#{on_or_at_the(location)} #{location.name}"
     if location.is_a?(Stop) && location.transport_mode_names.include?('Bus')
@@ -186,12 +186,12 @@ module ApplicationHelper
     end
     location_string
   end
-  
+
   def readable_location_type(location)
     if location.is_a? Stop or location.is_a? StopArea
-      
+
       # some stops could be bus or tram/metro - call these stops
-      if location.is_a?(StopArea) 
+      if location.is_a?(StopArea)
         if location.area_type == 'GBCS'
           return 'bus/coach station'
         end
@@ -212,13 +212,13 @@ module ApplicationHelper
     end
     location.class.to_s.tableize.singularize.humanize.downcase
   end
-  
+
   def org_names(problem, method, connector, wrapper_start='<strong>', wrapper_end='</strong>')
     return '' unless problem
     names = problem.send(method).map{ |org| "#{wrapper_start}#{org.name}#{wrapper_end}" }
     names.to_sentence(:last_word_connector => connector, :two_words_connector => " #{connector} ")
   end
-  
+
   def comment_url(comment)
     if comment.commented.is_a? Problem
       problem_url(comment.commented, :anchor => "comment_#{comment.id}")
@@ -226,19 +226,19 @@ module ApplicationHelper
       campaign_url(comment.commented.campaign, :anchor => "comment_#{comment.id}")
     end
   end
-  
+
   def pte_link(pte)
     link_to(pte.name, pte.wikipedia_url, :target => '_blank')
   end
-  
+
   def responsible_name_type(location)
-    if location.pte_responsible? 
+    if location.pte_responsible?
       responsible = location.passenger_transport_executive.name
     else
       responsible = "#{t(:the)} #{t(location.responsible_organization_type)}"
     end
   end
-  
+
   def location_path(location)
     if location.is_a? Stop
       return stop_path(location.locality, location)
@@ -255,7 +255,7 @@ module ApplicationHelper
     end
     raise "Unknown location type: #{location.class}"
   end
-  
+
   def location_url(location, attributes={})
    if location.is_a? Stop
      return stop_url(location.locality, location, attributes)
@@ -274,7 +274,7 @@ module ApplicationHelper
    end
    raise "Unknown location type: #{location.class}"
   end
-  
+
   def map_link_url(location, link_type)
     if link_type == :location
       return location_url(location)
@@ -284,24 +284,24 @@ module ApplicationHelper
       raise "Unknown link_type in map_link_url: #{link_type}"
     end
   end
-  
+
   def short_date(date)
     return date.strftime("%e %b %Y").strip
   end
-  
+
   def campaign_status(user, campaign)
     return t(:initiator) if user == campaign.initiator
     return t(:expert) if user.is_expert?
     return t(:supporter) if campaign.supporters.include?(user)
-    return ""  
+    return ""
   end
-  
+
   def problem_date_and_time(problem)
     datetime_parts = []
     if problem.time
       datetime_parts << t(:at_time, :time => problem.time.to_s(:standard))
     end
-    if problem.date 
+    if problem.date
       datetime_parts << t(:on_date, :date => problem.date.to_s(:standard))
     end
     return datetime_parts.join(" ")
@@ -319,13 +319,13 @@ module ApplicationHelper
       extra_parts << t(:about_email, :name => update.outgoing_message.recipient_name)
       extra_parts << t(:with_subject, :subject => update.outgoing_message.subject)
     end
-    if extra_parts.empty? 
+    if extra_parts.empty?
       extra = ''
-    else 
+    else
       extra = " " + extra_parts.join(" ")
     end
-    text = t(:new_update, :name => update.user.name, 
-                          :title => update.campaign.title, 
+    text = t(:new_update, :name => update.user.name,
+                          :title => update.campaign.title,
                           :link => link, :extra => extra)
   end
 
@@ -350,6 +350,15 @@ module ApplicationHelper
     end
     when 'comment_added'
       return t(:new_comment)
+    end
+  end
+
+  def national_route_link(region, national_region, anchor)
+    if @region != @national_region
+      national_link =  link_to(t(:national_routes), route_region_path(@national_region, :anchor => anchor))
+      return t(:see_also_national_routes, :national => national_link)
+    else
+      return ''
     end
   end
 end

@@ -959,3 +959,19 @@ div.submit{
 .pagination a{
   padding: 0 0.2em;
 } 
+
+/* Route-browsing */
+
+ul.region-list {
+  list-style-type: none;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+.route-link {
+  padding: 0.2em;
+}
+.national-routes-link {
+  padding: 0 0.5em 0.7em 0.5em;
+  float: right;
+}
