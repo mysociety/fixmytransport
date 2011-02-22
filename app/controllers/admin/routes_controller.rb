@@ -1,6 +1,7 @@
 class Admin::RoutesController < ApplicationController
   
   layout "admin" 
+  cache_sweeper :route_sweeper
 
   def show
     @route = Route.find(params[:id])
@@ -105,5 +106,7 @@ class Admin::RoutesController < ApplicationController
                                                         WHERE route_id = ? )", code, route.id])
     operators.map{ |operator| RouteOperator.new(:operator => operator) }
   end
+  
+
 
 end

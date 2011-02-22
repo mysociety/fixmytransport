@@ -2,7 +2,6 @@ class LocationsController < ApplicationController
   
   before_filter :process_map_params, :except => [:in_area]
   include ApplicationHelper
-  caches_page :show_route_region
   
   def show_stop
     @stop = Stop.full_find(params[:id], params[:scope])

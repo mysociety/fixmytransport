@@ -66,8 +66,8 @@ ActionController::Routing::Routes.draw do |map|
                          :action => "show_route_regions"
                          
   map.route_region "/routes/:id.:format", :controller => "locations", 
-                                              :action => 'show_route_region',
-                                              :conditions => { :method => :get }
+                                          :action => 'show_route_region',
+                                          :conditions => { :method => :get }
 
   map.route "/routes/:scope/:id.:format", :controller => "locations", 
                                           :action => 'show_route', 
