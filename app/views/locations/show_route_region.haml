@@ -8,7 +8,7 @@
   %h2.main-header= t(:national_routes_title)
 - cache(:action => 'show_route_region') do
   #tabs{:class => "ui-tabs"}
-    %ul
+    %ul{:class => "ui-tabs-nav"}
       - if @region.bus_routes.count > 0
         %li= link_to('Bus', '#tabs-bus')
       - if @region.train_routes.count > 0
