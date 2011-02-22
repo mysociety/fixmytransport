@@ -20,7 +20,7 @@
       - if @region.coach_routes.count > 0
         %li= link_to('Coach', '#tabs-coach')
     - if @region.bus_routes.count > 0
-      #tabs-bus{:class => "ui-tabs-hide"}
+      #tabs-bus
         %h3!= t(:bus_routes, :count => @region.bus_routes.count, :national => national_route_link(@region, @national_region, 'tabs-bus'))
         - if @region.bus_routes.count > 20
           %ul  
@@ -36,7 +36,7 @@
             .route-link = link_to(route.description, location_url(route)) 
 
     - if @region.train_routes.count > 0  
-      #tabs-train{:class => "ui-tabs-hide"}
+      #tabs-train
         %h3!= t(:train_routes, :count => @region.train_routes.count, :national => national_route_link(@region, @national_region, 'tabs-train'))
         - if @region.train_routes.count > 20
           %ul  
@@ -52,19 +52,19 @@
             .route-link= link_to(train_route.name(from_stop=nil, short=true), location_url(train_route))
 
     - if @region.tram_metro_routes.count > 0
-      #tabs-metro{:class => "ui-tabs-hide"}
+      #tabs-metro
         %h3!= t(:tram_routes, :count => @region.tram_metro_routes.count, :national => national_route_link(@region, @national_region, 'tabs-metro'))
         - @region.tram_metro_routes.each do |tram_metro_route|
           .route-link= link_to(tram_metro_route.name(from_stop=nil, short=true), location_url(tram_metro_route))
 
     - if @region.ferry_routes.count > 0
-      #tabs-ferry{:class => "ui-tabs-hide"}
+      #tabs-ferry
         %h3!= t(:ferry_routes, :count => @region.ferry_routes.count, :national => national_route_link(@region, @national_region, 'tabs-ferry'))
         - @region.ferry_routes.each do |ferry_route|
           .route-link= link_to(ferry_route.name(from_stop=nil, short=true), location_url(ferry_route))
   
     - if @region.coach_routes.count > 0
-      #tabs-coach{:class => "ui-tabs-hide"}
+      #tabs-coach
         %h3!= t(:coach_routes, :count => @region.coach_routes.count, :national => national_route_link(@region, @national_region, 'tabs-coach'))
         - if @region.coach_routes.count > 20
           %ul  
