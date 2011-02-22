@@ -46,7 +46,7 @@ define('OPTION_USE_SPATIAL_EXTENSIONS', 1);
 define('OPTION_ADMIN_BASE_URL', 'http://example.com/secure/');
 
 // Service locations
-define('OPTION_MAPIT_URL', 'http://mapit.example.com');
+define('OPTION_MAPIT_URL', 'http://mapit.mysociety.org');
 
 // Locations of transport data
 define('OPTION_NAPTAN_DIR', '/my/naptan/dir');
