@@ -44,6 +44,7 @@ Rails::Initializer.run do |config|
   config.gem "erubis", :version => '2.6.6'
   config.gem "fastercsv", :version => '1.5.3'
   config.gem 'will_paginate', :version => '2.3.15'
+  config.gem 'foreigner', :version => '0.9.1'
   config.gem "friendly_id", :version => '3.1.7'
   config.gem 'paper_trail', :version => '1.5.1'
   config.gem 'authlogic', :version => '2.1.6'
