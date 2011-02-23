@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110210151320) do
+ActiveRecord::Schema.define(:version => 20110223105145) do
 
   create_table "admin_areas", :force => true do |t|
     t.string   "code"
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(:version => 20110210151320) do
   end
 
   add_index "campaigns", ["cached_slug"], :name => "index_campaigns_on_cached_slug"
+  add_index "campaigns", ["subdomain"], :name => "index_campaigns_on_subdomain"
 
   create_table "comments", :force => true do |t|
     t.integer  "user_id"
@@ -673,6 +674,7 @@ ActiveRecord::Schema.define(:version => 20110210151320) do
 
   add_foreign_key "route_operators", "operators", :name => "route_operators_operator_id_fk", :dependent => :nullify
   add_foreign_key "route_operators", "routes", :name => "route_operators_route_id_fk", :dependent => :nullify
+
   add_foreign_key "routes", "transport_modes", :name => "routes_transport_mode_id_fk", :dependent => :nullify
 
   add_foreign_key "stop_area_memberships", "stop_areas", :name => "stop_area_memberships_stop_area_id_fk"
@@ -682,6 +684,7 @@ ActiveRecord::Schema.define(:version => 20110210151320) do
 
   add_foreign_key "transport_mode_stop_area_types", "transport_modes", :name => "transport_mode_stop_area_types_transport_mode_id_fk"
 
-  add_foreign_key "transport_mode_stop_types", "stop_types", :name => "transport_mode_stop_types_stop_type_id_fk", :dependent => :nul
-  add_foreign_key "transport_mode_stop_types", "transport_modes", :name => "transport_mode_stop_types_transport_mode_id_fk", :depende
+  add_foreign_key "transport_mode_stop_types", "stop_types", :name => "transport_mode_stop_types_stop_type_id_fk", :dependent => :nullify
+  add_foreign_key "transport_mode_stop_types", "transport_modes", :name => "transport_mode_stop_types_transport_mode_id_fk", :dependent => :nullify
+
 end
