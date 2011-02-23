@@ -671,4 +671,17 @@ ActiveRecord::Schema.define(:version => 20110210151320) do
     t.datetime "updated_at"
   end
 
+  add_foreign_key "route_operators", "operators", :name => "route_operators_operator_id_fk", :dependent => :nullify
+  add_foreign_key "route_operators", "routes", :name => "route_operators_route_id_fk", :dependent => :nullify
+  add_foreign_key "routes", "transport_modes", :name => "routes_transport_mode_id_fk", :dependent => :nullify
+
+  add_foreign_key "stop_area_memberships", "stop_areas", :name => "stop_area_memberships_stop_area_id_fk"
+  add_foreign_key "stop_area_memberships", "stops", :name => "stop_area_memberships_stop_id_fk"
+
+  add_foreign_key "stories", "users", :name => "problems_reporter_id_fk", :column => "reporter_id", :dependent => :nullify
+
+  add_foreign_key "transport_mode_stop_area_types", "transport_modes", :name => "transport_mode_stop_area_types_transport_mode_id_fk"
+
+  add_foreign_key "transport_mode_stop_types", "stop_types", :name => "transport_mode_stop_types_stop_type_id_fk", :dependent => :nul
+  add_foreign_key "transport_mode_stop_types", "transport_modes", :name => "transport_mode_stop_types_transport_mode_id_fk", :depende
 end
