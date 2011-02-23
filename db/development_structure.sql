@@ -3907,6 +3907,15 @@ CREATE FUNCTION pgis_geometry_union_finalfn(pgis_abs) RETURNS geometry
 
 
 --
+-- Name: plpgsql_call_handler(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION plpgsql_call_handler() RETURNS opaque
+    LANGUAGE c
+    AS '$libdir/plpgsql', 'plpgsql_call_handler';
+
+
+--
 -- Name: point_inside_circle(geometry, double precision, double precision, double precision); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -8766,6 +8775,24 @@ $_$;
 
 
 --
+-- Name: update_geometry_stats(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_geometry_stats() RETURNS text
+    LANGUAGE sql
+    AS $$ SELECT 'update_geometry_stats() has been obsoleted. Statistics are automatically built running the ANALYZE command'::text$$;
+
+
+--
+-- Name: update_geometry_stats(character varying, character varying); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_geometry_stats(character varying, character varying) RETURNS text
+    LANGUAGE sql
+    AS $$SELECT update_geometry_stats();$$;
+
+
+--
 -- Name: updategeometrysrid(character varying, character varying, character varying, character varying, integer); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -9707,6 +9734,391 @@ CREATE CAST (text AS public.geometry) WITH FUNCTION public.geometry(text) AS IMP
 
 SET search_path = public, pg_catalog;
 
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: admin_areas; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE admin_areas (
+    id integer NOT NULL,
+    code character varying(255),
+    atco_code character varying(255),
+    name text,
+    short_name text,
+    country character varying(255),
+    "national" boolean,
+    creation_datetime timestamp without time zone,
+    modification_datetime timestamp without time zone,
+    revision_number character varying(255),
+    modification character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    region_id integer
+);
+
+
+--
+-- Name: admin_areas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE admin_areas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: admin_areas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE admin_areas_id_seq OWNED BY admin_areas.id;
+
+
+--
+-- Name: alternative_names; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE alternative_names (
+    id integer NOT NULL,
+    name text,
+    locality_id integer,
+    short_name text,
+    qualifier_name text,
+    qualifier_locality text,
+    qualifier_district text,
+    creation_datetime timestamp without time zone,
+    modification_datetime timestamp without time zone,
+    revision_number character varying(255),
+    modification character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: alternative_names_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE alternative_names_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: alternative_names_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE alternative_names_id_seq OWNED BY alternative_names.id;
+
+
+--
+-- Name: assignments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE assignments (
+    id integer NOT NULL,
+    user_id integer,
+    campaign_id integer,
+    task_id integer,
+    status_code integer DEFAULT 0,
+    data text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    task_type_name character varying(255),
+    problem_id integer,
+    creator_id integer
+);
+
+
+--
+-- Name: assignments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE assignments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: assignments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE assignments_id_seq OWNED BY assignments.id;
+
+
+--
+-- Name: comments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE comments (
+    id integer NOT NULL,
+    user_id integer,
+    text text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    user_name character varying(255),
+    confirmed_at timestamp without time zone,
+    status_code integer,
+    token character varying(255),
+    mark_fixed boolean,
+    mark_open boolean,
+    commented_type character varying(255),
+    commented_id integer
+);
+
+
+--
+-- Name: campaign_comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE campaign_comments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: campaign_comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE campaign_comments_id_seq OWNED BY comments.id;
+
+
+--
+-- Name: campaign_events; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE campaign_events (
+    id integer NOT NULL,
+    event_type character varying(255),
+    campaign_id integer,
+    described_type character varying(255),
+    described_id integer,
+    visible boolean DEFAULT false,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: campaign_events_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE campaign_events_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: campaign_events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE campaign_events_id_seq OWNED BY campaign_events.id;
+
+
+--
+-- Name: campaign_supporters; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE campaign_supporters (
+    id integer NOT NULL,
+    campaign_id integer,
+    supporter_id integer,
+    confirmed_at timestamp without time zone,
+    token text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: campaign_supporters_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE campaign_supporters_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: campaign_supporters_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE campaign_supporters_id_seq OWNED BY campaign_supporters.id;
+
+
+--
+-- Name: campaign_updates; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE campaign_updates (
+    id integer NOT NULL,
+    campaign_id integer,
+    incoming_message_id integer,
+    user_id integer,
+    text text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    sent_at timestamp without time zone,
+    is_advice_request boolean,
+    outgoing_message_id integer
+);
+
+
+--
+-- Name: campaign_updates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE campaign_updates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: campaign_updates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE campaign_updates_id_seq OWNED BY campaign_updates.id;
+
+
+--
+-- Name: campaigns; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE campaigns (
+    id integer NOT NULL,
+    location_id integer,
+    location_type character varying(255),
+    title text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    description text,
+    transport_mode_id integer,
+    category character varying(255),
+    token text,
+    initiator_id integer,
+    status_code integer,
+    cached_slug character varying(255),
+    subdomain character varying(255),
+    confirmed_at timestamp without time zone,
+    latest_event_at timestamp without time zone
+);
+
+
+--
+-- Name: campaigns_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE campaigns_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: campaigns_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE campaigns_id_seq OWNED BY campaigns.id;
+
+
+--
+-- Name: council_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE council_contacts (
+    id integer NOT NULL,
+    area_id integer,
+    category character varying(255),
+    email character varying(255),
+    confirmed boolean,
+    notes text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: council_contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE council_contacts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: council_contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE council_contacts_id_seq OWNED BY council_contacts.id;
+
+
+--
+-- Name: districts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE districts (
+    id integer NOT NULL,
+    code character varying(255),
+    name text,
+    admin_area_id integer,
+    creation_datetime timestamp without time zone,
+    modification_datetime timestamp without time zone,
+    revision_number character varying(255),
+    modification character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: districts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE districts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: districts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE districts_id_seq OWNED BY districts.id;
+
+
 --
 -- Name: geography_columns; Type: VIEW; Schema: public; Owner: -
 --
@@ -9714,8 +10126,6 @@ SET search_path = public, pg_catalog;
 CREATE VIEW geography_columns AS
     SELECT current_database() AS f_table_catalog, n.nspname AS f_table_schema, c.relname AS f_table_name, a.attname AS f_geography_column, geography_typmod_dims(a.atttypmod) AS coord_dimension, geography_typmod_srid(a.atttypmod) AS srid, geography_typmod_type(a.atttypmod) AS type FROM pg_class c, pg_attribute a, pg_type t, pg_namespace n WHERE ((((((c.relkind = ANY (ARRAY['r'::"char", 'v'::"char"])) AND (t.typname = 'geography'::name)) AND (a.attisdropped = false)) AND (a.atttypid = t.oid)) AND (a.attrelid = c.oid)) AND (c.relnamespace = n.oid));
 
-
-SET default_tablespace = '';
 
 SET default_with_oids = true;
 
@@ -9737,6 +10147,242 @@ CREATE TABLE geometry_columns (
 SET default_with_oids = false;
 
 --
+-- Name: incoming_messages; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE incoming_messages (
+    id integer NOT NULL,
+    subject text,
+    campaign_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    raw_email_id integer,
+    "from" character varying(255),
+    main_body_text text,
+    main_body_text_folded text
+);
+
+
+--
+-- Name: incoming_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE incoming_messages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: incoming_messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE incoming_messages_id_seq OWNED BY incoming_messages.id;
+
+
+--
+-- Name: localities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE localities (
+    id integer NOT NULL,
+    code character varying(255),
+    name text,
+    short_name text,
+    "national" boolean,
+    creation_datetime timestamp without time zone,
+    modification_datetime timestamp without time zone,
+    revision_number character varying(255),
+    modification character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    admin_area_id integer,
+    qualifier_name character varying(255),
+    source_locality_type character varying(255),
+    grid_type character varying(255),
+    northing double precision,
+    easting double precision,
+    coords geometry,
+    district_id integer,
+    cached_slug character varying(255),
+    lat double precision,
+    lon double precision,
+    primary_metaphone character varying(255),
+    secondary_metaphone character varying(255),
+    CONSTRAINT enforce_dims_coords CHECK ((st_ndims(coords) = 2)),
+    CONSTRAINT enforce_geotype_coords CHECK (((geometrytype(coords) = 'POINT'::text) OR (coords IS NULL))),
+    CONSTRAINT enforce_srid_coords CHECK ((st_srid(coords) = 27700))
+);
+
+
+--
+-- Name: localities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE localities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: localities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE localities_id_seq OWNED BY localities.id;
+
+
+--
+-- Name: locality_links; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE locality_links (
+    id integer NOT NULL,
+    ancestor_id integer,
+    descendant_id integer,
+    direct boolean,
+    count integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: locality_links_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE locality_links_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: locality_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE locality_links_id_seq OWNED BY locality_links.id;
+
+
+--
+-- Name: location_searches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE location_searches (
+    id integer NOT NULL,
+    transport_mode_id integer,
+    name character varying(255),
+    area character varying(255),
+    route_number character varying(255),
+    location_type character varying(255),
+    session_id character varying(255),
+    events text,
+    active boolean,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    failed boolean,
+    "from" character varying(255),
+    "to" character varying(255)
+);
+
+
+--
+-- Name: location_searches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE location_searches_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: location_searches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE location_searches_id_seq OWNED BY location_searches.id;
+
+
+--
+-- Name: operator_codes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE operator_codes (
+    id integer NOT NULL,
+    region_id integer,
+    operator_id integer,
+    code character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: operator_codes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE operator_codes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: operator_codes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE operator_codes_id_seq OWNED BY operator_codes.id;
+
+
+--
+-- Name: operator_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE operator_contacts (
+    id integer NOT NULL,
+    operator_id integer,
+    location_id integer,
+    location_type character varying(255),
+    category character varying(255),
+    email character varying(255),
+    confirmed boolean,
+    notes character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: operator_contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE operator_contacts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: operator_contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE operator_contacts_id_seq OWNED BY operator_contacts.id;
+
+
+--
 -- Name: operators; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -9746,7 +10392,17 @@ CREATE TABLE operators (
     name text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    short_name character varying(255)
+    short_name character varying(255),
+    email text,
+    email_confirmed boolean,
+    notes text,
+    noc_code character varying(255),
+    reference_name character varying(255),
+    vosa_license_name character varying(255),
+    parent character varying(255),
+    vehicle_mode character varying(255),
+    ultimate_parent character varying(255),
+    transport_mode_id integer
 );
 
 
@@ -9770,6 +10426,113 @@ ALTER SEQUENCE operators_id_seq OWNED BY operators.id;
 
 
 --
+-- Name: outgoing_messages; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE outgoing_messages (
+    id integer NOT NULL,
+    campaign_id integer,
+    status_code integer,
+    author_id integer,
+    body text,
+    sent_at timestamp without time zone,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    recipient_id integer,
+    recipient_type character varying(255),
+    subject character varying(255),
+    incoming_message_id integer,
+    assignment_id integer
+);
+
+
+--
+-- Name: outgoing_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE outgoing_messages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: outgoing_messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE outgoing_messages_id_seq OWNED BY outgoing_messages.id;
+
+
+--
+-- Name: passenger_transport_executive_areas; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE passenger_transport_executive_areas (
+    id integer NOT NULL,
+    area_id integer,
+    passenger_transport_executive_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: passenger_transport_executive_areas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE passenger_transport_executive_areas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: passenger_transport_executive_areas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE passenger_transport_executive_areas_id_seq OWNED BY passenger_transport_executive_areas.id;
+
+
+--
+-- Name: passenger_transport_executives; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE passenger_transport_executives (
+    id integer NOT NULL,
+    name character varying(255),
+    wikipedia_url character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    email text,
+    email_confimed boolean,
+    notes text
+);
+
+
+--
+-- Name: passenger_transport_executives_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE passenger_transport_executives_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: passenger_transport_executives_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE passenger_transport_executives_id_seq OWNED BY passenger_transport_executives.id;
+
+
+--
 -- Name: problems; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -9777,13 +10540,25 @@ CREATE TABLE problems (
     id integer NOT NULL,
     subject text,
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    reporter_id integer,
-    stop_area_id integer,
     location_id integer,
     location_type character varying(255),
-    transport_mode_id integer
+    transport_mode_id integer,
+    token character varying(255),
+    reporter_id integer,
+    category character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    operator_id integer,
+    sent_at timestamp without time zone,
+    confirmed_at timestamp without time zone,
+    status_code integer,
+    council_info character varying(255),
+    passenger_transport_executive_id integer,
+    campaign_id integer,
+    reporter_name character varying(255),
+    reporter_phone character varying(255),
+    "time" time without time zone,
+    date date
 );
 
 
@@ -9804,6 +10579,106 @@ CREATE SEQUENCE problems_id_seq
 --
 
 ALTER SEQUENCE problems_id_seq OWNED BY problems.id;
+
+
+--
+-- Name: raw_emails; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE raw_emails (
+    id integer NOT NULL,
+    data_binary bytea,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: raw_emails_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE raw_emails_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: raw_emails_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE raw_emails_id_seq OWNED BY raw_emails.id;
+
+
+--
+-- Name: regions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE regions (
+    id integer NOT NULL,
+    code character varying(255),
+    name text,
+    creation_datetime timestamp without time zone,
+    modification_datetime timestamp without time zone,
+    revision_number character varying(255),
+    modification character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    cached_slug character varying(255)
+);
+
+
+--
+-- Name: regions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE regions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: regions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE regions_id_seq OWNED BY regions.id;
+
+
+--
+-- Name: route_localities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE route_localities (
+    id integer NOT NULL,
+    locality_id integer,
+    route_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: route_localities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE route_localities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: route_localities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE route_localities_id_seq OWNED BY route_localities.id;
 
 
 --
@@ -9839,23 +10714,28 @@ ALTER SEQUENCE route_operators_id_seq OWNED BY route_operators.id;
 
 
 --
--- Name: route_stops; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: route_segments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE route_stops (
+CREATE TABLE route_segments (
     id integer NOT NULL,
+    from_stop_id integer,
+    to_stop_id integer,
+    from_terminus boolean DEFAULT false,
+    to_terminus boolean DEFAULT false,
     route_id integer,
-    stop_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    from_stop_area_id integer,
+    to_stop_area_id integer
 );
 
 
 --
--- Name: route_stops_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: route_segments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE route_stops_id_seq
+CREATE SEQUENCE route_segments_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
@@ -9864,10 +10744,75 @@ CREATE SEQUENCE route_stops_id_seq
 
 
 --
--- Name: route_stops_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: route_segments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE route_stops_id_seq OWNED BY route_stops.id;
+ALTER SEQUENCE route_segments_id_seq OWNED BY route_segments.id;
+
+
+--
+-- Name: route_source_admin_areas; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE route_source_admin_areas (
+    id integer NOT NULL,
+    route_id integer,
+    source_admin_area_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    operator_code character varying(255)
+);
+
+
+--
+-- Name: route_source_admin_areas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE route_source_admin_areas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: route_source_admin_areas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE route_source_admin_areas_id_seq OWNED BY route_source_admin_areas.id;
+
+
+--
+-- Name: route_sub_routes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE route_sub_routes (
+    id integer NOT NULL,
+    route_id integer,
+    sub_route_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: route_sub_routes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE route_sub_routes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: route_sub_routes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE route_sub_routes_id_seq OWNED BY route_sub_routes.id;
 
 
 --
@@ -9879,7 +10824,16 @@ CREATE TABLE routes (
     transport_mode_id integer,
     number character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    type character varying(255),
+    name character varying(255),
+    region_id integer,
+    cached_slug character varying(255),
+    operator_code character varying(255),
+    loaded boolean,
+    lat double precision,
+    lon double precision,
+    cached_description text
 );
 
 
@@ -9909,6 +10863,108 @@ ALTER SEQUENCE routes_id_seq OWNED BY routes.id;
 CREATE TABLE schema_migrations (
     version character varying(255) NOT NULL
 );
+
+
+--
+-- Name: sent_emails; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE sent_emails (
+    id integer NOT NULL,
+    campaign_id integer,
+    campaign_update_id integer,
+    recipient_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    problem_id integer,
+    recipient_type character varying(255),
+    outgoing_message_id integer
+);
+
+
+--
+-- Name: sent_emails_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE sent_emails_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: sent_emails_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE sent_emails_id_seq OWNED BY sent_emails.id;
+
+
+--
+-- Name: sessions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE sessions (
+    id integer NOT NULL,
+    session_id character varying(255) NOT NULL,
+    data text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: sessions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE sessions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: sessions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE sessions_id_seq OWNED BY sessions.id;
+
+
+--
+-- Name: slugs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE slugs (
+    id integer NOT NULL,
+    name character varying(255),
+    sluggable_id integer,
+    sequence integer DEFAULT 1 NOT NULL,
+    sluggable_type character varying(40),
+    scope character varying(255),
+    created_at timestamp without time zone
+);
+
+
+--
+-- Name: slugs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE slugs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: slugs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE slugs_id_seq OWNED BY slugs.id;
 
 
 --
@@ -9995,6 +11051,70 @@ ALTER SEQUENCE stop_area_memberships_id_seq OWNED BY stop_area_memberships.id;
 
 
 --
+-- Name: stop_area_operators; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE stop_area_operators (
+    id integer NOT NULL,
+    stop_area_id integer,
+    operator_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: stop_area_operators_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE stop_area_operators_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: stop_area_operators_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE stop_area_operators_id_seq OWNED BY stop_area_operators.id;
+
+
+--
+-- Name: stop_area_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE stop_area_types (
+    id integer NOT NULL,
+    code character varying(255),
+    description text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: stop_area_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE stop_area_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: stop_area_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE stop_area_types_id_seq OWNED BY stop_area_types.id;
+
+
+--
 -- Name: stop_areas; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -10017,6 +11137,10 @@ CREATE TABLE stop_areas (
     coords geometry,
     lon double precision,
     lat double precision,
+    locality_id integer,
+    loaded boolean,
+    primary_metaphone character varying(255),
+    secondary_metaphone character varying(255),
     CONSTRAINT enforce_dims_coords CHECK ((st_ndims(coords) = 2)),
     CONSTRAINT enforce_geotype_coords CHECK (((geometrytype(coords) = 'POINT'::text) OR (coords IS NULL))),
     CONSTRAINT enforce_srid_coords CHECK ((st_srid(coords) = 27700))
@@ -10054,7 +11178,8 @@ CREATE TABLE stop_types (
     point_type character varying(255),
     version double precision,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    sub_type character varying(255)
 );
 
 
@@ -10093,10 +11218,6 @@ CREATE TABLE stops (
     crossing text,
     indicator text,
     bearing character varying(255),
-    nptg_locality_code character varying(255),
-    locality_name character varying(255),
-    parent_locality_name character varying(255),
-    grand_parent_locality_name character varying(255),
     town character varying(255),
     suburb character varying(255),
     locality_centre boolean,
@@ -10114,7 +11235,20 @@ CREATE TABLE stops (
     modification character varying(255),
     status character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    coords geometry,
+    locality_id integer,
+    cached_slug character varying(255),
+    loaded boolean,
+    tiploc_code character varying(255),
+    crs_code character varying(255),
+    metro_stop boolean DEFAULT false,
+    generation_high integer,
+    generation_low integer,
+    other_code character varying(255),
+    CONSTRAINT enforce_dims_coords CHECK ((st_ndims(coords) = 2)),
+    CONSTRAINT enforce_geotype_coords CHECK (((geometrytype(coords) = 'POINT'::text) OR (coords IS NULL))),
+    CONSTRAINT enforce_srid_coords CHECK ((st_srid(coords) = 27700))
 );
 
 
@@ -10135,6 +11269,111 @@ CREATE SEQUENCE stops_id_seq
 --
 
 ALTER SEQUENCE stops_id_seq OWNED BY stops.id;
+
+
+--
+-- Name: stories; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE stories (
+    id integer NOT NULL,
+    title text,
+    story text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    reporter_id integer,
+    stop_area_id integer,
+    location_id integer,
+    location_type character varying(255),
+    transport_mode_id integer,
+    confirmed boolean DEFAULT false,
+    token text,
+    category character varying(255)
+);
+
+
+--
+-- Name: stories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE stories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: stories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE stories_id_seq OWNED BY stories.id;
+
+
+--
+-- Name: sub_routes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE sub_routes (
+    id integer NOT NULL,
+    from_station_id integer,
+    to_station_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    transport_mode_id integer
+);
+
+
+--
+-- Name: sub_routes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE sub_routes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: sub_routes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE sub_routes_id_seq OWNED BY sub_routes.id;
+
+
+--
+-- Name: transport_mode_stop_area_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE transport_mode_stop_area_types (
+    id integer NOT NULL,
+    transport_mode_id integer,
+    stop_area_type_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: transport_mode_stop_area_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE transport_mode_stop_area_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: transport_mode_stop_area_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE transport_mode_stop_area_types_id_seq OWNED BY transport_mode_stop_area_types.id;
 
 
 --
@@ -10179,7 +11418,8 @@ CREATE TABLE transport_modes (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     naptan_name character varying(255),
-    active boolean
+    active boolean,
+    route_type character varying(255)
 );
 
 
@@ -10203,6 +11443,45 @@ ALTER SEQUENCE transport_modes_id_seq OWNED BY transport_modes.id;
 
 
 --
+-- Name: updates; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE updates (
+    id integer NOT NULL,
+    problem_id integer,
+    reporter_id integer,
+    text text,
+    confirmed_at timestamp without time zone,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    mark_fixed boolean,
+    mark_open boolean,
+    token character varying(255),
+    status_code integer,
+    reporter_name character varying(255)
+);
+
+
+--
+-- Name: updates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE updates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: updates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE updates_id_seq OWNED BY updates.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -10211,7 +11490,21 @@ CREATE TABLE users (
     name character varying(255),
     email character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    wants_fmt_updates boolean,
+    phone character varying(255),
+    crypted_password character varying(255),
+    password_salt character varying(255),
+    persistence_token character varying(255),
+    login_count integer DEFAULT 0 NOT NULL,
+    failed_login_count integer DEFAULT 0 NOT NULL,
+    last_request_at timestamp without time zone,
+    current_login_at timestamp without time zone,
+    last_login_at timestamp without time zone,
+    registered boolean DEFAULT false NOT NULL,
+    email_local_part character varying(255),
+    is_expert boolean,
+    perishable_token character varying(255) DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -10235,10 +11528,209 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
+-- Name: versions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE versions (
+    id integer NOT NULL,
+    item_type character varying(255) NOT NULL,
+    item_id integer NOT NULL,
+    event character varying(255) NOT NULL,
+    whodunnit character varying(255),
+    object text,
+    created_at timestamp without time zone
+);
+
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE versions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
+
+
+--
+-- Name: vosa_licenses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE vosa_licenses (
+    id integer NOT NULL,
+    operator_id integer,
+    number character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: vosa_licenses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE vosa_licenses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: vosa_licenses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE vosa_licenses_id_seq OWNED BY vosa_licenses.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE admin_areas ALTER COLUMN id SET DEFAULT nextval('admin_areas_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE alternative_names ALTER COLUMN id SET DEFAULT nextval('alternative_names_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE assignments ALTER COLUMN id SET DEFAULT nextval('assignments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE campaign_events ALTER COLUMN id SET DEFAULT nextval('campaign_events_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE campaign_supporters ALTER COLUMN id SET DEFAULT nextval('campaign_supporters_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE campaign_updates ALTER COLUMN id SET DEFAULT nextval('campaign_updates_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE campaigns ALTER COLUMN id SET DEFAULT nextval('campaigns_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE comments ALTER COLUMN id SET DEFAULT nextval('campaign_comments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE council_contacts ALTER COLUMN id SET DEFAULT nextval('council_contacts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE districts ALTER COLUMN id SET DEFAULT nextval('districts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE incoming_messages ALTER COLUMN id SET DEFAULT nextval('incoming_messages_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE localities ALTER COLUMN id SET DEFAULT nextval('localities_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE locality_links ALTER COLUMN id SET DEFAULT nextval('locality_links_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE location_searches ALTER COLUMN id SET DEFAULT nextval('location_searches_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE operator_codes ALTER COLUMN id SET DEFAULT nextval('operator_codes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE operator_contacts ALTER COLUMN id SET DEFAULT nextval('operator_contacts_id_seq'::regclass);
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE operators ALTER COLUMN id SET DEFAULT nextval('operators_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE outgoing_messages ALTER COLUMN id SET DEFAULT nextval('outgoing_messages_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE passenger_transport_executive_areas ALTER COLUMN id SET DEFAULT nextval('passenger_transport_executive_areas_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE passenger_transport_executives ALTER COLUMN id SET DEFAULT nextval('passenger_transport_executives_id_seq'::regclass);
 
 
 --
@@ -10252,6 +11744,27 @@ ALTER TABLE problems ALTER COLUMN id SET DEFAULT nextval('problems_id_seq'::regc
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE raw_emails ALTER COLUMN id SET DEFAULT nextval('raw_emails_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE regions ALTER COLUMN id SET DEFAULT nextval('regions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE route_localities ALTER COLUMN id SET DEFAULT nextval('route_localities_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE route_operators ALTER COLUMN id SET DEFAULT nextval('route_operators_id_seq'::regclass);
 
 
@@ -10259,7 +11772,21 @@ ALTER TABLE route_operators ALTER COLUMN id SET DEFAULT nextval('route_operators
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE route_stops ALTER COLUMN id SET DEFAULT nextval('route_stops_id_seq'::regclass);
+ALTER TABLE route_segments ALTER COLUMN id SET DEFAULT nextval('route_segments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE route_source_admin_areas ALTER COLUMN id SET DEFAULT nextval('route_source_admin_areas_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE route_sub_routes ALTER COLUMN id SET DEFAULT nextval('route_sub_routes_id_seq'::regclass);
 
 
 --
@@ -10267,6 +11794,27 @@ ALTER TABLE route_stops ALTER COLUMN id SET DEFAULT nextval('route_stops_id_seq'
 --
 
 ALTER TABLE routes ALTER COLUMN id SET DEFAULT nextval('routes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE sent_emails ALTER COLUMN id SET DEFAULT nextval('sent_emails_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE sessions ALTER COLUMN id SET DEFAULT nextval('sessions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE slugs ALTER COLUMN id SET DEFAULT nextval('slugs_id_seq'::regclass);
 
 
 --
@@ -10281,6 +11829,20 @@ ALTER TABLE stop_area_links ALTER COLUMN id SET DEFAULT nextval('stop_area_links
 --
 
 ALTER TABLE stop_area_memberships ALTER COLUMN id SET DEFAULT nextval('stop_area_memberships_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE stop_area_operators ALTER COLUMN id SET DEFAULT nextval('stop_area_operators_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE stop_area_types ALTER COLUMN id SET DEFAULT nextval('stop_area_types_id_seq'::regclass);
 
 
 --
@@ -10308,6 +11870,27 @@ ALTER TABLE stops ALTER COLUMN id SET DEFAULT nextval('stops_id_seq'::regclass);
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE stories ALTER COLUMN id SET DEFAULT nextval('stories_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE sub_routes ALTER COLUMN id SET DEFAULT nextval('sub_routes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE transport_mode_stop_area_types ALTER COLUMN id SET DEFAULT nextval('transport_mode_stop_area_types_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE transport_mode_stop_types ALTER COLUMN id SET DEFAULT nextval('transport_mode_stop_types_id_seq'::regclass);
 
 
@@ -10322,7 +11905,108 @@ ALTER TABLE transport_modes ALTER COLUMN id SET DEFAULT nextval('transport_modes
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE updates ALTER COLUMN id SET DEFAULT nextval('updates_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE vosa_licenses ALTER COLUMN id SET DEFAULT nextval('vosa_licenses_id_seq'::regclass);
+
+
+--
+-- Name: admin_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY admin_areas
+    ADD CONSTRAINT admin_areas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: alternative_names_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY alternative_names
+    ADD CONSTRAINT alternative_names_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: assignments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY assignments
+    ADD CONSTRAINT assignments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: campaign_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY comments
+    ADD CONSTRAINT campaign_comments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: campaign_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY campaign_events
+    ADD CONSTRAINT campaign_events_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: campaign_supporters_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY campaign_supporters
+    ADD CONSTRAINT campaign_supporters_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: campaign_updates_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY campaign_updates
+    ADD CONSTRAINT campaign_updates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: campaigns_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY campaigns
+    ADD CONSTRAINT campaigns_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: council_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY council_contacts
+    ADD CONSTRAINT council_contacts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: districts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY districts
+    ADD CONSTRAINT districts_pkey PRIMARY KEY (id);
 
 
 --
@@ -10334,6 +12018,54 @@ ALTER TABLE ONLY geometry_columns
 
 
 --
+-- Name: incoming_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY incoming_messages
+    ADD CONSTRAINT incoming_messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: localities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY localities
+    ADD CONSTRAINT localities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: locality_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY locality_links
+    ADD CONSTRAINT locality_links_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: location_searches_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY location_searches
+    ADD CONSTRAINT location_searches_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: operator_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY operator_codes
+    ADD CONSTRAINT operator_codes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: operator_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY operator_contacts
+    ADD CONSTRAINT operator_contacts_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: operators_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -10342,11 +12074,67 @@ ALTER TABLE ONLY operators
 
 
 --
+-- Name: outgoing_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY outgoing_messages
+    ADD CONSTRAINT outgoing_messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: passenger_transport_executive_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY passenger_transport_executive_areas
+    ADD CONSTRAINT passenger_transport_executive_areas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: passenger_transport_executives_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY passenger_transport_executives
+    ADD CONSTRAINT passenger_transport_executives_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: problems_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY problems
+ALTER TABLE ONLY stories
     ADD CONSTRAINT problems_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: problems_pkey1; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY problems
+    ADD CONSTRAINT problems_pkey1 PRIMARY KEY (id);
+
+
+--
+-- Name: raw_emails_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY raw_emails
+    ADD CONSTRAINT raw_emails_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: regions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY regions
+    ADD CONSTRAINT regions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: route_localities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY route_localities
+    ADD CONSTRAINT route_localities_pkey PRIMARY KEY (id);
 
 
 --
@@ -10358,11 +12146,27 @@ ALTER TABLE ONLY route_operators
 
 
 --
--- Name: route_stops_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: route_segments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY route_stops
-    ADD CONSTRAINT route_stops_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY route_segments
+    ADD CONSTRAINT route_segments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: route_source_admin_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY route_source_admin_areas
+    ADD CONSTRAINT route_source_admin_areas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: route_sub_routes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY route_sub_routes
+    ADD CONSTRAINT route_sub_routes_pkey PRIMARY KEY (id);
 
 
 --
@@ -10371,6 +12175,30 @@ ALTER TABLE ONLY route_stops
 
 ALTER TABLE ONLY routes
     ADD CONSTRAINT routes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sent_emails_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY sent_emails
+    ADD CONSTRAINT sent_emails_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY sessions
+    ADD CONSTRAINT sessions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: slugs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY slugs
+    ADD CONSTRAINT slugs_pkey PRIMARY KEY (id);
 
 
 --
@@ -10398,6 +12226,22 @@ ALTER TABLE ONLY stop_area_memberships
 
 
 --
+-- Name: stop_area_operators_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY stop_area_operators
+    ADD CONSTRAINT stop_area_operators_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stop_area_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY stop_area_types
+    ADD CONSTRAINT stop_area_types_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: stop_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -10422,6 +12266,22 @@ ALTER TABLE ONLY stops
 
 
 --
+-- Name: sub_routes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY sub_routes
+    ADD CONSTRAINT sub_routes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: transport_mode_stop_area_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY transport_mode_stop_area_types
+    ADD CONSTRAINT transport_mode_stop_area_types_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: transport_mode_stop_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -10438,11 +12298,301 @@ ALTER TABLE ONLY transport_modes
 
 
 --
+-- Name: updates_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY updates
+    ADD CONSTRAINT updates_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY versions
+    ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: vosa_licenses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY vosa_licenses
+    ADD CONSTRAINT vosa_licenses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_admin_areas_on_name_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_admin_areas_on_name_lower ON admin_areas USING btree (lower(name));
+
+
+--
+-- Name: index_campaigns_on_cached_slug; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_campaigns_on_cached_slug ON campaigns USING btree (cached_slug);
+
+
+--
+-- Name: index_campaigns_on_subdomain; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_campaigns_on_subdomain ON campaigns USING btree (subdomain);
+
+
+--
+-- Name: index_campaigns_on_subdomain_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_campaigns_on_subdomain_lower ON campaigns USING btree (lower((subdomain)::text));
+
+
+--
+-- Name: index_districts_on_name_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_districts_on_name_lower ON districts USING btree (lower(name));
+
+
+--
+-- Name: index_localities_on_cached_slug; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_localities_on_cached_slug ON localities USING btree (cached_slug);
+
+
+--
+-- Name: index_localities_on_coords; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_localities_on_coords ON localities USING gist (coords);
+
+
+--
+-- Name: index_localities_on_name_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_localities_on_name_lower ON localities USING btree (lower(name));
+
+
+--
+-- Name: index_localities_on_primary_metaphone; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_localities_on_primary_metaphone ON localities USING btree (primary_metaphone);
+
+
+--
+-- Name: index_localities_on_secondary_metaphone; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_localities_on_secondary_metaphone ON localities USING btree (secondary_metaphone);
+
+
+--
+-- Name: index_locality_links_on_ancestor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_locality_links_on_ancestor_id ON locality_links USING btree (ancestor_id);
+
+
+--
+-- Name: index_locality_links_on_descendant_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_locality_links_on_descendant_id ON locality_links USING btree (descendant_id);
+
+
+--
+-- Name: index_regions_on_cached_slug; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_regions_on_cached_slug ON regions USING btree (cached_slug);
+
+
+--
+-- Name: index_regions_on_name_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_regions_on_name_lower ON regions USING btree (lower(name));
+
+
+--
+-- Name: index_route_localities_on_locality_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_route_localities_on_locality_id ON route_localities USING btree (locality_id);
+
+
+--
+-- Name: index_route_localities_on_route_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_route_localities_on_route_id ON route_localities USING btree (route_id);
+
+
+--
+-- Name: index_route_operators_on_operator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_route_operators_on_operator_id ON route_operators USING btree (operator_id);
+
+
+--
+-- Name: index_route_operators_on_route_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_route_operators_on_route_id ON route_operators USING btree (route_id);
+
+
+--
+-- Name: index_route_segments_on_from_stop_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_route_segments_on_from_stop_area_id ON route_segments USING btree (from_stop_area_id);
+
+
+--
+-- Name: index_route_segments_on_from_stop_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_route_segments_on_from_stop_id ON route_segments USING btree (from_stop_id);
+
+
+--
+-- Name: index_route_segments_on_route_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_route_segments_on_route_id ON route_segments USING btree (route_id);
+
+
+--
+-- Name: index_route_segments_on_to_stop_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_route_segments_on_to_stop_area_id ON route_segments USING btree (to_stop_area_id);
+
+
+--
+-- Name: index_route_segments_on_to_stop_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_route_segments_on_to_stop_id ON route_segments USING btree (to_stop_id);
+
+
+--
+-- Name: index_route_source_admin_areas_on_route_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_route_source_admin_areas_on_route_id ON route_source_admin_areas USING btree (route_id);
+
+
+--
+-- Name: index_route_source_admin_areas_on_source_admin_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_route_source_admin_areas_on_source_admin_area_id ON route_source_admin_areas USING btree (source_admin_area_id);
+
+
+--
+-- Name: index_routes_on_cached_slug; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_routes_on_cached_slug ON routes USING btree (cached_slug);
+
+
+--
+-- Name: index_routes_on_name_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_routes_on_name_lower ON routes USING btree (lower((name)::text));
+
+
+--
+-- Name: index_routes_on_number; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_routes_on_number ON routes USING btree (number);
+
+
+--
+-- Name: index_routes_on_number_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_routes_on_number_lower ON routes USING btree (lower((number)::text));
+
+
+--
+-- Name: index_routes_on_operator_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_routes_on_operator_code ON routes USING btree (operator_code);
+
+
+--
+-- Name: index_routes_on_region_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_routes_on_region_id ON routes USING btree (region_id);
+
+
+--
+-- Name: index_routes_on_transport_mode_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_routes_on_transport_mode_id ON routes USING btree (transport_mode_id);
+
+
+--
+-- Name: index_routes_on_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_routes_on_type ON routes USING btree (type);
+
+
+--
+-- Name: index_sessions_on_session_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_sessions_on_session_id ON sessions USING btree (session_id);
+
+
+--
+-- Name: index_sessions_on_updated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_sessions_on_updated_at ON sessions USING btree (updated_at);
+
+
+--
+-- Name: index_slugs_on_n_s_s_and_s; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_slugs_on_n_s_s_and_s ON slugs USING btree (name, sluggable_type, sequence, scope);
+
+
+--
+-- Name: index_slugs_on_sluggable_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_slugs_on_sluggable_id ON slugs USING btree (sluggable_id);
+
+
+--
+-- Name: index_slugs_on_sluggable_id_and_sluggable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_slugs_on_sluggable_id_and_sluggable_type ON slugs USING btree (sluggable_id, sluggable_type);
 
 
 --
@@ -10474,10 +12624,38 @@ CREATE INDEX index_stop_areas_on_coords ON stop_areas USING gist (coords);
 
 
 --
+-- Name: index_stop_areas_on_locality_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_stop_areas_on_locality_id ON stop_areas USING btree (locality_id);
+
+
+--
+-- Name: index_stop_areas_on_primary_metaphone; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_stop_areas_on_primary_metaphone ON stop_areas USING btree (primary_metaphone);
+
+
+--
+-- Name: index_stop_areas_on_secondary_metaphone; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_stop_areas_on_secondary_metaphone ON stop_areas USING btree (secondary_metaphone);
+
+
+--
 -- Name: index_stops_on_atco_code_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_stops_on_atco_code_lower ON stops USING btree (lower((atco_code)::text));
+
+
+--
+-- Name: index_stops_on_cached_slug; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_stops_on_cached_slug ON stops USING btree (cached_slug);
 
 
 --
@@ -10488,24 +12666,80 @@ CREATE INDEX index_stops_on_common_name_lower ON stops USING btree (lower(common
 
 
 --
--- Name: index_stops_on_grand_parent_locality_name_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_stops_on_coords; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_stops_on_grand_parent_locality_name_lower ON stops USING btree (lower((grand_parent_locality_name)::text));
-
-
---
--- Name: index_stops_on_locality_name_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_stops_on_locality_name_lower ON stops USING btree (lower((locality_name)::text));
+CREATE INDEX index_stops_on_coords ON stops USING gist (coords);
 
 
 --
--- Name: index_stops_on_parent_locality_name_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_stops_on_crs_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_stops_on_parent_locality_name_lower ON stops USING btree (lower((parent_locality_name)::text));
+CREATE INDEX index_stops_on_crs_code ON stops USING btree (crs_code);
+
+
+--
+-- Name: index_stops_on_locality_and_stop_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_stops_on_locality_and_stop_type ON stops USING btree (locality_id, stop_type);
+
+
+--
+-- Name: index_stops_on_locality_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_stops_on_locality_id ON stops USING btree (locality_id);
+
+
+--
+-- Name: index_stops_on_metro_stop; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_stops_on_metro_stop ON stops USING btree (metro_stop);
+
+
+--
+-- Name: index_stops_on_naptan_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_stops_on_naptan_code ON stops USING btree (naptan_code);
+
+
+--
+-- Name: index_stops_on_stop_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_stops_on_stop_type ON stops USING btree (stop_type);
+
+
+--
+-- Name: index_stops_on_street_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_stops_on_street_lower ON stops USING btree (lower(street));
+
+
+--
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_users_on_email ON users USING btree (email);
+
+
+--
+-- Name: index_users_on_perishable_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_users_on_perishable_token ON users USING btree (perishable_token);
+
+
+--
+-- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (item_type, item_id);
 
 
 --
@@ -10519,7 +12753,7 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 -- Name: problems_reporter_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY problems
+ALTER TABLE ONLY stories
     ADD CONSTRAINT problems_reporter_id_fk FOREIGN KEY (reporter_id) REFERENCES users(id) ON DELETE SET NULL;
 
 
@@ -10564,6 +12798,14 @@ ALTER TABLE ONLY stop_area_memberships
 
 
 --
+-- Name: transport_mode_stop_area_types_transport_mode_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY transport_mode_stop_area_types
+    ADD CONSTRAINT transport_mode_stop_area_types_transport_mode_id_fk FOREIGN KEY (transport_mode_id) REFERENCES transport_modes(id);
+
+
+--
 -- Name: transport_mode_stop_types_stop_type_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10582,8 +12824,6 @@ ALTER TABLE ONLY transport_mode_stop_types
 --
 -- PostgreSQL database dump complete
 --
-
-INSERT INTO schema_migrations (version) VALUES ('20100406150740');
 
 INSERT INTO schema_migrations (version) VALUES ('20100407110848');
 
@@ -10642,3 +12882,335 @@ INSERT INTO schema_migrations (version) VALUES ('20100420102749');
 INSERT INTO schema_migrations (version) VALUES ('20100420143048');
 
 INSERT INTO schema_migrations (version) VALUES ('20100420165342');
+
+INSERT INTO schema_migrations (version) VALUES ('20100427114647');
+
+INSERT INTO schema_migrations (version) VALUES ('20100427141606');
+
+INSERT INTO schema_migrations (version) VALUES ('20100429100501');
+
+INSERT INTO schema_migrations (version) VALUES ('20100429101323');
+
+INSERT INTO schema_migrations (version) VALUES ('20100429102737');
+
+INSERT INTO schema_migrations (version) VALUES ('20100429120538');
+
+INSERT INTO schema_migrations (version) VALUES ('20100504144559');
+
+INSERT INTO schema_migrations (version) VALUES ('20100504145237');
+
+INSERT INTO schema_migrations (version) VALUES ('20100504150644');
+
+INSERT INTO schema_migrations (version) VALUES ('20100504162509');
+
+INSERT INTO schema_migrations (version) VALUES ('20100505095124');
+
+INSERT INTO schema_migrations (version) VALUES ('20100505100610');
+
+INSERT INTO schema_migrations (version) VALUES ('20100506101504');
+
+INSERT INTO schema_migrations (version) VALUES ('20100506142256');
+
+INSERT INTO schema_migrations (version) VALUES ('20100506155545');
+
+INSERT INTO schema_migrations (version) VALUES ('20100506162135');
+
+INSERT INTO schema_migrations (version) VALUES ('20100506163145');
+
+INSERT INTO schema_migrations (version) VALUES ('20100506164920');
+
+INSERT INTO schema_migrations (version) VALUES ('20100506165758');
+
+INSERT INTO schema_migrations (version) VALUES ('20100506170309');
+
+INSERT INTO schema_migrations (version) VALUES ('20100506172553');
+
+INSERT INTO schema_migrations (version) VALUES ('20100506175112');
+
+INSERT INTO schema_migrations (version) VALUES ('20100506183319');
+
+INSERT INTO schema_migrations (version) VALUES ('20100510102901');
+
+INSERT INTO schema_migrations (version) VALUES ('20100510111400');
+
+INSERT INTO schema_migrations (version) VALUES ('20100510114218');
+
+INSERT INTO schema_migrations (version) VALUES ('20100510115509');
+
+INSERT INTO schema_migrations (version) VALUES ('20100510121957');
+
+INSERT INTO schema_migrations (version) VALUES ('20100524094930');
+
+INSERT INTO schema_migrations (version) VALUES ('20100527144838');
+
+INSERT INTO schema_migrations (version) VALUES ('20100527144955');
+
+INSERT INTO schema_migrations (version) VALUES ('20100531140834');
+
+INSERT INTO schema_migrations (version) VALUES ('20100602162053');
+
+INSERT INTO schema_migrations (version) VALUES ('20100603100029');
+
+INSERT INTO schema_migrations (version) VALUES ('20100603114458');
+
+INSERT INTO schema_migrations (version) VALUES ('20100603115538');
+
+INSERT INTO schema_migrations (version) VALUES ('20100603121637');
+
+INSERT INTO schema_migrations (version) VALUES ('20100603134827');
+
+INSERT INTO schema_migrations (version) VALUES ('20100607150411');
+
+INSERT INTO schema_migrations (version) VALUES ('20100607162521');
+
+INSERT INTO schema_migrations (version) VALUES ('20100610153811');
+
+INSERT INTO schema_migrations (version) VALUES ('20100610170152');
+
+INSERT INTO schema_migrations (version) VALUES ('20100614082940');
+
+INSERT INTO schema_migrations (version) VALUES ('20100617100003');
+
+INSERT INTO schema_migrations (version) VALUES ('20100617102228');
+
+INSERT INTO schema_migrations (version) VALUES ('20100617103702');
+
+INSERT INTO schema_migrations (version) VALUES ('20100617140830');
+
+INSERT INTO schema_migrations (version) VALUES ('20100617171032');
+
+INSERT INTO schema_migrations (version) VALUES ('20100617171322');
+
+INSERT INTO schema_migrations (version) VALUES ('20100623095334');
+
+INSERT INTO schema_migrations (version) VALUES ('20100623103808');
+
+INSERT INTO schema_migrations (version) VALUES ('20100623134404');
+
+INSERT INTO schema_migrations (version) VALUES ('20100623145916');
+
+INSERT INTO schema_migrations (version) VALUES ('20100624124129');
+
+INSERT INTO schema_migrations (version) VALUES ('20100624172249');
+
+INSERT INTO schema_migrations (version) VALUES ('20100625151820');
+
+INSERT INTO schema_migrations (version) VALUES ('20100629120403');
+
+INSERT INTO schema_migrations (version) VALUES ('20100706102840');
+
+INSERT INTO schema_migrations (version) VALUES ('20100707152350');
+
+INSERT INTO schema_migrations (version) VALUES ('20100720134338');
+
+INSERT INTO schema_migrations (version) VALUES ('20100720140351');
+
+INSERT INTO schema_migrations (version) VALUES ('20100720140904');
+
+INSERT INTO schema_migrations (version) VALUES ('20100720141621');
+
+INSERT INTO schema_migrations (version) VALUES ('20100720145524');
+
+INSERT INTO schema_migrations (version) VALUES ('20100720145907');
+
+INSERT INTO schema_migrations (version) VALUES ('20100803142257');
+
+INSERT INTO schema_migrations (version) VALUES ('20100803154356');
+
+INSERT INTO schema_migrations (version) VALUES ('20100804100334');
+
+INSERT INTO schema_migrations (version) VALUES ('20100809111322');
+
+INSERT INTO schema_migrations (version) VALUES ('20100809133511');
+
+INSERT INTO schema_migrations (version) VALUES ('20100809133812');
+
+INSERT INTO schema_migrations (version) VALUES ('20100810091356');
+
+INSERT INTO schema_migrations (version) VALUES ('20100810130315');
+
+INSERT INTO schema_migrations (version) VALUES ('20100810145722');
+
+INSERT INTO schema_migrations (version) VALUES ('20100810145820');
+
+INSERT INTO schema_migrations (version) VALUES ('20100810151538');
+
+INSERT INTO schema_migrations (version) VALUES ('20100812085502');
+
+INSERT INTO schema_migrations (version) VALUES ('20100812092529');
+
+INSERT INTO schema_migrations (version) VALUES ('20100812100034');
+
+INSERT INTO schema_migrations (version) VALUES ('20100816111840');
+
+INSERT INTO schema_migrations (version) VALUES ('20100816132514');
+
+INSERT INTO schema_migrations (version) VALUES ('20100816141213');
+
+INSERT INTO schema_migrations (version) VALUES ('20100817082005');
+
+INSERT INTO schema_migrations (version) VALUES ('20100817110650');
+
+INSERT INTO schema_migrations (version) VALUES ('20100817114704');
+
+INSERT INTO schema_migrations (version) VALUES ('20100817140829');
+
+INSERT INTO schema_migrations (version) VALUES ('20100817140854');
+
+INSERT INTO schema_migrations (version) VALUES ('20100817193816');
+
+INSERT INTO schema_migrations (version) VALUES ('20100817193959');
+
+INSERT INTO schema_migrations (version) VALUES ('20100819101900');
+
+INSERT INTO schema_migrations (version) VALUES ('20100823093742');
+
+INSERT INTO schema_migrations (version) VALUES ('20100823094838');
+
+INSERT INTO schema_migrations (version) VALUES ('20100823142846');
+
+INSERT INTO schema_migrations (version) VALUES ('20100823151351');
+
+INSERT INTO schema_migrations (version) VALUES ('20100824093701');
+
+INSERT INTO schema_migrations (version) VALUES ('20100824121124');
+
+INSERT INTO schema_migrations (version) VALUES ('20100824135124');
+
+INSERT INTO schema_migrations (version) VALUES ('20100826111651');
+
+INSERT INTO schema_migrations (version) VALUES ('20100831125027');
+
+INSERT INTO schema_migrations (version) VALUES ('20100901122501');
+
+INSERT INTO schema_migrations (version) VALUES ('20100910132651');
+
+INSERT INTO schema_migrations (version) VALUES ('20100921140256');
+
+INSERT INTO schema_migrations (version) VALUES ('20100922103819');
+
+INSERT INTO schema_migrations (version) VALUES ('20100922142112');
+
+INSERT INTO schema_migrations (version) VALUES ('20100922142818');
+
+INSERT INTO schema_migrations (version) VALUES ('20101004162227');
+
+INSERT INTO schema_migrations (version) VALUES ('20101005143539');
+
+INSERT INTO schema_migrations (version) VALUES ('20101005170106');
+
+INSERT INTO schema_migrations (version) VALUES ('20101006152608');
+
+INSERT INTO schema_migrations (version) VALUES ('20101006154957');
+
+INSERT INTO schema_migrations (version) VALUES ('20101006173754');
+
+INSERT INTO schema_migrations (version) VALUES ('20101007090303');
+
+INSERT INTO schema_migrations (version) VALUES ('20101020152126');
+
+INSERT INTO schema_migrations (version) VALUES ('20101025171152');
+
+INSERT INTO schema_migrations (version) VALUES ('20101025181456');
+
+INSERT INTO schema_migrations (version) VALUES ('20101028154945');
+
+INSERT INTO schema_migrations (version) VALUES ('20101028155048');
+
+INSERT INTO schema_migrations (version) VALUES ('20101101110913');
+
+INSERT INTO schema_migrations (version) VALUES ('20101108134714');
+
+INSERT INTO schema_migrations (version) VALUES ('20101110173157');
+
+INSERT INTO schema_migrations (version) VALUES ('20101110173300');
+
+INSERT INTO schema_migrations (version) VALUES ('20101110173541');
+
+INSERT INTO schema_migrations (version) VALUES ('20101111080848');
+
+INSERT INTO schema_migrations (version) VALUES ('20101114163758');
+
+INSERT INTO schema_migrations (version) VALUES ('20101114165116');
+
+INSERT INTO schema_migrations (version) VALUES ('20101115143827');
+
+INSERT INTO schema_migrations (version) VALUES ('20101116113825');
+
+INSERT INTO schema_migrations (version) VALUES ('20101117102058');
+
+INSERT INTO schema_migrations (version) VALUES ('20101117113427');
+
+INSERT INTO schema_migrations (version) VALUES ('20101122124148');
+
+INSERT INTO schema_migrations (version) VALUES ('20101123113410');
+
+INSERT INTO schema_migrations (version) VALUES ('20101123124656');
+
+INSERT INTO schema_migrations (version) VALUES ('20101123134846');
+
+INSERT INTO schema_migrations (version) VALUES ('20101123152735');
+
+INSERT INTO schema_migrations (version) VALUES ('20101123162926');
+
+INSERT INTO schema_migrations (version) VALUES ('20101124104158');
+
+INSERT INTO schema_migrations (version) VALUES ('20101125100624');
+
+INSERT INTO schema_migrations (version) VALUES ('20101130093116');
+
+INSERT INTO schema_migrations (version) VALUES ('20101130170949');
+
+INSERT INTO schema_migrations (version) VALUES ('20101201102200');
+
+INSERT INTO schema_migrations (version) VALUES ('20101201131411');
+
+INSERT INTO schema_migrations (version) VALUES ('20101202130704');
+
+INSERT INTO schema_migrations (version) VALUES ('20101202130852');
+
+INSERT INTO schema_migrations (version) VALUES ('20101206083042');
+
+INSERT INTO schema_migrations (version) VALUES ('20101206162550');
+
+INSERT INTO schema_migrations (version) VALUES ('20101207132710');
+
+INSERT INTO schema_migrations (version) VALUES ('20101207143408');
+
+INSERT INTO schema_migrations (version) VALUES ('20101208084526');
+
+INSERT INTO schema_migrations (version) VALUES ('20101208085140');
+
+INSERT INTO schema_migrations (version) VALUES ('20101208170943');
+
+INSERT INTO schema_migrations (version) VALUES ('20101209103633');
+
+INSERT INTO schema_migrations (version) VALUES ('20101214163049');
+
+INSERT INTO schema_migrations (version) VALUES ('20101215151724');
+
+INSERT INTO schema_migrations (version) VALUES ('20101215153223');
+
+INSERT INTO schema_migrations (version) VALUES ('20101215180659');
+
+INSERT INTO schema_migrations (version) VALUES ('20101216111549');
+
+INSERT INTO schema_migrations (version) VALUES ('20101216183304');
+
+INSERT INTO schema_migrations (version) VALUES ('20101221103609');
+
+INSERT INTO schema_migrations (version) VALUES ('20101221124301');
+
+INSERT INTO schema_migrations (version) VALUES ('20101221150154');
+
+INSERT INTO schema_migrations (version) VALUES ('20110125172044');
+
+INSERT INTO schema_migrations (version) VALUES ('20110208195934');
+
+INSERT INTO schema_migrations (version) VALUES ('20110209121521');
+
+INSERT INTO schema_migrations (version) VALUES ('20110209193129');
+
+INSERT INTO schema_migrations (version) VALUES ('20110210151320');
+
+INSERT INTO schema_migrations (version) VALUES ('20110223105145');
