@@ -90,7 +90,12 @@ class ApplicationController < ActionController::Base
   # filter method for requiring that the campaign initiator be logged in
   def require_campaign_initiator
     return true if current_user && current_user == @campaign.initiator
-    @access_message = access_message_key
+    # custom message for editing a new campaign - which is part of the process of confirming a problem
+    if @campaign.status == :new && controller_name == 'campaigns' && ['edit', 'update'].include?(@action_name)
+      @access_message = :campaigns_confirm_problem
+    else
+      @access_message = access_message_key
+    end
     @name = @campaign.initiator.name
     return redirect_bad_user
   end

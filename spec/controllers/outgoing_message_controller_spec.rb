@@ -19,6 +19,7 @@ describe OutgoingMessagesController do
     @mock_campaign = mock_model(Campaign, :editable? => true,
                                           :visible? => true,
                                           :initiator => @campaign_user,
+                                          :status => :confirmed,
                                           :outgoing_messages => @outgoing_messages_mock, 
                                           :campaign_events => @campaign_events_mock)
     @controller.stub!(:current_user).and_return(@campaign_user)

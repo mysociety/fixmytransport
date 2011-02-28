@@ -10,6 +10,7 @@ module SharedBehaviours
           @campaign_user = mock_model(User, :name => "Campaign User")
           @mock_campaign = mock_model(Campaign, :initiator => @campaign_user,
                                                 :editable? => true, 
+                                                :status => :confirmed,
                                                 :visible? => true)
           Campaign.stub!(:find).and_return(@mock_campaign)
         end
