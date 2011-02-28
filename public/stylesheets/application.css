@@ -358,8 +358,17 @@ ul.location-list li{
 
 /* Campaign page */
 
-form.update_campaign label {
+.update_campaign label {
   width: 20em;
+}
+
+.update_campaign {
+  margin: auto;
+}
+
+.update_campaign input[type=submit] {
+  float: right;
+  margin-right: 20em;
 }
 
 .campaign-info {
@@ -381,6 +390,11 @@ form.update_campaign label {
 form.update_campaign .label-note { 
   font-size: 0.8em;
 }
+
+#campaign-update-form {
+  margin-top: 1.5em;
+}
+
 .twitter-share-button {
   float: right;
 }
@@ -390,7 +404,6 @@ form.new_campaign_update label {
   width: 20em;
 }
 
-message-campaign-update
 
 /* Location column */
 
