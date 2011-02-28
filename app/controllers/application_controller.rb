@@ -152,6 +152,7 @@ class ApplicationController < ActionController::Base
   def handle_unverified_request
     super
     cookies.delete 'user_credentials'
+    @current_user_session = @current_user = nil
   end
 
   def process_map_params
