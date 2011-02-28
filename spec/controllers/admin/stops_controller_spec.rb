@@ -30,9 +30,9 @@ describe Admin::StopsController do
     end
     
     it 'should ask for stops with the codes for the transport modes passed' do 
+      Stop.stub!(:name_or_id_conditions).and_return("conditions")
       Stop.should_receive(:paginate).with(:page => nil, 
-                                          :conditions => ["stop_type in (?)", 
-                                          ["BCQ", "BCS", "BCT", "BST", "BCE"]],
+                                          :conditions => "conditions",
                                           :order => 'common_name')
       get :index, :mode => '1'
     end
