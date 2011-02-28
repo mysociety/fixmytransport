@@ -89,7 +89,7 @@ describe CampaignsController do
           end
 
           it "should return a 'not found' response if the current user is not the campaign initiator" do
-            controller.stub!(:current_user).and_return(mock_model(User))
+            controller.stub!(:current_user).and_return(mock_model(User, :is_expert? => false))
             make_request
             response.status.should == '404 Not Found'
           end
@@ -111,7 +111,7 @@ describe CampaignsController do
           end
 
           it 'should render the "wrong_user" template with appropriate message params if the current user is not the campaign initiator' do
-            controller.stub!(:current_user).and_return(mock_model(User))
+            controller.stub!(:current_user).and_return(mock_model(User, :is_expert? => false))
             make_request(token=@mock_problem.token)
             response.should render_template("shared/wrong_user")
             assigns[:name].should == 'Campaign User'
@@ -153,7 +153,7 @@ describe CampaignsController do
           end
 
           it 'should render the "wrong_user" template if there is a current user' do
-            controller.stub!(:current_user).and_return(mock_model(User))
+            controller.stub!(:current_user).and_return(mock_model(User, :is_expert? => false))
             make_request(token=@mock_problem.token)
             response.should render_template("shared/wrong_user")
           end
@@ -179,17 +179,27 @@ describe CampaignsController do
         end
 
       end
+      
+      describe 'and the current user is an expert' do 
+        
+        it 'should do the default behaviour of the action' do 
+          controller.stub!(:current_user).and_return(@expert_user)
+          make_request
+          response.should do_default_behaviour
+        end
+        
+      end
 
       describe 'and the current user is not the campaign initiator' do
 
         it 'should render the "wrong_user" template' do
-          controller.stub!(:current_user).and_return(mock_model(User))
+          controller.stub!(:current_user).and_return(mock_model(User, :is_expert? => false))
           make_request(token=@mock_problem.token)
           response.should render_template('shared/wrong_user')
         end
 
         it 'should assign variables for an appropriate message' do
-          controller.stub!(:current_user).and_return(mock_model(User))
+          controller.stub!(:current_user).and_return(mock_model(User, :is_expert? => false))
           make_request(token=@mock_problem.token)
           assigns[:name].should == 'Campaign User'
           assigns[:access_message].should == @expected_access_message
@@ -214,6 +224,7 @@ describe CampaignsController do
   describe 'PUT #update' do
 
     before do
+      @expert_user = mock_model(User, :is_expert? => true)
       @campaign_user = mock_model(User, :name => "Campaign User",
                                         :save => true,
                                         :registered? => false,
@@ -221,6 +232,7 @@ describe CampaignsController do
                                         :registered= => true,
                                         :name= => true,
                                         :password= => true,
+                                        :is_expert? => false, 
                                         :password_confirmation= => true)
       @mock_problem = mock_model(Problem, :token => 'problem-token')
       @mock_campaign = mock_model(Campaign, :problem => @mock_problem,
@@ -316,6 +328,7 @@ describe CampaignsController do
   describe 'GET #edit' do
 
     before do
+      @expert_user = mock_model(User, :is_expert? => true)
       @campaign_user = mock_model(User, :name => "Campaign User")
       @mock_problem = mock_model(Problem, :token => 'problem-token')
       @mock_campaign = mock_model(Campaign, :problem => @mock_problem,

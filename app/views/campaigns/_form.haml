@@ -4,5 +4,5 @@
       .form-field-error= error_message_on campaign, :description
     .form-field
       = f.label :description
-      != f.text_area :description, { :rows => 5 }
+      != f.text_area :description, { :rows => 8, :cols => 50 }
     !=f.submit t(:save)

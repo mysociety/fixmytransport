@@ -223,7 +223,7 @@ class CampaignsController < ApplicationController
   end
   
   def require_campaign_initiator_or_token
-    return require_campaign_initiator if @campaign.status != :new
+    return require_campaign_initiator(allow_expert=true) if @campaign.status != :new
     return true if current_user && current_user == @campaign.initiator
     # if campaign initiator not yet registered, allow access by token
     if params[:token] && params[:token] == @campaign.problem.token

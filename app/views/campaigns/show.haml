@@ -15,12 +15,12 @@
         %span.transport-location!= t(:campaign_location, :link => link_to(@campaign.problem.location.description, location_url(@campaign.problem.location)))
       %span.supporters= t(:campaign_has_n_supporters, :n => @campaign.supporter_count, :count => @campaign.supporter_count)
   != simple_format(sanitize(@campaign.description), :class => 'campaign')
-  - if current_user && current_user == @campaign.initiator
+  - if current_user && (current_user == @campaign.initiator || current_user.is_expert?)
     = link_to(t(:edit), edit_campaign_path(@campaign), :class => 'description-edit-link')
   - if current_user && current_user == @campaign.initiator
     = render :partial => 'update_form', :locals => {  :hidden => false, :update => CampaignUpdate.new(:user_id => current_user.id) }
   - elsif current_user && current_user.campaigns.include?(@campaign)
-    = t(:you_support_this_campaign)
+    %p= t(:you_support_this_campaign)
     - form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f|
       != hidden_field_tag "user_id", current_user.id
       != submit_tag t(:leave_this_campaign)
