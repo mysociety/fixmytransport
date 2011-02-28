@@ -28,6 +28,7 @@ class Campaign < ActiveRecord::Base
   validates_associated :initiator, :on => :update
   cattr_reader :per_page
   delegate :transport_mode_text, :to => :problem
+  has_paper_trail
   
   @@per_page = 10
   

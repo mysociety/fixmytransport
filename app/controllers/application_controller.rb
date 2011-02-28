@@ -128,17 +128,20 @@ class ApplicationController < ActionController::Base
     "#{controller_name}_#{@action_name}_access_message".to_sym
   end
   
-  # For administration interface, return display name of authenticated user
-  def admin_http_auth_user
+  # For administration interface, return display name of authenticated user.
+  # Otherwise, currently logged in user
+  def user_for_edits
     if request.env["REMOTE_USER"]
       return request.env["REMOTE_USER"]
+    elsif current_user
+      return current_user
     else
       return "*unknown*";
     end
   end
   
   def user_for_paper_trail
-    admin_http_auth_user
+    user_for_edits
   end
   
   def initialize_feedback 
