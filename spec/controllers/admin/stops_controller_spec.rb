@@ -39,10 +39,10 @@ describe Admin::StopsController do
     
     
     it 'should ask for stops matching both the transport mode and query params' do 
+      Stop.stub!(:name_or_id_conditions).and_return("conditions")
       query_string = '(LOWER(common_name) LIKE ? OR LOWER(common_name) LIKE ? OR LOWER(street) LIKE ? OR LOWER(street) LIKE ?) AND stop_type in (?)'
       Stop.should_receive(:paginate).with(:page => nil, 
-                                           :conditions => [query_string,
-                                           "something%", "%something%", "something%", "%something%", ["BCQ", "BCS", "BCT", "BST", "BCE"]],
+                                           :conditions => "conditions",
                                             :order => 'common_name')
       get :index, :mode => '1', :query => 'something'
     end
