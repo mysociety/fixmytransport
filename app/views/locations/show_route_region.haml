@@ -7,27 +7,27 @@
 - else
   %h2.main-header= t(:national_routes_title)
 - cache(:action => 'show_route_region') do
-  #tabs{:class => "ui-tabs"}
-    %ul{:class => "ui-tabs-nav"}
+  #tabs{:class => "ui-tabs ui-widget ui-content ui-corner-all"}
+    %ul{:class => "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"}
       - if @region.bus_routes.count > 0
-        %li= link_to('Bus', '#tabs-bus')
+        %li{:class => 'ui-state-default ui-corner-top ui-tabs-selected ui-state-active'}= link_to('Bus', '#tabs-bus')
       - if @region.train_routes.count > 0
-        %li= link_to('Train', '#tabs-train')
+        %li{:class => 'ui-state-default ui-corner-top'}= link_to('Train', '#tabs-train')
       - if @region.tram_metro_routes.count > 0
-        %li= link_to('Metro, Underground or Tram', '#tabs-metro')
+        %li{:class => 'ui-state-default ui-corner-top'}= link_to('Metro, Underground or Tram', '#tabs-metro')
       - if @region.ferry_routes.count > 0
-        %li= link_to('Ferry', '#tabs-ferry')
+        %li{:class => 'ui-state-default ui-corner-top'}= link_to('Ferry', '#tabs-ferry')
       - if @region.coach_routes.count > 0
-        %li= link_to('Coach', '#tabs-coach')
+        %li{:class => 'ui-state-default ui-corner-top'}= link_to('Coach', '#tabs-coach')
     - if @region.bus_routes.count > 0
-      #tabs-bus
+      #tabs-bus{:class => "ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all"}
         %h3!= t(:bus_routes, :count => @region.bus_routes.count, :national => national_route_link(@region, @national_region, 'tabs-bus'))
         - if @region.bus_routes.count > 20
-          %ul  
+          %ul{:class => "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"}
             - @region.bus_route_letters.each do |first|
-              %li= link_to(first, "#bus_starts_with_#{first}")
+              %li{:class => "ui-state-default ui-corner-top"}= link_to(first, "#bus_starts_with_#{first}")
           - @region.bus_route_letters.each do |first|
-            .region-bus-routes{:id => "bus_starts_with_#{first}"}
+            %div{:id => "bus_starts_with_#{first}", :class => "region-bus-routes ui-tabs-panel ui-widget-content ui-corner-bottom"}
               %h4.first= first
               - @region.bus_routes_by_letter[first].sort_by(&:number).each do |route|
                 .route-link= link_to(route.description, location_url(route)) 
@@ -36,12 +36,12 @@
             .route-link = link_to(route.description, location_url(route)) 
 
     - if @region.train_routes.count > 0  
-      #tabs-train
+      #tabs-train{:class => "ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all"}
         %h3!= t(:train_routes, :count => @region.train_routes.count, :national => national_route_link(@region, @national_region, 'tabs-train'))
         - if @region.train_routes.count > 20
-          %ul  
+          %ul{:class => "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"}
             - @region.train_route_letters.each do |first|
-              %li= link_to(first, "#train_starts_with_#{first}")
+              %li{:class => "ui-state-default ui-corner-top"}= link_to(first, "#train_starts_with_#{first}")
           - @region.train_route_letters.each do |first|
             .region-train-routes{:id => "train_starts_with_#{first}"}
               %h4.first= first
@@ -52,24 +52,24 @@
             .route-link= link_to(train_route.name(from_stop=nil, short=true), location_url(train_route))
 
     - if @region.tram_metro_routes.count > 0
-      #tabs-metro
+      #tabs-metro{:class => "ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all"}
         %h3!= t(:tram_routes, :count => @region.tram_metro_routes.count, :national => national_route_link(@region, @national_region, 'tabs-metro'))
         - @region.tram_metro_routes.each do |tram_metro_route|
           .route-link= link_to(tram_metro_route.name(from_stop=nil, short=true), location_url(tram_metro_route))
 
     - if @region.ferry_routes.count > 0
-      #tabs-ferry
+      #tabs-ferry{:class => "ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all"}
         %h3!= t(:ferry_routes, :count => @region.ferry_routes.count, :national => national_route_link(@region, @national_region, 'tabs-ferry'))
         - @region.ferry_routes.each do |ferry_route|
           .route-link= link_to(ferry_route.name(from_stop=nil, short=true), location_url(ferry_route))
   
     - if @region.coach_routes.count > 0
-      #tabs-coach
+      #tabs-coach{:class => "ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all"}
         %h3!= t(:coach_routes, :count => @region.coach_routes.count, :national => national_route_link(@region, @national_region, 'tabs-coach'))
         - if @region.coach_routes.count > 20
-          %ul  
+          %ul{:class => "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"}
             - @region.coach_route_letters.each do |first|
-              %li= link_to(first, "#coach_starts_with_#{first}")
+              %li{:class => "ui-state-default ui-corner-top"}= link_to(first, "#coach_starts_with_#{first}")
           - @region.coach_route_letters.each do |first|
             .region-coach-routes{:id => "coach_starts_with_#{first}"}
               %h4.first= first
