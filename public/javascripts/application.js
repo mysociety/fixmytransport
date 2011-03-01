@@ -61,7 +61,7 @@ function hideProblemDateTimeForOngoing() {
     jQuery('#date-field').hide();
     jQuery('#time-field').hide();    
   }
-  jQuery('input[name=problem[is_campaign]]').click(function(){
+  jQuery('input[name="problem[is_campaign]"]').click(function(){
     if (jQuery('#is-campaign-1').is(':checked')){
       jQuery('#date-field').hide("slow");
       jQuery('#time-field').hide("slow");
