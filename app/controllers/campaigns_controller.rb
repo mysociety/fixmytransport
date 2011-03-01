@@ -104,14 +104,14 @@ class CampaignsController < ApplicationController
   
   def update
     @campaign.attributes=(params[:campaign])
-    @campaign.confirm
-    if params[:user] and params[:token] == @campaign.problem.token
+    if params[:user] and (params[:token] == @campaign.problem.token)
       @campaign.initiator.name = params[:user][:name]
       @campaign.initiator.password = params[:user][:password]
       @campaign.initiator.password_confirmation = params[:user][:password_confirmation]
       @campaign.initiator.registered = true
     end
-    if @campaign.valid? 
+    if @campaign.valid?
+      @campaign.confirm
       @campaign.save && @campaign.initiator.save
       redirect_to campaign_url(@campaign)
     else

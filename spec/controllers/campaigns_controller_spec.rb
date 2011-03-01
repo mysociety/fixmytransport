@@ -283,11 +283,6 @@ describe CampaignsController do
         make_request(token=@mock_problem.token)
       end
 
-      it 'should confirm the campaign' do
-        @mock_campaign.should_receive(:confirm)
-        make_request(token=@mock_problem.token)
-      end
-
     end
 
     describe 'if the campaign is valid' do
@@ -311,14 +306,27 @@ describe CampaignsController do
         response.should redirect_to(campaign_url(@mock_campaign))
       end
 
+      it 'should confirm the campaign' do
+        @mock_campaign.should_receive(:confirm)
+        make_request(token=@mock_problem.token)
+      end
+      
     end
 
     describe 'if the campaign is not valid' do
 
-      it 'should render the "edit" template' do
+      before do 
         @mock_campaign.stub!(:valid?).and_return(false)
+      end
+      
+      it 'should render the "edit" template' do
         make_request(token=@mock_problem.token)
         response.should render_template("campaigns/edit")
+      end
+      
+      it 'should not confirm the campaign' do
+        @mock_campaign.should_not_receive(:confirm)
+        make_request(token=@mock_problem.token)
       end
 
     end
