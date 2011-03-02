@@ -20,4 +20,5 @@
 
 class AlternativeName < ActiveRecord::Base
   belongs_to :locality
+  belongs_to :alternative_locality, :class_name => 'Locality'
 end
