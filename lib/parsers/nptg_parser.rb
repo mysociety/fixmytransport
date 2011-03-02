@@ -106,9 +106,9 @@ class Parsers::NptgParser
       alternative_locality = Locality.find_by_code(row['Alternate ID'])
       yield AlternativeName.new(:alternative_locality    => alternative_locality,
                                 :locality                => locality,
-                                :creation_datetime       => row['CreationDateTime'],
-                                :modification_datetime   => row['ModificationDateTime'],
-                                :revision_number         => row['RevisionNumber'],
+                                :creation_datetime       => (row['CreationDateTime'] or row['Date of Issue']),
+                                :modification_datetime   => (row['ModificationDateTime'] or row['Date of Last Change']),
+                                :revision_number         => (row['RevisionNumber'] or row['Issue Version']) ,
                                 :modification            => row['Modification'])
     end
   end
