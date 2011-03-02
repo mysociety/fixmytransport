@@ -54,17 +54,17 @@ namespace :nptg do
         usage_message "usage: rake nptg:load:all DIR=dirname"
       end
       puts "Loading data from #{ENV['DIR']}..."
-      ENV['FILE'] = File.join(ENV['DIR'], 'Regions.csv')
+      ENV['FILE'] = File.join(ENV['DIR'], 'Travel Regions.csv')
       Rake::Task['nptg:load:regions'].execute
-      ENV['FILE'] = File.join(ENV['DIR'], 'AdminAreas.csv')
+      ENV['FILE'] = File.join(ENV['DIR'], 'Admin Areas.csv')
       Rake::Task['nptg:load:admin_areas'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'Districts.csv')
       Rake::Task['nptg:load:districts'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'Localities.csv')
       Rake::Task['nptg:load:localities'].execute
-      ENV['FILE'] = File.join(ENV['DIR'], 'LocalityHierarchy.csv')
+      ENV['FILE'] = File.join(ENV['DIR'], 'Hierarchy.csv')
       Rake::Task['nptg:load:locality_hierarchy'].execute
-      ENV['FILE'] = File.join(ENV['DIR'], 'LocalityAlternativeNames.csv')
+      ENV['FILE'] = File.join(ENV['DIR'], 'AlternativeNames.csv')
       Rake::Task['nptg:load:locality_alternative_names'].execute
     end
     
