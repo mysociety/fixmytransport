@@ -47,11 +47,11 @@ namespace :naptan do
       Rake::Task['naptan:load:stop_area_types'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'Stops.csv')
       Rake::Task['naptan:load:stops'].execute
-      ENV['FILE'] = File.join(ENV['DIR'], 'StopAreas.csv')
+      ENV['FILE'] = File.join(ENV['DIR'], 'Groups.csv')
       Rake::Task['naptan:load:stop_areas'].execute
-      ENV['FILE'] = File.join(ENV['DIR'], 'StopsInArea.csv')
+      ENV['FILE'] = File.join(ENV['DIR'], 'StopsInGroup.csv')
       Rake::Task['naptan:load:stop_area_memberships'].execute   
-      ENV['FILE'] = File.join(ENV['DIR'], 'AreaHierarchy.csv')
+      ENV['FILE'] = File.join(ENV['DIR'], 'GroupsInGroup.csv')
       Rake::Task['naptan:load:stop_area_hierarchy'].execute   
     end
     
