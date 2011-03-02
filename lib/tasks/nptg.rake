@@ -47,6 +47,17 @@ namespace :nptg do
     task :locality_alternative_names => :environment do 
       parse('locality_alternative_names', Parsers::NptgParser)
     end
+    
+    desc "Updates districts with the admin areas given in the locality data" 
+    task :add_district_admin_areas => :environment do 
+      District.find_each do |district|
+        admin_areas = district.localities.map{ |locality| locality.admin_area }
+        puts "#{district.name} has #{district.localities.size} localities"
+        raise "More than one admin area for district #{district.name} #{admin_areas.inspect}" unless admin_areas.size <= 1
+        district.admin_area = admin_areas.first
+        district.save!
+      end
+    end
         
     desc "Loads all data from CSV files in a directory specified as DIR=dirname"
     task :all => :environment do 
@@ -64,8 +75,9 @@ namespace :nptg do
       Rake::Task['nptg:load:localities'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'Hierarchy.csv')
       Rake::Task['nptg:load:locality_hierarchy'].execute
-      ENV['FILE'] = File.join(ENV['DIR'], 'AlternativeNames.csv')
+      ENV['FILE'] = File.join(ENV['DIR'], 'Alternate Names.csv')
       Rake::Task['nptg:load:locality_alternative_names'].execute
+      Rake::Task['nptg:load:add_district_admin_areas'].execute
     end
     
   end
