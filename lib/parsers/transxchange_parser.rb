@@ -1,5 +1,5 @@
 begin
-  require 'libxml'
+  require 'xml'
 rescue LoadError
   require 'xml/libxml'
 end
@@ -8,7 +8,6 @@ require 'test/unit'
 
 class Parsers::TransxchangeParser
 
-  include LibXML
   include Test::Unit::Assertions
   attr_accessor :admin_area, :filename
 
