@@ -75,5 +75,7 @@ else
     echo "ENV['RAILS_ENV'] = 'development'" > config/rails_env.rb
 fi
 
+# build any native gems
+rake gems:build
 # upgrade database
 rake db:migrate #--trace
