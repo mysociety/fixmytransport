@@ -1,0 +1,129 @@
+have_library: checking for socket() in socket.lib... -------------------- no
+
+"cl -nologo -Feconftest -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32 -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32  -MD -Zi -O2b2xg- -G6 conftest.c   msvcrt-ruby18-static.lib socket.lib  oldnames.lib user32.lib advapi32.lib shell32.lib ws2_32.lib   -link    -libpath:"." -libpath:"C:/Development/Ruby/lib" -libpath:"C:/Development/Ruby/lib" -stack:0x2000000"
+checked program was:
+/* begin */
+1: #define WIN32_LEAN_AND_MEAN
+2: #define WIN32
+3: #include <winsock2.h>
+4: #include <windows.h>
+5: 
+6: /*top*/
+7: int main() { return 0; }
+8: int t() { void ((*volatile p)()); p = (void ((*)()))socket; return 0; }
+/* end */
+
+"cl -nologo -Feconftest -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32 -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32  -MD -Zi -O2b2xg- -G6 conftest.c   msvcrt-ruby18-static.lib socket.lib  oldnames.lib user32.lib advapi32.lib shell32.lib ws2_32.lib   -link    -libpath:"." -libpath:"C:/Development/Ruby/lib" -libpath:"C:/Development/Ruby/lib" -stack:0x2000000"
+checked program was:
+/* begin */
+1: /*top*/
+2: int main() { return 0; }
+3: int t() { socket(); return 0; }
+/* end */
+
+--------------------
+
+have_library: checking for gethostbyname() in nsl.lib... -------------------- no
+
+"cl -nologo -Feconftest -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32 -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32  -MD -Zi -O2b2xg- -G6 conftest.c   msvcrt-ruby18-static.lib nsl.lib  oldnames.lib user32.lib advapi32.lib shell32.lib ws2_32.lib   -link    -libpath:"." -libpath:"C:/Development/Ruby/lib" -libpath:"C:/Development/Ruby/lib" -stack:0x2000000"
+checked program was:
+/* begin */
+1: #define WIN32_LEAN_AND_MEAN
+2: #define WIN32
+3: #include <winsock2.h>
+4: #include <windows.h>
+5: 
+6: /*top*/
+7: int main() { return 0; }
+8: int t() { void ((*volatile p)()); p = (void ((*)()))gethostbyname; return 0; }
+/* end */
+
+"cl -nologo -Feconftest -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32 -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32  -MD -Zi -O2b2xg- -G6 conftest.c   msvcrt-ruby18-static.lib nsl.lib  oldnames.lib user32.lib advapi32.lib shell32.lib ws2_32.lib   -link    -libpath:"." -libpath:"C:/Development/Ruby/lib" -libpath:"C:/Development/Ruby/lib" -stack:0x2000000"
+checked program was:
+/* begin */
+1: /*top*/
+2: int main() { return 0; }
+3: int t() { gethostbyname(); return 0; }
+/* end */
+
+--------------------
+
+have_library: checking for atan() in m.lib... -------------------- yes
+
+--------------------
+
+have_library: checking for inflate() in z.lib... -------------------- no
+
+"cl -nologo -Feconftest -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32 -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32  -MD -Zi -O2b2xg- -G6 conftest.c   msvcrt-ruby18-static.lib z.lib  oldnames.lib user32.lib advapi32.lib shell32.lib ws2_32.lib   -link    -libpath:"." -libpath:"C:/Development/Ruby/lib" -libpath:"C:/Development/Ruby/lib" -stack:0x2000000"
+checked program was:
+/* begin */
+1: #define WIN32_LEAN_AND_MEAN
+2: #define WIN32
+3: #include <winsock2.h>
+4: #include <windows.h>
+5: 
+6: /*top*/
+7: int main() { return 0; }
+8: int t() { void ((*volatile p)()); p = (void ((*)()))inflate; return 0; }
+/* end */
+
+"cl -nologo -Feconftest -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32 -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32  -MD -Zi -O2b2xg- -G6 conftest.c   msvcrt-ruby18-static.lib z.lib  oldnames.lib user32.lib advapi32.lib shell32.lib ws2_32.lib   -link    -libpath:"." -libpath:"C:/Development/Ruby/lib" -libpath:"C:/Development/Ruby/lib" -stack:0x2000000"
+checked program was:
+/* begin */
+1: /*top*/
+2: int main() { return 0; }
+3: int t() { inflate(); return 0; }
+/* end */
+
+--------------------
+
+have_library: checking for inflate() in zlib.lib... -------------------- no
+
+"cl -nologo -Feconftest -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32 -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32  -MD -Zi -O2b2xg- -G6 conftest.c   msvcrt-ruby18-static.lib zlib.lib  oldnames.lib user32.lib advapi32.lib shell32.lib ws2_32.lib   -link    -libpath:"." -libpath:"C:/Development/Ruby/lib" -libpath:"C:/Development/Ruby/lib" -stack:0x2000000"
+checked program was:
+/* begin */
+1: #define WIN32_LEAN_AND_MEAN
+2: #define WIN32
+3: #include <winsock2.h>
+4: #include <windows.h>
+5: 
+6: /*top*/
+7: int main() { return 0; }
+8: int t() { void ((*volatile p)()); p = (void ((*)()))inflate; return 0; }
+/* end */
+
+"cl -nologo -Feconftest -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32 -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32  -MD -Zi -O2b2xg- -G6 conftest.c   msvcrt-ruby18-static.lib zlib.lib  oldnames.lib user32.lib advapi32.lib shell32.lib ws2_32.lib   -link    -libpath:"." -libpath:"C:/Development/Ruby/lib" -libpath:"C:/Development/Ruby/lib" -stack:0x2000000"
+checked program was:
+/* begin */
+1: /*top*/
+2: int main() { return 0; }
+3: int t() { inflate(); return 0; }
+/* end */
+
+--------------------
+
+have_library: checking for inflate() in zlib1.lib... -------------------- no
+
+"cl -nologo -Feconftest -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32 -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32  -MD -Zi -O2b2xg- -G6 conftest.c   msvcrt-ruby18-static.lib zlib1.lib  oldnames.lib user32.lib advapi32.lib shell32.lib ws2_32.lib   -link    -libpath:"." -libpath:"C:/Development/Ruby/lib" -libpath:"C:/Development/Ruby/lib" -stack:0x2000000"
+checked program was:
+/* begin */
+1: #define WIN32_LEAN_AND_MEAN
+2: #define WIN32
+3: #include <winsock2.h>
+4: #include <windows.h>
+5: 
+6: /*top*/
+7: int main() { return 0; }
+8: int t() { void ((*volatile p)()); p = (void ((*)()))inflate; return 0; }
+/* end */
+
+"cl -nologo -Feconftest -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32 -I. -IC:/Development/Ruby/lib/ruby/1.8/i386-mswin32  -MD -Zi -O2b2xg- -G6 conftest.c   msvcrt-ruby18-static.lib zlib1.lib  oldnames.lib user32.lib advapi32.lib shell32.lib ws2_32.lib   -link    -libpath:"." -libpath:"C:/Development/Ruby/lib" -libpath:"C:/Development/Ruby/lib" -stack:0x2000000"
+checked program was:
+/* begin */
+1: /*top*/
+2: int main() { return 0; }
+3: int t() { inflate(); return 0; }
+/* end */
+
+--------------------
+
