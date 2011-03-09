@@ -1,8 +1,4 @@
-begin
-  require 'xml'
-rescue LoadError
-  require 'xml/libxml'
-end
+require 'xml'
 require 'zip/zip'
 require 'test/unit'
 
