@@ -23,6 +23,7 @@ class Route < ActiveRecord::Base
   has_many :sub_routes, :through => :route_sub_routes
   has_many :route_operators, :dependent => :destroy, :uniq => true
   has_many :operators, :through => :route_operators, :uniq => true
+  has_many :journey_patterns, :dependent => :destroy, :order => 'id asc'
   has_many :route_segments, :dependent => :destroy, :order => 'id asc'
   has_many :from_stops, :through => :route_segments, :class_name => 'Stop' 
   has_many :to_stops, :through => :route_segments, :class_name => 'Stop'
@@ -41,7 +42,7 @@ class Route < ActiveRecord::Base
   cattr_reader :per_page
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
-  attr_accessor :show_as_point
+  attr_accessor :show_as_point, :journey_pattern_data
   before_save :cache_route_description, :cache_route_coords
   is_route_or_sub_route
   
@@ -146,8 +147,12 @@ class Route < ActiveRecord::Base
     [transport_mode]
   end
 
+  def default_journey
+    journey_patterns.sort{ |a,b| a.route_segments.count <=> b.route_segments.count }.last
+  end
+
   def stops_or_stations
-    route_segments.map do |route_segment|
+    default_journey.route_segments.map do |route_segment|
       if route_segment.from_stop_area 
         from = route_segment.from_stop_area
       else
@@ -192,8 +197,9 @@ class Route < ActiveRecord::Base
   end
 
   def terminuses
-    from_terminuses = route_segments.select{ |route_segment| route_segment.from_terminus? }
-    to_terminuses = route_segments.select{ |route_segment| route_segment.to_terminus? }
+    segments = journey_patterns.map{ |journey_pattern| journey_pattern.route_segments }.flatten
+    from_terminuses = segments.select{ |route_segment| route_segment.from_terminus? }
+    to_terminuses = segments.select{ |route_segment| route_segment.to_terminus? }
     from_terminuses = from_terminuses.map do |segment| 
       segment.from_stop_area ? segment.from_stop_area : segment.from_stop 
     end

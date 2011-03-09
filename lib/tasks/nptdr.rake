@@ -34,7 +34,7 @@ namespace :nptdr do
     task :check_routes => :environment do 
       check_for_dir
       puts "Checking routes in #{ENV['DIR']}..."
-      parser = Parsers::NptdrParser.new
+      parser = Parsers::TransxchangeParser.new
       dir = ENV['DIR']
       operators_outfile = File.open("#{RAILS_ROOT}/data/nptdr/unmatched_operators.tsv", 'w')
       operators_headings = ["NPTDR File Region", 
@@ -51,7 +51,7 @@ namespace :nptdr do
                         "NPTDR Route Numbers"]
       stops_outfile.write(stops_headings.join("\t") + "\n")                  
       
-      files = Dir.glob(File.join(ENV['DIR'], "Admin_Area*.tsv"))
+      files = Dir.glob(File.join(ENV['DIR'], "ATCO*.txc"))
       files.each do |file|
         unmatched_codes = {}
         ambiguous_codes = {}
@@ -73,7 +73,7 @@ namespace :nptdr do
             end
           end
         end
-        admin_area = parser.admin_area_from_filepath(file)
+        admin_area = parser.admin_area
         
         puts "File: #{file} Region:#{admin_area.region.name} Admin area: #{admin_area.name}"
         puts "Unmatched operator codes"
