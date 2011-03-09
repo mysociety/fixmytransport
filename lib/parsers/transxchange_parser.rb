@@ -1,4 +1,8 @@
-require 'libxml'
+begin
+  require 'libxml'
+rescue
+  require 'xml/libxml'
+end
 require 'zip/zip'
 require 'test/unit'
 
