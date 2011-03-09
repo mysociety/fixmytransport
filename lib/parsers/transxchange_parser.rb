@@ -6,7 +6,7 @@ class Parsers::TransxchangeParser
 
   include LibXML
   include Test::Unit::Assertions
-  attr_accessor :admin_area
+  attr_accessor :admin_area, :filename
 
   def initialize
   end

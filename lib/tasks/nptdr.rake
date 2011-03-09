@@ -1,3 +1,4 @@
+require 'zip/zip'
 require File.dirname(__FILE__) +  '/data_loader'
 namespace :nptdr do
     
@@ -30,6 +31,40 @@ namespace :nptdr do
       puts "Unmatched: #{unmatched_codes.keys.size}"
     end 
     
+    def write_missing_stops(missing_stops, admin_area, stops_outfile)
+      puts "Missing stops"
+      missing_stops.each do |stop_code, route_list|
+        values = [admin_area.region.name, 
+                  admin_area.name, 
+                  stop_code, 
+                  route_list.join(", ")]
+        stops_outfile.write(values.join("\t") + "\n")
+      end
+      stops_outfile.flush
+    end
+    
+    def write_missing_operators(unmatched_codes, ambiguous_codes, admin_area, operators_outfile)
+      puts "Unmatched operator codes"
+      unmatched_codes.each do |code, route_list|
+        values = [admin_area.region.name, 
+                  admin_area.name, 
+                  code, 
+                  "missing",
+                  route_list.join(", ")]
+        operators_outfile.write(values.join("\t") + "\n")
+      end
+      puts "Ambiguous operator codes"        
+      ambiguous_codes.each do |code, route_list|
+        values = [admin_area.region.name, 
+                  admin_area.name, 
+                  code, 
+                  "ambiguous",
+                  route_list.join(", ")]
+        operators_outfile.write(values.join("\t") + "\n")
+      end
+      operators_outfile.flush
+    end
+    
     desc 'Process routes from tsv files in a dir specified as DIR=dirname and output operator match and missing stop information'
     task :check_routes => :environment do 
       check_for_dir
@@ -51,64 +86,42 @@ namespace :nptdr do
                         "NPTDR Route Numbers"]
       stops_outfile.write(stops_headings.join("\t") + "\n")                  
       
-      files = Dir.glob(File.join(ENV['DIR'], "ATCO*.txc"))
-      files.each do |file|
-        unmatched_codes = {}
-        ambiguous_codes = {}
-        missing_stops = parser.parse_routes(file) do |route|
-          route_string = "#{route.type} #{route.number}"
-          if route.route_operators.size == 0
-            if ! unmatched_codes[route.operator_code]
-              unmatched_codes[route.operator_code] = []
+      Dir.glob(File.join(ENV['DIR'], '*/')).each do |subdir|
+        zips = Dir.glob(File.join(subdir, '*.zip'))
+        zips.each do |zip|
+          Zip::ZipFile.foreach(zip) do |txc_file|
+            puts txc_file
+            parser.filename = txc_file.to_s
+            unmatched_codes = {}
+            ambiguous_codes = {}
+            missing_stops = parser.parse_routes(txc_file.get_input_stream()) do |route|
+              route_string = "#{route.type} #{route.number}"
+              if route.route_operators.size == 0
+                if ! unmatched_codes[route.operator_code]
+                  unmatched_codes[route.operator_code] = []
+                end
+                if ! unmatched_codes[route.operator_code].include?(route_string)
+                  unmatched_codes[route.operator_code] << route_string
+                end
+              elsif route.route_operators.size > 1
+                if ! ambiguous_codes[route.operator_code]
+                  ambiguous_codes[route.operator_code] = []
+                end
+                if ! ambiguous_codes[route.operator_code].include?(route_string)
+                  ambiguous_codes[route.operator_code] << route_string
+                end
+              end
             end
-            if ! unmatched_codes[route.operator_code].include?(route_string)
-              unmatched_codes[route.operator_code] << route_string
-            end
-          elsif route.route_operators.size > 1
-            if ! ambiguous_codes[route.operator_code]
-              ambiguous_codes[route.operator_code] = []
-            end
-            if ! ambiguous_codes[route.operator_code].include?(route_string)
-              ambiguous_codes[route.operator_code] << route_string
-            end
+            admin_area = parser.admin_area
+            puts "File: #{file} Region:#{admin_area.region.name} Admin area: #{admin_area.name}"
+            write_missing_operators(unmatched_codes, ambiguous_codes, admin_area, operators_outfile)
+            write_missing_stops(missing_stops, admin_area, stops_outfile)
           end
         end
-        admin_area = parser.admin_area
-        
-        puts "File: #{file} Region:#{admin_area.region.name} Admin area: #{admin_area.name}"
-        puts "Unmatched operator codes"
-        unmatched_codes.each do |code, route_list|
-          values = [admin_area.region.name, 
-                    admin_area.name, 
-                    code, 
-                    "missing",
-                    route_list.join(", ")]
-          operators_outfile.write(values.join("\t") + "\n")
-        end
-        puts "Ambiguous operator codes"        
-        ambiguous_codes.each do |code, route_list|
-          values = [admin_area.region.name, 
-                    admin_area.name, 
-                    code, 
-                    "ambiguous",
-                    route_list.join(", ")]
-          operators_outfile.write(values.join("\t") + "\n")
-        end
-        operators_outfile.flush
-        puts "Missing stops"
-        missing_stops.each do |stop_code, route_list|
-          values = [admin_area.region.name, 
-                    admin_area.name, 
-                    stop_code, 
-                    route_list.join(", ")]
-          stops_outfile.write(values.join("\t") + "\n")
-        end
-        stops_outfile.flush
       end
       operators_outfile.close
       stops_outfile.close
     end
-
   end
   
   namespace :load do
