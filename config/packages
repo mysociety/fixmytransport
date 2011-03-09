@@ -6,6 +6,8 @@ libpgsql-ruby1.8
 libjson-ruby
 libtmail-ruby1.8
 libwww-mechanize-ruby1.8
+libxml2
+libxml2-dev
 libzip-ruby1.8
 mahoro-ruby1.8 | libmahoro-ruby1.8
 mutt
@@ -13,6 +15,7 @@ pdftk (> 1.41+dfsg-1) | pdftk (< 1.41+dfsg-1) # that version has a non-functioni
 poppler-utils
 rake (>= 0.8.4-1)
 ruby1.8
+ruby1.8-dev
 rubygems
 sharutils
 tnef (>= 1.4.5)
