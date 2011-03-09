@@ -17,8 +17,9 @@ class Admin::RoutesController < ApplicationController
     end
     if !params[:query].blank?
       query = params[:query].downcase
-      query_clause = "(lower(name) like ? OR lower(number) = ?"
+      query_clause = "(lower(name) like ? OR lower(number) = ? OR lower(operator_code) = ?"
       conditions << "%%#{query}%%" 
+      conditions << query
       conditions << query
       # numeric?
       if query.to_i.to_s == query

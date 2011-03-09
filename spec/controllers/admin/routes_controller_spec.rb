@@ -12,11 +12,11 @@ describe Admin::RoutesController do
       get :index
     end
     
-    it 'should ask for routes with part of the name or the whole number matching the query param' do 
+    it 'should ask for routes with part of the name or the whole number or operator code matching the query param' do 
       Route.should_receive(:paginate).with(:page => nil, 
                                            :select=>"distinct routes.*",
-                                           :conditions => ['(lower(name) like ? OR lower(number) = ?)',
-                                                           '%%something%%', 'something'],
+                                           :conditions => ['(lower(name) like ? OR lower(number) = ? OR lower(operator_code) = ?)',
+                                                           '%%something%%', 'something', 'something'],
                                            :order => 'number')
       get :index, :query => 'Something'
     end
@@ -24,8 +24,8 @@ describe Admin::RoutesController do
     it 'should ask for routes with part of the name or the whole number or the id matching the query param if it is numeric' do
       Route.should_receive(:paginate).with(:page => nil, 
                                            :select=>"distinct routes.*",
-                                           :conditions => ['(lower(name) like ? OR lower(number) = ? OR id = ?)',
-                                                            '%%34%%', '34', 34],
+                                           :conditions => ['(lower(name) like ? OR lower(number) = ? OR lower(operator_code) = ? OR id = ?)',
+                                                            '%%34%%', '34', '34', 34],
                                             :order => 'number')
       get :index, :query => '34'
     end
@@ -41,11 +41,11 @@ describe Admin::RoutesController do
     
     
     it 'should ask for routes matching both the transport mode and query params' do 
-      query_string = 'transport_mode_id = ? AND (lower(name) like ? OR lower(number) = ?)'
+      query_string = 'transport_mode_id = ? AND (lower(name) like ? OR lower(number) = ? OR lower(operator_code) = ?)'
       Route.should_receive(:paginate).with(:page => nil, 
                                            :select=>"distinct routes.*",
                                            :conditions => [query_string,
-                                                           '1', '%%something%%', 'something'],
+                                                           '1', '%%something%%', 'something', 'something'],
                                             :order => 'number')
       get :index, :mode => '1', :query => 'something'
     end
