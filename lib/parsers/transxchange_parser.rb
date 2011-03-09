@@ -116,19 +116,20 @@ class Parsers::TransxchangeParser
             if !to_stop
               missing << timing_link[:to_info][:stop]
             end
-
-            route_segment = jp.route_segments.build(:from_stop => from_stop,
-                                                    :to_stop   => to_stop,
-                                                    :route => route,
-                                                    :segment_order => i )
-            if i == 0
-              route_segment.from_terminus = true
+            if (from_stop and to_stop)
+              route_segment = jp.route_segments.build(:from_stop => from_stop,
+                                                      :to_stop   => to_stop,
+                                                      :route => route,
+                                                      :segment_order => i )
+              if i == 0
+                route_segment.from_terminus = true
+              end
+              if i == (section[:timing_links].size - 1)
+                route_segment.to_terminus = true
+              end
+              # route_segment.set_stop_areas
+              i += 1
             end
-            if i == (section[:timing_links].size - 1)
-              route_segment.to_terminus = true
-            end
-            # route_segment.set_stop_areas
-            i += 1
           end
         end
       end
