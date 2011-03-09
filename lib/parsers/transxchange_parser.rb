@@ -1,6 +1,6 @@
 begin
   require 'libxml'
-rescue
+rescue LoadError
   require 'xml/libxml'
 end
 require 'zip/zip'
