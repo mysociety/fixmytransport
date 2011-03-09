@@ -28,3 +28,4 @@ vendor/gems/libxml-ruby-1.1.4/ext/**/*.so.a
 vendor/gems/libxml-ruby-1.1.4/ext/**/Makefile
 vendor/gems/libxml-ruby-1.1.4/ext/**/mkmf.log
 vendor/gems/libxml-ruby-1.1.4/ext/**/gem_make.out
+vendor/gems/libxml-ruby-1.1.4/ext/**/extconf.h
