@@ -255,10 +255,15 @@ class Stop < ActiveRecord::Base
   end
   
   # find the nearest stop to a set of National Grid coordinates
-  def self.find_nearest(easting, northing)
+  def self.find_nearest(easting, northing, exclude_id = nil)
+    conditions = nil
+    if exclude_id
+      conditions = ["id != ?", exclude_id]
+    end
     stops = find(:first, :order => "ST_Distance(
                        ST_GeomFromText('POINT(#{easting} #{northing})', #{BRITISH_NATIONAL_GRID}), 
-                       stops.coords) asc")
+                       stops.coords) asc",
+                       :conditions => conditions)
   end
   
   def self.full_find(id, scope)
