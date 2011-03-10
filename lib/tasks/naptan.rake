@@ -164,7 +164,7 @@ namespace :naptan do
       StopArea.paper_trail_off
       StopArea.find_each do |stop_area|
         stop_area.locality = find_stop_area_locality(stop_area)
-        stop_area.save
+        stop_area.save!
       end
       StopArea.paper_trail_on
     end
