@@ -9,11 +9,11 @@ class UpdateAlternativeNames < ActiveRecord::Migration
   end
 
   def self.down
-    add_column :alternative_names, :name
-    add_column :alternative_names, :short_name
-    add_column :alternative_names, :qualifier_name
-    add_column :alternative_names, :qualifier_locality
-    add_column :alternative_names, :qualifier_district
+    add_column :alternative_names, :name, :text
+    add_column :alternative_names, :short_name, :text
+    add_column :alternative_names, :qualifier_name, :text
+    add_column :alternative_names, :qualifier_locality, :text
+    add_column :alternative_names, :qualifier_district, :text
     remove_column :alternative_names, :alternative_locality_id
   end
 end
