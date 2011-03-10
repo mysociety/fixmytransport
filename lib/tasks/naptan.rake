@@ -161,10 +161,12 @@ namespace :naptan do
     
     desc 'Add locality_id to stop areas'
     task :add_locality_to_stop_areas => :environment do 
+      StopArea.paper_trail_off
       StopArea.find_each do |stop_area|
         stop_area.locality = find_stop_area_locality(stop_area)
         stop_area.save
       end
+      StopArea.paper_trail_on
     end
     
     desc 'Add TIPLOC and CRS codes to stops'
