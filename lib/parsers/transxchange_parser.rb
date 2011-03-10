@@ -25,8 +25,8 @@ class Parsers::TransxchangeParser
           end
           if load_run
             next if LoadRunCompletion.find(:first, :conditions => { :admin_area_id => @admin_area,
-                                                                    :transport_mode_id => @mode, 
-                                                                    :load_type => 'routes', 
+                                                                    :transport_mode_id => @mode,
+                                                                    :load_type => 'routes',
                                                                     :name => load_run } )
           end
           parse_routes(txc_file.get_input_stream(), load_run, &block)
@@ -95,20 +95,19 @@ class Parsers::TransxchangeParser
       end
     end
     stop_options = {:includes => {:stop_area_memberships => :stop_area}}
-    @routes.each do |route|
 
+    @routes.each do |route|
       puts route.number
       route.region = @region
       missing = []
       route.route_source_admin_areas.build({:source_admin_area => @admin_area,
                                             :operator_code => route.operator_code})
-
       route_regions = []
       route.journey_pattern_data.each do |journey_pattern_id, journey_pattern|
-        i = 0
+        jp = route.journey_patterns.build(:destination => journey_pattern[:destination_display])
+        segment_order = 0
         journey_pattern[:section_refs].each do |section_ref|
           section = @journey_pattern_sections[section_ref]
-          jp = route.journey_patterns.build(:destination => journey_pattern[:destination_display])
           section[:timing_links].each do |timing_link|
             from_stop = Stop.find_by_code(timing_link[:from_info][:stop], stop_options)
             to_stop = Stop.find_by_code(timing_link[:to_info][:stop], stop_options)
@@ -123,19 +122,16 @@ class Parsers::TransxchangeParser
               route_segment = jp.route_segments.build(:from_stop => from_stop,
                                                       :to_stop   => to_stop,
                                                       :route => route,
-                                                      :segment_order => i )
-              if i == 0
-                route_segment.from_terminus = true
-              end
-              if i == (section[:timing_links].size - 1)
-                route_segment.to_terminus = true
-              end
+                                                      :segment_order => segment_order )
+              segment_order += 1
               route_segment.set_stop_areas
-              i += 1
             end
           end
         end
+        jp.route_segments.first.from_terminus = true
+        jp.route_segments.last.to_terminus = true
       end
+      next if route.journey_patterns.empty?
       missing.each do |missing_stop_code|
         missing_stops = self.mark_stop_code_missing(missing_stops, missing_stop_code, route)
       end
@@ -146,9 +142,9 @@ class Parsers::TransxchangeParser
       yield route
     end
     if load_run
-      LoadRunCompletion.create!(:transport_mode => @mode, 
+      LoadRunCompletion.create!(:transport_mode => @mode,
                                 :admin_area => @admin_area,
-                                :load_type => 'routes', 
+                                :load_type => 'routes',
                                 :name => load_run)
     end
     return missing_stops
