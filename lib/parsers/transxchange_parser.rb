@@ -12,7 +12,7 @@ class Parsers::TransxchangeParser
 
   # Go through a directory and look for zip files in each directory. Get a stream from every
   # zip file found and pass it to parse_routes
-  def parse_all_routes(dirname, transport_mode=nil)
+  def parse_all_routes(dirname, transport_mode=nil, &block)
     Dir.glob(File.join(dirname, '*/')).each do |subdir|
       zips = Dir.glob(File.join(subdir, '*.zip'))
       zips.each do |zip|
@@ -23,7 +23,7 @@ class Parsers::TransxchangeParser
           if transport_mode
             next unless @mode.name == transport_mode
           end
-          parse_routes(txc_file.get_input_stream())
+          parse_routes(txc_file.get_input_stream(), &block)
         end
       end
     end
@@ -67,9 +67,7 @@ class Parsers::TransxchangeParser
     return missing_stops
   end
 
-  def add_route_journey_pattern(route)
-  end
-  def parse_routes(input)
+  def parse_routes(input, &block)
     @routes = []
     missing_stops = {}
     if input.is_a?(String)
@@ -127,7 +125,7 @@ class Parsers::TransxchangeParser
               if i == (section[:timing_links].size - 1)
                 route_segment.to_terminus = true
               end
-              # route_segment.set_stop_areas
+              route_segment.set_stop_areas
               i += 1
             end
           end

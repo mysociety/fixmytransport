@@ -19,6 +19,13 @@ namespace :db do
     ENV['FILE'] = File.join(MySociety::Config.get('NOC_DIR', ''), 'NOC_DB_31-03-2010.csv')
     Rake::Task['noc:load:operators'].execute
 
+    # Pre-load checking and loading of missing stops (needs to be run manually)
+    # Requires ATCO-CIF NPTDR data to have been parsed into tsv files using script/dump_nptdr_routes.py
+    # Rake::Task['nptdr:pre_load:check_stops'].execute
+    # Rake::Task['nptdr:pre_load:check_routes'].execute
+    # Rake::Task['nptdr:load:missing_stops'].execute
+
+
     # Load Routes
     ENV['DIR'] = File.join(MySociety::Config.get('NPTDR_DERIVED_DIR', ''), 'routes')
     Rake::Task['nptdr:load:routes'].execute
