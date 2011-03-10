@@ -166,7 +166,11 @@ namespace :nptdr do
         if route.route_operators.size > 1
           route.route_operators.clear
         end
-        route.save!
+        if route.is_a?(TrainRoute)
+          route.class.add!(route, verbose=true)
+        else
+          route.save!
+        end
       end
       Route.paper_trail_on
       RouteSegment.paper_trail_on

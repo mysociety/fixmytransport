@@ -166,44 +166,50 @@ describe Route do
       end
     end
     
-    it 'should include a route with the same terminuses and the same operator' do 
+    it 'should include a route with a journey pattern with the same terminuses and the same operator' do 
+      journey_pattern = @route.journey_patterns.build(:destination => 'Haywards Heath')
       @terminus_segments.each do |route_segment|
-        @route.route_segments.build(:from_stop => route_segment.from_stop,
-                                    :to_stop => route_segment.to_stop, 
-                                    :from_stop_area => route_segment.from_stop_area,
-                                    :to_stop_area => route_segment.to_stop_area,
-                                    :from_terminus => route_segment.from_terminus?,
-                                    :to_terminus => route_segment.to_terminus?)
+        journey_pattern.route_segments.build(:from_stop => route_segment.from_stop,
+                                             :to_stop => route_segment.to_stop, 
+                                             :from_stop_area => route_segment.from_stop_area,
+                                             :to_stop_area => route_segment.to_stop_area,
+                                             :from_terminus => route_segment.from_terminus?,
+                                             :to_terminus => route_segment.to_terminus?,
+                                             :segment_order => route_segment.segment_order)
       end
-      @route.route_segments.build(:from_stop => stops(:victoria_station_one), 
-                                  :to_stop => stops(:victoria_station_two), 
-                                  :from_stop_area => stop_areas(:victoria_station_root),
-                                  :to_stop_area => stop_areas(:victoria_station_root),
-                                  :from_terminus => false,
-                                  :to_terminus => false)
+      journey_pattern.route_segments.build(:from_stop => stops(:victoria_station_one), 
+                                           :to_stop => stops(:victoria_station_two), 
+                                           :from_stop_area => stop_areas(:victoria_station_root),
+                                           :to_stop_area => stop_areas(:victoria_station_root),
+                                           :from_terminus => false,
+                                           :to_terminus => false, 
+                                           :segment_order => 5)
       Route.find_existing_train_routes(@route).should include(@existing_route)
     end
     
-    it 'should not include a route with the same terminus segments but with a different operator' do 
+    it 'should not include a route with a journey pattern with the same terminus segments but with a different operator' do 
       @route.route_operators.clear
       @route.route_operators.build(:operator => operators(:another_train_company))
+      journey_pattern = @route.journey_patterns.build(:destination => 'Haywards Heath')
       @terminus_segments.each do |route_segment|
-        @route.route_segments.build(:from_stop => route_segment.from_stop,
-                                    :to_stop => route_segment.to_stop, 
-                                    :from_terminus => route_segment.from_terminus?,
-                                    :to_terminus => route_segment.to_terminus?)
+        journey_pattern.route_segments.build(:from_stop => route_segment.from_stop,
+                                             :to_stop => route_segment.to_stop, 
+                                             :from_terminus => route_segment.from_terminus?,
+                                             :to_terminus => route_segment.to_terminus?,
+                                             :segment_order => route_segment.segment_order)
       end
       Route.find_existing_train_routes(@route).should_not include(@existing_route)
     end 
     
-    it 'should include route with the same terminus segments with the same operator code from the same admin area' do 
+    it 'should include route with a journey pattern with the same terminus segments with the same operator code from the same admin area' do 
       @route.route_operators.clear
       @route.route_source_admin_areas.build(:source_admin_area => admin_areas(:london), :operator_code => "TRAIN")
+      journey_pattern = @route.journey_patterns.build(:destination => 'Haywards Heath')
       @terminus_segments.each do |route_segment|
-        @route.route_segments.build(:from_stop => route_segment.from_stop,
-                                    :to_stop => route_segment.to_stop, 
-                                    :from_terminus => route_segment.from_terminus?,
-                                    :to_terminus => route_segment.to_terminus?)
+        journey_pattern.route_segments.build(:from_stop => route_segment.from_stop,
+                                             :to_stop => route_segment.to_stop, 
+                                             :from_terminus => route_segment.from_terminus?,
+                                             :to_terminus => route_segment.to_terminus?)
       end
       Route.find_existing_train_routes(@route).should_not include(@existing_route)
     end
@@ -271,49 +277,45 @@ describe Route do
       existing_route.route_operators.size.should == 1
     end
     
-    it 'should transfer route segment when merging overlapping routes' do 
+    it 'should transfer a journey pattern when merging overlapping routes' do 
       existing_route = routes(:victoria_to_haywards_heath)
       existing_route.route_segments.size.should == 4
+      existing_route.journey_patterns.size.should == 1
       Route.stub!(:find_existing).and_return([existing_route])
       route_segment = RouteSegment.create(:from_stop => stops(:borough_station),
                                           :to_stop => stops(:staple_street))
+      journey_pattern = JourneyPattern.create(:destination => 'Staple Street', 
+                                              :route_segments => [route_segment])
       route = Route.new(:transport_mode_id => 5, 
-                        :number => '43', 
-                        :route_segments => [route_segment])
+                        :number => '43',
+                        :journey_patterns => [journey_pattern])
       Route.add!(route)
-      existing_route.route_segments.size.should == 5
+      # need to reload the route segments to see the update as the new one is assigned
+      # via the journey pattern
+      existing_route.journey_patterns.size.should == 2
+      existing_route.route_segments(reload=true).size.should == 5
     end
     
-    it 'should not add duplicate route segments when merging overlapping routes' do 
+    it 'should not add duplicate journey patterns when merging overlapping routes' do 
       existing_route = routes(:victoria_to_haywards_heath)
       Route.stub!(:find_existing).and_return([existing_route])
       existing_route.route_segments.size.should == 4 
-      route_segment = existing_route.route_segments.first
+      existing_route.journey_patterns.size.should == 1
+
+      journey_pattern = existing_route.journey_patterns.first
       route = Route.new(:transport_mode_id => 5, 
                         :number => '43')
-      route.route_segments.build(:from_stop => route_segment.from_stop, 
-                                 :to_stop => route_segment.to_stop, 
-                                 :from_terminus => route_segment.from_terminus, 
-                                 :to_terminus => route_segment.to_terminus)                  
+      new_journey_pattern = route.journey_patterns.build(:destination => journey_pattern.destination)
+      journey_pattern.route_segments.each do |route_segment|
+        new_journey_pattern.route_segments.build(:from_stop => route_segment.from_stop, 
+                                                 :to_stop => route_segment.to_stop, 
+                                                 :from_terminus => route_segment.from_terminus, 
+                                                 :to_terminus => route_segment.to_terminus,
+                                                 :segment_order => route_segment.segment_order)       
+      end           
       Route.add!(route)
+      existing_route.journey_patterns.size.should == 1
       existing_route.route_segments.size.should == 4
-    end
-    
-    it 'should not leave as terminuses stops that are terminuses in an existing route but not terminuses in a duplicate' do 
-      existing_route = routes(:victoria_to_haywards_heath)
-      Route.stub!(:find_existing).and_return([existing_route])
-      existing_route_segment = existing_route.route_segments.detect{ |segment| segment.from_terminus? }
-      existing_route_segment.from_terminus?.should be_true
-      route_segment = mock_model(RouteSegment, :from_stop => existing_route_segment.from_stop, 
-                                               :to_stop => existing_route_segment.to_stop,
-                                               :from_terminus? => false, 
-                                               :to_terminus? => false, 
-                                               :destroy => true)
-      route = Route.new(:transport_mode_id => 5, 
-                        :number => '43', 
-                        :route_segments => [route_segment])
-      Route.add!(route)
-      RouteSegment.find(existing_route_segment.id).from_terminus.should be_false
     end
     
   end
