@@ -136,7 +136,55 @@ namespace :nptdr do
         operator.save!
       end
     end
+    
+    desc 'Loads route data from zipped TransXChange files named *.txc in subdirectories of a directory specified as DIR=dirname'
+    task :routes_from_transxchange => :environment do
+      check_for_dir
+      puts "Loading routes from #{ENV['DIR']}..."
+      transport_mode = ENV['MODE']
+      load_run = ENV['LOAD_RUN']
+      Dir.glob(File.join(ENV['DIR'], '*/')).each do |subdir|
+        zips = Dir.glob(File.join(subdir, '*.zip'))
+        zips.each do |zip|
+          puts "Loading routes from #{zip.inspect}"
+          command = "rake RAILS_ENV=#{RAILS_ENV} nptdr:load:routes_from_transxchange_file FILE=\"#{zip}\" MODE=\"#{transport_mode}\" LOAD_RUN=\"#{load_run}\" --trace" 
+          exit_status = run_in_shell(command, file)
+          raise "Process exited with error" unless exit_status == 0
+        end
+      end
+    end
 
+    desc 'Loads route data for one admin area from a zipped TransXChange file named *.txc in a directory specified as DIR=dirname'
+    task :routes_from_transxchange_file => :environment do
+      check_for_file
+      transport_mode = ENV['MODE']
+      load_run = ENV['LOAD_RUN']
+      zip = ENV['FILE']
+      Route.paper_trail_off
+      RouteSegment.paper_trail_off
+      RouteOperator.paper_trail_off
+      JourneyPattern.paper_trail_off
+      parser = Parsers::TransxchangeParser.new      
+      Zip::ZipFile.foreach(zip) do |txc_file|
+        puts txc_file
+        parser.parse_routes(txc_file.get_input_stream(), transport_mode, load_run, txc_file.to_s) do |route|
+          # don't save ambiguous operators
+          if route.route_operators.size > 1
+            route.route_operators.clear
+          end
+          if route.is_a?(TrainRoute)
+            route.class.add!(route, verbose=true)
+          else
+            route.save!
+          end
+        end
+      end
+      Route.paper_trail_on
+      RouteSegment.paper_trail_on
+      RouteOperator.paper_trail_on
+      JourneyPattern.paper_trail_on
+    end
+    
     desc 'Loads route data from TSV files named *.tsv in a directory specified as DIR=dirname'
     task :routes => :environment do
       check_for_dir
@@ -148,36 +196,6 @@ namespace :nptdr do
         run_in_shell(command, file)
       end
     end
-
-    desc 'Loads route data from zipped TransXChange files names *.txc in a directory specified as DIR=dirname'
-    task :routes_from_transxchange => :environment do
-      check_for_dir
-      puts "Loading routes from #{ENV['DIR']}..."
-      transport_mode = ENV['MODE']
-      load_run = ENV['LOAD_RUN']
-      Route.paper_trail_off
-      RouteSegment.paper_trail_off
-      RouteOperator.paper_trail_off
-      JourneyPattern.paper_trail_off
-      parser = Parsers::TransxchangeParser.new
-      parser.parse_all_routes(ENV['DIR'], transport_mode, load_run) do |route|
-
-        # don't save ambiguous operators
-        if route.route_operators.size > 1
-          route.route_operators.clear
-        end
-        if route.is_a?(TrainRoute)
-          route.class.add!(route, verbose=true)
-        else
-          route.save!
-        end
-      end
-      Route.paper_trail_on
-      RouteSegment.paper_trail_on
-      RouteOperator.paper_trail_on
-      JourneyPattern.paper_trail_on
-    end
-
 
     desc 'Loads route data from a TSV file specified as FILE=filename'
     task :routes_from_file => :environment do

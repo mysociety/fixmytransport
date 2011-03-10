@@ -5,7 +5,7 @@ require 'test/unit'
 class Parsers::TransxchangeParser
 
   include Test::Unit::Assertions
-  attr_accessor :admin_area, :filename
+  attr_accessor :admin_area, :filename, :mode
 
   def initialize
   end
@@ -18,18 +18,7 @@ class Parsers::TransxchangeParser
       zips.each do |zip|
         Zip::ZipFile.foreach(zip) do |txc_file|
           puts txc_file
-          @filename = txc_file.to_s
-          data_from_filename
-          if transport_mode
-            next unless @mode.name == transport_mode
-          end
-          if load_run
-            next if LoadRunCompletion.find(:first, :conditions => { :admin_area_id => @admin_area,
-                                                                    :transport_mode_id => @mode,
-                                                                    :load_type => 'routes',
-                                                                    :name => load_run } )
-          end
-          parse_routes(txc_file.get_input_stream(), load_run, &block)
+          parse_routes(txc_file.get_input_stream(), transport_mode, load_run, txc_file.to_s, &block)
         end
       end
     end
@@ -73,15 +62,27 @@ class Parsers::TransxchangeParser
     return missing_stops
   end
 
-  def parse_routes(input, load_run, &block)
-    @routes = []
-    missing_stops = {}
+  def parse_routes(input, transport_mode=nil, load_run=nil, filename=nil, &block)
     if input.is_a?(String)
       @filename = input
       @reader = XML::Reader.file(input)
     else
+      @filename = filename
       @reader = XML::Reader.io(input)
     end
+    data_from_filename
+    if !transport_mode.blank?
+      return unless @mode.name == transport_mode
+    end
+    if !load_run.blank?
+      return if LoadRunCompletion.find(:first, :conditions => { :admin_area_id => @admin_area,
+                                                                :transport_mode_id => @mode,
+                                                                :load_type => 'routes',
+                                                                :name => load_run } )
+    end
+    @routes = []
+    missing_stops = {}
+
     data_from_filename()
     while @reader.read
       case @reader.node_type
