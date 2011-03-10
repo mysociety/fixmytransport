@@ -19,6 +19,10 @@ namespace :db do
     ENV['FILE'] = File.join(MySociety::Config.get('NOC_DIR', ''), 'NOC_DB_31-03-2010.csv')
     Rake::Task['noc:load:operators'].execute
 
+    # Some post-load cleanup on NaPTAN data - add locality to stop areas, and any stops missing locality
+    Rake::Task['naptan:post_load:add_locality_to_stops'].execute
+    Rake::Task['naptan:post_load:add_locality_to_stop_areas'].execute
+
     # Pre-load checking and loading of missing stops (needs to be run manually)
     # Requires ATCO-CIF NPTDR data to have been parsed into tsv files using script/dump_nptdr_routes.py
     # Rake::Task['nptdr:pre_load:check_stops'].execute
@@ -27,12 +31,11 @@ namespace :db do
 
 
     # Load Routes
-    ENV['DIR'] = File.join(MySociety::Config.get('NPTDR_DERIVED_DIR', ''), 'routes')
-    Rake::Task['nptdr:load:routes'].execute
+    ENV['DIR'] = File.join(MySociety::Config.get('NPTDR_DIR', ''), 'routes')
+    Rake::Task['nptdr:load:routes_from_transxchange'].execute
 
-    # Delete stop areas without stops, add locality, other references, double-metaphone
+    # Delete stop areas without stops, other references, double-metaphone
     Rake::Task['naptan:post_load:delete_unpopulated_stop_areas'].execute
-    Rake::Task['naptan:post_load:add_locality_to_stop_areas'].execute
     Rake::Task['naptan:post_load:add_stops_codes'].execute
     Rake::Task['naptan:post_load:mark_metro_stops'].execute
     Rake::Task['naptan:post_load:add_station_double_metaphones'].execute
