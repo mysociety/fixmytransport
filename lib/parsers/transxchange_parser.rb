@@ -12,7 +12,7 @@ class Parsers::TransxchangeParser
 
   # Go through a directory and look for zip files in each directory. Get a stream from every
   # zip file found and pass it to parse_routes
-  def parse_all_routes(dirname, transport_mode=nil, &block)
+  def parse_all_routes(dirname, transport_mode=nil, load_run=nil, &block)
     Dir.glob(File.join(dirname, '*/')).each do |subdir|
       zips = Dir.glob(File.join(subdir, '*.zip'))
       zips.each do |zip|
@@ -23,7 +23,13 @@ class Parsers::TransxchangeParser
           if transport_mode
             next unless @mode.name == transport_mode
           end
-          parse_routes(txc_file.get_input_stream(), &block)
+          if load_run
+            next if LoadRunCompletion.find(:first, :conditions => { :admin_area_id => @admin_area,
+                                                                    :transport_mode_id => @mode, 
+                                                                    :load_type => 'routes', 
+                                                                    :name => load_run } )
+          end
+          parse_routes(txc_file.get_input_stream(), load_run, &block)
         end
       end
     end
@@ -67,7 +73,7 @@ class Parsers::TransxchangeParser
     return missing_stops
   end
 
-  def parse_routes(input, &block)
+  def parse_routes(input, load_run, &block)
     @routes = []
     missing_stops = {}
     if input.is_a?(String)
@@ -94,9 +100,8 @@ class Parsers::TransxchangeParser
       puts route.number
       route.region = @region
       missing = []
-      # route.route_source_admin_areas.build({:source_admin_area => @admin_area,
-                                            # :operator_code => route.operator_code})
-
+      route.route_source_admin_areas.build({:source_admin_area => @admin_area,
+                                            :operator_code => route.operator_code})
 
       route_regions = []
       route.journey_pattern_data.each do |journey_pattern_id, journey_pattern|
@@ -139,6 +144,12 @@ class Parsers::TransxchangeParser
         route.route_operators.build({ :operator => operator })
       end
       yield route
+    end
+    if load_run
+      LoadRunCompletion.create!(:transport_mode => @mode, 
+                                :admin_area => @admin_area,
+                                :load_type => 'routes', 
+                                :name => load_run)
     end
     return missing_stops
   end

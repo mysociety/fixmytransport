@@ -154,18 +154,24 @@ namespace :nptdr do
       check_for_dir
       puts "Loading routes from #{ENV['DIR']}..."
       transport_mode = ENV['MODE']
+      load_run = ENV['LOAD_RUN']
       Route.paper_trail_off
       RouteSegment.paper_trail_off
       RouteOperator.paper_trail_off
       JourneyPattern.paper_trail_off
       parser = Parsers::TransxchangeParser.new
-      parser.parse_all_routes(ENV['DIR'], transport_mode) do |route|
+      parser.parse_all_routes(ENV['DIR'], transport_mode, load_run) do |route|
+
         # don't save ambiguous operators
         if route.route_operators.size > 1
           route.route_operators.clear
         end
         route.save!
       end
+      Route.paper_trail_on
+      RouteSegment.paper_trail_on
+      RouteOperator.paper_trail_on
+      JourneyPattern.paper_trail_on
     end
 
 
