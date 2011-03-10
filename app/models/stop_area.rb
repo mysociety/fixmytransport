@@ -41,7 +41,7 @@ class StopArea < ActiveRecord::Base
   has_many :route_segments_as_to_stop_area, :foreign_key => 'to_stop_area_id', :class_name => 'RouteSegment'
   has_many :routes_as_from_stop_area, :through => :route_segments_as_from_stop_area, :source => 'route'
   has_many :routes_as_to_stop_area, :through => :route_segments_as_to_stop_area, :source => 'route'
-                                
+  has_paper_trail
   validates_presence_of :locality, :if => :loaded?
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
