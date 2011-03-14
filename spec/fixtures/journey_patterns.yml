@@ -1,3 +1,9 @@
 victoria_to_haywards_heath:
   route: victoria_to_haywards_heath
   destination: To Haywards Heath
+number_807_bus:
+  route: number_807_bus
+  destination: Arch
+aldershot_807_bus:
+  route: aldershot_807_bus
+  destination: Aldershot

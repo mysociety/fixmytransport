@@ -53,24 +53,28 @@ four:
   to_terminus: t
 five: 
   route: number_807_bus
+  journey_pattern: number_807_bus
   from_stop: bus_station
   to_stop: bethany_terrace
   from_terminus: f
   to_terminus: f
 six: 
   route: number_807_bus
+  journey_pattern: number_807_bus
   from_stop: bethany_terrace
   to_stop: arch_ne
   from_terminus: f
   to_terminus: f
 seven: 
   route: aldershot_807_bus
+  journey_pattern: aldershot_807_bus
   from_stop: white_lion_n
   to_stop: white_lion_s
   from_terminus: t
   to_terminus: f
 eight:
   route: aldershot_807_bus
+  journey_pattern: aldershot_807_bus
   from_stop: white_lion_s
   to_stop: wybourne_lane
   from_terminus: f

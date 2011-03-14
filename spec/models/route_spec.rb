@@ -109,9 +109,10 @@ describe Route do
       route.route_source_admin_areas.build({:operator_code => 'BUS', 
                                             :source_admin_area => admin_areas(:london)})
       new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
-      route.route_segments.build(:from_stop => stops(:arch_ne), 
-                                 :to_stop => new_stop, 
-                                 :from_terminus => true)
+      jp = route.journey_patterns.build(:destination => 'test dest')
+      jp.route_segments.build(:from_stop => stops(:arch_ne), 
+                              :to_stop => new_stop, 
+                              :from_terminus => true)
       Route.find_existing_routes(route).should include(routes(:number_807_bus))
     end
     
@@ -120,9 +121,10 @@ describe Route do
                         :transport_mode => transport_modes(:bus))
       route.route_operators.build({:operator => operators(:a_bus_company)})
       new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
-      route.route_segments.build(:from_stop => stops(:arch_ne), 
-                                 :to_stop => new_stop, 
-                                 :from_terminus => true)
+      jp = route.journey_patterns.build(:destination => 'test dest')
+      jp.route_segments.build(:from_stop => stops(:arch_ne), 
+                              :to_stop => new_stop, 
+                              :from_terminus => true)
       Route.find_existing_routes(route).should include(routes(:number_807_bus))      
     end
     
@@ -132,10 +134,11 @@ describe Route do
       route.route_source_admin_areas.build({:operator_code => 'BUS', 
                                             :source_admin_area => admin_areas(:london)})
       new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
-      route.route_segments.build(:from_stop => stops(:arch_sw), 
-                                 :to_stop => new_stop,
-                                 :from_terminus => true,
-                                 :to_terminus => false)
+      jp = route.journey_patterns.build(:destination => 'test dest')
+      jp.route_segments.build(:from_stop => stops(:arch_sw), 
+                              :to_stop => new_stop,
+                              :from_terminus => true,
+                              :to_terminus => false)
       Route.find_existing_routes(route).should include(routes(:number_807_bus))
     end
     

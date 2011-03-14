@@ -163,7 +163,7 @@ class Route < ActiveRecord::Base
   end
 
   def stops
-    route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }.flatten.uniq
+    journey_patterns.map{ |jp| jp.route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }}.flatten.uniq
   end
   memoize :stops
 
@@ -287,7 +287,7 @@ class Route < ActiveRecord::Base
     conditions = [condition_string, new_route.number, new_route.transport_mode.id]
     conditions += operator_params
     routes = Route.find(:all, :conditions => conditions,
-                        :include => [{ :route_segments => [:from_stop, :to_stop] },
+                        :include => [ {:journey_patterns => {:route_segments => [:from_stop, :to_stop] }},
                                        :route_operators,
                                        :route_source_admin_areas ])
     routes_with_same_stops = []
