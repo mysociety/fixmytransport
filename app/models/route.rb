@@ -64,7 +64,7 @@ class Route < ActiveRecord::Base
   end
 
   def stop_codes
-    stops.map{ |stop| stop.atco_code }.uniq
+    stops.map{ |stop| stop.atco_code or stop.other_code }.uniq
   end
 
   def stop_area_codes
@@ -165,7 +165,6 @@ class Route < ActiveRecord::Base
   def stops
     journey_patterns.map{ |jp| jp.route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }}.flatten.uniq
   end
-  memoize :stops
 
   def next_stops(current)
     if current.is_a? StopArea
@@ -269,7 +268,9 @@ class Route < ActiveRecord::Base
   # Return routes with this number and transport mode that have a stop or stop area in common with
   # the route given
   def self.find_all_by_number_and_common_stop(new_route)
+    puts "journey patterns #{new_route.journey_patterns.size}"
     stop_codes = new_route.stop_codes
+    puts "new route stops #{new_route.stops.size}"
     # do we think we know the operator for this route? If so, return any route with the same operator that
     # meets our other criteria. Otherwise, only return operators with the same operator code from the same
     # admin area
@@ -291,6 +292,7 @@ class Route < ActiveRecord::Base
                                        :route_operators,
                                        :route_source_admin_areas ])
     routes_with_same_stops = []
+
     routes.each do |route|
       route_stop_codes = route.stop_codes
       stop_codes_in_both = (stop_codes & route_stop_codes)
