@@ -208,6 +208,16 @@ namespace :nptdr do
       end
     end
 
+    desc 'Deletes all route associated data'
+    task :clear_routes => :environment do 
+      Route.connection.execute('DELETE FROM routes')
+      RouteSegment.connection.execute('DELETE FROM route_segments')
+      RouteOperator.connection.execute('DELETE FROM route_operators')
+      RouteSourceAdminArea.connection.execute('DELETE FROM route_source_admin_areas')
+      JourneyPattern.connection.execute('DELETE FROM journey_patterns')
+      Route.connection.execute("DELETE FROM slugs where sluggable_type = 'Route'")
+      LoadRunCompletion.connection.execute('DELETE FROM load_run_completions')
+    end
 
     desc 'Loads stops referenced by routes in NPTDR, but not present in the database'
     task :missing_stops => :environment do
