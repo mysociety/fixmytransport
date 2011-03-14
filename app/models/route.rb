@@ -268,9 +268,7 @@ class Route < ActiveRecord::Base
   # Return routes with this number and transport mode that have a stop or stop area in common with
   # the route given
   def self.find_all_by_number_and_common_stop(new_route)
-    puts "journey patterns #{new_route.journey_patterns.size}"
     stop_codes = new_route.stop_codes
-    puts "new route stops #{new_route.stops.size}"
     # do we think we know the operator for this route? If so, return any route with the same operator that
     # meets our other criteria. Otherwise, only return operators with the same operator code from the same
     # admin area

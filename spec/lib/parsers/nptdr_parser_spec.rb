@@ -38,8 +38,8 @@ describe Parsers::NptdrParser do
     end
     
     it 'should add stops to the route' do 
-      @route.route_segments.first.from_stop.atco_code.should == 'aaaaaaaa'
-      @route.route_segments.first.to_stop.atco_code.should == 'bbbbbbbbb'
+      @route.journey_patterns.first.route_segments.first.from_stop.atco_code.should == 'aaaaaaaa'
+      @route.journey_patterns.first.route_segments.first.to_stop.atco_code.should == 'bbbbbbbbb'
     end
     
     it 'should add an operator code to the route source admin area' do 
@@ -47,10 +47,10 @@ describe Parsers::NptdrParser do
     end
     
     it 'should mark the route terminus stops' do 
-      @route.route_segments.first.from_terminus?.should be_true
-      @route.route_segments.last.to_terminus?.should be_true
-      @route.route_segments.first.to_terminus?.should be_false
-      @route.route_segments.last.from_terminus?.should be_false
+      @route.journey_patterns.first.route_segments.first.from_terminus?.should be_true
+      @route.journey_patterns.first.route_segments.last.to_terminus?.should be_true
+      @route.journey_patterns.first.route_segments.first.to_terminus?.should be_false
+      @route.journey_patterns.first.route_segments.last.from_terminus?.should be_false
     end
     
     it 'should return a list of missing stops' do 
@@ -58,8 +58,8 @@ describe Parsers::NptdrParser do
     end
     
     it 'should return routes where missing stops have been skipped and the surrounding stops joined' do
-      @routes.last.route_segments.last.from_stop.atco_code.should == 'cccccccc'
-      @routes.last.route_segments.last.to_stop.atco_code.should == 'ddddddddd'
+      @routes.last.journey_patterns.first.route_segments.last.from_stop.atco_code.should == 'cccccccc'
+      @routes.last.journey_patterns.first.route_segments.last.to_stop.atco_code.should == 'ddddddddd'
     end
     
   end
