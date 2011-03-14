@@ -89,7 +89,7 @@ module ApplicationHelper
   end
 
   def route_segment_js(route)
-    segments_js = route.route_segments.map do |segment|
+    segments_js = route.journey_patterns.map{ |jp| jp.route_segments }.flatten.map do |segment|
       [stop_js_coords(segment.from_stop, main=true, small=true),
        stop_js_coords(segment.to_stop, main=true, small=true), segment.id]
     end

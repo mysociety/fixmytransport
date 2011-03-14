@@ -4,7 +4,7 @@ class Admin::RoutesController < ApplicationController
   cache_sweeper :route_sweeper
 
   def show
-    @route = Route.find(params[:id])
+    @route = Route.find(params[:id], :include => [ {:journey_patterns => {:route_segments  => [:from_stop, :to_stop]}}])
     @route_operators = make_route_operators(@route.operator_code, @route)
   end
   
