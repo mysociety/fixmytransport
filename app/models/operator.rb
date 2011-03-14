@@ -122,7 +122,7 @@ class Operator < ActiveRecord::Base
     if operators.empty?
       # if no operators, add any operators with this code with the right transport_mode in a region the route
       # goes through
-      regions = route.stops_or_stations.map{ |stop_or_station| stop_or_station.locality.admin_area.region }.uniq
+      regions = route.stops.map{ |stop| stop.locality.admin_area.region }.uniq
       operators = find(:all, :conditions => ["transport_mode_id = ?
                                               AND operator_codes.code = ?
                                               AND region_id in (?)",
