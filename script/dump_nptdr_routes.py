@@ -184,7 +184,7 @@ class CSVDumpATCO(mysociety.atcocif.ATCO):
                 vehicle_code = item.vehicle_code(self)
                 default_code = False
             except:
-                vehicle_code = self.transport_mode_mappings[item.vehicle_type]
+                vehicle_code = self.transport_mode_mappings()[item.vehicle_type]
                 default_code = True
         else:
             vehicle_code = self.vehicle_code_from_filename()
