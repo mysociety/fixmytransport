@@ -313,17 +313,6 @@ namespace :nptdr do
       puts "Deleted #{deleted_count} operators"
     end
 
-    desc 'Assigns routes to operators if the operator code of the route is unique'
-    task :add_route_operators => :environment do
-      # Match up any codes where we only have one operator. Not foolproof as we know that
-      # our set of operators is incomplete
-      Route.find_each do |route|
-        operators = Operator.find_all_by_code(route.operator_code)
-        if operators.size == 1
-          route.route_operators.create(:operator => operators.first)
-        end
-      end
-    end
 
     desc 'Adds region associations based on route localities'
     task :add_route_regions => :environment do

@@ -45,7 +45,6 @@ namespace :db do
     Rake::Task['nptdr:post_load:delete_routes_without_stops'].execute
     Rake::Task['nptdr:post_load:add_route_localities'].execute
     Rake::Task['nptdr:post_load:add_route_regions'].execute
-    Rake::Task['nptdr:post_load:add_route_operators'].execute
     Rake::Task['nptdr:post_load:add_route_coords'].execute
     Rake::Task['nptdr:post_load:cache_route_descriptions'].execute
 
