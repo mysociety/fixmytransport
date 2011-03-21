@@ -4,6 +4,7 @@ class OperatorContact < ActiveRecord::Base
   has_many :outgoing_messages, :as => :recipient
   validates_presence_of :category
   belongs_to :location, :polymorphic => true
+  validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
   has_paper_trail
   
   def name
