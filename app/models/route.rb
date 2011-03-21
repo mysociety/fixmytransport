@@ -413,10 +413,7 @@ class Route < ActiveRecord::Base
     query = "SELECT operator_code, cnt FROM
                (SELECT operator_code, count(*) as cnt
                 FROM routes
-                WHERE operator_code not in
-                  (SELECT code
-                   FROM operators)
-                AND id not in
+                WHERE id not in
                   (SELECT route_id
                    FROM route_operators)
                 GROUP BY operator_code)
@@ -430,7 +427,7 @@ class Route < ActiveRecord::Base
 
   def self.count_codes_without_operators()
     count(:select => 'distinct operator_code',
-          :conditions => ['operator_code not in (SELECT code FROM operators)'])
+          :conditions => ['id not in (SELECT route_id from route_operators)'])
   end
 
   # Return train routes by the same operator that have the same terminuses
