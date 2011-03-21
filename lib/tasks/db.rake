@@ -41,7 +41,6 @@ namespace :db do
     Rake::Task['naptan:post_load:add_station_double_metaphones'].execute
 
     # Delete routes with no stops, add localities and regions.
-    # Associate routes with operators
     Rake::Task['nptdr:post_load:delete_routes_without_stops'].execute
     Rake::Task['nptdr:post_load:add_route_localities'].execute
     Rake::Task['nptdr:post_load:add_route_regions'].execute
