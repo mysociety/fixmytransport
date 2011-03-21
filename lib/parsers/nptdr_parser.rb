@@ -145,14 +145,22 @@ class Parsers::NptdrParser
 
   def region_from_filepath(filepath)
     admin_area = self.admin_area_from_filepath(filepath)
-    region = admin_area.region
+    if admin_area == :national
+      region = Region.find_by_name(:first, 'Great Britain')
+    else
+      region = admin_area.region
+    end
+    region
   end
 
   def admin_area_from_filepath(filepath)
     filename = File.basename(filepath, '.tsv')
     admin_area_code = filename.split('_').last
-    admin_area = AdminArea.find_by_atco_code(admin_area_code)
-    raise unless admin_area
+    if admin_area_code == 'National'
+      admin_area = :national
+    else
+      admin_area = AdminArea.find_by_atco_code(admin_area_code)
+    end
     admin_area
   end
 
@@ -189,7 +197,12 @@ class Parsers::NptdrParser
                              :transport_mode => transport_mode,
                              :region => region,
                              :operator_code => operator_code)
-      route.route_source_admin_areas.build({:source_admin_area => admin_area,
+      if admin_area == :national
+        source_admin_area = nil
+      else
+        source_admin_area = admin_area
+      end
+      route.route_source_admin_areas.build({:source_admin_area => source_admin_area,
                                             :operator_code => operator_code})
 
       operators = Operator.find_all_by_nptdr_code(transport_mode, operator_code, region, route)
