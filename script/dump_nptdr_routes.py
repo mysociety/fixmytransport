@@ -206,7 +206,7 @@ class CSVDumpATCO(mysociety.atcocif.ATCO):
     def vehicle_code_from_filename(self):
         basename, ext = os.path.splitext(self.input_filename)
         name_parts = basename.split("_")
-        return self.transport_mode_mappings[name_parts[-1]]
+        return self.transport_mode_mappings()[name_parts[-1]]
 
     def new_stop_code(self, stop_code):
         if not self.stop_code_mappings:
