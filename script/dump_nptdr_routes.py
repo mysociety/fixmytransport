@@ -103,7 +103,7 @@ class CSVDumpATCO(mysociety.atcocif.ATCO):
                 self.read_string(data)
         else:
             # Otherwise, just read it
-            self.input_filename = file
+            self.input_filename = f
             return self.read_file_handle(open(f), os.stat(f)[6])
     
     # reload all ATCO files, setting load function to given one
