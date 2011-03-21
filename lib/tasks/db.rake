@@ -32,7 +32,7 @@ namespace :db do
 
     # Load Routes
     ENV['DIR'] = File.join(MySociety::Config.get('NPTDR_DIR', ''), 'routes')
-    Rake::Task['nptdr:load:routes_from_transxchange'].execute
+    Rake::Task['nptdr:load:routes'].execute
 
     # Delete stop areas without stops, other references, double-metaphone
     Rake::Task['naptan:post_load:delete_unpopulated_stop_areas'].execute
