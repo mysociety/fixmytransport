@@ -151,7 +151,6 @@ class Parsers::NptdrParser
   def admin_area_from_filepath(filepath)
     filename = File.basename(filepath, '.tsv')
     admin_area_code = filename.split('_').last
-    puts admin_area_code
     admin_area = AdminArea.find_by_atco_code(admin_area_code)
     raise unless admin_area
     admin_area
