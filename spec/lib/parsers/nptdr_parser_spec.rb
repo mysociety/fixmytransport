@@ -89,23 +89,5 @@ describe Parsers::NptdrParser do
     end
   
   end
-  
-  describe 'when parsing a TSV file of operator data' do 
- 
-    before(:all) do 
-      @parser = Parsers::NptdrParser.new
-      @operators = []
-      @parser.parse_operators(example_file("operators.tsv")){ |operator| @operators << operator }
-    end
-    
-    it 'should extract the operator code' do 
-      @operators.first.code.should == 'AW'
-    end
-    
-    it 'should extract the name' do 
-      @operators.first.name.should == 'Arriva Trains Wales'
-    end
-  
-  end
 
 end
