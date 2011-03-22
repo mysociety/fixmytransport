@@ -146,7 +146,7 @@ class Parsers::NptdrParser
   def region_from_filepath(filepath)
     admin_area = self.admin_area_from_filepath(filepath)
     if admin_area == :national
-      region = Region.find_by_name(:first, 'Great Britain')
+      region = Region.find(:first, :conditions => ['name = ?', 'Great Britain'])
     else
       region = admin_area.region
     end
