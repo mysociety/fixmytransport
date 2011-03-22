@@ -91,7 +91,7 @@ namespace :nptdr do
                         "NPTDR Route Numbers"]
       stops_outfile.write(stops_headings.join("\t") + "\n")
 
-      files = Dir.glob(File.join(subdir, '*.tsv'))
+      files = Dir.glob(File.join(ENV['DIR'], '*.tsv'))
       files.each do |file|
         unmatched_codes = {}
         ambiguous_codes = {}
