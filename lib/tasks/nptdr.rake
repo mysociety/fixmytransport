@@ -32,11 +32,15 @@ namespace :nptdr do
       puts "Unmatched: #{unmatched_codes.keys.size}"
     end
 
-    def write_missing_stops(missing_stops, admin_area, stops_outfile)
+    def admin_area_name(admin_area)
+      (admin_area == :national ? 'National' : admin_area.name)
+    end
+
+    def write_missing_stops(missing_stops, region, admin_area, stops_outfile)
       puts "Missing stops"
       missing_stops.each do |stop_code, route_list|
-        values = [admin_area.region.name,
-                  admin_area.name,
+        values = [region.name,
+                  admin_area_name(admin_area),
                   stop_code,
                   route_list.join(", ")]
         stops_outfile.write(values.join("\t") + "\n")
@@ -44,11 +48,11 @@ namespace :nptdr do
       stops_outfile.flush
     end
 
-    def write_missing_operators(unmatched_codes, ambiguous_codes, admin_area, operators_outfile)
+    def write_missing_operators(unmatched_codes, ambiguous_codes, region, admin_area, operators_outfile)
       puts "Unmatched operator codes"
       unmatched_codes.each do |code, route_list|
-        values = [admin_area.region.name,
-                  admin_area.name,
+        values = [region.name,
+                  admin_area_name(admin_area),
                   code,
                   "missing",
                   route_list.join(", ")]
@@ -56,8 +60,8 @@ namespace :nptdr do
       end
       puts "Ambiguous operator codes"
       ambiguous_codes.each do |code, route_list|
-        values = [admin_area.region.name,
-                  admin_area.name,
+        values = region.name,
+                  admin_area_name(admin_area),
                   code,
                   "ambiguous",
                   route_list.join(", ")]
@@ -70,7 +74,7 @@ namespace :nptdr do
     task :check_routes => :environment do
       check_for_dir
       puts "Checking routes in #{ENV['DIR']}..."
-      parser = Parsers::TransxchangeParser.new
+      parser = Parsers::NptdrParser.new
       dir = ENV['DIR']
       operators_outfile = File.open("#{RAILS_ROOT}/data/nptdr/unmatched_operators.tsv", 'w')
       operators_headings = ["NPTDR File Region",
@@ -87,37 +91,32 @@ namespace :nptdr do
                         "NPTDR Route Numbers"]
       stops_outfile.write(stops_headings.join("\t") + "\n")
 
-      Dir.glob(File.join(ENV['DIR'], '*/')).each do |subdir|
-        zips = Dir.glob(File.join(subdir, '*.zip'))
-        zips.each do |zip|
-          Zip::ZipFile.foreach(zip) do |txc_file|
-            puts txc_file
-            parser.filename = txc_file.to_s
-            unmatched_codes = {}
-            ambiguous_codes = {}
-            missing_stops = parser.parse_routes(txc_file.get_input_stream()) do |route|
-              route_string = "#{route.type} #{route.number}"
-              if route.route_operators.size == 0
-                if ! unmatched_codes[route.operator_code]
-                  unmatched_codes[route.operator_code] = []
-                end
-                if ! unmatched_codes[route.operator_code].include?(route_string)
-                  unmatched_codes[route.operator_code] << route_string
-                end
-              elsif route.route_operators.size > 1
-                if ! ambiguous_codes[route.operator_code]
-                  ambiguous_codes[route.operator_code] = []
-                end
-                if ! ambiguous_codes[route.operator_code].include?(route_string)
-                  ambiguous_codes[route.operator_code] << route_string
-                end
-              end
+      files = Dir.glob(File.join(subdir, '*.tsv'))
+      files.each do |file|
+        unmatched_codes = {}
+        ambiguous_codes = {}
+        missing_stops = parser.parse_routes(file) do |route|
+          route_string = "#{route.type} #{route.number}"
+          if route.route_operators.size == 0
+            if ! unmatched_codes[route.operator_code]
+              unmatched_codes[route.operator_code] = []
             end
-            admin_area = parser.admin_area
-            puts "File: #{file} Region:#{admin_area.region.name} Admin area: #{admin_area.name}"
-            write_missing_operators(unmatched_codes, ambiguous_codes, admin_area, operators_outfile)
-            write_missing_stops(missing_stops, admin_area, stops_outfile)
+            if ! unmatched_codes[route.operator_code].include?(route_string)
+              unmatched_codes[route.operator_code] << route_string
+            end
+          elsif route.route_operators.size > 1
+            if ! ambiguous_codes[route.operator_code]
+              ambiguous_codes[route.operator_code] = []
+            end
+            if ! ambiguous_codes[route.operator_code].include?(route_string)
+              ambiguous_codes[route.operator_code] << route_string
+            end
           end
+          admin_area = parser.admin_area_from_filepath(file)
+          region = parser.region_from_filepath(file)
+          puts "File: #{file} Region:#{region.name} Admin area: #{admin_area_name(admin_area)}"
+          write_missing_operators(unmatched_codes, ambiguous_codes, admin_area, operators_outfile)
+          write_missing_stops(missing_stops, region, admin_area, stops_outfile)
         end
       end
       operators_outfile.close
@@ -136,7 +135,7 @@ namespace :nptdr do
         operator.save!
       end
     end
-    
+
     desc 'Loads route data from zipped TransXChange files named *.txc in subdirectories of a directory specified as DIR=dirname'
     task :routes_from_transxchange => :environment do
       check_for_dir
@@ -147,7 +146,7 @@ namespace :nptdr do
         zips = Dir.glob(File.join(subdir, '*.zip'))
         zips.each do |zip|
           puts "Loading routes from #{zip.inspect}"
-          command = "rake RAILS_ENV=#{RAILS_ENV} nptdr:load:routes_from_transxchange_file FILE=\"#{zip}\" MODE=\"#{transport_mode}\" LOAD_RUN=\"#{load_run}\" --trace" 
+          command = "rake RAILS_ENV=#{RAILS_ENV} nptdr:load:routes_from_transxchange_file FILE=\"#{zip}\" MODE=\"#{transport_mode}\" LOAD_RUN=\"#{load_run}\" --trace"
           exit_status = run_in_shell(command, file)
           raise "Process exited with error" unless exit_status == 0
         end
@@ -164,7 +163,7 @@ namespace :nptdr do
       RouteSegment.paper_trail_off
       RouteOperator.paper_trail_off
       JourneyPattern.paper_trail_off
-      parser = Parsers::TransxchangeParser.new      
+      parser = Parsers::TransxchangeParser.new
       Zip::ZipFile.foreach(zip) do |txc_file|
         puts txc_file
         parser.parse_routes(txc_file.get_input_stream(), transport_mode, load_run, txc_file.to_s) do |route|
@@ -180,7 +179,7 @@ namespace :nptdr do
       RouteOperator.paper_trail_on
       JourneyPattern.paper_trail_on
     end
-    
+
     desc 'Loads route data from TSV files named *.tsv in a directory specified as DIR=dirname'
     task :routes => :environment do
       check_for_dir
@@ -209,7 +208,7 @@ namespace :nptdr do
     end
 
     desc 'Deletes all route associated data'
-    task :clear_routes => :environment do 
+    task :clear_routes => :environment do
       Route.connection.execute('DELETE FROM routes')
       RouteSegment.connection.execute('DELETE FROM route_segments')
       RouteOperator.connection.execute('DELETE FROM route_operators')
