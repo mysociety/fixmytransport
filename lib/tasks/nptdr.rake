@@ -112,12 +112,12 @@ namespace :nptdr do
               ambiguous_codes[route.operator_code] << route_string
             end
           end
-          admin_area = parser.admin_area_from_filepath(file)
-          region = parser.region_from_filepath(file)
-          puts "File: #{file} Region:#{region.name} Admin area: #{admin_area_name(admin_area)}"
-          write_missing_operators(unmatched_codes, ambiguous_codes, region, admin_area, operators_outfile)
-          write_missing_stops(missing_stops, region, admin_area, stops_outfile)
         end
+        admin_area = parser.admin_area_from_filepath(file)
+        region = parser.region_from_filepath(file)
+        puts "File: #{file} Region:#{region.name} Admin area: #{admin_area_name(admin_area)}"
+        write_missing_operators(unmatched_codes, ambiguous_codes, region, admin_area, operators_outfile)
+        write_missing_stops(missing_stops, region, admin_area, stops_outfile)
       end
       operators_outfile.close
       stops_outfile.close
