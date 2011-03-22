@@ -60,7 +60,7 @@ namespace :nptdr do
       end
       puts "Ambiguous operator codes"
       ambiguous_codes.each do |code, route_list|
-        values = region.name,
+        values = [region.name,
                   admin_area_name(admin_area),
                   code,
                   "ambiguous",
