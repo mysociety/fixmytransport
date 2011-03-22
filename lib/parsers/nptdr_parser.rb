@@ -135,8 +135,10 @@ class Parsers::NptdrParser
         segment_order += 1
         route_segment.set_stop_areas
       end
-      jp.route_segments.first.from_terminus = true
-      jp.route_segments.last.to_terminus = true
+      if jp.route_segments.size > 0
+        jp.route_segments.first.from_terminus = true
+        jp.route_segments.last.to_terminus = true
+      end
       yield route
     end
     return missing_stops
