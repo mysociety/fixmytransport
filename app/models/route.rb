@@ -276,10 +276,19 @@ class Route < ActiveRecord::Base
       operator_clause = "AND route_operators.operator_id = ? "
       operator_params = [new_route.route_operators.first.operator_id]
     else
-      operator_clause = "AND route_source_admin_areas.source_admin_area_id = ?
-                         AND route_source_admin_areas.operator_code = ? "
-      operator_params = [new_route.route_source_admin_areas.first.source_admin_area_id,
-                         new_route.route_source_admin_areas.first.operator_code]
+      source_admin_area = new_route.route_source_admin_areas.first
+      operator_clauses = []
+      operator_params = []
+      # did this come from an admin area, or from the national routes data?
+      if source_admin_area.source_admin_area_id
+        operator_clauses << "AND route_source_admin_areas.source_admin_area_id = ?"
+        operator_params << source_admin_area.source_admin_area_id
+      else
+        operator_clauses << "AND route_source_admin_areas.source_admin_area_id is NULL"
+      end
+      operator_clauses << "AND route_source_admin_areas.operator_code = ? "
+      operator_params << new_route.route_source_admin_areas.first.operator_code
+      operator_clause = operator_clauses.join(" ")
     end
     stop_area_codes = new_route.stop_area_codes
     condition_string = "number = ? AND transport_mode_id = ? #{operator_clause}"

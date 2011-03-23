@@ -140,6 +140,11 @@ class Operator < ActiveRecord::Base
       end
     end
 
+    # try any operators with that code
+    operators = find(:all, :include => :operator_codes,
+                           :conditions => ['transport_mode_id = ?
+                                            AND operator_codes.code = ?',
+                                            transport_mode, code])
     operators
   end
 
@@ -165,7 +170,7 @@ class Operator < ActiveRecord::Base
       return nil
     end
   end
-  
+
   # merge operator records to merge_to, transferring associations
   def self.merge!(merge_to, operators)
     transaction do
