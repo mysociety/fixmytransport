@@ -27,8 +27,8 @@ class Parsers::NaptanParser
         puts "*** Missing #{row['AtcoCode']} ***"
         next
       end
-      stop.tiploc_code = row["TiplocCode"] or row["Tiploc Code"]
-      stop.crs_code = row["CrsCode"] or row["CRS Code"]
+      stop.tiploc_code = (row["TiplocCode"] or row["Tiploc Code"])
+      stop.crs_code = (row["CrsCode"] or row["CRS Code"])
       # puts "#{stop.common_name} #{stop.tiploc_code} #{stop.crs_code}"
       yield stop
     end
