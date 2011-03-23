@@ -394,7 +394,6 @@ class Route < ActiveRecord::Base
     find_all_by_number_and_common_stop(new_route)
   end
 
-
   def self.find_without_operators(options={})
     if !options.has_key?(:order)
       options[:order] = 'number ASC'
@@ -496,24 +495,6 @@ class Route < ActiveRecord::Base
         next if route == merge_to
         merge_duplicate_route(route, merge_to)
       end
-    end
-  end
-
-  def self.identical_segment(route_segment, route)
-    direct_match = route.route_segments.detect do |existing|
-      (existing.from_stop == route_segment.from_stop && existing.to_stop == route_segment.to_stop)
-    end
-  end
-
-  def self.match_terminus(route_segment, route, type)
-    if type == :to
-      (route_segment.to_terminus? &&
-      (route.terminuses.include? route_segment.to_stop or
-      !route.stops.include? route_segment.to_stop))
-    elsif type == :from
-      (route_segment.from_terminus? &&
-      (route.terminuses.include? route_segment.from_stop or
-      !route.stops.include? route_segment.from_stop))
     end
   end
 
