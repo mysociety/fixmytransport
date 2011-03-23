@@ -7,6 +7,7 @@ en:
   notes: Notes
   updated_at: Updated at
   council_contact_form_error: There's been a problem editing this contact. Please see below for details. 
+  district_id: District ID
   history: History
   editor: Editor
   deleted: Deleted

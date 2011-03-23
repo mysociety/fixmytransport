@@ -4,15 +4,17 @@
   %tr
     %th{:width => "14%"}= t(:category)
     %th{:width => "34%"}= t(:email)
+    %th{:width => "8%"}= t(:district_id)
     %th{:width => "6%"}= t(:confirmed) 
     %th{:width => "30%"}= t(:last_editor) 
-    %th{:width => "38%"}= t(:notes)
+    %th{:width => "30%"}= t(:notes)
     %th{:width => "34%"}= t(:updated_at) 
   -@council.contacts.each do |contact|
     %tr{ :class => cycle('odd', 'even') }
       %td
         = link_to contact.category, admin_url(admin_council_contact_path(contact))
       %td= contact.email
+      %td= contact.district_id
       %td= contact.confirmed
       %td= contact.last_editor
       %td= contact.notes
