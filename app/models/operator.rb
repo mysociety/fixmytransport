@@ -24,8 +24,6 @@ class Operator < ActiveRecord::Base
   belongs_to :transport_mode
   validates_presence_of :name
   has_many :operator_contacts, :conditions => ['deleted = ?', false]
-  validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$"),
-                              :if => Proc.new { |operator| !operator.email.blank? }
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   has_paper_trail
   cattr_reader :per_page

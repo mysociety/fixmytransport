@@ -10,7 +10,11 @@ namespace :noc do
     task :operators => :environment do 
       parse('operators', Parsers::NocParser)
     end
-
+    
+    desc "Loads operator contact information from a CSV file specified as FILE=filename"
+    task :operator_contacts => :environment do 
+      parse('operator_contacts', Parsers::OperatorContactsParser)
+    end
   end
   
 end

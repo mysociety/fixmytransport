@@ -14,15 +14,12 @@ class Parsers::OperatorContactsParser
   
   def parse_operator_contacts(filepath)
     csv_data = File.read(filepath)
-    unmatched = 0
-    matched = 0
-    
     manual_matches = {"Anitas Coaches" => "Anita's Coaches", 
                       "Bakers" => nil, 
                       "BATH & NE SOMERSET COUNC" => "Bath & North East Somerset Council", 
                       "BELLE VUE MANCHESTER LTD" => "Belle Vue Coaches", 
                       "Blue Bus (Lancashire) Ltd" => "Blue Bus (Lancashire)", 
-                      "Bostocks Coaches" => , 
+                      "Bostocks Coaches" => nil, 
                       "BU-VAL BUSES LIMITED" => "Bu-Val Buses", 
                       "BULLOCK TRANSPORT LTD" => "R Bullock Buses", 
                       "Burtons Coaches" => "Burtons Coaches", 
@@ -36,46 +33,45 @@ class Parsers::OperatorContactsParser
                       "FINGLANDS SOUTH M/CR C'WAYS" => "Finglands",
                       "First Hampshire & Dorset" => "First in Hants & Dorset", 
                       "First Scotrail" => "ScotRail", 
-                      "GHA Coaches" => nil, 
-                      "Gorran & District Community Bus Association Ltd" => nil, 
-                      "GOSPORT FERRY LTD" => nil, 
-                      "GREATER M/CR BUSES SOUTH LTD" => nil, 
-                      "Hull Trains" => nil, 
-                      "J Durbin" => nil, 
-                      "J.P. Minicoaches" => nil, 
-                      "Keighley and District Travel Ltd" => nil, 
-                      "London Central" => nil, 
-                      "MERSEYSIDE TRANSPORT LTD." => nil, 
-                      "Metrobus" => nil, 
-                      "MR J M COX" => nil, 
-                      "MR S LEWIS" => nil, 
+                      "GHA Coaches" => "G H A Coaches", 
+                      "Gorran & District Community Bus Association Ltd" => "Gorran & District Community Bus", 
+                      "GOSPORT FERRY LTD" => "Gosport Ferry", 
+                      "GREATER M/CR BUSES SOUTH LTD" => "Stagecoach in Manchester", 
+                      "Hull Trains" => "First Hull Trains", 
+                      "J Durbin" => "South Gloucestershire Bus & Coach", 
+                      "J.P. Minicoaches" => "J P Minicoaches", 
+                      "Keighley and District Travel Ltd" => "Transdev Keighley & District Travel", 
+                      "London Central" => "London Central", 
+                      "MERSEYSIDE TRANSPORT LTD." => "Arriva Merseyside", 
+                      "Metrobus" => "Metrobus", 
+                      "MR J M COX" => "Checkmate Mini Coaches", 
+                      "MR S LEWIS" => "Olympia Travel", 
                       "Muirs Coaches" => nil, 
-                      "National Express West Midlands" => nil, 
-                      "R. Kime & Co. Ltd." => nil, 
+                      "National Express West Midlands" => "West Midlands Travel", 
+                      "R. Kime & Co. Ltd." => "Kimes", 
                       "Rackford Coaches" => nil, 
-                      "RIBBLE MOTOR SERVICES LTD." => nil, 
-                      "ROSSENDALE TRANSPORT LTD." => nil, 
+                      "RIBBLE MOTOR SERVICES LTD." => "Stagecoach in Lancashire", 
+                      "ROSSENDALE TRANSPORT LTD." => "Rossendale Transport", 
                       "Scarborough and District Motor Services" => nil, 
-                      "Scottish Citylink" => nil, 
-                      "Southern" => nil, 
+                      "Scottish Citylink" => "Scottish Citylink", 
+                      "Southern" => "Southern", 
                       "Stagecoach" => nil, 
-                      "Stagecoach Cambridgeshire" => nil, 
-                      "STAGECOACH COASTLINE" => nil, 
-                      "STAGECOACH DEVON" => nil, 
+                      "Stagecoach Cambridgeshire" => "Stagecoach in Cambridge", 
+                      "STAGECOACH COASTLINE" => "Stagecoach in the South Downs", 
+                      "STAGECOACH DEVON" => "Stagecoach South West", 
                       "Stagecoach East Midlands" => nil, 
-                      "STAGECOACH IN WYE AND DE" => nil, 
-                      "Stagecoach Manchester" => nil, 
-                      "STAGECOACH MERSEYSIDE" => nil, 
-                      "STAGECOACH MERSEYSIDE" => nil, 
-                      "Stagecoach Sheffield" => nil, 
-                      "Stagecoach Wye & Dean" => nil, 
-                      "TM Travel" => nil, 
+                      "STAGECOACH IN WYE AND DE" => "Stagecoach in Wye & Dean", 
+                      "Stagecoach Manchester" => "Stagecoach in Manchester", 
+                      "STAGECOACH MERSEYSIDE" => "Stagecoach in Merseyside", 
+                      "Stagecoach Sheffield" => "Stagecoach in Sheffield", 
+                      "Stagecoach Wye & Dean" => "Stagecoach in Wye & Dean", 
+                      "TM Travel" => "T M Travel Ltd", 
                       "Translink" => nil, 
-                      "Travel Surrey" => nil, 
-                      "Trent Barton" => nil, 
-                      "WARR BORO" => nil, 
-                      "Williams" => nil, 
-                      "Wrexham + Shropshire" => nil }
+                      "Travel Surrey" => "Abellio Surrey", 
+                      "Trent Barton" => "Trent Barton", 
+                      "WARR BORO" => "Warrington Borough Transport", 
+                      "Williams" => "Williams", 
+                      "Wrexham + Shropshire" => "Wrexham & Shropshire" }
     FasterCSV.parse(csv_data, csv_options) do |row|
       data = {}
       data[:operator] = row['Operator']
@@ -85,50 +81,40 @@ class Parsers::OperatorContactsParser
       data[:reg_address] = row["Company's Registered Postal Address"]
       data[:notes] = row['Notes/Observations of Interest']
       data[:url] = row['URL']
+      if data[:notes] && /^https?:\/\/[^ ]+$/.match(data[:notes].strip)
+        data[:url] = data[:notes].strip
+        data[:notes] = nil
+      end
       all_fields = [:operator, :short_name, :email, :company_no, :reg_address, :notes, :url]
       contact_fields = [:email]
       operator = nil
       if contact_fields.any?{ |field| ! data[field].blank? } 
         name = data[:operator].blank? ? data[:short_name].strip : data[:operator].strip
-        operators = Operator.find(:all, :conditions => ['lower(name) like ?
-                                                         or lower(vosa_license_name) like ?', 
-                                                         "#{name.downcase}%","#{name.downcase}%"])
-        
+        if manual_matches[name]
+          operators = Operator.find(:all, :conditions => ['name = ?', manual_matches[name]])
+        else
+          operators = Operator.find(:all, :conditions => ['lower(name) like ?
+                                                          or lower(vosa_license_name) like ?', 
+                                                          "#{name.downcase}%","#{name.downcase}%"])
+        end
         if operators.size == 1
           operator = operators.first   
-          # puts "MATCH #{name}"       
-        elsif operators.size == 0
-          # partial_matches = Operator.find(:all, :conditions => ['lower(name) like ?', "#{name.downcase}%"])
-          #        if partial_matches.size == 1
-          #          operator = operators.first
-          #        else
-          #          name_without_ltd = name.gsub(/Ltd\.?/i, '').strip
-          #          if name_without_ltd != name
-          #            matches_without_ltd = Operator.find(:all, :conditions => ['lower(name) = ?', name_without_ltd.downcase])
-          #            if matches_without_ltd.size == 1
-          #              operator = matches_without_ltd.first
-          #            end
-          #          end
-          #        end
         end
         if operator
-           begin
-             # contact = operator.operator_contacts.create!(:email => data[:email], 
-                                                          # :category => 'Other', 
-                                                          # :notes => data[:notes])
-             matched += 1
-           rescue 
-             puts "Unable to add contact #{data[:email]} for #{data[:operator]}"
-           end
-        else
-          puts "\"#{data[:operator]}\" => nil, "
-          unmatched += 1
+          operator.url = data[:url]
+          operator.company_no = data[:company_no]
+          if data[:reg_address]
+            registered_address = data[:reg_address].strip.gsub("\n", ", ").gsub(" ,", ",").gsub(",,", ',')
+            operator.registered_address = registered_address.chomp(",")
+          end
+          operator.notes = data[:notes]
+          contact = operator.operator_contacts.build(:email => data[:email].strip, 
+                                                     :category => 'Other')
+          yield operator
         end
       end
 
     end
-    puts "unmatched #{unmatched}"
-    puts "matched #{matched}"
   end
 
 end
