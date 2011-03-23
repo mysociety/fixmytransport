@@ -15,9 +15,15 @@ namespace :db do
     ENV['DIR'] = MySociety::Config.get('NAPTAN_DIR', '')
     Rake::Task['naptan:load:all'].execute
 
-    # Load Operators
-    ENV['FILE'] = File.join(MySociety::Config.get('NOC_DIR', ''), 'NOC_DB_31-03-2010.csv')
+    # Load Operators, assign operators to stations
+    ENV['FILE'] = File.join(MySociety::Config.get('NOC_DIR', ''), 'NOC_DB_18-02-2011.csv')
     Rake::Task['noc:load:operators'].execute
+
+    # Needs station operators file to be specified
+    # Rake::Task['noc:load:station_operators'].execute
+
+    # Needs council contacts file to be specified
+    # Rake::Task['council:load:contacts'].execute
 
     # Some post-load cleanup on NaPTAN data - add locality to stop areas, and any stops missing locality
     Rake::Task['naptan:post_load:add_locality_to_stops'].execute
