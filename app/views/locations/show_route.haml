@@ -13,7 +13,8 @@
     %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:campaigns_feed) }
   %h3.name= MySociety::Format.ucfirst(@route.name)
   .details
-    %span.locality= "#{@route.area}."
+    - if ! @route.is_a?(TrainRoute)
+      %span.locality= "#{@route.area}."
     .operators
       - if !@route.operators.empty? 
         Operated by
