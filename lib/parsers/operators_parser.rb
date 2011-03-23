@@ -7,7 +7,7 @@ class Parsers::OperatorsParser
   
   # Loads data from a file with tab-separated columns for CRS code, name, an unused field, and operator name
   # Loads name mappings from a file with tab-separated columns for alternative versions of names
-  def match_operators(filepath, mapping_file, stop_area_type)
+  def parse_station_operators(filepath, mapping_file, stop_area_type)
     operator_mappings = {}
     File.open(mapping_file).each_with_index do |line, index|
       next if index == 0
@@ -38,7 +38,8 @@ class Parsers::OperatorsParser
         puts "No stop_area for stop #{stop.name}"
         next
       end
-      stop_area.stop_area_operators.create(:operator => operator)
+      stop_area_operator = stop_area.stop_area_operators.build(:operator => operator)
+      yield stop_area_operator
       puts "#{stop_area.name} #{operator.name}"
     end
   end
