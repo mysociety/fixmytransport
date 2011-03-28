@@ -267,7 +267,7 @@ class Route < ActiveRecord::Base
 
   # Return routes with this number and transport mode that have a stop or stop area in common with
   # the route given
-  def self.find_all_by_number_and_common_stop(new_route)
+  def self.find_all_by_number_and_common_stop(new_route, any_admin_area=false)
     stop_codes = new_route.stop_codes
     # do we think we know the operator for this route? If so, return any route with the same operator that
     # meets our other criteria. Otherwise, only return operators with the same operator code from the same
@@ -280,20 +280,30 @@ class Route < ActiveRecord::Base
       operator_clauses = []
       operator_params = []
       # did this come from an admin area, or from the national routes data?
-      if source_admin_area.source_admin_area_id
-        operator_clauses << "AND route_source_admin_areas.source_admin_area_id = ?"
-        operator_params << source_admin_area.source_admin_area_id
-      else
-        operator_clauses << "AND route_source_admin_areas.source_admin_area_id is NULL"
+      if ! any_admin_area
+        if source_admin_area.source_admin_area_id
+          operator_clauses << "AND route_source_admin_areas.source_admin_area_id = ?"
+          operator_params << source_admin_area.source_admin_area_id
+        else
+          operator_clauses << "AND route_source_admin_areas.source_admin_area_id is NULL"
+        end
       end
       operator_clauses << "AND route_source_admin_areas.operator_code = ? "
       operator_params << new_route.route_source_admin_areas.first.operator_code
       operator_clause = operator_clauses.join(" ")
     end
+
+    id_clause = ''
+    id_params = []
+    if new_route.id
+      id_clause = " AND routes.id != ?"
+      id_params = [new_route.id]
+    end
     stop_area_codes = new_route.stop_area_codes
-    condition_string = "number = ? AND transport_mode_id = ? #{operator_clause}"
+    condition_string = "number = ? AND transport_mode_id = ? #{operator_clause} #{id_clause}"
     conditions = [condition_string, new_route.number, new_route.transport_mode.id]
     conditions += operator_params
+    conditions += id_params
     routes = Route.find(:all, :conditions => conditions,
                         :include => [ {:journey_patterns => {:route_segments => [:from_stop, :to_stop] }},
                                        :route_operators,
