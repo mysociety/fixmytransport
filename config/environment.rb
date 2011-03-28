@@ -12,7 +12,6 @@ $:.push(File.join(File.dirname(__FILE__), '../commonlib/rblib'))
 # ... if these fail to include, you need the commonlib submodule from git
 
 load "config.rb"
-load "email.rb"
 load "format.rb"
 load "mapit.rb"
 load "mask.rb"
@@ -35,10 +34,6 @@ Rails::Initializer.run do |config|
   config.autoload_paths += %W( #{RAILS_ROOT}/app/sweepers )
 
   # Specify gems that this application depends on and have them installed with rake gems:install
-  # config.gem "bj"
-  # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
-  # config.gem "sqlite3-ruby", :lib => "sqlite3"
-  # config.gem "aws-s3", :lib => "aws/s3"
   config.gem "rack", :version => '1.1.0'
   config.gem "haml", :version => '3.0.25'
   config.gem "erubis", :version => '2.6.6'

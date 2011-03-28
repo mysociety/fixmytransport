@@ -1,2 +1,2 @@
-require 'has_status'
+require 'fixmytransport/has_status'
 ActiveRecord::Base.send(:include, FixMyTransport::Status)

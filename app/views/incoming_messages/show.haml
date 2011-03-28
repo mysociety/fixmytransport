@@ -6,7 +6,7 @@
   .subject
     %b= "#{t(:subject)}:"
     = @incoming_message.subject
-  - MySociety::Email.get_display_attachments(@incoming_message.mail).each do |attachment|
+  - FixMyTransport::Email.get_display_attachments(@incoming_message.mail).each do |attachment|
     = link_to(attachment.display_filename, campaign_attachment_url(@incoming_message.campaign, :id => @incoming_message, :url_part_number => attachment.url_part_number))
   .body!= @incoming_message.get_body_for_html_display(@collapse_quotes)
   .reply-link!= link_to(t(:reply_to_this_message), new_campaign_outgoing_message_path(@incoming_message.campaign, :incoming_message_id => @incoming_message))

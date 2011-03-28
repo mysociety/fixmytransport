@@ -28,11 +28,11 @@ describe IncomingMessage do
       @incoming_message.stub!(:remove_privacy_sensitive_things).and_return{ |text| text }
       @incoming_message.stub!(:mail).and_return(@mock_mail)
       @incoming_message.stub!(:save!).and_return(true)
-      MySociety::Email.stub!(:get_main_body_text_part).and_return(@mock_mail)
+      FixMyTransport::Email.stub!(:get_main_body_text_part).and_return(@mock_mail)
     end
     
     it 'should return a note if there is no main body' do 
-      MySociety::Email.stub!(:get_main_body_text_part).and_return(nil)
+      FixMyTransport::Email.stub!(:get_main_body_text_part).and_return(nil)
       @incoming_message.main_body_text.should == '[ Email has no body, please see attachments ]'
     end
     
@@ -44,8 +44,8 @@ describe IncomingMessage do
     it 'should return plain text if the main body part is html' do 
       mock_part = mock('email part', :content_type => 'text/html', 
                                      :body => 'this is <b>really</b> important')
-      MySociety::Email.stub!(:get_main_body_text_part).and_return(mock_part)
-      MySociety::Email.should_receive(:_get_attachment_text_internal_one_file).and_return("this is really important")
+      FixMyTransport::Email.stub!(:get_main_body_text_part).and_return(mock_part)
+      FixMyTransport::Email.should_receive(:_get_attachment_text_internal_one_file).and_return("this is really important")
       @incoming_message.main_body_text
     end
     

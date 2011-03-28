@@ -51,11 +51,11 @@ class User < ActiveRecord::Base
   end
   
   def name_and_email
-    MySociety::Email::Address.address_from_name_and_email(self.name, self.email).to_s
+    FixMyTransport::Email::Address.address_from_name_and_email(self.name, self.email).to_s
   end
   
   def campaign_name_and_email_address(campaign)
-    MySociety::Email::Address.address_from_name_and_email(self.name, self.campaign_email_address(campaign)).to_s
+    FixMyTransport::Email::Address.address_from_name_and_email(self.name, self.campaign_email_address(campaign)).to_s
   end
   
   def save_if_new
