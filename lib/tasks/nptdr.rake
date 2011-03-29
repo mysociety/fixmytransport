@@ -316,8 +316,8 @@ namespace :nptdr do
             puts "merging #{existing_route.cached_description} #{route.cached_description}"
             Route.merge_duplicate_route(route, existing_route)
           end
-          puts offset
-          offset += 1
+          puts route.id
+          offset = route.id
         end
       end
     end
