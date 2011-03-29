@@ -301,24 +301,38 @@ namespace :nptdr do
     end
     
     desc 'Merges national routes into routes from admin areas'
-    task :merge_national_routes => :environment do 
+    task :merge_national_routes => :environment do     
+      route_type = ENV['ROUTE_TYPE']
+      total = route_type.constantize.maximum(:id)
+      offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : route_type.constantize.minimum(:id)
+      puts "Merging routes ..."
+      while offset < total
+        puts "Merging routes from offset #{offset}"
+        command = "rake RAILS_ENV=#{RAILS_ENV} nptdr:post_load:merge_national_route_set OFFSET=#{offset} ROUTE_TYPE=#{route_type}"
+        run_in_shell(command, offset)
+        offset += 100
+      end
+    end
+    
+    desc 'Merges a set of national routes into routes from admin areas'
+    task :merge_national_route_set => :environment do 
       great_britain = Region.find_by_name('Great Britain')
       offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : 1
-      [BusRoute, CoachRoute, FerryRoute, TramMetroRoute].each do |route_type|
-        route_type.find_each(:conditions => ['id >= ? 
-                                         AND region_id = ? 
-                                         AND id NOT IN (
-                                           SELECT route_id 
-                                           FROM route_operators)', offset, great_britain]) do |route|
-          existing_routes = Route.find_all_by_number_and_common_stop(route, any_admin_area=true)        
-          if existing_routes.size == 1
-            existing_route = existing_routes.first
-            puts "merging #{existing_route.cached_description} #{route.cached_description}"
-            Route.merge_duplicate_route(route, existing_route)
-          end
-          puts route.id
-          offset = route.id
+      route_type = ENV['ROUTE_TYPE'].constantize
+      max = offset + 100
+      route_type.find_each(:conditions => ['id >= ? 
+                                       AND id <= ?
+                                       AND region_id = ? 
+                                       AND id NOT IN (
+                                         SELECT route_id 
+                                         FROM route_operators)', offset, max, great_britain]) do |route|
+        existing_routes = Route.find_all_by_number_and_common_stop(route, any_admin_area=true)        
+        if existing_routes.size == 1
+          existing_route = existing_routes.first
+          puts "merging #{existing_route.cached_description} #{route.cached_description}"
+          Route.merge_duplicate_route(route, existing_route)
         end
+        puts route.id
       end
     end
 
