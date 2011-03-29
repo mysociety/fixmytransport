@@ -309,8 +309,7 @@ namespace :nptdr do
                                          AND region_id = ? 
                                          AND id NOT IN (
                                            SELECT route_id 
-                                           FROM route_operators)', offset, great_britain],
-                             :order => 'id asc') do |route|
+                                           FROM route_operators)', offset, great_britain]) do |route|
           existing_routes = Route.find_all_by_number_and_common_stop(route, any_admin_area=true)        
           if existing_routes.size == 1
             existing_route = existing_routes.first
