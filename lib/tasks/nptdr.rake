@@ -303,17 +303,22 @@ namespace :nptdr do
     desc 'Merges national routes into routes from admin areas'
     task :merge_national_routes => :environment do 
       great_britain = Region.find_by_name('Great Britain')
+      offset = ENV['OFFSET'] or 0
       [BusRoute, CoachRoute, FerryRoute, TramMetroRoute].each do |route_type|
-        route_type.find_each(:conditions => ['region_id = ? 
+        route_type.find_each(:conditions => ['id > ? 
+                                         AND region_id = ? 
                                          AND id NOT IN (
                                            SELECT route_id 
-                                           FROM route_operators)', great_britain]) do |route|
+                                           FROM route_operators)', offset, great_britain]
+                             :order => 'id asc') do |route|
           existing_routes = Route.find_all_by_number_and_common_stop(route, any_admin_area=true)        
           if existing_routes.size == 1
             existing_route = existing_routes.first
             puts "merging #{existing_route.cached_description} #{route.cached_description}"
             Route.merge_duplicate_route(route, existing_route)
           end
+          puts offset
+          offset += 1
         end
       end
     end
