@@ -303,9 +303,9 @@ namespace :nptdr do
     desc 'Merges national routes into routes from admin areas'
     task :merge_national_routes => :environment do 
       great_britain = Region.find_by_name('Great Britain')
-      offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i or 0
+      offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : 1
       [BusRoute, CoachRoute, FerryRoute, TramMetroRoute].each do |route_type|
-        route_type.find_each(:conditions => ['id > ? 
+        route_type.find_each(:conditions => ['id >= ? 
                                          AND region_id = ? 
                                          AND id NOT IN (
                                            SELECT route_id 
