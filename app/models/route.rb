@@ -267,30 +267,39 @@ class Route < ActiveRecord::Base
 
   # Return routes with this number and transport mode that have a stop or stop area in common with
   # the route given
-  def self.find_all_by_number_and_common_stop(new_route, any_admin_area=false)
+  def self.find_all_by_number_and_common_stop(new_route, options={})
     stop_codes = new_route.stop_codes
     # do we think we know the operator for this route? If so, return any route with the same operator that
-    # meets our other criteria. Otherwise, only return operators with the same operator code from the same
-    # admin area
-    if new_route.route_operators.size == 1
+    # meets our other criteria. If we don't know the operator, or we pass the :use_operator_codes option
+    # only return routes with the same operator code (optionally only from the same admin area)
+    if new_route.route_operators.size == 1 && !options[:use_operator_codes]
       operator_clause = "AND route_operators.operator_id = ? "
       operator_params = [new_route.route_operators.first.operator_id]
     else
       source_admin_area = new_route.route_source_admin_areas.first
       operator_clauses = []
       operator_params = []
-      # did this come from an admin area, or from the national routes data?
-      if ! any_admin_area
-        if source_admin_area.source_admin_area_id
-          operator_clauses << "AND route_source_admin_areas.source_admin_area_id = ?"
-          operator_params << source_admin_area.source_admin_area_id
+
+      new_route.route_source_admin_areas.each do |route_source_admin_area|
+        
+        next if route_source_admin_area.operator_code.blank?
+        route_operator_clauses = []
+
+        if ! options[:any_admin_area]
+          if route_source_admin_area.source_admin_area_id
+            route_operator_clauses << "(route_source_admin_areas.source_admin_area_id = ? AND "
+            operator_params << route_source_admin_area.source_admin_area_id
+          else
+            route_operator_clauses << "(route_source_admin_areas.source_admin_area_id is NULL AND "
+          end
         else
-          operator_clauses << "AND route_source_admin_areas.source_admin_area_id is NULL"
+          route_operator_clauses << "("
         end
+        route_operator_clauses << "route_source_admin_areas.operator_code = ?)"
+        operator_params << route_source_admin_area.operator_code
+        operator_clauses << route_operator_clauses.join(" ")
       end
-      operator_clauses << "AND route_source_admin_areas.operator_code = ? "
-      operator_params << new_route.route_source_admin_areas.first.operator_code
-      operator_clause = operator_clauses.join(" ")
+      operator_clause = "AND (#{operator_clauses.join(" OR ")})"
     end
 
     id_clause = ''
@@ -314,13 +323,24 @@ class Route < ActiveRecord::Base
       route_stop_codes = route.stop_codes
       stop_codes_in_both = (stop_codes & route_stop_codes)
       if stop_codes_in_both.size > 0
-        routes_with_same_stops << route
-        next
+        if options[:require_total_match]
+          fraction_matching = (stop_codes_in_both.size.to_f / stop_codes.size.to_f)
+          if fraction_matching == 1.0
+            routes_with_same_stops << route
+            next
+          end
+        else
+          routes_with_same_stops << route
+          next
+        end
+        
       end
-      route_stop_area_codes = route.stop_area_codes
-      stop_area_codes_in_both = (stop_area_codes & route_stop_area_codes)
-      if stop_area_codes_in_both.size > 0
-        routes_with_same_stops << route
+      if !options[:require_total_match]
+        route_stop_area_codes = route.stop_area_codes
+        stop_area_codes_in_both = (stop_area_codes & route_stop_area_codes)
+        if stop_area_codes_in_both.size > 0
+          routes_with_same_stops << route
+        end
       end
     end
     # requery fresh objects as the joins we used in the find query may result in only some associations
