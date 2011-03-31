@@ -300,7 +300,7 @@ namespace :nptdr do
       end
     end
 
-    desc 'Merges consecutively loaded pairs of bus routes from the same operator'
+    desc 'Merges consecutively loaded pairs of bus routes from the same operator going between the same places'
     task :merge_consecutive_bus_route_pairs => :environment do
       count = 0
 
@@ -317,7 +317,8 @@ namespace :nptdr do
         if route_words != next_route_words
           next
         end
-        puts "#{route.id} #{next_route.id}"
+        puts "Merging #{route.description} #{route.id} #{next_route.description} #{next_route.id}"
+        Route.merge_duplicate_route(next_route, route)
         count += 1
       end
       puts count
