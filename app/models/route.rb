@@ -518,7 +518,8 @@ class Route < ActiveRecord::Base
     end
     duplicate.route_source_admin_areas.each do |route_source_admin_area|
       if ! original.route_source_admin_areas.detect{ |existing| existing.source_admin_area == route_source_admin_area.source_admin_area }
-        original.route_source_admin_areas.build(:source_admin_area => route_source_admin_area.source_admin_area)
+        original.route_source_admin_areas.build(:source_admin_area => route_source_admin_area.source_admin_area,
+                                                :operator_code => route_source_admin_area.operator_code)
       end
     end
 
