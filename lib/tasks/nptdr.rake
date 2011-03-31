@@ -328,7 +328,8 @@ namespace :nptdr do
     task :merge_national_routes => :environment do
       route_type = ENV['ROUTE_TYPE']
       total = route_type.constantize.maximum(:id)
-      offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : route_type.constantize.minimum(:id)
+      great_britain = Region.find_by_name('Great Britain')
+      offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : route_type.constantize.minimum(:id, :conditions => ['region_id = ?', great_britain])
       puts "Merging routes ..."
       while offset < total
         puts "Merging routes from offset #{offset}"
