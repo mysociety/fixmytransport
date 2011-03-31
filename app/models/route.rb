@@ -33,7 +33,7 @@ class Route < ActiveRecord::Base
   has_many :route_localities, :dependent => :destroy
   has_many :localities, :through => :route_localities
   belongs_to :region
-  has_many :route_source_admin_areas
+  has_many :route_source_admin_areas, :dependent => :destroy
   has_many :source_admin_areas, :through => :route_source_admin_areas, :class_name => 'AdminArea'
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   accepts_nested_attributes_for :route_segments, :allow_destroy => true, :reject_if => :route_segment_invalid
