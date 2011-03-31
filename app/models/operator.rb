@@ -139,7 +139,7 @@ class Operator < ActiveRecord::Base
     end
 
     # # try any operators with that code
-    if transport_mode.name == 'Train' and operators.empty? 
+    if (transport_mode.name == 'Train' || transport_mode.name == 'Coach') && operators.empty?
       operators = find(:all, :include => :operator_codes,
                              :conditions => ['transport_mode_id = ?
                                               AND operator_codes.code = ?',
