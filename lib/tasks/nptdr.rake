@@ -303,8 +303,8 @@ namespace :nptdr do
     desc 'Merges consecutively loaded pairs of bus routes from the same operator going between the same places'
     task :merge_consecutive_bus_route_pairs => :environment do
       count = 0
-
-      Route.find_each(:conditions => ['transport_mode_id = ?', 1]) do |route|
+      bus_mode = TransportMode.find_by_name("Bus")
+      Route.find_each(:conditions => ['transport_mode_id = ?', bus_mode]) do |route|
         next_route = Route.find(:first,
                                 :conditions => ['transport_mode_id = ? and id > ?', 1, route.id],
                                 :order => 'id asc')
@@ -322,6 +322,28 @@ namespace :nptdr do
         count += 1
       end
       puts count
+    end
+
+    desc 'Merges routes by operator code and description'
+    task :merge_identical_routes_by_operator_and_description => :environment do
+      results = Route.connection.execute("SELECT cached_description, operator_code, cnt
+                                          FROM (SELECT cached_description, operator_code, count(*) as cnt
+                                                FROM routes
+                                                GROUP BY cached_description, operator_code ) as tmp
+                                          WHERE cnt > 1;")
+      results.each do |result|
+        cached_description = result['cached_description']
+        operator_code = result['operator_code']
+        routes = Route.find(:all, :conditions => ['cached_description = ? and operator_code = ?', 
+                                                   cached_description, operator_code])
+        options = { :any_admin_area => true, 
+                    :require_total_match => true,
+                    :use_operator_codes => true }
+        found = Route.find_all_by_number_and_common_stop(routes.first, options)
+        next if found.empty?
+        puts "Merging #{found.map{|route| route.id }.join(" ")} to #{routes.first.id} for #{cached_description} #{operator_code}"
+        Route.merge!(routes.first, found)
+      end
     end
 
     desc 'Merges national routes into routes from admin areas'
@@ -351,7 +373,7 @@ namespace :nptdr do
                                        AND id NOT IN (
                                          SELECT route_id
                                          FROM route_operators)', offset, max, great_britain]) do |route|
-        existing_routes = Route.find_all_by_number_and_common_stop(route, any_admin_area=true)
+        existing_routes = Route.find_all_by_number_and_common_stop(route, {:any_admin_area => true})
         if existing_routes.size == 1
           existing_route = existing_routes.first
           puts "merging #{existing_route.cached_description} #{route.cached_description}"
