@@ -299,9 +299,32 @@ namespace :nptdr do
         Route.destroy(route.id)
       end
     end
-    
+
+    desc 'Merges consecutively loaded pairs of bus routes from the same operator'
+    task :merge_consecutive_bus_route_pairs => :environment do
+      count = 0
+
+      Route.find_each(:conditions => ['transport_mode_id = ?', 1]) do |route|
+        next_route = Route.find(:first,
+                                :conditions => ['transport_mode_id = ? and id > ?', 1, route.id],
+                                :order => 'id asc')
+        next unless next_route && next_route.number == route.number && next_route.operator_code == route.operator_code
+        route.source_admin_areas.each do |source_admin_area|
+          next unless next_route.source_admin_areas.detect{ |next_source_admin_area| next_source_admin_area.id == source_admin_area.id }
+        end
+        route_words = route.description.split.sort
+        next_route_words = next_route.description.split.sort
+        if route_words != next_route_words
+          next
+        end
+        puts "#{route.id} #{next_route.id}"
+        count += 1
+      end
+      puts count
+    end
+
     desc 'Merges national routes into routes from admin areas'
-    task :merge_national_routes => :environment do     
+    task :merge_national_routes => :environment do
       route_type = ENV['ROUTE_TYPE']
       total = route_type.constantize.maximum(:id)
       offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : route_type.constantize.minimum(:id)
@@ -313,20 +336,20 @@ namespace :nptdr do
         offset += 100
       end
     end
-    
+
     desc 'Merges a set of national routes into routes from admin areas'
-    task :merge_national_route_set => :environment do 
+    task :merge_national_route_set => :environment do
       great_britain = Region.find_by_name('Great Britain')
       offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : 1
       route_type = ENV['ROUTE_TYPE'].constantize
       max = offset + 100
-      route_type.find_each(:conditions => ['id >= ? 
+      route_type.find_each(:conditions => ['id >= ?
                                        AND id <= ?
-                                       AND region_id = ? 
+                                       AND region_id = ?
                                        AND id NOT IN (
-                                         SELECT route_id 
+                                         SELECT route_id
                                          FROM route_operators)', offset, max, great_britain]) do |route|
-        existing_routes = Route.find_all_by_number_and_common_stop(route, any_admin_area=true)        
+        existing_routes = Route.find_all_by_number_and_common_stop(route, any_admin_area=true)
         if existing_routes.size == 1
           existing_route = existing_routes.first
           puts "merging #{existing_route.cached_description} #{route.cached_description}"
