@@ -431,13 +431,14 @@ class Route < ActiveRecord::Base
     query = 'id not in (SELECT route_id FROM route_operators)'
     params = []
     if options[:operator_code]
-      query += " AND operator_code = ?"
+      query += " AND route_source_admin_areas.operator_code = ?"
       params << options[:operator_code]
     end
     params = [query] + params
     find(:all, :conditions => params,
          :limit => options[:limit],
-         :order => options[:order])
+         :order => options[:order], 
+         :include => :route_source_admin_areas)
   end
 
   def self.count_without_operators(options={})

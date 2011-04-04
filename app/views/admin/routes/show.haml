@@ -5,6 +5,9 @@
 - form_for @route, :url => admin_url(admin_route_path(@route.id)), :html => { :method => :delete, :class => 'destroy-link' } do |f| 
   != hidden_field_tag :confirmation, t(:are_you_sure), {:id => 'destroy_confirmation'}
   != submit_tag t(:destroy)
+.source-admin-areas
+  %b= "Admin areas:"
+  =@route.source_admin_areas.map{|admin_area| admin_area.name }.to_sentence
 %h3= t(:merge)  
 - form_tag admin_url(merge_admin_routes_path), :method => :get do 
   != label_tag 'routes[]', t(:route_merge_label)

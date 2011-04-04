@@ -6,9 +6,8 @@
       %th{:width => "14%"}= t(:id)
       %th{:width => "5%"}= t(:admin_route_number)
       %th{:width => "14%"}= t(:name)
-      %th{:width => "25%"}= t(:generated_name)
+      %th{:width => "35%"}= t(:cached_description)
       %th{:width => "23%"}= t(:operators)
-      %th{:width => "5%"}= t(:operator_code)
       %th{:width => "10%"}= t(:region)
       %th{ :width => "5%" }= t(:merge_to)
     -@routes.each do |route|
@@ -20,7 +19,6 @@
         %td= route.read_attribute(:name)
         %td= route.name
         %td!= route.operators.map{ |operator| link_to(operator.name, admin_url(admin_operator_path(operator))) }.join(" ")
-        %td= route.operator_code
         %td= route.region.name
         %td
           != radio_button_tag "merge_to", route.id, route == @routes.first, { :class => "select-item" }

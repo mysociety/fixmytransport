@@ -3,9 +3,10 @@
 %table.route-segments
   %tr
     %th{:width => "4%"}= t(:id)
-    %th{:width => "40%"}= t(:from_stop)
+    %th{:width => "10%"}= t(:journey_pattern)
+    %th{:width => "35%"}= t(:from_stop)
     %th{:width => "2%"}= t(:terminus)
-    %th{:width => "40%"}= t(:to_stop)
+    %th{:width => "35%"}= t(:to_stop)
     %th{:width => "2%"}= t(:terminus)
     %th{:width => "4%"}= t(:remove)
   - f.fields_for :route_segments, RouteSegment.new, :child_index => "new_route_segment" do |segment_fields|
@@ -24,6 +25,7 @@
         - f.fields_for :route_segments, segment do |segment_fields|
           %tr{ :class => cycle('odd', 'even'), :id => "route_segment_#{segment.id}" }
             %td= segment.id
+            %td= journey_pattern.id
             %td!= "#{segment.from_stop.common_name} (#{link_to(segment.from_stop.id, admin_url(admin_stop_path(segment.from_stop.id)))}) #{link_to(t(:on_main_site), main_url(location_path(segment.from_stop)), :target => '_blank')}"
             %td!= segment_fields.check_box :from_terminus
             %td!= "#{segment.to_stop.common_name} (#{link_to(segment.to_stop.id, admin_url(admin_stop_path(segment.to_stop.id)))}) #{link_to(t(:on_main_site), main_url(location_path(segment.to_stop)), :target => '_blank')}"
