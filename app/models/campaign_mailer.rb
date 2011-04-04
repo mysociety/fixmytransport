@@ -51,7 +51,7 @@ class CampaignMailer < ApplicationMailer
   
   def write_to_other_assignment(assignment, subject)
     recipients assignment.user.name_and_email
-    from experts_from_name_and_email
+    from experts_from_name_and_email(assignment.creator)
     subject subject
     body({ :assignment => assignment,
            :link => main_url(new_campaign_outgoing_message_path(assignment.campaign, :assignment_id => assignment))})

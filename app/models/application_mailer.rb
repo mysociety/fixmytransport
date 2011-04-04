@@ -9,8 +9,13 @@ class ApplicationMailer < ActionMailer::Base
     "FixMyTransport <#{MySociety::Config.get("CONTACT_EMAIL", 'contact@localhost')}>"
   end
   
-  def experts_from_name_and_email
-    "FixMyTransport Boffins <#{MySociety::Config.get('EXPERT_EMAIL', 'contact@localhost')}>"
+  def experts_from_name_and_email(expert=nil)
+    if expert
+      name = expert.name
+    else
+      name = "FixMyTransport Boffins"
+    end
+    "#{name} <#{MySociety::Config.get('EXPERT_EMAIL', 'contact@localhost')}>"
   end
   
 end
