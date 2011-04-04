@@ -15,5 +15,15 @@ class OperatorContact < ActiveRecord::Base
     return nil if versions.empty? 
     return versions.last.whodunnit
   end
+  
+  # at the moment operator contacts can only relate to stations
+  def stop_area_id=(location_id)
+    self.location_id = location_id
+    self.location_type = 'StopArea'
+  end
+  
+  def stop_area_id()
+    self.location_id
+  end
 
 end
