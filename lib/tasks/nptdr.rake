@@ -434,7 +434,7 @@ namespace :nptdr do
       offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : 1
       max = offset + 100
       Route.find_each(:conditions => ['id >= ? AND id <= ?', offset, max]) do |route|
-        localities = []
+        locality_ids = []
         route.stops.each do |stop|
           locality_ids << stop.locality_id unless locality_ids.include? stop.locality_id
         end
