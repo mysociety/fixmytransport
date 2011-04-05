@@ -399,21 +399,35 @@ namespace :nptdr do
 
     desc 'Adds region associations based on route localities'
     task :add_route_regions => :environment do
+      total = Route.maximum(:id)
+      offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : Route.minimum(:id) 
+      puts "Adding locations for routes ..."
+      while offset < total
+        puts "Adding locations from offset #{offset}"
+        command = "rake RAILS_ENV=#{RAILS_ENV} nptdr:post_load:add_region_to_route_set OFFSET=#{offset}"
+        run_in_shell(command, offset)
+        offset += 100
+      end
+    end
+    
+    desc 'Adds region associations to a set of routes based on route localities'
+    task :add_region_to_route_set => :environment do 
+      offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : 1
+      max = offset + 100
       great_britain = Region.find_by_name('Great Britain')
-      Route.find_each do |route|
+      Route.find_each(:conditions => ['id >= ? AND id <= ?', offset, max]) do |route|
         regions = route.localities.map{ |locality| locality.admin_area.region }.uniq
         if regions.size > 1
           regions = [great_britain]
         end
         if regions.size == 0
-          raise route.inspect
+          puts "Couldn't assign region to #{route.inspect}"
         end
         route.region = regions.first
         route.save!
       end
     end
-
-
+    
     desc 'Adds cached route locality associations based on route stop localities'
     task :add_route_localities => :environment do
       total = Route.maximum(:id)
@@ -429,7 +443,7 @@ namespace :nptdr do
 
     end
 
-    desc 'Adds cached route locality associations based on route stop localities'
+    desc 'Adds cached route locality associations to a set of routes based on route stop localities'
     task :add_route_locality_sets => :environment do
       offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : 1
       max = offset + 100
