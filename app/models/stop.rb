@@ -178,7 +178,7 @@ class Stop < ActiveRecord::Base
     return nil
   end
   
-  def self.name_or_id_conditions(query, transport_mode_id)
+  def self.name_or_id_conditions(query, transport_mode_id, show_all_metro=false)
     query_clauses = []
     query_params = []
     if ! query.blank? 
@@ -195,16 +195,16 @@ class Stop < ActiveRecord::Base
     end
 
     if !transport_mode_id.blank?
-      query_clause, query_param_list = StopType.conditions_for_transport_mode(transport_mode_id.to_i)
+      query_clause, query_param_list = StopType.conditions_for_transport_mode(transport_mode_id.to_i, show_all_metro)
       query_clauses << query_clause
       query_params += query_param_list
     end
     conditions = [query_clauses.join(" AND ")] + query_params
   end
   
-  def self.find_by_name_or_id(query, transport_mode_id, limit)
+  def self.find_by_name_or_id(query, transport_mode_id, limit, show_all_metro=false)
     find(:all, 
-         :conditions => name_or_id_conditions(query, transport_mode_id),
+         :conditions => name_or_id_conditions(query, transport_mode_id, show_all_metro),
          :limit => limit)
   end
     

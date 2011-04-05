@@ -55,9 +55,9 @@ class StopType < ActiveRecord::Base
     codes = @@codes_by_mode[transport_mode_id]
   end
   
-  def self.conditions_for_transport_mode(transport_mode_id)
+  def self.conditions_for_transport_mode(transport_mode_id, show_all_metro=false)
     # Most tram/metro stations are at the stop area level - we just want street stops
-    if transport_mode_id == TransportMode.find_by_name("Tram/Metro").id
+    if transport_mode_id == TransportMode.find_by_name("Tram/Metro").id && !show_all_metro
       conditions = "stop_type in (?) and metro_stop = ?"
       params = [['BCT'], true]
     else
