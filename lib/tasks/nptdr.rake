@@ -334,9 +334,10 @@ namespace :nptdr do
       results.each do |result|
         cached_description = result['cached_description']
         operator_code = result['operator_code']
-        routes = Route.find(:all, :conditions => ['cached_description = ? and operator_code = ?', 
+        routes = Route.find(:all, :conditions => ['cached_description = ? and operator_code = ?',
                                                    cached_description, operator_code])
-        options = { :any_admin_area => true, 
+        next if routes.empty?
+        options = { :any_admin_area => true,
                     :require_total_match => true,
                     :use_operator_codes => true }
         found = Route.find_all_by_number_and_common_stop(routes.first, options)
@@ -412,15 +413,33 @@ namespace :nptdr do
       end
     end
 
+
     desc 'Adds cached route locality associations based on route stop localities'
     task :add_route_localities => :environment do
-      Route.find_each do |route|
+      total = Route.maximum(:id)
+      offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : RouteLocality.minimum(:route_id)
+      offset = 1 if offset.nil?
+      puts "Adding locations for routes ..."
+      while offset < total
+        puts "Adding locations from offset #{offset}"
+        command = "rake RAILS_ENV=#{RAILS_ENV} nptdr:post_load:add_route_locality_sets OFFSET=#{offset}"
+        run_in_shell(command, offset)
+        offset += 100
+      end
+
+    end
+
+    desc 'Adds cached route locality associations based on route stop localities'
+    task :add_route_locality_sets => :environment do
+      offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : 1
+      max = offset + 100
+      Route.find_each(:conditions => ['id >= ? AND id <= ?', offset, max]) do |route|
         localities = []
         route.stops.each do |stop|
-          localities << stop.locality unless localities.include? stop.locality
+          locality_ids << stop.locality_id unless locality_ids.include? stop.locality_id
         end
-        localities.each do |locality|
-          route.route_localities.build(:locality => locality)
+        locality_ids.each do |locality_id|
+          route.route_localities.build(:locality_id => locality_id)
         end
         route.save!
       end
