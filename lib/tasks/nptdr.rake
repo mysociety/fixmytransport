@@ -418,7 +418,7 @@ namespace :nptdr do
     task :add_route_localities => :environment do
       total = Route.maximum(:id)
       offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : RouteLocality.minimum(:route_id)
-      offset = 1 if offset.nil?
+      offset = Route.minimum(:id) if offset.nil?
       puts "Adding locations for routes ..."
       while offset < total
         puts "Adding locations from offset #{offset}"
