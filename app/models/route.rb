@@ -55,7 +55,11 @@ class Route < ActiveRecord::Base
   end
 
   def journey_pattern_invalid(attributes)
-    (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['id'].blank?
+    # ignore a journey pattern that doesn't have an _add attribute or 
+    # that's new but doesn't have any real route segments (just the new segment template)
+    (attributes['_add'] != "1") || \
+    (attributes['id'].blank? && (attributes['route_segments_attributes'].nil? || \
+     attributes['route_segments_attributes'].keys.all?{|key| key == 'new_route_segment' }))
   end
 
   def region_name
@@ -259,7 +263,7 @@ class Route < ActiveRecord::Base
   def self.full_find(id, scope)
     find(id,
          :scope => scope,
-         :include => [{ :route_segments => [:to_stop => :locality, :from_stop => :locality] },
+         :include => [{ :journey_patterns => {:route_segments => [:to_stop => :locality, :from_stop => :locality] }},
                       { :route_operators => :operator }])
 
   end

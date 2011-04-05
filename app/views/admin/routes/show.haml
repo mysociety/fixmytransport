@@ -16,6 +16,7 @@
   != submit_tag t(:route_merge_submit)
 - form_for [:admin, @route.becomes(Route)], :url => admin_url(admin_route_path(@route.id)), :html => { :class => 'route-form' } do |f|
   = render :partial => "form", :locals => { :f => f }
+  - f.object.journey_patterns.build(:_add => "1")
   %h3.admin-section-control= t(:route_segments)
   .admin-section= render :partial => "route_segments", :locals => { :f => f }
   %p=link_to t(:on_main_site), main_url(route_path(@route.region, @route)), :target => '_blank'

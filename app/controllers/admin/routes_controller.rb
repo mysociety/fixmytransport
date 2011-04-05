@@ -5,7 +5,8 @@ class Admin::RoutesController < ApplicationController
   helper_method :sort_column, :sort_direction
 
   def show
-    @route = Route.find(params[:id], :include => [ {:journey_patterns => {:route_segments  => [:from_stop, :to_stop]}}])
+    @route = Route.find(params[:id], :include => [ {:journey_patterns => 
+                                                      {:route_segments  => [:from_stop, :to_stop]}}])
     @route_operators = make_route_operators(@route)
   end
   
@@ -61,10 +62,10 @@ class Admin::RoutesController < ApplicationController
   end
   
   def update
-    # The inclusion of journey_patterns is required for changes to be saved correctly - several
-    # callbacks on route use the journey_patterns association and they need to all be acting on the same
+    # The inclusion of journey_patterns and route_segments is required for changes to be saved correctly - 
+    # several callbacks on route use the associations and they need to all be acting on the same
     # model instances, otherwise changes don't get saved.
-    @route = Route.find(params[:id], :include => :journey_patterns)
+    @route = Route.find(params[:id], :include => {:journey_patterns => :route_segments})
     if @route.update_attributes(params[:route])
       flash[:notice] = t(:route_updated)
       redirect_to admin_url(admin_route_path(@route.id))

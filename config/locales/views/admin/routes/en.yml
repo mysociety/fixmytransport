@@ -27,3 +27,4 @@ en:
   route_merge_label: ID of route to merge with
   route_merge_submit: Merge with another route
   journey_pattern: Journey pattern
+  add_a_journey_pattern: Add a journey pattern

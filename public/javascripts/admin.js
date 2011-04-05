@@ -21,21 +21,21 @@ function setupIndexSelectAllAndNone(){
   jQuery('.index-select-all').click(function(){
     var items = jQuery('.index-list').find('.select-item');
     items.attr('checked', true);
-    items.parents('tr').addClass("selected");
+    items.closest('tr').addClass("selected");
     event.preventDefault();
   })
 
   jQuery('.index-select-none').click(function(){
     var items = jQuery('.index-list').find('.select-item');
     items.attr('checked', false);
-    items.parents('tr').removeClass("selected");
+    items.closest('tr').removeClass("selected");
     event.preventDefault();
   })
 }
 
 function setupItemSelection(class_name){
   jQuery(class_name).click(function(){
-    jQuery(this).parents('tr').toggleClass("selected");
+    jQuery(this).closest('tr').toggleClass("selected");
   });
 }
 
@@ -91,41 +91,47 @@ function setupLocalityAutocomplete(){
                     'input.locality-id');
 }
 
-
-// link to add new route segments 
+// link to add new route segments to a journey pattern
 function setupAddSegmentLink(){
   jQuery('.add-segment-link').click(function(){
     // copy the hidden template
     var template_segment_row = jQuery(this).closest('tr').next('.add-segment-template');
     var new_segment_row = template_segment_row.clone();
-    new_segment_row.removeClass('add-segment-template');
-    new_segment_row.addClass('add-segment-row');
     // set the display class
     var first_segment_row = template_segment_row.next();
     if (first_segment_row.hasClass('odd')){
-      new_segment_row.addClass('even');
+      display_class = 'even';
     } else {
-      new_segment_row.addClass('odd');
+      display_class = 'odd';
     }
+    new_segment_row = popoutRouteSegmentRow(new_segment_row, display_class);
     // insert into the DOM
     template_segment_row.after(new_segment_row);
-    // make visible
-    new_segment_row.css('display', 'table-row');
-    // give fields a unique index 
-    var new_id = new Date().getTime();
-    var regexp = new RegExp("new_route_segment", "g");
-    new_segment_row.html(function(index, html){ 
-      return html.replace(regexp, new_id);
-    });
-    // add autocomplete events
-    setupAutocomplete(new_segment_row.find('input.from_stop_name_auto'), 
-                          "input#stop_name_autocomplete_url", 
-                          new_segment_row.find('input.from-stop-id'));
-    setupAutocomplete(new_segment_row.find('input.to_stop_name_auto'), 
-                          "input#stop_name_autocomplete_url", 
-                          new_segment_row.find('input.to-stop-id'));
     event.preventDefault();
   });
+}
+
+function popoutRouteSegmentRow(new_segment_row, class_name){
+  new_segment_row.removeClass('add-segment-template');
+  new_segment_row.addClass('add-segment-row');
+  // set the display class
+  new_segment_row.addClass(class_name);
+  // make visible
+  new_segment_row.css('display', 'table-row');
+  // give fields a unique index 
+  var new_id = new Date().getTime();
+  var regexp = new RegExp("new_route_segment", "g");
+  new_segment_row.html(function(index, html){ 
+    return html.replace(regexp, new_id);
+  });
+  // add autocomplete events
+  setupAutocomplete(new_segment_row.find('input.from_stop_name_auto'), 
+                        "input#stop_name_autocomplete_url", 
+                        new_segment_row.find('input.from-stop-id'));
+  setupAutocomplete(new_segment_row.find('input.to_stop_name_auto'), 
+                        "input#stop_name_autocomplete_url", 
+                        new_segment_row.find('input.to-stop-id'));
+  return new_segment_row;
 }
 
 function setupSectionControls() {
