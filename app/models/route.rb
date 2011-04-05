@@ -36,7 +36,7 @@ class Route < ActiveRecord::Base
   has_many :route_source_admin_areas, :dependent => :destroy
   has_many :source_admin_areas, :through => :route_source_admin_areas, :class_name => 'AdminArea'
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
-  accepts_nested_attributes_for :route_segments, :allow_destroy => true, :reject_if => :route_segment_invalid
+  accepts_nested_attributes_for :journey_patterns, :allow_destroy => true, :reject_if => :journey_pattern_invalid
   validates_presence_of :number, :transport_mode_id
   validates_presence_of :region_id, :if => :loaded?
   cattr_reader :per_page
@@ -54,9 +54,8 @@ class Route < ActiveRecord::Base
     (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['operator_id'].blank?
   end
 
-  def route_segment_invalid(attributes)
-    (attributes['_add'] != "1" and attributes['_destroy'] != "1") or \
-    attributes['from_stop_id'].blank? or attributes['to_stop_id'].blank?
+  def journey_pattern_invalid(attributes)
+    (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['id'].blank?
   end
 
   def region_name
@@ -281,7 +280,7 @@ class Route < ActiveRecord::Base
       operator_params = []
 
       new_route.route_source_admin_areas.each do |route_source_admin_area|
-        
+
         next if route_source_admin_area.operator_code.blank?
         route_operator_clauses = []
 
@@ -333,7 +332,7 @@ class Route < ActiveRecord::Base
           routes_with_same_stops << route
           next
         end
-        
+
       end
       if !options[:require_total_match]
         route_stop_area_codes = route.stop_area_codes
@@ -437,7 +436,7 @@ class Route < ActiveRecord::Base
     params = [query] + params
     find(:all, :conditions => params,
          :limit => options[:limit],
-         :order => options[:order], 
+         :order => options[:order],
          :include => :route_source_admin_areas)
   end
 

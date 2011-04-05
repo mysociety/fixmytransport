@@ -1,8 +1,18 @@
 class JourneyPattern < ActiveRecord::Base
   belongs_to :route
-  has_many :route_segments, :order => 'segment_order asc'
+  # virtual attribute used for adding new journey patterns
+  attr_accessor :_add
+  has_many :route_segments, :order => 'segment_order asc', :dependent => :destroy
+  accepts_nested_attributes_for :route_segments, :allow_destroy => true, :reject_if => :route_segment_invalid
+  
   has_paper_trail
 
+  def route_segment_invalid(attributes)
+    puts "trying route segment attributes #{attributes}"
+    (attributes['_add'] != "1" and attributes['_destroy'] != "1") or \
+    attributes['from_stop_id'].blank? or attributes['to_stop_id'].blank?
+  end
+  
   def identical_segments?(other)
     route_segments.all? do |route_segment|
       other.route_segments.detect do |other_segment|

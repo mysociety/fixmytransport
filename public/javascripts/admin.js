@@ -96,19 +96,19 @@ function setupLocalityAutocomplete(){
 function setupAddSegmentLink(){
   jQuery('.add-segment-link').click(function(){
     // copy the hidden template
-    var template_segment_row = jQuery('.add-segment-template')
+    var template_segment_row = jQuery(this).closest('tr').next('.add-segment-template');
     var new_segment_row = template_segment_row.clone();
     new_segment_row.removeClass('add-segment-template');
     new_segment_row.addClass('add-segment-row');
     // set the display class
-    var last_segment_row = jQuery('.add-segment-row:last');
-    if (last_segment_row.hasClass('odd')){
+    var first_segment_row = template_segment_row.next();
+    if (first_segment_row.hasClass('odd')){
       new_segment_row.addClass('even');
     } else {
       new_segment_row.addClass('odd');
     }
     // insert into the DOM
-    last_segment_row.after(new_segment_row);
+    template_segment_row.after(new_segment_row);
     // make visible
     new_segment_row.css('display', 'table-row');
     // give fields a unique index 

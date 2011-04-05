@@ -24,7 +24,12 @@ class RouteSegment < ActiveRecord::Base
   attr_accessor :_add
   before_save :set_stop_areas
   has_paper_trail
+  after_destroy :check_destroy_journey_pattern
   
+  def check_destroy_journey_pattern
+    journey_pattern.destroy if journey_pattern.route_segments.empty?
+  end
+   
   def set_stop_areas
     station_part_stops = StopType.station_part_types
     station_types = StopType.station_part_types_to_station_types

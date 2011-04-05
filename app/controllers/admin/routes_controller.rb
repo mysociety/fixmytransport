@@ -61,7 +61,10 @@ class Admin::RoutesController < ApplicationController
   end
   
   def update
-    @route = Route.find(params[:id])
+    # The inclusion of journey_patterns is required for changes to be saved correctly - several
+    # callbacks on route use the journey_patterns association and they need to all be acting on the same
+    # model instances, otherwise changes don't get saved.
+    @route = Route.find(params[:id], :include => :journey_patterns)
     if @route.update_attributes(params[:route])
       flash[:notice] = t(:route_updated)
       redirect_to admin_url(admin_route_path(@route.id))

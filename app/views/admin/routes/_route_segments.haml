@@ -9,29 +9,25 @@
     %th{:width => "35%"}= t(:to_stop)
     %th{:width => "2%"}= t(:terminus)
     %th{:width => "4%"}= t(:remove)
-  - f.fields_for :route_segments, RouteSegment.new, :child_index => "new_route_segment" do |segment_fields|
-    %tr{ :class => "add-segment-template", :style => "display: none" }
-      = render :partial => 'add_segment_row', :locals => { :segment_fields => segment_fields }
-  - f.fields_for :route_segments, RouteSegment.new do |segment_fields|
-    %tr{ :class => "#{cycle('odd', 'even')} add-segment-row" }
-      = render :partial => 'add_segment_row', :locals => { :segment_fields => segment_fields }
-  - @route.journey_patterns.each do |journey_pattern| 
-    - journey_pattern.route_segments.each do |segment|
-      - if segment.new_record?
-        - f.fields_for :route_segments, segment do |segment_fields|
-          %tr{ :class => "#{cycle('odd', 'even')} add-segment-row" }
-            = render :partial => 'add_segment_row', :locals => { :segment_fields => segment_fields }
-      - else
-        - f.fields_for :route_segments, segment do |segment_fields|
-          %tr{ :class => cycle('odd', 'even'), :id => "route_segment_#{segment.id}" }
-            %td= segment.id
-            %td= journey_pattern.id
-            %td!= "#{segment.from_stop.common_name} (#{link_to(segment.from_stop.id, admin_url(admin_stop_path(segment.from_stop.id)))}) #{link_to(t(:on_main_site), main_url(location_path(segment.from_stop)), :target => '_blank')}"
-            %td!= segment_fields.check_box :from_terminus
-            %td!= "#{segment.to_stop.common_name} (#{link_to(segment.to_stop.id, admin_url(admin_stop_path(segment.to_stop.id)))}) #{link_to(t(:on_main_site), main_url(location_path(segment.to_stop)), :target => '_blank')}"
-            %td!= segment_fields.check_box :to_terminus
-            %td
-              != segment_fields.hidden_field :id
-              != segment_fields.check_box :_destroy, :class => 'check-route-segment'
 
+    - f.fields_for :journey_patterns do |pattern_fields|
+      != pattern_fields.hidden_field :id  
+      %tr
+        %td{:colspan => 7}
+          %a{:class => 'add-segment-link', :href => ''}= t(:add_a_segment)      
+      - pattern_fields.fields_for :route_segments, RouteSegment.new(:journey_pattern => pattern_fields.object), :child_index => "new_route_segment" do |segment_fields|
+        %tr{ :class => "add-segment-template", :style => "display: none" }
+          = render :partial => 'add_segment_row', :locals => { :segment_fields => segment_fields }
+      - pattern_fields.fields_for :route_segments do |segment_fields|
+        %tr{ :class => cycle('odd', 'even'), :id => "route_segment_#{segment_fields.object.id}" }
+          %td= segment_fields.object.id
+          %td= pattern_fields.object.id
+          %td!= "#{segment_fields.object.from_stop.common_name} (#{link_to(segment_fields.object.from_stop.id, admin_url(admin_stop_path(segment_fields.object.from_stop.id)))}) #{link_to(t(:on_main_site), main_url(location_path(segment_fields.object.from_stop)), :target => '_blank')}"
+          %td!= segment_fields.check_box :from_terminus
+          %td!= "#{segment_fields.object.to_stop.common_name} (#{link_to(segment_fields.object.to_stop.id, admin_url(admin_stop_path(segment_fields.object.to_stop.id)))}) #{link_to(t(:on_main_site), main_url(location_path(segment_fields.object.to_stop)), :target => '_blank')}"
+          %td!= segment_fields.check_box :to_terminus
+          %td
+            != segment_fields.hidden_field :id
+            != segment_fields.check_box :_destroy, :class => 'check-route-segment'
+      
       
