@@ -384,19 +384,6 @@ namespace :nptdr do
       end
     end
 
-    desc 'Deletes operators whose code has no routes'
-    task :delete_operator_codes_without_routes => :environment do
-      deleted_count = 0
-      Operator.find_each do |operator|
-        if Route.count_by_sql(["SELECT count(*) from routes where operator_code = ?", operator.code]) == 0
-         puts "deleting #{operator.name} #{operator.code}"
-         deleted_count += 1
-        end
-      end
-      puts "Deleted #{deleted_count} operators"
-    end
-
-
     desc 'Adds region associations based on route localities'
     task :add_route_regions => :environment do
       total = Route.maximum(:id)
