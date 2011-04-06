@@ -1,8 +1,11 @@
 require 'zip/zip'
 require File.dirname(__FILE__) +  '/data_loader'
+require File.dirname(__FILE__) +  '/geo_functions'
+
 namespace :nptdr do
 
   include DataLoader
+  include GeoFunctions
 
   namespace :pre_load do
 
@@ -247,13 +250,8 @@ namespace :nptdr do
                                             :route_numbers => row['NPTDR Route Numbers'].split(',') }
         end
       end
-      spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false)
       all_stops.each do |code, stop_info|
-        if spatial_extensions
-          coords = Point.from_x_y(stop_info[:easting], stop_info[:northing], BRITISH_NATIONAL_GRID)
-        else
-          coords = nil
-        end
+        coords = Point.from_x_y(stop_info[:easting], stop_info[:northing], BRITISH_NATIONAL_GRID)
         locality = Locality.find_by_code((stop_info[:locality_id]))
         if locality.blank?
           nearest_stop = Stop.find_nearest(stop_info[:easting], stop_info[:northing])
@@ -297,6 +295,66 @@ namespace :nptdr do
       Route.find_each(:conditions => ['route_segments.id is null'],
                          :include => 'route_segments') do |route|
         Route.destroy(route.id)
+      end
+    end
+    
+    desc 'Load manually created stops from a TSV file specified as FILE'
+    task :load_manual_stops => :environment do 
+      check_for_file
+      csv_options = { :quote_char => '"',
+                      :col_sep => "\t",
+                      :row_sep =>:auto,
+                      :return_headers => false,
+                      :headers => :first_row,
+                      :encoding => 'U' }
+      FasterCSV.parse(File.read(ENV['FILE']), csv_options) do |row|
+        stop = Stop.new( :common_name => row['Name'] ? row['Name'].strip : nil,
+                         :easting => row['Easting'] ? row['Easting'].strip : nil,
+                         :northing => row['Northing'] ? row['Northing'].strip : nil,
+                         :lat => row['Lat'] ? row['Lat'].strip : nil, 
+                         :lon => row['Lon'] ? row['Lon'].strip : nil,
+                         :other_code => row['ATCO code'] ? row['ATCO code'].strip : nil,
+                         :stop_type => row['Stop type'] ? row['Stop type'].strip : nil)
+
+        # check if already exists
+        existing = Stop.find_by_code(stop.other_code)
+        if existing
+          puts "Stop already in db #{existing.inspect}"
+          next
+        end
+        
+        # add a locality
+        locality_code = row['Locality ID'] ? row['Locality ID'].strip : nil
+        if !locality_code.blank?
+         stop.locality = Locality.find_by_code(locality_code)
+        end
+
+        # generate the coords
+        if stop.easting.blank? or stop.northing.blank?
+          if stop.lon.blank? or stop.lat.blank?
+            raise "No coordinates for manual stop #{stop.atco_code}"
+          else
+            stop.easting, stop.northing = get_easting_northing(stop.lon, stop.lat)
+          end
+        end
+        stop.coords = Point.from_x_y(stop.easting, stop.northing, BRITISH_NATIONAL_GRID)
+        
+         # save the stop
+        stop.save!
+
+        # convert lat/lon to easting/northing or vice versa
+        if stop.lon.blank? or stop.lat.blank?
+          stop = set_lon_lat(stop, 'Stop')
+          stop.save!
+        end
+
+        # approximate a locality if needed
+        if !stop.locality
+          nearest_stop = Stop.find_nearest(stop.easting, stop.northing)
+          stop.locality = nearest_stop.locality
+          stop.save!
+        end
+        
       end
     end
 

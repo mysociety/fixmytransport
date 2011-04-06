@@ -1,9 +1,12 @@
 require File.dirname(__FILE__) +  '/data_loader'
+require File.dirname(__FILE__) +  '/geo_functions'
+
 namespace :naptan do
 
   namespace :load do
 
     include DataLoader
+    include GeoFunctions
 
     desc "Loads stop data from a CSV file specified as FILE=filename"
     task :stops => :environment do
@@ -250,18 +253,7 @@ namespace :naptan do
         usage_message "rake naptan:geo:#{task_name} requires PostgreSQL with PostGIS"
       end
       class_name.constantize.find_each(:conditions => conditions) do |instance|
-        conn = ActiveRecord::Base.connection
-        lon_lats = conn.execute("SELECT st_X(st_transform(coords,#{WGS_84})) as lon,
-                                        st_Y(st_transform(coords,#{WGS_84})) as lat
-                                 FROM #{class_name.tableize}
-                                 WHERE id = #{instance.id}")
-        lon_lat = lon_lats[0]
-        if lon_lat.is_a? Hash
-          instance.lon = lon_lat["lon"]
-          instance.lat = lon_lat["lat"]
-        else
-          instance.lon, instance.lat = lon_lat
-        end
+        instance = set_lon_lat(instance, class_name)
         instance.save!
       end
     end
