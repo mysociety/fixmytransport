@@ -7,6 +7,35 @@ namespace :nptdr do
   include DataLoader
   include GeoFunctions
 
+  def get_route_missing_stop_data()
+    missing_route_stops_files = ["#{RAILS_ROOT}/data/NPTDR/oct_2010/missing_stops.csv",
+                                 "#{RAILS_ROOT}/data/NPTDR/oct_2010/missing_stops_regional.csv"]
+    route_stops = {}
+    missing_route_stops_files.each do |missing_route_stops_file|
+      FasterCSV.parse( File.read(missing_route_stops_file), csv_options) do |row|
+        if route_stops[row['ATCO Code']]
+          route_stops[row['ATCO Code']][:regions] << row['NPTDR File Region']
+          route_stops[row['ATCO Code']][:admin_areas] << row['NPTDR File Admin Area']
+          route_stops[row['ATCO Code']][:route_numbers] += row['NPTDR Route Numbers'].split(',')
+        else
+          route_stops[row['ATCO Code']] = { :regions => [row['NPTDR File Region']],
+                                            :admin_areas => [row['NPTDR File Admin Area']],
+                                            :route_numbers => row['NPTDR Route Numbers'].split(',') }
+        end
+      end
+    end
+    return route_stops
+  end
+
+  def csv_options
+    { :quote_char => '"',
+      :col_sep => "\t",
+      :row_sep =>:auto,
+      :return_headers => false,
+      :headers => :first_row,
+      :encoding => 'U' }
+  end
+
   namespace :pre_load do
 
     desc 'Check stops data from any *.tsv files in directory specified DIR=dirname against existing stop data'
@@ -79,7 +108,7 @@ namespace :nptdr do
       puts "Checking routes in #{ENV['DIR']}..."
       parser = Parsers::NptdrParser.new
       dir = ENV['DIR']
-      operators_outfile = File.open("#{RAILS_ROOT}/data/nptdr/unmatched_operators.tsv", 'w')
+      operators_outfile = File.open("#{RAILS_ROOT}/data/NPTDR/oct_2010/unmatched_operators.tsv", 'w')
       operators_headings = ["NPTDR File Region",
                             "NPTDR File Admin Area",
                             "NPTDR Operator Code",
@@ -87,7 +116,7 @@ namespace :nptdr do
                             "NPTDR Route Numbers"]
       operators_outfile.write(operators_headings.join("\t") + "\n")
 
-      stops_outfile = File.open("#{RAILS_ROOT}/data/nptdr/missing_stops.tsv", 'w')
+      stops_outfile = File.open("#{RAILS_ROOT}/data/NPTDR/oct_2010/missing_stops.tsv", 'w')
       stops_headings = ["NPTDR File Region",
                         "NPTDR File Admin Area",
                         "ATCO Code",
@@ -223,14 +252,9 @@ namespace :nptdr do
 
     desc 'Loads stops referenced by routes in NPTDR, but not present in the database'
     task :missing_stops => :environment do
-      all_missing_stops_file = "#{RAILS_ROOT}/data/nptdr/unmapped_stops.csv"
-      missing_route_stops_file = "#{RAILS_ROOT}/data/nptdr/missing_stops.csv"
-      csv_options = { :quote_char => '"',
-                      :col_sep => "\t",
-                      :row_sep =>:auto,
-                      :return_headers => false,
-                      :headers => :first_row,
-                      :encoding => 'U' }
+      all_missing_stops_file = "#{RAILS_ROOT}/data/NPTDR/oct_2010/unmapped_stops.csv"
+      missing_route_stops_file = "#{RAILS_ROOT}/data/NPTDR/oct_2010/missing_stops.csv"
+
       all_stops = {}
       FasterCSV.parse(File.read(all_missing_stops_file), csv_options) do |row|
         all_stops[row['ATCO code']] = { :name => row['Name'],
@@ -238,18 +262,8 @@ namespace :nptdr do
                                         :northing => row['Northing'],
                                         :locality => row['Locality ID'] }
       end
-      route_stops = {}
-      FasterCSV.parse( File.read(missing_route_stops_file), csv_options) do |row|
-        if route_stops[row['ATCO Code']]
-          route_stops[row['ATCO Code']][:regions] << row['NPTDR File Region']
-          route_stops[row['ATCO Code']][:admin_areas] << row['NPTDR File Admin Area']
-          route_stops[row['ATCO Code']][:route_numbers] += row['NPTDR Route Numbers'].split(',')
-        else
-          route_stops[row['ATCO Code']] = { :regions => [row['NPTDR File Region']],
-                                            :admin_areas => [row['NPTDR File Admin Area']],
-                                            :route_numbers => row['NPTDR Route Numbers'].split(',') }
-        end
-      end
+
+      route_stops = get_route_missing_stop_data()
       all_stops.each do |code, stop_info|
         coords = Point.from_x_y(stop_info[:easting], stop_info[:northing], BRITISH_NATIONAL_GRID)
         locality = Locality.find_by_code((stop_info[:locality_id]))
@@ -297,21 +311,35 @@ namespace :nptdr do
         Route.destroy(route.id)
       end
     end
-    
+
+    def get_routes_file(admin_area_name, region_name)
+      if admin_area_name == 'National'
+        filename = 'National.tsv'
+      else
+        region = Region.find(:first, :conditions => ['name = ?', region_name])
+        admin_areas = region.admin_areas.find(:all, :conditions => ['name = ?', admin_area_name])
+        raise "More than one admin_area called #{admin_area_name} in #{region_name}" if admin_areas.size > 1
+        raise "No admin area #{admin_area_name} found in #{region_name}" if admin_areas.size < 1
+        admin_area = admin_areas.first
+        # get the directory where the nptdr-derived files are
+        filename = "Admin_Area_#{admin_area.atco_code}.tsv"
+      end
+      routes_file = File.join(MySociety::Config.get('NPTDR_DERIVED_DIR', ''), 'routes', filename)
+    end
+
     desc 'Load manually created stops from a TSV file specified as FILE'
-    task :load_manual_stops => :environment do 
+    task :load_manual_stops => :environment do
       check_for_file
-      csv_options = { :quote_char => '"',
-                      :col_sep => "\t",
-                      :row_sep =>:auto,
-                      :return_headers => false,
-                      :headers => :first_row,
-                      :encoding => 'U' }
+
+      # get a hash of missing stops and the routes that reference them
+      route_stops = get_route_missing_stop_data()
+
+      nptdr_parser = Parsers::NptdrParser.new
       FasterCSV.parse(File.read(ENV['FILE']), csv_options) do |row|
         stop = Stop.new( :common_name => row['Name'] ? row['Name'].strip : nil,
                          :easting => row['Easting'] ? row['Easting'].strip : nil,
                          :northing => row['Northing'] ? row['Northing'].strip : nil,
-                         :lat => row['Lat'] ? row['Lat'].strip : nil, 
+                         :lat => row['Lat'] ? row['Lat'].strip : nil,
                          :lon => row['Lon'] ? row['Lon'].strip : nil,
                          :other_code => row['ATCO code'] ? row['ATCO code'].strip : nil,
                          :stop_type => row['Stop type'] ? row['Stop type'].strip : nil)
@@ -322,7 +350,7 @@ namespace :nptdr do
           puts "Stop already in db #{existing.inspect}"
           next
         end
-        
+
         # add a locality
         locality_code = row['Locality ID'] ? row['Locality ID'].strip : nil
         if !locality_code.blank?
@@ -338,24 +366,104 @@ namespace :nptdr do
           end
         end
         stop.coords = Point.from_x_y(stop.easting, stop.northing, BRITISH_NATIONAL_GRID)
-        
-         # save the stop
-        stop.save!
 
-        # convert lat/lon to easting/northing or vice versa
-        if stop.lon.blank? or stop.lat.blank?
-          stop = set_lon_lat(stop, 'Stop')
-          stop.save!
+        # look for a station if this is part of a station
+        station_part_stops = StopType.station_part_types
+        station_types = StopType.station_part_types_to_station_types
+        if station_part_stops.include?(stop.stop_type)
+          station_type = station_types[stop.stop_type]
+          puts "Looking for a parent of type #{station_type} for #{stop.common_name}" if ENV['DRYRUN']
+          existing_stations = StopArea.find_parents(stop, station_type)
+          if existing_stations.empty?
+            puts "Couldn't find parent for #{stop.common_name} (#{stop.other_code})" if ENV['DRYRUN']
+          elsif existing_stations.size > 1
+            puts "More than one possible parent for #{stop.common_name} (#{stop.other_code}), please add manually" if ENV['DRYRUN']
+          else
+            puts "Adding #{existing_stations.first.name} as parent of #{stop.common_name}" if ENV['DRYRUN']
+            stop.stop_area_memberships.build(:stop_area => existing_stations.first)
+          end
         end
 
-        # approximate a locality if needed
-        if !stop.locality
-          nearest_stop = Stop.find_nearest(stop.easting, stop.northing)
-          stop.locality = nearest_stop.locality
+        if ! ENV['DRYRUN']
+           # save the stop
           stop.save!
+
+          # convert easting/northing to lat/lon
+          if stop.lon.blank? or stop.lat.blank?
+            stop = set_lon_lat(stop, 'Stop')
+            stop.save!
+          end
+
+          # approximate a locality if needed
+          if !stop.locality
+            nearest_stop = Stop.find_nearest(stop.easting, stop.northing)
+            stop.locality = nearest_stop.locality
+            stop.save!
+          end
+
+          # are there any routes missing this stop?
+          if route_stops[stop.other_code]
+            route_data = route_stops[stop.other_code]
+            puts "Inserting #{stop.common_name} into routes"
+            matched_journeys = {}
+            tried_codes = []
+            route_data[:admin_areas].zip(route_data[:regions]).each do |admin_area_name, region_name|
+              routes_file = get_routes_file(admin_area_name, region_name)
+              route_numbers = route_data[:route_numbers].map{ |route_desc| route_desc.split(" ")[1] }
+              nptdr_parser.parse_routes(routes_file, only_numbers=route_numbers) do |route|
+                new_matches, tried_codes = get_journey_patterns_to_replace(route, admin_area_name, stop, nptdr_parser, tried_codes)
+                matched_journeys.update(new_matches)
+              end
+            end
+            matched_journeys.each do |journey_pattern_id, replacement_pattern|
+              journey_pattern = JourneyPattern.find(journey_pattern_id)
+              route = journey_pattern.route
+              journey_pattern.destroy
+              replacement_pattern.route = route
+              replacement_pattern.route_segments.each{ |segment| segment.route = route }
+              replacement_pattern.save!
+              replacement_pattern.route.cache_route_coords
+              replacement_pattern.route.cache_route_description
+              replacement_pattern.route.save!
+            end
+          end
         end
-        
       end
+    end
+
+    def get_journey_patterns_to_replace(route, admin_area_name, stop, nptdr_parser, tried_codes)
+      matched_journeys = {}
+      if admin_area_name == 'National'
+        options = {:any_admin_area => true}
+      else
+        options = {}
+      end
+      existing_routes = Route.find_all_by_number_and_common_stop(route, options)
+      route.journey_patterns.each do |journey_pattern|
+        stops = journey_pattern.stop_list()
+        # for any journey pattern including the new stop
+        if stops.include?(stop)
+          stops.delete(stop)
+          stop_codes = stops.map{ |stop| stop.atco_code or stop.other_code }
+          next if tried_codes.include?(stop_codes)
+          tried_codes << stop_codes
+          comparison_journey = JourneyPattern.new
+          # make a comparison pattern without it
+          nptdr_parser.build_segments_for_journey_pattern(comparison_journey, route, stop_codes, {})
+          # and find existing journey patterns in the db that match it.
+          existing_routes.each do |existing_route|
+            match = false
+            existing_route.journey_patterns.each do |existing_journey_pattern|
+              if match == false && existing_journey_pattern.identical_segments?(comparison_journey)
+                matched_journeys[existing_journey_pattern.id] = journey_pattern
+                match = true
+                next
+              end
+            end
+          end
+        end
+      end
+      [ matched_journeys, tried_codes ]
     end
 
     desc 'Merges consecutively loaded pairs of bus routes from the same operator going between the same places'
@@ -445,7 +553,7 @@ namespace :nptdr do
     desc 'Adds region associations based on route localities'
     task :add_route_regions => :environment do
       total = Route.maximum(:id)
-      offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : Route.minimum(:id) 
+      offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : Route.minimum(:id)
       puts "Adding locations for routes ..."
       while offset < total
         puts "Adding locations from offset #{offset}"
@@ -454,9 +562,9 @@ namespace :nptdr do
         offset += 100
       end
     end
-    
+
     desc 'Adds region associations to a set of routes based on route localities'
-    task :add_region_to_route_set => :environment do 
+    task :add_region_to_route_set => :environment do
       offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : 1
       max = offset + 100
       great_britain = Region.find_by_name('Great Britain')
@@ -472,7 +580,7 @@ namespace :nptdr do
         route.save!
       end
     end
-    
+
     desc 'Adds cached route locality associations based on route stop localities'
     task :add_route_localities => :environment do
       total = Route.maximum(:id)

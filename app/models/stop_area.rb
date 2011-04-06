@@ -27,7 +27,7 @@
 
 class StopArea < ActiveRecord::Base
   extend ActiveSupport::Memoizable
-  
+
   has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships
   has_dag_links :link_class_name => 'StopAreaLink'
@@ -36,7 +36,7 @@ class StopArea < ActiveRecord::Base
   belongs_to :locality
   has_many :stop_area_operators, :dependent => :destroy
   has_many :operators, :through => :stop_area_operators, :uniq => true
-  has_friendly_id :name, :use_slug => true, :scope => :locality  
+  has_friendly_id :name, :use_slug => true, :scope => :locality
   has_many :route_segments_as_from_stop_area, :foreign_key => 'from_stop_area_id', :class_name => 'RouteSegment'
   has_many :route_segments_as_to_stop_area, :foreign_key => 'to_stop_area_id', :class_name => 'RouteSegment'
   has_many :routes_as_from_stop_area, :through => :route_segments_as_from_stop_area, :source => 'route'
@@ -45,27 +45,27 @@ class StopArea < ActiveRecord::Base
   validates_presence_of :locality, :if => :loaded?
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
-  
+
   def routes
     stops.map{ |stop| stop.routes }.flatten.uniq
   end
-  
+
   def route_terminuses
     routes.map{ |route| route.terminuses }.flatten.uniq.sort_by(&:name)
   end
-  
+
   def next_stops
-    route_segments_as_from_stop_area.map do |route_segment| 
-      route_segment.to_stop_area or route_segment.to_stop 
+    route_segments_as_from_stop_area.map do |route_segment|
+      route_segment.to_stop_area or route_segment.to_stop
     end.uniq.sort_by(&:name)
   end
-  
+
   def description
     text = name
     text += " in #{area}" if area
-    text  
+    text
   end
-  
+
   def full_name
     if area_type == 'GRLS' or area_type == 'GTMU'
       name
@@ -73,19 +73,19 @@ class StopArea < ActiveRecord::Base
       "#{name} stop area"
     end
   end
-  
+
   def transport_modes
     TransportMode.find(StopAreaType.transport_modes_for_code(area_type))
   end
-  
+
   def transport_mode_ids
     transport_modes.map{ |mode| mode.id }
   end
-  
+
   def transport_mode_names
     transport_modes.map{ |mode| mode.name }
   end
-  
+
   def area
     areas = stops.map{ |stop| stop.area }.uniq
     if areas.size == 1
@@ -94,7 +94,7 @@ class StopArea < ActiveRecord::Base
     return nil
   end
   memoize :area
-  
+
   def self.find_in_bounding_box(min_lat, min_lon, max_lat, max_lon)
     stops = find_by_sql(["SELECT  *
                           FROM stop_areas
@@ -104,8 +104,18 @@ class StopArea < ActiveRecord::Base
       	                    ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})",
     	                    StopAreaType.primary_types, min_lon, min_lat, max_lon, max_lat])
   end
-  
-  
+
+  def self.find_parents(stop, station_type)
+    distance_clause = "ST_Distance(
+                       ST_GeomFromText('POINT(#{stop.easting} #{stop.northing})', #{BRITISH_NATIONAL_GRID}),
+                       coords)"
+    existing_stations = StopArea.find(:all, :conditions => ["name = ?
+                                                             AND area_type = ?
+                                                             AND #{distance_clause} < ?",
+                                                            stop.common_name, station_type, 500] )
+    existing_stations = map_to_common_areas(existing_stations)
+  end
+
   # Take a list of stop areas and remove those that are descendents of areas already in the list
   def self.map_to_common_areas(stop_areas)
     area_list = []
@@ -116,11 +126,11 @@ class StopArea < ActiveRecord::Base
     end
     area_list
   end
-  
+
   def self.name_or_id_conditions(query, transport_mode_id)
     query_clauses = []
     query_params = []
-    if ! query.blank? 
+    if ! query.blank?
       query = query.downcase
       query_clause = "(LOWER(name) LIKE ? OR LOWER(name) LIKE ?"
       query_params = [ "#{query}%", "%#{query}%"]
@@ -140,20 +150,20 @@ class StopArea < ActiveRecord::Base
     end
     conditions = [query_clauses.join(" AND ")] + query_params
   end
-  
+
   def self.find_by_name_or_id(query, transport_mode_id, limit)
-    find(:all, 
+    find(:all,
          :conditions => name_or_id_conditions(query, transport_mode_id),
          :limit => limit)
   end
-  
+
   def self.full_find(id, scope)
-    find(id, :scope => scope, 
+    find(id, :scope => scope,
          :include => { :stops => [ {:routes_as_from_stop => :region}, {:routes_as_to_stop, :region}, :locality ] } )
   end
-  
+
   def self.find_by_code(code)
     find(:first, :conditions => ["lower(code) = ?", code.downcase])
   end
-  
+
 end

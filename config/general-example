@@ -53,7 +53,7 @@ define('OPTION_NAPTAN_DIR', '/my/naptan/dir');
 define('OPTION_NPTDR_DIR', '/my/nptdr/dir');
 define('OPTION_NPTG_DIR', '/my/nptg/dir');
 define('OPTION_NOC_DIR', '/my/noc/dir');
-define('OPTION_NPTG_DERIVED_DIR', '/my/nptdr-derived/dir');
+define('OPTION_NPTDR_DERIVED_DIR', '/my/nptdr-derived/dir');
 
 // Incoming email
 define('OPTION_INCOMING_EMAIL_DOMAIN', 'localhost'); // e.g. 'fixmytransport.com'

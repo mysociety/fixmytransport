@@ -80,8 +80,29 @@ class Parsers::NptdrParser
     end
     return missing_stops
   end
+  
+  def build_segments_for_journey_pattern(journey_pattern, route, stops, options)
+    segment_order = 0
+    stops.each_cons(2) do |from_stop_code,to_stop_code|
+      from_stop = Stop.find_by_code(from_stop_code.strip, options)
+      to_stop = Stop.find_by_code(to_stop_code.strip, options)
+      route_segment = journey_pattern.route_segments.build(:from_stop => from_stop,
+                                                           :to_stop   => to_stop,
+                                                           :route => route,
+                                                           :segment_order => segment_order,
+                                                           :from_terminus => false,
+                                                           :to_terminus  => false)
+      segment_order += 1
+      route_segment.set_stop_areas
+    end
+    if journey_pattern.route_segments.size > 0
+      journey_pattern.route_segments.first.from_terminus = true
+      journey_pattern.route_segments.last.to_terminus = true
+    end
+    return journey_pattern
+  end
 
-  def parse_routes filepath
+  def parse_routes(filepath, only_numbers=nil)
     csv_data = File.read(filepath)
     admin_area = self.admin_area_from_filepath(filepath)
     region = self.region_from_filepath(filepath)
@@ -89,6 +110,9 @@ class Parsers::NptdrParser
 
     FasterCSV.parse(csv_data, csv_options) do |row|
       route_number = row['Route Number']
+      if only_numbers
+        next unless only_numbers.include?(route_number) 
+      end
       vehicle_code = row['Vehicle Code']
       operator_code = row['Operator Code']
       route_number.strip! if route_number
@@ -121,24 +145,8 @@ class Parsers::NptdrParser
       missing.each do |missing_stop_code|
         missing_stops = self.mark_stop_code_missing(missing_stops, missing_stop_code, route)
       end
-      jp = route.journey_patterns.build()
-      segment_order = 0
-      found.each_cons(2) do |from_stop_code,to_stop_code|
-        from_stop = Stop.find_by_code(from_stop_code.strip, options)
-        to_stop = Stop.find_by_code(to_stop_code.strip, options)
-        route_segment = jp.route_segments.build(:from_stop => from_stop,
-                                                :to_stop   => to_stop,
-                                                :route => route,
-                                                :segment_order => segment_order,
-                                                :from_terminus => false,
-                                                :to_terminus  => false)
-        segment_order += 1
-        route_segment.set_stop_areas
-      end
-      if jp.route_segments.size > 0
-        jp.route_segments.first.from_terminus = true
-        jp.route_segments.last.to_terminus = true
-      end
+      journey_pattern = route.journey_patterns.build()
+      self.build_segments_for_journey_pattern(journey_pattern, route, found, options)
       yield route
     end
     return missing_stops
