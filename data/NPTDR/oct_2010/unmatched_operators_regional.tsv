@@ -1,0 +1,757 @@
+NPTDR File Region	NPTDR File Admin Area	NPTDR Operator Code	Code Problem	NPTDR Route Numbers
+South East	Kent	RHDR	missing	BusRoute RHDR
+South East	Kent	IC	missing	BusRoute AA21
+South East	Kent	XK	missing	BusRoute D
+South East	Kent	PO	missing	BusRoute PO
+South East	Kent	RED	ambiguous	BusRoute 223, BusRoute 311, BusRoute 433
+South West	Bristol	CI	missing	BusRoute 52
+South West	Bristol	BL	missing	BusRoute 178, BusRoute 309, BusRoute 310, BusRoute 318, BusRoute 319, BusRoute 327, BusRoute 329, BusRoute 332, BusRoute 339, BusRoute 342, BusRoute 349, BusRoute 351, BusRoute 352, BusRoute 353, BusRoute 354, BusRoute 357, BusRoute 358, BusRoute 359, BusRoute 361, BusRoute 362, BusRoute 363, BusRoute 376, BusRoute 379, BusRoute 649, BusRoute X1, BusRoute X39, BusRoute X42
+South West	Bristol	FK	missing	CoachRoute 200, CoachRoute 201, CoachRoute 202
+South West	Bristol	MB	missing	CoachRoute M10, CoachRoute M6, CoachRoute M7
+South West	Bristol	NX	missing	CoachRoute 300, CoachRoute 672
+South West	Poole	DCL	missing	BusRoute 8
+South West	Poole	FK	missing	CoachRoute 205
+South West	Poole	NX	missing	CoachRoute 310
+Yorkshire	South Yorkshire	FK	missing	CoachRoute 240
+Yorkshire	South Yorkshire	MB	missing	CoachRoute M12, CoachRoute M20, CoachRoute M35, CoachRoute MBP
+Yorkshire	South Yorkshire	NX	missing	CoachRoute 310, CoachRoute 351
+Yorkshire	South Yorkshire	EMS	missing	BusRoute 19, BusRoute 19A, BusRoute 216, BusRoute 25, BusRoute 29, BusRoute 53
+Yorkshire	South Yorkshire	VEO	missing	BusRoute 11A, BusRoute 122, BusRoute 227, BusRoute 261, BusRoute 437, BusRoute 443, BusRoute A1, BusRoute X12
+Yorkshire	South Yorkshire	BND	missing	BusRoute 108, BusRoute 109, BusRoute 143, BusRoute 20, BusRoute 21, BusRoute 219, BusRoute 220, BusRoute 221, BusRoute 222, BusRoute 224, BusRoute 225, BusRoute 226, BusRoute 229, BusRoute 23, BusRoute 24, BusRoute 24A, BusRoute 265, BusRoute 31, BusRoute 32, BusRoute 35, BusRoute 35A, BusRoute 36, BusRoute 408, BusRoute 428, BusRoute 42A, BusRoute 43, BusRoute 438, BusRoute 44, BusRoute 444, BusRoute 44A, BusRoute 453, BusRoute 455, BusRoute 456, BusRoute 46, BusRoute 485, BusRoute 489, BusRoute 496, BusRoute 497, BusRoute 59, BusRoute 68, BusRoute 68A, BusRoute 92, BusRoute 92A, BusRoute 93, BusRoute 93A, BusRoute 95A, BusRoute X19
+Yorkshire	South Yorkshire	TMT	missing	BusRoute 218
+Yorkshire	South Yorkshire	SST	missing	BusRoute ELL0, BusRoute LUE0, BusRoute URP0
+West Midlands	Telford & Wrekin	BUT	missing	BusRoute 719, BusRoute 816
+West Midlands	Worcestershire	NXB	missing	BusRoute 244, BusRoute 49, BusRoute 49A, BusRoute 63
+West Midlands	Worcestershire	CWL	missing	BusRoute 152, BusRoute 375, BusRoute 543, BusRoute 556, BusRoute 558, BusRoute 560, BusRoute 562, BusRoute 565, BusRoute 575, BusRoute 581, BusRoute 582, BusRoute 583, BusRoute 584, BusRoute 973
+West Midlands	Worcestershire	BCC	missing	BusRoute 137, BusRoute 140, BusRoute 141, BusRoute 157, BusRoute 19, BusRoute 20, BusRoute 20A, BusRoute 30, BusRoute 31, BusRoute 333, BusRoute 35, BusRoute 350, BusRoute 362, BusRoute 363, BusRoute 377, BusRoute 382, BusRoute 50, BusRoute 55A, BusRoute 56A, BusRoute 57A, BusRoute 58A, BusRoute 61, BusRoute 64, BusRoute 93
+West Midlands	Worcestershire	ZZZ	missing	BusRoute 844
+West Midlands	Worcestershire	CWY	missing	BusRoute 99
+West Midlands	Worcestershire	MRL	missing	BusRoute X7, BusRoute X95
+West Midlands	Worcestershire	LMS	missing	BusRoute 26A, BusRoute 27A, BusRoute 308, BusRoute 309, BusRoute 310, BusRoute 311, BusRoute 383, BusRoute 39
+West Midlands	Worcestershire	CTX	missing	BusRoute 22, BusRoute 23, BusRoute 24
+Yorkshire	West Yorkshire	HBE	missing	BusRoute 528, BusRoute 531, BusRoute 534, BusRoute 536, BusRoute 557, BusRoute 559, BusRoute 574, BusRoute 577, BusRoute 832
+Yorkshire	West Yorkshire	FCH	missing	BusRoute 181, BusRoute 182, BusRoute 186, BusRoute 200, BusRoute 226, BusRoute 302, BusRoute 303, BusRoute 306, BusRoute 307, BusRoute 308, BusRoute 312, BusRoute 313, BusRoute 314, BusRoute 316, BusRoute 321, BusRoute 323, BusRoute 324, BusRoute 327, BusRoute 328, BusRoute 336, BusRoute 337, BusRoute 342, BusRoute 346, BusRoute 353, BusRoute 356, BusRoute 358, BusRoute 363, BusRoute 370, BusRoute 371, BusRoute 372, BusRoute 387, BusRoute 398, BusRoute 399, BusRoute 501, BusRoute 502, BusRoute 503, BusRoute 505, BusRoute 507, BusRoute 508, BusRoute 510, BusRoute 511, BusRoute 512, BusRoute 513, BusRoute 517, BusRoute 521, BusRoute 522, BusRoute 523, BusRoute 526, BusRoute 535, BusRoute 537, BusRoute 538, BusRoute 539, BusRoute 541, BusRoute 542, BusRoute 546, BusRoute 547, BusRoute 548, BusRoute 549, BusRoute 554, BusRoute 560, BusRoute 570, BusRoute 571, BusRoute 572, BusRoute 576, BusRoute 579, BusRoute 589, BusRoute 590, BusRoute 591, BusRoute 592, BusRoute 593, BusRoute 594, BusRoute 906, BusRoute A, BusRoute B, BusRoute D, BusRoute E, BusRoute FLX1, BusRoute FLX2, BusRoute T1, BusRoute T2, BusRoute T3, BusRoute T4, BusRoute T5, BusRoute T6, BusRoute T8, BusRoute T9, BusRoute X13
+Yorkshire	West Yorkshire	PRO	missing	BusRoute 767
+Yorkshire	West Yorkshire	BND	missing	BusRoute 20, BusRoute 35, BusRoute 36, BusRoute 46, BusRoute 47, BusRoute 59
+Yorkshire	West Yorkshire	FL	missing	BusRoute 1, BusRoute 11, BusRoute 12, BusRoute 13, BusRoute 13A, BusRoute 16, BusRoute 16A, BusRoute 18, BusRoute 18A, BusRoute 2, BusRoute 28, BusRoute 3, BusRoute 33, BusRoute 33A, BusRoute 38, BusRoute 3A, BusRoute 4, BusRoute 40, BusRoute 40A, BusRoute 42, BusRoute 45, BusRoute 49, BusRoute 5, BusRoute 50, BusRoute 50A, BusRoute 51, BusRoute 55, BusRoute 56, BusRoute 6, BusRoute 64, BusRoute 64A, BusRoute 67, BusRoute 71, BusRoute 74A, BusRoute 80, BusRoute 86, BusRoute 87, BusRoute 9, BusRoute 90, BusRoute 91, BusRoute 91A, BusRoute 95, BusRoute 965, BusRoute 98, BusRoute 99, BusRoute AG2, BusRoute FCB, BusRoute X14, BusRoute X35, BusRoute X55, BusRoute X84, BusRoute X98
+Yorkshire	West Yorkshire	WRB	missing	BusRoute 15, BusRoute 32, BusRoute 61, BusRoute 62, BusRoute 63, BusRoute 63A, BusRoute 63B, BusRoute 737, BusRoute 747, BusRoute 757, BusRoute 781, BusRoute 8, BusRoute 86A, BusRoute 92
+Yorkshire	West Yorkshire	BLTR	missing	BusRoute 223, BusRoute 249
+Yorkshire	West Yorkshire	YRB	missing	BusRoute 607, BusRoute 610, BusRoute 611, BusRoute 612, BusRoute 613, BusRoute 614, BusRoute 615, BusRoute 616, BusRoute 617, BusRoute 618, BusRoute 619, BusRoute 620, BusRoute 621, BusRoute 622, BusRoute 623, BusRoute 624, BusRoute 625, BusRoute 626, BusRoute 627, BusRoute 630, BusRoute 636, BusRoute 637, BusRoute 640, BusRoute 641, BusRoute 645, BusRoute 649, BusRoute 650, BusRoute 652, BusRoute 653, BusRoute 656, BusRoute 657, BusRoute 658, BusRoute 659, BusRoute 660, BusRoute 670, BusRoute 675, BusRoute 677, BusRoute 680, BusRoute 681, BusRoute 682, BusRoute 709, BusRoute 710, BusRoute 714, BusRoute 72, BusRoute 845, BusRoute 846, BusRoute 990, BusRoute X11, BusRoute X6
+Yorkshire	West Yorkshire	TEDE	missing	BusRoute 301A, BusRoute 302A, BusRoute 304, BusRoute 315, BusRoute 319, BusRoute 324B, BusRoute 343, BusRoute 357, BusRoute 360, BusRoute 366, BusRoute 368, BusRoute 900, BusRoute 901, BusRoute 911, BusRoute 933, BusRoute FTB
+Yorkshire	West Yorkshire	BE	missing	CoachRoute 880
+Yorkshire	West Yorkshire	NEWB	missing	CoachRoute SB
+Yorkshire	West Yorkshire	FK	missing	CoachRoute 240
+Yorkshire	West Yorkshire	MB	missing	CoachRoute M12, CoachRoute M20, CoachRoute MBP
+Yorkshire	West Yorkshire	NX	missing	CoachRoute 320, CoachRoute 351, CoachRoute 380, CoachRoute 381, CoachRoute 383
+Yorkshire	West Yorkshire	SH	missing	CoachRoute 060
+South West	Southampton	FK	missing	CoachRoute 203, CoachRoute 205
+South West	Southampton	NX	missing	CoachRoute 300
+South West	Torbay	_DP	missing	BusRoute 100, BusRoute 25
+South West	Torbay	DMS	missing	BusRoute 500
+South West	Torbay	DVR	missing	TramMetroRoute 504
+South West	Torbay	MB	missing	CoachRoute M36
+South West	Swindon	MB	missing	CoachRoute M14
+South East	Slough	NEWB	missing	CoachRoute SB, CoachRoute SW
+South East	Slough	TDV	missing	BusRoute 81
+South East	Slough	FST	missing	BusRoute 60
+North East	Tyne & Wear	MB	missing	CoachRoute M12, CoachRoute M20
+North East	Tyne & Wear	NX	missing	CoachRoute 380, CoachRoute 381, CoachRoute 383, CoachRoute 534
+North East	Tyne & Wear	TW	missing	TrainRoute 2I05, TrainRoute 2I06, TrainRoute 2I10, TrainRoute 2I11
+North East	Tyne & Wear	PCL	missing	BusRoute A1
+North East	Tyne & Wear	CLB	missing	BusRoute 10C, BusRoute 127, BusRoute 148, BusRoute 465, BusRoute 849, BusRoute 868, BusRoute 882, BusRoute 883, BusRoute 885, BusRoute R5, BusRoute S1, BusRoute S2
+North East	Tyne & Wear	AKN	missing	BusRoute B529, BusRoute TB12
+North East	Tyne & Wear	ECM	missing	BusRoute B503, BusRoute B504
+North East	Tyne & Wear	UUU	missing	BusRoute B300
+Scotland	Aberdeen	MB	missing	CoachRoute M11
+Scotland	Aberdeen	NX	missing	CoachRoute 538
+Scotland	Aberdeen	CEN	missing	BusRoute 420
+Wales	Conwy	NWAB	missing	BusRoute NW1
+Wales	Conwy	GH00	ambiguous	BusRoute 91, BusRoute 95
+Wales	Conwy	NX	missing	CoachRoute 380
+South West	Cornwall	MB	missing	CoachRoute M6
+East Anglia	Cambridgeshire	JL	missing	CoachRoute 727, CoachRoute 787, CoachRoute 797
+East Anglia	Cambridgeshire	TVN	missing	BusRoute RT20
+East Anglia	Cambridgeshire	SIF	missing	BusRoute 005B, BusRoute 139, BusRoute 15, BusRoute 18, BusRoute 18A, BusRoute 20, BusRoute 21, BusRoute 30, BusRoute 35, BusRoute 400, BusRoute 401, BusRoute 402, BusRoute 403, BusRoute 404, BusRoute 405, BusRoute 406, BusRoute 407, BusRoute 408, BusRoute 409, BusRoute 414, BusRoute 431, BusRoute 45, BusRoute 55, BusRoute 62, BusRoute 64, BusRoute 65, BusRoute 66, BusRoute 67, BusRoute 68, BusRoute 91, BusRoute 95, BusRoute 96, BusRoute A, BusRoute B, BusRoute T1, BusRoute T2, BusRoute T3, BusRoute T4, BusRoute T5, BusRoute T6, BusRoute T7
+East Anglia	Cambridgeshire	CB	ambiguous	BusRoute 90
+Wales	Cardiff	FK	missing	CoachRoute 201, CoachRoute 202
+Wales	Cardiff	MB	missing	CoachRoute M10, CoachRoute M36, CoachRoute M6, CoachRoute M7
+Wales	Cardiff	NX	missing	CoachRoute 672
+Wales	Cardiff	CTW0	missing	BusRoute 701
+Wales	Cardiff	WM0	missing	BusRoute 138, BusRoute 2, BusRoute 22
+Wales	Cardiff	WTB	missing	BusRoute WTB
+Wales	Cardiff	SH00	missing	BusRoute 122, BusRoute 600
+Wales	Cardiff	FC00	ambiguous	BusRoute 100, BusRoute 601, BusRoute 602, BusRoute 613, BusRoute 619, BusRoute 633, BusRoute 638, BusRoute 803, BusRoute 89, BusRoute PR1, BusRoute X2
+Wales	Cardiff	SS00	ambiguous	BusRoute X43
+Wales	Cardiff	BE00	ambiguous	BusRoute 26A, BusRoute 3, BusRoute 400, BusRoute B5, BusRoute X5
+Wales	Torfaen	MB	missing	CoachRoute M10, CoachRoute M7
+Wales	Torfaen	BE00	ambiguous	BusRoute 13, BusRoute 14, BusRoute 15, BusRoute 83
+South East	Milton Keynes	JL	missing	CoachRoute 707, CoachRoute 767
+South East	Milton Keynes	FK	missing	CoachRoute 230, CoachRoute 777
+South East	Milton Keynes	WBUS	missing	BusRoute W11, BusRoute W13
+South East	Milton Keynes	CB	ambiguous	BusRoute X31
+Wales	Caerphilly	RL-C	missing	BusRoute 901
+Wales	Caerphilly	CON2	missing	BusRoute C1, BusRoute M
+Wales	Caerphilly	SH00	missing	BusRoute 3, BusRoute 52, BusRoute 7, BusRoute H, BusRoute K, BusRoute L
+Wales	Caerphilly	BE00	ambiguous	BusRoute 554, BusRoute B5, BusRoute R2
+Wales	Caerphilly	HA00	ambiguous	BusRoute 538, BusRoute 9, BusRoute C17, BusRoute C8
+Wales	Caerphilly	GC00	ambiguous	BusRoute 79
+Scotland	Midlothian	ALG	missing	BusRoute P15
+Scotland	Midlothian	NX	missing	CoachRoute 383
+Wales	Wrexham	NX	missing	CoachRoute 383, CoachRoute 533
+Wales	Wrexham	BM00	ambiguous	BusRoute 64A, BusRoute 64B
+Wales	Wrexham	GH00	ambiguous	BusRoute 141, BusRoute 142, BusRoute 146, BusRoute 14Y, BusRoute 17, BusRoute 23, BusRoute 31, BusRoute 34, BusRoute 40, BusRoute 41, BusRoute 42, BusRoute 5, BusRoute 6, BusRoute 60, BusRoute 65, BusRoute 95, BusRoute X46, BusRoute X50, BusRoute X9
+Wales	Bridgend	CTL0	missing	BusRoute V3, BusRoute V4
+Wales	Bridgend	RL-L	missing	BusRoute 904
+Wales	Bridgend	BTW	missing	BusRoute 16, BusRoute 37
+Wales	Bridgend	SH00	missing	BusRoute 215, BusRoute 44
+Wales	Bridgend	FC00	ambiguous	BusRoute 1, BusRoute 100, BusRoute 11, BusRoute 12, BusRoute 13, BusRoute 14, BusRoute 15, BusRoute 2, BusRoute 21, BusRoute 22, BusRoute 224, BusRoute 3, BusRoute 30, BusRoute 32, BusRoute 36, BusRoute 39, BusRoute 4, BusRoute 45, BusRoute 46, BusRoute 56, BusRoute 61, BusRoute 62, BusRoute 63, BusRoute 63B, BusRoute 801, BusRoute X1, BusRoute X2, BusRoute X3
+Wales	Bridgend	FK	missing	CoachRoute 201, CoachRoute 202
+Scotland	Renfrewshire	WIL	missing	BusRoute W2, BusRoute W3
+Scotland	Renfrewshire	CLK	missing	FerryRoute CLK
+North West	Blackpool	1011	missing	TramMetroRoute TRAM
+North West	Blackpool	CLC	missing	CoachRoute 352, CoachRoute 355
+North West	Blackpool	SCL	missing	CoachRoute 618
+North West	Blackpool	NX	missing	CoachRoute 351, CoachRoute 542
+North East	Northumberland	STR	missing	TramMetroRoute RAIL
+North East	Northumberland	NX	missing	CoachRoute 383
+North East	Northumberland	AST	missing	BusRoute 219, BusRoute 221, BusRoute 222, BusRoute 226, BusRoute 444, BusRoute 495, BusRoute M17, BusRoute M3
+North East	Northumberland	PCL	missing	BusRoute 393, BusRoute A1
+North East	Northumberland	NMC	missing	BusRoute 423
+North East	Northumberland	SBC	missing	BusRoute 905
+South East	West Sussex	BBR	missing	BusRoute BBR0
+South East	West Sussex	HBB	missing	BusRoute G23
+South East	West Sussex	BAA	missing	TramMetroRoute SHTL
+South East	West Sussex	JL	missing	CoachRoute 707, CoachRoute 727, CoachRoute 747, CoachRoute 787, CoachRoute 797
+South East	West Sussex	FK	missing	CoachRoute 200, CoachRoute 201, CoachRoute 205, CoachRoute 210, CoachRoute 230, CoachRoute 240
+Yorkshire	York	MB	missing	CoachRoute MBP
+Yorkshire	York	NX	missing	CoachRoute 380, CoachRoute 534
+East Midlands	Nottinghamshire	2252	missing	BusRoute TP
+East Midlands	Nottinghamshire	XISL	missing	BusRoute 646
+South East	Medway	RED	ambiguous	BusRoute 171
+East Midlands	Northamptonshire	JL	missing	CoachRoute 707
+East Midlands	Northamptonshire	LAW	missing	BusRoute R11, BusRoute R12, BusRoute R13, BusRoute R14
+East Midlands	Northamptonshire	SIF	missing	BusRoute 403, BusRoute 406
+East Midlands	Northamptonshire	YC	ambiguous	BusRoute 151, BusRoute 152, BusRoute 153, BusRoute 154, BusRoute 54, BusRoute Y4
+Scotland	Orkney Islands	OCT	missing	BusRoute 13
+Scotland	Orkney Islands	OKC	missing	BusRoute 2, BusRoute 3, BusRoute 4, BusRoute 5, BusRoute 6, BusRoute 7, BusRoute 8, BusRoute 9A, BusRoute 9B, BusRoute 9C, BusRoute X1, BusRoute X10
+North West	Lancashire	FCH	missing	BusRoute 517, BusRoute 589, BusRoute 592
+North West	Lancashire	2079	missing	BusRoute 476, BusRoute 480, BusRoute 484
+North West	Lancashire	PMS	missing	BusRoute 215
+North West	Lancashire	1892	missing	BusRoute 206
+North West	Lancashire	1032	missing	BusRoute 733, BusRoute 762
+North West	Lancashire	BP	missing	BusRoute 1, BusRoute 21, BusRoute 22, BusRoute 23
+North West	Lancashire	1676	missing	BusRoute 934, BusRoute 973
+North West	Lancashire	1467	missing	BusRoute 819
+North West	Lancashire	1045	missing	BusRoute 518, BusRoute 522
+North West	Lancashire	2710	missing	BusRoute 319, BusRoute 39
+North West	Lancashire	1721	missing	BusRoute 699
+North West	Lancashire	2766	missing	BusRoute 221, BusRoute 63
+North West	Lancashire	2778	missing	BusRoute 991
+North West	Lancashire	1071	missing	BusRoute 732
+North West	Lancashire	2757	missing	BusRoute 646
+North West	Lancashire	2153	missing	BusRoute 573
+North West	Lancashire	2043	missing	BusRoute 313, BusRoute 395
+North West	Lancashire	1083	missing	BusRoute 857
+North West	Lancashire	1094	missing	BusRoute 597, BusRoute 599, BusRoute 602, BusRoute 603, BusRoute 613
+North West	Lancashire	2758	missing	BusRoute 560
+North West	Lancashire	2088	missing	BusRoute 3, BusRoute 3A
+North West	Lancashire	SR	missing	BusRoute 81B
+North West	Lancashire	2759	missing	BusRoute 774
+North West	Lancashire	1062	missing	BusRoute 612, BusRoute 639
+North West	Lancashire	LU	missing	BusRoute 280
+North West	Lancashire	1968	missing	BusRoute 638
+North West	Lancashire	1096	missing	BusRoute 490
+North West	Lancashire	1011	missing	TramMetroRoute TRAM
+North West	Lancashire	CLC	missing	CoachRoute 352, CoachRoute 355
+North West	Lancashire	MB	missing	CoachRoute M11, CoachRoute M17
+North West	Lancashire	NX	missing	CoachRoute 351, CoachRoute 533, CoachRoute 538, CoachRoute 542
+South West	Plymouth	SB	missing	BusRoute 223
+South West	Plymouth	MB	missing	CoachRoute M6
+East Midlands	Leicestershire	FK	missing	CoachRoute 240
+East Midlands	Leicestershire	AM	missing	BusRoute 104, BusRoute 11, BusRoute 126, BusRoute 127, BusRoute 14, BusRoute 152, BusRoute 153, BusRoute 16A, BusRoute 28, BusRoute 31, BusRoute 31A, BusRoute 44A, BusRoute 47, BusRoute 49, BusRoute 49A, BusRoute 49B, BusRoute 5, BusRoute 50, BusRoute 50A, BusRoute 5A, BusRoute 6, BusRoute 80, BusRoute 80A, BusRoute 84, BusRoute 84A, BusRoute 85, BusRoute X3
+East Midlands	Leicestershire	CBN	missing	BusRoute 140
+East Midlands	Leicestershire	AFC	missing	BusRoute 158
+East Midlands	Leicestershire	WH	ambiguous	BusRoute H1
+Wales	Merthyr Tydfil	VRTR	missing	BusRoute 19
+Wales	Merthyr Tydfil	SH00	missing	BusRoute 3, BusRoute 7
+Wales	Merthyr Tydfil	SS00	ambiguous	BusRoute X43
+Wales	Merthyr Tydfil	BE00	ambiguous	BusRoute B5
+Wales	Merthyr Tydfil	GC00	ambiguous	BusRoute 28, BusRoute 80
+Wales	Merthyr Tydfil	JO00	ambiguous	BusRoute 20, BusRoute 21, BusRoute 22
+West Midlands	Shropshire	GHW	missing	BusRoute 120, BusRoute 132, BusRoute 790
+West Midlands	Shropshire	BUT	missing	BusRoute 816
+West Midlands	Shropshire	BTW	missing	BusRoute X11
+West Midlands	Shropshire	BM00	ambiguous	BusRoute 64A
+West Midlands	Shropshire	GH00	ambiguous	BusRoute 146, BusRoute 6, BusRoute 60, BusRoute 65, BusRoute X46, BusRoute X9
+West Midlands	Shropshire	WO00	ambiguous	BusRoute 777
+West Midlands	Shropshire	WH00	ambiguous	BusRoute 773
+Wales	Blaenau Gwent	SH00	missing	BusRoute 52
+Wales	Blaenau Gwent	RM00	ambiguous	BusRoute 2
+Wales	Blaenau Gwent	MT00	ambiguous	BusRoute 48, BusRoute 49
+Wales	Carmarthenshire	NX	missing	CoachRoute 508
+Wales	Carmarthenshire	CTW0	missing	BusRoute 701
+Wales	Carmarthenshire	PTI1	missing	BusRoute L27
+Wales	Carmarthenshire	BTW	missing	BusRoute 125, BusRoute 126, BusRoute 127, BusRoute 130, BusRoute 145, BusRoute 146, BusRoute 164
+Wales	Carmarthenshire	FC00	ambiguous	BusRoute 103, BusRoute 110, BusRoute 111, BusRoute 112, BusRoute 124, BusRoute 128, BusRoute 129, BusRoute 142, BusRoute 165, BusRoute 173, BusRoute 181, BusRoute 182, BusRoute 194, BusRoute 195, BusRoute 196, BusRoute 197, BusRoute 198, BusRoute 205, BusRoute 209, BusRoute 215, BusRoute 400, BusRoute 404, BusRoute 801, BusRoute 905, BusRoute B1, BusRoute B21, BusRoute B23, BusRoute B24, BusRoute B25, BusRoute B5, BusRoute D2, BusRoute D6, BusRoute PR1, BusRoute X11, BusRoute X12, BusRoute X13, BusRoute X14
+Wales	Carmarthenshire	RB00	ambiguous	BusRoute 430, BusRoute 551, BusRoute 601, BusRoute 64
+Wales	Carmarthenshire	MI00	ambiguous	BusRoute 230
+Wales	Carmarthenshire	MT00	ambiguous	BusRoute 166, BusRoute 199, BusRoute 206, BusRoute 207, BusRoute 225, BusRoute 226, BusRoute 228, BusRoute 240, BusRoute 243, BusRoute 246, BusRoute 248, BusRoute 276, BusRoute 277, BusRoute 278, BusRoute 279, BusRoute 280, BusRoute 281, BusRoute 283, BusRoute 284, BusRoute 288, BusRoute 289, BusRoute 441, BusRoute 460, BusRoute C11, BusRoute L19, BusRoute X1
+Wales	Carmarthenshire	CT00	ambiguous	BusRoute 224
+Wales	Powys	KNTX	missing	BusRoute T41, BusRoute T58, BusRoute T59
+Wales	Powys	SCAR	missing	BusRoute T57
+Wales	Powys	CELT	missing	BusRoute 83, BusRoute T75
+Wales	Powys	BTW	missing	BusRoute 121, BusRoute 124, BusRoute 40A, BusRoute 40B, BusRoute 40C, BusRoute 41, BusRoute 47, BusRoute 47A, BusRoute 47B, BusRoute 48, BusRoute X11, BusRoute X12, BusRoute X14, BusRoute X15, BusRoute X63
+Wales	Powys	CRTX	missing	BusRoute T43, BusRoute T49
+Wales	Powys	FC00	ambiguous	BusRoute 120, BusRoute 125, BusRoute 903, BusRoute 905, BusRoute 906, BusRoute 907, BusRoute D6, BusRoute X5
+Wales	Powys	SS00	ambiguous	BusRoute X43
+Wales	Powys	BE00	ambiguous	BusRoute B5
+Wales	Powys	ST00	ambiguous	BusRoute 542, BusRoute 543
+Wales	Powys	RM00	ambiguous	BusRoute T19, BusRoute T20
+Wales	Powys	RB00	ambiguous	BusRoute 445, BusRoute 51, BusRoute 52, BusRoute 64, BusRoute T51, BusRoute T52, BusRoute T55, BusRoute X16
+Wales	Powys	LC00	ambiguous	BusRoute 33, BusRoute 34, BusRoute 34A, BusRoute 36, BusRoute 522, BusRoute T36, BusRoute T37, BusRoute X28, BusRoute X85, BusRoute YP2
+Wales	Powys	WO00	ambiguous	BusRoute 777
+Wales	Powys	WH00	ambiguous	BusRoute 773
+East Midlands	Derbyshire	RSL	missing	BusRoute 247
+East Midlands	Derbyshire	PEA	missing	BusRoute 423
+East Midlands	Derbyshire	AM	missing	BusRoute 213, BusRoute 4A, BusRoute X40
+East Midlands	Derbyshire	BND	missing	BusRoute 43, BusRoute 44, BusRoute 44A
+East Midlands	Derbyshire	TRN	missing	BusRoute ONE
+East Midlands	Derbyshire	DWC	missing	BusRoute 506, BusRoute 559
+East Midlands	Derbyshire	JBT	missing	BusRoute 124
+East Midlands	Derbyshire	2252	missing	BusRoute 199, BusRoute TP
+East Midlands	Derbyshire	ACT	missing	BusRoute 0MC0, BusRoute MC
+East Midlands	Derbyshire	TML	missing	BusRoute 214, BusRoute 293
+East Midlands	Derbyshire	SMM	missing	BusRoute 200, BusRoute 395, BusRoute 398, BusRoute 399
+East Midlands	Derbyshire	RED	ambiguous	BusRoute 149, BusRoute 365, BusRoute 505
+East Midlands	Derbyshire	SMC	ambiguous	BusRoute 236, BusRoute 237N, BusRoute 358, BusRoute 390, BusRoute 842, BusRoute 906
+East Midlands	Derbyshire	FK	missing	CoachRoute 240
+East Midlands	Peterborough	NBC	missing	BusRoute 306
+East Midlands	Peterborough	SIF	missing	BusRoute 405, BusRoute 407
+East Midlands	Peterborough	KIM	ambiguous	BusRoute 71, BusRoute 9
+North East	Cumbria	LHR	missing	TramMetroRoute RAIL
+North East	Cumbria	MB	missing	CoachRoute M11
+North East	Cumbria	NX	missing	CoachRoute 533, CoachRoute 542
+North East	Cumbria	MKT	missing	BusRoute 25
+North East	Cumbria	RMS	missing	BusRoute 39
+North East	Cumbria	PTS	missing	BusRoute M5
+North East	Cumbria	LMT	missing	BusRoute 597
+North East	Cumbria	SR	missing	BusRoute 81B
+North East	Cumbria	NTG	missing	FerryRoute F12
+South East	Brighton and Hove	JL	missing	CoachRoute 727, CoachRoute 747, CoachRoute 797
+South West	Portsmouth	FK	missing	CoachRoute 203
+South West	Portsmouth	MB	missing	CoachRoute M34
+South West	Portsmouth	NX	missing	CoachRoute 300
+Scotland	Edinburgh	MB	missing	CoachRoute M17, CoachRoute M20
+Scotland	Edinburgh	NX	missing	CoachRoute 336, CoachRoute 383, CoachRoute 534
+South West	North Somerset	CI	missing	BusRoute 52
+South West	North Somerset	BL	missing	BusRoute 1, BusRoute 126, BusRoute 14, BusRoute 14A, BusRoute 3, BusRoute 351, BusRoute 352, BusRoute 353, BusRoute 354, BusRoute 357, BusRoute 358, BusRoute 359, BusRoute 361, BusRoute 362, BusRoute 363, BusRoute 3A, BusRoute 3B, BusRoute 5, BusRoute 5A, BusRoute 5B, BusRoute 7, BusRoute 8, BusRoute 9, BusRoute X1, BusRoute X21, BusRoute X22, BusRoute X23, BusRoute X24, BusRoute X25
+North East	Redcar & Cleveland	TSC	missing	BusRoute 221, BusRoute 224, BusRoute 271, BusRoute 272, BusRoute 272A
+North East	Redcar & Cleveland	MOOR	missing	BusRoute M1, BusRoute M12, BusRoute M16
+North East	Redcar & Cleveland	ANED	missing	BusRoute 5_5A
+South East	Southend-on-Sea	SE	ambiguous	BusRoute 14, BusRoute 250, BusRoute 503, BusRoute 504, BusRoute 509, BusRoute 513, BusRoute 514, BusRoute 524, BusRoute 560, BusRoute 6, BusRoute 60, BusRoute 61, BusRoute 800, BusRoute 814, BusRoute 816
+South East	Oxfordshire	OCC	missing	BusRoute H1
+South East	Oxfordshire	VMS	missing	BusRoute V8
+South East	Oxfordshire	CTN	missing	BusRoute 30, BusRoute 93, BusRoute 94, BusRoute 95
+South East	Oxfordshire	RE	missing	BusRoute 331
+South East	Oxfordshire	KIM	ambiguous	BusRoute F
+South East	Oxfordshire	PUL	ambiguous	BusRoute 806, BusRoute 810, BusRoute 811
+South East	Oxfordshire	JL	missing	CoachRoute 737
+South East	Oxfordshire	FK	missing	CoachRoute 210
+Yorkshire	Kingston upon Hull	XSEY	missing	BusRoute 3500
+Yorkshire	Kingston upon Hull	CTP	missing	BusRoute 701
+Yorkshire	Kingston upon Hull	MB	missing	CoachRoute MBP
+Yorkshire	Kingston upon Hull	NX	missing	CoachRoute 534
+South East	Windsor & Maidenhead	FST	missing	BusRoute 60
+South West	Bath & North East Somerset	CI	missing	BusRoute 52
+South West	Bath & North East Somerset	BL	missing	BusRoute 1, BusRoute 10, BusRoute 12A, BusRoute 13, BusRoute 13D, BusRoute 14, BusRoute 14A, BusRoute 17, BusRoute 173, BusRoute 178, BusRoute 179, BusRoute 18, BusRoute 184, BusRoute 19, BusRoute 2, BusRoute 21, BusRoute 231, BusRoute 264, BusRoute 265, BusRoute 267, BusRoute 271, BusRoute 272, BusRoute 273, BusRoute 31, BusRoute 318, BusRoute 319, BusRoute 332, BusRoute 337, BusRoute 339, BusRoute 349, BusRoute 376, BusRoute 379, BusRoute 4, BusRoute 41, BusRoute 5, BusRoute 6, BusRoute 649, BusRoute 7, BusRoute 8, BusRoute SPA1, BusRoute SPA2, BusRoute X39
+South West	Bath & North East Somerset	NX	missing	CoachRoute 300
+East Midlands	Leicester	JL	missing	CoachRoute 767
+East Midlands	Leicester	NEWB	missing	CoachRoute SB
+East Midlands	Leicester	FK	missing	CoachRoute 230
+East Midlands	Leicester	CEX	missing	BusRoute 657
+East Midlands	Leicester	AM	missing	BusRoute 104, BusRoute 126, BusRoute 127, BusRoute 14, BusRoute 15, BusRoute 152, BusRoute 153, BusRoute 22, BusRoute 27, BusRoute 28, BusRoute 31, BusRoute 31A, BusRoute 44, BusRoute 44A, BusRoute 47, BusRoute 49, BusRoute 49A, BusRoute 49B, BusRoute 5, BusRoute 50, BusRoute 50A, BusRoute 53, BusRoute 53A, BusRoute 56, BusRoute 58, BusRoute 58A, BusRoute 5A, BusRoute 6, BusRoute 80, BusRoute 80A, BusRoute 84, BusRoute 84A, BusRoute 85, BusRoute 86, BusRoute 87, BusRoute X3
+East Midlands	Leicester	CBN	missing	BusRoute 140
+East Midlands	Leicester	AFC	missing	BusRoute 158
+South East	Reading	TGB	missing	BusRoute LH1, BusRoute LH4, BusRoute LH5, BusRoute LH6, BusRoute TG2, BusRoute TG3, BusRoute TG4, BusRoute TG5, BusRoute TG6
+South West	South Gloucestershire	MB	missing	CoachRoute M10, CoachRoute M6, CoachRoute M7
+South West	South Gloucestershire	BL	missing	BusRoute 309, BusRoute 310, BusRoute 311, BusRoute 318, BusRoute 319, BusRoute 327, BusRoute 329, BusRoute 332, BusRoute 342, BusRoute X25, BusRoute X42
+Wales	Gwynedd	NWAB	missing	BusRoute NW1
+Wales	Gwynedd	GH00	ambiguous	BusRoute 91, BusRoute 95
+Wales	Gwynedd	SS00	ambiguous	BusRoute 37, BusRoute 6A, BusRoute 7, BusRoute 80, BusRoute 80A, BusRoute 81, BusRoute 81A, BusRoute 82, BusRoute 83, BusRoute 92
+Wales	Gwynedd	NE00	ambiguous	BusRoute 17, BusRoute 17B, BusRoute 27, BusRoute 8, BusRoute 8A, BusRoute 8B
+Wales	Gwynedd	BE00	ambiguous	BusRoute 14
+Wales	Gwynedd	LC00	ambiguous	BusRoute 33A, BusRoute 34, BusRoute 36, BusRoute 69, BusRoute T36, BusRoute X28
+Wales	Gwynedd	CT00	ambiguous	BusRoute 12
+Wales	Gwynedd	CA00	ambiguous	BusRoute 3
+Wales	Gwynedd	BE	missing	CoachRoute 880
+Wales	Gwynedd	NX	missing	CoachRoute 380
+West Midlands	Warwickshire	NXB	missing	BusRoute 891, BusRoute 90
+West Midlands	Warwickshire	BCC	missing	BusRoute 58A
+West Midlands	Warwickshire	GRO	missing	BusRoute 812, BusRoute S14
+West Midlands	Warwickshire	CGB	missing	BusRoute 219
+West Midlands	Warwickshire	HCB	ambiguous	BusRoute H3
+West Midlands	Warwickshire	FK	missing	CoachRoute 240
+North West	Blackburn with Darwen	2153	missing	BusRoute 573
+North West	Cheshire East	GHA	missing	BusRoute 72, BusRoute 73
+North West	Cheshire East	STW	missing	BusRoute 321
+North West	Cheshire East	2222	missing	BusRoute 10, BusRoute 10A, BusRoute 2, BusRoute 21, BusRoute 21A, BusRoute 2A, BusRoute 3, BusRoute 31, BusRoute 31A, BusRoute 37E, BusRoute 4, BusRoute 5, BusRoute 84
+North West	Cheshire East	BAK	missing	BusRoute X38
+North West	Cheshire East	PMT	missing	BusRoute 20
+North West	Cheshire East	2245	missing	BusRoute 11
+North West	Cheshire East	2260	missing	BusRoute 37, BusRoute 37A
+North West	Cheshire East	2248	missing	BusRoute 19, BusRoute 19X, BusRoute 27, BusRoute 27A, BusRoute 27B, BusRoute 300
+North West	Cheshire East	BKE	missing	BusRoute 392, BusRoute 393
+North West	Cheshire East	2251	missing	BusRoute 200, BusRoute 289
+North West	Cheshire East	1932	missing	BusRoute HD1
+North West	Cheshire East	2252	missing	BusRoute 199, BusRoute TP
+North West	Cheshire East	RST	missing	BusRoute X81
+North West	Cheshire East	SMM	missing	BusRoute 399
+North West	Cheshire East	2231	missing	BusRoute 378, BusRoute 390, BusRoute 391
+North West	Cheshire East	2232	missing	BusRoute 47, BusRoute 49, BusRoute E69
+North West	Cheshire East	2254	missing	BusRoute 15, BusRoute 38, BusRoute 42, BusRoute 44, BusRoute 45, BusRoute 45A, BusRoute 6E, BusRoute 78, BusRoute 8, BusRoute SB1, BusRoute SB2, BusRoute SB3
+North West	Cheshire East	ANW	missing	BusRoute 14
+North West	Cheshire East	FC00	ambiguous	BusRoute 10X, BusRoute 16
+North West	Cheshire East	GH00	ambiguous	BusRoute DB1, BusRoute DB2, BusRoute DB3
+North West	Cheshire East	SMC	ambiguous	BusRoute 360
+East Midlands	Lincolnshire	RSW	missing	BusRoute S95
+East Midlands	Lincolnshire	XHOL	missing	BusRoute TB1, BusRoute TB2
+East Midlands	Lincolnshire	REB	missing	BusRoute R1
+East Midlands	Lincolnshire	STR	missing	BusRoute S1
+East Midlands	Lincolnshire	KIM	ambiguous	BusRoute 12, BusRoute 21, BusRoute 26, BusRoute 27, BusRoute 29, BusRoute 30, BusRoute 31, BusRoute 32, BusRoute 33, BusRoute 34, BusRoute 35, BusRoute 36, BusRoute 57, BusRoute 58, BusRoute 6
+Scotland	North Lanarkshire	MCR	missing	BusRoute 1
+Scotland	North Lanarkshire	JDC	missing	BusRoute 381
+East Midlands	North East Lincolnshire	TWY	missing	BusRoute 510
+East Anglia	Suffolk	JL	missing	CoachRoute 727
+East Anglia	Suffolk	TGS	missing	BusRoute X5
+East Anglia	Suffolk	TVN	missing	BusRoute RT20
+East Anglia	Suffolk	A2BT	missing	BusRoute 1640
+East Anglia	Suffolk	OPT	missing	BusRoute RT30, BusRoute TAXI
+East Anglia	Suffolk	MC	ambiguous	BusRoute 802
+East Anglia	Suffolk	CC	ambiguous	BusRoute 107, BusRoute 111, BusRoute 140, BusRoute 202, BusRoute 31, BusRoute 755, BusRoute 756, BusRoute 773, BusRoute 90, BusRoute 92, BusRoute 93, BusRoute 93C, BusRoute 94, BusRoute 95, BusRoute 96, BusRoute 96B, BusRoute 988, BusRoute X93
+East Anglia	Suffolk	IB	ambiguous	BusRoute 14, BusRoute 14A, BusRoute 15, BusRoute 18A, BusRoute 192, BusRoute 22, BusRoute 3, BusRoute 38, BusRoute 405, BusRoute 511, BusRoute 6, BusRoute 62A, BusRoute 62B, BusRoute 73A, BusRoute 87B, BusRoute 88B, BusRoute 8B, BusRoute 9, BusRoute 914, BusRoute 977, BusRoute 98, BusRoute 983
+East Anglia	Suffolk	WH	ambiguous	BusRoute TM01
+South West	Bournemouth	FK	missing	CoachRoute 205
+South West	Bournemouth	NX	missing	CoachRoute 310
+Scotland	Fife	MB	missing	CoachRoute M20
+Wales	Swansea	CTW0	missing	BusRoute 701
+Wales	Swansea	BTW	missing	BusRoute 10, BusRoute 113, BusRoute 115, BusRoute 116, BusRoute 117, BusRoute 118, BusRoute 119, BusRoute 127, BusRoute 13, BusRoute 14, BusRoute 141, BusRoute 141A, BusRoute 141B, BusRoute 144, BusRoute 145, BusRoute 14A, BusRoute 25, BusRoute 503, BusRoute 53, BusRoute 620, BusRoute 721, BusRoute 8, BusRoute 9, BusRoute X63
+Wales	Swansea	FC00	ambiguous	BusRoute 11, BusRoute 110, BusRoute 111, BusRoute 112, BusRoute 12, BusRoute 120, BusRoute 121, BusRoute 122, BusRoute 125, BusRoute 142, BusRoute 143, BusRoute 15, BusRoute 156, BusRoute 157, BusRoute 158, BusRoute 17, BusRoute 19, BusRoute 2, BusRoute 20, BusRoute 20A, BusRoute 21, BusRoute 21A, BusRoute 21B, BusRoute 22, BusRoute 224, BusRoute 24, BusRoute 26, BusRoute 27, BusRoute 28, BusRoute 29, BusRoute 29A, BusRoute 29B, BusRoute 2A, BusRoute 2B, BusRoute 2C, BusRoute 3, BusRoute 31, BusRoute 32, BusRoute 33, BusRoute 35, BusRoute 36, BusRoute 37, BusRoute 3A, BusRoute 4, BusRoute 400, BusRoute 404, BusRoute 41, BusRoute 42, BusRoute 43, BusRoute 44, BusRoute 4A, BusRoute 4B, BusRoute 501, BusRoute 502, BusRoute 51, BusRoute 59, BusRoute 6, BusRoute 61, BusRoute 63, BusRoute 64, BusRoute 65, BusRoute 67, BusRoute 801, BusRoute 81, BusRoute 82A, BusRoute 904, BusRoute D2, BusRoute D3, BusRoute D4, BusRoute D5, BusRoute D6, BusRoute D7, BusRoute X10, BusRoute X11, BusRoute X12, BusRoute X13, BusRoute X18, BusRoute X20, BusRoute X3, BusRoute X5
+Wales	Swansea	MT00	ambiguous	BusRoute X1
+Wales	Swansea	FK	missing	CoachRoute 201, CoachRoute 202
+Wales	Swansea	NX	missing	CoachRoute 672
+Scotland	South Lanarkshire	MUI	missing	BusRoute L1
+Scotland	South Lanarkshire	SBC	missing	BusRoute 91
+Scotland	South Lanarkshire	NX	missing	CoachRoute 533, CoachRoute 538, CoachRoute 542
+North East	Middlesbrough	CRO	missing	BusRoute M53
+North East	Middlesbrough	TSC	missing	BusRoute 224
+North East	Middlesbrough	MOOR	missing	BusRoute M1, BusRoute M12
+North East	Middlesbrough	ANED	missing	BusRoute 5_5A
+North East	Middlesbrough	GEN	missing	BusRoute 322, BusRoute 323
+North East	Middlesbrough	MB	missing	CoachRoute M12
+North East	Middlesbrough	NX	missing	CoachRoute 380, CoachRoute 381, CoachRoute 534
+East Midlands	Nottingham	2252	missing	BusRoute TP
+East Midlands	Nottingham	JL	missing	CoachRoute 767
+East Midlands	Nottingham	FK	missing	CoachRoute 230
+Scotland	Dundee	MB	missing	CoachRoute M11
+Scotland	Dundee	NX	missing	CoachRoute 538, CoachRoute 590
+Scotland	Stirling	CLL	missing	FerryRoute LL1, FerryRoute LL2
+Scotland	Western Isles	MJM	missing	BusRoute W2A
+Wales	Rhondda Cynon Taff	SH00	missing	BusRoute 10, BusRoute 11, BusRoute 12, BusRoute 121, BusRoute 122, BusRoute 130, BusRoute 131, BusRoute 137, BusRoute 139, BusRoute 152, BusRoute 16, BusRoute 17, BusRoute 173, BusRoute 175, BusRoute 44, BusRoute 47, BusRoute 600, BusRoute 7, BusRoute 99
+Wales	Rhondda Cynon Taff	FC00	ambiguous	BusRoute 45, BusRoute 803, BusRoute X10
+Wales	Rhondda Cynon Taff	BE00	ambiguous	BusRoute 100, BusRoute 400, BusRoute B5
+North West	Warrington	NX	missing	CoachRoute 383
+North West	Warrington	2215	missing	BusRoute X30
+North West	Warrington	2260	missing	BusRoute 37, BusRoute 37A, BusRoute 38
+North West	Warrington	1104	missing	BusRoute 110, BusRoute 329, BusRoute 7A
+North West	Warrington	2164	missing	BusRoute 19, BusRoute 28, BusRoute 28A
+North West	Warrington	2198	missing	BusRoute 45, BusRoute 46, BusRoute 5
+North West	Warrington	2232	missing	BusRoute 47
+North West	Warrington	2199	missing	BusRoute 339
+Yorkshire	North Yorkshire	CLC	missing	CoachRoute 352, CoachRoute 355
+Yorkshire	North Yorkshire	MB	missing	CoachRoute M20, CoachRoute MBP
+Yorkshire	North Yorkshire	NX	missing	CoachRoute 380, CoachRoute 381, CoachRoute 383, CoachRoute 534
+Yorkshire	North Yorkshire	HDG	missing	BusRoute 78A
+Yorkshire	North Yorkshire	SDMS	missing	BusRoute 118, BusRoute 119, BusRoute 128, BusRoute 13, BusRoute 14, BusRoute 15, BusRoute 165, BusRoute 17, BusRoute 2, BusRoute 21, BusRoute 3, BusRoute 3A, BusRoute 3B, BusRoute 6, BusRoute 63, BusRoute 64, BusRoute 9
+Yorkshire	North Yorkshire	PRO	missing	BusRoute 767
+Yorkshire	North Yorkshire	ANE	missing	BusRoute 29, BusRoute 5
+Yorkshire	North Yorkshire	GEN	missing	BusRoute 322, BusRoute 323
+Yorkshire	North Yorkshire	FL	missing	BusRoute X84
+Yorkshire	North Yorkshire	RYE	missing	BusRoute X31
+South West	Hampshire	FK	missing	CoachRoute 203, CoachRoute 205
+South West	Hampshire	MB	missing	CoachRoute M34
+South West	Hampshire	NX	missing	CoachRoute 300
+South West	Hampshire	EMS	missing	BusRoute 36
+South West	Hampshire	RCHD	missing	BusRoute 992, BusRoute 994
+South West	Hampshire	FBUZ	missing	BusRoute 145, BusRoute 16, BusRoute 73, BusRoute 73X, BusRoute 80
+South West	Hampshire	CLR	missing	BusRoute 93
+South West	Hampshire	WHP	missing	BusRoute 807
+East Midlands	Derby	AM	missing	BusRoute X40
+East Midlands	Derby	2252	missing	BusRoute TP
+East Midlands	Derby	NEWB	missing	CoachRoute SB
+East Midlands	Derby	FK	missing	CoachRoute 230
+North West	Merseyside	BE	missing	CoachRoute 880
+North West	Merseyside	NX	missing	CoachRoute 380, CoachRoute 533
+North West	Merseyside	SH	missing	CoachRoute 060
+North West	Merseyside	2266	missing	BusRoute 420
+North West	Merseyside	2387	missing	BusRoute 350, BusRoute 351, BusRoute 356, BusRoute 37, BusRoute 50B, BusRoute 52, BusRoute 53, BusRoute 53A, BusRoute 53B, BusRoute 55, BusRoute 55D, BusRoute 56, BusRoute 56A, BusRoute 58, BusRoute 62, BusRoute 62A, BusRoute 62B, BusRoute 68, BusRoute X53
+North West	Merseyside	2035	missing	BusRoute 156, BusRoute 320, BusRoute 34, BusRoute 352, BusRoute 602, BusRoute 620
+North West	Merseyside	2762	missing	BusRoute X22
+North West	Merseyside	NWAB	missing	BusRoute NW1
+North West	Merseyside	2410	missing	BusRoute 29, BusRoute 60, BusRoute 97
+North West	Merseyside	2278	missing	BusRoute 173, BusRoute 211, BusRoute 236, BusRoute 289
+North West	Merseyside	2498	missing	BusRoute 116, BusRoute 161, BusRoute 801
+North West	Merseyside	2608	missing	BusRoute 112, BusRoute 113, BusRoute 138, BusRoute 139, BusRoute 154, BusRoute 155, BusRoute 167, BusRoute 201, BusRoute 202, BusRoute 204, BusRoute 213
+North West	Merseyside	2389	missing	BusRoute 41, BusRoute 42, BusRoute 71, BusRoute 72
+North West	Merseyside	2609	missing	BusRoute 206
+North West	Merseyside	2621	missing	BusRoute 25
+North West	Merseyside	2742	missing	BusRoute 157
+North West	Merseyside	2490	missing	BusRoute 153, BusRoute 160, BusRoute 182, BusRoute 193, BusRoute 210, BusRoute 221, BusRoute 241, BusRoute 250, BusRoute 293
+North West	Merseyside	2467	missing	BusRoute 142
+North West	Merseyside	2478	missing	BusRoute 114, BusRoute 118, BusRoute 168, BusRoute 180, BusRoute 181, BusRoute 218, BusRoute 897
+North West	Merseyside	2644	missing	BusRoute 82B
+North West	Merseyside	1104	missing	BusRoute 6, BusRoute 7A
+North West	Merseyside	2215	missing	BusRoute 401, BusRoute 487, BusRoute 488, BusRoute X11
+North West	Merseyside	2710	missing	BusRoute 319, BusRoute 39
+North West	Merseyside	2480	missing	BusRoute 121, BusRoute 122, BusRoute 147, BusRoute 194, BusRoute 195, BusRoute 196
+North West	Merseyside	2578	missing	BusRoute 101, BusRoute 102, BusRoute 111, BusRoute 123, BusRoute 128, BusRoute 141, BusRoute 159, BusRoute 192, BusRoute 209, BusRoute 259, BusRoute 883, BusRoute 898, BusRoute 899
+North West	Merseyside	2535	missing	BusRoute 248, BusRoute 290, BusRoute 881
+North West	Merseyside	2579	missing	BusRoute 166, BusRoute 188, BusRoute 258, BusRoute 266, BusRoute 288
+North West	Merseyside	2568	missing	BusRoute 135, BusRoute 136, BusRoute 152, BusRoute 158, BusRoute 163, BusRoute 164, BusRoute 165, BusRoute 215, BusRoute 235, BusRoute 807, BusRoute 810, BusRoute 830, BusRoute 831, BusRoute 838, BusRoute 865, BusRoute 874, BusRoute C1, BusRoute C2, BusRoute C3, BusRoute C4, BusRoute C5
+North West	Merseyside	2382	missing	BusRoute 12, BusRoute 13, BusRoute 14X, BusRoute 18A, BusRoute 8, BusRoute 8E, BusRoute 9
+North West	Merseyside	2481	missing	BusRoute 107, BusRoute 117, BusRoute 143, BusRoute 207, BusRoute 208, BusRoute 216, BusRoute 219, BusRoute 410
+North West	Merseyside	2623	missing	BusRoute 103, BusRoute 129, BusRoute 150, BusRoute 214, BusRoute 217, BusRoute 231, BusRoute 232, BusRoute 233, BusRoute 234, BusRoute 245, BusRoute 246, BusRoute 247, BusRoute 265, BusRoute 800, BusRoute 835, BusRoute 870, BusRoute 990, BusRoute 991, BusRoute 992, BusRoute 993
+North West	Merseyside	2262	missing	BusRoute LIN1
+North West	Merseyside	2163	missing	BusRoute 603
+North West	Merseyside	2383	missing	BusRoute 27, BusRoute 500, BusRoute 501, BusRoute 699, BusRoute 7, BusRoute 74, BusRoute 75, BusRoute 75E, BusRoute 76, BusRoute 76A, BusRoute 77, BusRoute 78, BusRoute 79, BusRoute 7B, BusRoute 80, BusRoute 80A, BusRoute 81, BusRoute 81A, BusRoute 81E, BusRoute 82E, BusRoute 82X, BusRoute 86, BusRoute 86A, BusRoute 86B, BusRoute 86D
+North West	Merseyside	2482	missing	BusRoute 137, BusRoute 140, BusRoute 199, BusRoute 240
+North West	Merseyside	2582	missing	BusRoute E10, BusRoute E11, BusRoute E12
+North West	Merseyside	2384	missing	BusRoute 203, BusRoute 23N, BusRoute 37N, BusRoute 403, BusRoute 407, BusRoute 409, BusRoute 411, BusRoute 413, BusRoute 418, BusRoute 419, BusRoute 423, BusRoute 432, BusRoute 433, BusRoute 437, BusRoute 450N, BusRoute 464, BusRoute 472, BusRoute 492, BusRoute 495, BusRoute 51N
+North West	Merseyside	2515	missing	BusRoute 144, BusRoute 15, BusRoute 16, BusRoute 40, BusRoute 57C, BusRoute 58C
+North West	Merseyside	1083	missing	BusRoute 857, BusRoute 919
+North West	Merseyside	2660	missing	BusRoute 79C
+North West	Merseyside	2604	missing	BusRoute 52A, BusRoute 52D
+North West	Merseyside	2637	missing	BusRoute 33A, BusRoute 5N, BusRoute 82A, BusRoute X1
+North West	Merseyside	2385	missing	BusRoute 1A, BusRoute 1B, BusRoute 43, BusRoute 43A, BusRoute 44, BusRoute 44B, BusRoute 44D, BusRoute 46, BusRoute 46A, BusRoute 47B, BusRoute 48, BusRoute 49, BusRoute 49A
+North West	Merseyside	2485	missing	BusRoute T1
+North West	Merseyside	2649	missing	BusRoute 61
+North West	Merseyside	2199	missing	BusRoute 339
+North West	Merseyside	2386	missing	BusRoute 31, BusRoute 32, BusRoute 329, BusRoute 32A, BusRoute 32C, BusRoute 33, BusRoute 34A, BusRoute 35, BusRoute 35A, BusRoute 36, BusRoute 36A, BusRoute 89, BusRoute 89A, BusRoute 920
+North West	Merseyside	2638	missing	BusRoute 14, BusRoute 14C, BusRoute 19, BusRoute 26, BusRoute 61A
+North West	Merseyside	2639	missing	BusRoute 17A, BusRoute 17B
+North West	Merseyside	2606	missing	BusRoute 119, BusRoute 120, BusRoute 130, BusRoute 133, BusRoute 151, BusRoute 162, BusRoute 220, BusRoute 242, BusRoute 244, BusRoute 892
+Scotland	North Ayrshire	BNT	missing	BusRoute 27, BusRoute 29, BusRoute 737
+Scotland	Argyll & Bute	IOM	missing	TramMetroRoute IOM
+Scotland	Argyll & Bute	CLL	missing	FerryRoute LL1, FerryRoute LL2
+East Midlands	Rutland	KIM	ambiguous	BusRoute 12, BusRoute 33, BusRoute 4, BusRoute 9
+West Midlands	Stoke-on-Trent	RST	missing	BusRoute X81
+Wales	Newport	FK	missing	CoachRoute 201, CoachRoute 202
+Wales	Newport	MB	missing	CoachRoute M10, CoachRoute M7
+Wales	Newport	NX	missing	CoachRoute 672
+Wales	Newport	SH00	missing	BusRoute 63
+Wales	Newport	BE00	ambiguous	BusRoute 61, BusRoute 73, BusRoute R2
+East Midlands	North Lincolnshire	MB	missing	CoachRoute MBP
+East Midlands	North Lincolnshire	TWY	missing	BusRoute 510, BusRoute 550, BusRoute 551, BusRoute 553, BusRoute 555
+East Midlands	North Lincolnshire	XHOL	missing	BusRoute 220, BusRoute 221, BusRoute 222, BusRoute 55, BusRoute TB1, BusRoute TB2, BusRoute TB3, BusRoute TB4
+East Midlands	North Lincolnshire	XNLC	missing	BusRoute 0680, BusRoute 260, BusRoute 354, BusRoute 58, BusRoute 640
+East Midlands	North Lincolnshire	SW	missing	BusRoute 360
+East Midlands	North Lincolnshire	XSEY	missing	BusRoute 3500
+East Midlands	North Lincolnshire	STR	missing	BusRoute S1
+East Midlands	North Lincolnshire	XISL	missing	BusRoute 646, BusRoute 647
+Wales	Isle of Anglesey	BE	missing	CoachRoute 871, CoachRoute 880
+Wales	Isle of Anglesey	NWAB	missing	BusRoute NW1
+Wales	Isle of Anglesey	CCAM	missing	BusRoute 60
+Wales	Isle of Anglesey	GWCO	missing	BusRoute 31, BusRoute 36, BusRoute 48, BusRoute 50, BusRoute 51, BusRoute 54, BusRoute 55
+South East	Surrey	NF	missing	FerryRoute 0NF0
+South East	Surrey	WR	missing	CoachRoute 701
+South East	Surrey	TDV	missing	BusRoute 116, BusRoute 203, BusRoute 216, BusRoute 290, BusRoute 411, BusRoute 467, BusRoute 641, BusRoute 661, BusRoute 881, BusRoute K3
+South East	Surrey	WHP	missing	BusRoute 807
+Scotland	Scottish Borders	ALG	missing	BusRoute P15
+Scotland	Scottish Borders	SBC	missing	BusRoute 905, BusRoute 91
+Scotland	Scottish Borders	MB	missing	CoachRoute M17
+Scotland	Scottish Borders	NX	missing	CoachRoute 383
+Scotland	Perth & Kinross	MB	missing	CoachRoute M11, CoachRoute M20
+Scotland	Perth & Kinross	HIS	missing	FerryRoute LL
+Scotland	Dumfries & Galloway	NX	missing	CoachRoute 921
+North West	Cheshire West & Chester	BE	missing	CoachRoute 880
+North West	Cheshire West & Chester	NX	missing	CoachRoute 380, CoachRoute 381, CoachRoute 383, CoachRoute 533
+North West	Cheshire West & Chester	2211	missing	BusRoute 21, BusRoute 21A, BusRoute 21B, BusRoute 53
+North West	Cheshire West & Chester	2222	missing	BusRoute 1E, BusRoute 29, BusRoute 29A, BusRoute 29B, BusRoute 31, BusRoute 31A, BusRoute 31E, BusRoute 37, BusRoute 37E, BusRoute 84, BusRoute 85
+North West	Cheshire West & Chester	2762	missing	BusRoute X22
+North West	Cheshire West & Chester	NWAB	missing	BusRoute NW1
+North West	Cheshire West & Chester	HEL	missing	BusRoute 41, BusRoute 41B
+North West	Cheshire West & Chester	2215	missing	BusRoute 401, BusRoute 487, BusRoute 488, BusRoute X30
+North West	Cheshire West & Chester	2205	missing	BusRoute 66
+North West	Cheshire West & Chester	2251	missing	BusRoute 289
+North West	Cheshire West & Chester	RST	missing	BusRoute X81
+North West	Cheshire West & Chester	2198	missing	BusRoute 45, BusRoute 46
+North West	Cheshire West & Chester	2242	missing	BusRoute 15, BusRoute 15A, BusRoute 1A, BusRoute 404
+North West	Cheshire West & Chester	2232	missing	BusRoute 47, BusRoute 49
+North West	Cheshire West & Chester	2254	missing	BusRoute 42
+North West	Cheshire West & Chester	FC00	ambiguous	BusRoute 10, BusRoute 10X, BusRoute 16
+North West	Cheshire West & Chester	GH00	ambiguous	BusRoute 100, BusRoute 111, BusRoute 13, BusRoute 4A, BusRoute 9, BusRoute 9A, BusRoute DB1, BusRoute DB2, BusRoute DB3
+South West	Somerset	CK	missing	BusRoute 063, BusRoute 199, BusRoute 20, BusRoute 204, BusRoute 20A, BusRoute 387, BusRoute 397, BusRoute 606, BusRoute 608, BusRoute 62, BusRoute 63, BusRoute 633, BusRoute 63A, BusRoute 697, BusRoute 747, BusRoute 748, BusRoute 9, BusRoute 90, BusRoute 91, BusRoute 96, BusRoute 97, BusRoute 98, BusRoute 98A, BusRoute 99, BusRoute 99A, BusRoute 99B, BusRoute 9A
+South West	Somerset	BL	missing	BusRoute 102, BusRoute 126, BusRoute 161, BusRoute 173, BusRoute 174, BusRoute 184, BusRoute 234, BusRoute 267, BusRoute 375, BusRoute 376, BusRoute 377, BusRoute 379, BusRoute 670, BusRoute X21, BusRoute X22, BusRoute X75
+South West	Somerset	NX	missing	CoachRoute 672
+Yorkshire	East Riding of Yorkshire	ERYC	missing	BusRoute 551
+Yorkshire	East Riding of Yorkshire	XSEY	missing	BusRoute 3500
+Yorkshire	East Riding of Yorkshire	NX	missing	CoachRoute 534
+South East	West Berkshire	TGB	missing	BusRoute LH1, BusRoute LH4, BusRoute LH5, BusRoute LH6, BusRoute TG1, BusRoute TG2, BusRoute TG3, BusRoute TG4, BusRoute TG5, BusRoute TG6
+South East	West Berkshire	WLT	missing	BusRoute 20, BusRoute 22, BusRoute X2, BusRoute X20
+South East	West Berkshire	FK	missing	CoachRoute 200, CoachRoute 201, CoachRoute 202
+South East	West Berkshire	MB	missing	CoachRoute M14
+North East	Durham	DCCL	missing	BusRoute 896
+North East	Durham	WRLY	missing	TramMetroRoute RAIL, TramMetroRoute TAGE
+North East	Durham	NX	missing	CoachRoute 381, CoachRoute 383
+South East	Luton	LAIR	missing	BusRoute 888
+South East	Luton	MC	ambiguous	BusRoute 772
+South East	Luton	CB	ambiguous	BusRoute 10, BusRoute 17, BusRoute 17A, BusRoute 19, BusRoute 19A, BusRoute 20, BusRoute 29, BusRoute 365, BusRoute 366, BusRoute 44, BusRoute 45, BusRoute 46, BusRoute 79, BusRoute X31
+South East	Luton	JL	missing	CoachRoute 707, CoachRoute 737, CoachRoute 767, CoachRoute 787
+South East	Luton	FK	missing	CoachRoute 230, CoachRoute 777
+South West	Wiltshire	JAC	missing	BusRoute 95
+South West	Wiltshire	RMCB	missing	BusRoute 1
+South West	Wiltshire	WLT	missing	BusRoute 20A, BusRoute 22, BusRoute X2, BusRoute X20
+South West	Wiltshire	BL	missing	BusRoute 231, BusRoute 234, BusRoute 235, BusRoute 236, BusRoute 260, BusRoute 263, BusRoute 264, BusRoute 265, BusRoute 271, BusRoute 272, BusRoute 273
+South West	Wiltshire	NX	missing	CoachRoute 300
+Wales	Ceredigion	CTW0	missing	BusRoute 701
+Wales	Ceredigion	LC00	ambiguous	BusRoute X28, BusRoute YP2, BusRoute YP8
+Wales	Ceredigion	RB00	ambiguous	BusRoute 405, BusRoute 406, BusRoute 407, BusRoute 430, BusRoute 551, BusRoute 552, BusRoute 554, BusRoute 601, BusRoute X50
+Wales	Ceredigion	MI00	ambiguous	BusRoute 230, BusRoute 431
+Wales	Ceredigion	MT00	ambiguous	BusRoute 288, BusRoute 289, BusRoute 460
+South East	Hertfordshire	5400	missing	BusRoute LC1, BusRoute LC2
+South East	Hertfordshire	TGS	missing	BusRoute 301, BusRoute 446, BusRoute 5
+South East	Hertfordshire	MN	missing	BusRoute N279
+South East	Hertfordshire	WBUS	missing	BusRoute W10, BusRoute W12, BusRoute W14, BusRoute W3, BusRoute W5, BusRoute W7, BusRoute W9
+South East	Hertfordshire	COZY	missing	BusRoute 391, BusRoute 875, BusRoute 877
+South East	Hertfordshire	SIF	missing	BusRoute 139
+South East	Hertfordshire	MXT	missing	BusRoute PB2
+South East	Hertfordshire	TS	missing	BusRoute 455
+South East	Hertfordshire	MC	ambiguous	BusRoute 771, BusRoute 772, BusRoute 773
+South East	Hertfordshire	SMC	ambiguous	BusRoute 18, BusRoute 323, BusRoute 524
+South East	Hertfordshire	CB	ambiguous	BusRoute 17, BusRoute 178, BusRoute 22, BusRoute 308, BusRoute 311, BusRoute 314, BusRoute 315, BusRoute 34, BusRoute 351, BusRoute 365, BusRoute 366, BusRoute 379, BusRoute 380, BusRoute 383, BusRoute 384, BusRoute 388, BusRoute 390, BusRoute 44, BusRoute 45, BusRoute 46, BusRoute 46A, BusRoute 53, BusRoute 700, BusRoute 79, BusRoute 80, BusRoute 82, BusRoute 825, BusRoute 863, BusRoute 866, BusRoute 868, BusRoute 872, BusRoute 89, BusRoute 90, BusRoute 91, BusRoute C1, BusRoute C2, BusRoute C3, BusRoute C3X, BusRoute C4, BusRoute H1, BusRoute H11, BusRoute H3, BusRoute H4, BusRoute HA1, BusRoute HA2, BusRoute SB15, BusRoute SB16, BusRoute X31
+South East	Hertfordshire	JL	missing	CoachRoute 707, CoachRoute 737, CoachRoute 767, CoachRoute 787, CoachRoute 797
+South East	Hertfordshire	FK	missing	CoachRoute 777
+Wales	Flintshire	NX	missing	CoachRoute 380
+Wales	Flintshire	NWAB	missing	BusRoute NW1
+Wales	Flintshire	ROCO	missing	BusRoute 72
+Wales	Flintshire	FC00	ambiguous	BusRoute 10, BusRoute 10X, BusRoute 16
+Wales	Flintshire	GH00	ambiguous	BusRoute 1, BusRoute 100, BusRoute 109, BusRoute 111, BusRoute 13, BusRoute 14, BusRoute 14Y, BusRoute 1A, BusRoute 2, BusRoute 40, BusRoute 4A, BusRoute 9, BusRoute 99, BusRoute 9A, BusRoute B37, BusRoute DB1, BusRoute DB2, BusRoute DB3, BusRoute S8, BusRoute X9
+Wales	Flintshire	PH00	ambiguous	BusRoute 126, BusRoute 127, BusRoute 23
+Scotland	Highland	THC	missing	FerryRoute F9
+Scotland	Highland	MB	missing	CoachRoute M20
+Scotland	Highland	SSR	missing	TramMetroRoute SSR
+South East	Bedford	WBUS	missing	BusRoute W1, BusRoute W2
+South East	Bedford	SIF	missing	BusRoute 404
+South East	East Sussex	BBR	missing	BusRoute BBR0
+South West	Gloucestershire	MB	missing	CoachRoute M14
+South West	Gloucestershire	RH	missing	BusRoute X8
+South West	Gloucestershire	SWD	missing	BusRoute 132
+South West	Gloucestershire	BCC	missing	BusRoute 377
+South West	Gloucestershire	CWL	missing	BusRoute 375, BusRoute 543, BusRoute 562, BusRoute 575, BusRoute 973
+South West	Gloucestershire	NWL	missing	BusRoute 643
+South West	Gloucestershire	KIM	missing	BusRoute F
+South West	Gloucestershire	SHP	missing	BusRoute 8
+South West	Gloucestershire	CAC	missing	BusRoute 606
+South West	Gloucestershire	VMS	missing	BusRoute V5, BusRoute V8
+South West	Gloucestershire	CCT	missing	BusRoute V
+South West	Gloucestershire	BKR	missing	BusRoute 5
+South West	Gloucestershire	SCO	missing	BusRoute 24, BusRoute 24A, BusRoute 30, BusRoute 31, BusRoute 703, BusRoute 721, BusRoute 871
+South West	Gloucestershire	VCB	missing	BusRoute V12, BusRoute V14, BusRoute V23, BusRoute V9
+South West	Gloucestershire	BL	missing	BusRoute 311
+South West	Gloucestershire	BE00	ambiguous	BusRoute C1
+South West	Gloucestershire	HCB	ambiguous	BusRoute H3
+South West	Gloucestershire	PUL	ambiguous	BusRoute 806, BusRoute 810, BusRoute 811
+North East	Stockton-on-Tees	DEL	missing	BusRoute 504
+North East	Stockton-on-Tees	MOOR	missing	BusRoute M1
+North East	Stockton-on-Tees	NX	missing	CoachRoute 380, CoachRoute 381
+Wales	Pembrokeshire	FC00	ambiguous	BusRoute 302, BusRoute 349
+Wales	Pembrokeshire	RB00	ambiguous	BusRoute 342, BusRoute 343, BusRoute 400, BusRoute 404, BusRoute 405, BusRoute 407, BusRoute 410, BusRoute 413, BusRoute 430
+Wales	Pembrokeshire	MI00	ambiguous	BusRoute 230, BusRoute 431, BusRoute 432
+Wales	Pembrokeshire	CT00	ambiguous	BusRoute 224
+London	Greater London	LRS	missing	FerryRoute 0CRC, FerryRoute 0RLA, FerryRoute 0TCA, FerryRoute 0TLA, FerryRoute 0TTC, FerryRoute 0WUA, FerryRoute HIL0, FerryRoute TRSA, FerryRoute WFF2
+London	Greater London	AB	missing	CoachRoute A6, CoachRoute A9
+London	Greater London	JL	missing	CoachRoute 707, CoachRoute 727, CoachRoute 747, CoachRoute 787, CoachRoute 797
+London	Greater London	NEWB	missing	CoachRoute SB, CoachRoute SW
+London	Greater London	WR	missing	CoachRoute 701
+London	Greater London	FK	missing	CoachRoute 200, CoachRoute 201, CoachRoute 202, CoachRoute 203, CoachRoute 205, CoachRoute 210, CoachRoute 230, CoachRoute 240
+London	Greater London	TE	missing	CoachRoute A50, CoachRoute A51
+London	Greater London	EL	missing	CoachRoute 473
+London	Greater London	MB	missing	CoachRoute M10, CoachRoute M12, CoachRoute M14, CoachRoute M17, CoachRoute M20, CoachRoute M6, CoachRoute M7, CoachRoute MBP
+London	Greater London	LT	missing	TrainRoute 2I05
+London	Greater London	TRAM	missing	BusRoute TRM1, BusRoute TRM2
+London	Greater London	LCN	missing	BusRoute 225, BusRoute 37, BusRoute 45, BusRoute 484, BusRoute C10, BusRoute P12
+London	Greater London	MN	missing	BusRoute 102, BusRoute 121, BusRoute 123, BusRoute 125, BusRoute 128, BusRoute 135, BusRoute 141, BusRoute 144, BusRoute 150, BusRoute 168, BusRoute 173, BusRoute 184, BusRoute 192, BusRoute 221, BusRoute 242, BusRoute 243, BusRoute 253, BusRoute 254, BusRoute 29, BusRoute 318, BusRoute 325, BusRoute 329, BusRoute 34, BusRoute 349, BusRoute 377, BusRoute 38, BusRoute 382, BusRoute 393, BusRoute 41, BusRoute 444, BusRoute 462, BusRoute 657, BusRoute 73, BusRoute 76, BusRoute 78, BusRoute N253, BusRoute N279, BusRoute N29, BusRoute N38, BusRoute N41, BusRoute N73, BusRoute N76, BusRoute W14, BusRoute W15, BusRoute W3, BusRoute W4
+London	Greater London	LD	missing	BusRoute 268, BusRoute 303, BusRoute 340, BusRoute H18, BusRoute H19
+London	Greater London	SK	missing	BusRoute 122, BusRoute 136, BusRoute 177, BusRoute 178, BusRoute 199, BusRoute 208, BusRoute 227, BusRoute 269, BusRoute 273, BusRoute 314, BusRoute 354, BusRoute 356, BusRoute 380, BusRoute 386, BusRoute 469, BusRoute 47, BusRoute 472, BusRoute 51, BusRoute 53, BusRoute 61, BusRoute 638, BusRoute 99, BusRoute N136, BusRoute N47, BusRoute P4
+London	Greater London	ME	missing	BusRoute 119, BusRoute 130, BusRoute 161, BusRoute 181, BusRoute 202, BusRoute 284, BusRoute 320, BusRoute 352, BusRoute 353, BusRoute 358, BusRoute 359, BusRoute 367, BusRoute 54, BusRoute 64, BusRoute 75, BusRoute B14, BusRoute N64, BusRoute R11, BusRoute R2, BusRoute R7, BusRoute T33, BusRoute X26
+London	Greater London	TRL	missing	BusRoute 157, BusRoute C3, BusRoute H25, BusRoute R70
+London	Greater London	SOV	missing	BusRoute H17
+London	Greater London	KE	missing	BusRoute 160, BusRoute 286, BusRoute 66, BusRoute B13, BusRoute B15
+London	Greater London	AEH	missing	BusRoute 126, BusRoute 162, BusRoute 256, BusRoute 288, BusRoute 346, BusRoute 499, BusRoute H1, BusRoute H2, BusRoute H3, BusRoute U9
+London	Greater London	ET	missing	BusRoute 1
+London	Greater London	HY	missing	BusRoute 153, BusRoute 212, BusRoute 388, BusRoute 394, BusRoute 675, BusRoute W12
+London	Greater London	TDV	missing	BusRoute 116, BusRoute 203, BusRoute 216, BusRoute 290, BusRoute 411, BusRoute 467, BusRoute 641, BusRoute 81, BusRoute K3
+London	Greater London	TE	missing	BusRoute 112, BusRoute 350, BusRoute 481, BusRoute 490, BusRoute 941, BusRoute H20, BusRoute H26, BusRoute H28, BusRoute U7
+London	Greater London	EB	missing	BusRoute 463, BusRoute S3, BusRoute S4
+London	Greater London	OL	missing	BusRoute 337
+London	Greater London	EL	missing	BusRoute 15HA, BusRoute 230, BusRoute 238, BusRoute 247, BusRoute 257, BusRoute 330, BusRoute 69, BusRoute N86
+London	Greater London	IF	missing	BusRoute 101, BusRoute 103, BusRoute 104, BusRoute 106, BusRoute 115, BusRoute 145, BusRoute 147, BusRoute 15, BusRoute 158, BusRoute 169, BusRoute 174, BusRoute 175, BusRoute 205, BusRoute 241, BusRoute 248, BusRoute 25, BusRoute 26, BusRoute 262, BusRoute 276, BusRoute 277, BusRoute 287, BusRoute 294, BusRoute 296, BusRoute 30, BusRoute 366, BusRoute 376, BusRoute 387, BusRoute 396, BusRoute 473, BusRoute 48, BusRoute 488, BusRoute 496, BusRoute 5, BusRoute 55, BusRoute 56, BusRoute 62, BusRoute 8, BusRoute 86, BusRoute 97, BusRoute D3, BusRoute N15, BusRoute N26, BusRoute N55, BusRoute N550, BusRoute N8
+London	Greater London	FST	missing	BusRoute 09HA, BusRoute 231, BusRoute 236, BusRoute 28, BusRoute 323, BusRoute 339, BusRoute 370, BusRoute 389, BusRoute 399, BusRoute 67, BusRoute 953, BusRoute 958, BusRoute 972, BusRoute A10, BusRoute D7, BusRoute W11, BusRoute W6
+London	Greater London	DC	missing	BusRoute 300, BusRoute 425, BusRoute 474, BusRoute 673, BusRoute N551, BusRoute W19
+London	Greater London	ML	missing	BusRoute 113, BusRoute 134, BusRoute 139, BusRoute 140, BusRoute 143, BusRoute 16, BusRoute 17, BusRoute 182, BusRoute 186, BusRoute 189, BusRoute 190, BusRoute 204, BusRoute 206, BusRoute 209, BusRoute 210, BusRoute 214, BusRoute 232, BusRoute 234, BusRoute 237, BusRoute 240, BusRoute 251, BusRoute 260, BusRoute 263, BusRoute 266, BusRoute 271, BusRoute 274, BusRoute 297, BusRoute 302, BusRoute 316, BusRoute 32, BusRoute 326, BusRoute 332, BusRoute 383, BusRoute 384, BusRoute 390, BusRoute 395, BusRoute 4, BusRoute 43, BusRoute 46, BusRoute 460, BusRoute 52, BusRoute 6, BusRoute 603, BusRoute 606, BusRoute 643, BusRoute 7, BusRoute 70, BusRoute 82, BusRoute 90, BusRoute 91, BusRoute 965, BusRoute 969, BusRoute 98, BusRoute C11, BusRoute C2, BusRoute E2, BusRoute E6, BusRoute E8, BusRoute H12, BusRoute N16, BusRoute N20, BusRoute N5, BusRoute N52, BusRoute N7, BusRoute N91, BusRoute N98, BusRoute W5, BusRoute W7, BusRoute W8, BusRoute W9
+London	Greater London	CW	missing	BusRoute 105, BusRoute 18, BusRoute 187, BusRoute 195, BusRoute 207, BusRoute 223, BusRoute 226, BusRoute 228, BusRoute 23, BusRoute 245, BusRoute 282, BusRoute 295, BusRoute 31, BusRoute 328, BusRoute 427, BusRoute 487, BusRoute 607, BusRoute 79, BusRoute 83, BusRoute 92, BusRoute 95, BusRoute E1, BusRoute E10, BusRoute E3, BusRoute E5, BusRoute E7, BusRoute E9, BusRoute N18, BusRoute N207, BusRoute N28, BusRoute N31, BusRoute PR2, BusRoute U1, BusRoute U10, BusRoute U2, BusRoute U3, BusRoute U4, BusRoute U5
+London	Greater London	BLT	missing	BusRoute 364
+London	Greater London	MB	missing	BusRoute 127, BusRoute 138, BusRoute 146, BusRoute 261, BusRoute 336, BusRoute 917, BusRoute R1, BusRoute R3, BusRoute R4, BusRoute R6, BusRoute R8, BusRoute R9, BusRoute T32
+London	Greater London	CX	missing	BusRoute 100, BusRoute 129, BusRoute 152, BusRoute 156, BusRoute 188, BusRoute 211, BusRoute 322, BusRoute 343, BusRoute 344, BusRoute 35, BusRoute 381, BusRoute 40, BusRoute 414, BusRoute 452, BusRoute 931, BusRoute N3, BusRoute N343, BusRoute N35, BusRoute N381, BusRoute P13
+London	Greater London	MC	ambiguous	BusRoute 771, BusRoute 772, BusRoute 773
+London	Greater London	CC	ambiguous	BusRoute 165, BusRoute 179, BusRoute 191, BusRoute 193, BusRoute 252, BusRoute 259, BusRoute 299, BusRoute 308, BusRoute 309, BusRoute 341, BusRoute 357, BusRoute 365, BusRoute 385, BusRoute 476, BusRoute 58, BusRoute 679, BusRoute 686, BusRoute D6, BusRoute D8, BusRoute RV1, BusRoute W10
+London	Greater London	SE	ambiguous	BusRoute 124, BusRoute 291
+Wales	Denbighshire	NX	missing	CoachRoute 380
+Wales	Denbighshire	NWAB	missing	BusRoute NW1
+Wales	Denbighshire	BM00	ambiguous	BusRoute 64A, BusRoute 64B, BusRoute 97
+Wales	Denbighshire	FC00	ambiguous	BusRoute 10X
+Wales	Denbighshire	GH00	ambiguous	BusRoute 1, BusRoute 14, BusRoute 1A, BusRoute 2, BusRoute 5, BusRoute 77, BusRoute 9, BusRoute 91, BusRoute 95, BusRoute 98, BusRoute X50, BusRoute X51, BusRoute X52
+West Midlands	Staffordshire	RSL	missing	BusRoute 247
+West Midlands	Staffordshire	GHW	missing	BusRoute 120
+West Midlands	Staffordshire	AM	missing	BusRoute 213, BusRoute X40
+West Midlands	Staffordshire	NXB	missing	BusRoute 256S, BusRoute 377A, BusRoute 379, BusRoute 6, BusRoute 757, BusRoute 77B, BusRoute X51
+West Midlands	Staffordshire	TB	missing	BusRoute 0V30
+West Midlands	Staffordshire	MIY	missing	BusRoute 880
+West Midlands	Staffordshire	ACT	missing	BusRoute 0MC0, BusRoute MC
+West Midlands	Staffordshire	RST	missing	BusRoute X81
+West Midlands	Staffordshire	WWT	missing	BusRoute 28, BusRoute 56
+Wales	Neath Port Talbot	CTW0	missing	BusRoute 701
+Wales	Neath Port Talbot	BTW	missing	BusRoute X63
+Wales	Neath Port Talbot	SH00	missing	BusRoute 428
+Wales	Neath Port Talbot	FC00	ambiguous	BusRoute 1, BusRoute 100, BusRoute 120, BusRoute 121, BusRoute 122, BusRoute 124, BusRoute 125, BusRoute 132, BusRoute 141, BusRoute 143, BusRoute 148, BusRoute 150, BusRoute 151, BusRoute 152, BusRoute 153, BusRoute 154, BusRoute 155, BusRoute 156, BusRoute 157, BusRoute 158, BusRoute 159, BusRoute 160, BusRoute 224, BusRoute 226, BusRoute 227, BusRoute 228, BusRoute 23, BusRoute 23G, BusRoute 32, BusRoute 36, BusRoute 407, BusRoute 471, BusRoute 565, BusRoute 59, BusRoute 65, BusRoute 8, BusRoute 900, BusRoute 901, BusRoute 902, BusRoute 903, BusRoute 904, BusRoute 905, BusRoute 906, BusRoute 907, BusRoute 908, BusRoute 909, BusRoute 921, BusRoute 922, BusRoute D4, BusRoute D5, BusRoute D6, BusRoute X1, BusRoute X10, BusRoute X20, BusRoute X22, BusRoute X3, BusRoute X4, BusRoute X5
+Wales	Neath Port Talbot	FK	missing	CoachRoute 201, CoachRoute 202
+Scotland	East Ayrshire	CCT	missing	BusRoute 347A
+South West	Devon	_DP	missing	BusRoute 100, BusRoute 25
+South West	Devon	_LF	missing	BusRoute LUN1, BusRoute LUN2
+South West	Devon	CK	missing	BusRoute 20, BusRoute 20A, BusRoute 367, BusRoute 368, BusRoute 382, BusRoute 387, BusRoute 391, BusRoute 392, BusRoute 393, BusRoute 397, BusRoute 675, BusRoute 694, BusRoute 695, BusRoute 697, BusRoute 70S, BusRoute BLUE, BusRoute SR4
+South West	Devon	DVR	missing	TramMetroRoute 504
+South West	Devon	SDR	missing	TramMetroRoute 400
+South West	Devon	_DP	missing	FerryRoute 502
+South West	Devon	MB	missing	CoachRoute M36, CoachRoute M6, CoachRoute M7
+South East	Essex	AB	missing	CoachRoute A6, CoachRoute A9
+South East	Essex	JL	missing	CoachRoute 727, CoachRoute 737, CoachRoute 767, CoachRoute 797
+South East	Essex	FK	missing	CoachRoute 777
+South East	Essex	TE	missing	CoachRoute A50, CoachRoute A51
+South East	Essex	TGS	missing	BusRoute 301, BusRoute 314, BusRoute 315, BusRoute 346, BusRoute 446, BusRoute 446B, BusRoute X5
+South East	Essex	MN	missing	BusRoute 150, BusRoute 462
+South East	Essex	STN	missing	BusRoute ILT0, BusRoute OLI0
+South East	Essex	TS	missing	BusRoute 308, BusRoute 455
+South East	Essex	CC	ambiguous	BusRoute 755, BusRoute 756, BusRoute 92, BusRoute 93, BusRoute 93C, BusRoute 96, BusRoute X93
+South East	Essex	IB	ambiguous	BusRoute 261, BusRoute 268, BusRoute 269, BusRoute 339
+South East	Essex	SE	ambiguous	BusRoute 20X, BusRoute 220, BusRoute 260, BusRoute 288, BusRoute 32, BusRoute 37, BusRoute 38, BusRoute 39, BusRoute 503, BusRoute 504, BusRoute 513, BusRoute 514, BusRoute 515, BusRoute 524, BusRoute 550, BusRoute 593, BusRoute 60, BusRoute 628, BusRoute 800, BusRoute 806, BusRoute 814, BusRoute 816, BusRoute 90, BusRoute D1, BusRoute D2, BusRoute D3, BusRoute D4, BusRoute D5, BusRoute D6, BusRoute D7, BusRoute D8
+South East	Essex	CB	ambiguous	BusRoute 700, BusRoute C3, BusRoute C3X
+South East	Essex	SMC	ambiguous	BusRoute 19
+South East	Essex	NC	ambiguous	BusRoute 105, BusRoute 107, BusRoute 109, BusRoute 115, BusRoute 78
+North West	Halton	2190	missing	BusRoute 31
+North West	Halton	2211	missing	BusRoute 21, BusRoute 21A, BusRoute 21B
+North West	Halton	2642	missing	BusRoute 52
+North West	Halton	2215	missing	BusRoute X30
+North West	Halton	2644	missing	BusRoute 82B
+North West	Halton	1104	missing	BusRoute 6, BusRoute 7A
+North West	Halton	2205	missing	BusRoute 66
+North West	Halton	2660	missing	BusRoute 79C
+North West	Halton	2637	missing	BusRoute 1, BusRoute 15, BusRoute 2, BusRoute 32B, BusRoute 33A, BusRoute 3A, BusRoute 3B, BusRoute 3C, BusRoute 5N, BusRoute X1
+North West	Halton	2760	missing	BusRoute 14
+North West	Halton	2649	missing	BusRoute 13, BusRoute 13A, BusRoute 61, BusRoute X21
+North West	Halton	2638	missing	BusRoute 110, BusRoute 12, BusRoute 14C, BusRoute 19, BusRoute 20A, BusRoute 26, BusRoute 2A, BusRoute 3D, BusRoute 62, BusRoute 62A
+North West	Halton	2639	missing	BusRoute 17A, BusRoute 17B
+North East	Darlington	NX	missing	CoachRoute 381, CoachRoute 383
+North East	Darlington	ANED	missing	BusRoute X27
+North East	Darlington	MOOR	missing	BusRoute M1
+South East	Thurrock	IB	ambiguous	BusRoute 268, BusRoute 269
+South East	Thurrock	SE	ambiguous	BusRoute 800
+South East	Buckinghamshire	RCB	missing	BusRoute RCB
+South East	Buckinghamshire	CTN	missing	BusRoute 30
+South East	Buckinghamshire	RE	missing	BusRoute 331
+South East	Buckinghamshire	MC	ambiguous	BusRoute 773
+South East	Buckinghamshire	JL	missing	CoachRoute 737
+West Midlands	West Midlands	BE	missing	CoachRoute 871
+West Midlands	West Midlands	FK	missing	CoachRoute 210, CoachRoute 240, CoachRoute 777
+West Midlands	West Midlands	AML	missing	BusRoute AS1, BusRoute AS2
+West Midlands	West Midlands	MBU	missing	BusRoute 335, BusRoute 339
+West Midlands	West Midlands	CPE	missing	BusRoute 336
+West Midlands	West Midlands	NXB	missing	BusRoute 1, BusRoute 101, BusRoute 10A, BusRoute 11A, BusRoute 11C, BusRoute 11S, BusRoute 127, BusRoute 13, BusRoute 141, BusRoute 14B, BusRoute 159, BusRoute 159C, BusRoute 16A, BusRoute 17, BusRoute 18A, BusRoute 2, BusRoute 22, BusRoute 222, BusRoute 23, BusRoute 238, BusRoute 241, BusRoute 244, BusRoute 246, BusRoute 254, BusRoute 256S, BusRoute 26, BusRoute 26A, BusRoute 27, BusRoute 276, BusRoute 28A, BusRoute 28B, BusRoute 28C, BusRoute 29, BusRoute 297, BusRoute 297A, BusRoute 29A, BusRoute 29S, BusRoute 3, BusRoute 30, BusRoute 301E, BusRoute 302, BusRoute 305, BusRoute 31, BusRoute 311, BusRoute 311A, BusRoute 313A, BusRoute 33, BusRoute 333, BusRoute 340, BusRoute 341, BusRoute 369, BusRoute 370, BusRoute 370A, BusRoute 377A, BusRoute 379, BusRoute 402A, BusRoute 404, BusRoute 404A, BusRoute 404H, BusRoute 405, BusRoute 406H, BusRoute 407H, BusRoute 414, BusRoute 428, BusRoute 429, BusRoute 439, BusRoute 444, BusRoute 447, BusRoute 448, BusRoute 448A, BusRoute 449, BusRoute 45, BusRoute 450, BusRoute 451, BusRoute 46, BusRoute 46S, BusRoute 47, BusRoute 49, BusRoute 49A, BusRoute 503, BusRoute 503A, BusRoute 503W, BusRoute 504, BusRoute 505, BusRoute 506A, BusRoute 507A, BusRoute 51, BusRoute 511A, BusRoute 512, BusRoute 525, BusRoute 527, BusRoute 528, BusRoute 529, BusRoute 54, BusRoute 543, BusRoute 558, BusRoute 559, BusRoute 58, BusRoute 582, BusRoute 583, BusRoute 58A, BusRoute 59, BusRoute 59A, BusRoute 59S, BusRoute 5A, BusRoute 6, BusRoute 614, BusRoute 628, BusRoute 63, BusRoute 636, BusRoute 638, BusRoute 651, BusRoute 654, BusRoute 654A, BusRoute 66, BusRoute 66A, BusRoute 67, BusRoute 67A, BusRoute 682, BusRoute 682A, BusRoute 688, BusRoute 698, BusRoute 6E, BusRoute 7, BusRoute 701, BusRoute 702, BusRoute 703, BusRoute 704, BusRoute 705, BusRoute 705A, BusRoute 705S, BusRoute 711, BusRoute 712, BusRoute 713, BusRoute 714, BusRoute 716, BusRoute 71A, BusRoute 727, BusRoute 745, BusRoute 751, BusRoute 762, BusRoute 763, BusRoute 77, BusRoute 775, BusRoute 77B, BusRoute 77S, BusRoute 781, BusRoute 783, BusRoute 784, BusRoute 785, BusRoute 791, BusRoute 794, BusRoute 794A, BusRoute 7A, BusRoute 8, BusRoute 80, BusRoute 807, BusRoute 82, BusRoute 821, BusRoute 826, BusRoute 827, BusRoute 828, BusRoute 838, BusRoute 839, BusRoute 84, BusRoute 841, BusRoute 850, BusRoute 852, BusRoute 863, BusRoute 869, BusRoute 870, BusRoute 870S, BusRoute 872, BusRoute 874, BusRoute 876, BusRoute 878, BusRoute 879, BusRoute 885, BusRoute 886, BusRoute 888, BusRoute 889, BusRoute 891, BusRoute 897, BusRoute 899, BusRoute 8C, BusRoute 90, BusRoute 902, BusRoute 904, BusRoute 907, BusRoute 908, BusRoute 914, BusRoute 915, BusRoute 934, BusRoute 934A, BusRoute 935, BusRoute 935A, BusRoute 952, BusRoute 957, BusRoute 966, BusRoute 97, BusRoute 97A, BusRoute 97S, BusRoute 997, BusRoute 9S, BusRoute S1, BusRoute S9, BusRoute X51, BusRoute X62, BusRoute X64
+West Midlands	West Midlands	ZZZ	missing	BusRoute 360, BusRoute 844
+West Midlands	West Midlands	GRO	missing	BusRoute 19W, BusRoute 39, BusRoute 39A, BusRoute 811, BusRoute 812, BusRoute S14
+West Midlands	West Midlands	APT	missing	BusRoute 14, BusRoute 40, BusRoute 55, BusRoute 71, BusRoute 900, BusRoute 94, BusRoute FORT
+West Midlands	West Midlands	SAT	missing	BusRoute 65
+West Midlands	West Midlands	MRL	missing	BusRoute X7, BusRoute X95
+West Midlands	West Midlands	MIY	missing	BusRoute 880
+West Midlands	West Midlands	SUT	missing	BusRoute 128, BusRoute 37, BusRoute 87
+West Midlands	West Midlands	BHX	missing	TramMetroRoute AIR
+South East	Central Bedfordshire	5400	missing	BusRoute LC1, BusRoute LC2
+South East	Central Bedfordshire	WBUS	missing	BusRoute W1, BusRoute W10, BusRoute W11, BusRoute W12, BusRoute W13, BusRoute W14, BusRoute W2, BusRoute W3, BusRoute W4, BusRoute W5, BusRoute W6, BusRoute W7, BusRoute W8, BusRoute W9
+South East	Central Bedfordshire	COZY	missing	BusRoute 391
+South East	Central Bedfordshire	MC	ambiguous	BusRoute 771, BusRoute 772
+South East	Central Bedfordshire	CB	ambiguous	BusRoute 20, BusRoute 365, BusRoute 366, BusRoute 45, BusRoute 46, BusRoute 79, BusRoute 82, BusRoute 852, BusRoute 89, BusRoute DB2, BusRoute DB3, BusRoute X31
+Scotland	Inverclyde	WIL	missing	BusRoute 19, BusRoute W2, BusRoute W3
+West Midlands	Herefordshire	KNTX	missing	BusRoute T41
+West Midlands	Herefordshire	LTT	missing	BusRoute 488, BusRoute 509
+West Midlands	Herefordshire	BTW	missing	BusRoute 41, BusRoute X11, BusRoute X15
+West Midlands	Herefordshire	LMS	missing	BusRoute 309
+West Midlands	Herefordshire	RB00	ambiguous	BusRoute 445
+Scotland	Glasgow	CLK	missing	FerryRoute CLK
+Scotland	Glasgow	MB	missing	CoachRoute M11
+Scotland	Glasgow	NX	missing	CoachRoute 533, CoachRoute 534, CoachRoute 538, CoachRoute 542
+Scotland	Glasgow	WIL	missing	BusRoute W2, BusRoute W3
+North West	Greater Manchester	BE	missing	CoachRoute 880
+North West	Greater Manchester	MB	missing	CoachRoute M11, CoachRoute M12, CoachRoute M17, CoachRoute M34
+North West	Greater Manchester	NX	missing	CoachRoute 351, CoachRoute 380, CoachRoute 381, CoachRoute 383
+North West	Greater Manchester	SH	missing	CoachRoute 060
+North West	Greater Manchester	FCH	missing	BusRoute 589, BusRoute 590
+North West	Greater Manchester	HBE	missing	BusRoute 528
+North West	Greater Manchester	2079	missing	BusRoute 433, BusRoute 434, BusRoute 435, BusRoute 440, BusRoute 442, BusRoute 444, BusRoute 445, BusRoute 461, BusRoute 468, BusRoute 471, BusRoute 475, BusRoute 476, BusRoute 477, BusRoute 480, BusRoute 481, BusRoute 485, BusRoute 486, BusRoute 494, BusRoute 498
+North West	Greater Manchester	2035	missing	BusRoute 156, BusRoute 320, BusRoute 34, BusRoute 352, BusRoute 602, BusRoute 620
+North West	Greater Manchester	1991	missing	BusRoute 118, BusRoute 129, BusRoute 17, BusRoute 268, BusRoute 276, BusRoute 294, BusRoute 31, BusRoute 324, BusRoute 335
+North West	Greater Manchester	1032	missing	BusRoute 733, BusRoute 762, BusRoute 964
+North West	Greater Manchester	2124	missing	BusRoute 364, BusRoute 407
+North West	Greater Manchester	FGM	missing	BusRoute 184
+North West	Greater Manchester	1895	missing	BusRoute 431
+North West	Greater Manchester	1873	missing	BusRoute 27, BusRoute 403, BusRoute 404, BusRoute 406, BusRoute 432, BusRoute 436, BusRoute 441, BusRoute 455, BusRoute 456, BusRoute 458, BusRoute 462, BusRoute 484, BusRoute 95
+North West	Greater Manchester	2260	missing	BusRoute 37, BusRoute 37A, BusRoute 38
+North West	Greater Manchester	SPW	missing	BusRoute 341, BusRoute 354
+North West	Greater Manchester	FMA	missing	BusRoute 180, BusRoute 350
+North West	Greater Manchester	TMT	missing	BusRoute 67
+North West	Greater Manchester	2163	missing	BusRoute 603, BusRoute 607, BusRoute 615
+North West	Greater Manchester	BKE	missing	BusRoute 392, BusRoute 393
+North West	Greater Manchester	CHK	missing	BusRoute 306
+North West	Greater Manchester	2251	missing	BusRoute 200, BusRoute 289
+North West	Greater Manchester	1932	missing	BusRoute HD1
+North West	Greater Manchester	2043	missing	BusRoute 622
+North West	Greater Manchester	2153	missing	BusRoute 573
+North West	Greater Manchester	2164	missing	BusRoute 28, BusRoute 28A
+North West	Greater Manchester	2252	missing	BusRoute 199, BusRoute TP
+North West	Greater Manchester	2198	missing	BusRoute 5
+North West	Greater Manchester	2088	missing	BusRoute 3A
+North West	Greater Manchester	SMM	missing	BusRoute 398, BusRoute 399
+North West	Greater Manchester	2231	missing	BusRoute 378, BusRoute 390, BusRoute 391
+North West	Greater Manchester	STT	missing	BusRoute 353
+North West	Greater Manchester	2232	missing	BusRoute E69
+North West	Greater Manchester	1062	missing	BusRoute 612, BusRoute 639
+North West	Greater Manchester	SMC	missing	BusRoute 236, BusRoute 360, BusRoute 375
+North West	Greater Manchester	1968	missing	BusRoute 126, BusRoute 132, BusRoute 300, BusRoute 514, BusRoute 516, BusRoute 517, BusRoute 521, BusRoute 581, BusRoute 583, BusRoute 591, BusRoute 614, BusRoute 624, BusRoute 630, BusRoute 635, BusRoute 638, BusRoute 640, BusRoute 641, BusRoute 654, BusRoute 664, BusRoute 674, BusRoute 683, BusRoute 684, BusRoute 685
+North West	Greater Manchester	SMC	ambiguous	BusRoute 237, BusRoute 237N, BusRoute 358, BusRoute 842
+Scotland	Aberdeenshire	CEN	missing	BusRoute 420
+Scotland	Aberdeenshire	FRE	missing	BusRoute 473
+South West	Dorset	CK	missing	BusRoute 204
+South West	Dorset	SRC	missing	TramMetroRoute SR
+East Anglia	Norfolk	JL	missing	CoachRoute 727
+East Anglia	Norfolk	BC	ambiguous	BusRoute 61, BusRoute 62
+East Anglia	Norfolk	SE	ambiguous	BusRoute 10A, BusRoute 15, BusRoute 371, BusRoute 60, BusRoute 805, BusRoute 806, BusRoute 905, BusRoute W1
+Wales	Vale of Glamorgan	CTL0	missing	BusRoute 100, BusRoute V1, BusRoute V2, BusRoute V3, BusRoute V4, BusRoute V5, BusRoute V6
+Wales	Vale of Glamorgan	WTB	missing	BusRoute WTB
+Wales	Vale of Glamorgan	FC00	ambiguous	BusRoute 801, BusRoute 803, BusRoute 87, BusRoute 87A, BusRoute 88A, BusRoute 88B, BusRoute 89, BusRoute X2
+Wales	Vale of Glamorgan	BE00	ambiguous	BusRoute 90, BusRoute 905, BusRoute X5
+Wales	Vale of Glamorgan	CAC	ambiguous	BusRoute 86, BusRoute M1
+Wales	Monmouthshire	FK	missing	CoachRoute 201
+Wales	Monmouthshire	BTW	missing	BusRoute X12
+Wales	Monmouthshire	SCO	missing	BusRoute 871
+Wales	Monmouthshire	FC00	ambiguous	BusRoute X10
+Wales	Monmouthshire	SS00	ambiguous	BusRoute X43
+Wales	Monmouthshire	BE00	ambiguous	BusRoute 43, BusRoute 62, BusRoute 73, BusRoute C1, BusRoute C2, BusRoute C3, BusRoute C4, BusRoute C5, BusRoute W3, BusRoute W4, BusRoute W5
+Wales	Monmouthshire	PH00	ambiguous	BusRoute 91
+Wales	Monmouthshire	RM00	ambiguous	BusRoute 2
