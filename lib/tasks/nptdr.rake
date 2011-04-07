@@ -396,7 +396,7 @@ namespace :nptdr do
 
           # approximate a locality if needed
           if !stop.locality
-            nearest_stop = Stop.find_nearest(stop.easting, stop.northing)
+            nearest_stop = Stop.find_nearest(stop.easting, stop.northing, exclude_id=stop.id)
             stop.locality = nearest_stop.locality
             stop.save!
           end
