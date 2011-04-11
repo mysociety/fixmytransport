@@ -1,7 +1,0 @@
-.homepage
-  %p.site-description=t(:get_problems_fixed)
-  .campaign-form-wrapper
-    .campaign-form
-      - form_for @campaign, :url => find_campaigns_path do |form| 
-        = render :partial => 'campaigns/form', :locals => { :form => form }
-        != submit_tag t(:go)
