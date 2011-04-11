@@ -63,6 +63,7 @@ namespace :temp do
                'Council contact email',
                'Operator contact operator id',
                'Operator contact location id', 
+               'Operator contact location type',
                'Operator contact email',
                'Operator contact category']
     FasterCSV.parse(mapping_data, csv_options) do |line|
@@ -147,6 +148,8 @@ namespace :temp do
         operator_location_id = line['Operator contact location id'] 
         operator_email = line['Operator contact email']
         category = line['Operator contact category']
+        puts operator_email
+        puts category
         new_operator_id = remaps[:operators][operator_id.to_i]
         if operator_location_id 
           mapped_contacts = OperatorContact.find(:all, :conditions => ['operator_id = ?
