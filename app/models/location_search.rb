@@ -68,25 +68,6 @@ class LocationSearch < ActiveRecord::Base
     descriptors.join(' ')
   end
   
-  def add_choice(locations)
-    self.events << { :type => :choice, 
-                     :locations => locations.size,
-                     :location_type => locations.first.class.to_s } 
-    self.save
-  end
-  
-  def add_location(location)
-    self.events << { :type => :result, 
-                     :location => identifying_info(location) }
-    self.save
-  end
-  
-  def add_method(method)
-    self.events << { :type => :method, 
-                     :method => method }
-    self.save
-  end
-  
   def fail()
     self.failed = true
     self.save
@@ -95,10 +76,6 @@ class LocationSearch < ActiveRecord::Base
   
   def close
     LocationSearch.close_session_searches(session_id)
-  end
-  
-  def identifying_info(location)
-    { :id => location.id, :class => location.class.to_s }
   end
   
 end
