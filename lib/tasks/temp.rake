@@ -1,23 +1,24 @@
 namespace :temp do
-  task :create_mappings => :environment do
+  task :create_mappings => :environment do 
     check_for_dir
     dir = ENV['DIR']
     mapping_file = File.open(File.join(dir, 'mappings.tsv'), 'w')
     headers = ['Instance Type',
-               'Instance ID',
+               'Instance ID', 
                'Stop ATCO code',
-               'Stop area code',
+               'Stop area code', 
                'Route transport mode id',
-               'Route number',
-               'Route operator code',
+               'Route number', 
+               'Route operator code', 
                'Route description',
                'Operator name',
                'Operator code',
-               'Council contact area id',
+               'Council contact area id', 
                'Council contact category',
                'Council contact email',
                'Operator contact operator id',
-               'Operator contact location id',
+               'Operator contact location id', 
+               'Operator contact location type',
                'Operator contact email',
                'Operator contact category']
     mapping_file.write(headers.join("\t") + "\n")
@@ -27,7 +28,7 @@ namespace :temp do
         write_mapping_line(problem.location, mapping_file)
       when StopArea
         write_mapping_line(problem.location, mapping_file)
-      when Route
+      when Route 
         write_mapping_line(problem.location, mapping_file)
       when SubRoute
         write_mapping_line(problem.location.from_station, mapping_file)
@@ -35,7 +36,7 @@ namespace :temp do
         problem.location.routes.each do |route|
           write_mapping_line(route, mapping_file)
         end
-      else
+      else 
         raise "Unexpected type of problem location #{problem.location.type}"
       end
       if problem.operator
@@ -66,10 +67,10 @@ namespace :temp do
       else raise "Unexpected type of sent email recipient #{sent_email.recipient.type}"
       end
     end
-
+    
     mapping_file.close()
   end
-
+  
   def write_mapping_line(instance, mapping_file)
     case instance
     when Stop
@@ -106,7 +107,7 @@ namespace :temp do
               identifying_data[:route_operator_code],
               identifying_data[:route_description],
               identifying_data[:operator_name],
-              identifying_data[:operator_code],
+              identifying_data[:operator_code], 
               identifying_data[:council_contact_area_id],
               identifying_data[:council_contact_category],
               identifying_data[:council_contact_email],
