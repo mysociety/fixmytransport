@@ -257,7 +257,6 @@ class Gazetteer
       params << options[:locality]
     end
     
-    query += " AND status != 'del'"
     conditions = [query] + params
     results = StopArea.find(:all, :conditions => conditions, 
                                   :limit => options[:limit], :order => 'name')  
