@@ -6,25 +6,31 @@ namespace :temp do
   end
   
   def remap_campaign_line(line, remaps)
+    # puts "remapping"
     line = remap_line(line, location_id_position=1, location_type_position=2, remaps)
   end
   
   def remap_line(line, location_id_position, location_type_position, remaps)
     fields = line.split("\t")
-    location_id = fields[location_id_position]
-    location_type = fields[location_type_position].constantize
-    puts "#{location_id} #{location_type}"
+    location_id = fields[location_id_position].to_i
+    location_type = fields[location_type_position]
+    # puts "#{location_id} #{location_type}"
+    # puts fields.inspect
     fields[location_id_position] = get_remap(location_type, location_id, remaps, fields[location_id_position])
+    
+    # puts fields.inspect
     return fields.join("\t")
   end
   
   def get_remap(location_type, location_id, remaps, default)
     case location_type
-    when Stop
+    when 'Stop'
+      # puts "remapping a stop"
       remaps[:stops][location_id]
-    when StopArea
+    when 'StopArea'
+      # puts "remapping a stop area"
       remaps[:stop_areas][location_id]
-    when Route
+    when 'Route'
       remaps[:routes][location_id]
     else 
       default
@@ -69,10 +75,12 @@ namespace :temp do
     FasterCSV.parse(mapping_data, csv_options) do |line|
       location_type = line['Instance Type']
       location_id = line['Instance ID'].to_i
-      puts "#{location_type} #{location_id}"
+      # puts "#{location_type} #{location_id}"
       case location_type
       when 'Stop'
         atco_code = line['Stop ATCO code']
+        # manual fix for two London Bridges
+        atco_code = '910GLNDNBDC' if atco_code == '910GLNDNBDE'
         mapped_stop = Stop.find_by_atco_code(atco_code)
         raise "Couldn't map stop #{atco_code}" unless mapped_stop
         remaps[:stops][location_id] = mapped_stop.id
@@ -90,11 +98,21 @@ namespace :temp do
                                                              AND (number = ? or cached_description = ?)
                                                              AND operator_code = ?',
                                                              transport_mode_id, number, description, operator_code])
+        
+        if mapped_locations.size == 0
+          mapped_locations = Route.find(:all, :conditions => ['transport_mode_id = ? 
+                                                               AND (cached_description = ?)',
+                                                               transport_mode_id, description])
+          
+        end
         if mapped_locations.size == 1
           mapped_route = mapped_locations.first
           remaps[:routes][location_id] = mapped_route.id
+          if transport_mode_id != '6'
+            puts "mapping #{location_id} #{transport_mode_id} #{number} #{operator_code} #{description} to #{mapped_route.number} #{mapped_route.description} #{mapped_route.id}"
+          end
         else
-          puts "Couldn't map route #{transport_mode_id} #{number} #{operator_code}"
+          # puts "Couldn't map route #{transport_mode_id} '#{number}' '#{operator_code}' '#{description}'"
         end
       when 'Operator'
         operator_name = line['Operator name']
@@ -146,29 +164,38 @@ namespace :temp do
       when 'OperatorContact'
         operator_id = line['Operator contact operator id']
         operator_location_id = line['Operator contact location id'] 
+        operator_location_type = line['Operator contact location type'] 
         operator_email = line['Operator contact email']
         category = line['Operator contact category']
-        puts operator_email
-        puts category
+        # puts operator_email
+        # puts category
+        # manual fix for stagecoach 
+        operator_id = '3580' if operator_id == '2613'
         new_operator_id = remaps[:operators][operator_id.to_i]
+        new_location_id = remaps[:stop_areas][operator_location_id.to_i]
+        # manual fix for abellio
+        new_operator_id = 57 if operator_id == '2555'
+
+        # manual fix for two london bridges
+        new_location_id = 74755 if new_location_id == 74756
         if operator_location_id 
           mapped_contacts = OperatorContact.find(:all, :conditions => ['operator_id = ?
                                                                         AND location_id = ?
                                                                         AND email = ?
                                                                         AND category = ?',
-                                                                        new_operator_id, operator_location_id, operator_email, category])
+                                                                        new_operator_id, new_location_id, operator_email.strip, category.strip])
         else
           mapped_contacts = OperatorContact.find(:all, :conditions => ['operator_id = ?
                                                                         AND location_id is null
                                                                         AND email = ?
                                                                         AND category = ?',
-                                                                        new_operator_id, operator_email, category])
+                                                                        new_operator_id, operator_email.strip, category.strip])
 
         end
         if mapped_contacts.size == 1
           remaps[:operator_contacts][location_id] = mapped_contacts.first
         else
-          raise "Couldn't map operator contact #{new_operator_id} #{operator_location_id} #{operator_email} #{category}"
+          raise "Couldn't map operator contact #{new_operator_id} #{new_location_id} #{operator_email} #{category}"
         end
       else 
         raise "Unrecognized location type #{location_type} when mapping locations"
@@ -312,7 +339,7 @@ namespace :temp do
               identifying_data[:operator_contact_email],
               identifying_data[:operator_contact_category]]
     mapping_file.write(fields.join("\t")+"\n")
-    puts "writing"
+    # puts "writing"
   end
 
   
