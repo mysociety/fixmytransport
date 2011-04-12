@@ -67,7 +67,10 @@ namespace :temp do
       else raise "Unexpected type of sent email recipient #{sent_email.recipient.type}"
       end
     end
-    
+    SubRoute.find(:all).each do |sub_route|
+      write_mapping_line(sub_route.from_station)
+      write_mapping_line(sub_route.to_station)
+    end
     mapping_file.close()
   end
   
