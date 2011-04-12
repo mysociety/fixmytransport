@@ -58,6 +58,10 @@ class Operator < ActiveRecord::Base
                                                        AND location_type is null'])
   end
 
+  def codes
+    operator_codes.map{ |operator_code| operator_code.code }.uniq
+  end
+  
   def categories(location)
     contacts = self.contacts_for_location(location)
     if contacts.empty?

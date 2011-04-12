@@ -431,11 +431,11 @@ class Route < ActiveRecord::Base
     if !options.has_key?(:order)
       options[:order] = 'number ASC'
     end
-    query = 'id not in (SELECT route_id FROM route_operators)'
+    query = 'routes.id not in (SELECT route_id FROM route_operators)'
     params = []
-    if options[:operator_code]
-      query += " AND route_source_admin_areas.operator_code = ?"
-      params << options[:operator_code]
+    if options[:operator_codes]
+      query += " AND route_source_admin_areas.operator_code in (?)"
+      params << options[:operator_codes]
     end
     params = [query] + params
     find(:all, :conditions => params,

@@ -23,7 +23,8 @@
             %td.route-terminuses= route_operator.route.description
             %td= link_to t(:external_search_route), external_search_link("#{route_operator.route.description}"), :target => '_blank'
             %td
-              != route_operator_fields.hidden_field :id
+              - if !route_operator.new_record?
+                != route_operator_fields.hidden_field :id
               != route_operator_fields.hidden_field :route_id
               - if route_operator.new_record? 
                 != route_operator_fields.check_box :_add, :class => 'check-route-operator'
