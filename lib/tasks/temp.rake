@@ -4,6 +4,14 @@ namespace :temp do
   
   def remap_problem_line(line, remaps)
     line = remap_line(line, location_id_position=3, location_type_position=4, remaps)
+    fields = line.split("\t")
+    operator_id = fields[11].to_i
+    if operator_id > 0
+      operator_id = get_remap('Operator', operator_id, remaps, operator_id)
+      fields[11] = operator_id
+      line = fields.join("\t")
+    end
+    line
   end
   
   def remap_campaign_line(line, remaps)
@@ -143,7 +151,8 @@ namespace :temp do
         operator_code = line['Route operator code']
         description = line['Route description']
         manual_mappings = { 9071 => 46428,
-                           9416 => 47386 }
+                            9416 => 47386,
+                            19679 => 37470 }
         if manual_mappings[location_id]
           mapped_locations = [Route.find(manual_mappings[location_id])]
         else
@@ -163,7 +172,9 @@ namespace :temp do
           mapped_route = mapped_locations.first
           remaps[:routes][location_id] = mapped_route.id
         else
-          # puts "Couldn't map route #{location_id} #{transport_mode_id} '#{number}' '#{operator_code}' '#{description}'"
+          if transport_mode_id != '6'
+            raise "Couldn't map route #{location_id} #{transport_mode_id} '#{number}' '#{operator_code}' '#{description}'"
+          end
         end
       when 'Operator'
         operator_name = line['Operator name']
@@ -187,7 +198,8 @@ namespace :temp do
                                      'Abellio' => 'Abellio London', 
                                      'First' => 'First (in the London area)', 
                                      'First South Yorkshire Ltd' => 'First South Yorkshire',
-                                     'London United' => 'Transdev London United'}
+                                     'London United' => 'Transdev London United', 
+                                     'Metroline' => 'Metroline Travel'}
         if mapped_operators.empty? and manual_operator_mappings.keys.include?(operator_name)
           mapped_operators = Operator.find(:all, 
                                            :conditions => ["lower(name) = ? ", 
@@ -400,9 +412,10 @@ namespace :temp do
   desc 'Dump sql files for tables that contain user data into a directory identfied by DIR'
   task :dump_user_tables => :environment do 
     check_for_dir
-    port = ENV['PORT']
-    database = ENV['DATABASE']
-    user = ENV['USER']
+    port = ActiveRecord::Base.configurations[RAILS_ENV]['port']
+    database = ActiveRecord::Base.configurations[RAILS_ENV]['database']
+    user = ActiveRecord::Base.configurations[RAILS_ENV]['username']
+
     dir = ENV['DIR']
     user_tables = [:assignments, 
                    :campaign_events, 
@@ -425,6 +438,12 @@ namespace :temp do
       output_file = File.join(dir, "#{user_table}.sql")
       system("pg_dump --port=#{port} --data-only -t #{user_table} -U #{user} #{database} > #{output_file}")
     end
+  end
+  
+  desc 'Load dumped sql files for user data, rewrite them and load them'  
+  task :load_user_tables => :environment do
+    check_for_dir
+    dir = ENV['DIR']
     
     # campaigns - location_id, location_type
     campaigns_data = File.read(File.join(dir,"campaigns.sql"))
