@@ -94,25 +94,30 @@ namespace :temp do
         number = line['Route number']
         operator_code = line['Route operator code']
         description = line['Route description']
-        mapped_locations = Route.find(:all, :conditions => ['transport_mode_id = ? 
-                                                             AND (number = ? or cached_description = ?)
-                                                             AND operator_code = ?',
-                                                             transport_mode_id, number, description, operator_code])
-        
-        if mapped_locations.size == 0
+        manual_mappings = {9071 => 46428}
+        if manual_mappings[location_id]
+          mapped_locations = [Route.find(manual_mappings[location_id])]
+        else
           mapped_locations = Route.find(:all, :conditions => ['transport_mode_id = ? 
-                                                               AND (cached_description = ?)',
-                                                               transport_mode_id, description])
+                                                               AND (number = ? or cached_description = ?)
+                                                               AND operator_code = ?',
+                                                               transport_mode_id, number, description, operator_code])
+        
+          if mapped_locations.size == 0
+            mapped_locations = Route.find(:all, :conditions => ['transport_mode_id = ? 
+                                                                 AND (cached_description = ?)',
+                                                                 transport_mode_id, description])
           
+          end
         end
         if mapped_locations.size == 1
           mapped_route = mapped_locations.first
           remaps[:routes][location_id] = mapped_route.id
           if transport_mode_id != '6'
-            puts "mapping #{location_id} #{transport_mode_id} #{number} #{operator_code} #{description} to #{mapped_route.number} #{mapped_route.description} #{mapped_route.id}"
+            # puts "mapping #{location_id} #{transport_mode_id} #{number} #{operator_code} #{description} to #{mapped_route.number} #{mapped_route.description} #{mapped_route.id}"
           end
         else
-          # puts "Couldn't map route #{transport_mode_id} '#{number}' '#{operator_code}' '#{description}'"
+          puts "Couldn't map route #{location_id} #{transport_mode_id} '#{number}' '#{operator_code}' '#{description}'"
         end
       when 'Operator'
         operator_name = line['Operator name']
@@ -134,7 +139,7 @@ namespace :temp do
                                      'Stagecoach East Midlands' => 'Stagecoach in Bassetlaw', 
                                      'Countryliner Coach Hire' => 'Countryliner Coach Hire', 
                                      'Abellio' => 'Abellio London', 
-                                     'First' => 'Surrey Connect', 
+                                     # 'First' => 'Surrey Connect', 
                                      'First South Yorkshire Ltd' => 'First South Yorkshire',
                                      'London United' => 'Transdev London United'}
         if mapped_operators.empty? and manual_operator_mappings.keys.include?(operator_name)
