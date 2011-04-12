@@ -1,4 +1,5 @@
 require 'fastercsv'
+require 'yaml'
 namespace :temp do
   
   def remap_problem_line(line, remaps)
@@ -6,8 +7,44 @@ namespace :temp do
   end
   
   def remap_campaign_line(line, remaps)
-    # puts "remapping"
     line = remap_line(line, location_id_position=1, location_type_position=2, remaps)
+  end
+  
+  def remap_outgoing_message_line(line, remaps)
+    line = remap_line(line, location_id_position=8, location_type_position=9, remaps)
+  end
+  
+  def remap_sent_email_line(line, remaps)
+    line = remap_line(line, location_id_position=3, location_type_position=7, remaps)
+  end
+  
+  def remap_assignment_line(line, remaps)
+    fields = line.split("\t")
+    if fields[8] != 'write-to-other'
+      data_string = fields[5].gsub('\n', "\n")  
+      data =  YAML.load(data_string)
+      if data[:organizations]
+        data[:organizations].each do |organization|
+          if organization[:type] == 'Operator'
+            operator_id = get_remap('Operator', organization[:id].to_i, remaps, organization[:id].to_i)
+            operator = Operator.find(operator_id)
+            organization[:id] = operator_id
+            organization[:name] = operator.name
+          end
+        end
+        fields[5] = YAML.dump(data).gsub("\n", '\n')
+      end
+    end
+    line = fields.join("\t")
+  end
+  
+  def remap_sub_route_line(line, remaps)
+    fields = line.split("\t")
+    from_station_id = fields[1].to_i
+    to_station_id = fields[2].to_i
+    fields[1] = get_remap('StopArea', from_station_id, remaps, fields[1])
+    fields[2] = get_remap('StopArea', to_station_id, remaps, fields[2])
+    return fields.join("\t")
   end
   
   def remap_line(line, location_id_position, location_type_position, remaps)
@@ -23,7 +60,7 @@ namespace :temp do
   end
   
   def get_remap(location_type, location_id, remaps, default)
-    case location_type
+    result = case location_type
     when 'Stop'
       # puts "remapping a stop"
       remaps[:stops][location_id]
@@ -32,9 +69,20 @@ namespace :temp do
       remaps[:stop_areas][location_id]
     when 'Route'
       remaps[:routes][location_id]
+    when 'CouncilContact'
+      remaps[:council_contacts][location_id]
+    when 'OperatorContact'
+      remaps[:operator_contacts][location_id]
+    when 'Operator'
+      remaps[:operators][location_id]
     else 
+      puts "Didn't remap #{location_type} #{location_id}" if location_id.to_i > 0
       default
     end
+    if !result
+      puts "Mapped to nil #{location_type} #{location_id}"
+    end
+    result
   end
   
   def csv_options
@@ -94,7 +142,8 @@ namespace :temp do
         number = line['Route number']
         operator_code = line['Route operator code']
         description = line['Route description']
-        manual_mappings = {9071 => 46428}
+        manual_mappings = { 9071 => 46428,
+                           9416 => 47386 }
         if manual_mappings[location_id]
           mapped_locations = [Route.find(manual_mappings[location_id])]
         else
@@ -103,7 +152,7 @@ namespace :temp do
                                                                AND operator_code = ?',
                                                                transport_mode_id, number, description, operator_code])
         
-          if mapped_locations.size == 0
+          if mapped_locations.size == 0 and transport_mode_id != '6'
             mapped_locations = Route.find(:all, :conditions => ['transport_mode_id = ? 
                                                                  AND (cached_description = ?)',
                                                                  transport_mode_id, description])
@@ -113,11 +162,8 @@ namespace :temp do
         if mapped_locations.size == 1
           mapped_route = mapped_locations.first
           remaps[:routes][location_id] = mapped_route.id
-          if transport_mode_id != '6'
-            # puts "mapping #{location_id} #{transport_mode_id} #{number} #{operator_code} #{description} to #{mapped_route.number} #{mapped_route.description} #{mapped_route.id}"
-          end
         else
-          puts "Couldn't map route #{location_id} #{transport_mode_id} '#{number}' '#{operator_code}' '#{description}'"
+          # puts "Couldn't map route #{location_id} #{transport_mode_id} '#{number}' '#{operator_code}' '#{description}'"
         end
       when 'Operator'
         operator_name = line['Operator name']
@@ -139,7 +185,7 @@ namespace :temp do
                                      'Stagecoach East Midlands' => 'Stagecoach in Bassetlaw', 
                                      'Countryliner Coach Hire' => 'Countryliner Coach Hire', 
                                      'Abellio' => 'Abellio London', 
-                                     # 'First' => 'Surrey Connect', 
+                                     'First' => 'First (in the London area)', 
                                      'First South Yorkshire Ltd' => 'First South Yorkshire',
                                      'London United' => 'Transdev London United'}
         if mapped_operators.empty? and manual_operator_mappings.keys.include?(operator_name)
@@ -162,7 +208,7 @@ namespace :temp do
                                                                     AND email = ?',
                                                                     area_id, category, email])
         if mapped_contacts.size == 1
-          remaps[:council_contacts][location_id] = mapped_contacts.first
+          remaps[:council_contacts][location_id] = mapped_contacts.first.id
         else
           raise "Couldn't map council contact area #{area_id} #{category} #{email}"
         end
@@ -198,7 +244,7 @@ namespace :temp do
 
         end
         if mapped_contacts.size == 1
-          remaps[:operator_contacts][location_id] = mapped_contacts.first
+          remaps[:operator_contacts][location_id] = mapped_contacts.first.id
         else
           raise "Couldn't map operator contact #{new_operator_id} #{new_location_id} #{operator_email} #{category}"
         end
@@ -295,7 +341,10 @@ namespace :temp do
       else raise "Unexpected type of sent email recipient #{sent_email.recipient.type}"
       end
     end
-    
+    SubRoute.find(:all).each do |sub_route|
+      write_mapping_line(sub_route.from_station)
+      write_mapping_line(sub_route.to_station)
+    end
     mapping_file.close()
   end
   
@@ -396,28 +445,98 @@ namespace :temp do
         data_section = true
       end
     end
-    # # problems - location_id, location_type, operator_id
-    # problems_data = File.read(File.join(dir, "problems.sql"))
-    # problems_output = File.open(File.join(dir, "problems_remapped.sql"), 'w')
+    # problems - location_id, location_type, operator_id
+    problems_data = File.read(File.join(dir, "problems.sql"))
+    problems_output = File.open(File.join(dir, "problems_remapped.sql"), 'w')
+    data_section = false
+    problems_data.each do |line|
+      if /^\\.$/.match(line)
+        data_section = false
+      end
+      if data_section
+        problems_output.write(remap_problem_line(line, remaps))
+      else 
+        problems_output.write(line)
+      end
+      if /^COPY problems.*FROM stdin;/.match(line)
+        data_section = true
+      end
+    end
+    
+    # outgoing messages receipient id, recipient type
+    outgoing_messages_data = File.read(File.join(dir, "outgoing_messages.sql"))
+    outgoing_messages_output = File.open(File.join(dir, "outgoing_messages_remapped.sql"), 'w')
+    data_section = false
+    outgoing_messages_data.each do |line|
+      if /^\\.$/.match(line)
+        data_section = false
+      end
+      if data_section
+        outgoing_messages_output.write(remap_outgoing_message_line(line, remaps))
+      else 
+        outgoing_messages_output.write(line)
+      end
+      if /^COPY outgoing_messages.*FROM stdin;/.match(line)
+        data_section = true
+      end
+    end
+    
+    # sub_routes - from_station_id, to_station_id
+    # sub_routes_data = File.read(File.join(dir, "sub_routes.sql"))
+    # sub_routes_output = File.open(File.join(dir, "sub_routes_remapped.sql"), 'w')
     # data_section = false
-    # problems_data.each do |line|
+    # sub_routes_data.each do |line|
     #   if /^\\.$/.match(line)
     #     data_section = false
     #   end
     #   if data_section
-    #     problems_output.write(remap_problem_line(line, remaps))
+    #     sub_routes_output.write(remap_sub_route_line(line, remaps))
     #   else 
-    #     problems_output.write(line)
+    #     sub_routes_output.write(line)
     #   end
-    #   if /^COPY problems.*FROM stdin;/.match(line)
+    #   if /^COPY sub_routes.*FROM stdin;/.match(line)
     #     data_section = true
     #   end
     # end
-    # outgoing messages receipient id, recipient type
-    # sub_routes - from_station_id, to_station_id
+    
     # routes_sub_routes - route_id
-    #sent messages - recipient id, recipient_type
+    
+    
+    #sent emails - recipient id, recipient_type
+    sent_emails_data = File.read(File.join(dir, "sent_emails.sql"))
+    sent_emails_output = File.open(File.join(dir, "sent_emails_remapped.sql"), 'w')
+    data_section = false
+    sent_emails_data.each do |line|
+      if /^\\.$/.match(line)
+        data_section = false
+      end
+      if data_section
+        sent_emails_output.write(remap_sent_email_line(line, remaps))
+      else 
+        sent_emails_output.write(line)
+      end
+      if /^COPY sent_emails.*FROM stdin;/.match(line)
+        data_section = true
+      end
+    end
+    
     # assignments - data[:operators]
+    assignments_data = File.read(File.join(dir, "assignments.sql"))
+    assignments_output = File.open(File.join(dir, "assignments_remapped.sql"), 'w')
+    data_section = false
+    assignments_data.each do |line|
+      if /^\\.$/.match(line)
+        data_section = false
+      end
+      if data_section
+        assignments_output.write(remap_assignment_line(line, remaps))
+      else 
+        assignments_output.write(line)
+      end
+      if /^COPY assignments.*FROM stdin;/.match(line)
+        data_section = true
+      end
+    end
   end
   
 end
