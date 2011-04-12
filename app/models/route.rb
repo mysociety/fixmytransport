@@ -245,6 +245,7 @@ class Route < ActiveRecord::Base
   end
 
   def cache_route_description
+    self.cached_description = nil
     self.cached_description = self.description
   end
 
