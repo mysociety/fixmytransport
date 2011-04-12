@@ -342,8 +342,8 @@ namespace :temp do
       end
     end
     SubRoute.find(:all).each do |sub_route|
-      write_mapping_line(sub_route.from_station)
-      write_mapping_line(sub_route.to_station)
+      write_mapping_line(sub_route.from_station, mapping_file)
+      write_mapping_line(sub_route.to_station, mapping_file)
     end
     mapping_file.close()
   end
@@ -445,6 +445,8 @@ namespace :temp do
         data_section = true
       end
     end
+    campaigns_output.close()
+    
     # problems - location_id, location_type, operator_id
     problems_data = File.read(File.join(dir, "problems.sql"))
     problems_output = File.open(File.join(dir, "problems_remapped.sql"), 'w')
@@ -462,6 +464,7 @@ namespace :temp do
         data_section = true
       end
     end
+    problems_output.close()
     
     # outgoing messages receipient id, recipient type
     outgoing_messages_data = File.read(File.join(dir, "outgoing_messages.sql"))
@@ -480,25 +483,26 @@ namespace :temp do
         data_section = true
       end
     end
+    outgoing_messages_output.close()
     
     # sub_routes - from_station_id, to_station_id
-    # sub_routes_data = File.read(File.join(dir, "sub_routes.sql"))
-    # sub_routes_output = File.open(File.join(dir, "sub_routes_remapped.sql"), 'w')
-    # data_section = false
-    # sub_routes_data.each do |line|
-    #   if /^\\.$/.match(line)
-    #     data_section = false
-    #   end
-    #   if data_section
-    #     sub_routes_output.write(remap_sub_route_line(line, remaps))
-    #   else 
-    #     sub_routes_output.write(line)
-    #   end
-    #   if /^COPY sub_routes.*FROM stdin;/.match(line)
-    #     data_section = true
-    #   end
-    # end
-    
+    sub_routes_data = File.read(File.join(dir, "sub_routes.sql"))
+    sub_routes_output = File.open(File.join(dir, "sub_routes_remapped.sql"), 'w')
+    data_section = false
+    sub_routes_data.each do |line|
+      if /^\\.$/.match(line)
+        data_section = false
+      end
+      if data_section
+        sub_routes_output.write(remap_sub_route_line(line, remaps))
+      else 
+        sub_routes_output.write(line)
+      end
+      if /^COPY sub_routes.*FROM stdin;/.match(line)
+        data_section = true
+      end
+    end
+    sub_routes_output.close()
     # routes_sub_routes - route_id
     
     
@@ -519,6 +523,7 @@ namespace :temp do
         data_section = true
       end
     end
+    sent_emails_output.close()
     
     # assignments - data[:operators]
     assignments_data = File.read(File.join(dir, "assignments.sql"))
@@ -536,6 +541,24 @@ namespace :temp do
       if /^COPY assignments.*FROM stdin;/.match(line)
         data_section = true
       end
+    end
+    assignments_output.close()
+    
+    user_tables.each do |user_table|
+      if File.exists?(File.join(dir, "#{user_table}_remapped.sql"))
+        load_file = File.join(dir, "#{user_table}_remapped.sql")
+      else
+        load_file = File.join(dir, "#{user_table}.sql")
+      end
+      port = ActiveRecord::Base.configurations[RAILS_ENV]['port']
+      database = ActiveRecord::Base.configurations[RAILS_ENV]['database']
+      user = ActiveRecord::Base.configurations[RAILS_ENV]['username']
+      delete_command = "psql -p#{port} -c 'delete from #{user_table}' #{database}"
+      command = "psql -p#{port} #{database} < #{load_file}"
+      puts delete_command
+      puts command
+      system(delete_command)
+      system(command)
     end
   end
   
