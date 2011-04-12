@@ -20,7 +20,7 @@
   %h3.admin-section-control= t(:route_segments)
   .admin-section= render :partial => "route_segments", :locals => { :f => f }
   %p=link_to t(:on_main_site), main_url(route_path(@route.region, @route)), :target => '_blank'
-  %p= link_to t(:external_search_route), external_search_link("#{@route.name} #{@route.area}"), :target => '_blank'
+  %p= link_to t(:external_search_route), external_search_link("#{@route.description}"), :target => '_blank'
   = render :partial => "route_operators", :locals => { :f => f, :route_operators => @route.route_operators, :title => t(:operators) }
   = render :partial => "route_operators", :locals => { :f => f, :route_operators => @route_operators, :title => t(:operator_code_matches) }
   %h3= t(:assign_an_operator)
