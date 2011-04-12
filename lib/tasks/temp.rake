@@ -68,8 +68,8 @@ namespace :temp do
       end
     end
     SubRoute.find(:all).each do |sub_route|
-      write_mapping_line(sub_route.from_station)
-      write_mapping_line(sub_route.to_station)
+      write_mapping_line(sub_route.from_station, mapping_file)
+      write_mapping_line(sub_route.to_station, mapping_file)
     end
     mapping_file.close()
   end
@@ -120,6 +120,5 @@ namespace :temp do
               identifying_data[:operator_contact_email],
               identifying_data[:operator_contact_category]]
     mapping_file.write(fields.join("\t")+"\n")
-    puts "writing"
   end
 end
