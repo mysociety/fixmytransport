@@ -1,4 +1,37 @@
 namespace :temp do
+  
+  desc 'Dump sql files for tables that contain user data into a directory identfied by DIR'
+  task :dump_user_tables => :environment do 
+    check_for_dir
+    port = ActiveRecord::Base.configurations[RAILS_ENV]['port']
+    database = ActiveRecord::Base.configurations[RAILS_ENV]['database']
+    user = ActiveRecord::Base.configurations[RAILS_ENV]['username']
+
+    dir = ENV['DIR']
+    user_tables = [:assignments, 
+                   :campaign_events, 
+                   :campaign_supporters, 
+                   :campaign_updates, 
+                   :campaigns, 
+                   :comments, 
+                   :incoming_messages,
+                   :location_searches,
+                   :outgoing_messages, 
+                   :problems, 
+                   :raw_emails,
+                   :route_sub_routes,
+                   :sent_emails,
+                   :sessions,
+                   :sub_routes,
+                   :updates, 
+                   :users]
+    user_tables.each do |user_table|
+      output_file = File.join(dir, "#{user_table}.sql")
+      system("pg_dump --port=#{port} --data-only -t #{user_table} -U #{user} #{database} > #{output_file}")
+    end
+  end
+  
+  
   task :create_mappings => :environment do 
     check_for_dir
     dir = ENV['DIR']
