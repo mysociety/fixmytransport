@@ -103,7 +103,7 @@ class CSVDumpATCO(mysociety.atcocif.ATCO):
                 self.read_string(data)
         else:
             # Otherwise, just read it
-            self.input_filename = file
+            self.input_filename = f
             return self.read_file_handle(open(f), os.stat(f)[6])
     
     # reload all ATCO files, setting load function to given one
@@ -184,7 +184,7 @@ class CSVDumpATCO(mysociety.atcocif.ATCO):
                 vehicle_code = item.vehicle_code(self)
                 default_code = False
             except:
-                vehicle_code = self.transport_mode_mappings[item.vehicle_type]
+                vehicle_code = self.transport_mode_mappings()[item.vehicle_type]
                 default_code = True
         else:
             vehicle_code = self.vehicle_code_from_filename()
@@ -206,7 +206,7 @@ class CSVDumpATCO(mysociety.atcocif.ATCO):
     def vehicle_code_from_filename(self):
         basename, ext = os.path.splitext(self.input_filename)
         name_parts = basename.split("_")
-        return self.transport_mode_mappings[name_parts[-1]]
+        return self.transport_mode_mappings()[name_parts[-1]]
 
     def new_stop_code(self, stop_code):
         if not self.stop_code_mappings:

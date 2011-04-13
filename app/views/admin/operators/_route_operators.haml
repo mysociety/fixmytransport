@@ -9,7 +9,7 @@
       %tr
         %th= t(:name)
         %th= t(:region)
-        %th= t(:terminuses)
+        %th= t(:description)
         %th= t(:search) 
         - if route_operators.first.new_record?
           %th= t(:assign_to_operator)
@@ -20,10 +20,11 @@
           %tr{ :class => cycle('odd', 'even') }
             %td!= "#{link_to route_operator.route.name, main_url(location_path(route_operator.route)), :target => '_blank'} #{link_to("(#{t(:admin)})", admin_url(admin_route_path(route_operator.route.id)))}"
             %td= route_operator.route.region.name
-            %td.route-terminuses= route_operator.route.area
-            %td= link_to t(:external_search_route), external_search_link("#{route_operator.route.name} #{route_operator.route.area}"), :target => '_blank'
+            %td.route-terminuses= route_operator.route.description
+            %td= link_to t(:external_search_route), external_search_link("#{route_operator.route.description}"), :target => '_blank'
             %td
-              != route_operator_fields.hidden_field :id
+              - if !route_operator.new_record?
+                != route_operator_fields.hidden_field :id
               != route_operator_fields.hidden_field :route_id
               - if route_operator.new_record? 
                 != route_operator_fields.check_box :_add, :class => 'check-route-operator'

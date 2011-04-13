@@ -2,10 +2,12 @@ class Admin::RoutesController < ApplicationController
   
   layout "admin" 
   cache_sweeper :route_sweeper
+  helper_method :sort_column, :sort_direction
 
   def show
-    @route = Route.find(params[:id])
-    @route_operators = make_route_operators(@route.operator_code, @route)
+    @route = Route.find(params[:id], :include => [ {:journey_patterns => 
+                                                      {:route_segments  => [:from_stop, :to_stop]}}])
+    @route_operators = make_route_operators(@route)
   end
   
   def index
@@ -17,12 +19,12 @@ class Admin::RoutesController < ApplicationController
     end
     if !params[:query].blank?
       query = params[:query].downcase
-      query_clause = "(lower(name) like ? OR lower(number) = ?"
+      query_clause = "(lower(routes.name) like ? OR lower(number) = ?"
       conditions << "%%#{query}%%" 
       conditions << query
       # numeric?
       if query.to_i.to_s == query
-        query_clause += " OR id = ?"
+        query_clause += " OR routes.id = ?"
         conditions << query.to_i
       end
       query_clause += ")"
@@ -32,7 +34,8 @@ class Admin::RoutesController < ApplicationController
     @routes = Route.paginate :select => "distinct routes.*",
                              :page => params[:page], 
                              :conditions => conditions, 
-                             :order => 'number'
+                             :include => :region,
+                             :order => "#{sort_column} #{sort_direction}"
   end
   
   def new
@@ -59,12 +62,15 @@ class Admin::RoutesController < ApplicationController
   end
   
   def update
-    @route = Route.find(params[:id])
+    # The inclusion of journey_patterns and route_segments is required for changes to be saved correctly - 
+    # several callbacks on route use the associations and they need to all be acting on the same
+    # model instances, otherwise changes don't get saved.
+    @route = Route.find(params[:id], :include => {:journey_patterns => :route_segments})
     if @route.update_attributes(params[:route])
       flash[:notice] = t(:route_updated)
       redirect_to admin_url(admin_route_path(@route.id))
     else
-      @route_operators = make_route_operators(@route.operator_code, @route)
+      @route_operators = make_route_operators(@route)
       flash[:error] = t(:route_problem)
       render :show
     end
@@ -74,7 +80,7 @@ class Admin::RoutesController < ApplicationController
     @route = Route.find(params[:id])
     if @route.campaigns.size > 0
       flash[:error] = t(:route_has_campaigns)
-      @route_operators = make_route_operators(@route.operator_code, @route)
+      @route_operators = make_route_operators(@route)
       render :show
     else
       @route.destroy
@@ -99,14 +105,25 @@ class Admin::RoutesController < ApplicationController
   
   private
   
-  def make_route_operators code, route
-    operators = Operator.find(:all, :conditions => ["code = ? AND id not in 
+  def make_route_operators route
+    codes = route.route_source_admin_areas.map{ |route_source_admin_area| route_source_admin_area.operator_code }
+    operators = Operator.find(:all, :conditions => ["operator_codes.code in (?) 
+                                                     AND operators.id not in 
                                                        (SELECT operator_id
                                                         FROM route_operators 
-                                                        WHERE route_id = ? )", code, route.id])
+                                                        WHERE route_id = ? )", codes, route.id],
+                                    :include => :operator_codes)
     operators.map{ |operator| RouteOperator.new(:operator => operator) }
   end
   
 
+  def sort_column
+    columns = Route.column_names + ["regions.name"]
+    columns.include?(params[:sort]) ? params[:sort] : "number"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+  end
 
 end

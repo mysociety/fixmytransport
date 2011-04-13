@@ -1,44 +1,39 @@
 require 'fastercsv'
 require 'iconv'
 
-class Parsers::NaptanParser 
+class Parsers::NaptanParser
 
   def initialize
   end
-  
+
   def csv_options
-    { :quote_char => '"', 
-      :col_sep =>',', 
-      :row_sep =>:auto, 
+    { :quote_char => '"',
+      :col_sep =>',',
+      :row_sep =>:auto,
       :return_headers => false,
       :headers => :first_row,
       :encoding => 'N' }
   end
-  
+
   def convert_encoding filepath
     Iconv.iconv('utf-8', 'ISO_8859-1', File.read(filepath)).join
   end
-  
+
   def parse_rail_references filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      stop = Stop.find_by_atco_code(row['AtcoCode'])
+      stop = Stop.find_by_atco_code((row['AtcoCode'] or row["NaPTAN"]))
       if ! stop
         puts "*** Missing #{row['AtcoCode']} ***"
         next
       end
-      stop.tiploc_code = row["TiplocCode"]
-      stop.crs_code = row["CrsCode"]
-      if stop.common_name == 'Dalston Junction Rail Station' and stop.crs_code == 'DKJ'
-        stop.crs_code = 'DLJ'
-        puts "*** Manual fix: Dalston Junction Rail Station DKJ -> DLJ"
-      end
+      stop.tiploc_code = (row["TiplocCode"] or row["Tiploc Code"])
+      stop.crs_code = (row["CrsCode"] or row["CRS Code"])
       # puts "#{stop.common_name} #{stop.tiploc_code} #{stop.crs_code}"
-    
       yield stop
     end
   end
-  
+
   def parse_stop_area_hierarchy filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
@@ -47,7 +42,7 @@ class Parsers::NaptanParser
       yield StopAreaLink.build_edge(ancestor, descendant)
     end
   end
-  
+
   def parse_stop_area_types filepath
     csv_options = self.csv_options.merge(:encoding => 'U',  :col_sep => "\t")
     csv_data = File.read(filepath)
@@ -62,17 +57,17 @@ class Parsers::NaptanParser
       yield stop_area_type
     end
   end
-  
+
   def parse_stop_types filepath
     csv_options = self.csv_options.merge(:encoding => 'U')
     csv_data = File.read(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      stop_type = StopType.new(:code              => row['Value'], 
-                               :description       => row['Description'], 
-                               :on_street         => row['On Street'] == 'On street' ? true : false, 
-                               :point_type        => row['Type'], 
+      stop_type = StopType.new(:code              => row['Value'],
+                               :description       => row['Description'],
+                               :on_street         => row['On Street'] == 'On street' ? true : false,
+                               :point_type        => row['Type'],
                                :sub_type          => row['SubType'].blank? ? nil : row['SubType'],
-                               :version           => row['Version'])                   
+                               :version           => row['Version'])
       transport_mode_names = row['Mode'].split(',')
       transport_mode_names.each do |transport_mode_name|
         transport_mode = TransportMode.find_by_naptan_name(transport_mode_name)
@@ -81,7 +76,7 @@ class Parsers::NaptanParser
       yield stop_type
     end
   end
-  
+
   def parse_stop_area_memberships filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
@@ -97,11 +92,11 @@ class Parsers::NaptanParser
       end
     end
   end
-  
+
   def parse_stop_areas filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
+      spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false)
       if spatial_extensions
         coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
       else
@@ -109,9 +104,9 @@ class Parsers::NaptanParser
       end
       yield StopArea.new( :code                      => (row['StopAreaCode'] or row['GroupID']),
                           :name                      => (row['Name'] or row['GroupName']),
-                          :administrative_area_code  => row['AdministrativeAreaCode'], 
-                          :area_type                 => (row['StopAreaType'] or row['Type']), 
-                          :grid_type                 => row['GridType'], 
+                          :administrative_area_code  => row['AdministrativeAreaCode'],
+                          :area_type                 => (row['StopAreaType'] or row['Type']),
+                          :grid_type                 => row['GridType'],
                           :easting                   => row['Easting'],
                           :northing                  => row['Northing'],
                           :coords                    => coords,
@@ -124,11 +119,11 @@ class Parsers::NaptanParser
                           :status                    => row['Status'])
     end
   end
-  
+
   def parse_stops filepath
     csv_data = convert_encoding(filepath)
-    spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
-    FasterCSV.parse(csv_data, csv_options) do |row| 
+    spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false)
+    FasterCSV.parse(csv_data, csv_options) do |row|
       if spatial_extensions
         coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
       else
@@ -137,14 +132,14 @@ class Parsers::NaptanParser
       locality = Locality.find_by_code((row['NptgLocalityCode'] or row['NatGazID']))
       yield Stop.new( :atco_code                  => (row['AtcoCode'] or row['ATCOCode']),
                       :naptan_code                => (row['NaptanCode'] or row['SMSNumber']),
-                      :plate_code                 => row['PlateCode'], 
-                      :common_name                => row['CommonName'], 
-                      :short_common_name          => row['ShortCommonName'], 
-                      :landmark                   => clean_field(:landmark, row['Landmark']), 
+                      :plate_code                 => row['PlateCode'],
+                      :common_name                => row['CommonName'],
+                      :short_common_name          => row['ShortCommonName'],
+                      :landmark                   => clean_field(:landmark, row['Landmark']),
                       :street                     => clean_field(:street, row['Street']),
-                      :crossing                   => clean_field(:crossing, row['Crossing']), 
-                      :indicator                  => clean_field(:indicator, (row['Indicator'] or row['Identifier'])), 
-                      :bearing                    => (row['Bearing'] or row['Direction']), 
+                      :crossing                   => clean_field(:crossing, row['Crossing']),
+                      :indicator                  => clean_field(:indicator, (row['Indicator'] or row['Identifier'])),
+                      :bearing                    => (row['Bearing'] or row['Direction']),
                       :locality                   => locality,
                       :town                       => row['Town'],
                       :suburb                     => row['Suburb'],
@@ -168,9 +163,9 @@ class Parsers::NaptanParser
 
   def clean_field(field, value)
     null_value_indicators = { :landmark  => ['---', '*', 'Landmark not known', 'Unknown', 'N/A', '-', 'landmark','N', 'TBA', 'N/K', '-'],
-                              :indicator => ['---'], 
-                              :crossing  => ['*', '--', 'No'], 
-                              :street    =>  ['---', '-', 'N/A', 'No name', 'Street not known', 'Unclassified', 'N/K', 'Unknown', 'Unnamed Road', 'Unclassified Road'], 
+                              :indicator => ['---'],
+                              :crossing  => ['*', '--', 'No'],
+                              :street    =>  ['---', '-', 'N/A', 'No name', 'Street not known', 'Unclassified', 'N/K', 'Unknown', 'Unnamed Road', 'Unclassified Road'],
                             }
     if value && null_value_indicators[field].include?(value.strip)
       return nil

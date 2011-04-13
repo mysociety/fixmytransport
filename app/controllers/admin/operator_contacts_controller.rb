@@ -13,10 +13,6 @@ class Admin::OperatorContactsController < ApplicationController
   
   def create 
     @operator_contact = OperatorContact.new(params[:operator_contact])
-    # hack - should really be set in the form 
-    if @operator_contact.location_id
-      @operator_contact.location_type = 'StopArea'
-    end
     if @operator_contact.save
       flash[:notice] = t(:operator_contact_created)
       redirect_to(admin_url(admin_operator_contact_path(@operator_contact)))

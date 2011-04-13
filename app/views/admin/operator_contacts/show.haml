@@ -19,12 +19,12 @@
     %td= @operator_contact.confirmed
     %td= @operator_contact.deleted
     %td= @operator_contact.last_editor
-    - if @operator_contact.location
+    - if @operator_contact.location_id
       %td= @operator_contact.location.name
     - else
       %td
     %td= @operator_contact.notes  
-  -@operator_contact.versions.each do |version|
+  -@operator_contact.versions.reverse.each do |version|
     - if version.event == 'update'
       - contact = version.reify
       %tr{ :class => cycle('odd', 'even') }
@@ -33,4 +33,8 @@
         %td= contact.confirmed
         %td= contact.deleted
         %td= version.whodunnit
+        - if contact.location
+          %td= contact.location.name
+        - else
+          %td
         %td= contact.notes

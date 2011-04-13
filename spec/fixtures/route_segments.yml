@@ -17,6 +17,7 @@
 
 one:
   route: victoria_to_haywards_heath
+  journey_pattern: victoria_to_haywards_heath
   from_stop: victoria_station_one
   to_stop: clapham_junction
   from_stop_area: victoria_station_root
@@ -25,6 +26,7 @@ one:
   to_terminus: f
 two:
   route: victoria_to_haywards_heath
+  journey_pattern: victoria_to_haywards_heath
   from_stop: clapham_junction
   to_stop: croydon_station
   from_stop_area: clapham_junction
@@ -33,6 +35,7 @@ two:
   to_terminus: f
 three:
   route: victoria_to_haywards_heath
+  journey_pattern: victoria_to_haywards_heath
   from_stop: croydon_station
   to_stop: gatwick_airport_station
   from_stop_area: east_croydon_station
@@ -41,6 +44,7 @@ three:
   to_terminus: f
 four:
   route: victoria_to_haywards_heath  
+  journey_pattern: victoria_to_haywards_heath
   from_stop: gatwick_airport_station
   to_stop: haywards_heath_station_interchange
   from_stop_area: gatwick_airport_station
@@ -49,24 +53,28 @@ four:
   to_terminus: t
 five: 
   route: number_807_bus
+  journey_pattern: number_807_bus
   from_stop: bus_station
   to_stop: bethany_terrace
   from_terminus: f
   to_terminus: f
 six: 
   route: number_807_bus
+  journey_pattern: number_807_bus
   from_stop: bethany_terrace
   to_stop: arch_ne
   from_terminus: f
   to_terminus: f
 seven: 
   route: aldershot_807_bus
+  journey_pattern: aldershot_807_bus
   from_stop: white_lion_n
   to_stop: white_lion_s
   from_terminus: t
   to_terminus: f
 eight:
   route: aldershot_807_bus
+  journey_pattern: aldershot_807_bus
   from_stop: white_lion_s
   to_stop: wybourne_lane
   from_terminus: f

@@ -101,8 +101,6 @@ function route_init() {
      points.push(toPoint)
      bounds.extend(fromPoint);
      bounds.extend(toPoint);
-     addRouteMarker(fromCoords, bounds, markers, coords[0], false);
-     addRouteMarker(toCoords, bounds, markers, coords[1], false);
      lineString = new OpenLayers.Geometry.LineString(points);
      lineFeature = new OpenLayers.Feature.Vector(lineString, {projection: proj}, segmentStyle);
      lineFeature.segment_id = coords[2];

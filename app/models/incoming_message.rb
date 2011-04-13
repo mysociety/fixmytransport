@@ -9,7 +9,7 @@ class IncomingMessage < ActiveRecord::Base
     @mail ||= if raw_email.nil?
       nil
     else
-      mail = MySociety::Email::Mail.parse(raw_email.data)
+      mail = FixMyTransport::Email::Mail.parse(raw_email.data)
       mail.base64_decode
       mail
     end
@@ -38,25 +38,25 @@ class IncomingMessage < ActiveRecord::Base
   end
   
   def generate_main_body_text
-    main_part = MySociety::Email.get_main_body_text_part(self.mail)
+    main_part = FixMyTransport::Email.get_main_body_text_part(self.mail)
     if main_part.nil?
       text = I18n.translate(:no_body)
     else
       text = main_part.body
       # convert html to formatted plain text as we escape all html later
       if main_part.content_type == 'text/html'
-        text = MySociety::Email._get_attachment_text_internal_one_file(main_part.content_type, text)
+        text = FixMyTransport::Email._get_attachment_text_internal_one_file(main_part.content_type, text)
       end
     end
    
-    text = MySociety::Email.strip_uudecode_attachments(text)
+    text = FixMyTransport::Email.strip_uudecode_attachments(text)
         
     if text.size > 1000000 # 1 MB ish
       raise "main body text more than 1 MB, need to implement clipping like for attachment text, or there is some other MIME decoding problem or similar"
     end
     
     text = remove_privacy_sensitive_things(text)
-    folded_quoted_text = MySociety::Email.remove_quoting(text, 'FOLDED_QUOTED_SECTION')
+    folded_quoted_text = FixMyTransport::Email.remove_quoting(text, 'FOLDED_QUOTED_SECTION')
     self.main_body_text = text
     self.main_body_text_folded = folded_quoted_text
     self.save!
@@ -64,8 +64,8 @@ class IncomingMessage < ActiveRecord::Base
   end
   
   def find_attachment(url_part_number)
-    attachments = MySociety::Email.get_display_attachments(mail)
-    attachment = MySociety::Email.get_attachment_by_url_part_number(attachments, url_part_number)
+    attachments = FixMyTransport::Email.get_display_attachments(mail)
+    attachment = FixMyTransport::Email.get_attachment_by_url_part_number(attachments, url_part_number)
     attachment.body = remove_privacy_sensitive_things(attachment.body)
     attachment
   end
@@ -94,7 +94,7 @@ class IncomingMessage < ActiveRecord::Base
       end
     end
     text.strip!
-    return MySociety::Email.clean_linebreaks(text)
+    return FixMyTransport::Email.clean_linebreaks(text)
   end
   
   def remove_privacy_sensitive_things(text)

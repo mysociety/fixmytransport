@@ -1,0 +1,819 @@
+NPTDR File Region	NPTDR File Admin Area	ATCO Code	NPTDR Route Numbers
+South East	Kent	998016701	CoachRoute 2
+South West	Bristol	0100053214	BusRoute X10, BusRoute X11, BusRoute X14
+South West	Bristol	998015256	CoachRoute 672
+Yorkshire	South Yorkshire	998035374	CoachRoute 240, CoachRoute 465, CoachRoute 562
+West Midlands	Worcestershire	43010399801	BusRoute 192, BusRoute 318, BusRoute 732, BusRoute 733, BusRoute 736, BusRoute 752, BusRoute 792, BusRoute 864, BusRoute X95
+West Midlands	Worcestershire	43010313701	BusRoute 144
+West Midlands	Worcestershire	43013914501	BusRoute 49, BusRoute 49A, BusRoute 63, BusRoute 884
+West Midlands	Worcestershire	43013123001	BusRoute 007
+West Midlands	Worcestershire	43010302001	BusRoute 143, BusRoute 178
+West Midlands	Worcestershire	2000G790002	BusRoute 179
+West Midlands	Worcestershire	43010302002	BusRoute 143, BusRoute 178
+West Midlands	Worcestershire	43013122501	BusRoute 007
+West Midlands	Worcestershire	43013908001	BusRoute 318, BusRoute FW6, BusRoute X19, BusRoute X7
+West Midlands	Worcestershire	43013906001	BusRoute 318
+West Midlands	Worcestershire	43010399201	BusRoute 192, BusRoute 732, BusRoute 733, BusRoute 736, BusRoute 752, BusRoute 792, BusRoute 864
+West Midlands	Worcestershire	43013900501	BusRoute 144, BusRoute 202, BusRoute 204
+West Midlands	Worcestershire	43012968502	BusRoute 143, BusRoute 178
+West Midlands	Worcestershire	43013904501	BusRoute 007
+West Midlands	Worcestershire	43013147702	BusRoute X7
+West Midlands	Worcestershire	43013906002	BusRoute 318
+West Midlands	Worcestershire	43013908002	BusRoute 318, BusRoute X19, BusRoute X7
+West Midlands	Worcestershire	43010399301	BusRoute 192, BusRoute 732, BusRoute 733, BusRoute 736, BusRoute 752, BusRoute 792, BusRoute 864
+West Midlands	Worcestershire	43010399202	BusRoute 192, BusRoute 732, BusRoute 733, BusRoute 736, BusRoute 752, BusRoute 792, BusRoute 864
+West Midlands	Worcestershire	43010308802	BusRoute 146
+West Midlands	Worcestershire	43013148901	BusRoute 143
+West Midlands	Worcestershire	43011510002	BusRoute 143, BusRoute FW6
+West Midlands	Worcestershire	43010399302	BusRoute 192, BusRoute 732, BusRoute 733, BusRoute 736, BusRoute 752, BusRoute 792, BusRoute 864
+West Midlands	Worcestershire	43010305901	BusRoute 178
+West Midlands	Worcestershire	43010308902	BusRoute 146
+West Midlands	Worcestershire	2000G790018	BusRoute 178
+West Midlands	Worcestershire	43011511502	BusRoute 179
+West Midlands	Worcestershire	43010294101	BusRoute 178, BusRoute 517, BusRoute 519
+Yorkshire	West Yorkshire	450025288	BusRoute 517
+Yorkshire	West Yorkshire	998021381	CoachRoute 351
+Yorkshire	West Yorkshire	998035374	CoachRoute 240, CoachRoute 465
+Yorkshire	West Yorkshire	998022102	CoachRoute 664
+Scotland	East Dunbartonshire	0000SPT9032	BusRoute 27A, BusRoute 27B
+Scotland	East Dunbartonshire	0000SPT9404	BusRoute 142
+Scotland	East Dunbartonshire	0000SPT8119	BusRoute 119
+Scotland	East Dunbartonshire	0000SPT24431	BusRoute 47, BusRoute 47A
+Scotland	East Dunbartonshire	0000SPT9300	BusRoute 178
+Scotland	East Dunbartonshire	0000SPT4152	BusRoute 119, BusRoute 40, BusRoute 40A, BusRoute N40
+South West	Torbay	998042705	CoachRoute 404
+North East	Tyne & Wear	998035374	CoachRoute 425
+South West	Cornwall	998041205	CoachRoute 500, CoachRoute 504
+South West	Cornwall	998046125	CoachRoute 500, CoachRoute 504
+South West	Cornwall	998042705	CoachRoute 404
+Wales	Cardiff	998015256	CoachRoute 672
+Wales	Torfaen	0100053214	BusRoute X14
+South East	Milton Keynes	998035374	CoachRoute 425, CoachRoute 562
+South East	Milton Keynes	998033333	CoachRoute 540, CoachRoute 550
+Wales	Wrexham	3500WRX02221	BusRoute 60
+Wales	Wrexham	0600AWQ26492	BusRoute 1
+Wales	Wrexham	3500AWQ26500	BusRoute 2, BusRoute 2A
+Wales	Wrexham	3500WRX02028	BusRoute 2A
+Wales	Wrexham	3500PWX18990	BusRoute 60
+Wales	Wrexham	900012312	BusRoute 2, BusRoute 2A
+Wales	Wrexham	3500AWQ26504	BusRoute 2, BusRoute 60
+Wales	Wrexham	0600FLX17125	BusRoute 1
+Wales	Wrexham	3501B207402	BusRoute 2C, BusRoute 5A, BusRoute 6, BusRoute 64A, BusRoute 65, BusRoute X9
+Wales	Wrexham	0600AWQ26489	BusRoute 1
+Wales	Wrexham	3500WRX02001	BusRoute 2A
+Wales	Wrexham	3500WRX02220	BusRoute 60
+Wales	Wrexham	3500WRX02002	BusRoute 2A
+Wales	Bridgend	998046125	CoachRoute 508
+Scotland	Renfrewshire	0000SPT2706	BusRoute 66
+Scotland	Renfrewshire	0000SPT17419	BusRoute 308
+Scotland	Renfrewshire	0000SPT2607	BusRoute 306
+Scotland	Renfrewshire	0000SPT2718	BusRoute 307
+Scotland	Renfrewshire	0000SPT3487	BusRoute 54
+Scotland	Renfrewshire	0000SPT22023	BusRoute 36B
+Scotland	Renfrewshire	0000SPT2779	BusRoute X35
+Scotland	Renfrewshire	0000SPT22102	BusRoute 307, BusRoute 317
+Scotland	Renfrewshire	0000SPT3171	BusRoute 3
+Scotland	Renfrewshire	0000SPT2357	BusRoute 17
+Scotland	Renfrewshire	0000SPT7594	BusRoute X23
+Scotland	Renfrewshire	0000SPT2769	BusRoute 308
+Scotland	Renfrewshire	0000SPT22148	BusRoute 69
+Scotland	Renfrewshire	0000SPT2781	BusRoute 306
+Scotland	Renfrewshire	0000SPT24919	BusRoute 6, BusRoute 7
+Scotland	Renfrewshire	0000SPT2727	BusRoute 308
+Scotland	Renfrewshire	0000SPT2662	BusRoute 10
+North West	Blackpool	998021381	CoachRoute 351
+North East	Northumberland	998035374	CoachRoute 425
+South East	West Sussex	998035374	CoachRoute 240
+Scotland	West Dunbartonshire	0000SPT5422	BusRoute 141
+Scotland	West Dunbartonshire	0000SPT5424	BusRoute 141
+Scotland	West Dunbartonshire	0000SPT24934	BusRoute 7A
+Scotland	West Dunbartonshire	0000SPT1925	BusRoute 7A
+Scotland	West Dunbartonshire	0000SPT1529	BusRoute 208
+Scotland	West Dunbartonshire	0000SPT24913	BusRoute 145, BusRoute 146, BusRoute 208
+Scotland	West Dunbartonshire	0000SPT1784	BusRoute 7A
+Scotland	West Dunbartonshire	0000SPT24937	BusRoute 141
+Scotland	West Dunbartonshire	0000SPT5165	BusRoute 204, BusRoute 205, BusRoute 215
+Scotland	West Dunbartonshire	0000SPT8563	BusRoute 217, BusRoute 81, BusRoute 81A
+Scotland	West Dunbartonshire	0000SPT5166	BusRoute 204, BusRoute 205, BusRoute 215
+Scotland	West Dunbartonshire	0000SPT1898	BusRoute 6B
+Scotland	West Dunbartonshire	0000SPT4152	BusRoute 40, BusRoute 40A, BusRoute N40
+Scotland	West Dunbartonshire	0000SPT1811	BusRoute 145, BusRoute 146
+East Midlands	Nottinghamshire	998035374	CoachRoute 465
+North West	Lancashire	450025288	BusRoute 517
+North West	Lancashire	998021381	CoachRoute 351
+North West	Lancashire	998033333	CoachRoute 540, CoachRoute 550
+North West	Lancashire	998022102	CoachRoute 664
+South West	Plymouth	998041205	CoachRoute 500, CoachRoute 504
+South West	Plymouth	998046125	CoachRoute 500, CoachRoute 504
+South West	Plymouth	998042705	CoachRoute 404
+East Midlands	Leicestershire	998035374	CoachRoute 240
+East Midlands	Leicestershire	43011534801	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43011534702	BusRoute 48
+East Midlands	Leicestershire	43011534901	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43011534802	BusRoute 48
+East Midlands	Leicestershire	43010039001	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43010116001	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43011534902	BusRoute 48
+East Midlands	Leicestershire	43010039101	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43010116002	BusRoute 48
+East Midlands	Leicestershire	43010039002	BusRoute 48
+East Midlands	Leicestershire	43011535001	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43010095501	BusRoute 48
+East Midlands	Leicestershire	43010039201	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43010039102	BusRoute 48
+East Midlands	Leicestershire	43011535101	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43010095601	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43010039202	BusRoute 48
+East Midlands	Leicestershire	43010095502	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43011535002	BusRoute 48
+East Midlands	Leicestershire	43011535201	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43010095701	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43010095602	BusRoute 48
+East Midlands	Leicestershire	43011535102	BusRoute 48
+East Midlands	Leicestershire	43010039501	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43011534401	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43011535301	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43010095801	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43010095702	BusRoute 48
+East Midlands	Leicestershire	43011535202	BusRoute 48
+East Midlands	Leicestershire	43011532301	BusRoute 48
+East Midlands	Leicestershire	43010039601	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43011534501	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43010095802	BusRoute 48
+East Midlands	Leicestershire	43011535302	BusRoute 48
+East Midlands	Leicestershire	43011534402	BusRoute 48
+East Midlands	Leicestershire	43010039502	BusRoute 48
+East Midlands	Leicestershire	43011534601	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43011534502	BusRoute 48
+East Midlands	Leicestershire	43010039602	BusRoute 48
+East Midlands	Leicestershire	43011534701	BusRoute 48, BusRoute X48
+East Midlands	Leicestershire	43011534602	BusRoute 48
+West Midlands	Shropshire	2090PWX18498	BusRoute X11
+West Midlands	Shropshire	3500WRX02221	BusRoute 60
+West Midlands	Shropshire	2090PWX18499	BusRoute X11
+West Midlands	Shropshire	2090PWX18500	BusRoute X11
+West Midlands	Shropshire	3500AWQ26500	BusRoute 2, BusRoute 2A
+West Midlands	Shropshire	3500PWX18481	BusRoute 738, BusRoute 740
+West Midlands	Shropshire	3500WRX02028	BusRoute 2A
+West Midlands	Shropshire	3500PWX18561	BusRoute D74
+West Midlands	Shropshire	3500PWX18990	BusRoute 60
+West Midlands	Shropshire	3500AWQ26504	BusRoute 2, BusRoute 60
+West Midlands	Shropshire	900012312	BusRoute 2, BusRoute 2A
+West Midlands	Shropshire	3500PWX18585	BusRoute X3, BusRoute X75
+West Midlands	Shropshire	5610PWX18608	BusRoute 405
+West Midlands	Shropshire	3501B207402	BusRoute 2C, BusRoute 5A, BusRoute 6, BusRoute 64A, BusRoute 65, BusRoute X9
+West Midlands	Shropshire	3500PWX18586	BusRoute X3
+West Midlands	Shropshire	3500PWX18553	BusRoute 71A
+West Midlands	Shropshire	3500WRX02001	BusRoute 2A
+West Midlands	Shropshire	3500PWX18576	BusRoute X3
+West Midlands	Shropshire	2090PWX18497	BusRoute X11
+West Midlands	Shropshire	3500B093807	BusRoute T10
+West Midlands	Shropshire	3500PWX18598	BusRoute D76
+West Midlands	Shropshire	3500WRX02220	BusRoute 60
+West Midlands	Shropshire	3500WRX02002	BusRoute 2A
+Wales	Carmarthenshire	998046125	CoachRoute 508
+Wales	Powys	2090PWX18498	BusRoute X11
+Wales	Powys	2090PWX18964	BusRoute 461
+Wales	Powys	2090PWX18499	BusRoute X11
+Wales	Powys	2090PWX18500	BusRoute X11
+Wales	Powys	3500PWX18481	BusRoute 738, BusRoute 740
+Wales	Powys	3500PWX18561	BusRoute D74
+Wales	Powys	3500PWX18585	BusRoute X3, BusRoute X75
+Wales	Powys	5610PWX18608	BusRoute 405
+Wales	Powys	3500PWX18586	BusRoute X3
+Wales	Powys	3500PWX18576	BusRoute X3
+Wales	Powys	2090PWX18497	BusRoute X11
+Wales	Powys	3500B093807	BusRoute T10
+Wales	Powys	3500PWX18598	BusRoute D76
+East Midlands	Derbyshire	998035374	CoachRoute 240, CoachRoute 465
+Scotland	Edinburgh	0000SPT11405	BusRoute X17
+South West	North Somerset	998042705	CoachRoute 404
+Scotland	East Renfrewshire	0000SPT3474	BusRoute 52
+Scotland	East Renfrewshire	0000SPT3487	BusRoute 54, BusRoute 55
+Scotland	East Renfrewshire	0000SPT3281	BusRoute 52
+Scotland	East Renfrewshire	0000SPT4621	BusRoute 229
+Scotland	East Renfrewshire	0000SPT3614	BusRoute 44, BusRoute 44A
+Scotland	East Renfrewshire	0000SPT24249	BusRoute 52
+Scotland	East Renfrewshire	0000SPT3296	BusRoute 395
+Yorkshire	Kingston upon Hull	998035374	CoachRoute 562
+South West	Bath & North East Somerset	900098256	BusRoute 620
+South West	Bath & North East Somerset	998042705	CoachRoute 404
+East Midlands	Leicester	998016701	CoachRoute 2, CoachRoute 5, CoachRoute 6
+East Midlands	Leicester	43019009501	BusRoute 657
+East Midlands	Leicester	43010118001	BusRoute 657, BusRoute X_6
+East Midlands	Leicester	43011534801	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43011534702	BusRoute 48
+East Midlands	Leicester	43017956501	BusRoute X_6
+East Midlands	Leicester	43010118002	BusRoute X_6
+East Midlands	Leicester	43011534901	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43011534802	BusRoute 48
+East Midlands	Leicester	43017959001	BusRoute X_6
+East Midlands	Leicester	43017957001	BusRoute 657, BusRoute X_6
+East Midlands	Leicester	43010039001	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43010116001	BusRoute 48, BusRoute X_6, BusRoute X48
+East Midlands	Leicester	43011534902	BusRoute 48
+East Midlands	Leicester	43017957002	BusRoute 657
+East Midlands	Leicester	43010039101	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43010116002	BusRoute 48
+East Midlands	Leicester	43010039002	BusRoute 48
+East Midlands	Leicester	43017960501	BusRoute X_6
+East Midlands	Leicester	43011535001	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43010095501	BusRoute 48
+East Midlands	Leicester	43010039201	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43010039102	BusRoute 48
+East Midlands	Leicester	43011535101	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43010095601	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43010039202	BusRoute 48
+East Midlands	Leicester	43010095502	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43011535002	BusRoute 48
+East Midlands	Leicester	43011535201	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43010095701	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43010095602	BusRoute 48
+East Midlands	Leicester	43011535102	BusRoute 48
+East Midlands	Leicester	43017957501	BusRoute X_6
+East Midlands	Leicester	43017956001	BusRoute X_6
+East Midlands	Leicester	43011549601	BusRoute 657, BusRoute X_6
+East Midlands	Leicester	43010039501	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43011534401	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43011535301	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43010095801	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43010095702	BusRoute 48
+East Midlands	Leicester	43011535202	BusRoute 48
+East Midlands	Leicester	43011549602	BusRoute X_6
+East Midlands	Leicester	43011532301	BusRoute 48
+East Midlands	Leicester	43010039601	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43011534501	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43010095802	BusRoute 48
+East Midlands	Leicester	43011535302	BusRoute 48
+East Midlands	Leicester	43011534402	BusRoute 48
+East Midlands	Leicester	43010039502	BusRoute 48
+East Midlands	Leicester	43010088101	BusRoute 657, BusRoute X_6
+East Midlands	Leicester	43011534601	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43011534502	BusRoute 48
+East Midlands	Leicester	43010039602	BusRoute 48
+East Midlands	Leicester	43011534701	BusRoute 48, BusRoute X48
+East Midlands	Leicester	43011534602	BusRoute 48
+South West	South Gloucestershire	0100053214	BusRoute X11, BusRoute X14
+South West	South Gloucestershire	900098256	BusRoute 620
+Wales	Gwynedd	900011581	BusRoute 58
+West Midlands	Warwickshire	43011552001	BusRoute X15
+West Midlands	Warwickshire	43011537602	BusRoute X15, BusRoute X18
+West Midlands	Warwickshire	43017971602	BusRoute 17B
+West Midlands	Warwickshire	43010095601	BusRoute 48, BusRoute X48
+West Midlands	Warwickshire	43011992501	BusRoute 223
+West Midlands	Warwickshire	43000103001	BusRoute 81
+West Midlands	Warwickshire	43011532301	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute CEC3
+West Midlands	Warwickshire	43017971202	BusRoute 17B
+West Midlands	Warwickshire	43010095602	BusRoute 48
+West Midlands	Warwickshire	43011534901	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	Warwickshire	43011992502	BusRoute 223
+West Midlands	Warwickshire	43010102201	BusRoute 540, BusRoute 80, BusRoute 81
+West Midlands	Warwickshire	43011547002	BusRoute C1
+West Midlands	Warwickshire	43011534902	BusRoute 48, BusRoute 57
+West Midlands	Warwickshire	43019200601	BusRoute 55A
+West Midlands	Warwickshire	43010102202	BusRoute 540, BusRoute 80, BusRoute 81
+West Midlands	Warwickshire	43011523901	BusRoute 16A, BusRoute 60, BusRoute X17, BusRoute X18
+West Midlands	Warwickshire	43017971802	BusRoute 17B
+West Midlands	Warwickshire	43010095801	BusRoute 48, BusRoute X48
+West Midlands	Warwickshire	43011421402	BusRoute 539
+West Midlands	Warwickshire	43010097701	BusRoute 537
+West Midlands	Warwickshire	43017973302	BusRoute 17B
+West Midlands	Warwickshire	4200F125056	BusRoute UW2, BusRoute X18
+West Midlands	Warwickshire	43010095802	BusRoute 48
+West Midlands	Warwickshire	43017957001	BusRoute X_6
+West Midlands	Warwickshire	43010190901	BusRoute 223, BusRoute 717
+West Midlands	Warwickshire	43010092902	BusRoute 57, BusRoute B59, BusRoute CEC1, BusRoute H1
+West Midlands	Warwickshire	43010039601	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	Warwickshire	43017971402	BusRoute 17B
+West Midlands	Warwickshire	43019550101	BusRoute CEC4
+West Midlands	Warwickshire	43019000101	BusRoute 115
+West Midlands	Warwickshire	43011549701	BusRoute 74
+West Midlands	Warwickshire	43010039602	BusRoute 48, BusRoute 57
+West Midlands	Warwickshire	43019000102	BusRoute 115, BusRoute 767
+West Midlands	Warwickshire	43011101002	BusRoute 1, BusRoute C1
+West Midlands	Warwickshire	43011549702	BusRoute 74
+West Midlands	Warwickshire	43010098001	BusRoute 12, BusRoute 16A, BusRoute 16X, BusRoute UW2, BusRoute X15
+West Midlands	Warwickshire	43019008601	BusRoute 717, BusRoute 757, BusRoute 767, BusRoute 777, BusRoute 90
+West Midlands	Warwickshire	43019008602	BusRoute 717, BusRoute 757, BusRoute 767, BusRoute 777, BusRoute 90
+West Midlands	Warwickshire	43010096701	BusRoute 537
+West Midlands	Warwickshire	43011815001	BusRoute UW2
+West Midlands	Warwickshire	43010079001	BusRoute 55, BusRoute B59
+West Midlands	Warwickshire	43010118001	BusRoute X_6
+West Midlands	Warwickshire	43017956001	BusRoute X_6
+West Midlands	Warwickshire	43017973702	BusRoute 17B
+West Midlands	Warwickshire	43010079002	BusRoute 55, BusRoute 57
+West Midlands	Warwickshire	43019551001	BusRoute CEC4
+West Midlands	Warwickshire	43019840001	BusRoute 767, BusRoute 777
+West Midlands	Warwickshire	43017939601	BusRoute 16, BusRoute X18
+West Midlands	Warwickshire	43019550501	BusRoute CEC4
+West Midlands	Warwickshire	43011552801	BusRoute X18
+West Midlands	Warwickshire	43011409501	BusRoute 17B, BusRoute 232
+West Midlands	Warwickshire	43011534401	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	Warwickshire	4200F125062	BusRoute 777
+West Midlands	Warwickshire	43011523401	BusRoute 16X, BusRoute 60, BusRoute X17, BusRoute X18
+West Midlands	Warwickshire	43011535101	BusRoute 48, BusRoute X48
+West Midlands	Warwickshire	43011534402	BusRoute 48, BusRoute 57
+West Midlands	Warwickshire	43010088101	BusRoute X_6
+West Midlands	Warwickshire	43011535102	BusRoute 48
+West Midlands	Warwickshire	43017930501	BusRoute 16, BusRoute 16A, BusRoute 16X, BusRoute 516, BusRoute X17
+West Midlands	Warwickshire	43010039101	BusRoute 48, BusRoute X48
+West Midlands	Warwickshire	43011534601	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	Warwickshire	43017930502	BusRoute 16, BusRoute 16A, BusRoute X17
+West Midlands	Warwickshire	43011878501	BusRoute 115, BusRoute 767
+West Midlands	Warwickshire	43010039102	BusRoute 48
+West Midlands	Warwickshire	43011535301	BusRoute 48, BusRoute X48
+West Midlands	Warwickshire	43011534602	BusRoute 48, BusRoute 57
+West Midlands	Warwickshire	43017931501	BusRoute 516
+West Midlands	Warwickshire	43017960501	BusRoute X_6
+West Midlands	Warwickshire	43011878502	BusRoute 115
+West Midlands	Warwickshire	43011535302	BusRoute 48
+West Midlands	Warwickshire	43010095501	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute CEC4
+West Midlands	Warwickshire	43017973002	BusRoute 17B
+West Midlands	Warwickshire	43010095502	BusRoute 48, BusRoute 57, BusRoute X48
+West Midlands	Warwickshire	43011534801	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	Warwickshire	43010116001	BusRoute 48, BusRoute X_6, BusRoute X48
+West Midlands	Warwickshire	43010102101	BusRoute 540, BusRoute 80, BusRoute 81
+West Midlands	Warwickshire	43010118602	BusRoute X18
+West Midlands	Warwickshire	43011414502	BusRoute X15, BusRoute X18
+West Midlands	Warwickshire	43011534802	BusRoute 48, BusRoute 57
+West Midlands	Warwickshire	43010116002	BusRoute 48
+West Midlands	Warwickshire	43010102102	BusRoute 540, BusRoute 80, BusRoute 81
+West Midlands	Warwickshire	43017971702	BusRoute 17B
+West Midlands	Warwickshire	43010095701	BusRoute 48, BusRoute X48
+West Midlands	Warwickshire	43010095702	BusRoute 48
+West Midlands	Warwickshire	43011527801	BusRoute 16
+West Midlands	Warwickshire	43010039501	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute CEC4, BusRoute X48
+West Midlands	Warwickshire	43011549601	BusRoute X_6
+West Midlands	Warwickshire	43010039502	BusRoute 48, BusRoute 57
+West Midlands	Warwickshire	43017972902	BusRoute 17B
+West Midlands	Warwickshire	43017973602	BusRoute 17B
+West Midlands	Warwickshire	43011525401	BusRoute 12, BusRoute 62, BusRoute U17, BusRoute U2
+West Midlands	Warwickshire	43010094901	BusRoute 17B
+West Midlands	Warwickshire	43010294101	BusRoute 517, BusRoute 519
+West Midlands	Warwickshire	43011022001	BusRoute 48, BusRoute 50, BusRoute 57, BusRoute H1
+West Midlands	Warwickshire	43011535001	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	Warwickshire	43017959001	BusRoute X_6
+West Midlands	Warwickshire	43019200001	BusRoute 55, BusRoute 55A, BusRoute 57
+West Midlands	Warwickshire	43017957501	BusRoute X_6
+West Midlands	Warwickshire	43011022002	BusRoute 57
+West Midlands	Warwickshire	43011101501	BusRoute 232
+West Midlands	Warwickshire	43011535002	BusRoute 48, BusRoute 57
+West Midlands	Warwickshire	43011009001	BusRoute 60
+West Midlands	Warwickshire	43011899501	BusRoute 115, BusRoute 116, BusRoute 757
+West Midlands	Warwickshire	43011546902	BusRoute C1
+West Midlands	Warwickshire	43010039001	BusRoute 48, BusRoute X48
+West Midlands	Warwickshire	43011899502	BusRoute 115, BusRoute 116, BusRoute 757
+West Midlands	Warwickshire	43019004001	BusRoute 232
+West Midlands	Warwickshire	43011534501	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	Warwickshire	43017974102	BusRoute 17B
+West Midlands	Warwickshire	43010039002	BusRoute 48
+West Midlands	Warwickshire	43011535201	BusRoute 48, BusRoute X48
+West Midlands	Warwickshire	43019004002	BusRoute 232
+West Midlands	Warwickshire	43011534502	BusRoute 48, BusRoute 57
+West Midlands	Warwickshire	43010094001	BusRoute 55, BusRoute 55A, BusRoute 56, BusRoute 57, BusRoute 772, BusRoute B59, BusRoute H1
+West Midlands	Warwickshire	43011535202	BusRoute 48
+West Midlands	Warwickshire	43010094002	BusRoute 55, BusRoute 56, BusRoute 57, BusRoute B59, BusRoute H1
+West Midlands	Warwickshire	43010039201	BusRoute 48, BusRoute X48
+West Midlands	Warwickshire	43011534701	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	Warwickshire	43011537601	BusRoute X15, BusRoute X18
+West Midlands	Warwickshire	43010039202	BusRoute 48
+West Midlands	Warwickshire	43011534702	BusRoute 48, BusRoute 57
+West Midlands	Warwickshire	43018920502	BusRoute CEC1
+West Midlands	Warwickshire	998035374	CoachRoute 240
+North West	Blackburn with Darwen	998033333	CoachRoute 540
+North West	Cheshire East	0600AWD71270	BusRoute 16
+North West	Cheshire East	0600AWQ26492	BusRoute 1
+North West	Cheshire East	0600ACX17018	BusRoute 10X
+North West	Cheshire East	0600AWQ26548	BusRoute DB2, BusRoute DB3
+North West	Cheshire East	0600AWQ26551	BusRoute DB2, BusRoute DB3
+North West	Cheshire East	0600ACX17033	BusRoute DB1
+North West	Cheshire East	0600ACX17034	BusRoute DB1
+North West	Cheshire East	0600AWQ26553	BusRoute 16, BusRoute DB2
+North West	Cheshire East	0600FLX17125	BusRoute 1
+North West	Cheshire East	0600AWQ26554	BusRoute 16
+North West	Cheshire East	0600AWQ26555	BusRoute 16
+North West	Cheshire East	0600CH2547	BusRoute 16, BusRoute DB2
+North West	Cheshire East	0600AWQ26489	BusRoute 1
+North West	Cheshire East	0600AWQ26491	BusRoute X44
+North West	Cheshire East	0600AWQ26557	BusRoute 6
+East Midlands	Lincolnshire	998022102	CoachRoute 664
+Scotland	North Lanarkshire	0000SPT11578	BusRoute X34
+Scotland	North Lanarkshire	0000SPT15186	BusRoute 49
+Scotland	North Lanarkshire	0000SPT12049	BusRoute 017
+Scotland	North Lanarkshire	0000SPT12512	BusRoute X34
+Scotland	North Lanarkshire	0000SPT11370	BusRoute 255
+Scotland	North Lanarkshire	0000SPT15288	BusRoute 343
+Scotland	North Lanarkshire	0000SPT11448	BusRoute 201
+Scotland	North Lanarkshire	0000SPT15332	BusRoute D01, BusRoute D02
+Scotland	North Lanarkshire	0000SPT11405	BusRoute X17
+Scotland	North Lanarkshire	0000SPT11670	BusRoute 58
+Scotland	North Lanarkshire	0000SPT15168	BusRoute 49
+Scotland	North Lanarkshire	0000SPT9032	BusRoute 27A
+Scotland	North Lanarkshire	0000SPT11647	BusRoute 2
+Scotland	North Lanarkshire	0000SPT12338	BusRoute 115
+Scotland	North Lanarkshire	0000SPT24431	BusRoute 47, BusRoute 47A
+Scotland	North Lanarkshire	0000SPT11484	BusRoute 366
+Scotland	North Lanarkshire	0000SPT12242	BusRoute X35
+Scotland	North Lanarkshire	0000SPT12329	BusRoute 6
+Scotland	North Lanarkshire	0000SPT24542	BusRoute 299
+Scotland	North Lanarkshire	0000SPT12132	BusRoute 200
+Scotland	North Lanarkshire	0000SPT12318	BusRoute 1
+Scotland	North Lanarkshire	0000SPT7605	BusRoute X35
+Scotland	North Lanarkshire	0000SPT11453	BusRoute 366
+Scotland	North Lanarkshire	0000SPT15171	BusRoute 34, BusRoute 35
+Scotland	North Lanarkshire	0000SPT12364	BusRoute 1
+Scotland	North Lanarkshire	0000SPT12319	BusRoute 1
+Scotland	North Lanarkshire	0000SPT11630	BusRoute X34
+Scotland	North Lanarkshire	0000SPT9300	BusRoute 132, BusRoute 178
+Scotland	North Lanarkshire	0000SPT12365	BusRoute 1
+Scotland	North Lanarkshire	0000SPT11488	BusRoute 355
+Scotland	North Lanarkshire	0000SPT11202	BusRoute 2
+Scotland	North Lanarkshire	0000SPT12366	BusRoute 1
+Scotland	North Lanarkshire	0000SPT11544	BusRoute 58
+Scotland	North Lanarkshire	0000SPT24809	BusRoute 44
+Scotland	North Lanarkshire	0000SPT12367	BusRoute 1
+Wales	Swansea	998015256	CoachRoute 672
+Wales	Swansea	998046125	CoachRoute 508
+Scotland	South Lanarkshire	0000SPT10939	BusRoute L2
+Scotland	South Lanarkshire	0000SPT10269	BusRoute 52
+Scotland	South Lanarkshire	0000SPT10324	BusRoute 255
+Scotland	South Lanarkshire	0000SPT10270	BusRoute 52
+Scotland	South Lanarkshire	0000SPT11370	BusRoute 255
+Scotland	South Lanarkshire	0000SPT5917	BusRoute 172
+Scotland	South Lanarkshire	0000SPT14497	BusRoute L1
+Scotland	South Lanarkshire	0000SPT10282	BusRoute 13
+Scotland	South Lanarkshire	0000SPT10303	BusRoute 13
+Scotland	South Lanarkshire	0000SPT14498	BusRoute L1
+Scotland	South Lanarkshire	0000SPT10810	BusRoute 52
+Scotland	South Lanarkshire	0000SPT10777	BusRoute 317
+Scotland	South Lanarkshire	0000SPT10964	BusRoute 243
+Scotland	South Lanarkshire	0000SPT11448	BusRoute 201
+Scotland	South Lanarkshire	0000SPT11670	BusRoute 58
+Scotland	South Lanarkshire	0000SPT10811	BusRoute 52
+Scotland	South Lanarkshire	0000SPT10965	BusRoute 243
+Scotland	South Lanarkshire	0000SPT5878	BusRoute 90
+Scotland	South Lanarkshire	0000SPT14093	BusRoute 47
+Scotland	South Lanarkshire	0000SPT10770	BusRoute L2
+Scotland	South Lanarkshire	0000SPT24102	BusRoute 171
+Scotland	South Lanarkshire	0000SPT21021	BusRoute 49
+Scotland	South Lanarkshire	0000SPT14095	BusRoute 47
+Scotland	South Lanarkshire	0000SPT10320	BusRoute 13
+Scotland	South Lanarkshire	0000SPT14261	BusRoute 135
+Scotland	South Lanarkshire	0000SPT11730	BusRoute 58
+Scotland	South Lanarkshire	0000SPT7244	BusRoute 165, BusRoute 65, BusRoute 65A
+Scotland	South Lanarkshire	0000SPT11544	BusRoute 58
+Scotland	South Lanarkshire	0000SPT3296	BusRoute 395
+Scotland	South Lanarkshire	0000SPT14252	BusRoute 30, BusRoute 31
+Scotland	South Lanarkshire	0000SPT14296	BusRoute 259, BusRoute 9
+East Midlands	Nottingham	998035374	CoachRoute 465
+Scotland	Dundee	6400IM1087	BusRoute A12, BusRoute A37, BusRoute A38, BusRoute F15, BusRoute K7
+North West	Warrington	998033333	CoachRoute 550
+South West	Hampshire	190018709E	BusRoute 273
+North West	Merseyside	998033333	CoachRoute 550
+North West	Merseyside	2800S17057A	BusRoute 39
+Scotland	North Ayrshire	0000SPT17355	BusRoute 27, BusRoute 29
+Scotland	North Ayrshire	0000SPT18322	BusRoute 13
+Scotland	North Ayrshire	0000SPT2779	BusRoute X35
+Scotland	North Ayrshire	0000SPT23026	BusRoute 40
+Scotland	North Ayrshire	0000SPT1434	BusRoute 578
+Scotland	North Ayrshire	0000SPT24608	BusRoute 40
+Scotland	North Ayrshire	0000SPT17613	BusRoute 321
+Scotland	North Ayrshire	0000SPT1436	BusRoute 580
+Scotland	North Ayrshire	0000SPT17989	BusRoute 40
+Scotland	North Ayrshire	0000SPT17637	BusRoute 321
+Scotland	North Ayrshire	0000SPT24040	BusRoute 901
+Scotland	Argyll & Bute	0000SPT5165	BusRoute 215
+Scotland	Argyll & Bute	0000SPT5166	BusRoute 215
+West Midlands	Stoke-on-Trent	998033333	CoachRoute 540, CoachRoute 550
+Wales	Newport	998015256	CoachRoute 672
+Wales	Newport	0100053214	BusRoute X14
+East Midlands	North Lincolnshire	998035374	CoachRoute 562
+Scotland	West Lothian	0000SPT11405	BusRoute X17
+Wales	Isle of Anglesey	900011581	BusRoute 58
+Scotland	Dumfries & Galloway	680000317501	BusRoute 365
+Scotland	Dumfries & Galloway	0000SPT14252	BusRoute 30
+Scotland	Dumfries & Galloway	0001TTA2322	FerryRoute HSS, FerryRoute SL1
+Scotland	Dumfries & Galloway	0001AIMLAR	FerryRoute PO1
+North West	Cheshire West & Chester	998033333	CoachRoute 550
+North West	Cheshire West & Chester	0600AWD71270	BusRoute 16
+North West	Cheshire West & Chester	0600AWQ26492	BusRoute 1
+North West	Cheshire West & Chester	0600ACX17018	BusRoute 10X
+North West	Cheshire West & Chester	0600AWQ26548	BusRoute DB2, BusRoute DB3
+North West	Cheshire West & Chester	0600AWQ26551	BusRoute DB2, BusRoute DB3
+North West	Cheshire West & Chester	0600ACX17033	BusRoute DB1
+North West	Cheshire West & Chester	0600ACX17034	BusRoute DB1
+North West	Cheshire West & Chester	0600AWQ26553	BusRoute 16, BusRoute DB2
+North West	Cheshire West & Chester	0600FLX17125	BusRoute 1
+North West	Cheshire West & Chester	0600AWQ26554	BusRoute 16
+North West	Cheshire West & Chester	0600CH2547	BusRoute 16, BusRoute DB2
+North West	Cheshire West & Chester	0600AWQ26555	BusRoute 16
+North West	Cheshire West & Chester	0600AWQ26489	BusRoute 1
+North West	Cheshire West & Chester	0600AWQ26491	BusRoute X44
+North West	Cheshire West & Chester	0600AWQ26557	BusRoute 6
+South West	Somerset	998015256	CoachRoute 672
+Yorkshire	East Riding of Yorkshire	998035374	CoachRoute 562
+Scotland	Angus	6400IM1087	BusRoute A12, BusRoute A37, BusRoute A38, BusRoute F15, BusRoute K7
+South East	West Berkshire	998041205	CoachRoute 500, CoachRoute 504
+South East	West Berkshire	998046125	CoachRoute 500, CoachRoute 504, CoachRoute 508
+South East	West Berkshire	998042705	CoachRoute 404
+North East	Durham	998035374	CoachRoute 425
+South East	Luton	998016701	CoachRoute 2
+South West	Wiltshire	998042705	CoachRoute 404
+Wales	Flintshire	0600AWD71270	BusRoute 16
+Wales	Flintshire	0600ACX17018	BusRoute 10X
+Wales	Flintshire	0600AWQ26548	BusRoute DB2, BusRoute DB3
+Wales	Flintshire	0600AWQ26551	BusRoute DB2, BusRoute DB3
+Wales	Flintshire	0600ACX17033	BusRoute DB1
+Wales	Flintshire	0600ACX17034	BusRoute DB1
+Wales	Flintshire	0600AWQ26553	BusRoute 16, BusRoute DB2
+Wales	Flintshire	0600AWQ26554	BusRoute 16
+Wales	Flintshire	3501B207402	BusRoute X9
+Wales	Flintshire	0600CH2547	BusRoute 16, BusRoute DB2
+Wales	Flintshire	0600AWQ26555	BusRoute 16
+Wales	Flintshire	0600AWQ26491	BusRoute X44
+Wales	Flintshire	0600AWQ26557	BusRoute 6
+South West	Gloucestershire	5330AWA16960	BusRoute 756, BusRoute 791
+South West	Gloucestershire	900098256	BusRoute 620
+Wales	Pembrokeshire	998046125	CoachRoute 508
+Wales	Pembrokeshire	900014685	BusRoute 352
+London	Greater London	490000254009	TramMetroRoute WAC0
+London	Greater London	490000276005	TramMetroRoute NTN0
+London	Greater London	9400ZZLUDGY1	TramMetroRoute DIS0
+London	Greater London	490000238006	TramMetroRoute DIS0
+London	Greater London	9300WAP	FerryRoute 0TCA
+London	Greater London	9300RQP	FerryRoute 0RLA
+London	Greater London	9300THP	FerryRoute 0TLA
+London	Greater London	998041205	CoachRoute 500, CoachRoute 504
+London	Greater London	998035374	CoachRoute 240, CoachRoute 425, CoachRoute 465, CoachRoute 562
+London	Greater London	998046125	CoachRoute 500, CoachRoute 504, CoachRoute 508
+London	Greater London	998033333	CoachRoute 540, CoachRoute 550
+London	Greater London	998016701	CoachRoute 2
+London	Greater London	998042705	CoachRoute 404
+London	Greater London	190018709E	BusRoute 273
+Wales	Denbighshire	0600ACX17018	BusRoute 10X
+Wales	Denbighshire	3501B207402	BusRoute 5A, BusRoute 64A
+West Midlands	Staffordshire	43010399801	BusRoute 864
+West Midlands	Staffordshire	43019840001	BusRoute 767
+West Midlands	Staffordshire	43010399201	BusRoute 864
+West Midlands	Staffordshire	43011878501	BusRoute 115, BusRoute 767
+West Midlands	Staffordshire	43010399202	BusRoute 864
+West Midlands	Staffordshire	43010399301	BusRoute 864
+West Midlands	Staffordshire	43019008601	BusRoute 767
+West Midlands	Staffordshire	43011899501	BusRoute 115, BusRoute 116
+West Midlands	Staffordshire	43011878502	BusRoute 115
+West Midlands	Staffordshire	43010399302	BusRoute 864
+West Midlands	Staffordshire	43019008602	BusRoute 767
+West Midlands	Staffordshire	43019000101	BusRoute 115
+West Midlands	Staffordshire	43011899502	BusRoute 115, BusRoute 116
+West Midlands	Staffordshire	43019000102	BusRoute 115, BusRoute 767
+Wales	Neath Port Talbot	998046125	CoachRoute 508
+Scotland	East Ayrshire	0000SPT16261	BusRoute S18
+Scotland	East Ayrshire	0000SPT18322	BusRoute 13
+Scotland	East Ayrshire	0000SPT18334	BusRoute 5
+Scotland	East Ayrshire	0000SPT24199	BusRoute 344
+Scotland	East Ayrshire	0000SPT16244	BusRoute 344
+Scotland	East Ayrshire	0000SPT18545	BusRoute 334
+Scotland	East Ayrshire	0000SPT19508	BusRoute 361
+Scotland	East Ayrshire	0000SPT18415	BusRoute 345
+Scotland	East Ayrshire	0000SPT24710	BusRoute 352
+South West	Devon	998041205	CoachRoute 500
+South West	Devon	998046125	CoachRoute 500
+South West	Devon	998042705	CoachRoute 404
+North West	Halton	998033333	CoachRoute 550
+North East	Darlington	998035374	CoachRoute 425
+Scotland	South Ayrshire	0000SPT19325	BusRoute 302, BusRoute A1, BusRoute A2, BusRoute A3, BusRoute A4, BusRoute A5, BusRoute A6, BusRoute A9
+Scotland	South Ayrshire	0000SPT19508	BusRoute 361
+Scotland	South Ayrshire	0000SPT24710	BusRoute 352
+Scotland	South Ayrshire	0001AIMLAR	FerryRoute PO2
+West Midlands	West Midlands	998035374	CoachRoute 240
+West Midlands	West Midlands	998016701	CoachRoute 2, CoachRoute 5, CoachRoute 6
+West Midlands	West Midlands	43011552001	BusRoute X15
+West Midlands	West Midlands	43011537602	BusRoute X15, BusRoute X18
+West Midlands	West Midlands	43000103001	BusRoute 81
+West Midlands	West Midlands	43017971602	BusRoute 17B
+West Midlands	West Midlands	43010095601	BusRoute 48, BusRoute X48
+West Midlands	West Midlands	43011992501	BusRoute 223
+West Midlands	West Midlands	43011547002	BusRoute C1
+West Midlands	West Midlands	43011532301	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute CEC3
+West Midlands	West Midlands	43017971202	BusRoute 17B
+West Midlands	West Midlands	43010095602	BusRoute 48
+West Midlands	West Midlands	43011534901	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	West Midlands	43011992502	BusRoute 223
+West Midlands	West Midlands	43010102201	BusRoute 540, BusRoute 80, BusRoute 81
+West Midlands	West Midlands	43010308902	BusRoute 146
+West Midlands	West Midlands	43019200601	BusRoute 55A
+West Midlands	West Midlands	43011534902	BusRoute 48, BusRoute 57
+West Midlands	West Midlands	43010102202	BusRoute 540, BusRoute 80, BusRoute 81
+West Midlands	West Midlands	43010399201	BusRoute 192, BusRoute 732, BusRoute 733, BusRoute 736, BusRoute 752, BusRoute 792, BusRoute 864
+West Midlands	West Midlands	43011523901	BusRoute 16A, BusRoute 60, BusRoute X17, BusRoute X18
+West Midlands	West Midlands	4200F125056	BusRoute UW2, BusRoute X18
+West Midlands	West Midlands	43017971802	BusRoute 17B
+West Midlands	West Midlands	43010095801	BusRoute 48, BusRoute X48
+West Midlands	West Midlands	43011421402	BusRoute 539
+West Midlands	West Midlands	43010097701	BusRoute 537
+West Midlands	West Midlands	43017973302	BusRoute 17B
+West Midlands	West Midlands	43010399202	BusRoute 192, BusRoute 732, BusRoute 733, BusRoute 736, BusRoute 752, BusRoute 792, BusRoute 864
+West Midlands	West Midlands	43017957001	BusRoute 657, BusRoute X_6
+West Midlands	West Midlands	43010092902	BusRoute 57, BusRoute B59, BusRoute CEC1, BusRoute H1
+West Midlands	West Midlands	43010095802	BusRoute 48
+West Midlands	West Midlands	43010190901	BusRoute 223, BusRoute 717
+West Midlands	West Midlands	43010039601	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	West Midlands	43017971402	BusRoute 17B
+West Midlands	West Midlands	43019550101	BusRoute CEC4
+West Midlands	West Midlands	43011549701	BusRoute 74
+West Midlands	West Midlands	43017957002	BusRoute 657
+West Midlands	West Midlands	43013123001	BusRoute 007
+West Midlands	West Midlands	43019000101	BusRoute 115
+West Midlands	West Midlands	43010039602	BusRoute 48, BusRoute 57
+West Midlands	West Midlands	43011549702	BusRoute 74
+West Midlands	West Midlands	43019008601	BusRoute 717, BusRoute 757, BusRoute 767, BusRoute 777, BusRoute 90
+West Midlands	West Midlands	43019000102	BusRoute 115, BusRoute 767
+West Midlands	West Midlands	43011101002	BusRoute 1, BusRoute C1
+West Midlands	West Midlands	43013900501	BusRoute 144, BusRoute 202, BusRoute 204
+West Midlands	West Midlands	43010098001	BusRoute 12, BusRoute 16A, BusRoute 16X, BusRoute UW2, BusRoute X15
+West Midlands	West Midlands	43019008602	BusRoute 717, BusRoute 757, BusRoute 767, BusRoute 777, BusRoute 90
+West Midlands	West Midlands	43010096701	BusRoute 537
+West Midlands	West Midlands	43011815001	BusRoute UW2
+West Midlands	West Midlands	43010079001	BusRoute 55, BusRoute B59
+West Midlands	West Midlands	43013904501	BusRoute 007
+West Midlands	West Midlands	43017956001	BusRoute X_6
+West Midlands	West Midlands	43019551001	BusRoute CEC4
+West Midlands	West Midlands	43010118001	BusRoute 657, BusRoute X_6
+West Midlands	West Midlands	43017973702	BusRoute 17B
+West Midlands	West Midlands	43010079002	BusRoute 55, BusRoute 57
+West Midlands	West Midlands	43010118002	BusRoute X_6
+West Midlands	West Midlands	43019840001	BusRoute 767, BusRoute 777
+West Midlands	West Midlands	43010313701	BusRoute 144
+West Midlands	West Midlands	43019550501	BusRoute CEC4
+West Midlands	West Midlands	43010399801	BusRoute 192, BusRoute 318, BusRoute 732, BusRoute 733, BusRoute 736, BusRoute 752, BusRoute 792, BusRoute 864, BusRoute X95
+West Midlands	West Midlands	43017939601	BusRoute 16, BusRoute X18
+West Midlands	West Midlands	43011552801	BusRoute X18
+West Midlands	West Midlands	4200F125062	BusRoute 777
+West Midlands	West Midlands	2000G790018	BusRoute 178
+West Midlands	West Midlands	43011409501	BusRoute 17B, BusRoute 232
+West Midlands	West Midlands	43011534401	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	West Midlands	43011510002	BusRoute 143, BusRoute FW6
+West Midlands	West Midlands	43011523401	BusRoute 16X, BusRoute 60, BusRoute X17, BusRoute X18
+West Midlands	West Midlands	43011535101	BusRoute 48, BusRoute X48
+West Midlands	West Midlands	43011534402	BusRoute 48, BusRoute 57
+West Midlands	West Midlands	43010088101	BusRoute 657, BusRoute X_6
+West Midlands	West Midlands	43011535102	BusRoute 48
+West Midlands	West Midlands	43017930501	BusRoute 16, BusRoute 16A, BusRoute 16X, BusRoute 516, BusRoute X17
+West Midlands	West Midlands	43010039101	BusRoute 48, BusRoute X48
+West Midlands	West Midlands	43011534601	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	West Midlands	43017930502	BusRoute 16, BusRoute 16A, BusRoute X17
+West Midlands	West Midlands	43011878501	BusRoute 115, BusRoute 767
+West Midlands	West Midlands	43010039102	BusRoute 48
+West Midlands	West Midlands	43011535301	BusRoute 48, BusRoute X48
+West Midlands	West Midlands	43013906001	BusRoute 318
+West Midlands	West Midlands	43011534602	BusRoute 48, BusRoute 57
+West Midlands	West Midlands	43017931501	BusRoute 516
+West Midlands	West Midlands	43017960501	BusRoute X_6
+West Midlands	West Midlands	43011878502	BusRoute 115
+West Midlands	West Midlands	43011535302	BusRoute 48
+West Midlands	West Midlands	43013906002	BusRoute 318
+West Midlands	West Midlands	43010095501	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute CEC4
+West Midlands	West Midlands	43017973002	BusRoute 17B
+West Midlands	West Midlands	43019009501	BusRoute 657
+West Midlands	West Midlands	43010095502	BusRoute 48, BusRoute 57, BusRoute X48
+West Midlands	West Midlands	43011534801	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	West Midlands	43010116001	BusRoute 48, BusRoute X_6, BusRoute X48
+West Midlands	West Midlands	43010102101	BusRoute 540, BusRoute 80, BusRoute 81
+West Midlands	West Midlands	43010308802	BusRoute 146
+West Midlands	West Midlands	43010118602	BusRoute X18
+West Midlands	West Midlands	43011414502	BusRoute X15, BusRoute X18
+West Midlands	West Midlands	43011534802	BusRoute 48, BusRoute 57
+West Midlands	West Midlands	43010116002	BusRoute 48
+West Midlands	West Midlands	43010102102	BusRoute 540, BusRoute 80, BusRoute 81
+West Midlands	West Midlands	43010302001	BusRoute 143, BusRoute 178
+West Midlands	West Midlands	43017971702	BusRoute 17B
+West Midlands	West Midlands	43010095701	BusRoute 48, BusRoute X48
+West Midlands	West Midlands	43010302002	BusRoute 143, BusRoute 178
+West Midlands	West Midlands	43013147702	BusRoute X7
+West Midlands	West Midlands	43010095702	BusRoute 48
+West Midlands	West Midlands	43011527801	BusRoute 16
+West Midlands	West Midlands	43012968502	BusRoute 143, BusRoute 178
+West Midlands	West Midlands	43010039501	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute CEC4, BusRoute X48
+West Midlands	West Midlands	43011549601	BusRoute 657, BusRoute X_6
+West Midlands	West Midlands	43010399301	BusRoute 192, BusRoute 732, BusRoute 733, BusRoute 736, BusRoute 752, BusRoute 792, BusRoute 864
+West Midlands	West Midlands	43010305901	BusRoute 178
+West Midlands	West Midlands	43010039502	BusRoute 48, BusRoute 57
+West Midlands	West Midlands	43011549602	BusRoute X_6
+West Midlands	West Midlands	43010399302	BusRoute 192, BusRoute 732, BusRoute 733, BusRoute 736, BusRoute 752, BusRoute 792, BusRoute 864
+West Midlands	West Midlands	43017972902	BusRoute 17B
+West Midlands	West Midlands	43013148901	BusRoute 143
+West Midlands	West Midlands	43017973602	BusRoute 17B
+West Midlands	West Midlands	43011525401	BusRoute 12, BusRoute 62, BusRoute U17, BusRoute U2
+West Midlands	West Midlands	43013914501	BusRoute 49, BusRoute 49A, BusRoute 63, BusRoute 884
+West Midlands	West Midlands	43011511502	BusRoute 179
+West Midlands	West Midlands	43010094901	BusRoute 17B
+West Midlands	West Midlands	43013908001	BusRoute 318, BusRoute FW6, BusRoute X19, BusRoute X7
+West Midlands	West Midlands	43017959001	BusRoute X_6
+West Midlands	West Midlands	43017957501	BusRoute X_6
+West Midlands	West Midlands	43010294101	BusRoute 178, BusRoute 517, BusRoute 519
+West Midlands	West Midlands	43011022001	BusRoute 48, BusRoute 50, BusRoute 57, BusRoute H1
+West Midlands	West Midlands	43011535001	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	West Midlands	43019200001	BusRoute 55, BusRoute 55A, BusRoute 57
+West Midlands	West Midlands	43013908002	BusRoute 318, BusRoute X19, BusRoute X7
+West Midlands	West Midlands	2000G790002	BusRoute 179
+West Midlands	West Midlands	43011546902	BusRoute C1
+West Midlands	West Midlands	43011009001	BusRoute 60
+West Midlands	West Midlands	43011022002	BusRoute 57
+West Midlands	West Midlands	43011101501	BusRoute 232, BusRoute 900
+West Midlands	West Midlands	43011535002	BusRoute 48, BusRoute 57
+West Midlands	West Midlands	43011899501	BusRoute 115, BusRoute 116, BusRoute 757
+West Midlands	West Midlands	43010039001	BusRoute 48, BusRoute X48
+West Midlands	West Midlands	43011899502	BusRoute 115, BusRoute 116, BusRoute 757
+West Midlands	West Midlands	43019004001	BusRoute 232
+West Midlands	West Midlands	43011534501	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	West Midlands	43017974102	BusRoute 17B
+West Midlands	West Midlands	43010094001	BusRoute 55, BusRoute 55A, BusRoute 56, BusRoute 57, BusRoute 772, BusRoute B59, BusRoute H1
+West Midlands	West Midlands	43010039002	BusRoute 48
+West Midlands	West Midlands	43011535201	BusRoute 48, BusRoute X48
+West Midlands	West Midlands	43019004002	BusRoute 232
+West Midlands	West Midlands	43011534502	BusRoute 48, BusRoute 57
+West Midlands	West Midlands	43011535202	BusRoute 48
+West Midlands	West Midlands	43010094002	BusRoute 55, BusRoute 56, BusRoute 57, BusRoute B59, BusRoute H1
+West Midlands	West Midlands	43017956501	BusRoute X_6
+West Midlands	West Midlands	43013122501	BusRoute 007
+West Midlands	West Midlands	43010039201	BusRoute 48, BusRoute X48
+West Midlands	West Midlands	43011534701	BusRoute 48, BusRoute 55, BusRoute 57, BusRoute X48
+West Midlands	West Midlands	43011537601	BusRoute X15, BusRoute X18
+West Midlands	West Midlands	43018920502	BusRoute CEC1
+West Midlands	West Midlands	43010039202	BusRoute 48
+West Midlands	West Midlands	43011534702	BusRoute 48, BusRoute 57
+Scotland	Inverclyde	0000SPT1042	BusRoute 550
+Scotland	Inverclyde	0000SPT17419	BusRoute 308
+Scotland	Inverclyde	0000SPT1230	BusRoute 534
+Scotland	Inverclyde	0000SPT1364	BusRoute 901, BusRoute 906
+Scotland	Inverclyde	0000SPT1474	BusRoute 31
+Scotland	Inverclyde	0000SPT2645	BusRoute 901, BusRoute 906
+Scotland	Inverclyde	0000SPT1309	BusRoute 540
+Scotland	Inverclyde	0000SPT1408	BusRoute 535
+Scotland	Inverclyde	0000SPT1135	BusRoute 545
+Scotland	Inverclyde	0000SPT20075	BusRoute 538
+Scotland	Inverclyde	0000SPT20031	BusRoute 532
+Scotland	Inverclyde	0000SPT1003	BusRoute 30
+Scotland	Inverclyde	0000SPT1312	BusRoute 550
+Scotland	Inverclyde	0000SPT1323	BusRoute 540
+Scotland	Inverclyde	0000SPT1434	BusRoute 578
+Scotland	Inverclyde	0000SPT2769	BusRoute 308
+Scotland	Inverclyde	0000SPT20045	BusRoute 547
+Scotland	Inverclyde	0000SPT20023	BusRoute 531, BusRoute 532, BusRoute 545
+Scotland	Inverclyde	0000SPT1436	BusRoute 580
+Scotland	Inverclyde	0000SPT24040	BusRoute 901
+Scotland	Inverclyde	0000SPT20058	BusRoute 540
+Scotland	Inverclyde	0000SPT2727	BusRoute 308
+West Midlands	Herefordshire	2090PWX18498	BusRoute X11
+West Midlands	Herefordshire	2090ANZ16894	BusRoute 54
+West Midlands	Herefordshire	2090PWX18964	BusRoute 461
+West Midlands	Herefordshire	2090PWX18499	BusRoute X11
+West Midlands	Herefordshire	2090PWX18500	BusRoute X11
+West Midlands	Herefordshire	3500PWX18481	BusRoute 738, BusRoute 740
+West Midlands	Herefordshire	2090ANZ16877	BusRoute 34
+West Midlands	Herefordshire	2090PWX18497	BusRoute X11
+West Midlands	Herefordshire	2090ANZ16893	BusRoute 54
+Scotland	Glasgow	0000SPT11578	BusRoute X34
+Scotland	Glasgow	0000SPT6566	BusRoute 310
+Scotland	Glasgow	0000SPT5422	BusRoute 141
+Scotland	Glasgow	0000SPT12512	BusRoute X34
+Scotland	Glasgow	0000SPT11370	BusRoute 255
+Scotland	Glasgow	0000SPT6458	BusRoute 310
+Scotland	Glasgow	0000SPT5424	BusRoute 141
+Scotland	Glasgow	0000SPT1364	BusRoute 901, BusRoute 906
+Scotland	Glasgow	0000SPT3487	BusRoute 55
+Scotland	Glasgow	0000SPT2645	BusRoute 901, BusRoute 906
+Scotland	Glasgow	0000SPT9032	BusRoute 27A, BusRoute 27B
+Scotland	Glasgow	0000SPT7635	BusRoute 23
+Scotland	Glasgow	0000SPT9404	BusRoute 142
+Scotland	Glasgow	0000SPT8119	BusRoute 119
+Scotland	Glasgow	0000SPT5878	BusRoute 90
+Scotland	Glasgow	0000SPT7361	BusRoute 23
+Scotland	Glasgow	0000SPT12242	BusRoute X35
+Scotland	Glasgow	0000SPT2779	BusRoute X35
+Scotland	Glasgow	0000SPT6044	BusRoute 310
+Scotland	Glasgow	0000SPT4621	BusRoute 229
+Scotland	Glasgow	0000SPT2357	BusRoute 17
+Scotland	Glasgow	0000SPT24937	BusRoute 141
+Scotland	Glasgow	0000SPT7605	BusRoute X35
+Scotland	Glasgow	0000SPT7594	BusRoute X23
+Scotland	Glasgow	0000SPT21021	BusRoute 49
+Scotland	Glasgow	0000SPT6254	BusRoute 39, BusRoute 39A
+Scotland	Glasgow	0000SPT5165	BusRoute 204, BusRoute 205, BusRoute 215
+Scotland	Glasgow	0000SPT11630	BusRoute X34
+Scotland	Glasgow	0000SPT8563	BusRoute 217
+Scotland	Glasgow	0000SPT5166	BusRoute 204, BusRoute 205, BusRoute 215
+Scotland	Glasgow	0000SPT4140	BusRoute 7
+Scotland	Glasgow	0000SPT3614	BusRoute 44, BusRoute 44A
+Scotland	Glasgow	0000SPT7244	BusRoute 165, BusRoute 65, BusRoute 65A
+Scotland	Glasgow	0000SPT3296	BusRoute 395
+Scotland	Glasgow	0000SPT1811	BusRoute 145
+Scotland	Glasgow	0000SPT4152	BusRoute 119, BusRoute 23, BusRoute 40, BusRoute 40A, BusRoute 61, BusRoute 8, BusRoute N40
+North West	Greater Manchester	998033333	CoachRoute 540
+North West	Greater Manchester	998022102	CoachRoute 664
+Wales	Monmouthshire	998046125	CoachRoute 508
+Wales	Monmouthshire	2090ANZ16894	BusRoute 54
+Wales	Monmouthshire	0100053214	BusRoute X10, BusRoute X11, BusRoute X14
+Wales	Monmouthshire	5330AWA16960	BusRoute 756, BusRoute 791
+Wales	Monmouthshire	2090ANZ16877	BusRoute 34
+Wales	Monmouthshire	2090ANZ16893	BusRoute 54

@@ -1,0 +1,44 @@
+From test@localhost Mon Oct 06 13:45:38 2008
+Return-path: <test@localhost>
+Envelope-to: foi@localhost
+Delivery-date: Mon, 06 Oct 2008 13:45:38 +0100
+Message-Id: <s8ea1156.098@localhost>
+X-Mailer: Novell GroupWise Internet Agent 6.5.4 
+Date: Mon, 06 Oct 2008 13:23:00 +0100
+From: "Test" <test@localhost>
+To: <request@localhost>
+Subject: Test Message
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="=__PartFDD45234.0__="
+X-Proofpoint-Virus-Version: vendor=nai engine=5.2.00 definitions=5398 signatures=473327
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 classifier= adjust=0 reason=limit engine=3.1.0-0805090000 definitions=main-0810060054
+
+This is a MIME message. If you are reading this text, you may want to 
+consider changing to a mail reader or gateway that understands how to 
+properly handle MIME multipart messages.
+--=__PartFDD45234.0__=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+
+This is a test
+
+--=__PartFDD45234.0__=
+Content-Type: message/rfc822
+
+Date: 23 February 2010 15:33
+From: "Sender" <sender@example.com>
+To: "Recipient" <recipient@example.com>
+Cc: "CC Recipient" <cc@example.com>,
+	"CC Recipient 2" <cc2@example.com>,
+	"CC Recipient 3" <cc3@example.com>
+Subject: Test Subject
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+
+Attachment message content
+
+--=__PartFDD45234.0__=--
+

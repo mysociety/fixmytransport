@@ -19,11 +19,17 @@ class RouteSegment < ActiveRecord::Base
   belongs_to :from_stop_area, :class_name => 'StopArea'
   belongs_to :to_stop_area, :class_name => 'StopArea'
   belongs_to :route
+  belongs_to :journey_pattern
   # virtual attribute used for adding new route segments
   attr_accessor :_add
   before_save :set_stop_areas
   has_paper_trail
+  after_destroy :check_destroy_journey_pattern
   
+  def check_destroy_journey_pattern
+    journey_pattern.destroy if journey_pattern.route_segments.empty?
+  end
+   
   def set_stop_areas
     station_part_stops = StopType.station_part_types
     station_types = StopType.station_part_types_to_station_types

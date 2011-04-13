@@ -24,7 +24,7 @@
 - if !@operator_contact.operator.stop_areas.empty?
   .form-field
     != f.label :location
-    != f.collection_select(:location_id, @operator_contact.operator.stop_areas, :id, :name, :prompt => true)
+    != f.collection_select(:stop_area_id, @operator_contact.operator.stop_areas.sort_by(&:name), :id, :name, :prompt => true)
 .form-field
   != f.label :notes
   != f.text_area :notes, :cols => 50, :rows => 4

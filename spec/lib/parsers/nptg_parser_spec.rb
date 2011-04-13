@@ -87,16 +87,25 @@ describe Parsers::NptgParser do
   
   describe 'when parsing an example file of locality alternative names' do 
  
-    before(:all) do 
+    before(:each) do 
       @parser = Parsers::NptgParser.new
+      Locality.stub!(:find_by_code).and_return(nil)
+      @mock_locality = mock_model(Locality)
+      @mock_alternative_locality = mock_model(Locality)
+      Locality.stub!(:find_by_code).with("E0041562").and_return(@mock_locality)
+      Locality.stub!(:find_by_code).with("N0070289").and_return(@mock_alternative_locality)      
       @names = []
       @parser.parse_locality_alternative_names(example_file("LocalityAlternativeNames.csv")) do |name| 
         @names << name 
       end
     end
     
-    it 'should extract the name' do 
-      @names.first.name.should == 'Abertyleri'
+    it 'should extract the locality' do 
+      @names.first.locality.should == @mock_locality
+    end
+    
+    it 'should extract the alternative locality' do
+      @names.first.alternative_locality.should == @mock_alternative_locality 
     end
     
   end

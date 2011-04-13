@@ -7,7 +7,7 @@ describe OperatorContact do
       :location_id => 1,
       :location_type => "value for location_type",
       :category => "value for category",
-      :email => "value for email",
+      :email => "test@example.com",
       :confirmed => false,
       :notes => "value for notes"
     }

@@ -5,7 +5,7 @@ describe CouncilContact do
     @valid_attributes = {
       :area_id => 1,
       :category => "value for category",
-      :email => "value for email",
+      :email => "test@example.com",
       :confirmed => false,
       :notes => "value for notes"
     }

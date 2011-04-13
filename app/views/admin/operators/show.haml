@@ -4,7 +4,7 @@
   != submit_tag t(:destroy) 
 
 %h3= t(:operator_contacts)
-= link_to(t(:add_an_operator_contact), admin_url(new_admin_operator_contact_path(:operator_id => @operator)))
+= link_to(t(:add_an_operator_contact), admin_url(new_admin_operator_contact_path(:operator_id => @operator.id)))
 
 - if !@operator.operator_contacts.empty? 
   %table{ :class => 'operators index-list' }

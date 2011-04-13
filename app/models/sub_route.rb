@@ -60,6 +60,15 @@ class SubRoute < ActiveRecord::Base
     name
   end
   
+  def make_routes
+    find_options = { :transport_modes => [TransportMode.find_by_name('Train').id],
+                     :as_terminus => false }
+    found_routes = Route.find_all_by_locations([from_station, to_station], find_options)  
+    found_routes.each do |route|
+      self.route_sub_routes.create!(:route => route)
+    end
+  end
+  
   def self.make_sub_route(from_station, to_station, transport_mode)
     exists = find(:first, :conditions => ['from_station_id = ? 
                                           AND to_station_id = ? 

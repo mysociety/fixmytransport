@@ -12,7 +12,7 @@ $:.push(File.join(File.dirname(__FILE__), '../commonlib/rblib'))
 # ... if these fail to include, you need the commonlib submodule from git
 
 load "config.rb"
-load "email.rb"
+# load "email.rb"
 load "format.rb"
 load "mapit.rb"
 load "mask.rb"

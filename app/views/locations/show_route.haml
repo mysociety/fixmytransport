@@ -5,7 +5,7 @@
   .extra-info
     %ul.stops   
       Stops:
-      - @route.stops_or_stations.sort_by(&:name).each do |stop_or_station|
+      - @route.stops_or_stations.each do |stop_or_station|
         %li= link_to stop_or_station.full_name, location_url(stop_or_station)
 .route
   %a{:href => location_url(@route, :format => 'atom'), :class => 'rss-link campaign-rss'}
@@ -13,7 +13,8 @@
     %img{:src => "/images/feed.png", :title => t(:feed), :alt => t(:campaigns_feed) }
   %h3.name= MySociety::Format.ucfirst(@route.name)
   .details
-    %span.locality= "#{@route.area}."
+    - if ! @route.is_a?(TrainRoute)
+      %span.locality= "#{@route.area}."
     .operators
       - if !@route.operators.empty? 
         Operated by

@@ -8,13 +8,15 @@
   %tr
     %th{:width => "30%"}= t(:updated_at)
     %th{:width => "30%"}= t(:email)
-    %th{:width => "10%"}= t(:confirmed) 
-    %th{:width => "10%"}= t(:deleted) 
+    %th{:width => "8%"}= t(:district_id)
+    %th{:width => "6%"}= t(:confirmed) 
+    %th{:width => "6%"}= t(:deleted) 
     %th{:width => "20%"}= t(:editor) 
     %th{:width => "38%"}= t(:notes)
   %tr{ :class => cycle('odd', 'even') }
     %td= @council_contact.updated_at
     %td= @council_contact.email
+    %td= @council_contact.district_id    
     %td= @council_contact.confirmed
     %td= @council_contact.deleted
     %td= @council_contact.last_editor
@@ -25,6 +27,7 @@
       %tr{ :class => cycle('odd', 'even') }
         %td= version.created_at
         %td= contact.email
+        %td= contact.district_id        
         %td= contact.confirmed
         %td= contact.deleted
         %td= version.whodunnit
