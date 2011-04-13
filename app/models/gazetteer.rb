@@ -1,5 +1,3 @@
-require 'mechanize'
-
 class Gazetteer 
   
   def self.postcode_from_area(attributes)
