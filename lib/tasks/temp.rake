@@ -588,8 +588,8 @@ namespace :temp do
       port = ActiveRecord::Base.configurations[RAILS_ENV]['port']
       database = ActiveRecord::Base.configurations[RAILS_ENV]['database']
       user = ActiveRecord::Base.configurations[RAILS_ENV]['username']
-      delete_command = "psql -p#{port} -c 'delete from #{user_table}' #{database}"
-      command = "psql -p#{port} #{database} < #{load_file}"
+      delete_command = "psql -p#{port} -c 'delete from #{user_table}' #{user} #{database}"
+      command = "psql -p#{port} #{user} #{database} < #{load_file}"
       puts delete_command
       puts command
       system(delete_command)
