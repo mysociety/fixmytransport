@@ -444,7 +444,23 @@ namespace :temp do
   task :load_user_tables => :environment do
     check_for_dir
     dir = ENV['DIR']
-    
+    user_tables = [:assignments, 
+                   :campaign_events, 
+                   :campaign_supporters, 
+                   :campaign_updates, 
+                   :campaigns, 
+                   :comments, 
+                   :incoming_messages,
+                   :location_searches,
+                   :outgoing_messages, 
+                   :problems, 
+                   :raw_emails,
+                   :route_sub_routes,
+                   :sent_emails,
+                   :sessions,
+                   :sub_routes,
+                   :updates, 
+                   :users]
     # campaigns - location_id, location_type
     campaigns_data = File.read(File.join(dir,"campaigns.sql"))
     campaigns_output = File.open(File.join(dir,"campaigns_remapped.sql"), 'w')
