@@ -8,7 +8,6 @@ $:.push(File.join(File.dirname(__FILE__), '../ruby-msg/lib'))
 $:.push(File.join(File.dirname(__FILE__), '../ruby-ole/lib'))
 require 'mapi/msg'
 require 'mapi/convert'
-require 'zip/zip'
 
 module FixMyTransport
 
@@ -117,8 +116,6 @@ module FixMyTransport
               end
             end
           end
-          # XXX call _convert_part_body_to_text here, but need to get charset somehow
-          # e.g. http://www.whatdotheyknow.com/request/1593/response/3088/attach/4/Freedom%20of%20Information%20request%20-%20car%20oval%20sticker:%20Article%2020,%20Convention%20on%20Road%20Traffic%201949.txt
           attachment.body = headers + "\n" + attachment.body
         end
       end
@@ -385,79 +382,11 @@ module FixMyTransport
         tempfile = Tempfile.new('emailextract')
         tempfile.print body
         tempfile.flush
-        if content_type == 'application/vnd.ms-word'
-          system("/usr/bin/wvText " + tempfile.path + " " + tempfile.path + ".txt")
-          # Try catdoc if we get into trouble (e.g. for InfoRequestEvent 2701)
-          if not File.exists?(tempfile.path + ".txt")
-            IO.popen("/usr/bin/catdoc " + tempfile.path, "r") do |child|
-              text += child.read() + "\n\n"
-            end
-          else
-            text += File.read(tempfile.path + ".txt") + "\n\n"
-            File.unlink(tempfile.path + ".txt")
-          end
-        elsif content_type == 'application/rtf'
-          # catdoc on RTF prodcues less comments and extra bumf than --text option to unrtf
-          IO.popen("/usr/bin/catdoc " + tempfile.path, "r") do |child|
-            text += child.read() + "\n\n"
-          end
-        elsif content_type == 'text/html'
+        if content_type == 'text/html'
           # lynx wordwraps links in its output, which then don't get formatted properly
           # by WhatDoTheyKnow. We use elinks instead, which doesn't do that.
           IO.popen("/usr/bin/elinks -dump-charset utf-8 -force-html -dump " + tempfile.path, "r") do |child|
             text += child.read() + "\n\n"
-          end
-        elsif content_type == 'application/vnd.ms-excel'
-          # Bit crazy using /usr/bin/strings - but xls2csv, xlhtml and
-          # py_xls2txt only extract text from cells, not from floating
-          # notes. catdoc may be fooled by weird character sets, but will
-          # probably do for UK FOI requests.
-          IO.popen("/usr/bin/strings " + tempfile.path, "r") do |child|
-            text += child.read() + "\n\n"
-          end
-        elsif content_type == 'application/vnd.ms-powerpoint'
-            # ppthtml seems to catch more text, but only outputs HTML when
-            # we want text, so just use catppt for now
-            IO.popen("/usr/bin/catppt " + tempfile.path, "r") do |child|
-                text += child.read() + "\n\n"
-            end
-        elsif content_type == 'application/pdf'
-          IO.popen("/usr/bin/pdftotext " + tempfile.path + " -", "r") do |child|
-            text += child.read() + "\n\n"
-          end
-        elsif content_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-          # This is Microsoft's XML office document format.
-          # Just pull out the main XML file, and strip it of text.
-          xml = ''
-          IO.popen("/usr/bin/unzip -qq -c " + tempfile.path + " word/document.xml", "r") do |child|
-            xml += child.read() + "\n\n"
-          end
-          doc = REXML::Document.new(xml)
-          text += doc.each_element( './/text()' ){}.join(" ")
-        elsif content_type == 'application/zip'
-          # recurse into zip files
-          zip_file = Zip::ZipFile.open(tempfile.path)
-          for entry in zip_file
-            if entry.file?
-              filename = entry.to_s
-              begin 
-                body = entry.get_input_stream.read
-              rescue
-                # move to next attachment silently if there were problems
-                # XXX really should reduce this to specific exceptions?
-                # e.g. password protected
-                next
-              end
-              calc_mime = filename_to_mimetype(filename)
-              if calc_mime
-                content_type = calc_mime
-              else
-                content_type = 'application/octet-stream'
-              end
-        
-              #STDERR.puts("doing file " + filename + " content type " + content_type)
-              text += _get_attachment_text_internal_one_file(content_type, body)
-            end
           end
         end
         tempfile.close
@@ -465,35 +394,7 @@ module FixMyTransport
     
       return text
     end
-      
-    # Given a main text part, converts it to text
-    def self.convert_part_body_to_text(part)
-      if part.nil?
-        text = "[ Email has no body, please see attachments ]"
-        text_charset = "utf-8"
-      else
-        text = part.body
-        text_charset = part.charset
-        if part.content_type == 'text/html'
-          # e.g. http://www.whatdotheyknow.com/request/35/response/177
-          # XXX This is a bit of a hack as it is calling a convert to text routine.
-          # Could instead call a sanitize HTML one.
-          text = _get_attachment_text_internal_one_file(part.content_type, text)
-        end
-      end
-    
-      # Fix DOS style linefeeds to Unix style ones (or other later regexps won't work)
-      # Needed for e.g. http://www.whatdotheyknow.com/request/60/response/98
-      text = text.gsub(/\r\n/, "\n")
-    
-      # Compress extra spaces down to save space, and to stop regular expressions
-      # breaking in strange extreme cases. e.g. for
-      # http://www.whatdotheyknow.com/request/spending_on_consultants
-      text = text.gsub(/ +/, " ")
-    
-      return text
-    end
-      
+
     def self.remove_quoting(text, replacement)
       folded_quoted_text = remove_quoted_sections(text, replacement)
       # merge contiguous quoted sections

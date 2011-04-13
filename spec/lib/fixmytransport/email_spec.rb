@@ -57,13 +57,6 @@ describe FixMyTransport::Email do
       assert_equal(expected_display_filename, attachment.display_filename)
     end
   
-    it 'should manage a zip file failure' do
-      mock_entry = mock('ZipFile entry', :file? => true)
-      mock_entry.stub!(:get_input_stream).and_raise("invalid distance too far back")
-      Zip::ZipFile.stub!(:open).and_return([mock_entry])
-      FixMyTransport::Email._get_attachment_text_internal_one_file('application/zip', "some string")
-    end
-    
   end
 
   describe "when handling attachment headers" do
