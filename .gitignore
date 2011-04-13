@@ -22,6 +22,7 @@ cache/*
 public/index.html
 moo.txt
 rdoc
+vendor/gems/libxml-ruby-1.1.4/lib/*.so
 vendor/gems/libxml-ruby-1.1.4/ext/**/*.o
 vendor/gems/libxml-ruby-1.1.4/ext/**/*.so
 vendor/gems/libxml-ruby-1.1.4/ext/**/*.so.a
