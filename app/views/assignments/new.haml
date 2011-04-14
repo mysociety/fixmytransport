@@ -8,7 +8,7 @@
       - if @assignment.errors.on('subject')
         .form-field-error= @assignment.errors.on(:subject)
       = label_tag :subject, t(:subject_line_for_email)
-      != text_field_tag :subject, "", :size => 45
+      != text_field_tag :subject, assignment.data[:subject], :size => 45
       %span.optional-note= t(:for_advice_email, :user => @initiator.first_name)
     .form-field
       - if @assignment.errors.on('reason')
