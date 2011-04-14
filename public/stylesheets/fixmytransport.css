@@ -216,11 +216,20 @@ form#search {
 	    margin: 0;
 	    color: #151f26;
 	}
+
 /* ===[ Main Content ]=== */
 #main-content {}
 	#main-content div {
 	    overflow: hidden
 	}
+
+  #main-content .staging-banner {
+      padding: 5px;
+      margin: 5px;
+      background-color: #FFE973;
+      border: 1px solid #FFD700;
+      text-align: center;
+  }
 /* ===[ Footer ]=== */
 #footer {
     color: #fff;
@@ -819,7 +828,7 @@ ul#process {
 		float:left;
 		position:relative;
 		z-index:3;
-		
+
 	}
 		ul#process li#crumb1 {
 			z-index:3;
@@ -856,17 +865,17 @@ ul#process {
 
 
 		/*Next and back buttons for process page*/
-		
+
 		.process-back, .process-next{
 			height: 28px;
 			border: 0px;
 			text-transform: uppercase;
-			color:#0075a0;	
-			outline: none;		
+			color:#0075a0;
+			outline: none;
 			}
-		
+
 		.process-back{
-			background:transparent url(../images/process-back.gif) left top no-repeat;			
+			background:transparent url(../images/process-back.gif) left top no-repeat;
 			padding-left: 30px;
 		}
 			.process-back:hover{
@@ -876,7 +885,7 @@ ul#process {
 			}
 
 		.process-next{
-			background:transparent url(../images/process-next.gif) right top no-repeat;			
+			background:transparent url(../images/process-next.gif) right top no-repeat;
 			padding-right: 30px;
 			float: right;
 		}
@@ -891,9 +900,9 @@ ul#process {
 				margin-left:120px;
 				margin-top: 1em;
 				margin-bottom: 20px;
-				
-				
+
+
 			}
-		
-		
-		
+
+
+
