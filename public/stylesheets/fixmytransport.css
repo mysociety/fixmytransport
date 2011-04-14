@@ -223,13 +223,6 @@ form#search {
 	    overflow: hidden
 	}
 
-  #main-content .staging-banner {
-      padding: 5px;
-      margin: 5px;
-      background-color: #FFE973;
-      border: 1px solid #FFD700;
-      text-align: center;
-  }
 /* ===[ Footer ]=== */
 #footer {
     color: #fff;
