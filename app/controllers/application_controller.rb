@@ -6,7 +6,9 @@ class ApplicationController < ActionController::Base
   include ExceptionNotification::Notifiable
   include MySociety::UrlMapper
   helper :all # include all helpers, all the time
-  protect_from_forgery # See ActionController::RequestForgeryProtection for details
+  protect_from_forgery if :current_user # See ActionController::RequestForgeryProtection for details
+  skip_before_filter :verify_authenticity_token, :unless => :current_user
+  
   helper_method :location_search,
                 :main_url, 
                 :admin_url, 
