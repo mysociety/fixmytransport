@@ -1,9 +1,10 @@
 
-#map-col {
+#main-content #map-col {
   float: right; 
   max-width: 400px;
   margin-left: 0.5em;
   margin-right: 2em;
+  overflow: visible;
 }
 
 #map {
@@ -18,9 +19,14 @@
     border: 0;
 }
 
-#large-map {
+#map div {
+  overflow: visible;
+}
+
+#main-content #large-map {
   width: 500px;
   margin:auto;
+  overflow: visible;
 }
 
 #large-map #map{
@@ -28,9 +34,6 @@
   width: 500px; 
   height: 500px;
   margin: auto;
-  position:relative;
-  border: 1px solid #000000;
-  overflow: hidden;
 }
 
 .tooltip-popup {
