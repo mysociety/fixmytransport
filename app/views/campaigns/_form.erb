@@ -1,0 +1,13 @@
+<%- form_for campaign, :url => campaign_url(campaign, :token => params[:token]), :html => { :class => 'update_campaign' } do |f| %>
+  <div class='fieldset'>
+    <%- if campaign.errors.on('description') %>
+      <div class='form-field-error'><%= error_message_on campaign, :description %>
+			</div>
+		<%- end %>
+		<div class='form-field'>
+		  <%= f.label :description %>
+		  <%= raw f.text_area :description, { :rows => 8, :cols => 50 } %>
+		</div>
+		<%= raw f.submit t(:save) %>
+	</div>
+<%- end %> 

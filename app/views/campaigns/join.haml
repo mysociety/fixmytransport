@@ -1,7 +1,0 @@
-- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST' } do |f|
-  - if @user.errors.on('email')
-    .form-field-error= error_message_on @user, 'email'
-  .form-field
-    != label_tag :email, t(:enter_your_email_to_join)
-    != text_field_tag :email, @user.email
-  != submit_tag t(:join)
