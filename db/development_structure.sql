@@ -3,7 +3,7 @@
 --
 
 SET statement_timeout = 0;
-SET client_encoding = 'UTF8';
+SET client_encoding = 'SQL_ASCII';
 SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
@@ -3907,15 +3907,6 @@ CREATE FUNCTION pgis_geometry_union_finalfn(pgis_abs) RETURNS geometry
 
 
 --
--- Name: plpgsql_call_handler(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION plpgsql_call_handler() RETURNS opaque
-    LANGUAGE c
-    AS '$libdir/plpgsql', 'plpgsql_call_handler';
-
-
---
 -- Name: point_inside_circle(geometry, double precision, double precision, double precision); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -4592,7 +4583,7 @@ CREATE FUNCTION postgis_proj_version() RETURNS text
 
 CREATE FUNCTION postgis_scripts_build_date() RETURNS text
     LANGUAGE sql IMMUTABLE
-    AS $$SELECT '2010-04-15 16:48:33'::text AS version$$;
+    AS $$SELECT '2010-09-30 02:44:42'::text AS version$$;
 
 
 --
@@ -4601,7 +4592,7 @@ CREATE FUNCTION postgis_scripts_build_date() RETURNS text
 
 CREATE FUNCTION postgis_scripts_installed() RETURNS text
     LANGUAGE sql IMMUTABLE
-    AS $$SELECT '1.5 r5385'::text AS version$$;
+    AS $$SELECT '1.5 r5976'::text AS version$$;
 
 
 --
@@ -5989,7 +5980,7 @@ CREATE FUNCTION st_coveredby(geometry, geometry) RETURNS boolean
 --
 
 CREATE FUNCTION st_coveredby(geography, geography) RETURNS boolean
-    LANGUAGE sql IMMUTABLE STRICT
+    LANGUAGE sql IMMUTABLE
     AS $_$SELECT $1 && $2 AND _ST_Covers($2, $1)$_$;
 
 
@@ -5998,7 +5989,7 @@ CREATE FUNCTION st_coveredby(geography, geography) RETURNS boolean
 --
 
 CREATE FUNCTION st_coveredby(text, text) RETURNS boolean
-    LANGUAGE sql IMMUTABLE STRICT
+    LANGUAGE sql IMMUTABLE
     AS $_$ SELECT ST_CoveredBy($1::geometry, $2::geometry);  $_$;
 
 
@@ -6025,7 +6016,7 @@ CREATE FUNCTION st_covers(geography, geography) RETURNS boolean
 --
 
 CREATE FUNCTION st_covers(text, text) RETURNS boolean
-    LANGUAGE sql IMMUTABLE STRICT
+    LANGUAGE sql IMMUTABLE
     AS $_$ SELECT ST_Covers($1::geometry, $2::geometry);  $_$;
 
 
@@ -6216,7 +6207,7 @@ CREATE FUNCTION st_dwithin(geography, geography, double precision) RETURNS boole
 --
 
 CREATE FUNCTION st_dwithin(text, text, double precision) RETURNS boolean
-    LANGUAGE sql IMMUTABLE STRICT
+    LANGUAGE sql IMMUTABLE
     AS $_$ SELECT ST_DWithin($1::geometry, $2::geometry, $3);  $_$;
 
 
@@ -6243,7 +6234,7 @@ CREATE FUNCTION st_envelope(geometry) RETURNS geometry
 --
 
 CREATE FUNCTION st_equals(geometry, geometry) RETURNS boolean
-    LANGUAGE sql IMMUTABLE STRICT
+    LANGUAGE sql IMMUTABLE
     AS $_$SELECT $1 && $2 AND _ST_Equals($1,$2)$_$;
 
 
@@ -6979,7 +6970,7 @@ CREATE FUNCTION st_intersects(geometry, geometry) RETURNS boolean
 --
 
 CREATE FUNCTION st_intersects(geography, geography) RETURNS boolean
-    LANGUAGE sql IMMUTABLE STRICT
+    LANGUAGE sql IMMUTABLE
     AS $_$SELECT $1 && $2 AND _ST_Distance($1, $2, 0.0, false) < 0.00001$_$;
 
 
@@ -6988,7 +6979,7 @@ CREATE FUNCTION st_intersects(geography, geography) RETURNS boolean
 --
 
 CREATE FUNCTION st_intersects(text, text) RETURNS boolean
-    LANGUAGE sql IMMUTABLE STRICT
+    LANGUAGE sql IMMUTABLE
     AS $_$ SELECT ST_Intersects($1::geometry, $2::geometry);  $_$;
 
 
@@ -8775,24 +8766,6 @@ $_$;
 
 
 --
--- Name: update_geometry_stats(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION update_geometry_stats() RETURNS text
-    LANGUAGE sql
-    AS $$ SELECT 'update_geometry_stats() has been obsoleted. Statistics are automatically built running the ANALYZE command'::text$$;
-
-
---
--- Name: update_geometry_stats(character varying, character varying); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION update_geometry_stats(character varying, character varying) RETURNS text
-    LANGUAGE sql
-    AS $$SELECT update_geometry_stats();$$;
-
-
---
 -- Name: updategeometrysrid(character varying, character varying, character varying, character varying, integer); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -9785,18 +9758,14 @@ ALTER SEQUENCE admin_areas_id_seq OWNED BY admin_areas.id;
 
 CREATE TABLE alternative_names (
     id integer NOT NULL,
-    name text,
     locality_id integer,
-    short_name text,
-    qualifier_name text,
-    qualifier_locality text,
-    qualifier_district text,
     creation_datetime timestamp without time zone,
     modification_datetime timestamp without time zone,
     revision_number character varying(255),
     modification character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    alternative_locality_id integer
 );
 
 
@@ -10059,7 +10028,8 @@ CREATE TABLE council_contacts (
     notes text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    deleted boolean DEFAULT false NOT NULL
+    deleted boolean DEFAULT false NOT NULL,
+    district_id integer
 );
 
 
@@ -10124,7 +10094,7 @@ ALTER SEQUENCE districts_id_seq OWNED BY districts.id;
 --
 
 CREATE VIEW geography_columns AS
-    SELECT current_database() AS f_table_catalog, n.nspname AS f_table_schema, c.relname AS f_table_name, a.attname AS f_geography_column, geography_typmod_dims(a.atttypmod) AS coord_dimension, geography_typmod_srid(a.atttypmod) AS srid, geography_typmod_type(a.atttypmod) AS type FROM pg_class c, pg_attribute a, pg_type t, pg_namespace n WHERE ((((((c.relkind = ANY (ARRAY['r'::"char", 'v'::"char"])) AND (t.typname = 'geography'::name)) AND (a.attisdropped = false)) AND (a.atttypid = t.oid)) AND (a.attrelid = c.oid)) AND (c.relnamespace = n.oid));
+    SELECT current_database() AS f_table_catalog, n.nspname AS f_table_schema, c.relname AS f_table_name, a.attname AS f_geography_column, geography_typmod_dims(a.atttypmod) AS coord_dimension, geography_typmod_srid(a.atttypmod) AS srid, geography_typmod_type(a.atttypmod) AS type FROM pg_class c, pg_attribute a, pg_type t, pg_namespace n WHERE ((((((t.typname = 'geography'::name) AND (a.attisdropped = false)) AND (a.atttypid = t.oid)) AND (a.attrelid = c.oid)) AND (c.relnamespace = n.oid)) AND (NOT pg_is_other_temp_schema(c.relnamespace)));
 
 
 SET default_with_oids = true;
@@ -10180,6 +10150,72 @@ CREATE SEQUENCE incoming_messages_id_seq
 --
 
 ALTER SEQUENCE incoming_messages_id_seq OWNED BY incoming_messages.id;
+
+
+--
+-- Name: journey_patterns; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE journey_patterns (
+    id integer NOT NULL,
+    route_id integer,
+    destination character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: journey_patterns_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE journey_patterns_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: journey_patterns_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE journey_patterns_id_seq OWNED BY journey_patterns.id;
+
+
+--
+-- Name: load_run_completions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE load_run_completions (
+    id integer NOT NULL,
+    transport_mode_id integer,
+    admin_area_id integer,
+    load_type character varying(255),
+    name character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: load_run_completions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE load_run_completions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: load_run_completions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE load_run_completions_id_seq OWNED BY load_run_completions.id;
 
 
 --
@@ -10393,8 +10429,6 @@ CREATE TABLE operators (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     short_name character varying(255),
-    email text,
-    email_confirmed boolean,
     notes text,
     noc_code character varying(255),
     reference_name character varying(255),
@@ -10402,7 +10436,10 @@ CREATE TABLE operators (
     parent character varying(255),
     vehicle_mode character varying(255),
     ultimate_parent character varying(255),
-    transport_mode_id integer
+    transport_mode_id integer,
+    company_no character varying(255),
+    registered_address text,
+    url text
 );
 
 
@@ -10727,7 +10764,9 @@ CREATE TABLE route_segments (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     from_stop_area_id integer,
-    to_stop_area_id integer
+    to_stop_area_id integer,
+    journey_pattern_id integer,
+    segment_order integer
 );
 
 
@@ -11674,6 +11713,20 @@ ALTER TABLE incoming_messages ALTER COLUMN id SET DEFAULT nextval('incoming_mess
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE journey_patterns ALTER COLUMN id SET DEFAULT nextval('journey_patterns_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE load_run_completions ALTER COLUMN id SET DEFAULT nextval('load_run_completions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE localities ALTER COLUMN id SET DEFAULT nextval('localities_id_seq'::regclass);
 
 
@@ -12023,6 +12076,22 @@ ALTER TABLE ONLY geometry_columns
 
 ALTER TABLE ONLY incoming_messages
     ADD CONSTRAINT incoming_messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_patterns_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY journey_patterns
+    ADD CONSTRAINT journey_patterns_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: load_run_completions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY load_run_completions
+    ADD CONSTRAINT load_run_completions_pkey PRIMARY KEY (id);
 
 
 --
@@ -12470,6 +12539,13 @@ CREATE INDEX index_route_segments_on_from_stop_id ON route_segments USING btree 
 
 
 --
+-- Name: index_route_segments_on_journey_pattern_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_route_segments_on_journey_pattern_id ON route_segments USING btree (journey_pattern_id);
+
+
+--
 -- Name: index_route_segments_on_route_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -12705,6 +12781,13 @@ CREATE INDEX index_stops_on_metro_stop ON stops USING btree (metro_stop);
 --
 
 CREATE INDEX index_stops_on_naptan_code ON stops USING btree (naptan_code);
+
+
+--
+-- Name: index_stops_on_other_code_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_stops_on_other_code_lower ON stops USING btree (lower((other_code)::text));
 
 
 --
@@ -13214,3 +13297,19 @@ INSERT INTO schema_migrations (version) VALUES ('20110209193129');
 INSERT INTO schema_migrations (version) VALUES ('20110210151320');
 
 INSERT INTO schema_migrations (version) VALUES ('20110223105145');
+
+INSERT INTO schema_migrations (version) VALUES ('20110302161101');
+
+INSERT INTO schema_migrations (version) VALUES ('20110309102438');
+
+INSERT INTO schema_migrations (version) VALUES ('20110309141414');
+
+INSERT INTO schema_migrations (version) VALUES ('20110310130119');
+
+INSERT INTO schema_migrations (version) VALUES ('20110310182250');
+
+INSERT INTO schema_migrations (version) VALUES ('20110314185100');
+
+INSERT INTO schema_migrations (version) VALUES ('20110323140249');
+
+INSERT INTO schema_migrations (version) VALUES ('20110323170738');
