@@ -1,6 +1,4 @@
-class Admin::PtesController < ApplicationController
-  
-  layout "admin" 
+class Admin::PtesController < Admin::AdminController
   
   def index
     @ptes = PassengerTransportExecutive.paginate :page => params[:page], 

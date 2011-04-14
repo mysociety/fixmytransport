@@ -1,6 +1,4 @@
-class Admin::LocationSearchesController < ApplicationController
-  
-  layout "admin" 
+class Admin::LocationSearchesController < Admin::AdminController
   
   def index
     @searches = LocationSearch.find(:all, :order => 'created_at desc')

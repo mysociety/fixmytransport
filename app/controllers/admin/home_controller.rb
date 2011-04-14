@@ -1,7 +1,5 @@
-class Admin::HomeController < ApplicationController
-  
-  layout "admin" 
-  
+class Admin::HomeController < Admin::AdminController
+
   def index
     @routes_without_operators = Route.find_without_operators(:limit => 20)
     @routes_without_operators_total = Route.count_without_operators

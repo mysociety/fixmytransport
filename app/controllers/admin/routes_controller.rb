@@ -1,6 +1,5 @@
-class Admin::RoutesController < ApplicationController
+class Admin::RoutesController < Admin::AdminController
   
-  layout "admin" 
   cache_sweeper :route_sweeper
   helper_method :sort_column, :sort_direction
 

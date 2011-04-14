@@ -1,4 +1,4 @@
-class Admin::LocalitiesController < ApplicationController
+class Admin::LocalitiesController < Admin::AdminController
 
   def autocomplete_for_name
     query = params[:term].downcase

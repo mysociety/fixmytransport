@@ -1,6 +1,4 @@
-class Admin::StopAreasController < ApplicationController
-  
-  layout "admin" 
+class Admin::StopAreasController < Admin::AdminController
   
   def show 
     @stop_area = StopArea.find(params[:id])

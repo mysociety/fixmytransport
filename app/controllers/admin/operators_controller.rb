@@ -1,7 +1,5 @@
-class Admin::OperatorsController < ApplicationController
-  
-  layout "admin" 
-  
+class Admin::OperatorsController < Admin::AdminController
+
   def index
     conditions = []
     query_clauses = []

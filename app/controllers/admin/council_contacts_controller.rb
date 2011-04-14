@@ -1,7 +1,5 @@
-class Admin::CouncilContactsController < ApplicationController
-  
-  layout "admin" 
-  
+class Admin::CouncilContactsController < Admin::AdminController
+    
   def show 
     @council_contact = CouncilContact.find(params[:id])
   end

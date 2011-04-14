@@ -1,7 +1,5 @@
-class Admin::StopsController < ApplicationController
-  
-  layout "admin" 
-  
+class Admin::StopsController < Admin::AdminController
+
   def show 
     @stop = Stop.find(params[:id])
   end

@@ -1,6 +1,4 @@
-class Admin::OperatorContactsController < ApplicationController
-  
-  layout "admin" 
+class Admin::OperatorContactsController < Admin::AdminController
   
   def show 
     @operator_contact = OperatorContact.find(params[:id])
