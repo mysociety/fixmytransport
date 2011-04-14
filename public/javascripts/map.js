@@ -42,7 +42,7 @@ function updateLocations(event) {
   center = map.getCenter();
   center = center.transform(map.getProjectionObject(), proj);
   url = "/locations/" + map.getZoom() + "/" + center.lat + "/" + center.lon + "/" + linkType;
-  params = "?height=" + jQuery('#map').height() + "&width=" + jQuery('#map').width();
+  params = "?height=" + $('#map').height() + "&width=" + $('#map').width();
   OpenLayers.loadURL(url + params, {}, this, loadNewMarkers, markerFail);
 }
 
@@ -126,7 +126,7 @@ function segmentSelected(event) {
   segment = event.feature;
   segment.style = segmentSelectedStyle;
   this.drawFeature(segment);
-  var row = jQuery("#route_segment_" + segment.segment_id);
+  var row = $("#route_segment_" + segment.segment_id);
   row.toggleClass("selected");
   row.find(".check-route-segment").attr('checked', 'true');
 }
@@ -135,7 +135,7 @@ function segmentUnselected(event) {
   segment = event.feature;
   segment.style = segmentStyle;
   this.drawFeature(segment);
-  jQuery("#route_segment_" + segment.segment_id).toggleClass("selected");
+  $("#route_segment_" + segment.segment_id).toggleClass("selected");
   
 }
 
@@ -149,7 +149,7 @@ function createMap() {
         'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
                                           20037508.34, 20037508.34)
       };
-  jQuery('.static-map-element').hide();    
+  $('.static-map-element').hide();    
   map = new OpenLayers.Map('map', options);
   var layer = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true,
                                                            'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
@@ -225,6 +225,4 @@ function addRouteMarker(stopCoords, bounds, markers, item, other) {
   }
 }
 
-// Run jquery in no-conflict mode so it doesn't use $()
-jQuery.noConflict();
 

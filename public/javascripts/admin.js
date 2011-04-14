@@ -1,16 +1,13 @@
-// Run jquery in no-conflict mode so it doesn't use $()
-jQuery.noConflict();
-
 function setupAssignAllAndNone(){
-  jQuery('.check-all-route-operators').click(function(){
-    var operators = jQuery(this).closest('.route-operators').find('.check-route-operator')
+  $('.check-all-route-operators').click(function(){
+    var operators = $(this).closest('.route-operators').find('.check-route-operator')
     operators.attr('checked', true);
     operators.parents('tr').addClass("selected");
     event.preventDefault();
   })
   
-  jQuery('.uncheck-all-route-operators').click(function(){
-    var operators = jQuery(this).closest('.route-operators').find('.check-route-operator')
+  $('.uncheck-all-route-operators').click(function(){
+    var operators = $(this).closest('.route-operators').find('.check-route-operator')
     operators.attr('checked', false);
     operators.parents('tr').removeClass("selected");
     event.preventDefault();
@@ -18,15 +15,15 @@ function setupAssignAllAndNone(){
 }
 
 function setupIndexSelectAllAndNone(){
-  jQuery('.index-select-all').click(function(){
-    var items = jQuery('.index-list').find('.select-item');
+  $('.index-select-all').click(function(){
+    var items = $('.index-list').find('.select-item');
     items.attr('checked', true);
     items.closest('tr').addClass("selected");
     event.preventDefault();
   })
 
-  jQuery('.index-select-none').click(function(){
-    var items = jQuery('.index-list').find('.select-item');
+  $('.index-select-none').click(function(){
+    var items = $('.index-list').find('.select-item');
     items.attr('checked', false);
     items.closest('tr').removeClass("selected");
     event.preventDefault();
@@ -34,20 +31,20 @@ function setupIndexSelectAllAndNone(){
 }
 
 function setupItemSelection(class_name){
-  jQuery(class_name).click(function(){
-    jQuery(this).closest('tr').toggleClass("selected");
+  $(class_name).click(function(){
+    $(this).closest('tr').toggleClass("selected");
   });
 }
 
 function setupAutocomplete(text_input_selector, url_input_selector, target_selector) {
-  jQuery(text_input_selector).autocomplete({
+  $(text_input_selector).autocomplete({
     source: function(request, response){
-      	jQuery.ajax({
-  				url: jQuery(url_input_selector).val(),
+      	$.ajax({
+  				url: $(url_input_selector).val(),
   				dataType: "json",
-  				data: { term: request.term, transport_mode_id: jQuery('select#route_transport_mode_id').val() },
+  				data: { term: request.term, transport_mode_id: $('select#route_transport_mode_id').val() },
   				success: function(data){
-  				  response(jQuery.map(data, function(item) {
+  				  response($.map(data, function(item) {
           		return {
           			label: item.name,
           			value: item.name,
@@ -59,11 +56,11 @@ function setupAutocomplete(text_input_selector, url_input_selector, target_selec
   		},
   		minLength: 0,
   		select: function(event, ui) {
-  			jQuery(this).next(target_selector).val(ui.item.id);
+  			$(this).next(target_selector).val(ui.item.id);
   		},
   		search: function(event, ui) {
-  		  jQuery(this).next(target_selector).val('');
-  		  if (jQuery(this).val().length == 0){
+  		  $(this).next(target_selector).val('');
+  		  if ($(this).val().length == 0){
   		    return false;
   		  }
   		}
@@ -93,9 +90,9 @@ function setupLocalityAutocomplete(){
 
 // link to add new route segments to a journey pattern
 function setupAddSegmentLink(){
-  jQuery('.add-segment-link').click(function(){
+  $('.add-segment-link').click(function(){
     // copy the hidden template
-    var template_segment_row = jQuery(this).closest('tr').next('.add-segment-template');
+    var template_segment_row = $(this).closest('tr').next('.add-segment-template');
     var new_segment_row = template_segment_row.clone();
     // set the display class
     var first_segment_row = template_segment_row.next();
@@ -135,23 +132,23 @@ function popoutRouteSegmentRow(new_segment_row, class_name){
 }
 
 function setupSectionControls() {
-  jQuery('.admin-section').hide();
-  jQuery('.admin-section-control').click(function(){
-    var section = jQuery(this).next('.admin-section');
-    var imgUrl = jQuery(this).toggleClass('active').css("background-image");
+  $('.admin-section').hide();
+  $('.admin-section-control').click(function(){
+    var section = $(this).next('.admin-section');
+    var imgUrl = $(this).toggleClass('active').css("background-image");
     if (imgUrl.search(/close/) > 0){
       imgUrl = imgUrl.replace('_close', '_open');
     } else {
       imgUrl = imgUrl.replace('_open', '_close'); 
     }
-    jQuery(this).toggleClass('active').css("background-image", imgUrl);
+    $(this).toggleClass('active').css("background-image", imgUrl);
     section.slideToggle('slow');
   });
 }
 
 function setupDestroyLink(){
-  jQuery('.destroy-link').submit(function(){
-    if (confirm(jQuery('input#destroy_confirmation').val())){
+  $('.destroy-link').submit(function(){
+    if (confirm($('input#destroy_confirmation').val())){
       return true;
     }else{
       return false;
