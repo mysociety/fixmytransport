@@ -1,0 +1,49 @@
+<%- content_for :javascript do  %>
+  <%= raw map_javascript_include_tags %>
+<%- end %>
+
+<div id='map-col'>
+  <%= render :partial => 'shared/map', :locals => { :locations => @stop.points, :other_locations => @other_locations, :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH  } %>
+  <div class='extra-info'>
+    <div class='departures'><%= raw departures_link(@stop) %></div>
+    <%= render :partial => "shared/route_list", :locals => { :stop_or_station => @stop } %>
+  </div>
+</div>
+<div class='stop'>
+  <a href="<%=location_url(@stop, :format => 'atom') %>" class='rss-link campaign-rss'>
+    <span><%= t(:feed) %></span>
+    <img title='<%= t(:feed) %>' src='/images/feed.png' alt='<%= t(:campaigns_feed) %>'/>
+  </a>
+  <h3 class='name'><%= "#{@stop.full_name}"  %></h3>
+
+  <div class='details'>
+    <span class='locality'><%= "In #{@stop.locality_name}" %></span>
+    <%- if !@stop.landmark.blank? %>
+      <span class='landmark'>
+        <%= "near #{@stop.landmark}" %>
+      </span>
+    <%- end %>
+    <%- if !@stop.street.blank?  %>
+      <span class='street'>
+        <%= "on #{@stop.street}" %>
+      </span>
+    <%- end %>
+    <%- if @stop.status == 'del' %>
+      <div class='status'>
+        <%= "This stop has been marked as inactive." %>
+      </div>
+    <%- end %>
+  </div>
+  
+  <div class='stop-areas'>
+   <%- if !@stop.stop_areas.empty? %>
+      Part of
+      <%-@stop.stop_areas.each do |stop_area| %>
+        <span class='stop-area'>
+          <%= link_to("#{stop_area.name} stop area", stop_area_url(stop_area.locality, stop_area)) %>
+        </span>
+      <%- end %>
+    <%- end %>
+  </div>
+</div>
+<%= render :partial => 'shared/location_content', :locals => { :location => @stop } %>

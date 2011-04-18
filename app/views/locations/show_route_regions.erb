@@ -1,0 +1,8 @@
+<h2 class='main-header'><%= t(:routes_by_region) %></h2>
+<ul class='region-list'>
+ <%- @regions.each do |region| %>
+    <li class='region'>
+      <%= link_to(region.name, route_region_path(region)) %>
+    </li>
+  <%- end %>
+</ul>
