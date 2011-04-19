@@ -1,0 +1,10 @@
+<%- @campaign.write_to_other_assignments.each do |assignment| %>
+  <div class='optional-assignment'>
+    <%- if assignment.status == :complete %>
+      <%- message = :write_again %>
+    <%- else %>
+     <%- message = :write_first_time %>
+    <%- end %>
+    <%= link_to(t(message, :name => assignment.data[:name]), new_campaign_outgoing_message_path(@campaign, :assignment_id => assignment.id)) %>
+  </div>
+<%- end %>

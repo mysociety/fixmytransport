@@ -1,5 +1,4 @@
-- if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com'
-  :plain
+<%- if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com' %>
     <!-- Piwik -->
     <script type="text/javascript">
     var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.mysociety.org/" : "http://piwik.mysociety.org/");
@@ -12,3 +11,4 @@
     } catch( err ) {}
     </script><noscript><p><img src="http://piwik.mysociety.org/piwik.php?idsite=14" style="border:0" alt="" /></p></noscript>
     <!-- End Piwik Tag -->
+<%- end %>

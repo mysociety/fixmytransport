@@ -1,0 +1,24 @@
+<a name='campaign_<%= campaign.id %>'/>
+<div class='campaign'>
+  <h4 class='title'>
+    <%= link_to(campaign.title, campaign_url(campaign))  %>
+  </h4>
+  <div class='details'>
+    <%= t(:added) %>
+    <span class='posted-time'>
+      <%= t(:posted_time, :time => time_ago_in_words(campaign.created_at)) %>
+    </span>
+    <%- if context != :location %>
+      <span class='transport-location'>
+        <%= raw t(:campaign_location, :link => link_to(campaign.location.description, location_url(campaign.location))) %>
+      </span>
+    <%- end %>
+    <span class='author'>
+      <%= t(:by, :name => campaign.initiator.name) %>
+    </span>
+  </div>
+  <p class='campaign'>
+    <%= raw simple_format(sanitize(campaign.description)) %>
+  </p>
+  
+</div>

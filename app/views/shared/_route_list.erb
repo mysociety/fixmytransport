@@ -1,0 +1,52 @@
+<%- if ! stop_or_station.routes.empty?  %>
+  <%- if stop_or_station.is_a?(StopArea) && stop_or_station.area_type == 'GRLS' %>
+    <div class='train-routes'>
+      <div class='final-destinations'>
+        Final destinations:
+        <%- stop_or_station.route_terminuses.each do |terminus| %>
+          <div class='stop-link'>
+            <%= link_to(terminus.name, location_url(terminus)) %>
+          </div>
+        <%- end %>
+      <div class='onward-stops'>
+        Next stops: 
+        <%- stop_or_station.next_stops.each do |next_stop| %>
+          <div class='stop-link'>
+            <%= link_to(next_stop.name, location_url(next_stop)) %>
+          </div>
+        <%- end %>
+      </div>
+    </div>
+  
+  <%- else %>
+  
+    <div class='route-list'>
+      Routes:
+     <%- stop_or_station.routes.each do |route| %>
+        <div class='route-info'>
+          
+          <div class='next-stops'>
+            <%- route.next_stops(stop_or_station).each do |next_stop| %>
+              <div class='stop-link'>
+                <%= link_to(next_stop.name_without_suffix(route.transport_mode), location_url(next_stop)) %>
+              </div>
+            <%- end %>
+          </div>
+          
+          <div class='previous-stops'>
+            <%- route.previous_stops(stop_or_station).each do |previous_stop| %>
+              <div class='stop-link'>
+                <%= link_to(previous_stop.name_without_suffix(route.transport_mode), location_url(previous_stop)) %>
+              </div>
+            <%- end %>
+          </div>
+          
+          <div class='route-name'>
+            <%= link_to(route.name(from_stop=stop_or_station, short=true), location_url(route)) %>
+          </div>
+        
+        </div>
+     <%- end %> 
+    </div>
+  <%- end %>
+<%- end %>
