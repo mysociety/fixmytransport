@@ -1,0 +1,53 @@
+<%= raw t(:please_give_feedback, :email => mail_to(MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost'))) %>
+<div class='feedback-form'>
+  <%- form_for(@feedback, :url => feedback_path) do |form|  %>
+    <div class='fieldset'>
+
+      <div class='form-field'>
+        <%- if @feedback.errors.on(:subject) %>
+          <div class='form-field-error'>
+            <%= error_message_on @feedback, :subject %>
+          </div>
+        <%- end %>
+        <%= form.label :subject %>
+        <%= raw form.text_field :subject  %>
+      </div>
+    
+
+      <div class='form-field'>
+        <%- if @feedback.errors.on(:name) %>
+          <div class='form-field-error'>
+            <%= error_message_on @feedback, :name %>
+          </div>
+        <%- end %>
+        <%= form.label :name  %>
+        <%= raw form.text_field :name %>
+      </div>
+
+
+      <div class='form-field'>
+        <%- if @feedback.errors.on(:email) %>
+          <div class='form-field-error'>
+            <%= error_message_on @feedback, :email %>
+          </div>
+        <%- end %>
+        <%= form.label :email  %>
+        <%= raw form.text_field :email  %>
+      </div>
+      
+
+      <div class='form-field'>
+        <%- if @feedback.errors.on(:message) %>
+          <div class='form-field-error'>
+            <%= error_message_on @feedback, :message %>
+          </div>
+        <%- end %>
+        <%= form.label :message %>
+        <%= raw form.text_area :message, {:rows => 8, :cols => 50} %>
+      </div>
+      
+      <%= raw form.submit t(:send) %>
+  
+    </div>
+  <%- end %>
+</div>
