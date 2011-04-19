@@ -40,7 +40,6 @@ Rails::Initializer.run do |config|
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem "rack", :version => '1.1.0'
-  config.gem "haml", :version => '3.0.25'
   config.gem "erubis", :version => '2.6.6'
   config.gem "fastercsv", :version => '1.5.3'
   config.gem 'will_paginate', :version => '2.3.15'
@@ -84,8 +83,6 @@ Rails::Initializer.run do |config|
 
 end
 
-# Tell HAML to escape HTML by default
-Haml::Template.options[:escape_html] = true
 
 # Use an asset host setting so that the admin interface can always get css, images, js.
 if (MySociety::Config.get("DOMAIN", "") != "")
