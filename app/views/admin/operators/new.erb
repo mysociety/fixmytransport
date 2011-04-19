@@ -1,0 +1,7 @@
+<h2><%= t(:add_an_operator) %></h2>
+<%-form_for :operator, @operator, :url => admin_url(admin_operators_path), :html => { :class => 'operator-form' } do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f }  %>
+  <%- if ! @route_operators.empty? %>
+    <%= render :partial => 'route_operators', :locals => { :f => f, :route_operators => @route_operators, :title => t(:routes_with_code) } %>
+  <%-end %>
+<%- end %>

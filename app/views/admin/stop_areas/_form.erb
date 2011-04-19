@@ -1,0 +1,33 @@
+<%- if !@stop_area.errors.empty? %>
+  <div class='form-error'>
+    <%= t(:stop_area_form_error) %>
+  </div>
+<%-end %>
+<%- [:name, :code, :lon, :lat].each do |field| %>
+  <%= render :partial => 'text_field', :locals => { :field => field, :f => f } %>
+<%- end %>
+
+<div class='form-field'>
+  <%- if @stop_area.errors.on(:area_type) %>
+    <div class='form-field-error'>
+    <%= error_message_on @stop_area, :area_type   %>
+    </div>
+  <%-end %>
+  <%= raw label(:stop_area, :area_type) %>
+  <%= raw f.select :area_type, StopAreaType.codes %>
+</div>
+
+<div class='form-field'>
+  <%- if @stop_area.errors.on(:locality_id) %>
+    <div class='form-field-error'>
+      <%= error_message_on @stop_area, :locality_id %>
+    </div>
+  <%- end %>
+  <%= raw hidden_field_tag :locality_name_autocomplete_url, admin_url("/admin/autocomplete_for_locality_name") %>
+  <%= raw label(:stop_area, :locality_id) %>
+  <%= raw text_field_tag :locality_name, @stop_area.locality_name, { :class => 'locality_name_auto', :size => 30 } %>
+  <%= raw f.hidden_field :locality_id, { :class => 'locality-id' } %>
+</div>
+
+<%= raw f.hidden_field :loaded %>
+<%= raw submit_tag t(:go) %>

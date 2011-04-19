@@ -1,0 +1,45 @@
+<h3><%= title %></h3>
+<div class='route-operators'>
+  <%- if route_operators.empty?  %>
+    <p>
+      <%= t(:no_operators) %>
+    </p>
+  <%- else %>
+    <%= link_to t(:check_all), '', :class => 'check-all-route-operators' %>
+    <%= link_to t(:uncheck_all), '', :class => 'uncheck-all-route-operators' %>
+    <table>
+      <tr>
+        <th><%= t(:name) %></th>
+        <th><%= t(:short_name) %></th>
+        <th><%= t(:search)  %></th>
+        <%- if route_operators.first.new_record? %>
+          <th><%= t(:assign_to_route) %></th>
+        <%- else %>
+          <th><%= t(:remove_from_route) %></th>
+        <%- end%>
+      </tr>
+      
+      <%- route_operators.each do |route_operator| %>
+        <%- f.fields_for :route_operators, route_operator do |route_operator_fields| %>
+          <tr class='<%= cycle("odd", "even") %>'>
+            <td><%= link_to(route_operator.operator.name, admin_url(admin_operator_path(route_operator.operator_id)), :target => "_blank" ) %>
+            <td><%= route_operator.operator.short_name %>
+            <td><%= link_to t(:external_search_operator), external_search_link("#{route_operator.operator.name}"), :target => '_blank' %></td>
+            <td>
+              <%- if route_operator.id %>
+                <%= raw route_operator_fields.hidden_field :id %>
+              <%- end %>
+              <%= raw route_operator_fields.hidden_field :operator_id %>
+              <%- if route_operator.new_record?  %>
+                <%= raw route_operator_fields.check_box :_add, :class => 'check-route-operator' %>
+              <%- else %>
+                <%= raw route_operator_fields.check_box :_destroy, :class => 'check-route-operator' %>
+              <%- end %>
+            </td>
+          </tr>
+        <%-end %>
+      <%- end %>
+  </table>
+  <%- end %>
+</div>
+

@@ -1,0 +1,46 @@
+<%- if !@council_contact.errors.empty? %>
+  <div class='form-error'>
+    <%= t(:council_contact_form_error) %>
+  </div>
+<%- end %>
+<%= raw f.hidden_field :area_id %>
+<div class='form-field'>
+  <%- if @council_contact.errors.on(:category) %>
+    <div class='form-field-error'>
+      <%= error_message_on @council_contact, :category %>
+    </div>
+  <%- end %>
+  <%= raw f.label :category %>
+  <%- if @council_contact.new_record?  %>
+    <%= raw f.text_field :category %>
+  <%- else %>
+    <%= raw @council_contact.category %>
+  <%- end %>
+</div>
+
+<div class='form-field'>
+  <%- if @council_contact.errors.on(:email) %>
+    <div class='form-field-error'>
+      <%= error_message_on @council_contact, :email %>
+    </div>
+  <%- end %>
+  <%= raw f.label :email %>
+  <%= raw f.text_field :email %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :confirmed %>
+  <%= raw f.check_box :confirmed %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :district_id %>
+  <%= raw f.text_field :district_id %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :notes %>
+  <%= raw f.text_area :notes, :cols => 50, :rows => 4 %>
+</div>
+
+<%= raw submit_tag t(:go) %>

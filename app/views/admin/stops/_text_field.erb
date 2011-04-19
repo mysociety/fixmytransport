@@ -1,0 +1,9 @@
+<div class='form-field'>
+  <%- if @stop.errors.on(field) %>
+    <div class='form-field-error'>
+    <%= error_message_on @stop, field %>
+    </div>
+  <%- end %>
+  <%= raw label(:stop, field) %>
+  <%= raw f.text_field field %>
+</div>

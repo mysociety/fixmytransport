@@ -1,0 +1,25 @@
+<h2><%= t(:council_contacts_for, :council => @council.name) %></h2>
+<%= link_to t(:add_a_council_contact), admin_url(new_admin_council_contact_path(:area_id => @council.id)) %>
+<table class='council-contacts index-list'>
+  <tr>
+    <th width='14%'><%= t(:category) %></th>
+    <th width='34%'><%= t(:email) %></th>
+    <th width='8%'><%= t(:district_id) %></th>
+    <th width='6%'><%= t(:confirmed)  %></th>
+    <th width='30%'><%= t(:last_editor)  %></th>
+    <th width='30%'><%= t(:notes) %></th>
+    <th width='34%'><%= t(:updated_at)  %></th>
+  </tr>
+  <%-@council.contacts.each do |contact| %>
+    <tr class="<%= cycle('odd', 'even') %>">
+      <td>
+        <%= link_to contact.category, admin_url(admin_council_contact_path(contact)) %>
+      <td><%= contact.email %></td>
+      <td><%= contact.district_id %></td>
+      <td><%= contact.confirmed %></td>
+      <td><%= contact.last_editor %></td>
+      <td><%= contact.notes %></td>
+      <td><%= contact.updated_at %></td>
+    </tr>
+  <%- end %>
+</table>

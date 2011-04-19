@@ -1,0 +1,40 @@
+<h2><%= t(:operators) %></h2>
+<%= link_to t(:add_an_operator), admin_url(new_admin_operator_path) %>
+<%= render :partial => "admin/shared/index_js" %>
+<%= render :partial => "admin/shared/search_form", :locals => { :skip_transport_mode => true }  %>
+<%= will_paginate @operators, {:admin => true} %>
+
+<form method='GET' action='<%= admin_url(merge_admin_operators_path) %>'>
+  <%= t(:select) %>
+  <%= link_to(t(:all), '', { :class => "index-select-all" }) %>
+  <%= link_to(t(:none), '', { :class => "index-select-none" }) %>
+  <table class='operators index-list'>
+    <tr>
+      <th width='14%'><%= t(:id) %></th>
+      <th width='34%'><%= t(:name) %></th>
+      <th width='34%'><%= t(:short_name)  %></th>
+      <th width='6%'><%= t(:code) %></th>
+      <th width='6%'><%= t(:routes) %></th>
+      <th width='6%'><%= t(:select) %></th>
+    </tr>
+    <%-@operators.each do |operator| %>
+      <tr class="<%= cycle('odd', 'even') %>">
+        <td>
+          <%= operator.id %>
+          <%= link_to "(#{t(:admin)})", admin_url(admin_operator_path(operator)) %></td>
+        <td><%= operator.name %></td>
+        <td><%= operator.short_name %></td>
+        <td><%= operator.code %></td>
+        <td><%= operator.routes.count %></td>
+        <td><%= raw check_box_tag "operators[]", operator.id, false, { :class => "select-item" } %></td>
+      </tr>
+    <%- end %>
+    <tr class='footer'>
+      <td colspan='6'>
+        <%= t(:selected_items) %>
+        <%= raw submit_tag t(:merge) %>
+      </td>
+    </tr>
+  </table>
+</form>
+<%= will_paginate @operators, {:admin => true} %>
