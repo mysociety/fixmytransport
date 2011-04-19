@@ -1,4 +1,34 @@
 <%- style = '' %>
 <%- if hidden  %>
-  <%- style = 'display:none;' %>
+  <%- style = 'display:none;'   %>
 <%- end %>
+<%- if update.is_advice_request? %>
+  <%- id = 'advice-request-form' %>
+  <%- text = t(:ask_our_expert_panel) %>
+<%- else %>
+  <%- id = 'campaign-update-form' %>
+  <%- text = t(:add_an_update) %>
+<%- end %>
+
+<div class='campaign-updates' style="<%= style %>" id="<%= id %>">
+  <%= text %>
+  <%- form_for update, :url => add_update_campaign_url(@campaign) do |f| %>
+    <div class='fieldset'>
+      <div class='form-field'>
+        <%- if @empty_update %>
+          <div class='form-field-error'>
+            <%= t(:please_enter_some_text) %>
+          </div>
+        <%- end %>
+        <%= raw f.hidden_field :user_id %>
+        <%= raw f.hidden_field :is_advice_request %>
+        <%= raw f.text_area :text, :cols => 40, :rows => 3 %>
+        <%- if update.is_advice_request %>
+          <%= raw f.submit t(:request_advice) %>
+        <%- else %>
+          <%= raw f.submit t(:add_update) %>
+        <%- end %>
+      </div>
+    </div>
+  <%- end %>
+</div>
