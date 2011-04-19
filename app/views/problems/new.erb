@@ -1,0 +1,165 @@
+<%- @title = t(:reporting_a_problem, :location => MySociety::Format.ucfirst(@problem.location.name)) %>
+
+<div id='map-col'>
+  <%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH  } %>
+</div>
+
+<h3 class='name'><%= @title %></h3>
+
+<%- form_for @problem, :url => problems_url, :html => {:class => 'create_problem'} do |f|  %>
+
+  <%= raw f.hidden_field :location_id %>
+  <%= raw f.hidden_field :location_type %>
+  
+  <div class='fieldset'>
+    
+    <div class='sending-advice'>
+      <%= raw @sending_advice %>
+    </div>
+    
+    <div class='form-field'>
+      <%- if @problem.errors.on('operator_id') %>
+        <div class='form-field-error'>
+          <%= error_message_on @problem, :operator_id %>
+        </div>
+      <%- end %>
+      
+      <%- if @problem.operators_responsible?  %>
+      
+       <%- if @problem.location.operators.size > 1 %>
+          <%= f.label :operator %>
+          <%= raw f.collection_select("operator_id", @problem.location.operators, :id, :name, :include_blank => t(:select_operator)) %>
+        <%- elsif @problem.location.operators.size == 1 %>
+          <%= raw f.hidden_field :operator_id, :value => @problem.location.operators.first.id %>
+        <%- end %>
+        
+      <%- elsif @problem.pte_responsible?  %>
+        <%= raw f.hidden_field :passenger_transport_executive_id, :value => @problem.location.passenger_transport_executive.id %>
+      <%- elsif @problem.councils_responsible? %>
+        <%= raw f.hidden_field :council_info, :value => @problem.location.council_info %>
+      <%- end %>
+    </div>
+    
+    <div class='form-field'>
+      <%- if @problem.errors.on('subject') %>
+        <div class='form-field-error'>
+          <%= error_message_on @problem, :subject %>
+        </div>
+      <%- end %>
+      <%= f.label t(:subject) %>
+      <%= raw f.text_field :subject %>
+    </div>
+    
+
+    <div class='form-field'>
+      <%- if @problem.errors.on('description') %>
+        <div class='form-field-error'>
+          <%= error_message_on @problem, :description %>
+        </div>
+      <%- end %>
+      <%= f.label :description %>
+      <%= raw f.text_area :description, {:rows => 8, :cols => 32 } %>
+    </div>
+    
+    
+    <%- if @problem.categories.size > 1 %>
+      <div class='form-field'>
+        <%- if @problem.errors.on('category') %>
+          <div class='form-field-error'>
+            <%= error_message_on @problem, :category %>
+          </div>
+        <%- end %>
+        <%= f.label :category %>
+        <%= raw f.select("category", @problem.categories, { :include_blank => t(:pick_a_category) }) %>
+      </div>
+    <%- else %>
+      <%= raw f.hidden_field :category, :value => "Other" %>
+    <%- end %>
+
+    <div class='form-field'>
+    
+      <%- if @problem.errors.on('is_campaign') %>
+        <div class='form-field-error'>
+          <%= error_message_on @problem, :is_campaign %>
+        </div>
+      <%- end %>
+      <div class='campaign-choices-label'>
+        <%= f.label :is_campaign, t(:is_this), {:id => 'is-campaign-label'} %>
+      </div>
+      <div class='campaign-choices'>
+        <div class='campaign-choice'>
+          <%= raw f.radio_button 'is_campaign', "0", {:id => 'is-campaign-0'} %>
+          <%= f.label 'is_campaign_0', t(:a_one_off), :class => 'radiobutton_label' %>
+        </div>
+        <div class='campaign-choice'>
+          <%= raw f.radio_button 'is_campaign', "1", {:id => 'is-campaign-1'} %>
+          <%= f.label 'is_campaign_1', t(:an_ongoing_problem), :class => 'radiobutton_label' %>
+        </div>
+      </div>
+    </div>
+  
+
+    <div class='form-field' id='time-field'>
+      <%= f.label :time, t(:problem_time) %>
+      <%= raw f.time_select :time, { :include_blank => true } %>
+      <span class='optional-note'><%= "(#{t(:optional)})" %></span>
+    </div>
+
+    <div class='form-field' id='date-field'>
+      <%= f.label :date, t(:problem_date) %>
+      <%= raw f.date_select :date, { :include_blank => true, :start_year => Time.now.year - 1, :end_year => Time.now.year } %>
+      <span class='optional-note'><%= "(#{t(:optional)})" %></span>
+    </div>
+    
+    <div class='form-field'>
+      <%- if @problem.errors.on('reporter_name') %>
+        <div class='form-field-error'>
+          <%= error_message_on @problem, 'reporter_name' %>
+        </div>
+      <%- end %>
+      <%= f.label :reporter_name, t(:name) %>
+      <%= raw f.text_field :reporter_name %>
+    </div>
+
+
+    <%- f.fields_for :reporter do |reporter_fields| %>
+      <%- if @problem.reporter == current_user %>
+        <div class='form-field'>
+          <%= raw reporter_fields.hidden_field :id %>
+          <%= raw reporter_fields.hidden_field :email %>
+      <%- else %>
+        <div class='form-field'>
+          <%- if @problem.reporter.errors.on('email') %>
+            <div class='form-field-error'>
+              <%= error_message_on @problem.reporter, 'email' %>
+            </div>
+          <%- end %>
+          <%= reporter_fields.label :email %>
+          <%= raw reporter_fields.text_field :email %>
+          <span class='optional-note'>
+            <%= link_to("?", about_url(:anchor => "privacy"), :target => '_blank') %>
+          </span>
+        </div>
+      <%- end %>
+    <%- end %>
+    
+
+    <div class='form-field'>
+      <%- if @problem.errors.on('reporter_phone') %>
+        <div class='form-field-error'>
+          <%= error_message_on @problem, 'reporter_phone' %>
+        </div>
+      <%- end %>
+      <%= f.label :reporter_phone, t(:phone) %>
+      <%= raw f.text_field :reporter_phone %>
+      <span class='optional-note'>
+        <%= "(#{t(:optional)})" %>
+        <%= link_to("?", about_url(:anchor => "privacy"), :target => '_blank') %>
+      </span>
+    </div>
+  
+  </div>
+  <div class='submit'>
+    <%= raw submit_tag t(:submit) %>
+  </div>
+<%- end %>

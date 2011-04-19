@@ -1,0 +1,19 @@
+<%- if @matched_stops_or_stations %>
+  <%= t(:within_multiple_localities, :name => @name) %>
+<%- else %>
+  <%= t(:multiple_localities, :name => @name) %>
+<%- end %>
+
+<ul class='locality-list'>
+  <%- @localities.each do |locality| %>
+    <%- if @matched_stops_or_stations %>
+      <li class='locality'>
+        <%= link_to(locality.name_and_qualifier_name_with_comma, find_stop_problems_url(:name => locality.name_and_qualifier_name_with_comma, :stop_name => @name)) %>
+      </li>
+    <%- else %>
+      <li class='locality'>
+        <%= link_to(locality.name_and_qualifier_name_with_comma, find_stop_problems_url(:name => locality.name_and_qualifier_name_with_comma))     %>
+      </li>
+    <%- end %>
+  <%- end %>
+</ul>

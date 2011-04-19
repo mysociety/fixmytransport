@@ -1,0 +1,64 @@
+<%- @title = "#{MySociety::Format.ucfirst(@problem.location.name)}: #{@problem.subject}" %>
+<div id='map-col'>
+  <%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH } %>
+</div>
+
+<div class='problem-full'>
+  <%- if @problem.status == :fixed %>
+    <div class='fixed'>
+      <%= t(:problem_has_been_fixed) %>
+    </div>
+  <%- end %>
+  <h2 class='name'><%= @title %></h2>
+  
+  <div class='details'>
+  
+    <%= t(:reported).titleize %>
+    <span class='posted-time'>
+      <%= t(:posted_time, :time => time_ago_in_words(@problem.confirmed_at)) %>
+    </span>
+    <span class='author'>
+      <%= t(:by, :name => @problem.reporter_name) %>
+    </span>
+    <%- unless @problem.location.is_a?(SubRoute) %>
+      <span class='transport-location'>
+        <%= raw t(:problem_location, :link => link_to(@problem.location.description, location_url(@problem.location))) %>
+      </span>
+    <%- end %>
+    <%- if @problem.sent_at %>
+      <div class='sent-time'>
+        <%= t(:sent_time, :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.recipients.map{ |recipient| recipient.name }.to_sentence) %>
+      </div>
+    <%- end %>
+  </div>
+
+  <p class='problem'>
+    <%= raw simple_format(sanitize(@problem.description)) %>
+    <%- if @problem.date or @problem.time %>
+      <div class='problem-datetime'>
+        <%= t(:problem_occurred, :date_and_time => problem_date_and_time(@problem)) %>
+      </div>
+    <%- end %>
+    <h3><%= t(:updates) %></h3>
+    <div class='updates'>
+    <%- @problem.comments.visible.each do |comment|  %>
+      <div class='problem-event'>
+        <a name='update_<%= comment.id %>'></a>
+        <span class='date'>
+          <%= t(:posted_time, :time => time_ago_in_words(comment.confirmed_at)) %>
+        </span>
+        <span class='update'>
+          <%= t(:user_updates, :name => comment.user_name)   %>
+          <%= "\"#{comment.text}\"" %>
+        </span>
+        <%- if comment.mark_fixed? %>
+            <span class='fixed-text'>
+              <%=", #{t(:marked_as_fixed)}"%>
+          </span>
+        <%- end %>
+      </div>
+    <%- end %>
+    <%= render :partial => 'update_form' %>
+    </div>
+  </p>
+</div>

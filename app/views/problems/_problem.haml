@@ -1,9 +1,0 @@
-.problem-body
-  %span.subject
-    =link_to(h(problem.subject), problem_url(problem))
-  %span.transport-modes-note=problem.transport_mode_text
-  .details
-    = t(:reported_on, :date => problem.created_at.strftime("%d/%m/%Y"))
-    = t(:by, :name => problem.reporter_name)
-    = on_or_at_the(problem.location)
-    = link_to("#{problem.location.description}", problem_url(problem))

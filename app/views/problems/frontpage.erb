@@ -1,0 +1,73 @@
+<div class='homepage'>
+  <h2 class='main-header'><%= t(:get_problems_fixed) %></h2>
+  <div class='problem-form-wrapper'>
+    <div class='problem-form'>
+      <div class='problem-options'>
+        <%= t(:do_you_want_to_report) %>
+        <span class='link-button'>
+          <%= link_to(t(:stop_or_station), find_stop_problems_url) %>
+        </span>
+        <%= t(:or_on_a) %>
+        <span class='link-button'>
+          <%= raw link_to(t(:frontpage_route), find_route_problems_url) + '?' %>
+        </span>
+      </div>
+    </div>
+  </div>
+  
+  <%- if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com' %>
+    <div class='info-for-alpha-testers'>
+      <div class='video'>
+        <object height='192' width='320'>
+          <param name='movie' value='http://www.youtube.com/v/LGYEfOm_28I?fs=1&amp;hl=en_US' />
+          <param name='allowFullScreen' value='true' />
+          <param name='allowscriptaccess' value='always' />
+          <embed allowfullscreen='true' src='http://www.youtube.com/v/LGYEfOm_28I?fs=1&amp;hl=en_US' allowscriptaccess='always' type='application/x-shockwave-flash' height='192' width='320'/>
+        </object>
+      </div>
+    </div>
+  <%- end %>
+  
+  <div class='latest'>
+    
+    <div class='right-col'>
+      <div class='latest-campaigns'>
+        <h3><%= t(:recently_active_campaigns) %></h3>
+        <ul>
+          <%- Campaign.find_recent(5).each do |campaign| %>
+            <li class='campaign-update'>
+              <%= link_to(h(campaign.title), campaign_url(campaign)) %>
+              <span class='transport-modes-note'>
+                <%= campaign.transport_mode_text %>
+              </span>
+              <span class='event-type-note'><%= "(#{event_type_note(campaign.campaign_events.first)})" %>
+              </span>
+            </li>
+          <%- end %>
+        </ul>
+        <div class='more'>
+          <%= link_to(t(:more_campaigns), campaigns_path) %>
+        </div>
+      </div>
+    </div>
+    
+    <div class='left-col'>
+      <div class='latest-problems'>
+        <h3><%= t(:latest_problems) %></h3>
+        <ul>
+          <%- Problem.latest(5).each do |problem| %>
+            <li class='problem'>
+              <%= link_to(h(problem.subject), problem_url(problem)) %>
+              <span class='transport-modes-note'>
+                <%= problem.transport_mode_text %>
+              </span>
+            </li>
+          <%- end %>
+        </ul>
+        <div class='more'>
+          <%= link_to(t(:more_problems), problems_path) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

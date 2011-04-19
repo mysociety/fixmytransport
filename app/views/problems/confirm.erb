@@ -1,0 +1,6 @@
+<%- if @error %>
+  <%= @error %>
+<%- else %>
+  <%= t(:thanks_for_adding_problem) %>
+  <%= link_to t(:see_your_problem), problem_url(@problem) %>
+<%- end %>

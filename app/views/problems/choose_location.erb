@@ -1,0 +1,6 @@
+<p class='large-map-intro'>
+  <%= t(:multiple_locations_intro) %>
+</p>
+<div id='large-map'>
+  <%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => @other_locations, :link_type => :problem, :height => LARGE_MAP_HEIGHT, :width => LARGE_MAP_WIDTH  } %>
+</div>
