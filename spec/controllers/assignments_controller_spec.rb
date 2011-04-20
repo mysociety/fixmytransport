@@ -184,7 +184,7 @@ describe AssignmentsController do
                                        :assignments => [])
       Campaign.stub!(:find).and_return(@campaign)
       @default_params = { :campaign_id => 55, :id => 22 }
-      @mock_assignment = mock_model(Assignment, :task_type_name => 'write-to-other')
+      @mock_assignment = mock_model(Assignment, :task_type => 'write_to_other')
       @campaign.assignments.stub!(:find).and_return(@mock_assignment)
     end
   
@@ -199,10 +199,10 @@ describe AssignmentsController do
       make_request
     end
     
-    describe 'if the assignment task type is not "write-to-other"' do 
+    describe 'if the assignment task type is "write_to_transport_organization"' do 
       
       before do 
-        @mock_assignment.stub!(:task_type_name).and_return('write-to-transport-organization')
+        @mock_assignment.stub!(:task_type).and_return('write_to_transport_organization')
       end
       
       it 'should return a 404' do 
@@ -212,10 +212,10 @@ describe AssignmentsController do
     
     end
     
-    describe 'if the assignment task type is "write-to-other"' do 
+    describe 'if the assignment task type is "write_to_other"' do 
     
       before do 
-        @mock_assignment.stub!(:task_type_name).and_return('write-to-other')
+        @mock_assignment.stub!(:task_type).and_return('write_to_other')
       end
       
       it 'should render the "show" template' do 

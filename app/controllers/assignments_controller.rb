@@ -41,8 +41,11 @@ class AssignmentsController < ApplicationController
   end
   
   def show
+    visible_assignments = [:write_to_other, 
+                           :find_transport_organization,
+                           :find_transport_organization_contact_details]
     @assignment = @campaign.assignments.find(params[:id])
-    if @assignment.task_type_name != 'write-to-other'
+    if ! visible_assignments.include?(@assignment.task_type.to_sym) 
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end
