@@ -19,8 +19,8 @@ class CampaignEvent < ActiveRecord::Base
   def set_visibility
     case self.event_type
     when 'assignment_completed'
-      # all assignment completions are visible except publish-problem, write-to-other
-      if ['publish-problem', 'write-to-other'].include?(self.described.task_type_name)
+      # all assignment completions are visible except write-to-other
+      if ['write-to-other'].include?(self.described.task_type_name)
         self.visible = false
       else 
         self.visible = true
