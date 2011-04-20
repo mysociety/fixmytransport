@@ -519,11 +519,11 @@ form.create_problem label.radiobutton_label {
 }
 
 form.create_problem .campaign-choices-label {
-  height: 100%;
   width: 8em;
   text-align: right;
   display: inline-block;
   margin: auto;
+  vertical-align: top;
 }
 
 form.create_problem .campaign-choices {
@@ -535,9 +535,6 @@ form.create_problem .campaign-choices {
   margin: 0.5em 0; 
 }
 
-form.create_problem .campaign-choices-label {
-  vertical-align: top;
-}
 
 form.create_problem .campaign-choice {
   width: 100%;
