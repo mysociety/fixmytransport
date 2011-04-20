@@ -49,6 +49,30 @@ describe Assignment do
     end
 
   end
+  
+    
+  describe 'when asked for unmet prerequisites' do 
+    
+    it 'should return true for a "write-to-transport-organization" assignment if there is an incomplete "find-transport-organization" assignment' do 
+      incomplete_assignment = mock_model(Assignment, :task_type => 'find_transport_organization')
+      mock_assignments = mock('assignments')
+      mock_assignments.stub!(:incomplete).and_return([incomplete_assignment])
+      mock_problem = mock_model(Problem, :assignments => mock_assignments)
+      assignment = Assignment.new(:task_type_name => 'write-to-transport_organization')
+      assignment.stub!(:problem).and_return(mock_problem)
+      assignment.has_unmet_prerequisites?.should be_true
+    end
+    
+    it 'should return false for a "write-to-transport-organization" assignment if there are no incomplete assignments' do 
+      mock_assignments = mock('assignments')
+      mock_assignments.stub!(:incomplete).and_return([])
+      mock_problem = mock_model(Problem, :assignments => mock_assignments)
+      assignment = Assignment.new(:task_type_name => 'write-to-transport_organization')
+      assignment.stub!(:problem).and_return(mock_problem)
+      assignment.has_unmet_prerequisites?.should be_false
+    end
+    
+  end
    
   describe 'when completing' do 
     
