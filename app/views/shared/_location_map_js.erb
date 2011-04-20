@@ -1,0 +1,17 @@
+<%- content_for :javascript do %>
+  <%= raw map_javascript_include_tags %>
+<%- end %>
+<script type="text/javascript">
+  //<![CDATA[
+   var zoom = <%= @zoom %>;
+   var lat = <%= @lat %>;
+   var lon = <%= @lon %>;
+   var findOtherLocations = <%= @find_other_locations %>;
+   var linkType = '<%= link_type %>';
+   var areaStops = <%= raw location_stops_js(locations, main=true, small=false, link_type) %>;
+   $(document).ready(function(){
+     area_init();
+   });
+  //]]>
+</script>
+ 

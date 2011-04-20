@@ -1,0 +1,6 @@
+<h3><%= @search.description %></h3>
+<%- @search.events.each do |event| %>
+  <div class='search-event'>
+    <%= raw render_event(event) %>
+  </div>
+<%- end %>

@@ -1,0 +1,5 @@
+<h2><%= @pte.name %></h2>
+<h3><%= t(:edit) %></h3>
+<%-form_for :pte, @pte, :url => admin_url(admin_pte_path(@pte)), :html => { :method => :put,  :class => 'pte-form' } do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f }   %>
+<%-end %>

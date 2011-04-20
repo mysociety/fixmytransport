@@ -1,0 +1,27 @@
+<h2 class='main-header'><%= t(:what_was_the_number_and_area) %></h2>
+<div class='problem-form-wrapper'>
+
+<%- form_tag find_bus_route_problems_path, :id => 'bus_route_form', :method => 'GET' do  %>
+    
+    <%- if @error_message %>
+      <div class='form-field-error'>
+        <%= @error_message %>
+      </div>
+    <%- end %>
+    
+    <div class='form-field'>
+      <%= raw label_tag t(:enter_route_number) %>
+      <%= raw text_field_tag 'route_number', params[:route_number] %>
+      <div id='guidance-route-number' class='guidance'>e.g. C10</div>
+    </div>
+    
+    <div class='form-field'>
+      <%= raw label_tag t(:enter_town_or_area) %>
+      <%= raw text_field_tag 'area', params[:area] %>
+      <div id='guidance-area' class='guidance'>e.g. London </div>
+    </div>
+    
+    <input type="submit" value="<%= t(:go) %>" />
+
+<%- end %>
+</div>

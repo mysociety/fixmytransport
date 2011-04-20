@@ -1,9 +1,0 @@
-%h2.main-header= t(:forgot_password)
-
-
-
-- form_tag password_resets_path, :class => 'password_reset_email' do 
-  .instructions=t(:enter_your_email_address)
-  %label!= t(:email)
-  != text_field_tag :email 
-  != submit_tag t(:continue)

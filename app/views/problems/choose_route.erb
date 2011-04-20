@@ -1,0 +1,25 @@
+<div id='map-col'>
+  <%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => [], :link_type => :problem, :height => MAP_HEIGHT, :width => MAP_WIDTH  } %>
+</div>
+
+<%- if @error_message %>
+  <div class='location-error'>
+    <%= @error_message %>
+  </div>
+<%- end %>
+
+<p>
+  <%= t(:multiple_routes_intro, :num_locations => MAX_LOCATION_RESULTS) %>
+</p>
+
+<ul class='location-list'>
+  <%- @locations.each do |location| %>
+    <li>
+      <%= link_to "#{location.description_with_operators}", new_problem_url(:location_id => location.id, :location_type => location.type) %>
+    </li>
+  <%- end %>
+</ul>
+
+<%- if @limit and @locations.size == @limit %>
+  <%= link_to(t(:show_all), url_for(params.merge(:show_all => 1))) %>
+<%- end %>

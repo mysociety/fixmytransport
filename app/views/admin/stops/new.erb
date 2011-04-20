@@ -1,0 +1,9 @@
+<h2 class='stop-header'><%= @stop.name %></h2>
+<%- form_for [:admin, @stop], :url => admin_url(admin_stops_path), :html => { :class => 'stop-form' } do |f|  %>
+  <%= render :partial => "form", :locals => { :f => f } %>
+<%- end %>
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+    setupNewStop();
+  });
+</script>

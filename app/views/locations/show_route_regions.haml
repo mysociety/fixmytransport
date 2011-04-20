@@ -1,4 +1,0 @@
-%h2.main-header=t(:routes_by_region)
-%ul.region-list
-  - @regions.each do |region|
-    %li.region= link_to(region.name, route_region_path(region))

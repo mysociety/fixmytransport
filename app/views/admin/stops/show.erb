@@ -1,0 +1,25 @@
+<%- content_for :javascript do  %>
+  <%= raw map_javascript_include_tags(:admin => true) %>
+<%- end %>
+<div id='map'>
+</div>
+<h2 class='stop-header'><%= @stop.name %></h2>
+<%- form_for @stop, :url => admin_url(admin_stop_path(@stop.id)), :html => { :method => :delete, :class => 'destroy-link' } do |f|  %>
+  <%= raw hidden_field_tag :confirmation, t(:are_you_sure), {:id => 'destroy_confirmation'} %>
+  <%= raw submit_tag t(:destroy) %>
+<%- end %>
+<%- form_for [:admin, @stop], :url => admin_url(admin_stop_path(@stop.id)), :html => { :class => 'stop-form' } do |f|  %>
+  <%= render :partial => "form", :locals => { :f => f } %>
+<%- end %>
+<script type="text/javascript">
+  var zoom = <%= MAX_VISIBLE_ZOOM - 1 %>;
+  var lat = <%= @stop.lat %>;
+  var lon = <%= @stop.lon %>;
+  var findOtherLocations = false;
+  var linkType = 'location';
+  var areaStops = <%= raw location_stops_js([@stop], main=true, small=false, :location) %>;
+    jQuery(document).ready(function(){
+    setupShowStop();
+    area_init();
+  });
+</script>

@@ -1,0 +1,46 @@
+<%- if !@pte.errors.empty? %>
+  <div class='form-error'>
+    <%= t(:pte_form_error) %>
+  </div>
+<%-end %>
+<div class='form-field'>
+  <%- if @pte.errors.on(:name) %>
+    <div class='form-field-error'>
+      <%= error_message_on @pte, :name %>
+    </div>
+  <%- end %>
+  <%= raw f.label :name %>
+  <%= raw f.text_field :name %>
+</div>
+
+<div class='form-field'>
+  <%- if @pte.errors.on(:wikipedia_url) %>
+    <div class='form-field-error'>
+      <%= error_message_on @pte, :wikipedia_url %>
+    </div>
+  <%-end %>
+  <%= raw f.label :wikipedia_url %>
+  <%= raw f.text_field :wikipedia_url %>
+</div>
+
+<div class='form-field'>
+  <%- if @pte.errors.on(:email) %>
+    <div class='form-field-error'>
+      <%= error_message_on @pte, :email %>
+    </div>
+  <%- end %>
+  <%= raw f.label :email %>
+  <%= raw f.text_field :email %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :email_confimed %>
+  <%= raw f.check_box :email_confimed %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :notes %>
+  <%= raw f.text_field :notes %>
+</div>
+
+<%= raw submit_tag t(:go) %>

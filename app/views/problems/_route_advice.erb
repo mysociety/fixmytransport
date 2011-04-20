@@ -1,0 +1,16 @@
+<p><%= t(:give_details) %></p>
+<p><%= t(:include_journey_detail) %></p>
+<ul>
+  <li><%= t(:where_to_and_from)  %></li>
+  <li><%= t(:time_and_date)  %></li>
+  <%-if @problem.location.is_a? BusRoute %>
+    <li>
+      <%= t(:driver_and_registration, :type => 'bus') %>
+    </li>
+  <%- end %>
+  <%- if @problem.location.is_a? CoachRoute %>
+    <li>
+      <%= t(:driver_and_registration, :type => 'coach') %>
+    </li>
+  <%- end %>
+</ul>

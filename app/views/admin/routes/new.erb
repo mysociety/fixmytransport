@@ -1,0 +1,12 @@
+<h2 class='route-header'><%= t(:add_a_route) %></h2>
+<%- form_for [:admin, @route], :url => admin_url(admin_routes_path), :html => { :class => 'route-form' } do |f|  %>
+  <%= render :partial => "form", :locals => { :f => f } %>
+  <h3><%= t(:route_segments) %></h3>
+  <%= render :partial => "route_segments", :locals => { :f => f } %>
+<%- end %>
+<script type="text/javascript">
+    var routeSegments = [];
+    jQuery(document).ready(function(){
+      setupNewRoute();
+    });
+</script>

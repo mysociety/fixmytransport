@@ -1,0 +1,89 @@
+<a id="update_<%= update.id %>"></a>
+<%- if update.is_advice_request? %>
+  <%- text = :user_requested_advice %>
+  <%- class_name = 'advice-request' %>
+<%- elsif update.incoming_message or update.outgoing_message %>
+  <%- text = :user_says %>
+ <%- class_name = 'message-update' %>
+<%- else %>
+  <%- text = :user_says %>
+  <%- class_name = 'general-campaign-update' %>
+<%- end %>
+<div class="<%= class_name %>">
+  <%= raw t(text, :name => h(update.user.name)) %>
+  <%= raw sanitize("\"#{update.text}\"") %>
+
+  <div class='actions'>
+    <span class='date'><%= t(:ago, :time => time_ago_in_words(update.created_at)) %></span>
+   <%- if (! current_user or update.comments.empty?) and !always_show_commentbox %>
+      <div class='campaign-comment-link' id="commentlink_<%= update.id %>"><%= link_to( t(:add_comment), add_comment_campaign_url(@campaign, :update_id => update.id)) %>
+      </div>
+   <%- end %>
+  </div>
+
+  <ul class='campaign-comments'>
+  <%- update.comments.visible.each do |comment| %>
+    <a id="comment_<%= comment.id %>"></a>
+    <%= render :partial => 'update_comment', :locals => { :comment => comment } %>
+  <%- end %>
+  <%- if (current_user && !update.comments.empty?) or always_show_commentbox %>
+    <%- style = '' %>
+  <%- else %>
+    <%- style = 'display:none;' %>
+  	<%- end  %>
+  </ul>
+
+
+  <div class='campaign-commentbox' id="commentbox_<%= update.id %>" style="<%= style %>">
+    
+    <%-if current_user %>
+      <%- form_class = "ajax_new_campaign_comment"  %>
+    <%- else %>
+      <%- form_class = "new_campaign_comment" %>
+    <%- end %>
+    
+    
+      <%- form_for @comment = Comment.new(:user => current_user ? current_user : User.new, :commented => update), :url => add_comment_campaign_url(@campaign), :html => {:class => form_class} do |f| %>
+      
+      
+      <%- if @empty_comment %>
+        <div class='form-field-error'>
+          <%= t(:please_enter_some_text) %>
+        </div>
+      <%- end %>
+      
+      <%= f.text_area :text, :rows => 2, :cols => 40,:id => "comment_text_#{update.id}" %>
+      <%= raw f.hidden_field :commented_id, :id => "comment_commented_id_#{update.id}" %>
+      <%= raw f.hidden_field :commented_type, :id => "comment_commented_type_#{update.id}" %>
+      
+      <%- if current_user %>
+        <%= raw f.hidden_field :user_id, :id => "comment_user_id_#{update.id}" %>
+      <%- else %>
+        <%- if @comment.errors.on('user_name') %>
+          <div class='form-field-error'><%= error_message_on @comment, 'user_name' %></div>
+        <%- end %>
+        <div class='form-field'>
+          <%= raw f.label :user_name, t(:name) %>
+          <%= raw f.text_field :user_name, :id => "comment_user_name_#{update.id}" %>
+        </div>
+        <%- f.fields_for :user do |user_fields| %>
+          <%- if @comment.user.errors.on('email') %>
+            <div class='form-field-error'><%= error_message_on @comment.user, "email" %></div>
+          <%- end %>
+          <div class='form-field'>
+            <%= raw user_fields.label :email %>
+            <%= raw user_fields.text_field :email, :id => "comment_email_#{update.id}" %>
+          </div>
+        <%- end %>
+      <%- end %>
+      
+      <%= raw f.submit t(:add_comment), :id => "comment_submit_#{update.id}" %>
+     <%- end %>
+     
+  </div>
+
+</div>
+
+
+<div style='clear:both;'>
+</div>

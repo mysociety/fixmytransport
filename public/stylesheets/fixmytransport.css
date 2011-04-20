@@ -1,0 +1,901 @@
+/* *
+ * Project: Fix My Transport
+ * Authors: Josh Angell
+ *
+ * Colours:
+ *   blue			#048fc2
+ *   dark blue		#0075a0
+ *   green			#9bce24
+ *   dark green		#86bc08
+ *   orange			#ff6600
+ *   red			#f4053d
+ *   dark red		#b3062f
+ *   light grey		#f1f1f7
+ *   grey			#ebebeb
+ *   dark grey		#666666
+ *   black			#333333
+ *   dark black		#151f26
+ * */
+/* ===[ Layout ]=== */
+.container {
+    width: 950px;
+    margin: auto;
+    overflow: hidden;
+}
+.showgrid {
+    background: url(../images/grid.png)
+}
+.leftcol {
+    float: left;
+    width: 590px;
+    margin: 0.5em 40px 0.5em 0;
+}
+.rightcol {
+    float: left;
+    width: 310px;
+    margin: 0.5em 0 0.5em 10px;
+}
+.leftcol-banner {
+    float: left;
+    width: 620px;
+    margin: 0.5em 10px 0.5em 0;
+}
+.box {
+    clear: both;
+    margin-bottom: 1em;
+}
+.grey {
+    padding: 10px;
+    background: #f1f1f7;
+    clear: both;
+}
+/* Main Elements
+   ================================================== */
+/* ===[ Body ]=== */
+body {
+    background: #048fc2 url(../images/top-nav-bg.jpg) 0 0 repeat-x;
+}
+/* ===[ Wrapper ]=== */
+#wrapper {
+    background: #fff
+}
+/* ===[ Top Bar ]=== */
+#top {
+    height: 45px;
+	margin-top:7px;
+}
+	#top ul {
+	    float: right;
+	    margin: 0;
+	    padding: 0;
+	    list-style-type: none;
+	    text-transform: uppercase;
+	}
+		#top ul li {
+		    display: block;
+		    float: left;
+		}
+			#top ul li a {
+			    display: block;
+			    padding: 10px;
+			}
+ul#top-nav {
+    font-size: 13px;
+    margin-right: 10px;
+}
+	ul#top-nav li a {
+	    color: #048fc2;
+	    padding: 9px 10px 8px 10px;
+	}
+	ul#top-nav li a:hover {
+	    color: #000
+	}
+ul#mysociety-tab {
+    font-size: 11px;
+    background: #048fc2;
+    border-radius: 0 0 6px 6px;
+    -moz-border-radius: 0 0 6px 6px;
+    -webkit-border-radius: 0 0 6px 6px;
+}
+	ul#mysociety-tab li a {
+	    color: #fff
+	}
+	ul#mysociety-tab li a:hover {
+	    color: #000
+	}
+	ul#mysociety-tab li a#mysociety-logo {
+	    width: 78px;
+	    background: url(../images/mysociety-logo.jpg) center center no-repeat;
+	    text-indent: -999999em;
+	}
+/* ===[ Header ]=== */
+#logo {
+    background: url(../images/logo.jpg) 0 0 no-repeat;
+    width: 400px;
+    height: 70px;
+    float: left;
+    display: block;
+    text-indent: -999999em;
+}
+#member-info {
+    margin-top: 50px;
+    text-align: right;
+}
+	#member-info p {
+	    margin: 0;
+	    float: right;
+	}
+	#member-info a.auth {
+	    margin-left: 5px
+	}
+/* ===[ Main Navigation ]=== */
+#main-nav-bar {
+    height: 40px;
+    background: #048fc2;
+    margin-top: 25px;
+}
+	#main-nav-bar h1 {
+	    font-size: 1.75em;
+	    color: #fff;
+	    margin-top: 0.35em;
+	}
+ul#main-nav {
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    text-transform: uppercase;
+}
+	ul#main-nav li {
+	    display: inline;
+	    float: left;
+	}
+		ul#main-nav li a {
+		    display: block;
+		    color: #fff;
+		    padding: 10px 10px 7px 10px;
+		    margin: 0 10px 0 10px;
+		}
+		ul#main-nav li a:hover,
+		ul#main-nav li a.active {
+		    background: #0075a0
+		}
+		ul#main-nav li a.help {
+		    padding-right: 22px;
+		    background: url(../images/arrow-sml-white.gif) right 18px no-repeat;
+		}
+		ul#main-nav li a.help:hover {
+		    background-color: #0075a0;
+		    background-position: right -27px;
+		}
+form#search {
+    position: relative
+}
+	form#search input {
+	    top: 4px;
+	    right: 0;
+	    position: absolute;
+	    background: #fff;
+	    width: 130px;
+	    padding: 2px 24px 2px 2px;
+	    border-radius: 6px;
+	    -moz-border-radius: 6px;
+	    -webkit-border-radius: 6px;
+	}
+	form#search button {
+	    top: 13px;
+	    width: 18px;
+	    height: 15px;
+	    right: 2px;
+	    position: absolute;
+	    text-indent: -999999em;
+	    cursor: pointer;
+	    border: none;
+	    background: url(../images/search.gif) 0 0 no-repeat;
+	}
+/* ===[ Banner ]=== */
+#banner {
+    padding: 1em 0;
+	margin-bottom:1em;
+    background: #ebebeb;
+}
+	#banner h3 {
+	    font-weight: bold;
+	    color: #151f26;
+	}
+	#banner h4 {
+	    color: #151f26;
+	    margin: 0;
+	}
+	#banner h4.bold {
+	    font-weight: bold;
+	    margin: 1em 0 0 0;
+	}
+	#banner p {
+	    line-height: 1.3;
+	    margin: 0;
+	    color: #151f26;
+	}
+
+/* ===[ Main Content ]=== */
+#main-content {}
+	#main-content div {
+	    overflow: hidden
+	}
+
+/* ===[ Footer ]=== */
+#footer {
+    color: #fff;
+    padding: 1em 0;
+    background: #048fc2 url(../images/footer-bg.jpg) 0 0 repeat-x;
+}
+	#footer a {
+	    color: #fff;
+	    text-decoration: underline;
+	}
+/* ===[ Gallery ]=== */
+ul.gallery {
+    padding: 10px;
+    margin: 0;
+    overflow: hidden;
+    clear: both;
+}
+	ul.gallery li {
+	    list-style-type: none;
+	    display: block;
+	    float: left;
+	    padding: 4px;
+	    background: #fff;
+	    margin-right: 4px;
+	}
+		ul.gallery li a {
+		    display: block;
+		    line-height: 0;
+		}
+/* ===[ User List ]=== */
+ul.user-list {
+    margin: 0;
+    padding: 10px;
+}
+	ul.user-list li {
+	    list-style-type: none;
+	    margin: 0 0 1.5em 0;
+	}
+	ul.user-list li:last-child {
+	    margin-bottom: 0.5em
+	}
+/* ===[ User Info ]=== */
+.user-info {
+    display: inline
+}
+	.user-info p.location {
+	    margin-bottom: 0.5em
+	}
+	.user-info p {
+	    margin: 0;
+	    font-size: 0.9em;
+	}
+		.user-info p a {
+		    font-style: italic
+		}
+/* ===[ Dialog Boxes ]=== */
+.ui-dialog {
+    background: #ddd;
+    padding: 5px;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+.ui-dialog-titlebar {
+    width: 100%;
+    background: #fff;
+    border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    -webkit-border-radius: 5px 5px 0 0;
+}
+.ui-dialog-titlebar-close {
+    float: right;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    margin: 4px;
+    padding-right: 20px;
+    background: url(../images/close-blue.gif) right 0 no-repeat;
+}
+.ui-dialog-titlebar-close:hover {
+    color: #0075a0;
+    background-position: right -55px;
+}
+.ui-dialog-content {
+    padding: 10px;
+    background: #fff;
+    border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+}
+/* ===[ Ui Overlay ]=== */
+.ui-widget-overlay {
+    left: 0;
+    position: absolute;
+    top: 0;
+    display: block;
+    background: #000;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity=50);
+    -moz-opacity: 0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+}
+/* ===[ Login Box ]=== */
+.login-box {
+    text-align: center
+}
+	.login-box h1 {
+	    color: #bfbfbf;
+	    font-size: 2.5em;
+	}
+	.login-box h2 {
+	    color: #333;
+	    font-size: 1.5em;
+	    width: 480px;
+	    margin: 2em auto 3em auto;
+	}
+	.login-box .login-options {
+	    display: block;
+	    width: 678px;
+	    margin: auto;
+	    overflow: hidden;
+	}
+		.login-box .login-options div {
+		    display: block;
+		    float: left;
+		    padding: 10px;
+		    width: 204px;
+		    height: 200px;
+		    margin-bottom: 2em;
+		    text-align: center;
+		    border-right: 3px solid #ddd;
+		}
+			.login-box .login-options div h3 {
+			    color: #048fc2;
+			    font-size: 1.4em;
+			    margin-bottom: 3em;
+			}
+		.login-box .login-options .button {
+		    display: block;
+		    width: 140px;
+		    margin: 0 auto 1em auto;
+		}
+		.login-box .login-options div #twitter,
+		.login-box .login-options div #facebook {
+		    display: block;
+		    margin-top: 6.2em;
+		}
+		.login-box .login-options div.last {
+		    border-right: none
+		}
+	.login-box .login-form {
+	    text-align: left;
+	    padding: 20px;
+	    overflow: hidden;
+	    display: block;
+	    width: 638px;
+	    margin: auto;
+	}
+		.login-box .login-form label {
+		    display: block;
+		    color: #048fc2;
+		    font-size: 1.2em;
+		    font-weight: normal;
+		}
+		.login-box .login-form input {
+		    color: #666;
+		    padding: 4px;
+		    width: 250px;
+		    border: 2px solid #048fc2;
+		    font-size: 1.5em;
+		    border-radius: 10px;
+		    -moz-border-radius: 10px;
+		    -webkit-border-radius: 10px;
+		}
+		.login-box .login-form button {
+		    border: 0;
+		    float: right;
+		}
+		.login-box .login-form .password {
+		    float: left;
+		    margin-right: 20px;
+		}
+			.login-box .login-form .password input {
+			    width: 150px
+			}
+/* Buttons
+   ================================================== */
+.support-big {
+    display: block;
+    text-align: center;
+    width: 180px;
+    margin: 2em auto;
+    font-size: 20px;
+    text-transform: uppercase;
+    color: #fff;
+    background: #9bce24;
+    padding: 10px;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+.support-big:hover {
+    background: #86bc08;
+    color: #fff;
+}
+.support {
+    margin-bottom: 1em;
+    text-align: center;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 10px;
+    background: #9bce24 url(../images/support-tick.gif) 6px 4px no-repeat;
+    padding: 3px 8px 3px 25px;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+.support:hover {
+    background-color: #86bc08;
+    background-position: 6px -33px;
+    color: #fff;
+}
+.comment-button {
+    margin-bottom: 1em;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 10px;
+    background: #048fc2 url(../images/comment-bubble.gif) right 4px no-repeat;
+    color: #fff;
+    padding: 3px 30px 3px 8px;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+.comment-button:hover {
+    background-color: #0075a0;
+    background-position: right -21px;
+    color: #fff;
+}
+.grey-button {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 10px;
+    background: #666666;
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+.grey-button:hover {
+    background: #333;
+    color: #fff;
+}
+.goto-top {
+    text-transform: uppercase;
+    font-size: 12px;
+    padding-right: 20px;
+    background: url(../images/arrow-lrg.gif) right 4px no-repeat;
+}
+.view-all {
+    font-size: 0.9em
+}
+.button {
+    cursor: pointer;
+	text-align: center;
+    font-size: 1.2em;
+    background: #048fc2;
+    color: #fff;
+    padding: 6px 20px;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+.button:hover,
+.button:focus {
+    background-color: #0075a0;
+    color: #fff;
+}
+/* Icons
+   ================================================== */
+.bus {
+    width: 30px;
+    height: 32px;
+    float: left;
+    margin: 4px 10px 0 0;
+    background: url(../images/bus.jpg) 0 0 no-repeat;
+}
+/* Images
+   ================================================== */
+.avatar {
+    float: left;
+    padding: 3px;
+    background: #fff;
+    line-height: 0;
+    margin-right: 10px;
+}
+.thumb {
+    float: left;
+    padding: 3px;
+    background: #fff;
+    line-height: 0;
+    margin-right: 10px;
+    border: 1px solid #c6cad0;
+}
+/* Forms
+   ================================================== */
+.formitem {
+    width: 950px;
+    margin: auto;
+    overflow: hidden;
+    margin: 0 0 1em 0;
+	position:relative;
+}
+	.formitem label {
+	    display: block;
+	    margin: 10px 10px 0 0;
+	    float: left;
+	    width: 100px;
+	    text-align: right;
+	    text-transform: uppercase;
+	}
+	.formitem input,
+	.formitem textarea {
+	    padding: 2px 4px;
+	    width: 340px;
+	    display: block;
+	    float: left;
+	    border: 2px solid #048fc2;
+	    border-radius: 3px;
+	    -moz-border-radius: 3px;
+	    -webkit-border-radius: 3px;
+	}
+	.formitem input {
+	    height: 20px
+	}
+	.formitem textarea {
+	    height: 200px
+	}
+.tipbox {
+    display: block;
+    float: right;
+    width: 350px;
+    padding: 15px;
+    background: #ebebeb;
+	position:relative;
+	right:-999999em;
+	overflow:visible !important;
+}
+	.tipbox.fixed {
+		right: 0;
+	}
+	.tipbox .tip-nub {
+	    background: url(../images/tip-nub.gif) 0 0 no-repeat;
+	    position: absolute;
+		left:-41px;
+	    height: 22px;
+	    width: 41px;
+	}
+	.tipbox .tip {
+	    float: right;
+	    text-transform: uppercase;
+	    font-weight: bold;
+	}
+	.tipbox h5 {
+	    font-weight: normal;
+	    font-size: 1.3em;
+	}
+	.tipbox p {
+		margin:0;
+	}
+form#create-campaign {
+    margin: 0 0 6em 0
+}
+/* Page Specific
+   ================================================== */
+/* ===[ Campaign Page ]=== */
+.campaign-head {
+    margin-bottom: 2em;
+    float: left;
+    width: 550px;
+}
+	.campaign-head h3 {
+	    font-weight: bold;
+	    float: left;
+	    margin: 0;
+	}
+	.campaign-head p.campaign-status {
+	    font-weight: bold;
+	    float: right;
+	    margin: 0.5em 0 0 0;
+	    font-size: 0.9em;
+	    text-transform: uppercase;
+	    color: #ff6600;
+	}
+	.campaign-head a {
+	    float: left;
+	    clear: left;
+	    width: 100%;
+	}
+.campaign-meta {
+    float: left;
+    height: 50px;
+    width: 150px;
+    margin-right: 10px;
+}
+	.campaign-meta p,
+	.campaign-meta a {
+	    display: inline-block;
+	    margin: 5px 0 0 0;
+	    margin: 6px 0 3px 0;
+	}
+	.campaign-meta a.supporters {
+	    font-size: 1.5em;
+	    font-weight: bold;
+	    margin: 0;
+	}
+	.campaign-meta span {
+	    display: block;
+	    text-transform: uppercase;
+	    font-size: 0.75em;
+	}
+.campaign-summary {
+    float: left;
+    clear: left;
+}
+	.campaign-summary p {
+	    margin: 0
+	}
+	.campaign-summary .read-more {
+	    float: right;
+	    padding-right: 15px;
+	    background: url(../images/arrow-sml.gif) right -26px no-repeat;
+	}
+#map {
+    padding: 5px
+}
+	#map a.grey-button {
+	    float: right;
+	    margin-top: 5px;
+	}
+/* ===[ Campaign Thread ]=== */
+.thread-controls {
+    float: right
+}
+	.thread-controls a.expand-all,
+	.thread-controls a.collapse-all,
+	.thread-controls a.sort {
+	    display: block;
+	    float: left;
+	    width: 18px;
+	    height: 18px;
+	    text-indent: -999999em;
+	    background: url(../images/thread-controls.gif) 0 0 no-repeat;
+	}
+	.thread-controls a.expand-all:hover {
+	    background-position: 0 -21px
+	}
+	.thread-controls a.collapse-all {
+	    background-position: -22px 0
+	}
+	.thread-controls a.collapse-all:hover {
+	    background-position: -22px -21px
+	}
+	.thread-controls a.sort {
+	    background-position: -43px 0
+	}
+	.thread-controls a.sort:hover {
+	    background-position: -43px -21px
+	}
+ul#campaign-thread {
+    margin: 0 0 1em 0;
+    padding: 0;
+    clear: both;
+}
+	ul#campaign-thread li {
+	    list-style-type: none;
+	    border-bottom: 3px solid #fff;
+	    clear: both;
+	}
+		ul#campaign-thread li a.thread-item {
+		    display: block;
+		    color: #fff;
+		    background: #048fc2;
+		    padding: 10px;
+		    height: 20px;
+		}
+		ul#campaign-thread li a.thread-item:hover {
+		    background: #0075a0
+		}
+		ul#campaign-thread li a.thread-item span.num {
+		    display: block;
+		    float: left;
+		    text-align: center;
+		    font-weight: bold;
+		    line-height: 0;
+		    margin: -2px 10px 0 0;
+		    width: 35px;
+		    background: #fff;
+		    color: #333;
+		    padding: 12px 0;
+		    border-radius: 20px;
+		    -moz-border-radius: 20px;
+		    -webkit-border-radius: 20px;
+		}
+		ul#campaign-thread li a.thread-item span.title {
+		    display: block;
+		    float: left;
+		    margin-top: 1px;
+		}
+		ul#campaign-thread li a.thread-item span.date {
+		    float: right;
+		    margin-right: 30px;
+		}
+		ul#campaign-thread li a.thread-item span.close {
+		    display: none
+		}
+		ul#campaign-thread li .thread-details {
+		    display: none
+		}
+	ul#campaign-thread li.open {
+	    background: #f1f1f7;
+	    color: #333;
+	}
+		ul#campaign-thread li.open a.thread-item {
+		    background: none;
+		    color: #333;
+		}
+		ul#campaign-thread li.open a.thread-item:hover {
+		    background: none;
+		    color: #333;
+		}
+		ul#campaign-thread li.open a.thread-item span.date {
+		    margin-right: 10px
+		}
+		ul#campaign-thread li.open a.thread-item span.close {
+		    display: block;
+		    height: 12px;
+		    width: 12px;
+		    margin: 4px;
+		    overflow: hidden;
+		    float: right;
+		    text-indent: -999999em;
+		    background: url(../images/close.gif) 0 0 no-repeat;
+		}
+		ul#campaign-thread li.open a.thread-item span.close:hover {
+		    background-position: 0 -12px
+		}
+		ul#campaign-thread li.open .box {
+		    padding: 10px 40px 10px 10px
+		}
+		ul#campaign-thread li.open .thread-details {
+		    display: block;
+		    padding-right: 10px;
+		}
+/* ===[ Choose Page ]=== */
+#choose .left,
+#choose .right {
+    text-align: center;
+    width: 465px;
+}
+	#choose .left .button,
+	#choose .right .button {
+	    font-size: 1.5em;
+	    text-transform: uppercase;
+	    width: 200px;
+	    display: block;
+	    margin: 1em auto;
+	}
+	#choose .left .button {
+	    background: #f4053d
+	}
+	#choose .left .button:hover {
+	    background: #b3062f
+	}
+	#choose .right .button {
+	    background: #9bce24
+	}
+	#choose .right .button:hover {
+	    background: #86bc08
+	}
+#choose p {
+    width: 300px;
+    margin: 2em auto;
+}
+/* ===[ Process Page ]=== */
+ul#process {
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+    text-transform: uppercase;
+}
+	ul#process li {
+		list-style-type:none;
+		display:block;
+		float:left;
+		position:relative;
+		z-index:3;
+
+	}
+		ul#process li#crumb1 {
+			z-index:3;
+		}
+			ul#process li#crumb1 a {
+				/*background:transparent url(../images/nav-nub.png) right center no-repeat;*/
+			}
+		ul#process li#crumb2 {
+			z-index:2;
+			margin-left:-20px;
+		}
+			ul#process li#crumb2 a{
+				padding-left:30px;
+			}
+		ul#process li#crumb3 {
+			z-index:1;
+			margin-left:-20px;
+		}
+			ul#process li#crumb3 a{
+				padding-left:30px;
+			}
+		ul#process li a {
+			display:block;
+	    	color:#fff;
+	    	padding:10px 25px 7px 15px;
+		}
+		ul#process li a:hover {
+			background:#0075a0;
+		}
+		ul#process li a.done {
+	    	color:#fff;
+			background:transparent url(../images/nav-nub.png) right center no-repeat;
+		}
+
+
+		/*Next and back buttons for process page*/
+
+		.process-back, .process-next{
+			height: 28px;
+			border: 0px;
+			text-transform: uppercase;
+			color:#0075a0;
+			outline: none;
+			}
+
+		.process-back{
+			background:transparent url(../images/process-back.gif) left top no-repeat;
+			padding-left: 30px;
+		}
+			.process-back:hover{
+				background-position: left bottom;
+				color:#000;
+				float: left;
+			}
+
+		.process-next{
+			background:transparent url(../images/process-next.gif) right top no-repeat;
+			padding-right: 30px;
+			float: right;
+		}
+			.process-next:hover{
+				background-position: right bottom;
+				color:#000;
+			}
+
+			#process-nav div{
+				float: left;
+				width: 340px;
+				margin-left:120px;
+				margin-top: 1em;
+				margin-bottom: 20px;
+
+
+			}
+
+
+

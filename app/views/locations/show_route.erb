@@ -1,0 +1,52 @@
+<%- content_for :javascript do  %>
+  <%= raw map_javascript_include_tags %>
+<%- end %>
+<div id='map-col'>
+  <%= render :partial => 'shared/map', :locals => { :locations => [@route], :other_locations => @other_locations, :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH  } %>
+  <div class='extra-info'>
+    <ul class='stops'>
+      Stops:
+      <%- @route.stops_or_stations.each do |stop_or_station| %>
+        <li>
+          <%= link_to stop_or_station.full_name, location_url(stop_or_station) %>
+        </li>
+      <%- end %>
+    </ul>
+  </div>
+</div>
+
+<div class='route'>
+  <a href="<%=location_url(@route, :format => 'atom')%>" class='rss-link campaign-rss'>
+    <span><%= t(:feed) %></span>
+    <img title='<%= t(:feed) %>' src='/images/feed.png' alt='<%= t(:campaigns_feed) %>'/>
+  </a>
+  
+  <h3 class='name'><%= MySociety::Format.ucfirst(@route.name) %></h3>
+  
+  <div class='details'>
+    <%- if ! @route.is_a?(TrainRoute) %>
+      <span class='locality'>
+        <%= "#{@route.area}." %>
+      </span>
+    <%- end %>
+    
+    <div class='operators'>
+     <%- if !@route.operators.empty?  %>
+        Operated by
+        <ul>
+          <%- @route.operators.each do |operator| %>
+            <li>
+              <%= raw link_to(operator.name, operator_path(operator))  %>
+            </li>
+          <%- end %>
+        </ul>
+      <%- end %>
+    </div>
+    
+    <div class='terminuses'>
+      <%= raw terminus_text(@route) %>
+    </div>
+  
+  </div>
+</div>
+<%= render :partial => 'shared/location_content', :locals => { :location => @route } %>

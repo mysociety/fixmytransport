@@ -9,22 +9,22 @@ function feedbackCallback(response) {
   if (response.success) {
       feedbackTab.hideTab();
    } else {
-     jQuery('.form-field-error').html('');
+     $('.form-field-error').html('');
      for (var key in response.errors){
-       jQuery('#form-field-error-' + key).html( response.errors[key] );
+       $('#form-field-error-' + key).html( response.errors[key] );
      }
    }
 }
 
 function clearFormElements(element) {
-  jQuery(element).find(':input').each(function() {
+  $(element).find(':input').each(function() {
       switch(this.type) {
           case 'password':
           case 'select-multiple':
           case 'select-one':
           case 'text':
           case 'textarea':
-              jQuery(this).val('');
+              $(this).val('');
               break;
           case 'checkbox':
           case 'radio':
@@ -34,9 +34,9 @@ function clearFormElements(element) {
 }
 
 function addGuidanceField(guidance_selector, field_selector){
-  jQuery(guidance_selector).hide();
-  jQuery(field_selector).autofill({
-       value: jQuery(guidance_selector).text(),
+  $(guidance_selector).hide();
+  $(field_selector).autofill({
+       value: $(guidance_selector).text(),
        defaultTextColor: '#595454',
        activeTextColor: '#000000'
      });  
@@ -57,37 +57,37 @@ function addSearchGuidance() {
 
 // For an ongoing issue, don't show the date and time fields
 function hideProblemDateTimeForOngoing() {
-  if (jQuery('#is-campaign-0').is(':not(:checked)')){
-    jQuery('#date-field').hide();
-    jQuery('#time-field').hide();    
+  if ($('#is-campaign-0').is(':not(:checked)')){
+    $('#date-field').hide();
+    $('#time-field').hide();    
   }
-  jQuery('input[name="problem[is_campaign]"]').click(function(){
-    if (jQuery('#is-campaign-1').is(':checked')){
-      jQuery('#date-field').hide("slow");
-      jQuery('#time-field').hide("slow");
+  $('input[name="problem[is_campaign]"]').click(function(){
+    if ($('#is-campaign-1').is(':checked')){
+      $('#date-field').hide("slow");
+      $('#time-field').hide("slow");
     }else{
-      jQuery('#date-field').show("slow");
-      jQuery('#time-field').show("slow");
+      $('#date-field').show("slow");
+      $('#time-field').show("slow");
     }
   })
 }
 
 // Add listeners for link click events
 function addLinkActions() {
-  jQuery('#ask-advice-link').click(function(){
-    if(jQuery('#advice-request-form').length == 0){
+  $('#ask-advice-link').click(function(){
+    if($('#advice-request-form').length == 0){
       return true;
     }else{
-      jQuery('#advice-request-form').show();
+      $('#advice-request-form').show();
       return false;
     }
   })
-  jQuery('.campaign-comment-link').live('click', function(){
-    id = jQuery(this).attr('id').split('_')[1];
-    if(jQuery('#commentbox_' + id).length == 0) {
+  $('.campaign-comment-link').live('click', function(){
+    id = $(this).attr('id').split('_')[1];
+    if($('#commentbox_' + id).length == 0) {
       return true;
     }else{
-      jQuery('#commentbox_' + id).show();
+      $('#commentbox_' + id).show();
       return false;
     }
   })
@@ -104,12 +104,12 @@ function setupForm(selector, callback) {
     dataType: 'json',
     beforeSubmit: highlightEmptyTextArea
   };
-  jQuery(selector).ajaxForm(options);
+  $(selector).ajaxForm(options);
 }
 
 function highlightEmptyTextArea(arr, form, options){
-  textarea = jQuery('textarea', form);
-  if (jQuery.trim(textarea.val()) == ''){
+  textarea = $('textarea', form);
+  if ($.trim(textarea.val()) == ''){
     textarea.parent().prepend('<div class="form-field-error">Please enter some text</div>')
     return false;  
   }else {
@@ -122,22 +122,22 @@ function show_error(element, message){
 }
 
 function adviceCallback(response){
-  jQuery('.latest-news').after(response.html);
-  jQuery('#advice-request-form textarea').val('');
-  jQuery('#advice-request-form').hide();
+  $('.latest-news').after(response.html);
+  $('#advice-request-form textarea').val('');
+  $('#advice-request-form').hide();
   setupForm('.new_campaign_comment', updateCommentCallback);
 }
 
 function updateCallback(response){
-  jQuery('.latest-news').after(response.html);
-  jQuery('#campaign-update-form textarea').val('');
+  $('.latest-news').after(response.html);
+  $('#campaign-update-form textarea').val('');
   setupForm('.new_campaign_comment', updateCommentCallback);
 }
 
 function updateCommentCallback(response){
-  commentbox_div = jQuery('#commentbox_' + response.commented_id);
-  commentbox = jQuery("#comment_text_" + response.commented_id);
-  jQuery('.form-field-error', commentbox_div).remove();
+  commentbox_div = $('#commentbox_' + response.commented_id);
+  commentbox = $("#comment_text_" + response.commented_id);
+  $('.form-field-error', commentbox_div).remove();
   
   if (response.success){
     commentbox.val("");
@@ -146,7 +146,7 @@ function updateCommentCallback(response){
   } else {
    
     for (var key in response.errors){
-      show_error(jQuery('#comment_'+ key + '_' + response.commented_id), response.errors[key] );
+      show_error($('#comment_'+ key + '_' + response.commented_id), response.errors[key] );
     }
   }
 }
@@ -160,22 +160,22 @@ function updateCommentCallback(response){
 function setupFeedbackForm() {
   feedbackTab = {
        speed:800,
-       containerWidth:jQuery('#feedback-panel-container').outerWidth(),
-       containerHeight:jQuery('#feedback-panel-container').outerHeight(),
-       tabWidth:jQuery('#feedback-tab').outerWidth(),
+       containerWidth:$('#feedback-panel-container').outerWidth(),
+       containerHeight:$('#feedback-panel-container').outerHeight(),
+       tabWidth:$('#feedback-tab').outerWidth(),
        showTab:function(){
-         jQuery('#feedback-panel-container').animate({left:'0'},  feedbackTab.speed,  function(){jQuery('#feedback-tab').removeClass().addClass('feedback-tab-open')})
+         $('#feedback-panel-container').animate({left:'0'},  feedbackTab.speed,  function(){$('#feedback-tab').removeClass().addClass('feedback-tab-open')})
        },
        hideTab:function(){
-         jQuery('#feedback-panel-container').animate({left:"-" + feedbackTab.containerWidth}, feedbackTab.speed, function(){jQuery('#feedback-tab').removeClass().addClass('feedback-tab-closed')});
+         $('#feedback-panel-container').animate({left:"-" + feedbackTab.containerWidth}, feedbackTab.speed, function(){$('#feedback-tab').removeClass().addClass('feedback-tab-closed')});
          clearFormElements('#ajax-feedback');
-         jQuery('#ajax-feedback .form-field-error').html('')
+         $('#ajax-feedback .form-field-error').html('')
        },
        init:function(){
-           jQuery('#feedback-tab').addClass('feedback-tab-closed');
-           jQuery('#feedback-panel-container').css('height',feedbackTab.containerHeight + 'px');
-           jQuery('#feedback-tab').click(function(event){
-               if (jQuery('#feedback-tab').hasClass('feedback-tab-open')) {
+           $('#feedback-tab').addClass('feedback-tab-closed');
+           $('#feedback-panel-container').css('height',feedbackTab.containerHeight + 'px');
+           $('#feedback-tab').click(function(event){
+               if ($('#feedback-tab').hasClass('feedback-tab-open')) {
                  feedbackTab.hideTab()
                } else {
                 feedbackTab.showTab()
@@ -193,9 +193,9 @@ function setupFeedbackForm() {
      },
      dataType: 'json'
    };
-  jQuery('#ajax-feedback').ajaxForm(options);
+  $('#ajax-feedback').ajaxForm(options);
   
-  jQuery('.feedback-cancel').click(function() {
+  $('.feedback-cancel').click(function() {
     feedbackTab.hideTab();
     event.preventDefault();
   });  
@@ -203,23 +203,21 @@ function setupFeedbackForm() {
 }
 
 function tabifyRouteLists() {
-    if (jQuery('#tabs').length > 0){
-      jQuery("#tabs").tabs();
-      jQuery("#tabs-bus").tabs();
-      jQuery("#tabs-coach").tabs();
-      jQuery("#tabs-train").tabs();
-      jQuery("#tabs-ferry").tabs();
-      jQuery("#tabs-metro").tabs();
+    if ($('#tabs').length > 0){
+      $("#tabs").tabs();
+      $("#tabs-bus").tabs();
+      $("#tabs-coach").tabs();
+      $("#tabs-train").tabs();
+      $("#tabs-ferry").tabs();
+      $("#tabs-metro").tabs();
     }
 }
 
-// Run jquery in no-conflict mode so it doesn't use $()
-jQuery.noConflict();
 
-jQuery(document).ready(function() {
+$(document).ready(function() {
   // Always send the authenticity_token with ajax
-  jQuery.ajaxSetup({
-    'beforeSend': function(xhr) { xhr.setRequestHeader('X-CSRF-Token', jQuery('meta[name=csrf-token]').attr('content')); }
+  $.ajaxSetup({
+    'beforeSend': function(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content')); }
   });
   tabifyRouteLists();
   addSearchGuidance();  

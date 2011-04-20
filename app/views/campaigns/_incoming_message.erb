@@ -1,0 +1,7 @@
+<span class='date'><%= t(:ago, :time => time_ago_in_words(event.created_at)) %></span>
+<span class='message-link'>
+  <%= raw t(:got_a_message, :link => link_to(t(:a_reply), campaign_incoming_message_path(@campaign, message)), :sender => message.safe_from, :campaigner => h(@campaign.initiator.name)) %>
+  <%- message.campaign_updates.each do |update| %>
+    <%= render :partial => 'campaign_update', :locals => { :update => update, :always_show_commentbox => always_show_commentbox } %>
+	<%- end %>
+</span>

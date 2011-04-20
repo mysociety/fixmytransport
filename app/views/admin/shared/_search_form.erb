@@ -1,0 +1,15 @@
+<form class='admin-search-form' method='GET'>
+  <span class='query'>
+    <%= raw label_tag t(:search) %>
+    <%= raw text_field_tag :query, params[:query] %>
+  </span>
+  <%- unless skip_transport_mode %>
+    <span class='transport-mode'>
+      <%- TransportMode.active.find(:all).each do |transport_mode|  %>
+        <%= raw label_tag "mode_#{transport_mode.id}", transport_mode.name %>
+        <%= raw radio_button_tag :mode, transport_mode.id, transport_mode.id == params[:mode].to_i %>
+      <%-end %>
+    </span>
+  <%- end %>
+  <%= raw submit_tag t(:go) %>
+</form>

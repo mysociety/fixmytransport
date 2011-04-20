@@ -1,0 +1,18 @@
+<a name='problem_<%= problem.id %>'></a>
+<div class='problem'>
+  <h4 class='subject'>
+    <%= link_to(problem.subject, problem_url(problem))  %>
+  </h4>
+  <div class='details'>
+    <%= t(:added) %>
+    <span class='posted-time'>
+      <%= t(:posted_time, :time => time_ago_in_words(problem.created_at)) %>
+    </span>
+    <span class='reporter'>
+      <%= t(:by, :name => problem.reporter_name) %>
+    </span>
+  </div>
+  <p class='problem'>
+    <%= raw sanitize(problem.description) %>
+  </p>
+</div>

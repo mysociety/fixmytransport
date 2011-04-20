@@ -1,0 +1,67 @@
+<html lang='<%= I18n.locale %>'>
+  <head>
+    <title>
+      <%= "#{t(:site_name)}#{@title ? ':' : ''} #{@title}" %>
+    </title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-type' />
+    <%= yield :feeds %>
+    <%= csrf_meta_tag %>
+    <%= stylesheet_link_tag 'application', 'map' %>
+    <%= yield :stylesheets %>
+    <%= raw javascript_include_tag('jquery-1.4.4.min.js') %>
+    <%= raw javascript_include_tag('jquery.autofill.js') %>
+    <%= raw javascript_include_tag('jquery.form.js') %>
+    <%= yield :javascript %>
+    <%= raw javascript_include_tag('application.js') %>
+  </head>
+  <body>
+    <div id='site-header'>
+      <h1><%= link_to_unless_current(t(:site_name), root_url)  %></h1>
+      <div id='site-tagline'><%= t(:site_tagline) %></div>
+    </div>
+    <%- if MySociety::Config.getbool('STAGING_SITE', true) %>
+      <div class='staging-banner'>
+        <%= t(:development_site) %>
+      </div>
+    <%- end %>
+    <%- [:notice, :error, :message].each do |key|  %>
+      <%- unless flash[key].blank?  %>
+        <p class='flash flash_<%= key %>'>
+          <%= raw flash[key] %>
+        </p>
+      <%- end %>
+    <%- end %>
+    <ul class='navigation'>
+      <%- if current_user %>
+        <li><%= raw t(:logged_in_as, :name => link_to(h(current_user.name), account_path)) %></li>
+        <li><%= link_to(t(:logout), logout_path) %></li>
+      <%- else %>
+        <li><%= link_to(t(:login), login_path) %></li>
+        <li><%= link_to(t(:signup), new_account_path) %></li>
+      <%- end %>
+    </ul>
+    <div class='wrapper'>
+      <div class='content'>
+        <%= yield %>
+      </div>
+    </div>
+    <%- unless action_name == 'feedback' %>
+      <div id='feedback-panel-container'>
+        <div id='feedback-tab'></div>
+        <div id='feedback-panel'>
+          <%= render :partial => 'shared/feedback_form' %>
+        </div>
+      </div>
+    <%- end %>
+    <div id='footer'>
+      <ul>
+        <li class='footer-item'><%= raw link_to t(:about), about_path %></li>
+        <li class='footer-item'><%= raw link_to t(:feedback), feedback_path %></li>
+        <li class='footer-item'><%= raw link_to t(:routes), routes_path %></li>
+      </ul>
+      <div class='support-links'><%= raw t(:built_by, :mysociety_link => link_to('mySociety', 'http://mysociety.org'), :indigo_link => link_to('Indigo Trust', 'http://indigotrust.wordpress.com/'), :donor_link => link_to(t(:small_donors), 'http://mysociety.org/donate'), :esmee_link => link_to('Esmée Fairbairn Foundation', 'http://www.esmeefairbairn.org.uk')) %></div>
+    </div>
+    <div class='anchor-padding'><%= " " %></div>
+    <%= render :partial => 'shared/tracking' %>
+  </body>
+</html>

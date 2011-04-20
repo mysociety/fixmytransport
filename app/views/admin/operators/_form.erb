@@ -1,0 +1,27 @@
+<%- if !@operator.errors.empty? %>
+  <div class='form-error'>
+    <%= t(:operator_form_error) %>
+  </div>
+<%- end %>
+<div class='form-field'>
+  <%= raw f.label :code %>
+  <%= raw f.text_field :code %>
+</div>
+<div class='form-field'>
+  <%= raw f.label :short_name %>
+  <%= raw f.text_field :short_name %>
+</div>
+<div class='form-field'>
+  <%- if @operator.errors.on(:name) %>
+    <div class='form-field-error'>
+      <%= error_message_on @operator, :name %>
+    </div>
+  <%= raw f.label :name %>
+  <%= raw f.text_field :name %>
+  <%-end %>
+</div>
+<div class='form-field'>
+  <%= raw f.label :notes %>
+  <%= raw f.text_field :notes %>
+</div>
+<%= raw submit_tag t(:go) %>

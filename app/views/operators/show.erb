@@ -1,0 +1,23 @@
+<h2><%= @operator.name %></h2>
+<%- if !@operator.routes.empty?  %>
+  <%= t(:operates_routes, :operator => @operator.name, :count => @operator.routes.count) %>
+  <ul class='operator-routes'>
+   <%- @operator.routes.each do |route| %>
+      <li>
+        <%= link_to(route.name(from_stop=nil, short=true), location_path(route)) %>
+        <%= route.area(lowercase=true) %>
+      </li>
+   <%- end %>
+</ul>
+<%- end %>
+
+<%- if !@operator.stop_areas.empty? %>
+  <%= t(:is_responsible_for_stations, :operator => @operator.name, :count => @operator.stop_areas.count) %>
+  <ul class='operator-stations'>
+    <%- @operator.stop_areas.each do |station| %>
+      <li>
+        <%= link_to(station.name, location_path(station)) %>
+      </li>
+    <%- end %>
+</ul>
+<%- end %>

@@ -1,8 +1,0 @@
-- if @campaign.status == :new
-  = t(:nearly_ready)
-  %p= t(:now_add_campaign_info)
-  %p= t(:edit_campaign_info)
-  = render :partial => "new_form", :locals => { :campaign => @campaign }
-- else
-  %h2.main-header= @campaign.title
-  = render :partial => 'form', :locals => { :campaign => @campaign }
