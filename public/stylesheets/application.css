@@ -624,7 +624,7 @@ form.new_update .label{
   width: 6em;
 }
 
-.optional-assignment {
+.assignment {
   border-radius: 10px;
   background-color: #951919;
   font-style: bold;
@@ -635,12 +635,12 @@ form.new_update .label{
   cursor: pointer;
 }
 
-.optional-assignment a {
+.assignment a {
   color: #ffffff;
   text-decoration: none;
 }
 
-.optional-assignment-end {
+.assignment-end {
   clear: left;
 }
 

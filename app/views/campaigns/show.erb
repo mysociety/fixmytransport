@@ -27,12 +27,12 @@
       </span>
     </div>
   </div>
-  
+
   <%= raw simple_format(sanitize(@campaign.description), :class => 'campaign') %>
   <%- if current_user && (current_user == @campaign.initiator || current_user.is_expert?) %>
     <%= link_to(t(:edit), edit_campaign_path(@campaign), :class => 'description-edit-link') %>
   <%- end %>
-  
+
   <%- if current_user && current_user == @campaign.initiator %>
     <%= render :partial => 'update_form', :locals => {  :hidden => false, :update => CampaignUpdate.new(:user_id => current_user.id) } %>
   <%- elsif current_user && current_user.campaigns.include?(@campaign) %>
@@ -52,36 +52,43 @@
           <%= raw text_field_tag :email %>
         </div>
         <%= raw submit_tag t(:join) %>
-      <%- end %>  
+      <%- end %>
     <%- end %>
   <%- end %>
 
-  <%- if !@campaign.problem.optional_assignments.empty? %>
-    <h3><%= t(:next_steps) %></h3>
-    <div class='optional-assignments'>
-      <%- @campaign.problem.optional_assignments.each do |assignment_type|
- %>
-        <%= render :partial => "shared/optional_assignments/#{assignment_type}" %>
+  <h3><%= t(:next_steps) %></h3>
+  <div class="incomplete-assignments">
+    <%- @campaign.problem.assignments.incomplete.each do |assignment| %>
+      <%- if !assignment.has_unmet_prerequisites? %>
+        <%= render :partial => "shared/incomplete_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }%>
       <%- end %>
-      <div class='optional-assignment-end'></div>
-      <%- if current_user && current_user == @campaign.initiator %>
-        <%= render :partial => 'update_form', :locals => { :hidden => true, :update => CampaignUpdate.new(:is_advice_request => true, :user_id => current_user.id) } %>
-      <%- end %>
-    </div>
-  <%- end %>
-  
+    <%- end %>
+  </div>
+  <div class='optional-assignments'>
+    <%- @campaign.problem.optional_assignments.each do |assignment_type|
+%>
+      <%= render :partial => "shared/optional_assignments/#{assignment_type}" %>
+    <%- end %>
+    <div class='assignment-end'></div>
+
+    <%- if current_user && current_user == @campaign.initiator %>
+      <%= render :partial => 'update_form', :locals => { :hidden => true, :update => CampaignUpdate.new(:is_advice_request => true, :user_id => current_user.id) } %>
+    <%- end %>
+
+  </div>
+
   <%- if current_user && current_user.is_expert? %>
     <h3><%= t(:transport_experts) %></h3>
     <div class='expert-actions'>
-      <div class='optional-assignment'>
+      <div class='assignment'>
         <%= link_to(t(:tell_to_write, :user => @campaign.initiator.first_name), new_campaign_assignment_path(@campaign)) %>
       </div>
-      <div class='optional-assignment-end'>
+      <div class='assignment-end'>
       </div>
     </div>
   <%- end %>
-  
-  
+
+
   <h3 class='latest-news'><%= t(:latest_news) %></h3>
   <%- @campaign.campaign_events.visible.each do |campaign_event| %>
     <%= render :partial => 'campaign_event', :locals => { :always_show_commentbox => false, :event => campaign_event } %>
