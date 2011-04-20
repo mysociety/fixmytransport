@@ -15,5 +15,5 @@ ActionController::Base.session = {
 ActionController::Base.session_store = :active_record_store
 
 # Insert a bit of middleware code to prevent uneeded cookie setting.
-require 'lib/fixmytransport/strip_empty_sessions'
+require "#{RAILS_ROOT}/lib/fixmytransport/strip_empty_sessions"
 ActionController::Dispatcher.middleware.insert_before ActionController::Base.session_store, FixMyTransport::StripEmptySessions, :key => '_fixmytransport_session', :path => "/", :httponly => true
