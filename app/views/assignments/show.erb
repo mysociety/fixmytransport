@@ -1,13 +1,2 @@
-<%= raw t(:message_from_expert, :expert => h(@assignment.creator.name), :campaign => link_to(h(@assignment.campaign.title), campaign_path(@assignment.campaign)), :user => h(@assignment.user.name)) %>
+<%= render :partial => @assignment.task_type %>
 
-<div class='campaign-email'>
-  <h2>
-    <div class='from'><%= @assignment.creator.name %></div>
-    <div class='date'><%= short_date(@assignment.created_at) %></div>
-  </h2>
-  <div class='subject'>
-    <b><%= "#{t(:subject)}:" %></b>
-    <%= @assignment.data[:subject] %>
-  </div>
-  <div class='body'><%= raw simple_format(h(@assignment.data[:reason])) %></div>
-</div>
