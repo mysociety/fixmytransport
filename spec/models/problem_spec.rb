@@ -45,6 +45,7 @@ describe Problem do
       @problem.confirmed_at = @confirmation_time
       @problem.stub!(:save!).and_return(true)
       @problem.stub!(:organization_info).and_return([])
+      @problem.stub!(:emailable_organizations).and_return([])
       Assignment.stub!(:complete_problem_assignments)
     end
     
@@ -75,17 +76,25 @@ describe Problem do
         Assignment.should_receive(:complete_problem_assignments).with(@problem, assignment_data)
         @problem.confirm!
       end
+      
+      describe 'if the problem has emailable organizations' do
     
-      it 'should set the "write-to-transport-organization" assignment associated with this user and problem as complete' do 
-        @problem.stub!(:responsible_organizations).and_return([mock_model(Operator)])
-        @problem.stub!(:organization_info).and_return({ :data => 'data' })
-        assignment_data = { 'write-to-transport-organization' => { :organizations => {:data => 'data'} } }
-        Assignment.should_receive(:complete_problem_assignments).with(@problem, assignment_data)
-        @problem.confirm!
+        before do 
+          @problem.stub!(:emailable_organizations).and_return(['some'])
+        end
+        
+        it 'should set the "write-to-transport-organization" assignment associated with this user and problem as complete' do 
+          @problem.stub!(:responsible_organizations).and_return([mock_model(Operator)])
+          @problem.stub!(:organization_info).and_return({ :data => 'data' })
+          assignment_data = { 'write-to-transport-organization' => { :organizations => {:data => 'data'} } }
+          Assignment.should_receive(:complete_problem_assignments).with(@problem, assignment_data)
+          @problem.confirm!
+        end
+    
       end
-    
-      it 'should not set the "write-to-transport-organization" assignment associated with this user and problem as complete if there are no responsible organizations' do 
-        @problem.stub!(:responsible_organizations).and_return([])
+      
+      it 'should not set the "write-to-transport-organization" assignment associated with this user and problem as complete if there are no emailable organizations' do 
+        @problem.stub!(:emailable_organizations).and_return([])
         @problem.stub!(:organization_info).and_return({ :data => 'data' })
         assignment_data ={ 'write-to-transport-organization' => { :data => 'data' } }
         Assignment.should_not_receive(:complete_problem_assignments).with(@problem, hash_including({'write-to-transport-organization'=> { :data => 'data' } }))
@@ -135,7 +144,9 @@ describe Problem do
     before do 
       @problem = Problem.new
       @mock_user = mock_model(User)
+      @mock_campaign = mock_model(Campaign)
       @problem.stub!(:reporter).and_return(@mock_user)
+      @problem.stub!(:campaign).and_return(@mock_campaign)
       @mock_operator = mock_model(Operator, :name => 'emailable operator')
       @problem.stub!(:responsible_organizations).and_return([@mock_operator])
       @problem.stub!(:emailable_organizations).and_return([@mock_operator])
@@ -147,7 +158,8 @@ describe Problem do
       expected_attributes = { :status => status, 
                               :task_type_name => name, 
                               :user => @mock_user, 
-                              :problem => @problem  }
+                              :problem => @problem,
+                              :campaign => @mock_campaign }
       Assignment.should_receive(:create_assignment).with(hash_including(expected_attributes))
     end
   

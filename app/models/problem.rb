@@ -83,7 +83,8 @@ class Problem < ActiveRecord::Base
                                 :status => data[:status],
                                 :user => reporter,
                                 :data => data[:data],
-                                :problem => self }
+                                :problem => self, 
+                                :campaign => self.campaign }
       Assignment.create_assignment(assignment_attributes)
       
     end
@@ -128,7 +129,9 @@ class Problem < ActiveRecord::Base
     # complete the relevant assignments
     Assignment.complete_problem_assignments(self, {'publish-problem' => {}})
     data = {:organizations => self.organization_info(:responsible_organizations) }
-    Assignment.complete_problem_assignments(self, {'write-to-transport-organization' => data })
+    if !self.emailable_organizations.empty?
+      Assignment.complete_problem_assignments(self, {'write-to-transport-organization' => data })
+    end
     # save new values without validation - don't want to validate any associated campaign yet
     self.update_attribute('status', :confirmed)
     self.update_attribute('confirmed_at', Time.now)
@@ -159,7 +162,7 @@ class Problem < ActiveRecord::Base
      :write_to_other,
      :ask_for_advice]
   end
-  
+    
   def transport_mode_text
     location.transport_modes.map{ |transport_mode| transport_mode.name }.join(", ")
   end
