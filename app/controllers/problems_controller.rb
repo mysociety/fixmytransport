@@ -339,25 +339,60 @@ class ProblemsController < ApplicationController
       @to_stop = route_info[:to_stops].first.name
     end
   end
-
+  
   def setup_problem_advice(problem)
     advice_params = { :location_type => @template.readable_location_type(problem.location) }
     num_organizations = problem.responsible_organizations.size
-    if num_organizations == 1
-      advice_params[:organization] = @template.org_names(problem, :responsible_organizations, t(:and))
-    elsif num_organizations > 1      
-      if problem.operators_responsible?
-        advice_params[:organization] = "the operator you select"
-      else
-        advice_params[:organization] = @template.org_names(problem, :responsible_organizations, t(:or))
+    num_organizations_with_email = 0
+   
+    problem.responsible_organizations.each do |organization| 
+      if organization.emailable?
+        num_organizations_with_email += 1
       end
-    elsif num_organizations == 0
-      advice_params[:organization] = "the organization responsible for this #{@template.readable_location_type(problem.location)}"
     end
-    advice = :problem_will_be_sent
+    if num_organizations == 1
+      advice_params[:organization] = @template.org_names(problem, :responsible_organizations, t(:or))
+      advice_params[:organization_unstrong] = @template.org_names(problem, :responsible_organizations, t(:or), '', '')
+    elsif num_organizations > 1
+      advice_params[:organizations] = @template.org_names(problem, :responsible_organizations, t(:or))
+    end
+    # don't know who is responsible for the location
+    if num_organizations == 0
+      advice = :no_organizations_for_problem
+    # all responsible organizations contactable
+    elsif num_organizations == num_organizations_with_email
+      if num_organizations == 1
+        advice = :problem_will_be_sent
+      else
+        # for operators you get to choose which to email
+        if problem.operators_responsible? 
+          advice = :problem_will_be_sent_multiple_operators
+        else
+          # for councils, it goes to all or one depending on category
+          advice = :problem_will_be_sent_multiple
+        end
+      end
+    # no responsible organizations contactable
+    elsif num_organizations_with_email == 0
+      if num_organizations == 1
+        advice = :no_details_for_organization
+      else
+        advice = :no_details_for_organizations
+      end
+    # some responsible organizations contactable
+    else
+      advice_params[:contactable] = @template.org_names(problem, :emailable_organizations, t(:or))
+      advice_params[:uncontactable] = @template.org_names(problem, :unemailable_organizations, t(:or)) 
+      if problem.operators_responsible? 
+        advice = :no_details_for_some_operators
+      else
+        advice_params[:councils] = @template.org_names(problem, :responsible_organizations, t(:or))
+        advice = :no_details_for_some_councils
+      end
+    end
     @sending_advice = t(advice, advice_params)
   end
-  
+    
   def cleanup_time_params
     # fix for https://rails.lighthouseapp.com/projects/8994/tickets/4346
     # from http://www.ruby-forum.com/topic/100815
