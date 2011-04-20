@@ -1,5 +1,5 @@
 <%- @campaign.write_to_other_assignments.each do |assignment| %>
-  <div class='optional-assignment'>
+  <div class='assignment'>
     <%- if assignment.status == :complete %>
       <%- message = :write_again %>
     <%- else %>

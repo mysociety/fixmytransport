@@ -1,6 +1,6 @@
 <%- @campaign.problem.recipients.each do |recipient| %>
   <%-if ! recipient.deleted?  %>
-    <div class='optional-assignment'>
+    <div class='assignment'>
       <%= link_to(t(:write_again, :name => recipient.name), new_campaign_outgoing_message_path(@campaign, :recipient_type => recipient.type, :recipient_id => recipient.id)) %>
     </div>
   <%- end %>
