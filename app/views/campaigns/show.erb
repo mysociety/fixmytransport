@@ -57,13 +57,14 @@
   <%- end %>
 
   <h3><%= t(:next_steps) %></h3>
-  <div class="incomplete-assignments">
-    <%- @campaign.problem.assignments.incomplete.each do |assignment| %>
-      <%- if !assignment.has_unmet_prerequisites? %>
+  <div class="new-assignments">
+    <%- @campaign.problem.assignments.each do |assignment| %>
+      <%- if assignment.status == :new %>
         <%= render :partial => "shared/incomplete_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }%>
       <%- end %>
     <%- end %>
   </div>
+  
   <div class='optional-assignments'>
     <%- @campaign.problem.optional_assignments.each do |assignment_type|
 %>
@@ -74,8 +75,7 @@
     <%- if current_user && current_user == @campaign.initiator %>
       <%= render :partial => 'update_form', :locals => { :hidden => true, :update => CampaignUpdate.new(:is_advice_request => true, :user_id => current_user.id) } %>
     <%- end %>
-
-  </div>
+  </div>  
 
   <%- if current_user && current_user.is_expert? %>
     <h3><%= t(:transport_experts) %></h3>
