@@ -346,7 +346,7 @@ class ProblemsController < ApplicationController
     num_organizations_with_email = 0
    
     problem.responsible_organizations.each do |organization| 
-      if organization.emailable?
+      if organization.emailable?(problem.location)
         num_organizations_with_email += 1
       end
     end
