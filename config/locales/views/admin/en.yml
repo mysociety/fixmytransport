@@ -8,6 +8,7 @@ en:
   external_search_route: Search for this route
   external_search_operator: Search for this operator
   num_unmatched_routes: "%{number} routes"
+  in_progress_assignments: "%{number} assignments that need to be checked"
   search: Search
   are_you_sure: "Are you sure?"
   select: Select

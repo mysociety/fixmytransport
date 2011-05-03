@@ -14,4 +14,5 @@ en:
               blank: "Please give a reason for writing to this person or organisation"
             subject:
               blank: "Please give a subject line for your message"
-              
+            organization_name: 
+              blank: "Please give the company name"
