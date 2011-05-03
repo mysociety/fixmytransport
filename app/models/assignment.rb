@@ -12,7 +12,9 @@ class Assignment < ActiveRecord::Base
   named_scope :completed, :conditions => ["status_code = ?", self.symbol_to_status_code[:complete]], :order => "updated_at"
   named_scope :incomplete, :conditions => ['status_code != ?',  self.symbol_to_status_code[:complete]], :order => "updated_at"
   validate :validate_write_to_other_fields, :if => Proc.new { |assignment| assignment.task_type_name == 'write-to-other'}
+  validate :validate_find_transport_organization_fields, :if => Proc.new{ |assignment| assignment.task_type_name == 'find-transport-organization' }
   validate :validate_subject, :if => Proc.new { |assignment| assignment.task_type_name == 'write-to-other' }
+  has_paper_trail
 
   # Validation of assignment data for the write-to-other task type
   def validate_write_to_other_fields
@@ -29,6 +31,13 @@ class Assignment < ActiveRecord::Base
   def validate_subject
     if data.nil? or data[:subject].blank?
       errors.add(:subject, ActiveRecord::Error.new(self, :subject, :blank).to_s)
+    end
+  end
+  
+  # Validation of assignment data for the find-transport-organization task type
+  def validate_find_transport_organization_fields
+    if data.nil? or data[:organization_name].blank?
+      errors.add(:organization_name, ActiveRecord::Error.new(self, :organization_name, :blank).to_s)
     end
   end
 
@@ -90,7 +99,7 @@ class Assignment < ActiveRecord::Base
     assignment.status = status
     assignment
   end
-
+  
   def self.create_assignment(attributes)
     assignment = assignment_from_attributes(attributes)
     assignment.save!
@@ -105,6 +114,23 @@ class Assignment < ActiveRecord::Base
        assignment.complete!(assignment_data)
       end
     end
+  end
+  
+  # Count the number of assignments that need admin attention
+  def self.count_need_attention
+    self.count(:all, :conditions => ['status_code = ? and task_type_name != ?', 
+                                      self.symbol_to_status_code[:in_progress],
+                                      'write-to-transport-organization'])
+  end
+  
+  # Find the assignments that need admin attention
+  def self.find_need_attention(options)
+    self.find(:all,
+              :conditions => ['status_code = ? and task_type_name != ?', 
+                self.symbol_to_status_code[:in_progress],
+                'write-to-transport-organization'], 
+              :order => 'updated_at asc', 
+              :limit => options[:limit])
   end
 
 end

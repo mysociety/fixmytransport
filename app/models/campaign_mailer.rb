@@ -66,6 +66,15 @@ class CampaignMailer < ApplicationMailer
            :feedback_link => main_url(feedback_path) })
   end
   
+  
+  def completed_assignment(campaign, assignment)
+    recipients contact_from_name_and_email
+    from contact_from_name_and_email
+    subject "[FixMyTransport] Assignment completed for \"#{campaign.title}\""
+    body({ :assignment => assignment, 
+           :campaign => campaign })
+  end
+  
   def comment_confirmation(recipient, comment, token)
     recipients recipient.name_and_email
     from contact_from_name_and_email

@@ -167,33 +167,57 @@ describe Assignment do
       
     end
     
-    describe 'an assignment to write to someone about a problem' do 
-    
-      def expect_validation_message(field, message)
-        assignment = Assignment.new(:task_type_name => 'write-to-other')
+    describe 'when validating assignments' do 
+
+      def expect_validation_message(field, task_type_name, message)
+        assignment = Assignment.new(:task_type_name => task_type_name)
         assignment.valid?.should be_false
         assignment.errors.on(field).should == message   
       end
       
-      it 'should be invalid without a name to write to' do 
-        expect_validation_message(:name, 'Please give the name of the person or organisation to write to')
-      end
+      describe 'an assignment to write to someone about a problem' do 
+    
+        it 'should be invalid without a name to write to' do 
+          expect_validation_message(:name, 'write-to-other', 'Please give the name of the person or organisation to write to')
+        end
       
-      it 'should be invalid without an email address to write to' do 
-        expect_validation_message(:email, 'Please give the email address to write to')
-      end
+        it 'should be invalid without an email address to write to' do 
+          expect_validation_message(:email, 'write-to-other', 'Please give the email address to write to')
+        end
       
-      it 'should be invalid without a reason to write to the person/organization' do 
-        expect_validation_message(:reason, 'Please give a reason for writing to this person or organisation')
-      end
+        it 'should be invalid without a reason to write to the person/organization' do 
+          expect_validation_message(:reason, 'write-to-other', 'Please give a reason for writing to this person or organisation')
+        end
       
-      it 'should be invalid if the email address is not in the correct format' do 
-        assignment = Assignment.new(:task_type_name => 'write-to-other', 
-                                    :data => {:email => 'invalid_email'})
-        assignment.valid?.should be_false
-        assignment.errors.on(:email).should == 'Please check the format of the email address'   
-      end
+        it 'should be invalid if the email address is not in the correct format' do 
+          assignment = Assignment.new(:task_type_name => 'write-to-other', 
+                                      :data => {:email => 'invalid_email'})
+          assignment.valid?.should be_false
+          assignment.errors.on(:email).should == 'Please check the format of the email address'   
+        end
 
+      end
+    
+      describe 'an assignment to find a transport organization' do 
+      
+        it 'should be invalid without an organization name to write to' do 
+          expect_validation_message(:organization_name, 'find-transport-organization', 'Please give the company name')
+        end
+      
+      end
     end
-
+  
+  describe 'when getting assignments that need attention' do 
+  
+    it 'should return in-progress assignments that are not "write-to-transport-organization" assignments' do 
+      Assignment.should_receive(:find).with(:all, 
+                                            :conditions => ['status_code = ? and task_type_name != ?', 
+                                                          Assignment.symbol_to_status_code[:in_progress],
+                                                          'write-to-transport-organization'], 
+                                            :order => 'updated_at asc', 
+                                            :limit => 10)
+      Assignment.find_need_attention({:limit => 10})
+    end
+    
+  end
 end
