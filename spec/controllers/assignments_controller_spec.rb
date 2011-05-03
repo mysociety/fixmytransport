@@ -227,4 +227,148 @@ describe AssignmentsController do
     
   end
   
+  describe 'GET #edit' do
+    
+    before do 
+      @default_params = { :campaign_id => 55, :id => 1 }
+      @expected_access_message = :assignments_edit_access_message
+    end
+    
+    def make_request(params)
+      get :edit, params
+    end
+    
+    it_should_behave_like "an action that requires the campaign initiator"
+
+    describe 'when responding to a request from the campaign initiator' do 
+
+      before do
+        @mock_assignment = mock_model(Assignment)
+        @mock_user = mock_model(User)
+        @mock_campaign = mock_model(Campaign, :assignments => [@mock_assignment],
+                                              :editable? => true, 
+                                              :visible? => true, 
+                                              :initiator => @mock_user)
+        Campaign.stub!(:find).and_return(@mock_campaign)
+        @mock_campaign.assignments.stub!(:find).and_return(@mock_assignment)
+        @controller.stub!(:current_user).and_return(@mock_user)
+      end
+
+      it 'should return a 404 if the assignment is not to find a transport organization or the contact details for one' do 
+        @mock_assignment.stub!(:task_type).and_return('some_other_assignment')
+        make_request(@default_params)
+        response.status.should == '404 Not Found'
+      end
+  
+      it 'should render the "edit" template if the task is to find a transport organization' do 
+        @mock_assignment.stub!(:task_type).and_return('find_transport_organization')
+        make_request(@default_params)
+        response.should render_template("edit")
+      end
+    
+      it 'should render the "edit" template if the task is to find contact details for a transport organization' do 
+        @mock_assignment.stub!(:task_type).and_return('find_transport_organization_contact_details')
+        make_request(@default_params)
+        response.should render_template("edit")
+      end
+  
+    end
+  
+  end
+  
+  describe 'PUT #update' do 
+    
+    before do 
+      @default_params = { :campaign_id => 55, :id => 1, :organization_name => 'test name'}
+      @expected_access_message = :assignments_update_access_message
+    end
+  
+    def make_request(params)
+      put :update, params
+    end
+    
+    it_should_behave_like "an action that requires the campaign initiator"
+    
+    describe 'when responding to a request from the campaign initiator' do 
+      
+      before do 
+        @mock_assignment = mock_model(Assignment, :data= => true,
+                                                  :status= => true, 
+                                                  :save => true)
+        @mock_user = mock_model(User)
+        @mock_campaign = mock_model(Campaign, :assignments => [@mock_assignment],
+                                              :editable? => true, 
+                                              :visible? => true, 
+                                              :initiator => @mock_user)
+        Campaign.stub!(:find).and_return(@mock_campaign)
+        @mock_campaign.assignments.stub!(:find).and_return(@mock_assignment)
+        @controller.stub!(:current_user).and_return(@mock_user)
+      end
+    
+      it 'should return a 404 if the assignment is not to find a transport organization or the contact details for one' do 
+        @mock_assignment.stub!(:task_type).and_return('some_other_assignment')
+        make_request(@default_params)
+        response.status.should == '404 Not Found'
+      end
+      
+      describe 'when the assignment is to find a transport organization' do
+
+        before do
+          @mock_assignment.stub!(:task_type).and_return("find_transport_organization")
+          CampaignMailer.stub!(:deliver_completed_assignment)
+        end
+        
+        it 'should set the status of the assignment to "in-progress"' do 
+          @mock_assignment.should_receive(:status=).with(:in_progress)
+          make_request(@default_params)
+        end
+        
+        it 'should add the organization name to the assignment data' do 
+          @mock_assignment.should_receive(:data=).with(:organization_name => 'test name')
+          make_request(@default_params)
+        end
+        
+        it 'should try and save the assignment' do 
+          @mock_assignment.should_receive(:save)
+          make_request(@default_params)
+        end
+        
+        describe 'when the assignment cannot be saved' do 
+        
+          before do 
+            @mock_assignment.stub!(:save).and_return(false)
+          end
+        
+          it 'should render the "edit" template' do 
+            make_request(@default_params)
+            response.should render_template("edit")
+          end
+          
+        end
+        
+        describe 'when the assignment can be saved' do 
+          
+          before do 
+            @mock_assignment.stub!(:save).and_return(true)
+          end
+          
+          it 'should send a notification that an assignment has been attempted' do 
+            CampaignMailer.should_receive(:deliver_completed_assignment)
+            make_request(@default_params)
+          end
+          
+          it 'should redirect to the campaign page' do 
+            make_request(@default_params)
+            response.should redirect_to campaign_path(@mock_campaign)
+          end
+          
+          it 'should show a notice that the company and contact information will be added to the database' do 
+            make_request(@default_params)
+            flash[:notice].should == "Well done, as soon as we've added the company and contact information into the database, your problem will be on its way!"
+          end
+          
+        end
+      end
+    end
+  end
 end
