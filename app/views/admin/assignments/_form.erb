@@ -1,0 +1,26 @@
+<%- if !@assignment.errors.empty? %>
+  <div class='form-error'>
+    <%= t(:assignment_form_error) %>
+  </div>
+<%- end %>
+<div class='form-field'>
+  <%= raw f.label :status %>
+  <%= raw f.select :status_code, Assignment.statuses, {:prompt => true, :selected => @assignment.status_code } %>
+</div>
+<div class="assignment-campaign-link">
+  <strong><%= t(:campaign) %>:</strong> 
+  <%= link_to(@assignment.campaign.title, main_url(campaign_path(@assignment.campaign))) %>
+</div>
+<div class="assignment-location-link">
+  <strong><%= t(:location) %>:</strong>
+  <%= link_to(@assignment.campaign.location.name, admin_location_url(@assignment.campaign.location))%>
+</div>
+
+<h3><%= t(:assignment_data) %></h3>
+<%- @assignment.data.keys.each do |key| %>
+  <div class="assignment-data">
+  <strong><%= key.to_s.humanize %>:</strong> <%= @assignment.data[key] %>
+  </div>
+<%- end %>
+
+<%= raw submit_tag t(:go) %>

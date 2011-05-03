@@ -29,6 +29,13 @@ module FixMyTransport
         self.status_code_to_symbol = self.symbol_to_status_code.invert
         send :include, InstanceMethods
       end
+      
+      def statuses
+        self.status_code_to_symbol.to_a.sort.map do |status_code, symbol| 
+          [symbol.to_s.humanize, status_code]
+        end
+      end
+      
     end
 
     module InstanceMethods

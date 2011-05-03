@@ -1,1 +1,4 @@
-<%= @assignment.data %>
+<h2><%= @assignment.task_type.humanize %> <%= t(:assignment) %></h2>
+<%-form_for :assignment, @assignment, :url => admin_url(admin_assignment_path(@assignment)), :html => { :method => :put,  :class => 'assignment-form' } do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f }   %>
+<%- end %>
