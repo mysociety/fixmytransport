@@ -6,7 +6,8 @@ class CampaignEvent < ActiveRecord::Base
                                               'campaign_update_added', 
                                               'assignment_given', 
                                               'assignment_completed', 
-                                              'comment_added']
+                                              'comment_added',
+                                              'assignment_in_progress']
   
   named_scope :visible, :conditions => ["visible = ?", true], :order => 'created_at desc'
   before_validation :set_visibility

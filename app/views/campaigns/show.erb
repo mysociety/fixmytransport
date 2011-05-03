@@ -60,7 +60,7 @@
   <div class="new-assignments">
     <%- @campaign.problem.assignments.each do |assignment| %>
       <%- if assignment.status == :new %>
-        <%= render :partial => "shared/incomplete_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }%>
+        <%= render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }%>
       <%- end %>
     <%- end %>
   </div>
