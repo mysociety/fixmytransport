@@ -20,3 +20,13 @@
     <%- end%>
   </ul>
 </div>
+<div class='admin-task-list'>
+  <h3><%= t(:in_progress_assignments, :number => @assignments_needing_attention_total) %></h3>
+  <ul>
+    <%- @assignments_needing_attention.each do |assignment| %>
+      <li class='assignment-link'>
+        <%= link_to "\"#{assignment.campaign.title}\" #{assignment.task_type.humanize}", admin_url(admin_assignment_path(assignment.id)) %>
+      </li>
+    <%- end%>
+  </ul>
+</div>

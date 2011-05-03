@@ -110,6 +110,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :operator_contacts, :only => [:show, :new, :create, :update]
     admin.resources :stops 
     admin.resources :stop_areas 
+    admin.resources :assignments, :only => [:show]
     admin.connect "/autocomplete_for_operator_name", :controller => 'operators', 
                                                      :action => 'autocomplete_for_name'
     admin.connect "/autocomplete_for_stop_name", :controller => 'stops',
