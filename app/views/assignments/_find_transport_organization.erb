@@ -1,0 +1,22 @@
+<h2 class="main-header">Find out the company that runs the <%= @assignment.problem.location.description %></h2>
+
+<%- form_for [@campaign, @assignment] do |f| %>
+  
+  <div class='fieldset'>
+  
+    <div class='form-field'>
+      <%- if @assignment.errors.on('organization_name') %>
+        <div class='form-field-error'>
+          <%= @assignment.errors.on(:organization_name) %>
+        </div>
+      <%- end %>
+      <%= label_tag :organization_name, t(:organization_name) %>
+      <%= raw text_field_tag :organization_name, @assignment.data[:organization_name], :size => 45 %>
+      <span class='optional-note'>
+      </span>
+    </div>
+    
+    <div class='form-field'>
+      <%= raw f.submit t(:submit) %>
+    </div>
+<%- end %>
