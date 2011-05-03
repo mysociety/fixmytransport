@@ -47,7 +47,6 @@ describe RouteOperator do
     
     it 'should raise an exception if problems exist with that route and operator' do 
       route_operator = RouteOperator.new(@valid_attributes)
-      puts route_operator.inspect
       conditions = ['location_type = ? AND location_id = ? AND operator_id = ?', 
                     'Route', route_operator.route.id, route_operator.operator.id]
       Problem.should_receive(:find).with(:all, :conditions => conditions).and_return([@mock_problem])
