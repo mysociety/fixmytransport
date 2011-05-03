@@ -294,12 +294,13 @@ describe AssignmentsController do
       before do
         @mock_assignment = mock_model(Assignment, :data= => true,
                                                   :status= => true,
-                                                  :save => true)
+                                                  :save => false)
         @mock_user = mock_model(User)
         @mock_campaign = mock_model(Campaign, :assignments => [@mock_assignment],
                                               :editable? => true,
                                               :visible? => true,
-                                              :initiator => @mock_user)
+                                              :initiator => @mock_user,
+                                              :campaign_events => [])
         Campaign.stub!(:find).and_return(@mock_campaign)
         @mock_campaign.assignments.stub!(:find).and_return(@mock_assignment)
         @controller.stub!(:current_user).and_return(@mock_user)
@@ -351,6 +352,7 @@ describe AssignmentsController do
 
           before do
             @mock_assignment.stub!(:save).and_return(true)
+            @mock_campaign.campaign_events.stub!(:create!)
           end
 
           it 'should send a notification that an assignment has been attempted' do
@@ -368,6 +370,12 @@ describe AssignmentsController do
             flash[:notice].should == "Well done, as soon as we've added the company and contact information into the database, your problem will be on its way!"
           end
 
+          it 'should add a campaign event that the assignment is in progress' do
+            @mock_campaign.campaign_events.should_receive(:create!).with(:event_type => 'assignment_in_progress',
+                                                                         :described => @mock_assignment)
+            make_request(@default_params)
+
+          end
         end
       end
     end

@@ -52,6 +52,8 @@ class AssignmentsController < ApplicationController
     if @assignment.save
       flash[:notice] = t(:confirming_organization)
       CampaignMailer.deliver_completed_assignment(@campaign, @assignment)
+      @campaign.campaign_events.create!(:event_type => 'assignment_in_progress',
+                                        :described => @assignment)
       # if they added a contact, complete that assignment
       # if they didn't, and we don't know, that needs to be added as an assignment
       redirect_to campaign_path(@campaign)
