@@ -12,7 +12,7 @@ class Assignment < ActiveRecord::Base
   named_scope :completed, :conditions => ["status_code = ?", self.symbol_to_status_code[:complete]], :order => "updated_at"
   named_scope :incomplete, :conditions => ['status_code != ?',  self.symbol_to_status_code[:complete]], :order => "updated_at"
   validate :validate_write_to_other_fields, :if => Proc.new { |assignment| assignment.task_type_name == 'write-to-other'}
-  validate :validate_find_transport_organization_fields, :if => Proc.new{ |assignment| assignment.task_type_name == 'find-transport-organization' }
+  validate :validate_find_transport_organization_fields, :if => Proc.new{ |assignment| assignment.task_type_name == 'find-transport-organization' && ! assignment.new_record? }
   validate :validate_subject, :if => Proc.new { |assignment| assignment.task_type_name == 'write-to-other' }
   has_paper_trail
 

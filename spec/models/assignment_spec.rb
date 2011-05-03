@@ -198,12 +198,23 @@ describe Assignment do
 
       end
     
-      describe 'an assignment to find a transport organization' do 
+      describe 'a new assignment to find a transport organization' do 
       
-        it 'should be invalid without an organization name to write to' do 
-          expect_validation_message(:organization_name, 'find-transport-organization', 'Please give the company name')
+        it 'should be valid without an organization name to write to' do 
+          assignment = Assignment.new(:task_type_name => 'find-transport-organization')
+          assignment.valid?.should be_true          
         end
       
+      end
+      
+      describe 'an existing assignment to find a transport organization' do 
+      
+        it 'should be invalid without an organization name to write to' do 
+          assignment = Assignment.new(:task_type_name => 'find-transport-organization')
+          assignment.stub!(:new_record?).and_return(false)
+          assignment.valid?.should be_false  
+          assignment.errors.on(:organization_name).should == 'Please give the company name'
+        end
       end
     end
   
