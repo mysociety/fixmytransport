@@ -216,6 +216,34 @@ describe Assignment do
           assignment.errors.on(:organization_name).should == 'Please give the company name'
         end
       end
+      
+      describe 'a new assignment to find contact details' do
+         
+        it 'should be valid without an organization email'  do 
+          assignment = Assignment.new(:task_type_name => 'find-transport-organization-contact-details')
+          assignment.valid?.should be_true          
+        end
+      
+      end
+      
+      describe 'an existing assignment to find a transport organization' do 
+        
+        it 'should be invalid without an email' do 
+          assignment = Assignment.new(:task_type_name => 'find-transport-organization-contact-details')
+          assignment.stub!(:new_record?).and_return(false)
+          assignment.valid?.should be_false  
+          assignment.errors.on(:organization_email).should == "Please give the company's email address"
+        end
+      
+        it 'should be invalid with an invalid email' do 
+          assignment = Assignment.new(:task_type_name => 'find-transport-organization-contact-details')
+          assignment.data = { :organization_email => 'bad email' }
+          assignment.stub!(:new_record?).and_return(false)
+          assignment.valid?.should be_false  
+          assignment.errors.on(:organization_email).should == 'Please check the format of the email address'
+        end
+      
+      end
     end
   
   describe 'when getting assignments that need attention' do 

@@ -13,6 +13,7 @@ class Assignment < ActiveRecord::Base
   named_scope :incomplete, :conditions => ['status_code != ?',  self.symbol_to_status_code[:complete]], :order => "updated_at"
   validate :validate_write_to_other_fields, :if => Proc.new { |assignment| assignment.task_type_name == 'write-to-other'}
   validate :validate_find_transport_organization_fields, :if => Proc.new{ |assignment| assignment.task_type_name == 'find-transport-organization' && ! assignment.new_record? }
+  validate :validate_find_contact_details_fields, :if => Proc.new{ |assignment| assignment.task_type_name == 'find-transport-organization-contact-details' && ! assignment.new_record? }
   validate :validate_subject, :if => Proc.new { |assignment| assignment.task_type_name == 'write-to-other' }
   has_paper_trail
 
@@ -33,11 +34,21 @@ class Assignment < ActiveRecord::Base
       errors.add(:subject, ActiveRecord::Error.new(self, :subject, :blank).to_s)
     end
   end
-  
+
   # Validation of assignment data for the find-transport-organization task type
   def validate_find_transport_organization_fields
     if data.nil? or data[:organization_name].blank?
       errors.add(:organization_name, ActiveRecord::Error.new(self, :organization_name, :blank).to_s)
+    end
+  end
+
+  # Validation of assignment data for the find-transport-organization-contact-details task type
+  def validate_find_contact_details_fields
+    if data.nil? or data[:organization_email].blank?
+      errors.add(:organization_email, ActiveRecord::Error.new(self, :organization_email, :blank).to_s)
+    end
+    if !data.nil? and !data[:organization_email].blank? and data[:organization_email].to_s !~ Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
+      errors.add(:organization_email, ActiveRecord::Error.new(self, :organization_email, :invalid).to_s)
     end
   end
 
@@ -99,7 +110,7 @@ class Assignment < ActiveRecord::Base
     assignment.status = status
     assignment
   end
-  
+
   def self.create_assignment(attributes)
     assignment = assignment_from_attributes(attributes)
     assignment.save!
@@ -115,21 +126,21 @@ class Assignment < ActiveRecord::Base
       end
     end
   end
-  
+
   # Count the number of assignments that need admin attention
   def self.count_need_attention
-    self.count(:all, :conditions => ['status_code = ? and task_type_name != ?', 
+    self.count(:all, :conditions => ['status_code = ? and task_type_name != ?',
                                       self.symbol_to_status_code[:in_progress],
                                       'write-to-transport-organization'])
   end
-  
+
   # Find the assignments that need admin attention
   def self.find_need_attention(options)
     self.find(:all,
-              :conditions => ['status_code = ? and task_type_name != ?', 
+              :conditions => ['status_code = ? and task_type_name != ?',
                 self.symbol_to_status_code[:in_progress],
-                'write-to-transport-organization'], 
-              :order => 'updated_at asc', 
+                'write-to-transport-organization'],
+              :order => 'updated_at asc',
               :limit => options[:limit])
   end
 
