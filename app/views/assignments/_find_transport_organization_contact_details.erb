@@ -1,0 +1,20 @@
+<h2 class="main-header">Find an email address for <%= @assignment.campaign.problem.operator.name %></h2>
+
+<%- form_for [@campaign, @assignment] do |f| %>
+  
+  <div class='fieldset'>
+  
+    <div class='form-field'>
+      <%- if @assignment.errors.on('organization_email') %>
+        <div class='form-field-error'>
+          <%= @assignment.errors.on(:organization_email) %>
+        </div>
+      <%- end %>
+      <%= label_tag :organization_email, t(:organization_email) %>
+      <%= raw text_field_tag :organization_email, @assignment.data[:organization_email], :size => 45 %>
+    </div>
+    
+    <div class='form-field'>
+      <%= raw f.submit t(:submit) %>
+    </div>
+<%- end %>

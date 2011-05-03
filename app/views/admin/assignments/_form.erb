@@ -8,14 +8,19 @@
   <%= raw f.select :status_code, Assignment.statuses, {:prompt => true, :selected => @assignment.status_code } %>
 </div>
 <div class="assignment-campaign-link">
-  <strong><%= t(:campaign) %>:</strong> 
+  <strong><%= t(:campaign).titleize %>:</strong> 
   <%= link_to(@assignment.campaign.title, main_url(campaign_path(@assignment.campaign))) %>
 </div>
 <div class="assignment-location-link">
   <strong><%= t(:location) %>:</strong>
   <%= link_to(@assignment.campaign.location.name, admin_location_url(@assignment.campaign.location))%>
 </div>
-
+<%- if @assignment.campaign.problem.operator %>
+<div class="assignment-operator-link">
+  <strong><%= t(:operator).titleize %></strong>
+  <%= link_to(@assignment.campaign.problem.operator.name, admin_operator_url(@assignment.campaign.problem.operator.id))%>
+</div>
+<%- end %>
 <h3><%= t(:assignment_data) %></h3>
 <%- @assignment.data.keys.each do |key| %>
   <div class="assignment-data">

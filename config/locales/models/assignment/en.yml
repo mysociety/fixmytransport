@@ -16,3 +16,6 @@ en:
               blank: "Please give a subject line for your message"
             organization_name: 
               blank: "Please give the company name"
+            organization_email:
+              blank: "Please give the company's email address"
+              invalid: "Please check the format of the email address"

@@ -12,6 +12,7 @@ en:
   default_reason_text: "Hi %{user},\n\nI've got some advice for you about your campaign. What I think you should do next is write to Joe Bloggs. They know how to get this type of issue fixed.\n\nGood luck!\n\n%{expert}"
   who_should_they_write_to: "Who should %{user} write to? (we'll set up a form for them with these details and put a link to it in your message so it's really easy)"
   organization_name: Company name
+  organization_email: Company email address
   confirming_organization: "Well done, as soon as we've added the company and contact information into the database, your problem will be on its way!"
   assignments_edit_access_message: "try this assignment"
   assignments_update_access_message: "try this assignment"
