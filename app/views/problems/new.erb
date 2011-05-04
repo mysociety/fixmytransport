@@ -76,29 +76,6 @@
       <%= raw f.hidden_field :category, :value => "Other" %>
     <%- end %>
 
-    <div class='form-field'>
-    
-      <%- if @problem.errors.on('is_campaign') %>
-        <div class='form-field-error'>
-          <%= error_message_on @problem, :is_campaign %>
-        </div>
-      <%- end %>
-      <div class='campaign-choices-label'>
-        <%= f.label :is_campaign, t(:is_this), {:id => 'is-campaign-label'} %>
-      </div>
-      <div class='campaign-choices'>
-        <div class='campaign-choice'>
-          <%= raw f.radio_button 'is_campaign', "0", {:id => 'is-campaign-0'} %>
-          <%= f.label 'is_campaign_0', t(:a_one_off), :class => 'radiobutton_label' %>
-        </div>
-        <div class='campaign-choice'>
-          <%= raw f.radio_button 'is_campaign', "1", {:id => 'is-campaign-1'} %>
-          <%= f.label 'is_campaign_1', t(:an_ongoing_problem), :class => 'radiobutton_label' %>
-        </div>
-      </div>
-    </div>
-  
-
     <div class='form-field' id='time-field'>
       <%= f.label :time, t(:problem_time) %>
       <%= raw f.time_select :time, { :include_blank => true } %>
@@ -142,21 +119,6 @@
         </div>
       <%- end %>
     <%- end %>
-    
-
-    <div class='form-field'>
-      <%- if @problem.errors.on('reporter_phone') %>
-        <div class='form-field-error'>
-          <%= error_message_on @problem, 'reporter_phone' %>
-        </div>
-      <%- end %>
-      <%= f.label :reporter_phone, t(:phone) %>
-      <%= raw f.text_field :reporter_phone %>
-      <span class='optional-note'>
-        <%= "(#{t(:optional)})" %>
-        <%= link_to("?", about_url(:anchor => "privacy"), :target => '_blank') %>
-      </span>
-    </div>
   
   </div>
   <div class='submit'>

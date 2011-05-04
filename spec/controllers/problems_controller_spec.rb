@@ -415,48 +415,12 @@ describe ProblemsController do
       before do 
         @controller.stub!(:current_user).and_return(@mock_user)
       end
-      
-      it 'should set the problem status to confirmed' do 
-        @mock_problem.should_receive(:confirm!)
-        make_request
-      end
        
-      describe 'if the problem is associated with a campaign' do 
-        
-        before do
-          @mock_campaign = mock_model(Campaign)
-          @mock_problem.stub!(:campaign).and_return(@mock_campaign)
-        end
-        
-        it 'should redirect to the campaign edit url' do 
-          make_request
-          response.should redirect_to(edit_campaign_url(@mock_campaign))
-        end
+      it 'should redirect to the problem conversion url' do 
+        make_request
+        response.should redirect_to(convert_problem_url(@mock_problem))
       end
-      
-      describe 'if the problem is not associated with a campaign' do 
-
-        before do
-          @mock_problem.stub!(:campaign).and_return(nil)
-        end
-        
-        it 'should show a message that the problem has been created' do 
-          make_request
-          flash[:notice].should == 'Thanks! Your problem report has been created.'
-        end
-        
-        it 'should redirect to the problem page' do 
-          make_request
-          response.should redirect_to(problem_url(@mock_problem))
-        end
-        
-      end
-      
-    end
-    
-    it 'should create assignments associated with the problem' do 
-      @mock_problem.should_receive(:create_assignments).and_return(@mock_assignment)
-      make_request
+          
     end
     
     it 'should create a campaign with status "New" associated with the problem if passed the parameter "is_campaign"' do 
@@ -569,9 +533,12 @@ describe ProblemsController do
      
     before do 
       @mock_assignment = mock_model(Assignment)
-      @mock_problem = mock_model(Problem, :campaign => nil, 
-                                          :confirm! => true)
+      @mock_reporter = mock_model(User)
+      @mock_problem = mock_model(Problem, :campaign => nil,
+                                          :status => :new,
+                                          :reporter => @mock_reporter)
       Problem.stub!(:find_by_token).and_return(@mock_problem)
+      UserSession.stub!(:create)
     end
 
     def make_request
@@ -583,23 +550,110 @@ describe ProblemsController do
       make_request
     end
     
-    it 'should confirm the problem' do
-      @mock_problem.should_receive(:confirm!)
-      make_request
+    describe 'if the problem is new' do 
+    
+      it 'should redirect to the "convert" url' do 
+        make_request
+        response.should redirect_to(convert_problem_url(@mock_problem))
+      end
+      
+      it 'should log in the problem reporter' do 
+        UserSession.should_receive(:create).with(@mock_reporter, remember_me=false)
+        make_request
+      end
+    
     end
     
-    it 'should render the "confirm" view if there is no campaign associated with the problem' do 
-      make_request
-      response.should render_template("problems/confirm")
+    describe 'if the problem is not new' do 
+      
+      before do 
+        @mock_problem.stub!(:status).and_return(:confirmed)
+      end
+      
+      it 'should display the "problem already confirmed" error' do 
+        make_request
+        assigns[:error].should == 'That problem has already been confirmed.'
+      end
     end
     
-    it 'should redirect to the campaign edit page passing the token if there is a campaign associated with the problem' do 
+  end
+  
+  describe '#GET convert' do 
+    
+    def make_request(params=default_params)
+      get :convert, params
+    end
+  
+    def default_params
+      { :id => 22 }
+    end
+    
+    before do 
+      @mock_reporter = mock_model(User)
       @mock_campaign = mock_model(Campaign)
-      @mock_problem.stub!(:campaign).and_return(@mock_campaign)
-      make_request
-      response.should redirect_to(edit_campaign_url(@mock_campaign, :token => 'my-test-token'))
+      @mock_problem = mock_model(Problem, :campaign => @mock_campaign, 
+                                          :confirm! => true, 
+                                          :status => :new,
+                                          :reporter => @mock_reporter,
+                                          :create_new_campaign => @mock_campaign)
+      Problem.stub!(:find).and_return(@mock_problem)
+      
     end
+    
+    describe 'if the user is not the problem reporter' do 
+    
+      it 'should return a 404' do 
+        make_request
+        response.status.should == '404 Not Found'
+      end
+      
+    end
+  
+    describe 'if the user is the problem reporter' do 
+      
+      before do 
+        @controller.stub!(:current_user).and_return(@mock_reporter)
+      end
+      
+      it 'should show the "convert" template' do 
+        make_request
+        response.should render_template("convert")
+      end
 
+      describe 'if the "convert" param is "yes"' do 
+        
+        it 'should confirm the problem' do
+          @mock_problem.should_receive(:confirm!)
+          make_request({:id => 22, :convert => 'yes'})
+        end
+        
+        it 'should create a campaign for the problem' do 
+          @mock_problem.should_receive(:create_new_campaign)
+          make_request({:id => 22, :convert => 'yes'})
+        end
+        
+        it 'should redirect to the campaign edit url' do 
+          make_request({:id => 22, :convert => 'yes'})
+          response.should redirect_to(edit_campaign_url(@mock_campaign))
+        end
+        
+      end
+      
+      describe 'if the "convert" param is "no"' do 
+        
+        it 'should confirm the problem' do 
+          @mock_problem.should_receive(:confirm!)
+          make_request({:id => 22, :convert => 'no'})
+        end
+        
+        it 'should redirect to the problem url' do 
+          make_request({:id => 22, :convert => 'no'})
+          response.should redirect_to(problem_url(@mock_problem))
+        end
+      
+      end
+      
+    end
   end
   
   describe 'when setting up problem advice' do 
