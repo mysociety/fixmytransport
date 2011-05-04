@@ -31,16 +31,6 @@ describe RouteOperator do
       route_operator.valid?.should be_true
     end
     
-    it "should assign its operator to any unsent problems for this route that don't have an operator" do 
-      conditions = ['location_type = ? AND location_id = ? AND operator_id is NULL', 'Route', @mock_route]
-      Problem.stub!(:unsent).and_return([])
-      Problem.unsent.should_receive(:find).with(:all, :conditions => conditions).and_return([@mock_problem])
-      @mock_problem.should_receive(:operator=).with(@mock_operator)
-      @mock_problem.should_receive(:save!)
-      route_operator = RouteOperator.new(@valid_attributes)
-      route_operator.update_problems()
-    end
-    
   end
 
   describe 'when destroying a route operator' do 

@@ -16,18 +16,7 @@ class RouteOperator < ActiveRecord::Base
   has_paper_trail
   # virtual attribute used for adding new route operators
   attr_accessor :_add
-  after_create :update_problems
   before_destroy :check_problems
-  
-  def update_problems
-    conditions = ['location_type = ? AND location_id = ? AND operator_id is NULL', 
-                'Route', self.route]
-    route_problems = Problem.unsent.find(:all, :conditions => conditions)
-    route_problems.each do |problem|
-      problem.operator = self.operator
-      problem.save!
-    end
-  end
 
   def check_problems
     conditions = ['location_type = ? AND location_id = ? AND operator_id = ?', 
