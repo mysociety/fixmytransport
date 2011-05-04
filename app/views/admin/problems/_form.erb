@@ -37,7 +37,7 @@
 <div class='form-field'>
   <%= raw label_tag :operator_name %>
   <%= raw hidden_field_tag :operator_name_autocomplete_url, admin_url("/admin/autocomplete_for_operator_name") %>
-  <%= raw text_field_tag :operator_name, @problem.operator.name, { :class => 'operator_name_auto', :size => 30 } %>
+  <%= raw text_field_tag :operator_name, @problem.operator ? @problem.operator.name : '', { :class => 'operator_name_auto', :size => 30 } %>
   <%= raw f.text_field :operator_id, { :class => 'operator-id' } %>
 </div>
 

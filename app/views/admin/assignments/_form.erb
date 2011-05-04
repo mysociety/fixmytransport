@@ -11,6 +11,10 @@
   <strong><%= t(:campaign).titleize %>:</strong> 
   <%= link_to(@assignment.campaign.title, main_url(campaign_path(@assignment.campaign))) %>
 </div>
+<div class="assignment-problem-link">
+  <strong><%= t(:problem).titleize %>:</strong> 
+  <%= link_to(@assignment.problem.subject, admin_problem_path(@assignment.problem)) %>
+</div>
 <div class="assignment-location-link">
   <strong><%= t(:location) %>:</strong>
   <%= link_to(@assignment.campaign.location.name, admin_location_url(@assignment.campaign.location))%>
