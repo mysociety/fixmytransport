@@ -216,7 +216,7 @@ module ApplicationHelper
   def org_names(problem, method, connector, wrapper_start='<strong>', wrapper_end='</strong>')
     return '' unless problem
     names = problem.send(method).map{ |org| "#{wrapper_start}#{org.name}#{wrapper_end}" }
-    names.to_sentence(:last_word_connector => connector, :two_words_connector => " #{connector} ")
+    names.to_sentence(:last_word_connector => " #{connector} ", :two_words_connector => " #{connector} ")
   end
 
   def comment_url(comment)
