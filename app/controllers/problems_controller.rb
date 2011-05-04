@@ -381,9 +381,17 @@ class ProblemsController < ApplicationController
       end
     # some responsible organizations contactable
     else
+
       advice_params[:contactable] = @template.org_names(problem, :emailable_organizations, t(:or))
       advice_params[:uncontactable] = @template.org_names(problem, :unemailable_organizations, t(:or)) 
+
       if problem.operators_responsible? 
+        if problem.unemailable_organizations.size > 2
+          advice_params[:uncontactable] = "one of the companies we don't have an email address for"
+        end
+        if problem.emailable_organizations.size > 2
+          advice_params[:contactable] = "one of the companies we have an email address for"
+        end
         advice = :no_details_for_some_operators
       else
         advice_params[:councils] = @template.org_names(problem, :responsible_organizations, t(:or))
