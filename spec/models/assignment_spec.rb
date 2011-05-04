@@ -250,10 +250,10 @@ describe Assignment do
   
     it 'should return in-progress assignments that are not "write-to-transport-organization" assignments' do 
       Assignment.should_receive(:find).with(:all, 
-                                            :conditions => ['status_code = ? and task_type_name != ?', 
+                                            :conditions => ['status_code = ? and task_type_name not in (?)', 
                                                           Assignment.symbol_to_status_code[:in_progress],
-                                                          'write-to-transport-organization'], 
-                                            :order => 'updated_at asc', 
+                                                          ['write-to-transport-organization', 'publish-problem']], 
+                                            :order => 'updated_at desc', 
                                             :limit => 10)
       Assignment.find_need_attention({:limit => 10})
     end

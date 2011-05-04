@@ -129,18 +129,18 @@ class Assignment < ActiveRecord::Base
 
   # Count the number of assignments that need admin attention
   def self.count_need_attention
-    self.count(:all, :conditions => ['status_code = ? and task_type_name != ?',
+    self.count(:all, :conditions => ['status_code = ? and task_type_name not in (?)',
                                       self.symbol_to_status_code[:in_progress],
-                                      'write-to-transport-organization'])
+                                      ['write-to-transport-organization', 'publish-problem']])
   end
 
   # Find the assignments that need admin attention
   def self.find_need_attention(options)
     self.find(:all,
-              :conditions => ['status_code = ? and task_type_name != ?',
+              :conditions => ['status_code = ? and task_type_name not in (?)',
                 self.symbol_to_status_code[:in_progress],
-                'write-to-transport-organization'],
-              :order => 'updated_at asc',
+                ['write-to-transport-organization', 'publish-problem']],
+              :order => 'updated_at desc',
               :limit => options[:limit])
   end
 
