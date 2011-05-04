@@ -73,7 +73,7 @@ class ProblemMailer < ApplicationMailer
   
   def self.recipient_model(recipient, problem)
     if recipient.is_a?(Council)
-      return recipient.contact_for_category(problem.category)
+      return recipient.contact_for_category_and_location(problem.category, problem.location)
     elsif recipient.is_a?(Operator)
       return recipient.contact_for_category_and_location(problem.category, problem.location)
     else

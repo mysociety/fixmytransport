@@ -143,7 +143,7 @@ describe ProblemMailer do
                                                  
       @emailable_council = mock_model(Council, :name => 'Emailable council')
       @council_contact = mock_model(CouncilContact, :email => 'council@example.com')
-      @emailable_council.stub!(:contact_for_category).and_return(@council_contact)
+      @emailable_council.stub!(:contact_for_category_and_location).and_return(@council_contact)
       
       @unemailable_council = mock_model(Council, :name => 'Unemailable council')
       
