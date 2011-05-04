@@ -635,7 +635,7 @@ describe ProblemsController do
       expected = ["We do not yet have contact details for <strong>Test Council One</strong>",
                   "or <strong>Test Council Two</strong>.  If you submit a problem here",
                   "it will be displayed on the site, with your name, but it will",
-                  "<strong>not</strong> be sent to them until contact details are added."].join(' ')
+                  "<strong>not</strong> be sent to them until you find an email address for them."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -648,7 +648,7 @@ describe ProblemsController do
       expected = ["We do not yet have contact details for <strong>Test Council</strong>.",
                   "If you submit a problem here it will be displayed on the site, with your name,",
                   "but it will <strong>not</strong> be sent to Test",
-                  "Council until contact details are added."].join(' ')
+                  "Council until you find an email address for them."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -696,7 +696,7 @@ describe ProblemsController do
                                          :responsible_organizations => [])
       expected = ["We do not yet know who is responsible for this stop. If you submit a problem",
                   "it will be displayed on the site, with your name, but will not be sent to the", 
-                  "responsible organization until someone finds out who that is."].join(' ')
+                  "responsible organization until you find out who that is."].join(' ')
       expect_advice(mock_problem, expected)
     end
 
@@ -706,7 +706,7 @@ describe ProblemsController do
                                          :responsible_organizations => [])
       expected = ["We do not yet know who is responsible for this route. If you submit a problem",
                  "it will be displayed on the site, with your name, but will not be sent to the", 
-                 "responsible organization until someone finds out who that is."].join(' ')
+                 "responsible organization until you find out who that is."].join(' ')
       expect_advice(mock_problem, expected)
     end
         
@@ -716,7 +716,7 @@ describe ProblemsController do
                                          :responsible_organizations => [])
       expected = ["We do not yet know who is responsible for this route. If you submit a problem",
                 "it will be displayed on the site, with your name, but will not be sent to the", 
-                "responsible organization until someone finds out who that is."].join(' ')
+                "responsible organization until you find out who that is."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -748,8 +748,8 @@ describe ProblemsController do
       
       expected = ["We do not yet have all the contact details for this route. If you submit a problem",
                   "here relating to <strong>Test Operator Two</strong>, it will be displayed on the site,",
-                  "with your name, but it will <strong>not</strong> be sent to them until contact details",
-                  "are added. If your problem relates to <strong>Test",
+                  "with your name, but it will <strong>not</strong> be sent to them until you find an",
+                  "email address for them. If your problem relates to <strong>Test",
                   "Operator One</strong>, it will be sent straight away."].join(' ')
       expect_advice(mock_problem, expected)
     end
@@ -760,7 +760,7 @@ describe ProblemsController do
                                          :responsible_organizations => [])
       expected = ["We do not yet know who is responsible for this station. If you submit a problem",
                "it will be displayed on the site, with your name, but will not be sent to the", 
-               "responsible organization until someone finds out who that is."].join(' ')
+               "responsible organization until you find out who that is."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
