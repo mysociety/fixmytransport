@@ -1,0 +1,107 @@
+<%- if !@problem.errors.empty? %>
+  <div class='form-error'>
+    <%= t(:problem_form_error) %>
+  </div>
+<%- end %>
+
+<div class='form-field'>
+  <%- if @problem.errors.on(:subject) %>
+    <div class='form-field-error'>
+      <%= error_message_on @problem, :subject   %>
+    </div>
+  <%- end %>
+  <%= raw label(:problem, :subject) %>
+  <%= raw f.text_field :subject %>
+</div>
+
+<div class='form-field'>
+  <%- if @problem.errors.on(:description) %>
+    <div class='form-field-error'>
+      <%= error_message_on @problem, :description   %>
+    </div>
+  <%- end %>
+  <%= raw label(:problem, :description) %>
+  <%= raw f.text_area :description %>
+</div>
+
+<div class='form-field'>
+  <%- if @problem.errors.on(:category) %>
+    <div class='form-field-error'>
+      <%= error_message_on @problem, :category   %>
+    </div>
+  <%- end %>
+  <%= raw label(:problem, :category) %>
+  <%= raw f.select :category, (@problem.categories + ['Other']).uniq %>
+</div>
+
+<div class='form-field'>
+  <%= raw label_tag :operator_name %>
+  <%= raw hidden_field_tag :operator_name_autocomplete_url, admin_url("/admin/autocomplete_for_operator_name") %>
+  <%= raw text_field_tag :operator_name, @problem.operator.name, { :class => 'operator_name_auto', :size => 30 } %>
+  <%= raw f.text_field :operator_id, { :class => 'operator-id' } %>
+</div>
+
+<div class='form-field'>
+  <%- if @problem.errors.on(:passenger_transport_executive_id) %>
+    <div class='form-field-error'>
+      <%= error_message_on @problem, :passenger_transport_executive_id %>
+    </div>
+  <%- end %>
+  <%= raw label(:problem, :passenger_transport_executive_id) %>
+  <%= raw f.collection_select :passenger_transport_executive_id, PassengerTransportExecutive.find(:all), :id, :name, :prompt => true %>
+</div>
+
+<div class='form-field'>
+  <%- if @problem.errors.on(:council_info) %>
+    <div class='form-field-error'>
+      <%= error_message_on @problem, :council_info %>
+    </div>
+  <%- end %>
+  <%= raw label(:problem, :council_info) %>
+  <%= raw f.text_field :council_info %>
+</div>
+
+<div class='form-field'>
+  <%- if @problem.errors.on(:status_code) %>
+    <div class='form-field-error'>
+      <%= error_message_on @problem, :status_code %>
+    </div>
+  <%- end %>
+  <%= raw f.label :status %>
+  <%= raw f.select :status_code, Problem.statuses, {:prompt => true, :selected => @problem.status_code } %>
+</div>
+
+<div class='form-field'>
+  <%- if @problem.errors.on(:reporter_name) %>
+    <div class='form-field-error'>
+      <%= error_message_on @problem, :reporter_name %>
+    </div>
+  <%- end %>
+  <%= raw label(:problem, :reporter_name) %>
+  <%= raw f.text_field :reporter_name %>
+</div>
+
+
+<div class='form-field'>
+  <%- if @problem.errors.on(:reporter_phone) %>
+    <div class='form-field-error'>
+      <%= error_message_on @problem, :reporter_phone %>
+    </div>
+  <%- end %>
+  <%= raw label(:problem, :reporter_phone) %>
+  <%= raw f.text_field :reporter_phone %>
+</div>
+
+<div class='form-field' id='time-field'>
+  <%= f.label :time, t(:problem_time) %>
+  <%= raw f.time_select :time, { :include_blank => true } %>
+</div>
+
+<div class='form-field' id='date-field'>
+  <%= f.label :date, t(:problem_date) %>
+  <%= raw f.date_select :date, { :include_blank => true, :start_year => Time.now.year - 1, :end_year => Time.now.year } %>
+</div>
+
+<%= raw submit_tag t(:go) %>
+
+

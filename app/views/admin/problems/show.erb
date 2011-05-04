@@ -1,0 +1,10 @@
+<h2 class='problem-header'><%= @problem.subject %></h2>
+<%- form_for [:admin, @problem], :url => admin_url(admin_problem_path(@problem.id)), :html => { :class => 'problem-form' } do |f|  %>
+  <%= render :partial => "form", :locals => { :f => f } %>
+<%- end %>
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+    setupShowProblem();
+  });
+</script>

@@ -196,3 +196,6 @@ function setupNewStopArea(){
   setupLocalityAutocomplete();
 }
 
+function setupShowProblem(){
+  setupOperatorAutocomplete();
+}
