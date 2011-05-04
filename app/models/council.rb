@@ -29,7 +29,7 @@ class Council
   end
 
   def general_contacts
-    self.contacts.find(:all, :conditions => ['district_id is null'])
+    self.contacts.select{ |contact| contact.district_id.nil? }
   end
 
   def contact_for_category(contact_list, category)
