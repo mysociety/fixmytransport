@@ -357,7 +357,14 @@ module ApplicationHelper
         return t(:new_campaign)
       when 'write-to-transport-organization'
         return t(:new_problem_reported)
-    end
+      end
+    when 'assignment_in_progress'
+      case campaign_event.described.task_type_name
+      when 'find-transport-organization'
+        return t(:transport_organization_found)
+      when 'find-transport-organization-contact-details'
+        return t(:contact_details_found)
+      end
     when 'comment_added'
       return t(:new_comment)
     end
