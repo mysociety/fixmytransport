@@ -60,7 +60,7 @@ class AccountsController < ApplicationController
     # set the user as registered, save and log in
     @user.registered = true
     @user.save
-    UserSession.create(@user, false) # Log user in manually
+    UserSession.create(@user, remember_me=false) # Log user in manually
     flash[:notice] = t(:successfully_confirmed_account)
     redirect_back_or_default root_url
   end
