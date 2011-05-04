@@ -16,3 +16,5 @@ en:
   confirming_organization: "Well done, as soon as we've added the company and contact information into the database, your problem will be on its way!"
   assignments_edit_access_message: "try this assignment"
   assignments_update_access_message: "try this assignment"
+  find_transport_org_explanation: "We don't know yet who operates the %{location}. If you can find out the company name and a contact email address, and let us know, we'll send your problem report on its way to them."
+  find_contact_details_explanation: "We don't yet have a contact email address for %{organization}. If you can find one, we can send your problem report on its way."

@@ -1,5 +1,5 @@
 <h2 class="main-header">Find out the company that runs the <%= @assignment.problem.location.description %></h2>
-
+<%= t(:find_transport_org_explanation, :location => @assignment.problem.location.description)%>
 <%- form_for [@campaign, @assignment] do |f| %>
   
   <div class='fieldset'>

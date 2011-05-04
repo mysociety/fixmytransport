@@ -1,5 +1,5 @@
 <h2 class="main-header">Find an email address for <%= @assignment.campaign.problem.operator.name %></h2>
-
+<%= t(:find_contact_details_explanation, :organization => @assignment.problem.operator.name)%>
 <%- form_for [@campaign, @assignment] do |f| %>
   
   <div class='fieldset'>
