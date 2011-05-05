@@ -4,8 +4,7 @@
     <title>
       <%= "#{t(:site_name)}#{@title ? ':' : ''} #{@title}" %>
     </title>
-    <meta content='text/html; charset=utf-8' http-equiv='Content-type'>
-    </meta>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-type' />
     <%= yield :feeds %>
     <%= csrf_meta_tag %>
     <style type="text/css">
