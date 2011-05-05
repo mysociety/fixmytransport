@@ -789,6 +789,12 @@ ul.campaign-meta li span{
  }
 
 /* ===[ Campaign Thread ]=== */
+h3.latest-news {
+	font-size:1em;
+	font-weight:bold;
+	margin-bottom:0.25em;
+}
+
 .thread-controls {
     float: right
 }
