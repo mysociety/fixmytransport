@@ -1,33 +1,49 @@
-<%- if @campaign.location %>
-  <div id='map-col'>
-    <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH } %>
-  </div>
-<%- end %>
+<div id="banner">
+	<div class="container">
+		<div class="leftcol-banner">
+			<h2><%= @campaign.title %></h2>
+			<%- if @campaign.problem.location.is_a?(SubRoute) %>
+			  <span class='transport-location'>
+			    <%= raw t(:campaign_location, :link => @campaign.problem.location.description) %>
+			  </span>
+			<%- else %>
+			  <span class='transport-location'>
+			    <%= raw t(:campaign_location, :link => link_to(@campaign.problem.location.description, location_url(@campaign.problem.location))) %>
+			  </span>
+			<%- end %>
+			
+		</div>
+		<div class="rightcol">
+			<a class="support-big" href="#">Support</a>
+		</div>
+	</div>
+</div>
 
+<div id="main-content" class="container">
 
-<div class='campaign-info'>
-
-  <h2><%= @campaign.title %></h2>
-
-  <div class='details'>
-    <%= t(:started_on, :date => @campaign.created_at.strftime("%d/%m/%Y")) %>
-    <%= t(:by, :name => @campaign.initiator.name) %>
-    <div class='location-and-supporters'>
-      <%- if @campaign.problem.location.is_a?(SubRoute) %>
-        <span class='transport-location'>
-          <%= raw t(:campaign_location, :link => @campaign.problem.location.description) %>
-        </span>
-      <%- else %>
-        <span class='transport-location'>
-          <%= raw t(:campaign_location, :link => link_to(@campaign.problem.location.description, location_url(@campaign.problem.location))) %>
-        </span>
-      <%- end %>
-      <span class='supporters'>
-        <%= t(:campaign_has_n_supporters, :n => @campaign.supporter_count, :count => @campaign.supporter_count) %>
-      </span>
-    </div>
-  </div>
+	<div class="leftcol">
+		<div class="box campaign-description">
+			<img src="http://dummyimage.com/46x46" class="avatar" />
+			<div>
+				<h4><a href="#"><%= t(:by, :name => @campaign.initiator.name) %></a></h4>
+				<p>Knenhall is a small hamlet just outside Staffordshire. Although the bus stop is only used by a handful of people, many are old and frail and shouldn't be exposed to damp conditions whilst waiting for their bus. <a href="#" class="more-info">more</a></p>
+			</div>
+		</div>
+	
+		<div class="box">
+			<h5>Images and Media</h5>
+			<ul class="gallery grey">
+				<li><a href="#"><img src="http://dummyimage.com/130x130" /></a></li>
+				<li><a href="#"><img src="http://dummyimage.com/130x130" /></a></li>
+				<li><a href="#"><img src="http://dummyimage.com/130x130" /></a></li>
+				<li><a href="#"><img src="http://dummyimage.com/130x130" /></a></li>
+			</ul>
+		</div>
   
+
+
+
+
   <%= raw simple_format(sanitize(@campaign.description), :class => 'campaign') %>
   <%- if current_user && (current_user == @campaign.initiator || current_user.is_expert?) %>
     <%= link_to(t(:edit), edit_campaign_path(@campaign), :class => 'description-edit-link') %>
@@ -86,4 +102,71 @@
   <%- @campaign.campaign_events.visible.each do |campaign_event| %>
     <%= render :partial => 'campaign_event', :locals => { :always_show_commentbox => false, :event => campaign_event } %>
   <%- end %>
+</div>
+
+
+	<div class="rightcol">
+		<ul class="campaign-meta">
+			<li>started <span><%= t(:started_on, :date => @campaign.created_at.strftime("%e %B %Y")) %></span></li>
+			<li>supporters <a href="#" class="supporter"><%= t(:campaign_has_n_supporters, :n => @campaign.supporter_count, :count => @campaign.supporter_count) %></a></li>														
+		</ul>
+		
+		<%- if @campaign.location %>
+			<%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH } %>
+		<%- end %>
+		
+		<div class="box">
+			<h5>Campaign Manager</h5>
+			<div class="grey">
+				<div class="avatar"><img src="http://dummyimage.com/70x70" /></div>
+				<div class="user-info">
+					<a class="name" href="#">Tom Steinberg</a>
+					<p class="location">Staffordshire, UK</p>
+					<p>Managing <a href="#">3 Campaigns</a></p>
+					<p>Supporting <a href="#">5 Campaigns</a></p>
+				</div>
+			</div>
+		</div>
+	
+		<div class="box">
+			<div>
+				<h5 class="left">Campaign Supporters</h5>
+				<a class="view-all right" href="#">View All</a>
+			</div>
+			<ul class="user-list grey">
+				<li>
+					<div class="avatar"><img src="http://dummyimage.com/40x40" /></div>
+					<div class="user-info">
+						<a class="name" href="#">Angie W</a>
+						<p class="location">Staffordshire, UK</p>
+					</div>
+				</li>
+				<li>
+					<div class="avatar"><img src="http://dummyimage.com/40x40" /></div>
+					<div class="user-info">
+						<a class="name" href="#">Rory Grenfell</a>
+						<p class="location">Hereford, UK</p>
+					</div>
+				</li>
+				<li>
+					<div class="avatar"><img src="http://dummyimage.com/40x40" /></div>
+					<div class="user-info">
+						<a class="name" href="#">Nelson May</a>
+						<p class="location">Stoke, UK</p>
+					</div>
+				</li>
+				<li>
+					<div class="avatar"><img src="http://dummyimage.com/40x40" /></div>
+					<div class="user-info">
+						<a class="name" href="#">Majeed S</a>
+						<p class="location">Staffordshire, UK</p>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
+	</div>
 </div>

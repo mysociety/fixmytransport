@@ -33,81 +33,73 @@
 					<li><a href="#">Tour</a></li>
 					<li><a href="#">Feedback</a></li>
 				</ul>
-			</div>
-			<div id="header" class="container">
+			
 				<a id="logo" href="<%= root_url %>">Fix My Transport</a>
-				<div id="member-info" class="rightbox">
-          <%- if current_user %>  
-          <p>Hi 
-            <a href="<% account_path %>"><%= current_user.name %></a>.
-            <a href="<%= logout_path %>">Logout</a></p>
-				  <%- else %>
-					<p>Hi Guest.
-					  <a class="auth" href="<%= login_path %>">Sign in</a></p>
-				  <%- end %>
-				</div>
+				<%- if current_user %>  
+          		<p id="member-info">Hi <a href="<% account_path %>"><%= current_user.name %></a>. <a href="<%= logout_path %>">Logout</a></p>
+		  		<%- else %>
+		  		<p id="member-info">Hi Guest. <a class="auth" href="<%= login_path %>">Sign in</a></p>
+		  		<%- end %>
+		  		
 				<div id="login-box" class="login-box">
 					<div id="login-landing" class="pane">
-						<h1>Sign in to FixMyTransport</h1>
-						<h2>Sign in with a username and password, or if you prefer, you can use your Facebook or Twitter details.</h2>
-						<div class="login-options">
-							<div>
-								<h3>Facebook Connect</h3>
-								<a href="#" id="facebook"><img src="/images/facebook-connect.jpg" /></a>
-							</div>
-							<div>
-								<h3>FixMyTransport Account</h3>
-								<a href="#" id="create-account" class="button">Create an account</a>
-								<a href="#" class="button">I have an account</a>
-							</div>
-							<div class="last">
-								<h3>Twitter Users</h3>
-								<a href="#" id="twitter"><img src="/images/twitter-connect.jpg" /></a>
-							</div>
-						</div>
-					</div>
-					<div id="login-create-account" class="pane">
-						<h1>Create a new account</h1>
-						<form class="login-form">
-							<h4>You will need to verify your details via email</h4>
-							<div>
-								<label for="username">Username</label>
+						<form id="login-form">
+						<ul>
+							<li class="login-username">
+								<label for="username">Email/Username</label>
 								<input name="username" type="text" />
-							</div>
-							<div class="password">
+							</li>
+							<li class="login-password">
 								<label for="password">Password</label>
 								<input name="password" type="password" />
-								<p class="error">Some kind of error</p>
-							</div>
-							<div class="password">
-								<label for="password2">Confirm password</label>
-								<input name="password2" type="password" />
-								<p class="notice">Some kind of notice</p>
-							</div>
-							<div class="clear">
-								<button type="submit" class="button">Create Account</button>
-							</div>
+								<a href="#">Forgot?</a>
+							</li>
+							<li>
+								<button>Sign In</button>
+								<label>Keep me signed in</label><input type="checkbox">
+								<p>Don't have an account? <a href="#" id="create-account">Create one</a>.</p>
+							</li>
+						</ul>
 						</form>
+						<div class="login-options">
+							<p>Or use an existing account</p>
+							<a href="#" id="facebook" class="facebook">Facebook Connect</a>							
+							<a href="#" id="twitter" class="twitter">Twitter Connect</a>
+						</div>
+					</div>
+					
+					<div id="login-twitter" class="pane">
+						<h2>TWITTER</h2>
+					</div>
+					
+					<div id="login-facebook" class="pane">
+						<h2>FACEBOOK</h2>
+					</div>
+					
+					<div id="login-create-account" class="pane">
+						<h2>CREATE ACCOUNT</h2>
 					</div>
 				</div>
 			</div>
-      <div id="main-content" class="container">
-        <%- if MySociety::Config.getbool('STAGING_SITE', true) %>
-        <div class="staging-banner notice">
-          <%= t(:development_site) %>
-        </div>
-        <%- end %>
-        <%- [:notice, :error].each do |key| %>
-          <%- unless flash[key].blank? %>
-            <p class="<%= "flash #{key}" %>">
-              <%= raw flash[key] %>
-            </p>
-          <%- end %>
-        <%- end %>
-        <%= yield %>
-      </div>
-    </div>
-    <div id="footer">
+
+			<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
+        	<div class="staging-banner notice container">
+          	<%= t(:development_site) %>
+        	</div>
+        	<%- end %>
+
+			<%- [:notice, :error].each do |key| %>
+          		<%- unless flash[key].blank? %>
+				<p class="<%= "flash #{key}" %>">
+					<%= raw flash[key] %>
+				</p>
+          		<%- end %>
+        	<%- end %>
+        	
+			
+			<%= yield %>
+    	</div>
+    	<div id="footer">
 			<div class="container">
 				<p>
 				  <%= raw t(:built_by, :mysociety_link => link_to('mySociety', 'http://mysociety.org'), :indigo_link => link_to('Indigo Trust', 'http://indigotrust.wordpress.com/'), :donor_link => link_to(t(:small_donors), 'http://mysociety.org/donate'), :esmee_link => link_to('Esmée Fairbairn Foundation', 'http://www.esmeefairbairn.org.uk')) %>
