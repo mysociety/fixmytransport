@@ -22,49 +22,55 @@ class User < ActiveRecord::Base
   has_many :campaigns, :through => :campaign_supporters
   has_many :sent_emails, :as => :recipient
   before_save :generate_email_local_part, :unless => :unregistered?
+  has_attached_file :profile_photo,
+                    :path => "#{MySociety::Config.get('OPTION_FILE_DIRECTORY', ':rails_root/public/system')}/:attachment/:id/:style/:filename",
+                    :styles => { :large_thumb => "70x70#",
+                                 :small_thumb => "40x40#" }
+
   attr_accessor :ignore_blank_passwords
-  
+
+
   acts_as_authentic do |c|
     # we validate the email with activerecord validation above
     c.validate_email_field = false
-    c.merge_validates_confirmation_of_password_field_options({:unless => :unregistered?, 
+    c.merge_validates_confirmation_of_password_field_options({:unless => :unregistered?,
                                                               :message => I18n.translate(:password_match_error)})
     password_min_length = 5
     c.merge_validates_length_of_password_field_options({:unless => :unregistered?,
                                                         :minimum => password_min_length,
-                                                        :message => I18n.translate(:password_length_error, 
+                                                        :message => I18n.translate(:password_length_error,
                                                                                    :length => password_min_length)})
-  end 
-  
+  end
+
   # object level attribute overrides the config level
   # attribute
   def ignore_blank_passwords?
     ignore_blank_passwords.nil? ? super : (ignore_blank_passwords == true)
   end
-  
+
   def unregistered?
     !registered
   end
-  
+
   def first_name
     name.split(' ').first
   end
-  
+
   def name_and_email
     FixMyTransport::Email::Address.address_from_name_and_email(self.name, self.email).to_s
   end
-  
+
   def campaign_name_and_email_address(campaign)
     FixMyTransport::Email::Address.address_from_name_and_email(self.name, self.campaign_email_address(campaign)).to_s
   end
-  
+
   def save_if_new
     if new_record?
       save_without_session_maintenance
     end
     return true
   end
-  
+
   def generate_email_local_part
     # don't overwrite an existing value
     return true if !email_local_part.blank?
@@ -76,21 +82,21 @@ class User < ActiveRecord::Base
     self.email_local_part = I18n.translate('campaign') if self.email_local_part == ''
     self.email_local_part
   end
-  
+
   def campaign_email_address(campaign)
     return "#{email_local_part}@#{campaign.domain}"
   end
-  
+
   def deliver_password_reset_instructions!
     reset_perishable_token!
     UserMailer.deliver_password_reset_instructions(self)
   end
-  
+
   def deliver_new_account_confirmation!
     reset_perishable_token!
     UserMailer.deliver_new_account_confirmation(self)
   end
-  
+
   def deliver_already_registered!
     reset_perishable_token!
     UserMailer.deliver_already_registered(self)
