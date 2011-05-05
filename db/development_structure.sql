@@ -11543,7 +11543,11 @@ CREATE TABLE users (
     registered boolean DEFAULT false NOT NULL,
     email_local_part character varying(255),
     is_expert boolean,
-    perishable_token character varying(255) DEFAULT ''::character varying NOT NULL
+    perishable_token character varying(255) DEFAULT ''::character varying NOT NULL,
+    profile_photo_file_name character varying(255),
+    profile_photo_content_type character varying(255),
+    profile_photo_file_size integer,
+    profile_photo_updated_at timestamp without time zone
 );
 
 
@@ -13313,3 +13317,5 @@ INSERT INTO schema_migrations (version) VALUES ('20110314185100');
 INSERT INTO schema_migrations (version) VALUES ('20110323140249');
 
 INSERT INTO schema_migrations (version) VALUES ('20110323170738');
+
+INSERT INTO schema_migrations (version) VALUES ('20110505103809');

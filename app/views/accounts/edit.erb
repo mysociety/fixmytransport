@@ -1,8 +1,8 @@
 <h2 class='main-header'><%= t(:your_account) %></h2>
 
-<%- form_for(current_user, :url => account_path, :html => {:method => :put, :class => 'edit_account'}) do |f| %>
+<%- form_for(current_user, :url => account_path, :html => {:method => :put, :class => 'edit_account', :multipart => true}) do |f| %>
   <div class='fieldset'>
-    
+
     <div class='form-field'>
       <%- if current_user.errors.on('email') %>
         <div class='form-field-error'>
@@ -12,7 +12,7 @@
       <%= f.label :email %>
       <%= raw f.text_field :email %>
     </div>
-    
+
     <div class='form-field'>
       <%- if current_user.errors.on('password') %>
         <div class='form-field-error'>
@@ -25,7 +25,7 @@
         <%= "(#{t(:only_needed_if_want_to_change)})" %>
       </span>
     </div>
-    
+
     <div class='form-field'>
       <%- if current_user.errors.on('password_confirmation') %>
         <div class='form-field-error'>
@@ -35,8 +35,19 @@
       <%= f.label :password_confirmation  %>
       <%= raw f.password_field :password_confirmation  %>
     </div>
-    
+
+    <div class='form-field'>
+      <%- if current_user.errors.on('profile_photo') %>
+        <div class='form-field-error'>
+          <%= error_message_on current_user, :profile_photo %>
+        </div>
+      <%- end %>
+      <%= f.label :profile_photo %>
+      <%= raw f.file_field :profile_photo %>
+
+    </div>
+
     <%= raw f.submit t(:update_account) %>
   </div>
-  
+
 <%- end %>

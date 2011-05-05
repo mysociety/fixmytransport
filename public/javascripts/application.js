@@ -55,22 +55,6 @@ function addSearchGuidance() {
   
 }
 
-// For an ongoing issue, don't show the date and time fields
-function hideProblemDateTimeForOngoing() {
-  if ($('#is-campaign-0').is(':not(:checked)')){
-    $('#date-field').hide();
-    $('#time-field').hide();    
-  }
-  $('input[name="problem[is_campaign]"]').click(function(){
-    if ($('#is-campaign-1').is(':checked')){
-      $('#date-field').hide("slow");
-      $('#time-field').hide("slow");
-    }else{
-      $('#date-field').show("slow");
-      $('#time-field').show("slow");
-    }
-  })
-}
 
 // Add listeners for link click events
 function addLinkActions() {
@@ -222,7 +206,6 @@ $(document).ready(function() {
   tabifyRouteLists();
   addSearchGuidance();  
   setupFeedbackForm();
-  hideProblemDateTimeForOngoing();
   addLinkActions();
 });
 

@@ -65,4 +65,8 @@ define('OPTION_MAILSERVERS', 'email_one|email_two');
 
 // Is the site currently visible? 
 define('OPTION_SITE_VISIBLE', 1);
+
+// Where to store uploaded files like profile images
+define('OPTION_FILE_DIRECTORY', ':rails_root/public/system')
+
 ?>

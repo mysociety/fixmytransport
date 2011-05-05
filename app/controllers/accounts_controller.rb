@@ -7,6 +7,7 @@ class AccountsController < ApplicationController
   end
   
   def update
+    current_user.update_attributes(params[:user])
     current_user.email = params[:user][:email]
     current_user.password = params[:user][:password]  
     current_user.password_confirmation = params[:user][:password_confirmation]  
@@ -60,7 +61,7 @@ class AccountsController < ApplicationController
     # set the user as registered, save and log in
     @user.registered = true
     @user.save
-    UserSession.create(@user, false) # Log user in manually
+    UserSession.create(@user, remember_me=false) # Log user in manually
     flash[:notice] = t(:successfully_confirmed_account)
     redirect_back_or_default root_url
   end

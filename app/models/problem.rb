@@ -12,7 +12,6 @@ class Problem < ActiveRecord::Base
   validates_presence_of :description, :subject, :category, :reporter_name, :if => :location
   validates_length_of :reporter_name, :minimum => 5, :if => :location
   validate :validate_reporter_name
-  validate_on_create :validate_is_campaign
   validates_associated :reporter
   attr_accessor :location_attributes, :locations, :location_search, :is_campaign
   attr_protected :confirmed_at
@@ -52,11 +51,6 @@ class Problem < ActiveRecord::Base
     end
   end
 
-  def validate_is_campaign
-    return true if ['0','1'].include?(self.is_campaign)
-    errors.add(:is_campaign, ActiveRecord::Error.new(self, :is_campaign, :blank).to_s)
-  end
-  
   def create_assignments
     assignment_types = []
     if assignments.empty? 
@@ -127,6 +121,7 @@ class Problem < ActiveRecord::Base
   def confirm!
     return unless self.status == :new
     # complete the relevant assignments
+    self.create_assignments
     Assignment.complete_problem_assignments(self, {'publish-problem' => {}})
     data = {:organizations => self.organization_info(:responsible_organizations) }
     if !self.emailable_organizations.empty?
@@ -135,6 +130,17 @@ class Problem < ActiveRecord::Base
     # save new values without validation - don't want to validate any associated campaign yet
     self.update_attribute('status', :confirmed)
     self.update_attribute('confirmed_at', Time.now)
+  end
+  
+  def create_new_campaign
+    return self.campaign if self.campaign
+    campaign = self.build_campaign({ :location_id => self.location_id, 
+                                     :location_type => self.location_type,
+                                     :initiator => self.reporter, 
+                                     :problem => self })
+    campaign.status = :new
+    self.save
+    return campaign
   end
   
   def save_reporter

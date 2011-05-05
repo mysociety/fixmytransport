@@ -7,6 +7,7 @@ class ProblemsController < ApplicationController
                                                :find_train_route, 
                                                :find_other_route]
   before_filter :find_visible_problem, :only => [:show, :update]
+  before_filter :require_problem_reporter, :only => [:convert]
   
   def index
     @problems = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
@@ -49,16 +50,9 @@ class ProblemsController < ApplicationController
       # save the user account if it doesn't exist, but don't log it in
       @problem.save_reporter
       @problem.save
-      # create task assignment
-      @problem.create_assignments
+
       if current_user
-        @problem.confirm!
-        if @problem.campaign
-          redirect_to edit_campaign_url(@problem.campaign)
-        else
-          flash[:notice] = t(:problem_created)
-          redirect_to problem_url(@problem)
-        end
+        redirect_to convert_problem_url(@problem)
       else
         @problem.send_confirmation_email
         @action = t(:your_problem_will_not_be_posted)
@@ -81,13 +75,33 @@ class ProblemsController < ApplicationController
 
   def confirm
     @problem = Problem.find_by_token(params[:email_token])
-    if @problem
-      @problem.confirm!
-      if @problem.campaign
-        redirect_to edit_campaign_url(@problem.campaign, :token => params[:email_token])
-      end
+    if @problem && @problem.status == :new
+      # log user in
+      UserSession.create(@problem.reporter, remember_me=false)
+      redirect_to convert_problem_url(@problem)
+    elsif @problem
+      @error = t(:problem_already_confirmed)
     else
       @error = t(:problem_not_found)
+    end
+  end
+  
+  def convert
+    if @problem.status != :new
+      if @problem.campaign
+        redirect_to(edit_campaign_url(@problem.campaign)) and return
+      else
+        redirect_to problem_url(@problem) and return
+      end
+    end
+    if params[:convert] == 'yes'
+      @problem.create_new_campaign
+      @problem.confirm!
+      redirect_to(edit_campaign_url(@problem.campaign)) and return 
+    elsif params[:convert] == 'no' 
+      @problem.confirm!
+      flash[:notice] = t(:thanks_for_adding_problem)
+      redirect_to problem_url(@problem) and return
     end
   end
   
@@ -326,6 +340,13 @@ class ProblemsController < ApplicationController
     @problem = Problem.visible.find(params[:id])
   end
   
+  def require_problem_reporter
+    @problem = Problem.find(params[:id])
+    return true if current_user && current_user == @problem.reporter
+    render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+    return false
+  end
+  
   def setup_from_and_to_stops(route_info)
     if route_info[:from_stops].size > 1
       @from_stops = route_info[:from_stops] 
@@ -412,4 +433,5 @@ class ProblemsController < ApplicationController
       params[:problem].delete("time(#{num}i)")
     end
   end
+
 end

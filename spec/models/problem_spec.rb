@@ -46,6 +46,7 @@ describe Problem do
       @problem.stub!(:save!).and_return(true)
       @problem.stub!(:organization_info).and_return([])
       @problem.stub!(:emailable_organizations).and_return([])
+      @problem.stub!(:create_assignments)
       Assignment.stub!(:complete_problem_assignments)
     end
     
@@ -69,6 +70,11 @@ describe Problem do
         @problem.confirm!
         @problem.status.should == :confirmed
         @problem.confirmed_at.should > @confirmation_time
+      end
+      
+      it 'should create assignments associated with the problem' do 
+        @problem.should_receive(:create_assignments)
+        @problem.confirm!
       end
 
       it 'should set the "publish-problem" assignments associated with this user and problem as complete' do 

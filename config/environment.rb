@@ -22,11 +22,11 @@ load "validate.rb"
 load "voting_area.rb"
 
 Rails::Initializer.run do |config|
-  
+
   # Load intial mySociety config
   MySociety::Config.set_file(File.join(config.root_path, 'config', 'general'), true)
   MySociety::Config.load_default
-  
+
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded.
@@ -51,7 +51,9 @@ Rails::Initializer.run do |config|
   config.gem 'text', :version => '0.2.0'
   config.gem 'rspec', :lib => false, :version => '1.3.1'
   config.gem 'rspec-rails', :lib => false, :version => '1.3.3'
-  
+  config.gem "paperclip", :version => "~> 2.3"
+
+
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
@@ -63,7 +65,7 @@ Rails::Initializer.run do |config|
   # Activate observers that should always be running
   # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
 
-  # Set the schema format to sql 
+  # Set the schema format to sql
   config.active_record.schema_format :sql
 
   # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
@@ -74,10 +76,10 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
   config.i18n.load_path += Dir[File.join(RAILS_ROOT, 'config', 'locales', '**', '*.{rb,yml}')]
-  
+
   # Set the cache store
   config.cache_store = :file_store, File.join(RAILS_ROOT, 'cache')
-  
+
   # override default fieldWithError divs in model-associated forms
   config.action_view.field_error_proc = Proc.new{ |html_tag, instance| html_tag }
 
