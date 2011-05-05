@@ -1,5 +1,6 @@
 <h2 class='main-header'><%= t(:your_account) %></h2>
 <div class='account-info'>
+  <%= image_tag current_user.profile_photo.url(:large_thumb) %>
   <%= t(:your_email_address) %>
   <%= current_user.email %>
   <div class='account-edit-link'>
