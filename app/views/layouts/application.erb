@@ -1,67 +1,121 @@
+<!DOCTYPE html>
 <html lang='<%= I18n.locale %>'>
   <head>
     <title>
       <%= "#{t(:site_name)}#{@title ? ':' : ''} #{@title}" %>
     </title>
-    <meta content='text/html; charset=utf-8' http-equiv='Content-type' />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-type'>
+    </meta>
     <%= yield :feeds %>
     <%= csrf_meta_tag %>
-    <%= stylesheet_link_tag 'application', 'map' %>
+    <style type="text/css">
+      @import url("/stylesheets/core.css"); 
+      @import url("/stylesheets/fixmytransport.css");
+      @import url("/stylesheets/map.css");
+    </style>
     <%= yield :stylesheets %>
-    <%= raw javascript_include_tag('jquery-1.4.4.min.js') %>
-    <%= raw javascript_include_tag('jquery.autofill.js') %>
-    <%= raw javascript_include_tag('jquery.form.js') %>
+    <%= raw javascript_include_tag('jquery-1.5.2.min', :charset => 'utf-8') %>
+    <%= raw javascript_include_tag('jquery-ui-1.8.11.min', :charset => 'utf-8') %>
+    <%= raw javascript_include_tag('jquery.autofill', :charset => 'utf-8') %>
+    <%= raw javascript_include_tag('jquery.form', :charset => 'utf-8') %>
     <%= yield :javascript %>
-    <%= raw javascript_include_tag('application.js') %>
   </head>
-  <body>
-    <div id='site-header'>
-      <h1><%= link_to_unless_current(t(:site_name), root_url)  %></h1>
-      <div id='site-tagline'><%= t(:site_tagline) %></div>
-    </div>
-    <%- if MySociety::Config.getbool('STAGING_SITE', true) %>
-      <div class='staging-banner'>
-        <%= t(:development_site) %>
-      </div>
-    <%- end %>
-    <%- [:notice, :error, :message].each do |key|  %>
-      <%- unless flash[key].blank?  %>
-        <p class='flash flash_<%= key %>'>
-          <%= raw flash[key] %>
-        </p>
-      <%- end %>
-    <%- end %>
-    <ul class='navigation'>
-      <%- if current_user %>
-        <li><%= raw t(:logged_in_as, :name => link_to(h(current_user.name), account_path)) %></li>
-        <li><%= link_to(t(:logout), logout_path) %></li>
-      <%- else %>
-        <li><%= link_to(t(:login), login_path) %></li>
-        <li><%= link_to(t(:signup), new_account_path) %></li>
-      <%- end %>
-    </ul>
-    <div class='wrapper'>
-      <div class='content'>
+	<body>
+		<div id="wrapper">
+			<div id="top" class="container">
+				<ul id="mysociety-tab">
+					<li><a id="mysociety-logo" href="#">MySociety</a></li>
+					<li><a href="http://mysociety.org/donate">Donate</a></li>
+					<li><a href="#">Our Sites</a></li>
+				</ul>
+				<ul id="top-nav">
+					<li><a href="/about">About</a></li>
+					<li><a href="#">Tour</a></li>
+					<li><a href="#">Feedback</a></li>
+				</ul>
+			</div>
+			<div id="header" class="container">
+				<a id="logo" href="<%= root_url %>">Fix My Transport</a>
+				<div id="member-info" class="rightbox">
+          <%- if current_user %>  
+          <p>Hi 
+            <a href="<% account_path %>"><%= current_user.name %></a>.
+            <a href="<%= logout_path %>">Logout</a></p>
+				  <%- else %>
+					<p>Hi Guest.
+					  <a class="auth" href="<%= login_path %>">Sign in</a></p>
+				  <%- end %>
+				</div>
+				<div id="login-box" class="login-box">
+					<div id="login-landing" class="pane">
+						<h1>Sign in to FixMyTransport</h1>
+						<h2>Sign in with a username and password, or if you prefer, you can use your Facebook or Twitter details.</h2>
+						<div class="login-options">
+							<div>
+								<h3>Facebook Connect</h3>
+								<a href="#" id="facebook"><img src="/images/facebook-connect.jpg" /></a>
+							</div>
+							<div>
+								<h3>FixMyTransport Account</h3>
+								<a href="#" id="create-account" class="button">Create an account</a>
+								<a href="#" class="button">I have an account</a>
+							</div>
+							<div class="last">
+								<h3>Twitter Users</h3>
+								<a href="#" id="twitter"><img src="/images/twitter-connect.jpg" /></a>
+							</div>
+						</div>
+					</div>
+					<div id="login-create-account" class="pane">
+						<h1>Create a new account</h1>
+						<form class="login-form">
+							<h4>You will need to verify your details via email</h4>
+							<div>
+								<label for="username">Username</label>
+								<input name="username" type="text" />
+							</div>
+							<div class="password">
+								<label for="password">Password</label>
+								<input name="password" type="password" />
+								<p class="error">Some kind of error</p>
+							</div>
+							<div class="password">
+								<label for="password2">Confirm password</label>
+								<input name="password2" type="password" />
+								<p class="notice">Some kind of notice</p>
+							</div>
+							<div class="clear">
+								<button type="submit" class="button">Create Account</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+      <div id="main-content" class="container">
+        <%- if MySociety::Config.getbool('STAGING_SITE', true) %>
+        <div class="staging-banner notice">
+          <%= t(:development_site) %>
+        </div>
+        <%- end %>
+        <%- [:notice, :error].each do |key| %>
+          <%- unless flash[key].blank? %>
+            <p class="<%= "flash #{key}" %>">
+              <%= raw flash[key] %>
+            </p>
+          <%- end %>
+        <%- end %>
         <%= yield %>
       </div>
     </div>
-    <%- unless action_name == 'feedback' %>
-      <div id='feedback-panel-container'>
-        <div id='feedback-tab'></div>
-        <div id='feedback-panel'>
-          <%= render :partial => 'shared/feedback_form' %>
-        </div>
-      </div>
-    <%- end %>
-    <div id='footer'>
-      <ul>
-        <li class='footer-item'><%= raw link_to t(:about), about_path %></li>
-        <li class='footer-item'><%= raw link_to t(:feedback), feedback_path %></li>
-        <li class='footer-item'><%= raw link_to t(:routes), routes_path %></li>
-      </ul>
-      <div class='support-links'><%= raw t(:built_by, :mysociety_link => link_to('mySociety', 'http://mysociety.org'), :indigo_link => link_to('Indigo Trust', 'http://indigotrust.wordpress.com/'), :donor_link => link_to(t(:small_donors), 'http://mysociety.org/donate'), :esmee_link => link_to('Esmée Fairbairn Foundation', 'http://www.esmeefairbairn.org.uk')) %></div>
-    </div>
-    <div class='anchor-padding'><%= " " %></div>
-    <%= render :partial => 'shared/tracking' %>
-  </body>
+    <div id="footer">
+			<div class="container">
+				<p>
+				  <%= raw t(:built_by, :mysociety_link => link_to('mySociety', 'http://mysociety.org'), :indigo_link => link_to('Indigo Trust', 'http://indigotrust.wordpress.com/'), :donor_link => link_to(t(:small_donors), 'http://mysociety.org/donate'), :esmee_link => link_to('Esmée Fairbairn Foundation', 'http://www.esmeefairbairn.org.uk')) %>
+				</p>
+			</div>
+		</div>
+		<%= raw javascript_include_tag('fixmytransport', :charset => 'utf-8') %>
+		<%= raw javascript_include_tag('application', :charset => 'utf-8') %>
+		<%= render :partial => 'shared/tracking' %>
+	</body>
 </html>
