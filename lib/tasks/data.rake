@@ -40,23 +40,37 @@ namespace :data do
       
       Operator.find(:all, :order => 'name').each do |operator|
         if operator.routes.count > 0
-          operator.operator_contacts.each do |operator_contact|
-            if operator_contact.location
-              location_desc = operator_contact.location.description
-            else
-              location_desc = ''
-            end
+          if operator.operator_contacts.empty? 
             operator_contact_file.write([operator.id, 
                                          operator.name, 
                                          operator.company_no, 
-                                         operator.registered_address,
-                                         operator.url,
-                                         operator_contact.category, 
-                                         location_desc,
-                                         operator_contact.email,
-                                         operator_contact.notes,
+                                         operator.registered_address, 
+                                         operator.url, 
+                                         '', 
+                                         '', 
+                                         '', 
+                                         '',
                                          operator.routes.count, 
                                          operator_url(operator)].join("\t") + "\n")
+          else
+            operator.operator_contacts.each do |operator_contact|
+              if operator_contact.location
+                location_desc = operator_contact.location.description
+              else
+                location_desc = ''
+              end
+              operator_contact_file.write([operator.id, 
+                                           operator.name, 
+                                           operator.company_no, 
+                                           operator.registered_address,
+                                           operator.url,
+                                           operator_contact.category, 
+                                           location_desc,
+                                           operator_contact.email,
+                                           operator_contact.notes,
+                                           operator.routes.count, 
+                                           operator_url(operator)].join("\t") + "\n")
+            end
           end
         end
       end
