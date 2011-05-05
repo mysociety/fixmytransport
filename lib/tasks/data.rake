@@ -21,7 +21,7 @@ namespace :data do
     
     puts "Writing council contact spreadsheet to #{ENV['DIR']}..."
     File.open(File.join(ENV['DIR'], 'council_contacts.tsv'), 'w') do |council_contacts_file|
-      council_contacts_file.write("Council\tArea ID\tContact category\tContact district ID\tContact email\tNotes")
+      council_contacts_file.write("Council\tArea ID\tContact category\tContact district ID\tContact email\tNotes\n")
       Council.find_all_without_ptes().each do |council|
         council.contacts.each do |council_contact|
           council_contacts_file.write([council.name, 
