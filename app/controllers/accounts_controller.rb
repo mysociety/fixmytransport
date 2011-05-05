@@ -7,6 +7,7 @@ class AccountsController < ApplicationController
   end
   
   def update
+    current_user.update_attributes(params[:user])
     current_user.email = params[:user][:email]
     current_user.password = params[:user][:password]  
     current_user.password_confirmation = params[:user][:password_confirmation]  
