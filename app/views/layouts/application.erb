@@ -38,7 +38,7 @@
 				<div id="member-info" class="rightbox">
           <%- if current_user %>  
           <p>Hi 
-            <a href="<% account_path %>"><%= current_user.name %></a>.
+            <a href="<%= account_path %>"><%= current_user.name %></a>.
             <a href="<%= logout_path %>">Logout</a></p>
 				  <%- else %>
 					<p>Hi Guest.
