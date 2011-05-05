@@ -856,12 +856,12 @@ div.submit{
 
 /* Updating account */ 
 .edit_account {
-  width: 62%;
+  width: 70%;
   margin: auto;
 }
 
 .edit_account label{
-  width: 8em;
+  width: 12em;
 }
 
 .edit_account input[type=submit] {
@@ -881,8 +881,6 @@ div.submit{
 .edit_user input[type=submit] {
   float: right;  
 }
-
-
 
 /* Campaign emails */
 
