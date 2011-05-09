@@ -1,7 +1,8 @@
-<span class='date'><%= t(:ago, :time => time_ago_in_words(event.created_at)) %></span>
-<span class='message-link'>
-  <%= raw t(:got_a_message, :link => link_to(t(:a_reply), campaign_incoming_message_path(@campaign, message)), :sender => message.safe_from, :campaigner => h(@campaign.initiator.name)) %>
-  <%- message.campaign_updates.each do |update| %>
+<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(:got_a_message, :link => link_to(t(:a_reply), campaign_incoming_message_path(@campaign, message)), :sender => message.safe_from, :campaigner => h(@campaign.initiator.name)) %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(event.created_at)) %></span></a>
+ 
+<div class="thread-details box">
+  <%= raw message.get_body_for_html_display(collapse_quotes=true) %>
+	<%- message.campaign_updates.each do |update| %>
     <%= render :partial => 'campaign_update', :locals => { :update => update, :always_show_commentbox => always_show_commentbox } %>
-	<%- end %>
-</span>
+  <%- end %>
+</div>  

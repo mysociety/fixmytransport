@@ -10,7 +10,7 @@
   <%- class_name = 'general-campaign-update' %>
 <%- end %>
 
-<a href="#" class="thread-item"><span class="num">#</span><span class="title"><%= raw t(text, :name => h(update.user.name)) %><%= raw sanitize("\"#{update.text}\"") %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(update.created_at)) %></span></a>
+<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(text, :name => h(update.user.name)) %><%= raw sanitize("\"#{update.text}\"") %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(update.created_at)) %></span></a>
 <div class="<%= class_name %> thread-details box">
 	<div class='actions'>
 		<div class="thumb"><img src="http://dummyimage.com/70x70" /></div>
