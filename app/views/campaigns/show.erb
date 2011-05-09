@@ -23,7 +23,7 @@
 
 	<div class="leftcol">
 		<div class="box campaign-description">
-			<img src="<%= @campaign.initiator.profile_photo.url(:small_thumb) %>" class="avatar" />
+			<img src="<%= @campaign.initiator.profile_photo.url(:medium_thumb) %>" class="avatar" />
 			<div>
 				<h4><a href="#"><%= @campaign.initiator.name %></a></h4>
 				<p><%= raw simple_format(sanitize(@campaign.description)) %>

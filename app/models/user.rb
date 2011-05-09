@@ -28,7 +28,8 @@ class User < ActiveRecord::Base
                     :url => "#{MySociety::Config.get('PAPERCLIP_URL_BASE', '/system/paperclip')}/:class/:attachment/:id/:style/:filename",
                     :default_url => "/images/paperclip_defaults/:class/:attachment/missing_:style.png",
                     :styles => { :large_thumb => "70x70#",
-                                 :small_thumb => "40x40#" }
+                                 :small_thumb => "40x40#",
+                                 :medium_thumb => "46x46#" }
 
   attr_accessor :ignore_blank_passwords
 
