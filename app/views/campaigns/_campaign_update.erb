@@ -1,24 +1,23 @@
 <a id="update_<%= update.id %>"></a>
 <%- if update.is_advice_request? %>
   <%- text = :user_requested_advice %>
-  <%- class_name = 'advice-request' %>
 <%- elsif update.incoming_message or update.outgoing_message %>
   <%- text = :user_says %>
- <%- class_name = 'message-update' %>
 <%- else %>
   <%- text = :user_says %>
-  <%- class_name = 'general-campaign-update' %>
 <%- end %>
 
-<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(text, :name => h(update.user.name)) %><%= raw sanitize("\"#{update.text}\"") %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(update.created_at)) %></span></a>
-<div class="<%= class_name %> thread-details box">
-	<div class='actions'>
-		<div class="thumb"><img src="http://dummyimage.com/70x70" /></div>
+<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(text, :name => h(update.user.name)) %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(update.created_at)) %></span></a>
+
+<div class="thread-details box">
+		<div class="thumb"><img src="<%= update.user.profile_photo.url(:large_thumb) %>" /></div>
+		<%= raw sanitize("\"#{update.text}\"") %>
+		<div class='actions'>
 		<%- if (! current_user or update.comments.empty?) and !always_show_commentbox %>
 	      <div class='campaign-comment-link' id="commentlink_<%= update.id %>"><%= link_to( t(:add_comment), add_comment_campaign_url(@campaign, :update_id => update.id)) %>
 	      </div>
 	   <%- end %>
-	</div>
+	 </div>
 
   <ul class='campaign-comments'>
   <%- update.comments.visible.each do |comment| %>
