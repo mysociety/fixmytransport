@@ -4,12 +4,12 @@
   <%- assignment_text = '' %>
 <%- end %>
 
-<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(:wrote_a_message, :link => link_to(t(:wrote_to), campaign_outgoing_message_path(@campaign, message)), :sender => h(message.author.name), :recipient => h(message.recipient_name), :assignment_text => assignment_text) %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(event.created_at)) %></span></a>
+<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(:wrote_a_message, :sender => h(message.author.name), :recipient => h(message.recipient_name), :assignment_text => assignment_text) %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(event.created_at)) %></span></a>
  
 <div class="thread-details box">
   <%= raw simple_format(h(message.body)) %>
 	<%- message.campaign_updates.each do |update| %>
-    <%= render :partial => 'campaign_update', :locals => { :update => update, :always_show_commentbox => always_show_commentbox } %>
+    <%= render :partial => 'campaign_update', :locals => { :update => update, :always_show_commentbox => always_show_commentbox, :index => index } %>
   <%- end %>
 </div>  
 

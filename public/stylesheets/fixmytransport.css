@@ -271,6 +271,11 @@ ul.user-list {
 	    list-style-type: none;
 	    margin: 0 0 1.5em 0;
 	}
+	
+	ul.user-list li p {
+	   white-space:nowrap;
+	}
+	
 	ul.user-list li:last-child {
 	    margin-bottom: 0.5em
 	}
@@ -284,6 +289,7 @@ ul.user-list {
 	.user-info p {
 	    margin: 0;
 	    font-size: 0.9em;
+      min-height: 0.9em;
 	}
 		.user-info p a {
 		    font-style: italic

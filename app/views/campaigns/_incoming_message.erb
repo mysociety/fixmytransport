@@ -3,6 +3,6 @@
 <div class="thread-details box">
   <%= raw message.get_body_for_html_display(collapse_quotes=true) %>
 	<%- message.campaign_updates.each do |update| %>
-    <%= render :partial => 'campaign_update', :locals => { :update => update, :always_show_commentbox => always_show_commentbox } %>
+    <%= render :partial => 'campaign_update', :locals => { :update => update, :always_show_commentbox => always_show_commentbox, :index => index } %>
   <%- end %>
 </div>  
