@@ -20,6 +20,7 @@ data/NPTDR/
 data/mail_conf
 cache/*
 public/index.html
+public/files
 public/files/*
 moo.txt
 rdoc
