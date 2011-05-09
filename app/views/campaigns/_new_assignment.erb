@@ -1,3 +1,5 @@
 <%-if assignment.task_type_name == 'write-to-other' %>
-  <%= raw t(:expert_advised_writing, :expert => h(assignment.creator.name), :user => h(assignment.user.first_name),  :recipient => h(assignment.data[:name]), :advised => link_to(t(:advised), campaign_assignment_path(assignment.campaign, assignment))) %>
+<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(:expert_advised_writing, :expert => h(assignment.creator.name), :user => h(assignment.user.first_name),  :recipient => h(assignment.data[:name]), :advised => link_to(t(:advised), campaign_assignment_path(assignment.campaign, assignment))) %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(event.created_at)) %></span></a>
+<div class="thread-details box">
+</div>
 <%- end %>
