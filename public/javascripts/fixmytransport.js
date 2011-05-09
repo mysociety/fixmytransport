@@ -53,6 +53,7 @@ $(document).ready(function(){
 	
 	//login click
 	$(".auth").click(function() {
+    $('#login-landing').show();
 		$("#login-box").dialog("open");
 		return false;
 	});

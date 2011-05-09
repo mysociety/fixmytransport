@@ -354,6 +354,10 @@ ul.user-list {
 		font-style:italic;
 		margin-bottom: 0.5em;
 	}
+	
+	#login-box .pane{
+    display: none;
+	}
 	.ui-dialog-titlebar{
 	}
 
