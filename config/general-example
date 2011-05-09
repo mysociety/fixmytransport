@@ -69,6 +69,6 @@ define('OPTION_SITE_VISIBLE', 1);
 // Where to store uploaded files like profile images
 define('OPTION_FILE_DIRECTORY', ':rails_root/public/system');
 // Base URL for paperclip files
-define('OPTION_PAPERCLIP_URL_BASE', '/images/paperclip');
+define('OPTION_PAPERCLIP_URL_BASE', '/system');
 
 ?>
