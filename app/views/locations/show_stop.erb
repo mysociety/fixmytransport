@@ -36,7 +36,7 @@
 	<div class="leftcol">
 		<h5>Location</h5>
 		<div id="medium-map">
-      <%= render :partial => 'shared/map', :locals => { :locations => @stop.points, :other_locations => @other_locations, :link_type => :location, :height => 490, :width => 590  } %>
+      <%= render :partial => 'shared/map', :locals => { :locations => @stop.points, :other_locations => @other_locations, :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH  } %>
  	  </div>
 		<a class="grey-button right" href="#">Larger Map</a>
 

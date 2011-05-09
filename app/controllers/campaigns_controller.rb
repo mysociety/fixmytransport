@@ -97,7 +97,10 @@ class CampaignsController < ApplicationController
   
   def show
     @title = @campaign.title
-    map_params_from_location(@campaign.location.points, find_other_locations=false)
+    map_params_from_location(@campaign.location.points, 
+                            find_other_locations=false, 
+                            height=CAMPAIGN_PAGE_MAP_HEIGHT, 
+                            width=CAMPAIGN_PAGE_MAP_WIDTH)
     if current_user && current_user == @campaign.initiator
       @campaign_update = CampaignUpdate.new(:campaign => @campaign, 
                                             :user => current_user)
