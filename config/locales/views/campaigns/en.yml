@@ -51,7 +51,7 @@ en:
   add_an_update: 'Add an update:'
   request_advice: Ask for advice
   ask_our_expert_panel: 'Ask your supporters and our expert panel what to do next:'
-  user_requested_advice: "%{name} asked for feedback from the campaign's supporters and FixMyTransport's expert panel:"
+  user_requested_advice: "%{name} asked for advice."
   advice_request_added: Your advice request will be sent to your supporters and the panel.
   expert_advised_writing: "%{expert} %{advised} %{user} to write to %{recipient}."
   following_experts_advice: " following %{expert}'s advice."

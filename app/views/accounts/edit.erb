@@ -35,7 +35,18 @@
       <%= f.label :password_confirmation  %>
       <%= raw f.password_field :password_confirmation  %>
     </div>
+    
+    <div class='form-field'>
+      <%- if current_user.errors.on('location') %>
+        <div class='form-field-error'>
+          <%= error_message_on current_user, :location %>
+        </div>
+      <%- end %>
+      <%= f.label :location %>
+      <%= raw f.text_field :location %>
 
+    </div>
+    
     <div class='form-field'>
       <%- if current_user.errors.on('profile_photo') %>
         <div class='form-field-error'>

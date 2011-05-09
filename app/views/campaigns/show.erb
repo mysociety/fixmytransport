@@ -136,7 +136,9 @@
 				<div class="avatar"><img src="<%= @campaign.initiator.profile_photo.url(:large_thumb) %>" /></div>
 				<div class="user-info">
 					<a class="name" href="#"><%= @campaign.initiator.name %></a>
-					<p class="location">Staffordshire, UK</p>
+					<%- if @campaign.initiator.location %>
+					<p class="location"><%= @campaign.initiator.location %></p>
+					<%- end %>
 					<p>Managing <a href="#"><%= pluralize(@campaign.initiator.initiated_campaigns.count, 'Campaign') %></a></p>
 					<p>Supporting <a href="#"><%= pluralize(@campaign.initiator.campaigns.count, 'Campaign') %></a></p>
 				</div>
@@ -155,7 +157,9 @@
 					<div class="avatar"><img src="<%= supporter.profile_photo.url(:small_thumb) %>" /></div>
 					<div class="user-info">
 						<a class="name" href="#"><%= supporter.name %></a>
-						<p class="location">Staffordshire, UK</p>
+						<%- if supporter.location %>
+						<p class="location"><%= supporter.location %></p>
+						<%- end %>
 					</div>
 				</li>
 				<%- end %>
