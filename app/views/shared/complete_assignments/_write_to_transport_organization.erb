@@ -1,4 +1,5 @@
-<%= "#{assignment.user_name} wrote to #{assignment.data[:organizations].map{ |organization| organization[:name] }.to_sentence}" %>
-<span class='date'>
-  <%= t(:ago, :time => time_ago_in_words(event.created_at)) %>
-</span>
+<a href="#" class="thread-item"><span class="num">#</span><span class="title"><%= "#{assignment.user_name} wrote to #{assignment.data[:organizations].map{ |organization| organization[:name] }.to_sentence}" %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(event.created_at)) %></span></a>
+<div class="thread-details box">
+	<div class="thumb"><img src="http://dummyimage.com/70x70" /></div>
+	<p>Here is the letter that <%= "#{assignment.user_name}" %> wrote.</p>
+</div>

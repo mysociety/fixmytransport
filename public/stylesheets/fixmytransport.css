@@ -19,6 +19,7 @@
 /* ===[ Layout ]=== */
 .container {
     width: 950px;
+	height:100%;
     margin: auto;
     overflow: hidden;
 }
@@ -59,10 +60,10 @@ body {
 #wrapper {
     background: #fff
 }
-/* ===[ Top Bar ]=== */
+/* ===[ Top ]=== */
 #top {
-    height: 45px;
-	margin-top:7px;
+	margin:7px auto 10px auto;
+	position:relative;
 }
 	#top ul {
 	    float: right;
@@ -108,31 +109,32 @@ ul#mysociety-tab {
 	    background: url(../images/mysociety-logo.jpg) center center no-repeat;
 	    text-indent: -999999em;
 	}
-/* ===[ Header ]=== */
+
 #logo {
     background: url(../images/logo.jpg) 0 0 no-repeat;
-    width: 400px;
-    height: 70px;
+    width: 290px;
+    height: 53px;
     float: left;
     display: block;
     text-indent: -999999em;
+	margin:30px 0 20px 0;
 }
-#member-info {
-    margin-top: 50px;
-    text-align: right;
+
+p#member-info {
+	margin:0;
+	right:0;
+	bottom:0;
+	position:absolute;
 }
-	#member-info p {
-	    margin: 0;
-	    float: right;
-	}
 	#member-info a.auth {
 	    margin-left: 5px
 	}
+
+
 /* ===[ Main Navigation ]=== */
 #main-nav-bar {
     height: 40px;
     background: #048fc2;
-    margin-top: 25px;
 }
 	#main-nav-bar h1 {
 	    font-size: 1.75em;
@@ -197,8 +199,14 @@ form#search {
 #banner {
     padding: 1em 0;
 	margin-bottom:1em;
-    background: #ebebeb;
+    background: #f4f4f4;
 }
+	#banner h2 {
+		font-size: 1.4em;
+		line-height: 1.2em;
+	    font-weight: bold;
+	    color: #151f26;
+	}
 	#banner h3 {
 	    font-weight: bold;
 	    color: #151f26;
@@ -216,13 +224,11 @@ form#search {
 	    margin: 0;
 	    color: #151f26;
 	}
-
 /* ===[ Main Content ]=== */
 #main-content {}
 	#main-content div {
-	    overflow: hidden
+      overflow: hidden
 	}
-
 /* ===[ Footer ]=== */
 #footer {
     color: #fff;
@@ -235,7 +241,7 @@ form#search {
 	}
 /* ===[ Gallery ]=== */
 ul.gallery {
-    padding: 10px;
+    padding: 10px 0 10px 10px;
     margin: 0;
     overflow: hidden;
     clear: both;
@@ -244,14 +250,18 @@ ul.gallery {
 	    list-style-type: none;
 	    display: block;
 	    float: left;
-	    padding: 4px;
+	    padding: 0px;
 	    background: #fff;
-	    margin-right: 4px;
+	    margin-right: 8px;
 	}
 		ul.gallery li a {
 		    display: block;
 		    line-height: 0;
+			border: 3px solid #fff;
 		}
+
+		ul.gallery li a:hover {border: 3px solid #aaa;}
+
 /* ===[ User List ]=== */
 ul.user-list {
     margin: 0;
@@ -288,7 +298,8 @@ ul.user-list {
 }
 .ui-dialog-titlebar {
     width: 100%;
-    background: #fff;
+	background:#048fc2;
+	padding: 5px 0px;
     border-radius: 5px 5px 0 0;
     -moz-border-radius: 5px 5px 0 0;
     -webkit-border-radius: 5px 5px 0 0;
@@ -297,13 +308,12 @@ ul.user-list {
     float: right;
     text-transform: uppercase;
     font-size: 0.8em;
-    margin: 4px;
-    padding-right: 20px;
+    margin: 4px 10px 4px 4px;
+    padding-right: 18px;
     background: url(../images/close-blue.gif) right 0 no-repeat;
 }
 .ui-dialog-titlebar-close:hover {
-    color: #0075a0;
-    background-position: right -55px;
+    color: #fff;
 }
 .ui-dialog-content {
     padding: 10px;
@@ -314,9 +324,11 @@ ul.user-list {
 }
 /* ===[ Ui Overlay ]=== */
 .ui-widget-overlay {
-    left: 0;
     position: absolute;
+    left: 0;
     top: 0;
+	width:100%;
+	height:100%;
     display: block;
     background: #000;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
@@ -326,95 +338,140 @@ ul.user-list {
     opacity: 0.5;
 }
 /* ===[ Login Box ]=== */
-.login-box {
-    text-align: center
+
+.login-box{
+	padding:0px;
+	overflow:hidden;
 }
-	.login-box h1 {
-	    color: #bfbfbf;
-	    font-size: 2.5em;
+	.login-box p{
+		color:#666;
+		font-style:italic;
+		margin-bottom: 0.5em;
 	}
-	.login-box h2 {
-	    color: #333;
-	    font-size: 1.5em;
-	    width: 480px;
-	    margin: 2em auto 3em auto;
+	.ui-dialog-titlebar{
 	}
-	.login-box .login-options {
+
+	.ui-dialog-title{
+		color:#fff;
+		font-size: 1em;
+		font-weight: bolder;
+		margin: 1em 10px;
+	}
+#static-login-box-wrap {
+	background:#f4f4f4;
+}
+	#static-login-box-wrap #static-login-box {
+		background:url(../images/static-login-arrow.gif) 110px 0 no-repeat;
+		padding-top:40px;
+	}
+	#static-login-box h5 {
 	    display: block;
-	    width: 678px;
-	    margin: auto;
-	    overflow: hidden;
+		margin-left: 190px;
+		margin-top: -1em;
+		font-size: 2em;
+		color:#ccc;
+		font-weight: normal;
 	}
-		.login-box .login-options div {
-		    display: block;
-		    float: left;
-		    padding: 10px;
-		    width: 204px;
-		    height: 200px;
-		    margin-bottom: 2em;
-		    text-align: center;
-		    border-right: 3px solid #ddd;
-		}
-			.login-box .login-options div h3 {
-			    color: #048fc2;
-			    font-size: 1.4em;
-			    margin-bottom: 3em;
-			}
-		.login-box .login-options .button {
-		    display: block;
-		    width: 140px;
-		    margin: 0 auto 1em auto;
-		}
-		.login-box .login-options div #twitter,
-		.login-box .login-options div #facebook {
-		    display: block;
-		    margin-top: 6.2em;
-		}
-		.login-box .login-options div.last {
-		    border-right: none
-		}
-	.login-box .login-form {
-	    text-align: left;
-	    padding: 20px;
-	    overflow: hidden;
-	    display: block;
-	    width: 638px;
-	    margin: auto;
+	#login-form{
+		width: 270px;
+		float: left;
+		display: block;
 	}
-		.login-box .login-form label {
-		    display: block;
-		    color: #048fc2;
-		    font-size: 1.2em;
-		    font-weight: normal;
-		}
-		.login-box .login-form input {
-		    color: #666;
-		    padding: 4px;
-		    width: 250px;
-		    border: 2px solid #048fc2;
-		    font-size: 1.5em;
-		    border-radius: 10px;
-		    -moz-border-radius: 10px;
-		    -webkit-border-radius: 10px;
-		}
-		.login-box .login-form button {
-		    border: 0;
-		    float: right;
-		}
-		.login-box .login-form .password {
-		    float: left;
-		    margin-right: 20px;
-		}
-			.login-box .login-form .password input {
-			    width: 150px
+	#static-login-box #login-form {
+		margin-left:180px;
+	}
+		#login-form ul{
+			margin: 0px;
+			list-style: none;
+			padding: 10px 10px 0px 10px;
+			width: 250px;
 			}
+
+			#login-form ul input{
+				border: 1px solid #ccc;
+				padding: 5px;
+				font-size:1.1em;
+				}
+
+			#login-form ul li.login-username input{width:240px;}
+			#login-form ul li.login-password input{
+				width: 150px;
+				margin-right: 10px;
+			}
+
+			#login-form ul li.login-username label,	
+			#login-form ul li.login-password label{
+				width: 100%;
+				display: block;
+			}	
+
+			#login-form button{
+			    text-align: center;
+			    font-size: 0.9em;
+			    text-transform: uppercase;
+			    color: #fff;
+				background:#048fc2;
+			    padding: 0.4em 8px;
+				margin: 10px 10px 10px 0;
+				border: 0px;
+			    border-radius: 4px;
+			    -moz-border-radius: 4px;
+			    -webkit-border-radius: 4px;
+				cursor:pointer;
+			}
+			#login-form button:hover{
+				background: #0075a0;
+			}
+
+	.login-options{
+		background:#f4f4f4;
+		float: right;
+		width: 200px;	
+		padding: 5px;
+		height: 210px;
+		border-radius:0 0 5px 0;
+		-moz-border-radius:0 0 5px 0;
+		-webkit-border-radius:0 0 5px 0;
+	}
+#static-login-box .login-options{
+	text-align:center;
+	margin-right:240px;
+	border-radius:0;
+	-moz-border-radius:0;
+	-webkit-border-radius:0;
+}
+	.login-options p{
+		margin-top: 2em;
+	}
+
+		.facebook{
+			width:192px;
+			display: block;
+			height:28px;
+			text-indent:-10000px;
+			margin: 10px 0 0 5px;
+			background:url(../images/facebook-connect.jpg) no-repeat;			
+		}
+
+		.twitter{
+			width:192px;
+			display: block;
+			height:28px;
+			text-indent:-10000px;
+			margin: 20px 0 0 5px;
+			background:url(../images/twitter-connect.jpg) no-repeat;
+		}
+
+
+
+
 /* Buttons
    ================================================== */
 .support-big {
     display: block;
     text-align: center;
     width: 180px;
-    margin: 2em auto;
+    margin: 0 auto;
     font-size: 20px;
     text-transform: uppercase;
     color: #fff;
@@ -425,7 +482,7 @@ ul.user-list {
     -webkit-border-radius: 6px;
 }
 .support-big:hover {
-    background: #86bc08;
+    background: #74cb04;
     color: #fff;
 }
 .support {
@@ -441,7 +498,7 @@ ul.user-list {
     -webkit-border-radius: 6px;
 }
 .support:hover {
-    background-color: #86bc08;
+    background-color: #74cb04;
     background-position: 6px -33px;
     color: #fff;
 }
@@ -477,12 +534,23 @@ ul.user-list {
     background: #333;
     color: #fff;
 }
+
+#map-container .grey-button{
+  margin-top: 5px;
+}
+#map-container{
+  float: right;
+}
+
 .goto-top {
     text-transform: uppercase;
     font-size: 12px;
     padding-right: 20px;
     background: url(../images/arrow-lrg.gif) right 4px no-repeat;
 }
+	.goto-top.on-grey {
+		background: url(../images/arrow-lrg.gif) right -56px no-repeat;
+	}
 .view-all {
     font-size: 0.9em
 }
@@ -500,6 +568,25 @@ ul.user-list {
 .button:hover,
 .button:focus {
     background-color: #0075a0;
+    color: #fff;
+}
+
+.report-big {
+    display: block;
+    text-align: center;
+    width: 180px;
+    margin: 0.5em auto;
+    font-size: 15px;
+    text-transform: uppercase;
+    color: #fff;
+    background: #f4053d;
+    padding: 10px;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+.report-big:hover {
+    background: #e00202;
     color: #fff;
 }
 /* Icons
@@ -530,50 +617,68 @@ ul.user-list {
 }
 /* Forms
    ================================================== */
-.formitem {
-    width: 950px;
+.form-1 ul{
+	margin: 0px;
+	padding: 0px;
+}
+
+.form-1 ul li {
+    width: 500px;
     margin: auto;
-    overflow: hidden;
+	padding: 0px;
+	list-style: none;
     margin: 0 0 1em 0;
 	position:relative;
+	clear:both;
+	display:inline-block;
 }
-	.formitem label {
-	    display: block;
-	    margin: 10px 10px 0 0;
-	    float: left;
-	    width: 100px;
-	    text-align: right;
-	    text-transform: uppercase;
-	}
-	.formitem input,
-	.formitem textarea {
-	    padding: 2px 4px;
-	    width: 340px;
-	    display: block;
-	    float: left;
-	    border: 2px solid #048fc2;
-	    border-radius: 3px;
-	    -moz-border-radius: 3px;
-	    -webkit-border-radius: 3px;
-	}
-	.formitem input {
-	    height: 20px
-	}
-	.formitem textarea {
-	    height: 200px
-	}
+#main-content .form-1 ul li {
+	overflow:visible;
+}
+.form-1 label {
+    display: block;
+    margin: 10px 10px 0 0;
+    float: left;
+    width: 100px;
+    text-align: right;
+    text-transform: uppercase;
+}
+.form-1 input,
+.form-1 textarea {
+	padding: 2px 4px;
+	width: 340px;
+	display: block;
+	float: left;
+	border: 2px solid #048fc2;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+.form-1 input {
+    height: 20px
+}
+.form-1 textarea {
+    height: 150px
+}
+
+.form-1 .static-value{
+	padding-top: 0.3em;
+	font-size: 1.3em;
+}
+
+/*TIP BOX*/	
 .tipbox {
     display: block;
-    float: right;
     width: 350px;
     padding: 15px;
     background: #ebebeb;
-	position:relative;
+	position:absolute;
 	right:-999999em;
+	margin-top: -8px;
 	overflow:visible !important;
 }
 	.tipbox.fixed {
-		right: 0;
+		right: -450px;
 	}
 	.tipbox .tip-nub {
 	    background: url(../images/tip-nub.gif) 0 0 no-repeat;
@@ -595,76 +700,109 @@ ul.user-list {
 		margin:0;
 	}
 form#create-campaign {
-    margin: 0 0 6em 0
+	display:block;
 }
+
+/*===[Campaign Status]===*/
+
+.stat-current{color:#ff6600;}
+.stat-complete{color:#9bce24;}
+.stat-pending{color:#f4053d;}
+
+
+/*===[Related Campaign List]===*/
+
+ul.related-campaigns{margin: 0px; padding: 0px;}
+	ul.related-campaigns li{
+		list-style: none;
+		border-bottom: 1px solid #eee;
+		overflow: hidden;
+		padding: 1em 0 0.5em 0 ;
+		}
+
+		ul.related-campaigns li img{
+			float: left;
+			margin-right: 10px;
+		}
+
+		ul.related-campaigns dl{
+			width: 480px;
+			font-size: 0.9em;
+			padding: 0px; 
+			margin: 0px; 
+			float:right;
+		}
+
+			ul.related-campaigns dl dt,
+			ul.related-campaigns dl dd {list-style: none; padding: 0px; margin: 0px; float: left;}
+
+			ul.related-campaigns dl dt{
+				margin-right: 0.3em;
+				font-weight: normal;
+			}
+
+			ul.related-campaigns dl dd{
+				margin-right: 1em;
+				font-weight: bolder;				
+			}
+
+				ul.related-campaigns h4{margin-bottom: 0.25em;}
+				ul.related-campaigns p{font-weight: normal;}
+
+				ul.related-campaigns span.status{float: right;}
+
+
 /* Page Specific
    ================================================== */
 /* ===[ Campaign Page ]=== */
-.campaign-head {
-    margin-bottom: 2em;
-    float: left;
-    width: 550px;
+
+.campaign-description, .campaign-initiator-actions, .expert-actions{
+	display: block;
+	float: left;
+	width: 550px;
+	}
+
+.campaign-description a.more-info{
+	float:right;
 }
-	.campaign-head h3 {
-	    font-weight: bold;
-	    float: left;
-	    margin: 0;
-	}
-	.campaign-head p.campaign-status {
-	    font-weight: bold;
-	    float: right;
-	    margin: 0.5em 0 0 0;
-	    font-size: 0.9em;
-	    text-transform: uppercase;
-	    color: #ff6600;
-	}
-	.campaign-head a {
-	    float: left;
-	    clear: left;
-	    width: 100%;
-	}
-.campaign-meta {
-    float: left;
-    height: 50px;
-    width: 150px;
-    margin-right: 10px;
+
+#banner h1.route-name {
+	font-size:2em;
 }
-	.campaign-meta p,
-	.campaign-meta a {
-	    display: inline-block;
-	    margin: 5px 0 0 0;
-	    margin: 6px 0 3px 0;
-	}
-	.campaign-meta a.supporters {
-	    font-size: 1.5em;
-	    font-weight: bold;
-	    margin: 0;
-	}
-	.campaign-meta span {
-	    display: block;
-	    text-transform: uppercase;
-	    font-size: 0.75em;
-	}
-.campaign-summary {
-    float: left;
-    clear: left;
+
+#banner h2.route-operator {
+	font-size:1.5em;
 }
-	.campaign-summary p {
-	    margin: 0
-	}
-	.campaign-summary .read-more {
-	    float: right;
-	    padding-right: 15px;
-	    background: url(../images/arrow-sml.gif) right -26px no-repeat;
-	}
-#map {
-    padding: 5px
+
+ul.campaign-meta{
+	list-style:none;
+	padding: 0px;
+	margin: 0px;
+	width: 100%;
+	text-align: center;
+
 }
-	#map a.grey-button {
-	    float: right;
-	    margin-top: 5px;
-	}
+
+ul.campaign-meta li{
+	margin: 0px;
+	padding: 0px;
+	display: inline;
+	color:#666;
+}
+
+ul.campaign-meta li span{
+	font-weight: bolder;
+	margin-right: 10px;
+	color:#333;
+ }
+
 /* ===[ Campaign Thread ]=== */
+h3.latest-news {
+	font-size:1em;
+	font-weight:bold;
+	margin-bottom:0.25em;
+}
+
 .thread-controls {
     float: right
 }
@@ -705,13 +843,14 @@ ul#campaign-thread {
 	}
 		ul#campaign-thread li a.thread-item {
 		    display: block;
-		    color: #fff;
-		    background: #048fc2;
+		    color: #444;
+		    background: #eee;
 		    padding: 10px;
 		    height: 20px;
 		}
 		ul#campaign-thread li a.thread-item:hover {
-		    background: #0075a0
+		    background: #0075a0;
+			color:#fff;
 		}
 		ul#campaign-thread li a.thread-item span.num {
 		    display: block;
@@ -796,7 +935,7 @@ ul#campaign-thread {
 	    background: #f4053d
 	}
 	#choose .left .button:hover {
-	    background: #b3062f
+	    background: #e00202
 	}
 	#choose .right .button {
 	    background: #9bce24
@@ -863,12 +1002,13 @@ ul#process {
 			height: 28px;
 			border: 0px;
 			text-transform: uppercase;
-			color:#0075a0;
-			outline: none;
+			color:#0075a0;	
+			outline: none;		
+			cursor: pointer;
 			}
 
 		.process-back{
-			background:transparent url(../images/process-back.gif) left top no-repeat;
+			background:transparent url(../images/process-back.gif) left top no-repeat;			
 			padding-left: 30px;
 		}
 			.process-back:hover{
@@ -878,7 +1018,7 @@ ul#process {
 			}
 
 		.process-next{
-			background:transparent url(../images/process-next.gif) right top no-repeat;
+			background:transparent url(../images/process-next.gif) right top no-repeat;			
 			padding-right: 30px;
 			float: right;
 		}
@@ -893,9 +1033,43 @@ ul#process {
 				margin-left:120px;
 				margin-top: 1em;
 				margin-bottom: 20px;
-
-
 			}
 
 
+/*===[Route Page]===*/		
 
+ol#large-ol {
+    margin: 0 0 1em 0;
+    padding: 0;
+    clear: both;
+}
+	ol#large-ol li {
+	    list-style-type: none;
+	    border-bottom: 3px solid #fff;
+	    clear: both;
+	}
+		ol#large-ol li a{
+		    display: block;
+		    color: #444;
+		    background: #eee;
+		    padding: 10px;
+		}
+		ol#large-ol li a:hover {
+		    background: #0075a0;
+			color:#fff;
+		}
+		ol#large-ol li a span.num {
+		    display: block;
+		    float: left;
+		    text-align: center;
+		    font-weight: bold;
+		    line-height: 0;
+		    margin: -2px 10px 0 0;
+		    width: 35px;
+		    background: #fff;
+		    color: #333;
+		    padding: 12px 0;
+		    border-radius: 20px;
+		    -moz-border-radius: 20px;
+		    -webkit-border-radius: 20px;
+		}

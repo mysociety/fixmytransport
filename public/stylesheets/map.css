@@ -18,6 +18,9 @@
     border: 0;
 }
 
+#map div {
+  overflow: visible !important;
+}
 
 #large-map {
   width: 500px;
@@ -29,6 +32,21 @@
   width: 500px; 
   height: 500px;
   margin: auto;
+}
+
+
+#small-map {
+  width: 300px;
+  overflow: default;
+  margin-top: 17px;
+  padding: 5px 0;
+}
+
+#small-map #map {
+  width: 300px;
+  height: 160px;
+  margin: auto;
+  border: none;
 }
 
 .tooltip-popup {

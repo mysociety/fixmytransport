@@ -1,96 +1,167 @@
-<%- if @campaign.location %>
-  <div id='map-col'>
-    <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH } %>
-  </div>
-<%- end %>
+<div id="banner">
+	<div class="container">
+		<div class="leftcol-banner">
+			<h2><%= @campaign.title %></h2>
+			<%- if @campaign.problem.location.is_a?(SubRoute) %>
+			  <span class='transport-location'>
+			    <%= raw t(:campaign_location, :link => @campaign.problem.location.description) %>
+			  </span>
+			<%- else %>
+			  <span class='transport-location'>
+			    <%= raw t(:campaign_location, :link => link_to(@campaign.problem.location.description, location_url(@campaign.problem.location))) %>
+			  </span>
+			<%- end %>
+			
+		</div>
+		<div class="rightcol">
+			<a class="support-big" href="<%= join_campaign_path(@campaign) %>">Support</a>
+		</div>
+	</div>
+</div>
 
+<div id="main-content" class="container">
 
-<div class='campaign-info'>
-
-  <h2><%= @campaign.title %></h2>
-
-  <div class='details'>
-    <%= t(:started_on, :date => @campaign.created_at.strftime("%d/%m/%Y")) %>
-    <%= t(:by, :name => @campaign.initiator.name) %>
-    <div class='location-and-supporters'>
-      <%- if @campaign.problem.location.is_a?(SubRoute) %>
-        <span class='transport-location'>
-          <%= raw t(:campaign_location, :link => @campaign.problem.location.description) %>
-        </span>
-      <%- else %>
-        <span class='transport-location'>
-          <%= raw t(:campaign_location, :link => link_to(@campaign.problem.location.description, location_url(@campaign.problem.location))) %>
-        </span>
-      <%- end %>
-      <span class='supporters'>
-        <%= t(:campaign_has_n_supporters, :n => @campaign.supporter_count, :count => @campaign.supporter_count) %>
-      </span>
-    </div>
-  </div>
-
-  <%= raw simple_format(sanitize(@campaign.description), :class => 'campaign') %>
-  <%- if current_user && (current_user == @campaign.initiator || current_user.is_expert?) %>
-    <%= link_to(t(:edit), edit_campaign_path(@campaign), :class => 'description-edit-link') %>
-  <%- end %>
-
-  <%- if current_user && current_user == @campaign.initiator %>
-    <%= render :partial => 'update_form', :locals => {  :hidden => false, :update => CampaignUpdate.new(:user_id => current_user.id) } %>
-  <%- elsif current_user && current_user.campaigns.include?(@campaign) %>
-    <p><%= t(:you_support_this_campaign) %></p>
-    <%- form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f| %>
-      <%= raw hidden_field_tag "user_id", current_user.id %>
-      <%= raw submit_tag t(:leave_this_campaign) %>
-    <%- end %>
-  <%- else %>
-    <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST' } do |f| %>
-      <%- if current_user %>
-        <%= raw hidden_field_tag "user_id", current_user.id %>
-        <%= raw submit_tag t(:join_this_campaign) %>
-      <%- else %>
-        <div class='form-field'>
-          <%= raw label_tag :email, t(:enter_your_email_to_join) %>
-          <%= raw text_field_tag :email %>
+	<div class="leftcol">
+		<div class="box campaign-description">
+			<img src="<%= @campaign.initiator.profile_photo.url(:small_thumb) %>" class="avatar" />
+			<div>
+				<h4><a href="#"><%= @campaign.initiator.name %></a></h4>
+				<p><%= raw simple_format(sanitize(@campaign.description)) %>
+				  <%- if current_user && (current_user == @campaign.initiator || current_user.is_expert?) %>
+            <%= link_to(t(:edit), edit_campaign_path(@campaign), :class => 'description-edit-link') %>
+          <%- end %>
+				  <a href="#" class="more-info">more</a>
+				  </p>
+			</div>
+		</div>
+	
+	  
+   <%- if current_user && current_user == @campaign.initiator %>
+    <div class="campaign-initiator-actions">
+     <%= render :partial => 'update_form', :locals => {  :hidden => false, :update => CampaignUpdate.new(:user_id => current_user.id) } %>
+   <%- elsif current_user && current_user.campaigns.include?(@campaign) %>
+     <p><%= t(:you_support_this_campaign) %></p>
+     <%- form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f| %>
+       <%= raw hidden_field_tag "user_id", current_user.id %>
+       <%= raw submit_tag t(:leave_this_campaign) %>
+     <%- end %>     
+   
+      <%- if !@campaign.problem.optional_assignments.empty? %>
+        <h3><%= t(:next_steps) %></h3>
+        <div class='optional-assignments'>
+          <%- @campaign.problem.optional_assignments.each do |assignment_type|
+     %>
+            <%= render :partial => "shared/optional_assignments/#{assignment_type}" %>
+          <%- end %>
+          <div class='optional-assignment-end'></div>
+          <%- if current_user && current_user == @campaign.initiator %>
+            <%= render :partial => 'update_form', :locals => { :hidden => true, :update => CampaignUpdate.new(:is_advice_request => true, :user_id => current_user.id) } %>
+          <%- end %>
         </div>
-        <%= raw submit_tag t(:join) %>
-      <%- end %>
-    <%- end %>
-  <%- end %>
+       </div>
+      <%- end %>   
+   <%- end %>
 
-  <h3><%= t(:next_steps) %></h3>
-  <div class="new-assignments">
-    <%- @campaign.problem.assignments.each do |assignment| %>
-      <%- if assignment.status == :new %>
-        <%= render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }%>
-      <%- end %>
-    <%- end %>
-  </div>
+
+
+   <%- if current_user && current_user.is_expert? %>
+     <div class="expert-actions">
+     <h3><%= t(:transport_experts) %></h3>
+     <div class='expert-actions'>
+       <div class='optional-assignment'>
+         <%= link_to(t(:tell_to_write, :user => @campaign.initiator.first_name), new_campaign_assignment_path(@campaign)) %>
+       </div>
+       <div class='optional-assignment-end'>
+       </div>
+     </div>
+     </div>
+   <%- end %>
+
+		<div class="box">
+			<h5>Images and Media</h5>
+			<ul class="gallery grey">
+				<li><a href="#"><img src="http://dummyimage.com/130x130" /></a></li>
+				<li><a href="#"><img src="http://dummyimage.com/130x130" /></a></li>
+				<li><a href="#"><img src="http://dummyimage.com/130x130" /></a></li>
+				<li><a href="#"><img src="http://dummyimage.com/130x130" /></a></li>
+			</ul>
+		</div>
+
+		<div class="box">
+			<a class="comment-button right" href="#">Comment</a>
+		</div>
+
+		<div class="clear">
+			<h3 class='left latest-news'><%= t(:latest_news) %></h3>
+			<div class="thread-controls">
+				<a href="#" class="expand-all">Expand All</a>
+				<a href="#" class="collapse-all">Collapse All</a>
+				<a href="#" class="sort">Sort</a>
+			</div>
+		</div>
+		<ul id="campaign-thread">
+		<%- @campaign.campaign_events.visible.each do |campaign_event| %>
+			<%= render :partial => 'campaign_event', :locals => { :always_show_commentbox => false, :event => campaign_event } %>
+		<%- end %>
+		</ul>
+		
+		<a class="right support" href="#">Support</a>
   
-  <div class='optional-assignments'>
-    <%- @campaign.problem.optional_assignments.each do |assignment_type|
-%>
-      <%= render :partial => "shared/optional_assignments/#{assignment_type}" %>
-    <%- end %>
-    <div class='assignment-end'></div>
 
-    <%- if current_user && current_user == @campaign.initiator %>
-      <%= render :partial => 'update_form', :locals => { :hidden => true, :update => CampaignUpdate.new(:is_advice_request => true, :user_id => current_user.id) } %>
-    <%- end %>
-  </div>  
-
-  <%- if current_user && current_user.is_expert? %>
-    <h3><%= t(:transport_experts) %></h3>
-    <div class='expert-actions'>
-      <div class='assignment'>
-        <%= link_to(t(:tell_to_write, :user => @campaign.initiator.first_name), new_campaign_assignment_path(@campaign)) %>
-      </div>
-      <div class='assignment-end'>
-      </div>
-    </div>
-  <%- end %>
+</div>
 
 
-  <h3 class='latest-news'><%= t(:latest_news) %></h3>
-  <%- @campaign.campaign_events.visible.each do |campaign_event| %>
-    <%= render :partial => 'campaign_event', :locals => { :always_show_commentbox => false, :event => campaign_event } %>
-  <%- end %>
+	<div class="rightcol">
+		<ul class="campaign-meta">
+			<li>started <span><%= @campaign.created_at.strftime("%e %B %Y") %></span></li>
+			<li>supporters <a href="#" class="supporter"><%=  @campaign.supporter_count %></a></li>														
+		</ul>
+		
+		<%- if @campaign.location %>
+		<div id="map-container">
+			<div id="small-map">
+			  <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => 160, :width => 300 } %>
+		  </div>
+      <a class="grey-button right" href="#">Larger Map</a>
+		</div>
+		<%- end %>
+		
+		
+		<div class="box">
+			<h5>Campaign Manager</h5>
+			<div class="grey">
+				<div class="avatar"><img src="<%= @campaign.initiator.profile_photo.url(:large_thumb) %>" /></div>
+				<div class="user-info">
+					<a class="name" href="#"><%= @campaign.initiator.name %></a>
+					<p class="location">Staffordshire, UK</p>
+					<p>Managing <a href="#"><%= pluralize(@campaign.initiator.initiated_campaigns.count, 'Campaign') %></a></p>
+					<p>Supporting <a href="#"><%= pluralize(@campaign.initiator.campaigns.count, 'Campaign') %></a></p>
+				</div>
+			</div>
+		</div>
+	
+		<%- if @campaign.supporters.count > 0 %>
+		<div class="box">
+			<div>
+				<h5 class="left">Campaign Supporters</h5>
+				<a class="view-all right" href="#">View All</a>
+			</div>
+			<ul class="user-list grey">
+				<%- @campaign.supporters.each do |supporter| %>
+				<li>
+					<div class="avatar"><img src="<%= supporter.profile_photo.url(:large_thumb) %>" /></div>
+					<div class="user-info">
+						<a class="name" href="#"><%= supporter.name %></a>
+						<p class="location">Staffordshire, UK</p>
+					</div>
+				</li>
+				<%- end %>
+			</ul>
+		</div>
+		<%- end %>
+	</div>
+
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
+	</div>
 </div>

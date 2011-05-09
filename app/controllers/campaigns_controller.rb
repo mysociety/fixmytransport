@@ -41,6 +41,8 @@ class CampaignsController < ApplicationController
           render :join
         end
       end
+    else
+      @user = User.new
     end
   end
   

@@ -1,4 +1,4 @@
-<div class='campaign-event'>
+<li>
   <%- case event.event_type %>
   <%- when 'incoming_message_received' %>
     <%= render :partial => 'incoming_message', :locals => { :message => event.described, :event => event, :always_show_commentbox => always_show_commentbox } %>
@@ -13,4 +13,4 @@
   <%- when 'campaign_update_added' %>
     <%= render :partial => 'campaign_update', :locals => { :update => event.described, :always_show_commentbox => always_show_commentbox } %>
   <%- end %>
-</div>
+</li>

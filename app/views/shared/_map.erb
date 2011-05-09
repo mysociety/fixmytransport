@@ -1,5 +1,5 @@
 <%= render :partial => 'shared/location_map_js', :locals => { :locations => locations, :other_locations => other_locations, :link_type => link_type } %>
-<div id="map">
+<div id="map" class="box">
   <noscript>
     <div id="drag">
       <img class="static-map-element" alt="Map" src="<%= Map.google_tile_url(@lat, @lon, @zoom, height, width) %>" style="top:0px; left:0;" />
@@ -9,7 +9,7 @@
           <img style="width: 18px; height: 18px; position: relative;" src="http://openlayers.org/api/img/north-mini.png" />
         </a>
       </div>
-      
+
       <div id="pan_left" class="map-control static-map-element" style="left: 4px; top: 22px; width: 18px; height: 18px; position: absolute; ">
         <a rel="nofollow" href="<%= url_for(params.merge(:lon => Map.left(@lon, @zoom, width))) %>">
           <img style="width: 18px; height: 18px; position: relative;" src="http://openlayers.org/api/img/west-mini.png" />
@@ -33,23 +33,23 @@
           <img style="width: 18px; height: 18px; position: relative;" src="http://openlayers.org/api/img/zoom-plus-mini.png" />
         </a>
       </div>
-      
+
       <div id="zoom_world" class="map-control static-map-element" style="left: 13px; top: 81px; width: 18px; height: 18px; position: absolute;">
         <a rel="nofollow" href="<%= url_for(params.merge(:zoom => MIN_ZOOM_LEVEL)) %>">
           <img style="width: 18px; height: 18px; position: relative;" src="http://openlayers.org/api/img/zoom-world-mini.png" />
         </a>
       </div>
-      
+
       <div id="zoom_out" class="map-control static-map-element" style="left: 13px; top: 99px; width: 18px; height: 18px; position: absolute; ">
         <a rel="nofollow" href="<%= url_for(params.merge(:zoom => Map.zoom_out(@zoom))) %>">
           <img style="width: 18px; height: 18px; position: relative;" src="http://openlayers.org/api/img/zoom-minus-mini.png" />
         </a>
       </div>
-          
+
       <div id="markers">
         <%= render :partial => 'shared/location_marker', :collection => other_locations, :as => :location, :locals => {:small => true, :main => false, :link_type => link_type, :height => height, :width => width } %>
         <%= render :partial => 'shared/location_marker', :collection => locations, :as => :location, :locals => {:small => false, :main => true, :link_type => link_type, :height => height, :width => width } %>
       </div>
     </div>
-  </noscript>
+  </noscript> 
 </div>

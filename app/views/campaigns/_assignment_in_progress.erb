@@ -1,5 +1,5 @@
-<%-if assignment.task_type_name == 'find-transport-organization' %>
+<a href="#" class="thread-item"><span class="num">#</span><span class="title"><%-if assignment.task_type_name == 'find-transport-organization' %>
   <%= assignment.user.name %> found the company that runs <%= assignment.campaign.location.description %>. 
 <%-elsif assignment.task_type_name == 'find-transport-organization-contact-details' %>
   <%= assignment.user.name %> found an email address for <%= assignment.campaign.problem.operator.name %>
-<%- end %>
+<%- end %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(event.created_at)) %></span></a>
