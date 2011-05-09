@@ -20,7 +20,7 @@
 	<div class="leftcol">
 		<h5>Route</h5>
     <div id="medium-map">
-      <%= render :partial => 'shared/map', :locals => { :locations => [@route], :other_locations => @other_locations, :link_type => :location, :height => 490, :width => 590  } %>
+      <%= render :partial => 'shared/map', :locals => { :locations => [@route], :other_locations => @other_locations, :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH  } %>
  	  </div>
 
  		<a href="#">Is this information wrong?</a>
@@ -34,7 +34,7 @@
 
 		<ol id="large-ol">
 		  <%- @route.stops_or_stations.each_with_index do |stop_or_station, index| %>
-        <li><a href="<%= location_url(stop_or_station) %>"><span class="num"><%= index+1 %></span><%= stop_or_station.full_name %></a></li>
+        <li><a href="<%= location_url(stop_or_station) %>"><span class="num"><%= index+1 %></span><%= stop_or_station.name_with_long_indicator %></a></li>
       <%- end %>
 		</ol>
 			
@@ -47,35 +47,3 @@
 	</div>
 </div>
 
-<!-- <div class='route'>
-
-  
-  <h3 class='name'><%= MySociety::Format.ucfirst(@route.name) %></h3>
-  
-  <div class='details'>
-    <%- if ! @route.is_a?(TrainRoute) %>
-      <span class='locality'>
-        <%= "#{@route.area}." %>
-      </span>
-    <%- end %>
-    
-    <div class='operators'>
-     <%- if !@route.operators.empty?  %>
-        Operated by
-        <ul>
-          <%- @route.operators.each do |operator| %>
-            <li>
-              <%= raw link_to(operator.name, operator_path(operator))  %>
-            </li>
-          <%- end %>
-        </ul>
-      <%- end %>
-    </div>
-    
-    <div class='terminuses'>
-      <%= raw terminus_text(@route) %>
-    </div>
-  
-  </div>
-</div>
-<%= render :partial => 'shared/location_content', :locals => { :location => @route } %> -->
