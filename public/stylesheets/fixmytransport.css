@@ -756,7 +756,7 @@ ul.related-campaigns{margin: 0px; padding: 0px;}
    ================================================== */
 /* ===[ Campaign Page ]=== */
 
-.campaign-description, .campaign-initiator-actions, .expert-actions{
+.campaign-description, .campaign-initiator-actions, .expert-actions, .supporter-actions{
 	display: block;
 	float: left;
 	width: 550px;
