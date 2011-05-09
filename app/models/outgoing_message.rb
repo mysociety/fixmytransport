@@ -79,7 +79,7 @@ class OutgoingMessage < ActiveRecord::Base
     if recipient
       return recipient.name
     elsif incoming_message
-      return incoming_message.from
+      return incoming_message.safe_from
     elsif assignment 
       return assignment.data[:name]
     else
