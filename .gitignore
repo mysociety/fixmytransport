@@ -20,6 +20,7 @@ data/NPTDR/
 data/mail_conf
 cache/*
 public/index.html
+public/files/*
 moo.txt
 rdoc
 vendor/gems/libxml-ruby-1.1.4/lib/*.so
