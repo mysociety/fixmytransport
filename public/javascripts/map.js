@@ -185,7 +185,7 @@ function hoverStop(stop) {
   tooltipPopup.displayClass = 'tooltip-popup';
   tooltipPopup.backgroundColor='#FFFCCF';
   tooltipPopup.border='1px solid #CDCDC1';
-  tooltipPopup.div.style.fontSize='0.7em';  
+  tooltipPopup.div.style.fontSize='1em';  
   tooltipPopup.contentDiv.style.overflow='hidden';
   tooltipPopup.closeOnMove = true;
   tooltipPopup.autoSize = true;

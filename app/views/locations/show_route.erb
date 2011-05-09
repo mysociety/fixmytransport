@@ -9,7 +9,6 @@
           
           <h2 class="route-operator">operated by <%= operator_links(@route.operators) %></h2>
         <%- end %>
-			
 			<p><%= "#{@route.area}." %></p>
 		</div>
 		<div class="rightcol">
@@ -26,7 +25,7 @@
 
  		<a href="#">Is this information wrong?</a>
 		<a class="grey-button right" href="#">Larger Map</a>
-
+	  <%= render :partial => "shared/location_content",  :locals => { :location => @route } %>
 	</div>
 
 	<div class="rightcol">

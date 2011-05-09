@@ -2,48 +2,65 @@
   <%= raw map_javascript_include_tags %>
 <%- end %>
 
-<div id='map-col'>
-  <%= render :partial => 'shared/map', :locals => { :locations => @stop.points, :other_locations => @other_locations, :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH  } %>
-  <div class='extra-info'>
-    <div class='departures'><%= raw departures_link(@stop) %></div>
-    <%= render :partial => "shared/route_list", :locals => { :stop_or_station => @stop } %>
-  </div>
-</div>
-<div class='stop'>
-  <a href="<%=location_url(@stop, :format => 'atom') %>" class='rss-link campaign-rss'>
-    <span><%= t(:feed) %></span>
-    <img title='<%= t(:feed) %>' src='/images/feed.png' alt='<%= t(:campaigns_feed) %>'/>
-  </a>
-  <h3 class='name'><%= "#{@stop.full_name}"  %></h3>
 
-  <div class='details'>
-    <span class='locality'><%= "In #{@stop.locality_name}" %></span>
-    <%- if !@stop.landmark.blank? %>
-      <span class='landmark'>
-        <%= "near #{@stop.landmark}" %>
-      </span>
-    <%- end %>
-    <%- if !@stop.street.blank?  %>
-      <span class='street'>
-        <%= "on #{@stop.street}" %>
-      </span>
-    <%- end %>
-    <%- if @stop.status == 'del' %>
-      <div class='status'>
-        <%= "This stop has been marked as inactive." %>
-      </div>
-    <%- end %>
-  </div>
-  
-  <div class='stop-areas'>
-   <%- if !@stop.stop_areas.empty? %>
-      Part of
-      <%-@stop.stop_areas.each do |stop_area| %>
-        <span class='stop-area'>
-          <%= link_to("#{stop_area.name} stop area", stop_area_url(stop_area.locality, stop_area)) %>
+<div id="banner">
+	<div class="container">
+		<div class="leftcol-banner">
+			<h1><%= "#{@stop.full_name}" %></h1>
+
+			<p><span class='locality'><%= "In #{@stop.locality_name}" %></span>
+      <%- if !@stop.landmark.blank? %>
+        <span class='landmark'>
+          <%= "near #{@stop.landmark}" %>
         </span>
       <%- end %>
-    <%- end %>
-  </div>
+      <%- if !@stop.street.blank?  %>
+        <span class='street'>
+          <%= "on #{@stop.street}" %>
+        </span>
+      <%- end %>
+      <%- if @stop.status == 'del' %>
+        <div class='status'>
+          <%= "This stop has been marked as inactive." %>
+        </div>
+      <%- end %></p>
+			
+
+		</div>
+		<div class="rightcol">
+			<a class="report-big" href="#">Report a problem</a>							
+		</div>
+	</div>
 </div>
-<%= render :partial => 'shared/location_content', :locals => { :location => @stop } %>
+<div id="main-content" class="container">
+	<div class="leftcol">
+		<h5>Location</h5>
+		<div id="medium-map">
+      <%= render :partial => 'shared/map', :locals => { :locations => @stop.points, :other_locations => @other_locations, :link_type => :location, :height => 490, :width => 590  } %>
+ 	  </div>
+		<a class="grey-button right" href="#">Larger Map</a>
+
+	  <%= render :partial => "shared/location_content",  :locals => { :location => @stop } %>
+	</div>
+
+	<div class="rightcol">
+
+		<h5 class="left">Routes</h5>
+
+		<ol id="large-ol">
+		  <%- @stop.routes.each do |route| %>
+			<li><a href="<%= location_url(route)%>"><span class="num"> <%=route.name(from_stop=@stop, short=true) %></span>
+			<%- route.next_stops(@stop).each do |next_stop| %> 
+          <%= next_stop.name_without_suffix(route.transport_mode) %>
+      <%- end %>
+      </a></li>
+      <%- end %>
+		</ol>	
+	
+	</div>
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
+	</div>
+</div>
+
+

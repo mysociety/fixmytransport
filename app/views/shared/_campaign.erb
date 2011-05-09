@@ -1,24 +1,21 @@
-<a name='campaign_<%= campaign.id %>'></a>
-<div class='campaign'>
-  <h4 class='title'>
-    <%= link_to(campaign.title, campaign_url(campaign))  %>
-  </h4>
-  <div class='details'>
-    <%= t(:added) %>
-    <span class='posted-time'>
-      <%= t(:posted_time, :time => time_ago_in_words(campaign.created_at)) %>
-    </span>
-    <%- if context != :location %>
-      <span class='transport-location'>
-        <%= raw t(:campaign_location, :link => link_to(campaign.location.description, location_url(campaign.location))) %>
-      </span>
-    <%- end %>
-    <span class='author'>
-      <%= t(:by, :name => campaign.initiator.name) %>
-    </span>
-  </div>
-  <p class='campaign'>
-    <%= raw simple_format(sanitize(campaign.description)) %>
-  </p>
-  
-</div>
+<a href="#"><img src="http://dummyimage.com/90x90"></a>
+<dl>
+	<dt><h4><a href="<%= campaign_url(campaign) %>"><%= campaign.title %></a></h4></dt>
+	<%- if context != :location %>
+    <dt>Location:<dt>
+    <dd><%= raw link_to(campaign.location.description, location_url(campaign.location)) %></dd>
+  <%- end %>
+	<dd><%= raw simple_format(sanitize(campaign.description)) %></dd>				
+	<dt>Started:</dt>
+	<dd><%= campaign.created_at.to_s(:short)%></dd>
+
+	<dt>By:</dt>
+	<dd><a href="#"><%= campaign.initiator.name %></a></dd>
+	<dt>Followers:</dt>
+	<dd><%= campaign.supporters.count %></dd>
+	<span class="status stat-<%= campaign.status %>">									
+	<dt>Status:</dt>
+	<dd><%= campaign.status.to_s.titleize %></dd>
+	</span>
+</dl>
+

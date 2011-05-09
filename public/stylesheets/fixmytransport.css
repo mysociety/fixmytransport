@@ -770,6 +770,13 @@ ul.related-campaigns{margin: 0px; padding: 0px;}
 	font-size:2em;
 }
 
+#banner h1 {
+    color: #151F26;
+    font-size: 1.4em;
+    font-weight: bold;
+    line-height: 1.2em;
+}
+
 #banner h2.route-operator {
 	font-size:1.5em;
 }
