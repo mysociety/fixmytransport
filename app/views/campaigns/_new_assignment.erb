@@ -6,6 +6,7 @@
 <span class="date"><%= t(:ago, :time => time_ago_in_words(event.created_at)) %></span>
 </a>
 <div class="thread-details box">
-  <%= raw t(:message_from_expert, :expert => h(@assignment.creator.name), :campaign => link_to(h(@assignment.campaign.title), campaign_path(@assignment.campaign)), :user => h(@assignment.user.name)) %>
+  <div class="thumb"><img src="<%= assignment.creator.profile_photo.url(:large_thumb) %>" /></div>
+  <%= raw t(:message_from_expert, :expert => h(assignment.creator.name), :campaign => link_to(h(assignment.campaign.title), campaign_path(assignment.campaign)), :user => h(assignment.user.name)) %>
 </div>
 <%- end %>
