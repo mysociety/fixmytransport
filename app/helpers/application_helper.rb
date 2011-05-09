@@ -218,6 +218,11 @@ module ApplicationHelper
     names = problem.send(method).map{ |org| "#{wrapper_start}#{org.name}#{wrapper_end}" }
     names.to_sentence(:last_word_connector => " #{connector} ", :two_words_connector => " #{connector} ")
   end
+  
+  def operator_links(operators)
+    operator_links = operators.map{ |operator| link_to(operator.name, operator_path(operator)) }
+    operator_links.to_sentence(:last_word_connector => ' and ', :two_words_connector => ', ')
+  end
 
   def comment_url(comment)
     if comment.commented.is_a? Problem

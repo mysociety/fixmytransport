@@ -35,6 +35,20 @@
 }
 
 
+#medium-map {
+  width: 590px;
+  overflow: default;
+  padding: 5px 0;
+}
+
+#medium-map #map {
+  width: 590px;
+  height: 490px;
+  margin: auto;
+  border: none;
+}
+
+
 #small-map {
   width: 300px;
   overflow: default;
