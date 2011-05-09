@@ -7,6 +7,6 @@
 </a>
 <div class="thread-details box">
   <div class="thumb"><img src="<%= assignment.creator.profile_photo.url(:large_thumb) %>" /></div>
-  <%= t(:subject) %>
+  <%= raw simple_format(h(assignment.data[:reason])) %>
 </div>
 <%- end %>
