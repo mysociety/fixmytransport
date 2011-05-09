@@ -152,7 +152,7 @@
 			<ul class="user-list grey">
 				<%- @campaign.supporters.each do |supporter| %>
 				<li>
-					<div class="avatar"><img src="<%= supporter.profile_photo.url(:large_thumb) %>" /></div>
+					<div class="avatar"><img src="<%= supporter.profile_photo.url(:small_thumb) %>" /></div>
 					<div class="user-info">
 						<a class="name" href="#"><%= supporter.name %></a>
 						<p class="location">Staffordshire, UK</p>
