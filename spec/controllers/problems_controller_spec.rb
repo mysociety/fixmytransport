@@ -673,8 +673,7 @@ describe ProblemsController do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'])
       mock_problem = mock_model(Problem, :location => mock_stop,
                                          :responsible_organizations => [mock_pte])
-      expected = ["Your problem will be sent by email to <strong>test PTE</strong>.",
-                  "It will also be displayed on the site, with your name."].join(' ')
+      expected = ["Send a message to <strong>test PTE</strong>. Your message will be public."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -686,10 +685,10 @@ describe ProblemsController do
       mock_problem = mock_model(Problem, :location => mock_stop, 
                                          :responsible_organizations => [mock_council_one, mock_council_two],
                                          :operators_responsible? => false)
-      expected = ["We do not yet have contact details for <strong>Test Council One</strong>",
-                  "or <strong>Test Council Two</strong>.  If you submit a problem here",
-                  "it will be displayed on the site, with your name, but it will",
-                  "<strong>not</strong> be sent to them until you find an email address for them."].join(' ')
+      expected = ["We do not yet have contact details for <strong>Test Council",
+                  "One</strong> or <strong>Test Council Two</strong>. Your message",
+                  "will be public, but it will <strong>not</strong> be sent to them until you find an",
+                  "email address for them."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -700,9 +699,8 @@ describe ProblemsController do
                                          :responsible_organizations => [mock_council])
       
       expected = ["We do not yet have contact details for <strong>Test Council</strong>.",
-                  "If you submit a problem here it will be displayed on the site, with your name,",
-                  "but it will <strong>not</strong> be sent to Test",
-                  "Council until you find an email address for them."].join(' ')
+                  "Your message will be public, but it will <strong>not</strong> be sent",
+                  "to Test Council until you find an email address for them."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -711,8 +709,7 @@ describe ProblemsController do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'])
       mock_problem = mock_model(Problem, :location => mock_stop, 
                                          :responsible_organizations => [mock_council])
-      expected = ["Your problem will be sent by email to <strong>Test Council</strong>.",
-                  "It will also be displayed on the site, with your name."].join(' ')
+      expected = ["Send a message to <strong>Test Council</strong>. Your message will be public."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -723,9 +720,8 @@ describe ProblemsController do
       mock_problem = mock_model(Problem, :location => mock_stop, 
                                          :responsible_organizations => [mock_council_one, mock_council_two],
                                          :operators_responsible? => false)
-      expected = ["Your problem will be sent by email to <strong>Test Council One</strong>",
-                  "or <strong>Test Council Two</strong>.",
-                  "It will also be displayed on the site, with your name."].join(' ')
+      expected = ["Send a message to <strong>Test Council One</strong> or <strong>Test Council",
+                  "Two</strong>. Your message will be public."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -739,8 +735,8 @@ describe ProblemsController do
                                          :unemailable_organizations => [mock_council_one],
                                          :operators_responsible? => false, 
                                          :councils_responsible? => true)
-      expected = ["Your problem will be sent by email to <strong>Test Council One</strong> or <strong>Test Council",
-                  "Two</strong>. It will also be displayed on the site, with your name."].join(' ')
+      expected = ["Send a message to <strong>Test Council One</strong> or <strong>Test",
+                  "Council Two</strong>. Your message will be public."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -748,9 +744,9 @@ describe ProblemsController do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'])
       mock_problem = mock_model(Problem, :location => mock_stop, 
                                          :responsible_organizations => [])
-      expected = ["We do not yet know who is responsible for this stop. If you submit a problem",
-                  "it will be displayed on the site, with your name, but will not be sent to the", 
-                  "responsible organization until you find out who that is."].join(' ')
+      expected = ["We do not yet know who is responsible for this stop. Your message",
+                  "will be public, but will not be sent to the responsible organization",
+                  "until you find out who that is."].join(' ')
       expect_advice(mock_problem, expected)
     end
 
@@ -758,9 +754,9 @@ describe ProblemsController do
       mock_sub_route = mock_model(SubRoute, :transport_mode_names => ['Train'])
       mock_problem = mock_model(Problem, :location => mock_sub_route, 
                                          :responsible_organizations => [])
-      expected = ["We do not yet know who is responsible for this route. If you submit a problem",
-                 "it will be displayed on the site, with your name, but will not be sent to the", 
-                 "responsible organization until you find out who that is."].join(' ')
+      expected = ["We do not yet know who is responsible for this route. Your message will",
+                  "be public, but will not be sent to the responsible organization until you",
+                  "find out who that is."].join(' ')
       expect_advice(mock_problem, expected)
     end
         
@@ -768,9 +764,9 @@ describe ProblemsController do
       mock_route = mock_model(Route, :transport_mode_names => ['Bus'])
       mock_problem = mock_model(Problem, :location => mock_route, 
                                          :responsible_organizations => [])
-      expected = ["We do not yet know who is responsible for this route. If you submit a problem",
-                "it will be displayed on the site, with your name, but will not be sent to the", 
-                "responsible organization until you find out who that is."].join(' ')
+      expected = ["We do not yet know who is responsible for this route. Your message will",
+                  "be public, but will not be sent to the responsible organization until you",
+                  "find out who that is."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -784,9 +780,8 @@ describe ProblemsController do
                                          :unemailable_organizations => [mock_operator_two],
                                          :operators_responsible? => true)
     
-    expected = ["More than one company operates this route.",
-                "Your problem <strong>will be sent to the operator</strong> you select below.",
-                "It will also be displayed on the site, with your name."].join(' ')
+    expected = ["More than one company operates this route. Your problem <strong>will be sent",
+                "to the operator</strong> you select below. Your message will be public."].join(' ')
     expect_advice(mock_problem, expected)
     end
     
@@ -800,11 +795,10 @@ describe ProblemsController do
                                          :unemailable_organizations => [mock_operator_two],
                                          :operators_responsible? => true)
       
-      expected = ["We do not yet have all the contact details for this route. If you submit a problem",
-                  "here relating to <strong>Test Operator Two</strong>, it will be displayed on the site,",
-                  "with your name, but it will <strong>not</strong> be sent to them until you find an",
-                  "email address for them. If your problem relates to <strong>Test",
-                  "Operator One</strong>, it will be sent straight away."].join(' ')
+      expected = ["We do not yet have all the contact details for this route. If your message is for",
+                  "<strong>Test Operator Two</strong>, it will be public, but it will <strong>not</strong>",
+                  "be sent to them until you find an email address for them. If your problem relates to",
+                  "<strong>Test Operator One</strong>, it will be sent straight away."].join(' ')
       expect_advice(mock_problem, expected)
     end
         
@@ -812,9 +806,9 @@ describe ProblemsController do
       mock_station = mock_model(Stop, :transport_mode_names => ['Train'])
       mock_problem = mock_model(Problem, :location => mock_station, 
                                          :responsible_organizations => [])
-      expected = ["We do not yet know who is responsible for this station. If you submit a problem",
-               "it will be displayed on the site, with your name, but will not be sent to the", 
-               "responsible organization until you find out who that is."].join(' ')
+      expected = ["We do not yet know who is responsible for this station. Your message will be",
+                  "public, but will not be sent to the responsible organization until you find",
+                  "out who that is."].join(' ')
       expect_advice(mock_problem, expected)
     end
     

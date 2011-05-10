@@ -7,7 +7,7 @@ en:
             category: 
               blank: "Please select a category for your problem"
             subject:
-              blank: "Please give your problem a subject"
+              blank: "Please give your message a subject"
             description:
               blank: "Please give a brief description of your problem"
             transport_mode_id:

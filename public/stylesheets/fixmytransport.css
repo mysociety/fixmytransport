@@ -649,7 +649,7 @@ ul.user-list {
     display: block;
     margin: 10px 10px 0 0;
     float: left;
-    width: 100px;
+    width: 120px;
     text-align: right;
     text-transform: uppercase;
 }
@@ -1015,7 +1015,7 @@ ul#process {
 
 		/*Next and back buttons for process page*/
 
-		.process-back, .process-next{
+		.process-back, .process-next, .problem-next{
 			height: 28px;
 			border: 0px;
 			text-transform: uppercase;
@@ -1034,12 +1034,18 @@ ul#process {
 				float: left;
 			}
 
-		.process-next{
+		.process-next {
 			background:transparent url(../images/process-next.gif) right top no-repeat;			
 			padding-right: 30px;
 			float: right;
 		}
-			.process-next:hover{
+		
+		.problem-next {
+			background:transparent url(../images/process-next.gif) right top no-repeat;			
+			padding-right: 30px;
+			margin-bottom: 10px;
+		}
+			.process-next:hover, .problem-next:hover {
 				background-position: right bottom;
 				color:#000;
 			}

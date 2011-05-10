@@ -160,6 +160,6 @@ $(document).ready(function(){
 	$('.formitem input, .formitem textarea').focus(function(){
 		var parent = $(this).parent();	
 		$('.tipbox').not('.fixed').css({'right':'-999999em'});
-		$('.tipbox', parent).not('.fixed').css({'right':'0', 'opacity':'0'}).animate({'opacity':'1'}, {duration: 500, queue: false});
+		$('.tipbox', parent).not('.fixed').css({'right':'-450px', 'opacity':'0'}).animate({'opacity':'1'}, {duration: 500, queue: false});
 	});
 });
