@@ -1034,17 +1034,12 @@ ul#process {
 				float: left;
 			}
 
-		.process-next {
+		.process-next, .problem-next {
 			background:transparent url(../images/process-next.gif) right top no-repeat;			
 			padding-right: 30px;
 			float: right;
 		}
-		
-		.problem-next {
-			background:transparent url(../images/process-next.gif) right top no-repeat;			
-			padding-right: 30px;
-			margin-bottom: 10px;
-		}
+
 			.process-next:hover, .problem-next:hover {
 				background-position: right bottom;
 				color:#000;

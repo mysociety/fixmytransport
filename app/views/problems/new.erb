@@ -21,7 +21,7 @@
         
          <%- if @problem.location.operators.size > 1 %>
            <%- if @problem.errors.on('operator_id') %>
-            <div class='form-field-error'>
+            <div class='error'>
               <%= error_message_on @problem, :operator_id %>
             </div>
            <%- end %>
@@ -43,7 +43,7 @@
       
       <li>
 			  <%- if @problem.errors.on('reporter_name') %>
-          <div class='form-field-error'>
+          <div class='error'>
             <%= error_message_on @problem, 'reporter_name' %>
           </div>
         <%- end %>
@@ -65,7 +65,7 @@
         <%- else %>
       			<li>
       			  <%- if @problem.reporter.errors.on('email') %>
-                <div class='form-field-error'>
+                <div class='error'>
                   <%= error_message_on @problem.reporter, 'email' %>
                 </div>
               <%- end %>
@@ -84,7 +84,7 @@
 
 			<li>
 			  <%- if @problem.errors.on('subject') %>
-          <div class='form-field-error'>
+          <div class='error'>
             <%= error_message_on @problem, 'subject' %>
           </div>
         <%- end %>
@@ -101,7 +101,7 @@
 			<%- if @problem.categories.size > 1 %>
         <li>
           <%- if @problem.errors.on('category') %>
-            <div class='form-field-error'>
+            <div class='error'>
               <%= error_message_on @problem, :category %>
             </div>
           <%- end %>
@@ -115,7 +115,7 @@
       
 			<li>
 			  <%- if @problem.errors.on('description') %>
-          <div class='form-field-error'>
+          <div class='error'>
             <%= error_message_on @problem, 'description' %>
           </div>
         <%- end %>
@@ -128,9 +128,11 @@
 					<p>Your message will be sent directly to Centro. Try to be descriptive, but concise. <a href="#">See an example</a>.</p>
 				</div>
 			</li>
-  		<button type="submit" class="problem-next" value="clicked">
-        Next
-      </button>
+			<li>
+  		  <button type="submit" class="problem-next" value="clicked">
+          Next
+        </button>
+		  </li>
 		</ul>
 
 		<%- end %>
