@@ -145,18 +145,18 @@
 			</div>
 		</div>
 	
-		<%- if @campaign.supporters.count > 0 %>
+		<%- if @campaign.supporters.registered.count > 0 %>
 		<div class="box">
 			<div>
 				<h5 class="left">Campaign Supporters</h5>
 				<a class="view-all right" href="#">View All</a>
 			</div>
 			<ul class="user-list grey">
-				<%- @campaign.supporters.each do |supporter| %>
+				<%- @campaign.supporters.registered.each do |supporter| %>
 				<li>
 					<div class="avatar"><img src="<%= supporter.profile_photo.url(:small_thumb) %>" /></div>
 					<div class="user-info">
-						<a class="name" href="<%= profile_url(@supporter) %>"><%= supporter.name %></a>
+						<a class="name" href="<%= profile_url(supporter) %>"><%= supporter.name %></a>
 						<p class="location"><%= supporter.location %></p>
 					</div>
 				</li>

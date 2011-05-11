@@ -34,6 +34,8 @@ class User < ActiveRecord::Base
   attr_accessor :ignore_blank_passwords
   has_friendly_id :name, :use_slug => true, :allow_nil => true
   
+  named_scope :registered, :conditions => { :registered => true }
+  
   acts_as_authentic do |c|
     # we validate the email with activerecord validation above
     c.validate_email_field = false
