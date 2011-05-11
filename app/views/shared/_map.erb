@@ -1,3 +1,6 @@
+<%- if defined?(static) == nil %>
+<%- static = false %>
+<%- end %>
 <%- unless static %>
 <%= render :partial => 'shared/location_map_js', :locals => { :locations => locations, :other_locations => other_locations, :link_type => link_type } %>
 <%- end %>
