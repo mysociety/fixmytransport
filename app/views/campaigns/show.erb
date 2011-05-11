@@ -1,7 +1,7 @@
 <div id="banner">
 	<div class="container">
 		<div class="leftcol-banner">
-			<h2><%= @campaign.title %></h2>
+			<h2>"<%= @campaign.title %>" - <%= @campaign.initiator.name %></h2>
 			<%- if @campaign.problem.location.is_a?(SubRoute) %>
 			  <span class='transport-location'>
 			    <%= raw t(:campaign_location, :link => @campaign.problem.location.description) %>
@@ -80,6 +80,7 @@
      </div>
    <%- end %>
 
+    <%- if @campaign.campaign_photos.count > 0 %>
 		<div class="box">
 			<h5>Images and Media</h5>
 			<ul class="gallery grey">
@@ -89,6 +90,7 @@
 				<li><a href="#"><img src="http://dummyimage.com/130x130" /></a></li>
 			</ul>
 		</div>
+		<%- end %>
 
 		<div class="box">
 			<a class="comment-button right" href="#">Comment</a>
