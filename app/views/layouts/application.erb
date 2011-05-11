@@ -51,7 +51,7 @@
 
 			<%- [:notice, :error].each do |key| %>
           <%- unless flash[key].blank? %>
-				    <p class="<%= "flash #{key}" %>">
+				    <p class="<%= "flash #{key} container" %>">
 					  <%= raw flash[key] %>
 				    </p>
           <%- end %>

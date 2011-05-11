@@ -175,7 +175,11 @@ class Route < ActiveRecord::Base
     final_segments = route_segments.select do |route_segment| 
       outgoing_journey_patterns.include?(route_segment.journey_pattern_id) && route_segment.to_terminus? 
     end
-    final_segments.map{ |route_segment| route_segment.to_stop }
+    final_stops = final_segments.map{ |route_segment| route_segment.to_stop }
+    if final_stops.empty? 
+      final_stops = [current]
+    end
+    final_stops
   end
   
   def terminuses
