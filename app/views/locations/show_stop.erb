@@ -38,7 +38,6 @@
 		<div id="medium-map">
       <%= render :partial => 'shared/map', :locals => { :locations => @stop.points, :other_locations => @other_locations, :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH  } %>
  	  </div>
-		<a class="grey-button right" href="#">Larger Map</a>
 
 	  <%= render :partial => "shared/location_content",  :locals => { :location => @stop } %>
 	</div>
@@ -48,7 +47,7 @@
 		<ol id="large-ol">
 		  <%- @stop.routes.each do |route| %>
 			<li><a href="<%= location_url(route)%>"><span class="num"> <%=route.name(from_stop=@stop, short=true) %></span>
-			<%- route.next_stops(@stop).each do |next_stop| %> 
+			<%- route.final_stops(@stop).each do |next_stop| %> 
           <%= next_stop.name_without_suffix(route.transport_mode) %>
       <%- end %>
       </a></li>

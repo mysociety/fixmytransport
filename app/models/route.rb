@@ -168,31 +168,16 @@ class Route < ActiveRecord::Base
   def stops
     journey_patterns.map{ |jp| jp.route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }}.flatten.uniq
   end
-
-  def next_stops(current)
-    if current.is_a? StopArea
-      outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_area_id == current.id }
-    else
-      outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == current.id }
+  
+  def final_stops(current)
+    outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == current.id }
+    outgoing_journey_patterns = outgoing_segments.map{ |route_segment| route_segment.journey_pattern_id }
+    final_segments = route_segments.select do |route_segment| 
+      outgoing_journey_patterns.include?(route_segment.journey_pattern_id) && route_segment.to_terminus? 
     end
-    next_stops = outgoing_segments.map do |route_segment|
-      route_segment.to_stop_area ? route_segment.to_stop_area : route_segment.to_stop
-    end
-    next_stops.uniq
+    final_segments.map{ |route_segment| route_segment.to_stop }
   end
-
-  def previous_stops(current)
-    if current.is_a? StopArea
-      incoming_segments = route_segments.select{ |route_segment| route_segment.to_stop_area_id == current.id }
-    else
-      incoming_segments = route_segments.select{ |route_segment| route_segment.to_stop_id == current.id }
-    end
-    previous_stops = incoming_segments.map do |route_segment|
-      route_segment.from_stop_area ? route_segment.from_stop_area : route_segment.from_stop
-    end
-    previous_stops.uniq - next_stops(current)
-  end
-
+  
   def terminuses
     segments = journey_patterns.map{ |journey_pattern| journey_pattern.route_segments }.flatten
     from_terminuses = segments.select{ |route_segment| route_segment.from_terminus? }
