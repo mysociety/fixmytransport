@@ -1,0 +1,40 @@
+<div id="banner">
+  <div class="container">
+    <img src="<%= @user.profile_photo.url(:large_thumb) %>" class="avatar" />
+    <h2><%= @user.name %></h2>
+    <%- if @user.location %>
+      <%= @user.location %>
+    <%- end %>
+  </div>
+</div>
+
+<div id="main-content" class="container">
+<div class="leftcol">
+  
+  
+  <%- if @user.initiated_campaigns.count > 0 %>
+  <a name="managing"></a>
+  <h3>Managing</h3>
+  <ul class="related-campaigns">
+  	<%- @user.initiated_campaigns.visible.each do |campaign| %>
+  	<li>
+       <%= render :partial => 'shared/campaign', :locals => { :context => :location, :campaign => campaign } %>
+  	</li>
+    <%- end %>
+  </ul>
+  <%- end %>
+  
+  <%- if @user.campaigns.count > 0 %>
+  <a name="supporting"></a>
+  <h3>Supporting</h3>
+  <ul class="related-campaigns">
+  	<%- @user.campaigns.visible.each do |campaign| %>
+  	<li>
+       <%= render :partial => 'shared/campaign', :locals => { :context => :location, :campaign => campaign } %>
+  	</li>
+    <%- end %>
+  </ul>
+  <%- end %>
+  
+  </div>
+</div>

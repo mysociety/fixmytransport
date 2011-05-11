@@ -94,6 +94,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :account, :except => [:index, :destroy]
   map.confirm_account '/a/:email_token', :action => 'confirm', :controller => 'accounts'
   
+  # user profiles
+  map.resources :profiles, :only => [:show]
+  
   # static
   map.about '/about', :controller => 'static', :action => 'about'
   map.feedback '/feedback', :controller => 'static', 

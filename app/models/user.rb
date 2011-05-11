@@ -32,8 +32,8 @@ class User < ActiveRecord::Base
                                  :medium_thumb => "46x46#" }
 
   attr_accessor :ignore_blank_passwords
-
-
+  has_friendly_id :name, :use_slug => true, :allow_nil => true
+  
   acts_as_authentic do |c|
     # we validate the email with activerecord validation above
     c.validate_email_field = false

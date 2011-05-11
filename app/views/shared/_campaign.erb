@@ -10,7 +10,7 @@
 	<dd><%= campaign.created_at.to_s(:short)%></dd>
 
 	<dt>By:</dt>
-	<dd><a href="#"><%= campaign.initiator.name %></a></dd>
+	<dd><a href="<%= profile_url(campaign.initiator) %>"><%= campaign.initiator.name %></a></dd>
 	<dt>Followers:</dt>
 	<dd><%= campaign.supporters.count %></dd>
 	<span class="status stat-<%= campaign.status %>">									
