@@ -26,6 +26,7 @@
 	<li>
 		<button>Sign In</button>
 		<label for="user_session_remember_me">Keep me signed in</label><input type="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1">    
+		<input type=hidden name="redirect" value="<%= request.request_uri %>">
 		<p>Don't have an account? <a href="<%= new_account_url %>" id="create-account">Create one</a>.</p>
 	</li>
 </ul>
