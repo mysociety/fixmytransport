@@ -191,7 +191,7 @@ class ApplicationController < ActionController::Base
       @lat = lats.inject(0){ |sum, lat| sum + lat } / lats.size
     end
     unless @zoom
-      @zoom = Map::zoom_to_coords(lons.min, lons.max, lats.min, lats.max, width)
+      @zoom = Map::zoom_to_coords(lons.min, lons.max, lats.min, lats.max, height, width)
     end
     if find_other_locations
       @other_locations = Map.other_locations(@lat, @lon, @zoom, height, width)

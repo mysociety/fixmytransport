@@ -19,15 +19,15 @@ describe Map do
   end
   
   it 'should give the correct zoom level for some example coords' do
-    Map.zoom_to_coords(-0.0914398192630478, -0.0888722778623277, 51.5057200938463, 51.5010403096676, MAP_WIDTH).should == 16
+    Map.zoom_to_coords(-0.0914398192630478, -0.0888722778623277, 51.5057200938463, 51.5010403096676, MAP_HEIGHT, MAP_WIDTH).should == 16
   end
   
   it 'should give the correct zoom level for some example coords very close to each other' do
-    Map.zoom_to_coords(-1.55394, -1.55371, 52.51866, 52.51869, MAP_WIDTH).should == 16
+    Map.zoom_to_coords(-1.55394, -1.55371, 52.51866, 52.51869, MAP_HEIGHT, MAP_WIDTH).should == 16
   end
   
   it 'should give the max visible zoom level if the real zoom level for the coords is higher than the max visible level' do
-    Map.zoom_to_coords(-0.09144, -0.09028, 51.50104, 51.50098, MAP_WIDTH).should == MAX_VISIBLE_ZOOM
+    Map.zoom_to_coords(-0.09144, -0.09028, 51.50104, 51.50098, MAP_HEIGHT, MAP_WIDTH).should == MAX_VISIBLE_ZOOM
   end
   
   
