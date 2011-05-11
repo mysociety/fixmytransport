@@ -7,10 +7,16 @@
 <a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(:wrote_a_message, :sender => h(message.author.name), :recipient => h(message.recipient_name), :assignment_text => assignment_text) %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(event.created_at)) %></span></a>
  
 <div class="thread-details box">
+  <div class="thumb"><img src="<%= message.author.profile_photo.url(:large_thumb) %>" /></div>
+	<div>
   <%= raw simple_format(h(message.body)) %>
+  </div>
+	<ul class='campaign-comments'>
 	<%- message.campaign_updates.each do |update| %>
-    <%= render :partial => 'campaign_update', :locals => { :update => update, :always_show_commentbox => always_show_commentbox, :index => index } %>
+    <%= render :partial => 'update_comment', :locals => { :comment => update } %>
   <%- end %>
+  </ul>
+
 </div>  
 
 

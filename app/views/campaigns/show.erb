@@ -104,7 +104,7 @@
 		</div>
 		<ul id="campaign-thread">
 		<%- @campaign.campaign_events.visible.each_with_index do |campaign_event, index| %>
-			<%= render :partial => 'campaign_event', :locals => { :always_show_commentbox => false, :event => campaign_event, :index =>  @campaign.campaign_events.visible.count - index } %>
+			<%= render :partial => 'campaign_event', :locals => { :always_show_commentbox => false, :event => campaign_event, :index => index+1 } %>
 		<%- end %>
 		</ul>
 		

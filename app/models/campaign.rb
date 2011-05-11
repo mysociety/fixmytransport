@@ -9,7 +9,7 @@ class Campaign < ActiveRecord::Base
   has_many :incoming_messages
   has_many :outgoing_messages
   has_many :campaign_updates
-  has_many :campaign_events, :order => 'created_at desc'
+  has_many :campaign_events, :order => 'created_at asc'
   has_many :campaign_photos
   validates_presence_of :title, :description, :on => :update
   validates_presence_of :subdomain, :on => :update

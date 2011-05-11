@@ -1,5 +1,9 @@
 <a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= "#{assignment.user_name} wrote to #{assignment.data[:organizations].map{ |organization| organization[:name] }.to_sentence}" %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(event.created_at)) %></span></a>
 <div class="thread-details box">
 	<div class="thumb"><img src="<%= assignment.user.profile_photo.url(:large_thumb) %>" /></div>
-	<p>Here is the letter that <%= "#{assignment.user_name}" %> wrote.</p>
+	<div>
+	  <p>Here is the letter that <%= assignment.user_name %> wrote.</p>
+	  <p><strong><%= assignment.problem.subject %></strong></p>
+	  <%= raw simple_format(sanitize(assignment.problem.description)) %>
+  </div>
 </div>
