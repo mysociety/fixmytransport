@@ -164,3 +164,15 @@ $(document).ready(function(){
 		$('.tipbox', parent).not('.fixed').css({'right':'-450px', 'opacity':'0'}).animate({'opacity':'1'}, {duration: 500, queue: false});
 	});
 });
+
+  /* Campaign Supporter 'View all' link 
+     ================================================== */
+  $('#campaign-supporters .view-all').click(function(event){
+    event.preventDefault();
+    $.ajax({
+      url: $(this).attr('url'),
+      success: function(data) {
+        $('#campaign-supporters').html(data);
+      }
+    });
+  });

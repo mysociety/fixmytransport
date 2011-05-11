@@ -4,7 +4,7 @@ class CampaignsController < ApplicationController
   before_filter :find_editable_campaign, :only => [:edit, :update]
   before_filter :find_visible_campaign, :only => [:show, :join, 
                                                   :leave, :add_update, 
-                                                  :request_advice, :add_comment]
+                                                  :request_advice, :add_comment, :get_supporters]
   before_filter :require_campaign_initiator_or_token, :only => [:edit, :update]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice]
   before_filter :find_update, :only => [:add_comment]
@@ -105,6 +105,10 @@ class CampaignsController < ApplicationController
       @campaign_update = CampaignUpdate.new(:campaign => @campaign, 
                                             :user => current_user)
     end
+  end
+  
+  def get_supporters
+    render :partial => "supporters", :locals => {:show_all => true}, :layout => false
   end
   
   def update

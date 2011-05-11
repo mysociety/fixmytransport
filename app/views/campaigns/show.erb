@@ -156,23 +156,7 @@
 		</div>
 	
 		<%- if @campaign.supporters.registered.count > 0 %>
-		<div class="box">
-			<div>
-				<h5 class="left">Campaign Supporters</h5>
-				<a class="view-all right" href="#">View All</a>
-			</div>
-			<ul class="user-list grey">
-				<%- @campaign.supporters.registered.each do |supporter| %>
-				<li>
-					<div class="avatar"><img src="<%= supporter.profile_photo.url(:small_thumb) %>" /></div>
-					<div class="user-info">
-						<a class="name" href="<%= profile_url(supporter) %>"><%= supporter.name %></a>
-						<p class="location"><%= supporter.location %></p>
-					</div>
-				</li>
-				<%- end %>
-			</ul>
-		</div>
+		  <%= render :partial => "supporters", :locals => {:show_all => (params[:all_supporters] == '1') }%>
 		<%- end %>
 	</div>
 
