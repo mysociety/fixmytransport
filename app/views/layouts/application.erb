@@ -35,51 +35,13 @@
 			
 				<a id="logo" href="<%= root_url %>">Fix My Transport</a>
 				<%- if current_user %>  
-          		<p id="member-info">Hi <a href="<%= account_path %>"><%= current_user.name %></a>. <a href="<%= logout_path %>">Logout</a></p>
-		  		<%- else %>
+          <p id="member-info">Hi <a href="<%= account_path %>"><%= current_user.name %></a>. <a href="<%= logout_path %>">Logout</a></p>
+		  	<%- else %>
 		  		<p id="member-info">Hi Guest. <a class="auth" href="<%= login_path %>">Sign in</a></p>
-		  		<%- end %>
-		  		
-				<div id="login-box" class="login-box">
-					<div id="login-landing" class="pane">
-						<form id="login-form">
-						<ul>
-							<li class="login-username">
-								<label for="username">Email/Username</label>
-								<input name="username" type="text" />
-							</li>
-							<li class="login-password">
-								<label for="password">Password</label>
-								<input name="password" type="password" />
-								<a href="#">Forgot?</a>
-							</li>
-							<li>
-								<button>Sign In</button>
-								<label>Keep me signed in</label><input type="checkbox">
-								<p>Don't have an account? <a href="#" id="create-account">Create one</a>.</p>
-							</li>
-						</ul>
-						</form>
-						<div class="login-options">
-							<p>Or use an existing account</p>
-							<a href="#" id="facebook" class="facebook">Facebook Connect</a>							
-							<a href="#" id="twitter" class="twitter">Twitter Connect</a>
-						</div>
-					</div>
-					
-					<div id="login-twitter" class="pane">
-						<h2>TWITTER</h2>
-					</div>
-					
-					<div id="login-facebook" class="pane">
-						<h2>FACEBOOK</h2>
-					</div>
-					
-					<div id="login-create-account" class="pane">
-						<h2>CREATE ACCOUNT</h2>
-					</div>
-				</div>
-			</div>
+		  	<%- end %>
+		  </div>		
+
+      <%= render :partial => "shared/login" %>
 
 			<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
         	<div class="staging-banner notice container">

@@ -54,6 +54,7 @@ $(document).ready(function(){
 	//login click
 	$(".auth").click(function() {
     $('#login-landing').show();
+    $('.login-box .pane').not('#login-landing').hide();
 		$("#login-box").dialog("open");
 		return false;
 	});

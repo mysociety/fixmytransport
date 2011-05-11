@@ -14,7 +14,15 @@
 			
 		</div>
 		<div class="rightcol">
-			<a class="support-big" href="<%= join_campaign_path(@campaign) %>">Support</a>
+		  
+      <%- if current_user %>
+        <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST',  } do |f| %>
+          <%= raw hidden_field_tag "user_id", current_user.id %>
+          <%= raw submit_tag "Support", :class => 'support-big' %>
+        <%- end %>
+      <%- else %>
+        <a class="support-big" href="<%= join_campaign_path(@campaign) %>">Support</a>
+      <%- end %>
 		</div>
 	</div>
 </div>
@@ -119,7 +127,7 @@
 	<div class="rightcol">
 		<ul class="campaign-meta">
 			<li>started <span><%= @campaign.created_at.strftime("%e %B %Y") %></span></li>
-			<li>supporters <a href="#" class="supporter"><%=  @campaign.supporter_count %></a></li>														
+			<li>supporters <%=  @campaign.supporter_count %></li>														
 		</ul>
 		
 		<%- if @campaign.location %>
