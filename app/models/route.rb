@@ -179,7 +179,7 @@ class Route < ActiveRecord::Base
     if final_stops.empty? 
       final_stops = [current]
     end
-    final_stops
+    final_stops.uniq
   end
   
   def terminuses
