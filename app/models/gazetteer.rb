@@ -153,10 +153,12 @@ class Gazetteer
     from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => station_types)
     to_stops = Gazetteer.find_stations_from_name(to.strip, to_exact, :types => station_types)
 
-    if from_stops.size > 1
+    # if there are multiple stations with the exact same name, don't ask the user to select one
+    # just pass them all to find_all_by_locations, and see which one has the route 
+    if from_stops.size > 1 && from_stops.map{ |stop| stop.name }.uniq.size > 1
       errors << :ambiguous_from_stop
     end
-    if to_stops.size > 1
+    if to_stops.size > 1 && to_stops.map{ |stop| stop.name }.uniq.size > 1
       errors << :ambiguous_to_stop
     end
     if from_stops.size == 0
@@ -183,10 +185,12 @@ class Gazetteer
     from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => ['GRLS'])
     to_stops = Gazetteer.find_stations_from_name(to.strip, to_exact, :types => ['GRLS'])
     
-    if from_stops.size > 1
+    # if there are multiple stations with the exact same name, don't ask the user to select one
+    # just pass them all to find_all_by_locations, and see which one has the route 
+    if from_stops.size > 1 && from_stops.map{ |stop| stop.name }.uniq.size > 1
       errors << :ambiguous_from_stop
     end
-    if to_stops.size > 1
+    if to_stops.size > 1 && to_stops.map{ |stop| stop.name }.uniq.size > 1
       errors << :ambiguous_to_stop
     end
     if from_stops.size == 0
