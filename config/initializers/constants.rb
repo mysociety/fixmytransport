@@ -4,4 +4,4 @@
 MAX_LOCATION_RESULTS = 10
 
 # how many supporters to display initially
-SUPPORTER_MAX = 1
+SUPPORTER_MAX = 4
