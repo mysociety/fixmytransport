@@ -1,1 +1,0 @@
-SUPPORTER_MAX = 1
