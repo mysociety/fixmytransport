@@ -1,12 +1,12 @@
 <h2 class='main-header'><%= t(:create_an_account) %></h2>
 
-<%- form_for((@user ||= User.new), :url => account_path, :html => { :class => 'create_account' }) do |f| %>
+<%- form_for((@account_user ||= User.new), :url => account_path, :html => { :class => 'create_account' }) do |f| %>
   <div class='fieldset'>
     
     <div class='form-field'>
-      <%- if @user.errors.on('name') %>
+      <%- if @account_user.errors.on('name') %>
         <div class='form-field-error'>
-          <%= error_message_on @user, :name %>
+          <%= error_message_on @account_user, :name %>
         </div>
       <%- end %>
       <%= f.label :name %>
@@ -14,9 +14,9 @@
     </div>
     
     <div class='form-field'>
-      <%- if @user.errors.on('email') %>
+      <%- if @account_user.errors.on('email') %>
         <div class='form-field-error'>
-          <%= error_message_on @user, :email %>
+          <%= error_message_on @account_user, :email %>
         </div>
       <%- end %>
       <%= f.label :email %>
@@ -24,9 +24,9 @@
     </div>
     
     <div class='form-field'>
-      <%- if @user.errors.on('password') %>
+      <%- if @account_user.errors.on('password') %>
         <div class='form-field-error'>
-          <%= error_message_on @user, :password %>
+          <%= error_message_on @account_user, :password %>
         </div>
       <%- end %>
       <%= f.label :password %>
@@ -34,9 +34,9 @@
     </div>
     
     <div class='form-field'>
-      <%- if @user.errors.on('password_confirmation') %>
+      <%- if @account_user.errors.on('password_confirmation') %>
         <div class='form-field-error'>
-          <%= error_message_on @user, :password_confirmation %>
+          <%= error_message_on @account_user, :password_confirmation %>
         </div>
       <%- end %>
       <%= f.label :password_confirmation  %>
