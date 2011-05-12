@@ -1,0 +1,6 @@
+<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(:user_says, :name => h(comment.user.name)) %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(comment.created_at)) %></span></a>
+
+<div class="thread-details box">
+		<div class="thumb"><img src="<%= comment.user.profile_photo.url(:large_thumb) %>" /></div>
+		<div><%= raw sanitize("\"#{comment.text}\"") %></div>
+</div>

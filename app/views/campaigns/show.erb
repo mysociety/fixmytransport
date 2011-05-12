@@ -49,8 +49,15 @@
      
      <%= render :partial => 'update_form', :locals => {  :hidden => false, :update => CampaignUpdate.new(:user_id => current_user.id) } %>
      
-     <%- if !@campaign.problem.optional_assignments.empty? %>
+     
+     <%- if !@campaign.problem.optional_assignments.empty? or !@campaign.problem.assignments.is_new.empty? %>
        <h3><%= t(:next_steps) %></h3>
+       
+       <div class="new-assignments">
+           <%- @campaign.problem.assignments.is_new.each do |assignment| %>
+              <%= render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }%>
+           <%- end %>
+         </div>
        <div class='optional-assignments'>
          <%- @campaign.problem.optional_assignments.each do |assignment_type|
     %>
@@ -135,7 +142,9 @@
 			<div id="small-map">
 			  <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => CAMPAIGN_PAGE_MAP_HEIGHT, :width => CAMPAIGN_PAGE_MAP_WIDTH, :static => true } %>
 		  </div>
+		  <%- unless @campaign.location.is_a?(SubRoute) %>
       <a class="grey-button right" href="<%= location_url(@campaign.location) %>">Larger Map</a>
+      <%- end %>
 		</div>
 		<%- end %>
 		

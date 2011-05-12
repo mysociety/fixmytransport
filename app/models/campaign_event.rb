@@ -18,25 +18,9 @@ class CampaignEvent < ActiveRecord::Base
   end
   
   def set_visibility
-    case self.event_type
-    when 'assignment_completed'
-      # all assignment completions are visible except write-to-other
-      if ['write-to-other'].include?(self.described.task_type_name)
-        self.visible = false
-      else 
-        self.visible = true
-      end
-    when 'comment_added'
-      # comments currently only on things that already have visible events
+    if self.event_type == 'assignment_completed' && ['write-to-other'].include?(self.described.task_type_name)
       self.visible = false
-    when 'campaign_update_added'
-      # only general campaign updates are visible 
-      if self.described.incoming_message or self.described.outgoing_message
-        self.visible = false
-      else
-        self.visible = true
-      end
-    else  
+    else
       self.visible = true
     end
     return true

@@ -5,9 +5,5 @@
   <div>
   <%= raw message.get_body_for_html_display(collapse_quotes=true) %>
   </div>
-  <ul class='campaign-comments'>
-	<%- message.campaign_updates.each do |update| %>
-    <%= render :partial => 'update_comment', :locals => { :comment => update } %>
-  <%- end %>
-  </ul>
+ 
 </div>  
