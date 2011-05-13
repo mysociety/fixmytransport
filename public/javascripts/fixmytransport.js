@@ -73,6 +73,9 @@ $(document).ready(function(){
 	
 	/* Process
 	   ================================================== */
+	//add the nav bar
+	var processnav = $('<div><button href="#" class="process-back">Back</button><button href="#" class="process-next">Next</button></div>');
+	$('#process-nav').append(processnav);
 	
 	//vars
 	var $tabs			= $('.tabbed');
