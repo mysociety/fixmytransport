@@ -348,6 +348,7 @@ ul.user-list {
 .login-box{
 	padding:0px;
 	overflow:hidden;
+	display:none;
 }
 	.login-box p{
 		color:#666;
