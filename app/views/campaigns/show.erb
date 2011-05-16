@@ -16,12 +16,25 @@
 		<div class="rightcol">
 		  
       <%- if current_user %>
-        <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST',  } do |f| %>
-          <%= raw hidden_field_tag "user_id", current_user.id %>
-          <%= raw submit_tag "Support", :class => 'support-big' %>
+        <%- if current_user.campaigns.include?(@campaign) %>
+          You are a supporter of this campaign
+
+            <%- form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f| %>
+              <%= raw hidden_field_tag "user_id", current_user.id %>
+              <%= raw submit_tag t(:leave_this_campaign) %>
+            <%- end %>     
+
+        <%- else %>
+          <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST',  } do |f| %>
+            <%= raw hidden_field_tag "user_id", current_user.id %>
+            <%= raw submit_tag "Support", :class => 'support-big' %>
+          <%- end %>
         <%- end %>
       <%- else %>
-        <a class="support-big" href="<%= join_campaign_path(@campaign) %>">Support</a>
+          <%- form_for @user_session = UserSession.new, :url => login_url, :html => { :method => 'POST',  } do |f| %>
+            <%= raw hidden_field_tag "next_action", @next_action_join %>
+            <%= raw submit_tag "Support", :class => 'support-big', :id => 'login-to-support' %>
+          <%- end %>
       <%- end %>
 		</div>
 	</div>
@@ -68,16 +81,6 @@
        </div>
      <%- end %>
      
-     </div>
-     
-   <%- elsif current_user && current_user.campaigns.include?(@campaign) %>
-     <div class="supporter-actions">
-     <p><%= t(:you_support_this_campaign) %></p>
-     
-     <%- form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f| %>
-       <%= raw hidden_field_tag "user_id", current_user.id %>
-       <%= raw submit_tag t(:leave_this_campaign) %>
-     <%- end %>     
      </div>
    <%- end %>
 
