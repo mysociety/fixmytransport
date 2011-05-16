@@ -1,23 +1,30 @@
 <%- form_for (@user_session ||= UserSession.new), :url => user_sessions_path, :html => {:id => 'login-form' } do |f|  %>
-<%- if @user_session.errors.on_base %>
-    <div class='error'>
+  <%- if @user_session.errors.on_base %>
+    <div class='error', id="error-base">
       <%= error_message_on @user_session, :base %>
     </div>
+  <%- else %>
+    <div class='error', id="error-base" style="display: none;"></div>
   <%- end %>
 <ul>
 	<li class="login-username">
 	  <%- if @user_session.errors.on('email') %>
-      <div class='error'>
+      <div class='error' id="error-email">
         <%= error_message_on @user_session, :email %>
       </div>
+      <%- else %>
+        <div class='error', id="error-email" style="display: none;"></div>
     <%- end %>
 		<label for="user_session_email">Email</label>
 		<input name="user_session[email]" id="user_session_email" type="text" />
 	</li>
 	<li class="login-password">
 	  <%- if @user_session.errors.on('password') %>
-      <div class='error'><%= error_message_on @user_session, :password %>
+      <div class='error' id='error-password'>
+        <%= error_message_on @user_session, :password %>
       </div>
+    <%- else %>
+      <div class='error', id="error-password" style="display: none;"></div>
     <%- end %>
 		<label for="user_session_password">Password</label>
 		<input name="user_session[password]" id="user_session_password" type="password" />
