@@ -25,7 +25,6 @@ class AccountsController < ApplicationController
   
   def create
     @account_user = User.find_or_initialize_by_email(params[:user][:email])
-    already_registered = @account_user.registered?
     @account_user.ignore_blank_passwords = false
     # want to force validation of passwords
     @account_user.registered = true
@@ -33,27 +32,34 @@ class AccountsController < ApplicationController
     @account_user.email = params[:user][:email]
     @account_user.password = params[:user][:password]
     @account_user.password_confirmation = params[:user][:password_confirmation]
-    if @account_user.valid? 
-      # no one's used this email before, or someone has, but not registered
-      if @account_user.new_record? or ! already_registered
-        # don't want to actually set them as registered until they confirm
-        @account_user.registered = false
-        @account_user.save_without_session_maintenance
-        @account_user.deliver_new_account_confirmation!
-        @action = t(:your_account_wont_be_created)
-        render :template => 'shared/confirmation_sent'
-      else
-        # this person already registered, send them an email to let them know
-        # response in browser should look the same in case this is someone
-        # just trying to find out if there's an account for an email address that's
-        # not theirs. Refresh the user, discard all the changes
-        @account_user = User.find_or_initialize_by_email(params[:user][:email])
-        @account_user.deliver_already_registered!
-        @action = t(:your_account_wont_be_created)
-        render :template => 'shared/confirmation_sent'
+    respond_to do |format|
+      format.html do
+        if @account_user.valid? 
+          save_post_login_action_to_session
+          send_new_account_mail
+          @action = t(:your_account_wont_be_created)
+          render :template => 'shared/confirmation_sent'
+        else
+          render :action => :new
+        end
       end
-    else
-      render :action => :new
+      format.json do 
+        @json = {}
+        if @account_user.valid? 
+          save_post_login_action_to_session
+          send_new_account_mail
+          @json[:success] = true
+          @action = t(:your_account_wont_be_created)
+          @json[:html] = render_to_string :template => 'shared/confirmation_sent', :layout => false
+        else
+          @json[:success] = false
+          @json[:errors] = {}
+          @account_user.errors.each do |attribute,message|
+            @json[:errors][attribute] = message
+          end
+        end
+        render :json => @json
+      end
     end
   end
   
@@ -63,6 +69,7 @@ class AccountsController < ApplicationController
     @account_user.save
     UserSession.create(@account_user, remember_me=false) # Log user in manually
     flash[:notice] = t(:successfully_confirmed_account)
+    perform_post_login_action
     redirect_back_or_default root_url
   end
   
@@ -74,6 +81,22 @@ class AccountsController < ApplicationController
     unless @account_user
       flash[:notice] = t(:could_not_find_account)
       redirect_to root_url  
+    end
+  end
+  
+  def send_new_account_mail
+    already_registered = @account_user.registered?
+    # no one's used this email before, or someone has, but not registered
+    if @account_user.new_record? or ! already_registered
+      # don't want to actually set them as registered until they confirm
+      @account_user.registered = false
+      @account_user.save_without_session_maintenance
+      @account_user.deliver_new_account_confirmation!
+    else
+      # this person already registered, send them an email to let them know
+      # Refresh the user, discard all the changes
+      @account_user = User.find_or_initialize_by_email(params[:user][:email])
+      @account_user.deliver_already_registered!
     end
   end
   

@@ -131,11 +131,12 @@ describe AccountsController do
       User.stub!(:find_or_initialize_by_email).and_return(@mock_user)
     end
 
-    def make_request
+    def make_request(format="html")
       post :create, { :user => { :name => 'A name',
                                  :email => 'new_user@example.com',
                                  :password => "A password",
-                                 :password_confirmation => "A password confirmation" } }
+                                 :password_confirmation => "A password confirmation" },
+                      :format => format }
     end
 
     it 'should find or initialize a user object using the email address' do
@@ -179,12 +180,30 @@ describe AccountsController do
           @mock_user.should_receive(:deliver_new_account_confirmation!)
           make_request
         end
-
-        it 'should render the "confirmation_sent" template' do
+        
+        it 'should save the next action to the session' do 
+          @controller.should_receive(:save_post_login_action_to_session)
           make_request
-          response.should render_template("shared/confirmation_sent")
         end
 
+        describe 'if the request asks for html' do 
+          
+          it 'should render the "confirmation_sent" template' do
+            make_request
+            response.should render_template("shared/confirmation_sent")
+          end
+          
+        end
+        
+        describe 'if the request asks for json' do 
+        
+          it 'should return the "confirmation_sent" template rendered as a string in the response' do 
+            @controller.stub!(:render_to_string).with(:template => 'shared/confirmation_sent', :layout => false).and_return("content")
+            make_request(format="json")
+            JSON.parse(response.body)['html'].should == "content"
+          end
+        end
+        
       end
 
       describe 'if this is an email address that has a registered account' do
@@ -212,13 +231,31 @@ describe AccountsController do
 
       before do
         @mock_user.stub!(:valid?).and_return(false)
+        @mock_user.stub!(:errors).and_return([[:base, "Test error message"]])
       end
 
-      it 'should render the "new" template' do
-        make_request
-        response.should render_template('new')
+      describe 'if the request asks for html' do 
+        
+        it 'should render the "new" template' do
+          make_request
+          response.should render_template('new')
+        end
+    
       end
 
+      describe 'if the request asks for json' do
+        
+        it 'should return a json hash with a key for errors' do 
+          make_request(format="json")
+          JSON.parse(response.body)['errors'].should == {'base' => 'Test error message'}
+        end
+        
+        it 'should return a json hash with a success key set to false' do 
+          make_request(format="json")
+          JSON.parse(response.body)['success'].should == false
+        end
+        
+      end
     end
 
   end
@@ -279,6 +316,11 @@ describe AccountsController do
 
       it 'should set the user to registered' do
         @mock_user.should_receive(:registered=).with(true)
+        make_request
+      end
+      
+      it 'should perform any post login action' do 
+        @controller.should_receive(:perform_post_login_action)
         make_request
       end
 

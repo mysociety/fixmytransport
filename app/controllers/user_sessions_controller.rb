@@ -4,15 +4,38 @@ class UserSessionsController < ApplicationController
 
   def new
     @user_session = UserSession.new
+    if request.post? 
+      save_post_login_action_to_session
+    end
   end
 
   def create
+    save_post_login_action_to_session
     @user_session = UserSession.new(params[:user_session])
-    if @user_session.save
-      flash[:notice] = t(:login_successful)
-      redirect_back_or_default root_path
-    else
-      render :action => :new
+    respond_to do |format|
+      format.html do 
+        if @user_session.save
+          flash[:notice] = t(:login_successful)
+          perform_post_login_action
+          redirect_back_or_default root_path
+        else
+          render :action => :new
+        end
+      end
+      format.json do 
+        @json = {}
+        if @user_session.save
+          @json[:success] = true
+          perform_post_login_action
+        else
+          @json[:success] = false
+          @json[:errors] = {}
+          @user_session.errors.each do |attribute,message|
+            @json[:errors][attribute] = message
+          end
+        end
+        render :json => @json
+      end
     end
   end
 
@@ -33,6 +56,6 @@ class UserSessionsController < ApplicationController
       session[:return_to] = params[:redirect]
     end
   end
-
+    
 end
 
