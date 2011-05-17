@@ -16,7 +16,12 @@
 		<div class="rightcol">
 		  
       <%- if current_user %>
-        <%- if current_user.campaigns.include?(@campaign) %>
+      
+        <%- if current_user.initiated_campaigns.include?(@campaign) %>
+          Your campaign
+          
+          <%= @campaign.status %>
+        <%- elsif current_user.campaigns.include?(@campaign) %>
           You are a supporter of this campaign
 
             <%- form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f| %>
@@ -43,10 +48,51 @@
 <div id="main-content" class="container">
 
 	<div class="leftcol">
+	  
+	  <%- if current_user && current_user == @campaign.initiator %>
+     <div class="campaign-initiator-actions">
+
+
+      <%= render :partial => 'update_form', :locals => {  :hidden => true, :update => CampaignUpdate.new(:user_id => current_user.id) } %>
+
+      <%- if @campaign.status != :successful %>
+        <%- form_for @campaign, :url => complete_campaign_url(@campaign), :html => { :method => 'POST',  } do |f| %>
+          <%= raw hidden_field_tag "user_id", current_user.id %>
+          <%= raw submit_tag "Mark as Complete", :class => 'action-button' %>
+        <%- end %>
+  	  <%- end %>
+
+      <%- if !@campaign.problem.optional_assignments.empty? or !@campaign.problem.assignments.is_new.empty? %>
+        <div class="new-assignments">
+            <%- @campaign.problem.assignments.is_new.each do |assignment| %>
+               <%= render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }%>
+            <%- end %>
+          </div>
+        <div class='optional-assignments'>
+          <%- @campaign.problem.optional_assignments.each do |assignment_type|
+     %>
+            <%= render :partial => "shared/optional_assignments/#{assignment_type}" %>
+          <%- end %>
+          <div class='optional-assignment-end'></div>
+          <%= render :partial => 'update_form', :locals => { :hidden => true, :update => CampaignUpdate.new(:is_advice_request => true, :user_id => current_user.id) } %>
+        </div>
+      <%- end %>
+
+      </div>
+    <%- end %>
+    
+
+	  
+	  
 		<div class="box campaign-description">
+		  <%- if !current_user || (current_user != @campaign.initiator) %>
 			<img src="<%= @campaign.initiator.profile_photo.url(:medium_thumb) %>" class="avatar" />
+			<%- end %>
 			<div>
+				<%- if !current_user || (current_user != @campaign.initiator) %>
 				<h4><a href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a></h4>
+				<%- end %>
+				
 				<p><%= raw simple_format(sanitize(@campaign.description)) %>
 				  <%- if current_user && (current_user == @campaign.initiator || current_user.is_expert?) %>
             <%= link_to(t(:edit), edit_campaign_path(@campaign), :class => 'description-edit-link') %>
@@ -55,34 +101,6 @@
 				  </p>
 			</div>
 		</div>
-	
-	  
-   <%- if current_user && current_user == @campaign.initiator %>
-    <div class="campaign-initiator-actions">
-     
-     <%= render :partial => 'update_form', :locals => {  :hidden => false, :update => CampaignUpdate.new(:user_id => current_user.id) } %>
-     
-     
-     <%- if !@campaign.problem.optional_assignments.empty? or !@campaign.problem.assignments.is_new.empty? %>
-       <h3><%= t(:next_steps) %></h3>
-       
-       <div class="new-assignments">
-           <%- @campaign.problem.assignments.is_new.each do |assignment| %>
-              <%= render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment }%>
-           <%- end %>
-         </div>
-       <div class='optional-assignments'>
-         <%- @campaign.problem.optional_assignments.each do |assignment_type|
-    %>
-           <%= render :partial => "shared/optional_assignments/#{assignment_type}" %>
-         <%- end %>
-         <div class='optional-assignment-end'></div>
-         <%= render :partial => 'update_form', :locals => { :hidden => true, :update => CampaignUpdate.new(:is_advice_request => true, :user_id => current_user.id) } %>
-       </div>
-     <%- end %>
-     
-     </div>
-   <%- end %>
 
 
    <%- if current_user && current_user.is_expert? %>

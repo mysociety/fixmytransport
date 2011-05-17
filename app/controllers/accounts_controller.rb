@@ -25,6 +25,7 @@ class AccountsController < ApplicationController
   
   def create
     @account_user = User.find_or_initialize_by_email(params[:user][:email])
+    already_registered = @account_user.registered?
     @account_user.ignore_blank_passwords = false
     # want to force validation of passwords
     @account_user.registered = true
@@ -36,7 +37,7 @@ class AccountsController < ApplicationController
       format.html do
         if @account_user.valid? 
           save_post_login_action_to_session
-          send_new_account_mail
+          send_new_account_mail(already_registered)
           @action = t(:your_account_wont_be_created)
           render :template => 'shared/confirmation_sent'
         else
@@ -47,7 +48,7 @@ class AccountsController < ApplicationController
         @json = {}
         if @account_user.valid? 
           save_post_login_action_to_session
-          send_new_account_mail
+          send_new_account_mail(already_registered)
           @json[:success] = true
           @action = t(:your_account_wont_be_created)
           @json[:html] = render_to_string :template => 'shared/confirmation_sent', :layout => false
@@ -84,8 +85,7 @@ class AccountsController < ApplicationController
     end
   end
   
-  def send_new_account_mail
-    already_registered = @account_user.registered?
+  def send_new_account_mail(already_registered)
     # no one's used this email before, or someone has, but not registered
     if @account_user.new_record? or ! already_registered
       # don't want to actually set them as registered until they confirm

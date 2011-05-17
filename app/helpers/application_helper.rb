@@ -151,16 +151,7 @@ module ApplicationHelper
     name += " #{t(:in_locality, :locality => stop.locality_name)} (#{stop.id})"
     name
   end
-
-  def departures_link(stop)
-    modes = stop.transport_mode_names
-    if modes.include? 'Bus' or modes.include? 'Coach' or modes.include? 'Ferry'
-      return link_to(t(:live_departures), "http://mytraveline.mobi/departureboard?stopCode=#{stop.atco_code}")
-    else
-      return "&nbsp;"
-    end
-  end
-
+  
   def transport_direct_link(stop)
     return link_to(t(:transport_direct), "http://www.transportdirect.info/web2/journeyplanning/StopInformationLandingPage.aspx?et=si&id=fixmytransport&st=n&sd=#{stop.atco_code}")
   end
@@ -381,6 +372,15 @@ module ApplicationHelper
       return t(:see_also_national_routes, :national => national_link)
     else
       return ''
+    end
+  end
+  
+  def campaign_display_status(campaign)
+    case campaign.status
+    when :confirmed
+      'current'
+    else
+      campaign.status.to_s
     end
   end
   

@@ -13,9 +13,9 @@
 	<dd><a href="<%= profile_url(campaign.initiator) %>"><%= campaign.initiator.name %></a></dd>
 	<dt>Followers:</dt>
 	<dd><%= campaign.supporters.count %></dd>
-	<span class="status stat-<%= campaign.status %>">									
+	<span class="status stat-<%= campaign_display_status(campaign) %>">									
 	<dt>Status:</dt>
-	<dd><%= campaign.status.to_s.titleize %></dd>
+	<dd><%= campaign_display_status(campaign).titleize %></dd>
 	</span>
 </dl>
 

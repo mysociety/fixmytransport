@@ -514,6 +514,41 @@ describe CampaignsController do
     end
 
   end
+  
+  describe 'POST #complete' do 
+    
+    before do 
+      @user = mock_model(User, :id => 55, :name => "Test User")
+      @default_params = { :id => 55 }
+      @controller.stub!(:current_user).and_return(@user)
+      @mock_campaign = mock_model(Campaign, :visible? => true,
+                                            :editable? => true,
+                                            :status => :confirmed,
+                                            :initiator => @user, 
+                                            :status= => true,
+                                            :save => true)
+      Campaign.stub!(:find).and_return(@mock_campaign)
+      @expected_access_message = :campaigns_complete_access_message
+    end
+  
+    def make_request(params)
+      post :complete, params
+    end
+    
+    it_should_behave_like "an action that requires the campaign initiator"
+    
+    it 'should set the campaign status to complete and save it' do 
+      @mock_campaign.should_receive(:status=).with(:successful)
+      @mock_campaign.should_receive(:save)
+      make_request(@default_params)
+    end
+    
+    it 'should redirect to the campaign page' do 
+      make_request(@default_params)
+      response.should redirect_to(campaign_url(@mock_campaign))
+    end
+  
+  end
 
   describe 'POST #add_update' do
 

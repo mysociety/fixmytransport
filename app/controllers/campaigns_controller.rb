@@ -4,9 +4,10 @@ class CampaignsController < ApplicationController
   before_filter :find_editable_campaign, :only => [:edit, :update]
   before_filter :find_visible_campaign, :only => [:show, :join,
                                                   :leave, :add_update,
-                                                  :request_advice, :add_comment, :get_supporters]
+                                                  :request_advice, :add_comment, 
+                                                  :get_supporters, :complete]
   before_filter :require_campaign_initiator_or_token, :only => [:edit, :update]
-  before_filter :require_campaign_initiator, :only => [:add_update, :request_advice]
+  before_filter :require_campaign_initiator, :only => [:add_update, :request_advice, :complete]
   before_filter :find_update, :only => [:add_comment]
 
   def index
@@ -93,6 +94,12 @@ class CampaignsController < ApplicationController
         @error = :error_on_register
       end
     end
+  end
+  
+  def complete 
+    @campaign.status = :successful
+    @campaign.save
+    redirect_to campaign_url(@campaign)
   end
 
   def show

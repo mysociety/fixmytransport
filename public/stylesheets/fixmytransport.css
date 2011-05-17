@@ -720,7 +720,7 @@ form#create-campaign {
 /*===[Campaign Status]===*/
 
 .stat-current{color:#ff6600;}
-.stat-complete{color:#9bce24;}
+.stat-successful{color:#9bce24;}
 .stat-pending{color:#f4053d;}
 
 

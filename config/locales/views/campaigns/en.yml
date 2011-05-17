@@ -13,6 +13,7 @@ en:
   add_password_to_update: "You'll need a password to be able to log back into the site and update your campaign. Enter one here. "
   tweet_this: Tweet this
   save: Save
+  campaigns_complete_access_message: "mark this campaign as complete"
   campaigns_add_update_access_message: "ask for advice on this campaign"
   campaigns_update_access_message: "edit this campaign"
   campaigns_confirm_problem: "confirm this problem"

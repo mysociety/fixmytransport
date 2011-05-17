@@ -12,7 +12,8 @@ ActionController::Routing::Routes.draw do |map|
                                          :leave => [:post], 
                                          :add_update => [:get, :post],
                                          :add_comment => [:get, :post],
-                                         :get_supporters => [:get] } do |campaign|
+                                         :get_supporters => [:get],
+                                         :complete => [:post] } do |campaign|
     campaign.resources :incoming_messages, :only => [:show]
     campaign.attachment '/incoming_messages/:id/attach/:url_part_number', :action => 'show_attachment', 
                                                                           :controller => 'incoming_messages'
