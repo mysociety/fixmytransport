@@ -29,6 +29,10 @@
           <%- elsif @problem.location.operators.size == 1 %>
             <%= raw f.hidden_field :operator_id, :value => @problem.location.operators.first.id %>
             <div class="static-value"><%= @problem.location.operators.first.name %></div>
+          <%- else %>
+            <div class="static-value">
+              The operator of the <%= @problem.location.description %>
+            </div>
           <%- end %>
 
         <%- elsif @problem.pte_responsible?  %>
