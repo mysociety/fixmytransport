@@ -20,7 +20,7 @@
         <%- if current_user.initiated_campaigns.include?(@campaign) %>
           Your campaign
           
-          <%= @campaign.status %>
+          <%= campaign_display_status(@campaign) %>
         <%- elsif current_user.campaigns.include?(@campaign) %>
           You are a supporter of this campaign
 
