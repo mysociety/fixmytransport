@@ -57,11 +57,14 @@
 
       <%- if @campaign.status != :successful %>
         <%- form_for @campaign, :url => complete_campaign_url(@campaign), :html => { :method => 'POST',  } do |f| %>
-          <%= raw hidden_field_tag "user_id", current_user.id %>
           <%= raw submit_tag "Mark as Complete", :class => 'action-button' %>
         <%- end %>
   	  <%- end %>
 
+      <%- form_for @campaign, :url => add_images_campaign_url(@campaign), :html => { :method => 'GET',  } do |f| %>
+        <%= raw submit_tag "Add Images", :class => 'action-button' %>
+      <%- end %>
+      
       <%- if !@campaign.problem.optional_assignments.empty? or !@campaign.problem.assignments.is_new.empty? %>
         <div class="new-assignments">
             <%- @campaign.problem.assignments.is_new.each do |assignment| %>

@@ -3,7 +3,7 @@
 <div class='problem-form-wrapper'>
   <%- form_tag find_stop_problems_path, :id => 'stop_name_form', :method => 'GET' do  %>
     <%- if @error_message %>
-      <div class='form-field-error'>
+      <div class='error'>
         <%= @error_message %>
       </div>
     <%- end %>

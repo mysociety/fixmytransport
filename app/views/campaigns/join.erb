@@ -1,6 +1,6 @@
 <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST' } do |f| %>
   <%- if @user.errors.on('email') %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @user, 'email' %>
     </div>
   <%- end %>

@@ -6,7 +6,7 @@
   
     <div class='form-field'>
       <%- if @assignment.errors.on('subject') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= @assignment.errors.on(:subject) %>
         </div>
       <%- end %>
@@ -20,7 +20,7 @@
     
     <div class='form-field'>
       <%- if @assignment.errors.on('reason') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= @assignment.errors.on(:reason) %>
         </div>
       <%- end %>
@@ -35,7 +35,7 @@
     <%= t(:who_should_they_write_to, :user => @initiator.first_name) %>
     <div class='form-field'>
       <%- if @assignment.errors.on('name') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= @assignment.errors.on(:name) %>
         </div>
       <%- end %>
@@ -46,7 +46,7 @@
     
     <div class='form-field'>
       <%- if @assignment.errors.on('email') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= @assignment.errors.on(:email) %>
         </div>
       <%- end %>

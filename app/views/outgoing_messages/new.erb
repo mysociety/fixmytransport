@@ -7,24 +7,24 @@
 <%- form_for [@campaign, @outgoing_message], :html => {:class => 'create_outgoing_message'} do |f|  %>
   
   <%- if @outgoing_message.errors.on('recipient') %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @outgoing_message, 'recipient' %>
     </div>
   <%- end %>
   <%- if @outgoing_message.errors.on('incoming_message') %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @outgoing_message, 'incoming_message' %>
     </div>
   <%- end %>
   <%- if @outgoing_message.errors.on('base') %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @outgoing_message, 'base' %>
     </div>
   <%- end %>
 
   <div class='form-field'>
     <%- if @outgoing_message.errors.on('subject') %>
-      <div class='form-field-error'>
+      <div class='error'>
         <%= error_message_on @outgoing_message, 'subject' %>
       </div>
     <%- end %>
@@ -34,7 +34,7 @@
   
   <div class='form-field'>
     <%- if @outgoing_message.errors.on('body') %>
-      <div class='form-field-error'>
+      <div class='error'>
         <%= error_message_on @outgoing_message, 'body' %>
       </div>
     <%- end %>

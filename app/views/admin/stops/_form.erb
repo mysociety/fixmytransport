@@ -8,7 +8,7 @@
 <%- end %>
 <div class='form-field'>
   <%- if @stop.errors.on(:stop_type) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @stop, :stop_type   %>
     </div>
   <%- end %>
@@ -18,7 +18,7 @@
 
 <div class='form-field'>
   <%- if @stop.errors.on(:bus_stop_type) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @stop, :bus_stop_type   %>
     </div>
   <%- end %>
@@ -28,7 +28,7 @@
 
 <div class='form-field'>
   <%- if @stop.errors.on(:locality_id) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @stop, :locality_id %>
     </div>
   <%- end %>

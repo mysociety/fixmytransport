@@ -9,7 +9,7 @@
 
 <div class='form-field'>
   <%- if @stop_area.errors.on(:area_type) %>
-    <div class='form-field-error'>
+    <div class='error'>
     <%= error_message_on @stop_area, :area_type   %>
     </div>
   <%-end %>
@@ -19,7 +19,7 @@
 
 <div class='form-field'>
   <%- if @stop_area.errors.on(:locality_id) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @stop_area, :locality_id %>
     </div>
   <%- end %>

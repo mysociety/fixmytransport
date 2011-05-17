@@ -9,9 +9,9 @@ function feedbackCallback(response) {
   if (response.success) {
       feedbackTab.hideTab();
    } else {
-     $('.form-field-error').html('');
+     $('.error').html('');
      for (var key in response.errors){
-       $('#form-field-error-' + key).html( response.errors[key] );
+       $('#error-' + key).html( response.errors[key] );
      }
    }
 }
@@ -94,7 +94,7 @@ function setupForm(selector, callback) {
 function highlightEmptyTextArea(arr, form, options){
   textarea = $('textarea', form);
   if ($.trim(textarea.val()) == ''){
-    textarea.parent().prepend('<div class="form-field-error">Please enter some text</div>')
+    textarea.parent().prepend('<div class="error">Please enter some text</div>')
     return false;  
   }else {
     return true; 
@@ -102,7 +102,7 @@ function highlightEmptyTextArea(arr, form, options){
 }
 
 function show_error(element, message){
-  element.parent().prepend('<div class="form-field-error">'+message+'</div>');
+  element.parent().prepend('<div class="error">'+message+'</div>');
 }
 
 function adviceCallback(response){
@@ -121,7 +121,7 @@ function updateCallback(response){
 function updateCommentCallback(response){
   commentbox_div = $('#commentbox_' + response.commented_id);
   commentbox = $("#comment_text_" + response.commented_id);
-  $('.form-field-error', commentbox_div).remove();
+  $('.error', commentbox_div).remove();
   
   if (response.success){
     commentbox.val("");
@@ -153,7 +153,7 @@ function setupFeedbackForm() {
        hideTab:function(){
          $('#feedback-panel-container').animate({left:"-" + feedbackTab.containerWidth}, feedbackTab.speed, function(){$('#feedback-tab').removeClass().addClass('feedback-tab-closed')});
          clearFormElements('#ajax-feedback');
-         $('#ajax-feedback .form-field-error').html('')
+         $('#ajax-feedback .error').html('')
        },
        init:function(){
            $('#feedback-tab').addClass('feedback-tab-closed');

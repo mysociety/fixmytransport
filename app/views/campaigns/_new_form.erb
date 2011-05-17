@@ -2,7 +2,7 @@
   <div class='fieldset'>
     
 		<%- if campaign.errors.on('title') %>
-      <div class='form-field-error'><%= error_message_on campaign, :title %>
+      <div class='error'><%= error_message_on campaign, :title %>
       </div>
     <%- end %>
 		<div class='form-field'>
@@ -11,7 +11,7 @@
     </div>
     
 		<%- if campaign.errors.on('description') %>
-      <div class='form-field-error'><%= error_message_on campaign, :description %>
+      <div class='error'><%= error_message_on campaign, :description %>
       </div>
     <%- end %>
     <div class='form-field'>
@@ -20,7 +20,7 @@
     </div>
     
 		<%- if campaign.errors.on('subdomain') %>
-      <div class='form-field-error'><%= error_message_on campaign, :subdomain %>
+      <div class='error'><%= error_message_on campaign, :subdomain %>
       </div>
     <%- end %>
     <div class='form-field'>
@@ -39,7 +39,7 @@
           <%= raw user_fields.hidden_field :name, :value => campaign.problem.reporter_name %>
           <%= raw hidden_field_tag :token, params[:token] %>
           <%- if campaign.initiator.errors.on('password') %>
-            <div class='form-field-error'><%= error_message_on campaign.initiator, :password %>
+            <div class='error'><%= error_message_on campaign.initiator, :password %>
             </div>
           <%- end %>
           <%= user_fields.label :password %>
@@ -48,7 +48,7 @@
         
         <div class='form-field'>
           <%- if campaign.initiator.errors.on('password_confirmation') %>
-            <div class='form-field-error'><%= error_message_on campaign.initiator, :password_confirmation %>
+            <div class='error'><%= error_message_on campaign.initiator, :password_confirmation %>
             </div>
           <%- end %>
           <%= user_fields.label :password_confirmation, t(:password_confirmation) %>

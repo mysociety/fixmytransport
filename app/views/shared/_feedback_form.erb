@@ -2,28 +2,28 @@
   <div class='fieldset'>
     
     <div class='form-field'>
-      <div class='form-field-error' id='form-field-error-subject'>
+      <div class='error' id='error-subject'>
       </div>
       <%= form.label :subject %>
       <%= raw form.text_field :subject  %>
     </div>
 
     <div class='form-field'>
-      <div class='form-field-error' id='form-field-error-name'>
+      <div class='error' id='error-name'>
       </div>
       <%= form.label :name  %>
       <%= raw form.text_field :name %>
     </div>
 
     <div class='form-field'>
-      <div class='form-field-error' id='form-field-error-email'>
+      <div class='error' id='error-email'>
       </div>
       <%= form.label :email  %>
       <%= raw form.text_field :email  %>
     </div>
     
     <div class='form-field'>
-      <div class='form-field-error' id='form-field-error-message'>
+      <div class='error' id='error-message'>
       </div>
       <%= form.label :message %>
       <%= raw form.text_area :message, {:rows => 5, :cols => 30} %>

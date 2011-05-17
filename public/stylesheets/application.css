@@ -276,7 +276,7 @@ label {
   float: left;
 }
 
-.form-field-error {
+.error {
   color: #CC0000;
   margin: 0.5em 1em 0 1em;
 }
