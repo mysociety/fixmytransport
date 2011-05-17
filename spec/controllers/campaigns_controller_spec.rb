@@ -549,6 +549,87 @@ describe CampaignsController do
     end
   
   end
+  
+  describe 'GET #add_photos' do 
+    
+    before do 
+      @user = mock_model(User, :id => 55, :name => "Test User")
+      @default_params = { :id => 55 }
+      @controller.stub!(:current_user).and_return(@user)
+      @mock_campaign = mock_model(Campaign, :visible? => true,
+                                            :editable? => true,
+                                            :status => :confirmed,
+                                            :initiator => @user, 
+                                            :campaign_photos => [])
+      @mock_campaign.campaign_photos.stub!(:build).and_return(true)
+      Campaign.stub!(:find).and_return(@mock_campaign)
+      @expected_access_message = :campaigns_add_photos_access_message
+    end
+    
+    def make_request(params)
+      get :add_photos, params
+    end
+
+    it_should_behave_like "an action that requires the campaign initiator"
+
+    it 'should render the "add_photos" template' do
+      make_request(@default_params)
+      response.should render_template("add_photos")
+    end
+    
+    it 'should build a new campaign photo associated with the campaign' do 
+      @mock_campaign.campaign_photos.should_receive(:build).with({})
+      make_request(@default_params)
+    end
+    
+  end
+  
+  describe 'POST #add_photos' do 
+    
+    before do 
+      @user = mock_model(User, :id => 55, :name => "Test User")
+      @default_params = { :id => 55 }
+      @controller.stub!(:current_user).and_return(@user)
+      @mock_campaign = mock_model(Campaign, :visible? => true,
+                                            :editable? => true,
+                                            :status => :confirmed,
+                                            :initiator => @user)
+      Campaign.stub!(:find).and_return(@mock_campaign)
+      @expected_access_message = :campaigns_add_photos_access_message
+    end
+    
+    def make_request(params)
+      post :add_photos, params
+    end
+
+    it_should_behave_like "an action that requires the campaign initiator"
+    
+    describe 'if the campaign (with associated photo) can be saved' do 
+
+      before do
+        @mock_campaign.stub!(:update_attributes).and_return(true)
+      end
+            
+      it 'should redirect to the campaign url' do 
+        make_request(@default_params)
+        response.should redirect_to(campaign_url(@mock_campaign))
+      end
+      
+    end
+    
+    describe 'if the campaign (with associated photo) cannot be saved' do 
+      
+      before do
+        @mock_campaign.stub!(:update_attributes).and_return(false)
+      end
+      
+      it 'should render the add_photos template' do 
+        make_request(@default_params)
+        response.should render_template("add_photos")
+      end
+    
+    end
+  end
 
   describe 'POST #add_update' do
 

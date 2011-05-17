@@ -29,6 +29,8 @@ class Campaign < ActiveRecord::Base
   validates_associated :initiator, :on => :update
   cattr_reader :per_page
   delegate :transport_mode_text, :to => :problem
+  accepts_nested_attributes_for :campaign_photos, :allow_destroy => true
+  
   has_paper_trail
   
   @@per_page = 10

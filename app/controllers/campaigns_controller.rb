@@ -2,12 +2,13 @@ class CampaignsController < ApplicationController
 
   before_filter :process_map_params, :only => [:show]
   before_filter :find_editable_campaign, :only => [:edit, :update]
-  before_filter :find_visible_campaign, :only => [:show, :join,
-                                                  :leave, :add_update,
-                                                  :request_advice, :add_comment, 
-                                                  :get_supporters, :complete]
+  before_filter :find_visible_campaign, :except => [:index,
+                                                    :confirm_join, :confirm_leave,
+                                                    :update, :edit,
+                                                    :confirm_comment]
   before_filter :require_campaign_initiator_or_token, :only => [:edit, :update]
-  before_filter :require_campaign_initiator, :only => [:add_update, :request_advice, :complete]
+  before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
+                                                       :complete, :add_photos]
   before_filter :find_update, :only => [:add_comment]
 
   def index
@@ -95,11 +96,23 @@ class CampaignsController < ApplicationController
       end
     end
   end
-  
-  def complete 
+
+  def complete
     @campaign.status = :successful
     @campaign.save
     redirect_to campaign_url(@campaign)
+  end
+
+  def add_photos
+    if request.post?
+      if @campaign.update_attributes(params[:campaign])
+        redirect_to campaign_url(@campaign)
+      else
+        render :action => 'add_photos'
+      end
+    else
+      @campaign.campaign_photos.build({})
+    end
   end
 
   def show

@@ -1,3 +1,9 @@
+<%- content_for :javascript do %>
+<%= raw javascript_include_tag('jquery.lightbox-0.5.min.js', :charset => 'utf-8') %>
+<%- end %>
+<%- content_for :stylesheets do %>
+<%= stylesheet_link_tag 'jquery.lightbox-0.5.css'  %>
+<%- end %>
 <div id="banner">
 	<div class="container">
 		<div class="leftcol-banner">
@@ -61,9 +67,7 @@
         <%- end %>
   	  <%- end %>
 
-      <%- form_for @campaign, :url => add_images_campaign_url(@campaign), :html => { :method => 'GET',  } do |f| %>
-        <%= raw submit_tag "Add Images", :class => 'action-button' %>
-      <%- end %>
+      <%= link_to "Add Image", add_photos_campaign_url(@campaign), :class => 'action-button'%>
       
       <%- if !@campaign.problem.optional_assignments.empty? or !@campaign.problem.assignments.is_new.empty? %>
         <div class="new-assignments">
@@ -123,10 +127,9 @@
 		<div class="box">
 			<h5>Images and Media</h5>
 			<ul class="gallery grey">
-				<li><a href="#"><img src="http://dummyimage.com/130x130" /></a></li>
-				<li><a href="#"><img src="http://dummyimage.com/130x130" /></a></li>
-				<li><a href="#"><img src="http://dummyimage.com/130x130" /></a></li>
-				<li><a href="#"><img src="http://dummyimage.com/130x130" /></a></li>
+			  <%- @campaign.campaign_photos.each do |campaign_photo| %>
+				  <li><a href="<%= campaign_photo.image.url(:max) %>"><img src="<%= campaign_photo.image.url(:default) %>" /></a></li>
+				<%- end %>
 			</ul>
 		</div>
 		<%- end %>

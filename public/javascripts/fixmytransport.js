@@ -208,6 +208,17 @@ $(document).ready(function(){
 	});
 });
 
+
+  /* Campaign photo lightboxing 
+     ================================================== */
+       
+  $('.gallery a').lightBox( {	
+    imageLoading:  '/images/lightbox-ico-loading.gif',
+   	imageBtnClose: '/images/lightbox-btn-close.gif',
+   	imageBtnPrev:  '/images/lightbox-btn-prev.gif',
+   	imageBtnNext:  '/images/lightbox-btn-next.gif',
+  }); 
+  
   /* Campaign Supporter 'View all' link
      ================================================== */
   $('#campaign-supporters .view-all').click(function(event){
