@@ -2,7 +2,7 @@ class UserSessionsController < ApplicationController
   before_filter :require_no_user, :only => [:new, :create]
 
   def new
-    if params[:redirect] and params[:redirect].starts_with('/')
+    if params[:redirect] and params[:redirect].starts_with?('/')
       session[:return_to] = params[:redirect]
     end
     @user_session = UserSession.new
