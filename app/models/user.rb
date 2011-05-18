@@ -125,13 +125,13 @@ class User < ActiveRecord::Base
     case source
     when 'facebook'
       facebook_data = self.get_facebook_data(access_token)
-      fb_id = facebook_data[:id]
+      fb_id = facebook_data['id']
       existing_access_token = AccessToken.find(:first, :conditions => ['key = ? and type = ?', fb_id, source])
       if existing_access_token
-          
+        UserSession.create(existing_access_token.user, remember_me=false)
       else
-        name = facebook_data[:name]
-        email = facebook_data[:email]
+        name = facebook_data['name']
+        email = facebook_data['email']
         user = User.find(:first, :conditions => ['email = ?', email])
         if not user
           user = User.new({:name => name, :email => email, :registered => true})

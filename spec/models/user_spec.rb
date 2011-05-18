@@ -124,9 +124,9 @@ describe User do
                                       :access_tokens => [])
         @mock_user.access_tokens.stub!(:build).and_return(true)
         User.stub!(:new).and_return(@mock_user)
-        User.stub!(:get_facebook_data).and_return({:id => 'myfbid',
-                                                   :name => 'Test Name', 
-                                                   :email => 'test@example.com'})
+        User.stub!(:get_facebook_data).and_return({'id' => 'myfbid',
+                                                   'name' => 'Test Name', 
+                                                   'email' => 'test@example.com'})
       end
       
       it 'should look up user records by the facebook ID' do 
