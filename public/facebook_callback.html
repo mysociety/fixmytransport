@@ -15,8 +15,8 @@
                 var valuePairs = facebookParamStr.split('&');
                 var accessToken;
                 var tokenExpiry;
-                for (valuePair in valuePairs) {
-                  var nameValue = valuePair.split("=");
+                for (var i in valuePairs) {
+                  var nameValue = valuePairs[i].split("=");
                   var name = nameValue[0].toLowerCase();
                   var value = nameValue[1];
                   if (name == 'access_token'){
