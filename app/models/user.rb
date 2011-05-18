@@ -107,5 +107,10 @@ class User < ActiveRecord::Base
     reset_perishable_token!
     UserMailer.deliver_already_registered(self)
   end
+  
+  # class methods
+  
+  def self.handle_external_auth_token(access_token, source)
+  end
 
 end
