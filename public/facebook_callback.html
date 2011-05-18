@@ -1,0 +1,49 @@
+<html> 
+        <head> 
+          <title>FB callback</title> 
+        </head> 
+        <body> 
+            <h1> callback page </h1>
+            <p id="userName">username: </p> 
+
+            <p id="accesstoken">accesstoken: </p>
+            <p>
+                <a href="http://facebook.com">facebook.com</a>
+            </p>
+
+          <script> 
+         
+         alert("callback page");             
+            function displayUser(user) {
+              var userName = document.getElementById('userName');
+              var greetingText = document.createTextNode('Greetings, ' + user.name + '.');
+              userName.appendChild(greetingText);
+            }
+
+         var appID = '202092799816216';
+            
+
+         var accessToken = window.location.hash.substring(1);
+         var tok = document.getElementById('accesstoken');
+         var tokText = document.createTextNode('accesstoken is ' + accessToken);
+         tok.appendChild(tokText);
+         
+         var path = "https://graph.facebook.com/me?";
+         var queryParams = [accessToken, 'callback=displayUser'];
+         var query = queryParams.join('&');
+         var url = path + query;
+
+         alert("about to set script.src='" + url + "')");
+
+          // use jsonp to call the graph
+              var script = document.createElement('script');
+              script.src = url;
+              document.body.appendChild(script);        
+            
+          </script> 
+        
+       </body> 
+      </html>
+
+
+

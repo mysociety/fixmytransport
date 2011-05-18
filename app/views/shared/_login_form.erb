@@ -41,7 +41,26 @@
 
 <div class="login-options">
 	<p>Or use an existing account</p>
-	<a href="#" id="facebook" class="facebook">Facebook Connect</a>							
+	<!-- DW:FIXME -->
+	<a href="https://www.facebook.com/dialog/oauth?client_id=<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>&amp;redirect_uri=<%= MySociety::Config.get('FACEBOOK_OAUTH_REDIRECT_URI','') %>" >Facebook Connect serverside</a>
+
+	<a href="#" onclick="callFacebook()" id="facebook" class="facebook">Facebook Connect</a>
+
+<script>
+function callFacebook(){
+        alert("calling facebook...");
+        var appID = '<%= MySociety::Config.get('FACEBOOK_APP_ID','no-app-id-specified') %>';
+        var path = 'https://www.facebook.com/dialog/oauth?';
+        var queryParams = ['client_id=' + appID,
+            'redirect_uri=' + 'http://dave.transport.mysociety.org/facebook_callback.html',
+            'response_type=token'];
+        var query = queryParams.join('&');
+        var url = path + query;
+        alert("about to window.open('" + url + "')");
+        window.open(url);
+}
+</script>
+
 	<a href="#" id="twitter" class="twitter">Twitter Connect</a>
 </div>
 
