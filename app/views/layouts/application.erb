@@ -8,7 +8,7 @@
     <%= yield :feeds %>
     <%= csrf_meta_tag %>
     <style type="text/css">
-      @import url("/stylesheets/core.css"); 
+      @import url("/stylesheets/core.css");
       @import url("/stylesheets/fixmytransport.css");
       @import url("/stylesheets/map.css");
     </style>
@@ -17,6 +17,7 @@
     <%= raw javascript_include_tag('jquery-ui-1.8.11.min', :charset => 'utf-8') %>
     <%= raw javascript_include_tag('jquery.autofill', :charset => 'utf-8') %>
     <%= raw javascript_include_tag('jquery.form', :charset => 'utf-8') %>
+
     <%= yield :javascript %>
   </head>
 	<body>
@@ -32,14 +33,14 @@
 					<li><a href="#">Tour</a></li>
 					<li><a href="#">Feedback</a></li>
 				</ul>
-			
+
 				<a id="logo" href="<%= root_url %>">Fix My Transport</a>
-				<%- if current_user %>  
+				<%- if current_user %>
           <p id="member-info">Hi <a href="<%= account_path %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>">Logout</a></p>
 		  	<%- else %>
 		  		<p id="member-info">Hi Guest. <a class="auth" href="<%= login_path(:redirect => request.request_uri) %>">Sign in</a></p>
 		  	<%- end %>
-		  </div>		
+		  </div>
 
       <%= render :partial => "shared/login" %>
 
@@ -56,11 +57,13 @@
 				    </p>
           <%- end %>
       <%- end %>
-        	
-			
-			    <%= yield %>
-    	</div>
-    	<div id="footer">
+
+
+			<%= yield %>
+
+    </div>
+
+    <div id="footer">
 			<div class="container">
 				<p>
 				  <%= raw t(:built_by, :mysociety_link => link_to('mySociety', 'http://mysociety.org'), :indigo_link => link_to('Indigo Trust', 'http://indigotrust.wordpress.com/'), :donor_link => link_to(t(:small_donors), 'http://mysociety.org/donate'), :esmee_link => link_to('Esmée Fairbairn Foundation', 'http://www.esmeefairbairn.org.uk')) %>
