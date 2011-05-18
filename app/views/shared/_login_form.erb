@@ -48,16 +48,16 @@
 
 <script>
 function callFacebook(){
-        alert("calling facebook...");
         var appID = '<%= MySociety::Config.get('FACEBOOK_APP_ID','no-app-id-specified') %>';
         var path = 'https://www.facebook.com/dialog/oauth?';
         var queryParams = ['client_id=' + appID,
             'redirect_uri=' + 'http://dave.transport.mysociety.org/facebook_callback.html',
+            'scope=email',
+            'display=popup',
             'response_type=token'];
         var query = queryParams.join('&');
         var url = path + query;
-        alert("about to window.open('" + url + "')");
-        window.open(url);
+        window.open(url, 'fblogin', 'width=580,height=400,location=no,menubar=no,toolbar=no,scrollbars:auto');
 }
 </script>
 
