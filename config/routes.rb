@@ -90,7 +90,7 @@ ActionController::Routing::Routes.draw do |map|
   # user sessions
   map.login 'login', :controller => 'user_sessions', :action => 'new'  
   map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
-  map.resources :user_sessions
+  map.resources :user_sessions, :collection => { :external => :post }
   
   # accounts
   map.resources :password_resets, :except => [:show, :destroy, :index]

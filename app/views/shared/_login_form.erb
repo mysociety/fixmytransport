@@ -41,8 +41,6 @@
 
 <div class="login-options">
 	<p>Or use an existing account</p>
-	<!-- DW:FIXME -->
-	<a href="https://www.facebook.com/dialog/oauth?client_id=<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>&amp;redirect_uri=<%= MySociety::Config.get('FACEBOOK_OAUTH_REDIRECT_URI','') %>" >Facebook Connect serverside</a>
 
 	<a href="#" onclick="callFacebook()" id="facebook" class="facebook">Facebook Connect</a>
 

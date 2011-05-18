@@ -209,16 +209,16 @@ $(document).ready(function(){
 });
 
 
-  /* Campaign photo lightboxing 
+  /* Campaign photo lightboxing
      ================================================== */
-       
-  $('.gallery a').lightBox( {	
+
+  $('.gallery a').lightBox( {
     imageLoading:  '/images/lightbox-ico-loading.gif',
    	imageBtnClose: '/images/lightbox-btn-close.gif',
    	imageBtnPrev:  '/images/lightbox-btn-prev.gif',
    	imageBtnNext:  '/images/lightbox-btn-next.gif',
-  }); 
-  
+  });
+
   /* Campaign Supporter 'View all' link
      ================================================== */
   $('#campaign-supporters .view-all').click(function(event){
@@ -230,3 +230,17 @@ $(document).ready(function(){
       }
     });
   });
+
+
+  /* External authentication
+     ================================================== */
+
+function externalAuth(source, authParams) {
+
+  var queryParams = [ 'access_token=' + authParams['access_token'],
+                      'path=' + window.location.pathname,
+                      'token_expiry=' + authParams['token_expiry'],
+                      'source=' + source ];
+  var url = window.location.protocol + "//" + window.location.host + "/external";
+  $.post( url, queryParams.join("&") );
+}

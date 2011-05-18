@@ -9,12 +9,25 @@
             <a href="http://facebook.com">facebook.com</a>
         </p>
         <script> 
-            var accessToken = window.location.hash.substring(1);
-            if (accessToken) {
-                var path = window.opener.location.pathname;
-                var url = window.location.protocol + "//" + window.location.host + "/fb?" + accessToken + "&fmtpath=" + path;
-                alert("url = " + url);
-                window.opener.location.assign(url)
+            var facebookParamStr = window.location.hash.substring(1);
+            if (facebookParamStr) {
+
+                var valuePairs = facebookParamStr.split('&');
+                var accessToken;
+                var tokenExpiry;
+                for (valuePair in valuePairs) {
+                  var nameValue = valuePair.split("=");
+                  var name = nameValue[0].toLowerCase();
+                  var value = nameValue[1];
+                  if (name == 'access_token'){
+                    accessToken = value;
+                  }else if (name == 'expires_in') {
+                    tokenExpiry = value;
+                  } 
+                }
+                var authParams = { 'access_token' : accessToken, 
+                                   'token_expiry': tokenExpiry }  
+                window.opener.externalAuth('facebook', authParams);
             }
             window.close()
         </script> 
