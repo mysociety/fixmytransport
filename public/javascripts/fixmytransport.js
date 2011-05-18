@@ -235,12 +235,12 @@ $(document).ready(function(){
   /* External authentication
      ================================================== */
 
-function externalAuth(source, authParams) {
+function externalAuth(source, authParams  ) {
 
   var queryParams = [ 'access_token=' + authParams['access_token'],
                       'path=' + window.location.pathname,
                       'token_expiry=' + authParams['token_expiry'],
                       'source=' + source ];
-  var url = window.location.protocol + "//" + window.location.host + "/external";
+  var url = window.location.protocol + "//" + window.location.host + "/user_sessions/external";
   $.post( url, queryParams.join("&") );
 }
