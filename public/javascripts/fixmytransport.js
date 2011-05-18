@@ -206,18 +206,24 @@ $(document).ready(function(){
 		$('.tipbox').not('.fixed').css({'right':'-999999em'});
 		$('.tipbox', parent).not('.fixed').css({'right':'-450px', 'opacity':'0'}).animate({'opacity':'1'}, {duration: 500, queue: false});
 	});
+	
+	
+  /* External authentication
+     ================================================== */
+
 });
 
 
   /* Campaign photo lightboxing
      ================================================== */
-
-  $('.gallery a').lightBox( {
-    imageLoading:  '/images/lightbox-ico-loading.gif',
-   	imageBtnClose: '/images/lightbox-btn-close.gif',
-   	imageBtnPrev:  '/images/lightbox-btn-prev.gif',
-   	imageBtnNext:  '/images/lightbox-btn-next.gif',
-  });
+  if ($('.gallery a').length > 0){
+    $('.gallery a').lightBox( {
+      imageLoading:  '/images/lightbox-ico-loading.gif',
+     	imageBtnClose: '/images/lightbox-btn-close.gif',
+     	imageBtnPrev:  '/images/lightbox-btn-prev.gif',
+     	imageBtnNext:  '/images/lightbox-btn-next.gif',
+    });
+  }
 
   /* Campaign Supporter 'View all' link
      ================================================== */
@@ -232,15 +238,11 @@ $(document).ready(function(){
   });
 
 
-  /* External authentication
-     ================================================== */
-
-function externalAuth(source, authParams  ) {
-
-  var queryParams = [ 'access_token=' + authParams['access_token'],
-                      'path=' + window.location.pathname,
-                      'token_expiry=' + authParams['token_expiry'],
-                      'source=' + source ];
+function externalAuth(source, authParams) {
   var url = window.location.protocol + "//" + window.location.host + "/user_sessions/external";
-  $.post( url, queryParams.join("&") );
+  var form = $('<form action="'+url+'" method="POST"></form>');
+  for (authParam in authParams) {
+    form.append($('<input type="hidden" name="'+authParam+'" value="'+authParams[authParam]+'">'));
+  }
+  $('body').append(form).submit();
 }
