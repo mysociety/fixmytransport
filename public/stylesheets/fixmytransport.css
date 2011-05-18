@@ -9,7 +9,7 @@
  *   dark green		#86bc08
  *   orange			#ff6600
  *   red			#f4053d
- *   dark red		#b3062f
+ *   dark red		#e00202
  *   light grey		#f1f1f7
  *   grey			#ebebeb
  *   dark grey		#666666
@@ -38,8 +38,9 @@
 }
 .leftcol-banner {
     float: left;
-    width: 620px;
-    margin: 0.5em 10px 0.5em 0;
+    width: 600px;
+    margin: 0;
+	padding:0 1em;
 }
 .box {
     clear: both;
@@ -201,6 +202,18 @@ form#search {
 	margin-bottom:1em;
     background: #f4f4f4;
 }
+  #banner.yellow {
+    background: #FFFBD7;
+	  border:1px solid #aaad95;
+  }
+  #banner h1 {
+		font-size: 28px;
+		line-height: 1.2em;
+	    font-weight: bold;
+	    color: #151f26;
+		margin:0;
+	}
+	
 	#banner h2 {
 		font-size: 1.4em;
 		line-height: 1.2em;
@@ -472,7 +485,35 @@ ul.user-list {
 			background:url(../images/twitter-connect.jpg) no-repeat;
 		}
 
-
+#comment-and-login textarea {
+	width:96%;
+	margin:5px;
+	border:none;
+	background: #f4f4f4;
+}
+#comment-login-options {
+	height:auto;
+	display:inline-block;
+	width:98%;
+	margin:0 1%;
+}
+#comment-login-options p {
+	display:inline-block;
+	width:25%;
+	float:left;
+	font-size:1.4em;
+	margin:0;
+	line-height:1;
+}
+#comment-login-options .button {
+	width:24%;
+	height:auto;
+	padding:0;
+	display:inline-block;
+	float:left;
+	text-indent:0;
+	margin:0 0 0 1%;
+}
 
 
 /* Buttons
@@ -653,14 +694,16 @@ ul.user-list {
     display: block;
     margin: 10px 10px 0 0;
     float: left;
-    width: 120px;
-    text-align: right;
+    width: 400px;
     text-transform: uppercase;
+}
+.form-1 label span {
+	color:#0075A0;
 }
 .form-1 input,
 .form-1 textarea {
 	padding: 2px 4px;
-	width: 340px;
+	width: 400px;
 	display: block;
 	float: left;
 	border: 2px solid #048fc2;
@@ -688,6 +731,7 @@ ul.user-list {
     background: #ebebeb;
 	position:absolute;
 	right:-999999em;
+	top:20px;
 	margin-top: -8px;
 	overflow:visible !important;
 }
@@ -782,13 +826,6 @@ ul.related-campaigns{margin: 0px; padding: 0px;}
 
 #banner h1.route-name {
 	font-size:2em;
-}
-
-#banner h1 {
-    color: #151F26;
-    font-size: 1.4em;
-    font-weight: bold;
-    line-height: 1.2em;
 }
 
 #banner h2.route-operator {
@@ -1027,6 +1064,12 @@ ul#process {
 			outline: none;		
 			cursor: pointer;
 			}
+			
+     .process-submit {
+             float:right;
+             clear:left;
+             margin-top:1em;
+     }
 
 		.process-back{
 			background:transparent url(../images/process-back.gif) left top no-repeat;			
