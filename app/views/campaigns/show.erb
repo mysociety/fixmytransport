@@ -4,57 +4,47 @@
 <%- content_for :stylesheets do %>
 <%= stylesheet_link_tag 'jquery.lightbox-0.5.css'  %>
 <%- end %>
-<div id="banner">
-	<div class="container">
-		<div class="leftcol-banner">
-			<h2>"<%= @campaign.title %>" - <%= @campaign.initiator.name %></h2>
-			<%- if @campaign.problem.location.is_a?(SubRoute) %>
-			  <span class='transport-location'>
-			    <%= raw t(:campaign_location, :link => @campaign.problem.location.description) %>
-			  </span>
-			<%- else %>
-			  <span class='transport-location'>
-			    <%= raw t(:campaign_location, :link => link_to(@campaign.problem.location.description, location_url(@campaign.problem.location))) %>
-			  </span>
-			<%- end %>
-			
-		</div>
-		<div class="rightcol">
-		  
-      <%- if current_user %>
-      
-        <%- if current_user.initiated_campaigns.include?(@campaign) %>
-          Your campaign
-          
-          <%= campaign_display_status(@campaign) %>
-        <%- elsif current_user.campaigns.include?(@campaign) %>
-          You are a supporter of this campaign
 
-            <%- form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f| %>
-              <%= raw hidden_field_tag "user_id", current_user.id %>
-              <%= raw submit_tag t(:leave_this_campaign) %>
-            <%- end %>     
+<div id="banner" class="yellow container">
+	<div class="leftcol-banner">
+		<h1 class="tk-museo"><%= @campaign.title %></h1>
+	</div>
 
-        <%- else %>
-          <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST',  } do |f| %>
+	<div class="rightcol">
+
+    <%- if current_user %>
+
+      <%- if current_user.initiated_campaigns.include?(@campaign) %>
+        Your campaign
+
+        <%= campaign_display_status(@campaign) %>
+      <%- elsif current_user.campaigns.include?(@campaign) %>
+        You are a supporter of this campaign
+
+          <%- form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f| %>
             <%= raw hidden_field_tag "user_id", current_user.id %>
-            <%= raw submit_tag "Support", :class => 'support-big' %>
+            <%= raw submit_tag t(:leave_this_campaign) %>
           <%- end %>
-        <%- end %>
+
       <%- else %>
-          <%- form_for @user_session = UserSession.new, :url => login_url, :html => { :method => 'POST',  } do |f| %>
-            <%= raw hidden_field_tag "next_action", @next_action_join %>
-            <%= raw submit_tag "Support", :class => 'support-big', :id => 'login-to-support' %>
-          <%- end %>
+        <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST',  } do |f| %>
+          <%= raw hidden_field_tag "user_id", current_user.id %>
+          <%= raw submit_tag "Support", :class => 'support-big' %>
+        <%- end %>
       <%- end %>
-		</div>
+    <%- else %>
+        <%- form_for @user_session = UserSession.new, :url => login_url, :html => { :method => 'POST',  } do |f| %>
+          <%= raw hidden_field_tag "next_action", @next_action_join %>
+          <%= raw submit_tag "Support", :class => 'support-big', :id => 'login-to-support' %>
+        <%- end %>
+    <%- end %>
 	</div>
 </div>
 
 <div id="main-content" class="container">
 
 	<div class="leftcol">
-	  
+
 	  <%- if current_user && current_user == @campaign.initiator %>
      <div class="campaign-initiator-actions">
 
@@ -68,7 +58,7 @@
   	  <%- end %>
 
       <%= link_to "Add Image", add_photos_campaign_url(@campaign), :class => 'action-button'%>
-      
+
       <%- if !@campaign.problem.optional_assignments.empty? or !@campaign.problem.assignments.is_new.empty? %>
         <div class="new-assignments">
             <%- @campaign.problem.assignments.is_new.each do |assignment| %>
@@ -87,10 +77,10 @@
 
       </div>
     <%- end %>
-    
 
-	  
-	  
+
+
+
 		<div class="box campaign-description">
 		  <%- if !current_user || (current_user != @campaign.initiator) %>
 			<img src="<%= @campaign.initiator.profile_photo.url(:medium_thumb) %>" class="avatar" />
@@ -99,7 +89,7 @@
 				<%- if !current_user || (current_user != @campaign.initiator) %>
 				<h4><a href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a></h4>
 				<%- end %>
-				
+
 				<p><%= raw simple_format(sanitize(@campaign.description)) %>
 				  <%- if current_user && (current_user == @campaign.initiator || current_user.is_expert?) %>
             <%= link_to(t(:edit), edit_campaign_path(@campaign), :class => 'description-edit-link') %>
@@ -151,9 +141,9 @@
 			<%= render :partial => 'campaign_event', :locals => { :always_show_commentbox => false, :event => campaign_event, :index => index+1 } %>
 		<%- end %>
 		</ul>
-		
+
 		<a class="right support" href="#">Support</a>
-  
+
 
 </div>
 
@@ -161,9 +151,9 @@
 	<div class="rightcol">
 		<ul class="campaign-meta">
 			<li>started <span><%= @campaign.created_at.strftime("%e %B %Y") %></span></li>
-			<li>supporters <%=  @campaign.supporter_count %></li>														
+			<li>supporters <%=  @campaign.supporter_count %></li>
 		</ul>
-		
+
 		<%- if @campaign.location %>
 		<div id="map-container">
 			<div id="small-map">
@@ -174,8 +164,8 @@
       <%- end %>
 		</div>
 		<%- end %>
-		
-		
+
+
 		<div class="box">
 			<h5>Campaign Manager</h5>
 			<div class="grey">
@@ -190,7 +180,7 @@
 				</div>
 			</div>
 		</div>
-	
+
 		<%- if @campaign.supporters.registered.count > 0 %>
 		  <%= render :partial => "supporters", :locals => {:show_all => (params[:all_supporters] == '1') }%>
 		<%- end %>
