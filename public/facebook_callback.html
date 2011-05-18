@@ -26,8 +26,9 @@
                   } 
                 }
                 var authParams = { 'access_token' : accessToken, 
-                                   'token_expiry': tokenExpiry }  
-                window.opener.externalAuth('facebook', authParams);
+                                   'token_expiry' : tokenExpiry,
+                                   'source' : 'facebook'}  
+                window.opener.externalAuth(authParams);
             }
             window.close()
         </script> 
