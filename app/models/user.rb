@@ -126,7 +126,7 @@ class User < ActiveRecord::Base
     when 'facebook'
       facebook_data = self.get_facebook_data(access_token)
       fb_id = facebook_data['id']
-      existing_access_token = AccessToken.find(:first, :conditions => ['key = ? and type = ?', fb_id, source])
+      existing_access_token = AccessToken.find(:first, :conditions => ['key = ? and token_type = ?', fb_id, source])
       if existing_access_token
         UserSession.create(existing_access_token.user, remember_me=false)
       else
@@ -136,7 +136,7 @@ class User < ActiveRecord::Base
         if not user
           user = User.new({:name => name, :email => email, :registered => true})
           user.access_tokens.build({:user_id => user.id, 
-                                    :type => 'facebook', 
+                                    :token_type => 'facebook', 
                                     :key => fb_id, 
                                     :token => access_token})
           user.save!

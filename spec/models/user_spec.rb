@@ -130,7 +130,7 @@ describe User do
       end
       
       it 'should look up user records by the facebook ID' do 
-        AccessToken.should_receive(:find).with(:first, :conditions => ['key = ? and type = ?', 'myfbid', 'facebook'])
+        AccessToken.should_receive(:find).with(:first, :conditions => ['key = ? and token_type = ?', 'myfbid', 'facebook'])
         User.handle_external_auth_token('mytoken', 'facebook')
       end
       
