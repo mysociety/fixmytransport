@@ -83,6 +83,7 @@ $(document).ready(function(){
       next_action.clone().appendTo($('#create-account-form'))
       $('#login-landing').show();
       $('.login-box .pane').not('#login-landing').hide();
+      $("#login-box").dialog({title: "Sign In"});
       $("#login-box").dialog("open");
       return false;
   });
@@ -94,6 +95,7 @@ $(document).ready(function(){
   $('#create-account').click(function(e){
   	e.preventDefault();
   	$('.pane:visible').fadeOut(500, function(){
+  	  $("#login-box").dialog({title: "Create Account"});
   		$('#login-create-account').fadeIn();
   	});
   });
@@ -137,6 +139,7 @@ $(document).ready(function(){
 		e.preventDefault();
 		$('.login-box .pane').hide();
 		$('#login-create-account').show();
+		$("#login-box").dialog({title: "Create Account"});
 		$("#login-box").dialog("open");
 		return false;
 	});
@@ -181,6 +184,10 @@ $(document).ready(function(){
 	// ajax submission of comment form
 	function setupCommentForm(form_selector) {
 	  options = defaultFormOptions();
+	  options['error'] = function() {
+	    $(form_selector + ' #error-text').html( "There was a problem contacting the server. Please reload the page and try again." );
+      $(form_selector + ' #error-text' ).show();
+	  }
 	  options['success'] = function(response) {
 	    if (response.success) {
         if (response.requires_login) {
@@ -190,6 +197,7 @@ $(document).ready(function(){
         
         // show the login form
         $('.login-box .pane').hide();
+        $("#login-box").dialog({title: "Sign In"});
     		$('#login-landing').show();
     		
         // clear the comment field
@@ -222,6 +230,10 @@ $(document).ready(function(){
   // ajax submission of login/create account forms
   function ajaxifyForm(form_selector) {
     options = defaultFormOptions();
+    options['error'] = function() {
+	    $(form_selector + ' #error-base').html( "There was a problem contacting the server. Please reload the page and try again." );
+      $(form_selector + ' #error-base' ).show();
+	  }
     options['success'] = function(response) {
        if (response.success) {
            if (response.html){
