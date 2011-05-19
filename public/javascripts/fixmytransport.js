@@ -60,7 +60,10 @@ $(document).ready(function(){
 		  $("#login-box form").find("#next_action").remove();
       // clear form errors
 		  $("#login-box .error").html();
-		  $("#login-box .error").hide();  }
+		  $("#login-box .error").hide(); 
+		  $('#login-box input[type=text]').val("");
+		  $('#login-box input[type=password]').val("");
+		   }
 	  });
 
 	//login click
