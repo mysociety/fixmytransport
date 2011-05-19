@@ -13,7 +13,7 @@
 
 class User < ActiveRecord::Base
   validates_presence_of :email
-  validates_presence_of :name, :unless => :unregistered?
+  validates_presence_of :name
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
   validates_uniqueness_of :email, :case_sensitive => false
   attr_protected :password, :password_confirmation, :is_expert
