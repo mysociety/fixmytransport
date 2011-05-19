@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   validates_presence_of :email
   validates_presence_of :name, :unless => :unregistered?
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
-  validates_uniqueness_of :email
+  validates_uniqueness_of :email, :case_sensitive => false
   attr_protected :password, :password_confirmation, :is_expert
   has_many :assignments
   has_many :campaign_supporters, :foreign_key => :supporter_id
@@ -33,9 +33,9 @@ class User < ActiveRecord::Base
 
   attr_accessor :ignore_blank_passwords
   has_friendly_id :name, :use_slug => true, :allow_nil => true
-  
+
   named_scope :registered, :conditions => { :registered => true }
-  
+
   acts_as_authentic do |c|
     # we validate the email with activerecord validation above
     c.validate_email_field = false
@@ -56,6 +56,12 @@ class User < ActiveRecord::Base
 
   def unregistered?
     !registered
+  end
+
+  # Wrap the registered flag in a confirmed? method - a magic method picked up by authlogic.
+  # Unregistered users cannot log in with a password.
+  def confirmed?
+    registered?
   end
 
   def first_name
@@ -106,6 +112,11 @@ class User < ActiveRecord::Base
   def deliver_already_registered!
     reset_perishable_token!
     UserMailer.deliver_already_registered(self)
+  end
+
+  def deliver_account_exists!
+    reset_perishable_token!
+    UserMailer.deliver_account_exists(self)
   end
 
 end

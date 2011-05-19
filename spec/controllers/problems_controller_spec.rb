@@ -538,7 +538,7 @@ describe ProblemsController do
                                           :status => :new,
                                           :reporter => @mock_reporter)
       Problem.stub!(:find_by_token).and_return(@mock_problem)
-      UserSession.stub!(:create)
+      UserSession.stub!(:login_by_confirmation)
     end
 
     def make_request
@@ -558,7 +558,7 @@ describe ProblemsController do
       end
       
       it 'should log in the problem reporter' do 
-        UserSession.should_receive(:create).with(@mock_reporter, remember_me=false)
+        UserSession.should_receive(:login_by_confirmation).with(@mock_reporter)
         make_request
       end
     

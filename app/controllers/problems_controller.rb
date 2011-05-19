@@ -76,8 +76,8 @@ class ProblemsController < ApplicationController
   def confirm
     @problem = Problem.find_by_token(params[:email_token])
     if @problem && @problem.status == :new
-      # log user in
-      UserSession.create(@problem.reporter, remember_me=false)
+      # log user in, whether or not they're registered
+      UserSession.login_by_confirmation(@problem.reporter)
       redirect_to convert_problem_url(@problem)
     elsif @problem
       @error = t(:problem_already_confirmed)
