@@ -43,7 +43,7 @@ class UserSessionsController < ApplicationController
     end
     current_user_session.destroy
     flash[:notice] = t(:logout_successful)
-    redirect_back_or_default login_path
+    redirect_back_or_default root_url
   end
   
   private
