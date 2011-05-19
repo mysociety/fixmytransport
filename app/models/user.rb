@@ -128,7 +128,7 @@ class User < ActiveRecord::Base
       fb_id = facebook_data['id']
       existing_access_token = AccessToken.find(:first, :conditions => ['key = ? and token_type = ?', fb_id, source])
       if existing_access_token
-	user = exsting_access_token.user
+        user = existing_access_token.user
       else
         name = facebook_data['name']
         email = facebook_data['email']
