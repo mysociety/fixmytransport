@@ -163,9 +163,10 @@ describe AccountsController do
         @mock_user.stub!(:save_without_session_maintenance)
         @mock_user.stub!(:deliver_new_account_confirmation!)
         @mock_user.stub!(:deliver_already_registered!)
+        @mock_user.stub!(:deliver_account_exists!)
       end
 
-      describe 'if this is a new email address, or one that does not have a registered account' do
+      describe 'if this is a new email address' do
 
         before do
           @mock_user.stub!(:new_record?).and_return(true)
@@ -202,6 +203,25 @@ describe AccountsController do
             make_request(format="json")
             JSON.parse(response.body)['html'].should == "content"
           end
+        end
+        
+      end
+      
+      describe 'if this is an email address that has an unregistered account' do 
+      
+        before do 
+          @mock_user.stub!(:new_record?).and_return(false)
+          @mock_user.stub!(:registered?).and_return(false)
+        end
+        
+        it 'should ask the user to send an "already exists" email' do 
+          @mock_user.should_receive(:deliver_account_exists!)
+          make_request
+        end
+        
+        it 'should render the "confirmation_sent" template' do 
+          make_request
+          response.should render_template("shared/confirmation_sent")
         end
         
       end
@@ -292,7 +312,7 @@ describe AccountsController do
     describe 'if a user can be found using the perishable token param' do
 
       before do
-        UserSession.stub!(:create)
+        UserSession.stub!(:login_by_confirmation)
         @mock_user = mock_model(User, :registered? => false,
                                       :registered= => true,
                                       :save => true)
@@ -310,7 +330,7 @@ describe AccountsController do
       end
 
       it 'should log the user in' do
-        UserSession.should_receive(:create).with(@mock_user, false)
+        UserSession.should_receive(:login_by_confirmation).with(@mock_user)
         make_request
       end
 

@@ -65,7 +65,7 @@ class AccountsController < ApplicationController
     # set the user as registered, save and log in
     @account_user.registered = true
     @account_user.save
-    UserSession.create(@account_user, remember_me=false) # Log user in manually
+    UserSession.login_by_confirmation(@account_user)
     flash[:notice] = t(:successfully_confirmed_account)
     perform_post_login_action
     redirect_back_or_default root_url
@@ -83,12 +83,17 @@ class AccountsController < ApplicationController
   end
   
   def send_new_account_mail(already_registered)
-    # no one's used this email before, or someone has, but not registered
-    if @account_user.new_record? or ! already_registered
+    # no one's used this email before
+    if @account_user.new_record? or 
       # don't want to actually set them as registered until they confirm
       @account_user.registered = false
       @account_user.save_without_session_maintenance
       @account_user.deliver_new_account_confirmation!
+    elsif ! already_registered
+      # someone has used this email, but not registered
+      # send them an email that will let them log in and create a password
+      @account_user = User.find_or_initialize_by_email(params[:user][:email])
+      @account_user.deliver_account_exists!      
     else
       # this person already registered, send them an email to let them know
       # Refresh the user, discard all the changes
