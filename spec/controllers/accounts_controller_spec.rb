@@ -315,6 +315,7 @@ describe AccountsController do
         UserSession.stub!(:login_by_confirmation)
         @mock_user = mock_model(User, :registered? => false,
                                       :registered= => true,
+                                      :password => "password",
                                       :save => true)
         User.stub!(:find_using_perishable_token).with('my_token', 0).and_return(@mock_user)
       end
@@ -323,19 +324,41 @@ describe AccountsController do
         make_request
         response.should redirect_to(root_url)
       end
+      
+      describe 'if the user has a password' do
+        
+        it 'should show a notice that the user has confirmed their account' do
+          make_request
+          flash[:notice].should == 'You have successfully confirmed your account.'
+        end
 
-      it 'should show a notice that the user has confirmed their account' do
-        make_request
-        flash[:notice].should == 'You have successfully confirmed your account.'
+        it 'should set the user to registered' do
+          @mock_user.should_receive(:registered=).with(true)
+          make_request
+        end
+            
+      end
+      
+      describe "if the user doesn't have a password" do 
+        
+        before do 
+          @mock_user.stub!(:password).and_return(nil)
+        end
+      
+        it 'should show a notice saying that the user has logged in and should set a password' do 
+          make_request
+          flash[:notice].should == "You've successfully logged in. Set a password on your account to make it easier to come back."
+        end
+        
+        it "should redirect to the user's account if there is no redirect defined by a post-login action" do 
+          make_request
+          response.should redirect_to(edit_account_url)
+        end
+        
       end
 
       it 'should log the user in' do
         UserSession.should_receive(:login_by_confirmation).with(@mock_user)
-        make_request
-      end
-
-      it 'should set the user to registered' do
-        @mock_user.should_receive(:registered=).with(true)
         make_request
       end
       

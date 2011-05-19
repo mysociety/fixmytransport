@@ -216,7 +216,9 @@ class ApplicationController < ActionController::Base
                              confirmed=true)
         flash[:notice] = "Thanks for your comment"
       end
-      session[:return_to] = post_login_action_data[:redirect]
+      if post_login_action_data[:redirect]
+        session[:return_to] = post_login_action_data[:redirect]
+      end
       session.delete(:next_action)
     end
   end
