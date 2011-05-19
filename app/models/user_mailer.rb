@@ -14,6 +14,13 @@ class UserMailer < ApplicationMailer
     body :account_confirmation_url => main_url(confirm_account_path(user.perishable_token)), :user => user
   end
   
+  def account_exists(user)
+    subject "[FixMyTransport] Confirm your account"
+    from contact_from_name_and_email
+    recipients user.email
+    body :account_confirmation_url => main_url(confirm_account_path(user.perishable_token)), :user => user  
+  end
+  
   def already_registered(user)
     subject "[FixMyTransport] Confirm your account"
     from contact_from_name_and_email
