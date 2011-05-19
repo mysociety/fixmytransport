@@ -11,6 +11,10 @@ class AccountsController < ApplicationController
     current_user.email = params[:user][:email]
     current_user.password = params[:user][:password]
     current_user.password_confirmation = params[:user][:password_confirmation]
+    # if someone logged in by confirmation creates a password here, register their account
+    if params[:user][:password]
+      current_user.registered = true
+    end
     if current_user.save
       flash[:notice] = t(:account_updated)
       redirect_to account_url

@@ -51,8 +51,12 @@ describe AccountsController do
 
   describe 'PUT #update' do
 
-    def make_request
-      put :update, { :user => { :email => 'test@example.com' } }
+    before do 
+      @default_params = { :user => { :email => 'test@example.com' } }
+    end
+    
+    def make_request(params=@default_params)
+      put :update, params
     end
 
     it_should_behave_like 'an action requiring a logged-in user'
@@ -70,13 +74,22 @@ describe AccountsController do
 
       it 'should update the current users account info' do
         @mock_user.should_receive(:email=).with('test@example.com')
-        make_request
+        make_request(@default_params)
+      end
+      
+      describe 'if the user enters a password' do 
+        
+        it 'should set the account as registered' do 
+          @mock_user.should_receive(:registered=).with(true)
+          make_request(@default_params.merge({:user => {:password => 'password'}}))
+        end
+        
       end
 
       describe 'if the update is successful' do
 
         it 'should redirect to the account page' do
-          make_request
+          make_request(@default_params)
           response.should redirect_to(account_path)
         end
 
@@ -89,7 +102,7 @@ describe AccountsController do
         end
 
         it 'should render the edit template' do
-          make_request
+          make_request(@default_params)
           response.should render_template('edit')
         end
 
