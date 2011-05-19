@@ -54,10 +54,7 @@ class AccountsController < ApplicationController
           @json[:html] = render_to_string :template => 'shared/confirmation_sent', :layout => false
         else
           @json[:success] = false
-          @json[:errors] = {}
-          @account_user.errors.each do |attribute,message|
-            @json[:errors][attribute] = message
-          end
+          add_json_errors(@account_user, @json)
         end
         render :json => @json
       end

@@ -9,6 +9,7 @@ class Campaign < ActiveRecord::Base
   has_many :incoming_messages
   has_many :outgoing_messages
   has_many :campaign_updates
+  has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   has_many :campaign_events, :order => 'created_at asc'
   has_many :campaign_photos
   validates_presence_of :title, :description, :on => :update
@@ -69,6 +70,17 @@ class Campaign < ActiveRecord::Base
       end
       campaign_supporters.create!(supporter_attributes)
     end
+  end
+  
+  def add_comment(user, text, comment_confirmed=false)
+    comment = comments.build(:text => text,
+                             :user => user)
+    comment.status = :new
+    comment.save
+    if comment_confirmed
+      comment.confirm!
+    end
+    comment
   end
   
   def remove_supporter(user)

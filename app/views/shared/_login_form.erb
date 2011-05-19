@@ -6,6 +6,7 @@
   <%- else %>
     <div class='error', id="error-base" style="display: none;"></div>
   <%- end %>
+  <div class='notice' id='notice-base' style="display: none;"></div>
 <ul>
 	<li class="login-username">
 	  <%- if @user_session.errors.on('email') %>

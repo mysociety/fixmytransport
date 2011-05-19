@@ -14,5 +14,11 @@
 	<div id="login-create-account" class="pane">
 		<%= render :partial => 'shared/create_account' %>
 	</div>
+	
+	<%- if @campaign %>
+	<div id="comment-and-login" class="pane">
+		<%= render :partial => 'shared/comment' %>
+	</div>
+	<%- end %>
 
 </div>

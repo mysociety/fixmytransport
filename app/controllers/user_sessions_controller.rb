@@ -29,10 +29,7 @@ class UserSessionsController < ApplicationController
           perform_post_login_action
         else
           @json[:success] = false
-          @json[:errors] = {}
-          @user_session.errors.each do |attribute,message|
-            @json[:errors][attribute] = message
-          end
+          add_json_errors(@user_session, @json)
         end
         render :json => @json
       end

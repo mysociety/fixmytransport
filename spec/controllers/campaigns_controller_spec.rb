@@ -413,8 +413,6 @@ describe CampaignsController do
     before do
       @mock_campaign = mock_model(Campaign, :visible? => true, :editable? => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
-      @mock_update = mock_model(CampaignUpdate)
-      CampaignUpdate.stub!(:find).and_return(@mock_update)
       @mock_user = mock_model(User)
       @controller.stub!(:current_user).and_return(@mock_user)
     end
@@ -429,40 +427,56 @@ describe CampaignsController do
       response.should render_template('add_comment')
     end
 
-    describe 'when no campaign update can be found' do
+  end
 
-      before do
-        @mock_user = mock_model(User, :campaigns => [@mock_campaign])
-        @controller.stub!(:current_user).and_return(@mock_user)
-        CampaignUpdate.stub!(:find).and_return(nil)
-      end
+  shared_examples_for "add_comment when an invalid comment has been submitted" do
+  
+    describe 'when handling a non-ajax request' do 
 
-      it 'should return a "not found" response' do
-        make_request
-        response.status.should == '404 Not Found'
+      it 'should render the "add_comment" template' do 
+        make_request(default_params)
+        response.should render_template("add_comment")
       end
 
     end
-
+    
+    describe 'when responding to a request asking for json' do 
+      
+      it 'should return a json hash with the key success set to false' do 
+        make_request(default_params.update(:format => 'json'))
+        json_hash = JSON.parse(response.body)
+        json_hash['success'].should == false
+      end
+    
+      it 'should return a json hash with the error messages' do 
+        make_request(default_params.update(:format => 'json'))
+        json_hash = JSON.parse(response.body)
+        json_hash['errors']['text'].should == "Please enter some text"
+      end
+    
+    end
+    
+  
   end
-
+  
   describe 'POST #add_comment' do
 
     before do
       @mock_user = mock_model(User)
-      @mock_campaign = mock_model(Campaign, :visible? => true, :editable? => true)
+      @mock_campaign = mock_model(Campaign, :visible? => true, 
+                                            :editable? => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
-      @controller.stub!(:current_user).and_return(@mock_user)
       @mock_comment = mock_model(Comment, :save => true,
                                           :valid? => true,
-                                          :save_user => true,
-                                          :commented_id => 66,
-                                          :commented_type => 'CampaignUpdate',
+                                          :user= => true,
+                                          :commented_id => 55,
+                                          :commented_type => 'Campaign',
                                           :text => 'comment text',
                                           :confirm! => true,
+                                          :skip_name_validation= => true,
+                                          :campaign_events => [],
                                           :status= => true)
-      @mock_update = mock_model(CampaignUpdate, :comments => mock('comments', :build => @mock_comment))
-      CampaignUpdate.stub!(:find).and_return(@mock_update)
+      @mock_campaign.stub!(:comments).and_return(mock('comments', :build => @mock_comment))
     end
 
     def make_request params
@@ -471,47 +485,145 @@ describe CampaignsController do
 
     def default_params
       { :id => 55,
-        :comment => { :commentable_id => 66,
-                      :commentable_type => 'CampaignUpdate',
-                      :user_attributes => {:email => 'test@example.com'}} }
+        :comment => { :commentable_id => 55,
+                      :commentable_type => 'Campaign'} }
+    end
+    
+    describe 'if there is no current user' do 
+      
+      it 'should validate the comment  skipping user name validation' do 
+        @mock_comment.should_receive(:skip_name_validation=).with(true)
+        make_request(default_params)
+      end
+      
+      describe 'if the comment is not valid' do 
+      
+        before do 
+          @mock_comment.stub!(:valid?).and_return(false)
+          @mock_comment.stub!(:errors).and_return([[:text, "Please enter some text"]])
+        end
+        
+        it_should_behave_like "add_comment when an invalid comment has been submitted"
+        
+      end
+      
+      describe 'if the comment is valid' do 
+    
+        it 'should save the comment data in the session' do 
+          controller.should_receive(:data_to_string)
+          make_request(default_params)
+        end
+    
+        describe 'if the request asks for json' do 
+        
+          it 'should return a json hash with the success key set to true' do 
+            make_request(default_params.update(:format => 'json'))
+            json_hash = JSON.parse(response.body)
+            json_hash['success'].should == true
+          end
+          
+          it 'should return a json hash with the requires_login key set to true' do 
+            make_request(default_params.update(:format => 'json'))
+            json_hash = JSON.parse(response.body)
+            json_hash['requires_login'].should == true
+          end
+          
+          it 'should return a json hash with a key for a message for the user asking them to login' do 
+            make_request(default_params.update(:format => 'json'))
+            json_hash = JSON.parse(response.body)
+            json_hash['notice'].should == 'Please login or signup to add your comment to this campaign'
+          end
+          
+        end
+        
+        describe 'if the request asks for html' do 
+        
+          it 'should redirect the user to the login page' do 
+            make_request(default_params)
+            response.should redirect_to(login_url)
+          end
+          
+          it 'should display a notice for the user asking them to login' do 
+            make_request(default_params)
+            flash[:notice].should == 'Please login or signup to add your comment to this campaign'
+          end
+          
+        end
+        
+      end
+          
     end
 
-    it 'should create a comment associated with the update' do
-      @mock_update.comments.should_receive(:build)
-      make_request(default_params)
-    end
-
-    it 'should save the comment' do
-      @mock_comment.should_receive(:save).and_return(true)
-      make_request(default_params)
-    end
-
-    it 'should save the associated user' do
-      @mock_comment.should_receive(:save_user).and_return(true)
-      make_request(default_params)
-    end
-
-    it 'should set the status of the comment to new' do
-      @mock_comment.should_receive(:status=).with(:new)
-      make_request(default_params)
-    end
-
-    it 'should assign a comment to the view' do
-      make_request(default_params)
-      assigns[:comment].should_not be_nil
-    end
-
-    describe 'when handling an AJAX request' do
-
-      it 'should return a json hash containing the commented_id, commented_type and comment html' do
-        xhr :post, :add_comment, default_params
-        json_hash = JSON.parse(response.body)
-        json_hash['commented_id'].should == 66
-        json_hash['commented_type'].should == 'CampaignUpdate'
-        json_hash['html'].should_not be_nil
+    describe 'if there is a current user' do 
+      
+      before do 
+        @controller.stub!(:current_user).and_return(@mock_user)
+      end
+      
+      it 'should create a comment associated with the campaign' do
+        @mock_campaign.comments.should_receive(:build)
+        make_request(default_params)
       end
 
+      it 'should set the status of the comment to new' do
+        @mock_comment.should_receive(:status=).with(:new)
+        make_request(default_params)
+      end
+      
+      it 'should set the current user as the commenter' do 
+        @mock_comment.should_receive(:user=).with(@mock_user)
+        make_request(default_params)
+      end
+      
+      describe 'if the comment is valid' do
+
+        it 'should save the comment' do
+          @mock_comment.should_receive(:save).and_return(true)
+          make_request(default_params)
+        end
+        
+        it 'should confirm the comment' do
+          @mock_comment.should_receive(:confirm!).and_return(true) 
+          make_request(default_params)
+        end
+        
+        
+        describe 'when handling an html request' do 
+
+          it 'should redirect to the campaign url' do 
+            make_request(default_params)
+            response.should redirect_to campaign_url(@mock_campaign)
+          end
+
+        end
+      
+        describe 'when handling a json request' do 
+          
+          it 'should return a json hash containing success and comment html' do
+            make_request(default_params.update(:format => 'json'))
+            json_hash = JSON.parse(response.body)
+            json_hash['success'].should == true
+            json_hash['html'].should_not be_nil
+          end
+          
+        end
+        
+      end
+      
+      describe 'if the comment is not valid' do 
+
+        before do 
+          @mock_comment.stub!(:valid?).and_return(false)
+          @mock_comment.stub!(:errors).and_return([[:text, "Please enter some text"]])
+        end  
+
+        it_should_behave_like "add_comment when an invalid comment has been submitted"
+        
+      end
+  
+
     end
+
 
   end
   

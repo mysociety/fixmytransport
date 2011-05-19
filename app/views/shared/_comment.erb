@@ -1,0 +1,15 @@
+
+<%- form_for :comment, @comment ||= Comment.new, :url => add_comment_campaign_url(@campaign), :html => {:id => 'comment-form'} do |f| %>
+<%- if @comment.errors.on('text') %>
+  <div class='error' id="error-text">
+    <%= error_message_on @comment, :text %>
+  </div>
+  <%- else %>
+    <div class='error', id="error-text" style="display: none;"></div>
+<%- end %>
+<%= raw f.label :text, {}, {:style => 'display:none'} %>
+<%= raw f.text_area :text %>
+<div id="comment-login-options">	
+	<button type="submit" class="button">Post</button>
+</div>
+<%- end %>

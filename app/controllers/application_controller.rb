@@ -182,13 +182,13 @@ class ApplicationController < ActionController::Base
     if post_login_action_data = get_action_data(params)
       session[:next_action] = params[:next_action]
       if post_login_action_data[:action] == :join_campaign
-        flash.now[:notice] = "Please login or create an account to join this campaign"
+        flash.now[:notice] = post_login_action_data[:notice]
       end
     end
   end
   
   def post_login_actions
-    [:join_campaign]
+    [:join_campaign, :add_campaign_comment]
   end
   
   def get_action_data(data_hash)
@@ -204,14 +204,27 @@ class ApplicationController < ActionController::Base
   def perform_post_login_action
     current_user(refresh=true)
     if post_login_action_data = get_action_data(session)
+      campaign_id = post_login_action_data[:id]
+      campaign = Campaign.find(campaign_id)
       case post_login_action_data[:action]
       when :join_campaign
-        campaign_id = post_login_action_data[:id]
-        Campaign.find(campaign_id).add_supporter(current_user, confirmed=true)
-        session[:return_to] = post_login_action_data[:redirect]
+        campaign.add_supporter(current_user, confirmed=true)
         flash[:notice] = "Thanks for joining this campaign"
+      when :add_campaign_comment
+        campaign.add_comment(current_user, 
+                             post_login_action_data[:text],
+                             confirmed=true)
+        flash[:notice] = "Thanks for your comment"
       end
+      session[:return_to] = post_login_action_data[:redirect]
       session.delete(:next_action)
+    end
+  end
+
+  def add_json_errors(model_instance, json_hash)
+    json_hash[:errors] = {}
+    model_instance.errors.each do |attribute,message|
+      json_hash[:errors][attribute] = message
     end
   end
 

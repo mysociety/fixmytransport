@@ -1,12 +1,13 @@
 class Comment < ActiveRecord::Base
   belongs_to :user
   belongs_to :commented, :polymorphic => true
-  validates_presence_of :text, :user_name
+  validates_presence_of :text
+  validates_presence_of :user_name, :unless => :skip_name_validation
   validates_associated :user
   before_create :generate_confirmation_token
   before_validation_on_create :populate_user_name
   has_many :campaign_events, :as => :described
-  
+  attr_accessor :skip_name_validation
   has_paper_trail
   has_status({ 0 => 'New', 
                1 => 'Confirmed', 
@@ -57,9 +58,10 @@ class Comment < ActiveRecord::Base
         end
         commented.updated_at = Time.now
         commented.save!
-      else
-        commented.campaign.campaign_events.create!(:event_type => 'comment_added',
-                                                   :described => self)
+      elsif commented.is_a? Campaign
+        self.campaign_events.build(:event_type => 'comment_added',
+                                   :described => self,
+                                   :campaign => commented)
       end
       save!  
     end

@@ -4,6 +4,11 @@
  */
 
 $(document).ready(function(){
+
+  	$('.goto-top').click(function(e){
+  		e.preventDefault();
+  		 $('html, body').animate({scrollTop : 0},'slow');
+  	});
 	/* Thread
 	   ================================================== */
 
@@ -48,16 +53,22 @@ $(document).ready(function(){
 		show: "fade",
 		hide: "fade",
 		modal: true,
-		width: "700px",
+		width: "500px",
+    title: "Sign In",
 		beforeClose: function(event, ui) {
-		  $('#login-form').find("#next_action").remove();
-		  $('#create-account-form').find("#next_action").remove(); }
+      // get rid of any next actions
+		  $("#login-box form").find("#next_action").remove();
+      // clear form errors
+		  $("#login-box .error").html();
+		  $("#login-box .error").hide();  }
 	  });
 
 	//login click
-	$(".auth").click(function() {
-    $('#login-landing').show();
-    $('.login-box .pane').not('#login-landing').hide();
+	$(".auth").click(function(e) {
+	  e.preventDefault();
+  	$('.login-box .pane').hide();
+  	$('#login-landing').show();
+		$("#login-box").dialog({title: "Sign In"});
 		$("#login-box").dialog("open");
 		return false;
 	});
@@ -76,23 +87,139 @@ $(document).ready(function(){
 	/* Login Options */
 	$('.login-box .pane').not('#login-landing').hide();
 
-	//create account
+  //create account
   $('#create-account').click(function(e){
-   e.preventDefault();
-   $('#login-landing').fadeOut(function(){
-     $('#login-create-account').fadeIn();
-   });
+  	e.preventDefault();
+  	$('.pane:visible').fadeOut(500, function(){
+  		$('#login-create-account').fadeIn();
+  	});
   });
 
-  // ajax submission of login/create account forms
-  function ajaxifyForm(form_selector){
-	  var options = {
+  //twitter
+  $('.twitter').click(function(e){
+  	e.preventDefault();
+  	$('.pane:visible').fadeOut(500, function(){
+			$('#login-twitter').fadeIn();
+  	});
+  });
+
+  //facebook
+  $('.facebook').click(function(e){
+  	e.preventDefault();
+  	$('.pane:visible').fadeOut(500, function(){
+  		$('#login-facebook').fadeIn();
+  	});
+	});
+
+		/* Comment but not logged in */
+  $('.comment-button').click(function(e){
+  	e.preventDefault();
+  	$('.login-box .pane').hide();
+  	$('#comment-and-login').show();
+    // Add the index of the last campaign event being shown to the form
+  	var last_campaign_event_index = $('#campaign-thread li:last-child .thread-item .num').text();
+    $('#comment-form').append($('<input/>')
+                .attr('type', 'hidden')
+                .attr('name', 'last_campaign_event_index')
+                .val(last_campaign_event_index));
+  	$("#login-box").dialog({title: "Comment:"});
+  	$("#login-box").dialog("open");
+  	return false;
+  });
+
+  /* Static Login Options for campaign creation page*/
+
+	//create account
+	$('#static-create-account').click(function(e){
+		e.preventDefault();
+		$('.login-box .pane').hide();
+		$('#login-create-account').show();
+		$("#login-box").dialog("open");
+		return false;
+	});
+
+	//twitter
+	$('#static-twitter').click(function(e){
+		e.preventDefault();
+		$('.login-box .pane').hide();
+		$('#login-twitter').show();
+		$("#login-box").dialog("open");
+		return false;
+	});
+
+	//facebook
+	$('#static-facebook').click(function(e){
+		e.preventDefault();
+		$('.login-box .pane').hide();
+		$('#login-facebook').show();
+		$("#login-box").dialog("open");
+		return false;
+	});
+
+  function showFormErrors(form_selector, response) {
+    $(form_selector + " .error").html();
+    $(form_selector + " .error").hide();
+    for (var key in response.errors){
+      $(form_selector + ' #error-' + key).html( response.errors[key] );
+      $(form_selector + ' #error-' + key).show();
+    }
+  }
+
+  function defaultFormOptions() {
+    var options = {
        data: {
          _method: 'post'
        },
        dataType: 'json'
      };
-    options['success'] = function(response){
+     return options;
+  }
+
+	// ajax submission of comment form
+	function setupCommentForm(form_selector) {
+	  options = defaultFormOptions();
+	  options['success'] = function(response) {
+	    if (response.success) {
+        if (response.requires_login) {
+        // add the notice to the login form
+        $('#login-landing #notice-base').text(response.notice);
+        $('#login-landing #notice-base').show();
+        
+        // show the login form
+        $('.login-box .pane').hide();
+    		$('#login-landing').show();
+    		
+        // clear the comment field
+        $(form_selector + " #comment_text").val("");
+          
+        }else{
+          // load the new comment into the campaign history
+          $('#campaign-thread').append(response.html);
+
+          // set up the new comment events
+          var new_comment = $('ul#campaign-thread li:last-child a.thread-item');
+          new_comment.click(function(e){
+        		e.preventDefault();
+        		thread($(this).parent('li'));
+        	});
+          // open it
+        	new_comment.click();
+          // clear the comment field
+          $(form_selector + " #comment_text").val("");
+          // close the dialog box
+          $("#login-box").dialog("close");
+        }
+      } else {
+        showFormErrors(form_selector, response);
+      }
+	  }
+	  $(form_selector).ajaxForm(options);
+	}
+
+  // ajax submission of login/create account forms
+  function ajaxifyForm(form_selector) {
+    options = defaultFormOptions();
+    options['success'] = function(response) {
        if (response.success) {
            if (response.html){
              $(form_selector).html(response.html);
@@ -100,17 +227,13 @@ $(document).ready(function(){
              window.location.reload();
            }
         } else {
-          $(form_selector + " .error").html();
-          $(form_selector + " .error").hide();
-          for (var key in response.errors){
-            $(form_selector + ' #error-' + key).html( response.errors[key] );
-            $(form_selector + ' #error-' + key).show();
-          }
+          showFormErrors(form_selector, response);
         }
    	};
 	  $(form_selector).ajaxForm(options);
 	}
 
+  setupCommentForm('#comment-form');
   ajaxifyForm('#login-form');
   ajaxifyForm('#create-account-form');
 
@@ -206,18 +329,18 @@ $(document).ready(function(){
 		$('.tipbox').not('.fixed').css({'right':'-999999em'});
 		$('.tipbox', parent).not('.fixed').css({'right':'-450px', 'opacity':'0'}).animate({'opacity':'1'}, {duration: 500, queue: false});
 	});
-});
-
-
-  /* Campaign photo lightboxing 
+	
+  /* Campaign photo lightboxing
      ================================================== */
-       
-  $('.gallery a').lightBox( {	
-    imageLoading:  '/images/lightbox-ico-loading.gif',
-   	imageBtnClose: '/images/lightbox-btn-close.gif',
-   	imageBtnPrev:  '/images/lightbox-btn-prev.gif',
-   	imageBtnNext:  '/images/lightbox-btn-next.gif',
-  }); 
+
+  if ($('.gallery a').length > 0){
+    $('.gallery a').lightBox( {
+      imageLoading:  '/images/lightbox-ico-loading.gif',
+     	imageBtnClose: '/images/lightbox-btn-close.gif',
+     	imageBtnPrev:  '/images/lightbox-btn-prev.gif',
+     	imageBtnNext:  '/images/lightbox-btn-next.gif',
+    });
+  }
   
   /* Campaign Supporter 'View all' link
      ================================================== */
@@ -230,3 +353,7 @@ $(document).ready(function(){
       }
     });
   });
+  	
+});
+
+

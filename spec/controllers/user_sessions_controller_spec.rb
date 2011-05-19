@@ -24,7 +24,9 @@ describe UserSessionsController do
     describe 'when a post-login action of joining the campaign is passed' do
       
       before do 
-        @next_action_data = @controller.send(:data_to_string, { :action => :join_campaign })
+        notice = "Please login or create an account to join this campaign"
+        @next_action_data = @controller.send(:data_to_string, { :action => :join_campaign,
+                                                                :notice => notice })
       end
   
       it 'should save the post-login action to the session' do 

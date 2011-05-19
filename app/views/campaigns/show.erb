@@ -30,11 +30,13 @@
           <%- end %>
 
       <%- else %>
+      
         <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST',  } do |f| %>
           <%= raw hidden_field_tag "user_id", current_user.id %>
           <%= raw submit_tag "Support", :class => 'support-big' %>
         <%- end %>
       <%- end %>
+      
     <%- else %>
         <%- form_for @user_session = UserSession.new, :url => login_url, :html => { :method => 'POST',  } do |f| %>
           <%= raw hidden_field_tag "next_action", @next_action_join %>
@@ -128,7 +130,7 @@
 		<%- end %>
 
 		<div class="box">
-			<a class="comment-button right" href="#">Comment</a>
+			<a class="comment-button right" href="<%= add_comment_campaign_url(@campaign) %>">Comment</a>
 		</div>
 
 		<div class="clear">
@@ -141,7 +143,7 @@
 		</div>
 		<ul id="campaign-thread">
 		<%- @campaign.campaign_events.visible.each_with_index do |campaign_event, index| %>
-			<%= render :partial => 'campaign_event', :locals => { :always_show_commentbox => false, :event => campaign_event, :index => index+1 } %>
+			<%= render :partial => 'campaign_event', :locals => { :event => campaign_event, :index => index+1 } %>
 		<%- end %>
 		</ul>
 
