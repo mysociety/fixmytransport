@@ -14,10 +14,9 @@
 	<div id="login-create-account" class="pane">
 		<%= render :partial => 'shared/create_account' %>
 	</div>
-	
-	<%- if @campaign %>
+	<%- if ['campaigns', 'problems'].include?(controller.controller_name) && controller.action_name == 'show' %>
 	<div id="comment-and-login" class="pane">
-		<%= render :partial => 'shared/comment' %>
+		<%= render :partial => 'shared/comment_form' %>
 	</div>
 	<%- end %>
 

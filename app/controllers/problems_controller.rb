@@ -6,7 +6,7 @@ class ProblemsController < ApplicationController
                                                :find_bus_route, 
                                                :find_train_route, 
                                                :find_other_route]
-  before_filter :find_visible_problem, :only => [:show, :update]
+  before_filter :find_visible_problem, :only => [:show, :update, :add_comment]
   before_filter :require_problem_reporter, :only => [:convert]
   
   def index
@@ -67,6 +67,7 @@ class ProblemsController < ApplicationController
   end
   
   def show
+    @commentable = @problem
     map_params_from_location(@problem.location.points, find_other_locations=false)
     @new_comment = Comment.new(:commented => @problem, 
                                :user => current_user ? current_user : User.new,
@@ -105,33 +106,18 @@ class ProblemsController < ApplicationController
     end
   end
   
-  def update
-    # just accept params for a new comment for now
-    if current_user && params[:problem][:comments][:user_attributes].has_key?(:id) && 
-      current_user.id != params[:problem][:comments][:user_attributes][:id].to_i
-      raise "Comment added with user_id that isn't logged in user"
-    end
-    @new_comment = @problem.comments.build(params[:problem][:comments])
-    @new_comment.status = :new
-    if @new_comment.valid? 
-      # save the user account if it doesn't exist, but don't log it in
-      @new_comment.save_user
-      @new_comment.save
+  def add_comment
+    @commentable = @problem
+    if request.post?
+      @comment = @problem.comments.build(params[:comment])
+      @comment.status = :new
       if current_user
-        @new_comment.confirm!
-        flash[:notice] = t(:thanks_for_update)
-        redirect_to problem_url(@problem)
+        return handle_comment_current_user
       else
-        @new_comment.send_confirmation_email
-        @action = t(:your_update_will_not_be_posted)
-        @worry = t(:holding_on_to_update)
-        render 'shared/confirmation_sent'
-        return
+        return handle_comment_no_user
       end
-    else
-      map_params_from_location(@problem.location.points, find_other_locations=false)
-      render :show
     end
+    render :template => 'shared/add_comment'
   end
   
   def find_stop

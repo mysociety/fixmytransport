@@ -1,64 +1,43 @@
-<%- @title = "#{MySociety::Format.ucfirst(@problem.location.name)}: #{@problem.subject}" %>
-<div id='map-col'>
-  <%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH } %>
-</div>
+<%- @title = "#{@problem.subject}" %>
+<div id="banner" class="blue">
+	<div class="container">
+		<h1><a href="<%= location_url(@problem.location) %>"><%= @problem.location.description %></a></h1>
+	</div>
+</div>			
 
-<div class='problem-full'>
-  <%- if @problem.status == :fixed %>
-    <div class='fixed'>
-      <%= t(:problem_has_been_fixed) %>
-    </div>
-  <%- end %>
-  <h2 class='name'><%= @title %></h2>
-  
-  <div class='details'>
-  
-    <%= t(:reported).titleize %>
-    <span class='posted-time'>
-      <%= t(:posted_time, :time => time_ago_in_words(@problem.confirmed_at)) %>
-    </span>
-    <span class='author'>
-      <%= t(:by, :name => @problem.reporter_name) %>
-    </span>
-    <%- unless @problem.location.is_a?(SubRoute) %>
-      <span class='transport-location'>
-        <%= raw t(:problem_location, :link => link_to(@problem.location.description, location_url(@problem.location))) %>
-      </span>
-    <%- end %>
-    <%- if @problem.sent_at %>
-      <div class='sent-time'>
-        <%= t(:sent_time, :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.recipients.map{ |recipient| recipient.name }.to_sentence) %>
-      </div>
-    <%- end %>
-  </div>
+<div id="main-content" class="container">
+	<div class="leftcol">	
+	  <div id="medium-map">
+    <%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH } %>
+		</div>				
+		<div class="clear">
+			<h5 class="left">Comments</h5>
+			<a class="comment-button right comment-trigger" href="#">Comment</a>
+		</div>
 
-  <p class='problem'>
-    <%= raw simple_format(sanitize(@problem.description)) %>
-    <%- if @problem.date or @problem.time %>
-      <div class='problem-datetime'>
-        <%= t(:problem_occurred, :date_and_time => problem_date_and_time(@problem)) %>
-      </div>
-    <%- end %>
-    <h3><%= t(:updates) %></h3>
-    <div class='updates'>
-    <%- @problem.comments.visible.each do |comment|  %>
-      <div class='problem-event'>
-        <a name='update_<%= comment.id %>'></a>
-        <span class='date'>
-          <%= t(:posted_time, :time => time_ago_in_words(comment.confirmed_at)) %>
-        </span>
-        <span class='update'>
-          <%= t(:user_updates, :name => comment.user_name)   %>
-          <%= "\"#{comment.text}\"" %>
-        </span>
-        <%- if comment.mark_fixed? %>
-            <span class='fixed-text'>
-              <%=", #{t(:marked_as_fixed)}"%>
-          </span>
-        <%- end %>
-      </div>
-    <%- end %>
-    <%= render :partial => 'update_form' %>
-    </div>
-  </p>
+		<ul id="campaign-thread">
+		  <%- @problem.comments.visible.each_with_index do |comment, index|  %>
+  		 <li>
+  		  <%= render :partial => 'shared/comment', :locals => { :comment => comment,  :index => index+1 }%>
+		   </li>
+		<%- end %>
+		</ul>
+		
+	</div>
+
+	<div class="rightcol">
+		<h3>The Problem</h3>
+			<p><%= raw simple_format(sanitize(@problem.description)) %></p>
+
+			<h5>Posted</h5>
+			<ul>
+				<li><a href="<%=  profile_url(@problem.reporter) %>"><%= @problem.reporter_name %></a></li>
+				<li><%= @problem.confirmed_at.to_date.to_s(:short) %></li>						
+			</ul>
+
+
+	</div>
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
+	</div>
 </div>

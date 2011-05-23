@@ -280,6 +280,26 @@ module ApplicationHelper
       return admin_url(route_path(location.id))
     end
   end
+  
+  def add_comment_url(commentable)
+    if commentable.is_a?(Campaign)
+      return add_comment_campaign_url(commentable)
+    elsif commentable.is_a?(Problem)
+      return add_comment_problem_url(commentable)
+    else 
+      raise "Unhandled commentable type in add_comment_url: #{commentable.type}"
+    end
+  end
+  
+  def commented_url(commentable)
+    if commentable.is_a?(Campaign)
+      return campaign_url(commentable)
+    elsif commentable.is_a?(Problem)
+      return problem_url(commentable)
+    else
+      raise "Unhandled commentable type in commentable_url: #{commentable.type}"
+    end
+  end
 
   def map_link_url(location, link_type)
     if link_type == :location

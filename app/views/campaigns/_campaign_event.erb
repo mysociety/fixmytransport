@@ -13,6 +13,6 @@
   <%- when 'campaign_update_added' %>
     <%= render :partial => 'campaign_update', :locals => { :update => event.described, :index => index } %>
     <%- when 'comment_added' %>
-    <%= render :partial => 'campaign_comment', :locals => { :comment => event.described, :index => index } %>
+    <%= render :partial => 'shared/comment', :locals => { :comment => event.described, :index => index } %>
   <%- end %>
 </li>

@@ -121,6 +121,7 @@ class CampaignsController < ApplicationController
   end
 
   def show
+    @commentable = @campaign
     @next_action_join = data_to_string({ :action => :join_campaign,
                                          :id => @campaign.id,
                                          :redirect => campaign_path(@campaign),
@@ -195,6 +196,7 @@ class CampaignsController < ApplicationController
   end
 
   def add_comment
+    @commentable = @campaign
     if request.post?
       @comment = @campaign.comments.build(params[:comment])
       @comment.status = :new
@@ -204,76 +206,10 @@ class CampaignsController < ApplicationController
         return handle_comment_no_user
       end
     end
+    render :template => 'shared/add_comment'
   end
 
   private
-
-  # handle a posted comment if there's no current user logged in
-  def handle_comment_no_user
-    @comment.skip_name_validation = true
-    if @comment.valid?
-      comment_data = { :action => :add_campaign_comment,
-                       :id => @campaign.id,
-                       :text => @comment.text,
-                       :redirect => campaign_path(@campaign),
-                       :notice => "Please login or signup to add your comment to this campaign" }
-      session[:next_action] = data_to_string(comment_data)
-      respond_to do |format|
-        format.html do
-          flash[:notice] = comment_data[:notice]
-          redirect_to(login_url)
-        end
-        format.json do
-          @json = { :success => true,
-                    :requires_login => true,
-                    :notice => comment_data[:notice] }
-          render :json => @json
-        end
-      end
-    else
-      render_or_return_for_invalid_comment and return false
-    end
-  end
-
-  # handle a posted comment if there is a current user
-  def handle_comment_current_user
-    @comment.user = current_user
-    if @comment.valid?
-      @comment.save
-      @comment.confirm!
-      respond_to do |format|
-        format.html do
-          flash[:notice] = 'Thanks for your comment!'
-          redirect_to campaign_url(@campaign)
-        end
-        format.json do
-          index = params[:last_campaign_event_index].to_i + 1
-          comment_html = render_to_string :partial => 'campaign_event',
-                                          :locals => { :event => @comment.campaign_events.first,
-                                                       :index => index }
-          @json = { :success => true,
-                    :html => comment_html }
-          render :json => @json
-        end
-      end
-    else
-      render_or_return_for_invalid_comment and return false
-    end
-  end
-
-  def render_or_return_for_invalid_comment
-    respond_to do |format|
-      format.html do
-        render :action => 'add_comment'
-      end
-      format.json do
-        @json = {}
-        @json[:success] = false
-        add_json_errors(@comment, @json)
-        render :json => @json
-      end
-    end
-  end
 
   def require_campaign_initiator_or_token
     return require_campaign_initiator(allow_expert=true) if @campaign.status != :new

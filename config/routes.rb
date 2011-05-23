@@ -27,8 +27,9 @@ ActionController::Routing::Routes.draw do |map|
   map.confirm_join '/c/:email_token', :action => 'confirm_join', :controller => 'campaigns'
   map.confirm_leave '/l/:email_token', :action => 'confirm_leave', :controller => 'campaigns'
 
-  map.resources :problems, :except => [:destroy], 
-                           :member => [:convert],
+  map.resources :problems, :except => [:destroy, :edit, :update], 
+                           :member => {:convert => [:get], 
+                                      :add_comment => [:get, :post] },
                            :collection => { :choose_location => :get, 
                                             :find_stop => :get,
                                             :find_route => :get, 

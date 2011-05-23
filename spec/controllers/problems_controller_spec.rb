@@ -435,97 +435,60 @@ describe ProblemsController do
     end
     
   end
-  
-  describe "PUT #update" do 
-  
-    before do 
-      @mock_problem = mock_model(Problem, :comments => [])
-      @mock_comment = mock_model(Comment, :valid? => true, 
-                                          :save => true, 
-                                          :save_user => true,
-                                          :status= => true,
-                                          :send_confirmation_email => true,
-                                          :confirm! => true)
-      @mock_problem.comments.stub!(:build).and_return(@mock_comment)
-      Problem.stub!(:find).and_return(@mock_problem)
-    end
+
+  describe 'GET #add_comment' do 
     
-    def make_request
-      put :update, default_params
+    before do
+      @mock_problem = mock_model(Problem, :visible? => true)
+      Problem.stub!(:find).and_return(@mock_problem)
+      @mock_user = mock_model(User)
+      @controller.stub!(:current_user).and_return(@mock_user)
+    end
+
+    def make_request(params=nil)
+      params = { :id => 55 } if !params
+      get :add_comment, params
+    end
+
+    it 'should render the template "add_comment"' do
+      make_request
+      response.should render_template('shared/add_comment')
+    end
+
+  end
+  
+  describe 'POST #add_comment' do 
+    
+    before do
+      @mock_user = mock_model(User)
+      @mock_problem = mock_model(Problem, :visible? => true)
+      Problem.stub!(:find).and_return(@mock_problem)
+      @mock_comment = mock_model(Comment, :save => true,
+                                          :valid? => true,
+                                          :user= => true,
+                                          :commented_id => 55,
+                                          :commented_type => 'Problem',
+                                          :commented => @mock_problem,
+                                          :text => 'comment text',
+                                          :confirm! => true,
+                                          :skip_name_validation= => true,
+                                          :status= => true)
+      @mock_problem.stub!(:comments).and_return(mock('comments', :build => @mock_comment))
+      @expected_notice = "Please login or signup to add your comment to this problem"
+      @expected_redirect = problem_url(@mock_problem)
+    end
+
+    def make_request params
+      post :add_comment, params
     end
     
     def default_params
-      { :id => 55, 
-        :problem => { :title => 'a new title', 
-                      :comments => { 'text' => 'test',
-                                     'user_attributes' => {'email' => 'test@example.com'} } } }
+      { :id => 55,
+        :comment => { :commentable_id => 55,
+                      :commentable_type => 'Problem'} }
     end
     
-    it 'should find the problem by id' do 
-      Problem.should_receive(:find).with('55')
-      make_request
-    end
-    
-    it 'should only pass on parameters for a new update' do 
-      @mock_problem.comments.should_receive(:build).with(default_params[:problem][:comments])
-      make_request
-    end
-    
-    it 'should set the update status to :new' do 
-      @mock_comment.should_receive(:status=).with(:new)
-      make_request
-    end
-    
-    describe 'if the update is valid' do 
-    
-      it 'should save the update' do 
-        @mock_comment.should_receive(:save)
-        make_request
-      end
-    
-      it 'should save the update user' do 
-        @mock_comment.should_receive(:save_user)
-        make_request
-      end
-      
-      describe 'if the user is logged in' do 
-        
-        before do 
-          @controller.stub!(:current_user).and_return(mock_model(User))
-        end
-        
-        it 'should confirm the update' do 
-          @mock_comment.should_receive(:confirm!)
-          make_request
-        end
-        
-        it 'should show the user a message' do 
-          make_request
-          flash[:notice].should == "Thanks for adding an update!"
-        end
-        
-        it 'should redirect to the problem page' do 
-          make_request
-          @response.should redirect_to(problem_url(@mock_problem))
-        end
-        
-      end
-      
-      describe 'if the user is not logged in' do 
-        
-        it 'should render the "confirmation_sent" template ' do 
-          make_request
-          response.should render_template('shared/confirmation_sent')
-        end
-        
-        it 'should send a confirmation email' do 
-          @mock_comment.should_receive(:send_confirmation_email)
-          make_request
-        end
-        
-      end
-      
-    end
+    it_should_behave_like "an action that receives a POSTed comment"
     
   end
   

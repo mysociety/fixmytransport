@@ -110,11 +110,11 @@ $(document).ready(function(){
   	$('.login-box .pane').hide();
   	$('#comment-and-login').show();
     // Add the index of the last campaign event being shown to the form
-  	var last_campaign_event_index = $('#campaign-thread li:last-child .thread-item .num').text();
+  	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
     $('#comment-form').append($('<input/>')
                 .attr('type', 'hidden')
-                .attr('name', 'last_campaign_event_index')
-                .val(last_campaign_event_index));
+                .attr('name', 'last_thread_index')
+                .val(last_thread_index));
   	$("#login-box").dialog({title: "Comment:"});
   	$("#login-box").dialog("open");
   	return false;
