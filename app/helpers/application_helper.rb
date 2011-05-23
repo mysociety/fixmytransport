@@ -384,6 +384,14 @@ module ApplicationHelper
     end
   end
   
+  def button(text, link, link_class, index)
+    if (index > 0 && ((index+1) % 4) == 0)
+      link_class += " last"
+    end
+    link = "<a href=\"#{link}\" class=\"#{link_class}\">#{text}</a>"
+    return link
+  end
+  
   def sortable(column, title = nil)
     title ||= column.titleize
     css_class = column == sort_column ? "current #{sort_direction}" : nil

@@ -105,7 +105,7 @@ $(document).ready(function(){
 	});
 
 		/* Comment but not logged in */
-  $('.comment-button').click(function(e){
+  $('.comment-trigger').click(function(e){
   	e.preventDefault();
   	$('.login-box .pane').hide();
   	$('#comment-and-login').show();
@@ -223,12 +223,13 @@ $(document).ready(function(){
         		e.preventDefault();
         		thread($(this).parent('li'));
         	});
-          // open it
-        	new_comment.click();
+
           // clear the comment field
           $(form_selector + " #comment_text").val("");
           // close the dialog box
           $("#login-box").dialog("close");
+          // open the comment
+        	new_comment.click();
         }
       } else {
         showFormErrors(form_selector, response);

@@ -44,11 +44,7 @@
 
       <%= render :partial => "shared/login" %>
 
-			<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
-        	<div class="staging-banner notice container">
-          	<%= t(:development_site) %>
-        	</div>
-      <%- end %>
+
 
 			<%- [:notice, :error].each do |key| %>
           <%- unless flash[key].blank? %>

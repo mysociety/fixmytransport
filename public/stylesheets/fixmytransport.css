@@ -206,19 +206,26 @@ form#search {
     background: #FFFBD7;
 	  border:1px solid #aaad95;
   }
-  #banner h1 {
+  #banner.blue {
+      background: #048fc2;
+  	margin-bottom:2em;
+  	padding: 1.5em 0;
+  }
+  #banner.blue.supporter {
+  	margin-bottom:0;
+  }
+  #banner h1.tk-museo {
 		font-size: 28px;
-		line-height: 1.2em;
-	    font-weight: bold;
-	    color: #151f26;
+	}
+  #banner h1 {
+    display:inline;
+    font-size:1.3em;
+    line-height: 1.6em;
+    color: #151f26;
 		margin:0;
 	}
-	
-	#banner h2 {
-		font-size: 1.4em;
-		line-height: 1.2em;
-	    font-weight: bold;
-	    color: #151f26;
+	#banner.blue h1 a {
+		color:#fff;
 	}
 	#banner h3 {
 	    font-weight: bold;
@@ -236,6 +243,22 @@ form#search {
 	    line-height: 1.3;
 	    margin: 0;
 	    color: #151f26;
+	}
+/* ===[ Supporter Notice ]=== */
+.supporter-notice {
+	background:#FFFBD7;
+	margin-bottom:3em;
+	width:100%;
+	padding:1em 0;
+}
+	.supporter-notice h1 {
+		font-size: 1.9em;
+		line-height: 1.2em;
+		margin-top: 0.5em;
+	}
+	.supporter-notice p {
+		font-size: 1.3em;
+		line-height: 1.2em;
 	}
 /* ===[ Main Content ]=== */
 #main-content {}
@@ -612,8 +635,9 @@ ul.user-list {
     font-size: 0.9em
 }
 .button {
+    border:none;
     cursor: pointer;
-	text-align: center;
+	  text-align: center;
     font-size: 1.2em;
     background: #048fc2;
     color: #fff;
@@ -626,6 +650,43 @@ ul.user-list {
 .button:focus {
     background-color: #0075a0;
     color: #fff;
+}
+.button.big {
+	border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+	font-size:1em;
+	float: left;
+	display: block;
+	background:#048fc2;
+	padding: 1em 0;
+	width: 22%;
+	margin-right: 4%;
+}
+.button.big:hover,
+.button.big:focus {
+    background-color: #0075a0;
+    color: #fff;
+}
+	.contrib-tools-initial .button.big {
+		padding: 2em 0;
+	}
+.button.big.twitter,
+.button.big.facebook {
+	height:auto;
+    margin: 0 4% 0 0;
+    width: 22%;
+	text-indent:0;
+}
+.button.big.twitter{
+	background:#34B2DA;
+}
+.button.big.facebook {
+	background:#3B5B98;
+}
+.button.big.grey {
+	clear:none;
+	background:#888894;
 }
 
 .report-big {
@@ -646,6 +707,47 @@ ul.user-list {
     background: #e00202;
     color: #fff;
 }
+
+.button-white {
+	width:150px;
+	margin-left:0.5em;
+	background: #fff;
+    border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+    color: #ED077B;
+    display: block;
+    font-weight: bolder;
+    padding: 4px 0;
+    text-align: center;
+}
+	.button-white:hover {
+		color:#ED077B;
+		background:#eee;
+	}
+.button-orange {
+	width:150px;
+	margin-left:0.5em;
+	background: #FFB600;
+    border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+    color: #fff;
+    display: block;
+    font-weight: bolder;
+    padding: 4px 0;
+    text-align: center;
+}
+	.button-orange:hover {
+		color:#fff;
+		background:#e6B600;
+	}
+	
+	#campaign-complete input{
+	  border: 0 none; 
+	  font-family: inherit;
+	}
+
 /* Icons
    ================================================== */
 .bus {
@@ -696,7 +798,6 @@ ul.user-list {
     display: block;
     margin: 10px 10px 0 0;
     float: left;
-    width: 400px;
     text-transform: uppercase;
 }
 .form-1 label span {
@@ -730,7 +831,8 @@ ul.user-list {
     display: block;
     width: 350px;
     padding: 15px;
-    background: #ebebeb;
+    background: #444;
+  	color:#eee;
 	position:absolute;
 	right:-999999em;
 	top:20px;
@@ -738,7 +840,7 @@ ul.user-list {
 	overflow:visible !important;
 }
 	.tipbox.fixed {
-		right: -450px;
+		right: -350px;
 	}
 	.tipbox .tip-nub {
 	    background: url(../images/tip-nub.gif) 0 0 no-repeat;
@@ -747,18 +849,34 @@ ul.user-list {
 	    height: 22px;
 	    width: 41px;
 	}
-	.tipbox .tip {
+	.tipbox .tip-close {
+		color:#eee;
 	    float: right;
 	    text-transform: uppercase;
 	    font-weight: bold;
+		border:none;
+		text-indent:-999999em;
+		padding-right:20px;
+		background: url(../images/close-black.gif) right 2px no-repeat;
 	}
+		.tipbox .tip-close:hover {
+			color:#999;
+			text-indent:0;
+			background-position:right -54px;
+		}
 	.tipbox h5 {
 	    font-weight: normal;
 	    font-size: 1.3em;
+		color:#eee;
 	}
 	.tipbox p {
 		margin:0;
 	}
+	.tipbox a {
+		color:#a5dfef;
+		border-bottom:1px dotted #a5dfef;
+	}
+
 form#create-campaign {
 	display:block;
 }
@@ -816,7 +934,7 @@ ul.related-campaigns{margin: 0px; padding: 0px;}
    ================================================== */
 /* ===[ Campaign Page ]=== */
 
-.campaign-description, .campaign-initiator-actions, .expert-actions, .supporter-actions{
+.campaign-description {
 	display: block;
 	float: left;
 	width: 550px;
@@ -857,11 +975,7 @@ ul.campaign-meta li span{
  }
 
 /* ===[ Campaign Thread ]=== */
-h3.latest-news {
-	font-size:1em;
-	font-weight:bold;
-	margin-bottom:0.25em;
-}
+
 
 .thread-controls {
     float: right
@@ -977,6 +1091,13 @@ ul#campaign-thread {
 		    display: block;
 		    padding-right: 10px;
 		}
+		
+.manager-tools,
+.contrib-tools,
+.expert-tools,
+.contrib-tools-initial {
+	margin-bottom:3em;
+}
 /* ===[ Choose Page ]=== */
 #choose .left,
 #choose .right {
@@ -1102,6 +1223,15 @@ ul#process {
 				margin-bottom: 20px;
 			}
 
+/*===[Homepage]===*/
+
+.home-intro{
+	text-align: center;
+}
+
+.home-intro a.button{
+	margin-bottom: 3em;
+}		
 
 /*===[Route Page]===*/		
 

@@ -1,13 +1,5 @@
 <%- if current_user %>
-
-
   <%- if current_user.initiated_campaigns.include?(@campaign) %>
-
-    <%- if display_initiator %>
-      Your campaign
-      <%= campaign_display_status(@campaign) %>
-    <%- end %>
-    
   <%- elsif current_user.campaigns.include?(@campaign) %>
     
     <%- if display_supporter %>
