@@ -118,5 +118,26 @@ class User < ActiveRecord::Base
     reset_perishable_token!
     UserMailer.deliver_account_exists(self)
   end
-
+  
+  def mark_seen(campaign)
+    if current_supporter = self.campaign_supporters.detect{ |supporter| supporter.campaign == campaign }
+      if current_supporter.new_supporter?
+        current_supporter.new_supporter = false
+        current_supporter.save
+      end
+    end
+  end
+  
+  def supporter_or_initiator(campaign)
+    return (self == campaign.initiator || self.campaigns.include?(campaign))
+  end
+  
+  def new_supporter?(campaign)
+    if current_supporter = self.campaign_supporters.detect{ |supporter| supporter.campaign == campaign }
+      if current_supporter.new_supporter?
+        return true
+      end
+    end
+    return false
+  end
 end
