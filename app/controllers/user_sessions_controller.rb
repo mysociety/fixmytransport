@@ -4,9 +4,6 @@ class UserSessionsController < ApplicationController
 
   def new
     @user_session = UserSession.new
-    if request.post? 
-      save_post_login_action_to_session
-    end
   end
 
   def create
