@@ -328,7 +328,7 @@ describe AccountsController do
         UserSession.stub!(:login_by_confirmation)
         @mock_user = mock_model(User, :registered? => false,
                                       :registered= => true,
-                                      :password => "password",
+                                      :crypted_password => "password",
                                       :save => true)
         User.stub!(:find_using_perishable_token).with('my_token', 0).and_return(@mock_user)
       end
@@ -352,10 +352,10 @@ describe AccountsController do
             
       end
       
-      describe "if the user doesn't have a password" do 
+      describe "if the user doesn't have a crypted password" do 
         
         before do 
-          @mock_user.stub!(:password).and_return(nil)
+          @mock_user.stub!(:crypted_password).and_return(nil)
         end
       
         it 'should show a notice saying that the user has logged in and should set a password' do 

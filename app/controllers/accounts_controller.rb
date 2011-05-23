@@ -67,7 +67,7 @@ class AccountsController < ApplicationController
 
   def confirm
     # if the account has a password, set the user as registered, save
-    if !@account_user.password.blank?
+    if !@account_user.crypted_password.blank?
       @account_user.registered = true
       @account_user.save
       flash[:notice] = t(:successfully_confirmed_account)
