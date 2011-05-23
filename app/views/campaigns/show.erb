@@ -38,10 +38,12 @@
       <%- end %>
 
     <%- else %>
-        <%- form_for @user_session = UserSession.new, :url => login_url, :html => { :method => 'POST',  } do |f| %>
-          <%= raw hidden_field_tag "next_action", @next_action_join %>
-          <%= raw submit_tag "Support", :class => 'support-big', :id => 'login-to-support' %>
-        <%- end %>
+
+      <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST',  } do |f| %>
+        <%= raw hidden_field_tag "next_action", @next_action_join %>
+        <%= raw submit_tag "Support", :class => 'support-big', :id => 'login-to-support'%>
+      <%- end %>
+    
     <%- end %>
 	</div>
 </div>

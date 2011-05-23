@@ -824,13 +824,14 @@ describe CampaignsController do
                                             :editable? => true,
                                             :add_supporter => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
+      @default_params = { :id => 44, :user_id => '55' }
     end
 
-    def make_request(params)
+    def make_request(params=@default_params)
       post :join, params
     end
 
-    describe 'when the current user has the same user id as that passed in the params' do
+    describe 'when there is a current user' do
 
       before do
         @user = mock_model(User, :id => 55)
@@ -839,48 +840,62 @@ describe CampaignsController do
 
       it 'should make the user a confirmed campaign supporter' do
         @mock_campaign.should_receive(:add_supporter).with(@user, confirmed=true)
-        make_request({ :id => 44, :user_id => '55' })
+        make_request(@default_params)
       end
 
       it 'should redirect them to the campaign URL' do
-        make_request({ :id => 44, :user_id => '55' })
+        make_request(@default_params)
         response.should redirect_to(campaign_url(@mock_campaign))
       end
 
     end
 
-    describe 'when an invalid email address is supplied' do
-
-      it 'should render the "join" template' do
-        make_request({ :id => 44, :email => 'bad_email' })
-        response.should render_template('join')
+    describe 'when there is no current user' do 
+      
+      it 'should store the next action in the session' do 
+        @controller.should_receive(:data_to_string)
+        make_request
       end
-
+      
+      
+      describe 'if the request asks for json' do 
+        
+        it 'should return a hash with the success key set to true' do 
+        make_request(@default_params.update(:format => 'json'))
+        json_hash = JSON.parse(response.body)
+        json_hash['success'].should == true
+        end
+        
+        it 'should return a hash with the "requires login" flag set to true' do 
+          make_request(@default_params.update(:format => 'json'))
+          json_hash = JSON.parse(response.body)
+          json_hash['requires_login'].should == true
+        end
+        
+        it 'should return a hash with a notice key giving a notice to show to the user' do 
+          make_request(@default_params.update(:format => 'json'))
+          json_hash = JSON.parse(response.body)
+          json_hash['notice'].should == 'Please login or signup to join this campaign'
+        end
+      
+      end
+  
+      describe 'if the request asks for html' do 
+        
+        it 'should redirect to the login page' do 
+          make_request(@default_params)
+          response.should redirect_to(login_url)
+        end
+        
+        it 'should display a notice that the user needs to login to join the campaign' do
+          make_request(@default_params)
+          flash[:notice].should == 'Please login or signup to join this campaign'
+        end
+        
+      end
+      
     end
-
-    describe 'when a valid email address is supplied' do
-
-      before do
-        @mock_user = mock_model(User, :valid? => true, :save_if_new => true)
-        User.stub!(:find_or_initialize_by_email).and_return(@mock_user)
-      end
-
-      it 'should save the user if new' do
-        @mock_user.should_receive(:save_if_new)
-        make_request({ :id => 44, :email => 'goodemail' })
-      end
-
-      it 'should make the user a campaign supporter' do
-        @mock_campaign.should_receive(:add_supporter).with(@mock_user, confirmed=false)
-        make_request({ :id => 44, :email => 'goodemail' })
-      end
-
-      it 'should render the "confirmation_sent" template' do
-        make_request({ :id => 44, :email => 'goodemail' })
-        response.should render_template('shared/confirmation_sent')
-      end
-
-    end
+  
   end
 
   describe 'GET #confirm_join' do

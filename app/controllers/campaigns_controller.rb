@@ -25,25 +25,30 @@ class CampaignsController < ApplicationController
 
   def join
     if request.post?
-      if current_user && params[:user_id] && current_user.id == params[:user_id].to_i
-        # don't need to send a confirmation mail - already logged in
+      if current_user
         @campaign.add_supporter(current_user, confirmed=true)
-        flash[:notice] = t(:you_are_a_supporter, :campaign => @campaign.title)
         redirect_to campaign_url(@campaign)
-      elsif params[:email]
-        @user = User.find_or_initialize_by_email(params[:email])
-        if @user.valid?
-          # save the user account if it doesn't exist, but don't log it in
-          @user.save_if_new
-          @campaign.add_supporter(@user, confirmed=false)
-          @action = t(:you_will_not_be_a_supporter, :campaign => @campaign.title)
-          render 'shared/confirmation_sent'
-        else
-          render :join
+      else
+        # store the next action to the session
+        join_data = { :action => :join_campaign,
+                      :id => @campaign.id,
+                      :redirect => campaign_path(@campaign),
+                      :notice => "Please login or signup to join this campaign" }
+        session[:next_action] = data_to_string(join_data)
+        respond_to do |format|
+          format.html do 
+            flash[:notice] = join_data[:notice]
+            redirect_to login_url
+          end
+          format.json do
+            @json = {}
+            @json[:success] = true
+            @json[:requires_login] = true
+            @json[:notice] = join_data[:notice]
+            render :json => @json
+          end
         end
       end
-    else
-      @user = User.new
     end
   end
 
