@@ -8,8 +8,8 @@
 <%= stylesheet_link_tag 'jquery.lightbox-0.5.css'  %>
 <%- end %>
 
-<%- if current_user && (current_user == @campaign.initiator || @campaign.supporters.include?(current_user))%>
-  <div id="banner" class="blue">
+<%- if current_user && current_user.supporter_or_initiator(@campaign) %>
+  <div id="banner" class="blue <%= 'supporter' %>">
   	<div class="container">
   		<h1>
   		  <%- if @campaign.location.is_a?(SubRoute) %>
@@ -28,6 +28,21 @@
   		</div>
   	</div>
   </div>
+  <%- if current_user.new_supporter?(@campaign) %>
+    <div class="supporter-notice">
+      <div class="container">
+        <h1>Yay! Thanks for supporting our campaign</h1>
+        <p>Offer opinions and advice to help make the campaign a success. <br />And don't forget to tell your friends  and spread the word through Twitter &amp; Facebook</p>
+      </div>
+    </div>
+
+    <div class="contrib-tools-initial container">
+		  <a href="<%= add_comment_campaign_url(@campaign) %>" class="button big comment-trigger">Comment</a>
+		  <a href="#" class="button big twitter">Twitter</a>
+      <a href="#" class="button big facebook">Facebook</a>
+      <a href="#" class="button big grey last">Email</a>
+    </div>
+  <%- end %>
 <%- else %>
   <div id="banner" class="yellow container">
   	<div class="leftcol-banner">
@@ -48,11 +63,11 @@
     <%- end %>
 
 		<div class="box campaign-description">
-		  <%- if !current_user || (current_user != @campaign.initiator) %>
+		  <%- if (!current_user) || !(current_user.supporter_or_initiator(@campaign)) %>
 			<img src="<%= @campaign.initiator.profile_photo.url(:medium_thumb) %>" class="avatar" />
 			<%- end %>
 			<div>
-				<%- if !current_user || (current_user != @campaign.initiator) %>
+				<%- if !current_user || !(current_user.supporter_or_initiator(@campaign)) %>
 				<h4><a href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a></h4>
 				<%- end %>
 
@@ -67,7 +82,7 @@
 
 
    <%- if current_user && current_user.is_expert? %>
-   
+
      <div class="clear">
      <h3><%= t(:transport_experts) %></h3>
      <div class='expert-tools'>
@@ -115,13 +130,13 @@
 
 
 	<div class="rightcol">
-	  
-	  <%- if current_user && (current_user == @campaign.initiator || current_user.campaigns.include?(@campaign) )%>
+
+	  <%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
 	  <div class="contrib-tools">
 			<a href="<%= add_comment_campaign_url(@campaign) %>" class="button big comment-trigger">Comment</a>
 			<a href="#" class="button big twitter">Twitter</a>
 			<a href="#" class="button big facebook">Facebook</a>
-			<a href="#" class="button big grey last">Email</a>										
+			<a href="#" class="button big grey last">Email</a>
 		</div>
 		<%- end %>
 		<ul class="campaign-meta">

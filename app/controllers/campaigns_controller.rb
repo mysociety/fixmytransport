@@ -9,6 +9,7 @@ class CampaignsController < ApplicationController
   before_filter :require_campaign_initiator_or_token, :only => [:edit, :update]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
                                                        :complete, :add_photos]
+  after_filter :update_campaign_supporter, :only => [:show]
 
   def index
     @campaigns = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
@@ -36,7 +37,7 @@ class CampaignsController < ApplicationController
                       :notice => "Please login or signup to join this campaign" }
         session[:next_action] = data_to_string(join_data)
         respond_to do |format|
-          format.html do 
+          format.html do
             flash[:notice] = join_data[:notice]
             redirect_to login_url
           end
@@ -129,10 +130,6 @@ class CampaignsController < ApplicationController
                             find_other_locations=false,
                             height=CAMPAIGN_PAGE_MAP_HEIGHT,
                             width=CAMPAIGN_PAGE_MAP_WIDTH)
-    if current_user && current_user == @campaign.initiator
-      @campaign_update = CampaignUpdate.new(:campaign => @campaign,
-                                            :user => current_user)
-    end
   end
 
   def get_supporters
@@ -293,6 +290,13 @@ class CampaignsController < ApplicationController
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
     end
     return false
+  end
+
+  # record that a user supporting a campaign has seen the campaign page.
+  def update_campaign_supporter
+    if current_user && current_user.new_supporter?(@campaign)
+      current_user.mark_seen(@campaign)
+    end
   end
 
 end
