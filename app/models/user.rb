@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
   end
 
   # Wrap the registered flag in a confirmed? method - a magic method picked up by authlogic.
-  # Unregistered users cannot log in with a password.
+  # Registered means that the user has set a password and confirmed their account.
   def confirmed?
     registered?
   end
