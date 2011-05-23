@@ -66,11 +66,6 @@ describe UserSessionsController do
           make_request(:next_action => @next_action_data)
           response.should redirect_to("/another_url")
         end
-        
-        it 'should show a notice ' do
-          make_request(:next_action => @next_action_data)
-          flash[:notice].should == "Thanks for joining this campaign"
-        end
       
       end
       

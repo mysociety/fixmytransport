@@ -209,7 +209,6 @@ class ApplicationController < ActionController::Base
       case post_login_action_data[:action]
       when :join_campaign
         campaign.add_supporter(current_user, confirmed=true)
-        flash[:notice] = "Thanks for joining this campaign"
       when :add_campaign_comment
         campaign.add_comment(current_user, 
                              post_login_action_data[:text],
