@@ -259,7 +259,7 @@ $(document).ready(function(){
 	}
 
   setupCommentForm('#comment-form');
-  setupSupportForm('#login-to-support');
+  setupSupportForm('.login-to-support');
   ajaxifyForm('#login-form');
   ajaxifyForm('#create-account-form');
 

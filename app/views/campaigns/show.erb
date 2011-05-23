@@ -14,37 +14,7 @@
 	</div>
 
 	<div class="rightcol">
-
-    <%- if current_user %>
-
-      <%- if current_user.initiated_campaigns.include?(@campaign) %>
-
-        Your campaign
-        <%= campaign_display_status(@campaign) %>
-
-      <%- elsif current_user.campaigns.include?(@campaign) %>
-        You are a supporter of this campaign
-          <%- form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f| %>
-            <%= raw hidden_field_tag "user_id", current_user.id %>
-            <%= raw submit_tag t(:leave_this_campaign) %>
-          <%- end %>
-
-      <%- else %>
-
-        <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST'  } do |f| %>
-          <%= raw submit_tag "Support", :class => 'support-big' %>
-        <%- end %>
-
-      <%- end %>
-
-    <%- else %>
-
-      <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST', :id => 'login-to-support' } do |f| %>
-        <%= raw hidden_field_tag "next_action", @next_action_join %>
-        <%= raw submit_tag "Support", :class => 'support-big' %>
-      <%- end %>
-    
-    <%- end %>
+    <%= render :partial => 'support_button', :locals => { :button_class => 'support-big', :display_supporter => true, :display_initiator => true } %>
 	</div>
 </div>
 
@@ -149,8 +119,7 @@
 		<%- end %>
 		</ul>
 
-		<a class="right support" href="#">Support</a>
-
+    <%= render :partial => 'support_button', :locals => { :button_class => 'right support', :display_supporter => false, :display_initiator => false } %>
 
 </div>
 

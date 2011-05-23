@@ -512,6 +512,7 @@ ul.user-list {
 	display:inline-block;
 	float:right;
 	text-indent:0;
+	border: 0 none;
 	margin:0 0 0 1%;
 }
 
@@ -545,12 +546,13 @@ ul.user-list {
     text-align: center;
     color: #fff;
     text-transform: uppercase;
-    font-size: 10px;
+    font-size: 11px;
     background: #9bce24 url(../images/support-tick.gif) 6px 4px no-repeat;
     padding: 3px 8px 3px 25px;
     border-radius: 6px;
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
+    border: 0 none;
 }
 .support:hover {
     background-color: #74cb04;

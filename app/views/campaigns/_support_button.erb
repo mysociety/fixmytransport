@@ -1,0 +1,35 @@
+<%- if current_user %>
+
+
+  <%- if current_user.initiated_campaigns.include?(@campaign) %>
+
+    <%- if display_initiator %>
+      Your campaign
+      <%= campaign_display_status(@campaign) %>
+    <%- end %>
+    
+  <%- elsif current_user.campaigns.include?(@campaign) %>
+    
+    <%- if display_supporter %>
+      You are a supporter of this campaign
+      <%- form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST' } do |f| %>
+        <%= raw hidden_field_tag "user_id", current_user.id %>
+        <%= raw submit_tag t(:leave_this_campaign) %>
+      <%- end %>
+    <%- end %>
+  <%- else %>
+
+    <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST'  } do |f| %>
+      <%= raw submit_tag "Support", :class => button_class %>
+    <%- end %>
+
+  <%- end %>
+
+<%- else %>
+
+  <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST', :class => 'login-to-support' } do |f| %>
+    <%= raw hidden_field_tag "next_action", @next_action_join %>
+    <%= raw submit_tag "Support", :class => button_class %>
+  <%- end %>
+
+<%- end %>
