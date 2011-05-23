@@ -8,7 +8,7 @@
 <%= stylesheet_link_tag 'jquery.lightbox-0.5.css'  %>
 <%- end %>
 
-<%- if current_user && current_user == @campaign.initiator %>
+<%- if current_user && (current_user == @campaign.initiator || @campaign.supporters.include?(current_user))%>
   <div id="banner" class="blue">
   	<div class="container">
   		<h1>
@@ -19,8 +19,11 @@
   		  <%- end %>
   		  </h1>
   		<div class="right">
-  			<span class="button-white left">Your Campaign</span>
-  			
+  		  <%- if current_user == @campaign.initiator %>
+  			  <span class="button-white left">Your Campaign</span>
+  			<%- else %>
+  			  <span class="button-white left">You support this</span>
+  			<%- end %>
   			<span class="button-orange left"><%= campaign_display_status(@campaign).titleize %> Campaign</span>
   		</div>
   	</div>
