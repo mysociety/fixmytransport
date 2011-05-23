@@ -31,7 +31,7 @@
 
       <%- else %>
 
-        <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST',  } do |f| %>
+        <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST'  } do |f| %>
           <%= raw submit_tag "Support", :class => 'support-big' %>
         <%- end %>
 
@@ -39,9 +39,9 @@
 
     <%- else %>
 
-      <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST',  } do |f| %>
+      <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST', :id => 'login-to-support' } do |f| %>
         <%= raw hidden_field_tag "next_action", @next_action_join %>
-        <%= raw submit_tag "Support", :class => 'support-big', :id => 'login-to-support'%>
+        <%= raw submit_tag "Support", :class => 'support-big' %>
       <%- end %>
     
     <%- end %>

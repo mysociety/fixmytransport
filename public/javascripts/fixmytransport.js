@@ -76,18 +76,6 @@ $(document).ready(function(){
 		return false;
 	});
 
-  // support campaign click
-  $("#login-to-support").click(function() {
-      next_action = $(this).parent().find("#next_action");
-      next_action.clone().appendTo($('#login-form'));
-      next_action.clone().appendTo($('#create-account-form'))
-      $('#login-landing').show();
-      $('.login-box .pane').not('#login-landing').hide();
-      $("#login-box").dialog({title: "Sign In"});
-      $("#login-box").dialog("open");
-      return false;
-  });
-
 	/* Login Options */
 	$('.login-box .pane').not('#login-landing').hide();
 
@@ -181,6 +169,28 @@ $(document).ready(function(){
      return options;
   }
 
+
+  // ajax submission of support form 
+  function setupSupportForm(form_selector) {
+	  options = defaultFormOptions();
+	  
+    options['success'] = function(response) {
+      
+      // add the notice to the login form
+      $('#login-landing #notice-base').text(response.notice);
+      $('#login-landing #notice-base').show();
+      
+      // show the login form
+      $('.login-box .pane').hide();
+      $("#login-box").dialog({title: "Sign In"});
+  		$('#login-landing').show();
+  		$("#login-box").dialog("open");  		
+          
+	  };
+	  $(form_selector).ajaxForm(options);
+ 
+  }
+  
 	// ajax submission of comment form
 	function setupCommentForm(form_selector) {
 	  options = defaultFormOptions();
@@ -249,6 +259,7 @@ $(document).ready(function(){
 	}
 
   setupCommentForm('#comment-form');
+  setupSupportForm('#login-to-support');
   ajaxifyForm('#login-form');
   ajaxifyForm('#create-account-form');
 
