@@ -1,10 +1,9 @@
 class CampaignsController < ApplicationController
 
   before_filter :process_map_params, :only => [:show]
-  before_filter :find_editable_campaign, :only => [:edit, :update]
+  before_filter :find_editable_campaign, :only => [:add_details]
   before_filter :find_visible_campaign, :except => [:index,
                                                     :confirm_join, :confirm_leave,
-                                                    :update, :edit,
                                                     :confirm_comment]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
                                                        :complete, :add_photos]
@@ -24,6 +23,31 @@ class CampaignsController < ApplicationController
     end
   end
 
+  def show
+    @commentable = @campaign
+    @next_action_join = data_to_string({ :action => :join_campaign,
+                                         :id => @campaign.id,
+                                         :redirect => campaign_path(@campaign),
+                                         :notice => "Please login or create an account to join this campaign" })
+    @title = @campaign.title
+    map_params_from_location(@campaign.location.points,
+                            find_other_locations=false,
+                            height=CAMPAIGN_PAGE_MAP_HEIGHT,
+                            width=CAMPAIGN_PAGE_MAP_WIDTH)
+  end
+  
+  def update
+    @campaign.attributes=(params[:campaign])
+    if @campaign.save
+      redirect_to campaign_url(@campaign)
+    else
+      render :edit
+    end
+  end
+
+  def edit
+  end
+  
   def join
     if request.post?
       if current_user
@@ -51,27 +75,6 @@ class CampaignsController < ApplicationController
         end
       end
     end
-  end
-
-  def confirm_leave
-    @campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
-    if @campaign_supporter
-      @campaign = @campaign_supporter.campaign
-      @campaign.remove_supporter(@campaign_supporter.supporter)
-    else
-      @error = :error_on_leave
-    end
-  end
-
-  def leave
-    if current_user && params[:user_id] && current_user.id == params[:user_id].to_i
-      @campaign.remove_supporter(current_user)
-      flash[:notice] = t(:you_are_no_longer_a_supporter, :campaign => @campaign.title)
-      redirect_to campaign_url(@campaign)
-      return
-    end
-    render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
-    return false
   end
 
   def confirm_join
@@ -102,10 +105,34 @@ class CampaignsController < ApplicationController
     end
   end
 
+  def leave
+    if current_user && params[:user_id] && current_user.id == params[:user_id].to_i
+      @campaign.remove_supporter(current_user)
+      flash[:notice] = t(:you_are_no_longer_a_supporter, :campaign => @campaign.title)
+      redirect_to campaign_url(@campaign)
+      return
+    end
+    render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+    return false
+  end
+  
+  def confirm_leave
+    @campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
+    if @campaign_supporter
+      @campaign = @campaign_supporter.campaign
+      @campaign.remove_supporter(@campaign_supporter.supporter)
+    else
+      @error = :error_on_leave
+    end
+  end
+  
   def complete
     @campaign.status = :successful
     @campaign.save
     redirect_to campaign_url(@campaign)
+  end
+  
+  def add_details
   end
 
   def add_photos
@@ -120,33 +147,8 @@ class CampaignsController < ApplicationController
     end
   end
 
-  def show
-    @commentable = @campaign
-    @next_action_join = data_to_string({ :action => :join_campaign,
-                                         :id => @campaign.id,
-                                         :redirect => campaign_path(@campaign),
-                                         :notice => "Please login or create an account to join this campaign" })
-    @title = @campaign.title
-    map_params_from_location(@campaign.location.points,
-                            find_other_locations=false,
-                            height=CAMPAIGN_PAGE_MAP_HEIGHT,
-                            width=CAMPAIGN_PAGE_MAP_WIDTH)
-  end
-
   def get_supporters
     render :partial => "supporters", :locals => {:show_all => true}, :layout => false
-  end
-
-  def update
-    @campaign.attributes=(params[:campaign])
-    if @campaign.save
-      redirect_to campaign_url(@campaign)
-    else
-      render :edit
-    end
-  end
-
-  def edit
   end
 
   def add_update
@@ -172,15 +174,6 @@ class CampaignsController < ApplicationController
     end
   end
 
-  def confirm_comment
-    @comment = Comment.find_by_token(params[:email_token])
-    if @comment
-      @comment.confirm!
-    else
-      @error = t(:update_not_found)
-    end
-  end
-
   def add_comment
     @commentable = @campaign
     if request.post?
@@ -193,6 +186,15 @@ class CampaignsController < ApplicationController
       end
     end
     render :template => 'shared/add_comment'
+  end
+  
+  def confirm_comment
+    @comment = Comment.find_by_token(params[:email_token])
+    if @comment
+      @comment.confirm!
+    else
+      @error = t(:update_not_found)
+    end
   end
 
   private

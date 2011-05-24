@@ -20,6 +20,11 @@ describe CampaignsController do
 
   end
 
+  describe 'GET #add_details' do 
+  
+    it_should_behave_like 
+  
+  end
 
   describe 'GET #show' do
 
@@ -65,7 +70,7 @@ describe CampaignsController do
                                             :initiator => @campaign_user,
                                             :attributes= => true,
                                             :editable? => true,
-                                            :visible? => false,
+                                            :visible? => true,
                                             :status => :confirmed,
                                             :save => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
@@ -139,6 +144,7 @@ describe CampaignsController do
                                             :initiator => @campaign_user,
                                             :title => 'A test campaign',
                                             :editable? => true,
+                                            :visible? => true,
                                             :status => :confirmed,
                                             :description => 'Campaign description')
       Campaign.stub!(:find).and_return(@mock_campaign)
