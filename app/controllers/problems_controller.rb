@@ -269,11 +269,8 @@ class ProblemsController < ApplicationController
           #create the subroute
           sub_route = SubRoute.make_sub_route(route_info[:from_stops].first, 
                                               route_info[:to_stops].first,
-                                              TransportMode.find_by_name('Train'))
-          route_info[:routes].each do |route|
-            RouteSubRoute.create!(:route => route, 
-                                  :sub_route => sub_route)
-          end
+                                              TransportMode.find_by_name('Train'),
+                                              route_info[:routes])
           redirect_to new_problem_url(:location_id => sub_route.id, :location_type => sub_route.class.to_s)
         end
       end

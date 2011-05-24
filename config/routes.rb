@@ -64,12 +64,16 @@ ActionController::Routing::Routes.draw do |map|
                                                             :type => :ferry_terminal,
                                                             :conditions => { :method => :get }
 
-  # routes                                               
+  # routes and sub routes                                          
 
 
   map.routes "/routes/", :controller => 'locations', 
                          :action => "show_route_regions"
                          
+  map.sub_route "/sub-routes/:id.:format", :controller => "locations", 
+                                           :action => 'show_sub_route', 
+                                           :conditions => { :method => :get }
+  
   map.route_region "/routes/:id.:format", :controller => "locations", 
                                           :action => 'show_route_region',
                                           :conditions => { :method => :get }

@@ -248,6 +248,8 @@ module ApplicationHelper
       end
     elsif location.is_a? Route
       return route_path(location.region, location)
+    elsif location.is_a? SubRoute
+      return sub_route_path(location, attributes)
     end
     raise "Unknown location type: #{location.class}"
   end
@@ -267,6 +269,8 @@ module ApplicationHelper
      end
    elsif location.is_a? Route
      return route_url(location.region, location, attributes)
+   elsif location.is_a? SubRoute
+     return sub_route_url(location, attributes)
    end
    raise "Unknown location type: #{location.class}"
   end

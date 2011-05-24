@@ -12,12 +12,8 @@
   <div id="banner" class="blue <%= 'supporter' %>">
   	<div class="container">
   		<h1>
-  		  <%- if @campaign.location.is_a?(SubRoute) %>
-  		    <%= @campaign.location.description %>
-  		  <%- else%>
-  		    <a href="<%= location_url(@campaign.location) %>"><%= @campaign.location.description %></a>
-  		  <%- end %>
-  		  </h1>
+  		  <a href="<%= location_url(@campaign.location) %>"><%= @campaign.location.description %></a>
+  		</h1>
   		<div class="right">
   		  <%- if current_user == @campaign.initiator %>
   			  <span class="button-white left">Your Campaign</span>

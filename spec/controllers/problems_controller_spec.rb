@@ -74,6 +74,11 @@ describe ProblemsController do
     
     describe 'when the "to" and "from" params are supplied' do
     
+      before do 
+        @sub_route = mock_model(SubRoute, :type => SubRoute)
+        SubRoute.stub!(:make_sub_route).and_return(@sub_route)
+      end
+    
       it 'should ask the gazetteer for routes' do 
         Gazetteer.should_receive(:train_route_from_stations).and_return({:routes => [], 
                                                                          :from_stops => [],
@@ -86,8 +91,6 @@ describe ProblemsController do
         before do 
           @from_stop = mock_model(StopArea, :name => 'London Euston')
           @to_stop = mock_model(StopArea, :name => 'Birmingham New Street')
-          @sub_route = mock_model(SubRoute, :type => SubRoute)
-          SubRoute.stub!(:make_sub_route).and_return(@sub_route)
           RouteSubRoute.stub!(:create!).and_return(true)
           @transport_mode = mock_model(TransportMode)
           TransportMode.stub!(:find).and_return(@transport_mode)
@@ -97,7 +100,7 @@ describe ProblemsController do
         end
         
         it 'should find or create a sub-route for the stations' do 
-          SubRoute.should_receive(:make_sub_route).with(@from_stop, @to_stop, @transport_mode)
+          SubRoute.should_receive(:make_sub_route).with(@from_stop, @to_stop, @transport_mode, [@mock_route, @mock_route])
           make_request({:to => "london euston", :from => 'birmingham new street'})
         end
         
