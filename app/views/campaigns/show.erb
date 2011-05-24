@@ -145,9 +145,7 @@
 			<div id="small-map">
 			  <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => CAMPAIGN_PAGE_MAP_HEIGHT, :width => CAMPAIGN_PAGE_MAP_WIDTH, :static => true } %>
 		  </div>
-		  <%- unless @campaign.location.is_a?(SubRoute) %>
       <a class="grey-button right" href="<%= location_url(@campaign.location) %>">Larger Map</a>
-      <%- end %>
 		</div>
 		<%- end %>
 
