@@ -6,9 +6,9 @@ class CampaignsController < ApplicationController
                                                     :confirm_join, :confirm_leave,
                                                     :update, :edit,
                                                     :confirm_comment]
-  before_filter :require_campaign_initiator_or_token, :only => [:edit, :update]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
                                                        :complete, :add_photos]
+  before_filter :require_campaign_initiator_or_expert, :only => [:edit, :update]
   after_filter :update_campaign_supporter, :only => [:show]
 
   def index
@@ -139,15 +139,7 @@ class CampaignsController < ApplicationController
 
   def update
     @campaign.attributes=(params[:campaign])
-    if params[:user] and (params[:token] == @campaign.problem.token)
-      @campaign.initiator.name = params[:user][:name]
-      @campaign.initiator.password = params[:user][:password]
-      @campaign.initiator.password_confirmation = params[:user][:password_confirmation]
-      @campaign.initiator.registered = true
-    end
-    if @campaign.valid?
-      @campaign.confirm
-      @campaign.save && @campaign.initiator.save
+    if @campaign.save
       redirect_to campaign_url(@campaign)
     else
       render :edit
@@ -155,12 +147,6 @@ class CampaignsController < ApplicationController
   end
 
   def edit
-    if @campaign.title.blank?
-      @campaign.title = @campaign.problem.subject
-    end
-    if @campaign.description.blank?
-      @campaign.description = @campaign.problem.description
-    end
   end
 
   def add_update
@@ -211,23 +197,10 @@ class CampaignsController < ApplicationController
 
   private
 
-  def require_campaign_initiator_or_token
-    return require_campaign_initiator(allow_expert=true) if @campaign.status != :new
-    return true if current_user && current_user == @campaign.initiator
-    # if campaign initiator not yet registered, allow access by token
-    if params[:token] && params[:token] == @campaign.problem.token
-      if !@campaign.initiator.registered? and !current_user
-        return true
-      else
-        # user is registered, but person making request is logged in as someone else
-        return require_campaign_initiator
-      end
-    else
-      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
-    end
-    return false
+  def require_campaign_initiator_or_expert
+    return require_campaign_initiator(allow_expert=true)
   end
-
+  
   # record that a user supporting a campaign has seen the campaign page.
   def update_campaign_supporter
     if current_user && current_user.new_supporter?(@campaign)

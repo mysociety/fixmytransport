@@ -99,7 +99,7 @@ class ProblemsController < ApplicationController
     if params[:convert] == 'yes'
       @problem.create_new_campaign
       @problem.confirm!
-      redirect_to(edit_campaign_url(@problem.campaign)) and return 
+      redirect_to(add_details_campaign_url(@problem.campaign)) and return 
     elsif params[:convert] == 'no' 
       @problem.confirm!
       flash[:notice] = t(:thanks_for_adding_problem)

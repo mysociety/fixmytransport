@@ -18,7 +18,6 @@ en:
   campaigns_complete_access_message: "mark this campaign as complete"
   campaigns_add_update_access_message: "ask for advice on this campaign"
   campaigns_update_access_message: "edit this campaign"
-  campaigns_confirm_problem: "confirm this problem"
   campaigns_edit_access_message: "edit this campaign"
   outgoing_messages_new_access_message: "write messages on behalf of this campaign"
   assignments_new_access_message: "create an assignment for this campaign"

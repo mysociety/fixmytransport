@@ -53,281 +53,76 @@ describe CampaignsController do
 
   end
 
-  shared_examples_for "an action that requires the campaign initiator or a token" do
-
-    describe 'when the campaign is hidden' do
-
-      before do
-        @mock_campaign.stub!(:visible?).and_return(false)
-      end
-
-      it 'should return a 404' do
-        make_request
-        response.status.should == '404 Not Found'
-      end
-
-    end
-
-    describe 'when the campaign is new' do
-
-      before do
-        @mock_campaign.stub!(:status).and_return(:new)
-      end
-
-      describe 'and the campaign initiator is a registered user' do
-
-        before do
-          @campaign_user.stub!(:registered?).and_return(true)
-        end
-
-        describe "and the campaign's problem's token is not supplied" do
-
-          it 'should do the default behaviour for the action if the current user is the campaign initiator' do
-            controller.stub!(:current_user).and_return(@campaign_user)
-            make_request
-            response.should do_default_behaviour
-          end
-
-          it "should return a 'not found' response if the current user is not the campaign initiator" do
-            controller.stub!(:current_user).and_return(mock_model(User, :is_expert? => false))
-            make_request
-            response.status.should == '404 Not Found'
-          end
-
-          it "should return a 'not found' response if there is no current user" do
-            controller.stub!(:current_user).and_return(nil)
-            make_request
-            response.status.should == '404 Not Found'
-          end
-
-        end
-
-        describe "and the campaign's problem's token is supplied" do
-
-          it 'should do the default behaviour for the action if the current user is the campaign initiator' do
-            controller.stub!(:current_user).and_return(@campaign_user)
-            make_request(token=@mock_problem.token)
-            response.should do_default_behaviour
-          end
-
-          it 'should render the "wrong_user" template with appropriate message params if the current user is not the campaign initiator' do
-            controller.stub!(:current_user).and_return(mock_model(User, :is_expert? => false))
-            make_request(token=@mock_problem.token)
-            response.should render_template("shared/wrong_user")
-            assigns[:name].should == 'Campaign User'
-            assigns[:access_message].should == @expected_new_access_message
-          end
-
-          it 'should redirect to the login page with a message if there is no current user' do
-            controller.stub!(:current_user).and_return(nil)
-            make_request(token=@mock_problem.token)
-            response.should redirect_to(login_url)
-            flash[:notice].should == "Login as Campaign User to #{@expected_wrong_user_message}"
-          end
-
-        end
-
-      end
-
-      describe 'and the campaign initiator is not yet a registered user' do
-
-        before do
-          @campaign_user.stub!(:registered?).and_return(false)
-        end
-
-        describe "and the campaign's problem's token is not supplied" do
-
-          it 'should return a "not found" response' do
-            make_request
-            response.status.should == '404 Not Found'
-          end
-
-        end
-
-        describe "and the campaign's problem's token is supplied" do
-
-          it 'should do the default behaviour for the action if there is no current user' do
-            controller.stub!(:current_user).and_return(nil)
-            make_request(token=@mock_problem.token)
-            response.should do_default_behaviour
-          end
-
-          it 'should render the "wrong_user" template if there is a current user' do
-            controller.stub!(:current_user).and_return(mock_model(User, :is_expert? => false))
-            make_request(token=@mock_problem.token)
-            response.should render_template("shared/wrong_user")
-          end
-
-        end
-
-      end
-
-    end
-
-    describe 'when the campaign is confirmed' do
-
-      before do
-       @mock_campaign.stub!(:status).and_return(:confirmed)
-      end
-
-      describe 'and the current user is the campaign initiator' do
-
-        it 'should do the default behaviour of the action' do
-          controller.stub!(:current_user).and_return(@campaign_user)
-          make_request
-          response.should do_default_behaviour
-        end
-
-      end
-      
-      describe 'and the current user is an expert' do 
-        
-        it 'should do the default behaviour of the action' do 
-          controller.stub!(:current_user).and_return(@expert_user)
-          make_request
-          response.should do_default_behaviour
-        end
-        
-      end
-
-      describe 'and the current user is not the campaign initiator' do
-
-        it 'should render the "wrong_user" template' do
-          controller.stub!(:current_user).and_return(mock_model(User, :is_expert? => false))
-          make_request(token=@mock_problem.token)
-          response.should render_template('shared/wrong_user')
-        end
-
-        it 'should assign variables for an appropriate message' do
-          controller.stub!(:current_user).and_return(mock_model(User, :is_expert? => false))
-          make_request(token=@mock_problem.token)
-          assigns[:name].should == 'Campaign User'
-          assigns[:access_message].should == @expected_access_message
-        end
-
-      end
-
-      describe 'and there is no current user' do
-
-        it 'should redirect to the login page with a message' do
-          controller.stub!(:current_user).and_return(nil)
-          make_request(token=@mock_problem.token)
-          response.should redirect_to(login_url)
-          flash[:notice].should == "Login as Campaign User to edit this campaign"
-        end
-
-      end
-
-    end
-  end
-
-
   describe 'PUT #update' do
 
     before do
       @expert_user = mock_model(User, :is_expert? => true)
       @campaign_user = mock_model(User, :name => "Campaign User",
                                         :save => true,
-                                        :registered? => false,
-                                        :attributes= => true,
-                                        :registered= => true,
-                                        :name= => true,
-                                        :password= => true,
-                                        :is_expert? => false, 
-                                        :password_confirmation= => true)
+                                        :is_expert? => false)
       @mock_problem = mock_model(Problem, :token => 'problem-token')
       @mock_campaign = mock_model(Campaign, :problem => @mock_problem,
                                             :initiator => @campaign_user,
                                             :attributes= => true,
-                                            :valid? => true,
                                             :editable? => true,
                                             :visible? => false,
-                                            :status => :new,
-                                            :confirm => true,
+                                            :status => :confirmed,
                                             :save => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
-      @expected_wrong_user_message = "confirm this problem"
-      @expected_new_access_message = :campaigns_confirm_problem
+      @controller.stub!(:current_user).and_return(@campaign_user)
+      @expected_wrong_user_message = "edit this campaign"
+      @expected_new_access_message = :campaigns_edit_access_message
       @expected_access_message = :campaigns_update_access_message
+      @default_params = { :id => 33, :campaign => { :description => 'Some stuff' }}
     end
 
-    def make_request(token=nil)
-      put :update, { :id => 33, :token => token,
-                                :campaign => { :title => 'Test Campaign' },
-                                :user => { :password => 'A password',
-                                           :password_confirmation => 'A password confirmation',
-                                           :name => 'A name'} }
+    def make_request(params=@default_params)
+      put :update, params
     end
 
     def do_default_behaviour
       redirect_to(campaign_url(@mock_campaign))
     end
 
-    it_should_behave_like "an action that requires the campaign initiator or a token"
+    it_should_behave_like "an action that requires the campaign initiator"
 
     it 'should update the campaign with the campaign params passed' do
-      @mock_campaign.should_receive(:attributes=).with("title" => 'Test Campaign')
-      make_request(token=@mock_problem.token)
+      @mock_campaign.should_receive(:attributes=).with("description" => 'Some stuff')
+      make_request()
+    end
+    
+    describe 'when the current user is an expert' do 
+      
+      it 'should do the default behaviour of the action' do
+        controller.stub!(:current_user).and_return(@expert_user)
+        make_request @default_params
+        response.should do_default_behaviour
+      end
+       
     end
 
-    describe 'if a valid token and user params are supplied' do
-
-      it 'should update the campaign initiator with the user params' do
-        @campaign_user.should_receive(:password=).with('A password')
-        @campaign_user.should_receive(:password_confirmation=).with('A password confirmation')
-        @campaign_user.should_receive(:name=).with('A name')
-        make_request(token=@mock_problem.token)
-      end
-
-      it 'should set the registered flag on the user' do
-        @campaign_user.should_receive(:registered=).with(true)
-        make_request(token=@mock_problem.token)
-      end
-
-    end
-
-    describe 'if the campaign is valid' do
+    describe 'if the campaign can be saved' do
 
       before do
-        @mock_campaign.stub!(:valid?).and_return(true)
-      end
-
-      it 'should save the campaign' do
-        @mock_campaign.should_receive(:save)
-        make_request(token=@mock_problem.token)
-      end
-
-      it 'should save the campaign initiator (logging them in though authlogic)' do
-        @campaign_user.should_receive(:save)
-        make_request(token=@mock_problem.token)
+        @mock_campaign.stub!(:save).and_return(true)
       end
 
       it 'should redirect to the campaign url' do
-        make_request(token=@mock_problem.token)
+        make_request()
         response.should redirect_to(campaign_url(@mock_campaign))
-      end
-
-      it 'should confirm the campaign' do
-        @mock_campaign.should_receive(:confirm)
-        make_request(token=@mock_problem.token)
       end
       
     end
 
-    describe 'if the campaign is not valid' do
+    describe 'if the campaign cannot be saved' do
 
       before do 
-        @mock_campaign.stub!(:valid?).and_return(false)
+        @mock_campaign.stub!(:save).and_return(false)
       end
       
       it 'should render the "edit" template' do
-        make_request(token=@mock_problem.token)
+        make_request()
         response.should render_template("campaigns/edit")
-      end
-      
-      it 'should not confirm the campaign' do
-        @mock_campaign.should_not_receive(:confirm)
-        make_request(token=@mock_problem.token)
       end
 
     end
@@ -338,18 +133,19 @@ describe CampaignsController do
 
     before do
       @expert_user = mock_model(User, :is_expert? => true)
-      @campaign_user = mock_model(User, :name => "Campaign User")
+      @campaign_user = mock_model(User, :name => "Campaign User", :is_expert? => false)
       @mock_problem = mock_model(Problem, :token => 'problem-token')
       @mock_campaign = mock_model(Campaign, :problem => @mock_problem,
                                             :initiator => @campaign_user,
                                             :title => 'A test campaign',
                                             :editable? => true,
-                                            :status => :new,
+                                            :status => :confirmed,
                                             :description => 'Campaign description')
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_wrong_user_message = "confirm this problem"
-      @expected_new_access_message = :campaigns_confirm_problem
+      @expected_new_access_message = :campaigns_edit_access_message
       @expected_access_message = :campaigns_edit_access_message
+      @controller.stub!(:current_user).and_return(@campaign_user)
     end
 
     def make_request(token=nil)
@@ -360,8 +156,18 @@ describe CampaignsController do
       render_template("campaigns/edit")
     end
 
-    it_should_behave_like "an action that requires the campaign initiator or a token"
-
+    it_should_behave_like "an action that requires the campaign initiator"
+    
+    describe 'when the current user is an expert' do 
+      
+      it 'should do the default behaviour of the action' do
+        controller.stub!(:current_user).and_return(@expert_user)
+        make_request @default_params
+        response.should do_default_behaviour
+      end
+       
+    end 
+  
   end
 
   describe 'GET #join' do
@@ -587,7 +393,7 @@ describe CampaignsController do
   describe 'POST #add_update' do
 
     before do
-      @user = mock_model(User, :id => 55)
+      @user = mock_model(User, :id => 55, :name => 'Test User')
       @controller.stub!(:current_user).and_return(@user)
       @mock_update = mock_model(CampaignUpdate, :save => true,
                                                 :is_advice_request? => false)

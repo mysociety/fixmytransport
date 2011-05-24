@@ -599,9 +599,9 @@ describe ProblemsController do
           make_request({:id => 22, :convert => 'yes'})
         end
         
-        it 'should redirect to the campaign edit url' do 
+        it 'should redirect to the campaign add details url' do 
           make_request({:id => 22, :convert => 'yes'})
-          response.should redirect_to(edit_campaign_url(@mock_campaign))
+          response.should redirect_to(add_details_campaign_url(@mock_campaign))
         end
         
       end

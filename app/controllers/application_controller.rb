@@ -95,12 +95,7 @@ class ApplicationController < ActionController::Base
     if allow_expert
       return true if current_user && current_user.is_expert?
     end
-    # custom message for editing a new campaign - which is part of the process of confirming a problem
-    if @campaign.status == :new && controller_name == 'campaigns' && ['edit', 'update'].include?(@action_name)
-      @access_message = :campaigns_confirm_problem
-    else
-      @access_message = access_message_key
-    end
+    @access_message = access_message_key
     @name = @campaign.initiator.name
     return redirect_bad_user
   end
