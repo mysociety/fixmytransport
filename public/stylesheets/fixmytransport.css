@@ -833,11 +833,11 @@ ul.user-list {
     padding: 15px;
     background: #444;
   	color:#eee;
-	position:absolute;
-	right:-999999em;
-	top:20px;
-	margin-top: -8px;
-	overflow:visible !important;
+	  position:absolute;
+	  right:-999999em;
+	  top:20px;
+	  margin-top: -8px;
+	  overflow:visible !important;
 }
 	.tipbox.fixed {
 		right: -350px;
