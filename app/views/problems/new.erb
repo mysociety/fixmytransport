@@ -68,7 +68,6 @@
 						
 			<%- f.fields_for :reporter do |reporter_fields| %>
         <%- if @problem.reporter == current_user %>
-          <div class='form-field'>
             <%= raw reporter_fields.hidden_field :id %>
             <%= raw reporter_fields.hidden_field :email %>
         <%- else %>
