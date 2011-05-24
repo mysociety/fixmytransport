@@ -808,7 +808,7 @@ ul.user-list {
 	padding: 2px 4px;
 	width: 400px;
 	display: block;
-	float: left;
+	clear: both;
 	border: 2px solid #048fc2;
     border-radius: 3px;
     -moz-border-radius: 3px;
@@ -850,12 +850,11 @@ ul.user-list {
 	    width: 41px;
 	}
 	.tipbox .tip-close {
-		color:#eee;
+		color:#444;
 	    float: right;
 	    text-transform: uppercase;
 	    font-weight: bold;
 		border:none;
-		text-indent:-999999em;
 		padding-right:20px;
 		background: url(../images/close-black.gif) right 2px no-repeat;
 	}

@@ -48,6 +48,18 @@
   border: none;
 }
 
+#problem-map {
+  width: 450px;
+  overflow: default;
+  padding: 5px 0;
+}
+
+#problem-map #map {
+  width: 450px;
+  height: 350px;
+  margin: auto;
+  border: none;
+}
 
 #small-map {
   width: 300px;

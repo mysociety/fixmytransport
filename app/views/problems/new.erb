@@ -1,7 +1,7 @@
 <%- @title = t(:reporting_a_problem, :location => @problem.location.name) %>
 <div id="main-nav-bar">
 	<div class="container">
-		<h1><%= @title %></h1>
+		<h1>Please write a message about your problem below.</h1>
 	</div>
 </div>
 <div id="banner">
@@ -11,6 +11,11 @@
 </div>
 <div id="main-content" class="container">
 	<div class="container">
+	  <div class="right">
+		  <div id="problem-map">
+      <%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => PROBLEM_CREATION_MAP_HEIGHT, :width => PROBLEM_CREATION_MAP_WIDTH } %>
+  		</div>
+		</div>
 	  <%- form_for @problem, :url => problems_url, :html => {:id => 'create-problem', :class => 'formitem form-1'} do |f|  %>
     <%= raw f.hidden_field :location_id %>
     <%= raw f.hidden_field :location_type %>
@@ -54,7 +59,7 @@
 				<label for="problem_reporter_name">Name</label>
 				<input id="problem_reporter_name" name="problem[reporter_name]" type="text" value="<%= @problem.reporter_name %>"/>
 				<div class="tipbox">
-					<p class="tip">Tip</p>
+				  <a href="#" class="tip-close">Close</a>
 					<div class="tip-nub"></div>
 					<h5>Your name</h5>
 					<p></p>
@@ -75,8 +80,9 @@
               <%- end %>
       				<label for="problem_reporter_attributes_email">Email address</label>
       				<input id="problem_reporter_attributes_email" name="problem[reporter_attributes][email]" type="text" value="<%=@problem.reporter.email %>"/>
+      				
       				<div class="tipbox">
-      					<p class="tip">Tip</p>
+                <a href="#" class="tip-close">Close</a>
       					<div class="tip-nub"></div>
       					<h5>Email address</h5>
       					<p>Your email address will not be public. <a href="<%= about_url(:anchor => "privacy") %>">Read our privacy policy</a></p>
@@ -95,7 +101,7 @@
 				<label for="problem_subject">Subject</label>
 				<input id="problem_subject" type="text" name="problem[subject]" value="<%= @problem.subject %>"/>
 				<div class="tipbox">
-					<p class="tip">Tip</p>
+				  <a href="#" class="tip-close">Close</a>
 					<div class="tip-nub"></div>
 					<h5>Subject</h5>
 					<p>The subject of your message.</p>
@@ -126,10 +132,10 @@
 				<label for="problem_description">Description</label>
 				<textarea id="problem_description" name="problem[description]" ><%= @problem.description %></textarea>
 				<div class="tipbox">
-					<p class="tip">Tip</p>
+				  <a href="#" class="tip-close">Close</a>
 					<div class="tip-nub"></div>
 					<h5>Description</h5>
-					<p>Your message will be sent directly to Centro. Try to be descriptive, but concise. <a href="#">See an example</a>.</p>
+					<p>Try to be descriptive, but concise. <a href="#">See an example</a>.</p>
 				</div>
 			</li>
 			<li>

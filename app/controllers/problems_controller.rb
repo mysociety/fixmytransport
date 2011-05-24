@@ -61,6 +61,7 @@ class ProblemsController < ApplicationController
         return
       end
     else
+      setup_problem_advice(@problem)
       map_params_from_location(@problem.location.points, find_other_locations=false)
       render :new
     end
