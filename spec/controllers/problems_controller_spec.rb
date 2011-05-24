@@ -365,6 +365,7 @@ describe ProblemsController do
                                           :create_assignments => true)
       Problem.stub!(:new).and_return(@mock_problem)
       @mock_assignment = mock_model(Assignment)
+      @controller.stub!(:setup_problem_advice)
       Assignment.stub!(:create_assignments).and_return(@mock_assignment)
       @problem_attributes = { "location_id" => 55, "location_type" => 'Stop' }
     end
@@ -639,7 +640,7 @@ describe ProblemsController do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'])
       mock_problem = mock_model(Problem, :location => mock_stop,
                                          :responsible_organizations => [mock_pte])
-      expected = ["Send a message to <strong>test PTE</strong>. Your message will be public."].join(' ')
+      expected = ["We'll then send it to <strong>test PTE</strong>. Your message will be public."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -675,7 +676,7 @@ describe ProblemsController do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'])
       mock_problem = mock_model(Problem, :location => mock_stop, 
                                          :responsible_organizations => [mock_council])
-      expected = ["Send a message to <strong>Test Council</strong>. Your message will be public."].join(' ')
+      expected = ["We'll then send it to <strong>Test Council</strong>. Your message will be public."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -686,7 +687,7 @@ describe ProblemsController do
       mock_problem = mock_model(Problem, :location => mock_stop, 
                                          :responsible_organizations => [mock_council_one, mock_council_two],
                                          :operators_responsible? => false)
-      expected = ["Send a message to <strong>Test Council One</strong> or <strong>Test Council",
+      expected = ["We'll then send it to <strong>Test Council One</strong> or <strong>Test Council",
                   "Two</strong>. Your message will be public."].join(' ')
       expect_advice(mock_problem, expected)
     end
@@ -701,7 +702,7 @@ describe ProblemsController do
                                          :unemailable_organizations => [mock_council_one],
                                          :operators_responsible? => false, 
                                          :councils_responsible? => true)
-      expected = ["Send a message to <strong>Test Council One</strong> or <strong>Test",
+      expected = ["We'll then send it to <strong>Test Council One</strong> or <strong>Test",
                   "Council Two</strong>. Your message will be public."].join(' ')
       expect_advice(mock_problem, expected)
     end
