@@ -22,7 +22,7 @@ class Campaign < ActiveRecord::Base
                   :strip_non_ascii => true, 
                   :cache_column => 'subdomain',
                   :allow_nil => true,
-                  :max_length => 25
+                  :max_length => 16
   
   has_paper_trail
   
