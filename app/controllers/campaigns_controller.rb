@@ -2,7 +2,7 @@ class CampaignsController < ApplicationController
 
   before_filter :process_map_params, :only => [:show]
   before_filter :find_editable_campaign, :only => [:add_details]
-  before_filter :find_visible_campaign, :except => [:index,
+  before_filter :find_visible_campaign, :except => [:index, :add_details,
                                                     :confirm_join, :confirm_leave,
                                                     :confirm_comment]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
@@ -35,7 +35,7 @@ class CampaignsController < ApplicationController
                             height=CAMPAIGN_PAGE_MAP_HEIGHT,
                             width=CAMPAIGN_PAGE_MAP_WIDTH)
   end
-  
+
   def update
     @campaign.attributes=(params[:campaign])
     if @campaign.save
@@ -47,7 +47,7 @@ class CampaignsController < ApplicationController
 
   def edit
   end
-  
+
   def join
     if request.post?
       if current_user
@@ -115,7 +115,7 @@ class CampaignsController < ApplicationController
     render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
     return false
   end
-  
+
   def confirm_leave
     @campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
     if @campaign_supporter
@@ -125,14 +125,27 @@ class CampaignsController < ApplicationController
       @error = :error_on_leave
     end
   end
-  
+
   def complete
     @campaign.status = :successful
     @campaign.save
     redirect_to campaign_url(@campaign)
   end
-  
+
   def add_details
+    if @campaign.status != :new
+      redirect_to campaign_url(@campaign) and return false
+    end
+    if request.post?
+      if (@campaign.update_attributes(params[:campaign]))
+        @campaign.confirm
+        @campaign.save!
+        redirect_to campaign_url(@campaign) 
+      else
+        render :action => "add_details"
+      end
+    else
+    end
   end
 
   def add_photos
@@ -187,7 +200,7 @@ class CampaignsController < ApplicationController
     end
     render :template => 'shared/add_comment'
   end
-  
+
   def confirm_comment
     @comment = Comment.find_by_token(params[:email_token])
     if @comment
@@ -202,7 +215,7 @@ class CampaignsController < ApplicationController
   def require_campaign_initiator_or_expert
     return require_campaign_initiator(allow_expert=true)
   end
-  
+
   # record that a user supporting a campaign has seen the campaign page.
   def update_campaign_supporter
     if current_user && current_user.new_supporter?(@campaign)

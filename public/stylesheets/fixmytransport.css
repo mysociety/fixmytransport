@@ -1155,13 +1155,13 @@ ul#process {
 			ul#process li#crumb2 a{
 				padding-left:30px;
 			}
-		ul#process li#crumb3 {
-			z-index:1;
-			margin-left:-20px;
-		}
-			ul#process li#crumb3 a{
-				padding-left:30px;
-			}
+/*    ul#process li#crumb3 {
+      z-index:1;
+      margin-left:-20px;
+    }
+      ul#process li#crumb3 a{
+        padding-left:30px;
+      }*/
 		ul#process li a {
 			display:block;
 	    	color:#fff;

@@ -1,14 +1,42 @@
+<%- content_for :javascript do %>
+<noscript>
+	<style>
+		ul#process {
+			display:none;
+		}
+		#banner {
+			width:940px;
+			margin:3em auto 1em auto;
+			padding:10px;
+		}
+		.form-1 ul li {
+			width:100%;
+		}
+		.form-1 input,
+		.form-1 textarea {
+			clear:both;
+		}
+		.tipbox, .tipbox.fixed {
+			position:relative;
+		    right: 0;
+			display:inline;
+			float:right
+		}
+	</style>
+</noscript>
+<%- end %>
 <div id="main-nav-bar">
 	<div class="container">
 		<ul id="process" class="crumb">
 			<li id="crumb1"><a href="#general">General</a></li>
-			<li id="crumb2"><a href="#images">Images</a></li>
-			<li id="crumb3"><a href="#share">Share</a></li>
+			<li id="crumb2"><a href="#share">Share</a></li>
 		</ul>
 	</div>
 </div>
 	<div id="main-content">
-		<form id="process-tabs" class="form-1">
+	  
+	  <%- form_for @campaign, :url => add_details_campaign_path(@campaign), :html => {:class => 'form-1', :id => 'process-tabs', :method => :post, :multipart => true} do |f| %>
+	  
 			<ul class="tabbed">
 				<div id="general" class="pane">
 					<div id="banner">
@@ -18,8 +46,16 @@
 					</div>
 					<div class="container">
 						<li>
-							<label for="headline">Please help me persuade <span>The Operator</span> to:</label>
-							<input name="headline" type="text" />
+						  <%- if @campaign.errors.on('title') %>
+						    <%- title_error_style = '' %>
+						  <%- else %>
+						    <%- title_error_style = 'display: none;'%>
+						  <%- end %>
+              <div class='error' style="<%= title_error_style %>">
+                <%= t('activerecord.errors.models.campaign.attributes.title.blank') %>
+              </div>
+              <%=  f.label :title, raw("Please help me persuade <span>The Operator</span> to:") %>
+              <%= raw f.text_field :title %>
 							<div class="tipbox">
 								<a href="#" class="tip-close">Close</a>
 								<h5>Make a title</h5>
@@ -29,8 +65,16 @@
 						</li>
 
 						<li>
-							<label for="description">Description</label>
-							<textarea name="description"></textarea>
+						  <%- if @campaign.errors.on('description') %>
+						    <%- description_error_style = '' %>
+						  <%- else %>
+						    <%- description_error_style = 'display: none;'%>
+						  <%- end %>
+              <div class='error' style="<%= description_error_style %>">
+                <%= t('activerecord.errors.models.campaign.attributes.description.blank') %>
+              </div>
+						   <%= f.label :description, "Description" %>
+						   <%= raw f.text_area :description %>
 							<div class="tipbox">
 								<a href="#" class="tip-close">Close</a>
 								<h5>Add a short description</h5>
@@ -40,35 +84,17 @@
 					</div>
 				</div>
 
-				<div id="images" class="pane">
-					<div id="banner">
-						<div class="container">
-							<h4>Add some images</h4>
-						</div>
-					</div>
-					<div class="container">
-						<li>
-							<label for="uploadimages">Upload Images</label>
-							<input name="uploadimages" type="file" />
-							<div class="tipbox fixed">
-								<h5>Upload Images</h5>
-								<p>Upload images that are related to your campaign. For example you could include images of the problem.</p>
-							</div>
-						</li>
-					</div>
-				</div>
-
 				<div id="share" class="pane">
 					<div id="banner">
 						<div class="container">
-							<h4>Share you campaign</h4>
+							<h4>Share your campaign</h4>
 						</div>
 					</div>
 					<div class="container">
 						<li>
 							<div class="box">
-								<img src="assets/images/facebook-share.jpg" />
-								<img src="assets/images/twitter-share.jpg" />
+								<img src="/images/facebook-share.jpg" />
+								<img src="/images/twitter-share.jpg" />
 							</div>
 							<label for="emails">List your friends' emails here</label>
 							<textarea name="emails"></textarea>
@@ -83,7 +109,7 @@
 					</div>	
 				</div>
 			</ul>
-		</form>
+		<%- end %>
 	</div>
 		
 	<div id="process-nav" class="container"></div>

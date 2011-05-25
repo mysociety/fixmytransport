@@ -22,8 +22,123 @@ describe CampaignsController do
 
   describe 'GET #add_details' do 
   
-    it_should_behave_like 
+    before do 
+      @default_params = {:id => 55}
+      @mock_campaign = mock_model(Campaign, :editable? => true, 
+                                            :visible? => false)
+      Campaign.stub!(:find).and_return(@mock_campaign)
+    end
+    
+    def make_request(params=@default_params)
+      get :add_details, params
+    end
+    
+    describe 'if the campaign is not new' do 
+      
+      before do 
+        @mock_campaign.stub!(:status).and_return(:confirmed)
+      end
+    
+      it 'should redirect to the campaign URL' do
+        make_request()
+        response.should redirect_to(campaign_url(@mock_campaign))
+      end
+      
+    end
+    
+    describe 'if the campaign is new' do
+    
+      before do
+        @mock_campaign.stub!(:status).and_return(:new)
+      end
+      
+      it 'should render the template "add_details"' do
+        make_request()
+        response.should render_template("add_details")
+      end
+    
+    end
   
+  end
+  
+  describe 'POST #add_details' do 
+  
+    before do 
+      @default_params = {:id => 55, :campaign => {:title => 'title', :description => 'description'}}
+      @mock_campaign = mock_model(Campaign, :editable? => true, 
+                                            :visible? => false,
+                                            :update_attributes => true, 
+                                            :confirm => true,
+                                            :save! => true)
+      Campaign.stub!(:find).and_return(@mock_campaign)
+    end
+    
+    def make_request(params=@default_params)
+      post :add_details, params
+    end
+    
+    describe 'if the campaign is not new' do 
+      
+      before do 
+        @mock_campaign.stub!(:status).and_return(:confirmed)
+      end
+    
+      it 'should redirect to the campaign URL' do
+        make_request()
+        response.should redirect_to(campaign_url(@mock_campaign))
+      end
+      
+    end
+    
+    describe 'if the campaign is new' do
+      
+      before do 
+        @mock_campaign.stub!(:status).and_return(:new)
+      end
+      
+      it 'should try to update the campaign attributes' do 
+        @mock_campaign.should_receive(:update_attributes).with({'title' => 'title', 'description' => 'description'})
+        make_request
+      end
+      
+      describe 'if the attributes can be updated' do 
+      
+        before do 
+          @mock_campaign.stub!(:update_attributes).and_return(true)
+        end
+      
+        it 'should save the campaign' do 
+          @mock_campaign.should_receive(:save!)
+          make_request
+        end
+        
+        it 'should confirm the campaign' do 
+          @mock_campaign.should_receive(:confirm)
+          make_request
+        end
+        
+        it 'should redirect to the campaign url' do 
+          make_request
+          response.should redirect_to campaign_url(@mock_campaign)
+        end
+        
+      end
+      
+      describe 'if the attributes cannot be updated' do 
+      
+        before do 
+          @mock_campaign.stub!(:update_attributes).and_return(false)
+        end
+        
+        it 'should render the template "add_details"' do 
+          make_request
+          response.should render_template("add_details")
+        end
+      
+      end
+      
+    end
+    
   end
 
   describe 'GET #show' do

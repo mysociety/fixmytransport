@@ -5,7 +5,7 @@ en:
         campaign:
           attributes: 
             title:
-              blank: "Please give your page a title"
+              blank: "Please give your campaign a headline"
             description:
               blank: "Please give a brief description of your issue"
             subdomain:

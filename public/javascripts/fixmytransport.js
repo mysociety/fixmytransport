@@ -60,7 +60,7 @@ $(document).ready(function(){
 		  $("#login-box form").find("#next_action").remove();
       // clear form errors
 		  $("#login-box .error").html();
-		  $("#login-box .error").hide(); 
+		  $("#login-box .error").hide();
 		  $('#login-box input[type=text]').val("");
 		  $('#login-box input[type=password]').val("");
 		   }
@@ -170,27 +170,27 @@ $(document).ready(function(){
   }
 
 
-  // ajax submission of support form 
+  // ajax submission of support form
   function setupSupportForm(form_selector) {
 	  options = defaultFormOptions();
-	  
+
     options['success'] = function(response) {
-      
+
       // add the notice to the login form
       $('#login-landing #notice-base').text(response.notice);
       $('#login-landing #notice-base').show();
-      
+
       // show the login form
       $('.login-box .pane').hide();
       $("#login-box").dialog({title: "Sign In"});
   		$('#login-landing').show();
-  		$("#login-box").dialog("open");  		
-          
+  		$("#login-box").dialog("open");
+
 	  };
 	  $(form_selector).ajaxForm(options);
- 
+
   }
-  
+
 	// ajax submission of comment form
 	function setupCommentForm(form_selector) {
 	  options = defaultFormOptions();
@@ -204,15 +204,15 @@ $(document).ready(function(){
         // add the notice to the login form
         $('#login-landing #notice-base').text(response.notice);
         $('#login-landing #notice-base').show();
-        
+
         // show the login form
         $('.login-box .pane').hide();
         $("#login-box").dialog({title: "Sign In"});
     		$('#login-landing').show();
-    		
+
         // clear the comment field
         $(form_selector + " #comment_text").val("");
-          
+
         }else{
           // load the new comment into the campaign history
           $('#campaign-thread').append(response.html);
@@ -294,9 +294,47 @@ $(document).ready(function(){
 	$crumb_first.addClass('current done');
 	$back.hide();
 
+
+	function validate_not_blank(form_input) {
+	  if ($.trim(form_input.val()) == '') {
+	    form_input.parent().find('.error').show();
+	    return false;
+	  } else {
+	    return true;
+	  }
+	}
+
+	function validate(panel_id) {
+    var all_validations_passed = true;
+	  var validations = {'general' : {'campaign_title' : [{'function' : validate_not_blank }],
+	                                  'campaign_description' : [{'function' : validate_not_blank }]},
+	                     'images' : [],
+	                     'share' : []}
+
+    for (var field_id in validations[panel_id]) {
+      validation_requirements = validations[panel_id][field_id];
+      for (var validation_requirement in validation_requirements) {
+        var form_field = $("#"+field_id);
+        form_field.parent().find('.error').hide();
+        validation_function = validation_requirements[validation_requirement]['function'];
+        if (! validation_function(form_field)) {
+          all_validations_passed = false;
+        }
+      }
+    }
+    return all_validations_passed;
+	}
+
 	//the tabbing function
 	//requires a pane's unique id to be passed
 	function tabbage(p){
+	  var old = $('.tabbed .pane.active').get(0);
+
+    // don't change tab if the current tab doesn't validate
+    if (! validate(old.id)) {
+      return;
+    }
+
 		//breadcrumbs
 		$crumb.removeClass('current done');
 		$($crumb+"[href='#"+$(p).attr('id')+"']").addClass('current done');
@@ -351,17 +389,19 @@ $(document).ready(function(){
 	/* Tip Box
 	   ================================================== */
 	//needs to include an if already showing thing when we focus
-	$('.formitem input, .formitem textarea').focus(function(){
+	$('.tipbox').prepend('<div class="tip-nub"></div>');
+
+	$('.form-1 input, .form-1 textarea').focus(function(){
 		var parent = $(this).parent();
 		$('.tipbox').not('.fixed').css({'right':'-999999em'});
 		$('.tipbox', parent).not('.fixed').css({'right':'-350px', 'opacity':'0'}).animate({'opacity':'1'}, {duration: 500, queue: false});
 	});
-	
+
 	$('.tip-close').click(function(e){
 		e.preventDefault();
 		$('.tipbox').not('.fixed').animate({'opacity':'0'}, {duration: 500, queue: false});
 	});
-	
+
   /* Campaign photo lightboxing
      ================================================== */
 
@@ -373,7 +413,7 @@ $(document).ready(function(){
      	imageBtnNext:  '/images/lightbox-btn-next.gif',
     });
   }
-  
+
   /* Campaign Supporter 'View all' link
      ================================================== */
   $('#campaign-supporters .view-all').click(function(event){
@@ -385,7 +425,7 @@ $(document).ready(function(){
       }
     });
   });
-  	
+
 });
 
 
