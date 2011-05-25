@@ -13,24 +13,16 @@ class Campaign < ActiveRecord::Base
   has_many :campaign_events, :order => 'created_at asc'
   has_many :campaign_photos
   validates_presence_of :title, :description, :on => :update
-  validates_presence_of :subdomain, :on => :update
-  validates_format_of :subdomain, :with => /^[a-z0-9]+[a-z0-9]*$/, 
-                                  :on => :update, 
-                                  :allow_nil => true,
-                                  :message => :only_letters_and_numbers
-  validates_format_of :subdomain, :with => /[a-zA-Z]+/, 
-                                  :on => :update, 
-                                  :allow_nil => true,
-                                  :message => :need_one_letter
-  validates_length_of :subdomain, :within => 6..16, 
-                                  :on => :update, 
-                                  :allow_nil => true
-  validates_uniqueness_of :subdomain, :on => :update,
-                                      :case_sensitive => false
   validates_associated :initiator, :on => :update
   cattr_reader :per_page
   delegate :transport_mode_text, :to => :problem
   accepts_nested_attributes_for :campaign_photos, :allow_destroy => true
+  has_friendly_id :title, 
+                  :use_slug => true, 
+                  :strip_non_ascii => true, 
+                  :cache_column => 'subdomain',
+                  :allow_nil => true,
+                  :max_length => 25
   
   has_paper_trail
   
