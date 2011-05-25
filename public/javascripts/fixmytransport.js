@@ -19,8 +19,10 @@ $(document).ready(function(){
 				li.removeClass('open');
 			});
 		}else{
-			li.addClass('open');
-			$('.thread-details', li).show('blind', '', 1000);
+		  if ($('.thread-details', li).length > 0){
+			  li.addClass('open');
+			  $('.thread-details', li).show('blind', '', 1000);
+		  }
 		}
 	}
 
@@ -413,6 +415,14 @@ $(document).ready(function(){
      	imageBtnNext:  '/images/lightbox-btn-next.gif',
     });
   }
+  
+  /* Campaign description 'more' link 
+     ================================================== */ 
+  $('.more-info').click(function(event){
+    event.preventDefault();
+    $('#truncated-description').html($('#full-description').html());
+    $('.more-info').hide();
+  });
 
   /* Campaign Supporter 'View all' link
      ================================================== */

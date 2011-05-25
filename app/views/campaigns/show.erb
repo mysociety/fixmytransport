@@ -66,13 +66,24 @@
 				<%- if !current_user || !(current_user.supporter_or_initiator(@campaign)) %>
 				<h4><a href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a></h4>
 				<%- end %>
-
-				<p><%= raw simple_format(sanitize(@campaign.description)) %>
+          
+			
+				  <%- if params[:full_description] %> 
+				    <%= raw simple_format(sanitize(@campaign.description)) %>
+				  <%- else %>
+				    <div id="truncated-description">
+				    <%= raw simple_format(truncate(sanitize(@campaign.description), :length => 200)) %>
+				    </div>
+				    <div id="full-description" style="display: none;">
+				      <%= raw simple_format(sanitize(@campaign.description)) %>
+				    </div>
+				  <%- end %>
 				  <%- if current_user && (current_user == @campaign.initiator || current_user.is_expert?) %>
             <%= link_to(t(:edit), edit_campaign_path(@campaign), :class => 'description-edit-link') %>
           <%- end %>
-				  <a href="#" class="more-info">more</a>
-				  </p>
+          <%- if sanitize(@campaign.description).size > 200 %>
+				  <a href="<%= url_for(params.merge(:full_description => '1')) %>" class="more-info">more</a>
+				  <%- end %>
 			</div>
 		</div>
 
@@ -107,11 +118,10 @@
 		</div>
 
 		<div class="clear">
-			<h3 class='left latest-news'><%= t(:latest_news) %></h3>
+			<h3 class='left campaign-history'><%= t(:campaign_history) %></h3>
 			<div class="thread-controls">
 				<a href="#" class="expand-all">Expand All</a>
 				<a href="#" class="collapse-all">Collapse All</a>
-				<a href="#" class="sort">Sort</a>
 			</div>
 		</div>
 		<ul id="campaign-thread">
