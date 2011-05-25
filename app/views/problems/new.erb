@@ -45,7 +45,7 @@
           <div class="static-value"><%= @problem.location.passenger_transport_executive.name %></div>
         <%- elsif @problem.councils_responsible? %>
           <%= raw f.hidden_field :council_info, :value => @problem.location.council_info %>
-          <div class="static-value"><%= org_names(@problem, :responsible_organizations, t(:or))%></div>
+          <div class="static-value"><%= raw org_names(@problem, :responsible_organizations, t(:or))%></div>
         <%- end %>
 				
 			</li>

@@ -54,6 +54,20 @@ class Campaign < ActiveRecord::Base
     campaign_supporters.confirmed.count
   end
   
+  def responsible_org_descriptor
+    if problem.operators_responsible?  
+      if problem.operator
+        problem.operator.name
+      else  
+        "the operator of the #{problem.location.description}"
+      end
+    elsif problem.pte_responsible? 
+      problem.passenger_transport_executive.name
+    elsif problem.councils_responsible?
+      problem.responsible_organizations.map{ |org| org.name }.to_sentence
+    end
+  end
+  
   def add_supporter(user, supporter_confirmed=false)
     if ! supporters.include?(user)
       supporter_attributes = { :supporter => user }

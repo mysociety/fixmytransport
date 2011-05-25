@@ -54,7 +54,7 @@
               <div class='error' style="<%= title_error_style %>">
                 <%= t('activerecord.errors.models.campaign.attributes.title.blank') %>
               </div>
-              <%=  f.label :title, raw("Please help me persuade <span>The Operator</span> to:") %>
+              <%=  f.label :title, raw("Please help me persuade <span>#{@campaign.responsible_org_descriptor}</span> to:") %>
               <%= raw f.text_field :title %>
 							<div class="tipbox">
 								<a href="#" class="tip-close">Close</a>
