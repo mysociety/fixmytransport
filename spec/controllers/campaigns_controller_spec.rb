@@ -517,7 +517,8 @@ describe CampaignsController do
       @user = mock_model(User, :id => 55, :name => 'Test User')
       @controller.stub!(:current_user).and_return(@user)
       @mock_update = mock_model(CampaignUpdate, :save => true,
-                                                :is_advice_request? => false)
+                                                :is_advice_request? => false,
+                                                :user= => true)
       @mock_updates = mock('campaign updates', :build => @mock_update)
       @mock_events = mock('campaign events', :create! => true)
       @mock_campaign = mock_model(Campaign, :supporters => [],
@@ -571,14 +572,14 @@ describe CampaignsController do
 
     end
 
-    describe 'when handling an AJAX request' do
+    describe 'when handling JSON request' do
 
       it 'should return a json hash with a key "html"' do
-        xhr :post, :add_update, {:id => 55}
+        post :add_update, {:id => 55, :format => 'json'}
         json_hash = JSON.parse(response.body)
         json_hash['html'].should_not be_nil
       end
-
+      
     end
 
   end

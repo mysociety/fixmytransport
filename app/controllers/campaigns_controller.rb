@@ -160,31 +160,46 @@ class CampaignsController < ApplicationController
     end
   end
 
-  def get_supporters
-    render :partial => "supporters", :locals => {:show_all => true}, :layout => false
-  end
-
   def add_update
     if request.post?
       @campaign_update = @campaign.campaign_updates.build(params[:campaign_update])
+      @campaign_update.user = current_user
       if @campaign_update.save
         @campaign_event = @campaign.campaign_events.create!(:event_type => 'campaign_update_added',
                                                             :described => @campaign_update)
-        if request.xhr?
-          render :json => { :html => render_to_string(:partial => 'campaign_event', :locals => { :event => @campaign_event })}
-          return
-        else
-          flash[:notice] = @campaign_update.is_advice_request? ? t(:advice_request_added) : t(:update_added)
+        respond_to do |format|
+          format.html do
+            flash[:notice] = @campaign_update.is_advice_request? ? t(:advice_request_added) : t(:update_added)
+            redirect_to campaign_url(@campaign)
+            return
+          end
+          format.json do 
+            index = params[:last_thread_index].to_i + 1
+            render :json => { :success => true, 
+                              :html => render_to_string(:partial => 'campaign_event', 
+                                                        :locals => { :event => @campaign_event,
+                                                                     :index => index})}
+            return
+          end
         end
-        redirect_to campaign_url(@campaign)
-        return
       else
-        @empty_update = true
+        respond_to do |format|
+          format.json do
+            @json = {}
+            @json[:success] = false
+            add_json_errors(@campaign_update, @json)
+            render :json => @json
+          end
+        end
       end
     else
       @campaign_update = @campaign.campaign_updates.build(:is_advice_request => params[:is_advice_request],
                                                           :user_id => current_user.id)
     end
+  end
+  
+  def get_supporters
+    render :partial => "supporters", :locals => {:show_all => true}, :layout => false
   end
 
   def add_comment

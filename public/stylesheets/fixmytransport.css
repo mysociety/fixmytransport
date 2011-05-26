@@ -508,7 +508,7 @@ ul.user-list {
 			background:url(../images/twitter-connect.jpg) no-repeat;
 		}
 
-#comment-and-login textarea {
+#comment-and-login textarea, #campaign-update textarea {
 	width:96%;
 	margin:5px;
 	border:none;

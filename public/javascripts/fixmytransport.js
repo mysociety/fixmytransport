@@ -106,16 +106,62 @@ $(document).ready(function(){
   	});
 	});
 
-		/* Comment but not logged in */
+    /* Advice request */
+  $('.advice-trigger').click(function(e){
+    	e.preventDefault();
+    	$('.login-box .pane').hide();
+    	$('#campaign-update').show();
+    	// Add the index of the last campaign event being shown to the form
+    	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
+      $('#campaign-update-form').append($('<input/>')
+                  .attr('type', 'hidden')
+                  .attr('name', 'last_thread_index')
+                  .attr('class', 'last_thread_index')
+                  .val(last_thread_index));
+
+    	$("#login-box").dialog({title: "Ask for advice:"});
+      // Set the button text
+      $('#campaign-update-form .button').html("Ask for advice")
+      // Add the hidden field
+      $('#campaign-update-form').append($('<input/>')
+                  .attr('type', 'hidden')
+                  .attr('id', 'campaign_update_is_advice_request')
+                  .attr('name', 'campaign_update[is_advice_request]')
+                  .val('true'));
+
+    	$("#login-box").dialog("open");
+    	return false;
+    });
+
+    /* Update */
+  $('.update-trigger').click(function(e){
+  	e.preventDefault();
+  	$('.login-box .pane').hide();
+  	$('#campaign-update').show();
+  	// Add the index of the last campaign event being shown to the form
+  	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
+    $('#campaign-update-form').append($('<input/>')
+                .attr('type', 'hidden')
+                .attr('name', 'last_thread_index')
+                .attr('class', 'last_thread_index')
+                .val(last_thread_index));
+
+  	$("#login-box").dialog({title: "Update:"});
+  	$("#login-box").dialog("open");
+  	return false;
+  });
+
+		/* Comment */
   $('.comment-trigger').click(function(e){
   	e.preventDefault();
   	$('.login-box .pane').hide();
   	$('#comment-and-login').show();
-    // Add the index of the last campaign event being shown to the form
+  	// Add the index of the last campaign event being shown to the form
   	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
     $('#comment-form').append($('<input/>')
                 .attr('type', 'hidden')
                 .attr('name', 'last_thread_index')
+                .attr('class', 'last_thread_index')
                 .val(last_thread_index));
   	$("#login-box").dialog({title: "Comment:"});
   	$("#login-box").dialog("open");
@@ -193,45 +239,64 @@ $(document).ready(function(){
 
   }
 
+  // ajax submission of update/advice form
+  function setupUpdateForm(form_selector) {
+    options = defaultFormOptions();
+	  options['error'] = function() { generalError(form_selector + ' #error-text'); }
+	  options['success'] = function(response) {
+	    if (response.success) {
+        // close the dialog box
+        $("#login-box").dialog("close");
+        // clear the update field
+        $(form_selector + " #campaign_update_text").val("");
+        // remove the hidden thread index field
+        $(form_selector + " .last_thread_index").remove();
+
+        // remove the advice flag
+        $(form_selector + " #campaign_update_is_advice_request").remove();
+        addCampaignItem(response.html);
+      } else {
+        showFormErrors(form_selector, response);
+      }
+	  }
+	  $(form_selector).ajaxForm(options);
+
+  }
+
+  function generalError(selector) {
+    $(selector).html( "There was a problem contacting the server. Please reload the page and try again." );
+    $(selector).show();
+  }
+
 	// ajax submission of comment form
 	function setupCommentForm(form_selector) {
 	  options = defaultFormOptions();
-	  options['error'] = function() {
-	    $(form_selector + ' #error-text').html( "There was a problem contacting the server. Please reload the page and try again." );
-      $(form_selector + ' #error-text' ).show();
-	  }
+	  options['error'] = function() { generalError(form_selector + ' #error-text'); }
 	  options['success'] = function(response) {
 	    if (response.success) {
-        if (response.requires_login) {
-        // add the notice to the login form
-        $('#login-landing #notice-base').text(response.notice);
-        $('#login-landing #notice-base').show();
-
-        // show the login form
-        $('.login-box .pane').hide();
-        $("#login-box").dialog({title: "Sign In"});
-    		$('#login-landing').show();
-
         // clear the comment field
         $(form_selector + " #comment_text").val("");
 
+        // clear the hidden thread index field
+        $(form_selector + " .last_thread_index").remove();
+
+        if (response.requires_login) {
+          // add the notice to the login form
+          $('#login-landing #notice-base').text(response.notice);
+          $('#login-landing #notice-base').show();
+
+          // show the login form
+          $('.login-box .pane').hide();
+          $("#login-box").dialog({title: "Sign In"});
+      		$('#login-landing').show();
+
         }else{
-          // load the new comment into the campaign history
-          $('#campaign-thread').append(response.html);
 
-          // set up the new comment events
-          var new_comment = $('ul#campaign-thread li:last-child a.thread-item');
-          new_comment.click(function(e){
-        		e.preventDefault();
-        		thread($(this).parent('li'));
-        	});
-
-          // clear the comment field
-          $(form_selector + " #comment_text").val("");
           // close the dialog box
           $("#login-box").dialog("close");
-          // open the comment
-        	new_comment.click();
+
+          addCampaignItem(response.html);
+
         }
       } else {
         showFormErrors(form_selector, response);
@@ -240,13 +305,26 @@ $(document).ready(function(){
 	  $(form_selector).ajaxForm(options);
 	}
 
+  function addCampaignItem(html) {
+    // load the new comment into the campaign history
+    $('#campaign-thread').append(html);
+
+    // set up the new item events
+    var new_item = $('ul#campaign-thread li:last-child a.thread-item');
+    new_item.click(function(e){
+  		e.preventDefault();
+  		thread($(this).parent('li'));
+  	});
+
+    // open the comment
+  	new_item.click();
+
+  }
+
   // ajax submission of login/create account forms
   function ajaxifyForm(form_selector) {
     options = defaultFormOptions();
-    options['error'] = function() {
-	    $(form_selector + ' #error-base').html( "There was a problem contacting the server. Please reload the page and try again." );
-      $(form_selector + ' #error-base' ).show();
-	  }
+    options['error'] = function() { generalError(form_selector + ' #error-base' ) };
     options['success'] = function(response) {
        if (response.success) {
            if (response.html){
@@ -261,6 +339,7 @@ $(document).ready(function(){
 	  $(form_selector).ajaxForm(options);
 	}
 
+  setupUpdateForm('#campaign-update-form');
   setupCommentForm('#comment-form');
   setupSupportForm('.login-to-support');
   ajaxifyForm('#login-form');
@@ -415,9 +494,9 @@ $(document).ready(function(){
      	imageBtnNext:  '/images/lightbox-btn-next.gif',
     });
   }
-  
-  /* Campaign description 'more' link 
-     ================================================== */ 
+
+  /* Campaign description 'more' link
+     ================================================== */
   $('.more-info').click(function(event){
     event.preventDefault();
     $('#truncated-description').html($('#full-description').html());

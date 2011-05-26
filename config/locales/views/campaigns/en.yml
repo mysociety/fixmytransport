@@ -44,11 +44,10 @@ en:
   a_reply: a reply
   wrote_a_message: "%{sender} wrote to %{recipient}%{assignment_text}"
   campaign: campaign
-  choose_a_short_name: Choose a short name (6 to 16 lowercase letters)
-  easy_web_address: This gives your page an easy web address. e.g. %{url}
   update_added: Your update has been added. 
   error_adding_update: "Sorry, there's been a problem adding your update. Please use the feedback form to let us know what happened."
   user_says: "%{name} commented"
+  added_an_update: "%{name} added an update"
   add_an_update: 'Add an update:'
   request_advice: Ask for advice
   ask_our_expert_panel: 'Ask your supporters and our expert panel what to do next:'
