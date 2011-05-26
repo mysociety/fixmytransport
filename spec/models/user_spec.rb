@@ -94,5 +94,49 @@ describe User do
     end
     
   end
+  
+  describe 'when handling an external auth token' do 
+    
+    describe 'when getting facebook data' do
+
+      before do 
+        @mock_io = mock('IO stream', :read => "")
+        JSON.stub!(:parse)
+        User.stub!(:open).and_return(@mock_io)
+      end
+      
+      it 'should make a call to the facebook graph URL, passing the access token' do 
+        User.should_receive(:open).with("https://graph.facebook.com/me?access_token=mytoken").and_return(@mock_io)
+        User.get_facebook_data('mytoken')
+      end
+
+      it 'should parse the response as JSON' do
+        JSON.should_receive(:parse)
+        User.get_facebook_data('mytoken')
+      end
+        
+    end
+
+    describe 'when the source is facebook' do       
+      
+      before do 
+        @mock_user = mock_model(User, :save! => true, 
+                                      :access_tokens => [])
+        @mock_user.access_tokens.stub!(:build).and_return(true)
+        User.stub!(:new).and_return(@mock_user)
+        User.stub!(:get_facebook_data).and_return({'id' => 'myfbid',
+                                                   'name' => 'Test Name', 
+                                                   'email' => 'test@example.com'})
+      end
+      
+      it 'should look up user records by the facebook ID' do 
+        AccessToken.should_receive(:find).with(:first, :conditions => ['key = ? and token_type = ?', 'myfbid', 'facebook'])
+        User.handle_external_auth_token('mytoken', 'facebook')
+      end
+      
+      
+    end
+    
+  end
 
 end

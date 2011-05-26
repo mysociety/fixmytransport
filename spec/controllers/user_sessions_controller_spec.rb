@@ -114,4 +114,29 @@ describe UserSessionsController do
     
   end
 
+  describe "POST #external" do
+  
+    def make_request
+      post :external, { :access_token => 'mytoken', 
+                        :expiry => '12', 
+                        :source => 'facebook', 
+                        :path => '/my/path' }
+    end
+    
+    before do 
+      User.stub!(:handle_external_auth_token).and_return(true)
+    end
+    
+    it 'should ask the user to handle an external auth token, passing the access token and source' do 
+      User.should_receive(:handle_external_auth_token).with('mytoken', 'facebook')
+      make_request
+    end
+    
+    it 'should redirect to the path given in the path param' do 
+      make_request
+      response.should redirect_to("/my/path")
+    end
+    
+  end
+
 end

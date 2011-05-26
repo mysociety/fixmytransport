@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   has_many :initiated_campaigns, :foreign_key => :initiator_id, :class_name => 'Campaign'
   has_many :sent_emails, :as => :recipient
   before_save :generate_email_local_part, :unless => :unregistered?
+  has_many :access_tokens
   has_attached_file :profile_photo,
                     :path => "#{MySociety::Config.get('FILE_DIRECTORY', ':rails_root/public/system')}/paperclip/:class/:attachment/:id/:style/:filename",
                     :url => "#{MySociety::Config.get('PAPERCLIP_URL_BASE', '/system/paperclip')}/:class/:attachment/:id/:style/:filename",
@@ -39,10 +40,10 @@ class User < ActiveRecord::Base
   acts_as_authentic do |c|
     # we validate the email with activerecord validation above
     c.validate_email_field = false
-    c.merge_validates_confirmation_of_password_field_options({:unless => :unregistered?,
+    c.merge_validates_confirmation_of_password_field_options({:unless => :password_not_required,
                                                               :message => I18n.translate(:password_match_error)})
     password_min_length = 5
-    c.merge_validates_length_of_password_field_options({:unless => :unregistered?,
+    c.merge_validates_length_of_password_field_options({:unless => :password_not_required,
                                                         :minimum => password_min_length,
                                                         :message => I18n.translate(:password_length_error,
                                                                                    :length => password_min_length)})
@@ -54,6 +55,10 @@ class User < ActiveRecord::Base
     ignore_blank_passwords.nil? ? super : (ignore_blank_passwords == true)
   end
 
+  def password_not_required
+    unregistered? or !access_tokens.empty?
+  end
+  
   def unregistered?
     !registered
   end
@@ -113,6 +118,39 @@ class User < ActiveRecord::Base
     reset_perishable_token!
     UserMailer.deliver_already_registered(self)
   end
+  
+  # class methods
+  
+  def self.get_facebook_data(access_token)
+    require 'open-uri'
+    contents = open("https://graph.facebook.com/me?access_token=#{CGI::escape(access_token)}").read
+    facebook_data = JSON.parse(contents)
+  end
+
+  def self.handle_external_auth_token(access_token, source)
+    case source
+    when 'facebook'
+      facebook_data = self.get_facebook_data(access_token)
+      fb_id = facebook_data['id']
+      existing_access_token = AccessToken.find(:first, :conditions => ['key = ? and token_type = ?', fb_id, source])
+      if existing_access_token
+        user = existing_access_token.user
+      else
+        name = facebook_data['name']
+        email = facebook_data['email']
+        user = User.find(:first, :conditions => ['email = ?', email])
+        if not user
+          user = User.new({:name => name, :email => email, :registered => true})
+        end   
+        user.access_tokens.build({:user_id => user.id,
+                                    :token_type => 'facebook',
+                                    :key => fb_id,
+                                    :token => access_token})
+        user.save_without_session_maintenance
+      end
+      UserSession.create(user, remember_me=false)
+    end
+  end
 
   def deliver_account_exists!
     reset_perishable_token!
@@ -141,3 +179,4 @@ class User < ActiveRecord::Base
     return false
   end
 end
+

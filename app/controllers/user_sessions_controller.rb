@@ -43,6 +43,15 @@ class UserSessionsController < ApplicationController
     redirect_back_or_default root_url
   end
   
+  # respond to an authentication token from an external source e.g. facebook
+  def external
+    access_token = params[:access_token]
+    source = params[:source]
+    path = params[:path]
+    User.handle_external_auth_token(access_token, source)
+    redirect_to path
+  end
+  
   private
   
   def save_redirect
