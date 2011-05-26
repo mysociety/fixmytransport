@@ -4,9 +4,6 @@ class UserSessionsController < ApplicationController
 
   def new
     @user_session = UserSession.new
-    if request.post? 
-      save_post_login_action_to_session
-    end
   end
 
   def create
@@ -29,10 +26,7 @@ class UserSessionsController < ApplicationController
           perform_post_login_action
         else
           @json[:success] = false
-          @json[:errors] = {}
-          @user_session.errors.each do |attribute,message|
-            @json[:errors][attribute] = message
-          end
+          add_json_errors(@user_session, @json)
         end
         render :json => @json
       end
@@ -46,7 +40,7 @@ class UserSessionsController < ApplicationController
     end
     current_user_session.destroy
     flash[:notice] = t(:logout_successful)
-    redirect_back_or_default login_path
+    redirect_back_or_default root_url
   end
   
   # respond to an authentication token from an external source e.g. facebook

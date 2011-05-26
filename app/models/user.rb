@@ -13,9 +13,9 @@
 
 class User < ActiveRecord::Base
   validates_presence_of :email
-  validates_presence_of :name, :unless => :unregistered?
+  validates_presence_of :name
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
-  validates_uniqueness_of :email
+  validates_uniqueness_of :email, :case_sensitive => false
   attr_protected :password, :password_confirmation, :is_expert
   has_many :assignments
   has_many :campaign_supporters, :foreign_key => :supporter_id
@@ -34,9 +34,9 @@ class User < ActiveRecord::Base
 
   attr_accessor :ignore_blank_passwords
   has_friendly_id :name, :use_slug => true, :allow_nil => true
-  
+
   named_scope :registered, :conditions => { :registered => true }
-  
+
   acts_as_authentic do |c|
     # we validate the email with activerecord validation above
     c.validate_email_field = false
@@ -61,6 +61,12 @@ class User < ActiveRecord::Base
   
   def unregistered?
     !registered
+  end
+
+  # Wrap the registered flag in a confirmed? method - a magic method picked up by authlogic.
+  # Registered means that the user has set a password and confirmed their account.
+  def confirmed?
+    registered?
   end
 
   def first_name
@@ -120,7 +126,7 @@ class User < ActiveRecord::Base
     contents = open("https://graph.facebook.com/me?access_token=#{CGI::escape(access_token)}").read
     facebook_data = JSON.parse(contents)
   end
-  
+
   def self.handle_external_auth_token(access_token, source)
     case source
     when 'facebook'
@@ -136,14 +142,41 @@ class User < ActiveRecord::Base
         if not user
           user = User.new({:name => name, :email => email, :registered => true})
         end   
-	user.access_tokens.build({:user_id => user.id,
+        user.access_tokens.build({:user_id => user.id,
                                     :token_type => 'facebook',
                                     :key => fb_id,
                                     :token => access_token})
-	user.save_without_session_maintenance
+        user.save_without_session_maintenance
       end
       UserSession.create(user, remember_me=false)
     end
   end
 
+  def deliver_account_exists!
+    reset_perishable_token!
+    UserMailer.deliver_account_exists(self)
+  end
+  
+  def mark_seen(campaign)
+    if current_supporter = self.campaign_supporters.detect{ |supporter| supporter.campaign == campaign }
+      if current_supporter.new_supporter?
+        current_supporter.new_supporter = false
+        current_supporter.save
+      end
+    end
+  end
+  
+  def supporter_or_initiator(campaign)
+    return (self == campaign.initiator || self.campaigns.include?(campaign))
+  end
+  
+  def new_supporter?(campaign)
+    if current_supporter = self.campaign_supporters.detect{ |supporter| supporter.campaign == campaign }
+      if current_supporter.new_supporter?
+        return true
+      end
+    end
+    return false
+  end
 end
+

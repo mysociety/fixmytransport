@@ -9,27 +9,20 @@ class Campaign < ActiveRecord::Base
   has_many :incoming_messages
   has_many :outgoing_messages
   has_many :campaign_updates
+  has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   has_many :campaign_events, :order => 'created_at asc'
   has_many :campaign_photos
   validates_presence_of :title, :description, :on => :update
-  validates_presence_of :subdomain, :on => :update
-  validates_format_of :subdomain, :with => /^[a-z0-9]+[a-z0-9]*$/, 
-                                  :on => :update, 
-                                  :allow_nil => true,
-                                  :message => :only_letters_and_numbers
-  validates_format_of :subdomain, :with => /[a-zA-Z]+/, 
-                                  :on => :update, 
-                                  :allow_nil => true,
-                                  :message => :need_one_letter
-  validates_length_of :subdomain, :within => 6..16, 
-                                  :on => :update, 
-                                  :allow_nil => true
-  validates_uniqueness_of :subdomain, :on => :update,
-                                      :case_sensitive => false
   validates_associated :initiator, :on => :update
   cattr_reader :per_page
   delegate :transport_mode_text, :to => :problem
   accepts_nested_attributes_for :campaign_photos, :allow_destroy => true
+  has_friendly_id :title, 
+                  :use_slug => true, 
+                  :strip_non_ascii => true, 
+                  :cache_column => 'subdomain',
+                  :allow_nil => true,
+                  :max_length => 16
   
   has_paper_trail
   
@@ -61,6 +54,20 @@ class Campaign < ActiveRecord::Base
     campaign_supporters.confirmed.count
   end
   
+  def responsible_org_descriptor
+    if problem.operators_responsible?  
+      if problem.operator
+        problem.operator.name
+      else  
+        "the operator of the #{problem.location.description}"
+      end
+    elsif problem.pte_responsible? 
+      problem.passenger_transport_executive.name
+    elsif problem.councils_responsible?
+      problem.responsible_organizations.map{ |org| org.name }.to_sentence
+    end
+  end
+  
   def add_supporter(user, supporter_confirmed=false)
     if ! supporters.include?(user)
       supporter_attributes = { :supporter => user }
@@ -69,6 +76,17 @@ class Campaign < ActiveRecord::Base
       end
       campaign_supporters.create!(supporter_attributes)
     end
+  end
+  
+  def add_comment(user, text, comment_confirmed=false)
+    comment = comments.build(:text => text,
+                             :user => user)
+    comment.status = :new
+    comment.save
+    if comment_confirmed
+      comment.confirm!
+    end
+    comment
   end
   
   def remove_supporter(user)

@@ -2,9 +2,9 @@
 <%- if update.is_advice_request? %>
   <%- text = :user_requested_advice %>
 <%- else %>
-  <%- text = :user_says %>
+  <%- text = :added_an_update %>
 <%- end %>
-<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(text, :name => h(update.user.name)) %></span><span class="close">close</span><span class="date"><%= t(:ago, :time => time_ago_in_words(update.created_at)) %></span></a>
+<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(text, :name => h(update.user.name)) %></span><span class="close">close</span><span class="date"><%= update.created_at.to_s(:standard_with_date) %></span></a>
 
 <div class="thread-details box">
 		<div class="thumb"><img src="<%= update.user.profile_photo.url(:large_thumb) %>" /></div>

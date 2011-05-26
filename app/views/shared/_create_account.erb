@@ -1,8 +1,13 @@
-<h2 class='main-header'><%= t(:create_an_account) %></h2>
 
 <%- form_for((@account_user ||= User.new), :url => account_path, :html => { :id => 'create-account-form' }) do |f| %>
   <div class='fieldset'>
-    
+    <%- if @account_user.errors.on('base') %>
+      <div class='error' id="error-base">
+        <%= error_message_on @account_user, :base %>
+      </div>
+    <%- else %>
+      <div class='error' id='error-base' style="display: none;"></div>
+    <%- end %>
     <div class='form-field'>
       <%- if @account_user.errors.on('name') %>
         <div class='error' id="error-name">

@@ -1,9 +1,9 @@
 <li>
   <%- case event.event_type %>
   <%- when 'incoming_message_received' %>
-    <%= render :partial => 'incoming_message', :locals => { :message => event.described, :event => event, :always_show_commentbox => always_show_commentbox, :index => index } %>
+    <%= render :partial => 'incoming_message', :locals => { :message => event.described, :event => event, :index => index } %>
   <%- when 'outgoing_message_sent' %>
-    <%= render :partial => 'outgoing_message', :locals => { :message => event.described, :event => event, :always_show_commentbox => always_show_commentbox, :index => index } %>
+    <%= render :partial => 'outgoing_message', :locals => { :message => event.described, :event => event, :index => index } %>
   <%- when 'assignment_completed' %>
     <%= render :partial => "shared/complete_assignments/#{event.described.task_type}", :locals => { :assignment => event.described, :event => event, :index => index } %>
   <%- when 'assignment_given' %>
@@ -13,6 +13,6 @@
   <%- when 'campaign_update_added' %>
     <%= render :partial => 'campaign_update', :locals => { :update => event.described, :index => index } %>
     <%- when 'comment_added' %>
-    <%= render :partial => 'campaign_comment', :locals => { :comment => event.described, :index => index } %>
+    <%= render :partial => 'shared/comment', :locals => { :comment => event.described, :index => index } %>
   <%- end %>
 </li>

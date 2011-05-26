@@ -51,8 +51,12 @@ describe AccountsController do
 
   describe 'PUT #update' do
 
-    def make_request
-      put :update, { :user => { :email => 'test@example.com' } }
+    before do 
+      @default_params = { :user => { :email => 'test@example.com' } }
+    end
+    
+    def make_request(params=@default_params)
+      put :update, params
     end
 
     it_should_behave_like 'an action requiring a logged-in user'
@@ -70,13 +74,22 @@ describe AccountsController do
 
       it 'should update the current users account info' do
         @mock_user.should_receive(:email=).with('test@example.com')
-        make_request
+        make_request(@default_params)
+      end
+      
+      describe 'if the user enters a password' do 
+        
+        it 'should set the account as registered' do 
+          @mock_user.should_receive(:registered=).with(true)
+          make_request(@default_params.merge({:user => {:password => 'password'}}))
+        end
+        
       end
 
       describe 'if the update is successful' do
 
         it 'should redirect to the account page' do
-          make_request
+          make_request(@default_params)
           response.should redirect_to(account_path)
         end
 
@@ -89,7 +102,7 @@ describe AccountsController do
         end
 
         it 'should render the edit template' do
-          make_request
+          make_request(@default_params)
           response.should render_template('edit')
         end
 
@@ -163,9 +176,10 @@ describe AccountsController do
         @mock_user.stub!(:save_without_session_maintenance)
         @mock_user.stub!(:deliver_new_account_confirmation!)
         @mock_user.stub!(:deliver_already_registered!)
+        @mock_user.stub!(:deliver_account_exists!)
       end
 
-      describe 'if this is a new email address, or one that does not have a registered account' do
+      describe 'if this is a new email address' do
 
         before do
           @mock_user.stub!(:new_record?).and_return(true)
@@ -202,6 +216,25 @@ describe AccountsController do
             make_request(format="json")
             JSON.parse(response.body)['html'].should == "content"
           end
+        end
+        
+      end
+      
+      describe 'if this is an email address that has an unregistered account' do 
+      
+        before do 
+          @mock_user.stub!(:new_record?).and_return(false)
+          @mock_user.stub!(:registered?).and_return(false)
+        end
+        
+        it 'should ask the user to send an "already exists" email' do 
+          @mock_user.should_receive(:deliver_account_exists!)
+          make_request
+        end
+        
+        it 'should render the "confirmation_sent" template' do 
+          make_request
+          response.should render_template("shared/confirmation_sent")
         end
         
       end
@@ -292,9 +325,10 @@ describe AccountsController do
     describe 'if a user can be found using the perishable token param' do
 
       before do
-        UserSession.stub!(:create)
+        UserSession.stub!(:login_by_confirmation)
         @mock_user = mock_model(User, :registered? => false,
                                       :registered= => true,
+                                      :crypted_password => "password",
                                       :save => true)
         User.stub!(:find_using_perishable_token).with('my_token', 0).and_return(@mock_user)
       end
@@ -303,19 +337,41 @@ describe AccountsController do
         make_request
         response.should redirect_to(root_url)
       end
+      
+      describe 'if the user has a password' do
+        
+        it 'should show a notice that the user has confirmed their account' do
+          make_request
+          flash[:notice].should == 'You have successfully confirmed your account.'
+        end
 
-      it 'should show a notice that the user has confirmed their account' do
-        make_request
-        flash[:notice].should == 'You have successfully confirmed your account.'
+        it 'should set the user to registered' do
+          @mock_user.should_receive(:registered=).with(true)
+          make_request
+        end
+            
+      end
+      
+      describe "if the user doesn't have a crypted password" do 
+        
+        before do 
+          @mock_user.stub!(:crypted_password).and_return(nil)
+        end
+      
+        it 'should show a notice saying that the user has logged in and should set a password' do 
+          make_request
+          flash[:notice].should == "You've successfully logged in. Set a password on your account to make it easier to come back."
+        end
+        
+        it "should redirect to the user's account if there is no redirect defined by a post-login action" do 
+          make_request
+          response.should redirect_to(edit_account_url)
+        end
+        
       end
 
       it 'should log the user in' do
-        UserSession.should_receive(:create).with(@mock_user, false)
-        make_request
-      end
-
-      it 'should set the user to registered' do
-        @mock_user.should_receive(:registered=).with(true)
+        UserSession.should_receive(:login_by_confirmation).with(@mock_user)
         make_request
       end
       

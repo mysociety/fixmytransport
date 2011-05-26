@@ -24,13 +24,12 @@
 		<div id="wrapper">
 			<div id="top" class="container">
 				<ul id="mysociety-tab">
-					<li><a id="mysociety-logo" href="#">MySociety</a></li>
+					<li><a id="mysociety-logo" href="http://mysociety.org">MySociety</a></li>
 					<li><a href="http://mysociety.org/donate">Donate</a></li>
-					<li><a href="#">Our Sites</a></li>
+					<li><a href="http://www.mysociety.org/projects/">Our Sites</a></li>
 				</ul>
 				<ul id="top-nav">
 					<li><a href="/about">About</a></li>
-					<li><a href="#">Tour</a></li>
 					<li><a href="#">Feedback</a></li>
 				</ul>
 
@@ -44,10 +43,10 @@
 
       <%= render :partial => "shared/login" %>
 
-			<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
-        	<div class="staging-banner notice container">
-          	<%= t(:development_site) %>
-        	</div>
+      <%- if MySociety::Config.getbool('STAGING_SITE', true) %>
+          <div class="staging-banner notice container">
+            <%= t(:development_site) %>
+          </div>
       <%- end %>
 
 			<%- [:notice, :error].each do |key| %>

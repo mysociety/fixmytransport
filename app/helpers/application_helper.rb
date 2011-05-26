@@ -248,6 +248,8 @@ module ApplicationHelper
       end
     elsif location.is_a? Route
       return route_path(location.region, location)
+    elsif location.is_a? SubRoute
+      return sub_route_path(location, attributes)
     end
     raise "Unknown location type: #{location.class}"
   end
@@ -267,6 +269,8 @@ module ApplicationHelper
      end
    elsif location.is_a? Route
      return route_url(location.region, location, attributes)
+   elsif location.is_a? SubRoute
+     return sub_route_url(location, attributes)
    end
    raise "Unknown location type: #{location.class}"
   end
@@ -278,6 +282,26 @@ module ApplicationHelper
       return admin_url(stop_area_path(location.id))
     elsif location.is_a? Route
       return admin_url(route_path(location.id))
+    end
+  end
+  
+  def add_comment_url(commentable)
+    if commentable.is_a?(Campaign)
+      return add_comment_campaign_url(commentable)
+    elsif commentable.is_a?(Problem)
+      return add_comment_problem_url(commentable)
+    else 
+      raise "Unhandled commentable type in add_comment_url: #{commentable.type}"
+    end
+  end
+  
+  def commented_url(commentable)
+    if commentable.is_a?(Campaign)
+      return campaign_url(commentable)
+    elsif commentable.is_a?(Problem)
+      return problem_url(commentable)
+    else
+      raise "Unhandled commentable type in commentable_url: #{commentable.type}"
     end
   end
 
@@ -382,6 +406,14 @@ module ApplicationHelper
     else
       campaign.status.to_s
     end
+  end
+  
+  def button(text, link, link_class, index)
+    if (index > 0 && ((index+1) % 4) == 0)
+      link_class += " last"
+    end
+    link = "<a href=\"#{link}\" class=\"#{link_class}\">#{text}</a>"
+    return link
   end
   
   def sortable(column, title = nil)

@@ -172,6 +172,17 @@ class Problem < ActiveRecord::Base
     location.transport_modes.map{ |transport_mode| transport_mode.name }.join(", ")
   end
   
+  def add_comment(user, text, comment_confirmed=false)
+    comment = comments.build(:text => text,
+                             :user => user)
+    comment.status = :new
+    comment.save
+    if comment_confirmed
+      comment.confirm!
+    end
+    comment
+  end
+  
   # class methods
   def self.latest(limit, options={})
     visible.find(:all, 

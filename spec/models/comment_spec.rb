@@ -55,17 +55,17 @@ describe Comment do
       
     end
     
-    describe 'if the thing being commented on is not a problem' do
+    describe 'if the thing being commented on is a campaign' do
     
       before do 
         @mock_campaign = mock_model(Campaign, :campaign_events => mock('campaign events', :create! => true))
-        @mock_campaign_update = mock_model(CampaignUpdate, :campaign => @mock_campaign)
-        @comment.stub!(:commented).and_return(@mock_campaign_update)
+        @comment.stub!(:commented).and_return(@mock_campaign)
       end
       
-      it 'should add a "comment_added" campaign event to the campaign associated with the thing being commented on' do 
-        @mock_campaign.campaign_events.should_receive(:create!).with(:event_type => 'comment_added', 
-                                                                     :described => @comment)
+      it 'should add a "comment_added" campaign event to the campaign' do 
+        @comment.campaign_events.should_receive(:build).with(:event_type => 'comment_added', 
+                                                             :described => @comment,
+                                                             :campaign => @mock_campaign)
         @comment.confirm!
       end
       

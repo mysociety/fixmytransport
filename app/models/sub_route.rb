@@ -6,6 +6,7 @@ class SubRoute < ActiveRecord::Base
   belongs_to :transport_mode
   has_many :campaigns, :as => :location, :order => 'created_at desc'
   has_many :problems, :as => :location, :order => 'created_at desc'
+  has_friendly_id :name, :use_slug => true
   
   attr_accessor :show_as_point
   is_route_or_sub_route
@@ -34,14 +35,19 @@ class SubRoute < ActiveRecord::Base
     false
   end
   
+  def route_operators
+    routes.map{ |route| route.operators }.flatten.uniq
+  end
+  
   def operators
-    route_operators = routes.map{ |route| route.operators }.flatten.uniq
     if route_operators.empty?
       mode = TransportMode.find_by_name('Train')
-      route_operators = Operator.find(:all, :conditions => ['transport_mode_id = ?', mode.id], 
-                                            :order => 'name asc')
+      operators = Operator.find(:all, :conditions => ['transport_mode_id = ?', mode.id], 
+                                      :order => 'name asc')
+    else
+      operators = route_operators
     end
-    route_operators
+    operators
   end
   
   def responsible_organization_type
@@ -53,7 +59,7 @@ class SubRoute < ActiveRecord::Base
   end
   
   def name
-    name_by_terminuses(transport_mode)
+    name_by_terminuses(transport_mode, from_stop=nil, short=true)
   end
   
   def description
@@ -69,7 +75,7 @@ class SubRoute < ActiveRecord::Base
     end
   end
   
-  def self.make_sub_route(from_station, to_station, transport_mode)
+  def self.make_sub_route(from_station, to_station, transport_mode, routes)
     exists = find(:first, :conditions => ['from_station_id = ? 
                                           AND to_station_id = ? 
                                           AND transport_mode_id = ?', 
@@ -78,6 +84,10 @@ class SubRoute < ActiveRecord::Base
     created = create!({:from_station => from_station, 
                        :to_station => to_station, 
                        :transport_mode => transport_mode})
+    routes.each do |route|
+      RouteSubRoute.create!(:route => route, 
+                            :sub_route => created)
+    end
     return created
   end
 end

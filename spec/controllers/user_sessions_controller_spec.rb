@@ -20,24 +20,12 @@ describe UserSessionsController do
     def make_request(params={})
       post :new, params
     end
-    
-    describe 'when a post-login action of joining the campaign is passed' do
-      
-      before do 
-        @next_action_data = @controller.send(:data_to_string, { :action => :join_campaign })
-      end
-  
-      it 'should save the post-login action to the session' do 
-        make_request(:next_action => @next_action_data)
-        session[:next_action].should == @next_action_data
-      end
-    
-      it 'should set a notice for the current action' do 
-        make_request(:next_action => @next_action_data)
-        response.flash[:notice].should == "Please login or create an account to join this campaign"
-      end
+
+    it 'should render the "new" template' do 
+      make_request
+      response.should render_template("new")
     end
-    
+
   end
   
   describe 'POST #create' do 
@@ -77,11 +65,6 @@ describe UserSessionsController do
         it 'should return to the redirect given' do 
           make_request(:next_action => @next_action_data)
           response.should redirect_to("/another_url")
-        end
-        
-        it 'should show a notice ' do
-          make_request(:next_action => @next_action_data)
-          flash[:notice].should == "Thanks for joining this campaign"
         end
       
       end

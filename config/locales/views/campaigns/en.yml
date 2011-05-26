@@ -18,7 +18,6 @@ en:
   campaigns_complete_access_message: "mark this campaign as complete"
   campaigns_add_update_access_message: "ask for advice on this campaign"
   campaigns_update_access_message: "edit this campaign"
-  campaigns_confirm_problem: "confirm this problem"
   campaigns_edit_access_message: "edit this campaign"
   outgoing_messages_new_access_message: "write messages on behalf of this campaign"
   assignments_new_access_message: "create an assignment for this campaign"
@@ -45,11 +44,10 @@ en:
   a_reply: a reply
   wrote_a_message: "%{sender} wrote to %{recipient}%{assignment_text}"
   campaign: campaign
-  choose_a_short_name: Choose a short name (6 to 16 lowercase letters)
-  easy_web_address: This gives your page an easy web address. e.g. %{url}
   update_added: Your update has been added. 
   error_adding_update: "Sorry, there's been a problem adding your update. Please use the feedback form to let us know what happened."
   user_says: "%{name} commented"
+  added_an_update: "%{name} added an update"
   add_an_update: 'Add an update:'
   request_advice: Ask for advice
   ask_our_expert_panel: 'Ask your supporters and our expert panel what to do next:'

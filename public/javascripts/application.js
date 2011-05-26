@@ -106,14 +106,14 @@ function show_error(element, message){
 }
 
 function adviceCallback(response){
-  $('.latest-news').after(response.html);
+  $('.campaign-history').after(response.html);
   $('#advice-request-form textarea').val('');
   $('#advice-request-form').hide();
   setupForm('.new_campaign_comment', updateCommentCallback);
 }
 
 function updateCallback(response){
-  $('.latest-news').after(response.html);
+  $('.campaign-history').after(response.html);
   $('#campaign-update-form textarea').val('');
   setupForm('.new_campaign_comment', updateCommentCallback);
 }

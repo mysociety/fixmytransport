@@ -1,3 +1,1 @@
-<div class="assignment">
-  <%= link_to(t(:find_responsible_org), edit_campaign_assignment_path(assignment.problem.campaign, assignment)) %>
-</div>
+<%= raw button(t(:find_responsible_org), edit_campaign_assignment_path(assignment.problem.campaign, assignment),"button big", index) %>

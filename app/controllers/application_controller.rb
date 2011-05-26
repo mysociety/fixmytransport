@@ -95,12 +95,7 @@ class ApplicationController < ActionController::Base
     if allow_expert
       return true if current_user && current_user.is_expert?
     end
-    # custom message for editing a new campaign - which is part of the process of confirming a problem
-    if @campaign.status == :new && controller_name == 'campaigns' && ['edit', 'update'].include?(@action_name)
-      @access_message = :campaigns_confirm_problem
-    else
-      @access_message = access_message_key
-    end
+    @access_message = access_message_key
     @name = @campaign.initiator.name
     return redirect_bad_user
   end
@@ -180,15 +175,16 @@ class ApplicationController < ActionController::Base
 
   def save_post_login_action_to_session
     if post_login_action_data = get_action_data(params)
+      
       session[:next_action] = params[:next_action]
       if post_login_action_data[:action] == :join_campaign
-        flash.now[:notice] = "Please login or create an account to join this campaign"
+        flash.now[:notice] = post_login_action_data[:notice]
       end
     end
   end
   
   def post_login_actions
-    [:join_campaign]
+    [:join_campaign, :add_comment]
   end
   
   def get_action_data(data_hash)
@@ -204,14 +200,30 @@ class ApplicationController < ActionController::Base
   def perform_post_login_action
     current_user(refresh=true)
     if post_login_action_data = get_action_data(session)
+      id = post_login_action_data[:id]
       case post_login_action_data[:action]
       when :join_campaign
-        campaign_id = post_login_action_data[:id]
-        Campaign.find(campaign_id).add_supporter(current_user, confirmed=true)
+        campaign = Campaign.find(id)
+        campaign.add_supporter(current_user, confirmed=true)
+      when :add_comment
+        commented_type = post_login_action_data[:commented_type]
+        commented = commented_type.titleize.constantize.find(id)
+        commented.add_comment(current_user, 
+                             post_login_action_data[:text],
+                             confirmed=true)
+        flash[:notice] = "Thanks for your comment"
+      end
+      if post_login_action_data[:redirect]
         session[:return_to] = post_login_action_data[:redirect]
-        flash[:notice] = "Thanks for joining this campaign"
       end
       session.delete(:next_action)
+    end
+  end
+
+  def add_json_errors(model_instance, json_hash)
+    json_hash[:errors] = {}
+    model_instance.errors.each do |attribute,message|
+      json_hash[:errors][attribute] = message
     end
   end
 
@@ -244,6 +256,75 @@ class ApplicationController < ActionController::Base
       @other_locations = Map.other_locations(@lat, @lon, @zoom, height, width)
     else
       @other_locations = []
+    end
+  end
+  
+  # handle a posted comment if there is a current user
+  def handle_comment_current_user
+    @comment.user = current_user
+    if @comment.valid?
+      @comment.save
+      @comment.confirm!
+      respond_to do |format|
+        format.html do
+          flash[:notice] = 'Thanks for your comment!'
+          redirect_to @template.commented_url(@comment.commented)
+        end
+        format.json do
+          index = params[:last_thread_index].to_i + 1
+          comment_html = render_to_string :partial => "shared/comment", 
+                                          :locals => { :comment => @comment, 
+                                                       :index => index }
+          @json = { :success => true,
+                    :html => "<li>#{comment_html}</li>" }
+          render :json => @json
+        end
+      end
+    else
+      render_or_return_for_invalid_comment and return false
+    end
+  end
+  
+  # handle a posted comment if there's no current user logged in
+  def handle_comment_no_user
+    @comment.skip_name_validation = true
+    if @comment.valid?
+      commented_type = @comment.commented_type.downcase
+      comment_data = { :action => :add_comment,
+                       :id => @comment.commented_id,
+                       :commented_type => commented_type,
+                       :text => @comment.text,
+                       :redirect => @template.commented_url(@comment.commented),
+                       :notice => "Please login or signup to add your comment to this #{commented_type}" }
+      session[:next_action] = data_to_string(comment_data)
+      respond_to do |format|
+        format.html do
+          flash[:notice] = comment_data[:notice]
+          redirect_to(login_url)
+        end
+        format.json do
+          @json = { :success => true,
+                    :requires_login => true,
+                    :notice => comment_data[:notice] }
+          render :json => @json
+        end
+      end
+    else
+      render_or_return_for_invalid_comment and return false
+    end
+  end
+  
+  def render_or_return_for_invalid_comment
+    respond_to do |format|
+      format.html do
+        render :action => 'add_comment'
+      end
+      format.json do
+        @json = {}
+        @json[:success] = false
+        add_json_errors(@comment, @json)
+        render :json => @json
+      end
     end
   end
 

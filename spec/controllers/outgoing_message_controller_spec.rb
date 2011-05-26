@@ -32,6 +32,7 @@ describe OutgoingMessagesController do
     before do 
       @default_params = { :campaign_id => 66, :recipient_id => 1, :recipient_type => 'CouncilContact' }
       mock_campaign
+      CouncilContact.stub!(:find).and_return(mock_model(CouncilContact))
       @expected_access_message = :outgoing_messages_new_access_message
     end
     

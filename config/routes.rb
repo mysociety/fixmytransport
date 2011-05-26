@@ -14,7 +14,8 @@ ActionController::Routing::Routes.draw do |map|
                                          :add_comment => [:get, :post],
                                          :get_supporters => [:get],
                                          :complete => [:post], 
-                                         :add_photos => [:get, :post] } do |campaign|
+                                         :add_photos => [:get, :post], 
+                                         :add_details => [:get, :post] } do |campaign|
     campaign.resources :incoming_messages, :only => [:show]
     campaign.attachment '/incoming_messages/:id/attach/:url_part_number', :action => 'show_attachment', 
                                                                           :controller => 'incoming_messages'
@@ -27,8 +28,9 @@ ActionController::Routing::Routes.draw do |map|
   map.confirm_join '/c/:email_token', :action => 'confirm_join', :controller => 'campaigns'
   map.confirm_leave '/l/:email_token', :action => 'confirm_leave', :controller => 'campaigns'
 
-  map.resources :problems, :except => [:destroy], 
-                           :member => [:convert],
+  map.resources :problems, :except => [:destroy, :edit, :update], 
+                           :member => {:convert => [:get], 
+                                      :add_comment => [:get, :post] },
                            :collection => { :choose_location => :get, 
                                             :find_stop => :get,
                                             :find_route => :get, 
@@ -63,12 +65,16 @@ ActionController::Routing::Routes.draw do |map|
                                                             :type => :ferry_terminal,
                                                             :conditions => { :method => :get }
 
-  # routes                                               
+  # routes and sub routes                                          
 
 
   map.routes "/routes/", :controller => 'locations', 
                          :action => "show_route_regions"
                          
+  map.sub_route "/sub-routes/:id.:format", :controller => "locations", 
+                                           :action => 'show_sub_route', 
+                                           :conditions => { :method => :get }
+  
   map.route_region "/routes/:id.:format", :controller => "locations", 
                                           :action => 'show_route_region',
                                           :conditions => { :method => :get }
