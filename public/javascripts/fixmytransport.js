@@ -98,6 +98,7 @@ $(document).ready(function(){
   	});
   });
 
+/* // NB handled explicitly in login code
   //facebook
   $('.facebook').click(function(e){
   	e.preventDefault();
@@ -105,6 +106,7 @@ $(document).ready(function(){
   		$('#login-facebook').fadeIn();
   	});
 	});
+*/
 
     /* Advice request */
   $('.advice-trigger').click(function(e){
@@ -514,19 +516,19 @@ $(document).ready(function(){
     });
   });
 
-  /* External authentication
-     ================================================== */
-
-  function externalAuth(authParams) {
-    var url = window.location.protocol + "//" + window.location.host + "/user_sessions/external";
-    var form = $('<form action="'+url+'" method="POST"></form>');
-    for (authParam in authParams) {
-      form.append($('<input type="hidden" name="'+authParam+'" value="'+authParams[authParam]+'">'));
-    }
-    form.append($('<input type="hidden" name="path" value="'+window.location.pathname+'">'));
-    $('body').append(form)
-    form.submit();
-  }
-
 });
+
+/* External authentication
+   ================================================== */
+
+function externalAuth(authParams) {
+  var url = window.location.protocol + "//" + window.location.host + "/user_sessions/external";
+  var form = $('<form action="'+url+'" method="POST"></form>');
+  for (authParam in authParams) {
+    form.append($('<input type="hidden" name="'+authParam+'" value="'+authParams[authParam]+'">'));
+  }
+  form.append($('<input type="hidden" name="path" value="'+window.location.pathname+'">'));
+  $('body').append(form)
+  form.submit();
+}
 
