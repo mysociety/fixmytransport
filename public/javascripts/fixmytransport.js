@@ -238,13 +238,13 @@ $(document).ready(function(){
   });
 
 
-function externalAuth(authParams) {
-  var url = window.location.protocol + "//" + window.location.host + "/user_sessions/external";
-  var form = $('<form action="'+url+'" method="POST"></form>');
-  for (authParam in authParams) {
-    form.append($('<input type="hidden" name="'+authParam+'" value="'+authParams[authParam]+'">'));
+  function externalAuth(authParams) {
+    var url = window.location.protocol + "//" + window.location.host + "/user_sessions/external";
+    var form = $('<form action="'+url+'" method="POST"></form>');
+    for (authParam in authParams) {
+      form.append($('<input type="hidden" name="'+authParam+'" value="'+authParams[authParam]+'">'));
+    }
+    form.append($('<input type="hidden" name="path" value="'+window.location.pathname+'">'));
+    $('body').append(form)
+    form.submit();
   }
-  form.append($('<input type="hidden" name="path" value="'+window.location.pathname+'">'));
-  $('body').append(form)
-  form.submit();
-}

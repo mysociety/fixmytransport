@@ -39,26 +39,91 @@
 </ul>
 <%- end %>
 
+
 <div class="login-options">
 	<p>Or use an existing account</p>
 
-	<a href="#" onclick="callFacebook()" id="facebook" class="facebook">Facebook Connect</a>
-
-<script>
-function callFacebook(){
-        var appID = '<%= MySociety::Config.get('FACEBOOK_APP_ID','no-app-id-specified') %>';
-        var path = 'https://www.facebook.com/dialog/oauth?';
-        var queryParams = ['client_id=' + appID,
-            'redirect_uri=' + 'http://dave.transport.mysociety.org/facebook_callback.html',
-            'scope=email',
-            'display=popup',
-            'response_type=token'];
-        var query = queryParams.join('&');
-        var url = path + query;
-        window.open(url, 'fblogin', 'width=580,height=400,location=no,menubar=no,toolbar=no,scrollbars:auto');
-}
-</script>
+	<a href="#" onclick="checkLoginOrCallFacebook()" id="facebook" class="facebook">Facebook Connect</a>
 
 	<a href="#" id="twitter" class="twitter">Twitter Connect</a>
 </div>
+<div id="fb-root"></div>
+
+<script>
+    var fmt_Facebook_appId = '<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>'; 
+    var fmtPopup = undefined;
+    var fmtPopupName = 'fmtfblogin';
+    var fmtPopupParams =  'width=580,height=400,location=no,menubar=no,toolbar=no,scrollbars:auto';
+    var fbButtonState = 'idle'; // idle, busy or blocked (if it seems popup was denied)
+    var url = '';
+    
+    function debugAlert(msg){
+        console.log(msg)
+    }
+        
+    function checkLoginOrCallFacebook(){
+        if (fbButtonState == 'idle'){
+            fbButtonState = 'busy'; 
+            $(".facebook").css('background-repeat', 'repeat-y');
+            $(".facebook").css('background-position', '0px -50px');
+            FB.getLoginStatus(function(response) {
+                debugAlert("'ajax' response back now, fbButtonState=" + fbButtonState);
+                if (response.session && response.status && response.status == 'connected') { // fb says: logged in
+                    var authParams = { 'access_token' : response.session.access_token, 
+                                        'token_expiry' : response.session.expires,
+                                        'source' : 'facebook'}
+                    if (fmtPopup){fmtPopup.close()};
+                    window.externalAuth(authParams);
+                } else {
+                    var path = 'https://www.facebook.com/dialog/oauth?';
+                    var redirectUri = document.location.protocol + '//' + document.location.host + '/facebook_callback.html';
+                    debugAlert("redirectUri = " + redirectUri);
+                    var queryParams = ['client_id=' + fmt_Facebook_appId,
+                        'redirect_uri=' + redirectUri,
+                        'scope=email',
+                        'display=popup',
+                        'response_type=token'];
+                    url = path + queryParams.join('&');                    
+                    debugAlert("inner open, fbButtonState=" + fbButtonState);
+                    fmtPopup = window.open(url, fmtPopupName, fmtPopupParams);
+                    // Can't usefull detect blocked popups on current Chrome: let the browser notify the user. Barely satisfactory.
+                    if (!fmtPopup || fmtPopup.closed || typeof fmtPopup.closed=='undefined'){
+                        fbButtonState = 'blocked';
+                        $(".facebook").css('background-position', '0px -100px'); 
+                        debugAlert("was blocked, dropping out, fbButtonState=" + fbButtonState);
+                    } else {
+                        debugAlert("was not blocked, inner open worked OK, will now set to idle and focus the popup");
+                        fbButtonState = 'idle';
+                        $(".facebook").css('background-position', '0px 0px'); 
+                        debugAlert("finishing up, fmtPopup.focus(), fbButtonState=" + fbButtonState);
+                        fmtPopup.focus();                        
+                    }
+                }
+            });
+        } else if (fbButtonState == 'blocked') {
+            if (url){
+                fmtPopup = window.open(url, fmtPopupName, fmtPopupParams);  
+            } else {
+                // something goofy with the URL means it wasn't going to work anyway :-|
+            }
+            fbButtonState = 'idle';
+        }
+        if (fbButtonState == 'idle') {
+            $(".facebook").css('background-position', '0px 0px'); 
+        }
+        return false;
+    }
+
+    window.fbAsyncInit = function() {
+        FB.init({appId: fmt_Facebook_appId, status: false, cookie: true, xfbml: false});      
+    };
+    (function() {
+        var e = document.createElement('script'); e.async = true;
+        // e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+        e.src = '/javascripts/facebook_all.js';
+        document.getElementById('fb-root').appendChild(e);
+    }());
+          
+</script>
+
 

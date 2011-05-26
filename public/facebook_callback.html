@@ -1,34 +1,39 @@
 <html> 
     <head> 
-        <title>FB callback</title> 
-    </head> 
+        <title>Facebook callback</title> 
+    </head>
+    <!-- no content on this page: it captures the returned FB hash and passes it on to its opener window, before closing itself--> 
     <body> 
-        <h1> callback page </h1>
-        <p>
-            pretty pretty pretty            
-            <a href="http://facebook.com">facebook.com</a>
-        </p>
         <script> 
-            var facebookParamStr = window.location.hash.substring(1);
-            if (facebookParamStr) {
-
-                var valuePairs = facebookParamStr.split('&');
-                var accessToken;
-                var tokenExpiry;
-                for (var i in valuePairs) {
-                  var nameValue = valuePairs[i].split("=");
-                  var name = nameValue[0].toLowerCase();
-                  var value = nameValue[1];
-                  if (name == 'access_token'){
-                    accessToken = value;
-                  }else if (name == 'expires_in') {
-                    tokenExpiry = value;
-                  } 
+            //   ?error_reason=user_denied&error=access_denied&error_description=The+user+denied+your+request.
+            var qParams = location.search&&location.search.substr(1).replace(/\+/gi," ").split("&");
+            for(var i in qParams){
+                var s=qParams[i].split("=");
+                qParams[i] = qParams[unescape(s[0])] =  unescape(s[1]);
+            }
+            if (qParams['error']){ // not checking details: error -> close window -> back to login
+                // alert("error: " + qParams['error'] + "\n error_reason: " + qParams['error_reason'] + "\n error_description: " +  qParams['error_description'])   
+            } else {
+                var facebookParamStr = window.location.hash.substring(1);
+                if (facebookParamStr) {
+                    var valuePairs = facebookParamStr.split('&');
+                    var accessToken;
+                    var tokenExpiry;
+                    for (var i in valuePairs) {
+                      var nameValue = valuePairs[i].split("=");
+                      var name = nameValue[0].toLowerCase();
+                      var value = nameValue[1];
+                      if (name == 'access_token'){
+                        accessToken = value;
+                      }else if (name == 'expires_in') {
+                        tokenExpiry = value;
+                      } 
+                    }
+                    var authParams = { 'access_token' : accessToken, 
+                                       'token_expiry' : tokenExpiry,
+                                       'source' : 'facebook'};
+                    window.opener.externalAuth(authParams);
                 }
-                var authParams = { 'access_token' : accessToken, 
-                                   'token_expiry' : tokenExpiry,
-                                   'source' : 'facebook'}  
-                window.opener.externalAuth(authParams);
             }
             window.close()
         </script> 
