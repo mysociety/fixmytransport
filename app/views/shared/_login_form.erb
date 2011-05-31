@@ -40,13 +40,14 @@
 </ul>
 <%- end %>
 
+<%- if ! MySociety::Config.get('FACEBOOK_APP_ID','').empty? %>
 
 <div class="login-options">
 	<p>Or use an existing account</p>
 
 	<a href="#" onclick="checkLoginOrCallFacebook()" id="facebook" class="facebook">Facebook Connect</a>
 
-	<a href="#" id="twitter" class="twitter">Twitter Connect</a>
+	<!-- <a href="#" id="twitter" class="twitter">Twitter Connect</a> -->
 </div>
 <div id="fb-root"></div>
 
@@ -126,5 +127,6 @@
     }());
           
 </script>
+<%- end %>
 
 
