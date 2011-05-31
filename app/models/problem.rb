@@ -183,6 +183,10 @@ class Problem < ActiveRecord::Base
     comment
   end
   
+  def visible? 
+    [:confirmed, :fixed].include?(self.status)
+  end
+  
   # class methods
   def self.latest(limit, options={})
     visible.find(:all, 

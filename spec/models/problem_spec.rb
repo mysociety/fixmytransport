@@ -2,6 +2,22 @@ require 'spec_helper'
 
 describe Problem do
   
+  describe 'when asked if it is visible' do 
+  
+    it 'should return true if the status is confirmed' do 
+      @problem = Problem.new
+      @problem.status = :confirmed
+      @problem.visible?.should == true
+    end
+    
+    it 'should return false if the status is new' do 
+      @problem = Problem.new
+      @problem.status = :new
+      @problem.visible?.should == false
+    end
+    
+  end
+  
   describe 'when validating a reporter_name' do 
     
     before do 
