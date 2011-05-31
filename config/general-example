@@ -39,6 +39,10 @@ define('OPTION_BUGS_EMAIL', 'bugs@localhost');
 
 define('OPTION_GOOGLE_MAPS_API_KEY', 'Your Google Maps API key');
 
+// Facebook stuff
+define('OPTION_FACEBOOK_APP_ID', 'xxxxx');
+define('OPTION_FACEBOOK_OAUTH_REDIRECT_URI', 'some_url');
+
 // Using a database with spatial extensions? PostGIS or MySQL with Spatial Extensions
 define('OPTION_USE_SPATIAL_EXTENSIONS', 1);
 
