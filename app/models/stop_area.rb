@@ -45,6 +45,7 @@ class StopArea < ActiveRecord::Base
   validates_presence_of :locality, :if => :loaded?
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
+  is_location
 
   def routes
     stops.map{ |stop| stop.routes }.flatten.uniq
