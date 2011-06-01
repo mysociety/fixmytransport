@@ -14,6 +14,7 @@ en:
   tweet_this: Tweet this
   save: Save
   add_photos: Add photos
+  campaigns_add_details_access_message: "add details to this campaign"
   campaigns_add_photos_access_message: "add photos to this campaign"
   campaigns_complete_access_message: "mark this campaign as complete"
   campaigns_add_update_access_message: "ask for advice on this campaign"

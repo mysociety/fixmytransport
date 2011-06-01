@@ -89,24 +89,16 @@ $(document).ready(function(){
   		$('#login-create-account').fadeIn();
   	});
   });
-
-  //twitter
-  $('.twitter').click(function(e){
+  
+  //login
+  $('#login-to-account').click(function(e){
   	e.preventDefault();
   	$('.pane:visible').fadeOut(500, function(){
-			$('#login-twitter').fadeIn();
+  	  $("#login-box").dialog({title: "Sign In"});
+  		$('#login-landing').fadeIn();
   	});
   });
 
-/* // NB handled explicitly in login code
-  //facebook
-  $('.facebook').click(function(e){
-  	e.preventDefault();
-  	$('.pane:visible').fadeOut(500, function(){
-  		$('#login-facebook').fadeIn();
-  	});
-	});
-*/
 
     /* Advice request */
   $('.advice-trigger').click(function(e){
@@ -182,24 +174,6 @@ $(document).ready(function(){
 		return false;
 	});
 
-	//twitter
-	$('#static-twitter').click(function(e){
-		e.preventDefault();
-		$('.login-box .pane').hide();
-		$('#login-twitter').show();
-		$("#login-box").dialog("open");
-		return false;
-	});
-
-	//facebook
-	$('#static-facebook').click(function(e){
-		e.preventDefault();
-		$('.login-box .pane').hide();
-		$('#login-facebook').show();
-		$("#login-box").dialog("open");
-		return false;
-	});
-
   function showFormErrors(form_selector, response) {
     $(form_selector + " .error").html();
     $(form_selector + " .error").hide();
@@ -270,6 +244,34 @@ $(document).ready(function(){
     $(selector).show();
   }
 
+  // ajax submission of problem form 
+  function setupProblemForm(form_selector) {
+    options = defaultFormOptions();
+	  options['error'] = function() { generalError(form_selector + ' #error-text'); }
+	  options['success'] = function(response) {
+	    if (response.success) {
+
+        if (response.requires_login) {
+          // add the notice to the login form
+          $('#login-landing #notice-base').text(response.notice);
+          $('#login-landing #notice-base').show();
+
+          // show the login form
+          $('.login-box .pane').hide();
+          $("#login-box").dialog({title: "Sign In"});
+      		$('#login-landing').show();
+      		$("#login-box").dialog("open");
+
+        }else{
+          window.location = response.redirect;
+        }
+      } else {
+        showFormErrors(form_selector, response);
+      }
+	  }
+	  $(form_selector).ajaxForm(options);
+	  
+  }
 	// ajax submission of comment form
 	function setupCommentForm(form_selector) {
 	  options = defaultFormOptions();
@@ -329,7 +331,10 @@ $(document).ready(function(){
     options['error'] = function() { generalError(form_selector + ' #error-base' ) };
     options['success'] = function(response) {
        if (response.success) {
-           if (response.html){
+           if (response.redirect) {
+             window.location = response.redirect;
+           }
+           else if (response.html){
              $(form_selector).html(response.html);
            }else{
              window.location.reload();
@@ -342,6 +347,7 @@ $(document).ready(function(){
 	}
 
   setupUpdateForm('#campaign-update-form');
+  setupProblemForm('#create-problem');
   setupCommentForm('#comment-form');
   setupSupportForm('.login-to-support');
   ajaxifyForm('#login-form');

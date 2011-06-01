@@ -184,7 +184,7 @@ class ApplicationController < ActionController::Base
   end
   
   def post_login_actions
-    [:join_campaign, :add_comment]
+    [:join_campaign, :add_comment, :create_problem]
   end
   
   def get_action_data(data_hash)
@@ -212,6 +212,27 @@ class ApplicationController < ActionController::Base
                              post_login_action_data[:text],
                              confirmed=true)
         flash[:notice] = "Thanks for your comment"
+      when :create_problem
+        problem = Problem.new(:subject => post_login_action_data[:subject], 
+                              :description => post_login_action_data[:description],
+                              :location_id => post_login_action_data[:location_id], 
+                              :location_type => post_login_action_data[:location_type],
+                              :category => post_login_action_data[:category],
+                              :operator_id => post_login_action_data[:operator_id],
+                              :passenger_transport_executive_id => post_login_action_data[:passenger_transport_executive_id], 
+                              :council_info => post_login_action_data[:council_info])
+        problem.status = :new
+        problem.reporter = current_user
+        problem.reporter_name = current_user.name
+        problem.save!
+        respond_to do |format|
+          format.json do
+            @json[:redirect] = convert_problem_url(problem)
+          end
+          format.html do
+            session[:return_to] = convert_problem_url(problem)
+          end
+        end
       end
       if post_login_action_data[:redirect]
         session[:return_to] = post_login_action_data[:redirect]

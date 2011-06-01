@@ -24,9 +24,12 @@ describe CampaignsController do
   
     before do 
       @default_params = {:id => 55}
+      @mock_user = mock_model(User, :name => 'Test User')
       @mock_campaign = mock_model(Campaign, :editable? => true, 
-                                            :visible? => false)
+                                            :visible? => false,
+                                            :initiator => @mock_user)
       Campaign.stub!(:find).and_return(@mock_campaign)
+      @controller.stub!(:current_user).and_return(@mock_user)
     end
     
     def make_request(params=@default_params)
@@ -64,13 +67,16 @@ describe CampaignsController do
   describe 'POST #add_details' do 
   
     before do 
+      @mock_user = mock_model(User, :name => "Test User")
       @default_params = {:id => 55, :campaign => {:title => 'title', :description => 'description'}}
       @mock_campaign = mock_model(Campaign, :editable? => true, 
                                             :visible? => false,
                                             :update_attributes => true, 
+                                            :initiator => @mock_user,
                                             :confirm => true,
                                             :save! => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
+      @controller.stub!(:current_user).and_return(@mock_user)
     end
     
     def make_request(params=@default_params)

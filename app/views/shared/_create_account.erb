@@ -8,6 +8,8 @@
     <%- else %>
       <div class='error' id='error-base' style="display: none;"></div>
     <%- end %>
+    <div class='notice' id='notice-base' style="display: none;"></div>
+    
     <div class='form-field'>
       <%- if @account_user.errors.on('name') %>
         <div class='error' id="error-name">
@@ -57,5 +59,6 @@
     </div>
     
     <%= raw f.submit t(:create_account) %>
+    Already have an account? <%= link_to("Sign in", login_url, :id => 'login-to-account')%>
   </div>
 <%- end %>

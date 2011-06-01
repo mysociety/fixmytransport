@@ -9,9 +9,7 @@ class Problem < ActiveRecord::Base
   has_many :comments, :as => :commented
   has_many :sent_emails
   has_many :recipients, :through => :sent_emails
-  validates_presence_of :description, :subject, :category, :reporter_name, :if => :location
-  validates_length_of :reporter_name, :minimum => 5, :if => :location
-  validate :validate_reporter_name
+  validates_presence_of :description, :subject, :category, :if => :location
   validates_associated :reporter
   attr_accessor :location_attributes, :locations, :location_search, :is_campaign
   attr_protected :confirmed_at
@@ -41,14 +39,6 @@ class Problem < ActiveRecord::Base
   
   def send_confirmation_email
     ProblemMailer.deliver_problem_confirmation(reporter, self, token)
-  end
-  
-  def validate_reporter_name
-    return true unless reporter_name
-    return true unless location
-    if /\ba\s*n+on+((y|o)mo?u?s)?(ly)?\b/i.match(reporter_name) or ! /\S\s\S/.match(reporter_name)
-      errors.add(:reporter_name, ActiveRecord::Error.new(self, :reporter_name, :invalid).to_s)
-    end
   end
 
   def create_assignments

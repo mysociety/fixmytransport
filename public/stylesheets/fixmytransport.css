@@ -1208,6 +1208,9 @@ ul#process {
 			padding-right: 30px;
 			float: right;
 		}
+    .problem-next {
+			margin-right: 20px;
+		}
 
 			.process-next:hover, .problem-next:hover {
 				background-position: right bottom;
