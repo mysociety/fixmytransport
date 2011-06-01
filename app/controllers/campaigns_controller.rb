@@ -6,7 +6,7 @@ class CampaignsController < ApplicationController
                                                     :confirm_join, :confirm_leave,
                                                     :confirm_comment]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
-                                                       :complete, :add_photos]
+                                                       :complete, :add_photos, :add_details]
   before_filter :require_campaign_initiator_or_expert, :only => [:edit, :update]
   after_filter :update_campaign_supporter, :only => [:show]
 
