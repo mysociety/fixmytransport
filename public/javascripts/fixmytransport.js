@@ -141,6 +141,9 @@ $(document).ready(function(){
                 .val(last_thread_index));
 
   	$("#login-box").dialog({title: "Update:"});
+  	// Set the button text
+    $('#campaign-update-form .button').html("Add Update")
+    
   	$("#login-box").dialog("open");
   	return false;
   });
