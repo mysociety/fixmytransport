@@ -12,8 +12,10 @@ class AccountsController < ApplicationController
     current_user.password = params[:user][:password]
     current_user.password_confirmation = params[:user][:password_confirmation]
     # if someone logged in by confirmation creates a password here, register their account
+    # and set the flag showing that they've confirmed their password
     if params[:user][:password]
       current_user.registered = true
+      current_user.confirmed_password = true
     end
     if current_user.save
       flash[:notice] = t(:account_updated)
@@ -69,6 +71,7 @@ class AccountsController < ApplicationController
     # if the account has a password, set the user as registered, save
     if !@account_user.crypted_password.blank?
       @account_user.registered = true
+      @account_user.confirmed_password = true
       @account_user.save_without_session_maintenance
       flash[:notice] = t(:successfully_confirmed_account)
     else
@@ -94,7 +97,7 @@ class AccountsController < ApplicationController
 
   def send_new_account_mail(already_registered)
     # no one's used this email before
-    if @account_user.new_record? or
+    if @account_user.new_record?
       # don't want to actually set them as registered until they confirm
       @account_user.registered = false
       @account_user.save_without_session_maintenance

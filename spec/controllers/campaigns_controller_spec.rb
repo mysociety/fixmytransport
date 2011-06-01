@@ -703,6 +703,7 @@ describe CampaignsController do
     before do
       @mock_user = mock_model(User,  :attributes= => true,
                                      :registered= => true,
+                                     :confirmed_password= => true,
                                      :name= => true,
                                      :password= => true,
                                      :password_confirmation= => true,

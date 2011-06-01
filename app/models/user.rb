@@ -63,12 +63,6 @@ class User < ActiveRecord::Base
     !registered
   end
 
-  # Wrap the registered flag in a confirmed? method - a magic method picked up by authlogic.
-  # Registered means that the user has set a password and confirmed their account.
-  def confirmed?
-    registered?
-  end
-
   def first_name
     name.split(' ').first
   end
@@ -140,8 +134,9 @@ class User < ActiveRecord::Base
         email = facebook_data['email']
         user = User.find(:first, :conditions => ['email = ?', email])
         if not user
-          user = User.new({:name => name, :email => email, :registered => true})
+          user = User.new({:name => name, :email => email})
         end   
+        user.registered = true
         user.access_tokens.build({:user_id => user.id,
                                     :token_type => 'facebook',
                                     :key => fb_id,

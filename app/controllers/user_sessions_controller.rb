@@ -8,7 +8,9 @@ class UserSessionsController < ApplicationController
 
   def create
     save_post_login_action_to_session
+    params[:user_session][:login_by_password] = true
     @user_session = UserSession.new(params[:user_session])
+    
     respond_to do |format|
       format.html do 
         if @user_session.save

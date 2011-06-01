@@ -79,8 +79,9 @@ describe AccountsController do
       
       describe 'if the user enters a password' do 
         
-        it 'should set the account as registered' do 
+        it 'should set the account as registered and set the confirmed password flag' do 
           @mock_user.should_receive(:registered=).with(true)
+          @mock_user.should_receive(:confirmed_password=).with(true)
           make_request(@default_params.merge({:user => {:password => 'password'}}))
         end
         
@@ -328,8 +329,9 @@ describe AccountsController do
         UserSession.stub!(:login_by_confirmation)
         @mock_user = mock_model(User, :registered? => false,
                                       :registered= => true,
+                                      :confirmed_password= => true,
                                       :crypted_password => "password",
-                                      :save => true)
+                                      :save_without_session_maintenance => true)
         User.stub!(:find_using_perishable_token).with('my_token', 0).and_return(@mock_user)
       end
 

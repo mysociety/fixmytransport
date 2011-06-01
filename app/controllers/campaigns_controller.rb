@@ -95,10 +95,12 @@ class CampaignsController < ApplicationController
         @user.password = params[:user][:password]
         @user.password_confirmation = params[:user][:password_confirmation]
         @user.registered = true
+        @user.confirmed_password = true
         if @user.save
           redirect_to campaign_url(@campaign_supporter.campaign)
         end
         @user.registered = false
+        @user.confirmed_password = false
       else
         @error = :error_on_register
       end
