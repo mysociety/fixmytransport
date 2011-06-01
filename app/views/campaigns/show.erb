@@ -161,6 +161,7 @@
 
 
 		<div class="box">
+			<iframe src="http://www.facebook.com/plugins/like.php?href=<%= url_encode(campaign_url(@campaign)) %>%2Fbinky&amp;send=false&amp;layout=standard&amp;width=310&amp;show_faces=true&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:310px; height:80px; margin:24px auto 0 auto;" ></iframe>
 			<h5>Campaign Manager</h5>
 			<div class="grey">
 				<div class="avatar"><img src="<%= @campaign.initiator.profile_photo.url(:large_thumb) %>" /></div>
