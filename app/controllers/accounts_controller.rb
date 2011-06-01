@@ -69,7 +69,7 @@ class AccountsController < ApplicationController
     # if the account has a password, set the user as registered, save
     if !@account_user.crypted_password.blank?
       @account_user.registered = true
-      @account_user.save
+      @account_user.save_without_session_maintenance
       flash[:notice] = t(:successfully_confirmed_account)
     else
       flash[:notice] = t(:logged_in_set_password)
