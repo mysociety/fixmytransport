@@ -49,6 +49,7 @@ class UserSessionsController < ApplicationController
     source = params[:source]
     path = params[:path]
     User.handle_external_auth_token(access_token, source)
+    perform_post_login_action
     redirect_to path
   end
   
