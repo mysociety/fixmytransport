@@ -70,4 +70,4 @@ en:
   transport_experts: "Transport experts"
   add_details_to_comment: "Please enter your name as you'd like it to appear, and create a password so you can log back into the site anytime."
   find_responsible_org: Find out who the responsible organisation is
-  find_responsible_org_contact_info: Get contact details for the organisation responsible
+  find_responsible_org_contact_info: "Get contact details for %{org}"
