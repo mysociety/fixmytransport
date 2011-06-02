@@ -225,6 +225,7 @@ class Stop < ActiveRecord::Base
     stops = find_by_sql(["SELECT  *
                           FROM stops
                           WHERE stops.stop_type in (?)
+                          AND status = 'ACT'
                           AND stops.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
                             ST_Point(?, ?),
     	                      ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})",
