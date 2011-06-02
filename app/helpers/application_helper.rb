@@ -151,10 +151,6 @@ module ApplicationHelper
     name += " #{t(:in_locality, :locality => stop.locality_name)} (#{stop.id})"
     name
   end
-  
-  def transport_direct_link(stop)
-    return link_to(t(:transport_direct), "http://www.transportdirect.info/web2/journeyplanning/StopInformationLandingPage.aspx?et=si&id=fixmytransport&st=n&sd=#{stop.atco_code}")
-  end
 
   def external_search_link(text)
     "http://www.google.co.uk/search?ie=UTF-8&q=#{CGI.escape(text)}"
