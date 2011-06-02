@@ -113,6 +113,33 @@ class User < ActiveRecord::Base
     UserMailer.deliver_already_registered(self)
   end
   
+  def deliver_account_exists!
+    reset_perishable_token!
+    UserMailer.deliver_account_exists(self)
+  end
+  
+  def mark_seen(campaign)
+    if current_supporter = self.campaign_supporters.detect{ |supporter| supporter.campaign == campaign }
+      if current_supporter.new_supporter?
+        current_supporter.new_supporter = false
+        current_supporter.save
+      end
+    end
+  end
+  
+  def supporter_or_initiator(campaign)
+    return (self == campaign.initiator || self.campaigns.include?(campaign))
+  end
+  
+  def new_supporter?(campaign)
+    if current_supporter = self.campaign_supporters.detect{ |supporter| supporter.campaign == campaign }
+      if current_supporter.new_supporter?
+        return true
+      end
+    end
+    return false
+  end
+  
   # class methods
   
   def self.get_facebook_data(access_token)
@@ -146,32 +173,7 @@ class User < ActiveRecord::Base
       UserSession.create(user, remember_me=false)
     end
   end
+  
 
-  def deliver_account_exists!
-    reset_perishable_token!
-    UserMailer.deliver_account_exists(self)
-  end
-  
-  def mark_seen(campaign)
-    if current_supporter = self.campaign_supporters.detect{ |supporter| supporter.campaign == campaign }
-      if current_supporter.new_supporter?
-        current_supporter.new_supporter = false
-        current_supporter.save
-      end
-    end
-  end
-  
-  def supporter_or_initiator(campaign)
-    return (self == campaign.initiator || self.campaigns.include?(campaign))
-  end
-  
-  def new_supporter?(campaign)
-    if current_supporter = self.campaign_supporters.detect{ |supporter| supporter.campaign == campaign }
-      if current_supporter.new_supporter?
-        return true
-      end
-    end
-    return false
-  end
 end
 
