@@ -536,7 +536,7 @@ function externalAuth(authParams) {
   for (authParam in authParams) {
     form.append($('<input type="hidden" name="'+authParam+'" value="'+authParams[authParam]+'">'));
   }
-  form.append($('<input type="hidden" name="path" value="'+window.location.pathname+window.location.search'">'));
+  form.append($('<input type="hidden" name="path" value="'+window.location.pathname+window.location.search+'">'));
   $('body').append(form)
   form.submit();
 }
