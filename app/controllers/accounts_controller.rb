@@ -41,16 +41,19 @@ class AccountsController < ApplicationController
     @account_user.password_confirmation = params[:user][:password_confirmation]
     if @account_user.valid?
       send_new_account_mail(already_registered)
-      save_post_login_action_to_session
+      save_post_login_action_to_database(@account_user)
+      if action_string = post_login_action_string
+        @action = action_string
+      else
+        @action = t(:your_account_wont_be_created)
+      end
       respond_to do |format|
         format.html do
-          @action = t(:your_account_wont_be_created)
           render :template => 'shared/confirmation_sent'
         end
         format.json do
           @json = {}
           @json[:success] = true
-          @action = t(:your_account_wont_be_created)
           @json[:html] = render_to_string :template => 'shared/confirmation_sent', :layout => false
           render :json => @json
         end

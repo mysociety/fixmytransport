@@ -183,6 +183,34 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def save_post_login_action_to_database(user)
+    if post_login_action_data = get_action_data(params)
+      id = post_login_action_data[:id]
+      case post_login_action_data[:action]
+      when :join_campaign
+        campaign = Campaign.find(id)
+        campaign.add_supporter(user, confirmed=false)
+      when :add_comment
+      when :create_problem
+      end
+    end
+  end
+  
+  def post_login_action_string
+    if post_login_action_data = get_action_data(session)
+      case post_login_action_data[:action]
+      when :join_campaign
+        return t(:you_will_not_be_a_supporter)
+      when :add_comment
+        return t(:your_comment_will_not_be_added)
+      when :create_problem
+        return t(:your_problem_will_not_be_created)
+      else 
+        return nil
+      end
+    end
+  end
+  
   def post_login_actions
     [:join_campaign, :add_comment, :create_problem]
   end

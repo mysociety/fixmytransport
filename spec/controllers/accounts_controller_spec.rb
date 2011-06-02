@@ -196,11 +196,33 @@ describe AccountsController do
           make_request
         end
         
-        it 'should save the next action to the session' do 
-          @controller.should_receive(:save_post_login_action_to_session)
+        it 'should save the next action to the database' do 
+          @controller.should_receive(:save_post_login_action_to_database)
           make_request
         end
+        
+        describe 'if there is no post login action set' do
 
+          it 'should set the action message for the confirmation template to an account confirmation message' do
+            make_request
+            assigns[:action].should == "your account won't be created."
+          end
+        
+        end
+        
+        describe 'if the post_login_action is to create a problem' do
+          
+          before do 
+            @controller.stub!(:get_action_data).and_return({:action => :create_problem})
+          end
+          
+          it 'should set the action for the confirmation template to a problem creation message' do 
+            make_request
+            assigns[:action].should == "your problem will not be created."
+          end
+           
+        end
+        
         describe 'if the request asks for html' do 
           
           it 'should render the "confirmation_sent" template' do
