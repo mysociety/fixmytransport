@@ -1,5 +1,5 @@
 <%- if current_user %>
-  <%- if !current_user.initiated_campaigns.include?(@campaign) %>
+  <%- if !current_user.supporter_or_initiator(@campaign) %>
 
     <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST'  } do |f| %>
       <%= raw submit_tag "Support", :class => button_class %>
