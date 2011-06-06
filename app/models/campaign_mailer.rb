@@ -5,7 +5,7 @@ class CampaignMailer < ApplicationMailer
   def supporter_confirmation(recipient, campaign, token)
     recipients recipient.name_and_email
     from contact_from_name_and_email
-    subject "[FixMyTransport] Confirm that you want to join \"#{campaign.title}\""
+    subject supporter_confirmation_subject(campaign)
     body :campaign => campaign, :recipient => recipient, :link => main_url(confirm_join_path(:email_token => token))
   end
 
@@ -78,7 +78,7 @@ class CampaignMailer < ApplicationMailer
   def comment_confirmation(recipient, comment, token)
     recipients recipient.name_and_email
     from contact_from_name_and_email
-    subject "[FixMyTransport] Your comment on \"#{comment.commented.campaign.title}\""
+    subject comment_confirmation_subject(comment)
     body :comment => comment, :recipient => recipient, :link => main_url(confirm_comment_path(:email_token => token))
   end
 

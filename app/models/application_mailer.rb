@@ -18,4 +18,16 @@ class ApplicationMailer < ActionMailer::Base
     "#{name} <#{MySociety::Config.get('EXPERT_EMAIL', 'contact@localhost')}>"
   end
   
+  def comment_confirmation_subject()
+    "[FixMyTransport] Confirm your comment"
+  end
+  
+  def supporter_confirmation_subject(campaign)
+    "[FixMyTransport] Confirm that you want to join \"#{campaign.title}\""
+  end
+  
+  def problem_confirmation_subject()
+    "[FixMyTransport] Confirm your problem"
+  end
+  
 end
