@@ -3,5 +3,6 @@
 LOC=`dirname $0`
 
 $LOC/runner 'CampaignMailer.send_updates'
+$LOC/runner 'CampaignMailer.send_comments'
 
 
