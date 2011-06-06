@@ -17,6 +17,8 @@ en:
   multiple_localities: "We found more than one place matching \"%{name}\". Please select one, or try a different search if yours is not here:"
   within_multiple_localities: "We found more than one place with matches for \"%{name}\". Please select one, or try a different search if yours is not here:"
   multiple_locations_intro: "Choose a stop or station by clicking on it, or zoom in on an area to see other stops and stations."
+  cant_see_the_map: "Can't see the map? %{link}"
+  choose_from_list: "Choose from a list of stops and stations"
   multiple_routes_intro: "Choose a route by clicking on it, or try a different search if yours is not here: "
   problem_not_found: "We couldn't locate your problem in the database. If you've copied the URL from an email, please check that you copied it exactly."
   problem_already_confirmed: "That problem has already been confirmed."
