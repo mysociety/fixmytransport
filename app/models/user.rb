@@ -102,24 +102,9 @@ class User < ActiveRecord::Base
     reset_perishable_token!
     UserMailer.deliver_password_reset_instructions(self)
   end
-
-  def deliver_new_account_confirmation!
-    reset_perishable_token!
-    UserMailer.deliver_new_account_confirmation(self)
-  end
-
-  def deliver_already_registered!
-    reset_perishable_token!
-    UserMailer.deliver_already_registered(self)
-  end
-  
-  def deliver_account_exists!
-    reset_perishable_token!
-    UserMailer.deliver_account_exists(self)
-  end
   
   def mark_seen(campaign)
-    if current_supporter = self.campaign_supporters.detect{ |supporter| supporter.campaign == campaign }
+    if current_supporter = self.campaign_supporters.confirmed.detect{ |supporter| supporter.campaign == campaign }
       if current_supporter.new_supporter?
         current_supporter.new_supporter = false
         current_supporter.save
@@ -128,11 +113,11 @@ class User < ActiveRecord::Base
   end
   
   def supporter_or_initiator(campaign)
-    return (self == campaign.initiator || self.campaigns.include?(campaign))
+    return (self == campaign.initiator || campaign.supporters.include?(self))
   end
   
   def new_supporter?(campaign)
-    if current_supporter = self.campaign_supporters.detect{ |supporter| supporter.campaign == campaign }
+    if current_supporter = self.campaign_supporters.confirmed.detect{ |supporter| supporter.campaign == campaign }
       if current_supporter.new_supporter?
         return true
       end
