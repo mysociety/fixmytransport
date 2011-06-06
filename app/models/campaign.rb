@@ -75,23 +75,30 @@ class Campaign < ActiveRecord::Base
     end
   end
 
-  def add_supporter(user, supporter_confirmed=false)
+  def add_supporter(user, supporter_confirmed=false, token=nil)
     if ! supporters.include?(user)
       supporter_attributes = { :supporter => user }
       if supporter_confirmed
         supporter_attributes[:confirmed_at] = Time.now
       end
-      campaign_supporters.create!(supporter_attributes)
+      campaign_supporter = campaign_supporters.create!(supporter_attributes)
+      if token
+        campaign_supporter.update_attributes(:token => token)
+      end
+      return campaign_supporter
     end
   end
 
-  def add_comment(user, text, comment_confirmed=false)
+  def add_comment(user, text, comment_confirmed=false, token=nil)
     comment = comments.build(:text => text,
                              :user => user)
     comment.status = :new
     comment.save
     if comment_confirmed
       comment.confirm!
+    end
+    if token
+      comment.update_attributes(:token => token)
     end
     comment
   end
