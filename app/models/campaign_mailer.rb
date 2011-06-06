@@ -12,7 +12,7 @@ class CampaignMailer < ApplicationMailer
   def new_message(recipient, incoming_message, campaign)
     recipients recipient.name_and_email
     from contact_from_name_and_email
-    subject "[FixMyTransport] Comment on the campaign to #{campaign.title}"
+    subject "[FixMyTransport] New message to the campaign to #{campaign.title}"
     url = main_url(campaign_incoming_message_path(campaign,incoming_message))
     body :campaign => campaign, :recipient => recipient, :link => url
   end
@@ -20,23 +20,29 @@ class CampaignMailer < ApplicationMailer
   def update(recipient, campaign, supporter, update)
     recipients recipient.name_and_email
     from contact_from_name_and_email
-    subject "[FixMyTransport] Comment on the campaign to #{campaign.title}"
-    body({ :campaign => campaign,
-           :recipient => recipient,
-           :update => update,
-           :link => main_url(campaign_path(campaign)),
-           :unsubscribe_link => main_url(confirm_leave_path(:email_token => supporter.token)) })
+    subject "[FixMyTransport] Update on the campaign to #{campaign.title}"
+    body_hash = { :campaign => campaign,
+                  :recipient => recipient,
+                  :update => update,
+                  :link => main_url(campaign_path(campaign)) }
+    if supporter
+      body_hash[:unsubscribe_link] = main_url(confirm_leave_path(:email_token => supporter.token))
+    end
+    body(body_hash)
   end
 
   def comment(recipient, campaign, supporter, comment)
     recipients recipient.name_and_email
     from contact_from_name_and_email
     subject "[FixMyTransport] Comment on the campaign to #{campaign.title}"
-    body({ :campaign => campaign, 
-           :recipient => recipient, 
-           :comment => comment, 
-           :link => main_url(campaign_path(campaign)),
-           :unsubscribe_link => main_url(confirm_leave_path(:email_token => supporter.token))})
+    body_hash = { :campaign => campaign, 
+                  :recipient => recipient, 
+                  :comment => comment, 
+                  :link => main_url(campaign_path(campaign)) }
+    if supporter 
+      body_hash[:unsubscribe_link] = main_url(confirm_leave_path(:email_token => supporter.token))
+    end
+    body(body_hash)
   end
 
   def expert_advice_request(campaign, advice_request)
@@ -53,11 +59,14 @@ class CampaignMailer < ApplicationMailer
     recipients recipient.name_and_email
     from contact_from_name_and_email
     subject "[FixMyTransport] Advice request from the campaign to #{campaign.title}"
-    body({ :campaign => campaign,
-           :recipient => recipient,
-           :advice_request => advice_request,
-           :link => main_url(campaign_path(campaign)),
-           :unsubscribe_link => main_url(confirm_leave_path(:email_token => supporter.token)) })
+    body_hash = { :campaign => campaign,
+                  :recipient => recipient,
+                  :advice_request => advice_request,
+                  :link => main_url(campaign_path(campaign)) }
+    if supporter
+      body_hash[:unsubscribe_link] = main_url(confirm_leave_path(:email_token => supporter.token))
+    end
+    body(body_hash)
   end
 
   def write_to_other_assignment(assignment, subject)
@@ -132,12 +141,16 @@ class CampaignMailer < ApplicationMailer
     end
     
     sent_recipients = sent_emails.map{ |sent_email| sent_email.recipient }
-    supporters = campaign.campaign_supporters.confirmed
-    supporters = supporters.select{ |supporter| !sent_recipients.include? supporter.supporter }
-    supporters.each do |supporter|
-      recipient = supporter.supporter
+    campaign_supporters = campaign.campaign_supporters.confirmed
+    recipients = campaign_supporters.map{ |campaign_supporter| [campaign_supporter, campaign_supporter.supporter] }
+    if update_or_comment.is_a?(Comment)
+      recipients << [nil, campaign.initiator]
+    end
+    recipients = recipients.select{ |supporter, recipient| !sent_recipients.include? recipient }
+    recipients.each do |supporter, recipient|
       # don't send an email to the person who created the update or comment
       next if recipient == update_or_comment.user
+      
       if self.dryrun
         STDERR.puts("Would send the following:")
         if update_or_comment.is_a?(CampaignUpdate) && update_or_comment.is_advice_request?

@@ -10,5 +10,7 @@ To comment on this update, please follow this link: <%= raw @link %>
 
 Yours,
 The FixMyTransport team
+<%- if @unsubscribe_link %>
 
 To leave this campaign and stop receiving updates, please follow this link: <%= raw @unsubscribe_link %>
+<%- end %>
