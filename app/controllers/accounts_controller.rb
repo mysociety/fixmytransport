@@ -41,10 +41,12 @@ class AccountsController < ApplicationController
     @account_user.password_confirmation = params[:user][:password_confirmation]
     if @account_user.valid?
       if @account_user.new_record?
+        new_account = true
         # don't want to actually set them as registered until they confirm
         @account_user.registered = false
         @account_user.save_without_session_maintenance
       else
+        new_account = false
         # Refresh the user, discard all the changes
         @account_user = User.find_or_initialize_by_email(params[:user][:email])
       end
@@ -56,7 +58,7 @@ class AccountsController < ApplicationController
       end
       @account_user.reset_perishable_token!
       unconfirmed_model = save_post_login_action_to_database(@account_user)
-      send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model)
+      send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model, new_account)
       respond_to do |format|
         format.html do
           render :template => 'shared/confirmation_sent'
@@ -134,9 +136,9 @@ class AccountsController < ApplicationController
     end
   end
 
-  def send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model)
+  def send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model, new_account)
     # no one's used this email before
-    if @account_user.new_record?
+    if new_account
       UserMailer.deliver_new_account_confirmation(@account_user, post_login_action_data, unconfirmed_model)
     elsif ! already_registered
       # someone has used this email, but not registered
