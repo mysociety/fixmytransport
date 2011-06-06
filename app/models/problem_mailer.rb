@@ -12,7 +12,7 @@ class ProblemMailer < ApplicationMailer
   def comment_confirmation(recipient, comment, token)
     recipients recipient.name_and_email
     from contact_from_name_and_email
-    subject comment_confirmation_subject
+    subject comment_confirmation_subject(comment)
     body :comment => comment, :recipient => recipient, :link => main_url(confirm_comment_path(:email_token => token))
   end
   

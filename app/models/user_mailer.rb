@@ -8,7 +8,7 @@ class UserMailer < ApplicationMailer
   end
 
   def new_account_confirmation(user, post_login_action_data, unconfirmed_model)
-    subject get_subject(post_login_action_data)
+    subject get_subject(post_login_action_data, unconfirmed_model)
     from contact_from_name_and_email
     recipients user.email
     body :account_confirmation_url => main_url(confirm_account_path(user.perishable_token)), 
@@ -18,7 +18,7 @@ class UserMailer < ApplicationMailer
   end
   
   def account_exists(user, post_login_action_data, unconfirmed_model)
-    subject get_subject(post_login_action_data)
+    subject get_subject(post_login_action_data, unconfirmed_model)
     from contact_from_name_and_email
     recipients user.email
     body :account_confirmation_url => main_url(confirm_account_path(user.perishable_token)), 
@@ -28,7 +28,7 @@ class UserMailer < ApplicationMailer
   end
   
   def already_registered(user, post_login_action_data, unconfirmed_model)
-    subject get_subject(post_login_action_data)
+    subject get_subject(post_login_action_data, unconfirmed_model)
     from contact_from_name_and_email
     recipients user.email
     body :account_confirmation_url => main_url(confirm_account_path(user.perishable_token)), 
@@ -59,14 +59,13 @@ class UserMailer < ApplicationMailer
     end
   end
   
-  def get_subject(post_login_action_data)
+  def get_subject(post_login_action_data, unconfirmed_model)
     if post_login_action_data
       case post_login_action_data[:action]
       when :join_campaign
-        campaign = Campaign.find(post_login_action_data[:id])
-        return supporter_confirmation_subject(campaign)
+        return supporter_confirmation_subject(unconfirmed_model)
       when :add_comment
-        return comment_confirmation_subject()
+        return comment_confirmation_subject(unconfirmed_model)
       when :create_problem
         return problem_confirmation_subject()
       else

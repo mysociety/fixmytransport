@@ -18,8 +18,13 @@ class ApplicationMailer < ActionMailer::Base
     "#{name} <#{MySociety::Config.get('EXPERT_EMAIL', 'contact@localhost')}>"
   end
   
-  def comment_confirmation_subject()
-    "[FixMyTransport] Confirm your comment"
+  def comment_confirmation_subject(comment)
+    if comment.commentable.is_a?(Campaign)
+      comment_type = 'comment'
+    else
+      comment_type = 'update'
+    end
+    "[FixMyTransport] Confirm your #{comment_type}"
   end
   
   def supporter_confirmation_subject(campaign)
