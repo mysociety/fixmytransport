@@ -184,16 +184,29 @@ class ApplicationController < ActionController::Base
   end
   
   def save_post_login_action_to_database(user)
-    if post_login_action_data = get_action_data(params)
+    if post_login_action_data = get_action_data(session)
+      session.delete(:next_action)
       id = post_login_action_data[:id]
+      user.post_login_action = post_login_action_data[:action].to_s
+      user.save_without_session_maintenance
       case post_login_action_data[:action]
       when :join_campaign
         campaign = Campaign.find(id)
-        campaign.add_supporter(user, confirmed=false)
+        supporter = campaign.add_supporter(user, confirmed=false, token=user.perishable_token)
+        return supporter
       when :add_comment
+        commented_type = post_login_action_data[:commented_type]
+        commented = commented_type.titleize.constantize.find(id)
+        comment = commented.add_comment(user, 
+                              post_login_action_data[:text],
+                              confirmed=false, token=user.perishable_token)
+        return comment
       when :create_problem
+        problem = Problem.create_from_hash(post_login_action_data, user, token=user.perishable_token)
+        return problem
       end
     end
+    
   end
   
   def post_login_action_string
@@ -241,18 +254,7 @@ class ApplicationController < ActionController::Base
                              confirmed=true)
         flash[:notice] = "Thanks for your comment"
       when :create_problem
-        problem = Problem.new(:subject => post_login_action_data[:subject], 
-                              :description => post_login_action_data[:description],
-                              :location_id => post_login_action_data[:location_id], 
-                              :location_type => post_login_action_data[:location_type],
-                              :category => post_login_action_data[:category],
-                              :operator_id => post_login_action_data[:operator_id],
-                              :passenger_transport_executive_id => post_login_action_data[:passenger_transport_executive_id], 
-                              :council_info => post_login_action_data[:council_info])
-        problem.status = :new
-        problem.reporter = current_user
-        problem.reporter_name = current_user.name
-        problem.save!
+        problem = Problem.create_from_hash(post_login_action_data, current_user)
         respond_to do |format|
           format.json do
             @json[:redirect] = convert_problem_url(problem)

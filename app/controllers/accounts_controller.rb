@@ -40,13 +40,23 @@ class AccountsController < ApplicationController
     @account_user.password = params[:user][:password]
     @account_user.password_confirmation = params[:user][:password_confirmation]
     if @account_user.valid?
-      send_new_account_mail(already_registered)
-      save_post_login_action_to_database(@account_user)
+      if @account_user.new_record?
+        # don't want to actually set them as registered until they confirm
+        @account_user.registered = false
+        @account_user.save_without_session_maintenance
+      else
+        # Refresh the user, discard all the changes
+        @account_user = User.find_or_initialize_by_email(params[:user][:email])
+      end
+      post_login_action_data = get_action_data(session)
       if action_string = post_login_action_string
         @action = action_string
       else
         @action = t(:your_account_wont_be_created)
       end
+      @account_user.reset_perishable_token!
+      unconfirmed_model = save_post_login_action_to_database(@account_user)
+      send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model)
       respond_to do |format|
         format.html do
           render :template => 'shared/confirmation_sent'
@@ -86,7 +96,30 @@ class AccountsController < ApplicationController
     end
     # log in the user.
     UserSession.login_by_confirmation(@account_user)
-    perform_post_login_action
+    if @account_user.post_login_action
+      case @account_user.post_login_action.to_sym
+      when :join_campaign
+        campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
+        if campaign_supporter
+          campaign_supporter.confirm!
+          session[:return_to] = campaign_path(campaign_supporter.campaign)
+        end
+      when :add_comment
+        comment = Comment.find_by_token(params[:email_token])
+        if comment
+          comment.confirm!
+          session[:return_to] = @template.commented_url(comment.commented)
+        end
+      when :create_problem
+        problem = Problem.find_by_token(params[:email_token])
+        if problem
+          session[:return_to] = convert_problem_url(problem)
+        end
+      end
+      
+      @account_user.post_login_action = nil
+      @account_user.save_without_session_maintenance
+    end
     redirect_back_or_default root_url
   end
 
@@ -101,23 +134,17 @@ class AccountsController < ApplicationController
     end
   end
 
-  def send_new_account_mail(already_registered)
+  def send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model)
     # no one's used this email before
     if @account_user.new_record?
-      # don't want to actually set them as registered until they confirm
-      @account_user.registered = false
-      @account_user.save_without_session_maintenance
-      @account_user.deliver_new_account_confirmation!
+      UserMailer.deliver_new_account_confirmation(@account_user, post_login_action_data, unconfirmed_model)
     elsif ! already_registered
       # someone has used this email, but not registered
       # send them an email that will let them log in and create a password
-      @account_user = User.find_or_initialize_by_email(params[:user][:email])
-      @account_user.deliver_account_exists!
+      UserMailer.deliver_account_exists(@account_user, post_login_action_data, unconfirmed_model)
     else
       # this person already registered, send them an email to let them know
-      # Refresh the user, discard all the changes
-      @account_user = User.find_or_initialize_by_email(params[:user][:email])
-      @account_user.deliver_already_registered!
+      UserMailer.deliver_already_registered(@account_user, post_login_action_data, unconfirmed_model)
     end
   end
 

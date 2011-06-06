@@ -175,9 +175,9 @@ describe AccountsController do
       before do
         @mock_user.stub!(:valid?).and_return(true)
         @mock_user.stub!(:save_without_session_maintenance)
-        @mock_user.stub!(:deliver_new_account_confirmation!)
-        @mock_user.stub!(:deliver_already_registered!)
-        @mock_user.stub!(:deliver_account_exists!)
+        @mock_user.stub!(:reset_perishable_token!)
+        @controller.stub!(:save_post_login_action_to_database)
+        UserMailer.stub!(:deliver_new_account_confirmation)
       end
 
       describe 'if this is a new email address' do
@@ -191,8 +191,8 @@ describe AccountsController do
           make_request
         end
 
-        it 'should ask the user to send an account confirmation email' do
-          @mock_user.should_receive(:deliver_new_account_confirmation!)
+        it 'should ask the user mailer to send an account confirmation email' do
+          UserMailer.should_receive(:deliver_new_account_confirmation)
           make_request
         end
         
@@ -248,10 +248,11 @@ describe AccountsController do
         before do 
           @mock_user.stub!(:new_record?).and_return(false)
           @mock_user.stub!(:registered?).and_return(false)
+          UserMailer.stub!(:deliver_account_exists)
         end
         
-        it 'should ask the user to send an "already exists" email' do 
-          @mock_user.should_receive(:deliver_account_exists!)
+        it 'should ask the user mailer to send an "already exists" email' do 
+          UserMailer.should_receive(:deliver_account_exists)
           make_request
         end
         
@@ -267,10 +268,11 @@ describe AccountsController do
         before do
           @mock_user.stub!(:new_record?).and_return(false)
           @mock_user.stub!(:registered?).and_return(true)
+          UserMailer.stub!(:deliver_already_registered)
         end
 
-        it 'should ask the user to send an "already registered" email' do
-          @mock_user.should_receive(:deliver_already_registered!)
+        it 'should ask the user mailer to send an "already registered" email' do
+          UserMailer.should_receive(:deliver_already_registered)
           make_request
         end
 
@@ -353,7 +355,9 @@ describe AccountsController do
                                       :registered= => true,
                                       :confirmed_password= => true,
                                       :crypted_password => "password",
-                                      :save_without_session_maintenance => true)
+                                      :post_login_action => nil,
+                                      :save_without_session_maintenance => true,
+                                      :post_login_action= => nil)
         User.stub!(:find_using_perishable_token).with('my_token', 0).and_return(@mock_user)
       end
 
@@ -362,7 +366,85 @@ describe AccountsController do
         response.should redirect_to(root_url)
       end
       
-      describe 'if the user has a password' do
+      describe 'if the user model has a post login action' do 
+    
+        
+        describe 'if the action is joining a campaign' do 
+    
+          before do 
+            @mock_user.stub!(:post_login_action).and_return('join_campaign')
+            @mock_campaign = mock_model(Campaign)
+            @mock_supporter = mock_model(CampaignSupporter, :confirm! => true,
+                                                            :campaign => @mock_campaign)
+            CampaignSupporter.stub!(:find_by_token).and_return(@mock_supporter)
+          end
+          
+          it 'should look for the campaign supporter model by the confirmation token' do 
+            CampaignSupporter.should_receive(:find_by_token).with("my_token")
+            make_request
+          end
+          
+          it 'should confirm the campaign support' do 
+            @mock_supporter.should_receive(:confirm!)
+            make_request
+          end
+          
+          it 'should the redirect to the campaign path' do 
+            make_request
+            response.should redirect_to(campaign_url(@mock_campaign))
+          end
+
+        end
+        
+        describe 'if the action is creating a problem' do 
+          
+          before do 
+            @mock_user.stub!(:post_login_action).and_return('create_problem')
+            @mock_problem = mock_model(Problem)
+            Problem.stub!(:find_by_token).and_return(@mock_problem)
+          end
+        
+          it 'should look for the problem by the confirmation token' do 
+            Problem.should_receive(:find_by_token).and_return(@mock_problem)
+            make_request
+          end
+                    
+          it 'should redirect to the problem conversion url' do 
+            make_request
+            response.should redirect_to(convert_problem_url(@mock_problem))
+          end
+          
+        end
+        
+        describe 'if the action is adding a comment' do 
+        
+          before do 
+            @mock_user.stub!(:post_login_action).and_return('add_comment')
+            @mock_problem = mock_model(Problem)
+            @mock_comment = mock_model(Comment, :confirm! => true, :commented => @mock_problem)
+            Comment.stub!(:find_by_token).and_return(@mock_comment)
+          end
+          
+          it 'should look for the comment by the confirmation token' do 
+            Comment.should_receive(:find_by_token)
+            make_request
+          end
+          
+          it 'should confirm the comment' do 
+            @mock_comment.should_receive(:confirm!)
+            make_request
+          end
+          
+          it 'should redirect to the url of the thing being commented on' do 
+            make_request
+            response.should redirect_to(problem_url(@mock_problem))
+          end
+          
+        end
+        
+      end
+      
+      describe 'if the user has a crypted password' do
         
         it 'should show a notice that the user has confirmed their account' do
           make_request
@@ -399,11 +481,6 @@ describe AccountsController do
         make_request
       end
       
-      it 'should perform any post login action' do 
-        @controller.should_receive(:perform_post_login_action)
-        make_request
-      end
-
     end
 
   end
