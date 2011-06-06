@@ -8,12 +8,15 @@ class Comment < ActiveRecord::Base
   before_validation_on_create :populate_user_name
   has_many :campaign_events, :as => :described
   attr_accessor :skip_name_validation
+  named_scope :unsent, :conditions => ['sent_at is null']
+  
   has_paper_trail
   has_status({ 0 => 'New', 
                1 => 'Confirmed', 
                2 => 'Hidden' })
                
   named_scope :visible, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
+  
   
   # Makes a random token, suitable for using in URLs e.g confirmation messages.
   def generate_confirmation_token
@@ -66,5 +69,6 @@ class Comment < ActiveRecord::Base
       save!  
     end
   end
+
   
 end

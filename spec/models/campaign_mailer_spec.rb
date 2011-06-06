@@ -35,13 +35,13 @@ describe CampaignMailer do
         SentEmail.should_receive(:create!).with(:recipient => @mock_user, 
                                                 :campaign => @mock_campaign, 
                                                 :campaign_update => @mock_update)
-        CampaignMailer.send_update(@mock_update)
+        CampaignMailer.send_update(@mock_update, @mock_campaign)
       end
     
       it 'should send an advice request email and an expert advice request mail if the update is an advice request' do 
         @mock_update.stub!(:is_advice_request?).and_return(true)
         ActionMailer::Base.deliveries.clear
-        CampaignMailer.send_update(@mock_update)
+        CampaignMailer.send_update(@mock_update, @mock_campaign)
         ActionMailer::Base.deliveries.size.should == 2
         expert_mail = ActionMailer::Base.deliveries.first
         expert_mail.body.should match(/Hi transport experts/)
@@ -58,13 +58,13 @@ describe CampaignMailer do
         mock_sent_email = mock_model(SentEmail, :recipient => @mock_user)
         SentEmail.stub!(:find).and_return([mock_sent_email])
         CampaignMailer.should_not_receive(:deliver_update)
-        CampaignMailer.send_update(@mock_update)
+        CampaignMailer.send_update(@mock_update, @mock_campaign)
       end
       
       it 'should not send an email to the person who created the update' do 
         @mock_supporter.stub!(:supporter).and_return(@mock_update_user)
         CampaignMailer.should_not_receive(:deliver_update)
-        CampaignMailer.send_update(@mock_update)
+        CampaignMailer.send_update(@mock_update, @mock_campaign)
       end
       
     end
