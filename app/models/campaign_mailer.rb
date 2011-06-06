@@ -169,9 +169,15 @@ class CampaignMailer < ApplicationMailer
         else
           deliver_comment(recipient, campaign, supporter, update_or_comment)
         end
-        SentEmail.create!(:recipient => recipient,
-                          :campaign => campaign,
-                          :campaign_update => update_or_comment)
+        
+        sent_email_attributes = {:recipient => recipient,
+                                 :campaign => campaign}
+        if update_or_comment.is_a?(CampaignUpdate)
+          sent_email_attributes[:campaign_update] = update_or_comment
+        else
+          sent_email_attributes[:comment] = update_or_comment
+        end
+        SentEmail.create!(sent_email_attributes)
       end
     end
     if ! self.dryrun
