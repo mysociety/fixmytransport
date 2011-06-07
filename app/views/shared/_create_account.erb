@@ -1,13 +1,22 @@
-<h2 class='main-header'><%= t(:create_an_account) %></h2>
 
-<%- form_for((@account_user ||= User.new), :url => account_path, :html => { :class => 'create_account' }) do |f| %>
+<%- form_for((@account_user ||= User.new), :url => account_path, :html => { :id => 'create-account-form' }) do |f| %>
   <div class='fieldset'>
+    <%- if @account_user.errors.on('base') %>
+      <div class='error' id="error-base">
+        <%= error_message_on @account_user, :base %>
+      </div>
+    <%- else %>
+      <div class='error' id='error-base' style="display: none;"></div>
+    <%- end %>
+    <div class='notice' id='notice-base' style="display: none;"></div>
     
     <div class='form-field'>
       <%- if @account_user.errors.on('name') %>
-        <div class='form-field-error'>
+        <div class='error' id="error-name">
           <%= error_message_on @account_user, :name %>
         </div>
+      <%- else %>
+        <div class='error' id='error-name' style="display: none;"></div>
       <%- end %>
       <%= f.label :name %>
       <%= raw f.text_field :name %>
@@ -15,9 +24,11 @@
     
     <div class='form-field'>
       <%- if @account_user.errors.on('email') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= error_message_on @account_user, :email %>
         </div>
+      <%- else %>
+        <div class='error' id='error-email' style="display: none;"></div>
       <%- end %>
       <%= f.label :email %>
       <%= raw f.text_field :email %>
@@ -25,9 +36,11 @@
     
     <div class='form-field'>
       <%- if @account_user.errors.on('password') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= error_message_on @account_user, :password %>
         </div>
+        <%- else %>
+          <div class='error' id='error-password' style="display: none;"></div>
       <%- end %>
       <%= f.label :password %>
       <%= raw f.password_field :password %>
@@ -35,14 +48,17 @@
     
     <div class='form-field'>
       <%- if @account_user.errors.on('password_confirmation') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= error_message_on @account_user, :password_confirmation %>
         </div>
+        <%- else %>
+          <div class='error' id='error-password_confirmation' style="display: none;"></div>
       <%- end %>
       <%= f.label :password_confirmation  %>
       <%= raw f.password_field :password_confirmation  %>
     </div>
     
     <%= raw f.submit t(:create_account) %>
+    Already have an account? <%= link_to("Sign in", login_url, :id => 'login-to-account')%>
   </div>
 <%- end %>

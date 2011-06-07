@@ -13,7 +13,7 @@
 </div>
 <div class='form-field'>
   <%- if @operator.errors.on(:name) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @operator, :name %>
     </div>
   <%= raw f.label :name %>

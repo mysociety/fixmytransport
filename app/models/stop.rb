@@ -58,6 +58,7 @@ class Stop < ActiveRecord::Base
   validates_uniqueness_of :other_code, :allow_nil => true
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
+  is_location
   has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality
   has_paper_trail
   
@@ -224,6 +225,7 @@ class Stop < ActiveRecord::Base
     stops = find_by_sql(["SELECT  *
                           FROM stops
                           WHERE stops.stop_type in (?)
+                          AND status = 'ACT'
                           AND stops.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
                             ST_Point(?, ?),
     	                      ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})",

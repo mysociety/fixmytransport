@@ -1,0 +1,27 @@
+<div class="manager-tools">
+
+  <%- index = 0 %>
+  <%- @campaign.problem.assignments.is_new.each do |assignment| %>
+     <%= render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment, :index => index }%>
+     <%- index += 1 %>
+  <%- end %>
+  <%= raw button("Ask an Expert", add_update_campaign_url(@campaign, :is_advice_request => true), 'button big advice-trigger', index) %>
+  <%- index += 1 %>
+  <%= raw button("Post Update", add_update_campaign_url(@campaign), 'button big update-trigger', index) %>
+  <%- index += 1 %>
+    <%= raw button("Add Images", add_photos_campaign_url(@campaign), 'button big', index) %>
+  <%- index += 1 %>
+  <%- @campaign.problem.recipients.each do |recipient| %>
+    <%- if ! recipient.deleted?  %>
+        <a href="<%= new_campaign_outgoing_message_path(@campaign, :recipient_type => recipient.type, :recipient_id => recipient.id) %>" class="button big"><%= t(:write_again, :name => recipient.name) %></a>
+        <%- index += 1 %>
+    <%- end %>
+  <%- end %>
+  
+  <%- if @campaign.status != :successful %>
+    <%- form_for @campaign, :url => complete_campaign_url(@campaign), :html => { :method => 'POST', :id => 'campaign-complete' } do |f| %>
+      <%= raw submit_tag "Mark as Complete", :class => 'button big last' %>
+      <%- index += 1 %>
+    <%- end %>
+  <%- end %>								
+</div>

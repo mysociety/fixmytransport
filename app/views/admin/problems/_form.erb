@@ -6,7 +6,7 @@
 
 <div class='form-field'>
   <%- if @problem.errors.on(:subject) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @problem, :subject   %>
     </div>
   <%- end %>
@@ -16,7 +16,7 @@
 
 <div class='form-field'>
   <%- if @problem.errors.on(:description) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @problem, :description   %>
     </div>
   <%- end %>
@@ -26,7 +26,7 @@
 
 <div class='form-field'>
   <%- if @problem.errors.on(:category) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @problem, :category   %>
     </div>
   <%- end %>
@@ -43,7 +43,7 @@
 
 <div class='form-field'>
   <%- if @problem.errors.on(:passenger_transport_executive_id) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @problem, :passenger_transport_executive_id %>
     </div>
   <%- end %>
@@ -53,7 +53,7 @@
 
 <div class='form-field'>
   <%- if @problem.errors.on(:council_info) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @problem, :council_info %>
     </div>
   <%- end %>
@@ -63,7 +63,7 @@
 
 <div class='form-field'>
   <%- if @problem.errors.on(:status_code) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @problem, :status_code %>
     </div>
   <%- end %>
@@ -73,7 +73,7 @@
 
 <div class='form-field'>
   <%- if @problem.errors.on(:reporter_name) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @problem, :reporter_name %>
     </div>
   <%- end %>
@@ -84,7 +84,7 @@
 
 <div class='form-field'>
   <%- if @problem.errors.on(:reporter_phone) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @problem, :reporter_phone %>
     </div>
   <%- end %>

@@ -4,7 +4,7 @@
 <div id="banner">
 	<div class="container">
 		<div class="leftcol-banner">
-			<h1 class="route-name"><%=  MySociety::Format.ucfirst(@route.name) %></h1>
+			<h1 class="route-name"><%= @route.name %></h1>
 			<%- if !@route.operators.empty?  %>
           
           <h2 class="route-operator">operated by <%= operator_links(@route.operators) %></h2>

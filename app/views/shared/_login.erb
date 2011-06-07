@@ -3,16 +3,22 @@
     <%= render :partial => "shared/login_form" %>
 	</div>
 
-	<div id="login-twitter" class="pane">
-		<h2>TWITTER</h2>
-	</div>
-	
-	<div id="login-facebook" class="pane">
-		<h2>FACEBOOK</h2>
-	</div>
-	
 	<div id="login-create-account" class="pane">
 		<%= render :partial => 'shared/create_account' %>
 	</div>
+
+	<%- if ['campaigns', 'problems'].include?(controller.controller_name) && controller.action_name == 'show' %>
+	<div id="comment-and-login" class="pane">
+		<%= render :partial => 'shared/comment_form' %>
+	</div>
+	<%- end %>
+
+	<%- if controller.controller_name == 'campaigns' and controller.action_name == 'show'%>
+	  <%- if current_user && current_user == @campaign.initiator %>
+	    <div id="campaign-update" class="pane">
+        <%= render :partial => 'campaigns/update_form' %>
+      </div>
+    <%- end %>
+  <%- end %>
 
 </div>

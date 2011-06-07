@@ -9,6 +9,7 @@ describe SubRoute do
   end
 
   it "should create a new instance given valid attributes" do
-    SubRoute.create!(@valid_attributes)
+    sub_route = SubRoute.new(@valid_attributes)
+    sub_route.valid?.should == true
   end
 end

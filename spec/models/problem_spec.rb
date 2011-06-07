@@ -2,40 +2,22 @@ require 'spec_helper'
 
 describe Problem do
   
-  describe 'when validating a reporter_name' do 
-    
-    before do 
-      @problem = Problem.new()
-      @problem.stub!(:location).and_return(mock('location'))
-      @full_name_error = "Please enter your full name"
+  describe 'when asked if it is visible' do 
+  
+    it 'should return true if the status is confirmed' do 
+      @problem = Problem.new
+      @problem.status = :confirmed
+      @problem.visible?.should == true
     end
     
-    it 'should add an error if the name is some variant of "anon"' do 
-      ['anon', 'anonymous', 'anonymos', 'anonymously'].each do |anon_variant|
-        @problem.errors.clear
-        @problem.reporter_name = anon_variant
-        @problem.validate_reporter_name
-        @problem.errors.on(:reporter_name).should == @full_name_error
-      end
-    end
-    
-    it 'should add an error if the name is less than 5 characters' do 
-      @problem.reporter_name = 'A B'
-      @problem.valid?
-      @problem.errors.on(:reporter_name).should == @full_name_error
-    end
-    
-    it 'should add an error if the name does not have a non space, followed by a space, followed by a non space' do 
-      ['Firstname ', ' Lastname'].each do |no_space|
-        @problem.errors.clear
-        @problem.reporter_name = no_space
-        @problem.validate_reporter_name
-        @problem.errors.on(:reporter_name).should == @full_name_error
-      end
+    it 'should return false if the status is new' do 
+      @problem = Problem.new
+      @problem.status = :new
+      @problem.visible?.should == false
     end
     
   end
-  
+    
   describe 'when confirming' do 
     
     before do

@@ -5,7 +5,7 @@
 
     <div class='form-field'>
       <%- if current_user.errors.on('email') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= error_message_on current_user, :email %>
         </div>
       <%- end %>
@@ -15,7 +15,7 @@
 
     <div class='form-field'>
       <%- if current_user.errors.on('password') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= error_message_on current_user, :password %>
         </div>
       <%- end %>
@@ -28,7 +28,7 @@
 
     <div class='form-field'>
       <%- if current_user.errors.on('password_confirmation') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= error_message_on current_user, :password_confirmation %>
         </div>
       <%- end %>
@@ -38,7 +38,7 @@
     
     <div class='form-field'>
       <%- if current_user.errors.on('location') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= error_message_on current_user, :location %>
         </div>
       <%- end %>
@@ -49,7 +49,7 @@
     
     <div class='form-field'>
       <%- if current_user.errors.on('profile_photo') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= error_message_on current_user, :profile_photo %>
         </div>
       <%- end %>

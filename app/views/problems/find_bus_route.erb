@@ -4,7 +4,7 @@
 <%- form_tag find_bus_route_problems_path, :id => 'bus_route_form', :method => 'GET' do  %>
     
     <%- if @error_message %>
-      <div class='form-field-error'>
+      <div class='error'>
         <%= @error_message %>
       </div>
     <%- end %>

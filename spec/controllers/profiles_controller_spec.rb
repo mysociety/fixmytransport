@@ -12,7 +12,7 @@ describe ProfilesController do
 
       before do 
         @user = mock_model(User, :registered? => false)
-        User.should_receive(:find).with('55', :conditions => ['registered = ?', true]).and_return(nil)
+        User.should_receive(:find).with('55', :conditions => ['login_count > 0']).and_return(nil)
       end
     
       it 'should return "not found"' do 
@@ -27,7 +27,7 @@ describe ProfilesController do
       before do 
         @user = mock_model(User, :registered? => true,
                                  :name => "Test User")
-        User.should_receive(:find).with('55', :conditions => ['registered = ?', true]).and_return(@user)
+        User.should_receive(:find).with('55', :conditions => ['login_count > 0']).and_return(@user)
       end
       
       it 'should render the "show" template' do 

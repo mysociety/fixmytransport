@@ -17,6 +17,8 @@ en:
   multiple_localities: "We found more than one place matching \"%{name}\". Please select one, or try a different search if yours is not here:"
   within_multiple_localities: "We found more than one place with matches for \"%{name}\". Please select one, or try a different search if yours is not here:"
   multiple_locations_intro: "Choose a stop or station by clicking on it, or zoom in on an area to see other stops and stations."
+  cant_see_the_map: "Can't see the map? %{link}"
+  choose_from_list: "Choose from a list of stops and stations"
   multiple_routes_intro: "Choose a route by clicking on it, or try a different search if yours is not here: "
   problem_not_found: "We couldn't locate your problem in the database. If you've copied the URL from an email, please check that you copied it exactly."
   problem_already_confirmed: "That problem has already been confirmed."
@@ -31,14 +33,14 @@ en:
   problem_date: Journey date
   by: "by %{name}"
   pte_advice: "%{pte_link} is responsible for public transport in this area."
-  problem_will_be_sent: "Send a message to %{organization}. Your message will be public."
+  problem_will_be_sent: "We'll then send it to %{organization}. Your message will be public."
   problem_will_be_sent_multiple_operators: "More than one company operates this %{location_type}. Your problem <strong>will be sent to the operator</strong> you select below. Your message will be public."
-  problem_will_be_sent_multiple: "Send a message to %{organizations}. Your message will be public."
+  problem_will_be_sent_multiple: "We'll then send it to %{organizations}. Your message will be public."
   no_organizations_for_problem: "We do not yet know who is responsible for this %{location_type}. Your message will be public, but will not be sent to the responsible organization until you find out who that is."
   no_details_for_organization: "We do not yet have contact details for %{organization}. Your message will be public, but it will <strong>not</strong> be sent to %{organization_unstrong} until you find an email address for them."
   no_details_for_organizations: "We do not yet have contact details for %{organizations}. Your message will be public, but it will <strong>not</strong> be sent to them until you find an email address for them."
   no_details_for_some_operators: "We do not yet have all the contact details for this %{location_type}. If your message is for %{uncontactable}, it will be public, but it will <strong>not</strong> be sent to them until you find an email address for them. If your problem relates to %{contactable}, it will be sent straight away."
-  no_details_for_some_councils: "Send a message to %{councils}. Your message will be public."
+  no_details_for_some_councils: "We'll then send it to %{councils}. Your message will be public."
   thanks_for_adding_problem: "Thanks, you've successfully confirmed your problem. "
   nearly_ready: "Brilliant! We're nearly ready to send your message."
   see_your_problem: See your problem on the site
@@ -59,7 +61,8 @@ en:
   pick_a_category: -- Pick a category --
   select_operator: -- Choose the name of the company --
   next_steps: Next steps
-  latest_news: Latest News
+  your_problem_will_not_be_created: your problem will not be created.
+  campaign_history: Campaign History
   provide_an_update: Provide an update
   post: Post
   mark_fixed: This problem has been fixed

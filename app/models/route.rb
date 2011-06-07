@@ -45,6 +45,7 @@ class Route < ActiveRecord::Base
   attr_accessor :show_as_point, :journey_pattern_data
   before_save :cache_route_description, :cache_route_coords
   is_route_or_sub_route
+  is_location
 
   @@per_page = 20
 

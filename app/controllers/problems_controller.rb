@@ -6,7 +6,7 @@ class ProblemsController < ApplicationController
                                                :find_bus_route, 
                                                :find_train_route, 
                                                :find_other_route]
-  before_filter :find_visible_problem, :only => [:show, :update]
+  before_filter :find_visible_problem, :only => [:show, :update, :add_comment]
   before_filter :require_problem_reporter, :only => [:convert]
   
   def index
@@ -36,37 +36,21 @@ class ProblemsController < ApplicationController
   end
   
   def create
-    cleanup_time_params
     @problem = Problem.new(params[:problem])
     @problem.status = :new
-    if @problem.is_campaign == "1"
-      campaign = @problem.build_campaign({ :location_id => params[:problem][:location_id], 
-                                           :location_type => params[:problem][:location_type],
-                                           :initiator => @problem.reporter })
-      campaign.status = :new
-    end
-    
     if @problem.valid?
-      # save the user account if it doesn't exist, but don't log it in
-      @problem.save_reporter
-      @problem.save
-
       if current_user
-        redirect_to convert_problem_url(@problem)
+        handle_problem_current_user
       else
-        @problem.send_confirmation_email
-        @action = t(:your_problem_will_not_be_posted)
-        @worry = t(:holding_on_to_problem)
-        render 'shared/confirmation_sent'
-        return
+        handle_problem_no_current_user
       end
     else
-      map_params_from_location(@problem.location.points, find_other_locations=false)
-      render :new
+      render_or_return_invalid_problem
     end
   end
   
   def show
+    @commentable = @problem
     map_params_from_location(@problem.location.points, find_other_locations=false)
     @new_comment = Comment.new(:commented => @problem, 
                                :user => current_user ? current_user : User.new,
@@ -76,8 +60,8 @@ class ProblemsController < ApplicationController
   def confirm
     @problem = Problem.find_by_token(params[:email_token])
     if @problem && @problem.status == :new
-      # log user in
-      UserSession.create(@problem.reporter, remember_me=false)
+      # log user in, whether or not they're registered
+      UserSession.login_by_confirmation(@problem.reporter)
       redirect_to convert_problem_url(@problem)
     elsif @problem
       @error = t(:problem_already_confirmed)
@@ -97,7 +81,7 @@ class ProblemsController < ApplicationController
     if params[:convert] == 'yes'
       @problem.create_new_campaign
       @problem.confirm!
-      redirect_to(edit_campaign_url(@problem.campaign)) and return 
+      redirect_to(add_details_campaign_url(@problem.campaign)) and return 
     elsif params[:convert] == 'no' 
       @problem.confirm!
       flash[:notice] = t(:thanks_for_adding_problem)
@@ -105,33 +89,18 @@ class ProblemsController < ApplicationController
     end
   end
   
-  def update
-    # just accept params for a new comment for now
-    if current_user && params[:problem][:comments][:user_attributes].has_key?(:id) && 
-      current_user.id != params[:problem][:comments][:user_attributes][:id].to_i
-      raise "Comment added with user_id that isn't logged in user"
-    end
-    @new_comment = @problem.comments.build(params[:problem][:comments])
-    @new_comment.status = :new
-    if @new_comment.valid? 
-      # save the user account if it doesn't exist, but don't log it in
-      @new_comment.save_user
-      @new_comment.save
+  def add_comment
+    @commentable = @problem
+    if request.post?
+      @comment = @problem.comments.build(params[:comment])
+      @comment.status = :new
       if current_user
-        @new_comment.confirm!
-        flash[:notice] = t(:thanks_for_update)
-        redirect_to problem_url(@problem)
+        return handle_comment_current_user
       else
-        @new_comment.send_confirmation_email
-        @action = t(:your_update_will_not_be_posted)
-        @worry = t(:holding_on_to_update)
-        render 'shared/confirmation_sent'
-        return
+        return handle_comment_no_user
       end
-    else
-      map_params_from_location(@problem.location.points, find_other_locations=false)
-      render :show
     end
+    render :template => 'shared/add_comment'
   end
   
   def find_stop
@@ -283,11 +252,8 @@ class ProblemsController < ApplicationController
           #create the subroute
           sub_route = SubRoute.make_sub_route(route_info[:from_stops].first, 
                                               route_info[:to_stops].first,
-                                              TransportMode.find_by_name('Train'))
-          route_info[:routes].each do |route|
-            RouteSubRoute.create!(:route => route, 
-                                  :sub_route => sub_route)
-          end
+                                              TransportMode.find_by_name('Train'),
+                                              route_info[:routes])
           redirect_to new_problem_url(:location_id => sub_route.id, :location_type => sub_route.class.to_s)
         end
       end
@@ -421,16 +387,64 @@ class ProblemsController < ApplicationController
     end
     @sending_advice = t(advice, advice_params)
   end
-    
-  def cleanup_time_params
-    # fix for https://rails.lighthouseapp.com/projects/8994/tickets/4346
-    # from http://www.ruby-forum.com/topic/100815
-    if params[:problem]['time(4i)'] && ! params[:problem]['time(4i)'].blank? && 
-      params[:problem]['time(5i)'] && !params[:problem]['time(5i)'].blank?
-      params[:problem][:time] = "#{params[:problem]['time(4i)']}:#{params[:problem]['time(5i)']}:00"
+
+  def handle_problem_current_user
+    @problem.save
+    respond_to do |format|
+      format.html do
+        redirect_to convert_problem_url(@problem)
+        return false
+      end
+      format.json do 
+        @json = {}
+        @json[:success] = true
+        @json[:redirect] = convert_problem_url(@problem)
+        render :json => @json
+        return false
+      end
     end
-    (1..5).each do |num|
-      params[:problem].delete("time(#{num}i)")
+  end
+  
+  def handle_problem_no_current_user
+    problem_data = { :action => :create_problem,
+                     :subject => @problem.subject,
+                     :description => @problem.description,
+                     :location_id => @problem.location_id, 
+                     :location_type => @problem.location_type,
+                     :category => @problem.category,
+                     :operator_id => @problem.operator_id, 
+                     :passenger_transport_executive_id => @problem.passenger_transport_executive_id, 
+                     :council_info => @problem.council_info,
+                     :notice => "Please sign in or create an account to finish reporting your problem" }
+    session[:next_action] = data_to_string(problem_data)
+    respond_to do |format|
+      format.html do
+        flash[:notice] = problem_data[:notice]
+        redirect_to(login_url)
+      end
+      format.json do
+        @json = { :success => true,
+                  :requires_login => true,
+                  :notice => problem_data[:notice] }
+        render :json => @json
+        return
+      end
+    end
+  end
+  
+  def render_or_return_invalid_problem
+    respond_to do |format|
+      format.html do
+        setup_problem_advice(@problem)
+        map_params_from_location(@problem.location.points, find_other_locations=false)
+        render :new
+      end
+      format.json do
+        @json = {}
+        @json[:success] = false
+        add_json_errors(@problem, @json)
+        render :json => @json
+      end
     end
   end
 

@@ -12,7 +12,7 @@
 <div class="leftcol">
   
   
-  <%- if @user.initiated_campaigns.count > 0 %>
+  <%- if @user.initiated_campaigns.visible.count > 0 %>
   <a name="managing"></a>
   <h3>Managing</h3>
   <ul class="related-campaigns">
@@ -24,7 +24,7 @@
   </ul>
   <%- end %>
   
-  <%- if @user.campaigns.count > 0 %>
+  <%- if @user.campaigns.visible.count > 0 %>
   <a name="supporting"></a>
   <h3>Supporting</h3>
   <ul class="related-campaigns">

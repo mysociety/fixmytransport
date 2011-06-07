@@ -45,7 +45,7 @@ Time: <%= raw @problem.time.to_s(:standard) %>
 Date: <%= raw @problem.date.to_s(:standard) %>
 <%- end %>
 
-Location name: <%= raw MySociety::Format.ucfirst(@problem.location.name) %>
+Location name: <%= raw @problem.location.name %>
 
 <%- if @problem.location.is_a? Stop and !@problem.location.atco_code.blank? %>
 Location ATCO code: <%= raw @problem.location.atco_code %>

@@ -32,7 +32,7 @@
 
       <div class='form-field'>
         <%- if @campaign_update.errors.on('text') %>
-          <div class='form-field-error'>
+          <div class='error'>
             <%= error_message_on @campaign_update, :text %>
           </div>
         <%- end %>

@@ -6,7 +6,7 @@
   
     <div class='form-field'>
       <%- if @assignment.errors.on('organization_name') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= @assignment.errors.on(:organization_name) %>
         </div>
       <%- end %>
@@ -16,7 +16,7 @@
     
     <div class='form-field'>
       <%- if @assignment.errors.on('organization_email') %>
-        <div class='form-field-error'>
+        <div class='error'>
           <%= @assignment.errors.on(:organization_email) %>
         </div>
       <%- end %>

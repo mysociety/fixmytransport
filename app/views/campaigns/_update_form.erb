@@ -1,33 +1,23 @@
-<%- style = '' %>
-<%- if hidden  %>
-  <%- style = 'display:none;'   %>
-<%- end %>
-<%- if update.is_advice_request? %>
-  <%- id = 'advice-request-form' %>
-  <%- text = t(:ask_our_expert_panel) %>
-<%- else %>
-  <%- id = 'campaign-update-form' %>
-  <%- text = t(:add_an_update) %>
-<%- end %>
-
-<div class='campaign-updates' style="<%= style %>" id="<%= id %>">
-  <%= text %>
-  <%- form_for update, :url => add_update_campaign_url(@campaign) do |f| %>
+<div class='campaign-updates' id="<%= id %>">
+  <%- form_for @campaign_update ||= CampaignUpdate.new, :url => add_update_campaign_url(@campaign), :html => {:id => 'campaign-update-form'} do |f| %>
     <div class='fieldset'>
       <div class='form-field'>
-        <%- if @empty_update %>
-          <div class='form-field-error'>
-            <%= t(:please_enter_some_text) %>
+        <%- if @campaign_update.errors.on('text') %>
+          <div class='error' id="error-text">
+            <%= error_message_on @campaign_update, :text %>
           </div>
-        <%- end %>
-        <%= raw f.hidden_field :user_id %>
+        <%- else %>
+            <div class='error', id="error-text" style="display: none;"></div>
+        <%- end %>        
         <%= raw f.hidden_field :is_advice_request %>
         <%= raw f.text_area :text, :cols => 40, :rows => 3 %>
-        <%- if update.is_advice_request %>
-          <%= raw f.submit t(:request_advice) %>
+        <div id="comment-login-options">	
+        <%- if @campaign_update.is_advice_request %>
+          <button type="submit" class="button"><%= t(:request_advice)%></button>
         <%- else %>
-          <%= raw f.submit t(:add_update) %>
+          <button type="submit" class="button"><%= t(:add_update)%></button>
         <%- end %>
+        </div>
       </div>
     </div>
   <%- end %>

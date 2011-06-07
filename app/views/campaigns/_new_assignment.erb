@@ -3,7 +3,7 @@
 <span class="num"><%= index %></span>
 <span class="title"><%= raw t(:expert_advised_writing, :expert => h(assignment.creator.name), :user => h(assignment.user.first_name),  :recipient => h(assignment.data[:name]), :advised => t(:advised)) %></span>
 <span class="close">close</span>
-<span class="date"><%= t(:ago, :time => time_ago_in_words(event.created_at)) %></span>
+<span class="date"><%= event.created_at.to_s(:standard_with_date) %></span>
 </a>
 <div class="thread-details box">
   <div class="thumb"><img src="<%= assignment.creator.profile_photo.url(:large_thumb) %>" /></div>

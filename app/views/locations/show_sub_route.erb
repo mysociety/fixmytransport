@@ -1,0 +1,43 @@
+<%- content_for :javascript do  %>
+  <%= raw map_javascript_include_tags %>
+<%- end %>
+<div id="banner">
+	<div class="container">
+		<div class="leftcol-banner">
+			<h1 class="route-name"><%= @sub_route.name %></h1>
+			<%- if !@sub_route.route_operators.empty?  %>
+          
+          <h2 class="route-operator">operated by <%= raw operator_links(@sub_route.route_operators) %></h2>
+      <%- end %>
+		</div>
+		<div class="rightcol">
+			<a class="report-big" href="<%= new_problem_url(:location_id => @sub_route.id, :location_type => @sub_route.type, :to => params[:to], :from => params[:from])%>">Report a problem</a>
+		</div>
+	</div>
+</div>
+<div id="main-content" class="container">
+	<div class="leftcol">
+		<h5>Route</h5>
+    <div id="medium-map">
+      <%= render :partial => 'shared/map', :locals => { :locations => [@sub_route], :other_locations => @other_locations, :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH  } %>
+ 	  </div>
+
+ 		<a href="#">Is this information wrong?</a>
+	  <%= render :partial => "shared/location_content",  :locals => { :location => @sub_route } %>
+	</div>
+
+	<div class="rightcol">
+
+		<h5 class="left">Stops</h5>
+
+		<ol id="large-ol">
+		  <%- @sub_route.terminuses.each_with_index do |stop_or_station, index| %>
+        <li><a href="<%= location_url(stop_or_station) %>"><span class="num"><%= index+1 %></span><%= stop_or_station.is_a?(Stop) ? stop_or_station.name_with_long_indicator : stop_or_station.name %></a></li>
+      <%- end %>
+		</ol>
+			
+	</div>
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
+	</div>
+</div>

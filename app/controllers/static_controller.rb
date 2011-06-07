@@ -20,10 +20,7 @@ class StaticController < ApplicationController
             @json[:success] = true
           else
             @json[:success] = false
-            @json[:errors] = {}
-            @feedback.errors.each do |attribute,message|
-              @json[:errors][attribute] = message
-            end
+            add_json_errors(@feedback, @json)
           end
           render :json => @json
         end

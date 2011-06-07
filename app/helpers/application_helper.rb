@@ -152,19 +152,6 @@ module ApplicationHelper
     name
   end
 
-  def departures_link(stop)
-    modes = stop.transport_mode_names
-    if modes.include? 'Bus' or modes.include? 'Coach' or modes.include? 'Ferry'
-      return link_to(t(:live_departures), "http://mytraveline.mobi/departureboard?stopCode=#{stop.atco_code}")
-    else
-      return "&nbsp;"
-    end
-  end
-
-  def transport_direct_link(stop)
-    return link_to(t(:transport_direct), "http://www.transportdirect.info/web2/journeyplanning/StopInformationLandingPage.aspx?et=si&id=fixmytransport&st=n&sd=#{stop.atco_code}")
-  end
-
   def external_search_link(text)
     "http://www.google.co.uk/search?ie=UTF-8&q=#{CGI.escape(text)}"
   end
@@ -218,7 +205,7 @@ module ApplicationHelper
     names = problem.send(method).map{ |org| "#{wrapper_start}#{org.name}#{wrapper_end}" }
     names.to_sentence(:last_word_connector => " #{connector} ", :two_words_connector => " #{connector} ")
   end
-  
+
   def operator_links(operators)
     operator_links = operators.map{ |operator| link_to(operator.name, operator_path(operator)) }
     operator_links.to_sentence(:last_word_connector => ' and ', :two_words_connector => ', ')
@@ -257,6 +244,8 @@ module ApplicationHelper
       end
     elsif location.is_a? Route
       return route_path(location.region, location)
+    elsif location.is_a? SubRoute
+      return sub_route_path(location, attributes)
     end
     raise "Unknown location type: #{location.class}"
   end
@@ -276,10 +265,12 @@ module ApplicationHelper
      end
    elsif location.is_a? Route
      return route_url(location.region, location, attributes)
+   elsif location.is_a? SubRoute
+     return sub_route_url(location, attributes)
    end
    raise "Unknown location type: #{location.class}"
   end
-  
+
   def admin_location_url(location)
     if location.is_a? Stop
       return admin_url(stop_path(location.id))
@@ -287,6 +278,26 @@ module ApplicationHelper
       return admin_url(stop_area_path(location.id))
     elsif location.is_a? Route
       return admin_url(route_path(location.id))
+    end
+  end
+
+  def add_comment_url(commentable)
+    if commentable.is_a?(Campaign)
+      return add_comment_campaign_url(commentable)
+    elsif commentable.is_a?(Problem)
+      return add_comment_problem_url(commentable)
+    else
+      raise "Unhandled commentable type in add_comment_url: #{commentable.type}"
+    end
+  end
+
+  def commented_url(commentable)
+    if commentable.is_a?(Campaign)
+      return campaign_url(commentable)
+    elsif commentable.is_a?(Problem)
+      return problem_url(commentable)
+    else
+      raise "Unhandled commentable type in commentable_url: #{commentable.type}"
     end
   end
 
@@ -383,7 +394,32 @@ module ApplicationHelper
       return ''
     end
   end
-  
+
+  def campaign_display_status(campaign)
+    case campaign.status
+    when :confirmed
+      'current'
+    else
+      campaign.status.to_s
+    end
+  end
+
+  def button(text, link, link_class, index)
+    if (index > 0 && ((index+1) % 4) == 0)
+      link_class += " last"
+    end
+    link = "<a href=\"#{link}\" class=\"#{link_class}\">#{text}</a>"
+    return link
+  end
+
+  def twitter_url(campaign)
+    twitter_params = { :url => campaign_url(campaign),
+                       :text => campaign.call_to_action,
+                       :via => 'FixMyTransport' }
+
+    return "http://twitter.com/share?#{twitter_params.to_query}"
+  end
+
   def sortable(column, title = nil)
     title ||= column.titleize
     css_class = column == sort_column ? "current #{sort_direction}" : nil

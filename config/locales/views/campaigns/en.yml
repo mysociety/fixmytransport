@@ -13,9 +13,12 @@ en:
   add_password_to_update: "You'll need a password to be able to log back into the site and update your campaign. Enter one here. "
   tweet_this: Tweet this
   save: Save
+  add_photos: Add photos
+  campaigns_add_details_access_message: "add details to this campaign"
+  campaigns_add_photos_access_message: "add photos to this campaign"
+  campaigns_complete_access_message: "mark this campaign as complete"
   campaigns_add_update_access_message: "ask for advice on this campaign"
   campaigns_update_access_message: "edit this campaign"
-  campaigns_confirm_problem: "confirm this problem"
   campaigns_edit_access_message: "edit this campaign"
   outgoing_messages_new_access_message: "write messages on behalf of this campaign"
   assignments_new_access_message: "create an assignment for this campaign"
@@ -30,10 +33,11 @@ en:
     one: "and has %{n} supporter."
     other: "and has %{n} supporters."
   thanks_for_adding_comment: You've successfully confirmed your comment.
+  your_comment_will_not_be_added: your comment will not be added.
   see_your_comment: See your comment
   campaign_location: This campaign concerns the %{link}
   join_confirmation_sent: We've sent you an email to confirm that you want to join this campaign.
-  you_will_not_be_a_supporter: "you will not be added as a supporter of \"%{campaign}\"."
+  you_will_not_be_a_supporter: "you will not be added as a campaign supporter."
   you_support_this_campaign: "You are a supporter of this campaign"
   leave_this_campaign: "Leave this campaign"
   you_are_no_longer_a_supporter: "You are no longer a supporter of \"%{campaign}\""
@@ -42,11 +46,10 @@ en:
   a_reply: a reply
   wrote_a_message: "%{sender} wrote to %{recipient}%{assignment_text}"
   campaign: campaign
-  choose_a_short_name: Choose a short name (6 to 16 lowercase letters)
-  easy_web_address: This gives your page an easy web address. e.g. %{url}
   update_added: Your update has been added. 
   error_adding_update: "Sorry, there's been a problem adding your update. Please use the feedback form to let us know what happened."
   user_says: "%{name} commented"
+  added_an_update: "%{name} added an update"
   add_an_update: 'Add an update:'
   request_advice: Ask for advice
   ask_our_expert_panel: 'Ask your supporters and our expert panel what to do next:'
@@ -68,4 +71,4 @@ en:
   transport_experts: "Transport experts"
   add_details_to_comment: "Please enter your name as you'd like it to appear, and create a password so you can log back into the site anytime."
   find_responsible_org: Find out who the responsible organisation is
-  find_responsible_org_contact_info: Get contact details for the organisation responsible
+  find_responsible_org_contact_info: "Get contact details for %{org}"
