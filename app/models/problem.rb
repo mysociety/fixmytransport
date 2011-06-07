@@ -11,6 +11,7 @@ class Problem < ActiveRecord::Base
   has_many :recipients, :through => :sent_emails
   validates_presence_of :description, :subject, :category, :if => :location
   validates_associated :reporter
+  validates_presence_of :operator_id, :if => :location_has_operators
   attr_accessor :location_attributes, :locations, :location_search, :is_campaign
   attr_protected :confirmed_at
   before_create :generate_confirmation_token
@@ -72,6 +73,10 @@ class Problem < ActiveRecord::Base
       Assignment.create_assignment(assignment_attributes)
 
     end
+  end
+  
+  def location_has_operators
+    operators_responsible? && location.operators.size > 1
   end
 
   def responsible_organizations
