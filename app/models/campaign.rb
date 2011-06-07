@@ -89,6 +89,10 @@ class Campaign < ActiveRecord::Base
     end
   end
 
+  def call_to_action
+    "Please help me persuade #{responsible_org_descriptor} to #{title}"
+  end
+  
   def add_comment(user, text, comment_confirmed=false, token=nil)
     comment = comments.build(:text => text,
                              :user => user)

@@ -205,7 +205,7 @@ module ApplicationHelper
     names = problem.send(method).map{ |org| "#{wrapper_start}#{org.name}#{wrapper_end}" }
     names.to_sentence(:last_word_connector => " #{connector} ", :two_words_connector => " #{connector} ")
   end
-  
+
   def operator_links(operators)
     operator_links = operators.map{ |operator| link_to(operator.name, operator_path(operator)) }
     operator_links.to_sentence(:last_word_connector => ' and ', :two_words_connector => ', ')
@@ -270,7 +270,7 @@ module ApplicationHelper
    end
    raise "Unknown location type: #{location.class}"
   end
-  
+
   def admin_location_url(location)
     if location.is_a? Stop
       return admin_url(stop_path(location.id))
@@ -280,17 +280,17 @@ module ApplicationHelper
       return admin_url(route_path(location.id))
     end
   end
-  
+
   def add_comment_url(commentable)
     if commentable.is_a?(Campaign)
       return add_comment_campaign_url(commentable)
     elsif commentable.is_a?(Problem)
       return add_comment_problem_url(commentable)
-    else 
+    else
       raise "Unhandled commentable type in add_comment_url: #{commentable.type}"
     end
   end
-  
+
   def commented_url(commentable)
     if commentable.is_a?(Campaign)
       return campaign_url(commentable)
@@ -394,7 +394,7 @@ module ApplicationHelper
       return ''
     end
   end
-  
+
   def campaign_display_status(campaign)
     case campaign.status
     when :confirmed
@@ -403,7 +403,7 @@ module ApplicationHelper
       campaign.status.to_s
     end
   end
-  
+
   def button(text, link, link_class, index)
     if (index > 0 && ((index+1) % 4) == 0)
       link_class += " last"
@@ -411,7 +411,15 @@ module ApplicationHelper
     link = "<a href=\"#{link}\" class=\"#{link_class}\">#{text}</a>"
     return link
   end
-  
+
+  def twitter_url(campaign)
+    twitter_params = { :url => campaign_url(campaign),
+                       :text => campaign.call_to_action,
+                       :via => 'FixMyTransport' }
+
+    return "http://twitter.com/share?#{twitter_params.to_query}"
+  end
+
   def sortable(column, title = nil)
     title ||= column.titleize
     css_class = column == sort_column ? "current #{sort_direction}" : nil

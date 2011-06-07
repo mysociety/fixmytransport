@@ -34,7 +34,7 @@
 
     <div class="contrib-tools-initial container">
 		  <a href="<%= add_comment_campaign_url(@campaign) %>" class="button big comment-trigger">Comment</a>
-		  <a href="#" class="button big twitter">Twitter</a>
+		  <a href="<%= twitter_url(@campaign) %>" class="button big twitter">Tweet</a>
       <a href="#" class="button big facebook">Facebook</a>
       <a href="#" class="button big grey last">Email</a>
     </div>
@@ -42,7 +42,7 @@
 <%- else %>
   <div id="banner" class="yellow container">
   	<div class="leftcol-banner">
-  		<h1 class="tk-museo">&ldquo;Please help me persuade <%= @campaign.responsible_org_descriptor %> to <%= @campaign.title %>&rdquo; &ndash; <%= @campaign.initiator.name %></h1>
+  		<h1 class="tk-museo">&ldquo;<%= @campaign.call_to_action %>&rdquo; &ndash; <%= @campaign.initiator.name %></h1>
   	</div>
 
   	<div class="rightcol">
@@ -140,7 +140,7 @@
 	  <%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
 	  <div class="contrib-tools">
 			<a href="<%= add_comment_campaign_url(@campaign) %>" class="button big comment-trigger">Comment</a>
-			<a href="#" class="button big twitter">Twitter</a>
+			<a href="<%= twitter_url(@campaign) %>" class="button big twitter twitter-popup">Twitter</a>
 			<a href="#" class="button big facebook">Facebook</a>
 			<a href="#" class="button big grey last">Email</a>
 		</div>
