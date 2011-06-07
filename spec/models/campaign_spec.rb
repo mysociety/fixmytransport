@@ -32,7 +32,7 @@ describe Campaign do
       campaign.short_title.should == "replace bus stop"
 
       campaign.title = "fix the hole in the bus stop at the corner of the high street"
-      campaign.short_title.should == 'fix hole bus stop'
+      campaign.short_title.should == 'fix hole bus'
       
       campaign.title = 'deal with the litter here'
       campaign.short_title.should == 'deal with litter'

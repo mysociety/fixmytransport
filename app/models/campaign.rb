@@ -50,7 +50,7 @@ class Campaign < ActiveRecord::Base
     character_count = 0
     stop_words = ['the', 'in', 'a', 'an', 'of', 'at', 'this']
     title.split(" ").each do |word|
-      if character_count + word.size + 1 < 16
+      if character_count + word.size + short_title.size <= 16
         if !stop_words.include?(word)
           short_title << word
           character_count += word.size
