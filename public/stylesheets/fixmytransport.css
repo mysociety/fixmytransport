@@ -551,6 +551,7 @@ ul.user-list {
     font-family: inherit;
     font-style: inherit;
     font-weight: inherit;
+    cursor: pointer;
     border: 0 none;
     text-transform: uppercase;
     color: #fff;
@@ -576,6 +577,7 @@ ul.user-list {
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
     border: 0 none;
+    cursor: pointer;
 }
 .support:hover {
     background-color: #74cb04;
