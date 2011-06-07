@@ -419,7 +419,8 @@ ul.user-list {
 		color:#ccc;
 		font-weight: normal;
 	}
-	#login-form{
+	#login-form,
+	#create-account-form {
 		width: 270px;
 		float: left;
 		display: block;
@@ -427,32 +428,40 @@ ul.user-list {
 	#static-login-box #login-form {
 		margin-left:180px;
 	}
-		#login-form ul{
-			margin: 0px;
-			list-style: none;
+		#login-form,
+		#create-account-form .fieldset {
 			padding: 10px 10px 0px 10px;
 			width: 250px;
-			}
-
-			#login-form ul input{
+		}
+		#login-form ul {
+			margin: 0;
+			list-style: none;
+			padding:0;
+		}
+			#login-form ul input,
+			#create-account-form .fieldset input {
 				border: 1px solid #ccc;
 				padding: 5px;
 				font-size:1.1em;
-				}
+			}
 
-			#login-form ul li.login-username input{width:240px;}
+			#login-form ul li.login-username input{
+				width:240px;
+			}
 			#login-form ul li.login-password input{
 				width: 150px;
 				margin-right: 10px;
 			}
 
 			#login-form ul li.login-username label,	
-			#login-form ul li.login-password label{
+			#login-form ul li.login-password label,
+			#create-account-form label {
 				width: 100%;
 				display: block;
 			}	
 
-			#login-form button{
+			#login-form button,
+			#create-account-form input[type=submit] {
 			    text-align: center;
 			    font-size: 0.9em;
 			    text-transform: uppercase;
@@ -466,7 +475,8 @@ ul.user-list {
 			    -webkit-border-radius: 4px;
 				cursor:pointer;
 			}
-			#login-form button:hover{
+			#login-form button:hover,
+			#create-account-form input[type=submit]:hover {
 				background: #0075a0;
 			}
 
@@ -539,8 +549,6 @@ ul.user-list {
 	border: 0 none;
 	margin:0 0 0 1%;
 }
-
-
 /* Buttons
    ================================================== */
 .support-big {

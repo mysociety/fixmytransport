@@ -59,6 +59,6 @@
     </div>
     
     <%= raw f.submit t(:create_account) %>
-    Already have an account? <%= link_to("Sign in", login_url, :id => 'login-to-account')%>
+    <%= link_to("back", login_url, :id => 'login-to-account')%>
   </div>
 <%- end %>
