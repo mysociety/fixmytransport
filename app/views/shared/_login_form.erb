@@ -1,3 +1,4 @@
+<div id="login-landing-wrap">
 <%- form_for (@user_session ||= UserSession.new), :url => user_sessions_path, :html => {:id => 'login-form' } do |f|  %>
   <%- if @user_session.errors.on_base %>
     <div class='error', id="error-base">
@@ -35,7 +36,6 @@
 		<button>Sign In</button>
 		<label for="user_session_remember_me">Keep me signed in</label><input type="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1">    
 		<input type=hidden name="redirect" value="<%= request.request_uri %>">
-		<p>Don't have an account? <a href="<%= new_account_url %>" id="create-account">Create one</a>.</p>
 	</li>
 </ul>
 <%- end %>
@@ -43,14 +43,13 @@
 <%- if ! MySociety::Config.get('FACEBOOK_APP_ID','').empty? %>
 
 <div class="login-options">
-	<p>Or use an existing account</p>
-
+	<p>Don't have a FMT account?</p>
+	<a href="<%= new_account_url %>" class="button" id="create-account">Create one</a>
+	<p>Sign in with FaceBook</p>
 	<a href="#" onclick="checkLoginOrCallFacebook()" id="facebook" class="facebook">Facebook Connect</a>
-
-	<!-- <a href="#" id="twitter" class="twitter">Twitter Connect</a> -->
 </div>
 <div id="fb-root"></div>
-
+</div>
 <script>
     var fmt_Facebook_appId = '<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>'; 
     var fmtPopup = undefined;

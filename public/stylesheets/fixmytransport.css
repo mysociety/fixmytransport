@@ -393,7 +393,7 @@ ul.user-list {
 	}
 	
 	#login-box .pane{
-    display: none;
+    	display: none;
 	}
 	.ui-dialog-titlebar{
 	}
@@ -428,10 +428,21 @@ ul.user-list {
 	#static-login-box #login-form {
 		margin-left:180px;
 	}
+	#login-landing {
+		line-height:0;
+	}
+	#login-landing-wrap {
+		line-height:1.5;
+		display:inline-block;
+		width:100%;
+		height:120%;
+		background:#f4f4f4;
+	}
 		#login-form,
 		#create-account-form .fieldset {
-			padding: 10px 10px 0px 10px;
+			padding: 10px 20px 0px 10px;
 			width: 250px;
+			background:#ffffff;
 		}
 		#login-form ul {
 			margin: 0;
@@ -481,11 +492,9 @@ ul.user-list {
 			}
 
 	.login-options{
-		background:#f4f4f4;
 		float: right;
 		width: 200px;	
 		padding: 5px;
-		height: 210px;
 		border-radius:0 0 5px 0;
 		-moz-border-radius:0 0 5px 0;
 		-webkit-border-radius:0 0 5px 0;
@@ -756,6 +765,12 @@ ul.user-list {
 	  border: 0 none; 
 	  font-family: inherit;
 	}
+
+#create-account.button {
+	font-size:0.9em;
+	text-transform:uppercase;
+	padding:6px 8px;
+}
 
 /* Icons
    ================================================== */
