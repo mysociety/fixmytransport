@@ -136,56 +136,6 @@ function updateCommentCallback(response){
 }
 
 
-// Make the feedback tab popup the form, 
-// make the form submit via AJAX,
-// setup the cancel button to clear fields
-// and close the panel
- 
-function setupFeedbackForm() {
-  feedbackTab = {
-       speed:800,
-       containerWidth:$('#feedback-panel-container').outerWidth(),
-       containerHeight:$('#feedback-panel-container').outerHeight(),
-       tabWidth:$('#feedback-tab').outerWidth(),
-       showTab:function(){
-         $('#feedback-panel-container').animate({left:'0'},  feedbackTab.speed,  function(){$('#feedback-tab').removeClass().addClass('feedback-tab-open')})
-       },
-       hideTab:function(){
-         $('#feedback-panel-container').animate({left:"-" + feedbackTab.containerWidth}, feedbackTab.speed, function(){$('#feedback-tab').removeClass().addClass('feedback-tab-closed')});
-         clearFormElements('#ajax-feedback');
-         $('#ajax-feedback .error').html('')
-       },
-       init:function(){
-           $('#feedback-tab').addClass('feedback-tab-closed');
-           $('#feedback-panel-container').css('height',feedbackTab.containerHeight + 'px');
-           $('#feedback-tab').click(function(event){
-               if ($('#feedback-tab').hasClass('feedback-tab-open')) {
-                 feedbackTab.hideTab()
-               } else {
-                feedbackTab.showTab()
-               }
-               event.preventDefault();
-           });
-       }
-   };
-
-  feedbackTab.init();
-  var options = {
-     success: feedbackCallback,
-     data: {
-       _method: 'post'
-     },
-     dataType: 'json'
-   };
-  $('#ajax-feedback').ajaxForm(options);
-  
-  $('.feedback-cancel').click(function() {
-    feedbackTab.hideTab();
-    event.preventDefault();
-  });  
-  
-}
-
 function tabifyRouteLists() {
     if ($('#tabs').length > 0){
       $("#tabs").tabs();
@@ -205,7 +155,6 @@ $(document).ready(function() {
   });
   tabifyRouteLists();
   addSearchGuidance();  
-  setupFeedbackForm();
   addLinkActions();
 });
 
