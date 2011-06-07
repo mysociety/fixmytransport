@@ -6,7 +6,7 @@ class CampaignsController < ApplicationController
                                                     :confirm_join, :confirm_leave,
                                                     :confirm_comment]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
-                                                       :complete, :add_photos, :add_details]
+                                                       :complete, :add_photos, :add_details, :share]
   before_filter :require_campaign_initiator_or_expert, :only => [:edit, :update]
   after_filter :update_campaign_supporter, :only => [:show]
 
@@ -142,11 +142,10 @@ class CampaignsController < ApplicationController
       if (@campaign.update_attributes(params[:campaign]))
         @campaign.confirm
         @campaign.save!
-        redirect_to campaign_url(@campaign) 
+        redirect_to share_campaign_url(@campaign) 
       else
         render :action => "add_details"
       end
-    else
     end
   end
 
