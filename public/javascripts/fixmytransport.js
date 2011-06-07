@@ -19,14 +19,14 @@ $(document).ready(function(){
 				li.removeClass('open');
 			});
 		}else{
-		  if ($('.thread-details', li).length > 0){
-			  li.addClass('open');
-			  $('.thread-details', li).show('blind', '', 1000);
-		  }
+			if ($('.thread-details', li).length > 0){
+				li.addClass('open');
+				setEqualHeight($('.thread-details > div', li));
+				$('.thread-details', li).show('blind', '', 1000);
+			}
 		}
 	}
-
-
+	
 	//main toggle
 	$('ul#campaign-thread li a.thread-item').click(function(e){
 		e.preventDefault();
@@ -561,3 +561,19 @@ function externalAuth(authParams) {
   form.submit();
 }
 
+
+/* Make all columns equal height - quick fix
+   ================================================== */
+
+function setEqualHeight(columns){
+	var tallestcolumn = 0;
+	columns.each(
+		function(){
+			currentHeight = $(this).height();
+			if(currentHeight > tallestcolumn){
+				tallestcolumn = currentHeight;
+			}
+		}
+	);
+	columns.height(tallestcolumn);
+}

@@ -1057,6 +1057,9 @@ ul#campaign-thread {
 		    background: #0075a0;
 			color:#fff;
 		}
+			ul#campaign-thread li a.thread-item:hover span.close {
+				background-position: -18px -29px;
+			}
 		ul#campaign-thread li a.thread-item.compact:hover {
 			background:#eee;
 			cursor:default;
@@ -1084,41 +1087,44 @@ ul#campaign-thread {
 		}
 		ul#campaign-thread li a.thread-item span.date {
 		    float: right;
-		    margin-right: 30px;
+		    margin-right: 20px;
 		}
 		ul#campaign-thread li a.thread-item span.close {
-		    display: none
+			display: block;
+		    height: 12px;
+		    width: 18px;
+		    margin: 4px 0;
+		    overflow: hidden;
+		    float: right;
+		    text-indent: -999999em;
+		    background: url(../images/up-down.png) 0 -29px no-repeat;
+		}
+		ul#campaign-thread li a.thread-item.compact span.close {
+		    background:none;
 		}
 		ul#campaign-thread li .thread-details {
 		    display: none
 		}
 	ul#campaign-thread li.open {
-	    background: #f1f1f7;
-	    color: #333;
+	    background: #0075a0;
+	    color: #fff;
 	}
 		ul#campaign-thread li.open a.thread-item {
 		    background: none;
-		    color: #333;
+		    color: #fff;
 		}
 		ul#campaign-thread li.open a.thread-item:hover {
 		    background: none;
 		    color: #333;
 		}
+			ul#campaign-thread li.open a.thread-item:hover span.close {
+			    background-position: -18px 0;
+			}
 		ul#campaign-thread li.open a.thread-item span.date {
 		    margin-right: 10px
 		}
 		ul#campaign-thread li.open a.thread-item span.close {
-		    display: block;
-		    height: 12px;
-		    width: 12px;
-		    margin: 4px;
-		    overflow: hidden;
-		    float: right;
-		    text-indent: -999999em;
-		    background: url(../images/close.gif) 0 0 no-repeat;
-		}
-		ul#campaign-thread li.open a.thread-item span.close:hover {
-		    background-position: 0 -12px
+		    background-position: 0 0;
 		}
 		ul#campaign-thread li.open .box {
 		    padding: 10px 40px 10px 10px
@@ -1126,7 +1132,23 @@ ul#campaign-thread {
 		ul#campaign-thread li.open .thread-details {
 		    display: block;
 		    padding-right: 10px;
+			margin:0;
 		}
+			ul#campaign-thread li.open .thread-details .thread-copy {
+				float:left;
+				width:70%;
+				color:#333;
+				background:#fff;
+				padding:2%;
+			}
+			ul#campaign-thread li.open .thread-details .thread-furniture {
+				float:right;
+				width:24%;
+			}
+				ul#campaign-thread li.open .thread-details .thread-furniture .thumb {
+					float:right;
+					margin:0 0 0 10px;
+				}
 		
 .manager-tools,
 .contrib-tools,
