@@ -413,8 +413,13 @@ module ApplicationHelper
   end
 
   def twitter_url(campaign)
+    if current_user == campaign.initiator
+      text = campaign.call_to_action
+    else
+      text = campaign.supporter_call_to_action
+    end
     twitter_params = { :url => campaign_url(campaign),
-                       :text => campaign.call_to_action,
+                       :text => text,
                        :via => 'FixMyTransport' }
 
     return "http://twitter.com/share?#{twitter_params.to_query}"
