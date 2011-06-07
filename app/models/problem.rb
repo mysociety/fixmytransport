@@ -76,7 +76,7 @@ class Problem < ActiveRecord::Base
   end
   
   def location_has_operators
-    operators_responsible? && location.operators.size > 1
+    operators_responsible? && location.operators.size > 0
   end
 
   def responsible_organizations
