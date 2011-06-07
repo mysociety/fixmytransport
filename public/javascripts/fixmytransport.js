@@ -36,13 +36,13 @@ $(document).ready(function(){
 	//show all
 	$('.thread-controls .expand-all').click(function(e){
 		e.preventDefault();
-		thread($('ul#campaign-thread li').not('.open'));
+		thread($('ul#campaign-thread li:not(:has(.compact))').not('.open'));
 	});
 
 	//collapse all
 	$('.thread-controls .collapse-all').click(function(e){
 		e.preventDefault();
-		thread($('ul#campaign-thread li.open'));
+		thread($('ul#campaign-thread li.open:not(:has(.compact))'));
 	});
 
 

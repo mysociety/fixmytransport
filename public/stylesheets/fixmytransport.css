@@ -1049,6 +1049,11 @@ ul#campaign-thread {
 		    background: #0075a0;
 			color:#fff;
 		}
+		ul#campaign-thread li a.thread-item.compact:hover {
+			background:#eee;
+			cursor:default;
+			color:#444;
+		}
 		ul#campaign-thread li a.thread-item span.num {
 		    display: block;
 		    float: left;
