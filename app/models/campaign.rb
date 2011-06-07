@@ -43,6 +43,30 @@ class Campaign < ActiveRecord::Base
     (!slug? && !slug_text.blank?)
   end
 
+  # Try to generate a string that will make a better slug than the title itself, falling 
+  # back to the title on failure
+  def short_title
+    short_title = []
+    character_count = 0
+    stop_words = ['the', 'in', 'a', 'an', 'of', 'at', 'this']
+    title.split(" ").each do |word|
+      if character_count + word.size + short_title.size <= 16
+        if !stop_words.include?(word)
+          short_title << word
+          character_count += word.size
+        end 
+      else 
+        break
+      end
+    end
+    short_title = short_title.join(" ")
+    if short_title.blank?
+      return title
+    else
+      return short_title
+    end
+  end
+
   def confirm
     return unless self.status == :new
     self.status = :confirmed
@@ -91,6 +115,10 @@ class Campaign < ActiveRecord::Base
 
   def call_to_action
     "Please help me persuade #{responsible_org_descriptor} to #{title}"
+  end
+  
+  def supporter_call_to_action
+    "I just joined the campaign to persuade #{responsible_org_descriptor} to #{title}"
   end
   
   def add_comment(user, text, comment_confirmed=false, token=nil)

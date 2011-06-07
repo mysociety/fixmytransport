@@ -577,6 +577,7 @@ ul.user-list {
     font-family: inherit;
     font-style: inherit;
     font-weight: inherit;
+    cursor: pointer;
     border: 0 none;
     text-transform: uppercase;
     color: #fff;
@@ -602,6 +603,7 @@ ul.user-list {
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
     border: 0 none;
+    cursor: pointer;
 }
 .support:hover {
     background-color: #74cb04;
@@ -836,7 +838,8 @@ ul.user-list {
 	color:#0075A0;
 }
 .form-1 input,
-.form-1 textarea {
+.form-1 textarea, 
+.form-1 select{
 	padding: 2px 4px;
 	width: 400px;
 	display: block;
@@ -849,6 +852,7 @@ ul.user-list {
 .form-1 input {
     height: 20px
 }
+
 .form-1 textarea {
     height: 150px
 }
@@ -1204,14 +1208,14 @@ ul#process {
 		ul#process li#crumb1 {
 			z-index:3;
 		}
-			ul#process li#crumb1 a {
+			ul#process li#crumb1 {
 				/*background:transparent url(../images/nav-nub.png) right center no-repeat;*/
 			}
 		ul#process li#crumb2 {
 			z-index:2;
 			margin-left:-20px;
 		}
-			ul#process li#crumb2 a{
+			ul#process li#crumb2 {
 				padding-left:30px;
 			}
 /*    ul#process li#crumb3 {
@@ -1221,16 +1225,16 @@ ul#process {
       ul#process li#crumb3 a{
         padding-left:30px;
       }*/
-		ul#process li a {
+		ul#process li {
 			display:block;
 	    	color:#fff;
 	    	padding:10px 25px 7px 15px;
 		}
-		ul#process li a:hover {
-			background:#0075a0;
-		}
-		ul#process li a.done {
-	    	color:#fff;
+/*    ul#process li a:hover {
+      background:#0075a0;
+    }*/
+		ul#process li.done {
+	    color:#fff;
 			background:transparent url(../images/nav-nub.png) right center no-repeat;
 		}
 

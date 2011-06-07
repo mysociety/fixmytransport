@@ -18,6 +18,28 @@ require 'spec_helper'
 
 describe Campaign do
   
+  describe 'short name' do 
+  
+    it 'should not exceed 16 characters' do 
+      campaign = Campaign.new
+      campaign.title = "save the station I use for work"
+      campaign.short_title.should == 'save station I'
+      
+      campaign.title = "save the extremely useful station"
+      campaign.short_title.should == 'save extremely'
+      
+      campaign.title = 'replace the bus stop at the end of my road'
+      campaign.short_title.should == "replace bus stop"
+
+      campaign.title = "fix the hole in the bus stop at the corner of the high street"
+      campaign.short_title.should == 'fix hole bus'
+      
+      campaign.title = 'deal with the litter here'
+      campaign.short_title.should == 'deal with litter'
+    end
+    
+  end
+  
   describe 'in different statuses' do 
 
     before do 
