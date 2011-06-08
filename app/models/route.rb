@@ -43,7 +43,7 @@ class Route < ActiveRecord::Base
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
   attr_accessor :show_as_point, :journey_pattern_data
-  before_save :cache_route_description, :cache_route_coords
+  before_save :cache_description, :cache_route_coords
   is_route_or_sub_route
   is_location
 
@@ -232,11 +232,6 @@ class Route < ActiveRecord::Base
       problem_list = problem_list.select{ |problem| operators.include?(problem.operator) }
     end
     problem_list
-  end
-
-  def cache_route_description
-    self.cached_description = nil
-    self.cached_description = self.description
   end
 
   def cache_route_coords

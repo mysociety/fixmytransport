@@ -33,5 +33,19 @@ namespace :temp do
     end
   end
   
+  desc 'Add stop and stop area cached descriptions'  
+  task :add_stop_and_stop_area_cached_descriptions => :environment do 
+    puts "stops"
+    Stop.find_each do |stop|
+      stop.save!
+      print '.'
+    end
+    puts "stop areas"
+    StopArea.find_each do |stop_area|
+      stop_area.save!
+      print '.'
+    end
+  end
+  
 end
 
