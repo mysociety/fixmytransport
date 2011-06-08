@@ -21,7 +21,13 @@ $(document).ready(function(){
 		}else{
 			if ($('.thread-details', li).length > 0){
 				li.addClass('open');
-				setEqualHeight($('.thread-details > div', li));
+				
+				//fix height of copy if less than furniture
+				var copy_h = $('.thread-details .thread-copy', li).height();
+				var furniture_h = $('.thread-details .thread-furniture', li).height();
+				if(copy_h < furniture_h)
+					$('.thread-details .thread-copy', li).height(furniture_h);
+				
 				$('.thread-details', li).show('blind', '', 1000);
 			}
 		}
@@ -438,21 +444,4 @@ function externalAuth(authParams) {
   form.append($('<input type="hidden" name="path" value="'+window.location.pathname+window.location.search+'">'));
   $('body').append(form)
   form.submit();
-}
-
-
-/* Make all columns equal height - quick fix
-   ================================================== */
-
-function setEqualHeight(columns){
-	var tallestcolumn = 0;
-	columns.each(
-		function(){
-			currentHeight = $(this).height();
-			if(currentHeight > tallestcolumn){
-				tallestcolumn = currentHeight;
-			}
-		}
-	);
-	columns.height(tallestcolumn);
 }
