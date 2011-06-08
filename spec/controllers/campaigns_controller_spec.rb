@@ -156,6 +156,7 @@ describe CampaignsController do
                                        :initiator_id => 44,
                                        :editable? => true,
                                        :visible? => true,
+                                       :campaign_photos => mock('campaign photos', :build => true),
                                        :location => mock_model(Stop, :points => [mock("point", :lat => 51, :lon => 0)]))
       Campaign.stub!(:find).and_return(@campaign)
     end
