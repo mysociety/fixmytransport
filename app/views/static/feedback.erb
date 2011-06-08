@@ -46,7 +46,8 @@
         <%= raw form.text_area :message, {:rows => 8, :cols => 50} %>
       </div>
       
-      <%= raw form.submit t(:send) %>
+	  <button stype="submit"><%= t(:send) %></button>
+      <%# <%= raw form.submit t(:send) %>
   
     </div>
   <%- end %>

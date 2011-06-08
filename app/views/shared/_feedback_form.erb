@@ -30,8 +30,10 @@
     </div>
     
     <div class='feedback-buttons'>
-      <input class='feedback-cancel' value='<%= t(:cancel) %>' type='button' >
-      <%= raw form.submit t(:send) %>
+	  <button type="button" class="feedback-cancel"><%= t(:cancel) %></button>
+      <!-- <input class='feedback-cancel' value='<%# <%= t(:cancel) %>' type='button' > -->
+	  <button type="submit"><%= t(:send) %></button>
+      <%# <%= raw form.submit t(:send) %>
     </div>
     
   </div>

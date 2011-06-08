@@ -37,7 +37,8 @@
         <%= raw f.hidden_field :incoming_message_id %>
         <%= raw f.hidden_field :user_id %>
         <%= raw f.text_area :text, :cols => 40, :rows => 5 %>
-        <%= raw f.submit t(:add_update) %>
+        <button type="submit"><%= t(:add_update) %></button>
+		<%# <%= raw f.submit t(:add_update) %>
       </div>
     </div>
   <%- end %>

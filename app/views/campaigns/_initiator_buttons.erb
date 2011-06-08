@@ -20,7 +20,8 @@
   
   <%- if @campaign.status != :successful %>
     <%- form_for @campaign, :url => complete_campaign_url(@campaign), :html => { :method => 'POST', :id => 'campaign-complete' } do |f| %>
-      <%= raw submit_tag "Mark as Complete", :class => 'button big last' %>
+      <button type="submit" class="button big last">Mark as Complete</button>
+	  <%# <%= raw submit_tag "Mark as Complete", :class => 'button big last' %>
       <%- index += 1 %>
     <%- end %>
   <%- end %>								

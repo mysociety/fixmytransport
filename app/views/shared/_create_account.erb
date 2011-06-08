@@ -58,7 +58,8 @@
       <%= raw f.password_field :password_confirmation  %>
     </div>
     
-    <%= raw f.submit t(:create_account) %>
+	<button type="submit"><%= t(:create_account) %></button>
+    <%# <%= raw f.submit t(:create_account) %>
     <%= link_to("back", login_url, :id => 'login-to-account')%>
   </div>
 <%- end %>

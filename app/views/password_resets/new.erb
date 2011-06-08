@@ -4,6 +4,7 @@
   <div class='instructions'><%= t(:enter_your_email_address) %>
     <label><%= raw t(:email) %></label>
     <%= raw text_field_tag :email  %>
-    <%= raw submit_tag t(:continue) %>
+	<button type="submit"><%= t(:continue) %></button>
+    <%# <%= raw submit_tag t(:continue) %>
   </div>
 <%- end %>

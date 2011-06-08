@@ -480,19 +480,9 @@ ul.user-list {
 			}	
 
 			#login-form button,
-			#create-account-form input[type=submit] {
-			    text-align: center;
+			#create-account-form button {
 			    font-size: 0.9em;
-			    text-transform: uppercase;
-			    color: #fff;
-				background:#048fc2;
-			    padding: 0.4em 8px;
 				margin: 10px 10px 10px 0;
-				border: 0px;
-			    border-radius: 4px;
-			    -moz-border-radius: 4px;
-			    -webkit-border-radius: 4px;
-				cursor:pointer;
 			}
 			#login-form button:hover,
 			#create-account-form input[type=submit]:hover {
@@ -506,6 +496,9 @@ ul.user-list {
 		border-radius:0 0 5px 0;
 		-moz-border-radius:0 0 5px 0;
 		-webkit-border-radius:0 0 5px 0;
+	}
+	.login-options a.button {
+		font-size:0.9em;
 	}
 #static-login-box .login-options{
 	text-align:center;
@@ -556,18 +549,82 @@ ul.user-list {
 	margin:0;
 	line-height:1;
 }
-#comment-login-options .button {
-	width:24%;
-	height:auto;
-	padding:0;
-	display:inline-block;
+#comment-login-options button {
 	float:right;
-	text-indent:0;
-	border: 0 none;
-	margin:0 0 0 1%;
 }
-/* Buttons
+/* Buttons - needs all unused styles stripping out of here and the markup....
    ================================================== */
+
+button,
+.button {
+	border:none;
+	color:#ffffff;
+	text-transform:uppercase;
+	padding:2px 8px;
+	cursor:pointer;
+	font-size:1em;
+	margin:2px;
+	
+	/*gradients - thankyou http://www.colorzilla.com/gradient-editor */
+	background: #048fc2; /* Old browsers */
+	background: -moz-linear-gradient(top, #048fc2 0%, #006699 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#048fc2), color-stop(100%,#006699)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #048fc2 0%,#006699 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #048fc2 0%,#006699 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #048fc2 0%,#006699 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#048fc2', endColorstr='#006699',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #048fc2 0%,#006699 100%); /* W3C */
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+	-webkit-box-shadow: 0px 0px 2px rgba(84, 84, 84, 0.75);
+	-moz-box-shadow: 0px 0px 2px rgba(84, 84, 84, 0.75);
+	box-shadow: 0px 0px 2px rgba(84, 84, 84, 0.75);
+}
+
+button:hover,
+.button:hover {
+	color:#ffffff;
+	
+	background: #006699; /* Old browsers */
+	background: -moz-linear-gradient(top, #006699 0%, #048fc2 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006699), color-stop(100%,#048fc2)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #006699 0%,#048fc2 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #006699 0%,#048fc2 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #006699 0%,#048fc2 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#006699', endColorstr='#048fc2',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #006699 0%,#048fc2 100%); /* W3C */
+}
+
+a.button {
+	padding:4px 10px;
+}
+
+button.green,
+.button.green {
+	background: #99cc33; /* Old browsers */
+	background: -moz-linear-gradient(top, #99cc33 0%, #669933 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#99cc33), color-stop(100%,#669933)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #99cc33 0%,#669933 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #99cc33 0%,#669933 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #99cc33 0%,#669933 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99cc33', endColorstr='#669933',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #99cc33 0%,#669933 100%); /* W3C */
+}
+button.green:hover,
+.button.green:hover {
+	background: #669933; /* Old browsers */
+	background: -moz-linear-gradient(top, #669933 0%, #99cc33 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#669933), color-stop(100%,#99cc33)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #669933 0%,#99cc33 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #669933 0%,#99cc33 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #669933 0%,#99cc33 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#669933', endColorstr='#99cc33',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #669933 0%,#99cc33 100%); /* W3C */
+}
+
 .support-big {
     display: block;
     text-align: center;
@@ -577,38 +634,30 @@ ul.user-list {
     font-family: inherit;
     font-style: inherit;
     font-weight: inherit;
-    cursor: pointer;
-    border: 0 none;
-    text-transform: uppercase;
-    color: #fff;
-    background: #9bce24;
     padding: 10px;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
 }
-.support-big:hover {
-    background: #74cb04;
-    color: #fff;
-}
-.support {
-    margin-bottom: 1em;
-    text-align: center;
-    color: #fff;
-    text-transform: uppercase;
-    font-size: 11px;
-    background: #9bce24 url(../images/support-tick.gif) 6px 4px no-repeat;
+button.green.support {
+    font-size: 0.9em;
     padding: 3px 8px 3px 25px;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    border: 0 none;
-    cursor: pointer;
+
+	background: #99cc33 url(../images/support-tick.png) 6px 4px no-repeat; /* Old browsers */
+	background:url(../images/support-tick.png) 6px 4px no-repeat, -moz-linear-gradient(top, #99cc33 0%, #669933 100%); /* FF3.6+ */
+	background:url(../images/support-tick.png) 6px 4px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#99cc33), color-stop(100%,#669933)); /* Chrome,Safari4+ */
+	background:url(../images/support-tick.png) 6px 4px no-repeat, -webkit-linear-gradient(top, #99cc33 0%,#669933 100%); /* Chrome10+,Safari5.1+ */
+	background:url(../images/support-tick.png) 6px 4px no-repeat, -o-linear-gradient(top, #99cc33 0%,#669933 100%); /* Opera11.10+ */
+	background:url(../images/support-tick.png) 6px 4px no-repeat, -ms-linear-gradient(top, #99cc33 0%,#669933 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99cc33', endColorstr='#669933',GradientType=0 ); /* IE6-9 */
+	background:url(../images/support-tick.png) 6px 4px no-repeat, linear-gradient(top, #99cc33 0%,#669933 100%); /* W3C */
 }
-.support:hover {
-    background-color: #74cb04;
-    background-position: 6px -33px;
-    color: #fff;
+button.green.support:hover {
+	background: #669933 url(../images/support-tick.png) 6px 4px no-repeat; /* Old browsers */
+	background:url(../images/support-tick.png) 6px 4px no-repeat, -moz-linear-gradient(top, #669933 0%, #99cc33 100%); /* FF3.6+ */
+	background:url(../images/support-tick.png) 6px 4px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#669933), color-stop(100%,#99cc33)); /* Chrome,Safari4+ */
+	background:url(../images/support-tick.png) 6px 4px no-repeat, -webkit-linear-gradient(top, #669933 0%,#99cc33 100%); /* Chrome10+,Safari5.1+ */
+	background:url(../images/support-tick.png) 6px 4px no-repeat, -o-linear-gradient(top, #669933 0%,#99cc33 100%); /* Opera11.10+ */
+	background:url(../images/support-tick.png) 6px 4px no-repeat, -ms-linear-gradient(top, #669933 0%,#99cc33 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#669933', endColorstr='#99cc33',GradientType=0 ); /* IE6-9 */
+	background:url(../images/support-tick.png) 6px 4px no-repeat, linear-gradient(top, #669933 0%,#99cc33 100%); /* W3C */
 }
 .comment-button {
     margin-bottom: 1em;
@@ -661,23 +710,6 @@ ul.user-list {
 	}
 .view-all {
     font-size: 0.9em
-}
-.button {
-    border:none;
-    cursor: pointer;
-	  text-align: center;
-    font-size: 1.2em;
-    background: #048fc2;
-    color: #fff;
-    padding: 6px 20px;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-}
-.button:hover,
-.button:focus {
-    background-color: #0075a0;
-    color: #fff;
 }
 .button.big {
 	border-radius: 10px;
@@ -776,11 +808,6 @@ ul.user-list {
 	  font-family: inherit;
 	}
 
-#create-account.button {
-	font-size:0.9em;
-	text-transform:uppercase;
-	padding:6px 8px;
-}
 
 /* Icons
    ================================================== */
@@ -1015,29 +1042,35 @@ ul.campaign-meta li span{
 .thread-controls {
     float: right
 }
-	.thread-controls a.expand-all,
-	.thread-controls a.collapse-all,
-	.thread-controls a.sort {
+	.thread-controls .expand-all,
+	.thread-controls .collapse-all,
+	.thread-controls .sort {
+		border:none;
 	    display: block;
+		margin:0;
 	    float: left;
 	    width: 18px;
 	    height: 18px;
 	    text-indent: -999999em;
 	    background: url(../images/thread-controls.gif) 0 0 no-repeat;
+	
+		-webkit-box-shadow: none ;
+		-moz-box-shadow: none ;
+		box-shadow: none ;
 	}
-	.thread-controls a.expand-all:hover {
+	.thread-controls .expand-all:hover {
 	    background-position: 0 -21px
 	}
-	.thread-controls a.collapse-all {
+	.thread-controls .collapse-all {
 	    background-position: -22px 0
 	}
-	.thread-controls a.collapse-all:hover {
+	.thread-controls .collapse-all:hover {
 	    background-position: -22px -21px
 	}
-	.thread-controls a.sort {
+	.thread-controls .sort {
 	    background-position: -43px 0
 	}
-	.thread-controls a.sort:hover {
+	.thread-controls .sort:hover {
 	    background-position: -43px -21px
 	}
 ul#campaign-thread {
