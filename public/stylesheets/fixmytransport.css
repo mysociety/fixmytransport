@@ -1058,7 +1058,7 @@ ul#campaign-thread {
 		    height: 20px;
 		}
 		ul#campaign-thread li a.thread-item:hover {
-		    background: #0075a0;
+		    background: #048fc2;
 			color:#fff;
 		}
 			ul#campaign-thread li a.thread-item:hover span.close {
@@ -1110,7 +1110,7 @@ ul#campaign-thread {
 		    display: none
 		}
 	ul#campaign-thread li.open {
-	    background: #0075a0;
+	    background: #048fc2;
 	    color: #fff;
 	}
 		ul#campaign-thread li.open a.thread-item {

@@ -9,7 +9,7 @@
   <%- index += 1 %>
   <%= raw button("Post Update", add_update_campaign_url(@campaign), 'button big update-trigger', index) %>
   <%- index += 1 %>
-    <%= raw button("Add Images", add_photos_campaign_url(@campaign), 'button big', index) %>
+    <%= raw button("Add Images", add_photos_campaign_url(@campaign), 'button big add-photos-trigger', index) %>
   <%- index += 1 %>
   <%- @campaign.problem.recipients.each do |recipient| %>
     <%- if ! recipient.deleted?  %>

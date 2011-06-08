@@ -53,7 +53,7 @@ $(document).ready(function(){
 
 
 
-	/* Dialog Box
+	/* Dialog Boxes
 	   ================================================== */
 
 	$("#login-box").dialog({
@@ -170,6 +170,18 @@ $(document).ready(function(){
   	$("#login-box").dialog("open");
   	return false;
   });
+
+	/* Add Photos */
+	$('.add-photos-trigger').click(function(e){
+	  	e.preventDefault();
+	  	$('.login-box .pane').hide();
+	  	$('#campaign-add-photos').show();
+	
+	  	$("#login-box").dialog({title: "Add images:"});
+	  	$("#login-box").dialog("open");
+	  	return false;
+	  });
+	
 
   /* Static Login Options for campaign creation page*/
 
