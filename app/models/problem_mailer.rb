@@ -20,7 +20,7 @@ class ProblemMailer < ApplicationMailer
     recipients contact_from_name_and_email
     from email_params[:name] + " <" + email_params[:email] + ">"
     subject "[FixMyTransport] " << email_params[:subject]
-    body :message => email_params[:message], :name => email_params[:name]
+    body :message => email_params[:message], :name => email_params[:name], :uri => email_params[:feedback_on_uri]
   end
   
   def report(problem, recipient, recipient_models, missing_recipient_models=[])

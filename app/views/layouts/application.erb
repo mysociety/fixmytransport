@@ -24,7 +24,7 @@
 				</ul>
 				<ul id="top-nav">
 					<li><a href="<%= about_url %>">About</a></li>
-					<li><a href="<%= feedback_url %>">Feedback</a></li>
+					<li><a href="<%= feedback_url(:url => CGI.escape(request.request_uri)) %>">Feedback</a></li>
 				</ul>
 
 				<a id="logo" href="<%= root_url %>">Fix My Transport</a>

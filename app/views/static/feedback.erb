@@ -13,7 +13,10 @@
         <%= raw form.text_field :subject  %>
       </div>
     
-
+      <%- if params[:url] %>
+        <%= raw hidden_field_tag 'feedback[feedback_on_uri]', params[:url] %>
+      <%- end %>
+      
       <div class='form-field'>
         <%- if @feedback.errors.on(:name) %>
           <div class='error'>
