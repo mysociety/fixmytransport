@@ -1,9 +1,8 @@
 <a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(:got_a_message, :link => link_to(t(:a_reply), campaign_incoming_message_path(@campaign, message)), :sender => message.safe_from, :campaigner => h(@campaign.initiator.name)) %></span><span class="close">close</span><span class="date"><%= event.created_at.to_s(:standard_with_date) %></span></a>
- 
+
 <div class="thread-details box">
-  <div class="thumb"><img src="/images/paperclip_defaults/users/profile_photos/missing_large_thumb.png" /></div>
-  <div>
-  <%= raw message.get_body_for_html_display(collapse_quotes=true) %>
-  </div>
- 
-</div>  
+	<div class="thread-copy"><%= raw message.get_body_for_html_display(collapse_quotes=true) %></div>
+	<div class="thread-furniture">
+		<div class="thumb"><img src="/images/paperclip_defaults/users/profile_photos/missing_large_thumb.png" /></div>
+	</div>
+</div>

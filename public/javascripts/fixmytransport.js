@@ -19,14 +19,20 @@ $(document).ready(function(){
 				li.removeClass('open');
 			});
 		}else{
-		  if ($('.thread-details', li).length > 0){
-			  li.addClass('open');
-			  $('.thread-details', li).show('blind', '', 1000);
-		  }
+			if ($('.thread-details', li).length > 0){
+				li.addClass('open');
+				
+				//fix height of copy if less than furniture
+				var copy_h = $('.thread-details .thread-copy', li).height();
+				var furniture_h = $('.thread-details .thread-furniture', li).height();
+				if(copy_h < furniture_h)
+					$('.thread-details .thread-copy', li).height(furniture_h);
+				
+				$('.thread-details', li).show('blind', '', 1000);
+			}
 		}
 	}
-
-
+	
 	//main toggle
 	$('ul#campaign-thread li a.thread-item').click(function(e){
 		e.preventDefault();
@@ -36,18 +42,18 @@ $(document).ready(function(){
 	//show all
 	$('.thread-controls .expand-all').click(function(e){
 		e.preventDefault();
-		thread($('ul#campaign-thread li').not('.open'));
+		thread($('ul#campaign-thread li:not(:has(.compact))').not('.open'));
 	});
 
 	//collapse all
 	$('.thread-controls .collapse-all').click(function(e){
 		e.preventDefault();
-		thread($('ul#campaign-thread li.open'));
+		thread($('ul#campaign-thread li.open:not(:has(.compact))'));
 	});
 
 
 
-	/* Dialog Box
+	/* Dialog Boxes
 	   ================================================== */
 
 	$("#login-box").dialog({
@@ -115,7 +121,7 @@ $(document).ready(function(){
 
     	$("#login-box").dialog({title: "Ask for advice:"});
       // Set the button text
-      $('#campaign-update-form .button').html("Ask for advice")
+      $('#campaign-update-form button[type=submit]').html("Ask for advice")
       // Add the hidden field
       $('#campaign-update-form').append($('<input/>')
                   .attr('type', 'hidden')
@@ -142,7 +148,7 @@ $(document).ready(function(){
 
   	$("#login-box").dialog({title: "Update:"});
   	// Set the button text
-    $('#campaign-update-form .button').html("Add Update")
+    $('#campaign-update-form button[type=submit]').html("Add Update")
     
   	$("#login-box").dialog("open");
   	return false;
@@ -164,6 +170,18 @@ $(document).ready(function(){
   	$("#login-box").dialog("open");
   	return false;
   });
+
+	/* Add Photos */
+	$('.add-photos-trigger').click(function(e){
+	  	e.preventDefault();
+	  	$('.login-box .pane').hide();
+	  	$('#campaign-add-photos').show();
+	
+	  	$("#login-box").dialog({title: "Add images:"});
+	  	$("#login-box").dialog("open");
+	  	return false;
+	  });
+	
 
   /* Static Login Options for campaign creation page*/
 
@@ -439,4 +457,3 @@ function externalAuth(authParams) {
   $('body').append(form)
   form.submit();
 }
-

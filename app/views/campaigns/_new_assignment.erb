@@ -6,9 +6,11 @@
 <span class="date"><%= event.created_at.to_s(:standard_with_date) %></span>
 </a>
 <div class="thread-details box">
-  <div class="thumb"><img src="<%= assignment.creator.profile_photo.url(:large_thumb) %>" /></div>
-  <div>
-  <%= raw simple_format(h(assignment.data[:reason])) %>
-  </div>
+	<div class="thread-copy">
+		<%= raw simple_format(h(assignment.data[:reason])) %>
+	</div>
+	<div class="thread-furniture">
+		<div class="thumb"><img src="<%= assignment.creator.profile_photo.url(:large_thumb) %>" /></div>
+	</div>
 </div>
 <%- end %>

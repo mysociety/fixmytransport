@@ -1,7 +1,7 @@
 <%- content_for :javascript do %>
 <%= raw javascript_include_tag('jquery.lightbox-0.5.min.js', :charset => 'utf-8') %>
-<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-<%= raw javascript_include_tag("http://use.typekit.com/ftq7gco.js")%>
+<!-- <script type="text/javascript">try{Typekit.load();}catch(e){}</script> -->
+<%= raw javascript_include_tag("http://use.typekit.com/fji8ime.js")%>
 <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 <%- end %>
 <%- content_for :stylesheets do %>
@@ -42,7 +42,7 @@
 <%- else %>
   <div id="banner" class="yellow container">
   	<div class="leftcol-banner">
-  		<h1 class="tk-museo">&ldquo;<%= @campaign.call_to_action %>&rdquo; &ndash; <%= @campaign.initiator.name %></h1>
+  		<h1 class="font-1">&ldquo;<%= @campaign.call_to_action %>&rdquo; &ndash; <%= @campaign.initiator.name %></h1>
   	</div>
 
   	<div class="rightcol">
@@ -114,14 +114,14 @@
 		<%- end %>
 
 		<div class="box">
-			<a class="comment-button comment-trigger right" href="<%= add_comment_campaign_url(@campaign) %>">Comment</a>
+			<a class="button comment comment-trigger right" href="<%= add_comment_campaign_url(@campaign) %>">Comment</a>
 		</div>
 
 		<div class="clear">
 			<h3 class='left campaign-history'><%= t(:campaign_history) %></h3>
 			<div class="thread-controls">
-				<a href="#" class="expand-all">Expand All</a>
-				<a href="#" class="collapse-all">Collapse All</a>
+				<button type="button" class="expand-all">Expand All</button>
+				<button type="button" class="collapse-all">Collapse All</button>
 			</div>
 		</div>
 		<ul id="campaign-thread">

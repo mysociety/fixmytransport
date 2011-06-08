@@ -30,6 +30,7 @@ class CampaignsController < ApplicationController
                                          :redirect => campaign_path(@campaign),
                                          :notice => "Please login or create an account to join this campaign" })
     @title = @campaign.title
+    @campaign.campaign_photos.build({})
     map_params_from_location(@campaign.location.points,
                             find_other_locations=false,
                             height=CAMPAIGN_PAGE_MAP_HEIGHT,

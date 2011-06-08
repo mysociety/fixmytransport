@@ -9,7 +9,7 @@
   <%- index += 1 %>
   <%= raw button("Post Update", add_update_campaign_url(@campaign), 'button big update-trigger', index) %>
   <%- index += 1 %>
-    <%= raw button("Add Images", add_photos_campaign_url(@campaign), 'button big', index) %>
+    <%= raw button("Add Images", add_photos_campaign_url(@campaign), 'button big add-photos-trigger', index) %>
   <%- index += 1 %>
   <%- @campaign.problem.recipients.each do |recipient| %>
     <%- if ! recipient.deleted?  %>
@@ -20,7 +20,7 @@
   
   <%- if @campaign.status != :successful %>
     <%- form_for @campaign, :url => complete_campaign_url(@campaign), :html => { :method => 'POST', :id => 'campaign-complete' } do |f| %>
-      <%= raw submit_tag "Mark as Complete", :class => 'button big last' %>
+      <button type="submit" class="button big last">Mark as Complete</button>
       <%- index += 1 %>
     <%- end %>
   <%- end %>								

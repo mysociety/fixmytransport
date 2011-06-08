@@ -17,7 +17,11 @@
 	  <%- if current_user && current_user == @campaign.initiator %>
 	    <div id="campaign-update" class="pane">
         <%= render :partial => 'campaigns/update_form' %>
-      </div>
+      	</div>
+
+		<div id="campaign-add-photos" class="pane">
+        <%= render :partial => 'campaigns/add_photos_form' %>
+      	</div>
     <%- end %>
   <%- end %>
 
