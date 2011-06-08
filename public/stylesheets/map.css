@@ -1,4 +1,6 @@
 
+.javascript-enabled #noscript {display: none;}
+
 #map-col {
   float: right; 
   max-width: 400px;

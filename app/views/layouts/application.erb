@@ -10,6 +10,9 @@
     <%= raw stylesheet_link_tag('core', 'fixmytransport', 'map', :cache => 'main') %>
     <%= yield :stylesheets %>
     <%= raw javascript_include_tag('jquery-1.5.2.min', 'jquery-ui-1.8.11.min', 'jquery.autofill', 'jquery.form', :charset => 'utf-8', :cache => 'libraries') %>
+    <script type="text/javascript">
+      $('html').addClass('javascript-enabled');
+    </script>
   </head>
 	<body>
 		<div id="wrapper">
