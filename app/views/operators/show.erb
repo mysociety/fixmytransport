@@ -4,8 +4,7 @@
   <ul class='operator-routes'>
    <%- @operator.routes.each do |route| %>
       <li>
-        <%= link_to(route.name(from_stop=nil, short=true), location_path(route)) %>
-        <%= route.area(lowercase=true) %>
+        <%= link_to(route.description, route_url(route.region, route)) %>
       </li>
    <%- end %>
 </ul>

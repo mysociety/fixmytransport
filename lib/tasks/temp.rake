@@ -16,5 +16,13 @@ namespace :temp do
       user.save_without_session_maintenance
     end
   end
+
+  desc 'Recache route descriptions for train routes'
+  task :recache_route_descriptions => :environment do 
+    Route.find_each(:conditions => ['transport_mode_id = 6']) do |route|
+      route.save!
+    end
+  end
   
 end
+
