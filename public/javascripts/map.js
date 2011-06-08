@@ -30,7 +30,9 @@ function area_init() {
   map.addLayer(otherMarkers);
   map.addLayer(markers);
   
- 
+  if (!typeof(areaStops) == 'undefined'){
+    addMarkerList(areaStops, markers, false);
+  }
   addHtmlMarkers('#noscript .location-marker', markers, true);
   
   centerCoords =  new OpenLayers.LonLat(lon, lat);

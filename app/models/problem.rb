@@ -135,6 +135,9 @@ class Problem < ActiveRecord::Base
                                      :problem => self })
     campaign.status = :new
     self.save
+    assignments.each do |assignment|
+      assignment.update_attribute('campaign', campaign)
+    end
     return campaign
   end
 
