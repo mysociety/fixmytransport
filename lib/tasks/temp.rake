@@ -24,5 +24,14 @@ namespace :temp do
     end
   end
   
+  desc 'Set campaign on assignments'
+  task :set_campaign_on_assignments => :environment do 
+    Problem.find_each(:conditions => ['campaign_id is not null']) do |problem|
+      problem.assignments.each do |assignment|
+        assignment.update_attribute('campaign_id', problem.campaign_id)
+      end
+    end
+  end
+  
 end
 
