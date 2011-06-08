@@ -43,6 +43,7 @@ class StopArea < ActiveRecord::Base
   has_many :routes_as_to_stop_area, :through => :route_segments_as_to_stop_area, :source => 'route'
   has_paper_trail
   validates_presence_of :locality, :if => :loaded?
+  before_save :cache_description
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
   is_location
@@ -56,6 +57,7 @@ class StopArea < ActiveRecord::Base
   end
 
   def description
+    return cached_description if cached_description
     text = name
     text += " in #{area}" if area
     text

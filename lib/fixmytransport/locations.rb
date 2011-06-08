@@ -28,6 +28,11 @@ module FixMyTransport
       end
       return issues
     end
+    
+    def cache_description
+      self.cached_description = nil
+      self.cached_description = self.description
+    end
   
   end
   

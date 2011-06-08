@@ -80,7 +80,8 @@ describe Stop do
      end
    
      it "should create a new instance given valid attributes" do
-       Stop.create!(@valid_attributes)
+       stop = Stop.new(@valid_attributes)
+       stop.valid?.should == true
      end
   
   end
