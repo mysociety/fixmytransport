@@ -35,6 +35,7 @@ class CampaignsController < ApplicationController
                             find_other_locations=false,
                             height=CAMPAIGN_PAGE_MAP_HEIGHT,
                             width=CAMPAIGN_PAGE_MAP_WIDTH)
+     @collapse_quotes = params[:unfold] ? false : true
   end
 
   def update

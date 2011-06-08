@@ -1181,12 +1181,17 @@ ul#campaign-thread {
 		    padding-right: 10px;
 			margin:0;
 		}
-			ul#campaign-thread li.open .thread-details .thread-copy {
+			ul#campaign-thread li.open .thread-details .thread-copy,
+			ul#campaign-thread li.open .thread-details .thread-alternative-copy {
 				float:left;
 				width:70%;
 				color:#333;
 				background:#fff;
 				padding:2%;
+			}
+			
+			ul#campaign-thread li.open .thread-details .thread-alternative-copy {
+			  display: none;
 			}
 			ul#campaign-thread li.open .thread-details .thread-furniture {
 				float:right;

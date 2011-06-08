@@ -81,7 +81,7 @@
 				  <%- if current_user && (current_user == @campaign.initiator || current_user.is_expert?) %>
             <%= link_to(t(:edit), edit_campaign_path(@campaign), :class => 'description-edit-link') %>
           <%- end %>
-          <%- if sanitize(@campaign.description).size > 200 %>
+          <%- if sanitize(@campaign.description).size > 200 and ! params[:full_description] %>
 				  <a href="<%= url_for(params.merge(:full_description => '1')) %>" class="more-info">more</a>
 				  <%- end %>
 			</div>

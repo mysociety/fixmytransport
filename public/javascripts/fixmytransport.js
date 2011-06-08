@@ -430,6 +430,25 @@ $(document).ready(function(){
     $('.more-info').hide();
   });
 
+  /* Email quoting folding and unfolding
+  ================================================== */
+  function swap_copy(thread_element) {
+    var copy = thread_element.find('.thread-copy');
+    var alternative_copy = thread_element.find('.thread-alternative-copy');
+    var copy_contents = copy.html();
+    var alt_copy_contents = alternative_copy.html();
+    copy.html(alt_copy_contents);
+    alternative_copy.html(copy_contents);
+    copy.find('.unfold_link').click(function(event){
+        event.preventDefault();
+        swap_copy($(this).parents('.thread-details'));
+    });
+  }
+  
+  $('.unfold_link').click(function(event){
+      event.preventDefault();
+      swap_copy($(this).parents('.thread-details'));
+  });
   /* Campaign Supporter 'View all' link
      ================================================== */
   $('#campaign-supporters .view-all').click(function(event){
