@@ -60,7 +60,7 @@
 
 		<div class="box campaign-description">
 		  <%- if (!current_user) || !(current_user.supporter_or_initiator(@campaign)) %>
-			<img src="<%= @campaign.initiator.profile_photo.url(:medium_thumb) %>" class="avatar" />
+			<img src="<%= @campaign.initiator.profile_photo.url(:small_thumb) %>" class="avatar" />
 			<%- end %>
 			<div>
 				<%- if !current_user || !(current_user.supporter_or_initiator(@campaign)) %>
