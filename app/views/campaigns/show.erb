@@ -16,11 +16,11 @@
   		</h1>
   		<div class="right">
   		  <%- if current_user == @campaign.initiator %>
-  			  <span class="button-white left">Your Campaign</span>
+  			  <span class="button white left">Your Campaign</span>
   			<%- else %>
-  			  <span class="button-white left">You support this</span>
+  			  <span class="button white left">You support this</span>
   			<%- end %>
-  			<span class="button-orange left"><%= campaign_display_status(@campaign).titleize %> Campaign</span>
+  			<span class="button orange left"><%= campaign_display_status(@campaign).titleize %> Campaign</span>
   		</div>
   	</div>
   </div>
@@ -33,10 +33,10 @@
     </div>
 
     <div class="contrib-tools-initial container">
-		  <a href="<%= add_comment_campaign_url(@campaign) %>" class="button big comment-trigger">Comment</a>
-		  <a href="<%= twitter_url(@campaign) %>" target="_blank" class="button big twitter twitter-popup">Tweet</a>
-      <a href="#" class="button big facebook">Facebook</a>
-      <a href="#" class="button big grey last">Email</a>
+		  <a href="<%= add_comment_campaign_url(@campaign) %>" class="button comment-trigger">Comment</a>
+		  <a href="<%= twitter_url(@campaign) %>" target="_blank" class="button twitter twitter-popup">Tweet</a>
+      <a href="#" class="button facebook">Facebook</a>
+      <a href="#" class="button grey last">Email</a>
     </div>
   <%- end %>
 <%- else %>
@@ -139,10 +139,10 @@
 
 	  <%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
 	  <div class="contrib-tools">
-			<a href="<%= add_comment_campaign_url(@campaign) %>" class="button big comment-trigger">Comment</a>
-			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="button big twitter twitter-popup">Twitter</a>
-			<a href="#" class="button big facebook">Facebook</a>
-			<a href="#" class="button big grey last">Email</a>
+			<a href="<%= add_comment_campaign_url(@campaign) %>" class="button comment-trigger">Comment</a>
+			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="button twitter twitter-popup">Twitter</a>
+			<a href="#" class="button facebook">Facebook</a>
+			<a href="#" class="button grey last">Email</a>
 		</div>
 		<%- end %>
 		<ul class="campaign-meta">
@@ -155,7 +155,7 @@
 			<div id="small-map">
 			  <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => CAMPAIGN_PAGE_MAP_HEIGHT, :width => CAMPAIGN_PAGE_MAP_WIDTH, :static => true } %>
 		  </div>
-      <a class="grey-button right" href="<%= location_url(@campaign.location) %>">Larger Map</a>
+      <a class="button grey right" href="<%= location_url(@campaign.location) %>">Larger Map</a>
 		</div>
 		<%- end %>
 
