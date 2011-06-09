@@ -61,30 +61,33 @@ module ApplicationHelper
   end
 
   def stop_icon(location, main=false, small=false)
-    name = ''
+    name = '/images/map-icons/map-'
     if location.is_a? Route
       if location.transport_mode_name == 'Train'
-        name = 'train'
+        name += 'train-blue'
       elsif location.transport_mode_name == 'Tram/Metro'
-        name = 'tram'
+        name += 'tram-green'
       elsif location.transport_mode_name == 'Ferry'
-        name = 'ferry'
+        name += 'boat-orange'
       else
-        name = 'bus'
+        name += 'bus-magenta'
       end
     else
       if location.respond_to?(:area_type) && location.area_type == 'GRLS'
-        name = 'train'
+        name += 'train-blue'
       elsif location.respond_to?(:area_type) && location.area_type == 'GTMU'
-        name = 'tram'
+        name += 'tram-green'
       elsif location.respond_to?(:area_type) && location.area_type == 'GFTD'
-        name = 'ferry'
+        name += 'boat-orange'
       else
-        name = 'bus'
+        name += 'bus-magenta'
       end
     end
-    name += '-main' if main
-    name += '-sm' if small
+    if main
+      name += '-med' 
+    elsif small
+      name += '-sml' 
+    end
     return name
   end
 

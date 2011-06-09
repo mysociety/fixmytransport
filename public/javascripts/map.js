@@ -250,7 +250,7 @@ function addRouteMarker(stopCoords, bounds, markers, item, other) {
     bounds.extend(stopCoords);
     var size = new OpenLayers.Size(item.width, item.height);
     var offset = new OpenLayers.Pixel(-(size.w/2), -(size.h/2));
-    var stopIcon = new OpenLayers.Icon("/images/" + item.icon + ".png", size, offset);
+    var stopIcon = new OpenLayers.Icon(item.icon + ".png", size, offset);
     stopIcon.imageDiv.style.cursor = 'pointer';
     var marker = new OpenLayers.Marker(stopCoords, stopIcon);
     marker.url = item.url;

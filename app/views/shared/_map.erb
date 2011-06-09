@@ -54,8 +54,8 @@
       </div>
       <%- end %>
       <div id="markers">
-        <%= render :partial => 'shared/location_marker', :collection => other_locations, :as => :location, :locals => {:small => true, :main => false, :link_type => link_type, :height => height, :width => width } %>
         <%= render :partial => 'shared/location_marker', :collection => locations, :as => :location, :locals => {:small => false, :main => true, :link_type => link_type, :height => height, :width => width } %>
+        <%= render :partial => 'shared/location_marker', :collection => other_locations, :as => :location, :locals => {:small => true, :main => false, :link_type => link_type, :height => height, :width => width } %>
       </div>
     </div>
   <%- unless static %></div><%- end %> 
