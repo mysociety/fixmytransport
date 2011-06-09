@@ -2,6 +2,52 @@ require 'spec_helper'
 
 describe CampaignMailer do
   
+  describe 'when receiving mail' do 
+    
+    before do
+      filepath = File.join(RAILS_ROOT, 'spec', 'examples', 'email', "plain.txt")
+      @raw_email = File.read(filepath)
+      @mock_user = mock_model(User, :name_and_email => "Campaign Person <campaign.person@my-campaign.example.com>",
+                                    :name => "Campaign Person")
+      @mock_campaign = mock_model(Campaign, :get_recipient => @mock_user,
+                                            :title => "A Test Campaign")
+      @mock_message = mock_model(IncomingMessage)
+      IncomingMessage.stub!(:create_from_tmail).and_return(@mock_message)
+    end
+  
+    describe 'if a campaign address can be found in the to: field' do 
+      
+      before do
+        Campaign.stub!(:find_by_campaign_email).with('campaign.person@my-campaign.example.com').and_return(@mock_campaign)
+      end
+      
+      it 'should create an incoming message for the campaign from the mail' do 
+        IncomingMessage.should_receive(:create_from_tmail).with(anything, @raw_email, @mock_campaign).and_return(@mock_message)
+        CampaignMailer.receive(@raw_email)
+      end
+      
+      it 'should send a message to the recipient telling them they have a message' do 
+        CampaignMailer.should_receive(:deliver_new_message).with(@mock_user, @mock_message, @mock_campaign)
+        CampaignMailer.receive(@raw_email)
+      end
+      
+    end
+    
+    describe 'if no campaign address can be found' do 
+    
+      before do
+        Campaign.stub!(:find_by_campaign_email).and_return(nil)
+      end
+      
+      it 'should create an incoming message with no associated campaign' do 
+        IncomingMessage.should_receive(:create_from_tmail).with(anything, @raw_email, nil)
+        CampaignMailer.receive(@raw_email)
+      end
+      
+    end
+     
+  end
+  
   describe 'when sending a campaign update' do 
   
     describe 'when not running in dry-run mode' do 

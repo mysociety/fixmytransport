@@ -151,8 +151,10 @@ class IncomingMessage < ActiveRecord::Base
                                  :campaign => campaign, 
                                  :raw_email => raw_email,
                                  :from => tmail.friendly_from)
-      campaign.campaign_events.create!(:event_type => 'incoming_message_received', 
-                                       :described => incoming_message)
+      if campaign                           
+        campaign.campaign_events.create!(:event_type => 'incoming_message_received', 
+                                         :described => incoming_message)
+      end
       return incoming_message
     end
   end
