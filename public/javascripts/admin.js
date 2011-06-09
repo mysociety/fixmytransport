@@ -199,3 +199,7 @@ function setupNewStopArea(){
 function setupShowProblem(){
   setupOperatorAutocomplete();
 }
+
+function setupShowIncomingMessage(){
+  setupDestroyLink();
+}

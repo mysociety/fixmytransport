@@ -30,3 +30,6 @@ en:
   operator_contact_updated: Operator contact updated. 
   operator_contact_problem: There was a problem updating this operator contact.
   operator_contact_created: Operator contact created.
+  incoming_message_destroyed: Incoming message destroyed
+  incoming_message_destroy_problem: There was a probem destroying this incoming message.
+  incoming_message_moved: Incoming message has been moved to this campaign

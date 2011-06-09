@@ -1,9 +1,11 @@
 class IncomingMessage < ActiveRecord::Base
+
   belongs_to :campaign
-  belongs_to :raw_email
-  validates_presence_of :campaign, :raw_email
-  has_many :campaign_updates
-  has_many :campaign_events, :as => :described
+  belongs_to :raw_email, :dependent => :destroy
+  validates_presence_of :raw_email
+  has_many :outgoing_messages, :dependent => :nullify
+  has_many :campaign_updates, :dependent => :nullify
+  has_many :campaign_events, :as => :described, :dependent => :destroy
   
   def mail 
     @mail ||= if raw_email.nil?
