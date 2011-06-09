@@ -4,7 +4,7 @@
       <img src="<%=stop_icon(location, main, small)%>.png" title="<%=location.description%>" alt="<%=location.description %>" style="<%=icon_style(location, @lon, @lat, @zoom, small, height, width) %>" />
     </a>
   <%- else %>
-    <%= render :partial => 'shared/location_marker', :collection => location.points, :as => :location, :locals => { :small => true, :main => main, :link_type => link_type, :height => height, :width => width } %>
+    <%= render :partial => 'shared/location_marker', :collection => location.points, :as => :location, :locals => { :small => true, :main => false, :link_type => link_type, :height => height, :width => width } %>
   <%- end %>
 <%- else %>
 
