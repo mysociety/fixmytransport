@@ -102,16 +102,28 @@ class CampaignMailer < ApplicationMailer
     body :comment => comment, :recipient => recipient, :link => main_url(confirm_comment_path(:email_token => token))
   end
 
-  def receive(email, raw_email)
+  def campaigns_matching_email(email)
+    campaigns = []
     addresses = (email.to || []) + (email.cc || [])
     addresses.each do |address|
       campaign = Campaign.find_by_campaign_email(address)
       if campaign
-        incoming_message = IncomingMessage.create_from_tmail(email, raw_email, campaign)
         recipient = campaign.get_recipient(address)
+        campaigns << [campaign, recipient]
+      end
+    end
+    return campaigns
+  end
+
+  def receive(email, raw_email)
+    campaigns = campaigns_matching_email(email)
+    if campaigns.empty? 
+      # no matching campaigns
+      IncomingMessage.create_from_tmail(email, raw_email, nil)
+    else
+      campaigns.each do |campaign, recipient|
+        incoming_message = IncomingMessage.create_from_tmail(email, raw_email, campaign)
         CampaignMailer.deliver_new_message(recipient, incoming_message, campaign)
-      else
-        logger.info "Undeliverable mail to #{address}"
       end
     end
   end
