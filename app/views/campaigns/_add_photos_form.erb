@@ -1,7 +1,8 @@
 <%- form_for(@campaign, :url => add_photos_campaign_path(@campaign), :html => {:method => :post, :multipart => true}) do |f| %>
+  <div class="fieldset">
   <%- @campaign.campaign_photos.select{ |campaign_photo| campaign_photo.new_record? }.each do |campaign_photo| %>
   <%- f.fields_for :campaign_photos, campaign_photo do |photo_fields| %>
-    <div class='form-field'>
+	<div class='form-field'>
       <%- if photo_fields.object.errors.on('image_content_type') %>
         <div class='error'>
           <%= error_message_on photo_fields.object, :image_content_type %>
@@ -13,5 +14,5 @@
   <%- end %>
   <%- end %>
 	<button type="submit"><%= t(:add_photos) %></button>
-  
+  </div>
 <%- end %>
