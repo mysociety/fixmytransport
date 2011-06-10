@@ -24,13 +24,13 @@ class RouteSweeper < ActionController::Caching::Sweeper
                          :action => 'show_route_region',
                          :id => route.region,
                          :only_path => true)                     
-    expire_fragment(main_url(route_path, { :skip_protocol => true }))
+    expire_fragment(@controller.main_url(route_path,{ :skip_protocol => true }))
     if route.previous_version and (route.previous_version.region_id != route.region_id)
       route_path = url_for(:controller => '/locations',
                            :action => 'show_route_region',
                            :id => route.previous_version.region,
                            :only_path => true)
-      expire_fragment(main_url(route_path, { :skip_protocol => true }))
+      expire_fragment(@controller.main_url(route_path, { :skip_protocol => true }))
     end
   end
 

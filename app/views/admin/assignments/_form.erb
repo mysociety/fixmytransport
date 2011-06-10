@@ -13,7 +13,7 @@
 </div>
 <div class="assignment-problem-link">
   <strong><%= t(:problem).titleize %>:</strong> 
-  <%= link_to(@assignment.problem.subject, admin_problem_path(@assignment.problem)) %>
+  <%= link_to(@assignment.problem.subject, admin_url(admin_problem_path(@assignment.problem))) %>
 </div>
 <div class="assignment-location-link">
   <strong><%= t(:location) %>:</strong>
