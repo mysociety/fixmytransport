@@ -70,11 +70,6 @@ describe StopArea do
       @stop_area = StopArea.new(@valid_attributes)
       @stop_area.loaded = true
     end
-    
-    it 'should require locality' do 
-      @stop_area.locality_id = nil
-      @stop_area.valid?.should be_false
-    end
   
   end
   
