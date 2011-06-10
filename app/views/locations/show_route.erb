@@ -12,7 +12,7 @@
 			<p><%= "#{@route.area}." %></p>
 		</div>
 		<div class="rightcol">
-			<a class="report-big" href="<%= new_problem_url(:location_id => @route.id, :location_type => @route.type, :to => params[:to], :from => params[:from])%>">Report a problem</a>
+			<a class="button big red report" href="<%= new_problem_url(:location_id => @route.id, :location_type => @route.type, :to => params[:to], :from => params[:from])%>">Report a problem</a>
 		</div>
 	</div>
 </div>

@@ -731,8 +731,8 @@ button.orange:hover,
     font-weight: inherit;
     padding: 30px 45px;
 }
-button.green.support,
-.button.green.support {
+button.support,
+.button.support {
     padding: 3px 8px 3px 25px;
 
 	background: #99cc33 url(../images/support-tick.png) 6px center no-repeat; /* Old browsers */
@@ -744,8 +744,8 @@ button.green.support,
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99cc33', endColorstr='#669933',GradientType=0 ); /* IE6-9 */
 	background:url(../images/support-tick.png) 6px center no-repeat, linear-gradient(top, #99cc33 0%,#669933 100%); /* W3C */
 }
-button.green.support:hover,
-.button.green.support:hover {
+button.support:hover,
+.button.support:hover {
 	background: #669933 url(../images/support-tick.png) 6px center no-repeat; /* Old browsers */
 	background:url(../images/support-tick.png) 6px center no-repeat, -moz-linear-gradient(top, #669933 0%, #99cc33 100%); /* FF3.6+ */
 	background:url(../images/support-tick.png) 6px center no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#669933), color-stop(100%,#99cc33)); /* Chrome,Safari4+ */
@@ -832,12 +832,8 @@ button.facebook:hover,
 	border-radius: 10px;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
-	font-size:1em;
-	float: left;
-	display: block;
-	padding: 1em 0;
-	width: 22%;
-	margin-right: 4%;
+	font-size:1.4em;
+	padding: 1em 0.5em;
 }
 .button.facebook,
 .button.twitter {
@@ -865,8 +861,18 @@ button.facebook:hover,
 .manager-tools .button.big {
 	width:136px;
 	margin:2px 11px 2px 2px;
+	padding:1em 0;
+	font-size:1em;
+	display:block;
+	float:left;
 }
 
+button.report,
+.button.report {
+    width: 200px;
+	margin: 0.5em auto;
+	display:block;
+}
 
 
 #map-container{
@@ -891,29 +897,6 @@ button.facebook:hover,
 .view-all {
     font-size: 0.9em
 }
-
-
-
-.report-big {
-    display: block;
-    text-align: center;
-    width: 180px;
-    margin: 0.5em auto;
-    font-size: 15px;
-    text-transform: uppercase;
-    color: #fff;
-    background: #f4053d;
-    padding: 10px;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-}
-.report-big:hover {
-    background: #e00202;
-    color: #fff;
-}
-
-
 
 
 
