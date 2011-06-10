@@ -1,3 +1,4 @@
+<%- index = 0 %>
 <div class="manager-tools">
 	<h2 class="font-1">Manage this campaign</h2>
 	<div class="manager-tools-inner">
@@ -5,10 +6,13 @@
 			<h3 class="font-1">Recommended actions</h3>
 			<ul>
 				<li>
-					<a href="#">
+					<a href="<%= raw add_update_campaign_url(@campaign, :is_advice_request => true) %>" class="advice-trigger">
 						<span class="icon big question"></span>
-						<h4>Ask an expert</h4>
-						Get help from the Fix My Transport experts who can answer your questions and make your campaign successful.
+						<div>
+							<h4>Ask an expert</h4>
+							<p>Get help from the Fix My Transport experts who can answer your questions and make your campaign successful.</p>
+						</div>
+						<%- index += 1 %>
 					</a>
 				</li>
 			</ul>
@@ -17,23 +21,29 @@
 			<h3 class="font-1">Actions</h3>
 			<ul>
 				<li>
-					<a href="#">
+					<a href="<%= raw add_update_campaign_url(@campaign, :is_advice_request => true) %>" class="advice-trigger">
 						<span class="icon question"></span>
 						Ask an expert
+						<%- index += 1 %>
 					</a>
 				</li>
 				<li>
-					<a href="#">
+					<a href="<%= raw add_photos_campaign_url(@campaign) %>" class="add-photos-trigger">
 						<span class="icon camera"></span>
 						Add images
+						<%- index += 1 %>
 					</a>
 				</li>
+				<%- if @campaign.status != :successful %>
+				  <%- form_for @campaign, :url => complete_campaign_url(@campaign), :html => { :method => 'POST', :id => 'campaign-complete' } do |f| %>
 				<li>
-					<a href="#">
+					<button type="submit">
 						<span class="icon tick"></span>
 						Mark as complete
-					</a>
+					</button>
 				</li>
+				  <%- end %>
+				<%- end %>
 				<li>
 					<a href="#">
 						<span class="icon person"></span>
@@ -53,42 +63,40 @@
 			<p>Useful people, that may be able to help with your campaign</p>
 			<ul>
 				<li>
-					<button class="orange email right">Email</button>
+					<a href="#" class="button orange email right">Email</a>
 					<h4>Centro</h4>
 					<p>The Route Operator</p>
 				</li>
 				<li>
-					<button class="orange email right">Email</button>
-					<h4>Centro</h4>
-					<p>The Route Operator</p>
+					<a href="#" class="button orange email right">Email</a>
+					<h4>Tony Blair</h4>
+					<p>Local MP</p>
 				</li>
 				<li>
-					<button class="orange email right">Email</button>
-					<h4>Centro</h4>
-					<p>The Route Operator</p>
+					<a href="#" class="button orange email right">Email</a>
+					<h4>The Daily Herald</h4>
+					<p>Local Newspaper</p>
 				</li>
 			</ul>
 		</div>
 		<div class="share-update">
 			<h3 class="font-1">What's happening?</h3>
 			<input type="text" name="post-update" id="post-update"/>
-			<button type="submit">Post</button>
+			<button type="submit" class="update-trigger">Post</button>
 			<label for="post-update">Keep supporters up-to-date on how the campaign is progressing.</label>
 		</div>
 		
 		
 		
-  <%- index = 0 %>
+  
   <%- @campaign.problem.assignments.is_new.each do |assignment| %>
      <%= render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment, :index => index }%>
      <%- index += 1 %>
   <%- end %>
-  <%= raw button("Ask an Expert", add_update_campaign_url(@campaign, :is_advice_request => true), 'button big advice-trigger', index) %>
-  <%- index += 1 %>
-  <%= raw button("Post Update", add_update_campaign_url(@campaign), 'button big update-trigger', index) %>
-  <%- index += 1 %>
-    <%= raw button("Add Images", add_photos_campaign_url(@campaign), 'button big add-photos-trigger', index) %>
-  <%- index += 1 %>
+
+  <%#= raw button("Post Update", add_update_campaign_url(@campaign), 'button big update-trigger', index) %>
+  <%#- index += 1 %>
+    
   <%- @campaign.problem.recipients.each do |recipient| %>
     <%- if ! recipient.deleted?  %>
         <a href="<%= new_campaign_outgoing_message_path(@campaign, :recipient_type => recipient.type, :recipient_id => recipient.id) %>" class="button big"><%= t(:write_again, :name => recipient.name) %></a>
@@ -96,11 +104,6 @@
     <%- end %>
   <%- end %>
   
-  <%- if @campaign.status != :successful %>
-    <%- form_for @campaign, :url => complete_campaign_url(@campaign), :html => { :method => 'POST', :id => 'campaign-complete' } do |f| %>
-      <button type="submit" class="button big last">Mark as Complete</button>
-      <%- index += 1 %>
-    <%- end %>
-  <%- end %>
+  
 	</div>
 </div>
