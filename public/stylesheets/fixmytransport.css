@@ -202,14 +202,13 @@ form#search {
 	margin-bottom:1em;
     background: #f4f4f4;
 }
+#banner .container {
+	position:relative;
+	overflow:visible;
+}
   #banner.yellow {
 	background: #FFFBD7;
-/*	border:1px solid #aaad95;
-*/	
-/*	-webkit-border-radius:10px;
-	-moz-border-radius:10px;
-	border-radius:10px;
-*/	
+
 	-webkit-box-shadow: 0 0 34px rgba(0, 0, 0, 0.5);
 	-moz-box-shadow: 0 0 34px rgba(0, 0, 0, 0.5);
 	box-shadow: 0 0 34px rgba(0, 0, 0, 0.5);
@@ -217,7 +216,18 @@ form#search {
   #banner.blue {
 	background: #048fc2;
   	margin-bottom:2em;
-  	padding: 1.5em 0;
+    padding:0;
+  }
+  #banner.blue .status {
+	display:inline-block;
+	margin-top: 35px;
+	color:#fff;
+	text-transform:uppercase;
+	font-size:0.8em;
+  }
+  #banner.blue h1 {
+	display:inline-block;
+	padding: 1.25em 0;
   }
   #banner.blue.supporter {
   	margin-bottom:0;
@@ -824,16 +834,19 @@ button.facebook:hover,
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#002060', endColorstr='#3b5b98',GradientType=0 ); /* IE6-9 */
 	background: linear-gradient(top, #002060 0%,#3b5b98 100%); /* W3C */
 }
-
-
-
-
+button.big,
 .button.big {
 	border-radius: 10px;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
 	font-size:1.4em;
 	padding: 1em 0.5em;
+}
+button.report,
+.button.report {
+    width: 200px;
+	margin: 0.5em auto;
+	display:block;
 }
 .button.facebook,
 .button.twitter {
@@ -857,7 +870,6 @@ button.facebook:hover,
 .contrib-tools-initial .button.last {
 	clear:none;
 }
-
 .manager-tools .button.big {
 	width:136px;
 	margin:2px 11px 2px 2px;
@@ -867,14 +879,6 @@ button.facebook:hover,
 	float:left;
 }
 
-button.report,
-.button.report {
-    width: 200px;
-	margin: 0.5em auto;
-	display:block;
-}
-
-
 #map-container{
 	float: right;
 }
@@ -882,8 +886,6 @@ button.report,
 		margin-top: 10px;
 		font-size:0.8em;
 	}
-
-
 
 .goto-top {
     text-transform: uppercase;
@@ -898,13 +900,28 @@ button.report,
     font-size: 0.9em
 }
 
-
-
 #campaign-complete input{
   border: 0 none; 
   font-family: inherit;
 }
 
+/* Ribbons
+   ================================================== */
+.ribbon {
+	position:absolute;
+	top:-17px;
+	right:-5px;
+	display:block;
+	width:116px;
+	height:38px;
+	background:transparent url('../images/ribbon.png') 0 0 no-repeat;
+	color:#fff;
+	font-size:1em;
+	text-transform:uppercase;
+	text-align:center;
+	line-height:1.1;
+	padding:16px 0 0 0;
+}
 
 /* Icons
    ================================================== */
