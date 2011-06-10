@@ -20,7 +20,7 @@
   			<%- else %>
   			  <span class="status">You support this</span>
   			<%- end %>
-			<span class="ribbon"><%#= campaign_display_status(@campaign).titleize %> Campaign</span>
+			<span class="ribbon"><%#= campaign_display_status(@campaign).titleize %>Solved</span>
   		</div>
   	</div>
   </div>
@@ -32,11 +32,19 @@
       </div>
     </div>
 
-    <div class="contrib-tools-initial container">
-		  <a href="<%= add_comment_campaign_url(@campaign) %>" class="button comment-trigger">Comment</a>
-		  <a href="<%= twitter_url(@campaign) %>" target="_blank" class="button twitter twitter-popup">Tweet</a>
-      <a href="#" class="button facebook">Facebook</a>
-      <a href="#" class="button grey last">Email</a>
+    <div class="contrib-tools-initial">
+		<a href="#">
+			<span class="icon facebook"></span>
+			Facebook
+		</a>
+		<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
+			<span class="icon twitter"></span>
+			Twitter
+		</a>
+		<a href="#">
+			<span class="icon email"></span>
+			Email
+		</a>
     </div>
   <%- end %>
 <%- else %>
@@ -139,12 +147,20 @@
 
 	  <%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
 	  <div class="contrib-tools">
-			<a href="<%= add_comment_campaign_url(@campaign) %>" class="button comment-trigger">Comment</a>
-			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="button twitter twitter-popup">Twitter</a>
-			<a href="#" class="button facebook">Facebook</a>
-			<a href="#" class="button grey last">Email</a>
-		</div>
-		<%- end %>
+		<a href="#">
+			<span class="icon facebook"></span>
+			Facebook
+		</a>
+		<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
+			<span class="icon twitter"></span>
+			Twitter
+		</a>
+		<a href="#">
+			<span class="icon email"></span>
+			Email
+		</a>
+	</div>
+	<%- end %>
 		<ul class="campaign-meta">
 			<li>started <span><%= @campaign.created_at.strftime("%e %B %Y") %></span></li>
 			<li>supporters <%=  @campaign.supporter_count %></li>
