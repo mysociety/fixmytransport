@@ -1,5 +1,83 @@
 <div class="manager-tools">
-
+	<h2 class="font-1">Manage this campaign</h2>
+	<div class="manager-tools-inner">
+		<div class="recommended-actions">
+			<h3 class="font-1">Recommended actions</h3>
+			<ul>
+				<li>
+					<a href="#">
+						<span class="icon big question"></span>
+						<h4>Ask an expert</h4>
+						Get help from the Fix My Transport experts who can answer your questions and make your campaign successful.
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="actions">
+			<h3 class="font-1">Actions</h3>
+			<ul>
+				<li>
+					<a href="#">
+						<span class="icon question"></span>
+						Ask an expert
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<span class="icon camera"></span>
+						Add images
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<span class="icon tick"></span>
+						Mark as complete
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<span class="icon person"></span>
+						Add a contact
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<span class="icon pencil"></span>
+						Edit description
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="contacts">
+			<h3 class="font-1">Your contacts</h3>
+			<p>Useful people, that may be able to help with your campaign</p>
+			<ul>
+				<li>
+					<button class="orange email right">Email</button>
+					<h4>Centro</h4>
+					<p>The Route Operator</p>
+				</li>
+				<li>
+					<button class="orange email right">Email</button>
+					<h4>Centro</h4>
+					<p>The Route Operator</p>
+				</li>
+				<li>
+					<button class="orange email right">Email</button>
+					<h4>Centro</h4>
+					<p>The Route Operator</p>
+				</li>
+			</ul>
+		</div>
+		<div class="share-update">
+			<h3 class="font-1">What's happening?</h3>
+			<input type="text" name="post-update" id="post-update"/>
+			<button type="submit">Post</button>
+			<label for="post-update">Keep supporters up-to-date on how the campaign is progressing.</label>
+		</div>
+		
+		
+		
   <%- index = 0 %>
   <%- @campaign.problem.assignments.is_new.each do |assignment| %>
      <%= render :partial => "shared/new_assignments/#{assignment.task_type}", :locals => { :assignment => assignment, :index => index }%>
@@ -23,5 +101,6 @@
       <button type="submit" class="button big last">Mark as Complete</button>
       <%- index += 1 %>
     <%- end %>
-  <%- end %>								
+  <%- end %>
+	</div>
 </div>
