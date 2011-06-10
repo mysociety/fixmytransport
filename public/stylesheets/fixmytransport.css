@@ -452,6 +452,10 @@ ul.user-list {
 			width: 250px;
 			background:#ffffff;
 		}
+		#campaign-update .fieldset {
+			width:auto;
+			padding:0;
+		}
 		#login-form ul {
 			margin: 0;
 			list-style: none;
@@ -487,9 +491,8 @@ ul.user-list {
 			    font-size: 0.9em;
 				margin: 10px 10px 10px 0;
 			}
-			#login-form button:hover,
-			#login-box .fieldset input[type=submit]:hover {
-				background: #0075a0;
+			#campaign-update .fieldset button {
+				margin:0;
 			}
 
 	.login-options{
