@@ -52,6 +52,8 @@ en:
   user_says: "%{name} commented"
   added_an_update: "%{name} added an update"
   add_an_update: 'Add an update:'
+  add_a_comment: 'Add a comment:'
+  edit_campaign_description: 'Edit the campaign description:'
   request_advice: Ask for advice
   ask_our_expert_panel: 'Ask your supporters and our expert panel what to do next:'
   user_requested_advice: "%{name} asked for advice."

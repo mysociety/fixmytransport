@@ -1,11 +1,15 @@
-<%- if @campaign_update.is_advice_request? %>
-  <%- id = 'advice-request-form' %>
-  <%- text = t(:ask_our_expert_panel) %>
-<%- else %>
-  <%- id = 'campaign-update-form' %>
-  <%- text = t(:add_an_update) %>
-<%- end %>
+<div id="main-content" class="container">
+	<div class="container">
+    <%- if @campaign_update.is_advice_request? %>
+      <%- id = 'advice-request-form' %>
+      <%- text = t(:ask_our_expert_panel) %>
+    <%- else %>
+      <%- id = 'campaign-update-form' %>
+      <%- text = t(:add_an_update) %>
+    <%- end %>
 
-<%= text %>
+    <%= text %>
 
-<%= render :partial => 'update_form' %>
+    <%= render :partial => 'update_form' %>
+  </div>
+</div>

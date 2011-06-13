@@ -1,4 +1,6 @@
-<h2 class='main-header'>
-  <%= @campaign.title %>
-</h2>
-<%= render :partial => 'form', :locals => { :campaign => @campaign } %>
+<div id="main-content" class="container">
+	<div class="container">
+    <%= t(:edit_campaign_description)%>
+    <%= render :partial => 'form', :locals => { :campaign => @campaign } %>
+  </div>
+</div>
