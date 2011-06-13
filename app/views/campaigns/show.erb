@@ -107,7 +107,12 @@
 			<h5>Images and Media</h5>
 			<ul class="gallery grey">
 			  <%- @campaign.campaign_photos.each do |campaign_photo| %>
-				  <li><a href="<%= campaign_photo.image.url(:max) %>"><img src="<%= campaign_photo.image.url(:default) %>" /></a></li>
+			    <%- if ! campaign_photo.new_record? %>
+				    <li>
+				      <a href="<%= campaign_photo.image.url(:max) %>"><img src="<%= campaign_photo.image.url(:default) %>" />
+				      </a>
+				    </li>
+				  <%- end %>
 				<%- end %>
 			</ul>
 		</div>
