@@ -875,7 +875,9 @@ button.facebook:hover,
 	}
 
 
-
+.large-map-intro {
+  font-size: 1.5em;
+}
 .goto-top {
     text-transform: uppercase;
     font-size: 12px;
