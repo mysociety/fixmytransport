@@ -17,6 +17,9 @@ class Comment < ActiveRecord::Base
                
   named_scope :visible, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
   
+  def visible?
+    self.status_code == self.symbol_to_status_code[:confirmed]
+  end
   
   # Makes a random token, suitable for using in URLs e.g confirmation messages.
   def generate_confirmation_token
