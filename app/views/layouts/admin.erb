@@ -18,6 +18,7 @@
     <h2><%= link_to_unless_current("#{t(:site_name)} #{t(:admin)}", admin_url(admin_root_path)) %></h2>
     <ul class='admin-navigation'>
       <li><%= link_to t(:location_searches), admin_url(admin_location_searches_path) %></li>
+      <li><%= link_to t(:campaigns), admin_url(admin_campaigns_path) %></li>      
       <li><%= link_to t(:problems), admin_url(admin_problems_path) %></li>
       <li><%= link_to t(:operators), admin_url(admin_operators_path) %></li>
       <li><%= link_to t(:routes), admin_url(admin_routes_path) %></li>

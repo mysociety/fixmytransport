@@ -1,5 +1,6 @@
 <h2><%= t(:problems) %></h2>
 <%= render :partial => "admin/shared/index_js" %>
+<%= render :partial => "admin/shared/search_form", :locals => { :skip_transport_mode => true }  %>
 <%= will_paginate @problems, { :admin => true } %>
 <table class='problems index-list'>
   <tr>
@@ -20,7 +21,7 @@
         <%= link_to(problem.id, main_url(problem_path(problem)), :target => '_blank') %>
         <%= link_to("(#{t(:admin)})", admin_url(admin_problem_path(problem.id)), :target => '_blank') %></td>
       <td><%= problem.subject %></td>
-      <td><%- if problem.campaign %><%= link_to(problem.campaign.title, main_url(campaign_path(problem.campaign)))%><%- end %></td>
+      <td><%- if problem.campaign %><%= link_to(problem.campaign.title, admin_url(admin_campaign_path(problem.campaign)))%><%- end %></td>
       <td><%= link_to(problem.location.name, admin_location_url(problem.location))%></td>
       <td><%= problem.transport_mode_text %></td>
       <td><%= problem.reporter_name %></td>

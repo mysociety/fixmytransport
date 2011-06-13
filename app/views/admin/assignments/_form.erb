@@ -28,7 +28,7 @@
 <h3><%= t(:assignment_data) %></h3>
 <%- @assignment.data.keys.each do |key| %>
   <div class="assignment-data">
-  <strong><%= key.to_s.humanize %>:</strong> <%= @assignment.data[key] %>
+  <strong><%= key.to_s.humanize %>:</strong> <%= @assignment.data[key].inspect %>
   </div>
 <%- end %>
 

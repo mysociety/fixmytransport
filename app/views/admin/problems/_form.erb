@@ -21,7 +21,7 @@
     </div>
   <%- end %>
   <%= raw label(:problem, :description) %>
-  <%= raw f.text_area :description %>
+  <%= raw f.text_area :description, :rows => 6 %>
 </div>
 
 <div class='form-field'>
@@ -81,26 +81,6 @@
   <%= raw f.text_field :reporter_name %>
 </div>
 
-
-<div class='form-field'>
-  <%- if @problem.errors.on(:reporter_phone) %>
-    <div class='error'>
-      <%= error_message_on @problem, :reporter_phone %>
-    </div>
-  <%- end %>
-  <%= raw label(:problem, :reporter_phone) %>
-  <%= raw f.text_field :reporter_phone %>
-</div>
-
-<div class='form-field' id='time-field'>
-  <%= f.label :time, t(:problem_time) %>
-  <%= raw f.time_select :time, { :include_blank => true } %>
-</div>
-
-<div class='form-field' id='date-field'>
-  <%= f.label :date, t(:problem_date) %>
-  <%= raw f.date_select :date, { :include_blank => true, :start_year => Time.now.year - 1, :end_year => Time.now.year } %>
-</div>
 
 <%= raw submit_tag t(:go) %>
 

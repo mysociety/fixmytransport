@@ -1,0 +1,138 @@
+<h2 class='campaign-header'><%= @campaign.title %></h2>
+<%- form_for [:admin, @campaign], :url => admin_url(admin_campaign_path(@campaign.id)), :html => { :class => 'campaign-form' } do |f|  %>
+  <%= render :partial => "form", :locals => { :f => f } %>
+<%- end %>
+
+<h3><%= t(:events) %></h3>
+<table>
+  <tr>
+    <th><%= t(:id) %></th>
+    <th><%= t(:type) %></th>
+    <th><%= t(:data) %></th>
+    <th><%= t(:created_at) %></th>
+    <th><%= t(:updated_at) %></th>
+    <th><%= t(:visible) %></th>
+    <th><%= t(:described) %></th>
+  </tr>
+<%- @campaign.campaign_events.each do |event| %>
+  <tr class='<%= cycle("odd", "even", :name => 'campaign_events') %>'>
+    <td><%= event.id %></td>
+    <td><%= event.event_type %></td>
+    <td><%= event.data %></td>
+    <td><%= event.created_at %></td>
+    <td><%= event.updated_at %></td>
+    <td><%= event.visible %></td>
+    <td>
+      <%- case event.described %>
+      <%- when Assignment %>
+        <%= link_to("#{t(:assignment)}: #{event.described.task_type}", admin_url(admin_assignment_path(event.described))) %>
+      <%- when CampaignUpdate %>
+        <%= "#{t(:campaign_update)}: #{event.described.id}" %>
+      <%- when Comment %>
+        <%= "#{t(:comment)}: #{event.described.id}" %>
+      <%- when IncomingMessage %>
+        <%= link_to("#{t(:incoming_message)}: #{event.described.id}", admin_incoming_message_path(event.described)) %>
+      <%- when OutgoingMessage %>
+        <%= "#{t(:outgoing_message)}: #{event.described.id}" %>
+      <%- end %>
+    </td>
+  </tr>
+<%- end %>
+</table>
+
+<h3><%= t(:incoming_messages) %></h3>
+<table>
+  <tr>
+    <th><%= t(:id) %></th>
+    <% for column in IncomingMessage.content_columns %>
+      <th><%= column.human_name %></th>
+    <% end %>
+  </tr>
+  <%- @campaign.incoming_messages.each do |incoming_message| %>
+    <tr class='<%= cycle("odd", "even", :name => 'incoming_messages') %>'>
+      <td>
+        <%= incoming_message.id %>
+      </td>
+      <%- IncomingMessage.content_columns.map { |c| c.name }.each do |column| %>
+        <%- if column =~ /^main_body_.*?$/ %>
+        <td>
+          <div><%= raw(simple_format( raw(truncate( incoming_message.send(column), :length => 400, :omission => raw(link_to_function("...", "$(this).parents('td').children().toggle()")))))) %></div>  
+          <div style="display:none;"><%= simple_format( incoming_message.send(column) ) %></div>
+        </td>
+        <%- else %>
+          <td><%= simple_format( incoming_message.send(column) ) %></td>
+        <%- end %>
+        
+      <%- end %>
+    </tr>
+  <%- end %>
+</table>
+<h3><%= t(:outgoing_messages) %></h3>
+<table>
+  <tr>
+    <th><%= t(:id) %></th>
+    <% for column in OutgoingMessage.content_columns %>
+      <th><%= column.human_name %></th>
+    <% end %>
+  </tr>
+<%- @campaign.outgoing_messages.each do |outgoing_message| %>
+  <tr class='<%= cycle("odd", "even", :name => 'outgoing_messages') %>'>
+    <td>
+      <%= outgoing_message.id %>
+    </td>
+    <%- OutgoingMessage.content_columns.map { |c| c.name }.each do |column| %>
+      
+      
+      <%- if column == 'body' %>
+      <td>
+        <div><%= raw(simple_format( raw(truncate( outgoing_message.send(column), :length => 400, :omission => raw(link_to_function("...", "$(this).parents('td').children().toggle()")))))) %></div>  
+        <div style="display:none;"><%= simple_format( outgoing_message.send(column) ) %></div>
+      </td>
+      <%- else %>
+        <td><%= simple_format( outgoing_message.send(column) ) %></td>
+      <%- end %>
+    <%- end %>
+  </tr>
+<%- end %>
+</table>
+
+<h3><%= t(:campaign_updates)%></h3>
+<table>
+  <tr>
+    <th><%= t(:id) %></th>
+    <% for column in CampaignUpdate.content_columns %>
+      <th><%= column.human_name %></th>
+    <% end %>
+  </tr>
+<%- @campaign.campaign_updates.each do |campaign_update| %>
+  <tr class='<%= cycle("odd", "even", :name => 'campaign_updates') %>'>
+    <td>
+      <%= campaign_update.id %>
+    </td>
+    <%- CampaignUpdate.content_columns.map { |c| c.name }.each do |column| %>
+      <td><%= simple_format( campaign_update.send(column) ) %></td>
+    <%- end %>
+  </tr>
+<%- end %>
+</table>
+
+
+<h3><%= t(:comments) %></h3>
+<table>
+  <tr>
+    <th><%= t(:id) %></th>
+    <% for column in Comment.content_columns %>
+      <th><%= column.human_name %></th>
+    <% end %>
+  </tr>
+<%- @campaign.comments.each do |comment| %>
+  <tr class='<%= cycle("odd", "even", :name => 'comments') %>'>
+    <td>
+      <%= comment.id %>
+    </td>
+    <%- Comment.content_columns.map { |c| c.name }.each do |column| %>
+      <td><%= simple_format( comment.send(column) ) %></td>
+    <%- end %>
+  </tr>
+<%- end %>
+</table>
