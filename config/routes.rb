@@ -128,6 +128,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :campaigns, :only => [:show, :index, :update]
     admin.resources :campaign_updates, :only => [:show, :update]
     admin.resources :assignments, :only => [:show, :update]
+    admin.resources :comments, :only => [:show, :update]
     admin.resources :incoming_messages, :only => [:show, :update, :destroy], 
                                         :member => { :download => [:get],
                                                      :redeliver => [:post] }

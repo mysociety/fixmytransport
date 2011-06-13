@@ -3,6 +3,9 @@
   <%= render :partial => "form", :locals => { :f => f } %>
 <%- end %>
 
+
+<%= render :partial => 'admin/shared/comment', :locals => { :comments => @problem.comments } %>
+
 <script type="text/javascript">
   jQuery(document).ready(function(){
     setupShowProblem();

@@ -27,7 +27,7 @@
 <div class='form-field'>
   <%- if @campaign.errors.on(:status_code) %>
     <div class='error'>
-      <%= error_message_on @problem, :status_code %>
+      <%= error_message_on @campaign, :status_code %>
     </div>
   <%- end %>
   <%= raw f.label :status %>
