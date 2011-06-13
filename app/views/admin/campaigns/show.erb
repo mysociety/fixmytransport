@@ -25,9 +25,9 @@
     <td>
       <%- case event.described %>
       <%- when Assignment %>
-        <%= link_to("#{t(:assignment)}: #{event.described.task_type}", admin_url(admin_assignment_path(event.described))) %>
+        <%= link_to("#{t(:assignment)}: #{event.described.task_type}", admin_assignment_path(event.described)) %>
       <%- when CampaignUpdate %>
-        <%= "#{t(:campaign_update)}: #{event.described.id}" %>
+        <%= link_to("#{t(:campaign_update)}: #{event.described.id}", admin_campaign_update_path(event.described)) %>
       <%- when Comment %>
         <%= "#{t(:comment)}: #{event.described.id}" %>
       <%- when IncomingMessage %>

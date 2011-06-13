@@ -18,7 +18,11 @@
   <%-@problems.each do |problem| %>
     <tr class='<%= cycle("odd", "even") %>'>
       <td>
-        <%= link_to(problem.id, main_url(problem_path(problem)), :target => '_blank') %>
+        <%- if problem.campaign %>
+          <%= problem.id %>
+        <%- else %>
+          <%= link_to(problem.id, main_url(problem_path(problem)), :target => '_blank') %>
+        <%- end %>
         <%= link_to("(#{t(:admin)})", admin_url(admin_problem_path(problem.id)), :target => '_blank') %></td>
       <td><%= problem.subject %></td>
       <td><%- if problem.campaign %><%= link_to(problem.campaign.title, admin_url(admin_campaign_path(problem.campaign)))%><%- end %></td>

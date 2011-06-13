@@ -1,0 +1,4 @@
+<h2 class='campaign-update-header'>Campaign Update <%= @campaign_update.id %></h2>
+<%- form_for [:admin, @campaign_update], :url => admin_url(admin_campaign_update_path(@campaign_update.id)), :html => { :class => 'campaign-update-form' } do |f|  %>
+  <%= render :partial => "form", :locals => { :f => f } %>
+<%- end %>
