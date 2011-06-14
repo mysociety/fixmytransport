@@ -137,6 +137,10 @@ class Campaign < ActiveRecord::Base
     "Campaign to #{title}"
   end
   
+  def short_initiator_call_to_action
+    "Your campaign to #{title}"
+  end
+  
   def supporter_call_to_action
     "I just joined the campaign to persuade #{responsible_org_descriptor} to #{title}"
   end
