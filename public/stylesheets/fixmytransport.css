@@ -508,6 +508,16 @@ ul.user-list {
 			background:url(../images/twitter-connect.jpg) no-repeat;
 		}
 
+#social-share {
+    padding: 1em;
+}
+#social-share h2 {
+    font-size: 110%;
+}
+#social-share p {
+    font-style: normal;
+}
+
 #comment-and-login textarea, #campaign-update textarea {
 	width:96%;
 	margin:5px;

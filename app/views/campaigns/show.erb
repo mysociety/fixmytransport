@@ -8,6 +8,14 @@
 <%= stylesheet_link_tag 'jquery.lightbox-0.5.css'  %>
 <%- end %>
 
+<script>
+	var campaign_data = {
+		title: "<%= @campaign.title %>",
+		id: <%= @campaign.id %>,
+		url: document.location.protocol + '//' + document.location.host + "<%= campaign_path(@campaign) %>",
+		description: "<%= @campaign.description %>"
+	};
+</script>
 <%- if current_user && current_user.supporter_or_initiator(@campaign) %>
   <div id="banner" class="blue <%= 'supporter' %>">
   	<div class="container">
@@ -35,8 +43,8 @@
     <div class="contrib-tools-initial container">
 		  <a href="<%= add_comment_campaign_url(@campaign) %>" class="button big comment-trigger">Comment</a>
 		  <a href="#" class="button big twitter">Twitter</a>
-      <a href="#" class="button big facebook">Facebook</a>
-      <a href="#" class="button big grey last">Email</a>
+		  <a href="#" class="button big facebook facebook-trigger">Facebook</a>
+         <a href="#" class="button big grey last">Email</a>
     </div>
   <%- end %>
 <%- else %>
@@ -141,7 +149,7 @@
 	  <div class="contrib-tools">
 			<a href="<%= add_comment_campaign_url(@campaign) %>" class="button big comment-trigger">Comment</a>
 			<a href="#" class="button big twitter">Twitter</a>
-			<a href="#" class="button big facebook">Facebook</a>
+			<a href="#" class="button big facebook facebook-trigger">Facebook</a>
 			<a href="#" class="button big grey last">Email</a>
 		</div>
 		<%- end %>
@@ -161,7 +169,6 @@
 
 
 		<div class="box">
-			<iframe src="http://www.facebook.com/plugins/like.php?href=<%= url_encode(campaign_url(@campaign)) %>%2Fbinky&amp;send=false&amp;layout=standard&amp;width=310&amp;show_faces=true&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:310px; height:80px; margin:24px auto 0 auto;" ></iframe>
 			<h5>Campaign Manager</h5>
 			<div class="grey">
 				<div class="avatar"><img src="<%= @campaign.initiator.profile_photo.url(:large_thumb) %>" /></div>
@@ -179,6 +186,11 @@
 		<%- if @campaign.supporters.registered.count > 0 %>
 		  <%= render :partial => "supporters", :locals => {:show_all => (params[:all_supporters] == '1') }%>
 		<%- end %>
+		
+		<%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
+			<iframe style="width:310px;height:80px;border:none;margin:12px 0 8px 0;" src="http://www.facebook.com/plugins/like.php?href=<%= url_encode(campaign_url(@campaign)) %>&amp;send=false&amp;layout=standard&amp;width=310&amp;show_faces=true&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=80"></iframe>
+		<%- end %>
+		
 	</div>
 
 	<div class="container">

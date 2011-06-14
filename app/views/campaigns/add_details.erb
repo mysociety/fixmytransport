@@ -93,7 +93,18 @@
 					<div class="container">
 						<li>
 							<div class="box">
-								<img src="/images/facebook-share.jpg" />
+								<%- if ! MySociety::Config.get('FACEBOOK_APP_ID','').empty? %>
+									<img src="/images/facebook-share.jpg" id="fb-share" style="cursor:pointer;"/>
+								<%- end %>
+								<script>
+								// FIXME
+								$(document).ready(function(){
+									$('#fb-share').click(function(){
+										FB.ui({method: 'apprequests', message: 'Support my "<%= h(@campaign.title) %>" campaign on fixmytransport.com', data: 'user tracking info', display:'popup', title:'Spread the word: <%= h(@campaign.title) %>'});
+									})
+								})
+								</script>
+								
 								<img src="/images/twitter-share.jpg" />
 							</div>
 							<label for="emails">List your friends' emails here</label>

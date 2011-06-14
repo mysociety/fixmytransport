@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='<%= I18n.locale %>'>
+<html lang='<%= I18n.locale %>' xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
   <head>
     <title>
       <%= "#{t(:site_name)}#{@title ? ':' : ''} #{@title}" %>
@@ -13,11 +13,13 @@
       @import url("/stylesheets/map.css");
     </style>
     <%= yield :stylesheets %>
+    <script>
+        var fmt_facebook_app_id = '<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>';
+    </script>
     <%= raw javascript_include_tag('jquery-1.5.2.min', :charset => 'utf-8') %>
     <%= raw javascript_include_tag('jquery-ui-1.8.11.min', :charset => 'utf-8') %>
     <%= raw javascript_include_tag('jquery.autofill', :charset => 'utf-8') %>
     <%= raw javascript_include_tag('jquery.form', :charset => 'utf-8') %>
-
     <%= yield :javascript %>
   </head>
 	<body>

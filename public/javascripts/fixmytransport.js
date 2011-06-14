@@ -98,15 +98,70 @@ $(document).ready(function(){
   	});
   });
 
-/* // NB handled explicitly in login code
+  // NB handled explicitly in login code
   //facebook
-  $('.facebook').click(function(e){
+  $('.facebook-trigger').click(function(e){
+
+/*
   	e.preventDefault();
-  	$('.pane:visible').fadeOut(500, function(){
-  		$('#login-facebook').fadeIn();
-  	});
-	});
-*/
+  	$('.login-box .pane').hide();
+  	$('#social-share').empty(); 
+    var fbUrl = 'http://www.facebook.com/dialog/apprequests';
+  	var redirectUri = document.location.protocol + '//' + document.location.host + '/test_callback.html';
+    var queryParams = [
+        'app_id=' + fmt_facebook_app_id,
+        'redirect_uri=' + encodeURI(redirectUri),
+        'access_token=' + 
+        'display=iframe'
+        ];
+    fbUrl = fbUrl + '?' + queryParams.join('&');
+
+  	alert("adding iframe to url " + fbUrl);
+  	$('<iframe />', {
+        name:  'fbiframe',
+        id:    'fbkiframe',
+        src:   fbUrl,
+        style: 'width: 480px; height:480px; margin:10px auto;'
+    }).appendTo('#social-share');
+  	$('#social-share').show();
+  	$("#login-box").dialog({title: "Facebook:"});
+  	$("#login-box").dialog("open");
+ */
+    e.preventDefault();
+    var msg = "Please support me in my campaign";
+    if (campaign_data && campaign_data.title) {
+        msg = msg + " to " + campaign_data.title;
+    }
+    msg = msg + ".";
+    var campaignId = campaign_data.id + " (" + campaign_data.slug + ")"; // only want ID... slug is human-readable hint
+    // FB.ui({method: 'apprequests', message: msg, data: campaignId, title: 'Pick some friends to help you', app_id:fmt_facebook_app_id });
+    FB.ui(
+        {
+            method:  'feed',
+            name:    'FixMyTransport campaign: ' + campaign_data.title,
+            link:    campaign_data.url,
+            picture: document.location.protocol + '//' + document.location.host + '/images/facebook-feed-logo.gif',
+            caption: campaign_data.description,
+            description: "Help this FixMyTransport campaign by spreading the word and encouraging your friends to support it.",
+            //message: "" // FB policy recommends: only set this if user is creator of the campaign
+        },
+        function(response) {
+            $('.login-box .pane').hide();
+            $('#social-share').empty(); 
+            if (response && response.post_id) {
+                $('<h2>Post was published</h2>').appendTo('#social-share');
+                $('<p>Thanks for spreading the word about this campaign!</p>').appendTo('#social-share');
+            } else {
+                $('<h2>Post was not published</h2>').appendTo('#social-share');
+                $('<p>You cancelled your post this time.<br/>But please do spread the word about this campaign!</p>').appendTo('#social-share');
+            }
+            $('#social-share').show();
+            $("#login-box").dialog({title: "Facebook:"});
+            $("#login-box").dialog("open");
+        }
+    );
+  	return false;
+  });
 
     /* Advice request */
   $('.advice-trigger').click(function(e){
@@ -191,7 +246,7 @@ $(document).ready(function(){
 		return false;
 	});
 
-	//facebook
+	//facebook    
 	$('#static-facebook').click(function(e){
 		e.preventDefault();
 		$('.login-box .pane').hide();
@@ -521,6 +576,8 @@ $(document).ready(function(){
 /* External authentication
    ================================================== */
 
+// fmt_facebook_app_id declared in header (layouts/application.erb)
+
 function externalAuth(authParams) {
   var url = window.location.protocol + "//" + window.location.host + "/user_sessions/external";
   var form = $('<form action="'+url+'" method="POST"></form>');
@@ -531,4 +588,15 @@ function externalAuth(authParams) {
   $('body').append(form)
   form.submit();
 }
+
+window.fbAsyncInit = function() {
+	// fmt_facebook_app_id declared in layouts/application.erb 
+    FB.init({appId: fmt_facebook_app_id, status: false, cookie: true, xfbml: false});      
+};
+(function() {
+    var e = document.createElement('script'); e.async = true;
+    // e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+    e.src = '/javascripts/facebook_all.js';
+    document.getElementById('fb-root').appendChild(e);
+}());
 

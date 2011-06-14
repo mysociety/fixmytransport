@@ -7,10 +7,6 @@
 		<h2>TWITTER</h2>
 	</div>
 	
-	<div id="login-facebook" class="pane">
-		<h2>FACEBOOK</h2>
-	</div>
-	
 	<div id="login-create-account" class="pane">
 		<%= render :partial => 'shared/create_account' %>
 	</div>
@@ -19,6 +15,11 @@
 		<%= render :partial => 'shared/comment_form' %>
 	</div>
 	<%- end %>
+	
+	<div id="social-share" class="pane">
+		<!-- contents provided dynamically when displayed -->
+	</div>
+
 	<%- if controller.controller_name == 'campaigns' and controller.action_name == 'show'%>
 	  <%- if current_user && current_user == @campaign.initiator %>
 	    <div id="campaign-update" class="pane">
