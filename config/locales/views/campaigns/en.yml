@@ -69,6 +69,7 @@ en:
   login_to_comment: "You'll need to %{link} to comment"
   write_again: "Write to %{name} again"
   write_first_time: "Write to %{name}"
+  edit_description: Edit campaign description
   reply_to_this_message: "Reply to this message"
   tell_to_write: "Tell %{user} who to write to next"
   transport_experts: "Transport experts"

@@ -96,6 +96,7 @@ describe AssignmentsController do
     def make_request
       post :create, { :campaign_id => 44,
                       :name => 'A name',
+                      :description => 'A description',
                       :email => 'An email',
                       :reason => 'A reason',
                       :subject => 'subject',
@@ -114,6 +115,7 @@ describe AssignmentsController do
 
       it 'should create an assignment from the attributes passed' do
         expected_data = { :name => 'A name',
+                          :description => 'A description',
                           :email => 'An email',
                           :reason => 'A reason',
                           :subject => 'subject',

@@ -116,4 +116,28 @@
 <%- end %>
 </table>
 
+<h3><%= t(:assignments)%></h3>
+<table>
+  <tr>
+    <th><%= t(:id) %></th>
+    <% for column in Assignment.content_columns %>
+      <th><%= column.human_name %></th>
+    <% end %>
+  </tr>
+<%- @campaign.assignments.each do |assignment| %>
+  <tr class='<%= cycle("odd", "even", :name => 'campaign_updates') %>'>
+    <td>
+      <%= assignment.id %>
+    </td>
+    <%- Assignment.content_columns.map { |c| c.name }.each do |column| %>
+      <%- if column == 'data' %>
+      <td><pre><%= assignment.send(column).inspect %></pre></td>
+      <%- else %>
+        <td><%= simple_format( assignment.send(column) ) %></td>
+      <%- end %>
+    <%- end %>
+  </tr>
+<%- end %>
+</table>
+
 <%= render :partial => 'admin/shared/comment', :locals => { :comments => @campaign.comments } %>

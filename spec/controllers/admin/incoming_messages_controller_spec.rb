@@ -116,7 +116,7 @@ describe Admin::IncomingMessagesController do
       
       it 'should show a notice saying the campaign has been moved' do
         make_request
-        flash[:notice].should == 'Incoming message has been moved to this campaign'
+        flash[:notice].should == 'Incoming message has been moved to this campaign.'
       end
       
       it 'should redirect to the destination campaign admin page' do 

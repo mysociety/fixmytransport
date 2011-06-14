@@ -12,15 +12,17 @@
   <div id="banner" class="blue <%= 'supporter' %>">
   	<div class="container">
   		<h1>
-  		  <a href="<%= location_url(@campaign.location) %>"><%= @campaign.location.description %></a>
+  		  <a href="<%= location_url(@campaign.location) %>"><%= @campaign.call_to_action %></a>
   		</h1>
   		<div class="right">
   		  <%- if current_user == @campaign.initiator %>
-  			  <span class="button white left">Your Campaign</span>
+  			  <span class="status">Your Campaign</span>
   			<%- else %>
-  			  <span class="button white left">You support this</span>
+  			  <span class="status">You support this</span>
   			<%- end %>
-  			<span class="button orange left"><%= campaign_display_status(@campaign).titleize %> Campaign</span>
+  		<%- if @campaign.status == :successful %>
+			<span class="ribbon">Fixed</span>
+  		<%- end %>
   		</div>
   	</div>
   </div>
@@ -32,11 +34,19 @@
       </div>
     </div>
 
-    <div class="contrib-tools-initial container">
-		  <a href="<%= add_comment_campaign_url(@campaign) %>" class="button comment-trigger">Comment</a>
-		  <a href="<%= twitter_url(@campaign) %>" target="_blank" class="button twitter twitter-popup">Tweet</a>
-      <a href="#" class="button facebook">Facebook</a>
-      <a href="#" class="button grey last">Email</a>
+    <div class="contrib-tools-initial">
+		<a href="#">
+			<span class="icon facebook"></span>
+			Facebook
+		</a>
+		<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
+			<span class="icon twitter"></span>
+			Twitter
+		</a>
+		<a href="#">
+			<span class="icon email"></span>
+			Email
+		</a>
     </div>
   <%- end %>
 <%- else %>
@@ -78,9 +88,6 @@
 				      <%= raw simple_format(sanitize(@campaign.description)) %>
 				    </div>
 				  <%- end %>
-				  <%- if current_user && (current_user == @campaign.initiator || current_user.is_expert?) %>
-            <%= link_to(t(:edit), edit_campaign_path(@campaign), :class => 'description-edit-link') %>
-          <%- end %>
           <%- if sanitize(@campaign.description).size > 200 and ! params[:full_description] %>
 				  <a href="<%= url_for(params.merge(:full_description => '1')) %>" class="more-info">more</a>
 				  <%- end %>
@@ -91,14 +98,17 @@
    <%- if current_user && current_user.is_expert? %>
 
      <div class="clear">
-     <h3><%= t(:transport_experts) %></h3>
-     <div class='expert-tools'>
-       <div class='optional-assignment'>
-         <a href="<%= new_campaign_assignment_path(@campaign) %>" class="big button"><%= t(:tell_to_write, :user => @campaign.initiator.first_name) %></a>
+       <h3><%= t(:transport_experts) %></h3>
+       <div class='expert-tools'>
+         <div class='optional-assignment'>
+           <a href="<%= new_campaign_assignment_path(@campaign) %>" class="big button"><%= t(:tell_to_write, :user => @campaign.initiator.first_name) %></a>
+         </div>
+         <div class='optional-assignment'>
+           <a href="<%= edit_campaign_path(@campaign)%>" class="big button"><%= t(:edit_description) %></a>
+         </div>
+         <div class='optional-assignment-end'>
+         </div>
        </div>
-       <div class='optional-assignment-end'>
-       </div>
-     </div>
      </div>
    <%- end %>
 
@@ -148,12 +158,20 @@
 
 	  <%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
 	  <div class="contrib-tools">
-			<a href="<%= add_comment_campaign_url(@campaign) %>" class="button comment-trigger">Comment</a>
-			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="button twitter twitter-popup">Twitter</a>
-			<a href="#" class="button facebook">Facebook</a>
-			<a href="#" class="button grey last">Email</a>
-		</div>
-		<%- end %>
+		<a href="#">
+			<span class="icon facebook"></span>
+			Facebook
+		</a>
+		<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
+			<span class="icon twitter"></span>
+			Twitter
+		</a>
+		<a href="#">
+			<span class="icon email"></span>
+			Email
+		</a>
+	</div>
+	<%- end %>
 		<ul class="campaign-meta">
 			<li>started <span><%= @campaign.created_at.strftime("%e %B %Y") %></span></li>
 			<li>supporters <%=  @campaign.supporter_count %></li>

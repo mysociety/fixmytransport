@@ -84,6 +84,22 @@ class Campaign < ActiveRecord::Base
   def supporter_count
     campaign_supporters.confirmed.count
   end
+  
+  def recommended_assignments
+    priority_assignments = ['find_transport_organization', 
+                            'find_transport_organization_contact_details']
+    recommended_assignments =  self.assignments.select do |assignment| 
+      assignment.status == :new && priority_assignments.include?(assignment.task_type)
+    end
+    recommended_assignments
+  end
+
+  def assignments_with_contacts
+    assignments_with_contacts = self.assignments.select do |assignment|
+      assignment.status == :new && assignment.task_type == 'write_to_other'
+    end
+    assignments_with_contacts
+  end
 
   def responsible_org_descriptor
     if problem.operators_responsible?
@@ -172,7 +188,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def existing_recipients
-    problem.recipients
+    problem.recipients.select{ |recipient| ! recipient.deleted }
   end
 
   # get an array of assignments for the 'write-to-other' assignments

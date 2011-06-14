@@ -20,7 +20,7 @@ class Assignment < ActiveRecord::Base
 
   # Validation of assignment data for the write-to-other task type
   def validate_write_to_other_fields
-    [:name, :email, :reason].each do |field|
+    [:name, :description, :email, :reason].each do |field|
       if data.nil? or data[field].blank?
         errors.add(field, ActiveRecord::Error.new(self, field, :blank).to_s)
       end
