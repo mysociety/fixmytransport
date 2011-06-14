@@ -133,6 +133,10 @@ class Campaign < ActiveRecord::Base
     "Please help me persuade #{responsible_org_descriptor} to #{title}"
   end
   
+  def short_call_to_action
+    "Campaign to #{title}"
+  end
+  
   def supporter_call_to_action
     "I just joined the campaign to persuade #{responsible_org_descriptor} to #{title}"
   end

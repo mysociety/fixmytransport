@@ -12,7 +12,7 @@
   <div id="banner" class="blue <%= 'supporter' %>">
   	<div class="container">
   		<h1>
-  		  <a href="<%= location_url(@campaign.location) %>"><%= @campaign.call_to_action %></a>
+  		  <a href="<%= location_url(@campaign.location) %>"><%= @campaign.short_call_to_action %></a>
   		</h1>
   		<div class="right">
   		  <%- if current_user == @campaign.initiator %>
