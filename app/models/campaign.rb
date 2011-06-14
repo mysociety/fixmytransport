@@ -188,7 +188,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def existing_recipients
-    problem.recipients.select{ |recipient| ! recipient.deleted }
+    problem.recipients.select{ |recipient| ! recipient.deleted? }
   end
 
   # get an array of assignments for the 'write-to-other' assignments
