@@ -37,21 +37,6 @@
         <p>Offer opinions and advice to help make the campaign a success. <br />And don't forget to tell your friends  and spread the word through Twitter &amp; Facebook</p>
       </div>
     </div>
-
-    <div class="contrib-tools-initial">
-		<a href="#">
-			<span class="icon facebook"></span>
-			Facebook
-		</a>
-		<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
-			<span class="icon twitter"></span>
-			Twitter
-		</a>
-		<a href="#">
-			<span class="icon grey email"></span>
-			Email
-		</a>
-    </div>
   <%- end %>
 <%- else %>
   <div id="banner" class="yellow container">
@@ -159,6 +144,22 @@
 
 
 	<div class="rightcol">
+		<%- if current_user && current_user.new_supporter?(@campaign) %>
+	    <div class="contrib-tools-initial">
+			<a href="#">
+				<span class="icon facebook"></span>
+				Facebook
+			</a>
+			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
+				<span class="icon twitter"></span>
+				Twitter
+			</a>
+			<a href="#">
+				<span class="icon grey email"></span>
+				Email
+			</a>
+	    </div>
+	  <%- end %>
 
 	  <%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
 	  <div class="contrib-tools">
