@@ -2,44 +2,29 @@
 	<h2 class="font-1">Manage this campaign</h2>
 	<div class="manager-tools-inner">
 		
-		<%#- if !@campaign.recommended_assignments.empty? %>
+		<%- if !@campaign.recommended_assignments.empty? %>
 		<div class="recommended-actions">
 			<h3 class="font-1">Recommended actions</h3>
 			<ul>
-			  <%#- @campaign.recommended_assignments.each do |assignment| %>
+			  <%- @campaign.recommended_assignments.each do |assignment| %>
 				<li>			  
-				 	<a href="<%#= edit_campaign_assignment_path(assignment.campaign, assignment) %>">
-	  					<span class="icon big question <%#=assignment_icon(assignment) %>"></span>
+				 	<a href="<%= edit_campaign_assignment_path(assignment.campaign, assignment) %>">
+	  					<span class="icon big <%=assignment_icon(assignment) %>"></span>
  						<div>
-							<h4>This is some title<%#= assignment_title(assignment) %></h4>
-							<p>This is some p tag copy<%#= assignment_details(assignment) %></p>
+							<h4><%= assignment_title(assignment) %></h4>
+							<p><%= assignment_details(assignment) %></p>
 						</div>
 					</a>
 				</li>
-				<li>			  
-				 	<a href="<%#= edit_campaign_assignment_path(assignment.campaign, assignment) %>">
-	  					<span class="icon big email <%#=assignment_icon(assignment) %>"></span>
- 						<div>
-							<h4>This is some title<%#= assignment_title(assignment) %></h4>
-							<p>This is some p tag copy<%#= assignment_details(assignment) %></p>
-						</div>
-					</a>
-				</li>
-				<%#- end %>
+				<%- end %>
 			</ul>
 		</div>
-		<%#- end %>
+		<%- end %>
 		
 		
 		<div class="actions">
 			<h3 class="font-1">Actions</h3>
 			<ul>
-				<li>
-					<a href="<%#= raw add_update_campaign_url(@campaign, :is_advice_request => true) %>" class="advice-trigger">
-						<span class="icon grey email"></span>
-						Ask an expert
-					</a>
-				</li>
 				<li>
 					<a href="<%= raw add_update_campaign_url(@campaign, :is_advice_request => true) %>" class="advice-trigger">
 						<span class="icon grey question"></span>
