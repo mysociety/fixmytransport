@@ -1,6 +1,5 @@
-/* Buttons - needs all unused styles stripping out of here and the markup....
+/* Buttons
    ================================================== */
-
 .icon,
 button,
 .button {
@@ -342,9 +341,6 @@ button.report,
   border: 0 none; 
   font-family: inherit;
 }
-
-
-
 
 /* Icons
    ================================================== */
@@ -1229,10 +1225,6 @@ button:hover .icon.orange.big.email {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d89700', endColorstr='#ffb600',GradientType=0 ); /* IE6-9 */
 	background:url(../images/icons.png) -39px -240px no-repeat, linear-gradient(top, #d89700 0%,#ffb600 100%); /* W3C */
 }
-
-
-
-
 
 
 /* Social
