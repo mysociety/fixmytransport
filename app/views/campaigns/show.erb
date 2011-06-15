@@ -188,9 +188,14 @@
 		<%- end %>
 		
 		<%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
-			<iframe style="width:310px;height:80px;border:none;margin:12px 0 8px 0;" src="http://www.facebook.com/plugins/like.php?href=<%= url_encode(campaign_url(@campaign)) %>&amp;send=false&amp;layout=standard&amp;width=310&amp;show_faces=true&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=80"></iframe>
+
+<!--			
+			<div id="fb-like">
+				<iframe style="width:310px;height:80px;border:none;margin:12px 0 8px 0;" src="http://www.facebook.com/plugins/like.php?href=<%= url_encode(campaign_url(@campaign)) %>&amp;send=false&amp;layout=standard&amp;width=310&amp;show_faces=true&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=80"></iframe>
+			</div>
+-->
+			<fb:like href="http://www.example.com" send="true" width="310" show_faces="true" action="recommend" font=""></fb:like>
 		<%- end %>
-		
 	</div>
 
 	<div class="container">

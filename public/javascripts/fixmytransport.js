@@ -570,7 +570,7 @@ $(document).ready(function(){
       }
     });
   });
-
+  
 });
 
 /* External authentication
@@ -591,12 +591,15 @@ function externalAuth(authParams) {
 
 window.fbAsyncInit = function() {
 	// fmt_facebook_app_id declared in layouts/application.erb 
-    FB.init({appId: fmt_facebook_app_id, status: false, cookie: true, xfbml: false});      
+    FB.init({appId: fmt_facebook_app_id, status: false, cookie: true, xfbml: true});      
 };
 (function() {
     var e = document.createElement('script'); e.async = true;
     // e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
     e.src = '/javascripts/facebook_all.js';
     document.getElementById('fb-root').appendChild(e);
+    if (document.getElementById('fb-like')) {
+      FB.XFBML.parse(document.getElementById('fb-like'));
+    }
 }());
 
