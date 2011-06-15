@@ -5,13 +5,8 @@ en:
         campaign:
           attributes: 
             title:
-              blank: "Please give your campaign a headline"
+              blank: 'Please enter a headline that is between 40 and 80 characters long'
+              too_short: 'Please enter a headline that is between 40 and 80 characters long'
+              too_long: 'Please enter a headline that is between 40 and 80 characters long'
             description:
               blank: "Please give a brief description of your issue"
-            subdomain:
-              blank: "Please give your page a short name"
-              too_short: 'The short name must be at least 6 characters long'
-              too_long: 'The short name must be 16 characters or less'
-              need_one_letter: 'The short name must contain at least one letter'
-              only_letters_and_numbers: 'The short name can only contain lowercase letters and numbers'
-              taken: 'That short name has already been taken'

@@ -9,6 +9,7 @@ libxml2-dev
 libzip-ruby1.8
 mahoro-ruby1.8 | libmahoro-ruby1.8
 mutt
+postgresql-8.4-postgis
 rake (>= 0.8.4-1)
 ruby1.8
 ruby1.8-dev
@@ -18,3 +19,4 @@ tnef (>= 1.4.5)
 unzip
 vpim
 xlhtml
+zlib1g-dev
