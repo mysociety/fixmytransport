@@ -8,20 +8,20 @@
 <%= stylesheet_link_tag 'jquery.lightbox-0.5.css'  %>
 <%- end %>
 
-<%- if current_user && current_user.supporter_or_initiator(@campaign) %>
+<%- if (current_user && current_user.supporter_or_initiator(@campaign)) || @campaign.status == :successful %>
   <div id="banner" class="blue <%= 'supporter' %>">
   	<div class="container">
   		<h1>
-  		  <%- if current_user == @campaign.initiator %>
+  		  <%- if current_user && current_user == @campaign.initiator %>
   		  <a href="<%= location_url(@campaign.location) %>"><%= @campaign.short_initiator_call_to_action %></a>
   		  <%- else %>
   		  <a href="<%= location_url(@campaign.location) %>"><%= @campaign.short_call_to_action %></a>
   		  <%- end %>
   		</h1>
   		<div class="right">
-  		  <%- if current_user == @campaign.initiator %>
+  		  <%- if current_user && current_user == @campaign.initiator %>
   			  <span class="status">Your Campaign</span>
-  			<%- else %>
+  			<%- elsif current_user &&  current_user.supporter_or_initiator(@campaign) %>
   			  <span class="status">You support this</span>
   			<%- end %>
   		<%- if @campaign.status == :successful %>
@@ -30,7 +30,7 @@
   		</div>
   	</div>
   </div>
-  <%- if current_user.new_supporter?(@campaign) %>
+  <%- if current_user && current_user.new_supporter?(@campaign) %>
     <div class="supporter-notice">
       <div class="container">
         <h1>Yay! Thanks for supporting our campaign</h1>
