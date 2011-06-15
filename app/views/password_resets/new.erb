@@ -1,9 +1,11 @@
-<h2 class='main-header'><%= t(:forgot_password) %></h2>
+<div id="main-content" class="container">
+	<h2 class='main-header'><%= t(:forgot_password) %></h2>
 
-<%- form_tag password_resets_path, :class => 'password_reset_email' do  %>
-  <div class='instructions'><%= t(:enter_your_email_address) %>
-    <label><%= raw t(:email) %></label>
-    <%= raw text_field_tag :email  %>
-	<button type="submit"><%= t(:continue) %></button>
-  </div>
-<%- end %>
+	<%- form_tag password_resets_path, :class => 'password_reset_email' do  %>
+	  <div class='instructions'><%= t(:enter_your_email_address) %>
+	    <label><%= raw t(:email) %></label>
+	    <%= raw text_field_tag :email  %>
+		<button type="submit"><%= t(:continue) %></button>
+	  </div>
+	<%- end %>
+</div>

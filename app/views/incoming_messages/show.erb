@@ -1,46 +1,48 @@
-<%= raw t(:this_message_was_sent_to, :campaign => link_to(h(@incoming_message.campaign.title), campaign_path(@incoming_message.campaign))) %>
-<div class='campaign-email'>
-  <h2>
-    <div class='from'>
-      <%= t(:from, :sender => @incoming_message.safe_from) %>
-    </div>
-    <div class='date'>
-      <%= short_date(@incoming_message.sent_at) %>
-    </div>
-  </h2>
-  <div class='subject'>
-    <b><%= "#{t(:subject)}:" %></b>
-    <%= @incoming_message.subject %>
-  </div>
-  <%- FixMyTransport::Email.get_display_attachments(@incoming_message.mail).each do |attachment| %>
-    <%= link_to(attachment.display_filename, campaign_attachment_url(@incoming_message.campaign, :id => @incoming_message, :url_part_number => attachment.url_part_number)) %>
-  <%- end %>
-  <div class='body'>
-    <%= raw @incoming_message.get_body_for_html_display(@collapse_quotes) %>
-  </div>
-  <div class='reply-link'>
-    <%= raw link_to(t(:reply_to_this_message), new_campaign_outgoing_message_path(@incoming_message.campaign, :incoming_message_id => @incoming_message)) %>
-  </div>
-</div>
+<div id="main-content" class="container">
+	<%= raw t(:this_message_was_sent_to, :campaign => link_to(h(@incoming_message.campaign.title), campaign_path(@incoming_message.campaign))) %>
+	<div class='campaign-email'>
+	  <h2>
+	    <div class='from'>
+	      <%= t(:from, :sender => @incoming_message.safe_from) %>
+	    </div>
+	    <div class='date'>
+	      <%= short_date(@incoming_message.sent_at) %>
+	    </div>
+	  </h2>
+	  <div class='subject'>
+	    <b><%= "#{t(:subject)}:" %></b>
+	    <%= @incoming_message.subject %>
+	  </div>
+	  <%- FixMyTransport::Email.get_display_attachments(@incoming_message.mail).each do |attachment| %>
+	    <%= link_to(attachment.display_filename, campaign_attachment_url(@incoming_message.campaign, :id => @incoming_message, :url_part_number => attachment.url_part_number)) %>
+	  <%- end %>
+	  <div class='body'>
+	    <%= raw @incoming_message.get_body_for_html_display(@collapse_quotes) %>
+	  </div>
+	  <div class='reply-link'>
+	    <%= raw link_to(t(:reply_to_this_message), new_campaign_outgoing_message_path(@incoming_message.campaign, :incoming_message_id => @incoming_message)) %>
+	  </div>
+	</div>
 
-<%- if current_user && current_user == @incoming_message.campaign.initiator %>
-  <%- form_for @campaign_update, :url => add_update_campaign_url(@incoming_message.campaign) do |f| %>
-    <div class='fieldset'>
+	<%- if current_user && current_user == @incoming_message.campaign.initiator %>
+	  <%- form_for @campaign_update, :url => add_update_campaign_url(@incoming_message.campaign) do |f| %>
+	    <div class='fieldset'>
       
-      <div class='form-field'>
-        <%- if @campaign_update.errors.on('text') %>
-          <div class='error'>
-            <%= error_message_on @campaign_update, :text %>
-          </div>
-        <%- end %>
-        <%= f.label :text, t(:what_does_this_mean) %>
-        <%= raw f.hidden_field :incoming_message_id %>
-        <%= raw f.hidden_field :user_id %>
-        <%= raw f.text_area :text, :cols => 40, :rows => 5 %>
-        <button type="submit"><%= t(:add_update) %></button>
-      </div>
-    </div>
-  <%- end %>
-<%- else  %>
-  <%= raw t(:login_to_add_update, :link => link_to(t(:login_as, :user => h(@incoming_message.campaign.initiator.name)), login_url(:redirect => request.request_uri)), :campaign => h(@incoming_message.campaign.title)) %>
-<%- end %>
+	      <div class='form-field'>
+	        <%- if @campaign_update.errors.on('text') %>
+	          <div class='error'>
+	            <%= error_message_on @campaign_update, :text %>
+	          </div>
+	        <%- end %>
+	        <%= f.label :text, t(:what_does_this_mean) %>
+	        <%= raw f.hidden_field :incoming_message_id %>
+	        <%= raw f.hidden_field :user_id %>
+	        <%= raw f.text_area :text, :cols => 40, :rows => 5 %>
+	        <button type="submit"><%= t(:add_update) %></button>
+	      </div>
+	    </div>
+	  <%- end %>
+	<%- else  %>
+	  <%= raw t(:login_to_add_update, :link => link_to(t(:login_as, :user => h(@incoming_message.campaign.initiator.name)), login_url(:redirect => request.request_uri)), :campaign => h(@incoming_message.campaign.title)) %>
+	<%- end %>
+</div>

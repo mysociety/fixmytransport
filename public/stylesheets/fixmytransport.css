@@ -404,12 +404,6 @@ ul.user-list {
 	overflow:hidden;
 	display:none;
 }
-	.login-box p{
-		color:#666;
-		font-style:italic;
-		margin-bottom: 0.5em;
-	}
-	
 	#login-box .pane{
     	display: none;
 	}
@@ -437,9 +431,13 @@ ul.user-list {
 		color:#ccc;
 		font-weight: normal;
 	}
-	#login-form,
-	#create-account-form {
+	#login-form {
 		width: 270px;
+		float: left;
+		display: block;
+	}
+	#create-account-form {
+		width: auto;
 		float: left;
 		display: block;
 	}
@@ -456,11 +454,23 @@ ul.user-list {
 		height:120%;
 		background:#f4f4f4;
 	}
-		#login-form,
-		#login-box .fieldset {
+	#main-content #login-landing-wrap {
+		width:500px;
+		margin:2em auto;
+		display:block;
+		border: 4px solid #F4F4F4;
+		
+		border-radius:5px;
+		-moz-border-radius:5px;
+		-webkit-border-radius:5px;
+	}
+		#login-form {
 			padding: 10px 20px 0px 10px;
 			width: 250px;
 			background:#ffffff;
+		}
+		#login-box .fieldset {
+			padding: 10px 20px 0px 10px;
 		}
 		#campaign-update .fieldset {
 			width:auto;
@@ -471,8 +481,10 @@ ul.user-list {
 			list-style: none;
 			padding:0;
 		}
+			#main-content #login-form ul input,
 			#login-box ul input,
-			#login-box .fieldset input {
+			#login-box .fieldset input,
+			.form-field input {
 				border: 1px solid #ccc;
 				padding: 5px;
 				font-size:1.1em;
@@ -491,15 +503,17 @@ ul.user-list {
 
 			#login-form ul li.login-username label,	
 			#login-form ul li.login-password label,
-			#login-box .fieldset label {
+			.fieldset label,
+			.form-field label {
 				width: 100%;
 				display: block;
 			}	
 
 			#login-form button,
-			#login-box .fieldset button {
+			.fieldset button,
+			.form-field button {
 			    font-size: 0.9em;
-				margin: 10px 10px 10px 0;
+				margin: 10px 10px 10px 2px;
 			}
 			#campaign-update .fieldset button {
 				margin:0;
@@ -513,6 +527,12 @@ ul.user-list {
 		-moz-border-radius:0 0 5px 0;
 		-webkit-border-radius:0 0 5px 0;
 	}
+	.login-options p{
+		color:#666;
+		font-style:italic;
+		margin-bottom: 0.5em;
+	}
+	
 	.login-options a.button {
 		font-size:0.9em;
 	}
@@ -545,11 +565,25 @@ ul.user-list {
 			background:url(../images/twitter-connect.jpg) no-repeat;
 		}
 
-#comment-and-login textarea, #campaign-update textarea {
+#comment-form textarea,
+#campaign-update-form textarea {
 	width:96%;
 	margin:5px;
 	border:none;
 	background: #f4f4f4;
+}
+#main-content #comment-form,
+#main-content #campaign-update-form,
+#main-content .update_campaign {
+	width:500px;
+}
+#main-content #comment-form textarea,
+#main-content #campaign-update-form textarea,
+#main-content .update_campaign textarea {
+	margin:0;
+	width:96%;
+	background: #f4f4f4;
+	border:1px solid #BDBDBD;
 }
 #comment-login-options {
 	height:auto;

@@ -3,6 +3,8 @@
 .icon,
 button,
 .button {
+	display:inline-block;
+	
 	border:none;
 	color:#ffffff;
 	text-transform:uppercase;
