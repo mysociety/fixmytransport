@@ -551,9 +551,11 @@ ul.user-list {
 			width:192px;
 			display: block;
 			height:28px;
-			text-indent:-10000px;
+			text-indent:-999999em;
 			margin: 10px 0 0 5px;
-			background:url(../images/facebook-connect.jpg) no-repeat;			
+			background:url("../images/facebook-connect.jpg") 0 0 no-repeat;
+			font-size:0;
+			line-height:0;
 		}
 
 		.twitter{
@@ -562,7 +564,9 @@ ul.user-list {
 			height:28px;
 			text-indent:-10000px;
 			margin: 20px 0 0 5px;
-			background:url(../images/twitter-connect.jpg) no-repeat;
+			background:url("../images/twitter-connect.jpg") 0 0 no-repeat;
+			font-size:0;
+			line-height:0;
 		}
 
 #comment-form textarea,
@@ -1156,26 +1160,20 @@ ul#process {
 			ul#process li#crumb2 {
 				padding-left:30px;
 			}
-/*    ul#process li#crumb3 {
-      z-index:1;
-      margin-left:-20px;
-    }
-      ul#process li#crumb3 a{
-        padding-left:30px;
-      }*/
 		ul#process li {
 			display:block;
 	    	color:#fff;
 	    	padding:10px 25px 7px 15px;
 		}
-/*    ul#process li a:hover {
-      background:#0075a0;
-    }*/
+
 		ul#process li.done {
 	    color:#fff;
 			background:transparent url(../images/nav-nub.png) right center no-repeat;
 		}
-
+			#problem-map {
+				position:absolute;
+				right:0;
+			}
 
 		/*Next and back buttons for process page*/
 

@@ -110,3 +110,5 @@ hr.space {background:#fff;color:#fff;visibility:hidden;}
 .clearfix, .container {display:block;}
 .clear {clear:both;}
 .center {text-align:center;}
+
+.container {position:relative;}

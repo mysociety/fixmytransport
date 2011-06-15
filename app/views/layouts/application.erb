@@ -8,6 +8,9 @@
     <%= yield :feeds %>
     <%= csrf_meta_tag %>
     <%= raw stylesheet_link_tag('core', 'fixmytransport', 'map', 'buttons', :cache => 'main') %>
+
+	<!--[if lte IE 7]><%= raw stylesheet_link_tag('ie', :cache => 'main') %><![endif]-->
+
     <%= yield :stylesheets %>
     <%= raw javascript_include_tag('jquery-1.5.2.min', 'jquery-ui-1.8.11.min', 'jquery.autofill', 'jquery.form', :charset => 'utf-8', :cache => 'libraries') %>
     <script type="text/javascript">
