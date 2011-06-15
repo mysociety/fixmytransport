@@ -27,13 +27,13 @@
 			<ul>
 				<li>
 					<a href="<%= raw add_update_campaign_url(@campaign, :is_advice_request => true) %>" class="advice-trigger">
-						<span class="icon grey question"></span>
+						<span class="icon question"></span>
 						Ask an expert
 					</a>
 				</li>
 				<li>
 					<a href="<%= raw add_photos_campaign_url(@campaign) %>" class="add-photos-trigger">
-						<span class="icon magenta camera"></span>
+						<span class="icon camera"></span>
 						Add images
 					</a>
 				</li>
@@ -41,7 +41,7 @@
 				  <%- form_for @campaign, :url => complete_campaign_url(@campaign), :html => { :method => 'POST', :id => 'campaign-complete' } do |f| %>
 				<li>
 					<button type="submit">
-						<span class="icon green tick"></span>
+						<span class="icon tick"></span>
 						Mark as complete
 					</button>
 				</li>
@@ -49,7 +49,7 @@
 				<%- end %>
 				<li>
 					<a href="<%=edit_campaign_path(@campaign) %>">
-						<span class="icon orange pencil"></span>
+						<span class="icon pencil"></span>
 						Edit description
 					</a>
 				</li>
@@ -58,7 +58,7 @@
           <%- if assignment.task_type == 'find_transport_organization' %>
            <li>
    					 	<a href="<%= edit_campaign_assignment_path(assignment.problem.campaign, assignment) %>">
-     						<span class="icon orange person"></span>
+     						<span class="icon person"></span>
      						Find operator
      					</a>
    				</li>
@@ -66,7 +66,7 @@
            <%- if assignment.task_type == 'find_transport_organization_contact_details' %>
             <li>
     					 	<a href="<%= edit_campaign_assignment_path(assignment.problem.campaign, assignment) %>">
-      						<span class="icon orange person"></span>
+      						<span class="icon person"></span>
       						Add contact
       					</a>
     				</li>
