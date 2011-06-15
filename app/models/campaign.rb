@@ -12,7 +12,8 @@ class Campaign < ActiveRecord::Base
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   has_many :campaign_events, :order => 'created_at asc'
   has_many :campaign_photos
-  validates_presence_of :title, :description, :on => :update
+  validates_length_of :title, :within => 40..80
+  validates_presence_of :description, :on => :update
   validates_associated :initiator, :on => :update
   cattr_reader :per_page
   delegate :transport_mode_text, :to => :problem
