@@ -113,7 +113,7 @@ $(document).ready(function(){
     	$('#campaign-update').show();
     	// Add the index of the last campaign event being shown to the form
     	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
-      $('#campaign-update-form').append($('<input/>')
+      $('#campaign-update-form-modal').append($('<input/>')
                   .attr('type', 'hidden')
                   .attr('name', 'last_thread_index')
                   .attr('class', 'last_thread_index')
@@ -121,9 +121,9 @@ $(document).ready(function(){
 
     	$("#login-box").dialog({title: "Ask for advice:"});
       // Set the button text
-      $('#campaign-update-form button[type=submit]').html("Ask for advice")
+      $('#campaign-update-form-modal button[type=submit]').html("Ask for advice")
       // Add the hidden field
-      $('#campaign-update-form').append($('<input/>')
+      $('#campaign-update-form-modal').append($('<input/>')
                   .attr('type', 'hidden')
                   .attr('id', 'campaign_update_is_advice_request')
                   .attr('name', 'campaign_update[is_advice_request]')
@@ -243,6 +243,7 @@ $(document).ready(function(){
 	  options['success'] = function(response) {
 	    if (response.success) {
         // close the dialog box
+      
         $("#login-box").dialog("close");
         // clear the update field
         $(form_selector + " #campaign_update_text").val("");
@@ -262,28 +263,28 @@ $(document).ready(function(){
 
   // ajax submission of non-modal dialog update form
   function setupStaticUpdateForm(form_selector) {
+    options = defaultFormOptions();
     options['error'] = function() { generalError(form_selector + ' #error-text'); }
     options['beforeSubmit'] = function(formData, jQueryForm, options) {
-    	// Add the index of the last campaign event being shown to the form
-    	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
+     // Add the index of the last campaign event being shown to the form
+     var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
       formData[formData.length] = { "name": "last_thread_index", "value": last_thread_index };
     }
-	  options['success'] = function(response) {
-	    if (response.success) {
-	      // clear any error
-	      $(form_selector + " #error-text").html('');
-	      $(form_selector + " #error-text").hide()
+     options['success'] = function(response) {
+       if (response.success) {
+         // clear any error
+         $(form_selector + " #error-text").html('');
+         $(form_selector + " #error-text").hide()
         // clear the update field
         $(form_selector + " #campaign_update_text").val("");
         // remove the hidden thread index field
         $(form_selector + " .last_thread_index").remove();
-        
         addCampaignItem(response.html);
       } else {
         showFormErrors(form_selector, response);
       }
-	  }
-	  $(form_selector).ajaxForm(options);
+     }
+     $(form_selector).ajaxForm(options);
     
   }
 
@@ -394,7 +395,7 @@ $(document).ready(function(){
 	  $(form_selector).ajaxForm(options);
 	}
 
-  setupUpdateForm('#campaign-update-form');
+  setupUpdateForm('#campaign-update-form-modal');
   setupStaticUpdateForm('#campaign-update-form-static');
   setupProblemForm('#create-problem');
   setupCommentForm('#comment-form');

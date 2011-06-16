@@ -1,5 +1,5 @@
 <div class='campaign-updates' id="<%= id %>">
-  <%- form_for @campaign_update ||= CampaignUpdate.new, :url => add_update_campaign_url(@campaign), :html => {:id => 'campaign-update-form'} do |f| %>
+  <%- form_for @campaign_update ||= CampaignUpdate.new, :url => add_update_campaign_url(@campaign), :html => {:id => 'campaign-update-form-modal'} do |f| %>
     <div class='fieldset'>
       <div class='form-field'>
         <%- if @campaign_update.errors.on('text') %>
