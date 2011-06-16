@@ -415,7 +415,7 @@ class ProblemsController < ApplicationController
                      :operator_id => @problem.operator_id, 
                      :passenger_transport_executive_id => @problem.passenger_transport_executive_id, 
                      :council_info => @problem.council_info,
-                     :notice => "Please sign in or create an account to finish reporting your problem" }
+                     :notice => "Please create an account to finish reporting your problem." }
     session[:next_action] = data_to_string(problem_data)
     respond_to do |format|
       format.html do

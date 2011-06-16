@@ -440,7 +440,7 @@ describe ProblemsController do
         
           it 'should show a notice asking the user to login' do 
             make_request
-            flash[:notice].should == 'Please sign in or create an account to finish reporting your problem'
+            flash[:notice].should == 'Please create an account to finish reporting your problem.'
           end
         
           it 'should redirect to the login URL' do 
@@ -464,7 +464,7 @@ describe ProblemsController do
         
           it 'should return a hash with the notice key set to a message asking the user to login' do
             make_request(@default_params.merge(:format => 'json'))
-            JSON.parse(response.body)['notice'].should == 'Please sign in or create an account to finish reporting your problem'
+            JSON.parse(response.body)['notice'].should == 'Please create an account to finish reporting your problem.'
           end
 
         end
