@@ -1,9 +1,0 @@
-31532
-31110
-
-One is national and has no operator
-They have the same number 
-Same admin areas
-
-
-find_all_by_number_and_common_stop uses operator codes - run without
