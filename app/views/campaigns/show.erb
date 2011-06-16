@@ -171,8 +171,8 @@
 
 	  <%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
 	  <div class="contrib-tools">
-		<a href="#">
-			<span class="icon facebook facebook-trigger"></span>
+		<a href="#" class="facebook-trigger">
+			<span class="icon facebook"></span>
 			Facebook
 		</a>
 		<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
