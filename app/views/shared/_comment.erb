@@ -1,6 +1,6 @@
 <a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(:user_says, :name => h(comment.user.name)) %></span><span class="close">close</span><span class="date"><%= comment.created_at.to_s(:standard_with_date) %></span></a>
 
-<div class="thread-details box">
+<div class="thread-details">
 	<div class="thread-copy">
 		<%= raw sanitize("\"#{comment.text}\"") %>
 	</div>

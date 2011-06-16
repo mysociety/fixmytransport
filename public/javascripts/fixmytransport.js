@@ -22,11 +22,17 @@ $(document).ready(function(){
 			if ($('.thread-details', li).length > 0){
 				li.addClass('open');
 				
+				/*
+				 * I honestly think its better without this
+				 *
 				//fix height of copy if less than furniture
 				var copy_h = $('.thread-details .thread-copy', li).height();
 				var furniture_h = $('.thread-details .thread-furniture', li).height();
 				if(copy_h < furniture_h)
 					$('.thread-details .thread-copy', li).height(furniture_h);
+				 
+				 *
+				 */
 				
 				$('.thread-details', li).show('blind', '', 1000);
 			}
@@ -61,8 +67,8 @@ $(document).ready(function(){
 		show: "fade",
 		hide: "fade",
 		modal: true,
-		width: "500px",
-    title: "Sign In",
+		width: 500,
+		title: "Sign In",
 		beforeClose: function(event, ui) {
       // get rid of any next actions
 		  $("#login-box form").find("#next_action").remove();

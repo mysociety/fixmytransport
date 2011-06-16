@@ -1,0 +1,20 @@
+/*Hacks for IE6*/
+* html #banner {
+  background-color: expression(this.className == "blue" ? "#048fc2" : this.className == "yellow" ? "#FFFBD7" : "#f4f4f4");
+}
+
+* html .report {
+    width: 200px;
+}
+
+
+* html .leftcol-banner {
+    width: 560px;
+}
+
+
+/*Hacks for IE6 and IE7*/
+.ui-dialog-title,
+#footer {
+	float:left;
+}
