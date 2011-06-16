@@ -52,7 +52,7 @@
 						    <%- title_error_style = 'display: none;'%>
 						  <%- end %>
               <div class='error' style="<%= title_error_style %>">
-                <%= t('activerecord.errors.models.campaign.attributes.title.blank') %>
+                <%= @campaign.errors.on('title') %>
               </div>
               <%=  f.label :title, raw("Please help me persuade <span>#{@campaign.responsible_org_descriptor}</span> to:") %>
               <%= raw f.text_field :title %>
@@ -71,7 +71,7 @@
 						    <%- description_error_style = 'display: none;'%>
 						  <%- end %>
               <div class='error' style="<%= description_error_style %>">
-                <%= t('activerecord.errors.models.campaign.attributes.description.blank') %>
+                <%= @campaign.errors.on('description') %>
               </div>
 						   <%= f.label :description, "Description" %>
 						   <%= raw f.text_area :description %>
