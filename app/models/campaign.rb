@@ -18,12 +18,11 @@ class Campaign < ActiveRecord::Base
   cattr_reader :per_page
   delegate :transport_mode_text, :to => :problem
   accepts_nested_attributes_for :campaign_photos, :allow_destroy => true
+  after_create :generate_subdomain
   has_friendly_id :title,
                   :use_slug => true,
-                  :strip_non_ascii => true,
-                  :cache_column => 'subdomain',
                   :allow_nil => true,
-                  :max_length => 16
+                  :max_length => 50
 
   has_paper_trail
 
@@ -37,36 +36,6 @@ class Campaign < ActiveRecord::Base
                                                                self.symbol_to_status_code[:successful]]]
 
   # instance methods
-
-  # Once a slug has been generated, we'll be using it for email address generation, so it can't be regenerated
-  # if the campaign title changes
-  def new_slug_needed?
-    (!slug? && !slug_text.blank?)
-  end
-
-  # Try to generate a string that will make a better slug than the title itself, falling 
-  # back to the title on failure
-  def short_title
-    short_title = []
-    character_count = 0
-    stop_words = ['the', 'in', 'a', 'an', 'of', 'at', 'this']
-    title.split(" ").each do |word|
-      if character_count + word.size + short_title.size <= 16
-        if !stop_words.include?(word)
-          short_title << word
-          character_count += word.size
-        end 
-      else 
-        break
-      end
-    end
-    short_title = short_title.join(" ")
-    if short_title.blank?
-      return title
-    else
-      return short_title
-    end
-  end
 
   def confirm
     return unless self.status == :new
@@ -166,10 +135,6 @@ class Campaign < ActiveRecord::Base
     end
   end
 
-  def to_param
-    (subdomain && !subdomain_changed?) ? subdomain : id.to_s
-  end
-
   def domain
     return "#{subdomain}.#{Campaign.email_domain}"
   end
@@ -206,7 +171,22 @@ class Campaign < ActiveRecord::Base
     assignments.find(:all, :conditions => ['task_type_name = ?', 'write-to-other'])
   end
 
+  # Encode the id to Base 26 and then use alphabetic rather than alphanumeric range
+  def email_id
+    self.id.to_s(base=26).tr('0-9a-p', 'a-z') 
+  end
+  
+  def generate_subdomain
+    chars = ('a'..'z').to_a
+    random_string = (0..5).map{ chars[rand(chars.length)] }.join
+    self.update_attribute("subdomain", "#{email_id}-#{random_string}")
+  end
+
   # class methods
+  def self.email_id_to_id(email_id)
+    base_26_string = email_id.tr('a-z', '0-9a-p')
+    base_26_string.to_i(base=26)
+  end
 
   def self.mail_conf_staging_dir
     dir = "#{RAILS_ROOT}/data/mail_conf"

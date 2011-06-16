@@ -59,11 +59,7 @@ class ApplicationController < ActionController::Base
     else
       param = :campaign_id
     end
-    if params[param].to_i.to_s == params[param]
-      @campaign = Campaign.find(params[param])
-    else
-      @campaign = Campaign.find_by_subdomain(params[param])
-    end
+    @campaign = Campaign.find(params[param])
     unless @campaign && @campaign.editable?
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
