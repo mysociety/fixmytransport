@@ -261,34 +261,40 @@ class Route < ActiveRecord::Base
     # do we think we know the operator for this route? If so, return any route with the same operator that
     # meets our other criteria. If we don't know the operator, or we pass the :use_operator_codes option
     # only return routes with the same operator code (optionally only from the same admin area)
-    if new_route.route_operators.size == 1 && !options[:use_operator_codes]
-      operator_clause = "AND route_operators.operator_id = ? "
-      operator_params = [new_route.route_operators.first.operator_id]
-    else
-      source_admin_area = new_route.route_source_admin_areas.first
-      operator_clauses = []
-      operator_params = []
+    if ! options[:skip_operator_comparison]
+      
+      if new_route.route_operators.size == 1 && !options[:use_operator_codes]
+        operator_clause = "AND route_operators.operator_id = ? "
+        operator_params = [new_route.route_operators.first.operator_id]
+      else
+        source_admin_area = new_route.route_source_admin_areas.first
+        operator_clauses = []
+        operator_params = []
 
-      new_route.route_source_admin_areas.each do |route_source_admin_area|
+        new_route.route_source_admin_areas.each do |route_source_admin_area|
 
-        next if route_source_admin_area.operator_code.blank?
-        route_operator_clauses = []
+          next if route_source_admin_area.operator_code.blank?
+          route_operator_clauses = []
 
-        if ! options[:any_admin_area]
-          if route_source_admin_area.source_admin_area_id
-            route_operator_clauses << "(route_source_admin_areas.source_admin_area_id = ? AND "
-            operator_params << route_source_admin_area.source_admin_area_id
+          if ! options[:any_admin_area]
+            if route_source_admin_area.source_admin_area_id
+              route_operator_clauses << "(route_source_admin_areas.source_admin_area_id = ? AND "
+              operator_params << route_source_admin_area.source_admin_area_id
+            else
+              route_operator_clauses << "(route_source_admin_areas.source_admin_area_id is NULL AND "
+            end
           else
-            route_operator_clauses << "(route_source_admin_areas.source_admin_area_id is NULL AND "
+            route_operator_clauses << "("
           end
-        else
-          route_operator_clauses << "("
+          route_operator_clauses << "route_source_admin_areas.operator_code = ?)"
+          operator_params << route_source_admin_area.operator_code
+          operator_clauses << route_operator_clauses.join(" ")
         end
-        route_operator_clauses << "route_source_admin_areas.operator_code = ?)"
-        operator_params << route_source_admin_area.operator_code
-        operator_clauses << route_operator_clauses.join(" ")
+        operator_clause = "AND (#{operator_clauses.join(" OR ")})"
       end
-      operator_clause = "AND (#{operator_clauses.join(" OR ")})"
+    else
+      operator_clause = ''
+      operator_params = []
     end
 
     id_clause = ''

@@ -88,6 +88,25 @@ class Admin::RoutesController < Admin::AdminController
     end
   end
   
+  def compare
+    if request.post?
+      @merge_candidate = MergeCandidate.find(params[:id])
+      if params[:is_same] == 'yes'
+        @merge_candidate.update_attribute('is_same', true)
+      end
+      if params[:is_same] == 'no'
+        @merge_candidate.update_attribute('is_same', false)
+      end
+      redirect_to admin_url(compare_admin_routes_path)
+    end
+    @merge_candidate = MergeCandidate.find(:first, :conditions => 'is_same is null', :order => 'random()')
+    route_ids = @merge_candidate.regional_route_ids.split("|")
+  
+    regional_routes = Route.find(:all, :conditions => ['id in (?)', route_ids],
+                                       :include => {:journey_patterns => {:route_segments => [:from_stop, :to_stop] }})
+    @routes = [@merge_candidate.national_route] + regional_routes
+  end
+  
   def merge
     if params[:routes].blank?
       redirect_to admin_url(admin_routes_path)
@@ -103,6 +122,7 @@ class Admin::RoutesController < Admin::AdminController
   end
   
   private
+
   
   def make_route_operators route
     codes = route.route_source_admin_areas.map{ |route_source_admin_area| route_source_admin_area.operator_code }

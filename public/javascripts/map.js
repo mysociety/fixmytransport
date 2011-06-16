@@ -23,7 +23,7 @@ var segmentSelectedStyle =
 };
 
 function area_init() {
-  createMap();
+  createMap('map');
   bounds = new OpenLayers.Bounds();
   markers = new OpenLayers.Layer.Markers( "Markers" );
   otherMarkers = new OpenLayers.Layer.Markers( "Other Markers" );
@@ -97,9 +97,9 @@ function pointCoords(lon, lat) {
   return new OpenLayers.LonLat(lon, lat).transform(proj, map.getProjectionObject());
 }
 
-function route_init() {
+function route_init(map_element, routeSegments) {
 		  
-  createMap();
+  createMap(map_element);
   bounds = new OpenLayers.Bounds();
   
   var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer",{projection: proj});
@@ -157,7 +157,7 @@ function segmentUnselected(event) {
   
 }
 
-function createMap() {
+function createMap(map_element) {
 
   var options = { 
         'projection': new OpenLayers.Projection("EPSG:900913"),
@@ -168,7 +168,7 @@ function createMap() {
                                           20037508.34, 20037508.34)
       };
   $('.static-map-element').hide();    
-  map = new OpenLayers.Map('map', options);
+  map = new OpenLayers.Map(map_element, options);
   var layer = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true,
                                                            'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
                                                                                             20037508.34, 20037508.34)});

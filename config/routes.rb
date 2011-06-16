@@ -117,7 +117,7 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace :admin do |admin|
     admin.root :controller => 'home'
     admin.resources :location_searches, :only => [:index, :show]
-    admin.resources :routes, :collection => { :merge => [:get, :post] }
+    admin.resources :routes, :collection => { :merge => [:get, :post], :compare => [:get, :post] }
     admin.resources :operators, :collection => { :merge => [:get, :post] }
     admin.resources :ptes, :only => [:index, :show, :update]
     admin.resources :council_contacts, :only => [:show, :index, :new, :create, :update]

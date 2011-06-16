@@ -549,6 +549,21 @@ namespace :nptdr do
         puts route.id
       end
     end
+    
+    desc 'Generate list of merge candidates from national routes'
+    task :generate_merge_candidates => :environment do 
+      great_britain = Region.find_by_name('Great Britain')
+      routes = BusRoute.find(:all, :conditions => ['region_id = ?
+                                                     AND id NOT IN (
+                                                      SELECT route_id
+                                                      FROM route_operators)', great_britain])
+      routes.each do |route|
+        others = Route.find_all_by_number_and_common_stop(route, options={:skip_operator_comparison => true})
+        if ! others.empty? 
+          MergeCandidate.create!(:national_route => route, :regional_route_ids => others.map{|route| route.id}.join("|"))
+        end
+      end
+    end
 
     desc 'Adds region associations based on route localities'
     task :add_route_regions => :environment do
