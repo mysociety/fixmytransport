@@ -45,11 +45,14 @@
 .box {
     clear: both;
     margin-bottom: 1em;
+	display:inline-block;
 }
-.grey {
+.greybox {
     padding: 10px;
     background: #f1f1f7;
     clear: both;
+	display:inline-block;
+	width:100%;
 }
 /* Main Elements
    ================================================== */
@@ -297,8 +300,11 @@ form#search {
 ul.gallery {
     padding: 10px 0 10px 10px;
     margin: 0;
+	display:inline-block;
     overflow: hidden;
     clear: both;
+	width:100%;
+	background: #f1f1f7;
 }
 	ul.gallery li {
 	    list-style-type: none;
@@ -314,12 +320,14 @@ ul.gallery {
 			border: 3px solid #fff;
 		}
 
-		ul.gallery li a:hover {border: 3px solid #aaa;}
+		ul.gallery li a:hover {border: 3px solid #aaa;background:#aaa;}
 
 /* ===[ User List ]=== */
 ul.user-list {
     margin: 0;
     padding: 10px;
+    background: #f1f1f7;
+    clear: both;
 }
 	ul.user-list li {
 	    list-style-type: none;
@@ -335,7 +343,7 @@ ul.user-list {
 	}
 /* ===[ User Info ]=== */
 .user-info {
-    display: inline
+    display: inline-block;
 }
 	.user-info p.location {
 	    margin-bottom: 0.5em
@@ -955,14 +963,22 @@ ul.campaign-meta li span{
 			font-weight:normal;
 		}
 
+
+		#map-container{
+			float: right;
+		}
+			#map-container .button{
+				margin-top: 10px;
+				font-size:0.8em;
+			}
+
 /* ===[ Campaign Thread ]=== */
 
 .thread-controls {
     float: right
 }
 	.thread-controls .expand-all,
-	.thread-controls .collapse-all,
-	.thread-controls .sort {
+	.thread-controls .collapse-all {
 		border:none;
 	    display: block;
 		margin:0;
@@ -985,28 +1001,27 @@ ul.campaign-meta li span{
 	.thread-controls .collapse-all:hover {
 	    background-position: -22px -21px
 	}
-	.thread-controls .sort {
-	    background-position: -43px 0
-	}
-	.thread-controls .sort:hover {
-	    background-position: -43px -21px
-	}
 ul#campaign-thread {
     margin: 0 0 1em 0;
     padding: 0;
     clear: both;
+	display:inline-block;
+	width:100%;
 }
 	ul#campaign-thread li {
-	    list-style-type: none;
-	    border-bottom: 3px solid #fff;
-	    clear: both;
+		display:inline-block;
+		width:100%;
+		list-style-type: none;
+		border-bottom: 3px solid #fff;
+		clear: both;
+		line-height:0;
 	}
 		ul#campaign-thread li a.thread-item {
-		    display: block;
+		    display: inline-block;
+			width:100%;
 		    color: #444;
 		    background: #eee;
-		    padding: 10px;
-		    height: 20px;
+		    height: 40px;
 		}
 		ul#campaign-thread li a.thread-item:hover {
 		    background: #048fc2;
@@ -1021,12 +1036,12 @@ ul#campaign-thread {
 			color:#444;
 		}
 		ul#campaign-thread li a.thread-item span.num {
-		    display: block;
+		    display: inline-block;
 		    float: left;
 		    text-align: center;
 		    font-weight: bold;
 		    line-height: 0;
-		    margin: -2px 10px 0 0;
+		    margin: 8px 10px 10px 10px;
 		    width: 35px;
 		    background: #fff;
 		    color: #333;
@@ -1036,21 +1051,25 @@ ul#campaign-thread {
 		    -webkit-border-radius: 20px;
 		}
 		ul#campaign-thread li a.thread-item span.title {
-		    display: block;
+		    display: inline-block;
 		    float: left;
+			width:300px;
+			margin:10px 0;
+			line-height:1.5;
 		}
 		ul#campaign-thread li a.thread-item span.date {
+			display: inline-block;
 		    float: right;
-			margin-top:2px;
-		    margin-right: 20px;
+			margin:10px 20px 10px 0;
 			font-size:0.9em;
 			font-style:italic;
+			line-height:1.5;
 		}
 		ul#campaign-thread li a.thread-item span.close {
-			display: block;
+			display: inline-block;
 		    height: 12px;
 		    width: 18px;
-		    margin: 4px 0;
+		    margin: 10px 10px 10px 0;
 		    overflow: hidden;
 		    float: right;
 		    text-indent: -999999em;
@@ -1060,7 +1079,7 @@ ul#campaign-thread {
 		    background:none;
 		}
 		ul#campaign-thread li .thread-details {
-		    display: none
+			display: none
 		}
 	ul#campaign-thread li.open {
 	    background: #048fc2;

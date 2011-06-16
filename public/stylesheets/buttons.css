@@ -314,15 +314,6 @@ button.report,
 	float:left;
 }
 
-#map-container{
-	float: right;
-}
-	#map-container .button{
-		margin-top: 10px;
-		font-size:0.8em;
-	}
-
-
 .large-map-intro {
   font-size: 1.5em;
 }

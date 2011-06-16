@@ -14,4 +14,21 @@
 }
 
 
+* html .leftcol-banner {
+    width: 560px;
+}
+
+
+
+* html ul#campaign-thread li a.compact:hover {
+	background:#eee;
+	cursor:default;
+	color:#444;
+}
+
+* html ul#campaign-thread li a.compact span.close {
+	background:none;
+}
+
+
 /* undo hiding */

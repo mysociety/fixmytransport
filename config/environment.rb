@@ -92,7 +92,7 @@ if (MySociety::Config.get("DOMAIN", "") != "")
 end
 
 # Domain for URLs (so can work for scripts, not just web pages)
-ActionMailer::Base.default_url_options[:host] = MySociety::Config.get("DOMAIN", 'localhost:3000')
+ActionMailer::Base.default_url_options[:host] = MySociety::Config.get("DOMAIN", '192.168.0.222:3000')
 
 # settings for exception notification
 ExceptionNotification::Notifier.exception_recipients = MySociety::Config.get("BUGS_EMAIL", "")

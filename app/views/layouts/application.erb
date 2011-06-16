@@ -29,45 +29,39 @@
 					<li><a href="<%= about_url %>">About</a></li>
 					<li><a href="<%= feedback_url(:url => CGI.escape(request.request_uri)) %>">Feedback</a></li>
 				</ul>
-
 				<a id="logo" href="<%= root_url %>">Fix My Transport</a>
 				<%- if current_user %>
-          <p id="member-info">Hi <a href="<%= account_path %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>">Logout</a></p>
-		  	<%- else %>
-		  		<p id="member-info">Hi Guest. <a class="auth" href="<%= login_path(:redirect => request.request_uri) %>">Sign in</a></p>
-		  	<%- end %>
-		  </div>
+				<p id="member-info">Hi <a href="<%= account_path %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>">Logout</a></p>
+				<%- else %>
+				<p id="member-info">Hi Guest. <a class="auth" href="<%= login_path(:redirect => request.request_uri) %>">Sign in</a></p>
+				<%- end %>
+			</div>
 
-      <%= render :partial => "shared/login" %>
+			<%= render :partial => "shared/login" %>
 
-      <%- if MySociety::Config.getbool('STAGING_SITE', true) %>
-          <div class="staging-banner notice container">
-            <%= t(:development_site) %>
-          </div>
-      <%- end %>
+			<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
+				<div class="staging-banner notice container">
+					<%= t(:development_site) %>
+				</div>
+			<%- end %>
 
 			<%- [:notice, :error].each do |key| %>
-          <%- unless flash[key].blank? %>
-				    <p class="<%= "flash #{key} container" %>">
+					<%- unless flash[key].blank? %>
+					<p class="<%= "flash #{key} container" %>">
 					  <%= raw flash[key] %>
-				    </p>
-          <%- end %>
-      <%- end %>
-
-
+					</p>
+					<%- end %>
+			<%- end %>
 			<%= yield %>
+    	</div>
 
-    </div>
-
-    <div id="footer">
+		<div id="footer">
 			<div class="container">
-				<p>
-				  <%= raw t(:built_by, :mysociety_link => link_to('mySociety', 'http://mysociety.org'), :indigo_link => link_to('Indigo Trust', 'http://indigotrust.wordpress.com/'), :donor_link => link_to(t(:small_donors), 'http://mysociety.org/donate'), :esmee_link => link_to('Esmée Fairbairn Foundation', 'http://www.esmeefairbairn.org.uk')) %>
-				</p>
+				<p><%= raw t(:built_by, :mysociety_link => link_to('mySociety', 'http://mysociety.org'), :indigo_link => link_to('Indigo Trust', 'http://indigotrust.wordpress.com/'), :donor_link => link_to(t(:small_donors), 'http://mysociety.org/donate'), :esmee_link => link_to('Esmée Fairbairn Foundation', 'http://www.esmeefairbairn.org.uk')) %></p>
 			</div>
 		</div>
-		    <%= yield :javascript %>
-		    <%= raw javascript_include_tag('fixmytransport', 'application', :charset => 'utf-8', :cache => 'main') %>
+		<%= yield :javascript %>
+		<%= raw javascript_include_tag('fixmytransport', 'application', :charset => 'utf-8', :cache => 'main') %>
 		<%= render :partial => 'shared/tracking' %>
 	</body>
 </html>
