@@ -1,0 +1,20 @@
+<%- content_for :javascript do %>
+  <%= raw map_javascript_include_tags(:admin => true) %>
+<%- end %>
+
+<h2><%= t(:comparing_routes) %></h2>
+
+<%- @routes.each_with_index do |route,index| %>
+<div id="map_<%=index%>" style="width:400px;height:400px;">
+</div>
+<%- end %>
+
+<script type="text/javascript">
+  var routeSegments = [];
+  <%- @routes.each_with_index do |route, index| %>
+  routeSegments[<%=index%>] = <%= raw route_segment_js(route) %>;
+  <%- end %>
+  jQuery(document).ready(function(){
+    setupShowRoutes();
+  });
+</script>

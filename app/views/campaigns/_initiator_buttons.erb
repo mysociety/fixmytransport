@@ -75,7 +75,7 @@
 			</ul>
 		</div>
 		
-		<%- if !@campaign.existing_recipients.empty? %>
+		<%- if !@campaign.existing_recipients.empty? or !@campaign.assignments_with_contacts.empty? %>
 		
   		<div class="contacts">
   			<h3 class="font-1">Your contacts</h3>
@@ -103,7 +103,7 @@
 		
 		<div class="share-update">
 			<h3 class="font-1">What's happening?</h3>
-			  <%- form_for @campaign_update ||= CampaignUpdate.new, :url => add_update_campaign_url(@campaign), :html => {:id => 'campaign-update-form-static'} do |f| %>
+			  <%- form_for @campaign_update ||= CampaignUpdate.new, :url => add_update_campaign_url(@campaign), :html => {:id => 'campaign-update-form-static' } do |f| %>
 			  
 			  <div class='fieldset'>
           <div class='form-field'>
