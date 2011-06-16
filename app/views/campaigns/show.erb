@@ -45,21 +45,6 @@
         <p>Offer opinions and advice to help make the campaign a success. <br />And don't forget to tell your friends  and spread the word through Twitter &amp; Facebook</p>
       </div>
     </div>
-
-    <div class="contrib-tools-initial">
-		<a href="#">
-			<span class="icon facebook facebook-trigger"></span>
-			Facebook
-		</a>
-		<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
-			<span class="icon twitter"></span>
-			Twitter
-		</a>
-		<a href="#">
-			<span class="icon email"></span>
-			Email
-		</a>
-    </div>
   <%- end %>
 <%- else %>
   <div id="banner" class="yellow container">
@@ -75,13 +60,13 @@
 <div id="main-content" class="container">
 
 	<div class="leftcol">
-
-	  <%- if current_user && current_user == @campaign.initiator %>
-      <%= render :partial => "initiator_buttons" %>
-    <%- end %>
+	  	<%- if current_user && current_user == @campaign.initiator %>
+      	<%= render :partial => "initiator_buttons" %>
+    	<%- end %>
 
 		<div class="box campaign-description">
-		  <%- if (!current_user) || !(current_user.supporter_or_initiator(@campaign)) %>
+			<h3>Description</h3>
+		  	<%- if (!current_user) || !(current_user.supporter_or_initiator(@campaign)) %>
 			<img src="<%= @campaign.initiator.profile_photo.url(:small_thumb) %>" class="avatar" />
 			<%- end %>
 			<div>
@@ -113,10 +98,10 @@
        <h3><%= t(:transport_experts) %></h3>
        <div class='expert-tools'>
          <div class='optional-assignment'>
-           <a href="<%= new_campaign_assignment_path(@campaign) %>" class="big button"><%= t(:tell_to_write, :user => @campaign.initiator.first_name) %></a>
+           <a href="<%= new_campaign_assignment_path(@campaign) %>" class="button"><%= t(:tell_to_write, :user => @campaign.initiator.first_name) %></a>
          </div>
          <div class='optional-assignment'>
-           <a href="<%= edit_campaign_path(@campaign)%>" class="big button"><%= t(:edit_description) %></a>
+           <a href="<%= edit_campaign_path(@campaign)%>" class="button"><%= t(:edit_description) %></a>
          </div>
          <div class='optional-assignment-end'>
          </div>
@@ -127,7 +112,7 @@
     <%- if @campaign.campaign_photos.count > 0 %>
 		<div class="box">
 			<h5>Images and Media</h5>
-			<ul class="gallery grey">
+			<ul class="gallery">
 			  <%- @campaign.campaign_photos.each do |campaign_photo| %>
 			    <%- if ! campaign_photo.new_record? %>
 				    <li>
@@ -147,8 +132,8 @@
 		<div class="clear">
 			<h3 class='left campaign-history'><%= t(:campaign_history) %></h3>
 			<div class="thread-controls">
-				<button type="button" class="expand-all">Expand All</button>
-				<button type="button" class="collapse-all">Collapse All</button>
+				<a href="#" class="expand-all">Expand All</a>
+				<a href="#" class="collapse-all">Collapse All</a>
 			</div>
 		</div>
 		<ul id="campaign-thread">
@@ -163,10 +148,26 @@
 
     <%= render :partial => 'support_button', :locals => { :button_class => 'right support', :display_supporter => false, :display_initiator => false } %>
 
-</div>
+	</div>
 
 
 	<div class="rightcol">
+		<%- if current_user && current_user.new_supporter?(@campaign) %>
+	    <div class="contrib-tools-initial">
+			<a href="#">
+				<span class="icon facebook"></span>
+				Facebook
+			</a>
+			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
+				<span class="icon twitter"></span>
+				Twitter
+			</a>
+			<a href="#">
+				<span class="icon grey email"></span>
+				Email
+			</a>
+	    </div>
+	  <%- end %>
 
 	  <%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
 	  <div class="contrib-tools">
@@ -179,7 +180,7 @@
 			Twitter
 		</a>
 		<a href="#">
-			<span class="icon email"></span>
+			<span class="icon grey email"></span>
 			Email
 		</a>
 	</div>
@@ -202,7 +203,7 @@
 
 		<div class="box">
 			<h5>Campaign Manager</h5>
-			<div class="grey">
+			<div class="greybox">
 				<div class="avatar"><img src="<%= @campaign.initiator.profile_photo.url(:large_thumb) %>" /></div>
 				<div class="user-info">
 					<a class="name" href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a>

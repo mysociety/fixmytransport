@@ -19,6 +19,10 @@ blockquote:before, blockquote:after, q:before, q:after {content:'';}
 blockquote, q {quotes:"" "";}
 a img {border:none;}
 :focus {outline:0;}
+a:focus {outline:0;}
+button::-moz-focus-inner {border: 0;}
+input::-moz-focus-inner {border: 0;}
+
 
 /* typography.css */
 html {font-size:100.01%;}
@@ -106,3 +110,5 @@ hr.space {background:#fff;color:#fff;visibility:hidden;}
 .clearfix, .container {display:block;}
 .clear {clear:both;}
 .center {text-align:center;}
+
+.container {position:relative;}

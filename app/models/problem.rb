@@ -117,6 +117,9 @@ class Problem < ActiveRecord::Base
     return unless self.status == :new
     # complete the relevant assignments
     self.create_assignments
+    self.assignments.each do |assignment|
+      assignment.update_attribute('campaign', campaign)
+    end
     Assignment.complete_problem_assignments(self, {'publish-problem' => {}})
     data = {:organizations => self.organization_info(:responsible_organizations) }
     if !self.emailable_organizations.empty?
@@ -135,9 +138,6 @@ class Problem < ActiveRecord::Base
                                      :problem => self })
     campaign.status = :new
     self.save
-    assignments.each do |assignment|
-      assignment.update_attribute('campaign', campaign)
-    end
     return campaign
   end
 

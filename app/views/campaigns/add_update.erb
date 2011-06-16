@@ -1,5 +1,4 @@
 <div id="main-content" class="container">
-	<div class="container">
     <%- if @campaign_update.is_advice_request? %>
       <%- id = 'advice-request-form' %>
       <%- text = t(:ask_our_expert_panel) %>
@@ -8,8 +7,7 @@
       <%- text = t(:add_an_update) %>
     <%- end %>
 
-    <%= text %>
+    <h3><%= text %></h3>
 
     <%= render :partial => 'update_form' %>
-  </div>
 </div>

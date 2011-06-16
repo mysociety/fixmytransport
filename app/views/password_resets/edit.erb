@@ -1,28 +1,30 @@
-<h2 class='main-header'><%= raw t(:change_your_password) %></h2>
+<div id="main-content" class="container">
+	<h2 class='main-header'><%= raw t(:change_your_password) %></h2>
 
-<%- form_for @user, :url => password_reset_path, :method => :put do |f| %>
-  <div class='fieldset'>
+	<%- form_for @user, :url => password_reset_path, :method => :put do |f| %>
+	  <div class='fieldset'>
     
-    <div class='form-field'>
-      <%- if @user.errors.on('password') %>
-        <div class='error'>
-          <%= error_message_on @user, :password %>
-        </div>
-      <%- end %>
-      <%= f.label :password %>
-      <%= raw f.password_field :password %>
-    </div>
+	    <div class='form-field'>
+	      <%- if @user.errors.on('password') %>
+	        <div class='error'>
+	          <%= error_message_on @user, :password %>
+	        </div>
+	      <%- end %>
+	      <%= f.label :password %>
+	      <%= raw f.password_field :password %>
+	    </div>
     
-    <div class='form-field'>
-      <%- if @user.errors.on('password_confirmation') %>
-        <div class='error'>
-          <%= error_message_on @user, :password_confirmation %>
-        </div>
-      <%- end %>
-      <%= f.label :password_confirmation  %>
-      <%= raw f.password_field :password_confirmation  %>
-    </div>
-	<button type="submit"><%= t(:update_password_and_login) %></button>
-  </div>
+	    <div class='form-field'>
+	      <%- if @user.errors.on('password_confirmation') %>
+	        <div class='error'>
+	          <%= error_message_on @user, :password_confirmation %>
+	        </div>
+	      <%- end %>
+	      <%= f.label :password_confirmation  %>
+	      <%= raw f.password_field :password_confirmation  %>
+	    </div>
+		<button class="button" type="submit"><%= t(:update_password_and_login) %></button>
+	  </div>
   
-<%- end %>
+	<%- end %>
+</div>

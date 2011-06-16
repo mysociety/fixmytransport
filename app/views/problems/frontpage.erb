@@ -1,4 +1,4 @@
-<div class='homepage container'>
+<div id="main-content" class="container">
   <h2 class='main-header'><%= t(:get_problems_fixed) %></h2>
   <div class='problem-form-wrapper'>
     <div class='problem-form'>
@@ -40,7 +40,7 @@
               <span class='transport-modes-note'>
                 <%= campaign.transport_mode_text %>
               </span>
-              <span class='event-type-note'><%= "(#{event_type_note(campaign.campaign_events.first)})" %>
+              <span class='event-type-note'><%= "(#{event_type_note(campaign.campaign_events.visible.first)})" %>
               </span>
             </li>
           <%- end %>

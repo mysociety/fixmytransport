@@ -33,7 +33,7 @@
 		<a href="<%= new_password_reset_path %>">Forgot?</a>
 	</li>
 	<li>
-		<button>Sign In</button>
+		<button class="button" type="submit">Sign In</button>
 		<label for="user_session_remember_me">Keep me signed in</label><input type="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1">    
 		<input type=hidden name="redirect" value="<%= request.request_uri %>">
 	</li>
@@ -127,7 +127,18 @@
                     $(".facebook").css('background-position', '0px 0px'); 
             }
         }
-	</script>
+
+    window.fbAsyncInit = function() {
+        FB.init({appId: fmt_Facebook_appId, status: false, cookie: true, xfbml: false});      
+    };
+    (function() {
+        var e = document.createElement('script'); e.async = true;
+        // e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+        e.src = '/javascripts/facebook_all.js';
+        document.getElementById('fb-root').appendChild(e);
+    }());
+          
+</script>
 <%- end %>
 
 

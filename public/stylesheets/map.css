@@ -63,14 +63,14 @@
 }
 
 #small-map {
-  width: 300px;
+  width: 310px;
   overflow: default;
   margin-top: 17px;
   padding: 5px 0;
 }
 
 #small-map #map {
-  width: 300px;
+  width: 310px;
   height: 160px;
   margin: auto;
   border: none;

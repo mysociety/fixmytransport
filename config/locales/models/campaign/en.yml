@@ -5,8 +5,7 @@ en:
         campaign:
           attributes: 
             title:
-              blank: 'Please enter a headline that is between 40 and 80 characters long'
-              too_short: 'Please enter a headline that is between 40 and 80 characters long'
-              too_long: 'Please enter a headline that is between 40 and 80 characters long'
+              too_short: "Please enter a headline that is at least %{count} characters long."
+              too_long: "Please enter a headline that is at most %{count} characters long."
             description:
               blank: "Please give a brief description of your issue"

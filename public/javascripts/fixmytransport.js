@@ -365,13 +365,15 @@ $(document).ready(function(){
 
         if (response.requires_login) {
           // add the notice to the login form
-          $('#login-landing #notice-base').text(response.notice);
-          $('#login-landing #notice-base').show();
+          $('#login-create-account #notice-base').text(response.notice);
+          $('#login-create-account #notice-base').show();
 
           // show the login form
           $('.login-box .pane').hide();
-          $("#login-box").dialog({title: "Sign In"});
-      		$('#login-landing').show();
+          $("#login-box").dialog({title: "Create a FixMyTransport Account"});
+        	$('#login-create-account').fadeIn();
+        	$("#login-to-account").before("Got an account? ")
+        	$("#login-to-account").html("Sign in")
       		$("#login-box").dialog("open");
 
         }else{
@@ -510,7 +512,7 @@ $(document).ready(function(){
       imageLoading:  '/images/lightbox-ico-loading.gif',
      	imageBtnClose: '/images/lightbox-btn-close.gif',
      	imageBtnPrev:  '/images/lightbox-btn-prev.gif',
-     	imageBtnNext:  '/images/lightbox-btn-next.gif',
+     	imageBtnNext:  '/images/lightbox-btn-next.gif'
     });
   }
 

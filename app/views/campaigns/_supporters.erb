@@ -5,7 +5,7 @@
 		  <a class="view-all right" url="<%= get_supporters_campaign_path(@campaign) %>" href="<%= url_for(params.merge(:all_supporters => '1')) %>">View All</a>
 		<%- end %>
 	</div>
-	<ul class="user-list grey">
+	<ul class="user-list">
 	  <%- if show_all %>
 	  <%- supporters = @campaign.supporters.registered %>
 	  <%- else %>
