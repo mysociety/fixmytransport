@@ -40,7 +40,7 @@
 				<%- if @campaign.status != :successful %>
 				  <%- form_for @campaign, :url => complete_campaign_url(@campaign), :html => { :method => 'POST', :id => 'campaign-complete' } do |f| %>
 				<li>
-					<button type="submit">
+					<button class="button" type="submit">
 						<span class="icon tick"></span>
 						Mark as complete
 					</button>
@@ -108,7 +108,7 @@
           		<div class='form-field'>
           			<%= raw f.hidden_field :is_advice_request %>
       				<input type="text" name="campaign_update[text]" id="campaign_update_text"/>
-      				<button type="submit">Post</button>
+      				<button class="button" type="submit">Post</button>
 					<div class='error', id="error-text" style="display: none;"></div>
       				<label for="post-update">Keep supporters up-to-date on how the campaign is progressing.</label>          
 				</div>

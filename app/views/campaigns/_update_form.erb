@@ -13,9 +13,9 @@
         <%= raw f.text_area :text, :cols => 40, :rows => 3 %>
         <div id="comment-login-options">	
         <%- if @campaign_update.is_advice_request %>
-          <button type="submit"><%= t(:request_advice)%></button>
+          <button class="button" type="submit"><%= t(:request_advice)%></button>
         <%- else %>
-          <button type="submit"><%= t(:add_update)%></button>
+          <button class="button" type="submit"><%= t(:add_update)%></button>
         <%- end %>
         </div>
       </div>

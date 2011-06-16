@@ -46,6 +46,7 @@
     clear: both;
     margin-bottom: 1em;
 	display:inline-block;
+	width:100%;
 }
 .greybox {
     padding: 10px;
@@ -373,6 +374,8 @@ ul.user-list {
     -webkit-border-radius: 5px 5px 0 0;
 }
 .ui-dialog-titlebar-close {
+	display:inline-block;
+	width:38px;
     float: right;
     text-transform: uppercase;
     font-size: 0.8em;
@@ -419,10 +422,12 @@ ul.user-list {
 	}
 
 	.ui-dialog-title{
-		color:#fff;
+		color: #FFFFFF;
+		display: inline-block;
 		font-size: 1em;
 		font-weight: bolder;
-		margin: 1em 10px;
+		margin: 0 10px;
+		width: 70%;
 	}
 #static-login-box-wrap {
 	background:#f4f4f4;
@@ -459,7 +464,7 @@ ul.user-list {
 		line-height:1.5;
 		display:inline-block;
 		width:100%;
-		height:120%;
+		height:100%;
 		background:#f4f4f4;
 	}
 	#main-content #login-landing-wrap {
@@ -555,24 +560,13 @@ ul.user-list {
 		margin-top: 2em;
 	}
 
-		.facebook{
+		#facebook{
 			width:192px;
 			display: block;
 			height:28px;
 			text-indent:-999999em;
 			margin: 10px 0 0 5px;
 			background:url("../images/facebook-connect.jpg") 0 0 no-repeat;
-			font-size:0;
-			line-height:0;
-		}
-
-		.twitter{
-			width:192px;
-			display: block;
-			height:28px;
-			text-indent:-10000px;
-			margin: 20px 0 0 5px;
-			background:url("../images/twitter-connect.jpg") 0 0 no-repeat;
 			font-size:0;
 			line-height:0;
 		}

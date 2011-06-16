@@ -33,7 +33,7 @@
 		<a href="<%= new_password_reset_path %>">Forgot?</a>
 	</li>
 	<li>
-		<button type="submit">Sign In</button>
+		<button class="button" type="submit">Sign In</button>
 		<label for="user_session_remember_me">Keep me signed in</label><input type="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1">    
 		<input type=hidden name="redirect" value="<%= request.request_uri %>">
 	</li>
@@ -46,7 +46,7 @@
 	<p>Don't have an account?</p>
 	<a href="<%= new_account_url %>" class="button" id="create-account">Create one</a>
 	<p>Sign in with Facebook</p>
-	<a href="#" onclick="checkLoginOrCallFacebook()" id="facebook" class="facebook">Facebook Connect</a>
+	<a href="#" onclick="checkLoginOrCallFacebook()" id="facebook">Facebook Connect</a>
 </div>
 <div id="fb-root"></div>
 </div>
@@ -65,8 +65,8 @@
     function checkLoginOrCallFacebook(){
         if (fbButtonState == 'idle'){
             fbButtonState = 'busy'; 
-            $(".facebook").css('background-repeat', 'repeat-y');
-            $(".facebook").css('background-position', '0px -50px');
+            $("#facebook").css('background-repeat', 'repeat-y');
+            $("#facebook").css('background-position', '0px -50px');
             FB.getLoginStatus(function(response) {
                 debugAlert("'ajax' response back now, fbButtonState=" + fbButtonState);
                 if (response.session && response.status && response.status == 'connected') { // fb says: logged in
@@ -90,12 +90,12 @@
                     // Can't usefull detect blocked popups on current Chrome: let the browser notify the user. Barely satisfactory.
                     if (!fmtPopup || fmtPopup.closed || typeof fmtPopup.closed=='undefined'){
                         fbButtonState = 'blocked';
-                        $(".facebook").css('background-position', '0px -100px'); 
+                        $("#facebook").css('background-position', '0px -100px'); 
                         debugAlert("was blocked, dropping out, fbButtonState=" + fbButtonState);
                     } else {
                         debugAlert("was not blocked, inner open worked OK, will now set to idle and focus the popup");
                         fbButtonState = 'idle';
-                        $(".facebook").css('background-position', '0px 0px'); 
+                        $("#facebook").css('background-position', '0px 0px'); 
                         debugAlert("finishing up, fmtPopup.focus(), fbButtonState=" + fbButtonState);
                         fmtPopup.focus();                        
                     }
@@ -110,7 +110,7 @@
             fbButtonState = 'idle';
         }
         if (fbButtonState == 'idle') {
-            $(".facebook").css('background-position', '0px 0px'); 
+            $("#facebook").css('background-position', '0px 0px'); 
         }
         return false;
     }
