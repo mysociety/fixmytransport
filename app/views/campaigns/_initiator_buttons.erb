@@ -103,18 +103,20 @@
 		
 		<div class="share-update">
 			<h3 class="font-1">What's happening?</h3>
-			<%- form_for @campaign_update ||= CampaignUpdate.new, :url => add_update_campaign_url(@campaign), :html => {:id => 'campaign-update-form-static' } do |f| %>
-			<div class='fieldset'>
-          		<div class='form-field'>
-          			<%= raw f.hidden_field :is_advice_request %>
-      				<input type="text" name="campaign_update[text]" id="campaign_update_text"/>
-      				<button class="button" type="submit">Post</button>
-					<div class='error', id="error-text" style="display: none;"></div>
-      				<label for="post-update">Keep supporters up-to-date on how the campaign is progressing.</label>          
-				</div>
-			</div>
-			<%- end %>
-		</div>
-  
+			  <%- form_for @campaign_update ||= CampaignUpdate.new, :url => add_update_campaign_url(@campaign), :html => {:id => 'campaign-update-form-static' } do |f| %>
+			  
+			  <div class='fieldset'>
+          <div class='form-field'>
+          
+              
+            <%= raw f.hidden_field :is_advice_request %>
+      			<input type="text" name="campaign_update[text]" id="campaign_update_text"/>
+      			<button class="button" type="submit">Post</button>
+			<div class='error', id="error-text" style="display: none;"></div>
+     			<label for="post-update">Keep supporters up-to-date on how the campaign is progressing.</label>          
+          </div>
+        </div>
+			  <%- end %>
+		</div>		
 	</div>
 </div>
