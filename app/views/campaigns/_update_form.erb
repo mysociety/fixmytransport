@@ -1,5 +1,5 @@
 <div class='campaign-updates' id="<%= id %>">
-  <%- form_for @campaign_update ||= CampaignUpdate.new, :url => add_update_campaign_url(@campaign), :html => {:id => 'campaign-update-form'} do |f| %>
+  <%- form_for @campaign_update ||= CampaignUpdate.new, :url => add_update_campaign_url(@campaign), :html => {:id => 'campaign-update-form-modal'} do |f| %>
     <div class='fieldset'>
       <div class='form-field'>
         <%- if @campaign_update.errors.on('text') %>
@@ -13,9 +13,9 @@
         <%= raw f.text_area :text, :cols => 40, :rows => 3 %>
         <div id="comment-login-options">	
         <%- if @campaign_update.is_advice_request %>
-          <button type="submit" class="button"><%= t(:request_advice)%></button>
+          <button type="submit"><%= t(:request_advice)%></button>
         <%- else %>
-          <button type="submit" class="button"><%= t(:add_update)%></button>
+          <button type="submit"><%= t(:add_update)%></button>
         <%- end %>
         </div>
       </div>

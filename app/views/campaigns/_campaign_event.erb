@@ -12,7 +12,7 @@
     <%= render :partial => 'assignment_in_progress', :locals => { :assignment => event.described, :event => event, :index => index }%>
   <%- when 'campaign_update_added' %>
     <%= render :partial => 'campaign_update', :locals => { :update => event.described, :index => index } %>
-    <%- when 'comment_added' %>
+  <%- when 'comment_added' %>
     <%= render :partial => 'shared/comment', :locals => { :comment => event.described, :index => index } %>
   <%- end %>
 </li>

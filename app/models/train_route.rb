@@ -31,6 +31,7 @@ class TrainRoute < Route
   end
   
   def description
+    return cached_description if cached_description
     name
   end
   

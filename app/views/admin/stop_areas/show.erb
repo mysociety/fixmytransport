@@ -19,7 +19,8 @@
   var linkType = 'location';
   var areaStops = <%= raw location_stops_js([@stop_area], main=true, small=false, :location)%>;
   jQuery(document).ready(function(){
-    setupShowStopArea();
     area_init();
+    setupShowStopArea();
+    
   });
 </script>

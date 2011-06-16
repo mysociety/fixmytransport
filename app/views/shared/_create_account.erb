@@ -8,6 +8,8 @@
     <%- else %>
       <div class='error' id='error-base' style="display: none;"></div>
     <%- end %>
+    <div class='notice' id='notice-base' style="display: none;"></div>
+    
     <div class='form-field'>
       <%- if @account_user.errors.on('name') %>
         <div class='error' id="error-name">
@@ -56,6 +58,7 @@
       <%= raw f.password_field :password_confirmation  %>
     </div>
     
-    <%= raw f.submit t(:create_account) %>
+	<button type="submit"><%= t(:create_account) %></button>
+    <%= link_to("back", login_url, :id => 'login-to-account')%>
   </div>
 <%- end %>

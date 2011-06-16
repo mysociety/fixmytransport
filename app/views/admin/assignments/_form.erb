@@ -13,7 +13,7 @@
 </div>
 <div class="assignment-problem-link">
   <strong><%= t(:problem).titleize %>:</strong> 
-  <%= link_to(@assignment.problem.subject, admin_problem_path(@assignment.problem)) %>
+  <%= link_to(@assignment.problem.subject, admin_url(admin_problem_path(@assignment.problem))) %>
 </div>
 <div class="assignment-location-link">
   <strong><%= t(:location) %>:</strong>
@@ -28,7 +28,7 @@
 <h3><%= t(:assignment_data) %></h3>
 <%- @assignment.data.keys.each do |key| %>
   <div class="assignment-data">
-  <strong><%= key.to_s.humanize %>:</strong> <%= @assignment.data[key] %>
+  <strong><%= key.to_s.humanize %>:</strong> <%= @assignment.data[key].inspect %>
   </div>
 <%- end %>
 

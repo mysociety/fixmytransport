@@ -118,7 +118,7 @@ describe Campaign do
     end
   
     it 'should be invalid without a title' do 
-      @campaign.errors.on(:title).should == 'Please give your campaign a headline'
+      @campaign.errors.on(:title).should == 'Please enter a headline that is between 40 and 80 characters long'
     end
     
   end

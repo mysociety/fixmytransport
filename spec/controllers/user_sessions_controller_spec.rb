@@ -30,7 +30,8 @@ describe UserSessionsController do
   
   describe 'POST #create' do 
   
-    def make_request(params={:format=>"html"})
+  
+    def make_request(params=@default_params)
       post :create, params
     end
     
@@ -38,6 +39,9 @@ describe UserSessionsController do
       @controller.stub!(:current_user).and_return(nil)
       @user_session = mock_model(UserSession, :save => true)
       UserSession.stub!(:new).and_return(@user_session) 
+      @default_params = {:format=>"html", :user_session => {:login => 'test@example.com', 
+                                                            :password => 'mypassword',
+                                                            :login_by_password => true}}
     end
     
     it 'should save the post-login action to the session' do 
@@ -45,7 +49,14 @@ describe UserSessionsController do
       make_request
     end
     
-    describe 'if the user session is valid' do
+    it 'should set "login_by_password" on the params passed to the user session for validation' do 
+      UserSession.should_receive(:new).with("login" => 'test@example.com', 
+                                            "password" => 'mypassword', 
+                                            "login_by_password" => true)
+      make_request
+    end
+        
+    describe 'if the user session is valid and the user has confirmed their password' do
     
       describe 'and a post-login action of joining a campaign is passed' do 
 
@@ -59,11 +70,11 @@ describe UserSessionsController do
         
         it 'should add the supporter to the campaign' do
           @mock_campaign.should_receive(:add_supporter)
-          make_request(:next_action => @next_action_data)
+          make_request(@default_params.update(:next_action => @next_action_data))
         end
         
         it 'should return to the redirect given' do 
-          make_request(:next_action => @next_action_data)
+          make_request(@default_params.update(:next_action => @next_action_data))
           response.should redirect_to("/another_url")
         end
       
@@ -72,7 +83,7 @@ describe UserSessionsController do
       describe 'if the request asks for json' do 
       
         it 'should return a json hash with a success key set to true' do 
-          make_request({:format=>"json"})
+          make_request(@default_params.update({:format=>"json"}))
           JSON.parse(response.body)['success'].should == true
         end
       
@@ -80,7 +91,7 @@ describe UserSessionsController do
       
     end
     
-    describe 'if the user session is not valid' do 
+    describe 'if the user session is not valid or the user has not confirmed their password' do 
       
       before do
         @user_session.stub!(:save).and_return(false)
@@ -99,12 +110,12 @@ describe UserSessionsController do
       describe 'if the request asks for json' do 
       
         it 'should return a json hash with a key for errors' do 
-          make_request({:format=>"json"})
+          make_request(@default_params.update({:format=>"json"}))
           JSON.parse(response.body)['errors'].should == {'base' => 'Test error message'}
         end
         
         it 'should return a json hash with a success key set to false' do 
-          make_request({:format=>"json"})
+          make_request(@default_params.update({:format=>"json"}))
           JSON.parse(response.body)['success'].should == false
         end
         

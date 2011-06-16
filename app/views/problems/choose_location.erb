@@ -1,6 +1,22 @@
-<p class='large-map-intro'>
-  <%= t(:multiple_locations_intro) %>
-</p>
-<div id='large-map'>
-  <%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => @other_locations, :link_type => :problem, :height => LARGE_MAP_HEIGHT, :width => LARGE_MAP_WIDTH  } %>
+<div id="main-content" class="container">
+<%- if params[:choose_from_list] %>
+   <%- page_results = (@locations + @other_locations).paginate({:page => params[:page], :per_page => 10 }) %>
+  <%= will_paginate page_results %>
+  <ul>
+  <%- page_results.each do |location| %>
+    <li class='location'>
+      <%= link_to(location.description, map_link_url(location, :problem)) %>
+    </li>
+  <%- end %>
+  </ul>
+  <%= will_paginate page_results %>
+<%- else %>
+  <p class='large-map-intro'>
+    <%= t(:multiple_locations_intro) %>
+    <%= raw t(:cant_see_the_map, :link => link_to(t(:choose_from_list), params.update("choose_from_list" => 1)))%>
+  </p>
+  <div id='large-map'>
+    <%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => @other_locations, :link_type => :problem, :height => LARGE_MAP_HEIGHT, :width => LARGE_MAP_WIDTH  } %>
+  </div>
+<%- end %>
 </div>

@@ -7,19 +7,13 @@
     <meta content='text/html; charset=utf-8' http-equiv='Content-type' />
     <%= yield :feeds %>
     <%= csrf_meta_tag %>
-    <style type="text/css">
-      @import url("/stylesheets/core.css");
-      @import url("/stylesheets/fixmytransport.css");
-      @import url("/stylesheets/map.css");
-    </style>
+    <%= raw stylesheet_link_tag('core', 'fixmytransport', 'map', :cache => 'main') %>
     <%= yield :stylesheets %>
-    <script>
-        var fmt_facebook_app_id = '<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>';
+    <%= raw javascript_include_tag('jquery-1.5.2.min', 'jquery-ui-1.8.11.min', 'jquery.autofill', 'jquery.form', :charset => 'utf-8', :cache => 'libraries') %>
+    <script type="text/javascript">
+      $('html').addClass('javascript-enabled');
+      var fmt_facebook_app_id = '<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>';
     </script>
-    <%= raw javascript_include_tag('jquery-1.5.2.min', :charset => 'utf-8') %>
-    <%= raw javascript_include_tag('jquery-ui-1.8.11.min', :charset => 'utf-8') %>
-    <%= raw javascript_include_tag('jquery.autofill', :charset => 'utf-8') %>
-    <%= raw javascript_include_tag('jquery.form', :charset => 'utf-8') %>
     <%= yield :javascript %>
   </head>
 	<body>
@@ -32,7 +26,7 @@
 				</ul>
 				<ul id="top-nav">
 					<li><a href="<%= about_url %>">About</a></li>
-					<li><a href="<%= feedback_url %>">Feedback</a></li>
+					<li><a href="<%= feedback_url(:url => CGI.escape(request.request_uri)) %>">Feedback</a></li>
 				</ul>
 
 				<a id="logo" href="<%= root_url %>">Fix My Transport</a>
@@ -71,8 +65,8 @@
 				</p>
 			</div>
 		</div>
-		<%= raw javascript_include_tag('fixmytransport', :charset => 'utf-8') %>
-		<%= raw javascript_include_tag('application', :charset => 'utf-8') %>
+		    <%= yield :javascript %>
+		    <%= raw javascript_include_tag('fixmytransport', 'application', :charset => 'utf-8', :cache => 'main') %>
 		<%= render :partial => 'shared/tracking' %>
 	</body>
 </html>

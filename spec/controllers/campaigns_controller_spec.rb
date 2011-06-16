@@ -24,9 +24,12 @@ describe CampaignsController do
   
     before do 
       @default_params = {:id => 55}
+      @mock_user = mock_model(User, :name => 'Test User')
       @mock_campaign = mock_model(Campaign, :editable? => true, 
-                                            :visible? => false)
+                                            :visible? => false,
+                                            :initiator => @mock_user)
       Campaign.stub!(:find).and_return(@mock_campaign)
+      @controller.stub!(:current_user).and_return(@mock_user)
     end
     
     def make_request(params=@default_params)
@@ -64,13 +67,16 @@ describe CampaignsController do
   describe 'POST #add_details' do 
   
     before do 
+      @mock_user = mock_model(User, :name => "Test User")
       @default_params = {:id => 55, :campaign => {:title => 'title', :description => 'description'}}
       @mock_campaign = mock_model(Campaign, :editable? => true, 
                                             :visible? => false,
                                             :update_attributes => true, 
+                                            :initiator => @mock_user,
                                             :confirm => true,
                                             :save! => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
+      @controller.stub!(:current_user).and_return(@mock_user)
     end
     
     def make_request(params=@default_params)
@@ -117,9 +123,9 @@ describe CampaignsController do
           make_request
         end
         
-        it 'should redirect to the campaign url' do 
+        it 'should redirect to the share campaign url' do 
           make_request
-          response.should redirect_to campaign_url(@mock_campaign)
+          response.should redirect_to share_campaign_url(@mock_campaign)
         end
         
       end
@@ -150,6 +156,7 @@ describe CampaignsController do
                                        :initiator_id => 44,
                                        :editable? => true,
                                        :visible? => true,
+                                       :campaign_photos => mock('campaign photos', :build => true),
                                        :location => mock_model(Stop, :points => [mock("point", :lat => 51, :lon => 0)]))
       Campaign.stub!(:find).and_return(@campaign)
     end
@@ -703,6 +710,7 @@ describe CampaignsController do
     before do
       @mock_user = mock_model(User,  :attributes= => true,
                                      :registered= => true,
+                                     :confirmed_password= => true,
                                      :name= => true,
                                      :password= => true,
                                      :password_confirmation= => true,

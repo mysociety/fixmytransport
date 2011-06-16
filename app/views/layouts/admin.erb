@@ -9,7 +9,7 @@
     <%= stylesheet_link_tag 'admin' %>
     <%= stylesheet_link_tag 'custom-theme/jquery-ui-1.8.9.custom.css' %>
     <%= yield :css %>
-    <%= raw javascript_include_tag('jquery-1.4.4.min.js') %>
+    <%= raw javascript_include_tag('jquery-1.5.2.min.js') %>
     <%= raw javascript_include_tag('jquery-ui-1.8.9.custom.min.js') %>
     <%= raw javascript_include_tag('admin.js') %>
     <%= yield :javascript %>
@@ -18,6 +18,7 @@
     <h2><%= link_to_unless_current("#{t(:site_name)} #{t(:admin)}", admin_url(admin_root_path)) %></h2>
     <ul class='admin-navigation'>
       <li><%= link_to t(:location_searches), admin_url(admin_location_searches_path) %></li>
+      <li><%= link_to t(:campaigns), admin_url(admin_campaigns_path) %></li>      
       <li><%= link_to t(:problems), admin_url(admin_problems_path) %></li>
       <li><%= link_to t(:operators), admin_url(admin_operators_path) %></li>
       <li><%= link_to t(:routes), admin_url(admin_routes_path) %></li>

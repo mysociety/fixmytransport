@@ -59,11 +59,7 @@ class ApplicationController < ActionController::Base
     else
       param = :campaign_id
     end
-    if params[param].to_i.to_s == params[param]
-      @campaign = Campaign.find(params[param])
-    else
-      @campaign = Campaign.find_by_subdomain(params[param])
-    end
+    @campaign = Campaign.find(params[param])
     unless @campaign && @campaign.editable?
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
@@ -183,8 +179,49 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def save_post_login_action_to_database(user)
+    if post_login_action_data = get_action_data(session)
+      session.delete(:next_action)
+      id = post_login_action_data[:id]
+      user.post_login_action = post_login_action_data[:action].to_s
+      user.save_without_session_maintenance
+      case post_login_action_data[:action]
+      when :join_campaign
+        campaign = Campaign.find(id)
+        supporter = campaign.add_supporter(user, confirmed=false, token=user.perishable_token)
+        return supporter
+      when :add_comment
+        commented_type = post_login_action_data[:commented_type]
+        commented = commented_type.titleize.constantize.find(id)
+        comment = commented.add_comment(user, 
+                              post_login_action_data[:text],
+                              confirmed=false, token=user.perishable_token)
+        return comment
+      when :create_problem
+        problem = Problem.create_from_hash(post_login_action_data, user, token=user.perishable_token)
+        return problem
+      end
+    end
+    
+  end
+  
+  def post_login_action_string
+    if post_login_action_data = get_action_data(session)
+      case post_login_action_data[:action]
+      when :join_campaign
+        return t(:you_will_not_be_a_supporter)
+      when :add_comment
+        return t(:your_comment_will_not_be_added)
+      when :create_problem
+        return t(:your_problem_will_not_be_created)
+      else 
+        return nil
+      end
+    end
+  end
+  
   def post_login_actions
-    [:join_campaign, :add_comment]
+    [:join_campaign, :add_comment, :create_problem]
   end
   
   def get_action_data(data_hash)
@@ -212,6 +249,16 @@ class ApplicationController < ActionController::Base
                              post_login_action_data[:text],
                              confirmed=true)
         flash[:notice] = "Thanks for your comment"
+      when :create_problem
+        problem = Problem.create_from_hash(post_login_action_data, current_user)
+        respond_to do |format|
+          format.json do
+            @json[:redirect] = convert_problem_url(problem)
+          end
+          format.html do
+            session[:return_to] = convert_problem_url(problem)
+          end
+        end
       end
       if post_login_action_data[:redirect]
         session[:return_to] = post_login_action_data[:redirect]

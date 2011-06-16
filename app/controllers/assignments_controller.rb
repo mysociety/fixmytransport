@@ -15,6 +15,7 @@ class AssignmentsController < ApplicationController
     @initiator = @campaign.initiator
     assignment_data = { :name => params[:name],
                         :email => params[:email],
+                        :description => params[:description],
                         :draft_text => params[:draft_text],
                         :reason => params[:reason],
                         :subject => params[:subject] }

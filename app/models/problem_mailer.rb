@@ -5,14 +5,14 @@ class ProblemMailer < ApplicationMailer
   def problem_confirmation(recipient, problem, token)
    recipients recipient.name_and_email
    from contact_from_name_and_email
-   subject "[FixMyTransport] Your transport problem"
+   subject problem_confirmation_subject
    body :problem => problem, :recipient => recipient, :link => main_url(confirm_problem_path(:email_token => token))
   end  
   
   def comment_confirmation(recipient, comment, token)
     recipients recipient.name_and_email
     from contact_from_name_and_email
-    subject "[FixMyTransport] Your transport update"
+    subject comment_confirmation_subject(comment)
     body :comment => comment, :recipient => recipient, :link => main_url(confirm_comment_path(:email_token => token))
   end
   
@@ -20,7 +20,7 @@ class ProblemMailer < ApplicationMailer
     recipients contact_from_name_and_email
     from email_params[:name] + " <" + email_params[:email] + ">"
     subject "[FixMyTransport] " << email_params[:subject]
-    body :message => email_params[:message], :name => email_params[:name]
+    body :message => email_params[:message], :name => email_params[:name], :uri => email_params[:feedback_on_uri]
   end
   
   def report(problem, recipient, recipient_models, missing_recipient_models=[])

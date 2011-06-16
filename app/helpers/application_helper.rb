@@ -4,22 +4,7 @@ module ApplicationHelper
   def google_maps_key
     MySociety::Config.get('GOOGLE_MAPS_API_KEY', '')
   end
-
-  def location_type_radio_buttons(campaign)
-    tags = []
-    location_types = { 'Stop' => 'Stop',
-                       'StopArea' => 'Station',
-                       'Route' => 'Route'}
-
-    location_types.keys.sort.each do |location_class|
-      checked = campaign.location_type == location_class
-      tag = radio_button 'campaign', 'location_type', location_class, {:class => 'location-type'}
-      tag += location_types[location_class]
-      tags << tag
-    end
-    tags.join("\n")
-  end
-
+  
   # options:
   #  no_jquery - don't include a tag for the main jquery js file
   def map_javascript_include_tags(options={})
@@ -61,30 +46,33 @@ module ApplicationHelper
   end
 
   def stop_icon(location, main=false, small=false)
-    name = ''
+    name = '/images/map-icons/map-'
     if location.is_a? Route
       if location.transport_mode_name == 'Train'
-        name = 'train'
+        name += 'train-blue'
       elsif location.transport_mode_name == 'Tram/Metro'
-        name = 'tram'
+        name += 'tram-green'
       elsif location.transport_mode_name == 'Ferry'
-        name = 'ferry'
+        name += 'boat-orange'
       else
-        name = 'bus'
+        name += 'bus-magenta'
       end
     else
       if location.respond_to?(:area_type) && location.area_type == 'GRLS'
-        name = 'train'
+        name += 'train-blue'
       elsif location.respond_to?(:area_type) && location.area_type == 'GTMU'
-        name = 'tram'
+        name += 'tram-green'
       elsif location.respond_to?(:area_type) && location.area_type == 'GFTD'
-        name = 'ferry'
+        name += 'boat-orange'
       else
-        name = 'bus'
+        name += 'bus-magenta'
       end
     end
-    name += '-main' if main
-    name += '-sm' if small
+    if main
+      name += '-med' 
+    elsif small
+      name += '-sml' 
+    end
     return name
   end
 
@@ -114,35 +102,6 @@ module ApplicationHelper
     array_content.to_json
   end
 
-  def terminus_text(route)
-    text = ''
-    return text if route.stops.empty?
-    terminuses = route.terminuses
-    if terminuses.empty?
-      terminuses = [route.stops.first]
-    end
-    stop_names = []
-    terminus_links = []
-    terminuses.each do |stop|
-      stop_name = stop.name_without_suffix(route.transport_mode)
-      stop_area = stop.area
-      link_text = stop_name
-      if stop_name != stop_area
-        link_text += " in #{stop_area}"
-      end
-      terminus_links << link_to(link_text, location_url(stop)) unless stop_names.include? link_text
-      stop_names << link_text
-    end
-    if terminus_links.size > 1
-      text += "Between "
-      text += terminus_links.to_sentence(:last_word_connector => ' and ')
-    else
-      text += "From "
-      text += terminus_links.first
-    end
-    text += "."
-  end
-
   def stop_name_for_admin(stop)
     name = stop.full_name
     if ! stop.street.blank?
@@ -150,10 +109,6 @@ module ApplicationHelper
     end
     name += " #{t(:in_locality, :locality => stop.locality_name)} (#{stop.id})"
     name
-  end
-  
-  def transport_direct_link(stop)
-    return link_to(t(:transport_direct), "http://www.transportdirect.info/web2/journeyplanning/StopInformationLandingPage.aspx?et=si&id=fixmytransport&st=n&sd=#{stop.atco_code}")
   end
 
   def external_search_link(text)
@@ -209,7 +164,7 @@ module ApplicationHelper
     names = problem.send(method).map{ |org| "#{wrapper_start}#{org.name}#{wrapper_end}" }
     names.to_sentence(:last_word_connector => " #{connector} ", :two_words_connector => " #{connector} ")
   end
-  
+
   def operator_links(operators)
     operator_links = operators.map{ |operator| link_to(operator.name, operator_path(operator)) }
     operator_links.to_sentence(:last_word_connector => ' and ', :two_words_connector => ', ')
@@ -274,7 +229,7 @@ module ApplicationHelper
    end
    raise "Unknown location type: #{location.class}"
   end
-  
+
   def admin_location_url(location)
     if location.is_a? Stop
       return admin_url(stop_path(location.id))
@@ -284,17 +239,17 @@ module ApplicationHelper
       return admin_url(route_path(location.id))
     end
   end
-  
+
   def add_comment_url(commentable)
     if commentable.is_a?(Campaign)
       return add_comment_campaign_url(commentable)
     elsif commentable.is_a?(Problem)
       return add_comment_problem_url(commentable)
-    else 
+    else
       raise "Unhandled commentable type in add_comment_url: #{commentable.type}"
     end
   end
-  
+
   def commented_url(commentable)
     if commentable.is_a?(Campaign)
       return campaign_url(commentable)
@@ -324,17 +279,6 @@ module ApplicationHelper
     return t(:expert) if user.is_expert?
     return t(:supporter) if campaign.supporters.include?(user)
     return ""
-  end
-
-  def problem_date_and_time(problem)
-    datetime_parts = []
-    if problem.time
-      datetime_parts << t(:at_time, :time => problem.time.to_s(:standard))
-    end
-    if problem.date
-      datetime_parts << t(:on_date, :date => problem.date.to_s(:standard))
-    end
-    return datetime_parts.join(" ")
   end
 
   def update_text(update, link)
@@ -398,7 +342,7 @@ module ApplicationHelper
       return ''
     end
   end
-  
+
   def campaign_display_status(campaign)
     case campaign.status
     when :confirmed
@@ -407,19 +351,72 @@ module ApplicationHelper
       campaign.status.to_s
     end
   end
-  
-  def button(text, link, link_class, index)
-    if (index > 0 && ((index+1) % 4) == 0)
-      link_class += " last"
+
+  def twitter_url(campaign)
+    if current_user == campaign.initiator
+      text = campaign.call_to_action
+    else
+      text = campaign.supporter_call_to_action
     end
-    link = "<a href=\"#{link}\" class=\"#{link_class}\">#{text}</a>"
-    return link
+    twitter_params = { :url => campaign_url(campaign),
+                       :text => text,
+                       :via => 'FixMyTransport' }
+
+    return "http://twitter.com/share?#{twitter_params.to_query}"
   end
-  
+
   def sortable(column, title = nil)
     title ||= column.titleize
     css_class = column == sort_column ? "current #{sort_direction}" : nil
     direction = (column == sort_column && sort_direction == "asc") ? "desc" : "asc"
     link_to title, admin_url(url_for(params.merge({:sort => column, :direction => direction}))), {:class => css_class}
   end
+  
+  def assignment_title(assignment)
+    case assignment.task_type
+    when 'find_transport_organization'
+      return 'Find operator'
+    when 'find_transport_organization_contact_details'
+      return 'Add contact'
+    else
+      raise "No title set for assignment type #{assignment.task_type}"
+    end
+  end
+  
+  def assignment_details(assignment)
+    case assignment.task_type
+    when 'find_transport_organization'
+      return "In order to get your campaign started, you'll need to find out who operates this #{readable_location_type(assignment.campaign.location)}."
+    when 'find_transport_organization_contact_details'
+      return "In order to get your campaign started, you'll need to find an email address for #{assignment.problem.operator.name}"
+    else 
+      raise "No details set for assignment type #{assignment.task_type}"
+    end
+  end
+    
+  def assignment_icon(assignment)
+    case assignment.task_type
+    when 'find_transport_organization'
+      return 'person'
+    when 'find_transport_organization_contact_details'
+      return 'person'
+    else
+      raise "No icon set for assignment type #{assignment.task_type}"
+    end
+  end
+  
+  def contact_description(contact_type, campaign)
+    case contact_type
+    when 'OperatorContact'
+      return MySociety::Format.ucfirst("#{readable_location_type(campaign.location)} operator")
+    when 'CouncilContact'
+      return "Council"
+    when 'PassengerTransportExecutive'
+      return "Passenger Transport Executive"
+    else
+      raise "No contact description set for contact_type #{contact_type}"
+    end
+      
+  end
+  
 end

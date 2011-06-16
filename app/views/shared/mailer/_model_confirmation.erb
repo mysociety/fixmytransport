@@ -1,0 +1,15 @@
+<%- if model.is_a? Comment %>
+
+  <%- if model.commentable.is_a?(Problem) %>
+Your update reads: <%= raw(model.text) %> 
+  <%- else %>
+Your comment reads: <%= raw(model.text) %>
+  <%- end %>
+
+<%- elsif model.is_a? Problem %>
+
+Your problem had the subject: <%= raw(model.subject) %>
+
+And description: <%= raw(model.description) %> 
+
+<%- end %>

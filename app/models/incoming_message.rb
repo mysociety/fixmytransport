@@ -1,9 +1,11 @@
 class IncomingMessage < ActiveRecord::Base
+
   belongs_to :campaign
-  belongs_to :raw_email
-  validates_presence_of :campaign, :raw_email
-  has_many :campaign_updates
-  has_many :campaign_events, :as => :described
+  belongs_to :raw_email, :dependent => :destroy
+  validates_presence_of :raw_email
+  has_many :outgoing_messages, :dependent => :nullify
+  has_many :campaign_updates, :dependent => :nullify
+  has_many :campaign_events, :as => :described, :dependent => :destroy
   
   def mail 
     @mail ||= if raw_email.nil?
@@ -151,8 +153,10 @@ class IncomingMessage < ActiveRecord::Base
                                  :campaign => campaign, 
                                  :raw_email => raw_email,
                                  :from => tmail.friendly_from)
-      campaign.campaign_events.create!(:event_type => 'incoming_message_received', 
-                                       :described => incoming_message)
+      if campaign                           
+        campaign.campaign_events.create!(:event_type => 'incoming_message_received', 
+                                         :described => incoming_message)
+      end
       return incoming_message
     end
   end

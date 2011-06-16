@@ -121,7 +121,8 @@ describe User do
       
       before do 
         @mock_user = mock_model(User, :save! => true, 
-                                      :access_tokens => [])
+                                      :access_tokens => [],
+                                      :registered= => true)
         @mock_user.access_tokens.stub!(:build).and_return(true)
         @mock_user.stub!(:save_without_session_maintenance)
         User.stub!(:new).and_return(@mock_user)
@@ -129,6 +130,11 @@ describe User do
                                                    'name' => 'Test Name', 
                                                    'email' => 'test@example.com'})
         UserSession.stub!(:create)
+      end
+      
+      it 'should set the user as registered' do 
+        @mock_user.should_receive(:registered=).with(true)
+        User.handle_external_auth_token('mytoken', 'facebook')
       end
       
       it 'should look up user records by the facebook ID' do 

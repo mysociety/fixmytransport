@@ -15,7 +15,8 @@ ActionController::Routing::Routes.draw do |map|
                                          :get_supporters => [:get],
                                          :complete => [:post], 
                                          :add_photos => [:get, :post], 
-                                         :add_details => [:get, :post] } do |campaign|
+                                         :add_details => [:get, :post], 
+                                         :share => [:get] } do |campaign|
     campaign.resources :incoming_messages, :only => [:show]
     campaign.attachment '/incoming_messages/:id/attach/:url_part_number', :action => 'show_attachment', 
                                                                           :controller => 'incoming_messages'
@@ -125,7 +126,13 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :stops 
     admin.resources :stop_areas 
     admin.resources :problems, :only => [:show, :index, :update]
+    admin.resources :campaigns, :only => [:show, :index, :update]
+    admin.resources :campaign_updates, :only => [:show, :update]
     admin.resources :assignments, :only => [:show, :update]
+    admin.resources :comments, :only => [:show, :update]
+    admin.resources :incoming_messages, :only => [:show, :update, :destroy], 
+                                        :member => { :download => [:get],
+                                                     :redeliver => [:post] }
     admin.connect "/autocomplete_for_operator_name", :controller => 'operators', 
                                                      :action => 'autocomplete_for_name'
     admin.connect "/autocomplete_for_stop_name", :controller => 'stops',

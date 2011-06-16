@@ -1,14 +1,14 @@
 <%- if location.is_a?(Route) or location.is_a?(SubRoute) %>
   <%- if location.show_as_point %>
-    <a href="<%=map_link_url(location, link_type) %>">
-      <img src="/images/<%=stop_icon(location, main, small)%>.png" title="<%=location.description%>" alt="<%=location.description %>" style="<%=icon_style(location, @lon, @lat, @zoom, small, height, width) %>" />
+    <a class="location-marker" href="<%=map_link_url(location, link_type) %>" data-id="<%=location.id %>" data-lon="<%= location.lon %>" data-lat="<%= location.lat %>" >
+      <img src="<%=stop_icon(location, main, small)%>.png" title="<%=location.description%>" alt="<%=location.description %>" style="<%=icon_style(location, @lon, @lat, @zoom, small, height, width) %>" />
     </a>
   <%- else %>
-    <%= render :partial => 'shared/location_marker', :collection => location.points, :as => :location, :locals => { :small => true, :main => main, :link_type => link_type, :height => height, :width => width } %>
+    <%= render :partial => 'shared/location_marker', :collection => location.points, :as => :location, :locals => { :small => true, :main => false, :link_type => link_type, :height => height, :width => width } %>
   <%- end %>
 <%- else %>
 
-  <a href="<%=map_link_url(location, link_type) %>">
-    <img src="/images/<%=stop_icon(location, main, small)%>.png" title="<%=location.description%>" alt="<%=location.description %>" style="<%=icon_style(location, @lon, @lat, @zoom, small, height, width) %>" />
+  <a class="location-marker" href="<%=map_link_url(location, link_type) %>" data-id="<%=location.id %>" data-lon="<%= location.lon %>" data-lat="<%= location.lat %>">
+    <img src="<%=stop_icon(location, main, small)%>.png" title="<%=location.description%>" alt="<%=location.description %>" style="<%=icon_style(location, @lon, @lat, @zoom, small, height, width) %>" />
     </a>
 <%- end %>

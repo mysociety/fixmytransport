@@ -1,0 +1,4 @@
+<h2 class='comment-header'>Comment <%= @comment.id %></h2>
+<%- form_for [:admin, @comment], :url => admin_url(admin_comment_path(@comment.id)), :html => { :class => 'comment-form' } do |f|  %>
+  <%= render :partial => "form", :locals => { :f => f } %>
+<%- end %>

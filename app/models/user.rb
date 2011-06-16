@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   has_many :campaigns, :through => :campaign_supporters
   has_many :initiated_campaigns, :foreign_key => :initiator_id, :class_name => 'Campaign'
   has_many :sent_emails, :as => :recipient
-  before_save :generate_email_local_part, :unless => :unregistered?
+  before_save :generate_email_local_part
   has_many :access_tokens
   has_attached_file :profile_photo,
                     :path => "#{MySociety::Config.get('FILE_DIRECTORY', ':rails_root/public/system')}/paperclip/:class/:attachment/:id/:style/:filename",
@@ -61,12 +61,6 @@ class User < ActiveRecord::Base
   
   def unregistered?
     !registered
-  end
-
-  # Wrap the registered flag in a confirmed? method - a magic method picked up by authlogic.
-  # Registered means that the user has set a password and confirmed their account.
-  def confirmed?
-    registered?
   end
 
   def first_name
@@ -108,15 +102,27 @@ class User < ActiveRecord::Base
     reset_perishable_token!
     UserMailer.deliver_password_reset_instructions(self)
   end
-
-  def deliver_new_account_confirmation!
-    reset_perishable_token!
-    UserMailer.deliver_new_account_confirmation(self)
+  
+  def mark_seen(campaign)
+    if current_supporter = self.campaign_supporters.confirmed.detect{ |supporter| supporter.campaign == campaign }
+      if current_supporter.new_supporter?
+        current_supporter.new_supporter = false
+        current_supporter.save
+      end
+    end
   end
-
-  def deliver_already_registered!
-    reset_perishable_token!
-    UserMailer.deliver_already_registered(self)
+  
+  def supporter_or_initiator(campaign)
+    return (self == campaign.initiator || campaign.supporters.include?(self))
+  end
+  
+  def new_supporter?(campaign)
+    if current_supporter = self.campaign_supporters.confirmed.detect{ |supporter| supporter.campaign == campaign }
+      if current_supporter.new_supporter?
+        return true
+      end
+    end
+    return false
   end
   
   # class methods
@@ -140,8 +146,9 @@ class User < ActiveRecord::Base
         email = facebook_data['email']
         user = User.find(:first, :conditions => ['email = ?', email])
         if not user
-          user = User.new({:name => name, :email => email, :registered => true})
+          user = User.new({:name => name, :email => email})
         end   
+        user.registered = true
         user.access_tokens.build({:user_id => user.id,
                                     :token_type => 'facebook',
                                     :key => fb_id,
@@ -151,32 +158,7 @@ class User < ActiveRecord::Base
       UserSession.create(user, remember_me=false)
     end
   end
+  
 
-  def deliver_account_exists!
-    reset_perishable_token!
-    UserMailer.deliver_account_exists(self)
-  end
-  
-  def mark_seen(campaign)
-    if current_supporter = self.campaign_supporters.detect{ |supporter| supporter.campaign == campaign }
-      if current_supporter.new_supporter?
-        current_supporter.new_supporter = false
-        current_supporter.save
-      end
-    end
-  end
-  
-  def supporter_or_initiator(campaign)
-    return (self == campaign.initiator || self.campaigns.include?(campaign))
-  end
-  
-  def new_supporter?(campaign)
-    if current_supporter = self.campaign_supporters.detect{ |supporter| supporter.campaign == campaign }
-      if current_supporter.new_supporter?
-        return true
-      end
-    end
-    return false
-  end
 end
 

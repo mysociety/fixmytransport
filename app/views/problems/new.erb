@@ -26,9 +26,11 @@
         
          <%- if @problem.location.operators.size > 1 %>
            <%- if @problem.errors.on('operator_id') %>
-            <div class='error'>
+            <div class='error' id="error-operator_id">
               <%= error_message_on @problem, :operator_id %>
             </div>
+          <%- else %>
+            <div class='error', id="error-operator_id" style="display: none;"></div>
            <%- end %>
             <%= raw f.collection_select("operator_id", @problem.location.operators, :id, :name, :include_blank => t(:select_operator)) %>
           <%- elsif @problem.location.operators.size == 1 %>
@@ -49,51 +51,21 @@
         <%- end %>
 				
 			</li>
-      
-      <li>
-			  <%- if @problem.errors.on('reporter_name') %>
-          <div class='error'>
-            <%= error_message_on @problem, 'reporter_name' %>
-          </div>
+    
+  		<input id="problem_reporter_name" name="problem[reporter_name]" type="hidden" value="<%= @problem.reporter_name %>"/>
+			<%- f.fields_for :reporter, @problem.reporter do |reporter_fields| %>
+        <%- if current_user %>
+            <%= raw reporter_fields.hidden_field :email, :value => current_user.email %>
         <%- end %>
-				<label for="problem_reporter_name">Name</label>
-				<input id="problem_reporter_name" name="problem[reporter_name]" type="text" value="<%= @problem.reporter_name %>"/>
-				<div class="tipbox">
-				  <a href="#" class="tip-close">Close</a>
-					<h5>Your name</h5>
-					<p></p>
-				</div>
-			</li>
-						
-			<%- f.fields_for :reporter do |reporter_fields| %>
-        <%- if @problem.reporter == current_user %>
-            <%= raw reporter_fields.hidden_field :id %>
-            <%= raw reporter_fields.hidden_field :email %>
-        <%- else %>
-      			<li>
-      			  <%- if @problem.reporter.errors.on('email') %>
-                <div class='error'>
-                  <%= error_message_on @problem.reporter, 'email' %>
-                </div>
-              <%- end %>
-      				<label for="problem_reporter_attributes_email">Email address</label>
-      				<input id="problem_reporter_attributes_email" name="problem[reporter_attributes][email]" type="text" value="<%=@problem.reporter.email %>"/>
-      				
-      				<div class="tipbox">
-                <a href="#" class="tip-close">Close</a>
-      					<h5>Email address</h5>
-      					<p>Your email address will not be public. <a href="<%= about_url(:anchor => "privacy") %>">Read our privacy policy</a></p>
-      				</div>
-      			</li>
-      <%- end %>
-          
       <%- end %>
 
 			<li>
 			  <%- if @problem.errors.on('subject') %>
-          <div class='error'>
+          <div class='error' id="error-subject">
             <%= error_message_on @problem, 'subject' %>
           </div>
+        <%- else %>
+           <div class='error', id="error-subject" style="display: none;"></div>
         <%- end %>
 				<label for="problem_subject">Subject</label>
 				<input id="problem_subject" type="text" name="problem[subject]" value="<%= @problem.subject %>"/>
@@ -110,6 +82,8 @@
             <div class='error'>
               <%= error_message_on @problem, :category %>
             </div>
+          <%- else %>
+           <div class='error', id="error-category" style="display: none;"></div>
           <%- end %>
           <label for="problem_category">Category</label>
           <%= raw f.select("category", @problem.categories, { :include_blank => t(:pick_a_category) }) %>
@@ -124,6 +98,8 @@
           <div class='error'>
             <%= error_message_on @problem, 'description' %>
           </div>
+        <%- else %>
+         <div class='error', id="error-description" style="display: none;"></div>
         <%- end %>
 				<label for="problem_description">Description</label>
 				<textarea id="problem_description" name="problem[description]" ><%= @problem.description %></textarea>
@@ -133,16 +109,17 @@
 					<p>Try to be descriptive, but concise. <a href="#">See an example</a>.</p>
 				</div>
 			</li>
-			<li>
-  		  <button type="submit" class="problem-next" value="clicked">
+      <li>
+        <button type="submit" class="problem-next" value="clicked">
           Next
         </button>
-		  </li>
+			</li>
 		</ul>
 
 		<%- end %>
 	</div>
 </div>
+
 
 
 

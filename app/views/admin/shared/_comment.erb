@@ -1,0 +1,19 @@
+<h3><%= t(:comments) %></h3>
+<table>
+  <tr>
+    <th><%= t(:id) %></th>
+    <% for column in Comment.content_columns %>
+      <th><%= column.human_name %></th>
+    <% end %>
+  </tr>
+<%- comments.each do |comment| %>
+  <tr class='<%= cycle("odd", "even", :name => 'comments') %>'>
+    <td>
+      <%= link_to(comment.id, admin_comment_path(comment)) %>
+    </td>
+    <%- Comment.content_columns.map { |c| c.name }.each do |column| %>
+      <td><%= simple_format( comment.send(column) ) %></td>
+    <%- end %>
+  </tr>
+<%- end %>
+</table>

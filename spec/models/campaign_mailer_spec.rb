@@ -2,6 +2,52 @@ require 'spec_helper'
 
 describe CampaignMailer do
   
+  describe 'when receiving mail' do 
+    
+    before do
+      filepath = File.join(RAILS_ROOT, 'spec', 'examples', 'email', "plain.txt")
+      @raw_email = File.read(filepath)
+      @mock_user = mock_model(User, :name_and_email => "Campaign Person <campaign.person@my-campaign.example.com>",
+                                    :name => "Campaign Person")
+      @mock_campaign = mock_model(Campaign, :get_recipient => @mock_user,
+                                            :title => "A Test Campaign")
+      @mock_message = mock_model(IncomingMessage)
+      IncomingMessage.stub!(:create_from_tmail).and_return(@mock_message)
+    end
+  
+    describe 'if a campaign address can be found in the to: field' do 
+      
+      before do
+        Campaign.stub!(:find_by_campaign_email).with('campaign.person@my-campaign.example.com').and_return(@mock_campaign)
+      end
+      
+      it 'should create an incoming message for the campaign from the mail' do 
+        IncomingMessage.should_receive(:create_from_tmail).with(anything, @raw_email, @mock_campaign).and_return(@mock_message)
+        CampaignMailer.receive(@raw_email)
+      end
+      
+      it 'should send a message to the recipient telling them they have a message' do 
+        CampaignMailer.should_receive(:deliver_new_message).with(@mock_user, @mock_message, @mock_campaign)
+        CampaignMailer.receive(@raw_email)
+      end
+      
+    end
+    
+    describe 'if no campaign address can be found' do 
+    
+      before do
+        Campaign.stub!(:find_by_campaign_email).and_return(nil)
+      end
+      
+      it 'should create an incoming message with no associated campaign' do 
+        IncomingMessage.should_receive(:create_from_tmail).with(anything, @raw_email, nil)
+        CampaignMailer.receive(@raw_email)
+      end
+      
+    end
+     
+  end
+  
   describe 'when sending a campaign update' do 
   
     describe 'when not running in dry-run mode' do 
@@ -35,13 +81,13 @@ describe CampaignMailer do
         SentEmail.should_receive(:create!).with(:recipient => @mock_user, 
                                                 :campaign => @mock_campaign, 
                                                 :campaign_update => @mock_update)
-        CampaignMailer.send_update(@mock_update)
+        CampaignMailer.send_update(@mock_update, @mock_campaign)
       end
     
       it 'should send an advice request email and an expert advice request mail if the update is an advice request' do 
         @mock_update.stub!(:is_advice_request?).and_return(true)
         ActionMailer::Base.deliveries.clear
-        CampaignMailer.send_update(@mock_update)
+        CampaignMailer.send_update(@mock_update, @mock_campaign)
         ActionMailer::Base.deliveries.size.should == 2
         expert_mail = ActionMailer::Base.deliveries.first
         expert_mail.body.should match(/Hi transport experts/)
@@ -58,13 +104,13 @@ describe CampaignMailer do
         mock_sent_email = mock_model(SentEmail, :recipient => @mock_user)
         SentEmail.stub!(:find).and_return([mock_sent_email])
         CampaignMailer.should_not_receive(:deliver_update)
-        CampaignMailer.send_update(@mock_update)
+        CampaignMailer.send_update(@mock_update, @mock_campaign)
       end
       
       it 'should not send an email to the person who created the update' do 
         @mock_supporter.stub!(:supporter).and_return(@mock_update_user)
         CampaignMailer.should_not_receive(:deliver_update)
-        CampaignMailer.send_update(@mock_update)
+        CampaignMailer.send_update(@mock_update, @mock_campaign)
       end
       
     end

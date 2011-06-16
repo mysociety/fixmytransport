@@ -28,8 +28,8 @@
 <div id="main-nav-bar">
 	<div class="container">
 		<ul id="process" class="crumb">
-			<li id="crumb1"><a href="#general">General</a></li>
-			<li id="crumb2"><a href="#share">Share</a></li>
+			<li id="crumb1" class="current done">General</li>
+			<li id="crumb2">Share</li>
 		</ul>
 	</div>
 </div>
@@ -58,8 +58,8 @@
               <%= raw f.text_field :title %>
 							<div class="tipbox">
 								<a href="#" class="tip-close">Close</a>
-								<h5>Make a title</h5>
-								<p>Give your campaign a good title</p>
+								<h5>Make a headline</h5>
+								<p>Give your campaign a good headline</p>
 								<p>E.g. "<em>Please help me persuade The Operator to get rid of the awful smell between Manors and Monument on the Metro</em>"</p>
 							</div>
 						</li>
@@ -80,44 +80,9 @@
 								<h5>Add a short description</h5>
 								<p>In no more than 40 words, provide a quick description of the issue. This will allow others to easily understand and support your campaign.</p>
 							</div>
+							<button type="submit" class="process-next">Next</button>
 						</li>
 					</div>
-				</div>
-
-				<div id="share" class="pane">
-					<div id="banner">
-						<div class="container">
-							<h4>Share your campaign</h4>
-						</div>
-					</div>
-					<div class="container">
-						<li>
-							<div class="box">
-								<%- if ! MySociety::Config.get('FACEBOOK_APP_ID','').empty? %>
-									<img src="/images/facebook-share.jpg" id="fb-share" style="cursor:pointer;"/>
-								<%- end %>
-								<script>
-								// FIXME
-								$(document).ready(function(){
-									$('#fb-share').click(function(){
-										FB.ui({method: 'apprequests', message: 'Support my "<%= h(@campaign.title) %>" campaign on fixmytransport.com', data: 'user tracking info', display:'popup', title:'Spread the word: <%= h(@campaign.title) %>'});
-									})
-								})
-								</script>
-								
-								<img src="/images/twitter-share.jpg" />
-							</div>
-							<label for="emails">List your friends' emails here</label>
-							<textarea name="emails"></textarea>
-							<div class="tipbox">
-								<a href="#" class="tip-close">Close</a>
-								<h5>Share with you friends via email</h5>
-								<p>List your friends' email addresses here and we will send them an email with the details of you campaign.</p>
-								<p>One email per line, we hate spam as much as you, so we don't send it.</p>
-							</div>
-							<button class="process-submit button">Submit</button>
-						</li>
-					</div>	
 				</div>
 			</ul>
 		<%- end %>

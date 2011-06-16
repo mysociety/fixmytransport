@@ -61,6 +61,7 @@ class Stop < ActiveRecord::Base
   is_location
   has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality
   has_paper_trail
+  before_save :cache_description
   
   # instance methods
   
@@ -130,9 +131,9 @@ class Stop < ActiveRecord::Base
   end
   
   def description
+    return cached_description if cached_description
     "#{full_name} in #{area}"
   end
-  memoize :description
   
   def area
     locality_name
@@ -225,6 +226,7 @@ class Stop < ActiveRecord::Base
     stops = find_by_sql(["SELECT  *
                           FROM stops
                           WHERE stops.stop_type in (?)
+                          AND status = 'ACT'
                           AND stops.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
                             ST_Point(?, ?),
     	                      ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})",

@@ -29,13 +29,19 @@ function area_init() {
   otherMarkers = new OpenLayers.Layer.Markers( "Other Markers" );
   map.addLayer(otherMarkers);
   map.addLayer(markers);
-  addMarkerList(areaStops, markers, false);
-  if (findOtherLocations == true) {
-    map.events.register('moveend', map, updateLocations); 
+  
+  if (!typeof(areaStops) == 'undefined'){
+    addMarkerList(areaStops, markers, false);
   }
+  addHtmlMarkers('#noscript .location-marker', markers, true);
+  
   centerCoords =  new OpenLayers.LonLat(lon, lat);
   centerCoords.transform(proj, map.getProjectionObject());
   map.setCenter(centerCoords, zoom);
+  if (findOtherLocations == true) {
+    map.events.register('moveend', map, updateLocations); 
+  }
+
 }
 
 function updateLocations(event) {
@@ -55,6 +61,12 @@ function loadNewMarkers(response) {
 function markerFail(){
 }
 
+function addHtmlMarkers(selector, layer, others) {
+  $(selector).each(function(){
+    addHtmlMarker($(this), bounds, layer, others);
+  });
+}
+
 function addMarkerList(list, markers, others) {
   var stopCoords;
 
@@ -68,6 +80,12 @@ function addMarkerList(list, markers, others) {
       addMarker(item, bounds, markers, others);
     }
   }
+}
+
+
+function addHtmlMarker(current, bounds, layer, other) {
+  stopCoords= pointCoords(parseFloat(current.attr('data-lon')), parseFloat(current.attr('data-lat')));
+  addRouteHTMLMarker(stopCoords, bounds, layer, current,other);
 }
 
 function addMarker(current, bounds, layer, other){
@@ -206,12 +224,33 @@ function unHoverStop(stop) {
   }  
 }
 
+function addRouteHTMLMarker(stopCoords, bounds, markers, item, other){
+  
+  if (stopsById[item.attr('data-id')] == undefined) {
+    bounds.extend(stopCoords);
+    var size = new OpenLayers.Size(item.find("img:first").attr('width'), item.find("img:first").attr('height'));
+    var offset = new OpenLayers.Pixel(-(size.w/2), -(size.h/2));
+    var stopIcon = new OpenLayers.Icon(item.find("img:first").attr('src'), size, offset);
+    stopIcon.imageDiv.style.cursor = 'pointer';
+    var marker = new OpenLayers.Marker(stopCoords, stopIcon);
+    marker.url = item.attr('href');
+    marker.name = item.find("img:first").attr('title');
+    marker.id = item.attr('data-id');
+    stopsById[item.attr('data-id')] = marker;
+    marker.events.register("click", marker, stopSelected);
+    marker.events.register("mouseover", marker, stopHovered);
+    marker.events.register("mouseout", marker, stopUnhovered);
+    markers.addMarker(marker);
+  }
+    
+}
+
 function addRouteMarker(stopCoords, bounds, markers, item, other) {
   if (stopsById[item.id] == undefined) {
     bounds.extend(stopCoords);
     var size = new OpenLayers.Size(item.width, item.height);
     var offset = new OpenLayers.Pixel(-(size.w/2), -(size.h/2));
-    var stopIcon = new OpenLayers.Icon("/images/" + item.icon + ".png", size, offset);
+    var stopIcon = new OpenLayers.Icon(item.icon + ".png", size, offset);
     stopIcon.imageDiv.style.cursor = 'pointer';
     var marker = new OpenLayers.Marker(stopCoords, stopIcon);
     marker.url = item.url;

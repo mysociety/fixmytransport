@@ -23,6 +23,9 @@ public/index.html
 public/files
 public/files/*
 public/system
+public/javascripts/libraries.js
+public/javascripts/main.js
+public/stylesheets/main.css
 moo.txt
 rdoc
 vendor/gems/libxml-ruby-1.1.4/lib/*.so

@@ -1,0 +1,75 @@
+<%- content_for :javascript do %>
+<noscript>
+	<style>
+		ul#process {
+			display:none;
+		}
+		#banner {
+			width:940px;
+			margin:3em auto 1em auto;
+			padding:10px;
+		}
+		.form-1 ul li {
+			width:100%;
+		}
+		.form-1 input,
+		.form-1 textarea {
+			clear:both;
+		}
+		.tipbox, .tipbox.fixed {
+			position:relative;
+		    right: 0;
+			display:inline;
+			float:right
+		}
+	</style>
+</noscript>
+<%- end %>
+<div id="main-nav-bar">
+	<div class="container">
+		<ul id="process" class="crumb">
+			<li id="crumb1" class="done">General</li>
+			<li id="crumb2" class="current done">Share</li>
+		</ul>
+	</div>
+</div>
+	<div id="main-content">
+	  
+	  <%- form_for @campaign, :url => campaign_path(@campaign), :html => {:class => 'form-1', :id => 'process-tabs', :method => :get} do |f| %>
+	  
+			<ul class="tabbed">
+        <div id="share" class="pane">
+        	<div id="banner">
+        		<div class="container">
+        			<h4>Share your campaign</h4>
+        		</div>
+        	</div>
+        	<div class="container">
+        		<li>
+        			<div class="box">
+        				<img src="/images/facebook-share.jpg" />
+        				<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
+							<span class="icon twitter"></span>
+							Tweet
+						</a>
+        			</div>
+        			<label for="emails">List your friends' emails here</label>
+        			<div class="tipbox">
+        				<a href="#" class="tip-close">Close</a>
+        				<h5>Share with you friends via email</h5>
+        				<p>List your friends' email addresses here and we will send them an email with the details of you campaign.</p>
+        				<p>One email per line, we hate spam as much as you, so we don't send it.</p>
+        			</div>
+        			<button type="submit" class="process-next">Next</button>
+        		</li>
+        	</div>	
+        </div>
+      </ul>
+		<%- end %>
+	</div>
+		
+	<div id="process-nav" class="container"></div>
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
+	</div>
+</div>

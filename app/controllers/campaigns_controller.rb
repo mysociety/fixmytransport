@@ -6,7 +6,7 @@ class CampaignsController < ApplicationController
                                                     :confirm_join, :confirm_leave,
                                                     :confirm_comment]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
-                                                       :complete, :add_photos]
+                                                       :complete, :add_photos, :add_details, :share]
   before_filter :require_campaign_initiator_or_expert, :only => [:edit, :update]
   after_filter :update_campaign_supporter, :only => [:show]
 
@@ -30,10 +30,12 @@ class CampaignsController < ApplicationController
                                          :redirect => campaign_path(@campaign),
                                          :notice => "Please login or create an account to join this campaign" })
     @title = @campaign.title
+    @campaign.campaign_photos.build({})
     map_params_from_location(@campaign.location.points,
                             find_other_locations=false,
                             height=CAMPAIGN_PAGE_MAP_HEIGHT,
                             width=CAMPAIGN_PAGE_MAP_WIDTH)
+     @collapse_quotes = params[:unfold] ? false : true
   end
 
   def update
@@ -95,10 +97,12 @@ class CampaignsController < ApplicationController
         @user.password = params[:user][:password]
         @user.password_confirmation = params[:user][:password_confirmation]
         @user.registered = true
+        @user.confirmed_password = true
         if @user.save
           redirect_to campaign_url(@campaign_supporter.campaign)
         end
         @user.registered = false
+        @user.confirmed_password = false
       else
         @error = :error_on_register
       end
@@ -140,11 +144,10 @@ class CampaignsController < ApplicationController
       if (@campaign.update_attributes(params[:campaign]))
         @campaign.confirm
         @campaign.save!
-        redirect_to campaign_url(@campaign) 
+        redirect_to share_campaign_url(@campaign) 
       else
         render :action => "add_details"
       end
-    else
     end
   end
 

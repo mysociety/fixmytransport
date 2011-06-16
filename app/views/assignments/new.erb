@@ -42,7 +42,16 @@
       <%= label_tag :name, t(:name) %>
       <%= raw text_field_tag :name, @assignment.data[:name], :size => 35 %>
     </div>
-    
+  
+    <div class='form-field'>
+      <%- if @assignment.errors.on('description') %>
+        <div class='error'>
+          <%= @assignment.errors.on(:description) %>
+        </div>
+      <%- end %>
+      <%= label_tag :description, t(:description) %>
+      <%= raw text_field_tag :description, @assignment.data[:description], :size => 35 %>
+    </div>
     
     <div class='form-field'>
       <%- if @assignment.errors.on('email') %>

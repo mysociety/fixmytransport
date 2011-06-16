@@ -12,7 +12,7 @@
 			<p><%= "#{@route.area}." %></p>
 		</div>
 		<div class="rightcol">
-			<a class="report-big" href="<%= new_problem_url(:location_id => @route.id, :location_type => @route.type, :to => params[:to], :from => params[:from])%>">Report a problem</a>
+			<a class="button big red report" href="<%= new_problem_url(:location_id => @route.id, :location_type => @route.type, :to => params[:to], :from => params[:from])%>">Report a problem</a>
 		</div>
 	</div>
 </div>
@@ -23,7 +23,7 @@
       <%= render :partial => 'shared/map', :locals => { :locations => [@route], :other_locations => @other_locations, :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH  } %>
  	  </div>
 
- 		<a href="#">Is this information wrong?</a>
+ 		<a href="<%= feedback_url(:url => CGI.escape(request.request_uri)) %>">Is this information wrong?</a>
 	  <%= render :partial => "shared/location_content",  :locals => { :location => @route } %>
 	</div>
 
