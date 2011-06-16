@@ -1,8 +1,10 @@
-<%= t(:multiple_localities, :name => @name) %>
-<ul class='locality-list'>
- <%- @areas.each do |area| %>
-    <li class='area'>
-      <%= link_to(area.full_name, find_bus_route_problems_url(:area => area.full_name, :route_number => params[:route_number], :area_type => area.class.to_s)) %>
-    </li>
-  <%- end %>
-</ul>
+<div id="main-content" class="container">
+	<%= t(:multiple_localities, :name => @name) %>
+	<ul class='locality-list'>
+	 <%- @areas.each do |area| %>
+	    <li class='area'>
+	      <%= link_to(area.full_name, find_bus_route_problems_url(:area => area.full_name, :route_number => params[:route_number], :area_type => area.class.to_s)) %>
+	    </li>
+	  <%- end %>
+	</ul>
+</div>

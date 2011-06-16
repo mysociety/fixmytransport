@@ -1,52 +1,54 @@
-<%- if @outgoing_message.assignment && @outgoing_message.assignment.status != :complete %>
-  <%- @title = t(:message_to, :organization => @outgoing_message.recipient_name) %>
-<%- else %>
-  <%- @title = t(:new_message_to, :organization => @outgoing_message.recipient_name) %>
-<%- end %>
-<h2 class='main-header'><%= @title %></h2>
-<%- form_for [@campaign, @outgoing_message], :html => {:class => 'create_outgoing_message'} do |f|  %>
+<div id="main-content" class="container">
+	<%- if @outgoing_message.assignment && @outgoing_message.assignment.status != :complete %>
+	  <%- @title = t(:message_to, :organization => @outgoing_message.recipient_name) %>
+	<%- else %>
+	  <%- @title = t(:new_message_to, :organization => @outgoing_message.recipient_name) %>
+	<%- end %>
+	<h2 class='main-header'><%= @title %></h2>
+	<%- form_for [@campaign, @outgoing_message], :html => {:class => 'create_outgoing_message'} do |f|  %>
   
-  <%- if @outgoing_message.errors.on('recipient') %>
-    <div class='error'>
-      <%= error_message_on @outgoing_message, 'recipient' %>
-    </div>
-  <%- end %>
-  <%- if @outgoing_message.errors.on('incoming_message') %>
-    <div class='error'>
-      <%= error_message_on @outgoing_message, 'incoming_message' %>
-    </div>
-  <%- end %>
-  <%- if @outgoing_message.errors.on('base') %>
-    <div class='error'>
-      <%= error_message_on @outgoing_message, 'base' %>
-    </div>
-  <%- end %>
+	  <%- if @outgoing_message.errors.on('recipient') %>
+	    <div class='error'>
+	      <%= error_message_on @outgoing_message, 'recipient' %>
+	    </div>
+	  <%- end %>
+	  <%- if @outgoing_message.errors.on('incoming_message') %>
+	    <div class='error'>
+	      <%= error_message_on @outgoing_message, 'incoming_message' %>
+	    </div>
+	  <%- end %>
+	  <%- if @outgoing_message.errors.on('base') %>
+	    <div class='error'>
+	      <%= error_message_on @outgoing_message, 'base' %>
+	    </div>
+	  <%- end %>
 
-  <div class='form-field'>
-    <%- if @outgoing_message.errors.on('subject') %>
-      <div class='error'>
-        <%= error_message_on @outgoing_message, 'subject' %>
-      </div>
-    <%- end %>
-    <%= f.label :subject %>
-    <%= raw f.text_field :subject, :size => 60 %>
-  </div>
+	  <div class='form-field'>
+	    <%- if @outgoing_message.errors.on('subject') %>
+	      <div class='error'>
+	        <%= error_message_on @outgoing_message, 'subject' %>
+	      </div>
+	    <%- end %>
+	    <%= f.label :subject %>
+	    <%= raw f.text_field :subject, :size => 60 %>
+	  </div>
   
-  <div class='form-field'>
-    <%- if @outgoing_message.errors.on('body') %>
-      <div class='error'>
-        <%= error_message_on @outgoing_message, 'body' %>
-      </div>
-    <%- end %>
-    <%= f.label :body, t(:message) %>
-    <%= raw f.text_area :body, :rows => 12, :cols => 40 %>
-    <%- if @outgoing_message.recipient %>
-      <%= raw f.hidden_field :recipient_id %>
-      <%= raw f.hidden_field :recipient_type %>
-    <%- end %>
-    <%= raw f.hidden_field :incoming_message_id %>
-    <%= raw f.hidden_field :author_id %>
-    <%= raw f.hidden_field :assignment_id %>
-  </div>
-  <button type="submit"><%= t(:submit) %></button>
-<%- end %>
+	  <div class='form-field'>
+	    <%- if @outgoing_message.errors.on('body') %>
+	      <div class='error'>
+	        <%= error_message_on @outgoing_message, 'body' %>
+	      </div>
+	    <%- end %>
+	    <%= f.label :body, t(:message) %>
+	    <%= raw f.text_area :body, :rows => 12, :cols => 40 %>
+	    <%- if @outgoing_message.recipient %>
+	      <%= raw f.hidden_field :recipient_id %>
+	      <%= raw f.hidden_field :recipient_type %>
+	    <%- end %>
+	    <%= raw f.hidden_field :incoming_message_id %>
+	    <%= raw f.hidden_field :author_id %>
+	    <%= raw f.hidden_field :assignment_id %>
+	  </div>
+	  <button class="button" type="submit"><%= t(:submit) %></button>
+	<%- end %>
+</div>

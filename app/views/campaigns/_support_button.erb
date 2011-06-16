@@ -2,7 +2,7 @@
   <%- if !current_user.supporter_or_initiator(@campaign) %>
 
     <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST'  } do |f| %>
-        <button type="submit" class="<%= raw button_class %> green">Support</button>
+        <button type="submit" class="button <%= raw button_class %> green">Support</button>
     <%- end %>
 
   <%- end %>
@@ -11,7 +11,7 @@
 
   <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST', :class => 'login-to-support' } do |f| %>
     <%= raw hidden_field_tag "next_action", @next_action_join %>
-    <button type="submit" class="<%= raw button_class %> green">Support</button>
+    <button type="submit" class="button <%= raw button_class %> green">Support</button>
   <%- end %>
 
 <%- end %>
