@@ -40,7 +40,7 @@
               <span class='transport-modes-note'>
                 <%= campaign.transport_mode_text %>
               </span>
-              <span class='event-type-note'><%= "(#{event_type_note(campaign.campaign_events.first)})" %>
+              <span class='event-type-note'><%= "(#{event_type_note(campaign.campaign_events.visible.first)})" %>
               </span>
             </li>
           <%- end %>

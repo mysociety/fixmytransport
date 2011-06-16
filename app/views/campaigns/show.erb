@@ -90,10 +90,10 @@
        <h3><%= t(:transport_experts) %></h3>
        <div class='expert-tools'>
          <div class='optional-assignment'>
-           <a href="<%= new_campaign_assignment_path(@campaign) %>" class="big button"><%= t(:tell_to_write, :user => @campaign.initiator.first_name) %></a>
+           <a href="<%= new_campaign_assignment_path(@campaign) %>" class="button"><%= t(:tell_to_write, :user => @campaign.initiator.first_name) %></a>
          </div>
          <div class='optional-assignment'>
-           <a href="<%= edit_campaign_path(@campaign)%>" class="big button"><%= t(:edit_description) %></a>
+           <a href="<%= edit_campaign_path(@campaign)%>" class="button"><%= t(:edit_description) %></a>
          </div>
          <div class='optional-assignment-end'>
          </div>
