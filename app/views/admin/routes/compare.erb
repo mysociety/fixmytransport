@@ -17,7 +17,8 @@
 <button class="button" type='submit'><%= t(:different) %></button>
 <%- end %>
 </div>
-<%- form_tag '', :method => 'GET' do  %>
+<%- form_tag '', :method => 'POST' do  %>
+<input type="hidden" name="id" value="<%=@merge_candidate.id%>">
 <button class="button" type='submit'><%= t(:skip) %></button>
 <%- end %>
 </div>

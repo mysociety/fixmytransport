@@ -97,9 +97,10 @@ class Admin::RoutesController < Admin::AdminController
       if params[:is_same] == 'no'
         @merge_candidate.update_attribute('is_same', false)
       end
-      redirect_to admin_url(compare_admin_routes_path)
+      @merge_candidate.update_attribute('been_seen', true)
+      redirect_to admin_url(compare_admin_routes_path())
     end
-    @merge_candidate = MergeCandidate.find(:first, :conditions => 'is_same is null', :order => 'random()')
+    @merge_candidate = MergeCandidate.find(:first, :conditions => 'is_same is null and been_seen is null', :order => 'random()')
     route_ids = @merge_candidate.regional_route_ids.split("|")
   
     regional_routes = Route.find(:all, :conditions => ['id in (?)', route_ids],
