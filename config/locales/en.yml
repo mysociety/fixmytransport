@@ -35,7 +35,7 @@ en:
   what_was_the_number_and_area: "What was the route number and town or area?"
   is_it_on_a: Is it on a
   train_route: "train route"
-  tram_metro_ferry_route: "tram, metro or ferry route?"
+  tram_metro_ferry_route: "tram, metro, underground or ferry route?"
   enter_route_number: Route number
   enter_town_or_area: Town/Area
   finding_a_bus_route: Finding a bus route
