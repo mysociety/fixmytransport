@@ -27,7 +27,7 @@ class UserSession < Authlogic::Session::Base
   private
   
   def check_password_confirmed
-    if self.login_by_password == true
+    if self.login_by_password == true && attempted_record
       errors.add(:base, ActiveRecord::Error.new(attempted_record, :password, :not_confirmed).to_s) unless attempted_record.confirmed_password?
     end
   end
