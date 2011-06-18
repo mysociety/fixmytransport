@@ -24,11 +24,11 @@
         
          <%- if @problem.location.operators.size > 1 %>
            <%- if @problem.errors.on('operator_id') %>
-            <div class='error' id="error-operator_id">
+            <div class='error error-operator_id'>
               <%= error_message_on @problem, :operator_id %>
             </div>
           <%- else %>
-            <div class='error', id="error-operator_id" style="display: none;"></div>
+            <div class='error error-operator_id' style="display: none;"></div>
            <%- end %>
             <%= raw f.collection_select("operator_id", @problem.location.operators, :id, :name, :include_blank => t(:select_operator)) %>
           <%- elsif @problem.location.operators.size == 1 %>
@@ -59,11 +59,11 @@
 
 			<li>
 			  <%- if @problem.errors.on('subject') %>
-          <div class='error' id="error-subject">
+          <div class='error error-subject'>
             <%= error_message_on @problem, 'subject' %>
           </div>
         <%- else %>
-           <div class='error', id="error-subject" style="display: none;"></div>
+           <div class='error error-subject' style="display: none;"></div>
         <%- end %>
 				<label for="problem_subject">Subject</label>
 				<input id="problem_subject" type="text" name="problem[subject]" value="<%= @problem.subject %>"/>
@@ -81,7 +81,7 @@
               <%= error_message_on @problem, :category %>
             </div>
           <%- else %>
-           <div class='error', id="error-category" style="display: none;"></div>
+           <div class='error error-category' style="display: none;"></div>
           <%- end %>
           <label for="problem_category">Category</label>
           <%= raw f.select("category", @problem.categories, { :include_blank => t(:pick_a_category) }) %>
@@ -97,7 +97,7 @@
             <%= error_message_on @problem, 'description' %>
           </div>
         <%- else %>
-         <div class='error', id="error-description" style="display: none;"></div>
+         <div class='error error-description' style="display: none;"></div>
         <%- end %>
 				<label for="problem_description">Description</label>
 				<textarea id="problem_description" name="problem[description]" ><%= @problem.description %></textarea>

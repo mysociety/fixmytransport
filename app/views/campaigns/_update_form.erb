@@ -3,11 +3,11 @@
     <div class='fieldset'>
       <div class='form-field'>
         <%- if @campaign_update.errors.on('text') %>
-          <div class='error' id="error-text">
+          <div class='error error-text'>
             <%= error_message_on @campaign_update, :text %>
           </div>
         <%- else %>
-            <div class='error', id="error-text" style="display: none;"></div>
+            <div class='error error-text' style="display: none;"></div>
         <%- end %>        
         <%= raw f.hidden_field :is_advice_request %>
         <%= raw f.text_area :text, :cols => 40, :rows => 3 %>

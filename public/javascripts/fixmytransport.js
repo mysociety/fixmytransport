@@ -199,8 +199,8 @@ $(document).ready(function(){
     $(form_selector + " .error").html();
     $(form_selector + " .error").hide();
     for (var key in response.errors){
-      $(form_selector + ' #error-' + key).html( response.errors[key] );
-      $(form_selector + ' #error-' + key).show();
+      $(form_selector + ' .error-' + key).html( response.errors[key] );
+      $(form_selector + ' .error-' + key).show();
     }
   }
 
@@ -222,8 +222,8 @@ $(document).ready(function(){
     options['success'] = function(response) {
 
       // add the notice to the login form
-      $('#login-landing #notice-base').text(response.notice);
-      $('#login-landing #notice-base').show();
+      $('#login-landing .notice').text(response.notice);
+      $('#login-landing .notice').show();
 
       // show the login form
       $('.login-box .pane').hide();
@@ -239,7 +239,7 @@ $(document).ready(function(){
   // ajax submission of update/advice form
   function setupUpdateForm(form_selector) {
     options = defaultFormOptions();
-	  options['error'] = function() { generalError(form_selector + ' #error-text'); }
+	  options['error'] = function() { generalError(form_selector + ' .error-text'); }
 	  options['success'] = function(response) {
 	    if (response.success) {
         // close the dialog box
@@ -264,7 +264,7 @@ $(document).ready(function(){
   // ajax submission of non-modal dialog update form
   function setupStaticUpdateForm(form_selector) {
     options = defaultFormOptions();
-    options['error'] = function() { generalError(form_selector + ' #error-text'); }
+    options['error'] = function() { generalError(form_selector + ' .error-text'); }
     options['beforeSubmit'] = function(formData, jQueryForm, options) {
      // Add the index of the last campaign event being shown to the form
      var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
@@ -273,8 +273,8 @@ $(document).ready(function(){
      options['success'] = function(response) {
        if (response.success) {
          // clear any error
-         $(form_selector + " #error-text").html('');
-         $(form_selector + " #error-text").hide()
+         $(form_selector + " .error-text").html('');
+         $(form_selector + " .error-text").hide()
         // clear the update field
         $(form_selector + " #campaign_update_text").val("");
         // remove the hidden thread index field
@@ -296,14 +296,14 @@ $(document).ready(function(){
   // ajax submission of problem form 
   function setupProblemForm(form_selector) {
     options = defaultFormOptions();
-	  options['error'] = function() { generalError(form_selector + ' #error-text'); }
+	  options['error'] = function() { generalError(form_selector + ' .error-text'); }
 	  options['success'] = function(response) {
 	    if (response.success) {
 
         if (response.requires_login) {
           // add the notice to the login form
-          $('#login-create-account #notice-base').text(response.notice);
-          $('#login-create-account #notice-base').show();
+          $('#login-create-account .notice').text(response.notice);
+          $('#login-create-account .notice').show();
 
           // show the login form
           $('.login-box .pane').hide();
@@ -326,7 +326,7 @@ $(document).ready(function(){
 	// ajax submission of comment form
 	function setupCommentForm(form_selector) {
 	  options = defaultFormOptions();
-	  options['error'] = function() { generalError(form_selector + ' #error-text'); }
+	  options['error'] = function() { generalError(form_selector + ' .error-text'); }
 	  options['success'] = function(response) {
 	    if (response.success) {
         // clear the comment field
@@ -337,8 +337,8 @@ $(document).ready(function(){
 
         if (response.requires_login) {
           // add the notice to the login form
-          $('#login-landing #notice-base').text(response.notice);
-          $('#login-landing #notice-base').show();
+          $('#login-landing .notice').text(response.notice);
+          $('#login-landing .notice').show();
 
           // show the login form
           $('.login-box .pane').hide();
