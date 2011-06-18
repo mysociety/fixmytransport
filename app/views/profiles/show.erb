@@ -5,6 +5,9 @@
     <%- if @user.location %>
       <%= @user.location %>
     <%- end %>
+    <%- if current_user && current_user == @user %>
+    	<%= raw link_to(t(:edit_your_account), edit_account_path, :class => 'button') %>
+    <%- end %>
   </div>
 </div>
 

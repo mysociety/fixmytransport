@@ -31,7 +31,7 @@
 				</ul>
 				<a id="logo" href="<%= root_url %>">Fix My Transport</a>
 				<%- if current_user %>
-				<p id="member-info">Hi <a href="<%= account_path %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>">Logout</a></p>
+				<p id="member-info">Hi <a href="<%= profile_path(current_user) %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>">Logout</a></p>
 				<%- else %>
 				<p id="member-info">Hi Guest. <a class="auth" href="<%= login_path(:redirect => request.request_uri) %>">Sign in</a></p>
 				<%- end %>
