@@ -89,6 +89,8 @@ class Admin::RoutesController < Admin::AdminController
   end
   
   def compare
+    @done = MergeCandidate.count(:conditions => 'been_seen is not null')
+    @count = MergeCandidate.count
     if request.post?
       @merge_candidate = MergeCandidate.find(params[:id])
       if params[:is_same] == 'yes'

@@ -3,7 +3,7 @@
 <%- end %>
 
 <h2><%= t(:same_or_different) %></h2>
-
+<%= "#{@done} done of #{@count}"%>
 <div style="">
 <%- form_tag '', :method => 'POST' do  %>
 <input type="hidden" name="is_same" value="yes">
