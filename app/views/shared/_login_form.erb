@@ -48,8 +48,8 @@
 	<p>Sign in with Facebook</p>
 	<a href="#" onclick="checkLoginOrCallFacebook()" id="facebook">Facebook Connect</a>
 </div>
+
 <div id="fb-root"></div>
-</div>
 <script>
     var fmt_Facebook_appId = '<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>'; 
     var fmtPopup = undefined;
@@ -128,4 +128,4 @@
 </script>
 <%- end %>
 
-
+</div>
