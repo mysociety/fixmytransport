@@ -592,6 +592,7 @@ namespace :nptdr do
           puts "merging #{to_merge.id} #{to_merge.cached_description} to #{routes.map{|route| "#{route.id} #{route.cached_description}"}}"
           Route.merge!(to_merge, routes)
         end
+        merge_candidate.destroy
       end
     end
 
