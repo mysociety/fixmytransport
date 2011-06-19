@@ -551,7 +551,7 @@ namespace :nptdr do
     end
     
     desc 'Generate list of merge candidates from national routes'
-    task :generate_merge_candidates => :environment do 
+    task :generate_merge_candidates_national => :environment do 
       great_britain = Region.find_by_name('Great Britain')
       routes = BusRoute.find(:all, :conditions => ['region_id = ?
                                                      AND id NOT IN (
@@ -564,6 +564,35 @@ namespace :nptdr do
         end
       end
     end
+
+    desc 'Generate list of merge candidates from bus routes that have the same number, region and cached description'
+    task :generate_merge_candidates_by_number => :environment do 
+      routes = BusRoute.find_by_sql("SELECT a.* from routes as a, routes as b 
+                                     WHERE a.id > b.id 
+                                     AND a.number = b.number
+                                     AND a.transport_mode_id = 1 
+                                     AND b.transport_mode_id = 1 
+                                     AND a.cached_description = b.cached_description")
+       routes.each do |route|
+         others = Route.find_all_by_number_and_common_stop(route, options={:skip_operator_comparison => true})
+         if ! others.empty? 
+           MergeCandidate.create!(:national_route => route, :regional_route_ids => others.map{|route| route.id}.join("|"))
+         end
+       end       
+    end
+
+    desc 'Merge candidates marked in the route comparison interface as being the same'
+    task :merge_marked_candidates => :environment do 
+      MergeCandidate.find_each(:conditions => ['is_same = ?', true]) do |merge_candidate|
+        route = merge_candidate.national_route
+        route_ids = merge_candidate.regional_route_ids.split("|")
+        other_routes = Route.find(route_ids)
+        
+        puts "merging #{route.id} #{route.cached_description} to #{other_routes.map{|route| "#{route.id} #{route.cached_description}"}}"
+        # Route.merge!(route, other_routes)
+      end
+    end
+
 
     desc 'Adds region associations based on route localities'
     task :add_route_regions => :environment do
@@ -676,6 +705,9 @@ namespace :nptdr do
         end
       end
     end
+  
+    desc 'Audit route quality'
+  
   end
 
 end
