@@ -583,13 +583,15 @@ namespace :nptdr do
 
     desc 'Merge candidates marked in the route comparison interface as being the same'
     task :merge_marked_candidates => :environment do 
-      MergeCandidate.find_each(:conditions => ['is_same = ?', true]) do |merge_candidate|
-        route = merge_candidate.national_route
-        route_ids = merge_candidate.regional_route_ids.split("|")
-        other_routes = Route.find(route_ids)
-        
-        puts "merging #{route.id} #{route.cached_description} to #{other_routes.map{|route| "#{route.id} #{route.cached_description}"}}"
-        # Route.merge!(route, other_routes)
+      MergeCandidate.find_each(:conditions => ['is_same = ?', true]) do |merge_candidate|        
+        other_route_ids = merge_candidate.regional_route_ids.split("|")
+        route_ids = [merge_candidate.national_route_id] + other_route_ids
+        routes = route_ids.map{ |route_id| Route.find(:first, :conditions => ['id = ?', route_id]) }.compact
+        if routes.size > 1
+          to_merge = routes.shift
+          puts "merging #{to_merge.id} #{to_merge.cached_description} to #{routes.map{|route| "#{route.id} #{route.cached_description}"}}"
+          Route.merge!(to_merge, routes)
+        end
       end
     end
 
