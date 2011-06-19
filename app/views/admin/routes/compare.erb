@@ -4,6 +4,9 @@
 
 <h2><%= t(:same_or_different) %></h2>
 <%= "#{@done} done of #{@count}"%>
+
+
+<h2 style="display:block;"><%= @routes.first.description %></h2>
 <div style="">
 <%- form_tag '', :method => 'POST' do  %>
 <input type="hidden" name="is_same" value="yes">
@@ -22,7 +25,6 @@
 <button class="button" type='submit'><%= t(:skip) %></button>
 <%- end %>
 </div>
-
 <%- @routes.each_with_index do |route,index| %>
 <div class="compare_map" style="float:left; margin: 2em;">
   <div id="map_<%=index%>" style="width:300px;height:300px;">
