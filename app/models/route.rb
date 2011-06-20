@@ -463,6 +463,12 @@ class Route < ActiveRecord::Base
     count(:select => 'distinct operator_code',
           :conditions => ['id not in (SELECT route_id from route_operators)'])
   end
+  
+  def self.count_without_contacts
+    count(:conditions => ['route_operators.operator_id not in 
+                          (select operator_id from operator_contacts where deleted = ?)', false],
+          :include => :route_operators)
+  end
 
   # Return train routes by the same operator that have the same terminuses
   def Route.find_existing_train_routes(new_route)
