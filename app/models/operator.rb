@@ -97,6 +97,10 @@ class Operator < ActiveRecord::Base
     self.operator_contacts.map{ |contact| contact.email }.uniq.compact
   end
 
+  def self.count_without_contacts
+    count(:conditions => ['id not in (select operator_id from operator_contacts where deleted = ?)', false])
+  end
+
   def self.find_all_by_nptdr_code(transport_mode, code, region, route)
     operators = find(:all, :include => :operator_codes,
                            :conditions => ['transport_mode_id = ?
