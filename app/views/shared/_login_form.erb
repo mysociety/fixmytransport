@@ -31,10 +31,10 @@
 		<label for="user_session_password">Password</label>
 		<input name="user_session[password]" id="user_session_password" type="password" />
 		<a href="<%= new_password_reset_path %>">Forgot?</a>
-	</li>
+	</li>	
 	<li>
 		<button class="button" type="submit">Sign In</button>
-		<label for="user_session_remember_me">Keep me signed in</label><input type="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1">    
+		<label for="user_session_remember_me">Keep me signed in</label><input type="checkbox" class="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1">    
 		<input type=hidden name="redirect" value="<%= request.request_uri %>">
 	</li>
 </ul>
@@ -50,6 +50,7 @@
 </div>
 
 <div id="fb-root"></div>
+
 <script>
     var fmt_Facebook_appId = '<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>'; 
     var fmtPopup = undefined;
