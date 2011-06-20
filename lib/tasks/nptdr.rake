@@ -715,7 +715,7 @@ namespace :nptdr do
       # Can be checked for duplicate routes, incorrectly merged routes, bad operator assignments
       audit_file = File.open("#{RAILS_ROOT}/data/audit.tsv", 'w')
       headers = ["Route ID", "Description", "URL", "Operators", "Does the description map to more than one (identical looking) route?", "Do the route terminuses look about right compared to any external source you can find?", "Is the operator right (if there is one)?"]
-      audit_file.write(headers.join("\t"))
+      audit_file.write(headers.join("\t") + "\n")
       random_routes = Route.find(:all, :order => 'random()', :limit => 100)
       random_routes.each do |route|
         route_url = route_url(route.region, route, :host => MySociety::Config.get("DOMAIN", "localhost:3000"))
@@ -724,7 +724,7 @@ namespace :nptdr do
                   route.description, 
                   route_url, 
                   route_operators]
-        audit_file.write(fields.join("\t"))
+        audit_file.write(fields.join("\t") + "\n")
       end      
     end
   
