@@ -6,7 +6,7 @@ namespace :nptdr do
 
   include DataLoader
   include GeoFunctions
-
+  
   def get_route_missing_stop_data()
     missing_route_stops_files = ["#{RAILS_ROOT}/data/NPTDR/oct_2010/missing_stops.csv",
                                  "#{RAILS_ROOT}/data/NPTDR/oct_2010/missing_stops_regional.csv"]
@@ -709,7 +709,35 @@ namespace :nptdr do
       end
     end
   
-    desc 'Audit route quality'
+    desc 'Generate list of 100 routes for data audit'
+    task :generate_audit_set => :environment do 
+      include ActionController::UrlWriter
+      # Can be checked for duplicate routes, incorrectly merged routes, bad operator assignments
+      audit_file = File.open("#{RAILS_ROOT}/data/audit.tsv", 'w')
+      headers = ["Route ID", "Description", "URL", "Operators", "Does the description map to more than one (identical looking) route?", "Do the route terminuses look about right compared to any external source you can find?", "Is the operator right (if there is one)?"]
+      audit_file.write(headers.join("\t"))
+      random_routes = Route.find(:all, :order => 'random()', :limit => 100)
+      random_routes.each do |route|
+        route_url = route_url(route.region, route, :host => MySociety::Config.get("DOMAIN", "localhost:3000"))
+        route_operators = route.operators.map{|operator| operator.name}.to_sentence
+        fields = [route.id, 
+                  route.description, 
+                  route_url, 
+                  route_operators]
+        audit_file.write(fields.join("\t"))
+      end      
+    end
+  
+    desc 'Show stats on data completion' 
+    task :status => :environment do 
+
+      # routes without operators
+      puts "Routes without operators: #{Route.count_without_operators} out of #{Route.count}"
+          
+      # operators without contact details 
+      puts "Missing operators contacts #{Operator.count_without_contacts} out of #{Operator.count}, affects #{Route.count_without_contacts} out of #{Route.count} routes"
+      
+    end
   
   end
 
