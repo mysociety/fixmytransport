@@ -7,7 +7,7 @@ namespace :cached_assets do
     include ApplicationHelper
     js_dir = "#{RAILS_ROOT}/public/javascripts/"
     css_dir = "#{RAILS_ROOT}/public/stylesheets/"
-    js_assets = ['libraries', 'main']
+    js_assets = ['admin_libraries', 'libraries', 'main']
     css_assets = ['main']
     js_assets.each do |basename|
       path = "#{js_dir}#{basename}.js"
@@ -19,6 +19,7 @@ namespace :cached_assets do
     end
     stylesheet_link_tag('core', 'fixmytransport', 'map', 'buttons', :cache => 'main')
     library_js_link
+    admin_library_js_link
     main_js_link
   end
  end

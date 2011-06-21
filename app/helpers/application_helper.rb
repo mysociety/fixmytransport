@@ -14,6 +14,14 @@ module ApplicationHelper
                            'map', :charset => 'utf-8', :cache => 'libraries')
   end
   
+  def admin_library_js_link
+     javascript_include_tag('jquery-1.5.2.min', 
+                            'jquery-ui-1.8.13.custom.min', 
+                            'OpenLayers-admin', 
+                            'map'
+                            'admin', :charset => 'utf-8', :cache => 'admin_libraries')
+  end
+  
   def main_js_link
     javascript_include_tag('fixmytransport', 'application', :charset => 'utf-8', :cache => 'main')
   end
@@ -22,11 +30,6 @@ module ApplicationHelper
   #  no_jquery - don't include a tag for the main jquery js file
   def map_javascript_include_tags(options={})
     tags = []
-    if options[:admin]
-      tags << javascript_include_tag('OpenLayers-admin.js')
-    else
-      tags << javascript_include_tag('OpenLayers.js')
-    end
     tags << "<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=#{google_maps_key}\" type=\"text/javascript\"></script>"
     tags.join("\n")
   end
