@@ -4,7 +4,7 @@ namespace :cached_assets do
     include ActionView::Helpers::TagHelper
     include ActionView::Helpers::UrlHelper
     include ActionView::Helpers::AssetTagHelper
-    include ActionView::Helpers::ApplicationHelper
+    include ApplicationHelper
     js_dir = "#{RAILS_ROOT}/public/javascripts/"
     css_dir = "#{RAILS_ROOT}/public/stylesheets/"
     js_assets = ['libraries', 'main']
