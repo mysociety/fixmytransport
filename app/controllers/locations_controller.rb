@@ -1,6 +1,7 @@
 class LocationsController < ApplicationController
 
   before_filter :process_map_params, :except => [:in_area]
+  before_filter :make_cachable
   include ApplicationHelper
 
   def show_stop
@@ -107,6 +108,10 @@ class LocationsController < ApplicationController
   def campaign_feed(source)
     @campaigns = source.campaigns.visible
     render :template => 'shared/campaigns.atom.builder', :layout => false
+  end
+  
+  def make_cachable
+    expires_in 60.seconds, :public => true unless current_user
   end
 
 end
