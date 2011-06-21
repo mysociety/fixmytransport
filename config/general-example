@@ -27,6 +27,7 @@ define('OPTION_COOKIE_STORE_SESSION_SECRET', 'your secret key here, make it long
 define('OPTION_STAGING_SITE', 1);
 
 define('OPTION_DOMAIN', '127.0.0.1:3000');
+define('OPTION_ASSET_HOST', '127.0.0.1:3000'); # set up an asset host with wildcards
 
 // Address that email comes from
 define('OPTION_CONTACT_EMAIL', 'contact@localhost');

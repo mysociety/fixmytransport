@@ -88,7 +88,7 @@ end
 
 # Use an asset host setting so that the admin interface can always get css, images, js.
 if (MySociety::Config.get("DOMAIN", "") != "")
-    ActionController::Base.asset_host = MySociety::Config.get("DOMAIN", 'localhost:3000')
+    ActionController::Base.asset_host = MySociety::Config.get("ASSET_HOST", 'localhost:3000')
 end
 
 # Domain for URLs (so can work for scripts, not just web pages)
