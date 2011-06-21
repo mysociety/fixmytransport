@@ -5,6 +5,19 @@ module ApplicationHelper
     MySociety::Config.get('GOOGLE_MAPS_API_KEY', '')
   end
   
+  def library_js_link
+    javascript_include_tag('jquery-1.5.2.min', 
+                           'jquery-ui-1.8.13.custom.min', 
+                           'jquery.autofill.min', 
+                           'jquery.form.min', 
+                           'OpenLayers', 
+                           'map', :charset => 'utf-8', :cache => 'libraries')
+  end
+  
+  def main_js_link
+    javascript_include_tag('fixmytransport', 'application', :charset => 'utf-8', :cache => 'main')
+  end
+  
   # options:
   #  no_jquery - don't include a tag for the main jquery js file
   def map_javascript_include_tags(options={})
