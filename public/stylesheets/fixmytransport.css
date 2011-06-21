@@ -1314,3 +1314,16 @@ ol#large-ol {
 		    -moz-border-radius: 20px;
 		    -webkit-border-radius: 20px;
 		}
+
+/*===[Operator Page]===*/
+.operators .left,
+.operators .right {
+	display:block;
+	width:45%;
+}
+.operators .right{
+	margin-left:10%;
+}
+.operators div ul {
+	display:none;
+}

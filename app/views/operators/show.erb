@@ -1,22 +1,29 @@
-<h2><%= @operator.name %></h2>
-<%- if !@operator.routes.empty?  %>
-  <%= t(:operates_routes, :operator => @operator.name, :count => @operator.routes.count) %>
-  <ul class='operator-routes'>
-   <%- @operator.routes.each do |route| %>
-      <li>
-        <%= link_to(route.description, route_url(route.region, route)) %>
-      </li>
-   <%- end %>
-</ul>
-<%- end %>
+<div id="main-content" class="container operators">
+	<h2><%= @operator.name %></h2>
+	
+	<div class="left">
+	<%- if !@operator.routes.empty?  %>
+	  <h3 class="operator-trigger"><%= t(:operates_routes, :operator => @operator.name, :count => @operator.routes.count) %></h3>
+	  <ul class='operator-routes'>
+	   <%- @operator.routes.each do |route| %>
+	      <li>
+	        <%= link_to(route.description, route_url(route.region, route)) %>
+	      </li>
+	   <%- end %>
+	  </ul>
+	<%- end %>
+	</div>
 
-<%- if !@operator.stop_areas.empty? %>
-  <%= t(:is_responsible_for_stations, :operator => @operator.name, :count => @operator.stop_areas.count) %>
-  <ul class='operator-stations'>
-    <%- @operator.stop_areas.each do |station| %>
-      <li>
-        <%= link_to(station.name, location_path(station)) %>
-      </li>
-    <%- end %>
-</ul>
-<%- end %>
+	<div class="right">
+	<%- if !@operator.stop_areas.empty? %>
+	  <h3 class="operator-trigger"><%= t(:is_responsible_for_stations, :operator => @operator.name, :count => @operator.stop_areas.count) %></h3>
+	  <ul class='operator-stations'>
+	    <%- @operator.stop_areas.each do |station| %>
+	      <li>
+	        <%= link_to(station.name, location_path(station)) %>
+	      </li>
+	    <%- end %>
+	  </ul>
+	<%- end %>
+	</div>
+</div>
