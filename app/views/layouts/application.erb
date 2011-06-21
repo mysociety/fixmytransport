@@ -14,7 +14,7 @@
 	<!--[if lte IE 8]><%= raw stylesheet_link_tag('ie678') %><![endif]-->
 
     <%= yield :stylesheets %>
-    <%= raw javascript_include_tag('jquery-1.5.2.min', 'jquery-ui-1.8.13.custom.min', 'jquery.autofill.min', 'jquery.form.min', :charset => 'utf-8', :cache => 'libraries') %>
+    <%= raw javascript_include_tag('map', 'jquery-1.5.2.min', 'jquery-ui-1.8.13.custom.min', 'jquery.autofill.min', 'jquery.form.min', :charset => 'utf-8', :cache => 'libraries') %>
     <script type="text/javascript">
       $('html').addClass('javascript-enabled');
     </script>
@@ -63,7 +63,7 @@
 			</div>
 		</div>
 		<%= yield :javascript %>
-		<%= raw javascript_include_tag('fixmytransport', 'application', 'map', :charset => 'utf-8', :cache => 'main') %>
+		<%= raw javascript_include_tag('fixmytransport', 'application', :charset => 'utf-8', :cache => 'main') %>
 		<!--[if lte IE 8]><%= raw javascript_include_tag('ie', :charset => 'utf-8') %><![endif]-->
 		<%= render :partial => 'shared/tracking' %>
 	</body>
