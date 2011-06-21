@@ -7,6 +7,8 @@
    var lat = <%= @lat %>;
    var lon = <%= @lon %>;
    var findOtherLocations = <%= @find_other_locations %>;
+   var areaStops = <%= raw location_stops_js(locations, main=true, small=false, link_type) %>;
+   var otherAreaStops = <%= raw location_stops_js(other_locations, main=false, small=true, link_type) %>;
    var linkType = '<%= link_type %>';
    $(document).ready(function(){
      area_init();
