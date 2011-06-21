@@ -110,7 +110,7 @@
 	            fbButtonState = 'idle';
 	        }
 	        if (fbButtonState == 'idle') {
-	            $(".facebook").css('background-position', '0px 0px'); 
+	            paintFbButton(fbButtonState);
 	        }
 	        return false;
 	    }
@@ -128,16 +128,6 @@
             }
         }
 
-    window.fbAsyncInit = function() {
-        FB.init({appId: fmt_Facebook_appId, status: false, cookie: true, xfbml: false});      
-    };
-    (function() {
-        var e = document.createElement('script'); e.async = true;
-        // e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-        e.src = '/javascripts/facebook_all.js';
-        document.getElementById('fb-root').appendChild(e);
-    }());
-          
 </script>
 <%- end %>
 

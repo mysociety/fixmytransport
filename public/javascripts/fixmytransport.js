@@ -107,66 +107,47 @@ $(document).ready(function(){
 
   //facebook
   $('.facebook-trigger').click(function(e){
-
-/*
-  	e.preventDefault();
-  	$('.login-box .pane').hide();
-  	$('#social-share').empty(); 
-    var fbUrl = 'http://www.facebook.com/dialog/apprequests';
-  	var redirectUri = document.location.protocol + '//' + document.location.host + '/test_callback.html';
-    var queryParams = [
-        'app_id=' + fmt_facebook_app_id,
-        'redirect_uri=' + encodeURI(redirectUri),
-        'access_token=' + 
-        'display=iframe'
-        ];
-    fbUrl = fbUrl + '?' + queryParams.join('&');
-
-  	alert("adding iframe to url " + fbUrl);
-  	$('<iframe />', {
-        name:  'fbiframe',
-        id:    'fbkiframe',
-        src:   fbUrl,
-        style: 'width: 480px; height:480px; margin:10px auto;'
-    }).appendTo('#social-share');
-  	$('#social-share').show();
-  	$("#login-box").dialog({title: "Facebook:"});
-  	$("#login-box").dialog("open");
- */
     e.preventDefault();
-    var msg = "Please support me in my campaign";
-    if (campaign_data && campaign_data.title) {
-        msg = msg + " to " + campaign_data.title;
-    }
-    msg = msg + ".";
-    var campaignId = campaign_data.id + " (" + campaign_data.slug + ")"; // only want ID... slug is human-readable hint
-    // FB.ui({method: 'apprequests', message: msg, data: campaignId, title: 'Pick some friends to help you', app_id:fmt_facebook_app_id });
-    FB.ui(
-        {
-            method:  'feed',
-            name:    'FixMyTransport campaign: ' + campaign_data.title,
-            link:    campaign_data.url,
-            picture: document.location.protocol + '//' + document.location.host + '/images/facebook-feed-logo.gif',
-            caption: campaign_data.description,
-            description: "Help this FixMyTransport campaign by spreading the word and encouraging your friends to support it.",
-            //message: "" // FB policy recommends: only set this if user is creator of the campaign
-        },
-        function(response) {
-            $('.login-box .pane').hide();
-            $('#social-share').empty(); 
-            if (response && response.post_id) {
-                $('<h2>Post was published</h2>').appendTo('#social-share');
-                $('<p>Thanks for spreading the word about this campaign!</p>').appendTo('#social-share');
-            } else {
-                $('<h2>Post was not published</h2>').appendTo('#social-share');
-                $('<p>You cancelled your post this time.<br/>But please do spread the word about this campaign!</p>').appendTo('#social-share');
-            }
-            $('#social-share').show();
-            $("#login-box").dialog({title: "Facebook:"});
-            $("#login-box").dialog("open");
-        }
-    );
-  	return false;
+    $('.login-box .pane').hide();
+    $('#social-message').empty().append('<b>Tell the world you&rsquo;re a supporter</b><br/>' +
+       'Post to your Facebook wall and let everyone know!').show(); 
+    $('#social-share').show();
+  	$("#login-box").dialog({title: "Facebook"});
+  	$("#login-box").dialog("open");
+  	return false;    
+  });
+
+  $('.fb-feed-button').click(function(e){
+      e.preventDefault();
+     $('#social-message').fadeOut().empty();
+      FB.ui(
+          {
+              method:  'feed',
+              display: 'popup',
+              name:    'FixMyTransport campaign: ' + campaign_data.title,
+              link:    campaign_data.url,
+              picture: document.location.protocol + '//' + document.location.host + '/images/facebook-feed-logo.gif',
+              caption: campaign_data.description,
+              description: "Please help this FixMyTransport campaign by spreading the word and encouraging your friends to support it.",
+              message: "I'm supporting this FixMyTransport campaign: "  + campaign_data.title + " ...will you join me?"
+          },
+          function(response) {
+              $('.login-box .pane').hide();
+              $('#social-message').empty(); 
+              if (response && response.post_id) {
+                  $('<b>Posted on Facebook</b><br/>' +
+                    'Thanks for spreading the word about this campaign!').appendTo('#social-message');
+              } else {
+                  $('<b>Didn&rsquo;t post on Facebook</b><br/>' +
+                    'You cancelled your post this time.<br/>But please do spread the word about this campaign.').appendTo('#social-message');
+              }
+              $('#social-share').show();
+              $("#login-box").dialog({title: "Facebook"});
+              $("#login-box").dialog("open");
+              $('#social-message').fadeIn();
+          }
+      );
+     return false;
   });
 
     /* Advice request */

@@ -581,6 +581,41 @@ ul.user-list {
     font-style: normal;
 }
 
+/* --- facebook items in the social-share dialog  -- */
+.fb-post-to-wall { /* mimics fb button */
+    color: #3B5998;
+    background-color: #ECEEF5;
+    border: 1px solid #CAD4E7;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    display: block;
+    float: left;
+    font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+    font-size: 11px;
+    background-image: url(/images/facebook-tiny-12x12.png);
+    background-position: 4px 4px;
+    background-repeat: no-repeat;
+    padding: 2px 6px 2px 24px;
+}
+.fb-post-to-wall:hover {
+    border-color: #9DACCE;
+    color: #3B5998;
+}
+.fb-item-container {
+    overflow: visible;
+    margin: 1em 0;
+    padding: 4px 0;
+    border-top: 1px solid #CAD4E7;
+}
+.fb-item-container p {
+    margin: 0 0 0 120px;
+}
+.fb-item-container div {
+    float:left;
+    width:100px;
+}
+
 #comment-form textarea,
 #campaign-update-form textarea {
 	width:96%;

@@ -57,7 +57,7 @@
   	</div>
   </div>
 <%- end %>
-<div id="main-content" class="container">
+<div id="main-content" class="container"  style="overflow: visible !important;">
 
 	<div class="leftcol">
 	  	<%- if current_user && current_user == @campaign.initiator %>
@@ -151,10 +151,10 @@
 	</div>
 
 
-	<div class="rightcol">
+	<div class="rightcol" style="overflow: visible !important;">
 		<%- if current_user && current_user.new_supporter?(@campaign) %>
 	    <div class="contrib-tools-initial">
-			<a href="#">
+			<a href="#" class="facebook-trigger">
 				<span class="icon facebook"></span>
 				Facebook
 			</a>
@@ -219,16 +219,13 @@
 		<%- if @campaign.supporters.registered.count > 0 %>
 		  <%= render :partial => "supporters", :locals => {:show_all => (params[:all_supporters] == '1') }%>
 		<%- end %>
-		
-		<%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
 
-<!--			
-			<div id="fb-like">
-				<iframe style="width:310px;height:80px;border:none;margin:12px 0 8px 0;" src="http://www.facebook.com/plugins/like.php?href=<%= url_encode(campaign_url(@campaign)) %>&amp;send=false&amp;layout=standard&amp;width=310&amp;show_faces=true&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=80"></iframe>
+		<%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
+		    <div>
+			    <fb:like href="<%= campaign_url(@campaign) %>" send="false" width="310" show_faces="true" action="recommend" font=""></fb:like>
 			</div>
--->
-			<fb:like href="<%= campaign_url(@campaign) %>" send="true" width="310" show_faces="true" action="recommend" font=""></fb:like>
 		<%- end %>
+		
 	</div>
 
 	<div class="container">
