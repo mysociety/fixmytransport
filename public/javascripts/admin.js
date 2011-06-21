@@ -156,6 +156,12 @@ function setupDestroyLink(){
   });
 }
 
+function setupShowRoutes() {
+  for (index in routeSegments) {
+    route_init('map_' + index, routeSegments[index]);
+  }
+}
+
 function setupShowRoute(){
   setupOperatorAutocomplete();
   setupStopAutocompletes();
@@ -163,7 +169,7 @@ function setupShowRoute(){
   setupItemSelection('.check-route-operator');
   setupItemSelection('.check-route-segment');
   setupAddSegmentLink();
-  route_init();
+  route_init('map', routeSegments);
   setupSectionControls();
   setupDestroyLink();
 }

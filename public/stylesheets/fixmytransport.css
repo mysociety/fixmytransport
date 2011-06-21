@@ -485,7 +485,8 @@ ul.user-list {
 		#login-box .fieldset {
 			padding: 10px 20px 0px 10px;
 		}
-		#campaign-update .fieldset {
+		.new_campaign_update .fieldset,
+		#login-box .new_campaign_update .fieldset {
 			width:auto;
 			padding:0;
 		}
@@ -528,8 +529,11 @@ ul.user-list {
 			    font-size: 0.9em;
 				margin: 10px 10px 10px 2px;
 			}
-			#campaign-update .fieldset button {
+			#login-box .new_campaign_update .fieldset button {
 				margin:0;
+			}
+			#main-content .new_campaign_update .fieldset button {
+				margin: 10px 2px;
 			}
 
 	.login-options{
@@ -617,19 +621,19 @@ ul.user-list {
 }
 
 #comment-form textarea,
-#campaign-update-form textarea {
+.new_campaign_update textarea {
 	width:96%;
 	margin:5px;
 	border:none;
 	background: #f4f4f4;
 }
 #main-content #comment-form,
-#main-content #campaign-update-form,
+#main-content .new_campaign_update,
 #main-content .update_campaign {
 	width:500px;
 }
 #main-content #comment-form textarea,
-#main-content #campaign-update-form textarea,
+#main-content .new_campaign_update textarea,
 #main-content .update_campaign textarea {
 	margin:0;
 	width:96%;
@@ -742,7 +746,15 @@ ul.user-list {
 	padding-top: 0.3em;
 	font-size: 1.3em;
 }
-
+#main-content #login-form ul input.checkbox,
+#login-box ul input.checkbox,
+#login-box .fieldset input.checkbox,
+.form-field input.checkbox,
+.checkbox,
+.checkbox input,
+input.checkbox {
+	border: none;
+}
 /*TIP BOX*/	
 .tipbox {
     display: block;
@@ -1048,11 +1060,10 @@ ul#campaign-thread {
 	width:100%;
 }
 	ul#campaign-thread li {
-		display:inline-block;
+		display:block;
 		width:100%;
 		list-style-type: none;
 		border-bottom: 3px solid #fff;
-		clear: both;
 		line-height:0;
 	}
 		ul#campaign-thread li a.thread-item {
@@ -1118,7 +1129,7 @@ ul#campaign-thread {
 		    background:none;
 		}
 		ul#campaign-thread li .thread-details {
-			display: none
+			display: none;
 		}
 	ul#campaign-thread li.open {
 	    background: #048fc2;
@@ -1142,25 +1153,31 @@ ul#campaign-thread {
 		    padding: 10px 40px 10px 10px
 		}
 		ul#campaign-thread li.open .thread-details {
-		    display: block;
-		    padding-right: 10px;
+			display: inline-block;
+			padding: 0;
 			margin:0;
+			width:100%;
 		}
 			ul#campaign-thread li.open .thread-details .thread-copy,
 			ul#campaign-thread li.open .thread-details .thread-alternative-copy {
-				float:left;
-				width:70%;
-				color:#333;
-				background:#fff;
-				padding:2%;
+				background: none repeat scroll 0 0 #FFFFFF;
+				color: #333333;
+				float: left;
+				margin: 0 0 10px 10px;
+				padding: 2%;
+				width: 70%;
+				display:inline-block;
+				line-height:1.5;
 			}
 			
 			ul#campaign-thread li.open .thread-details .thread-alternative-copy {
 			  display: none;
 			}
 			ul#campaign-thread li.open .thread-details .thread-furniture {
-				float:right;
-				width:24%;
+				display:inline-block;
+				float: right;
+				margin: 0 10px 10px 0;
+				width: 20%;
 			}
 				ul#campaign-thread li.open .thread-details .thread-furniture .thumb {
 					float:right;

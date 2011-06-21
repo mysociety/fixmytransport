@@ -1,10 +1,4 @@
-/*
- * at present these are all just for ie 6, I will check to see what
- * 7 and 8 do later and if they just need the same styles or specific ones
- */
-
-/* hide from IE Mac \*/
-
+/*Hacks for IE6*/
 * html #banner {
   background-color: expression(this.className == "blue" ? "#048fc2" : this.className == "yellow" ? "#FFFBD7" : "#f4f4f4");
 }
@@ -17,8 +11,10 @@
 * html .leftcol-banner {
     width: 560px;
 }
-/* undo hiding */
 
-.ui-dialog-title{
+
+/*Hacks for IE6 and IE7*/
+.ui-dialog-title,
+#footer {
 	float:left;
 }

@@ -8,9 +8,9 @@
 	</div>
 
 	<%- if ['campaigns', 'problems'].include?(controller.controller_name) && controller.action_name == 'show' %>
-	<div id="comment-and-login" class="pane">
-		<%= render :partial => 'shared/comment_form' %>
-	</div>
+  	<div id="comment-and-login" class="pane">
+  		<%= render :partial => 'shared/comment_form' %>
+  	</div>
 	<%- end %>
 	
 	<%- if controller.controller_name == 'campaigns' && controller.action_name == 'show' %>
@@ -37,11 +37,11 @@
 	  <%- if current_user && current_user == @campaign.initiator %>
 	    <div id="campaign-update" class="pane">
         <%= render :partial => 'campaigns/update_form' %>
-      	</div>
+      </div>
 
-		<div id="campaign-add-photos" class="pane">
+		  <div id="campaign-add-photos" class="pane">
         <%= render :partial => 'campaigns/add_photos_form' %>
-      	</div>
+      </div>
     <%- end %>
   <%- end %>
 

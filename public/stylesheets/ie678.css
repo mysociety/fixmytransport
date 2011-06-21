@@ -1,0 +1,26 @@
+/*Hacks for IE6, IE7 and IE8*/
+
+.support-big {
+	display: block;
+	margin: 17px auto;
+	padding: 10px 25px;
+	width:220px;
+}
+
+
+#login-form {
+	height:230px;
+}
+
+
+/*thread details lost its 10px margin at the bottom, so we use padding instead on the li*/
+ul#campaign-thread li.open {
+	padding-bottom:10px;
+}
+ul#campaign-thread li.open .thread-details .thread-copy,
+ul#campaign-thread li.open .thread-details .thread-alternative-copy {
+	margin: 0 0 0 10px;
+}
+ul#campaign-thread li.open .thread-details .thread-furniture {
+	margin: 0 10px 0 0;
+}

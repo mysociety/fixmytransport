@@ -23,21 +23,18 @@ var segmentSelectedStyle =
 };
 
 function area_init() {
-  createMap();
+  createMap('map');
   bounds = new OpenLayers.Bounds();
   markers = new OpenLayers.Layer.Markers( "Markers" );
   otherMarkers = new OpenLayers.Layer.Markers( "Other Markers" );
   map.addLayer(otherMarkers);
   map.addLayer(markers);
-  
-  if (!typeof(areaStops) == 'undefined'){
-    addMarkerList(areaStops, markers, false);
-  }
-  addHtmlMarkers('#noscript .location-marker', markers, true);
-  
+  addMarkerList(areaStops, markers, false);
+  addMarkerList(otherAreaStops, otherMarkers, true);
   centerCoords =  new OpenLayers.LonLat(lon, lat);
   centerCoords.transform(proj, map.getProjectionObject());
   map.setCenter(centerCoords, zoom);
+  
   if (findOtherLocations == true) {
     map.events.register('moveend', map, updateLocations); 
   }
@@ -61,12 +58,6 @@ function loadNewMarkers(response) {
 function markerFail(){
 }
 
-function addHtmlMarkers(selector, layer, others) {
-  $(selector).each(function(){
-    addHtmlMarker($(this), bounds, layer, others);
-  });
-}
-
 function addMarkerList(list, markers, others) {
   var stopCoords;
 
@@ -83,11 +74,6 @@ function addMarkerList(list, markers, others) {
 }
 
 
-function addHtmlMarker(current, bounds, layer, other) {
-  stopCoords= pointCoords(parseFloat(current.attr('data-lon')), parseFloat(current.attr('data-lat')));
-  addRouteHTMLMarker(stopCoords, bounds, layer, current,other);
-}
-
 function addMarker(current, bounds, layer, other){
   stopCoords = pointCoords(current.lon, current.lat);
   addRouteMarker(stopCoords, bounds, layer, current, other);
@@ -97,9 +83,9 @@ function pointCoords(lon, lat) {
   return new OpenLayers.LonLat(lon, lat).transform(proj, map.getProjectionObject());
 }
 
-function route_init() {
+function route_init(map_element, routeSegments) {
 		  
-  createMap();
+  createMap(map_element);
   bounds = new OpenLayers.Bounds();
   
   var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer",{projection: proj});
@@ -157,18 +143,19 @@ function segmentUnselected(event) {
   
 }
 
-function createMap() {
-
+function createMap(map_element) {
+  OpenLayers.ImgPath='/javascripts/img/';
   var options = { 
         'projection': new OpenLayers.Projection("EPSG:900913"),
         'units': "m",
         'numZoomLevels': 18,
         'maxResolution': 156543.0339,
+        'theme': '/javascripts/theme/default/style.css',
         'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
                                           20037508.34, 20037508.34)
       };
   $('.static-map-element').hide();    
-  map = new OpenLayers.Map('map', options);
+  map = new OpenLayers.Map(map_element, options);
   var layer = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true,
                                                            'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
                                                                                             20037508.34, 20037508.34)});
@@ -224,26 +211,6 @@ function unHoverStop(stop) {
   }  
 }
 
-function addRouteHTMLMarker(stopCoords, bounds, markers, item, other){
-  
-  if (stopsById[item.attr('data-id')] == undefined) {
-    bounds.extend(stopCoords);
-    var size = new OpenLayers.Size(item.find("img:first").attr('width'), item.find("img:first").attr('height'));
-    var offset = new OpenLayers.Pixel(-(size.w/2), -(size.h/2));
-    var stopIcon = new OpenLayers.Icon(item.find("img:first").attr('src'), size, offset);
-    stopIcon.imageDiv.style.cursor = 'pointer';
-    var marker = new OpenLayers.Marker(stopCoords, stopIcon);
-    marker.url = item.attr('href');
-    marker.name = item.find("img:first").attr('title');
-    marker.id = item.attr('data-id');
-    stopsById[item.attr('data-id')] = marker;
-    marker.events.register("click", marker, stopSelected);
-    marker.events.register("mouseover", marker, stopHovered);
-    marker.events.register("mouseout", marker, stopUnhovered);
-    markers.addMarker(marker);
-  }
-    
-}
 
 function addRouteMarker(stopCoords, bounds, markers, item, other) {
   if (stopsById[item.id] == undefined) {

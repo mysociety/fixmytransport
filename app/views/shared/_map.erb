@@ -7,7 +7,7 @@
 
 <div id="map" class="box">
   
-  <%- unless static %><div id="noscript"><%- end %>
+  <%- unless static %><noscript><%- end %>
     <div id="drag">
       <img class="static-map-element" alt="Map" src="<%= Map.google_tile_url(@lat, @lon, @zoom, height, width) %>" style="top:0px; left:0;" />
       <%- unless static %>
@@ -58,5 +58,5 @@
         <%= render :partial => 'shared/location_marker', :collection => other_locations, :as => :location, :locals => {:small => true, :main => false, :link_type => link_type, :height => height, :width => width } %>
       </div>
     </div>
-  <%- unless static %></div><%- end %> 
+  <%- unless static %></noscript><%- end %> 
 </div>

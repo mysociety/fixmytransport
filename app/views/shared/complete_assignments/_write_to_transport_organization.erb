@@ -1,5 +1,5 @@
 <a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= "#{assignment.user_name} wrote to #{assignment.data[:organizations].map{ |organization| organization[:name] }.to_sentence}" %></span><span class="close">close</span><span class="date"><%= event.created_at.to_s(:standard_with_date) %></span></a>
-<div class="thread-details box">
+<div class="thread-details">
 	<div class="thread-copy">
 		<p>Here is the letter that <%= assignment.user_name %> wrote.</p>
 		<p><strong><%= assignment.problem.subject %></strong></p>

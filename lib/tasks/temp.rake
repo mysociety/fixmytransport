@@ -47,5 +47,22 @@ namespace :temp do
     end
   end
   
+  desc 'Add some operators that had ambiguous codes'
+  task :add_operators_for_ambiguous_codes => :environment do
+    # BL - Badgerline now First Somerset & Avon
+    # FC00 - In Wales will be First Cymru 
+    mappings = { 'BL' => 'First Somerset & Avon', 
+                 'FC00' => 'First Cymru' }
+    mappings.each do |code, operator_name|
+      operator = Operator.find_by_name(operator_name)
+      routes = Route.find(:all, :conditions => ['operator_code = ? 
+                                                 AND id not in (SELECT route_id FROM route_operators)', code])
+      routes.each do |route|
+        puts route.description
+        route.route_operators.create!(:operator => operator)
+      end
+    end              
+  end
+  
 end
 

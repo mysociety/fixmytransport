@@ -5,17 +5,32 @@ module ApplicationHelper
     MySociety::Config.get('GOOGLE_MAPS_API_KEY', '')
   end
   
+  def library_js_link
+    javascript_include_tag('jquery-1.5.2.min', 
+                           'jquery-ui-1.8.13.custom.min', 
+                           'jquery.autofill.min', 
+                           'jquery.form.min', 
+                           'OpenLayers', 
+                           'map', :charset => 'utf-8', :cache => 'libraries')
+  end
+  
+  def admin_library_js_link
+     javascript_include_tag('jquery-1.5.2.min', 
+                            'jquery-ui-1.8.13.custom.min', 
+                            'OpenLayers-admin', 
+                            'map',
+                            'admin', :charset => 'utf-8', :cache => 'admin_libraries')
+  end
+  
+  def main_js_link
+    javascript_include_tag('fixmytransport', 'application', :charset => 'utf-8', :cache => 'main')
+  end
+  
   # options:
   #  no_jquery - don't include a tag for the main jquery js file
   def map_javascript_include_tags(options={})
     tags = []
-    if options[:admin]
-      tags << javascript_include_tag('OpenLayers-admin.js')
-    else
-      tags << javascript_include_tag('OpenLayers.js')
-    end
     tags << "<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=#{google_maps_key}\" type=\"text/javascript\"></script>"
-    tags << javascript_include_tag('map.js')
     tags.join("\n")
   end
 
@@ -33,16 +48,25 @@ module ApplicationHelper
     small ? SMALL_ICON_WIDTH : LARGE_ICON_WIDTH
   end
 
-  def stop_js_coords(stop, main=true, small=false, link_type=:location, location=nil)
+  def stop_js_coords(stop, main=true, small=false, link_type=:location, location=nil, line_only=false)
+    
     location = (location or stop)
-    { :lat => stop.lat,
-      :lon => stop.lon,
-      :id => stop.id,
-      :url => map_link_url(location, link_type),
-      :description => location.description,
-      :icon => stop_icon(stop, main, small),
-      :height => icon_height(small),
-      :width => icon_width(small) }
+    if line_only
+      data = { :lat => stop.lat,
+               :lon => stop.lon,
+               :id => stop.id }
+    else
+      
+      data = { :lat => stop.lat,
+               :lon => stop.lon,
+               :id => stop.id,
+               :url => map_link_url(location, link_type),
+               :description => location.description,
+               :icon => stop_icon(stop, main, small),
+               :height => icon_height(small),
+               :width => icon_width(small) }
+    end
+    return data
   end
 
   def stop_icon(location, main=false, small=false)
@@ -76,10 +100,10 @@ module ApplicationHelper
     return name
   end
 
-  def route_segment_js(route)
+  def route_segment_js(route, line_only=false)
     segments_js = route.journey_patterns.map{ |jp| jp.route_segments }.flatten.map do |segment|
-      [stop_js_coords(segment.from_stop, main=true, small=true),
-       stop_js_coords(segment.to_stop, main=true, small=true), segment.id]
+      [stop_js_coords(segment.from_stop, main=true, small=true, link_type=:location, location=nil, line_only=line_only),
+       stop_js_coords(segment.to_stop, main=true, small=true, link_type=:location, location=nil, line_only=line_only), segment.id]
     end
     segments_js.to_json
   end

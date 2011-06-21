@@ -1,9 +1,6 @@
 <div id="main-content" class="container">
-	<%- content_for :javascript do  %>
-	  <%= raw javascript_include_tag('jquery-ui-1.8.9.custom.min.js') %>
-	<%- end %>
 	<%- content_for :stylesheets do %>
-	  <%= stylesheet_link_tag 'custom-theme/jquery-ui-1.8.9.custom' %>
+	  <%= stylesheet_link_tag 'custom-theme/jquery-ui-1.8.13.custom' %>
 	<%- end %>
 
 	<%- if @region != @national_region %>

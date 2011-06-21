@@ -6,7 +6,7 @@ namespace :nptdr do
 
   include DataLoader
   include GeoFunctions
-
+  
   def get_route_missing_stop_data()
     missing_route_stops_files = ["#{RAILS_ROOT}/data/NPTDR/oct_2010/missing_stops.csv",
                                  "#{RAILS_ROOT}/data/NPTDR/oct_2010/missing_stops_regional.csv"]
@@ -549,6 +549,53 @@ namespace :nptdr do
         puts route.id
       end
     end
+    
+    desc 'Generate list of merge candidates from national routes'
+    task :generate_merge_candidates_national => :environment do 
+      great_britain = Region.find_by_name('Great Britain')
+      routes = BusRoute.find(:all, :conditions => ['region_id = ?
+                                                     AND id NOT IN (
+                                                      SELECT route_id
+                                                      FROM route_operators)', great_britain])
+      routes.each do |route|
+        others = Route.find_all_by_number_and_common_stop(route, options={:skip_operator_comparison => true})
+        if ! others.empty? 
+          MergeCandidate.create!(:national_route => route, :regional_route_ids => others.map{|route| route.id}.join("|"))
+        end
+      end
+    end
+
+    desc 'Generate list of merge candidates from bus routes that have the same number, region and cached description'
+    task :generate_merge_candidates_by_number => :environment do 
+      routes = BusRoute.find_by_sql("SELECT a.* from routes as a, routes as b 
+                                     WHERE a.id > b.id 
+                                     AND a.number = b.number
+                                     AND a.transport_mode_id = 1 
+                                     AND b.transport_mode_id = 1 
+                                     AND a.cached_description = b.cached_description")
+       routes.each do |route|
+         others = Route.find_all_by_number_and_common_stop(route, options={:skip_operator_comparison => true})
+         if ! others.empty? 
+           MergeCandidate.create!(:national_route => route, :regional_route_ids => others.map{|route| route.id}.join("|"))
+         end
+       end       
+    end
+
+    desc 'Merge candidates marked in the route comparison interface as being the same'
+    task :merge_marked_candidates => :environment do 
+      MergeCandidate.find_each(:conditions => ['is_same = ?', true]) do |merge_candidate|        
+        other_route_ids = merge_candidate.regional_route_ids.split("|")
+        route_ids = [merge_candidate.national_route_id] + other_route_ids
+        routes = route_ids.map{ |route_id| Route.find(:first, :conditions => ['id = ?', route_id]) }.compact
+        if routes.size > 1
+          to_merge = routes.shift
+          puts "merging #{to_merge.id} #{to_merge.cached_description} to #{routes.map{|route| "#{route.id} #{route.cached_description}"}}"
+          Route.merge!(to_merge, routes)
+        end
+        merge_candidate.destroy
+      end
+    end
+
 
     desc 'Adds region associations based on route localities'
     task :add_route_regions => :environment do
@@ -661,6 +708,37 @@ namespace :nptdr do
         end
       end
     end
+  
+    desc 'Generate list of 100 routes for data audit'
+    task :generate_audit_set => :environment do 
+      include ActionController::UrlWriter
+      # Can be checked for duplicate routes, incorrectly merged routes, bad operator assignments
+      audit_file = File.open("#{RAILS_ROOT}/data/audit.tsv", 'w')
+      headers = ["Route ID", "Description", "URL", "Operators", "Does the description map to more than one (identical looking) route?", "Do the route terminuses look about right compared to any external source you can find?", "Is the operator right (if there is one)?"]
+      audit_file.write(headers.join("\t") + "\n")
+      random_routes = Route.find(:all, :order => 'random()', :limit => 100)
+      random_routes.each do |route|
+        route_url = route_url(route.region, route, :host => MySociety::Config.get("DOMAIN", "localhost:3000"))
+        route_operators = route.operators.map{|operator| operator.name}.to_sentence
+        fields = [route.id, 
+                  route.description, 
+                  route_url, 
+                  route_operators]
+        audit_file.write(fields.join("\t") + "\n")
+      end      
+    end
+  
+    desc 'Show stats on data completion' 
+    task :status => :environment do 
+
+      # routes without operators
+      puts "Routes without operators: #{Route.count_without_operators} out of #{Route.count}"
+          
+      # operators without contact details 
+      puts "Missing operators contacts #{Operator.count_without_contacts} out of #{Operator.count}, affects #{Route.count_without_contacts} out of #{Route.count} routes"
+      
+    end
+  
   end
 
 end

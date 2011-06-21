@@ -9,15 +9,16 @@
     <%= csrf_meta_tag %>
     <%= raw stylesheet_link_tag('core', 'fixmytransport', 'map', 'buttons', :cache => 'main') %>
 
-	<!--[if lte IE 7]><%= raw stylesheet_link_tag('ie', :cache => 'main') %><![endif]-->
+	<!--[if lte IE 7]><%= raw stylesheet_link_tag('ie67') %><![endif]-->
+	
+	<!--[if lte IE 8]><%= raw stylesheet_link_tag('ie678') %><![endif]-->
 
     <%= yield :stylesheets %>
-    <%= raw javascript_include_tag('jquery-1.5.2.min', 'jquery-ui-1.8.11.min', 'jquery.autofill', 'jquery.form', :charset => 'utf-8', :cache => 'libraries') %>
+    <%= raw library_js_link %>
     <script type="text/javascript">
-      $('html').addClass('javascript-enabled');
       var fmt_facebook_app_id = '<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>';
     </script>
-    <%= yield :javascript %>
+
   </head>
 	<body>
 		<div id="wrapper">
@@ -33,7 +34,7 @@
 				</ul>
 				<a id="logo" href="<%= root_url %>">Fix My Transport</a>
 				<%- if current_user %>
-				<p id="member-info">Hi <a href="<%= account_path %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>">Logout</a></p>
+				<p id="member-info">Hi <a href="<%= profile_path(current_user) %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>">Logout</a></p>
 				<%- else %>
 				<p id="member-info">Hi Guest. <a class="auth" href="<%= login_path(:redirect => request.request_uri) %>">Sign in</a></p>
 				<%- end %>
@@ -63,7 +64,8 @@
 			</div>
 		</div>
 		<%= yield :javascript %>
-		<%= raw javascript_include_tag('fixmytransport', 'application', :charset => 'utf-8', :cache => 'main') %>
+		<%= raw main_js_link %>
+		<!--[if lte IE 8]><%= raw javascript_include_tag('ie', :charset => 'utf-8') %><![endif]-->
 		<%= render :partial => 'shared/tracking' %>
 	</body>
 </html>

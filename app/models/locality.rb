@@ -113,7 +113,7 @@ class Locality < ActiveRecord::Base
       areas += area_type.find_all_by_full_name(name)
     end
     areas.each do |area|
-      if area.is_a?(Locality) && (areas.include?(area.admin_area.region) || areas.include?(area.admin_area))
+      if area.is_a?(Locality) && (areas.include?(area.admin_area.region) || areas.include?(area.admin_area) || areas.include?(area.district))
         areas.delete(area)
       end
     end

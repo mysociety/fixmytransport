@@ -79,3 +79,6 @@ fi
 rake gems:build
 # upgrade database
 rake db:migrate #--trace
+# redeploy any cached assets
+rake cached_assets:regenerate
+
