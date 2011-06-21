@@ -135,11 +135,11 @@ $(document).ready(function(){
               $('.login-box .pane').hide();
               $('#social-message').empty(); 
               if (response && response.post_id) {
-                  $('<b>Posted on Facebook</b><br/>' +
-                    'Thanks for spreading the word about this campaign!').appendTo('#social-message');
+                  $('<b>Posted on Facebook!</b><br/>' +
+                    'Thanks for spreading the word about this campaign!<br/>').appendTo('#social-message');
               } else {
-                  $('<b>Didn&rsquo;t post on Facebook</b><br/>' +
-                    'You cancelled your post this time.<br/>But please do spread the word about this campaign.').appendTo('#social-message');
+                  $('<b>Oops &mdash; didn&rsquo;t post on Facebook</b><br/>' +
+                    'You cancelled your post this time...<br/>but please do spread the word about this campaign.<br/>').appendTo('#social-message');
               }
               $('#social-share').show();
               $("#login-box").dialog({title: "Facebook"});
