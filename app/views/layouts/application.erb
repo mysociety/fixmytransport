@@ -63,7 +63,7 @@
 			</div>
 		</div>
 		<%= yield :javascript %>
-		<%= raw javascript_include_tag('fixmytransport', 'application', :charset => 'utf-8', :cache => 'main') %>
+		<%= raw javascript_include_tag('fixmytransport', 'application', 'map', :charset => 'utf-8', :cache => 'main') %>
 		<!--[if lte IE 8]><%= raw javascript_include_tag('ie', :charset => 'utf-8') %><![endif]-->
 		<%= render :partial => 'shared/tracking' %>
 	</body>
