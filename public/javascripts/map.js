@@ -150,6 +150,7 @@ function createMap(map_element) {
         'units': "m",
         'numZoomLevels': 18,
         'maxResolution': 156543.0339,
+        'theme': '/javascripts/theme/default/style.css',
         'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
                                           20037508.34, 20037508.34)
       };
