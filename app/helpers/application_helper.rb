@@ -18,7 +18,7 @@ module ApplicationHelper
      javascript_include_tag('jquery-1.5.2.min', 
                             'jquery-ui-1.8.13.custom.min', 
                             'OpenLayers-admin', 
-                            'map'
+                            'map',
                             'admin', :charset => 'utf-8', :cache => 'admin_libraries')
   end
   
