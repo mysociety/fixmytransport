@@ -4,6 +4,7 @@ namespace :cached_assets do
     include ActionView::Helpers::TagHelper
     include ActionView::Helpers::UrlHelper
     include ActionView::Helpers::AssetTagHelper
+    include ActionView::Helpers::ApplicationHelper
     js_dir = "#{RAILS_ROOT}/public/javascripts/"
     css_dir = "#{RAILS_ROOT}/public/stylesheets/"
     js_assets = ['libraries', 'main']
@@ -19,7 +20,5 @@ namespace :cached_assets do
     stylesheet_link_tag('core', 'fixmytransport', 'map', 'buttons', :cache => 'main')
     library_js_link
     main_js_link
-    javascript_include_tag('fixmytransport', 'application',  :charset => 'utf-8', :cache => 'main') 
-    
   end
  end
