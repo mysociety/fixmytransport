@@ -97,7 +97,7 @@ class StopArea < ActiveRecord::Base
                             ST_Point(?, ?),
       	                    ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})",
     	                    StopAreaType.primary_types, min_lon, min_lat, max_lon, max_lat],
-    	                 :include => :localities)
+    	                 :include => :locality)
   end
 
   def self.find_parents(stop, station_type)
