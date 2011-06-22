@@ -83,18 +83,12 @@ class ProblemMailer < ApplicationMailer
   
   def self.send_reports(dryrun=false, verbose=false)
     self.dryrun = dryrun
-    
-    # make sure the mail confs are up to date
-    Campaign.sync_mail_confs
-    
+
     missing_emails = { :council => {},
                        :passenger_transport_executive => {},
                        :operator => {} }
     self.sent_count = 0
     Problem.sendable.each do |problem|
-
-      # if campaign mail, wait until the campaign has a subdomain
-      next if problem.campaign and !problem.campaign.subdomain
       
       check_for_council_change(problem)
       

@@ -3,7 +3,7 @@ Hi <%= raw @user.name %>,
 You just tried to sign up to FixMyTransport, when you
 already have already got an account, but haven't set a password on it.
 
-Please click on the link below to log in<%-if @action%><%=" and #{@action}"%><%- end %>:
+Please click on the link below to sign in<%-if @action%><%=" and #{@action}"%><%- end %>:
 
 <%= raw @account_confirmation_url %>
 

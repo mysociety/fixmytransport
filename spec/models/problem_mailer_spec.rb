@@ -230,14 +230,7 @@ describe ProblemMailer do
                                                          [@emailable_council], 
                                                          [@unemailable_council])
       ProblemMailer.send_reports
-    end
-    
-    it "shouldn't send a report email for a problem which has an operator email but is associated with a campaign with no subdomain" do
-      mock_campaign = mock_model(Campaign, :subdomain => nil)
-      @mock_problem_email_operator.stub!(:campaign).and_return(mock_campaign)
-      ProblemMailer.should_not_receive(:deliver_report).with(@mock_problem_email_operator, @operator_with_mail, [@operator_with_mail], [])
-      ProblemMailer.send_reports
-    end  
+    end 
     
     it 'should create a sent email record for each problem report delivered' do 
       SentEmail.should_receive(:create!).with(:problem => @mock_problem_email_operator, 

@@ -121,7 +121,7 @@ describe Problem do
     it 'should give the campaign email address of the reporter if there is an associated campaign' do 
       mock_campaign = mock_model(Campaign)
       @problem.stub!(:campaign).and_return(mock_campaign)
-      @mock_reporter.should_receive(:campaign_email_address).with(mock_campaign)
+      mock_campaign.should_receive(:email_address)
       @problem.reply_email
     end
     

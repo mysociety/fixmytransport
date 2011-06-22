@@ -1,11 +1,13 @@
+<h3>Related Issues</h3>
 <%- if !location.campaigns.visible.empty? %>
-<h3>Related Campaigns</h3>
-<ul class="related-campaigns">
+<ul class="related-issues">
 	<%- location.campaigns.visible.each do |campaign| %>
 	<li>
      <%= render :partial => 'shared/campaign', :locals => { :context => :location, :campaign => campaign } %>
 	</li>
   <%- end %>
 </ul>
+<%- else %>
+No reported issues.
 <%- end %>
 

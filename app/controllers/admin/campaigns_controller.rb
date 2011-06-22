@@ -9,8 +9,8 @@ class Admin::CampaignsController < Admin::AdminController
     query_clauses = []
     if params[:query]
       query = params[:query].downcase
-      query_clause = "(lower(title) like ?"
-      conditions << "%%#{query}%%" 
+      query_clause = "(lower(title) like ? or lower(key) like ? "
+      2.times { conditions << "%%#{query}%%" }
       # numeric?
       if query.to_i.to_s == query
         query_clause += " OR id = ?"
