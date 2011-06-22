@@ -1277,14 +1277,20 @@ ul#process {
 				margin-bottom: 20px;
 			}
 
-/*===[Homepage]===*/
+/*===[Front Page]===*/
 
+
+/* redundent?
 .home-intro{
 	text-align: center;
 }
-
 .home-intro a.button{
 	margin-bottom: 3em;
+}
+*/
+
+#other-country-notice{
+  display: none;
 }
 
 #frontpage-banner-left {
@@ -1323,7 +1329,7 @@ ul#process {
 
 #fg-head {
 	display:inline-block;
-	/*padding-bottom:30px;*/
+	padding-bottom:30px;
 }
 	div.fg-bottom {
 		float:left;
@@ -1439,9 +1445,4 @@ ol#large-ol {
 }
 .operators div ul {
 	display:none;
-}
-
-/*===[Front Page]===*/
-#other-country-notice{
-  display: none;
 }
