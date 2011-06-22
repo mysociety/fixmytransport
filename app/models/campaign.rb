@@ -171,12 +171,12 @@ class Campaign < ActiveRecord::Base
   end
   
   def email_address
-    prefix = MySociety::Config.get("INCOMING_EMAIL_PREFIX", 'campaign-')
     domain = MySociety::Config.get("INCOMING_EMAIL_DOMAIN", 'localhost')
     "#{email_local_part}@#{domain}"
   end
   
   def email_local_part
+    prefix = MySociety::Config.get("INCOMING_EMAIL_PREFIX", 'campaign-')
     "#{prefix}#{key}"
   end
 
