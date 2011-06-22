@@ -40,9 +40,10 @@ define('OPTION_BUGS_EMAIL', 'bugs@localhost');
 
 define('OPTION_GOOGLE_MAPS_API_KEY', 'Your Google Maps API key');
 
-// Facebook stuff
-define('OPTION_FACEBOOK_APP_ID', 'xxxxx');
-define('OPTION_FACEBOOK_OAUTH_REDIRECT_URI', 'some_url');
+// Facebook: 
+// APP_ID is typically a 16-digit code regestered for this app by your "owner" Facebook account.
+// If you leave it blank, facebook stuff (connect/login)  won't be displayed.
+define('OPTION_FACEBOOK_APP_ID', '');
 
 // Using a database with spatial extensions? PostGIS or MySQL with Spatial Extensions
 define('OPTION_USE_SPATIAL_EXTENSIONS', 1);
@@ -62,6 +63,12 @@ define('OPTION_NOC_DIR', '/my/noc/dir');
 define('OPTION_NPTDR_DERIVED_DIR', '/my/nptdr-derived/dir');
 
 // Incoming email
+
+define('OPTION_INCOMING_EMAIL_BASE_DOMAIN', 'example.com');
+define('OPTION_MAIL_CONF_LIVE_DIR', '/etc/exim4/virtual/fixmytransport');
+define('OPTION_INCOMING_EMAIL_LOCAL_USER', 'username');
+define('OPTION_MAILSERVERS', 'mailserver1|mailserver2');
+
 define('OPTION_INCOMING_EMAIL_DOMAIN', 'localhost'); // e.g. 'fixmytransport.com'
 define('OPTION_INCOMING_EMAIL_PREFIX', ''); // e.g. fmt-
 

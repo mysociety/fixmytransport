@@ -12,7 +12,27 @@
   		<%= render :partial => 'shared/comment_form' %>
   	</div>
 	<%- end %>
-
+	
+	<%- if controller.controller_name == 'campaigns' && controller.action_name == 'show' %>
+	<div id="social-share" class="pane" style="min-height:340px;">
+	    <fb:like href="<%= campaign_url(@campaign) %>" send="false" width="490" show_faces="true" action="recommend" font=""></fb:like>
+    	<div class="fb-item-container">
+    	    <div>
+	            <fb:send href="<%= campaign_url(@campaign) %>" font=""></fb:send>
+	        </div>
+	        <p>
+	            <b>Send via Facebook</b><br/>
+	            Share this campaign through friends and email
+	        </p>
+	    </div>
+	    <div class="fb-item-container">
+	        <a href="#" class="fb-post-to-wall fb-feed-button" >Post to wall</a>
+	        <p id="social-message">
+	        </p>
+	    </div>
+	</div>
+    <%- end %>
+    
 	<%- if controller.controller_name == 'campaigns' and controller.action_name == 'show'%>
 	  <%- if current_user && current_user == @campaign.initiator %>
 	    <div id="campaign-update" class="pane">

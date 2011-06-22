@@ -8,6 +8,14 @@
 <%= stylesheet_link_tag 'jquery.lightbox-0.5.css'  %>
 <%- end %>
 
+<script>
+	var campaign_data = {
+		title: "<%= @campaign.title %>",
+		id: <%= @campaign.id %>,
+		url: document.location.protocol + '//' + document.location.host + "<%= campaign_path(@campaign) %>",
+		description: "<%= @campaign.description %>"
+	};
+</script>
 <%- if (current_user && current_user.supporter_or_initiator(@campaign)) || @campaign.status == :successful %>
   <div id="banner" class="blue <%= 'supporter' %>">
   	<div class="container">
@@ -49,7 +57,7 @@
   	</div>
   </div>
 <%- end %>
-<div id="main-content" class="container">
+<div id="main-content" class="container"  style="overflow: visible !important;">
 
 	<div class="leftcol">
 	  	<%- if current_user && current_user == @campaign.initiator %>
@@ -143,10 +151,10 @@
 	</div>
 
 
-	<div class="rightcol">
+	<div class="rightcol" style="overflow: visible !important;">
 		<%- if current_user && current_user.new_supporter?(@campaign) %>
 	    <div class="contrib-tools-initial">
-			<a href="#">
+			<a href="#" class="facebook-trigger">
 				<span class="icon facebook"></span>
 				Facebook
 			</a>
@@ -163,7 +171,7 @@
 
 	  <%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
 	  <div class="contrib-tools">
-		<a href="#">
+		<a href="#" class="facebook-trigger">
 			<span class="icon facebook"></span>
 			Facebook
 		</a>
@@ -177,6 +185,7 @@
 		</a>
 	</div>
 	<%- end %>
+
 		<ul class="campaign-meta">
 			<li>started <span><%= @campaign.created_at.strftime("%e %B %Y") %></span></li>
 			<li>supporters <%=  @campaign.supporter_count %></li>
@@ -211,6 +220,13 @@
 		<%- if @campaign.supporters.registered.count > 0 %>
 		  <%= render :partial => "supporters", :locals => {:show_all => (params[:all_supporters] == '1') }%>
 		<%- end %>
+
+		<%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
+		    <div>
+			    <fb:like href="<%= campaign_url(@campaign) %>" send="false" width="310" show_faces="true" action="recommend" font=""></fb:like>
+			</div>
+		<%- end %>
+		
 	</div>
 
 	<div class="container">

@@ -125,6 +125,50 @@ $(document).ready(function(){
   	});
   });
 
+  //facebook
+  $('.facebook-trigger').click(function(e){
+    e.preventDefault();
+    $('.login-box .pane').hide();
+    $('#social-message').empty().append('<b>Tell the world you&rsquo;re a supporter</b><br/>' +
+       'Post to your Facebook wall and let everyone know!').show(); 
+    $('#social-share').show();
+  	$("#login-box").dialog({title: "Facebook"});
+  	$("#login-box").dialog("open");
+  	return false;    
+  });
+
+  $('.fb-feed-button').click(function(e){
+      e.preventDefault();
+     $('#social-message').fadeOut().empty();
+      FB.ui(
+          {
+              method:  'feed',
+              display: 'popup',
+              name:    'FixMyTransport campaign: ' + campaign_data.title,
+              link:    campaign_data.url,
+              picture: document.location.protocol + '//' + document.location.host + '/images/facebook-feed-logo.gif',
+              caption: campaign_data.description,
+              description: "Please help this FixMyTransport campaign by spreading the word and encouraging your friends to support it.",
+              message: "I'm supporting this FixMyTransport campaign: "  + campaign_data.title + " ...will you join me?"
+          },
+          function(response) {
+              $('.login-box .pane').hide();
+              $('#social-message').empty(); 
+              if (response && response.post_id) {
+                  $('<b>Posted on Facebook!</b><br/>' +
+                    'Thanks for spreading the word about this campaign!<br/>').appendTo('#social-message');
+              } else {
+                  $('<b>Oops &mdash; didn&rsquo;t post on Facebook</b><br/>' +
+                    'You cancelled your post this time...<br/>but please do spread the word about this campaign.<br/>').appendTo('#social-message');
+              }
+              $('#social-share').show();
+              $("#login-box").dialog({title: "Facebook"});
+              $("#login-box").dialog("open");
+              $('#social-message').fadeIn();
+          }
+      );
+     return false;
+  });
 
     /* Advice request */
   $('.advice-trigger').click(function(e){
@@ -511,11 +555,13 @@ $(document).ready(function(){
       }
     });
   });
-
+  
 });
 
 /* External authentication
    ================================================== */
+
+// fmt_facebook_app_id declared in header (layouts/application.erb)
 
 function externalAuth(authParams) {
   var url = window.location.protocol + "//" + window.location.host + "/user_sessions/external";
@@ -527,3 +573,16 @@ function externalAuth(authParams) {
   $('body').append(form)
   form.submit();
 }
+
+window.fbAsyncInit = function() {
+	// fmt_facebook_app_id declared in layouts/application.erb 
+    FB.init({appId: fmt_facebook_app_id, status: false, cookie: true, xfbml: true});      
+};
+(function() {
+    var e = document.createElement('script'); e.async = true;
+    e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+    document.getElementById('fb-root').appendChild(e);
+    if (document.getElementById('fb-like')) {
+      FB.XFBML.parse(document.getElementById('fb-like'));
+    }
+}());
