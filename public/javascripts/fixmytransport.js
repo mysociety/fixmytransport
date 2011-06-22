@@ -406,10 +406,10 @@ $(document).ready(function(){
   setupUpdateForm('#campaign-update-form-modal');
   setupStaticUpdateForm('#campaign-update-form-static');
   setupProblemForm('#create-problem');
-  setupCommentForm('#comment-form');
+  setupCommentForm('.pane #comment-form');
   setupSupportForm('.login-to-support');
-  ajaxifyForm('#login-form');
-  ajaxifyForm('#create-account-form');
+  ajaxifyForm('.pane #login-form');
+  ajaxifyForm('.pane #create-account-form');
 
   /* Twitter button 
      ================================================== */
