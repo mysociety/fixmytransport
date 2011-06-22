@@ -555,7 +555,14 @@ $(document).ready(function(){
       }
     });
   });
-  
+
+  /* Operator hide/show
+     ================================================== */
+	$('.operator-trigger').click(function(){
+		var parent = $(this).parent();
+		$('ul', parent).slideToggle(1500);
+	});
+
 });
 
 /* External authentication
