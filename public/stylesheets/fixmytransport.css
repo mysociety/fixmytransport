@@ -1314,3 +1314,7 @@ ol#large-ol {
 		    -moz-border-radius: 20px;
 		    -webkit-border-radius: 20px;
 		}
+/*===[Front Page]===*/
+#other-country-notice{
+  display: none;
+}
