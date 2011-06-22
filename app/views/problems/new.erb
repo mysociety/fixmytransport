@@ -12,7 +12,7 @@
 <div id="main-content" class="container">
 	<div class="container">
 		<div id="problem-map">
-		    <strong><%= @problem.location.description %></strong>
+		    <h5><%= @problem.location.description %></h5>
    			<%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => PROBLEM_CREATION_MAP_HEIGHT, :width => PROBLEM_CREATION_MAP_WIDTH } %>
 		</div>
 	  <%- form_for @problem, :url => problems_url, :html => {:id => 'create-problem', :class => 'form-1'} do |f|  %>

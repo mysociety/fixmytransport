@@ -30,3 +30,15 @@
     <%- end%>
   </ul>
 </div>
+<%- if @incoming_messages_without_campaign.size > 0 %>
+<div class='admin-task-list'>
+  <h3><%= t(:incoming_messages_without_campaigns, :number => @incoming_messages_without_campaign.size) %></h3>
+  <ul>
+    <%- @incoming_messages_without_campaign.each do |incoming| %>
+      <li class='incoming-link'>
+        <%= link_to "\"#{incoming.subject}\"", admin_url(admin_incoming_message_path(incoming.id)) %>
+      </li>
+    <%- end%>
+  </ul>
+</div>
+<%- end %>

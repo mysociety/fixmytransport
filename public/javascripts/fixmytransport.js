@@ -4,6 +4,25 @@
  */
 
 $(document).ready(function(){
+    
+    
+    if ($('#other-country-notice').length > 0) {
+      $.ajax({
+        url: "http://gaze.mysociety.org/gaze-rest?f=get_country_from_ip;ip=130.88.200.1",
+        dataType: 'html',
+        success: function(country_code){
+          alert(country_code);
+          if (country_code != 'GB'){
+            $('#other-country-notice').html("You're coming from "+country+". Why not set up a site like this there?");
+            $('#other-country-notice').show();
+          }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          alert("error" + errorThrown + textStatus + jqXHR.responseText);
+        }
+      }) 
+    }
+    
 
   	$('.goto-top').click(function(e){
   		e.preventDefault();
@@ -450,10 +469,10 @@ $(document).ready(function(){
   setupUpdateForm('#campaign-update-form-modal');
   setupStaticUpdateForm('#campaign-update-form-static');
   setupProblemForm('#create-problem');
-  setupCommentForm('#comment-form');
+  setupCommentForm('.pane #comment-form');
   setupSupportForm('.login-to-support');
-  ajaxifyForm('#login-form');
-  ajaxifyForm('#create-account-form');
+  ajaxifyForm('.pane #login-form');
+  ajaxifyForm('.pane #create-account-form');
 
   /* Twitter button 
      ================================================== */
