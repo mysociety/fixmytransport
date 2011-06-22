@@ -223,14 +223,13 @@ class Stop < ActiveRecord::Base
   end
   
   def self.find_in_bounding_box(min_lat, min_lon, max_lat, max_lon)
-    stops = find_by_sql(["SELECT  *
-                          FROM stops
-                          WHERE stops.stop_type in (?)
-                          AND status = 'ACT'
-                          AND stops.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
-                            ST_Point(?, ?),
-    	                      ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})",
-    	                     StopType.primary_types, min_lon, min_lat, max_lon, max_lat])
+    stops = find(:all, :conditions => ["stops.stop_type in (?)
+                                        AND status = 'ACT'
+                                        AND stops.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
+                                        ST_Point(?, ?),
+    	                                  ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})",
+    	                                  StopType.primary_types, min_lon, min_lat, max_lon, max_lat],
+    	                  :include => :locality)
   end
   
   def self.find_by_atco_code(atco_code, options={})
