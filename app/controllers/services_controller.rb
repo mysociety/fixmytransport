@@ -15,7 +15,7 @@ class ServicesController < ApplicationController
     require 'open-uri'
     gaze = MySociety::Config.get('GAZE_URL', '')
     if gaze != ''
-      render :text => open("/gaze-rest?f=get_country_from_ip;ip=#{request.remote_ip}").read
+      render :text => open("#{gaze}/gaze-rest?f=get_country_from_ip;ip=#{request.remote_ip}").read
     else
       render :text => ''
     end
