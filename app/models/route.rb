@@ -148,6 +148,9 @@ class Route < ActiveRecord::Base
   end
 
   def stops_or_stations
+    if ! default_journey
+      generate_default_journey
+    end
     default_journey.route_segments.map do |route_segment|
       if route_segment.from_stop_area
         from = route_segment.from_stop_area
