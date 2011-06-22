@@ -1,5 +1,7 @@
 class ServicesController < ApplicationController
   
+  include ApplicationHelper
+  
   def in_area
     expires_in 60.seconds, :public => true 
     map_height = (params[:height].to_i or MAP_HEIGHT)
