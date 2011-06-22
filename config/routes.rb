@@ -112,6 +112,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :profiles, :only => [:show]
   
   # static
+  map.about '/advice', :controller => 'static', :action => 'advice'
   map.about '/about', :controller => 'static', :action => 'about'
   map.feedback '/feedback', :controller => 'static', 
                             :action => 'feedback', 

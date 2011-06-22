@@ -5,14 +5,13 @@
 
 $(document).ready(function(){
     
-
     if ($('#other-country-notice').length > 0) {
       $.ajax({
         url: "/request_country",
         dataType: 'html',
         success: function(country_code){
           if (country_code != 'GB'){
-            $('#other-country-notice').html("You're coming from "+country_code+". Why not set up a site like this there?");
+            $('#other-country-notice').html("Want to set up a site like this in your country? Get <a href='advice'>our advice</a>");
             $('#other-country-notice').show();
           }
         }
