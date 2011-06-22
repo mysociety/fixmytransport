@@ -64,5 +64,13 @@ namespace :temp do
     end              
   end
   
+  desc 'Cache default journeys for routes'
+  task :cache_default_journeys => :environment do 
+    Route.find_each(:conditions => ['default_journey_id is null'], 
+                    :include => [{ :journey_patterns => :route_segments }]) do |route|
+      route.save!
+    end
+  end
+  
 end
 

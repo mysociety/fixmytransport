@@ -33,6 +33,7 @@ class Route < ActiveRecord::Base
   has_many :route_localities, :dependent => :destroy
   has_many :localities, :through => :route_localities
   belongs_to :region
+  belongs_to :default_journey, :class_name => 'JourneyPattern'
   has_many :route_source_admin_areas, :dependent => :destroy
   has_many :source_admin_areas, :through => :route_source_admin_areas, :class_name => 'AdminArea'
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
@@ -43,7 +44,7 @@ class Route < ActiveRecord::Base
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
   attr_accessor :show_as_point, :journey_pattern_data
-  before_save :cache_description, :cache_route_coords
+  before_save :cache_description, :cache_route_coords, :generate_default_journey
   is_route_or_sub_route
   is_location
 
@@ -146,10 +147,6 @@ class Route < ActiveRecord::Base
     [transport_mode]
   end
 
-  def default_journey
-    journey_patterns.sort{ |a,b| a.route_segments.count <=> b.route_segments.count }.last
-  end
-
   def stops_or_stations
     default_journey.route_segments.map do |route_segment|
       if route_segment.from_stop_area
@@ -242,6 +239,10 @@ class Route < ActiveRecord::Base
     lat = lats.min + ((lats.max - lats.min)/2)
     self.lat = lat
     self.lon = lon
+  end
+  
+  def generate_default_journey
+    self.default_journey = self.journey_patterns.sort{ |a,b| a.route_segments.count <=> b.route_segments.count }.last
   end
 
   # class methods
