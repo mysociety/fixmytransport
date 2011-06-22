@@ -648,6 +648,16 @@ ul.user-list {
     margin-right: 10px;
     border: 1px solid #c6cad0;
 }
+/* Misc
+   ================================================== */
+.dotted-white {
+	background:#048FC2 url(../images/dotted-white.jpg) 0 0 repeat-x;
+	height:4px;
+	width:100%;
+	line-height:0;
+	display:inline-block;
+}
+
 /* Forms
    ================================================== */
 .form-1 ul{
@@ -1275,8 +1285,111 @@ ul#process {
 
 .home-intro a.button{
 	margin-bottom: 3em;
-}		
+}
 
+#frontpage-banner-left {
+	width:654px;
+	height:100%;
+	display:block;
+	float:left;
+	margin:5px 0 7px 0;
+}
+#frontpage-banner-right {
+	width:216px;
+	display:block;
+	float:left;
+	padding:40px;
+	margin:10px 0;
+}
+	#frontpage-banner-left h2 {
+		font-size:1.7em;
+		color:#fff;
+	}
+	#frontpage-banner-left p {
+		color:#fff;
+	}
+	#frontpage-banner-left .left {
+		width:304px;
+	}
+	#frontpage-banner-left .right {
+		width:320px;
+		border:3px solid #fff;
+		margin:10px 0 0 20px;
+	}
+	#frontpage-banner-right .button {
+		width:220px;
+		font-size:2em;
+	}
+
+#fg-head {
+	display:inline-block;
+	/*padding-bottom:30px;*/
+}
+	div.fg-bottom {
+		float:left;
+		border-top:1px solid #B3B3B3;
+		margin-bottom:20px;
+	}
+	#fg-head {
+		float:left;
+	}
+		#fg-head h2 {
+			color:#048FC2;
+		}
+		#fg-head h2,
+		#fg-head p {
+			margin: 0 0 10px 15px;
+		    padding-right: 20px;
+		}
+	ol#frontpage-grid {
+		display:inline;
+		margin:0;
+		padding:0;
+		list-style-type:none;
+	}
+		ol#frontpage-grid li,
+		#fg-head-inner {
+			display:block;
+			float:left;
+			width:316px;
+			height:324px;
+			border-right:1px solid #B3B3B3;
+			margin-top:30px;
+		}
+		ol#frontpage-grid li.fg-top {
+			margin-bottom:20px;
+		}
+		ol#frontpage-grid li.end {
+			border-right:0;
+		}
+			ol#frontpage-grid li .fg-img {
+				background:url(../images/frontpage-grid-1.jpg) 0 center no-repeat;
+				height:200px;
+				margin-left:30px;
+			}
+			ol#frontpage-grid li #fg-img-1 {
+				background:url(../images/frontpage-grid-1.jpg) 0 center no-repeat;
+			}
+			ol#frontpage-grid li #fg-img-2 {
+				background:url(../images/frontpage-grid-2.jpg) 0 center no-repeat;
+			}
+			ol#frontpage-grid li #fg-img-3 {
+				background:url(../images/frontpage-grid-3.jpg) 0 center no-repeat;
+			}
+			ol#frontpage-grid li #fg-img-4 {
+				background:url(../images/frontpage-grid-4.jpg) 0 center no-repeat;
+			}
+			ol#frontpage-grid li #fg-img-5 {
+				background:url(../images/frontpage-grid-5.jpg) 0 center no-repeat;
+			}
+			ol#frontpage-grid li h3 {
+				color:#048FC2;
+				margin-left:15px;
+			}
+			ol#frontpage-grid li p {
+				margin:0 0 10px 37px;
+				padding-right:20px;
+			}
 /*===[Route Page]===*/		
 
 ol#large-ol {

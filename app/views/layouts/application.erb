@@ -15,6 +15,9 @@
 
     <%= yield :stylesheets %>
     <%= raw library_js_link %>
+
+	<%= raw javascript_include_tag("http://use.typekit.com/fji8ime.js")%>
+	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   </head>
 	<body>
 		<div id="wrapper">

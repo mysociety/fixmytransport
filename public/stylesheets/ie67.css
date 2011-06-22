@@ -13,8 +13,14 @@
 }
 
 
+
 /*Hacks for IE6 and IE7*/
 .ui-dialog-title,
 #footer {
 	float:left;
+}
+
+ol#frontpage-grid li,
+#fg-head-inner {
+	margin-top:0;
 }
