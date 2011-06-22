@@ -52,6 +52,7 @@ define('OPTION_ADMIN_BASE_URL', 'http://example.com/secure/');
 
 // Service locations
 define('OPTION_MAPIT_URL', 'http://mapit.mysociety.org');
+define('OPTION_GAZE_URL', '');
 
 // Locations of transport data
 define('OPTION_NAPTAN_DIR', '/my/naptan/dir');
