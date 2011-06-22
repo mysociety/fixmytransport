@@ -86,13 +86,17 @@ ActionController::Routing::Routes.draw do |map|
 
   
   # other locations for maps
-  map.locations "/locations/:zoom/:lat/:lon/:link_type", :controller => 'locations', 
+  map.locations "/locations/:zoom/:lat/:lon/:link_type", :controller => 'services', 
                                               :action => 'in_area',
                                               :conditions => { :method => :get },
                                               :requirements => { :zoom => /\d\d?/,
                                                                  :lon => /[-+]?[0-9]*\.?[0-9]+/,
                                                                  :lat => /[-+]?[0-9]*\.?[0-9]+/,
                                                                  :link_type => /(problem|location)/}
+  # little service url for getting request country
+  map.request_country 'request_country', :controller => 'services', 
+                                         :action => 'request_country',
+                                         :conditions => { :method => :get }
   
   # user sessions
   map.login 'login', :controller => 'user_sessions', :action => 'new'  

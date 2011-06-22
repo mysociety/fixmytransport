@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
 
-  before_filter :process_map_params, :except => [:in_area]
+  before_filter :process_map_params
   before_filter :make_cachable
   include ApplicationHelper
 
@@ -91,16 +91,6 @@ class LocationsController < ApplicationController
 
   def show_route_regions
     @regions = Region.find(:all, :order => 'name asc')
-  end
-
-  def in_area
-    map_height = (params[:height].to_i or MAP_HEIGHT)
-    map_width = (params[:width].to_i or MAP_WIDTH)
-    map_height = MAP_HEIGHT if ! ALL_HEIGHTS.include? map_height
-    map_width = MAP_WIDTH if ! ALL_WIDTHS.include? map_width
-    other_locations =  Map.other_locations(params[:lat].to_f, params[:lon].to_f, params[:zoom].to_i, map_height, map_width)
-    link_type = params[:link_type].to_sym
-    render :json => "#{location_stops_js(other_locations, main=false, small=true, link_type)}"
   end
 
   private
