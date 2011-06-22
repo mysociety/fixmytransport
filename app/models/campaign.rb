@@ -189,7 +189,8 @@ class Campaign < ActiveRecord::Base
 
   def self.find_by_campaign_email(email)
     local_part, domain = email.split("@")
-    key = local_part.gsub(/^campaign-/, '')
+    prefix = MySociety::Config.get("INCOMING_EMAIL_PREFIX", 'campaign-')
+    key = local_part.gsub(/^#{prefix}/, '')
     campaign = find(:first, :conditions => ['lower(key) = ?', key.downcase])
   end
 
