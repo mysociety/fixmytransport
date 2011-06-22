@@ -64,11 +64,6 @@ define('OPTION_NPTDR_DERIVED_DIR', '/my/nptdr-derived/dir');
 
 // Incoming email
 
-define('OPTION_INCOMING_EMAIL_BASE_DOMAIN', 'example.com');
-define('OPTION_MAIL_CONF_LIVE_DIR', '/etc/exim4/virtual/fixmytransport');
-define('OPTION_INCOMING_EMAIL_LOCAL_USER', 'username');
-define('OPTION_MAILSERVERS', 'mailserver1|mailserver2');
-
 define('OPTION_INCOMING_EMAIL_DOMAIN', 'localhost'); // e.g. 'fixmytransport.com'
 define('OPTION_INCOMING_EMAIL_PREFIX', ''); // e.g. fmt-
 
