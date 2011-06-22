@@ -22,7 +22,6 @@ class User < ActiveRecord::Base
   has_many :campaigns, :through => :campaign_supporters
   has_many :initiated_campaigns, :foreign_key => :initiator_id, :class_name => 'Campaign'
   has_many :sent_emails, :as => :recipient
-  before_save :generate_email_local_part
   has_many :access_tokens
   has_attached_file :profile_photo,
                     :path => "#{MySociety::Config.get('FILE_DIRECTORY', ':rails_root/public/system')}/paperclip/:class/:attachment/:id/:style/:filename",
@@ -72,7 +71,7 @@ class User < ActiveRecord::Base
   end
 
   def campaign_name_and_email_address(campaign)
-    FixMyTransport::Email::Address.address_from_name_and_email(self.name, self.campaign_email_address(campaign)).to_s
+    FixMyTransport::Email::Address.address_from_name_and_email(self.name, campaign.email_address).to_s
   end
 
   def save_if_new
@@ -81,23 +80,7 @@ class User < ActiveRecord::Base
     end
     return true
   end
-
-  def generate_email_local_part
-    # don't overwrite an existing value
-    return true if !email_local_part.blank?
-    self.email_local_part = name.strip.downcase.gsub(' ', '.')
-    self.email_local_part = self.email_local_part.gsub(/[^A-Za-z\-\.]/, '')
-    self.email_local_part = self.email_local_part[0...64]
-    self.email_local_part = self.email_local_part.gsub(/^[\.-]/, '')
-    self.email_local_part = self.email_local_part.gsub(/[\.-]$/, '')
-    self.email_local_part = I18n.translate('campaign') if self.email_local_part == ''
-    self.email_local_part
-  end
-
-  def campaign_email_address(campaign)
-    return "#{email_local_part}@#{campaign.domain}"
-  end
-
+  
   def deliver_password_reset_instructions!
     reset_perishable_token!
     UserMailer.deliver_password_reset_instructions(self)

@@ -103,6 +103,17 @@ describe Campaign do
     end
      
   end
+  
+  describe 'when asked for its email address' do 
+  
+    it 'should return an email address generated from the prefix, key and domain' do 
+      @campaign = Campaign.new
+      @campaign.stub!(:id).and_return(5049322)
+      @campaign.key = @campaign.generate_key
+      @campaign.email_address.should match(/campaign-lbhks-[a-z]{6}@localhost/)
+    end
+    
+  end
     
   describe 'validating on update' do 
     
@@ -125,10 +136,10 @@ describe Campaign do
   
   describe 'when finding a campaign by campaign email' do 
     
-    it 'should look for a campaign whose subdomain is the subdomain of the email' do 
+    it 'should look for a campaign whose key is the key of the email' do 
       Campaign.stub!(:email_domain).and_return("example.com")
-      Campaign.should_receive(:find).with(:first, :conditions => ["subdomain = ?", "campaign"])
-      Campaign.find_by_campaign_email("test@campaign.example.com")
+      Campaign.should_receive(:find).with(:first, :conditions => ["lower(key) = ?", "cx-vgfdf"])
+      Campaign.find_by_campaign_email("campaign-cx-vgfdf@example.com")
     end
   
   end
