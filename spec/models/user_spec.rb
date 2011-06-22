@@ -43,56 +43,7 @@ describe User do
       @user.name = 'A Test Name'
       @user.valid?.should be_true
     end
-    
-    it 'should generate an email local part from the name' do 
-      @user.name = 'A Test Name'
-      @user.save
-      @user.email_local_part.should == 'a.test.name'
-    end
-    
-    it 'should remove non-ascii characters from the email local part' do 
-      @user.name = "test$£%^&*()%'name"
-      @user.save
-      @user.email_local_part.should == 'testname'
-    end
-    
-    
-    it 'should generate the name "campaign" if there are no suitable characters in the name' do 
-      @user.name = "$£%^&*()%'"
-      @user.save
-      @user.email_local_part.should == 'campaign'
-    end
-    
-    it 'should not remove dots from the email local part' do 
-      @user.name = "A.Test"
-      @user.save
-      @user.email_local_part.should == 'a.test'
-    end
-    
-    it 'should not remove hyphens from the email local part' do 
-      @user.name = 'A Test-Case'
-      @user.save
-      @user.email_local_part.should == 'a.test-case'
-    end
-    
-    it 'should remove a leading dot or hyphen from the email local part' do 
-      @user.name = '.A Test Case'
-      @user.save
-      @user.email_local_part.should == 'a.test.case'
-    end
-    
-    it 'should remove a trailing dot or hyphen from the email local part' do 
-      @user.name = 'A Test Case.'
-      @user.save
-      @user.email_local_part.should == 'a.test.case'
-    end
-    
-    it 'should trim the local part to 64 characters' do 
-      @user.name = 'S' * 65
-      @user.save
-      @user.email_local_part.should == 's' * 64
-    end
-    
+        
   end
   
   describe 'when handling an external auth token' do 

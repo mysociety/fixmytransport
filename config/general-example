@@ -62,11 +62,7 @@ define('OPTION_NPTDR_DERIVED_DIR', '/my/nptdr-derived/dir');
 
 // Incoming email
 define('OPTION_INCOMING_EMAIL_DOMAIN', 'localhost'); // e.g. 'fixmytransport.com'
-define('OPTION_INCOMING_EMAIL_BASE_DOMAIN', 'localhost'); // e.g. 'fixmytransport.com'
-
-define('OPTION_MAIL_CONF_LIVE_DIR', '/my/live/conf/dir');
-define('OPTION_INCOMING_EMAIL_LOCAL_USER', 'fmt');
-define('OPTION_MAILSERVERS', 'email_one|email_two');
+define('OPTION_INCOMING_EMAIL_PREFIX', ''); // e.g. fmt-
 
 // Is the site currently visible? 
 define('OPTION_SITE_VISIBLE', 1);
