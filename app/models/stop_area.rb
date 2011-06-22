@@ -92,13 +92,12 @@ class StopArea < ActiveRecord::Base
   memoize :area
 
   def self.find_in_bounding_box(min_lat, min_lon, max_lat, max_lon)
-    stops = find_by_sql(["SELECT  *
-                          FROM stop_areas
-                          WHERE stop_areas.area_type in (?)
+    stops = find(:all, :conditions => ["stop_areas.area_type in (?)
                           AND stop_areas.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
                             ST_Point(?, ?),
       	                    ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})",
-    	                    StopAreaType.primary_types, min_lon, min_lat, max_lon, max_lat])
+    	                    StopAreaType.primary_types, min_lon, min_lat, max_lon, max_lat],
+    	                 :include => :localities)
   end
 
   def self.find_parents(stop, station_type)
