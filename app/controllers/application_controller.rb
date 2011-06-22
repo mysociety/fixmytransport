@@ -17,7 +17,6 @@ class ApplicationController < ActionController::Base
   url_mapper # See MySociety::UrlMapper
   # Scrub sensitive parameters from the log
   filter_parameter_logging :password, :password_confirmation
-  before_filter :initialize_feedback
 
   private
 
@@ -135,10 +134,6 @@ class ApplicationController < ActionController::Base
 
   def user_for_paper_trail
     user_for_edits
-  end
-
-  def initialize_feedback
-    @feedback = Feedback.new
   end
 
   def location_search

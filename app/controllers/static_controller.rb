@@ -1,6 +1,7 @@
 class StaticController < ApplicationController
   
   def feedback
+    @feedback = Feedback.new
     if request.post?
       @feedback = Feedback.new(params[:feedback]) 
       respond_to do |format|
