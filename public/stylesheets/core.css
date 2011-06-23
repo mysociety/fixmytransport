@@ -96,6 +96,7 @@ form.inline p {margin-bottom:0;}
 .error, .alert, .notice, .success, .info {line-height:1.2;display:inline-block;font-size:12px;padding:3px;margin-bottom:0.5em;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;}
 .error, .alert {background:#cc0000;color:#fff;border-color:#fbc2c4;}
 .notice {background:#fff6bf;color:#514721;border-color:#ffd324;}
+.top-notice {line-height:1.2;display:block;font-size:12px;padding:3px;margin:0;background:#fff6bf;color:#514721;border-color:#ffd324;}
 .success {background:#e6efc2;color:#264409;border-color:#c6d880;}
 .info {background:#d5edf8;color:#205791;border-color:#92cae4;}
 .error a, .alert a {color:#8a1f11;}
