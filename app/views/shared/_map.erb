@@ -3,7 +3,7 @@
 <%- end %>
 <%- unless static %>
 <%- location_data = location_stops_coords(locations, small=false, link_type) %>
-<%- other_location_data = location_stops_coords(other_locations, small=false, link_type) %>
+<%- other_location_data = location_stops_coords(other_locations, small=true, link_type) %>
 <%= render :partial => 'shared/location_map_js', :locals => { :locations => location_data, :other_locations => other_location_data, :link_type => link_type } %>
 <%- end %>
 
@@ -56,8 +56,13 @@
       </div>
       <%- end %>
       <div id="markers">
-        <%= render :partial => 'shared/location_marker', :collection => location_data, :as => :location, :locals => {:small => false, :height => height, :width => width } %>
-        <%= render :partial => 'shared/location_marker', :collection => other_location_data, :as => :location, :locals => {:small => true, :height => height, :width => width } %>
+        <%- center_y = Map.lat_to_y(@lat) %>
+        <%- center_offset_y = height / 2 %>
+        <%- center_x = Map.lon_to_x(@lon) %>
+        <%- center_offset_x = width / 2 %>
+        <%= render :partial => 'shared/location_marker', :collection => other_location_data, :as => :location, :locals => {:small => true,  :center_y => center_y, :center_x => center_x, :center_offset_y => center_offset_y, :center_offset_x => center_offset_x } %>
+        <%= render :partial => 'shared/location_marker', :collection => location_data, :as => :location, :locals => {:small => false, :center_y => center_y, :center_x => center_x, :center_offset_y => center_offset_y, :center_offset_x => center_offset_x } %>
+
       </div>
     </div>
   <%- unless static %></noscript><%- end %> 
