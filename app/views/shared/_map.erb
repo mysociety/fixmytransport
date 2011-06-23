@@ -2,7 +2,9 @@
 <%- static = false %>
 <%- end %>
 <%- unless static %>
-<%= render :partial => 'shared/location_map_js', :locals => { :locations => locations, :other_locations => other_locations, :link_type => link_type } %>
+<%- location_data = location_stops_coords(locations, small=false, link_type) %>
+<%- other_location_data = location_stops_coords(other_locations, small=false, link_type) %>
+<%= render :partial => 'shared/location_map_js', :locals => { :locations => location_data, :other_locations => other_location_data, :link_type => link_type } %>
 <%- end %>
 
 <div id="map" class="box">
@@ -54,8 +56,8 @@
       </div>
       <%- end %>
       <div id="markers">
-        <%= render :partial => 'shared/location_marker', :collection => locations, :as => :location, :locals => {:small => false, :main => true, :link_type => link_type, :height => height, :width => width } %>
-        <%= render :partial => 'shared/location_marker', :collection => other_locations, :as => :location, :locals => {:small => true, :main => false, :link_type => link_type, :height => height, :width => width } %>
+        <%= render :partial => 'shared/location_marker', :collection => location_data, :as => :location, :locals => {:small => false, :height => height, :width => width } %>
+        <%= render :partial => 'shared/location_marker', :collection => other_location_data, :as => :location, :locals => {:small => true, :height => height, :width => width } %>
       </div>
     </div>
   <%- unless static %></noscript><%- end %> 

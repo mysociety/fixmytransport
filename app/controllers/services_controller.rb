@@ -10,7 +10,7 @@ class ServicesController < ApplicationController
     map_width = MAP_WIDTH if ! ALL_WIDTHS.include? map_width
     other_locations =  Map.other_locations(params[:lat].to_f, params[:lon].to_f, params[:zoom].to_i, map_height, map_width)
     link_type = params[:link_type].to_sym
-    render :json => "#{location_stops_js(other_locations, main=false, small=true, link_type)}"
+    render :json => "#{location_stops_coords(other_locations, small=true, link_type).to_json}"
   end
   
   def request_country
