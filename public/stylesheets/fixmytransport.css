@@ -1457,15 +1457,13 @@ ul#process {
 
 #fg-head {
 	display:inline-block;
-	padding-bottom:30px;
+	margin-bottom:20px;
+	float:left;
 }
 	div.fg-bottom {
 		float:left;
 		border-top:1px solid #B3B3B3;
 		margin-bottom:20px;
-	}
-	#fg-head {
-		float:left;
 	}
 		#fg-head h2 {
 			color:#048FC2;
