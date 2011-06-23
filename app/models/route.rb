@@ -140,14 +140,36 @@ class Route < ActiveRecord::Base
   end
 
   def points
-    stops_or_stations
+    all_locations
   end
 
   def transport_modes
     [transport_mode]
   end
+  
+  def all_locations
+    stops = Stop.find(:all, :conditions => ["id in ((SELECT from_stop_id 
+                                                     FROM route_segments 
+                                                     WHERE route_id = ? 
+                                                     AND from_stop_area_id is null) 
+                                                    UNION 
+                                                    (SELECT to_stop_id 
+                                                    FROM route_segments 
+                                                    WHERE route_id = ? 
+                                                    AND to_stop_area_id is null))", self.id, self.id],
+                            :include => :locality)
+    stop_areas = StopArea.find(:all, :conditions => ["id in ((SELECT from_stop_area_id 
+                                                              FROM route_segments
+                                                              WHERE route_id = ?)
+                                                             UNION
+                                                             (SELECT to_stop_area_id
+                                                              FROM route_segments
+                                                              WHERE route_id = ? ))", self.id, self.id],
+                            :include => :locality)
+    return stops + stop_areas
+  end
 
-  def stops_or_stations
+  def default_journey_locations
     if ! default_journey
       generate_default_journey
     end

@@ -32,7 +32,7 @@
 		<h5 class="left">Stops</h5>
 
 		<ol id="large-ol">
-		  <%- @route.stops_or_stations.each_with_index do |stop_or_station, index| %>
+		  <%- @route.default_journey_locations.each_with_index do |stop_or_station, index| %>
         <li><a href="<%= location_url(stop_or_station) %>"><span class="num"><%= index+1 %></span><%= stop_or_station.is_a?(Stop) ? stop_or_station.name_with_long_indicator : stop_or_station.name %></a></li>
       <%- end %>
 		</ol>
