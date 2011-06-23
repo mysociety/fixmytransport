@@ -51,7 +51,8 @@ class Map
   end
   
   def self.lat_to_y(lat)
-    (offset - radius * Math::log((1 + Math::sin(lat * (Math::PI / 180))) / (1 - Math::sin(lat * (Math::PI / 180)))) / 2 ).round
+    sin_val = Math::sin(lat * (Math::PI / 180))
+    (offset - radius * Math::log((1 + sin_val) / (1 - sin_val)) / 2 ).round
   end
   
   def self.y_to_lat(y)
