@@ -565,9 +565,11 @@ $(document).ready(function(){
 	
 	/* Fancy buttons - :active and IE don't play nice so lets do it js
 	    ================================================== */
-	$('.button.fancy').mousedown(function(){
+	$('.fancybutton').mousedown(function(){
 		$(this).addClass('mousedown');
 	}).mouseup(function(){
+		$(this).removeClass('mousedown');
+	}).mouseout(function(){
 		$(this).removeClass('mousedown');
 	});
 });
