@@ -48,7 +48,11 @@ class StopArea < ActiveRecord::Base
   is_location
 
   def routes
-    stops.map{ |stop| stop.routes }.flatten.uniq
+    Route.find(:all, :conditions => ['id in (SELECT route_id
+                                             FROM route_segments
+                                             WHERE from_stop_area_id = ?
+                                             OR to_stop_area_id = ?)', self.id, self.id],
+                     :include => :region)
   end
 
   def route_terminuses
@@ -153,8 +157,7 @@ class StopArea < ActiveRecord::Base
   end
 
   def self.full_find(id, scope)
-    find(id, :scope => scope,
-         :include => { :stops => [ {:routes_as_from_stop => :region}, {:routes_as_to_stop, :region}, :locality ] } )
+    find(id, :scope => scope, :include => :locality)
   end
 
   def self.find_by_code(code)

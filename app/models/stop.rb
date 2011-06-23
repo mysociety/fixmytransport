@@ -69,7 +69,8 @@ class Stop < ActiveRecord::Base
     Route.find(:all, :conditions => ['id in (SELECT route_id
                                              FROM route_segments
                                              WHERE from_stop_id = ?
-                                             OR to_stop_id = ?)', self.id, self.id] )
+                                             OR to_stop_id = ?)', self.id, self.id],
+                      :include => :region )
   end
 
   def name
