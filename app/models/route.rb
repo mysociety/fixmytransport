@@ -44,7 +44,7 @@ class Route < ActiveRecord::Base
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
   attr_accessor :show_as_point, :journey_pattern_data
-  before_save :cache_route_coords, :generate_default_journey, :cache_area
+  before_save :cache_route_coords, :generate_default_journey, :cache_area, :cache_description
   is_route_or_sub_route
   is_location
 
@@ -87,6 +87,7 @@ class Route < ActiveRecord::Base
   end
 
   def description
+    return cached_description if cached_description
     "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
   end
 
@@ -126,7 +127,6 @@ class Route < ActiveRecord::Base
   end
 
   def description
-    return cached_description if cached_description
     "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
   end
 
@@ -238,10 +238,11 @@ class Route < ActiveRecord::Base
 
   # where can this route end up if you get on here?
   def final_stops(current)
-    journeys_from_here = JourneyPattern.connection.select_values("SELECT journey_pattern_id
+    conn = JourneyPattern.connection
+    journeys_from_here = conn.select_values("SELECT journey_pattern_id
                                                                   FROM route_segments
-                                                                  WHERE from_stop_id = #{current.id}
-                                                                  AND route_id = #{self.id}")
+                                                                  WHERE from_stop_id = #{conn.quote(current.id)}
+                                                                  AND route_id = #{conn.quote(self.id)}")
     final_stops = Stop.find(:all, :conditions => ["id in (SELECT to_stop_id 
                                                           FROM route_segments 
                                                           WHERE to_terminus = ? 
