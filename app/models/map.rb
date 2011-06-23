@@ -58,19 +58,15 @@ class Map
     (Math::PI / 2 - 2 * Math::atan(Math::exp((y.round - offset) / radius))) * 180 / Math::PI
   end
   
-  def self.lat_to_y_offset(center_lat, lat, zoom, map_height)
-    center_y = lat_to_y(center_lat)
+  def self.lat_to_y_offset(center_y, center_offset_y, lat, zoom)    
     target_y = lat_to_y(lat)
     delta_y  = (target_y - center_y) >> (MAX_ZOOM_LEVEL - zoom)
-    center_offset_y = map_height / 2 
     return center_offset_y + delta_y
   end
   
-  def self.lon_to_x_offset(center_lon, lon, zoom, map_width)
-    center_x = lon_to_x(center_lon)
+  def self.lon_to_x_offset(center_x, center_offset_x, lon, zoom)
     target_x = lon_to_x(lon)
     delta_x  = (target_x - center_x) >> (MAX_ZOOM_LEVEL - zoom)
-    center_offset_x = map_width / 2
     return center_offset_x + delta_x
   end
   

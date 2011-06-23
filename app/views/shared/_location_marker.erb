@@ -1,7 +1,7 @@
 <%- if location.kind_of?(Array) %>
-<%= render :partial => 'shared/location_marker', :collection => location, :as => :location, :locals => {:small => small, :height => height, :width => width } %>
+<%= render :partial => 'shared/location_marker', :collection => location, :as => :location, :locals => {:small => small, :center_y => center_y, :center_x => center_x, :center_offset_y => center_offset_y, :center_offset_x => center_offset_x} %>
 <%- else %>
 <a class="location-marker" href="<%= location[:url] %>">
-  <img src="<%= location[:icon] %>.png" title="<%=location[:description] %>" alt="<%=location[:description] %>" style="<%=icon_style(location, @lon, @lat, @zoom, small, height, width) %>" />
+  <img src="<%= location[:icon] %>.png" title="<%=location[:description] %>" alt="<%=location[:description] %>" style="<%=icon_style(location, center_y, center_offset_y, center_x, center_offset_x, @zoom) %>" />
 </a>
 <%- end %>
