@@ -18,11 +18,17 @@ $(document).ready(function(){
       }) 
     }
     
-
+	/* Goto top
+	   ================================================== */
   	$('.goto-top').click(function(e){
   		e.preventDefault();
   		 $('html, body').animate({scrollTop : 0},'slow');
   	});
+
+	/* Frontpage problem scroller
+	   ================================================== */
+	$('#frontpage-problem-scroller').cycle();
+
 	/* Thread
 	   ================================================== */
 	function thread(li){

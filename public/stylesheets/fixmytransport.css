@@ -1327,10 +1327,24 @@ ul#process {
 	#frontpage-top .leftcol {
 		text-align:center;
 	}
-		#frontpage-top .leftcol h1 {
-			font-size:3.3em;
-			color:#048fc2;
+		#frontpage-top .leftcol ul#frontpage-problem-scroller {
+			display:block;
+			width:100%;
+			height:auto;
+			
+			list-style-type:none;
+			padding:0;
+			margin:0 0 1em 0;
 		}
+			#frontpage-top .leftcol ul#frontpage-problem-scroller li {
+				display:block;
+				width:100%;
+			}
+				#frontpage-top .leftcol ul#frontpage-problem-scroller li h1 {
+					font-size:3.3em;
+					margin:0;
+					color:#048fc2;
+				}
 		#frontpage-top .leftcol p {
 			font-size:2.2em;
 			margin:0;
@@ -1351,6 +1365,15 @@ ul#process {
 			font-size:1.9em;
 			margin-bottom:0.2em;
 		}
+		#frontpage-top .rightcol #followus {
+			display:block;
+			text-align:left;
+			width:200px;
+			margin:0 auto;
+		}
+			#frontpage-top .rightcol #followus a {
+				color:#333;
+			}
 		#frontpage-top .rightcol ul#secret-list {
 			display:block;
 			text-align:left;
