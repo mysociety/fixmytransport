@@ -248,6 +248,9 @@ class Route < ActiveRecord::Base
                                                           WHERE to_terminus = ? 
                                                           AND journey_pattern_id in (?))", 
                                                    true, journeys_from_here])
+    if final_stops.empty?
+      final_stops = [current]
+    end
     final_stops
   end
 
