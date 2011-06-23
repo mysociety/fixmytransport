@@ -44,7 +44,7 @@ class Route < ActiveRecord::Base
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
   attr_accessor :show_as_point, :journey_pattern_data
-  before_save :cache_description, :cache_route_coords, :generate_default_journey
+  before_save :cache_route_coords, :generate_default_journey, :cache_area
   is_route_or_sub_route
   is_location
 
@@ -57,7 +57,7 @@ class Route < ActiveRecord::Base
   end
 
   def journey_pattern_invalid(attributes)
-    # ignore a journey pattern that doesn't have an _add attribute or 
+    # ignore a journey pattern that doesn't have an _add attribute or
     # that's new but doesn't have any real route segments (just the new segment template)
     (attributes['_add'] != "1") || \
     (attributes['id'].blank? && (attributes['route_segments_attributes'].nil? || \
@@ -81,13 +81,26 @@ class Route < ActiveRecord::Base
     transport_mode.name
   end
 
+  def cache_area
+    self.cached_area = nil
+    self.cached_area = self.area
+  end
+
+  def description
+    "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
+  end
+
   def area(lowercase=false)
-    area = ''
-    area_list = areas(all=false)
-    if area_list.size > 1
-      area = "Between #{area_list.to_sentence}"
+    if cached_area
+      area = cached_area
     else
-      area = "In #{area_list.first}" if !area_list.empty?
+      area = ''
+      area_list = areas(all=false)
+      if area_list.size > 1
+        area = "Between #{area_list.to_sentence}"
+      else
+        area = "In #{area_list.first}" if !area_list.empty?
+      end
     end
     if !area.blank? && lowercase
       area[0] = area.first.downcase
@@ -146,19 +159,19 @@ class Route < ActiveRecord::Base
   def transport_modes
     [transport_mode]
   end
-  
+
   def all_locations
-    stops = Stop.find(:all, :conditions => ["id in ((SELECT from_stop_id 
-                                                     FROM route_segments 
-                                                     WHERE route_id = ? 
-                                                     AND from_stop_area_id is null) 
-                                                    UNION 
-                                                    (SELECT to_stop_id 
-                                                    FROM route_segments 
-                                                    WHERE route_id = ? 
+    stops = Stop.find(:all, :conditions => ["id in ((SELECT from_stop_id
+                                                     FROM route_segments
+                                                     WHERE route_id = ?
+                                                     AND from_stop_area_id is null)
+                                                    UNION
+                                                    (SELECT to_stop_id
+                                                    FROM route_segments
+                                                    WHERE route_id = ?
                                                     AND to_stop_area_id is null))", self.id, self.id],
                             :include => :locality)
-    stop_areas = StopArea.find(:all, :conditions => ["id in ((SELECT from_stop_area_id 
+    stop_areas = StopArea.find(:all, :conditions => ["id in ((SELECT from_stop_area_id
                                                               FROM route_segments
                                                               WHERE route_id = ?)
                                                              UNION
@@ -189,22 +202,34 @@ class Route < ActiveRecord::Base
   end
 
   def stops
-    journey_patterns.map{ |jp| jp.route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }}.flatten.uniq
+    if new_record?
+      stops = journey_patterns.map{ |jp| jp.route_segments.map{ |route_segment| [route_segment.from_stop, route_segment.to_stop] }}.flatten.uniq
+    else
+      stops = Stop.find(:all, :conditions => ["id in ((SELECT from_stop_id
+                                              FROM route_segments
+                                              WHERE route_id = ?)
+                                              UNION
+                                              (SELECT to_stop_id
+                                              FROM route_segments
+                                              WHERE route_id = ?))", self.id, self.id],
+                              :include => :locality)
+    end
+    return stops
   end
-  
+
   def final_stops(current)
     outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == current.id }
     outgoing_journey_patterns = outgoing_segments.map{ |route_segment| route_segment.journey_pattern_id }
-    final_segments = route_segments.select do |route_segment| 
-      outgoing_journey_patterns.include?(route_segment.journey_pattern_id) && route_segment.to_terminus? 
+    final_segments = route_segments.select do |route_segment|
+      outgoing_journey_patterns.include?(route_segment.journey_pattern_id) && route_segment.to_terminus?
     end
     final_stops = final_segments.map{ |route_segment| route_segment.to_stop }
-    if final_stops.empty? 
+    if final_stops.empty?
       final_stops = [current]
     end
     final_stops.uniq
   end
-  
+
   def terminuses
     segments = journey_patterns.map{ |journey_pattern| journey_pattern.route_segments }.flatten
     from_terminuses = segments.select{ |route_segment| route_segment.from_terminus? }
@@ -265,14 +290,14 @@ class Route < ActiveRecord::Base
     self.lat = lat
     self.lon = lon
   end
-  
+
   def generate_default_journey
-    self.default_journey = JourneyPattern.find(:first, :conditions => ["id = 
-                                                      (SELECT journey_pattern_id from 
-                                                        (SELECT journey_pattern_id, count(*) as cnt 
-                                                        FROM route_segments 
-                                                        WHERE route_id = ? 
-                                                        GROUP BY journey_pattern_id 
+    self.default_journey = JourneyPattern.find(:first, :conditions => ["id =
+                                                      (SELECT journey_pattern_id from
+                                                        (SELECT journey_pattern_id, count(*) as cnt
+                                                        FROM route_segments
+                                                        WHERE route_id = ?
+                                                        GROUP BY journey_pattern_id
                                                         ORDER BY cnt desc limit 1)
                                                       as tmp)", self.id])
   end
@@ -280,11 +305,7 @@ class Route < ActiveRecord::Base
   # class methods
 
   def self.full_find(id, scope)
-    find(id,
-         :scope => scope,
-         :include => [{ :journey_patterns => {:route_segments => [:to_stop => :locality, :from_stop => :locality] }},
-                      { :route_operators => :operator }])
-
+    find(id, :scope => scope, :include => { :route_operators => :operator })
   end
 
   # Return routes with this number and transport mode that have a stop or stop area in common with
@@ -295,7 +316,7 @@ class Route < ActiveRecord::Base
     # meets our other criteria. If we don't know the operator, or we pass the :use_operator_codes option
     # only return routes with the same operator code (optionally only from the same admin area)
     if ! options[:skip_operator_comparison]
-      
+
       if new_route.route_operators.size == 1 && !options[:use_operator_codes]
         operator_clause = "AND route_operators.operator_id = ? "
         operator_params = [new_route.route_operators.first.operator_id]
@@ -496,9 +517,9 @@ class Route < ActiveRecord::Base
     count(:select => 'distinct operator_code',
           :conditions => ['id not in (SELECT route_id from route_operators)'])
   end
-  
+
   def self.count_without_contacts
-    count(:conditions => ['route_operators.operator_id not in 
+    count(:conditions => ['route_operators.operator_id not in
                           (select operator_id from operator_contacts where deleted = ?)', false],
           :include => :route_operators)
   end
