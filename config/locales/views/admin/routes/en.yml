@@ -5,7 +5,7 @@ en:
   routes: Routes
   route: Route
   add_operator: Add operator(s)
-  cached_description: Description
+  description: Description
   admin_route_number: Number
   assign_to_route: Assign to route?
   remove_from_route: Remove from route?
