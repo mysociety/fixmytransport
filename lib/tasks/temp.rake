@@ -68,7 +68,8 @@ namespace :temp do
   task :cache_default_journeys => :environment do 
     Route.find_each(:conditions => ['default_journey_id is null'], 
                     :include => [{ :journey_patterns => :route_segments }]) do |route|
-      route.save!
+      route.generate_default_journey
+      route.update_attribute('default_journey_id', route.default_journey.id)
     end
   end
   
