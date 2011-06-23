@@ -245,7 +245,14 @@ class Route < ActiveRecord::Base
   end
   
   def generate_default_journey
-    self.default_journey = self.journey_patterns.sort{ |a,b| a.route_segments.count <=> b.route_segments.count }.last
+    self.default_journey = JourneyPattern.find(:first, :conditions => ["id = 
+                                                      (SELECT journey_pattern_id from 
+                                                        (SELECT journey_pattern_id, count(*) as cnt 
+                                                        FROM route_segments 
+                                                        WHERE route_id = ? 
+                                                        GROUP BY journey_pattern_id 
+                                                        ORDER BY cnt desc limit 1)
+                                                      as tmp)", self.id])
   end
 
   # class methods

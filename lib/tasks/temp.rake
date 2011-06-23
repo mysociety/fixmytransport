@@ -66,10 +66,9 @@ namespace :temp do
   
   desc 'Cache default journeys for routes'
   task :cache_default_journeys => :environment do 
-    Route.find_each(:conditions => ['default_journey_id is null'], 
-                    :include => [{ :journey_patterns => :route_segments }]) do |route|
+    Route.find_each(:conditions => ['default_journey_id is null']) do |route|
       route.generate_default_journey
-      route.update_attribute('default_journey_id', route.default_journey.id)
+      Route.connection.execute("UPDATE routes set default_journey_id = #{route.default_journey.id} where id = #{route.id}" )
     end
   end
   
