@@ -562,7 +562,14 @@ $(document).ready(function(){
 		var parent = $(this).parent();
 		$('ul', parent).slideToggle(1500);
 	});
-
+	
+	/* Fancy buttons - :active and IE don't play nice so lets do it js
+	    ================================================== */
+	$('.button.fancy').mousedown(function(){
+		$(this).addClass('mousedown');
+	}).mouseup(function(){
+		$(this).removeClass('mousedown');
+	});
 });
 
 /* External authentication
