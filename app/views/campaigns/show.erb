@@ -54,7 +54,7 @@
   	</div>
   </div>
 <%- end %>
-<div id="main-content" class="container"  style="overflow: visible !important;">
+<div id="main-content" class="container">
 
 	<div class="leftcol">
 	  	<%- if current_user && current_user == @campaign.initiator %>
@@ -148,7 +148,7 @@
 	</div>
 
 
-	<div class="rightcol" style="overflow: visible !important;">
+	<div class="rightcol">
 		<%- if current_user && current_user.new_supporter?(@campaign) %>
 	    <div class="contrib-tools-initial">
 			<a href="#" class="facebook-trigger">
@@ -167,21 +167,21 @@
 	  <%- end %>
 
 	  <%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
-	  <div class="contrib-tools">
-		<a href="#" class="facebook-trigger">
-			<span class="icon facebook"></span>
-			Facebook
-		</a>
-		<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
-			<span class="icon twitter"></span>
-			Twitter
-		</a>
-		<a href="#">
-			<span class="icon grey email"></span>
-			Email
-		</a>
-	</div>
-	<%- end %>
+		<div class="contrib-tools">
+			<a href="#" class="facebook-trigger">
+				<span class="icon facebook"></span>
+				Facebook
+			</a>
+			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
+				<span class="icon twitter"></span>
+				Twitter
+			</a>
+			<a href="#">
+				<span class="icon grey email"></span>
+				Email
+			</a>
+		</div>
+		<%- end %>
 
 		<ul class="campaign-meta">
 			<li>started <span><%= @campaign.created_at.strftime("%e %B %Y") %></span></li>
@@ -193,8 +193,8 @@
 			<div id="small-map">
 			  <h5><%= @campaign.location.description %></h5>
 			  <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => CAMPAIGN_PAGE_MAP_HEIGHT, :width => CAMPAIGN_PAGE_MAP_WIDTH, :static => true } %>
-		  </div>
-      <a class="button grey right" href="<%= location_url(@campaign.location) %>">Larger Map</a>
+			</div>
+			<a class="button grey right" href="<%= location_url(@campaign.location) %>">Larger Map</a>
 		</div>
 		<%- end %>
 
