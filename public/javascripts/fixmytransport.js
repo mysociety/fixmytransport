@@ -25,8 +25,6 @@ $(document).ready(function(){
   	});
 	/* Thread
 	   ================================================== */
-
-	//functions - look to interrupt
 	function thread(li){
 		if(li.hasClass('open')){
 			$('.thread-details', li).hide('blind', '', 1000, function(){
