@@ -1,14 +1,7 @@
-<%- if location.is_a?(Route) or location.is_a?(SubRoute) %>
-  <%- if location.show_as_point %>
-    <a class="location-marker" href="<%=map_link_url(location, link_type) %>">
-      <img src="<%=stop_icon(location, main, small)%>.png" title="<%=location.description%>" alt="<%=location.description %>" style="<%=icon_style(location, @lon, @lat, @zoom, small, height, width) %>" />
-    </a>
-  <%- else %>
-    <%= render :partial => 'shared/location_marker', :collection => location.points, :as => :location, :locals => { :small => true, :main => false, :link_type => link_type, :height => height, :width => width } %>
-  <%- end %>
+<%- if location.kind_of?(Array) %>
+<%= render :partial => 'shared/location_marker', :collection => location, :as => :location, :locals => {:small => small, :height => height, :width => width } %>
 <%- else %>
-
-  <a class="location-marker" href="<%=map_link_url(location, link_type) %>">
-    <img src="<%=stop_icon(location, main, small)%>.png" title="<%=location.description%>" alt="<%=location.description %>" style="<%=icon_style(location, @lon, @lat, @zoom, small, height, width) %>" />
-    </a>
+<a class="location-marker" href="<%= location[:url] %>">
+  <img src="<%= location[:icon] %>.png" title="<%=location[:description] %>" alt="<%=location[:description] %>" style="<%=icon_style(location, @lon, @lat, @zoom, small, height, width) %>" />
+</a>
 <%- end %>

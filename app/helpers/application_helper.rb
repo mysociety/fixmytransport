@@ -35,8 +35,8 @@ module ApplicationHelper
   end
 
   def icon_style(location, lon, lat, zoom, small, map_height, map_width)
-    top = Map.lat_to_y_offset(lat, location.lat, zoom, map_height) - (icon_height(small) / 2)
-    left = Map.lon_to_x_offset(lon, location.lon, zoom, map_width) - (icon_width(small) / 2)
+    top = Map.lat_to_y_offset(lat, location[:lat], zoom, map_height) - (location[:height] / 2)
+    left = Map.lon_to_x_offset(lon, location[:lon], zoom, map_width) - (location[:width] / 2)
     "position: absolute; top: #{top}px; left: #{left}px;"
   end
 
@@ -48,8 +48,7 @@ module ApplicationHelper
     small ? SMALL_ICON_WIDTH : LARGE_ICON_WIDTH
   end
 
-  def stop_js_coords(stop, main=true, small=false, link_type=:location, location=nil, line_only=false)
-    
+  def stop_coords(stop, small=false, link_type=:location, location=nil, line_only=false)
     location = (location or stop)
     if line_only
       data = { :lat => stop.lat,
@@ -62,14 +61,14 @@ module ApplicationHelper
                :id => stop.id,
                :url => map_link_url(location, link_type),
                :description => location.description,
-               :icon => stop_icon(stop, main, small),
+               :icon => stop_icon(stop, small),
                :height => icon_height(small),
                :width => icon_width(small) }
     end
     return data
   end
 
-  def stop_icon(location, main=false, small=false)
+  def stop_icon(location, small=false)
     name = '/images/map-icons/map-'
     if location.is_a? Route
       if location.transport_mode_name == 'Train'
@@ -92,38 +91,39 @@ module ApplicationHelper
         name += 'bus-magenta'
       end
     end
-    if main
-      name += '-med' 
-    elsif small
+    
+    if small
       name += '-sml' 
+    else
+      name += '-med'
     end
     return name
   end
 
   def route_segment_js(route, line_only=false)
     segments_js = route.journey_patterns.map{ |jp| jp.route_segments }.flatten.map do |segment|
-      [stop_js_coords(segment.from_stop, main=true, small=true, link_type=:location, location=nil, line_only=line_only),
-       stop_js_coords(segment.to_stop, main=true, small=true, link_type=:location, location=nil, line_only=line_only), segment.id]
+      [stop_coords(segment.from_stop, small=true, link_type=:location, location=nil, line_only=line_only),
+       stop_coords(segment.to_stop, small=true, link_type=:location, location=nil, line_only=line_only), segment.id]
     end
     segments_js.to_json
   end
 
-  def location_stops_js(locations, main, small, link_type)
+  def location_stops_coords(locations, small, link_type)
     array_content = []
     locations.each do |location|
       if location.is_a? Route or location.is_a? SubRoute
         if location.show_as_point
-          array_content << stop_js_coords(location, main, false, link_type)
+          array_content << stop_coords(location, false, link_type)
         elsif location.is_a? Route and link_type == :problem
-          array_content <<  location.points.map{ |stop| stop_js_coords(stop, main, true, link_type, location) }
+          array_content <<  location.points.map{ |stop| stop_coords(stop, true, link_type, location) }
         else
-          array_content <<  location.points.map{ |stop| stop_js_coords(stop, main, true, link_type) }
+          array_content <<  location.points.map{ |stop| stop_coords(stop, true, link_type) }
         end
       else
-       array_content << stop_js_coords(location, main, small, link_type)
+       array_content << stop_coords(location, small, link_type)
       end
     end
-    array_content.to_json
+    array_content
   end
 
   def stop_name_for_admin(stop)
