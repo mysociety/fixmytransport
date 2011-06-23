@@ -181,6 +181,7 @@ class Route < ActiveRecord::Base
                             :include => :locality)
     return stops + stop_areas
   end
+  memoize :all_locations
 
   def default_journey_locations
     if ! default_journey
