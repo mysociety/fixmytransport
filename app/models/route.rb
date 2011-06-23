@@ -280,11 +280,7 @@ class Route < ActiveRecord::Base
   # class methods
 
   def self.full_find(id, scope)
-    find(id,
-         :scope => scope,
-         :include => [{ :journey_patterns => {:route_segments => [:to_stop => :locality, :from_stop => :locality] }},
-                      { :route_operators => :operator }])
-
+    find(id, :scope => scope, :include => { :route_operators => :operator }])
   end
 
   # Return routes with this number and transport mode that have a stop or stop area in common with
