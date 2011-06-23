@@ -203,13 +203,15 @@ class Route < ActiveRecord::Base
       stop_ids[segments.last.to_stop_id] << segments.length
     end
     locations = []
-    stops = Stop.find(:all, :conditions => ['id in (?)', stop_ids.keys])
+    stops = Stop.find(:all, :conditions => ['id in (?)', stop_ids.keys],
+                            :include => :locality)
     stops.each do |stop|
       stop_ids[stop.id].each do |index|
         locations[index] = stop
       end
     end
-    stop_areas = StopArea.find(:all, :conditions => ['id in (?)', stop_area_ids.keys])
+    stop_areas = StopArea.find(:all, :conditions => ['id in (?)', stop_area_ids.keys],
+                                     :include => :locality)
     stop_areas.each do |stop_area|
       stop_area_ids[stop_area.id].each do |index|
         locations[index] = stop
