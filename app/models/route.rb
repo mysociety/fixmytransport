@@ -187,19 +187,35 @@ class Route < ActiveRecord::Base
     if ! default_journey
       generate_default_journey
     end
-    default_journey.route_segments.map do |route_segment|
-      if route_segment.from_stop_area
-        from = route_segment.from_stop_area
+    segments = default_journey.route_segments
+    stop_ids = Hash.new { |hash, key| hash[key] = [] }
+    stop_area_ids = Hash.new { |hash, key| hash[key] = [] }
+    segments.each_with_index do |route_segment, index|
+      if route_segment.from_stop_area_id
+        stop_area_ids[route_segment.from_stop_area_id] << index
       else
-        from = route_segment.from_stop
+        stop_ids[route_segment.from_stop_id] << index
       end
-      if route_segment.to_stop_area
-        to = route_segment.to_stop_area
-      else
-        to = route_segment.to_stop
+    end
+    if segments.last.to_stop_area_id
+      stop_area_ids[segments.last.to_stop_area_id] << segments.length
+    else
+      stop_ids[segments.last.to_stop_id] << segments.length
+    end
+    locations = []
+    stops = Stop.find(:all, :conditions => ['id in (?)', stop_ids.keys])
+    stops.each do |stop|
+      stop_ids[stop.id].each do |index|
+        locations[index] = stop
       end
-      [from, to]
-    end.flatten.uniq
+    end
+    stop_areas = StopArea.find(:all, :conditions => ['id in (?)', stop_area_ids.keys])
+    stop_areas.each do |stop_area|
+      stop_area_ids[stop_area.id].each do |index|
+        locations[index] = stop
+      end
+    end
+    locations
   end
 
   def stops
