@@ -50,8 +50,13 @@ class UserSessionsController < ApplicationController
     access_token = params[:access_token]
     source = params[:source]
     path = params[:path]
-    User.handle_external_auth_token(access_token, source)
-    perform_post_login_action
+    remember_me = params[:remember_me] == 'true'
+    begin
+      User.handle_external_auth_token(access_token, source, remember_me)
+      perform_post_login_action
+    rescue # e.g., HTTP exception if FB is not responding or access_token is wrong: unexpected error at this stage
+      flash[:error] = "Unable to complete authentication with #{source} &mdash; try again later"
+    end      
     redirect_back_or_default path
   end
   

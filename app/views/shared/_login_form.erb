@@ -65,15 +65,19 @@
             $(".facebook").css('background-repeat', 'repeat-y');
             paintFbButton(fbButtonState);
             FB.getLoginStatus(function(response) {
+                var rememberMe = $('#user_session_remember_me').is(':checked');
                 if (response.session && response.status && response.status == 'connected') { // fb says: logged in
                     var authParams = { 'access_token' : response.session.access_token, 
                                         'token_expiry' : response.session.expires,
-                                        'source' : 'facebook'}
+                                        'source' : 'facebook',
+                                        'remember_me' : rememberMe
+                                    };
                     if (fmtPopup){fmtPopup.close()};
                     window.externalAuth(authParams);
                 } else {
                     var path = 'https://www.facebook.com/dialog/oauth?';
-                    var redirectUri = document.location.protocol + '//' + document.location.host + '/facebook_callback.html';
+                    var redirectUri = document.location.protocol + '//' + document.location.host 
+                        + '/facebook_callback.html?fmt_remember=' + rememberMe;
                     var queryParams = ['client_id=' + fmt_facebook_app_id,
                         'redirect_uri=' + redirectUri,
                         'scope=email',
