@@ -1369,10 +1369,12 @@ ul#process {
 			display:block;
 			text-align:left;
 			width:200px;
-			margin:0 auto;
+			margin:3em auto 0 auto;
 		}
 			#frontpage-top .rightcol #followus a {
 				color:#333;
+				display:block;
+				margin-bottom:1em;
 			}
 		#frontpage-top .rightcol ul#secret-list {
 			display:block;
