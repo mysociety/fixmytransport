@@ -1,5 +1,14 @@
+<div id="banner">
+	<div class="container">
+		<h1>Route Regions</h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+		<p><%= t(:routes_by_region) %></p>
+	</div>
+</div>
 <div id="main-content" class="container">
-  <h2 class='main-header'><%= t(:routes_by_region) %></h2>
   <ul class='region-list'>
    <%- @regions.each do |region| %>
       <li class='region'>
@@ -7,4 +16,7 @@
       </li>
     <%- end %>
   </ul>
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
+	</div>
 </div>

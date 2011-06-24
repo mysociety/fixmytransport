@@ -1,5 +1,15 @@
+<div id="banner">
+	<div class="container">
+		<h1>Other Routes</h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+		<p>Find a Tram, Metro, Underground or Ferry route.</p>
+		<p><%= t(:where_did_you_get_on_and_off) %></p>
+	</div>
+</div>
 <div id="main-content" class="container">
-	<h2 class='main-header'><%= t(:where_did_you_get_on_and_off) %></h2>
 	<div class='problem-form-wrapper'>
 	  <%- form_tag find_other_route_problems_path, :id => 'other_route_form', :method => 'GET' do  %>
 	    <%- @error_messages.each do |error_message| %>
@@ -33,5 +43,8 @@
 		<button class="button" type='submit'><%= t(:go) %></button>
       
 	  <%- end %>
+	</div>
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
 	</div>
 </div>

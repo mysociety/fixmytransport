@@ -1,5 +1,14 @@
+<div id="banner">
+	<div class="container">
+		<h1>Find a Train Route</h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+		<p><%= t(:where_did_you_get_on_and_off) %></p>
+	</div>
+</div>
 <div id="main-content" class="container">
-	<h2 class='main-header'><%= t(:where_did_you_get_on_and_off) %></h2>
 	<div class='problem-form-wrapper'>
 	  <%- form_tag find_train_route_problems_path, :id => 'train_route_form', :method => 'GET' do  %>
   
@@ -33,5 +42,8 @@
     
 	    <button class="button" type='submit'><%= t(:go) %></button>
 	  <%- end %>
+	</div>
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
 	</div>
 </div>

@@ -1,5 +1,14 @@
+<div id="banner">
+	<div class="container">
+		<h1>Choose Area</h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+		<p><%= t(:multiple_localities, :name => @name) %></p>
+	</div>
+</div>
 <div id="main-content" class="container">
-	<%= t(:multiple_localities, :name => @name) %>
 	<ul class='locality-list'>
 	 <%- @areas.each do |area| %>
 	    <li class='area'>
@@ -7,4 +16,7 @@
 	    </li>
 	  <%- end %>
 	</ul>
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
+	</div>
 </div>
