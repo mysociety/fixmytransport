@@ -116,7 +116,7 @@ class User < ActiveRecord::Base
     facebook_data = JSON.parse(contents)
   end
 
-  def self.handle_external_auth_token(access_token, source)
+  def self.handle_external_auth_token(access_token, source, remember_me)
     case source
     when 'facebook'
       facebook_data = self.get_facebook_data(access_token)
@@ -138,7 +138,7 @@ class User < ActiveRecord::Base
                                     :token => access_token})
         user.save_without_session_maintenance
       end
-      UserSession.create(user, remember_me=false)
+      UserSession.create(user, remember_me=remember_me)
     end
   end
   
