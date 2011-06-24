@@ -25,9 +25,6 @@ $(document).ready(function(){
   		 $('html, body').animate({scrollTop : 0},'slow');
   	});
 
-	/* Frontpage problem scroller
-	   ================================================== */
-	$('#frontpage-problem-scroller').cycle();
 
 	/* Thread
 	   ================================================== */

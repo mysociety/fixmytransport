@@ -14,7 +14,7 @@
 	};
 </script>
 <%- if (current_user && current_user.supporter_or_initiator(@campaign)) || @campaign.status == :successful %>
-  <div id="banner" class="blue <%= 'supporter' %>">
+  <div id="banner" class="<%= 'supporter' %>">
   	<div class="container">
   		<h1>
   		  <%- if current_user && current_user == @campaign.initiator %>

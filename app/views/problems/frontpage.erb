@@ -1,6 +1,11 @@
 <%- content_for :javascript do %>
 <%= raw javascript_include_tag('jquery.cycle.min.js', :charset => 'utf-8') %>
 <%- end %>
+<script type="text/javascript">
+$(function(){
+	$('#frontpage-problem-scroller').cycle();
+});
+</script>
 <div id="frontpage-top" class="container">
 	<div class="leftcol">
 		<noscript>

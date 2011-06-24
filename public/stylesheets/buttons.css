@@ -186,7 +186,7 @@ a.button {
 .support-big {
     display: block;
     text-align: center;
-    margin: 17px auto;
+    margin: 0 auto;
     font-size: 30px;
     font-family: inherit;
     font-style: inherit;
@@ -260,6 +260,9 @@ a.button {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d89700', endColorstr='#ffb600',GradientType=0 ); /* IE6-9 */
 	background:url(../images/email.png) 6px center no-repeat, linear-gradient(top, #d89700 0%,#ffb600 100%); /* W3C */
 }
+
+/* Miscellenious buttons
+   ================================================== */
 .button.big {
 	border-radius: 10px;
     -moz-border-radius: 10px;
@@ -313,7 +316,20 @@ a.button {
   font-family: inherit;
 }
 
-
+.point-go {
+	cursor:pointer;
+	display:block;
+	width:94px;
+	height:60px;
+	background:url(../images/point-go.png) -2px -4px no-repeat;
+	border:none;
+	text-indent:-999999em;
+	line-height:0;
+	font-size:0;
+}
+.point-go:hover {
+	background-position:-2px -97px;
+}
 /* Icons
    ================================================== */
 
@@ -1322,3 +1338,5 @@ a:hover .icon.facebook {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#002060', endColorstr='#3b5b98',GradientType=0 ); /* IE6-9 */
 	background:url('../images/icons.png') 9px -227px no-repeat, linear-gradient(top, #002060 0%,#3b5b98 100%); /* W3C */
 }
+
+
