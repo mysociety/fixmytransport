@@ -49,6 +49,9 @@ a.button {
 	padding:4px 10px;
 	line-heignt:1;
 }
+#banner a.button {
+	color:#fff;
+}
 .icon.green,
 .button.green {
 	background: #99cc33; /* Old browsers */
@@ -186,7 +189,7 @@ a.button {
 .support-big {
     display: block;
     text-align: center;
-    margin: 17px auto;
+    margin: 0 auto;
     font-size: 30px;
     font-family: inherit;
     font-style: inherit;
@@ -260,6 +263,9 @@ a.button {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d89700', endColorstr='#ffb600',GradientType=0 ); /* IE6-9 */
 	background:url(../images/email.png) 6px center no-repeat, linear-gradient(top, #d89700 0%,#ffb600 100%); /* W3C */
 }
+
+/* Miscellenious buttons
+   ================================================== */
 .button.big {
 	border-radius: 10px;
     -moz-border-radius: 10px;
@@ -312,6 +318,85 @@ a.button {
   border: 0 none; 
   font-family: inherit;
 }
+
+.point-go {
+	cursor:pointer;
+	display:block;
+	width:94px;
+	height:60px;
+	background:url(../images/point-go.png) -2px -4px no-repeat;
+	border:none;
+	text-indent:-999999em;
+	line-height:0;
+	font-size:0;
+}
+.point-go:hover {
+	background-position:-2px -97px;
+}
+/* Icons
+   ================================================== */
+
+.fancybutton {
+	display:inline-block;
+	
+	border:none;
+	color:#ffffff;
+	text-transform:uppercase;
+	padding:2px 8px;
+	cursor:pointer;
+	font-size: 0.9em;
+	margin:2px;
+	text-align:center;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+	-webkit-box-shadow: 0px 0px 2px rgba(84, 84, 84, 0.75);
+	-moz-box-shadow: 0px 0px 2px rgba(84, 84, 84, 0.75);
+	box-shadow: 0px 0px 2px rgba(84, 84, 84, 0.75);
+	
+	background: #888894; /* Old browsers */
+	background: -moz-linear-gradient(top, #888894 0%, #444444 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#888894), color-stop(100%,#444444)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #888894 0%,#444444 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #888894 0%,#444444 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #888894 0%,#444444 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#888894', endColorstr='#444444',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #888894 0%,#444444 100%); /* W3C */
+}
+.fancybutton:hover {
+	color:#ffffff;
+	
+	background: #048fc2; /* Old browsers */
+	background: -moz-linear-gradient(top, #048fc2 0%, #006699 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#048fc2), color-stop(100%,#006699)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #048fc2 0%,#006699 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #048fc2 0%,#006699 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #048fc2 0%,#006699 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#048fc2', endColorstr='#006699',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #048fc2 0%,#006699 100%); /* W3C */
+}
+.fancybutton.mousedown {
+	color:#ffffff;
+	
+	background: #006699; /* Old browsers */
+	background: -moz-linear-gradient(top, #006699 0%, #048fc2 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006699), color-stop(100%,#048fc2)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #006699 0%,#048fc2 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #006699 0%,#048fc2 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #006699 0%,#048fc2 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#006699', endColorstr='#048fc2',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #006699 0%,#048fc2 100%); /* W3C */
+}
+a.fancybutton {
+	padding:4px 10px;
+	line-heignt:1;
+}
+#banner a.fancybutton {
+	color:#fff;
+}
+
 
 /* Icons
    ================================================== */
@@ -1259,3 +1344,5 @@ a:hover .icon.facebook {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#002060', endColorstr='#3b5b98',GradientType=0 ); /* IE6-9 */
 	background:url('../images/icons.png') 9px -227px no-repeat, linear-gradient(top, #002060 0%,#3b5b98 100%); /* W3C */
 }
+
+

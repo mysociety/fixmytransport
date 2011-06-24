@@ -18,38 +18,33 @@ $(document).ready(function(){
       }) 
     }
     
-
+	/* Goto top
+	   ================================================== */
   	$('.goto-top').click(function(e){
   		e.preventDefault();
   		 $('html, body').animate({scrollTop : 0},'slow');
   	});
+
+	/* Find Stop focus
+	   ================================================== */
+	$('#find-stop input').focus(function(){
+		$('#find-stop').addClass('active');
+	});
+	
+	$('#find-stop input').blur(function(){
+		$('#find-stop').removeClass('active');
+	});
+	
 	/* Thread
 	   ================================================== */
-
-	//functions - look to interrupt
 	function thread(li){
 		if(li.hasClass('open')){
 			$('.thread-details', li).hide('blind', '', 1000, function(){
 				li.removeClass('open');
 			});
 		}else{
-			if ($('.thread-details', li).length > 0){
-				li.addClass('open');
-				
-				/*
-				 * I honestly think its better without this
-				 *
-				//fix height of copy if less than furniture
-				var copy_h = $('.thread-details .thread-copy', li).height();
-				var furniture_h = $('.thread-details .thread-furniture', li).height();
-				if(copy_h < furniture_h)
-					$('.thread-details .thread-copy', li).height(furniture_h);
-				 
-				 *
-				 */
-				
-				$('.thread-details', li).show('blind', '', 1000);
-			}
+			li.addClass('open');
+			$('.thread-details', li).show('blind', '', 1000);
 		}
 	}
 	
@@ -556,13 +551,22 @@ $(document).ready(function(){
     });
   });
 
-  /* Operator hide/show
-     ================================================== */
+	/* Operator hide/show
+	   ================================================== */
 	$('.operator-trigger').click(function(){
 		var parent = $(this).parent();
 		$('ul', parent).slideToggle(1500);
 	});
-
+	
+	/* Fancy buttons - :active and IE don't play nice so lets do it js
+	    ================================================== */
+	$('.fancybutton').mousedown(function(){
+		$(this).addClass('mousedown');
+	}).mouseup(function(){
+		$(this).removeClass('mousedown');
+	}).mouseout(function(){
+		$(this).removeClass('mousedown');
+	});
 });
 
 /* External authentication

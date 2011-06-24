@@ -107,12 +107,12 @@
 			  
 			  <div class='fieldset'>
           <div class='form-field'>
-          <div class='error error-text' style="display: none;"></div>
+          
             <%= raw f.hidden_field :is_advice_request %>
       			<input type="text" name="campaign_update[text]" id="campaign_update_text"/>
       			<button class="button" type="submit">Post</button>
-			<div class='error', id="error-text" style="display: none;"></div>
-     			<label for="post-update">Keep supporters up-to-date on how the campaign is progressing.</label>          
+				<div class='error error-text' style="display: none;"></div>
+				<label for="post-update">Keep supporters up-to-date on how the campaign is progressing.</label>          
           </div>
         </div>
 			  <%- end %>

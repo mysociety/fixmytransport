@@ -1,18 +1,25 @@
 <div id="banner">
+	<div class="container">
+		<%- if current_user && current_user == @user %>
+	    	<%= raw link_to(t(:edit_your_account), edit_account_path, :class => 'button right') %>
+	    <%- end %>
+		<h1>Profile</h1>
+	</div>
+</div>
+
+<div id="greybanner">
   <div class="container">
     <img src="<%= @user.profile_photo.url(:large_thumb) %>" class="avatar" />
     <h2><%= @user.name %></h2>
     <%- if @user.location %>
-      <%= @user.location %>
-    <%- end %>
-    <%- if current_user && current_user == @user %>
-    	<%= raw link_to(t(:edit_your_account), edit_account_path, :class => 'button') %>
+      <p><%= @user.location %></p>
     <%- end %>
   </div>
 </div>
 
+
 <div id="main-content" class="container">
-<div class="leftcol">
+  <div class="leftcol">
   
   
   <%- if @user.initiated_campaigns.visible.count > 0 %>
@@ -40,4 +47,7 @@
   <%- end %>
   
   </div>
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
+	</div>
 </div>

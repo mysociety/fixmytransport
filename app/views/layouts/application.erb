@@ -22,6 +22,14 @@
 	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   </head>
 	<body>
+		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
+		<div class="staging-banner top-notice">
+			<div class="container"><%= t(:development_site) %></div>
+		</div>
+		<%- end %>
+		<div class="top-notice">
+			<div id="other-country-notice" class="container"></div>
+		</div>
 		<div id="wrapper">
 			<div id="top" class="container">
 				<ul id="mysociety-tab">
@@ -42,12 +50,6 @@
 			</div>
 
 			<%= render :partial => "shared/login" %>
-
-			<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
-				<div class="staging-banner notice container">
-					<%= t(:development_site) %>
-				</div>
-			<%- end %>
 
 			<%- [:notice, :error].each do |key| %>
 					<%- unless flash[key].blank? %>

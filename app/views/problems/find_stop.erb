@@ -1,20 +1,19 @@
-<div id="main-content" class="container">
-	<h2 class='main-header'><%= t(:where_is_it) %></h2>
-	<div class='problem-form-wrapper'>
-	  <%- form_tag find_stop_problems_path, :id => 'stop_name_form', :method => 'GET' do  %>
-	    <%- if @error_message %>
-	      <div class='error'>
-	        <%= @error_message %>
-	      </div>
-	    <%- end %>
-    
-	    <div class='form-field'>
-	      <label for="name" id='guidance-name' class='guidance'>Enter an area, town or postcode</label>
-	      <%= raw text_field_tag 'name', params[:name], :size => 40 %>
-
-	    </div>
-    
-	    <button class="button" type='submit'><%= t(:go) %></button>
-	  <%- end %>
+<div id="banner">
+	<div class="container">
+		<h1><%= t(:where_is_it) %></h1>
 	</div>
+</div>
+
+<div id="main-content" class="container">
+	<%- form_tag find_stop_problems_path, :id => 'stop_name_form', :method => 'GET' do  %>
+	<div id="find-stop">
+		<label for="name" id='guidance-name' class='guidance'>Enter an area, town or postcode</label>
+		<%= raw text_field_tag 'name', params[:name], :size => 40 %>
+		<button class="point-go" type='submit'><%= t(:go) %></button>
+	</div>
+	
+	<%- if @error_message %>
+	<div class='error'><%= @error_message %></div>
+	<%- end %>
+	<%- end %>
 </div>
