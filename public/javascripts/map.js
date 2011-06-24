@@ -44,7 +44,7 @@ function area_init() {
 function updateLocations(event) {
   center = map.getCenter();
   center = center.transform(map.getProjectionObject(), proj);
-  url = "/locations/" + map.getZoom() + "/" + center.lat + "/" + center.lon + "/" + linkType;
+  url = "/locations/" + map.getZoom() + "/" + Math.round(center.lat*1000)/1000 + "/" + Math.round(center.lon*1000)/1000 + "/" + linkType;
   params = "?height=" + $('#map').height() + "&width=" + $('#map').width();
   OpenLayers.loadURL(url + params, {}, this, loadNewMarkers, markerFail);
 }
