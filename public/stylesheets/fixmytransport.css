@@ -789,6 +789,42 @@ ul.user-list {
 input.checkbox {
 	border: none;
 }
+
+.form-list {
+	margin:2em 0 0.5em 0;
+	padding:0;
+	list-style-type:none;
+}
+	.form-list li {
+		display:inline-block;
+		position:relative;
+		padding:5px;
+		margin-right:1.4em;
+	}
+	.form-list li.fieldset {
+		background:#DFEEF5;
+	}
+	.form-list li.fieldset:hover,
+	.form-list li.active {
+		background:#048fc2;
+	}
+		.form-list li input {
+			margin:0;
+			padding:4px;
+			font-size:1.6em;
+			border:1px solid #048fc2;
+			border-radius:4px;
+			-moz-border-radius:4px;
+			-webkit-border-radius:4px;
+		}
+		.form-list li label {
+			display:block;
+			position:absolute;
+			top:-2em;
+		}
+		.form-list li .button {
+			padding:0.5em 1em;
+		}
 /*TIP BOX*/	
 .tipbox {
     display: block;

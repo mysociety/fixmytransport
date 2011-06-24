@@ -25,14 +25,13 @@ $(document).ready(function(){
   		 $('html, body').animate({scrollTop : 0},'slow');
   	});
 
-	/* Find Stop focus
+	/* Form focusses
 	   ================================================== */
-	$('#find-stop input').focus(function(){
-		$('#find-stop').addClass('active');
+	$('#find-stop input, .form-list li input').focus(function(){
+		$(this).parent().addClass('active');
 	});
-	
-	$('#find-stop input').blur(function(){
-		$('#find-stop').removeClass('active');
+	$('#find-stop input, .form-list li input').blur(function(){
+		$(this).parent().removeClass('active');
 	});
 	
 	/* Thread

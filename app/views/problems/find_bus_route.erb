@@ -12,31 +12,27 @@
 
 
 <div id="main-content" class="container">
-	<div class='problem-form-wrapper'>
 	<%- form_tag find_bus_route_problems_path, :id => 'bus_route_form', :method => 'GET' do  %>
-    
-	    <%- if @error_message %>
-	      <div class='error'>
-	        <%= @error_message %>
-	      </div>
-	    <%- end %>
-    
-	    <div class='form-field'>
+	<%- if @error_message %>
+      <div class='error'>
+        <%= @error_message %>
+      </div>
+    <%- end %>
+	<ul class="form-list">
+	    <li class="fieldset">
 	      <%= raw label_tag t(:enter_route_number) %>
 	      <%= raw text_field_tag 'route_number', params[:route_number] %>
 	      <div id='guidance-route-number' class='guidance'>e.g. C10</div>
-	    </div>
+	    </li>
     
-	    <div class='form-field'>
+	    <li class="fieldset">
 	      <%= raw label_tag t(:enter_town_or_area) %>
 	      <%= raw text_field_tag 'area', params[:area] %>
 	      <div id='guidance-area' class='guidance'>e.g. London </div>
-	    </div>
-    
-	    <button class="button" type="submit"><%= t(:go) %></button>
-
+	    </li>
+		<li><button class="big button" type="submit"><%= t(:go) %></button></li>
+    </ul>
 	<%- end %>
-	</div>
 	<div class="container">
 		<a href="#top" class="goto-top right">Top of page</a>
 	</div>
