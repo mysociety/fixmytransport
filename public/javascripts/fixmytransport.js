@@ -25,7 +25,16 @@ $(document).ready(function(){
   		 $('html, body').animate({scrollTop : 0},'slow');
   	});
 
-
+	/* Find Stop focus
+	   ================================================== */
+	$('#find-stop input').focus(function(){
+		$('#find-stop').addClass('active');
+	});
+	
+	$('#find-stop input').blur(function(){
+		$('#find-stop').removeClass('active');
+	});
+	
 	/* Thread
 	   ================================================== */
 	function thread(li){
