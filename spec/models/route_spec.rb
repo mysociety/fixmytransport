@@ -72,7 +72,10 @@ describe Route do
     fixtures default_fixtures
 
     it 'should return correct terminuses for an example route' do
-      routes(:victoria_to_haywards_heath).terminuses.should == [stop_areas(:victoria_station_root), stop_areas(:haywards_heath_station)]
+      terminuses = routes(:victoria_to_haywards_heath).terminuses
+      terminuses.size.should == 2
+      terminuses.include?(stop_areas(:haywards_heath_station)).should == true
+      terminuses.include?(stop_areas(:victoria_station_root)).should == true
     end
 
   end

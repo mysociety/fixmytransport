@@ -133,6 +133,7 @@ class Route < ActiveRecord::Base
   def short_name
     name(from_stop=nil, short=true)
   end
+  memoize :short_name
 
   def full_name
     "#{name} route"
@@ -161,27 +162,49 @@ class Route < ActiveRecord::Base
   end
 
   def all_locations
-    stops = Stop.find(:all, :conditions => ["id in ((SELECT from_stop_id
-                                                     FROM route_segments
-                                                     WHERE route_id = ?
-                                                     AND from_stop_area_id is null)
-                                                    UNION
-                                                    (SELECT to_stop_id
-                                                    FROM route_segments
-                                                    WHERE route_id = ?
-                                                    AND to_stop_area_id is null))", self.id, self.id],
+    _get_locations
+  end
+  memoize :all_locations
+
+  def _get_locations(terminuses_only=false)
+    if terminuses_only
+      from_terminus_clause = "AND from_terminus = ?"
+      to_terminus_clause = "AND to_terminus = ?"
+      params = [self.id, true, self.id, true]
+    else
+      from_terminus_clause = ''
+      to_terminus_clause = ''
+      params = [self.id, self.id]
+    end
+    stop_sql = "id in ((SELECT from_stop_id
+                        FROM route_segments
+                        WHERE route_id = ?
+                        #{from_terminus_clause}
+                        AND from_stop_area_id is null)
+                      UNION
+                       (SELECT to_stop_id
+                        FROM route_segments
+                        WHERE route_id = ?
+                        #{to_terminus_clause}
+                        AND to_stop_area_id is null))"
+
+    stop_conditions = [stop_sql] + params
+    stops = Stop.find(:all, :conditions => stop_conditions,
                             :include => :locality)
-    stop_areas = StopArea.find(:all, :conditions => ["id in ((SELECT from_stop_area_id
-                                                              FROM route_segments
-                                                              WHERE route_id = ?)
-                                                             UNION
-                                                             (SELECT to_stop_area_id
-                                                              FROM route_segments
-                                                              WHERE route_id = ? ))", self.id, self.id],
+    stop_area_sql = "id in ((SELECT from_stop_area_id
+                             FROM route_segments
+                             WHERE route_id = ?
+                             #{from_terminus_clause})
+                           UNION
+                            (SELECT to_stop_area_id
+                             FROM route_segments
+                             WHERE route_id = ?
+                             #{to_terminus_clause}))"
+    stop_area_conditions = [stop_area_sql] + params
+    stop_areas = StopArea.find(:all, :conditions => stop_area_conditions,
                             :include => :locality)
     return stops + stop_areas
   end
-  memoize :all_locations
 
   def default_journey_locations
     if ! default_journey
@@ -243,10 +266,10 @@ class Route < ActiveRecord::Base
                                                                   FROM route_segments
                                                                   WHERE from_stop_id = #{conn.quote(current.id)}
                                                                   AND route_id = #{conn.quote(self.id)}")
-    final_stops = Stop.find(:all, :conditions => ["id in (SELECT to_stop_id 
-                                                          FROM route_segments 
-                                                          WHERE to_terminus = ? 
-                                                          AND journey_pattern_id in (?))", 
+    final_stops = Stop.find(:all, :conditions => ["id in (SELECT to_stop_id
+                                                          FROM route_segments
+                                                          WHERE to_terminus = ?
+                                                          AND journey_pattern_id in (?))",
                                                    true, journeys_from_here])
     if final_stops.empty?
       final_stops = [current]
@@ -254,18 +277,25 @@ class Route < ActiveRecord::Base
     final_stops
   end
 
+  # sometimes we need to know the terminuses of a new route, but if the route's in the database
+  # then it's quicker to pull them out
   def terminuses
-    segments = journey_patterns.map{ |journey_pattern| journey_pattern.route_segments }.flatten
-    from_terminuses = segments.select{ |route_segment| route_segment.from_terminus? }
-    to_terminuses = segments.select{ |route_segment| route_segment.to_terminus? }
-    from_terminuses = from_terminuses.map do |segment|
-      segment.from_stop_area ? segment.from_stop_area : segment.from_stop
+    if new_record?
+      segments = journey_patterns.map{ |journey_pattern| journey_pattern.route_segments }.flatten
+      from_terminuses = segments.select{ |route_segment| route_segment.from_terminus? }
+      to_terminuses = segments.select{ |route_segment| route_segment.to_terminus? }
+      from_terminuses = from_terminuses.map do |segment|
+        segment.from_stop_area ? segment.from_stop_area : segment.from_stop
+      end
+      to_terminuses = to_terminuses.map do |segment|
+        segment.to_stop_area ? segment.to_stop_area : segment.to_stop
+      end
+      terminuses = from_terminuses + to_terminuses
+      terminuses = terminuses.uniq
+    else
+      terminuses = _get_locations(terminuses_only=true)
     end
-    to_terminuses = to_terminuses.map do |segment|
-      segment.to_stop_area ? segment.to_stop_area : segment.to_stop
-    end
-    terminuses = from_terminuses + to_terminuses
-    terminuses.uniq
+    return terminuses
   end
   memoize :terminuses
 

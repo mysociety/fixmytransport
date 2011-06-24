@@ -4,5 +4,5 @@ en:
     one: "%{operator} runs %{count} route:"
     other: "%{operator} runs %{count} routes:"
   is_responsible_for_stations: 
-    one: "%{operator} is responsible for %{count} stations:"
-    other: "%{operator} is responsible for %{count} station:"
+    one: "%{operator} is responsible for %{count} station:"
+    other: "%{operator} is responsible for %{count} stations:"

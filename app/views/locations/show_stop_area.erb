@@ -37,7 +37,7 @@
 		<h5 class="left">Routes</h5>
       <ol id="large-ol">
 
-        <%- @stop_area.routes.each do |route| %>
+        <%- @stop_area.routes.sort_by(&:short_name).each do |route| %>
         <li><a href="<%= location_url(route)%>">
          <%= route.short_name %>
         </a></li>
