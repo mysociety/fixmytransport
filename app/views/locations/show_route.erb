@@ -3,17 +3,15 @@
 <%- end %>
 <div id="banner">
 	<div class="container">
-		<div class="leftcol-banner">
-			<h1 class="route-name"><%= @route.name %></h1>
+		<h1 class="route-name"><%= @route.name %></h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
 			<%- if !@route.operators.empty?  %>
-          
-          <h2 class="route-operator">operated by <%= operator_links(@route.operators) %></h2>
-      <%- end %>
+			<h2 class="route-operator">operated by <%= operator_links(@route.operators) %></h2>
+			<%- end %>
 			<p><%= "#{@route.area}." %></p>
-		</div>
-		<div class="rightcol">
-			<a class="button big red report" href="<%= new_problem_url(:location_id => @route.id, :location_type => @route.type, :to => params[:to], :from => params[:from])%>">Report a problem</a>
-		</div>
 	</div>
 </div>
 <div id="main-content" class="container">
@@ -28,21 +26,15 @@
 	</div>
 
 	<div class="rightcol">
-
+		<a class="button big red report" href="<%= new_problem_url(:location_id => @route.id, :location_type => @route.type, :to => params[:to], :from => params[:from])%>">Report a problem</a>
 		<h5 class="left">Stops</h5>
-
 		<ol id="large-ol">
-		  <%- @route.default_journey_locations.each_with_index do |stop_or_station, index| %>
-        <li><a href="<%= location_url(stop_or_station) %>"><span class="num"><%= index+1 %></span><%= stop_or_station.is_a?(Stop) ? stop_or_station.name_with_long_indicator : stop_or_station.name %></a></li>
-      <%- end %>
+			<%- @route.default_journey_locations.each_with_index do |stop_or_station, index| %>
+			<li><a href="<%= location_url(stop_or_station) %>"><span class="num"><%= index+1 %></span><%= stop_or_station.is_a?(Stop) ? stop_or_station.name_with_long_indicator : stop_or_station.name %></a></li>
+			<%- end %>
 		</ol>
-			
-	
-	
-	
 	</div>
 	<div class="container">
 		<a href="#top" class="goto-top right">Top of page</a>
 	</div>
 </div>
-
