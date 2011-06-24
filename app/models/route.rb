@@ -44,7 +44,7 @@ class Route < ActiveRecord::Base
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
   attr_accessor :show_as_point, :journey_pattern_data
-  before_save :cache_route_coords, :generate_default_journey, :cache_area
+  before_save :cache_route_coords, :generate_default_journey, :cache_area, :cache_description
   is_route_or_sub_route
   is_location
 
@@ -87,6 +87,7 @@ class Route < ActiveRecord::Base
   end
 
   def description
+    return cached_description if cached_description
     "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
   end
 
@@ -126,7 +127,6 @@ class Route < ActiveRecord::Base
   end
 
   def description
-    return cached_description if cached_description
     "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
   end
 
@@ -214,7 +214,7 @@ class Route < ActiveRecord::Base
                                      :include => :locality)
     stop_areas.each do |stop_area|
       stop_area_ids[stop_area.id].each do |index|
-        locations[index] = stop
+        locations[index] = stop_area
       end
     end
     locations
@@ -236,17 +236,22 @@ class Route < ActiveRecord::Base
     return stops
   end
 
+  # where can this route end up if you get on here?
   def final_stops(current)
-    outgoing_segments = route_segments.select{ |route_segment| route_segment.from_stop_id == current.id }
-    outgoing_journey_patterns = outgoing_segments.map{ |route_segment| route_segment.journey_pattern_id }
-    final_segments = route_segments.select do |route_segment|
-      outgoing_journey_patterns.include?(route_segment.journey_pattern_id) && route_segment.to_terminus?
-    end
-    final_stops = final_segments.map{ |route_segment| route_segment.to_stop }
+    conn = JourneyPattern.connection
+    journeys_from_here = conn.select_values("SELECT journey_pattern_id
+                                                                  FROM route_segments
+                                                                  WHERE from_stop_id = #{conn.quote(current.id)}
+                                                                  AND route_id = #{conn.quote(self.id)}")
+    final_stops = Stop.find(:all, :conditions => ["id in (SELECT to_stop_id 
+                                                          FROM route_segments 
+                                                          WHERE to_terminus = ? 
+                                                          AND journey_pattern_id in (?))", 
+                                                   true, journeys_from_here])
     if final_stops.empty?
       final_stops = [current]
     end
-    final_stops.uniq
+    final_stops
   end
 
   def terminuses

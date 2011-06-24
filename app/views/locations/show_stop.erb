@@ -47,7 +47,7 @@
 		<ol id="large-ol">
 		  <%- @stop.routes.each do |route| %>
 			<li><a href="<%= location_url(route)%>"><span class="num"> <%=route.name(from_stop=@stop, short=true) %></span>
-			<%= route.final_stops(@stop).map{ |stop| stop.name_without_suffix(route.transport_mode) }.to_sentence%>
+			<%= route.final_stops(@stop).map{ |stop| stop.name_without_suffix(route.transport_mode) }.to_sentence %>
 			</a></li>
       <%- end %>
 		</ol>	

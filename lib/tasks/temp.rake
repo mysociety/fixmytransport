@@ -17,13 +17,6 @@ namespace :temp do
     end
   end
 
-  desc 'Recache route descriptions for train routes'
-  task :recache_route_descriptions => :environment do
-    Route.find_each(:conditions => ['transport_mode_id = 6']) do |route|
-      route.save!
-    end
-  end
-
   desc 'Set campaign on assignments'
   task :set_campaign_on_assignments => :environment do
     Problem.find_each(:conditions => ['campaign_id is not null']) do |problem|
@@ -64,6 +57,14 @@ namespace :temp do
     end
   end
 
+  desc 'Cache route descriptions'
+  task :cache_route_descriptions => :environment do
+    Route.find_each(:conditions => ['cached_description is null']) do |route|
+      Route.connection.execute("UPDATE routes set cached_description = #{Route.connection.quote(route.description)} where id = #{route.id}" )
+      puts '.'
+    end
+  end
+  
   desc 'Cache route areas'
   task :cache_route_areas => :environment do
     Route.find_each(:conditions => ['cached_area is null']) do |route|

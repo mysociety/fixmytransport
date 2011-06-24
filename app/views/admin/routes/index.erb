@@ -12,7 +12,7 @@
       <th width='12%'><%= sortable('id', t(:id)) %></th>
       <th width='5%'><%= sortable('number', t(:admin_route_number)) %></th>
       <th width='14%'><%= sortable('name', t(:name)) %></th>
-      <th width='35%'><%= sortable('cached_description', t(:cached_description)) %></th>
+      <th width='35%'><%= sortable('description', t(:description)) %></th>
       <th width='23%'><%= t(:operators) %></th>
       <th width='10%'><%= sortable('regions.name', t(:region)) %></th>
       <th width='5%'><%= t(:select) %></th>
@@ -24,7 +24,7 @@
           <%= link_to "(#{t(:admin)})", admin_url(admin_route_path(route.id)) %>
         <td><%= route.number   %></td>
         <td><%= route.read_attribute(:name) %></td>
-        <td><%= route.cached_description %></td>
+        <td><%= route.description %></td>
         <td><%= raw route.operators.map{ |operator| link_to(operator.name, admin_url(admin_operator_path(operator))) }.join(" ") %></td>
         <td><%= route.region.name %></td>
         <td><%= raw check_box_tag "routes[]", route.id, false, { :class => "select-item" } %></td>
