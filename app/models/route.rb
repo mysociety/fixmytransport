@@ -133,6 +133,7 @@ class Route < ActiveRecord::Base
   def short_name
     name(from_stop=nil, short=true)
   end
+  memoize :short_name
 
   def full_name
     "#{name} route"
