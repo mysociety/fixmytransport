@@ -3,6 +3,7 @@
  * Authors: Josh Angell
  *
  * Colours:
+ *   light blue			#DFEEF5
  *   blue				#048fc2
  *   dark blue			#0075a0
  *   green				#9bce24
@@ -1224,22 +1225,54 @@ ul#campaign-thread {
 	margin-bottom:3em;
 }
 /* ===[ Choose Page ]=== */
-#choose .left,
-#choose .right {
-    text-align: center;
-    width: 465px;
+#choose {
+	background:#DFEEF5;
+	text-align:center;
+	margin-bottom:2em;
+	border-radius:8px;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
 }
-	#choose .left .button,
-	#choose .right .button {
-	    font-size: 1.5em;
-	    width: 200px;
-	    display: block;
-	    margin: 1em auto;
+	#choose h1 {
+		color:#048fc2;
+		margin:0.5em;
 	}
-#choose p {
-    width: 300px;
-    margin: 2em auto;
-}
+	#choose h2 {
+		margin:0;
+	}
+	#choose p {
+		font-size:1.6em;
+	}
+	#choose .left,
+	#choose .right {
+	    text-align: center;
+	    width: 340px;
+	}
+	#choose .middle {
+		display:inline-block;
+		margin-top:0.5em;
+		font-size:3em;
+	}
+	#choose .left {
+		margin-left:100px;
+	}
+	#choose .right {
+		margin-right:100px;
+	}
+		#choose .left .button,
+		#choose .right .button {
+		    font-size: 1.5em;
+		    width: 200px;
+			padding:1em 0.5em;
+		    display: block;
+		    margin: 1em auto;
+		}
+		#choose .left p,
+		#choose .right p {
+		    width: 300px;
+		    margin: 2em auto;
+			font-size:1em;
+		}
 /* ===[ Process Page ]=== */
 ul#process {
     font-size: 15px;
