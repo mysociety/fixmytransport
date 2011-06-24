@@ -236,10 +236,16 @@ form#search {
 		text-transform:uppercase;
 		font-size:0.8em;
 	}
-	#banner h1, #banner h2, #banner h3, #banner h4, #banner h5, #banner h6{
+	#banner h1, #banner h2, #banner h3, #banner h4, #banner h5, #banner h6 {
 		color:#fff;
 		padding:0;
 		margin:0;
+	}
+	#banner a {
+		color:#555;
+	}
+	#banner a:hover {
+		color:#333;
 	}
 	#banner.yellow h1, #banner.yellow h2, #banner.yellow h3, #banner.yellow h4, #banner.yellow h5, #banner.yellow h6, #banner.yellow p,
 	#banner.grey h1, #banner.grey h2, #banner.grey h3, #banner.grey h4, #banner.grey h5, #banner.grey h6, #banner.grey p {

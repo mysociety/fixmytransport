@@ -49,6 +49,9 @@ a.button {
 	padding:4px 10px;
 	line-heignt:1;
 }
+#banner a.button {
+	color:#fff;
+}
 .icon.green,
 .button.green {
 	background: #99cc33; /* Old browsers */
@@ -389,6 +392,9 @@ a.button {
 a.fancybutton {
 	padding:4px 10px;
 	line-heignt:1;
+}
+#banner a.fancybutton {
+	color:#fff;
 }
 
 
