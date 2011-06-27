@@ -1,11 +1,13 @@
 <%- content_for :javascript do  %>
   <%= raw map_javascript_include_tags %>
 <%- end %>
-
 <div id="banner">
 	<div class="container">
-		<div class="leftcol-banner">
-			<h1><%= "#{@stop_area.full_name}" %></h1>
+		<h1><%= "#{@stop_area.full_name}" %></h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
       <%- if !@stop_area.operators.empty?  %>
           
           <h2 class="route-operator">operated by <%= operator_links(@stop_area.operators) %></h2>
@@ -16,11 +18,6 @@
           <%= "In #{@stop_area.area}" %>
         </span></p>
       <%- end %>
-			
-		</div>
-		<div class="rightcol">
-			<a class="button big red report" href="<%= new_problem_url(:location_id => @stop_area.id, :location_type => @stop_area.type, :to => params[:to], :from => params[:from])%>">Report a problem</a>							
-		</div>
 	</div>
 </div>
 <div id="main-content" class="container">
@@ -34,6 +31,7 @@
 	</div>
 
 	<div class="rightcol">
+		<a class="button big red report" href="<%= new_problem_url(:location_id => @stop_area.id, :location_type => @stop_area.type, :to => params[:to], :from => params[:from])%>">Report a problem</a>
 		<h5 class="left">Routes</h5>
       <ol id="large-ol">
 
@@ -49,6 +47,3 @@
 		<a href="#top" class="goto-top right">Top of page</a>
 	</div>
 </div>
-
-
-

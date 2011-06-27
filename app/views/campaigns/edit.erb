@@ -1,4 +1,16 @@
+<div id="banner">
+	<div class="container">
+		<h1>Edit</h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+		<p><%= t(:edit_campaign_description)%></p>
+	</div>
+</div>
 <div id="main-content" class="container">
-    <h3><%= t(:edit_campaign_description)%></h3>
     <%= render :partial => 'form', :locals => { :campaign => @campaign } %>
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
+	</div>
 </div>

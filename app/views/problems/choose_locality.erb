@@ -1,10 +1,20 @@
+<div id="banner">
+	<div class="container">
+		<h1>Choose Locality</h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+		<p>
+		<%- if @matched_stops_or_stations %>
+		  <%= t(:within_multiple_localities, :name => @name) %>
+		<%- else %>
+		  <%= t(:multiple_localities, :name => @name) %>
+		<%- end %>
+		</p>
+	</div>
+</div>
 <div id="main-content" class="container">
-	<%- if @matched_stops_or_stations %>
-	  <%= t(:within_multiple_localities, :name => @name) %>
-	<%- else %>
-	  <%= t(:multiple_localities, :name => @name) %>
-	<%- end %>
-
 	<ul class='locality-list'>
 	  <%- @localities.each do |locality| %>
 	    <%- if @matched_stops_or_stations %>
@@ -18,4 +28,7 @@
 	    <%- end %>
 	  <%- end %>
 	</ul>
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
+	</div>
 </div>

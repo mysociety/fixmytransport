@@ -1,12 +1,12 @@
 <%- @title = t(:reporting_a_problem, :location => @problem.location.name) %>
-<div id="main-nav-bar">
-	<div class="container">
-		<h1>Please write a message about your problem below.</h1>
-	</div>
-</div>
 <div id="banner">
 	<div class="container">
-		<h4><%= raw @sending_advice %></h4>
+		<h1>Write a message.</h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+		<p>Please write a message below, <%= raw @sending_advice %></p>
 	</div>
 </div>
 <div id="main-content" class="container">
@@ -108,17 +108,14 @@
 					<p>Try to be descriptive, but concise. <a href="#">See an example</a>.</p>
 				</div>
 			</li>
-      <li>
-        <button type="submit" class="problem-next" value="clicked">
-          Next
-        </button>
+			<li>
+				<button type="submit" class="button" value="clicked">Submit</button>
 			</li>
 		</ul>
 
 		<%- end %>
 	</div>
+	<div class="container">
+		<a href="#top" class="goto-top right">Top of page</a>
+	</div>
 </div>
-
-
-
-

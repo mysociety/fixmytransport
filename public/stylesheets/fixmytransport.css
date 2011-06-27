@@ -3,18 +3,22 @@
  * Authors: Josh Angell
  *
  * Colours:
- *   blue			#048fc2
- *   dark blue		#0075a0
- *   green			#9bce24
- *   dark green		#86bc08
- *   orange			#ff6600
- *   red			#f4053d
- *   dark red		#e00202
- *   light grey		#f1f1f7
- *   grey			#ebebeb
- *   dark grey		#666666
- *   black			#333333
- *   dark black		#151f26
+ *   light blue			#DFEEF5
+ *   blue				#048fc2
+ *   dark blue			#0075a0
+ *   green				#9bce24
+ *   dark green			#86bc08
+ *   orange				#ff6600
+ *   red				#f4053d
+ *   dark red			#e00202
+ *   really light grey	#f1f1f7
+ *   light grey			#BDCCD4
+ *   grey				#ebebeb
+ *   dark grey			#808080
+ *   darker grey		#666666
+ *   black				#333333
+ *   dark black			#151f26
+
  * */
 /* ===[ Layout ]=== */
 .container {
@@ -202,59 +206,67 @@ form#search {
 	}
 /* ===[ Banner ]=== */
 #banner {
-    padding: 1em 0;
-	margin-bottom:1em;
-    background: #f4f4f4;
+    padding:10px 0;
+    background: #048fc2;
+	color:#fff;
 }
-#banner .container {
-	position:relative;
-	overflow:visible;
-}
-  #banner.yellow {
+#banner.yellow {
 	background: #FFFBD7;
+	padding:1.2em 0;
 
 	-webkit-box-shadow: 0 0 34px rgba(0, 0, 0, 0.5);
 	-moz-box-shadow: 0 0 34px rgba(0, 0, 0, 0.5);
 	box-shadow: 0 0 34px rgba(0, 0, 0, 0.5);
-  }
-  #banner.blue {
-	background: #048fc2;
-  	margin-bottom:2em;
-    padding:0;
-  }
-  #banner.blue .status {
-	display:inline-block;
-	margin-top: 35px;
-	color:#fff;
-	text-transform:uppercase;
-	font-size:0.8em;
-  }
-  #banner.blue h1 {
-	display:inline-block;
-	padding: 1.25em 0;
-  }
-  #banner.blue.supporter {
-  	margin-bottom:0;
-  }
-  #banner h1.font-1 {
-		font-size: 28px;
+}
+
+#banner.supporter {
+	margin-bottom:0;
+}
+	#banner .container {
+		position:relative;
+		overflow:visible;
 	}
-  #banner h1 {
-    display:inline;
-    font-size:1.3em;
-    line-height: 1.6em;
-    color: #151f26;
+	#banner .status {
+		display:inline-block;
+		margin-top: 35px;
+		color:#fff;
+		text-transform:uppercase;
+		font-size:0.8em;
+	}
+	#banner h1, #banner h2, #banner h3, #banner h4, #banner h5, #banner h6 {
+		color:#fff;
+		padding:0;
 		margin:0;
 	}
-	#banner.blue h1 a {
-		color:#fff;
+	#banner a {
+		color:#555;
 	}
+	#banner a:hover {
+		color:#333;
+	}
+	#banner.yellow h1, #banner.yellow h2, #banner.yellow h3, #banner.yellow h4, #banner.yellow h5, #banner.yellow h6,
+	#greybanner h1, #greybanner h2, #greybanner h3, #greybanner h4, #greybanner h5, #greybanner h6 {
+		color:#333;
+		padding:0;
+		margin:0;
+	}
+	#banner.yellow h1 {
+		line-height:1.3;
+		font-size:2.2em;
+	}
+	#banner h1,
+	#greybanner h1,
+	#greybanner h2 {
+		font-size: 2em;
+	}
+		#banner h1 a {
+			color:#fff;
+		}
+
 	#banner h3 {
 	    font-weight: bold;
-	    color: #151f26;
 	}
 	#banner h4 {
-	    color: #151f26;
 	    margin: 0;
 	}
 	#banner h4.bold {
@@ -263,8 +275,18 @@ form#search {
 	}
 	#banner p {
 	    line-height: 1.3;
-	    margin: 0;
-	    color: #151f26;
+	    margin: 5px 0 0 0;
+	}
+#greybanner {
+	background: #f4f4f4;
+	margin-bottom:1em;
+	padding:10px 0;
+}
+	#greybanner p {
+		color:#333;
+		font-size: 1.2em;
+	    line-height: 1.25;
+		margin:5px 0;
 	}
 /* ===[ Supporter Notice ]=== */
 .supporter-notice {
@@ -283,7 +305,9 @@ form#search {
 		line-height: 1.2em;
 	}
 /* ===[ Main Content ]=== */
-#main-content {}
+#main-content {
+	padding-bottom:10px;
+}
 	#main-content div {
       overflow: hidden
 	}
@@ -662,7 +686,7 @@ ul.user-list {
    ================================================== */
 .ribbon {
 	position:absolute;
-	top:-17px;
+	top:-22px;
 	right:-5px;
 	display:block;
 	width:116px;
@@ -765,6 +789,42 @@ ul.user-list {
 input.checkbox {
 	border: none;
 }
+
+.form-list {
+	margin:2em 0 0.5em 0;
+	padding:0;
+	list-style-type:none;
+}
+	.form-list li {
+		display:inline-block;
+		position:relative;
+		padding:5px;
+		margin-right:1.4em;
+	}
+	.form-list li.fieldset {
+		background:#DFEEF5;
+	}
+	.form-list li.fieldset:hover,
+	.form-list li.active {
+		background:#048fc2;
+	}
+		.form-list li input {
+			margin:0;
+			padding:4px;
+			font-size:1.6em;
+			border:1px solid #048fc2;
+			border-radius:4px;
+			-moz-border-radius:4px;
+			-webkit-border-radius:4px;
+		}
+		.form-list li label {
+			display:block;
+			position:absolute;
+			top:-2em;
+		}
+		.form-list li .button {
+			padding:0.5em 1em;
+		}
 /*TIP BOX*/	
 .tipbox {
     display: block;
@@ -1201,22 +1261,54 @@ ul#campaign-thread {
 	margin-bottom:3em;
 }
 /* ===[ Choose Page ]=== */
-#choose .left,
-#choose .right {
-    text-align: center;
-    width: 465px;
+#choose {
+	background:#DFEEF5;
+	text-align:center;
+	margin-bottom:2em;
+	border-radius:8px;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
 }
-	#choose .left .button,
-	#choose .right .button {
-	    font-size: 1.5em;
-	    width: 200px;
-	    display: block;
-	    margin: 1em auto;
+	#choose h1 {
+		color:#048fc2;
+		margin:0.5em;
 	}
-#choose p {
-    width: 300px;
-    margin: 2em auto;
-}
+	#choose h2 {
+		margin:0;
+	}
+	#choose p {
+		font-size:1.6em;
+	}
+	#choose .left,
+	#choose .right {
+	    text-align: center;
+	    width: 340px;
+	}
+	#choose .middle {
+		display:inline-block;
+		margin-top:0.5em;
+		font-size:3em;
+	}
+	#choose .left {
+		margin-left:100px;
+	}
+	#choose .right {
+		margin-right:100px;
+	}
+		#choose .left .button,
+		#choose .right .button {
+		    font-size: 1.5em;
+		    width: 200px;
+			padding:1em 0.5em;
+		    display: block;
+		    margin: 1em auto;
+		}
+		#choose .left p,
+		#choose .right p {
+		    width: 300px;
+		    margin: 2em auto;
+			font-size:1em;
+		}
 /* ===[ Process Page ]=== */
 ul#process {
     font-size: 15px;
@@ -1280,14 +1372,12 @@ ul#process {
 		}
 			.process-back:hover, .process-next:hover, .:hover {
 				background
-			}
-			
+			}		
      .process-submit {
              float:right;
              clear:left;
              margin-top:1em;
      }
-
 		.process-back{
 			background:transparent url(../images/process-back.gif) left top no-repeat;
 			padding-left: 30px;
@@ -1298,7 +1388,6 @@ ul#process {
 				color:#000;
 				float: left;
 			}
-
 		.process-next, .problem-next {
 			background:transparent url(../images/process-next.gif) right top no-repeat;
 			padding-right: 30px;
@@ -1307,13 +1396,11 @@ ul#process {
     	.problem-next {
 			margin-right: 20px;
 		}
-
 			.process-next:hover, .problem-next:hover {
 				background:transparent url(../images/process-next.gif) right top no-repeat;
 				background-position: right bottom;
 				color:#000;
 			}
-
 			#process-nav div{
 				float: left;
 				width: 340px;
@@ -1323,16 +1410,103 @@ ul#process {
 			}
 
 /*===[Front Page]===*/
-
-
-/* redundant?
-.home-intro{
-	text-align: center;
+#frontpage-top {
+	margin:5em auto;
 }
-.home-intro a.button{
-	margin-bottom: 3em;
-}
-*/
+	#frontpage-top .leftcol {
+		text-align:center;
+	}
+		#frontpage-top .leftcol ul#frontpage-problem-scroller {
+			display:block;
+			width:100%;
+			height:auto;
+			
+			list-style-type:none;
+			padding:0;
+			margin:0 0 1em 0;
+		}
+			#frontpage-top .leftcol ul#frontpage-problem-scroller li {
+				display:block;
+				width:100%;
+			}
+				#frontpage-top .leftcol ul#frontpage-problem-scroller li h1 {
+					font-size:3.3em;
+					margin:0;
+					color:#048fc2;
+				}
+		#frontpage-top .leftcol p {
+			font-size:2.2em;
+			margin:0;
+		}
+		#frontpage-top .leftcol .button {
+			font-size:1.6em;
+			padding:0.8em 1.1em;
+			margin:1.5em 0.7em;
+			text-transform:none;
+		}
+	#frontpage-top .rightcol {
+		text-align:center;
+	}
+	
+		#frontpage-top .rightcol h2 {
+			color:#808080;
+			text-align:left;
+			font-size:1.9em;
+			margin-bottom:0.2em;
+		}
+		#frontpage-top .rightcol #followus {
+			display:block;
+			text-align:left;
+			width:200px;
+			margin:3em auto 0 auto;
+		}
+			#frontpage-top .rightcol #followus a {
+				color:#333;
+				display:block;
+				margin-bottom:1em;
+			}
+		#frontpage-top .rightcol ul#secret-list {
+			display:block;
+			text-align:left;
+			background:#ebebeb;
+			color:#4d4d4d;
+			font-size:1.4em;
+			list-style-type:none;
+			margin:0;
+			padding:6px 16px;
+			
+			border-radius:6px;
+			-moz-border-radius:6px;
+			-webkit-border-radius:6px;
+		}
+			#frontpage-top .rightcol ul#secret-list li {
+				display:block;
+				background:transparent url(../images/icons.png) -122px 7px no-repeat;
+				padding:0 0 10px 50px;
+			}
+			#frontpage-top .rightcol ul#secret-list li.secret-report {
+				background-position:-122px 7px;
+			}
+			#frontpage-top .rightcol ul#secret-list li.secret-find {
+				background-position:-125px -50px;
+			}
+			#frontpage-top .rightcol ul#secret-list li.secret-grow {
+				background-position:-125px -112px;
+			}
+			#frontpage-top .rightcol ul#secret-list li.secret-track {
+				background-position:-121px -170px;
+			}
+			#frontpage-top .rightcol ul#secret-list li.secret-done {
+				background-position:-120px -226px;
+				padding-bottom:0;
+			}
+
+		#frontpage-top .rightcol .button {
+			font-size:1.5em;
+			padding:0.7em 1em;
+			margin:1em 2px;
+			text-transform:none;
+		}
 
 #other-country-notice{
   display: none;
@@ -1367,22 +1541,20 @@ ul#process {
 		border:3px solid #fff;
 		margin:10px 0 0 20px;
 	}
-	#frontpage-banner-right .button {
+	#frontpage-banner-right .fancybutton {
 		width:220px;
 		font-size:2em;
 	}
 
 #fg-head {
 	display:inline-block;
-	padding-bottom:30px;
+	margin-bottom:20px;
+	float:left;
 }
 	div.fg-bottom {
 		float:left;
 		border-top:1px solid #B3B3B3;
 		margin-bottom:20px;
-	}
-	#fg-head {
-		float:left;
 	}
 		#fg-head h2 {
 			color:#048FC2;
@@ -1491,3 +1663,30 @@ ol#large-ol {
 .operators div ul {
 	display:none;
 }
+
+/*===[Find Stop Page]===*/
+#find-stop {
+	display:block;
+	width:518px;
+	height:70px;
+	margin:2em auto;
+	background:url(../images/find_stop.jpg) -10px -86px no-repeat;
+}
+#find-stop:hover,
+#find-stop.active {
+	background-position:-10px -10px;
+}
+	#find-stop label {
+		display:none;
+	}
+	#find-stop input {
+		float:left;
+		width:375px;
+		margin:20px 0 0 20px;
+		border:none;
+		font-size:1.8em;
+	}
+	#find-stop .point-go {
+		float:right;
+		margin:7px 13px 0 0;
+	}
