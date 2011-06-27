@@ -45,6 +45,8 @@ namespace :temp do
     # BL - Badgerline now First Somerset & Avon
     # FC00 - In Wales will be First Cymru
     # MN - In London is Arriva London
+    # KIM - In East Midlands, Kimes
+    # ML - In London, Metroline
     mappings = { 'BL' => 'First Somerset & Avon',
                  'FC00' => 'First Cymru', 
                  'MN' => 'Arriva London',
