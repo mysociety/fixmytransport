@@ -2,26 +2,13 @@ class CampaignsController < ApplicationController
 
   before_filter :process_map_params, :only => [:show]
   before_filter :find_editable_campaign, :only => [:add_details]
-  before_filter :find_visible_campaign, :except => [:index, :add_details,
+  before_filter :find_visible_campaign, :except => [:add_details,
                                                     :confirm_join, :confirm_leave,
                                                     :confirm_comment]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
                                                        :complete, :add_photos, :add_details, :share]
   before_filter :require_campaign_initiator_or_expert, :only => [:edit, :update]
   after_filter :update_campaign_supporter, :only => [:show]
-
-  def index
-    @campaigns = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
-      campaigns = Campaign.find_recent(pager.per_page, :offset => pager.offset)
-      # inject the result array into the paginated collection:
-      pager.replace(campaigns)
-
-      unless pager.total_entries
-        # the pager didn't manage to guess the total count, do it manually
-        pager.total_entries = Campaign.visible.count
-      end
-    end
-  end
 
   def show
     @commentable = @campaign

@@ -9,15 +9,15 @@ class ProblemsController < ApplicationController
   before_filter :find_visible_problem, :only => [:show, :update, :add_comment]
   before_filter :require_problem_reporter, :only => [:convert]
   
-  def index
-    @problems = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
-      problems = Problem.latest(pager.per_page, :offset => pager.offset)
+  def issues_index
+    @issues = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
+      issues = Problem.find_recent_issues(pager.per_page, :offset => pager.offset)
       # inject the result array into the paginated collection:
-      pager.replace(problems)
+      pager.replace(issues)
 
       unless pager.total_entries
         # the pager didn't manage to guess the total count, do it manually
-        pager.total_entries = Problem.visible.count
+        pager.total_entries = Campaign.visible.count + Problem.visible.count
       end
     end
   end

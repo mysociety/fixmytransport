@@ -1,0 +1,5 @@
+<%- if issue.is_a?(Campaign) %>
+  <%= render :partial => 'campaigns/campaign', :locals => { :campaign => issue }%>
+<%- else %>
+  <%= render :partial => 'problems/problem', :locals => { :problem => issue } %>
+<%- end %>

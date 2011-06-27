@@ -32,8 +32,12 @@ class Campaign < ActiveRecord::Base
                1 => 'Confirmed',
                2 => 'Successful',
                3 => 'Hidden' })
-  named_scope :visible, :conditions => ["status_code in (?)", [self.symbol_to_status_code[:confirmed],
-                                                               self.symbol_to_status_code[:successful]]]
+
+  def self.visible_status_codes
+   [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:successful]]
+  end
+
+  named_scope :visible, :conditions => ["status_code in (?)", Campaign.visible_status_codes]
 
   # instance methods
 
@@ -54,11 +58,11 @@ class Campaign < ActiveRecord::Base
   def supporter_count
     campaign_supporters.confirmed.count
   end
-  
+
   def recommended_assignments
-    priority_assignments = ['find_transport_organization', 
+    priority_assignments = ['find_transport_organization',
                             'find_transport_organization_contact_details']
-    recommended_assignments =  self.assignments.select do |assignment| 
+    recommended_assignments =  self.assignments.select do |assignment|
       assignment.status == :new && priority_assignments.include?(assignment.task_type)
     end
     recommended_assignments
@@ -102,19 +106,19 @@ class Campaign < ActiveRecord::Base
   def call_to_action
     "Please help me persuade #{responsible_org_descriptor} to #{title}"
   end
-  
+
   def short_call_to_action
     "Campaign to #{title}"
   end
-  
+
   def short_initiator_call_to_action
     "Your campaign to #{title}"
   end
-  
+
   def supporter_call_to_action
     "I just joined the campaign to persuade #{responsible_org_descriptor} to #{title}"
   end
-  
+
   def add_comment(user, text, comment_confirmed=false, token=nil)
     comment = comments.build(:text => text,
                              :user => user)
@@ -159,9 +163,9 @@ class Campaign < ActiveRecord::Base
 
   # Encode the id to Base 26 and then use alphabetic rather than alphanumeric range
   def email_id
-    self.id.to_s(base=26).tr('0-9a-p', 'a-z') 
+    self.id.to_s(base=26).tr('0-9a-p', 'a-z')
   end
-  
+
   def generate_key
     chars = ('a'..'z').to_a
     random_string = (0..5).map{ chars[rand(chars.length)] }.join
@@ -169,12 +173,12 @@ class Campaign < ActiveRecord::Base
     self.update_attribute("key", generated_key)
     return generated_key
   end
-  
+
   def email_address
     domain = MySociety::Config.get("INCOMING_EMAIL_DOMAIN", 'localhost')
     "#{email_local_part}@#{domain}"
   end
-  
+
   def email_local_part
     prefix = MySociety::Config.get("INCOMING_EMAIL_PREFIX", 'campaign-')
     "#{prefix}#{key}"
@@ -202,12 +206,6 @@ class Campaign < ActiveRecord::Base
     MySociety::Config.get('INCOMING_EMAIL_DOMAIN', 'localhost')
   end
 
-  def self.find_recent(number, options={})
-    visible.find(:all, :order => 'latest_event_at desc',
-                       :limit => number,
-                       :include => [:location, :initiator, :campaign_events],
-                       :offset => options[:offset])
-  end
 
 
 end

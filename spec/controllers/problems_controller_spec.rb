@@ -10,19 +10,19 @@ describe ProblemsController do
     
   end
   
-  describe 'GET #index' do 
+  describe 'GET #issues_index' do 
   
     def make_request
-      get :index
+      get :issues_index
     end
     
-    it 'should render the index template' do 
+    it 'should render the issues_index template' do 
       make_request
-      response.should render_template('index')
+      response.should render_template('issues_index')
     end
     
-    it 'should ask for latest problems' do 
-      Problem.should_receive(:latest).and_return([])
+    it 'should ask for recent issues' do 
+      Problem.should_receive(:find_recent_issues).and_return([])
       make_request
     end
   

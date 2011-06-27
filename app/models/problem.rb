@@ -19,9 +19,13 @@ class Problem < ActiveRecord::Base
                1 => 'Confirmed',
                2 => 'Fixed',
                3 => 'Hidden' })
+
+  def self.visible_status_codes
+    [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:fixed]]
+  end
+
   named_scope :confirmed, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
-  named_scope :visible, :conditions => ["status_code in (?) and campaign_id is null", [self.symbol_to_status_code[:confirmed],
-                                                              self.symbol_to_status_code[:fixed]]], :order => "confirmed_at desc"
+  named_scope :visible, :conditions => ["status_code in (?) and campaign_id is null", Problem.visible_status_codes], :order => "confirmed_at desc"
   named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
   named_scope :with_operator, :conditions => ['operator_id is not null'], :order => 'confirmed_at desc'
   [:responsible_organizations,
@@ -74,7 +78,7 @@ class Problem < ActiveRecord::Base
 
     end
   end
-  
+
   def location_has_operators
     operators_responsible? && location.operators.size > 0
   end
@@ -209,11 +213,47 @@ class Problem < ActiveRecord::Base
     return problem
   end
 
-  def self.latest(limit, options={})
-    visible.find(:all,
-                 :limit => limit,
-                 :include => [:location],
-                 :offset => options[:offset])
+  # Get a number of recent problems and campaigns, with an optional offset
+  def self.find_recent_issues(number, options={})
+    if options[:offset]
+      offset_clause = " OFFSET #{options[:offset]}"
+    else
+      offset_clause = ""
+    end
+    issue_info = self.connection.select_rows("SELECT id, model_type
+                                             FROM
+                                             (SELECT id, 'Problem' as model_type, confirmed_at as latest_date
+                                              FROM problems
+                                              WHERE status_code in (#{Problem.visible_status_codes.join(",")})
+                                              AND campaign_id is null
+                                              UNION
+                                              SELECT id, 'Campaign' as model_type, latest_event_at as latest_date
+                                              FROM campaigns
+                                              WHERE status_code in (#{Campaign.visible_status_codes.join(",")}))
+                                             AS campaigns_and_problems
+                                             ORDER by latest_date desc
+                                             LIMIT #{number}
+                                             #{offset_clause}")
+    campaign_ids = {}
+    problem_ids = {}
+    # store the index that each instance sits at in date order
+    issue_info.each_with_index do |issue, index|
+      if issue[1] == 'Problem'
+        problem_ids[issue[0].to_i] = index
+      else
+        campaign_ids[issue[0].to_i] = index
+      end
+    end
+    issues = []
+    # pull all the models with the associations we need for displaying them
+    problems = Problem.find(:all, :conditions => ['id in (?)', problem_ids.keys],
+                                  :include => [:location, :reporter])
+    campaigns = Campaign.find(:all, :conditions => ['id in (?)', campaign_ids.keys],
+                                    :include => [:location, :initiator])
+    # map the models back into the a combined array in the right order
+    problems.each{ |problem| issues[problem_ids[problem.id]] = problem }
+    campaigns.each{ |campaign| issues[campaign_ids[campaign.id]] = campaign }
+    return issues
   end
 
   # Sendable reports - confirmed, with operator, PTE, or council, but not sent
