@@ -139,7 +139,7 @@ describe UserSessionsController do
     end
     
     it 'should ask the user to handle an external auth token, passing the access token and source' do 
-      User.should_receive(:handle_external_auth_token).with('mytoken', 'facebook')
+      User.should_receive(:handle_external_auth_token).with('mytoken', 'facebook', false)
       make_request
     end
     
