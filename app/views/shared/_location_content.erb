@@ -1,10 +1,8 @@
 <h3>Related Issues</h3>
-<%- if !location.campaigns.visible.empty? %>
-<ul class="related-issues">
-	<%- location.campaigns.visible.each do |campaign| %>
-	<li>
-     <%= render :partial => 'shared/campaign', :locals => { :context => :location, :campaign => campaign } %>
-	</li>
+<%- if !location.related_issues.empty? %>
+<ul class="issues-list">
+	<%- location.related_issues.each do |issue| %>
+     <%= render :partial => 'shared/issue', :locals => { :issue => issue, :context => :location } %>
   <%- end %>
 </ul>
 <%- else %>

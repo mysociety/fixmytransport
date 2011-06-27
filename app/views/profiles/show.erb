@@ -25,11 +25,9 @@
   <%- if @user.initiated_campaigns.visible.count > 0 %>
   <a name="managing"></a>
   <h3>Managing</h3>
-  <ul class="related-campaigns">
+  <ul class="issues-list">
   	<%- @user.initiated_campaigns.visible.each do |campaign| %>
-  	<li>
-       <%= render :partial => 'shared/campaign', :locals => { :context => :location, :campaign => campaign } %>
-  	</li>
+       <%= render :partial => 'shared/issue', :locals => { :context => :profile, :issue => campaign } %>
     <%- end %>
   </ul>
   <%- end %>
@@ -37,15 +35,22 @@
   <%- if @user.campaigns.visible.count > 0 %>
   <a name="supporting"></a>
   <h3>Supporting</h3>
-  <ul class="related-campaigns">
+  <ul class="issues-list">
   	<%- @user.campaigns.visible.each do |campaign| %>
-  	<li>
-       <%= render :partial => 'shared/campaign', :locals => { :context => :location, :campaign => campaign } %>
-  	</li>
+       <%= render :partial => 'shared/issue', :locals => { :context => :profile, :issue => campaign } %>
     <%- end %>
   </ul>
   <%- end %>
   
+  <%- if @user.problems.visible.count > 0 %>
+  <a name="reported"></a>
+  <h3>Problems Reported</h3>
+  <ul class="issues-list">
+  	<%- @user.problems.visible.each do |problem| %>
+       <%= render :partial => 'shared/issue', :locals => { :context => :profile, :issue => problem } %>
+    <%- end %>
+  </ul>
+  <%- end %>
   </div>
 	<div class="container">
 		<a href="#top" class="goto-top right">Top of page</a>
