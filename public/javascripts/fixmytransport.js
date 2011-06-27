@@ -12,7 +12,7 @@ $(document).ready(function(){
         success: function(country_code){
           if (country_code != 'GB'){
             $('#other-country-notice').html("Want to set up a site like this in your country? Get <a href='advice'>our advice</a>");
-            $('#other-country-notice').show();
+            $('#conditional-notice').show();
           }
         }
       }) 
