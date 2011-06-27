@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   has_many :assignments
   has_many :campaign_supporters, :foreign_key => :supporter_id
   has_many :campaigns, :through => :campaign_supporters
+  has_many :problems, :foreign_key => :reporter_id
   has_many :initiated_campaigns, :foreign_key => :initiator_id, :class_name => 'Campaign'
   has_many :sent_emails, :as => :recipient
   has_many :access_tokens
