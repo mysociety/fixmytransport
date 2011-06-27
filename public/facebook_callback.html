@@ -6,14 +6,16 @@
     <body> 
         <script> 
             //   ?error_reason=user_denied&error=access_denied&error_description=The+user+denied+your+request.
+            // note: if FB add error reason, they _do_ neatly add it to any existing query vars on the URL
             var qParams = location.search&&location.search.substr(1).replace(/\+/gi," ").split("&");
             for(var i in qParams){
                 var s=qParams[i].split("=");
-                qParams[i] = qParams[unescape(s[0])] =  unescape(s[1]);
+                qParams[i] = qParams[unescape(s[0])] = unescape(s[1]);
             }
             if (qParams['error']){ // not checking details: error -> close window -> back to login
                 // alert("error: " + qParams['error'] + "\n error_reason: " + qParams['error_reason'] + "\n error_description: " +  qParams['error_description'])   
             } else {
+                var remember_me = qParams['fmt_remember'];
                 var facebookParamStr = window.location.hash.substring(1);
                 if (facebookParamStr) {
                     var valuePairs = facebookParamStr.split('&');
@@ -31,7 +33,9 @@
                     }
                     var authParams = { 'access_token' : accessToken, 
                                        'token_expiry' : tokenExpiry,
-                                       'source' : 'facebook'};
+                                       'source' : 'facebook',
+                                       'remember_me': remember_me
+                                      };
                     window.opener.externalAuth(authParams);
                 }
             }
