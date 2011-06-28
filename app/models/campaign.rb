@@ -70,7 +70,7 @@ class Campaign < ActiveRecord::Base
 
   def assignments_with_contacts
     assignments_with_contacts = self.assignments.select do |assignment|
-      assignment.status == :new && assignment.task_type == 'write_to_other'
+      assignment.task_type == 'write_to_other'
     end
     assignments_with_contacts
   end

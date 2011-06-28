@@ -22,7 +22,10 @@ class ApplicationController < ActionController::Base
   private
   
   def make_cachable
-    expires_in 60.seconds, :public => true unless current_user
+    unless current_user
+      expires_in 60.seconds, :public => true 
+      response.headers['Vary'] = 'Cookie'
+    end
   end
 
   def current_user_session(refresh=false)

@@ -1,32 +1,4 @@
 <div id="main-content" class="container">
-	<%- if @outgoing_message.incoming_message %>
-	  <%- extra =  t(:in_reply_to, :incoming => link_to(@outgoing_message.incoming_message.subject, campaign_incoming_message_path(@outgoing_message.campaign, @outgoing_message.incoming_message))) %>
-	<%- end %>
-	<%= raw t(:this_message_was_sent_by, :campaign => link_to(h(@outgoing_message.campaign.title), campaign_path(@outgoing_message.campaign)), :recipient => h(@outgoing_message.recipient_name), :extra => extra) %>
-
-	<div class='campaign-email'>
-	  <h2>
-	    <div class='from'><%= @outgoing_message.author.name %></div>
-	    <%- if @outgoing_message.sent_at %>
-	      <div class='date'>
-	        <%= short_date(@outgoing_message.sent_at) %>
-	      </div>
-	    <%- else %>
-	      <div class='date'>
-	        <%= t(:not_yet_sent) %>
-	      </div>
-	    <%- end %>
-	  </h2>
-  
-	  <div class='subject'>
-	    <b><%= "#{t(:subject)}:" %></b>
-	    <%= @outgoing_message.subject %>
-	  </div>
-	  <div class='body'>
-	  <%= raw simple_format(h(@outgoing_message.body)) %>
-	  </div>
-  
-	</div>
 	<%- if current_user && current_user == @outgoing_message.author %>
 	  <%- form_for @campaign_update, :url => add_update_campaign_url(@outgoing_message.campaign) do |f| %>
 	    <div class='fieldset'>

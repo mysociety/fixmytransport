@@ -5,7 +5,7 @@
       <%= error_message_on @user_session, :base %>
     </div>
   <%- else %>
-    <div class='error' style="display: none;"></div>
+    <div class='error error-base' style="display: none;"></div>
   <%- end %>
   <div class='notice' style="display: none;"></div>
 <ul>
@@ -35,7 +35,9 @@
 	<li>
 		<button class="button" type="submit">Sign In</button>
 		<label for="user_session_remember_me">Keep me signed in</label><input type="checkbox" class="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1">    
+		<%- if !(controller.controller_name == 'user_sessions') %>
 		<input type=hidden name="redirect" value="<%= request.request_uri %>">
+		<%- end %>
 	</li>
 </ul>
 <%- end %>

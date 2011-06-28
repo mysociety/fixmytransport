@@ -101,7 +101,7 @@ $(document).ready(function(){
 	$('.login-box .pane').not('#login-landing').hide();
 
   //create account
-  $('#create-account').click(function(e){
+  $('.pane #create-account').click(function(e){
   	e.preventDefault();
   	$('.pane:visible').fadeOut(500, function(){
   	  $("#login-box").dialog({title: "Create Account"});
@@ -110,7 +110,7 @@ $(document).ready(function(){
   });
   
   //login
-  $('#login-to-account').click(function(e){
+  $('.pane #login-to-account').click(function(e){
   	e.preventDefault();
   	$('.pane:visible').fadeOut(500, function(){
   	  $("#login-box").dialog({title: "Sign In"});
@@ -454,7 +454,7 @@ $(document).ready(function(){
              window.location = response.redirect;
            }
            else if (response.html){
-             $(form_selector).html(response.html);
+             $(form_selector).html("<div class='ui-dialog-content'>"+response.html+"</div>");
            }else{
              window.location.reload();
            }

@@ -147,9 +147,9 @@
 			<%- end %>
 		<%- end %>
 		</ul>
-
+    <%- if !((current_user && current_user.supporter_or_initiator(@campaign)) || @campaign.status == :successful) %>
     <%= render :partial => 'support_button', :locals => { :button_class => 'right support', :display_supporter => false, :display_initiator => false } %>
-
+    <%- end %>
 	</div>
 
 

@@ -19,7 +19,7 @@ class AccountsController < ApplicationController
     end
     if current_user.save
       flash[:notice] = t(:account_updated)
-      redirect_to account_url
+      redirect_to profile_url(current_user)
     else
       render :action => :edit
     end
@@ -66,7 +66,7 @@ class AccountsController < ApplicationController
         format.json do
           @json = {}
           @json[:success] = true
-          @json[:html] = render_to_string :template => 'shared/confirmation_sent', :layout => false
+          @json[:html] = render_to_string :partial => 'shared/confirmation_sent'
           render :json => @json
         end
       end
@@ -131,7 +131,7 @@ class AccountsController < ApplicationController
     # not currently using a timeout on the tokens
     @account_user = User.find_using_perishable_token(params[:email_token], token_age=0)
     unless @account_user
-      flash[:notice] = t(:could_not_find_account)
+      flash[:error] = t(:could_not_find_account)
       redirect_to root_url
     end
   end

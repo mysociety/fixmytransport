@@ -89,9 +89,9 @@ describe AccountsController do
 
       describe 'if the update is successful' do
 
-        it 'should redirect to the account page' do
+        it "should redirect to the user's profile page" do
           make_request(@default_params)
-          response.should redirect_to(account_path)
+          response.should redirect_to(profile_path(@mock_user))
         end
 
       end
@@ -235,7 +235,7 @@ describe AccountsController do
         describe 'if the request asks for json' do 
         
           it 'should return the "confirmation_sent" template rendered as a string in the response' do 
-            @controller.stub!(:render_to_string).with(:template => 'shared/confirmation_sent', :layout => false).and_return("content")
+            @controller.stub!(:render_to_string).with(:partial => 'shared/confirmation_sent').and_return("content")
             make_request(format="json")
             JSON.parse(response.body)['html'].should == "content"
           end
@@ -335,9 +335,9 @@ describe AccountsController do
         User.stub!(:find_using_perishable_token).with('my_token', 0).and_return(nil)
       end
 
-      it 'should show a notice saying that the account cannot be found' do
+      it 'should show an error message saying that the account cannot be found' do
         make_request
-        flash[:notice].should == "We're sorry, but we could not locate your account. If you are having issues try copying and pasting the URL from your email into your browser or restarting the reset password process."
+        flash[:error].should == "We're sorry, but we could not locate your account. If you are having issues try copying and pasting the URL from your email into your browser or restarting the reset password process."
       end
 
       it 'should redirect to the root url' do
