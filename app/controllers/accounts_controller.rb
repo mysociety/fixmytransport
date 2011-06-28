@@ -131,7 +131,7 @@ class AccountsController < ApplicationController
     # not currently using a timeout on the tokens
     @account_user = User.find_using_perishable_token(params[:email_token], token_age=0)
     unless @account_user
-      flash[:notice] = t(:could_not_find_account)
+      flash[:error] = t(:could_not_find_account)
       redirect_to root_url
     end
   end
