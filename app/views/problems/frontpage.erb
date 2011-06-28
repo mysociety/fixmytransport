@@ -3,7 +3,10 @@
 <%- end %>
 <script type="text/javascript">
 $(function(){
-	$('#frontpage-problem-scroller').cycle();
+	$('#frontpage-problem-scroller').cycle({
+		speed:   250,
+		timeout: 4000
+	});
 });
 </script>
 <%- content_for :banner_content do %>
@@ -21,15 +24,27 @@ $(function(){
 			</style>
 		</noscript>
 		<ul id="frontpage-problem-scroller">
-			<li><h1>Had a bad train journey?</h1></li>
-			<li><h1>Had a bad bus journey?</h1></li>
-			<li><h1>Does the ferry stink?</h1></li>
+			<li>
+				<h1>Had a bad train journey?</h1>
+				<%- if @version == 1 %>
+				  <img src="/images/frontpage-trainwreck.jpg" />
+				<%- end %>
+			</li>
+			<li>
+				<h1>Had a bad bus journey?</h1>
+				<%- if @version == 1 %>
+				  <img src="/images/frontpage-trainwreck2.jpg" />
+				<%- end %>
+			</li>
+			<li>
+				<h1>Did the ferry sink?</h1>
+				<%- if @version == 1 %>
+				  <img src="/images/frontpage-trainwreck3.jpg" />
+				<%- end %>
+			</li>
 		</ul>
 		
-		<%- if @version == 1 %>
-		  <img src="/images/frontpage-trainwreck.jpg" />
-		<%- end %>
-		
+
 		<p class="font-1">Report your problem:</p>
 		<%= link_to('STOP or STATION', find_stop_problems_url, :class => 'font-1 button green') %>
 		<%= raw link_to('JOURNEY or ROUTE', find_route_problems_url, :class => 'font-1 button green') %>
