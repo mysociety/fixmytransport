@@ -231,7 +231,7 @@ class Problem < ActiveRecord::Base
       location = options[:location]
       location_id = conn.quote(location.id)
       location_class = conn.quote(location.class.to_s)
-      if location.is_a?(Route)
+      if location.is_a?(Route) && !location.sub_routes.empty?
         # for a train route, we want to include problems on sub-routes of this route
         # that were reported to a matching operator
         operator_ids = location.operator_ids.map{ |id| conn.quote(id) }.join(',')
