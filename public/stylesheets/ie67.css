@@ -11,6 +11,12 @@
 * html .leftcol-banner {
     width: 560px;
 }
+* html .form-list li.fieldset {
+	width:40%;
+}
+* html .form-list li input {
+	width:100%;
+}
 
 
 
@@ -23,4 +29,14 @@
 ol#frontpage-grid li,
 #fg-head-inner {
 	margin-top:0;
+}
+
+.form-list li .button {
+	padding:0.1em 0.25em;
+}
+
+
+/*sort this*/
+.error, .alert, .notice, .success, .info {
+	display:inline;
 }
