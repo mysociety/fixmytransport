@@ -10,9 +10,8 @@
 	</div>
 </div>
 <div id="main-content" class="container">
-   <%- page_results = (@locations + @other_locations).paginate({:page => params[:page], :per_page => 10 }) %>
-  <%= will_paginate page_results %>
-  <ul>
+   <%- page_results = (@locations + @other_locations).paginate({:page => params[:page], :per_page => 20 }) %>
+  <ul id="large-ul">
   <%- page_results.each do |location| %>
     <li class='location'>
       <%= link_to(location.description, map_link_url(location, :problem)) %>

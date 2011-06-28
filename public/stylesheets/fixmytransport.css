@@ -1629,27 +1629,33 @@ ul#process {
 			}
 /*===[Route Page]===*/		
 
-ol#large-ol {
+ol#large-ol,
+ul#large-ul {
     margin: 0 0 1em 0;
     padding: 0;
     clear: both;
+	display:inline-block;
 }
-	ol#large-ol li {
+	ol#large-ol li,
+	ul#large-ul li {
 	    list-style-type: none;
 	    border-bottom: 3px solid #fff;
 	    clear: both;
 	}
-		ol#large-ol li a{
+		ol#large-ol li a,
+		ul#large-ul li a{
 		    display: block;
 		    color: #444;
 		    background: #eee;
 		    padding: 10px;
 		}
-		ol#large-ol li a:hover {
+		ol#large-ol li a:hover,
+		ul#large-ul li a:hover {
 		    background: #0075a0;
 			color:#fff;
 		}
-		ol#large-ol li a span.num {
+		ol#large-ol li a span.num,
+		ul#large-ul li a span.num {
 		    display: block;
 		    float: left;
 		    text-align: center;
