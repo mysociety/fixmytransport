@@ -130,6 +130,17 @@ $(document).ready(function(){
   	return false;    
   });
 
+  //email
+  $('.email-trigger').click(function(e){
+    e.preventDefault();
+    $('.login-box .pane').hide();
+
+    $('#email-share').show();
+  	$("#login-box").dialog({title: "Email"});
+  	$("#login-box").dialog("open");
+  	return false;    
+  });
+
   $('.fb-feed-button').click(function(e){
       e.preventDefault();
      $('#social-message').fadeOut().empty();

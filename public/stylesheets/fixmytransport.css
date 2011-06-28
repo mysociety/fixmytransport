@@ -661,7 +661,8 @@ ul.user-list {
 }
 #main-content #comment-form textarea,
 #main-content .new_campaign_update textarea,
-#main-content .update_campaign textarea {
+#main-content .update_campaign textarea,
+#email-share textarea {
 	margin:0;
 	width:96%;
 	background: #f4f4f4;
