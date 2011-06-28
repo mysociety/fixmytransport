@@ -44,15 +44,20 @@
     </div>
   <%- end %>
 <%- else %>
-  <div id="banner" class="yellow container">
+  <div id="yellowbanner" class="container">
   	<div class="leftcol-banner">
-  		<h1 class="font-1">&ldquo;<%= @campaign.call_to_action %>&rdquo; &ndash; <%= @campaign.initiator.name %></h1>
+  		<h1>&ldquo;<%= @campaign.call_to_action %>&rdquo; &ndash; <%= @campaign.initiator.name %></h1>
   	</div>
 
   	<div class="rightcol">
       <%= render :partial => 'support_button', :locals => { :button_class => 'support-big', :display_supporter => true, :display_initiator => true } %>
   	</div>
   </div>
+<%- end %>
+<%- if current_user && current_user == @campaign.initiator %>
+<div id="yellowbanner" class="container">
+	<h1>Congratulations you just made a campaign. To help make it a success get your friends involved through <a href="#">twitter</a>, <a href="#">facebook</a> or <a href="#">email</a>.</h1>
+</div>
 <%- end %>
 <div id="main-content" class="container">
 
