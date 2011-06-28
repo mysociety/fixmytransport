@@ -18,14 +18,7 @@ module FixMyTransport
   module InstanceMethods
     
     def related_issues
-      issues = []
-      problems.each do |problem|
-        if problem.visible?
-          issues << problem
-        elsif problem.campaign && problem.campaign.visible?
-          issues << problem.campaign
-        end
-      end
+      issues = Problem.find_recent_issues(nil, { :location => self })
       return issues
     end
     

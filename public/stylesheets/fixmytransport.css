@@ -891,22 +891,22 @@ form#create-campaign {
 .stat-pending{color:#f4053d;}
 
 
-/*===[Related Campaign List]===*/
+/*===[Issues Lists]===*/
 
-ul.related-campaigns{margin: 0px; padding: 0px;}
-	ul.related-campaigns li{
+ul.issues-list{margin: 0px; padding: 0px;}
+	ul.issues-list li{
 		list-style: none;
 		border-bottom: 1px solid #eee;
 		overflow: hidden;
 		padding: 1em 0 0.5em 0 ;
 		}
 
-		ul.related-campaigns li img{
+		ul.issues-list li img{
 			float: left;
 			margin-right: 10px;
 		}
 
-		ul.related-campaigns dl{
+		ul.issues-list dl{
 			width: 480px;
 			font-size: 0.9em;
 			padding: 0px; 
@@ -914,23 +914,23 @@ ul.related-campaigns{margin: 0px; padding: 0px;}
 			float:right;
 		}
 
-			ul.related-campaigns dl dt,
-			ul.related-campaigns dl dd {list-style: none; padding: 0px; margin: 0px; float: left;}
+			ul.issues-list dl dt,
+			ul.issues-list dl dd {list-style: none; padding: 0px; margin: 0px; float: left;}
 
-			ul.related-campaigns dl dt{
+			ul.issues-list dl dt{
 				margin-right: 0.3em;
 				font-weight: normal;
 			}
 
-			ul.related-campaigns dl dd{
+			ul.issues-list dl dd{
 				margin-right: 1em;
 				font-weight: bolder;				
 			}
 
-				ul.related-campaigns h4{margin-bottom: 0.25em;}
-				ul.related-campaigns p{font-weight: normal;}
+				ul.issues-list h4{margin-bottom: 0.25em;}
+				ul.issues-list p{font-weight: normal;}
 
-				ul.related-campaigns span.status{float: right;}
+				ul.issues-list span.status{float: right;}
 
 
 /* Page Specific
