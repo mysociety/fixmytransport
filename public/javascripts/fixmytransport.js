@@ -4,7 +4,6 @@
  */
 
 $(document).ready(function(){
-    
     if ($('#other-country-notice').length > 0) {
       $.ajax({
         url: "/request_country",

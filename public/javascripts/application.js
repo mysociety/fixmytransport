@@ -144,7 +144,16 @@ function tabifyRouteLists() {
       $("#tabs-train").tabs();
       $("#tabs-ferry").tabs();
       $("#tabs-metro").tabs();
+      tabshook();
     }
+}
+
+function tabshook(){
+	var activetab = 'childactive-'+$('#tabs-main-nav li.ui-state-active').attr('id');
+	$("#tabs-main-nav").removeClass (function (index, css) {
+	    return (css.match (/\bchildactive-\S+/g) || []).join(' ');
+	});
+	$('#tabs-main-nav').addClass(activetab);
 }
 
 
@@ -156,5 +165,9 @@ $(document).ready(function() {
   tabifyRouteLists();
   addSearchGuidance();  
   addLinkActions();
+
+	$('#tabs').bind('tabsshow', function(event, ui) {
+		tabshook();
+	});
 });
 
