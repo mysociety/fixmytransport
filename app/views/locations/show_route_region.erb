@@ -23,29 +23,29 @@
 
 	  <div id='tabs' class='ui-tabs ui-widget ui-content ui-corner-all'>
     
-	    <ul class='ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+	    <ul id="tabs-main-nav" class='ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
 	      <%- if @region.bus_routes.count > 0 %>
-	        <li class='ui-state-default ui-corner-top ui-tabs-selected ui-state-active'>
+	        <li id="bus-tab" class='ui-state-default ui-corner-top ui-tabs-selected ui-state-active'>
 	          <%= link_to('Bus', '#tabs-bus') %>
 	        </li>
 	      <%- end %>
 	      <%- if @region.train_routes.count > 0 %>
-	        <li class='ui-state-default ui-corner-top'>
+	        <li id="train-tab" class='ui-state-default ui-corner-top'>
 	          <%= link_to('Train', '#tabs-train') %>
 	        </li>
 	      <%- end %>
 	      <%- if @region.tram_metro_routes.count > 0 %>
-	        <li class='ui-state-default ui-corner-top'>
+	        <li id="metro-tab" class='ui-state-default ui-corner-top'>
 	          <%= link_to('Metro, Underground or Tram', '#tabs-metro') %>
 	        </li>
 	      <%- end %>
 	      <%- if @region.ferry_routes.count > 0 %>
-	        <li class='ui-state-default ui-corner-top'>
+	        <li id="ferry-tab" class='ui-state-default ui-corner-top'>
 	          <%= link_to('Ferry', '#tabs-ferry') %>
 	        </li>
 	      <%- end %>
 	      <%- if @region.coach_routes.count > 0 %>
-	        <li class='ui-state-default ui-corner-top'>
+	        <li id="coach-tab" class='ui-state-default ui-corner-top'>
 	          <%= link_to('Coach', '#tabs-coach') %>
 	        </li>
 	      <%- end %>
