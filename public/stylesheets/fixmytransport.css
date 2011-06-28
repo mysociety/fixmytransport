@@ -306,11 +306,14 @@ form#search {
 	}
 /* ===[ Main Content ]=== */
 #main-content {
-	padding-bottom:10px;
+	min-height:400px;
 }
 	#main-content div {
       overflow: hidden
 	}
+#goto-top-wrap {
+	padding:10px 0;
+}
 /* ===[ Footer ]=== */
 #footer {
     color: #fff;
@@ -791,12 +794,13 @@ input.checkbox {
 }
 
 .form-list {
-	margin:2em 0 0.5em 0;
+	margin:80px 0 0.5em 0;
 	padding:0;
 	list-style-type:none;
 }
 	.form-list li {
 		display:inline-block;
+		float:left;
 		position:relative;
 		padding:5px;
 		margin-right:1.4em;
@@ -825,6 +829,7 @@ input.checkbox {
 		.form-list li .button {
 			padding:0.5em 1em;
 		}
+
 /*TIP BOX*/	
 .tipbox {
     display: block;
@@ -1669,7 +1674,7 @@ ol#large-ol {
 	display:block;
 	width:518px;
 	height:70px;
-	margin:2em auto;
+	margin:100px auto 0 auto;
 	background:url(../images/find_stop.jpg) -10px -86px no-repeat;
 }
 #find-stop:hover,
