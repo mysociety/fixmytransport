@@ -89,9 +89,9 @@ describe AccountsController do
 
       describe 'if the update is successful' do
 
-        it 'should redirect to the account page' do
+        it "should redirect to the user's profile page" do
           make_request(@default_params)
-          response.should redirect_to(account_path)
+          response.should redirect_to(profile_path(@mock_user))
         end
 
       end
