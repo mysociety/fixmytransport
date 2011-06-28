@@ -131,7 +131,7 @@ class CampaignsController < ApplicationController
       if (@campaign.update_attributes(params[:campaign]))
         @campaign.confirm
         @campaign.save!
-        redirect_to share_campaign_url(@campaign) 
+        redirect_to campaign_url(@campaign) 
       else
         render :action => "add_details"
       end

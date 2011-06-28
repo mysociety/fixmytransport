@@ -105,9 +105,9 @@ describe CampaignsController do
           make_request
         end
         
-        it 'should redirect to the share campaign url' do 
+        it 'should redirect to the campaign url' do 
           make_request
-          response.should redirect_to share_campaign_url(@mock_campaign)
+          response.should redirect_to campaign_url(@mock_campaign)
         end
         
       end
