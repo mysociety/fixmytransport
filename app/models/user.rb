@@ -38,6 +38,11 @@ class User < ActiveRecord::Base
   named_scope :registered, :conditions => { :registered => true }
 
   acts_as_authentic do |c|
+
+    # moving from SHA512 to BCrypt - remove when done 
+    c.crypto_provider = Authlogic::CryptoProviders::BCrypt
+    c.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha512
+
     # we validate the email with activerecord validation above
     c.validate_email_field = false
     c.merge_validates_confirmation_of_password_field_options({:unless => :password_not_required,
