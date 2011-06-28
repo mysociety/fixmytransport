@@ -8,7 +8,8 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery if :current_user # See ActionController::RequestForgeryProtection for details
   skip_before_filter :verify_authenticity_token, :unless => :current_user
-
+  before_filter :make_cachable
+  
   helper_method :location_search,
                 :main_url,
                 :admin_url,
@@ -19,6 +20,10 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password, :password_confirmation
 
   private
+  
+  def make_cachable
+    expires_in 60.seconds, :public => true unless current_user
+  end
 
   def current_user_session(refresh=false)
     return @current_user_session if (defined?(@current_user_session) && ! refresh)
