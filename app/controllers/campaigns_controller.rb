@@ -15,7 +15,7 @@ class CampaignsController < ApplicationController
     @next_action_join = data_to_string({ :action => :join_campaign,
                                          :id => @campaign.id,
                                          :redirect => campaign_path(@campaign),
-                                         :notice => "Please login or create an account to join this campaign" })
+                                         :notice => "Please sign in or create an account to join this campaign" })
     @title = @campaign.title
     @campaign.campaign_photos.build({})
     map_params_from_location(@campaign.location.points,
@@ -47,7 +47,7 @@ class CampaignsController < ApplicationController
         join_data = { :action => :join_campaign,
                       :id => @campaign.id,
                       :redirect => campaign_path(@campaign),
-                      :notice => "Please login or signup to join this campaign" }
+                      :notice => "Please sign in or create an account to join this campaign" }
         session[:next_action] = data_to_string(join_data)
         respond_to do |format|
           format.html do
