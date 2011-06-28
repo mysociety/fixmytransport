@@ -235,7 +235,7 @@ describe AccountsController do
         describe 'if the request asks for json' do 
         
           it 'should return the "confirmation_sent" template rendered as a string in the response' do 
-            @controller.stub!(:render_to_string).with(:template => 'shared/confirmation_sent', :layout => false).and_return("content")
+            @controller.stub!(:render_to_string).with(:partial => 'shared/confirmation_sent').and_return("content")
             make_request(format="json")
             JSON.parse(response.body)['html'].should == "content"
           end

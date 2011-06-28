@@ -444,7 +444,7 @@ $(document).ready(function(){
              window.location = response.redirect;
            }
            else if (response.html){
-             $(form_selector).html(response.html);
+             $(form_selector).html("<div class='ui-dialog-content'>"+response.html+"</div>");
            }else{
              window.location.reload();
            }

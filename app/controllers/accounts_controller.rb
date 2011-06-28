@@ -66,7 +66,7 @@ class AccountsController < ApplicationController
         format.json do
           @json = {}
           @json[:success] = true
-          @json[:html] = render_to_string :template => 'shared/confirmation_sent', :layout => false
+          @json[:html] = render_to_string :partial => 'shared/confirmation_sent'
           render :json => @json
         end
       end
