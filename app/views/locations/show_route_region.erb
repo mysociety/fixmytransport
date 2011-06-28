@@ -105,7 +105,7 @@
 	              </h4>
 	              <%- @region.train_routes_by_letter[first].each do |route| %>
 	                <div class='route-link'>
-	                  <%= link_to(route.name(from_stop=nil, short=true, first_letter=first), location_url(route)) %>
+	                  <%= link_to(route.short_name, location_url(route)) %>
 	                </div>
 	              <%- end %>
 	            </div>
@@ -114,7 +114,7 @@
 	        <%- else %>
 	          <%- @region.train_routes.each do |train_route| %>
 	            <div class='route-link'>
-	              <%= link_to(train_route.name(from_stop=nil, short=true), location_url(train_route)) %>
+	              <%= link_to(train_route.short_name, location_url(train_route)) %>
 	            </div>
 	          <%- end %>
 	        <%- end %> 
@@ -130,7 +130,7 @@
 	      </h3>
 	      <%- @region.tram_metro_routes.each do |tram_metro_route| %>
 	          <div class='route-link'>
-	            <%= link_to(tram_metro_route.name(from_stop=nil, short=true), location_url(tram_metro_route)) %>
+	            <%= link_to(tram_metro_route.short_name, location_url(tram_metro_route)) %>
 	          </div>
 	      <%- end %>
 	    </div>
@@ -143,7 +143,7 @@
 	      </h3>
 	      <%- @region.ferry_routes.each do |ferry_route| %>
 	        <div class='route-link'>
-	          <%= link_to(ferry_route.name(from_stop=nil, short=true), location_url(ferry_route)) %>
+	          <%= link_to(ferry_route.short_name, location_url(ferry_route)) %>
 	        </div>
 	      <%- end %>
 	    </div>

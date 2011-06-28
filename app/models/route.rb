@@ -44,7 +44,7 @@ class Route < ActiveRecord::Base
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
   attr_accessor :show_as_point, :journey_pattern_data
-  before_save :cache_route_coords, :generate_default_journey, :cache_area, :cache_description
+  before_save :cache_route_coords, :generate_default_journey, :cache_area, :cache_description, :cache_short_name
   is_route_or_sub_route
   is_location
 
@@ -84,6 +84,11 @@ class Route < ActiveRecord::Base
   def cache_area
     self.cached_area = nil
     self.cached_area = self.area
+  end
+  
+  def cache_short_name
+    self.cached_short_name = nil
+    self.cached_short_name = self.short_name
   end
 
   def description
@@ -126,14 +131,10 @@ class Route < ActiveRecord::Base
     areas
   end
 
-  def description
-    "#{name(from_stop=nil, short=true)} #{area(lowercase=true)}"
-  end
-
   def short_name
+    return self.cached_short_name if self.cached_short_name
     name(from_stop=nil, short=true)
   end
-  memoize :short_name
 
   def full_name
     "#{name} route"
