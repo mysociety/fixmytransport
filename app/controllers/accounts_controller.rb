@@ -19,7 +19,7 @@ class AccountsController < ApplicationController
     end
     if current_user.save
       flash[:notice] = t(:account_updated)
-      redirect_to account_url
+      redirect_to profile_url(current_user)
     else
       render :action => :edit
     end
