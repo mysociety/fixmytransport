@@ -13,7 +13,7 @@ class PasswordResetsController < ApplicationController
       @action = t(:your_password_will_not_be_changed)
       render 'shared/confirmation_sent'
     else  
-      flash[:notice] = t(:no_user_found_with_email)
+      flash[:error] = t(:no_user_found_with_email)
       render :action => :new  
     end  
   end
@@ -39,7 +39,7 @@ class PasswordResetsController < ApplicationController
     # not currently using a timeout on the tokens
     @user = User.find_using_perishable_token(params[:id], token_age=0)  
     unless @user && @user.registered?
-      flash[:notice] = t(:could_not_find_account)
+      flash[:error] = t(:could_not_find_account)
       redirect_to root_url  
     end  
   end
