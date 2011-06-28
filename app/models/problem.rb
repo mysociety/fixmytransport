@@ -215,28 +215,65 @@ class Problem < ActiveRecord::Base
 
   # Get a number of recent problems and campaigns, with an optional offset
   def self.find_recent_issues(number, options={})
+    conn = self.connection
+    if number
+      limit_clause = " LIMIT #{conn.quote(number)} "
+    else
+      limit_clause = ""
+    end
+    
     if options[:offset]
-      offset_clause = " OFFSET #{options[:offset]}"
+      offset_clause = " OFFSET #{conn.quote(options[:offset])}"
     else
       offset_clause = ""
     end
+    if options[:location]
+      location = options[:location]
+      location_id = conn.quote(location.id)
+      location_class = conn.quote(location.class.to_s)
+      if location.is_a?(Route)
+        # for a train route, we want to include problems on sub-routes of this route
+        # that were reported to a matching operator
+        operator_ids = location.operator_ids.map{ |id| conn.quote(id) }.join(',')
+        location_clause = "AND ((problems.location_id = #{location_id}
+                            AND problems.location_type = #{location_class})
+                            OR 
+                            (problems.location_id in (SELECT sub_route_id 
+                                             FROM route_sub_routes
+                                             WHERE route_id = #{location_id}) 
+                             AND problems.location_type = 'SubRoute' 
+                             AND problems.operator_id in (#{operator_ids}))) "
+      else
+        location_clause = " AND problems.location_id = #{location_id}
+                            AND problems.location_type = #{location_class} "
+      end
+    else
+      location_clause = ""
+    end
+    # grab the ids of visiblecampaigns and problems, order them by most recently created
+    # (problems) or active (campaigns)
+    visible_problem_codes = Problem.visible_status_codes.map{ |code| conn.quote(code) }.join(",")
+    visible_campaign_codes = Campaign.visible_status_codes.map{ |code| conn.quote(code) }.join(",")
     issue_info = self.connection.select_rows("SELECT id, model_type
                                              FROM
                                              (SELECT id, 'Problem' as model_type, confirmed_at as latest_date
                                               FROM problems
-                                              WHERE status_code in (#{Problem.visible_status_codes.join(",")})
+                                              WHERE status_code in (#{visible_problem_codes})
                                               AND campaign_id is null
+                                              #{location_clause}
                                               UNION
-                                              SELECT id, 'Campaign' as model_type, latest_event_at as latest_date
-                                              FROM campaigns
-                                              WHERE status_code in (#{Campaign.visible_status_codes.join(",")}))
+                                              SELECT campaigns.id, 'Campaign' as model_type, latest_event_at as latest_date
+                                              FROM campaigns, problems
+                                              WHERE campaigns.status_code in (#{visible_campaign_codes})
+                                              #{location_clause}
+                                              AND problems.campaign_id = campaigns.id)
                                              AS campaigns_and_problems
                                              ORDER by latest_date desc
-                                             LIMIT #{number}
+                                             #{limit_clause}
                                              #{offset_clause}")
     campaign_ids = {}
     problem_ids = {}
-    # store the index that each instance sits at in date order
+    # store the index that each id sits at in date order
     issue_info.each_with_index do |issue, index|
       if issue[1] == 'Problem'
         problem_ids[issue[0].to_i] = index
