@@ -58,6 +58,7 @@
 	display:inline-block;
 	width:100%;
 }
+
 /* Main Elements
    ================================================== */
 /* ===[ Body ]=== */
@@ -901,6 +902,13 @@ input.checkbox {
 
 form#create-campaign {
 	display:block;
+}
+
+
+/*===[Pagination]===*/
+.pagination span, 
+.pagination a {
+  padding: 0 0.5em;
 }
 
 /*===[Campaign Status]===*/
