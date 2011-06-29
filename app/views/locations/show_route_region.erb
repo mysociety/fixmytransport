@@ -16,36 +16,36 @@
 </div>
 <div id="main-content" class="container">
 	<%- content_for :stylesheets do %>
-	  <%= stylesheet_link_tag 'custom-theme/jquery-ui-1.8.13.custom' %>
+	  <%= stylesheet_link_tag 'ui-tabs-mod' %>
 	<%- end %>
 	
 	<%- cache(:action => 'show_route_region') do %>
 
-	  <div id='tabs' class='ui-tabs ui-widget ui-content ui-corner-all'>
+	  <div id='tabs' class='ui-tabs ui-widget ui-content'>
     
-	    <ul class='ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+	    <ul id="tabs-main-nav" class='font-1 ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-top'>
 	      <%- if @region.bus_routes.count > 0 %>
-	        <li class='ui-state-default ui-corner-top ui-tabs-selected ui-state-active'>
+	        <li id="bus-tab" class='ui-state-default ui-corner-top ui-tabs-selected ui-state-active'>
 	          <%= link_to('Bus', '#tabs-bus') %>
 	        </li>
 	      <%- end %>
 	      <%- if @region.train_routes.count > 0 %>
-	        <li class='ui-state-default ui-corner-top'>
+	        <li id="train-tab" class='ui-state-default ui-corner-top'>
 	          <%= link_to('Train', '#tabs-train') %>
 	        </li>
 	      <%- end %>
 	      <%- if @region.tram_metro_routes.count > 0 %>
-	        <li class='ui-state-default ui-corner-top'>
+	        <li id="metro-tab" class='ui-state-default ui-corner-top'>
 	          <%= link_to('Metro, Underground or Tram', '#tabs-metro') %>
 	        </li>
 	      <%- end %>
 	      <%- if @region.ferry_routes.count > 0 %>
-	        <li class='ui-state-default ui-corner-top'>
+	        <li id="ferry-tab" class='ui-state-default ui-corner-top'>
 	          <%= link_to('Ferry', '#tabs-ferry') %>
 	        </li>
 	      <%- end %>
 	      <%- if @region.coach_routes.count > 0 %>
-	        <li class='ui-state-default ui-corner-top'>
+	        <li id="coach-tab" class='ui-state-default ui-corner-top'>
 	          <%= link_to('Coach', '#tabs-coach') %>
 	        </li>
 	      <%- end %>
@@ -58,9 +58,9 @@
 	        </h3>
 	        <!-- Lots of routes - do alphabetical links -->
 	        <%- if @region.bus_routes.count > 20 %>
-	          <ul class='ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+	          <ul class='font-1 tabs-sub-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
 	            <%- @region.bus_route_letters.each do |first| %>
-	              <li class='ui-state-default ui-corner-top'>
+	              <li class='ui-state-default ui-corner-all'>
 	                <%= link_to(first, "#bus_starts_with_#{first}") %>
 	              </li>
 	            <%- end %>
@@ -91,9 +91,9 @@
         
 	        <!-- Lots of routes - do alphabetical links -->
 	        <%- if @region.train_routes.count > 20 %>
-	          <ul class='ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+	          <ul class='font-1 tabs-sub-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
 	          <%- @region.train_route_letters.each do |first| %>
-	            <li class='ui-state-default ui-corner-top'>
+	            <li class='ui-state-default ui-corner-all'>
 	              <%= link_to(first, "#train_starts_with_#{first}") %>
 	            </li>
 	          <%- end %>
@@ -155,9 +155,9 @@
 	        <%= raw t(:coach_routes, :count => @region.coach_routes.count, :national => national_route_link(@region, @national_region, 'tabs-coach')) %>
 	      </h3>
 	      <%- if @region.coach_routes.count > 20 %>
-	        <ul class='ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+	        <ul class='font-1 tabs-sub-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
 	          <%- @region.coach_route_letters.each do |first| %>
-	            <li class='ui-state-default ui-corner-top'>
+	            <li class='ui-state-default ui-corner-all'>
 	              <%= link_to(first, "#coach_starts_with_#{first}") %>
 	            </li>
 	          <%- end %>
@@ -184,7 +184,4 @@
 	  <%- end %>  
 	  </div>
 	<%- end %>
-	<div class="container">
-		<a href="#top" class="goto-top right">Top of page</a>
-	</div>
 </div>

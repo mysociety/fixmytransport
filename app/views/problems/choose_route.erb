@@ -30,7 +30,4 @@
 	<%- if @limit and @locations.size == @limit %>
 	  <%= link_to(t(:show_all), url_for(params.merge(:show_all => 1))) %>
 	<%- end %>
-	<div class="container">
-		<a href="#top" class="goto-top right">Top of page</a>
-	</div>
 </div>

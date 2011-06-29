@@ -1,4 +1,4 @@
-<li>
+<li class="open">
   <%- case event.event_type %>
   <%- when 'incoming_message_received' %>
     <%= render :partial => 'incoming_message', :locals => { :message => event.described, :event => event, :index => index } %>

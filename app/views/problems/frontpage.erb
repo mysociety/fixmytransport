@@ -3,7 +3,10 @@
 <%- end %>
 <script type="text/javascript">
 $(function(){
-	$('#frontpage-problem-scroller').cycle();
+	$('#frontpage-problem-scroller').cycle({
+		speed:   250,
+		timeout: 4000
+	});
 });
 </script>
 <%- content_for :banner_content do %>
@@ -21,19 +24,43 @@ $(function(){
 			</style>
 		</noscript>
 		<ul id="frontpage-problem-scroller">
-			<li><h1>Had a bad train journey?</h1></li>
-			<li><h1>Had a bad bus journey?</h1></li>
-			<li><h1>Does the ferry stink?</h1></li>
+			<li>
+				<h1>Had a bad train journey?</h1>
+				<%- if @version == 1 %>
+				  <img src="/images/frontpage-trainwreck.jpg" alt="" />
+				<%- end %>
+			</li>
+			<li>
+				<h1>Had a bad bus journey?</h1>
+				<%- if @version == 1 %>
+				  <img src="/images/frontpage-trainwreck2.jpg" alt="" />
+				<%- end %>
+			</li>
+			<li>
+				<h1>Did the ferry sink?</h1>
+				<%- if @version == 1 %>
+				  <img src="/images/frontpage-trainwreck3.jpg" alt="" />
+				<%- end %>
+			</li>
 		</ul>
 		
-		<%- if @version == 1 %>
-		  <img src="/images/frontpage-trainwreck.jpg" alt="" />
-		<%- end %>
-		
+
 		<p class="font-1">Report your problem:</p>
 		<%= link_to('STOP or STATION', find_stop_problems_url, :class => 'font-1 button green') %>
 		<%= raw link_to('JOURNEY or ROUTE', find_route_problems_url, :class => 'font-1 button green') %>
 		<p class="font-1">and we will help you get it fixed</p>
+		<%- if @version == 0 %>
+		<div id="followus" class="font-1">
+			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank">
+				<span class="icon facebook"></span>
+				Follow us on Facebook
+			</a>
+			<a href="http://twitter.com/FixMyTransport" target="_target">
+				<span class="icon twitter"></span>
+				Follow us on Twitter
+			</a>
+		</div>
+		<%- end %>
 	</div>
 	<div class="rightcol">
 		<h2>What FixMyTransport does</h2>
@@ -45,7 +72,7 @@ $(function(){
 			<li class="secret-done">Gets things done</li>
 		</ul>
 		<a href="#main-content" class="font-1 button">How does it work?</a>
-		
+		<%- if @version == 1 %>
 		<div id="followus" class="font-1">
 			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank" title="Facebook (opens in new window)">
 				<span class="icon facebook"></span>
@@ -56,6 +83,7 @@ $(function(){
 				Follow us on Twitter
 			</a>
 		</div>
+		<%- end %>
 	</div>
 </div>
 
@@ -114,8 +142,4 @@ $(function(){
 		</li>
 		</div>
 	</ol>
-	
-	<div class="container">
-		<a href="#top" class="goto-top right">Top of page</a>
-	</div>
 </div>

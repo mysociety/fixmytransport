@@ -4,7 +4,6 @@
  */
 
 $(document).ready(function(){
-    
     if ($('#other-country-notice').length > 0) {
       $.ajax({
         url: "/request_country",
@@ -47,10 +46,14 @@ $(document).ready(function(){
 		}
 	}
 	
+	//init
+	$('ul#campaign-thread li').removeClass('open');
+	
 	//main toggle
 	$('ul#campaign-thread li a.thread-item').click(function(e){
 		e.preventDefault();
-		thread($(this).parent('li'));
+		if(!$(this).hasClass('compact'))
+			thread($(this).parent('li'));
 	});
 
 	//show all
@@ -127,6 +130,17 @@ $(document).ready(function(){
        'Post to your Facebook wall and let everyone know!').show(); 
     $('#social-share').show();
   	$("#login-box").dialog({title: "Facebook"});
+  	$("#login-box").dialog("open");
+  	return false;    
+  });
+
+  //email
+  $('.email-trigger').click(function(e){
+    e.preventDefault();
+    $('.login-box .pane').hide();
+
+    $('#email-share').show();
+  	$("#login-box").dialog({title: "Email"});
   	$("#login-box").dialog("open");
   	return false;    
   });
@@ -549,13 +563,6 @@ $(document).ready(function(){
       }
     });
   });
-
-	/* Operator hide/show
-	   ================================================== */
-	$('.operator-trigger').click(function(){
-		var parent = $(this).parent();
-		$('ul', parent).slideToggle(1500);
-	});
 	
 	/* Fancy buttons - :active and IE don't play nice so lets do it js
 	    ================================================== */
