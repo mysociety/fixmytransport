@@ -9,6 +9,6 @@
 <div class="thread-details">
 	<div class="thread-copy"><%= raw simple_format(h(message.body)) %></div>
 	<div class="thread-furniture">
-		<div class="thumb"><img src="<%= message.author.profile_photo.url(:large_thumb) %>" /></div>
+		<div class="thumb"><img src="<%= message.author.profile_photo.url(:large_thumb) %>" alt="" /></div>
 	</div>
 </div>
