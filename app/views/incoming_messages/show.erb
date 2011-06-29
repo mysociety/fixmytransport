@@ -1,5 +1,14 @@
+<div id="banner">
+	<div class="container">
+		<h1>Incoming Message</h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+		<p><%= raw t(:this_message_was_sent_to, :campaign => link_to(h(@incoming_message.campaign.title), campaign_path(@incoming_message.campaign))) %></p>
+	</div>
+</div>
 <div id="main-content" class="container">
-	<%= raw t(:this_message_was_sent_to, :campaign => link_to(h(@incoming_message.campaign.title), campaign_path(@incoming_message.campaign))) %>
 	<div class='campaign-email'>
 	  <h2>
 	    <div class='from'>
