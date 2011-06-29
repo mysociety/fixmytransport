@@ -1,7 +1,7 @@
 <div id="main-content" class="container">
 	<h3><%= t(:your_account) %></h3>
 	<div class='account-info'>
-	  <%= image_tag current_user.profile_photo.url(:large_thumb), :class => 'avatar' %>
+	  <%= image_tag current_user.profile_photo.url(:large_thumb), :class => 'avatar' alt="profile image" %>
 	  <div>
 	    <%= t(:your_email_address) %>
 	    <%= current_user.email %>

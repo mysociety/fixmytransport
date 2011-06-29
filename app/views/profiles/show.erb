@@ -9,7 +9,7 @@
 
 <div id="greybanner">
   <div class="container">
-    <img src="<%= @user.profile_photo.url(:large_thumb) %>" class="avatar" />
+    <img src="<%= @user.profile_photo.url(:large_thumb) %>" class="avatar" alt="" />
     <h2><%= @user.name %></h2>
     <%- if @user.location %>
       <p><%= @user.location %></p>

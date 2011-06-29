@@ -69,7 +69,7 @@
 		<div class="box campaign-description">
 			<h3>Description</h3>
 		  	<%- if (!current_user) || !(current_user.supporter_or_initiator(@campaign)) %>
-			<img src="<%= @campaign.initiator.profile_photo.url(:small_thumb) %>" class="avatar" />
+			<img src="<%= @campaign.initiator.profile_photo.url(:small_thumb) %>" class="avatar" alt="" />
 			<%- end %>
 			<div>
 				<%- if !current_user || !(current_user.supporter_or_initiator(@campaign)) %>
@@ -118,7 +118,7 @@
 			  <%- @campaign.campaign_photos.each do |campaign_photo| %>
 			    <%- if ! campaign_photo.new_record? %>
 				    <li>
-				      <a href="<%= campaign_photo.image.url(:max) %>"><img src="<%= campaign_photo.image.url(:default) %>" />
+				      <a href="<%= campaign_photo.image.url(:max) %>"><img src="<%= campaign_photo.image.url(:default) %>" alt="" />
 				      </a>
 				    </li>
 				  <%- end %>
@@ -160,7 +160,7 @@
 				<span class="icon facebook"></span>
 				Facebook
 			</a>
-			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
+			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup" title="Twitter (opens in a new window)">
 				<span class="icon twitter"></span>
 				Twitter
 			</a>
@@ -177,7 +177,7 @@
 				<span class="icon facebook"></span>
 				Facebook
 			</a>
-			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup">
+			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup" title="Twitter (opens in a new window)">
 				<span class="icon twitter"></span>
 				Twitter
 			</a>
@@ -207,7 +207,7 @@
 		<div class="box">
 			<h5>Campaign Manager</h5>
 			<div class="greybox">
-				<div class="avatar"><img src="<%= @campaign.initiator.profile_photo.url(:large_thumb) %>" /></div>
+				<div class="avatar"><img src="<%= @campaign.initiator.profile_photo.url(:large_thumb) %>" alt="" /></div>
 				<div class="user-info">
 					<a class="name" href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a>
 					<%- if @campaign.initiator.location %>
