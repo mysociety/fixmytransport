@@ -1,3 +1,31 @@
+<%- content_for :javascript do %>
+<noscript>
+	<style>
+		#banner {
+			padding:10px;
+		}
+		.form-1 ul li {
+			width:100%;
+		}
+		.form-1 input,
+		.form-1 textarea {
+			clear:both;
+		}
+		.tipbox, .tipbox.fixed {
+			position:relative;
+			left: 0;
+			top:10px;
+			display:inline;
+			float:left;
+			width:380px;
+		}
+		.tipbox .tip-close, .tipbox.fixed .tip-close,
+		.tipbox h5, .tipbox.fixed h5 {
+			display:none;
+		}
+	</style>
+</noscript>
+<%- end %>
 <%- @title = t(:reporting_a_problem, :location => @problem.location.name) %>
 <div id="banner">
 	<div class="container">

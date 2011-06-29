@@ -1,12 +1,7 @@
 <%- content_for :javascript do %>
 <noscript>
 	<style>
-		ul#process {
-			display:none;
-		}
 		#banner {
-			width:940px;
-			margin:3em auto 1em auto;
 			padding:10px;
 		}
 		.form-1 ul li {
@@ -18,16 +13,28 @@
 		}
 		.tipbox, .tipbox.fixed {
 			position:relative;
-		    right: 0;
+			left: 0;
+			top:10px;
+			width:380px;
 			display:inline;
-			float:right
+			float:left
+		}
+		.tipbox .tip-close, .tipbox.fixed .tip-close,
+		.tipbox h5, .tipbox.fixed h5 {
+			display:none;
+		}
+		.button {
+			display:block;
+			float:left;
+			clear:left;
+			margin-top:20px;
 		}
 	</style>
 </noscript>
 <%- end %>
 <div id="banner">
 	<div class="container">
-		<h1>Title</h1>
+		<h1>Add Details</h1>
 	</div>
 </div>
 
