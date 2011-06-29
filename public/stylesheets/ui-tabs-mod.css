@@ -232,11 +232,10 @@
 			.operator-tabs-nav li.ui-state-active a span.num {
 				color:#0075A0;
 			}
-.ui-tabs .tabs-sub-nav {
-	background:#DFEEF5;
-	padding:7px 8px 10px;
-}
+
 .ui-tabs .tabs-sub-nav.ui-corner-all {
+	background:#F4F4F4;
+	padding:7px 8px 10px;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
@@ -265,15 +264,3 @@
 		-moz-border-radius: 8px;
 		-webkit-border-radius: 8px;
 	}
-
-#tabs-bus,
-#tabs-train,
-#tabs-ferry,
-#tabs-tram,
-#operator-tabs-routes,
-#operator-tabs-areas {
-	margin-top:-3px;
-	-webkit-box-shadow: 0px -6px 2px -4px #666666;
-	-moz-box-shadow: 0px -6px 2px -4px #666666;
-	box-shadow: 0px -6px 2px -4px #666666;
-}

@@ -21,31 +21,31 @@
 	
 	<%- cache(:action => 'show_route_region') do %>
 
-	  <div id='tabs' class='ui-tabs ui-widget ui-content ui-corner-all'>
+	  <div id='tabs' class='ui-tabs ui-widget ui-content'>
     
-	    <ul id="tabs-main-nav" class='font-1 ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+	    <ul id="tabs-main-nav" class='font-1 ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-top'>
 	      <%- if @region.bus_routes.count > 0 %>
-	        <li id="bus-tab" class='ui-state-default ui-corner-all ui-tabs-selected ui-state-active'>
+	        <li id="bus-tab" class='ui-state-default ui-corner-top ui-tabs-selected ui-state-active'>
 	          <%= link_to('Bus', '#tabs-bus') %>
 	        </li>
 	      <%- end %>
 	      <%- if @region.train_routes.count > 0 %>
-	        <li id="train-tab" class='ui-state-default ui-corner-all'>
+	        <li id="train-tab" class='ui-state-default ui-corner-top'>
 	          <%= link_to('Train', '#tabs-train') %>
 	        </li>
 	      <%- end %>
 	      <%- if @region.tram_metro_routes.count > 0 %>
-	        <li id="metro-tab" class='ui-state-default ui-corner-all'>
+	        <li id="metro-tab" class='ui-state-default ui-corner-top'>
 	          <%= link_to('Metro, Underground or Tram', '#tabs-metro') %>
 	        </li>
 	      <%- end %>
 	      <%- if @region.ferry_routes.count > 0 %>
-	        <li id="ferry-tab" class='ui-state-default ui-corner-all'>
+	        <li id="ferry-tab" class='ui-state-default ui-corner-top'>
 	          <%= link_to('Ferry', '#tabs-ferry') %>
 	        </li>
 	      <%- end %>
 	      <%- if @region.coach_routes.count > 0 %>
-	        <li id="coach-tab" class='ui-state-default ui-corner-all'>
+	        <li id="coach-tab" class='ui-state-default ui-corner-top'>
 	          <%= link_to('Coach', '#tabs-coach') %>
 	        </li>
 	      <%- end %>
