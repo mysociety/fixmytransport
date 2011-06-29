@@ -32,6 +32,7 @@
 	</style>
 </noscript>
 <%- end %>
+
 <div id="banner">
 	<div class="container">
 		<h1>Add Details</h1>
@@ -44,46 +45,45 @@
 	</div>
 </div>
 	<div id="main-content" class="container">
-	  <%- form_for @campaign, :url => add_details_campaign_path(@campaign), :html => {:class => 'form-1', :method => :post, :multipart => true} do |f| %>
-			<ul>
-				<li>
-				  <%- if @campaign.errors.on('title') %>
-				    <%- title_error_style = '' %>
-				  <%- else %>
-				    <%- title_error_style = 'display: none;'%>
-				  <%- end %>
-            <div class='error' style="<%= title_error_style %>">
-              <%= @campaign.errors.on('title') %>
-            </div>
-            <%=  f.label :title, raw("Please help me persuade <span>#{@campaign.responsible_org_descriptor}</span> to:") %>
-            <%= raw f.text_field :title %>
-					<div class="tipbox">
-						<a href="#" class="tip-close">Close</a>
-						<h5>Make a headline</h5>
-						<p>Give your campaign a good headline</p>
-						<p>E.g. "<em>Please help me persuade The Operator to get rid of the awful smell between Manors and Monument on the Metro</em>"</p>
-					</div>
-				</li>
+  <%- form_for @campaign, :url => add_details_campaign_path(@campaign), :html => {:class => 'form-1', :method => :post, :multipart => true} do |f| %>
+		<ul>
+			<li>
+			  <%- if @campaign.errors.on('title') %>
+			    <%- title_error_style = '' %>
+			  <%- else %>
+			    <%- title_error_style = 'display: none;'%>
+			  <%- end %>
+          <div class='error' style="<%= title_error_style %>">
+            <%= @campaign.errors.on('title') %>
+          </div>
+          <%=  f.label :title, raw("Please help me persuade <span>#{@campaign.responsible_org_descriptor}</span> to:") %>
+          <%= raw f.text_field :title %>
+				<div class="tipbox">
+					<a href="#" class="tip-close">Close</a>
+					<h5>Make a headline</h5>
+					<p>Give your campaign a good headline</p>
+					<p>E.g. "<em>Please help me persuade The Operator to get rid of the awful smell between Manors and Monument on the Metro</em>"</p>
+				</div>
+			</li>
 
-				<li>
-				  <%- if @campaign.errors.on('description') %>
-				    <%- description_error_style = '' %>
-				  <%- else %>
-				    <%- description_error_style = 'display: none;'%>
-				  <%- end %>
-            <div class='error' style="<%= description_error_style %>">
-              <%= @campaign.errors.on('description') %>
-            </div>
-				   <%= f.label :description, "Description" %>
-				   <%= raw f.text_area :description %>
-					<div class="tipbox">
-						<a href="#" class="tip-close">Close</a>
-						<h5>Add a short description</h5>
-						<p>In no more than 40 words, provide a quick description of the issue. This will allow others to easily understand and support your campaign.</p>
-					</div>
-					<button type="submit" class="button">Submit</button>
-				</li>
-			</ul>
-		<%- end %>
-	</div>
+			<li>
+			  <%- if @campaign.errors.on('description') %>
+			    <%- description_error_style = '' %>
+			  <%- else %>
+			    <%- description_error_style = 'display: none;'%>
+			  <%- end %>
+          <div class='error' style="<%= description_error_style %>">
+            <%= @campaign.errors.on('description') %>
+          </div>
+			   <%= f.label :description, "Description" %>
+			   <%= raw f.text_area :description %>
+				<div class="tipbox">
+					<a href="#" class="tip-close">Close</a>
+					<h5>Add a short description</h5>
+					<p>In no more than 40 words, provide a quick description of the issue. This will allow others to easily understand and support your campaign.</p>
+				</div>
+				<button type="submit" class="button">Submit</button>
+			</li>
+		</ul>
+	<%- end %>
 </div>
