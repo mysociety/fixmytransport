@@ -1,6 +1,19 @@
 <%- content_for :javascript do  %>
   <%= raw map_javascript_include_tags %>
 <%- end %>
+<%- content_for :meta do %>
+  <meta property="og:title" content="<%= @stop_area.full_name %>" />
+  <meta property="og:type" content="landmark" />
+  <meta property="og:latitude" content="<%= @stop_area.lat %>" />
+  <meta property="og:longitude" content="<%= @stop_area.lon %>" />
+  <meta property="og:locality" content="<%= @stop_area.locality_name %>" />
+  <meta property="og:country-name" content="Great Britain" />
+  <meta property="og:url" content="<%= request.url %>"/>
+  <meta property="og:image" content="<%=  main_url("#{stop_icon(@stop_area, small=false)}.png") %>"/>
+  <meta property="og:description" content="<%= @stop_area.description %>"/>
+  <meta property="og:site_name" content="FixMyTransport"/>
+<%- end %>
+
 <div id="banner">
 	<div class="container">
 		<h1><%= "#{@stop_area.full_name}" %></h1>
@@ -15,7 +28,7 @@
         
       <%- if !@stop_area.area.blank? %>
         <p><span class='locality'>
-          <%= "In #{@stop_area.area}" %>
+          <%= "In #{@stop_area.locality_name}" %>
         </span></p>
       <%- end %>
 	</div>
