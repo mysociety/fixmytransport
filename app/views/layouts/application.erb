@@ -21,7 +21,7 @@
 	<%= raw javascript_include_tag("http://use.typekit.com/fji8ime.js")%>
 	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   </head>
-	<body>
+	<body role="application">
 		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
 		<div class="staging-banner top-notice">
 			<div class="container"><%= t(:development_site) %></div>
@@ -29,8 +29,8 @@
 		<%- end %>
     <%= yield :banner_content %>
 		<div id="wrapper">
-			<div id="top" class="container">
-				<ul id="mysociety-tab">
+			<div id="top" class="container" role="banner">
+				<ul id="mysociety-tab" role="navigation">
 					<li><a id="mysociety-logo" href="http://mysociety.org">MySociety</a></li>
 					<li><a href="http://mysociety.org/donate">Donate</a></li>
 					<li><a href="http://www.mysociety.org/projects/">Our Sites</a></li>
@@ -59,7 +59,7 @@
 					<%- end %>
 			<%- end %>
 			<%= yield %>
-    	</div>
+    </div>
 
 		<div id="footer">
 			<div class="container">
