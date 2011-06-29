@@ -1,13 +1,13 @@
 <div class="manager-tools">
 	<h2 class="font-1">Manage this campaign</h2>
 	<div class="manager-tools-inner">
-		
+
 		<%- if !@campaign.recommended_assignments.empty? %>
 		<div class="recommended-actions">
 			<h3 class="font-1">Recommended actions</h3>
 			<ul>
 			  <%- @campaign.recommended_assignments.each do |assignment| %>
-				<li>			  
+				<li>
 				 	<a href="<%= edit_campaign_assignment_path(assignment.campaign, assignment) %>">
 	  					<span class="icon big <%=assignment_icon(assignment) %>"></span>
  						<div>
