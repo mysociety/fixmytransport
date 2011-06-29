@@ -71,6 +71,14 @@ namespace :temp do
     end
   end
   
+  desc 'Cache route short names'
+  task :cache_route_short_names => :environment do
+    Route.find_each(:conditions => ['cached_short_name is null']) do |route|
+      Route.connection.execute("UPDATE routes set cached_short_name = #{Route.connection.quote(route.short_name)} where id = #{route.id}" )
+      puts '.'
+    end
+  end
+  
   desc 'Cache route areas'
   task :cache_route_areas => :environment do
     Route.find_each(:conditions => ['cached_area is null']) do |route|

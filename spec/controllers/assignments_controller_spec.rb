@@ -30,7 +30,7 @@ describe AssignmentsController do
         controller.stub!(:current_user).and_return(nil)
         make_request
         response.should redirect_to(login_url)
-        flash[:notice].should == "Login as a FixMyTransport boffin to create an assignment for this campaign"
+        flash[:notice].should == "Sign in as a FixMyTransport boffin to create an assignment for this campaign"
       end
 
     end

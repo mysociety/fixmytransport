@@ -22,8 +22,8 @@ class Region < ActiveRecord::Base
   has_many :admin_areas
   has_many :localities, :through => :admin_areas
   has_many :routes
-  has_many :bus_routes
-  has_many :train_routes, :order => 'cached_slug asc'
+  has_many :bus_routes, :order => 'number asc'
+  has_many :train_routes, :order => 'cached_short_name asc'
   has_many :coach_routes, :order => 'number asc'
   has_many :tram_metro_routes
   has_many :ferry_routes
@@ -65,23 +65,18 @@ class Region < ActiveRecord::Base
   end
   memoize :train_route_letters
 
-  # train routes get indexed by the first letter of each terminus
+  # train routes get indexed by their short name
   def train_routes_by_letter
-    by_letter(train_routes){ |route| route.terminuses.map{ |terminus| terminus.name } }
+    by_letter(train_routes){ |route| route.short_name  }
   end
   memoize :train_routes_by_letter
 
   def by_letter(routes)
-    routes_by_first = {}
+    routes_by_first = Hash.new { |hash, key| hash[key] = [] }
     routes.each do |route|
-      descriptors = yield route
-      firsts = descriptors.map{ |descriptor| descriptor.first }
-      firsts.each do |first|
-        if !routes_by_first[first]
-          routes_by_first[first] = []
-        end
-        routes_by_first[first] << route
-      end
+      descriptor = yield route
+      first = descriptor[0].chr
+      routes_by_first[first] << route
     end
     routes_by_first
   end

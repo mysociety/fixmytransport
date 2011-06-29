@@ -5,8 +5,8 @@ en:
   fixmytransport: "FixMyTransport"
   campaign_start_date: Start date
   write_to_operator: Write to the operator
-  login_to: "Login as %{user} to %{requested_action}"
-  wrong_user: "To %{requested_action}, you'll need to %{logout_link}, and login as %{name}."
+  login_to: "Sign in as %{user} to %{requested_action}"
+  wrong_user: "To %{requested_action}, you'll need to %{logout_link}, and sign in as %{name}."
   password_confirmation: Password (again)
   password_length_error: "Please enter a password that is at least %{length} characters long"
   password_match_error: "The password confirmation does not match the password"

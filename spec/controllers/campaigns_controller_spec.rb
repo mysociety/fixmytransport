@@ -105,9 +105,9 @@ describe CampaignsController do
           make_request
         end
         
-        it 'should redirect to the share campaign url' do 
+        it 'should redirect to the campaign url' do 
           make_request
-          response.should redirect_to share_campaign_url(@mock_campaign)
+          response.should redirect_to campaign_url(@mock_campaign)
         end
         
       end
@@ -366,7 +366,7 @@ describe CampaignsController do
                                           :campaign_events => [],
                                           :status= => true)
       @mock_campaign.stub!(:comments).and_return(mock('comments', :build => @mock_comment))
-      @expected_notice = "Please login or signup to add your comment to this campaign"
+      @expected_notice = "Please sign in or create an account to add your comment to this campaign"
       @expected_redirect = campaign_url(@mock_campaign)
     end
 
@@ -633,7 +633,7 @@ describe CampaignsController do
         it 'should return a hash with a notice key giving a notice to show to the user' do 
           make_request(@default_params.update(:format => 'json'))
           json_hash = JSON.parse(response.body)
-          json_hash['notice'].should == 'Please login or signup to join this campaign'
+          json_hash['notice'].should == 'Please sign in or create an account to join this campaign'
         end
       
       end
@@ -647,7 +647,7 @@ describe CampaignsController do
         
         it 'should display a notice that the user needs to login to join the campaign' do
           make_request(@default_params)
-          flash[:notice].should == 'Please login or signup to join this campaign'
+          flash[:notice].should == 'Please sign in or create an account to join this campaign'
         end
         
       end

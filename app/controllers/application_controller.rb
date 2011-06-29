@@ -345,7 +345,7 @@ class ApplicationController < ActionController::Base
                        :commented_type => commented_type,
                        :text => @comment.text,
                        :redirect => @template.commented_url(@comment.commented),
-                       :notice => "Please login or signup to add your comment to this #{commented_type}" }
+                       :notice => "Please sign in or create an account to add your comment to this #{commented_type}" }
       session[:next_action] = data_to_string(comment_data)
       respond_to do |format|
         format.html do

@@ -14,15 +14,15 @@ en:
   browse_or_create_campaign: Browse the transport network or create a campaign
   feed: Feed
   campaigns_feed: Feed of campaigns
-  logged_in_as: "Logged in as %{name}"
-  login: Login
-  logout: Logout
+  logged_in_as: "Signed in as %{name}"
+  login: Sign in
+  logout: Sign out
   must_be_logged_in: "You must be logged in to %{requested_action}"
   a_fixmytransport_boffin: "a FixMyTransport boffin"
   campaigns_add_comment_access_message: "add a comment"
   must_be_logged_out: "You must be logged out to access this page"
-  login_successful: "Login successful!"
-  logout_successful: "Logout successful!"
+  login_successful: "Sign in successful!"
+  logout_successful: "Sign out successful!"
   development_site: "This is a developer site; things might break at any time, and the database will be periodically deleted."
   do_you_want_to_report: Do you want to report a problem at a
   stop_or_station: stop or station

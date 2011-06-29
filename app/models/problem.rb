@@ -230,8 +230,14 @@ class Problem < ActiveRecord::Base
     if options[:location]
       location = options[:location]
       location_id = conn.quote(location.id)
-      location_class = conn.quote(location.class.to_s)
-      if location.is_a?(Route) && !location.sub_routes.empty?
+      # make sure we have 'Route' for routes, not one of it's subclasses
+      if location.class.superclass == ActiveRecord::Base 
+        location_class = location.class.to_s 
+      else
+        location_class = location.class.superclass.to_s
+      end
+      location_class = conn.quote(location_class)
+      if location_class == 'Route' && !location.sub_routes.empty?
         # for a train route, we want to include problems on sub-routes of this route
         # that were reported to a matching operator
         operator_ids = location.operator_ids.map{ |id| conn.quote(id) }.join(',')
