@@ -775,9 +775,12 @@ ul.user-list {
 .form-1 input {
     height: 20px
 }
-
 .form-1 textarea {
     height: 150px
+}
+.form-1 select {
+	padding: 4px;
+    width: 412px;
 }
 
 .form-1 .static-value{
@@ -1425,7 +1428,7 @@ ul#process {
 
 /*===[Front Page]===*/
 #frontpage-top {
-	margin:5em auto;
+	margin:1em auto;
 }
 	#frontpage-top .leftcol {
 		text-align:center;
