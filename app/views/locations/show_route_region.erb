@@ -58,7 +58,7 @@
 	        </h3>
 	        <!-- Lots of routes - do alphabetical links -->
 	        <%- if @region.bus_routes.count > 20 %>
-	          <ul class='tabs-sub-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+	          <ul class='font-1 tabs-sub-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
 	            <%- @region.bus_route_letters.each do |first| %>
 	              <li class='ui-state-default ui-corner-all'>
 	                <%= link_to(first, "#bus_starts_with_#{first}") %>
@@ -91,7 +91,7 @@
         
 	        <!-- Lots of routes - do alphabetical links -->
 	        <%- if @region.train_routes.count > 20 %>
-	          <ul class='tabs-sub-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+	          <ul class='font-1 tabs-sub-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
 	          <%- @region.train_route_letters.each do |first| %>
 	            <li class='ui-state-default ui-corner-all'>
 	              <%= link_to(first, "#train_starts_with_#{first}") %>
@@ -155,7 +155,7 @@
 	        <%= raw t(:coach_routes, :count => @region.coach_routes.count, :national => national_route_link(@region, @national_region, 'tabs-coach')) %>
 	      </h3>
 	      <%- if @region.coach_routes.count > 20 %>
-	        <ul class='tabs-sub-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+	        <ul class='font-1 tabs-sub-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
 	          <%- @region.coach_route_letters.each do |first| %>
 	            <li class='ui-state-default ui-corner-all'>
 	              <%= link_to(first, "#coach_starts_with_#{first}") %>
