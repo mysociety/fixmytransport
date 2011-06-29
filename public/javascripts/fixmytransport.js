@@ -563,13 +563,6 @@ $(document).ready(function(){
       }
     });
   });
-
-	/* Operator hide/show
-	   ================================================== */
-	$('.operator-trigger').click(function(){
-		var parent = $(this).parent();
-		$('ul', parent).slideToggle(1500);
-	});
 	
 	/* Fancy buttons - :active and IE don't play nice so lets do it js
 	    ================================================== */

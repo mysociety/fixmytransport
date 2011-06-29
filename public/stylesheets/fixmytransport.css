@@ -1683,17 +1683,6 @@ ul#large-ul {
 		}
 
 /*===[Operator Page]===*/
-.operators .left,
-.operators .right {
-	display:block;
-	width:45%;
-}
-.operators .right{
-	margin-left:10%;
-}
-.operators div ul {
-	display:none;
-}
 
 /*===[Find Stop Page]===*/
 #find-stop {
