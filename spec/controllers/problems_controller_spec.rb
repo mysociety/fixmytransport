@@ -546,6 +546,8 @@ describe ProblemsController do
                                           :text => 'comment text',
                                           :confirm! => true,
                                           :skip_name_validation= => true,
+                                          :mark_fixed => true, 
+                                          :mark_open => true,
                                           :status= => true)
       @mock_problem.stub!(:comments).and_return(mock('comments', :build => @mock_comment))
       @expected_notice = "Please sign in or create an account to add your comment to this problem"

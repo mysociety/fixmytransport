@@ -62,6 +62,9 @@ class Comment < ActiveRecord::Base
         if mark_fixed
           commented.status = :fixed
         end
+        if mark_open && self.user == commented.reporter
+          commented.status = :confirmed
+        end
         commented.updated_at = Time.now
         commented.save!
       elsif commented.is_a? Campaign

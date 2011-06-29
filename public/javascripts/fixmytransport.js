@@ -403,10 +403,18 @@ $(document).ready(function(){
 	    if (response.success) {
         // clear the comment field
         $(form_selector + " #comment_text").val("");
+        $(form_selector + " #comment_mark_fixed").attr("checked", false);
+        $(form_selector + " #comment_mark_open").attr("checked", false);
+        
+        // mark a problem as fixed
         if (response.mark_fixed) {
-          $(form_selector + " #comment_mark_fixed").attr("checked", false);
           $("#banner .container").append('<div class="right"><span class="ribbon">Fixed</span></div>');
         }
+        // mark a problem as open
+        if (response.mark_open) {
+          $("#banner .container .right").remove();
+        }
+        
         // clear the hidden thread index field
         $(form_selector + " .last_thread_index").remove();
 

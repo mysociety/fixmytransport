@@ -11,9 +11,17 @@
 <%= raw f.text_area :text %>
 <div id="comment-login-options">	
     <%- if context == 'problems' %>
+      <%- if @commentable.status == :fixed %>
+        <%- if current_user && current_user == @commentable.reporter %>
+          <span class="checkbox"><%= raw f.check_box :mark_open %>
+            <%= raw f.label :mark_open, t(:mark_open) %>
+          </span>
+        <%- end %>
+      <%- else %>
       <span class="checkbox"><%= raw f.check_box :mark_fixed %>
         <%= raw f.label :mark_fixed, t(:mark_fixed) %>
       </span>
+      <%- end %>
     <%- end %>
 	<button class="button" type="submit">Post</button>
 </div>
