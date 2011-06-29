@@ -2,6 +2,9 @@
 <div id="banner">
 	<div class="container">
 		<h1><a href="<%= location_url(@problem.location) %>"><%= @problem.location.description %></a></h1>
+		<div class="right">
+			<span class="ribbon">Fixed</span>
+  		</div>
 	</div>
 </div>			
 
@@ -32,9 +35,7 @@
 			<h5>Posted</h5>
 			<ul>
 				<li><a href="<%=  profile_url(@problem.reporter) %>"><%= @problem.reporter_name %></a></li>
-				<li><%= @problem.confirmed_at.to_date.to_s(:short) %></li>						
+				<li><%= @problem.confirmed_at.to_date.to_s(:short) %></li>
 			</ul>
-
-
 	</div>
 </div>
