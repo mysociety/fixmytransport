@@ -15,7 +15,7 @@ class Comment < ActiveRecord::Base
                1 => 'Confirmed', 
                2 => 'Hidden' })
                
-  named_scope :visible, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
+  named_scope :visible, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at asc"
   
   def visible?
     self.status_code == self.symbol_to_status_code[:confirmed]

@@ -403,7 +403,10 @@ $(document).ready(function(){
 	    if (response.success) {
         // clear the comment field
         $(form_selector + " #comment_text").val("");
-
+        if (response.mark_fixed) {
+          $(form_selector + " #comment_mark_fixed").attr("checked", false);
+          $("#banner .container").append('<div class="right"><span class="ribbon">Fixed</span></div>');
+        }
         // clear the hidden thread index field
         $(form_selector + " .last_thread_index").remove();
 

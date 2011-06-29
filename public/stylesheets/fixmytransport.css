@@ -682,11 +682,10 @@ ul.user-list {
 	width:98%;
 	margin:0 1%;
 }
-#comment-login-options p {
+#comment-login-options .checkbox {
 	display:inline-block;
-	width:25%;
+	width:50%;
 	float:left;
-	font-size:1.4em;
 	margin:0;
 	line-height:1;
 }

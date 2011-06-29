@@ -198,6 +198,7 @@ class ApplicationController < ActionController::Base
         commented = commented_type.titleize.constantize.find(id)
         comment = commented.add_comment(user, 
                               post_login_action_data[:text],
+                              post_login_action_data[:mark_fixed],
                               confirmed=false, token=user.perishable_token)
         return comment
       when :create_problem
@@ -250,6 +251,7 @@ class ApplicationController < ActionController::Base
         commented = commented_type.titleize.constantize.find(id)
         commented.add_comment(current_user, 
                              post_login_action_data[:text],
+                             post_login_action_data[:mark_fixed],
                              confirmed=true)
         flash[:notice] = "Thanks for your comment"
       when :create_problem
@@ -326,7 +328,8 @@ class ApplicationController < ActionController::Base
                                           :locals => { :comment => @comment, 
                                                        :index => index }
           @json = { :success => true,
-                    :html => "<li>#{comment_html}</li>" }
+                    :html => "<li>#{comment_html}</li>",
+                    :mark_fixed => @comment.mark_fixed }
           render :json => @json
         end
       end
@@ -344,6 +347,7 @@ class ApplicationController < ActionController::Base
                        :id => @comment.commented_id,
                        :commented_type => commented_type,
                        :text => @comment.text,
+                       :mark_fixed => @comment.mark_fixed, 
                        :redirect => @template.commented_url(@comment.commented),
                        :notice => "Please sign in or create an account to add your comment to this #{commented_type}" }
       session[:next_action] = data_to_string(comment_data)

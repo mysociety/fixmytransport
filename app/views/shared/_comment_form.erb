@@ -10,6 +10,11 @@
 <%= raw f.label :text, {}, {:style => 'display:none'} %>
 <%= raw f.text_area :text %>
 <div id="comment-login-options">	
+    <%- if context == 'problems' %>
+      <span class="checkbox"><%= raw f.check_box :mark_fixed %>
+        <%= raw f.label :mark_fixed, t(:mark_fixed) %>
+      </span>
+    <%- end %>
 	<button class="button" type="submit">Post</button>
 </div>
 <%- end %>
