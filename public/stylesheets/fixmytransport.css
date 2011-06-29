@@ -813,6 +813,7 @@ input.checkbox {
 		background:#DFEEF5;
 		padding:5px;
 		max-width:40%;
+		margin-top:5px;
 	}
 	.form-list li.fieldset:hover,
 	.form-list li.active {
@@ -837,9 +838,6 @@ input.checkbox {
 			display:block;
 			position:absolute;
 			top:-2em;
-		}
-		.form-list li .button {
-			padding:0.5em 1em;
 		}
 
 /*TIP BOX*/	
