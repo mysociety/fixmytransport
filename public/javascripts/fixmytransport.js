@@ -46,10 +46,14 @@ $(document).ready(function(){
 		}
 	}
 	
+	//init
+	$('ul#campaign-thread li').removeClass('open');
+	
 	//main toggle
 	$('ul#campaign-thread li a.thread-item').click(function(e){
 		e.preventDefault();
-		thread($(this).parent('li'));
+		if(!$(this).hasClass('compact'))
+			thread($(this).parent('li'));
 	});
 
 	//show all
