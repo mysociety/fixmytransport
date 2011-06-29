@@ -1478,10 +1478,16 @@ ul#process {
 			width:200px;
 			margin:3em auto 0 auto;
 		}
+		#frontpage-top #followus a {
+			color:#333;
+		}
 			#frontpage-top .rightcol #followus a {
-				color:#333;
 				display:block;
 				margin-bottom:1em;
+			}
+			#frontpage-top .leftcol #followus a {
+				margin:2em 1em 1em 1em;
+				display:inline-block;
 			}
 		#frontpage-top .rightcol ul#secret-list {
 			display:block;
