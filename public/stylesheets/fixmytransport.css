@@ -1642,6 +1642,9 @@ ul#large-ul {
     margin: 0 0 1em 0;
     padding: 0;
     clear: both;
+	display:block;
+}
+ul#large-ul {
 	display:inline-block;
 }
 	ol#large-ol li,
