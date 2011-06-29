@@ -49,6 +49,18 @@ $(function(){
 		<%= link_to('STOP or STATION', find_stop_problems_url, :class => 'font-1 button green') %>
 		<%= raw link_to('JOURNEY or ROUTE', find_route_problems_url, :class => 'font-1 button green') %>
 		<p class="font-1">and we will help you get it fixed</p>
+		<%- if @version == 0 %>
+		<div id="followus" class="font-1">
+			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank">
+				<span class="icon facebook"></span>
+				Follow us on Facebook
+			</a>
+			<a href="http://twitter.com/FixMyTransport" target="_target">
+				<span class="icon twitter"></span>
+				Follow us on Twitter
+			</a>
+		</div>
+		<%- end %>
 	</div>
 	<div class="rightcol">
 		<h2>What FixMyTransport does</h2>
@@ -60,7 +72,7 @@ $(function(){
 			<li class="secret-done">Gets things done</li>
 		</ul>
 		<a href="#main-content" class="font-1 button">How does it work?</a>
-		
+		<%- if @version == 1 %>
 		<div id="followus" class="font-1">
 			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank">
 				<span class="icon facebook"></span>
@@ -71,6 +83,7 @@ $(function(){
 				Follow us on Twitter
 			</a>
 		</div>
+		<%- end %>
 	</div>
 </div>
 
