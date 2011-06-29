@@ -19,9 +19,11 @@ data/organizations/*
 data/NPTDR/
 data/mail_conf
 cache/*
+public/.DS_Store
 public/index.html
 public/files
 public/files/*
+public/images/.DS_Store
 public/system
 public/javascripts/libraries.js
 public/javascripts/admin_libraries.js
