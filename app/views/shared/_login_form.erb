@@ -34,9 +34,9 @@
 	</li>	
 	<li>
 		<button class="button" type="submit">Sign In</button>
-		<label for="user_session_remember_me">Keep me signed in</label><input type="checkbox" class="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1">    
+		<label for="user_session_remember_me">Keep me signed in</label><input type="checkbox" class="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1" />    
 		<%- if !(controller.controller_name == 'user_sessions') %>
-		<input type="hidden" name="redirect" value="<%= request.request_uri %>">
+		<input type="hidden" name="redirect" value="<%= request.request_uri %>" />
 		<%- end %>
 	</li>
 </ul>
