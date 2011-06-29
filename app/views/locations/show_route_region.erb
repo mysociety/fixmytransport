@@ -58,7 +58,7 @@
 	        </h3>
 	        <!-- Lots of routes - do alphabetical links -->
 	        <%- if @region.bus_routes.count > 20 %>
-	          <ul class='ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+	          <ul class='tabs-sub-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
 	            <%- @region.bus_route_letters.each do |first| %>
 	              <li class='ui-state-default ui-corner-top'>
 	                <%= link_to(first, "#bus_starts_with_#{first}") %>
