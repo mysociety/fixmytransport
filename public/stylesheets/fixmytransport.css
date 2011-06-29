@@ -97,7 +97,8 @@ ul#top-nav {
 	    color: #048fc2;
 	    padding: 9px 10px 8px 10px;
 	}
-	ul#top-nav li a:hover {
+	ul#top-nav li a:hover,
+	ul#top-nav li a:focus {
 	    color: #000
 	}
 ul#mysociety-tab {
@@ -110,7 +111,8 @@ ul#mysociety-tab {
 	ul#mysociety-tab li a {
 	    color: #fff
 	}
-	ul#mysociety-tab li a:hover {
+	ul#mysociety-tab li a:hover,
+	ul#mysociety-tab li a:focus {
 	    color: #000
 	}
 	ul#mysociety-tab li a#mysociety-logo {
@@ -168,14 +170,16 @@ ul#main-nav {
 		    margin: 0 10px 0 10px;
 		}
 		ul#main-nav li a:hover,
-		ul#main-nav li a.active {
+		ul#main-nav li a.active,
+		ul#main-nav li a:focus {
 		    background: #0075a0
 		}
 		ul#main-nav li a.help {
 		    padding-right: 22px;
 		    background: url(../images/arrow-sml-white.gif) right 18px no-repeat;
 		}
-		ul#main-nav li a.help:hover {
+		ul#main-nav li a.help:hover,
+		ul#main-nav li a.help:focus {
 		    background-color: #0075a0;
 		    background-position: right -27px;
 		}
@@ -241,7 +245,8 @@ form#search {
 	#banner a {
 		color:#555;
 	}
-	#banner a:hover {
+	#banner a:hover,
+	#banner a:focus {
 		color:#333;
 	}
 	#banner.yellow h1, #banner.yellow h2, #banner.yellow h3, #banner.yellow h4, #banner.yellow h5, #banner.yellow h6,
@@ -345,7 +350,7 @@ ul.gallery {
 			border: 3px solid #fff;
 		}
 
-		ul.gallery li a:hover {border: 3px solid #aaa;background:#aaa;}
+		ul.gallery li a:hover,  ul.gallery li a:focus {border: 3px solid #aaa;background:#aaa;}
 
 /* ===[ User List ]=== */
 ul.user-list {
@@ -407,7 +412,8 @@ ul.user-list {
     padding-right: 18px;
     background: url(../images/close-blue.gif) right 0 no-repeat;
 }
-.ui-dialog-titlebar-close:hover {
+.ui-dialog-titlebar-close:hover,
+.ui-dialog-titlebar-close:focus {
     color: #fff;
 }
 .ui-dialog-content {
@@ -626,7 +632,8 @@ ul.user-list {
     background-repeat: no-repeat;
     padding: 2px 6px 2px 24px;
 }
-.fb-post-to-wall:hover {
+.fb-post-to-wall:hover,
+.fb-post-to-wall:focus {
     border-color: #9DACCE;
     color: #3B5998;
 }
@@ -805,7 +812,8 @@ input.checkbox {
 		background:#DFEEF5;
 	}
 	.form-list li.fieldset:hover,
-	.form-list li.active {
+	.form-list li.active,
+	.form-list li.fieldset:focus {
 		background:#048fc2;
 	}
 		.form-list li input {
@@ -857,7 +865,8 @@ input.checkbox {
 		padding-right:20px;
 		background: url(../images/close-black.gif) right 2px no-repeat;
 	}
-		.tipbox .tip-close:hover {
+		.tipbox .tip-close:hover,
+		.tipbox .tip-close:focus {
 			color:#999;
 			text-indent:0;
 			background-position:right -54px;
@@ -1113,13 +1122,15 @@ ul.campaign-meta li span{
 		-moz-box-shadow: none ;
 		box-shadow: none ;
 	}
-	.thread-controls .expand-all:hover {
+	.thread-controls .expand-all:hover,
+	.thread-controls .expand-all:focus {
 	    background-position: 0 -21px
 	}
 	.thread-controls .collapse-all {
 	    background-position: -22px 0
 	}
-	.thread-controls .collapse-all:hover {
+	.thread-controls .collapse-all:hover,
+	.thread-controls .collapse-all:focus {
 	    background-position: -22px -21px
 	}
 ul#campaign-thread {
@@ -1143,14 +1154,17 @@ ul#campaign-thread {
 		    background: #eee;
 		    height: 40px;
 		}
-		ul#campaign-thread li a.thread-item:hover {
+		ul#campaign-thread li a.thread-item:hover,
+		ul#campaign-thread li a.thread-item:focus {
 		    background: #048fc2;
 			color:#fff;
 		}
-			ul#campaign-thread li a.thread-item:hover span.close {
+			ul#campaign-thread li a.thread-item:hover span.close,
+			ul#campaign-thread li a.thread-item:focus span.close {
 				background-position: -18px -29px;
 			}
-		ul#campaign-thread li a.thread-item.compact:hover {
+		ul#campaign-thread li a.thread-item.compact:hover,
+		ul#campaign-thread li a.thread-item.compact:focus {
 			background:#eee;
 			cursor:default;
 			color:#444;
@@ -1209,11 +1223,13 @@ ul#campaign-thread {
 		    background: none;
 		    color: #fff;
 		}
-		ul#campaign-thread li.open a.thread-item:hover {
+		ul#campaign-thread li.open a.thread-item:hover,
+		ul#campaign-thread li.open a.thread-item:focus {
 		    background: none;
 		    color: #333;
 		}
-			ul#campaign-thread li.open a.thread-item:hover span.close {
+			ul#campaign-thread li.open a.thread-item:hover span.close,
+			ul#campaign-thread li.open a.thread-item:focus span.close {
 			    background-position: -18px 0;
 			}
 		ul#campaign-thread li.open a.thread-item span.close {
@@ -1370,7 +1386,8 @@ ul#process {
 			-moz-box-shadow: none;
 			box-shadow: none;
 		}
-			.process-back:hover, .process-next:hover, .:hover {
+			.process-back:hover, .process-next:hover, .:hover,
+			.process-back:focus, .process-next:focus, .:focus {
 				background
 			}		
      .process-submit {
@@ -1382,7 +1399,8 @@ ul#process {
 			background:transparent url(../images/process-back.gif) left top no-repeat;
 			padding-left: 30px;
 		}
-			.process-back:hover{
+			.process-back:hover,
+			.process-back:focus {
 				background:transparent url(../images/process-back.gif) left top no-repeat;
 				background-position: left bottom;
 				color:#000;
@@ -1396,7 +1414,8 @@ ul#process {
     	.problem-next {
 			margin-right: 20px;
 		}
-			.process-next:hover, .problem-next:hover {
+			.process-next:hover, .problem-next:hover,
+			.process-next:focus, .problem-next:focus {
 				background:transparent url(../images/process-next.gif) right top no-repeat;
 				background-position: right bottom;
 				color:#000;
@@ -1631,7 +1650,8 @@ ol#large-ol {
 		    background: #eee;
 		    padding: 10px;
 		}
-		ol#large-ol li a:hover {
+		ol#large-ol li a:hover,
+		ol#large-ol li a:focus {
 		    background: #0075a0;
 			color:#fff;
 		}
@@ -1673,7 +1693,8 @@ ol#large-ol {
 	background:url(../images/find_stop.jpg) -10px -86px no-repeat;
 }
 #find-stop:hover,
-#find-stop.active {
+#find-stop.active,
+#find-stop:focus {
 	background-position:-10px -10px;
 }
 	#find-stop label {

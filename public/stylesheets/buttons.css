@@ -32,7 +32,9 @@
 	box-shadow: 0px 0px 2px rgba(84, 84, 84, 0.75);
 }
 .icon:hover,
-.button:hover {
+.button:hover,
+.icon:focus,
+.button:focus {
 	color:#ffffff;
 	
 	background: #006699; /* Old browsers */
@@ -64,7 +66,10 @@ a.button {
 	background: linear-gradient(top, #99cc33 0%,#669933 100%); /* W3C */
 }
 .icon.green:hover,
-.button.green:hover {
+.button.green:hover,
+.button.green:focus,
+.icon.green:focus
+{
 	background: #669933; /* Old browsers */
 	background: -moz-linear-gradient(top, #669933 0%, #99cc33 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#669933), color-stop(100%,#99cc33)); /* Chrome,Safari4+ */
@@ -86,7 +91,9 @@ a.button {
 	background: linear-gradient(top, #f4053d 0%,#e00202 100%); /* W3C */
 }
 .icon.red:hover,
-.button.red:hover {
+.button.red:hover,
+.icon.red:focus,
+.button.red:focus {
 	background: #e00202; /* Old browsers */
 	background: -moz-linear-gradient(top, #e00202 0%, #f4053d 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e00202), color-stop(100%,#f4053d)); /* Chrome,Safari4+ */
@@ -108,7 +115,9 @@ a.button {
 	background: linear-gradient(top, #888894 0%,#444444 100%); /* W3C */
 }
 .icon.grey:hover,
-.button.grey:hover {
+.button.grey:hover,
+.icon.grey:focus,
+.button.grey:focus {
 	background: #444444; /* Old browsers */
 	background: -moz-linear-gradient(top, #444444 0%, #888894 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#444444), color-stop(100%,#888894)); /* Chrome,Safari4+ */
@@ -132,7 +141,9 @@ a.button {
 	background: linear-gradient(top, #ffffff 0%,#e2e2e2 100%); /* W3C */
 }
 .icon.white:hover,
-.button.white:hover {
+.button.white:hover,
+.icon.white:focus,
+.button.white:focus {
 	background: #e2e2e2; /* Old browsers */
 	background: -moz-linear-gradient(top, #e2e2e2 0%, #ffffff 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e2e2e2), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
@@ -154,7 +165,9 @@ a.button {
 	background: linear-gradient(top, #ffb600 0%,#d89700 100%); /* W3C */
 }
 .icon.orange:hover,
-.button.orange:hover {
+.button.orange:hover,
+.icon.orange:focus,
+.button.orange:focus {
 	background: #d89700; /* Old browsers */
 	background: -moz-linear-gradient(top, #d89700 0%, #ffb600 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d89700), color-stop(100%,#ffb600)); /* Chrome,Safari4+ */
@@ -176,7 +189,9 @@ a.button {
 	background: linear-gradient(top, #cc3366 0%,#9d1f60 100%); /* W3C */
 }
 .icon.magenta:hover,
-.button.magenta:hover {
+.button.magenta:hover,
+.icon.magenta:focus,
+.button.magenta:focus {
 	background: #9d1f60; /* Old browsers */
 	background: -moz-linear-gradient(top, #9d1f60 0%, #cc3366 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9d1f60), color-stop(100%,#cc3366)); /* Chrome,Safari4+ */
@@ -208,7 +223,8 @@ a.button {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99cc33', endColorstr='#669933',GradientType=0 ); /* IE6-9 */
 	background:url(../images/support-tick.png) 6px center no-repeat, linear-gradient(top, #99cc33 0%,#669933 100%); /* W3C */
 }
-.button.support:hover {
+.button.support:hover,
+.button.support:focus {
 	background: #669933 url(../images/support-tick.png) 6px center no-repeat; /* Old browsers */
 	background:url(../images/support-tick.png) 6px center no-repeat, -moz-linear-gradient(top, #669933 0%, #99cc33 100%); /* FF3.6+ */
 	background:url(../images/support-tick.png) 6px center no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#669933), color-stop(100%,#99cc33)); /* Chrome,Safari4+ */
@@ -231,7 +247,8 @@ a.button {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#048fc2', endColorstr='#006699',GradientType=0 ); /* IE6-9 */
 	background:url(../images/comment-bubble.png) right center no-repeat, linear-gradient(top, #048fc2 0%,#006699 100%); /* W3C */
 }
-.button.comment:hover {
+.button.comment:hover,
+.button.comment:focus  {
 	background: #006699 url(../images/comment-bubble.png) right center no-repeat; /* Old browsers */
 	background:url(../images/comment-bubble.png) right center no-repeat, -moz-linear-gradient(top, #006699 0%, #048fc2 100%); /* FF3.6+ */
 	background:url(../images/comment-bubble.png) right center no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006699), color-stop(100%,#048fc2)); /* Chrome,Safari4+ */
@@ -253,7 +270,8 @@ a.button {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffb600', endColorstr='#d89700',GradientType=0 ); /* IE6-9 */
 	background:url(../images/email.png) 6px center no-repeat, linear-gradient(top, #ffb600 0%,#d89700 100%); /* W3C */
 }
-.button.email:hover {
+.button.email:hover,
+.button.email:focus {
 	background: #d89700 url(../images/email.png) 6px center no-repeat,; /* Old browsers */
 	background:url(../images/email.png) 6px center no-repeat, -moz-linear-gradient(top, #d89700 0%, #ffb600 100%); /* FF3.6+ */
 	background:url(../images/email.png) 6px center no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d89700), color-stop(100%,#ffb600)); /* Chrome,Safari4+ */
@@ -330,7 +348,8 @@ a.button {
 	line-height:0;
 	font-size:0;
 }
-.point-go:hover {
+.point-go:hover,
+.point-go:focus {
 	background-position:-2px -97px;
 }
 /* Icons
@@ -365,7 +384,8 @@ a.button {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#888894', endColorstr='#444444',GradientType=0 ); /* IE6-9 */
 	background: linear-gradient(top, #888894 0%,#444444 100%); /* W3C */
 }
-.fancybutton:hover {
+.fancybutton:hover,
+.fancybutton:focus {
 	color:#ffffff;
 	
 	background: #048fc2; /* Old browsers */
@@ -427,7 +447,10 @@ a .icon {
 }
 .icon.grey.camera:hover,
 a:hover .icon.grey.camera,
-.button:hover .icon.grey.camera {
+.button:hover .icon.grey.camera,
+.icon.grey.camera:focus,
+a:focus .icon.grey.camera,
+.button:focus .icon.grey.camera {
 	background: #444444 url(../images/icons.png) 6px -25px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) 6px -25px no-repeat, -moz-linear-gradient(top, #444444 0%, #888894 100%); /* FF3.6+ */
 	background:url(../images/icons.png) 6px -25px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#444444), color-stop(100%,#888894)); /* Chrome,Safari4+ */
@@ -449,7 +472,10 @@ a:hover .icon.grey.camera,
 }
 .icon.grey.person:hover,
 a:hover .icon.grey.person,
-.button:hover .icon.grey.person {
+.button:hover .icon.grey.person,
+.icon.grey.person:focus,
+a:focus .icon.grey.person,
+.button:focus .icon.grey.person {
 	background: #444444 url(../images/icons.png) 8px -57px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) 8px -57px no-repeat, -moz-linear-gradient(top, #444444 0%, #888894 100%); /* FF3.6+ */
 	background:url(../images/icons.png) 8px -57px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#444444), color-stop(100%,#888894)); /* Chrome,Safari4+ */
@@ -471,7 +497,10 @@ a:hover .icon.grey.person,
 }
 .icon.grey.pencil:hover,
 a:hover .icon.grey.pencil,
-.button:hover .icon.grey.pencil {
+.button:hover .icon.grey.pencil,
+.icon.grey.pencil:focus,
+a:focus .icon.grey.pencil,
+.button:focus .icon.grey.pencil {
 	background: #444444 url(../images/icons.png) 6px -88px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) 6px -88px no-repeat, -moz-linear-gradient(top, #444444 0%, #888894 100%); /* FF3.6+ */
 	background:url(../images/icons.png) 6px -88px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#444444), color-stop(100%,#888894)); /* Chrome,Safari4+ */
@@ -497,7 +526,13 @@ a:hover .icon.grey.question,
 .button:hover .icon.grey.question,
 .icon.question:hover,
 a:hover .icon.question,
-.button:hover .icon.question {
+.button:hover .icon.question,
+.icon.grey.question:focus,
+a:focus .icon.grey.question,
+.button:focus .icon.grey.question,
+.icon.question:focus,
+a:focus .icon.question,
+.button:focus .icon.question {
 	background: #444444 url(../images/icons.png) 8px -120px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) 8px -120px no-repeat, -moz-linear-gradient(top, #444444 0%, #888894 100%); /* FF3.6+ */
 	background:url(../images/icons.png) 8px -120px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#444444), color-stop(100%,#888894)); /* Chrome,Safari4+ */
@@ -523,7 +558,13 @@ a:hover .icon.grey.email,
 .button:hover .icon.grey.email,
 .icon.email:hover,
 a:hover .icon.email,
-.button:hover .icon.email {
+.button:hover .icon.email,
+.icon.grey.email:focus,
+a:focus .icon.grey.email,
+.button:focus .icon.grey.email,
+.icon.email:focus,
+a:focus .icon.email,
+.button:focus .icon.email {
 	background: #444444 url(../images/icons.png) 5px -154px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) 5px -154px no-repeat, -moz-linear-gradient(top, #444444 0%, #888894 100%); /* FF3.6+ */
 	background:url(../images/icons.png) 5px -154px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#444444), color-stop(100%,#888894)); /* Chrome,Safari4+ */
@@ -546,7 +587,10 @@ a:hover .icon.email,
 }
 .icon.tick:hover,
 a:hover .icon.tick,
-.button:hover .icon.tick {
+.button:hover .icon.tick,
+.icon.tick:focus,
+a:focus .icon.tick,
+.button:focus .icon.tick {
 	background: #669933 url(../images/icons.png) 8px 8px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) 8px 8px no-repeat, -moz-linear-gradient(top, #669933 0%, #99cc33 100%); /* FF3.6+ */
 	background:url(../images/icons.png) 8px 8px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#669933), color-stop(100%,#99cc33)); /* Chrome,Safari4+ */
@@ -569,7 +613,10 @@ a:hover .icon.tick,
 }
 .icon.camera:hover,
 a:hover .icon.camera,
-.button:hover .icon.camera {
+.button:hover .icon.camera,
+.icon.camera:focus,
+a:focus .icon.camera,
+.button:focus .icon.camera {
 	background: #9d1f60 url(../images/icons.png) 6px -25px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) 6px -25px no-repeat, -moz-linear-gradient(top, #9d1f60 0%, #cc3366 100%); /* FF3.6+ */
 	background:url(../images/icons.png) 6px -25px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9d1f60), color-stop(100%,#cc3366)); /* Chrome,Safari4+ */
@@ -592,7 +639,10 @@ a:hover .icon.camera,
 }
 .icon.person:hover,
 a:hover .icon.person,
-.button:hover .icon.person {
+.button:hover .icon.person,
+.icon.person:focus,
+a:focus .icon.person,
+.button:focus .icon.person {
 	background: #d89700 url(../images/icons.png) 8px -57px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) 8px -57px no-repeat, -moz-linear-gradient(top, #d89700 0%, #ffb600 100%); /* FF3.6+ */
 	background:url(../images/icons.png) 8px -57px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d89700), color-stop(100%,#ffb600)); /* Chrome,Safari4+ */
@@ -615,7 +665,10 @@ a:hover .icon.person,
 }
 .icon.pencil:hover,
 a:hover .icon.pencil,
-.button:hover .icon.pencil {
+.button:hover .icon.pencil,
+.icon.pencil:focus,
+a:focus .icon.pencil,
+.button:focus .icon.pencil {
 	background: #d89700 url(../images/icons.png) 6px -88px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) 6px -88px no-repeat, -moz-linear-gradient(top, #d89700 0%, #ffb600 100%); /* FF3.6+ */
 	background:url(../images/icons.png) 6px -88px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d89700), color-stop(100%,#ffb600)); /* Chrome,Safari4+ */
@@ -641,7 +694,10 @@ a:hover .icon.pencil,
 }
 .icon.big.tick:hover,
 a:hover .icon.big.tick,
-.button:hover .icon.big.tick {
+.button:hover .icon.big.tick,
+.icon.big.tick:focus,
+a:focus .icon.big.tick,
+.button:focus .icon.big.tick {
 	background: #006699 url(../images/icons.png) -36px 9px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px 9px no-repeat, -moz-linear-gradient(top, #006699 0%, #048fc2 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px 9px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006699), color-stop(100%,#048fc2)); /* Chrome,Safari4+ */
@@ -663,7 +719,10 @@ a:hover .icon.big.tick,
 }
 .icon.big.camera:hover,
 a:hover .icon.big.camera,
-.button:hover .icon.big.camera {
+.button:hover .icon.big.camera,
+.icon.big.camera:focus,
+a:focus .icon.big.camera,
+.button:focus .icon.big.camera {
 	background: #006699 url(../images/icons.png) -36px -45px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px -45px no-repeat, -moz-linear-gradient(top, #006699 0%, #048fc2 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px -45px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006699), color-stop(100%,#048fc2)); /* Chrome,Safari4+ */
@@ -685,7 +744,10 @@ a:hover .icon.big.camera,
 }
 .icon.big.person:hover,
 a:hover .icon.big.person,
-.button:hover .icon.big.person {
+.button:hover .icon.big.person,
+.icon.big.person:focus,
+a:focus .icon.big.person,
+.button:focus .icon.big.person {
 	background: #006699 url(../images/icons.png) -36px -95px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px -95px no-repeat, -moz-linear-gradient(top, #006699 0%, #048fc2 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px -95px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006699), color-stop(100%,#048fc2)); /* Chrome,Safari4+ */
@@ -707,7 +769,10 @@ a:hover .icon.big.person,
 }
 .icon.big.pencil:hover,
 a:hover .icon.big.pencil,
-.button:hover .icon.big.pencil {
+.button:hover .icon.big.pencil,
+.icon.big.pencil:focus,
+a:focus .icon.big.pencil,
+.button:focus .icon.big.pencil {
 	background: #006699 url(../images/icons.png) -35px -146px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -35px -146px no-repeat, -moz-linear-gradient(top, #006699 0%, #048fc2 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -35px -146px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006699), color-stop(100%,#048fc2)); /* Chrome,Safari4+ */
@@ -729,7 +794,10 @@ a:hover .icon.big.pencil,
 }
 .icon.big.question:hover,
 a:hover .icon.big.question,
-.button:hover .icon.big.question {
+.button:hover .icon.big.question,
+.icon.big.question:focus,
+a:focus .icon.big.question,
+.button:focus .icon.big.question {
 	background: #006699 url(../images/icons.png) -33px -194px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -33px -194px no-repeat, -moz-linear-gradient(top, #006699 0%, #048fc2 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -33px -194px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006699), color-stop(100%,#048fc2)); /* Chrome,Safari4+ */
@@ -751,7 +819,10 @@ a:hover .icon.big.question,
 }
 .icon.big.email:hover,
 a:hover .icon.big.email,
-.button:hover .icon.big.email {
+.button:hover .icon.big.email,
+.icon.big.email:focus,
+a:focus .icon.big.email,
+.button:focus .icon.big.email {
 	background: #006699 url(../images/icons.png) -39px -240px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -39px -240px no-repeat, -moz-linear-gradient(top, #006699 0%, #048fc2 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -39px -240px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006699), color-stop(100%,#048fc2)); /* Chrome,Safari4+ */
@@ -774,7 +845,10 @@ a:hover .icon.big.email,
 }
 .icon.grey.big.tick:hover,
 a:hover .icon.grey.big.tick,
-.button:hover .icon.grey.big.tick {
+.button:hover .icon.grey.big.tick,
+.icon.grey.big.tick:focus,
+a:focus .icon.grey.big.tick,
+.button:focus .icon.grey.big.tick {
 	background: #444444 url(../images/icons.png) -36px 9px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px 9px no-repeat, -moz-linear-gradient(top, #444444 0%, #888894 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px 9px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#444444), color-stop(100%,#888894)); /* Chrome,Safari4+ */
@@ -796,7 +870,10 @@ a:hover .icon.grey.big.tick,
 }
 .icon.grey.big.camera:hover,
 a:hover .icon.grey.big.camera,
-.button:hover .icon.grey.big.camera {
+.button:hover .icon.grey.big.camera,
+.icon.grey.big.camera:focus,
+a:focus .icon.grey.big.camera,
+.button:focus .icon.grey.big.camera {
 	background: #444444 url(../images/icons.png) -36px -45px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px -45px no-repeat, -moz-linear-gradient(top, #444444 0%, #888894 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px -45px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#444444), color-stop(100%,#888894)); /* Chrome,Safari4+ */
@@ -818,7 +895,10 @@ a:hover .icon.grey.big.camera,
 }
 .icon.grey.big.person:hover,
 a:hover .icon.grey.big.person,
-.button:hover .icon.grey.big.person {
+.button:hover .icon.grey.big.person,
+.icon.grey.big.person:focus,
+a:focus .icon.grey.big.person,
+.button:focus .icon.grey.big.person {
 	background: #444444 url(../images/icons.png) -36px -95px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px -95px no-repeat, -moz-linear-gradient(top, #444444 0%, #888894 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px -95px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#444444), color-stop(100%,#888894)); /* Chrome,Safari4+ */
@@ -840,7 +920,10 @@ a:hover .icon.grey.big.person,
 }
 .icon.grey.big.pencil:hover,
 a:hover .icon.grey.big.pencil,
-.button:hover .icon.grey.big.pencil {
+.button:hover .icon.grey.big.pencil,
+.icon.grey.big.pencil:focus,
+a:focus .icon.grey.big.pencil,
+.button:focus .icon.grey.big.pencil {
 	background: #444444 url(../images/icons.png) -35px -146px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -35px -146px no-repeat, -moz-linear-gradient(top, #444444 0%, #888894 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -35px -146px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#444444), color-stop(100%,#888894)); /* Chrome,Safari4+ */
@@ -862,7 +945,10 @@ a:hover .icon.grey.big.pencil,
 }
 .icon.grey.big.question:hover,
 a:hover .icon.grey.big.question,
-.button:hover .icon.grey.big.question {
+.button:hover .icon.grey.big.question,
+.icon.grey.big.question:focus,
+a:focus .icon.grey.big.question,
+.button:focus .icon.grey.big.question {
 	background: #444444 url(../images/icons.png) -33px -194px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -33px -194px no-repeat, -moz-linear-gradient(top, #444444 0%, #888894 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -33px -194px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#444444), color-stop(100%,#888894)); /* Chrome,Safari4+ */
@@ -884,7 +970,10 @@ a:hover .icon.grey.big.question,
 }
 .icon.grey.big.email:hover,
 a:hover .icon.grey.big.email,
-.button:hover .icon.grey.big.email {
+.button:hover .icon.grey.big.email,
+.icon.grey.big.email:focus,
+a:focus .icon.grey.big.email,
+.button:focus .icon.grey.big.email {
 	background: #444444 url(../images/icons.png) -39px -240px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -39px -240px no-repeat, -moz-linear-gradient(top, #444444 0%, #888894 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -39px -240px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#444444), color-stop(100%,#888894)); /* Chrome,Safari4+ */
@@ -907,7 +996,10 @@ a:hover .icon.grey.big.email,
 }
 .icon.green.big.tick:hover,
 a:hover .icon.green.big.tick,
-.button:hover .icon.green.big.tick {
+.button:hover .icon.green.big.tick,
+.icon.green.big.tick:focus,
+a:focus .icon.green.big.tick,
+.button:focus .icon.green.big.tick {
 	background: #669933 url(../images/icons.png) -36px 9px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px 9px no-repeat, -moz-linear-gradient(top, #669933 0%, #99cc33 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px 9px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#669933), color-stop(100%,#99cc33)); /* Chrome,Safari4+ */
@@ -929,7 +1021,10 @@ a:hover .icon.green.big.tick,
 }
 .icon.green.big.camera:hover,
 a:hover .icon.green.big.camera,
-.button:hover .icon.green.big.camera {
+.button:hover .icon.green.big.camera,
+.icon.green.big.camera:focus,
+a:focus .icon.green.big.camera,
+.button:focus .icon.green.big.camera {
 	background: #669933 url(../images/icons.png) -36px -45px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px -45px no-repeat, -moz-linear-gradient(top, #669933 0%, #99cc33 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px -45px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#669933), color-stop(100%,#99cc33)); /* Chrome,Safari4+ */
@@ -951,7 +1046,10 @@ a:hover .icon.green.big.camera,
 }
 .icon.green.big.person:hover,
 a:hover .icon.green.big.person,
-.button:hover .icon.green.big.person {
+.button:hover .icon.green.big.person,
+.icon.green.big.person:focus,
+a:focus .icon.green.big.person,
+.button:focus .icon.green.big.person {
 	background: #669933 url(../images/icons.png) -36px -95px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px -95px no-repeat, -moz-linear-gradient(top, #669933 0%, #99cc33 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px -95px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#669933), color-stop(100%,#99cc33)); /* Chrome,Safari4+ */
@@ -973,7 +1071,10 @@ a:hover .icon.green.big.person,
 }
 .icon.green.big.pencil:hover,
 a:hover .icon.green.big.pencil,
-.button:hover .icon.green.big.pencil {
+.button:hover .icon.green.big.pencil,
+.icon.green.big.pencil:focus,
+a:focus .icon.green.big.pencil,
+.button:focus .icon.green.big.pencil{
 	background: #669933 url(../images/icons.png) -35px -146px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -35px -146px no-repeat, -moz-linear-gradient(top, #669933 0%, #99cc33 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -35px -146px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#669933), color-stop(100%,#99cc33)); /* Chrome,Safari4+ */
@@ -995,7 +1096,10 @@ a:hover .icon.green.big.pencil,
 }
 .icon.green.big.question:hover,
 a:hover .icon.green.big.question,
-.button:hover .icon.green.big.question {
+.button:hover .icon.green.big.question,
+.icon.green.big.question:focus,
+a:focus .icon.green.big.question,
+.button:focus .icon.green.big.question{
 	background: #669933 url(../images/icons.png) -33px -194px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -33px -194px no-repeat, -moz-linear-gradient(top, #669933 0%, #99cc33 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -33px -194px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#669933), color-stop(100%,#99cc33)); /* Chrome,Safari4+ */
@@ -1017,7 +1121,10 @@ a:hover .icon.green.big.question,
 }
 .icon.green.big.email:hover,
 a:hover .icon.green.big.email,
-.button:hover .icon.green.big.email {
+.button:hover .icon.green.big.email,
+.icon.green.big.email:focus,
+a:focus .icon.green.big.email,
+.button:focus .icon.green.big.email {
 	background: #669933 url(../images/icons.png) -39px -240px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -39px -240px no-repeat, -moz-linear-gradient(top, #669933 0%, #99cc33 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -39px -240px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#669933), color-stop(100%,#99cc33)); /* Chrome,Safari4+ */
@@ -1040,7 +1147,10 @@ a:hover .icon.green.big.email,
 }
 .icon.magenta.big.tick:hover,
 a:hover .icon.magenta.big.tick,
-.button:hover .icon.magenta.big.tick {
+.button:hover .icon.magenta.big.tick,
+.icon.magenta.big.tick:focus,
+a:focus .icon.magenta.big.tick,
+.button:focus .icon.magenta.big.tick {
 	background: #9d1f60 url(../images/icons.png) -36px 9px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px 9px no-repeat, -moz-linear-gradient(top, #9d1f60 0%, #cc3366 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px 9px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9d1f60), color-stop(100%,#cc3366)); /* Chrome,Safari4+ */
@@ -1062,7 +1172,10 @@ a:hover .icon.magenta.big.tick,
 }
 .icon.magenta.big.camera:hover,
 a:hover .icon.magenta.big.camera,
-.button:hover .icon.magenta.big.camera {
+.button:hover .icon.magenta.big.camera,
+.icon.magenta.big.camera:focus,
+a:focus .icon.magenta.big.camera,
+.button:focus .icon.magenta.big.camera {
 	background: #9d1f60 url(../images/icons.png) -36px -45px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px -45px no-repeat, -moz-linear-gradient(top, #9d1f60 0%, #cc3366 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px -45px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9d1f60), color-stop(100%,#cc3366)); /* Chrome,Safari4+ */
@@ -1084,7 +1197,10 @@ a:hover .icon.magenta.big.camera,
 }
 .icon.magenta.big.person:hover,
 a:hover .icon.magenta.big.person,
-.button:hover .icon.magenta.big.person {
+.button:hover .icon.magenta.big.person,
+.icon.magenta.big.person:focus,
+a:focus .icon.magenta.big.person,
+.button:focus .icon.magenta.big.person {
 	background: #9d1f60 url(../images/icons.png) -36px -95px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px -95px no-repeat, -moz-linear-gradient(top, #9d1f60 0%, #cc3366 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px -95px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9d1f60), color-stop(100%,#cc3366)); /* Chrome,Safari4+ */
@@ -1106,7 +1222,10 @@ a:hover .icon.magenta.big.person,
 }
 .icon.magenta.big.pencil:hover,
 a:hover .icon.magenta.big.pencil,
-.button:hover .icon.magenta.big.pencil {
+.button:hover .icon.magenta.big.pencil,
+.icon.magenta.big.pencil:focus,
+a:focus .icon.magenta.big.pencil,
+.button:focus .icon.magenta.big.pencil {
 	background: #9d1f60 url(../images/icons.png) -35px -146px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -35px -146px no-repeat, -moz-linear-gradient(top, #9d1f60 0%, #cc3366 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -35px -146px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9d1f60), color-stop(100%,#cc3366)); /* Chrome,Safari4+ */
@@ -1128,7 +1247,10 @@ a:hover .icon.magenta.big.pencil,
 }
 .icon.magenta.big.question:hover,
 a:hover .icon.magenta.big.question,
-.button:hover .icon.magenta.big.question {
+.button:hover .icon.magenta.big.question,
+.icon.magenta.big.question:focus,
+a:focus .icon.magenta.big.question,
+.button:focus .icon.magenta.big.question {
 	background: #9d1f60 url(../images/icons.png) -33px -194px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -33px -194px no-repeat, -moz-linear-gradient(top, #9d1f60 0%, #cc3366 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -33px -194px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9d1f60), color-stop(100%,#cc3366)); /* Chrome,Safari4+ */
@@ -1150,7 +1272,10 @@ a:hover .icon.magenta.big.question,
 }
 .icon.magenta.big.email:hover,
 a:hover .icon.magenta.big.email,
-.button:hover .icon.magenta.big.email {
+.button:hover .icon.magenta.big.email,
+.icon.magenta.big.email:focus,
+a:focus .icon.magenta.big.email,
+.button:focus .icon.magenta.big.email {
 	background: #9d1f60 url(../images/icons.png) -39px -240px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -39px -240px no-repeat, -moz-linear-gradient(top, #9d1f60 0%, #cc3366 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -39px -240px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9d1f60), color-stop(100%,#cc3366)); /* Chrome,Safari4+ */
@@ -1173,7 +1298,10 @@ a:hover .icon.magenta.big.email,
 }
 .icon.orange.big.tick:hover,
 a:hover .icon.orange.big.tick,
-.button:hover .icon.orange.big.tick {
+.button:hover .icon.orange.big.tick,
+.icon.orange.big.tick:focus,
+a:focus .icon.orange.big.tick,
+.button:focus .icon.orange.big.tick {
 	background: #d89700 url(../images/icons.png) -36px 9px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px 9px no-repeat, -moz-linear-gradient(top, #d89700 0%, #ffb600 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px 9px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d89700), color-stop(100%,#ffb600)); /* Chrome,Safari4+ */
@@ -1195,7 +1323,10 @@ a:hover .icon.orange.big.tick,
 }
 .icon.orange.big.camera:hover,
 a:hover .icon.orange.big.camera,
-.button:hover .icon.orange.big.camera {
+.button:hover .icon.orange.big.camera,
+.icon.orange.big.camera:focus,
+a:focus .icon.orange.big.camera,
+.button:focus .icon.orange.big.camera {
 	background: #d89700 url(../images/icons.png) -36px -45px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px -45px no-repeat, -moz-linear-gradient(top, #d89700 0%, #ffb600 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px -45px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d89700), color-stop(100%,#ffb600)); /* Chrome,Safari4+ */
@@ -1217,7 +1348,10 @@ a:hover .icon.orange.big.camera,
 }
 .icon.orange.big.person:hover,
 a:hover .icon.orange.big.person,
-.button:hover .icon.orange.big.person {
+.button:hover .icon.orange.big.person,
+.icon.orange.big.person:focus,
+a:focus .icon.orange.big.person,
+.button:focus .icon.orange.big.person {
 	background: #d89700 url(../images/icons.png) -36px -95px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -36px -95px no-repeat, -moz-linear-gradient(top, #d89700 0%, #ffb600 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -36px -95px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d89700), color-stop(100%,#ffb600)); /* Chrome,Safari4+ */
@@ -1239,7 +1373,10 @@ a:hover .icon.orange.big.person,
 }
 .icon.orange.big.pencil:hover,
 a:hover .icon.orange.big.pencil,
-.button:hover .icon.orange.big.pencil {
+.button:hover .icon.orange.big.pencil,
+.icon.orange.big.pencil:focus,
+a:focus .icon.orange.big.pencil,
+.button:focus .icon.orange.big.pencil {
 	background: #d89700 url(../images/icons.png) -35px -146px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -35px -146px no-repeat, -moz-linear-gradient(top, #d89700 0%, #ffb600 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -35px -146px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d89700), color-stop(100%,#ffb600)); /* Chrome,Safari4+ */
@@ -1261,7 +1398,10 @@ a:hover .icon.orange.big.pencil,
 }
 .icon.orange.big.question:hover,
 a:hover .icon.orange.big.question,
-.button:hover .icon.orange.big.question {
+.button:hover .icon.orange.big.question,
+.icon.orange.big.question:focus,
+a:focus .icon.orange.big.question,
+.button:focus .icon.orange.big.question {
 	background: #d89700 url(../images/icons.png) -33px -194px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -33px -194px no-repeat, -moz-linear-gradient(top, #d89700 0%, #ffb600 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -33px -194px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d89700), color-stop(100%,#ffb600)); /* Chrome,Safari4+ */
@@ -1284,7 +1424,10 @@ a:hover .icon.orange.big.question,
 }
 .icon.orange.big.email:hover,
 a:hover .icon.orange.big.email,
-.button:hover .icon.orange.big.email {
+.button:hover .icon.orange.big.email,
+.icon.orange.big.email:focus,
+a:focus .icon.orange.big.email,
+.button:focus .icon.orange.big.email {
 	background: #d89700 url(../images/icons.png) -39px -240px no-repeat; /* Old browsers */
 	background:url(../images/icons.png) -39px -240px no-repeat, -moz-linear-gradient(top, #d89700 0%, #ffb600 100%); /* FF3.6+ */
 	background:url(../images/icons.png) -39px -240px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d89700), color-stop(100%,#ffb600)); /* Chrome,Safari4+ */
@@ -1311,7 +1454,10 @@ a:hover .icon.orange.big.email,
 }
 .icon.twitter:hover,
 .button.twitter:hover,
-a:hover .icon.twitter {
+a:hover .icon.twitter,
+.icon.twitter:focus,
+.button.twitter:focus,
+a:focus .icon.twitter {
 	background: #456bad url('../images/icons.png') 4px -190px no-repeat; /* Old browsers */
 	background:url('../images/icons.png') 4px -190px no-repeat, -moz-linear-gradient(top, #456bad 0%, #34b2da 100%); /* FF3.6+ */
 	background:url('../images/icons.png') 4px -190px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#456bad), color-stop(100%,#34b2da)); /* Chrome,Safari4+ */
@@ -1334,7 +1480,10 @@ a:hover .icon.twitter {
 }
 .icon.facebook:hover,
 .button.facebook:hover,
-a:hover .icon.facebook {
+a:hover .icon.facebook,
+.icon.facebook:focus,
+.button.facebook:focus,
+a:focus .icon.facebook {
 	background: #002060 url('../images/icons.png') 9px -227px no-repeat; /* Old browsers */
 	background:url('../images/icons.png') 9px -227px no-repeat, -moz-linear-gradient(top, #002060 0%, #3b5b98 100%); /* FF3.6+ */
 	background:url('../images/icons.png') 9px -227px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#002060), color-stop(100%,#3b5b98)); /* Chrome,Safari4+ */
