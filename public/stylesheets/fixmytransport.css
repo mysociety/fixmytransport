@@ -282,13 +282,14 @@ form#search {
 		margin:5px 0;
 	}
 #yellowbanner {
+	margin: 1em auto;
 	background: #FFFBD7;
 	padding:1em;
 	color:#fff;
 
-	-webkit-box-shadow: 0 0 34px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow: 0 0 34px rgba(0, 0, 0, 0.5);
-	box-shadow: 0 0 34px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
 	#yellowbanner h1 {
 		line-height:1.3;
@@ -1454,7 +1455,7 @@ ul#process {
 
 /*===[Front Page]===*/
 #frontpage-top {
-	margin:1em auto;
+	margin:1em auto 0 auto;
 }
 	#frontpage-top .leftcol {
 		text-align:center;
@@ -1485,7 +1486,7 @@ ul#process {
 		#frontpage-top .leftcol .button {
 			font-size:1.6em;
 			padding:0.8em 1.1em;
-			margin:1.5em 0.7em;
+			margin:1em 0.7em;
 			text-transform:none;
 		}
 	#frontpage-top .rightcol {
@@ -1554,7 +1555,7 @@ ul#process {
 		#frontpage-top .rightcol .button {
 			font-size:1.5em;
 			padding:0.7em 1em;
-			margin:1em 2px;
+			margin:1.5em 2px 1em 2px;
 			text-transform:none;
 		}
 
