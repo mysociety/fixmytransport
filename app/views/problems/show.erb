@@ -1,20 +1,24 @@
 <%- @title = "#{@problem.subject}" %>
 <div id="banner">
 	<div class="container">
-		<h1><a href="<%= location_url(@problem.location) %>"><%= @problem.location.description %></a></h1>
+		<h1><%= @problem.subject %></h1>
 		<%- if @problem.status == :fixed %>
-		  <div class="right">
-			  <span class="ribbon">Fixed</span>
-  	  </div>
+		<div class="right">
+			<span class="ribbon">Fixed</span>
+		</div>
   	<%- end %>
 	</div>
-</div>			
-
+</div>
+<div id="greybanner">
+	<div class="container">
+		<a href="<%= location_url(@problem.location) %>"><%= @problem.location.description %></a>
+	</div>
+</div>
 <div id="main-content" class="container">
 	<div class="leftcol">	
 	  <div id="medium-map">
     <%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH } %>
-		</div>				
+		</div>
 		<div class="clear">
 			<h5 class="left">Comments</h5>
 			<a class="comment button right comment-trigger" href="<%= add_comment_problem_url(@problem) %>">Comment</a>
@@ -31,7 +35,7 @@
 	</div>
 
 	<div class="rightcol">
-		<h3><%= @problem.subject %></h3>
+		<h3>Initial problem</h3>
 			<p><%= raw simple_format(sanitize(@problem.description)) %></p>
 
 			<h5>Posted</h5>
