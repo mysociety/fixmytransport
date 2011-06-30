@@ -1213,11 +1213,14 @@ ul#campaign-thread {
 		    -webkit-border-radius: 20px;
 		}
 		ul#campaign-thread li a.thread-item span.title {
-		    display: inline-block;
+			overflow: hidden;
+		    white-space: nowrap;
+			display:block;
 		    float: left;
-			width:300px;
+			width:360px;
 			margin:10px 0;
 			line-height:1.5;
+			text-overflow:ellipsis;
 		}
 		ul#campaign-thread li a.thread-item span.date {
 			display: inline-block;
