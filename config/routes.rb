@@ -10,6 +10,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :operators, :only => [:show]
 
   # campaigns
+  map.confirm_leave '/l/:email_token', :action => 'confirm_leave', :controller => 'campaigns'
   map.resources :campaigns, :except => [:destroy, :index],
                             :member => { :join => [:get, :post],
                                          :leave => [:post],
@@ -24,7 +25,7 @@ ActionController::Routing::Routes.draw do |map|
     campaign.attachment '/incoming_messages/:id/attach/:url_part_number', :action => 'show_attachment',
                                                                           :controller => 'incoming_messages'
     campaign.resources :outgoing_messages, :only => [:new, :show, :create]
-    campaign.resources :assignments, :only => [:new, :create, :show, :update, :edit]
+    campaign.resources :assignments, :only => [:new, :create, :update, :edit]
   end
 
   map.resources :problems, :except => [:destroy, :edit, :update, :index],
@@ -102,7 +103,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # accounts
   map.resources :password_resets, :except => [:show, :destroy, :index]
-  map.resource :account, :except => [:index, :destroy]
+  map.resource :account, :except => [:index, :destroy, :show]
   map.confirm_account '/a/:email_token', :action => 'confirm', :controller => 'accounts'
 
   # user profiles

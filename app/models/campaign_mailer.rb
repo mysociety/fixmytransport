@@ -2,13 +2,6 @@ class CampaignMailer < ApplicationMailer
 
   cattr_accessor :sent_count, :dryrun
 
-  def supporter_confirmation(recipient, campaign, token)
-    recipients recipient.name_and_email
-    from contact_from_name_and_email
-    subject supporter_confirmation_subject(campaign)
-    body :campaign => campaign, :recipient => recipient, :link => main_url(confirm_join_path(:email_token => token))
-  end
-
   def new_message(recipient, incoming_message, campaign)
     recipients recipient.name_and_email
     from contact_from_name_and_email

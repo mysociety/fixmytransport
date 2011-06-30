@@ -11,16 +11,6 @@ describe AccountsController do
 
   end
 
-  describe 'GET #show' do
-
-    def make_request
-      get :show
-    end
-
-    it_should_behave_like 'an action requiring a logged-in user'
-
-  end
-
   describe 'GET #edit' do
 
     def make_request

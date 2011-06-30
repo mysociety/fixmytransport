@@ -75,6 +75,16 @@ class CampaignsController < ApplicationController
     render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
     return false
   end
+  
+  def confirm_leave
+    @campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
+    if @campaign_supporter
+      @campaign = @campaign_supporter.campaign
+      @campaign.remove_supporter(@campaign_supporter.supporter)
+    else
+      @error = 'campaigns.confirm_leave.error_on_leave'
+    end
+  end
 
   def complete
     @campaign.status = :successful

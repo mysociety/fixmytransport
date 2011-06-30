@@ -178,57 +178,6 @@ describe AssignmentsController do
     end
   end
 
-  describe 'GET #show' do
-
-    before do
-      @campaign = mock_model(Campaign, :editable? => true,
-                                       :visible? => true,
-                                       :assignments => [])
-      Campaign.stub!(:find).and_return(@campaign)
-      @default_params = { :campaign_id => 55, :id => 22 }
-      @mock_assignment = mock_model(Assignment, :task_type => 'write_to_other')
-      @campaign.assignments.stub!(:find).and_return(@mock_assignment)
-    end
-
-    def make_request(params=@default_params)
-      get :show, params
-    end
-
-    it_should_behave_like "an action requiring a visible campaign"
-
-    it 'should get the assignment' do
-      @campaign.assignments.should_receive(:find).with("22")
-      make_request
-    end
-
-    describe 'if the assignment task type is "write_to_transport_organization"' do
-
-      before do
-        @mock_assignment.stub!(:task_type).and_return('write_to_transport_organization')
-      end
-
-      it 'should return a 404' do
-        make_request
-        response.status.should == '404 Not Found'
-      end
-
-    end
-
-    describe 'if the assignment task type is "write_to_other"' do
-
-      before do
-        @mock_assignment.stub!(:task_type).and_return('write_to_other')
-      end
-
-      it 'should render the "show" template' do
-        make_request
-        response.should render_template('show')
-      end
-
-    end
-
-  end
-
   describe 'GET #edit' do
 
     before do

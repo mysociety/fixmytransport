@@ -3,9 +3,6 @@ class AccountsController < ApplicationController
   before_filter :require_user, :except => [:new, :create, :confirm]
   before_filter :load_user_using_perishable_token, :only => [:confirm]
 
-  def show
-  end
-
   def update
     current_user.update_attributes(params[:user])
     current_user.email = params[:user][:email]

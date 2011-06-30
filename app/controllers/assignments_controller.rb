@@ -72,15 +72,6 @@ class AssignmentsController < ApplicationController
     end
   end
 
-  def show
-    visible_assignments = [:write_to_other]
-    @assignment = @campaign.assignments.find(params[:id])
-    if ! visible_assignments.include?(@assignment.task_type.to_sym)
-      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
-      return false
-    end
-  end
-
   private
 
   def editable_assignments

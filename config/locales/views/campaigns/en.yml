@@ -99,3 +99,7 @@ en:
     edit:
       edit_campaign_description: 'Edit the campaign description:'
       save: Save
+    confirm_leave:
+      you_are_no_longer_a_supporter: "You are no longer a supporter of \"%{campaign}\""
+      let_us_know: let us know
+      error_on_leave: "Sorry, we couldn't locate your membership of this campaign in the database. If you've copied the URL from an email, please check that you copied it exactly - if you have, please %{link} what happened."
