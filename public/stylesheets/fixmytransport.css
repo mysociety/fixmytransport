@@ -1670,8 +1670,7 @@ ul#process {
 				margin:0 0 10px 37px;
 				padding-right:20px;
 			}
-/*===[Route Page]===*/		
-
+/*===[Route Page]===*/
 ol#large-ol,
 ul#large-ul,
 ul.route-links {
@@ -1754,7 +1753,29 @@ ul.route-links {
 		float:right;
 		margin:7px 13px 0 0;
 	}
-
+/*===[Find Route Page]===*/
+#route-type-list {
+	list-style-type:none;
+	padding:0;
+	margin:2em 0;
+	display:block;
+	width:100%;
+	height:100px;
+}
+	#route-type-list li {
+		display:block;
+		float:left;
+		width:21%;;
+	}
+		#route-type-list li span {
+			display:block;
+			color:#666;
+			text-transform:lowercase;
+			font-size:0.5em;
+			font-style:italic;
+			margin-top:1.5em;
+			font-weight:lighter;
+		}
 /*===[Route Regions Page]===*/
 #region-list {
 	list-style-type:none;
