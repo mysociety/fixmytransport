@@ -654,13 +654,16 @@ ul.user-list {
     float:left;
     width:100px;
 }
-
+#email-share textarea,
 #comment-form textarea,
 .new_campaign_update textarea {
 	width:96%;
 	margin:5px;
 	border:none;
 	background: #f4f4f4;
+}
+#email-share label {
+	margin:5px;
 }
 #main-content #comment-form,
 #main-content .new_campaign_update,
@@ -669,8 +672,7 @@ ul.user-list {
 }
 #main-content #comment-form textarea,
 #main-content .new_campaign_update textarea,
-#main-content .update_campaign textarea,
-#email-share textarea {
+#main-content .update_campaign textarea {
 	margin:0;
 	width:96%;
 	background: #f4f4f4;
