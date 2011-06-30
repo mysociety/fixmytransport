@@ -1673,7 +1673,8 @@ ul.route-links {
 }
 ul#large-ul,
 ul.route-links {
-	display:inline-block;
+	width:700px;
+	
 }
 	ol#large-ol li,
 	ul#large-ul li,
