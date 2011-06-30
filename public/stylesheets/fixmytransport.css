@@ -224,7 +224,7 @@ form#search {
 	}
 	#banner .status {
 		display:inline-block;
-		margin-top: 35px;
+		/*margin-top: 35px;*/
 		color:#fff;
 		text-transform:uppercase;
 		font-size:0.8em;
@@ -251,6 +251,9 @@ form#search {
 	#greybanner h1,
 	#greybanner h2 {
 		font-size: 2em;
+	}
+	#banner h1 {
+		width:700px;
 	}
 		#banner h1 a {
 			color:#fff;
