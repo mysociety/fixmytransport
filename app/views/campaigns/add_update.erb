@@ -1,10 +1,10 @@
 <div id="main-content" class="container">
     <%- if @campaign_update.is_advice_request? %>
       <%- id = 'advice-request-form' %>
-      <%- text = t(:ask_our_expert_panel) %>
+      <%- text = t('campaigns.add_update.ask_our_expert_panel') %>
     <%- else %>
       <%- id = 'campaign-update-form' %>
-      <%- text = t(:add_an_update) %>
+      <%- text = t('campaigns.add_update.add_an_update') %>
     <%- end %>
 
     <h3><%= text %></h3>

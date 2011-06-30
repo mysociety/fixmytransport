@@ -1,9 +1,9 @@
-<h2><%= t(:nearly_done) %></h2>
-<p><%= raw t(:click_the_link, :action => @action) %></p>
+<h2><%= t('shared.confirmation_sent.nearly_done') %></h2>
+<p><%= raw t('shared.confirmation_sent.click_the_link', :action => @action) %></p>
 <%- if @worry %>
   <p>
-    <%= raw t(:dont_worry, :worry => @worry) %>
+    <%= raw t('shared.confirmation_sent.dont_worry', :worry => @worry) %>
   </p>
 <%- end %>
-<p><%= raw t(:please_be_patient) %></p>
-<p><%= raw t(:check_your_junkmail_filters) %></p>
+<p><%= raw t('shared.confirmation_sent.please_be_patient') %></p>
+<p><%= raw t('shared.confirmation_sent.check_your_junkmail_filters') %></p>

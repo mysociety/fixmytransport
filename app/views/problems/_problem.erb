@@ -4,8 +4,8 @@
   </span>
   <span class='transport-modes-note'><%= problem.transport_mode_text %></span>
   <div class='details'>
-    <%= t(:reported_on, :date => problem.created_at.strftime("%d/%m/%Y")) %>
-    <%= t(:by, :name => problem.reporter_name) %>
+    <%= t('problems.list.reported_on', :date => problem.created_at.strftime("%d/%m/%Y")) %>
+    <%= t('problems.list.reported_by', :name => problem.reporter_name) %>
     <%= on_or_at_the(problem.location) %>
     <%= link_to("#{problem.location.description}", problem_url(problem)) %>
   </div>

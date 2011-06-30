@@ -26,14 +26,6 @@ class Comment < ActiveRecord::Base
     self.token = MySociety::Util.generate_token
   end
   
-  def send_confirmation_email
-    if commented.is_a? Problem
-      ProblemMailer.deliver_comment_confirmation(user, self, token)
-    else
-      CampaignMailer.deliver_comment_confirmation(user, self, token)
-    end
-  end
-  
   def populate_user_name
     if self.user and ! self.user_name
       self.user_name = self.user.name

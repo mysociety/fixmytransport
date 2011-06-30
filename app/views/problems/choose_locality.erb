@@ -1,15 +1,15 @@
 <div id="banner">
 	<div class="container">
-		<h1>Choose Locality</h1>
+		<h1><%= t('problems.choose_localities.choose_locality')%></h1>
 	</div>
 </div>
 <div id="greybanner">
 	<div class="container">
 		<p>
 		<%- if @matched_stops_or_stations %>
-		  <%= t(:within_multiple_localities, :name => @name) %>
+		  <%= t('problems.choose_localities.within_multiple_localities', :name => @name) %>
 		<%- else %>
-		  <%= t(:multiple_localities, :name => @name) %>
+		  <%= t('problems.choose_localities.multiple_localities', :name => @name) %>
 		<%- end %>
 		</p>
 	</div>

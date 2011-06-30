@@ -42,8 +42,8 @@ class ApplicationController < ActionController::Base
   def require_user
     unless current_user
       store_location
-      access_message_key = :access_this_page
-      flash[:notice] = t(:must_be_logged_in, :requested_action => t(access_message_key))
+      access_message_key = 'shared.access.access_this_page'
+      flash[:notice] = t('shared.login.must_be_logged_in', :requested_action => t(access_message_key))
       redirect_to new_user_session_url
       return false
     end
@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
   def require_no_user
     if current_user
       store_location
-      flash[:notice] = t(:must_be_logged_out)
+      flash[:notice] = t('shared.login.must_be_logged_out')
       redirect_to root_url
       return false
     end
@@ -88,7 +88,7 @@ class ApplicationController < ActionController::Base
   def require_expert
     return true if current_user && current_user.is_expert?
     @access_message = access_message_key
-    @name = t(:a_fixmytransport_boffin)
+    @name = t('shared.login.a_fixmytransport_boffin')
     return redirect_bad_user
   end
 
@@ -109,7 +109,7 @@ class ApplicationController < ActionController::Base
       render :template => "shared/wrong_user"
       return false
     end
-    flash[:notice] = t(:login_to, :user => @name, :requested_action => t(@access_message))
+    flash[:notice] = t('shared.login.login_to', :user => @name, :requested_action => t(@access_message))
     store_location
     redirect_to login_url
     return false
@@ -125,7 +125,7 @@ class ApplicationController < ActionController::Base
   end
 
   def access_message_key
-    "#{controller_name}_#{@action_name}_access_message".to_sym
+    "shared.access.#{controller_name}_#{@action_name}_access_message"
   end
 
   # For administration interface, return display name of authenticated user.
@@ -214,11 +214,11 @@ class ApplicationController < ActionController::Base
     if post_login_action_data = get_action_data(session)
       case post_login_action_data[:action]
       when :join_campaign
-        return t(:you_will_not_be_a_supporter)
+        return t('shared.confirmation_sent.you_will_not_be_a_supporter')
       when :add_comment
-        return t(:your_comment_will_not_be_added)
+        return t('shared.confirmation_sent.your_comment_will_not_be_added')
       when :create_problem
-        return t(:your_problem_will_not_be_created)
+        return t('shared.confirmation_sent.your_problem_will_not_be_created')
       else 
         return nil
       end
@@ -255,7 +255,7 @@ class ApplicationController < ActionController::Base
                              post_login_action_data[:mark_fixed],
                              post_login_action_data[:mark_open],
                              confirmed=true)
-        flash[:notice] = "Thanks for your comment"
+        flash[:notice] = t('shared.add_comment.thanks_for_comment')
       when :create_problem
         problem = Problem.create_from_hash(post_login_action_data, current_user)
         respond_to do |format|
@@ -321,7 +321,7 @@ class ApplicationController < ActionController::Base
       @comment.confirm!
       respond_to do |format|
         format.html do
-          flash[:notice] = 'Thanks for your comment!'
+          flash[:notice] = t('shared.add_comment.thanks_for_comment')
           redirect_to @template.commented_url(@comment.commented)
         end
         format.json do
@@ -353,7 +353,7 @@ class ApplicationController < ActionController::Base
                        :mark_fixed => @comment.mark_fixed, 
                        :mark_open => @comment.mark_open, 
                        :redirect => @template.commented_url(@comment.commented),
-                       :notice => "Please sign in or create an account to add your comment to this #{commented_type}" }
+                       :notice => t('shared.add_comment.sign_in_to_comment', :commented_type => commented_type) }
       session[:next_action] = data_to_string(comment_data)
       respond_to do |format|
         format.html do

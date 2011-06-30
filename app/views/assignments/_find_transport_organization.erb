@@ -1,5 +1,5 @@
-<h2 class="main-header">Find out the company that runs the <%= @assignment.problem.location.description %></h2>
-<%= t(:find_transport_org_explanation, :location => @assignment.problem.location.description)%>
+<h2 class="main-header"><%= t('assignments.edit.find_transport_org_header', :location => @assignment.problem.location.description) %></h2>
+<%= t('assignments.edit.find_transport_org_explanation', :location => @assignment.problem.location.description)%>
 <%- form_for [@campaign, @assignment] do |f| %>
   
   <div class='fieldset'>
@@ -10,7 +10,7 @@
           <%= @assignment.errors.on(:organization_name) %>
         </div>
       <%- end %>
-      <%= label_tag :organization_name, t(:organization_name) %>
+      <%= label_tag :organization_name, t('assignments.edit.organization_name') %>
       <%= raw text_field_tag :organization_name, @assignment.data[:organization_name], :size => 45 %>
     </div>
     
@@ -20,10 +20,10 @@
           <%= @assignment.errors.on(:organization_email) %>
         </div>
       <%- end %>
-      <%= label_tag :organization_email, t(:organization_email) %>
+      <%= label_tag :organization_email, t('assignments.edit.organization_email') %>
       <%= raw text_field_tag :organization_email, @assignment.data[:organization_email], :size => 45 %>
     </div>
     <div class='form-field'>
-      <%= raw f.submit t(:submit) %>
+      <%= raw f.submit t('assignments.edit.submit') %>
     </div>
 <%- end %>

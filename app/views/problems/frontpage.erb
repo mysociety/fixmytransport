@@ -25,19 +25,19 @@ $(function(){
 		</noscript>
 		<ul id="frontpage-problem-scroller">
 			<li>
-				<h1>Had a bad train journey?</h1>
+				<h1><%= t('problems.frontpage.bad_train')%></h1>
 				<%- if @version == 1 %>
 				  <img src="/images/frontpage-trainwreck.jpg" alt="" />
 				<%- end %>
 			</li>
 			<li>
-				<h1>Had a bad bus journey?</h1>
+				<h1><%= t('problems.frontpage.bad_bus') %></h1>
 				<%- if @version == 1 %>
 				  <img src="/images/frontpage-trainwreck2.jpg" alt="" />
 				<%- end %>
 			</li>
 			<li>
-				<h1>Did the ferry sink?</h1>
+				<h1><%= t('problems.frontpage.bad_ferry')%></h1>
 				<%- if @version == 1 %>
 				  <img src="/images/frontpage-trainwreck3.jpg" alt="" />
 				<%- end %>
@@ -45,42 +45,42 @@ $(function(){
 		</ul>
 		
 
-		<p class="font-1">Report your problem:</p>
+		<p class="font-1"><%= t('problems.frontpage.report_problem') %></p>
 		<%= link_to('STOP or STATION', find_stop_problems_url, :class => 'font-1 button green') %>
 		<%= raw link_to('JOURNEY or ROUTE', find_route_problems_url, :class => 'font-1 button green') %>
-		<p class="font-1">and we will help you get it fixed</p>
+		<p class="font-1"><%= t('problems.frontpage.get_it_fixed')%></p>
 		<%- if @version == 0 %>
 		<div id="followus" class="font-1">
 			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank">
 				<span class="icon facebook"></span>
-				Follow us on Facebook
+				<%= t('problems.frontpage.follow_on_facebook')%>
 			</a>
 			<a href="http://twitter.com/FixMyTransport" target="_target">
 				<span class="icon twitter"></span>
-				Follow us on Twitter
+				<%= t('problems.frontpage.follow_on_twitter')%>
 			</a>
 		</div>
 		<%- end %>
 	</div>
 	<div class="rightcol">
-		<h2>What FixMyTransport does</h2>
+		<h2><%= t('problems.frontpage.what_it_does')%></h2>
 		<ul id="secret-list">
-			<li class="secret-report">Reports problems</li>
-			<li class="secret-find">Finds people responsible</li>
-			<li class="secret-grow">Grows support</li>
-			<li class="secret-track">Tracks progress</li>
-			<li class="secret-done">Gets things done</li>
+			<li class="secret-report"><%= t('problems.frontpage.reports_problems')%></li>
+			<li class="secret-find"><%= t('problems.frontpage.finds_responsible') %></li>
+			<li class="secret-grow"><%= t('problems.frontpage.grows_support') %></li>
+			<li class="secret-track"><%= t('problems.frontpage.tracks_progress')%></li>
+			<li class="secret-done"><%= t('problems.frontpage.gets_things_done')%></li>
 		</ul>
-		<a href="#main-content" class="font-1 button">How does it work?</a>
+		<a href="#main-content" class="font-1 button"><%= t('problems.frontpage.how_does_it_work')%></a>
 		<%- if @version == 1 %>
 		<div id="followus" class="font-1">
 			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank" title="Facebook (opens in new window)">
 				<span class="icon facebook"></span>
-				Follow us on Facebook
+					<%= t('problems.frontpage.follow_on_facebook')%>
 			</a>
 			<a href="http://twitter.com/FixMyTransport" target="_target" title="Twitter (opens in new window)">
 				<span class="icon twitter"></span>
-				Follow us on Twitter
+					<%= t('problems.frontpage.follow_on_twitter')%>
 			</a>
 		</div>
 		<%- end %>
@@ -99,46 +99,46 @@ $(function(){
 			<div class="dotted-white">&nbsp;</div>
 		</div>
 		<div id="frontpage-banner-right">
-			<a href="<%= issues_url %>" class="font-1 fancybutton">Recent Issues</a>
-			<a href="<%= routes_url %>" class="font-1 fancybutton">Browse Routes</a>
+			<a href="<%= issues_url %>" class="font-1 fancybutton"><%= t('problems.frontpage.recent_issues')%></a>
+			<a href="<%= routes_url %>" class="font-1 fancybutton"><%= t('problems.frontpage.browse_routes')%></a>
 		</div>
 	</div>
 </div>
 <div id="main-content" class="container">
 	<div id="fg-head">
 		<div id="fg-head-inner">
-			<h2 class="font-1">How does it work?</h2>
-			<p>We give you the tools to report your public transport problems to the correct operator or authority.</p>
-			<p>All reports and responses are posted online so that other people can support, respond and give advice.</p>
+			<h2 class="font-1"><%= t('problems.frontpage.how_does_it_work')%></h2>
+			<p><%= t('problems.frontpage.how_details_one')%></p>
+			<p><%= t('problems.frontpage.how_details_two')%></p>
 		</div>
 	</div>
 	<ol id="frontpage-grid">
 		<li class="fg-top">
 			<div id="fg-img-1" class="fg-img"></div>
-			<h3 class="font-1">1. Report your problem</h3>
-			<p>It might have been a one of incident you’d just like to log, or a recurring problem you’d like fixing.</p>
+			<h3 class="font-1"><%= t('problems.frontpage.step_one')%></h3>
+			<p><%= t('problems.frontpage.step_one_details')%></p>
 		</li>
 		<li class="fg-top end">
 			<div id="fg-img-2" class="fg-img"></div>
-			<h3 class="font-1">2. Find who's responsible</h3>
-			<p>From the information you provide we can send your problem through to the correct department of the operator or local authority in charge.</p>
+			<h3 class="font-1"><%= t('problems.frontpage.step_two')%></h3>
+			<p><%= t('problems.frontpage.step_two_details')%></p>
 		</li>
 		
 		<div class="fg-bottom">
 		<li>
 			<div id="fg-img-3" class="fg-img"></div>
-			<h3 class="font-1">3. Gather Support</h3>
-			<p>All reports are posted to the site, and you can share them with friends and followers and fellow passengers.</p>
+			<h3 class="font-1"><%= t('problems.frontpage.step_three')%></h3>
+			<p><%= t('problems.frontpage.step_three_details')%></p>
 		</li>
 		<li>
 			<div id="fg-img-4" class="fg-img"></div>
-			<h3 class="font-1">4. Track Progress</h3>
-			<p>Gather responses, comments and advice from operators, authorities, supporters, as well as our transport boffins.</p>
+			<h3 class="font-1"><%= t('problems.frontpage.step_four')%></h3>
+			<p><%= t('problems.frontpage.step_four_details')%></p>
 		</li>
 		<li class="end">
 			<div id="fg-img-5" class="fg-img"></div>
-			<h3 class="font-1">5. Get it sorted!</h3>
-			<p>See your campaign gain momentum and hopefully get resolved. Get a warm fuzzy feeling for making public transport better for everybody.</p>
+			<h3 class="font-1"><%= t('problems.frontpage.step_five')%></h3>
+			<p><%= t('problems.frontpage.step_five_details')%></p>
 		</li>
 		</div>
 	</ol>

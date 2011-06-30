@@ -1,5 +1,5 @@
 <div id="main-content" class="container">
-	<%= raw t(:please_give_feedback, :email => mail_to(MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost'))) %>
+	<%= raw t('static.feedback.please_give_feedback', :email => mail_to(MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost'))) %>
 	<div class='feedback-form'>
 	  <%- form_for(@feedback, :url => feedback_path) do |form|  %>
 	    <div class='fieldset'>
@@ -56,7 +56,7 @@
 	        <%= raw form.text_area :message, {:rows => 8, :cols => 50} %>
 	      </div>
 
-		  <button stype="submit"><%= t(:send) %></button>
+		  <button stype="submit"><%= t('static.feedback.send') %></button>
 
 	    </div>
 	  <%- end %>

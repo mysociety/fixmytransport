@@ -2,7 +2,7 @@
 <html lang='<%= I18n.locale %>' xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml">
   <head>
     <title>
-      <%= "#{t(:site_name)}#{@title ? ':' : ''} #{@title}" %>
+      <%= "#{t('shared.header.site_name')}#{@title ? ':' : ''} #{@title}" %>
     </title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-type' />
     <%= yield :meta %>
@@ -25,7 +25,7 @@
 	<body role="application">
 		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
 		<div class="staging-banner top-notice">
-			<div class="container"><%= t(:development_site) %></div>
+			<div class="container"><%= t('shared.header.development_site') %></div>
 		</div>
 		<%- end %>
     <%= yield :banner_content %>
@@ -33,18 +33,18 @@
 			<div id="top" class="container" role="banner">
 				<ul id="mysociety-tab" role="navigation">
 					<li><a id="mysociety-logo" href="http://mysociety.org">MySociety</a></li>
-					<li><a href="http://mysociety.org/donate">Donate</a></li>
-					<li><a href="http://www.mysociety.org/projects/">Our Sites</a></li>
+					<li><a href="http://mysociety.org/donate"><%= t('shared.header.donate') %></a></li>
+					<li><a href="http://www.mysociety.org/projects/"><%= t('shared.header.our_sites') %></a></li>
 				</ul>
 				<ul id="top-nav">
-					<li><a href="<%= about_url %>">About</a></li>
-					<li><a href="<%= feedback_url(:url => CGI.escape(request.request_uri)) %>">Feedback</a></li>
+					<li><a href="<%= about_url %>"><%= t('shared.header.about') %></a></li>
+					<li><a href="<%= feedback_url(:url => CGI.escape(request.request_uri)) %>"><%= t('shared.header.feedback') %></a></li>
 				</ul>
-				<a id="logo" href="<%= root_url %>">Fix My Transport</a>
+				<a id="logo" href="<%= root_url %>">FixMyTransport</a>
 				<%- if current_user %>
-				<p id="member-info">Hi <a href="<%= profile_path(current_user) %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>">Logout</a></p>
+				<p id="member-info"><%= t('shared.header.hi')%> <a href="<%= profile_path(current_user) %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>">Logout</a></p>
 				<%- else %>
-				<p id="member-info">Hi Guest. <a class="auth" href="<%= login_path(:redirect => request.request_uri) %>">Sign in</a></p>
+				<p id="member-info"><%= t('shared.header.hi') %> <%= t('shared.header.guest') %>. <a class="auth" href="<%= login_path(:redirect => request.request_uri) %>">Sign in</a></p>
 				<%- end %>
 			</div>
 
@@ -61,13 +61,13 @@
 			<%- end %>
 			<%= yield %>
 			<div id="goto-top-wrap" class="container">
-				<a href="#top" class="goto-top right">Top of page</a>
+				<a href="#top" class="goto-top right"><%= t('shared.footer.top_of_page') %></a>
 			</div>
     	</div>
 
 		<div id="footer">
 			<div class="container">
-				<p><%= raw t(:built_by, :mysociety_link => link_to('mySociety', 'http://mysociety.org'), :indigo_link => link_to('Indigo Trust', 'http://indigotrust.wordpress.com/'), :donor_link => link_to(t(:small_donors), 'http://mysociety.org/donate'), :esmee_link => link_to('Esmée Fairbairn Foundation', 'http://www.esmeefairbairn.org.uk')) %></p>
+				<p><%= raw t('shared.footer.built_by', :mysociety_link => link_to('mySociety', 'http://mysociety.org'), :indigo_link => link_to('Indigo Trust', 'http://indigotrust.wordpress.com/'), :donor_link => link_to(t('shared.footer.small_donors'), 'http://mysociety.org/donate'), :esmee_link => link_to('Esmée Fairbairn Foundation', 'http://www.esmeefairbairn.org.uk')) %></p>
 			</div>
 		</div>
 		<%= yield :javascript %>

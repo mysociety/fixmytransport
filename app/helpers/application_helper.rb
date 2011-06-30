@@ -141,11 +141,11 @@ module ApplicationHelper
 
   def on_or_at_the(location)
     if location.is_a? Route or location.is_a? SubRoute
-      return t(:on_the)
+      return t('shared.problem.on_the')
     elsif location.is_a?(StopArea) && ['GRLS', 'GTMU'].include?(location.area_type)
-      return t(:at)
+      return t('shared.problem.at')
     else
-      return t(:at_the)
+      return t('shared.problem.at_the')
     end
   end
 
@@ -210,7 +210,7 @@ module ApplicationHelper
     if location.pte_responsible?
       responsible = location.passenger_transport_executive.name
     else
-      responsible = "#{t(:the)} #{t(location.responsible_organization_type)}"
+      responsible = "#{t('shared.problem.the')} #{t(location.responsible_organization_type)}"
     end
   end
 
@@ -298,70 +298,33 @@ module ApplicationHelper
     return date.strftime("%e %b %Y").strip
   end
 
-  def campaign_status(user, campaign)
-    return t(:initiator) if user == campaign.initiator
-    return t(:expert) if user.is_expert?
-    return t(:supporter) if campaign.supporters.include?(user)
-    return ""
-  end
-
   def update_text(update, link)
     extra_parts = []
     if update.incoming_message
-      extra_parts << t(:in_response_to, :subject => update.incoming_message.subject)
+      extra_parts << t('campaign_mailer.update.in_response_to', :subject => update.incoming_message.subject)
       if !update.incoming_message.from.blank?
-        extra_parts << t(:received_from, :from => update.incoming_message.from)
+        extra_parts << t('campaign_mailer.update.received_from', :from => update.incoming_message.from)
       end
     end
     if update.outgoing_message
-      extra_parts << t(:about_email, :name => update.outgoing_message.recipient_name)
-      extra_parts << t(:with_subject, :subject => update.outgoing_message.subject)
+      extra_parts << t('campaign_mailer.update.about_email', :name => update.outgoing_message.recipient_name)
+      extra_parts << t('campaign_mailer.update.with_subject', :subject => update.outgoing_message.subject)
     end
     if extra_parts.empty?
       extra = ''
     else
       extra = " " + extra_parts.join(" ")
     end
-    text = t(:new_update, :name => update.user.name,
-                          :title => update.campaign.title,
-                          :link => link, :extra => extra)
+    text = t('campaign_mailer.update.new_update', :name => update.user.name,
+                                                  :title => update.campaign.title,
+                                                  :link => link, :extra => extra)
   end
 
-  def event_type_note(campaign_event)
-    case campaign_event.event_type
-    when 'outgoing_message_sent'
-      return t(:new_message)
-    when 'incoming_message_received'
-      return t(:new_reply)
-    when 'campaign_update_added'
-      return t(:new_update)
-    when 'assignment_given'
-      return t(:new_assignment)
-    when 'assignment_completed'
-      case campaign_event.described.task_type_name
-      when 'write-to-other'
-        return t(:new_message)
-      when 'publish-problem'
-        return t(:new_campaign)
-      when 'write-to-transport-organization'
-        return t(:new_problem_reported)
-      end
-    when 'assignment_in_progress'
-      case campaign_event.described.task_type_name
-      when 'find-transport-organization'
-        return t(:transport_organization_found)
-      when 'find-transport-organization-contact-details'
-        return t(:contact_details_found)
-      end
-    when 'comment_added'
-      return t(:new_comment)
-    end
-  end
 
   def national_route_link(region, national_region, anchor)
     if @region != @national_region
-      national_link =  link_to(t(:national_routes), route_region_path(@national_region, :anchor => anchor))
-      return t(:see_also_national_routes, :national => national_link)
+      national_link =  link_to(t('locations.show_route_region.national_routes'), route_region_path(@national_region, :anchor => anchor))
+      return t('locations.show_route_region.see_also_national_routes', :national => national_link)
     else
       return ''
     end
@@ -385,7 +348,6 @@ module ApplicationHelper
     twitter_params = { :url => campaign_url(campaign),
                        :text => text,
                        :via => 'FixMyTransport' }
-
     return "http://twitter.com/share?#{twitter_params.to_query}"
   end
 
@@ -399,9 +361,9 @@ module ApplicationHelper
   def assignment_title(assignment)
     case assignment.task_type
     when 'find_transport_organization'
-      return 'Find operator'
+      return t('campaigns.show.find_operator_task_title')
     when 'find_transport_organization_contact_details'
-      return 'Add contact'
+      return t('campaigns.show.find_contact_task_title')
     else
       raise "No title set for assignment type #{assignment.task_type}"
     end
@@ -410,9 +372,9 @@ module ApplicationHelper
   def assignment_details(assignment)
     case assignment.task_type
     when 'find_transport_organization'
-      return "In order to get your campaign started, you'll need to find out who operates this #{readable_location_type(assignment.campaign.location)}."
+      return t('campaigns.show.find_operator_task_description', :location => readable_location_type(assignment.campaign.location))
     when 'find_transport_organization_contact_details'
-      return "In order to get your campaign started, you'll need to find an email address for #{assignment.problem.operator.name}"
+      return t('campaigns.show.find_contact_task_description', :name => assignment.problem.operator.name)
     else 
       raise "No details set for assignment type #{assignment.task_type}"
     end
@@ -432,11 +394,11 @@ module ApplicationHelper
   def contact_description(contact_type, campaign)
     case contact_type
     when 'OperatorContact'
-      return MySociety::Format.ucfirst("#{readable_location_type(campaign.location)} operator")
+      return t('campaigns.show.contact_operator', :location => MySociety::Format.ucfirst(readable_location_type(campaign.location)))
     when 'CouncilContact'
-      return "Council"
+      return t('campaigns.show.contact_council')
     when 'PassengerTransportExecutive'
-      return "Passenger Transport Executive"
+      return t('campaigns.show.contact_passenger_transport_executive')
     else
       raise "No contact description set for contact_type #{contact_type}"
     end

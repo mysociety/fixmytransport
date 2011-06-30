@@ -1,11 +1,11 @@
 <div id="banner">
 	<div class="container">
-		<h1>Choose a Route</h1>
+		<h1><%= t('problems.choose_route.header')%></h1>
 	</div>
 </div>
 <div id="greybanner">
 	<div class="container">
-		<p><%= t(:multiple_routes_intro, :num_locations => MAX_LOCATION_RESULTS) %></p>
+		<p><%= t('problems.choose_route.multiple_routes_intro', :num_locations => MAX_LOCATION_RESULTS) %></p>
 	</div>
 </div>
 <div id="main-content" class="container">
@@ -28,6 +28,6 @@
 	</ul>
 
 	<%- if @limit and @locations.size == @limit %>
-	  <%= link_to(t(:show_all), url_for(params.merge(:show_all => 1))) %>
+	  <%= link_to(t('problems.choose_route.show_all'), url_for(params.merge(:show_all => 1))) %>
 	<%- end %>
 </div>

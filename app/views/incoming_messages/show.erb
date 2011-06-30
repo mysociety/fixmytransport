@@ -5,21 +5,21 @@
 </div>
 <div id="greybanner">
 	<div class="container">
-		<p><%= raw t(:this_message_was_sent_to, :campaign => link_to(h(@incoming_message.campaign.title), campaign_path(@incoming_message.campaign))) %></p>
+		<p><%= raw t('incoming_messages.show.this_message_was_sent_to', :campaign => link_to(h(@incoming_message.campaign.title), campaign_path(@incoming_message.campaign))) %></p>
 	</div>
 </div>
 <div id="main-content" class="container">
 	<div class='campaign-email'>
 	  <h2>
 	    <div class='from'>
-	      <%= t(:from, :sender => @incoming_message.safe_from) %>
+	      <%= t('incoming_messages.show.from', :sender => @incoming_message.safe_from) %>
 	    </div>
 	    <div class='date'>
 	      <%= short_date(@incoming_message.sent_at) %>
 	    </div>
 	  </h2>
 	  <div class='subject'>
-	    <b><%= "#{t(:subject)}:" %></b>
+	    <b><%= "#{t('incoming_messages.show.subject')}:" %></b>
 	    <%= @incoming_message.subject %>
 	  </div>
 	  <%- FixMyTransport::Email.get_display_attachments(@incoming_message.mail).each do |attachment| %>
@@ -29,7 +29,7 @@
 	    <%= raw @incoming_message.get_body_for_html_display(@collapse_quotes) %>
 	  </div>
 	  <div class='reply-link'>
-	    <%= raw link_to(t(:reply_to_this_message), new_campaign_outgoing_message_path(@incoming_message.campaign, :incoming_message_id => @incoming_message)) %>
+	    <%= raw link_to(t('incoming_messages.show.reply_to_this_message'), new_campaign_outgoing_message_path(@incoming_message.campaign, :incoming_message_id => @incoming_message)) %>
 	  </div>
 	</div>
 
@@ -43,15 +43,15 @@
 	            <%= error_message_on @campaign_update, :text %>
 	          </div>
 	        <%- end %>
-	        <%= f.label :text, t(:what_does_this_mean) %>
+	        <%= f.label :text, t('incoming_messages.show.what_does_this_mean') %>
 	        <%= raw f.hidden_field :incoming_message_id %>
 	        <%= raw f.hidden_field :user_id %>
 	        <%= raw f.text_area :text, :cols => 40, :rows => 5 %>
-	        <button class="button" type="submit"><%= t(:add_update) %></button>
+	        <button class="button" type="submit"><%= t('incoming_messages.show.add_update') %></button>
 	      </div>
 	    </div>
 	  <%- end %>
 	<%- else  %>
-	  <%= raw t(:login_to_add_update, :link => link_to(t(:login_as, :user => h(@incoming_message.campaign.initiator.name)), login_url(:redirect => request.request_uri)), :campaign => h(@incoming_message.campaign.title)) %>
+	  <%= raw t('incoming_messages.show.login_to_add_update', :link => link_to(t('incoming_messages.show.login_as', :user => h(@incoming_message.campaign.initiator.name)), login_url(:redirect => request.request_uri)), :campaign => h(@incoming_message.campaign.title)) %>
 	<%- end %>
 </div>

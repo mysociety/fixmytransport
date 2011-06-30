@@ -1,7 +1,16 @@
 en:
-  message_to: "Write your message to %{organization}"
-  new_message_to: "Write your new message to %{organization}"
-  not_yet_sent: Not yet sent
-  this_message_was_sent_by: "This is a message from the %{campaign} campaign to %{recipient}%{extra}."
-  message: Message
-  in_reply_to: " in reply to their message %{incoming}"
+  outgoing_messages:
+    new:
+      your_message_has_been_sent: Your message has been sent on its way.
+      message_to: "Write your message to %{organization}"
+      new_message_to: "Write your new message to %{organization}"
+      message: Message
+      submit: Submit
+      original_message: Original Message
+      re: Re
+    show:
+      what_does_this_mean: What does this message mean for your campaign? 
+      add_update: "Add update"
+      login_as: "Sign in as %{user}"
+      login_to_add_update: "%{link} to add an update about this message to \"%{campaign}\""
+      

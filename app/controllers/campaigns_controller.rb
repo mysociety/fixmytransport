@@ -3,8 +3,7 @@ class CampaignsController < ApplicationController
   before_filter :process_map_params, :only => [:show]
   before_filter :find_editable_campaign, :only => [:add_details]
   before_filter :find_visible_campaign, :except => [:add_details,
-                                                    :confirm_join, :confirm_leave,
-                                                    :confirm_comment]
+                                                    :confirm_join, :confirm_leave]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
                                                        :complete, :add_photos, :add_details, :share]
   before_filter :require_campaign_initiator_or_expert, :only => [:edit, :update]
@@ -15,7 +14,7 @@ class CampaignsController < ApplicationController
     @next_action_join = data_to_string({ :action => :join_campaign,
                                          :id => @campaign.id,
                                          :redirect => campaign_path(@campaign),
-                                         :notice => "Please sign in or create an account to join this campaign" })
+                                         :notice => t('campaigns.show.sign_in_to_join') })
     @title = @campaign.title
     @campaign.campaign_photos.build({})
     map_params_from_location(@campaign.location.points,
@@ -47,7 +46,7 @@ class CampaignsController < ApplicationController
         join_data = { :action => :join_campaign,
                       :id => @campaign.id,
                       :redirect => campaign_path(@campaign),
-                      :notice => "Please sign in or create an account to join this campaign" }
+                      :notice => t('campaigns.show.sign_in_to_join') }
         session[:next_action] = data_to_string(join_data)
         respond_to do |format|
           format.html do
@@ -66,55 +65,15 @@ class CampaignsController < ApplicationController
     end
   end
 
-  def confirm_join
-    @campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
-    # GET request with token from confirmation email
-    if request.get?
-      if @campaign_supporter
-        @user = @campaign_supporter.supporter
-        @campaign_supporter.confirm!
-      else
-        @error = :error_on_join
-      end
-    # POST request from form displayed on confirmation
-    elsif request.put?
-      if @campaign_supporter
-        @user = @campaign_supporter.supporter
-        @user.name = params[:user][:name]
-        @user.password = params[:user][:password]
-        @user.password_confirmation = params[:user][:password_confirmation]
-        @user.registered = true
-        @user.confirmed_password = true
-        if @user.save
-          redirect_to campaign_url(@campaign_supporter.campaign)
-        end
-        @user.registered = false
-        @user.confirmed_password = false
-      else
-        @error = :error_on_register
-      end
-    end
-  end
-
   def leave
     if current_user && params[:user_id] && current_user.id == params[:user_id].to_i
       @campaign.remove_supporter(current_user)
-      flash[:notice] = t(:you_are_no_longer_a_supporter, :campaign => @campaign.title)
+      flash[:notice] = t('campaigns.show.you_are_no_longer_a_supporter', :campaign => @campaign.title)
       redirect_to campaign_url(@campaign)
       return
     end
     render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
     return false
-  end
-
-  def confirm_leave
-    @campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
-    if @campaign_supporter
-      @campaign = @campaign_supporter.campaign
-      @campaign.remove_supporter(@campaign_supporter.supporter)
-    else
-      @error = :error_on_leave
-    end
   end
 
   def complete
@@ -159,7 +118,7 @@ class CampaignsController < ApplicationController
                                                             :described => @campaign_update)
         respond_to do |format|
           format.html do
-            flash[:notice] = @campaign_update.is_advice_request? ? t(:advice_request_added) : t(:update_added)
+            flash[:notice] = @campaign_update.is_advice_request? ? t('campaigns.add_update.advice_request_added') : t('campaigns.add_update.update_added')
             redirect_to campaign_url(@campaign)
             return
           end
@@ -204,15 +163,6 @@ class CampaignsController < ApplicationController
       end
     end
     render :template => 'shared/add_comment'
-  end
-
-  def confirm_comment
-    @comment = Comment.find_by_token(params[:email_token])
-    if @comment
-      @comment.confirm!
-    else
-      @error = t(:update_not_found)
-    end
   end
 
   private

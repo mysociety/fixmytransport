@@ -35,13 +35,13 @@
 
 <div id="banner">
 	<div class="container">
-		<h1>Add Details</h1>
+		<h1><%= t('campaigns.add_details.add_details') %></h1>
 	</div>
 </div>
 
 <div id="greybanner">
 	<div class="container">
-		<p>Give your campaign a headline and description</p>
+		<p><%= t('campaigns.add_details.add_details_instructions') %></p>
 	</div>
 </div>
 	<div id="main-content" class="container">
@@ -59,10 +59,10 @@
           <%=  f.label :title, raw("Please help me persuade <span>#{@campaign.responsible_org_descriptor}</span> to:") %>
           <%= raw f.text_field :title %>
 				<div class="tipbox">
-					<a href="#" class="tip-close">Close</a>
-					<h5>Make a headline</h5>
-					<p>Give your campaign a good headline</p>
-					<p>E.g. "<em>Please help me persuade The Operator to get rid of the awful smell between Manors and Monument on the Metro</em>"</p>
+					<a href="#" class="tip-close"><%= t('campaigns.add_details.tip_close') %></a>
+					<h5><%= t('campaigns.add_details.make_a_headline')%></h5>
+					<p><%= t('campaigns.add_details.good_headline') %></p>
+					<p><%= t('campaigns.add_details.eg') %>"<em><%= t('campaigns.add_details.headline_example')%></em>"</p>
 				</div>
 			</li>
 
@@ -78,11 +78,11 @@
 			   <%= f.label :description, "Description" %>
 			   <%= raw f.text_area :description %>
 				<div class="tipbox">
-					<a href="#" class="tip-close">Close</a>
-					<h5>Add a short description</h5>
-					<p>In no more than 40 words, provide a quick description of the issue. This will allow others to easily understand and support your campaign.</p>
+					<a href="#" class="tip-close"><%= t('campaigns.add_details.tip_close') %></a>
+					<h5><%= t('campaigns.add_details.add_short_description') %></h5>
+					<p><%= t('campaigns.add_details.description_advice')%></p>
 				</div>
-				<button type="submit" class="button">Submit</button>
+				<button type="submit" class="button"><%= t('campaigns.add_details.details_submit') %></button>
 			</li>
 		</ul>
 	<%- end %>

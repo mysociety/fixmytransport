@@ -1,7 +1,7 @@
 <div id="banner">
 	<div class="container">
 		<%- if current_user && current_user == @user %>
-	    	<%= raw link_to(t(:edit_your_account), edit_account_path, :class => 'button right') %>
+	    	<%= raw link_to(t('profiles.show.edit_your_account'), edit_account_path, :class => 'button right') %>
 	    <%- end %>
 		<h1>Profile</h1>
 	</div>
@@ -24,7 +24,7 @@
   
   <%- if @user.initiated_campaigns.visible.count > 0 %>
   <a name="managing"></a>
-  <h3>Managing</h3>
+  <h3><%= t('profiles.show.managing')%></h3>
   <ul class="issues-list">
   	<%- @user.initiated_campaigns.visible.each do |campaign| %>
        <%= render :partial => 'shared/issue', :locals => { :context => :profile, :issue => campaign } %>
@@ -34,7 +34,7 @@
   
   <%- if @user.campaigns.visible.count > 0 %>
   <a name="supporting"></a>
-  <h3>Supporting</h3>
+  <h3><%= t('profiles.show.supporting')%></h3>
   <ul class="issues-list">
   	<%- @user.campaigns.visible.each do |campaign| %>
        <%= render :partial => 'shared/issue', :locals => { :context => :profile, :issue => campaign } %>
@@ -44,7 +44,7 @@
   
   <%- if @user.problems.visible.count > 0 %>
   <a name="reported"></a>
-  <h3>Problems Reported</h3>
+  <h3><%= t('profiles.show.problems_reported')%></h3>
   <ul class="issues-list">
   	<%- @user.problems.visible.each do |problem| %>
        <%= render :partial => 'shared/issue', :locals => { :context => :profile, :issue => problem } %>

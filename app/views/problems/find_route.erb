@@ -1,11 +1,11 @@
 <div id="banner">
 	<div class="container">
-		<h1><%= t(:find_a_route) %></h1>
+		<h1><%= t('problems.find_route.find_a_route') %></h1>
 	</div>
 </div>
 <div id="greybanner">
 	<div class="container">
-		<p>Choose from one of the three options below</p>
+		<p><%= t('problems.find_route.subheader') %></p>
 	</div>
 </div>
 
@@ -13,17 +13,17 @@
   <div class='problem-form-wrapper'>
     <div class='problem-form'>
       <div class='problem-options'>
-        <%= t(:is_it_on_a) %>
+        <%= t('problems.find_route.is_it_on_a') %>
         <span class='link-button'>
-          <%= link_to(t(:bus_or_coach_route), find_bus_route_problems_path) %>
+          <%= link_to(t('problems.find_route.bus_or_coach_route'), find_bus_route_problems_path) %>
         </span>
-        <%= t(:or_on_a) %>
+        <%= t('problems.find_route.or_on_a') %>
         <span class='link-button'>
-          <%= link_to(t(:train_route), find_train_route_problems_path) %>
+          <%= link_to(t('problems.find_route.train_route'), find_train_route_problems_path) %>
         </span>
-        <%= t(:or_on_a) %>
+        <%= t('problems.find_route.or_on_a') %>
         <span class='link-button'>
-          <%= link_to(t(:tram_metro_ferry_route), find_other_route_problems_path) %>
+          <%= link_to(t('problems.find_route.tram_metro_ferry_route'), find_other_route_problems_path) %>
         </span>
       </div>
     </div>

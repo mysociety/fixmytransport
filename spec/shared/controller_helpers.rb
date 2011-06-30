@@ -54,7 +54,7 @@ module SharedBehaviours
 
           it 'should show an appropriate message' do 
             make_request @default_params
-            assigns[:access_message].should == @expected_access_message 
+            assigns[:access_message].should == "shared.access.#{@expected_access_message}"
           end
           
         end
@@ -69,7 +69,7 @@ module SharedBehaviours
         it 'should redirect to the login page with a message' do
           make_request(@default_params)
           response.should redirect_to(login_url)
-          assigns[:access_message].should == @expected_access_message
+          assigns[:access_message].should == "shared.access.#{@expected_access_message}"
         end
         
       end

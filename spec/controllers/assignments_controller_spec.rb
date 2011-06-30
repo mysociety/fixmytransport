@@ -19,7 +19,7 @@ describe AssignmentsController do
       it 'should assign variables for an appropriate message' do
         make_request
         assigns[:name].should == 'a FixMyTransport boffin'
-        assigns[:access_message].should == @expected_access_message
+        assigns[:access_message].should == "shared.access.#{@expected_access_message}"
       end
 
     end

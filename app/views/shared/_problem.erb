@@ -4,12 +4,12 @@
     <%= link_to(problem.subject, problem_url(problem))  %>
   </h4>
   <div class='details'>
-    <%= t(:added) %>
+    <%= t('shared.problem.added') %>
     <span class='posted-time'>
-      <%= t(:posted_time, :time => time_ago_in_words(problem.created_at)) %>
+      <%= t('shared.problem.posted_time', :time => time_ago_in_words(problem.created_at)) %>
     </span>
     <span class='reporter'>
-      <%= t(:by, :name => problem.reporter_name) %>
+      <%= t('shared.problem.by', :name => problem.reporter_name) %>
     </span>
   </div>
   <p class='problem'>

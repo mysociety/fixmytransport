@@ -2,7 +2,7 @@
   <%- if !current_user.supporter_or_initiator(@campaign) %>
 
     <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST'  } do |f| %>
-        <button type="submit" class="button <%= raw button_class %> green">Support</button>
+        <button type="submit" class="button <%= raw button_class %> green"><%= t('campaigns.show.support_this')%></button>
     <%- end %>
 
   <%- end %>

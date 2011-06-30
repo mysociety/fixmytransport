@@ -1,4 +1,4 @@
-<h3>Related Issues</h3>
+<h3><%= t('shared.location_content.related_issues')%></h3>
 <%- if !location.related_issues.empty? %>
 <ul class="issues-list">
 	<%- location.related_issues.each do |issue| %>
@@ -6,6 +6,6 @@
   <%- end %>
 </ul>
 <%- else %>
-No reported issues.
+<%= t('shared.location_content.no_issues')%>
 <%- end %>
 

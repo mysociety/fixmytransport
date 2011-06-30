@@ -8,18 +8,11 @@ class ProblemMailer < ApplicationMailer
    subject problem_confirmation_subject
    body :problem => problem, :recipient => recipient, :link => main_url(confirm_problem_path(:email_token => token))
   end  
-  
-  def comment_confirmation(recipient, comment, token)
-    recipients recipient.name_and_email
-    from contact_from_name_and_email
-    subject comment_confirmation_subject(comment)
-    body :comment => comment, :recipient => recipient, :link => main_url(confirm_comment_path(:email_token => token))
-  end
-  
+    
   def feedback(email_params)
     recipients contact_from_name_and_email
     from email_params[:name] + " <" + email_params[:email] + ">"
-    subject "[FixMyTransport] " << email_params[:subject]
+    subject I18n.translate('mailers.app_subject_prefix') << email_params[:subject]
     body :message => email_params[:message], :name => email_params[:name], :uri => email_params[:feedback_on_uri]
   end
   
@@ -27,7 +20,7 @@ class ProblemMailer < ApplicationMailer
     recipient_email = ProblemMailer.get_recipient_email(recipient, problem)
     recipients recipient_email
     from problem.reply_name_and_email
-    subject "Problem Report: #{problem.subject}" 
+    subject I18n.translate('mailers.problem_report_subject', :subject => problem.subject)
     campaign_link = problem.campaign ? main_url(campaign_path(problem.campaign)) : nil
     body({ :problem => problem, 
            :problem_link => main_url(problem_path(problem)), 

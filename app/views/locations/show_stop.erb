@@ -35,7 +35,7 @@
       <%- end %>
       <%- if @stop.status == 'DEL' %>
         <div class='status'>
-          <%= "This stop has been marked as inactive." %>
+          <%= t('locations.show_stop.stop_marked_inactive') %>
         </div>
       <%- end %>
 	</p>
@@ -43,7 +43,7 @@
 </div>
 <div id="main-content" class="container">
 	<div class="leftcol">
-		<h5>Location</h5>
+		<h5><%= t('locations.show_stop.location_header') %></h5>
 		<div id="medium-map">
       <%= render :partial => 'shared/map', :locals => { :locations => @stop.points, :other_locations => @other_locations, :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH  } %>
  	  </div>
@@ -52,8 +52,8 @@
 	</div>
 
 	<div class="rightcol">
-		<a class="button big red report" href="<%= new_problem_url(:location_id => @stop.id, :location_type => 'Stop', :to => params[:to], :from => params[:from])%>">Report a problem</a>
-		<h5 class="left">Routes</h5>
+		<a class="button big red report" href="<%= new_problem_url(:location_id => @stop.id, :location_type => 'Stop', :to => params[:to], :from => params[:from])%>"><%= t('locations.show_stop.report_a_problem') %></a>
+		<h5 class="left"><%= t('locations.show_stop.routes_header') %></h5>
 		<ol id="large-ol">
 		  <%- @stop.routes.each do |route| %>
 			<li><a href="<%= location_url(route)%>"><span class="num"> <%=route.name(from_stop=@stop, short=true) %></span>

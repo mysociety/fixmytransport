@@ -42,7 +42,7 @@ class IncomingMessage < ActiveRecord::Base
   def generate_main_body_text
     main_part = FixMyTransport::Email.get_main_body_text_part(self.mail)
     if main_part.nil?
-      text = I18n.translate(:no_body)
+      text = I18n.translate('incoming_messages.show.no_body')
     else
       text = main_part.body
       # convert html to formatted plain text as we escape all html later
@@ -89,10 +89,12 @@ class IncomingMessage < ActiveRecord::Base
     if collapse_quoted_sections
       text.strip!
       # and display link for quoted stuff
-      text = text.gsub(/FOLDED_QUOTED_SECTION/, "\n\n" + '<span class="unfold_link"><a href="?unfold=1">show quoted sections</a></span>' + "\n\n")
+      show_quoted = I18n.translate('campaigns.show.show_quoted')
+      text = text.gsub(/FOLDED_QUOTED_SECTION/, "\n\n" + '<span class="unfold_link"><a href="?unfold=1">' + show_quoted + '</a></span>' + "\n\n")
     else
       if folded_quoted_text.include?('FOLDED_QUOTED_SECTION')
-        text = text + "\n\n" + '<span class="unfold_link"><a href="?">hide quoted sections</a></span>'
+        hide_quoted = I18n.translate('campaigns.show.hide_quoted')
+        text = text + "\n\n" + '<span class="unfold_link"><a href="?">'+ hide_quoted + '</a></span>'
       end
     end
     text.strip!
@@ -109,9 +111,11 @@ class IncomingMessage < ActiveRecord::Base
   def mask_special_emails(text)
     mask_organization_emails(text)
     campaign.valid_local_parts.each do |local_part|
-      text.gsub!("#{local_part}@#{campaign.domain}", "[#{campaign.title} email]")
+      campaign_email_replacement = I18n.translate('campaigns.show.campaign_email_replacement', :title => campaign.title)
+      text.gsub!("#{local_part}@#{campaign.domain}", campaign_email_replacement)
     end
-    text.gsub!(MySociety::Config.get("CONTACT_EMAIL", 'contact@localhost'), "[FixMyTransport contact email]")
+    app_email_replacement = I18n.translate('campaigns.show.app_email_replacement')
+    text.gsub!(MySociety::Config.get("CONTACT_EMAIL", 'contact@localhost'), app_email_replacement)
     text
   end
   
@@ -126,7 +130,8 @@ class IncomingMessage < ActiveRecord::Base
         if block_given?
          text = yield [organization, email, text]
         else
-          text.gsub!(email, "[#{organization.name} problem reporting email]")
+          org_email_replacement = I18n.translate('campaigns.show.org_email_replacement', :name => organization.name)
+          text.gsub!(email, org_email_replacement)
         end
       end
     end

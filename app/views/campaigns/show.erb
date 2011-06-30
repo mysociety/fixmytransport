@@ -25,12 +25,12 @@
   		</h1>
   		<div class="right">
   		  <%- if current_user && current_user == @campaign.initiator %>
-  			  <span class="status">Your Campaign</span>
+  			  <span class="status"><%= t('campaigns.show.your_campaign')%></span>
   			<%- elsif current_user &&  current_user.supporter_or_initiator(@campaign) %>
-  			  <span class="status">You support this</span>
+  			  <span class="status"><%= t('campaigns.show.you_support_this') %></span>
   			<%- end %>
   		<%- if @campaign.status == :successful %>
-			<span class="ribbon">Fixed</span>
+			<span class="ribbon"><%= t('campaigns.show.campaign_fixed') %></span>
   		<%- end %>
   		</div>
   	</div>
@@ -38,8 +38,8 @@
   <%- if current_user && current_user.new_supporter?(@campaign) %>
     <div class="supporter-notice">
       <div class="container">
-        <h1>Yay! Thanks for supporting our campaign</h1>
-        <p>Offer opinions and advice to help make the campaign a success. <br />And don't forget to tell your friends  and spread the word through Twitter &amp; Facebook</p>
+        <h1><%= t('campaigns.show.campaign_supporter_first_time_header')%></h1>
+        <p><%= t('campaigns.show.campaign_supporter_offer_opinions') %> <br /><%= t('campaigns.show.campaign_supporter_share') %></p>
       </div>
     </div>
   <%- end %>
@@ -56,7 +56,7 @@
 <%- end %>
 <%- if current_user && current_user == @campaign.initiator %>
 <div id="yellowbanner" class="container">
-	<h1>Congratulations you just made a campaign. To help make it a success get your friends involved through <a href="#">twitter</a>, <a href="#">facebook</a> or <a href="#">email</a>.</h1>
+	<h1><%= raw t('campaigns.show.campaign_initiator_first_time_header', :twitter_link => link_to(t('campaigns.show.twitter'),''), :facebook_link => link_to(t('campaigns.show.facebook'),''), :email_link => link_to(t('campaigns.show.email'), ''))%></h1>
 </div>
 <%- end %>
 <div id="main-content" class="container">
@@ -67,7 +67,7 @@
     	<%- end %>
 
 		<div class="box campaign-description">
-			<h3>Description</h3>
+			<h3><%= t('campaigns.show.campaign_description_header') %></h3>
 		  	<%- if (!current_user) || !(current_user.supporter_or_initiator(@campaign)) %>
 			<img src="<%= @campaign.initiator.profile_photo.url(:small_thumb) %>" class="avatar" alt="" />
 			<%- end %>
@@ -97,13 +97,13 @@
    <%- if current_user && current_user.is_expert? %>
 
      <div class="clear">
-       <h3><%= t(:transport_experts) %></h3>
+       <h3><%= t('campaigns.show.transport_experts') %></h3>
        <div class='expert-tools'>
          <div class='optional-assignment'>
-           <a href="<%= new_campaign_assignment_path(@campaign) %>" class="button"><%= t(:tell_to_write, :user => @campaign.initiator.first_name) %></a>
+           <a href="<%= new_campaign_assignment_path(@campaign) %>" class="button"><%= t('campaigns.show.tell_to_write', :user => @campaign.initiator.first_name) %></a>
          </div>
          <div class='optional-assignment'>
-           <a href="<%= edit_campaign_path(@campaign)%>" class="button"><%= t(:edit_description) %></a>
+           <a href="<%= edit_campaign_path(@campaign)%>" class="button"><%= t('campaigns.show.edit_description') %></a>
          </div>
          <div class='optional-assignment-end'>
          </div>
@@ -113,7 +113,7 @@
 
     <%- if @campaign.campaign_photos.count > 0 %>
 		<div class="box">
-			<h5>Images and Media</h5>
+			<h5><%= t('campaigns.show.images_and_media') %></h5>
 			<ul class="gallery">
 			  <%- @campaign.campaign_photos.each do |campaign_photo| %>
 			    <%- if ! campaign_photo.new_record? %>
@@ -128,14 +128,14 @@
 		<%- end %>
 
 		<div class="box">
-			<a class="button comment comment-trigger right" href="<%= add_comment_campaign_url(@campaign) %>">Comment</a>
+			<a class="button comment comment-trigger right" href="<%= add_comment_campaign_url(@campaign) %>"><%= t('campaigns.show.campaign_comment') %></a>
 		</div>
 
 		<div class="clear">
-			<h3 class='left campaign-history'><%= t(:campaign_history) %></h3>
+			<h3 class='left campaign-history'><%= t('campaigns.show.campaign_history') %></h3>
 			<div class="thread-controls">
-				<a href="#" class="expand-all">Expand All</a>
-				<a href="#" class="collapse-all">Collapse All</a>
+				<a href="#" class="expand-all"><%= t('campaigns.show.expand_all') %></a>
+				<a href="#" class="collapse-all"><%= t('campaigns.show.collapse_all') %></a>
 			</div>
 		</div>
 		<ul id="campaign-thread">
@@ -158,15 +158,15 @@
 	    <div class="contrib-tools-initial">
 			<a href="#" class="facebook-trigger">
 				<span class="icon facebook"></span>
-				Facebook
+				<%= t('campaigns.show.facebook_title') %>
 			</a>
 			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup" title="Twitter (opens in a new window)">
 				<span class="icon twitter"></span>
-				Twitter
+				<%= t('campaigns.show.twitter_title') %>
 			</a>
 			<a href="#" class="email-trigger">
 				<span class="icon grey email"></span>
-				Email
+				<%= t('campaigns.show.email_title') %>
 			</a>
 	    </div>
 	  <%- end %>
@@ -175,15 +175,15 @@
 		<div class="contrib-tools">
 			<a href="#" class="facebook-trigger">
 				<span class="icon facebook"></span>
-				Facebook
+				<%= t('campaigns.show.facebook_title') %>
 			</a>
 			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup" title="Twitter (opens in a new window)">
 				<span class="icon twitter"></span>
-				Twitter
+				<%= t('campaigns.show.twitter_title') %>
 			</a>
 			<a href="#" class="email-trigger">
 				<span class="icon grey email"></span>
-				Email
+				<%= t('campaigns.show.email_title') %>
 			</a>
 		</div>
 		<%- end %>
@@ -205,7 +205,7 @@
 
 
 		<div class="box">
-			<h5>Campaign Manager</h5>
+			<h5><%= t('campaigns.show.campaign_manager') %></h5>
 			<div class="greybox">
 				<div class="avatar"><img src="<%= @campaign.initiator.profile_photo.url(:large_thumb) %>" alt="" /></div>
 				<div class="user-info">
@@ -213,8 +213,8 @@
 					<%- if @campaign.initiator.location %>
 					<p class="location"><%= @campaign.initiator.location %></p>
 					<%- end %>
-					<p>Managing <a href="<%= profile_url(@campaign.initiator, :anchor => "managing") %>"><%= pluralize(@campaign.initiator.initiated_campaigns.count, 'Campaign') %></a></p>
-					<p>Supporting <a href="<%= profile_url(@campaign.initiator, :anchor => "supporting") %>"><%= pluralize(@campaign.initiator.campaigns.count, 'Campaign') %></a></p>
+					<p><%= t('campaigns.show.managing') %> <a href="<%= profile_url(@campaign.initiator, :anchor => "managing") %>"><%= pluralize(@campaign.initiator.initiated_campaigns.count, 'Campaign') %></a></p>
+					<p><%= t('campaigns.show.supporting') %> <a href="<%= profile_url(@campaign.initiator, :anchor => "supporting") %>"><%= pluralize(@campaign.initiator.campaigns.count, 'Campaign') %></a></p>
 				</div>
 			</div>
 		</div>

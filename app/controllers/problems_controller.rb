@@ -34,7 +34,7 @@ class ProblemsController < ApplicationController
   def frontpage
     @version = 0
     expires_in 60.seconds, :public => true unless current_user
-    @title = t(:get_problems_fixed)
+    @title = t('problems.frontpage.title')
   end
   
   def create
@@ -58,19 +58,6 @@ class ProblemsController < ApplicationController
                                :user => current_user ? current_user : User.new,
                                :user_name => current_user ? current_user.name : '')
   end
-
-  def confirm
-    @problem = Problem.find_by_token(params[:email_token])
-    if @problem && @problem.status == :new
-      # log user in, whether or not they're registered
-      UserSession.login_by_confirmation(@problem.reporter)
-      redirect_to convert_problem_url(@problem)
-    elsif @problem
-      @error = t(:problem_already_confirmed)
-    else
-      @error = t(:problem_not_found)
-    end
-  end
   
   def convert
     if @problem.status != :new
@@ -86,7 +73,7 @@ class ProblemsController < ApplicationController
       redirect_to(add_details_campaign_url(@problem.campaign)) and return 
     elsif params[:convert] == 'no' 
       @problem.confirm!
-      flash[:notice] = t(:thanks_for_adding_problem)
+      flash[:notice] = t('problems.confirm.thanks')
       redirect_to problem_url(@problem) and return
     end
   end
@@ -106,10 +93,10 @@ class ProblemsController < ApplicationController
   end
   
   def find_stop
-    @title = t(:find_a_stop_or_station)
+    @title = t('problems.find_stop.title')
     if params[:name]
       if params[:name].blank?
-        @error_message = t(:please_enter_an_area)
+        @error_message = t('problems.find_stop.please_enter_an_area')
         render :find_stop
         return
       end
@@ -148,7 +135,7 @@ class ProblemsController < ApplicationController
         postcode_info = stop_info[:postcode_info]
         if postcode_info[:error]
           location_search.fail
-          @error_message = t(:postcode_not_found)
+          @error_message = t('problems.find_stop.postcode_not_found')
           render :find_stop
           return
         else
@@ -164,7 +151,7 @@ class ProblemsController < ApplicationController
       else
         # didn't find anything
         location_search.fail
-        @error_message = t(:area_not_found)
+        @error_message = t('problems.find_stop.area_not_found')
         render :find_stop
         return
       end
@@ -175,7 +162,7 @@ class ProblemsController < ApplicationController
   end
   
   def find_bus_route
-    @title = t(:finding_a_bus_route)
+    @title = t('problems.find_bus_route.title')
     if params[:show_all]
       @limit = nil
     else
@@ -183,7 +170,7 @@ class ProblemsController < ApplicationController
     end
     if params[:route_number]
       if params[:route_number].blank? or params[:area].blank?
-        @error_message = t(:please_enter_route_number_and_area)
+        @error_message = t('problems.find_bus_route.please_enter_route_number_and_area')
         render :find_bus_route 
         return
       end
@@ -204,17 +191,17 @@ class ProblemsController < ApplicationController
       end
       if route_info[:routes].empty? 
         location_search.fail
-        @error_message = t(:route_not_found)
+        @error_message = t('problems.find_bus_route.route_not_found')
       elsif route_info[:routes].size == 1
         location = route_info[:routes].first
         redirect_to new_problem_url(:location_id => location.id, :location_type => location.type)
       else 
         if route_info[:error] == :area_not_found
-          @error_message = t(:area_not_found_routes, :area => params[:area])
+          @error_message = t('problems.find_bus_route.area_not_found_routes', :area => params[:area])
         elsif route_info[:error] == :postcode_not_found
-          @error_message = t(:postcode_not_found_routes)
+          @error_message = t('problems.find_bus_route.postcode_not_found_routes')
         elsif route_info[:error] == :route_not_found_in_area
-          @error_message = t(:route_not_found_in_area, :area => params[:area], 
+          @error_message = t('problems.find_bus_route.route_not_found_in_area', :area => params[:area], 
                                                        :route_number => params[:route_number])
         end
         @locations = []
@@ -235,7 +222,7 @@ class ProblemsController < ApplicationController
       @from_stop = params[:from]
       @to_stop = params[:to]
       if @to_stop.blank? or @from_stop.blank?
-        @error_messages = [t(:please_enter_from_and_to)]
+        @error_messages = [t('problems.find_train_route.please_enter_from_and_to')]
       else
         location_search = LocationSearch.new_search!(session_id, :from => @from_stop,
                                                                  :to => @to_stop, 
@@ -268,7 +255,7 @@ class ProblemsController < ApplicationController
       @from_stop = params[:from]
       @to_stop = params[:to]
       if @from_stop.blank? or @to_stop.blank?
-        @error_messages << t(:please_enter_from_and_to)
+        @error_messages << t('problems.find_other_route.please_enter_from_and_to')
       else
         location_search = LocationSearch.new_search!(session_id, :from => @from_stop,
                                                                  :to => @to_stop, 
@@ -285,7 +272,7 @@ class ProblemsController < ApplicationController
           return
         elsif route_info[:routes].empty? 
           location_search.fail
-          @error_messages << t(:route_not_found)
+          @error_messages << t('problems.find_other_route.route_not_found')
         elsif route_info[:routes].size == 1
           location = route_info[:routes].first
           redirect_to new_problem_url(:location_id => location.id, :location_type => location.type)
@@ -340,51 +327,51 @@ class ProblemsController < ApplicationController
       end
     end
     if num_organizations == 1
-      advice_params[:organization] = @template.org_names(problem, :responsible_organizations, t(:or))
-      advice_params[:organization_unstrong] = @template.org_names(problem, :responsible_organizations, t(:or), '', '')
+      advice_params[:organization] = @template.org_names(problem, :responsible_organizations, t('problems.new.or'))
+      advice_params[:organization_unstrong] = @template.org_names(problem, :responsible_organizations, t('problems.new.or'), '', '')
     elsif num_organizations > 1
-      advice_params[:organizations] = @template.org_names(problem, :responsible_organizations, t(:or))
+      advice_params[:organizations] = @template.org_names(problem, :responsible_organizations, t('problems.new.or'))
     end
     # don't know who is responsible for the location
     if num_organizations == 0
-      advice = :no_organizations_for_problem
+      advice = 'problems.new.no_organizations_for_problem'
     # all responsible organizations contactable
     elsif num_organizations == num_organizations_with_email
       if num_organizations == 1
-        advice = :problem_will_be_sent
+        advice = 'problems.new.problem_will_be_sent'
       else
         # for operators you get to choose which to email
         if problem.operators_responsible? 
-          advice = :problem_will_be_sent_multiple_operators
+          advice = 'problems.new.problem_will_be_sent_multiple_operators'
         else
           # for councils, it goes to all or one depending on category
-          advice = :problem_will_be_sent_multiple
+          advice = 'problems.new.problem_will_be_sent_multiple'
         end
       end
     # no responsible organizations contactable
     elsif num_organizations_with_email == 0
       if num_organizations == 1
-        advice = :no_details_for_organization
+        advice = 'problems.new.no_details_for_organization'
       else
-        advice = :no_details_for_organizations
+        advice = 'problems.new.no_details_for_organizations'
       end
     # some responsible organizations contactable
     else
 
-      advice_params[:contactable] = @template.org_names(problem, :emailable_organizations, t(:or))
-      advice_params[:uncontactable] = @template.org_names(problem, :unemailable_organizations, t(:or)) 
+      advice_params[:contactable] = @template.org_names(problem, :emailable_organizations, t('problems.new.or'))
+      advice_params[:uncontactable] = @template.org_names(problem, :unemailable_organizations, t('problems.new.or')) 
 
       if problem.operators_responsible? 
         if problem.unemailable_organizations.size > 2
-          advice_params[:uncontactable] = "one of the companies we don't have an email address for"
+          advice_params[:uncontactable] = t('problems.new.one_of_the_uncontactable_companies')
         end
         if problem.emailable_organizations.size > 2
-          advice_params[:contactable] = "one of the companies we have an email address for"
+          advice_params[:contactable] = t('problems.new.one_of_the_contactable_companies')
         end
-        advice = :no_details_for_some_operators
+        advice = 'problems.new.no_details_for_some_operators'
       else
-        advice_params[:councils] = @template.org_names(problem, :responsible_organizations, t(:or))
-        advice = :no_details_for_some_councils
+        advice_params[:councils] = @template.org_names(problem, :responsible_organizations, t('problems.new.or'))
+        advice = 'problems.new.no_details_for_some_councils'
       end
     end
     @sending_advice = t(advice, advice_params)
@@ -417,7 +404,7 @@ class ProblemsController < ApplicationController
                      :operator_id => @problem.operator_id, 
                      :passenger_transport_executive_id => @problem.passenger_transport_executive_id, 
                      :council_info => @problem.council_info,
-                     :notice => "Please create an account to finish reporting your problem." }
+                     :notice => t('problems.new.create_account_to_report_problem') }
     session[:next_action] = data_to_string(problem_data)
     respond_to do |format|
       format.html do

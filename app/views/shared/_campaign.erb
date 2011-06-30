@@ -2,19 +2,19 @@
 <dl>
 	<dt><h4><a href="<%= campaign_url(campaign) %>"><%= MySociety::Format.ucfirst(campaign.title) %></a></h4></dt>
 	<%- if context != :location %>
-    <dt>Location:<dt>
+    <dt><%= t('shared.campaign.location')%><dt>
     <dd><%= raw link_to(campaign.location.description, location_url(campaign.location)) %></dd>
   <%- end %>
 	<dd><%= raw simple_format(sanitize(campaign.description)) %></dd>				
-	<dt>Started:</dt>
+	<dt><%= t('shared.campaign.started')%></dt>
 	<dd><%= campaign.created_at.to_s(:short)%></dd>
 
-	<dt>By:</dt>
+	<dt><%= t('shared.campaign.by')%></dt>
 	<dd><a href="<%= profile_url(campaign.initiator) %>"><%= campaign.initiator.name %></a></dd>
-	<dt>Followers:</dt>
+	<dt><%= t('shared.campaign.followers')%></dt>
 	<dd><%= campaign.supporters.count %></dd>
 	<span class="status stat-<%= campaign_display_status(campaign) %>">									
-	<dt>Status:</dt>
+	<dt><%= t('shared.campaign.status')%></dt>
 	<dd><%= campaign_display_status(campaign).titleize %></dd>
 	</span>
 </dl>

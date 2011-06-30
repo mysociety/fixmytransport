@@ -1,10 +1,10 @@
 <%- if message.completed_assignment  %>
-  <%- assignment_text = t(:following_experts_advice, :expert => message.assignment.creator.name) %>
+  <%- assignment_text = t('campaigns.show.following_experts_advice', :expert => message.assignment.creator.name) %>
 <%- else %>
   <%- assignment_text = '' %>
 <%- end %>
 
-<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(:wrote_a_message, :sender => h(message.author.name), :recipient => h(message.recipient_name), :assignment_text => assignment_text) %></span><span class="close">close</span><span class="date"><%= event.created_at.to_s(:standard_with_date) %></span></a>
+<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t('campaigns.show.wrote_a_message', :sender => h(message.author.name), :recipient => h(message.recipient_name), :assignment_text => assignment_text) %></span><span class="close">close</span><span class="date"><%= event.created_at.to_s(:standard_with_date) %></span></a>
 
 <div class="thread-details">
 	<div class="thread-copy"><%= raw simple_format(h(message.body)) %></div>

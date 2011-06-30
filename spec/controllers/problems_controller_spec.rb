@@ -370,7 +370,6 @@ describe ProblemsController do
                                           :is_campaign= => true, 
                                           :is_campaign => '0',
                                           :errors => [],
-                                          :send_confirmation_email => true,
                                           :create_assignments => true)
       Problem.stub!(:new).and_return(@mock_problem)
       @mock_assignment = mock_model(Assignment)
@@ -568,54 +567,6 @@ describe ProblemsController do
     
   end
   
-  describe "GET #confirm" do 
-     
-    before do 
-      @mock_assignment = mock_model(Assignment)
-      @mock_reporter = mock_model(User)
-      @mock_problem = mock_model(Problem, :campaign => nil,
-                                          :status => :new,
-                                          :reporter => @mock_reporter)
-      Problem.stub!(:find_by_token).and_return(@mock_problem)
-      UserSession.stub!(:login_by_confirmation)
-    end
-
-    def make_request
-      get :confirm, { :email_token => "my-test-token" }
-    end
-
-    it 'should look for the problem by token' do 
-      Problem.should_receive(:find_by_token).with("my-test-token")
-      make_request
-    end
-    
-    describe 'if the problem is new' do 
-    
-      it 'should redirect to the "convert" url' do 
-        make_request
-        response.should redirect_to(convert_problem_url(@mock_problem))
-      end
-      
-      it 'should log in the problem reporter' do 
-        UserSession.should_receive(:login_by_confirmation).with(@mock_reporter)
-        make_request
-      end
-    
-    end
-    
-    describe 'if the problem is not new' do 
-      
-      before do 
-        @mock_problem.stub!(:status).and_return(:confirmed)
-      end
-      
-      it 'should display the "problem already confirmed" error' do 
-        make_request
-        assigns[:error].should == 'That problem has already been confirmed.'
-      end
-    end
-    
-  end
   
   describe '#GET convert' do 
     

@@ -6,7 +6,7 @@ class AssignmentsController < ApplicationController
 
   def new
     @initiator = @campaign.initiator
-    reason =  t(:default_reason_text, :user => @initiator.first_name,
+    reason =  t('assignments.new.default_reason_text', :user => @initiator.first_name,
                                       :expert => current_user.name)
     @assignment = @campaign.assignments.build(:user => @initiator, :data => {:reason => reason})
   end
@@ -33,7 +33,7 @@ class AssignmentsController < ApplicationController
       # add an event to the campaign
       @campaign.campaign_events.create!(:event_type => 'assignment_given',
                                         :described => @assignment)
-      flash[:notice] = t(:sent_your_advice, :user => @initiator.name)
+      flash[:notice] = t('assignments.new.sent_your_advice', :user => @initiator.name)
       redirect_to campaign_path(@campaign)
     else
       render :new
@@ -51,7 +51,7 @@ class AssignmentsController < ApplicationController
                          :organization_email => params[:organization_email] }
     @assignment.status = :in_progress
     if @assignment.save
-      flash[:notice] = t(:confirming_organization)
+      flash[:notice] = t('assignments.edit.confirming_organization')
       CampaignMailer.deliver_completed_assignment(@campaign, @assignment)
       @campaign.campaign_events.create!(:event_type => 'assignment_in_progress',
                                         :described => @assignment)

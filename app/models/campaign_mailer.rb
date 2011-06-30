@@ -12,7 +12,7 @@ class CampaignMailer < ApplicationMailer
   def new_message(recipient, incoming_message, campaign)
     recipients recipient.name_and_email
     from contact_from_name_and_email
-    subject "[FixMyTransport] New message to the campaign to #{campaign.title}"
+    subject I18n.translate('mailers.new_message_subject', :title => campaign.title)
     url = main_url(campaign_incoming_message_path(campaign,incoming_message))
     body :campaign => campaign, :recipient => recipient, :link => url
   end
@@ -20,7 +20,7 @@ class CampaignMailer < ApplicationMailer
   def update(recipient, campaign, supporter, update)
     recipients recipient.name_and_email
     from contact_from_name_and_email
-    subject "[FixMyTransport] Update on the campaign to #{campaign.title}"
+    subject I18n.translate('mailers.update_subject', :title => campaign.title)
     body_hash = { :campaign => campaign,
                   :recipient => recipient,
                   :update => update,
@@ -34,7 +34,7 @@ class CampaignMailer < ApplicationMailer
   def comment(recipient, campaign, supporter, comment)
     recipients recipient.name_and_email
     from contact_from_name_and_email
-    subject "[FixMyTransport] Comment on the campaign to #{campaign.title}"
+    subject I18n.translate('mailers.comment_subject', :title => campaign.title)
     body_hash = { :campaign => campaign, 
                   :recipient => recipient, 
                   :comment => comment, 
@@ -48,7 +48,7 @@ class CampaignMailer < ApplicationMailer
   def expert_advice_request(campaign, advice_request)
     recipients experts_from_name_and_email
     from contact_from_name_and_email
-    subject "[FixMyTransport] Advice request from the campaign to #{campaign.title}"
+    subject I18n.translate('mailers.advice_request_subject', :title => campaign.title)
     body({ :campaign => campaign,
            :advice_request => advice_request,
            :assignment_link => main_url(new_campaign_assignment_path(campaign)),
@@ -58,7 +58,7 @@ class CampaignMailer < ApplicationMailer
   def advice_request(recipient, campaign, supporter, advice_request)
     recipients recipient.name_and_email
     from contact_from_name_and_email
-    subject "[FixMyTransport] Advice request from the campaign to #{campaign.title}"
+    subject I18n.translate('mailers.advice_request_subject', :title => campaign.title)
     body_hash = { :campaign => campaign,
                   :recipient => recipient,
                   :advice_request => advice_request,
@@ -90,16 +90,9 @@ class CampaignMailer < ApplicationMailer
   def completed_assignment(campaign, assignment)
     recipients contact_from_name_and_email
     from contact_from_name_and_email
-    subject "[FixMyTransport] Assignment completed for the campaign to #{campaign.title}"
+    subject I18n.translate('mailers.completed_assignment_subject', :title => campaign.title)
     body({ :assignment => assignment,
            :campaign => campaign })
-  end
-
-  def comment_confirmation(recipient, comment, token)
-    recipients recipient.name_and_email
-    from contact_from_name_and_email
-    subject comment_confirmation_subject(comment)
-    body :comment => comment, :recipient => recipient, :link => main_url(confirm_comment_path(:email_token => token))
   end
 
   def campaigns_matching_email(email)

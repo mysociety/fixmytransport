@@ -1,16 +1,16 @@
 <div id="main-content" class="container">
   <div id="choose" class="container font-1">
-	<h1>Create a Campaign?</h1>
-	<h2>Use FixMy Transport to create a campaign.</h2>
-	<p>Share your report with friends, let others support<br />you and get your problem fixed.</p>
+	<h1><%= t('problems.convert.header') %></h1>
+	<h2><%= t('problems.convert.subheader') %></h2>
+	<p><%= raw t('problems.convert.intro')%></p>
     <div class="left">
-      <a href="?convert=no" class="button red">No Thanks</a>
-      <p>If your issue was a small one-off incident that you<br />just wanted to report, then your job is done.</p>
+      <a href="?convert=no" class="button red"><%= t('problems.convert.no_thanks')%></a>
+      <p><%= raw t('problems.convert.no_explanation')%></p>
     </div>
-	<span class="middle">or</span>
+	<span class="middle"><%= t('problems.convert.or')%></span>
     <div class="right">
-      <a href="?convert=yes" class="button green">Start Campaign</a>
-      <p>If it's a big issue that's going to require a few<br />more voices, you should start a campaign.</p>
+      <a href="?convert=yes" class="button green"><%= t('problems.convert.start_campaign') %></a>
+      <p><%= raw t('problems.convert.yes_explanation') %></p>
     </div>
   </div>
 </div>

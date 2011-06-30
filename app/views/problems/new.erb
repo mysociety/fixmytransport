@@ -26,15 +26,15 @@
 	</style>
 </noscript>
 <%- end %>
-<%- @title = t(:reporting_a_problem, :location => @problem.location.name) %>
+<%- @title = t('problems.new.reporting_a_problem', :location => @problem.location.name) %>
 <div id="banner">
 	<div class="container">
-		<h1>Write a message.</h1>
+		<h1><%= t('problems.new.header')%></h1>
 	</div>
 </div>
 <div id="greybanner">
 	<div class="container">
-		<p>Please write a message below, <%= raw @sending_advice %></p>
+		<p><%= t('problems.new.write_a_message')%> <%= raw @sending_advice %></p>
 	</div>
 </div>
 <div id="main-content" class="container">
@@ -48,7 +48,7 @@
     <%= raw f.hidden_field :location_type %>
 		<ul>
 			<li>
-				<label>To</label>
+				<label><%= t('problems.new.to')%></label>
 				<%- if @problem.operators_responsible?  %>
         
          <%- if @problem.location.operators.size > 1 %>
@@ -59,13 +59,13 @@
           <%- else %>
             <div class='error error-operator_id' style="display: none;"></div>
            <%- end %>
-            <%= raw f.collection_select("operator_id", @problem.location.operators, :id, :name, :include_blank => t(:select_operator)) %>
+            <%= raw f.collection_select("operator_id", @problem.location.operators, :id, :name, :include_blank => t('problems.new.select_operator')) %>
           <%- elsif @problem.location.operators.size == 1 %>
             <%= raw f.hidden_field :operator_id, :value => @problem.location.operators.first.id %>
             <div class="static-value"><%= @problem.location.operators.first.name %></div>
           <%- else %>
             <div class="static-value">
-              The operator of the <%= @problem.location.description %>
+              <%= t('problems.new.operator', :location => @problem.location.description)%>
             </div>
           <%- end %>
 
@@ -74,7 +74,7 @@
           <div class="static-value"><%= @problem.location.passenger_transport_executive.name %></div>
         <%- elsif @problem.councils_responsible? %>
           <%= raw f.hidden_field :council_info, :value => @problem.location.council_info %>
-          <div class="static-value"><%= raw org_names(@problem, :responsible_organizations, t(:or))%></div>
+          <div class="static-value"><%= raw org_names(@problem, :responsible_organizations, t('problems.new.or'))%></div>
         <%- end %>
 				
 			</li>
@@ -94,12 +94,12 @@
         <%- else %>
            <div class='error error-subject' style="display: none;"></div>
         <%- end %>
-				<label for="problem_subject">Subject</label>
+				<label for="problem_subject"><%= t('problems.new.subject')%></label>
 				<input id="problem_subject" type="text" name="problem[subject]" value="<%= @problem.subject %>"/>
 				<div class="tipbox">
 				  <a href="#" class="tip-close">Close</a>
-					<h5>Subject</h5>
-					<p>The subject of your message.</p>
+					<h5><%= t('problems.new.subject_help_header')%></h5>
+					<p><%= t('problems.new.subject_help')%></p>
 				</div>
 			</li>
 			
@@ -112,8 +112,8 @@
           <%- else %>
            <div class='error error-category' style="display: none;"></div>
           <%- end %>
-          <label for="problem_category">Category</label>
-          <%= raw f.select("category", @problem.categories, { :include_blank => t(:pick_a_category) }) %>
+          <label for="problem_category"><%= t('problems.new.category')%></label>
+          <%= raw f.select("category", @problem.categories, { :include_blank => t('problems.new.pick_a_category') }) %>
         </li>
       <%- else %>
         <%= raw f.hidden_field :category, :value => "Other" %>
@@ -128,12 +128,12 @@
         <%- else %>
          <div class='error error-description' style="display: none;"></div>
         <%- end %>
-				<label for="problem_description">Description</label>
+				<label for="problem_description"><%= t('problems.new.description')%></label>
 				<textarea id="problem_description" name="problem[description]" ><%= @problem.description %></textarea>
 				<div class="tipbox">
 				  <a href="#" class="tip-close">Close</a>
-					<h5>Description</h5>
-					<p>Try to be descriptive, but concise. <a href="#">See an example</a>.</p>
+					<h5><%= t('problems.new.description_help_header')%></h5>
+					<p><%= t('problems.new.description_help')%></p>
 				</div>
 			</li>
 			<li>

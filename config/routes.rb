@@ -27,11 +27,6 @@ ActionController::Routing::Routes.draw do |map|
     campaign.resources :assignments, :only => [:new, :create, :show, :update, :edit]
   end
 
-  # confirmation URLs
-  map.confirm_comment '/u/:email_token', :action => 'confirm_comment', :controller => 'campaigns'
-  map.confirm_join '/c/:email_token', :action => 'confirm_join', :controller => 'campaigns'
-  map.confirm_leave '/l/:email_token', :action => 'confirm_leave', :controller => 'campaigns'
-
   map.resources :problems, :except => [:destroy, :edit, :update, :index],
                            :member => {:convert => [:get],
                                       :add_comment => [:get, :post] },
@@ -41,7 +36,6 @@ ActionController::Routing::Routes.draw do |map|
                                             :find_bus_route => :get,
                                             :find_train_route => :get,
                                             :find_other_route => :get }
-  map.confirm_problem '/p/:email_token', :action => 'confirm', :controller => 'problems'
 
   # stops
   map.stop "/stops/:scope/:id.:format", :controller => "locations",

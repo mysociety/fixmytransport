@@ -1,8 +1,8 @@
 <div id="main-content" class="container">
 	<%- if @outgoing_message.assignment && @outgoing_message.assignment.status != :complete %>
-	  <%- @title = t(:message_to, :organization => @outgoing_message.recipient_name) %>
+	  <%- @title = t('outgoing_messages.show.message_to', :organization => @outgoing_message.recipient_name) %>
 	<%- else %>
-	  <%- @title = t(:new_message_to, :organization => @outgoing_message.recipient_name) %>
+	  <%- @title = t('outgoing_messages.show.new_message_to', :organization => @outgoing_message.recipient_name) %>
 	<%- end %>
 	<h2 class='main-header'><%= @title %></h2>
 	<%- form_for [@campaign, @outgoing_message], :html => {:class => 'create_outgoing_message'} do |f|  %>
@@ -39,7 +39,7 @@
 	        <%= error_message_on @outgoing_message, 'body' %>
 	      </div>
 	    <%- end %>
-	    <%= f.label :body, t(:message) %>
+	    <%= f.label :body, t('outgoing_messages.new.message') %>
 	    <%= raw f.text_area :body, :rows => 12, :cols => 40 %>
 	    <%- if @outgoing_message.recipient %>
 	      <%= raw f.hidden_field :recipient_id %>
@@ -49,6 +49,6 @@
 	    <%= raw f.hidden_field :author_id %>
 	    <%= raw f.hidden_field :assignment_id %>
 	  </div>
-	  <button class="button" type="submit"><%= t(:submit) %></button>
+	  <button class="button" type="submit"><%= t('outgoing_messages.new.submit') %></button>
 	<%- end %>
 </div>

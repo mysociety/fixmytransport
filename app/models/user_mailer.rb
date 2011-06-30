@@ -1,7 +1,7 @@
 class UserMailer < ApplicationMailer
 
   def password_reset_instructions(user)  
-    subject "[FixMyTransport] Password reset instructions"  
+    subject I18n.translate('mailers.password_reset_subject')
     from contact_from_name_and_email
     recipients user.email  
     body :edit_password_reset_url => main_url(edit_password_reset_path(user.perishable_token)), 
@@ -41,7 +41,7 @@ class UserMailer < ApplicationMailer
   private
 
   def supporter_confirmation_subject(campaign)
-    "[FixMyTransport] Confirm that you want to join the campaign to #{campaign.title}"
+    I18.translate('mailers.supporter_confirmation_subject', :title => campaign.title)
   end
   
   def get_action_description(post_login_action_data)
@@ -49,11 +49,11 @@ class UserMailer < ApplicationMailer
       case post_login_action_data[:action]
       when :join_campaign
         campaign = Campaign.find(post_login_action_data[:id])
-        return "confirm that you want to join the campaign to #{campaign.title}"
+        return I18n.translate('mailers.confirm_join_campaign', :title => campaign.title)
       when :add_comment
-        return "confirm your comment"
+        return I18n.translate('mailers.confirm_comment')
       when :create_problem
-        return "confirm your problem"
+        return I18n.translate('mailers.confirm_create_problem')
       end
     else
       return nil
@@ -73,7 +73,7 @@ class UserMailer < ApplicationMailer
         raise "Unexpected post login action #{post_login_action_data[:action]} when sending account confirmation email"
       end
     else
-      return "[FixMyTransport] Confirm your account"
+      return I18n.translate('mailers.account_confirmation_subject')
     end
   end
   

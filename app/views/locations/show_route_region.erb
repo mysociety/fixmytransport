@@ -1,15 +1,15 @@
 <div id="banner">
 	<div class="container">
-		<h1>Route Region</h1>
+		<h1><%= t('locations.show_route_region.route_region') %></h1>
 	</div>
 </div>
 <div id="greybanner">
 	<div class="container">
 		<p>
 		<%- if @region != @national_region %>
-		    <%= t(:routes_in, :region => @region.name) %>
+		    <%= t('locations.show_route_region.routes_in', :region => @region.name) %>
 		<%- else %>
-		    <%= t(:national_routes_title) %>
+		    <%= t('locations.show_route_region.national_routes_title') %>
 		<%- end %>
 		</p>
 	</div>
@@ -54,7 +54,7 @@
 	    <%- if @region.bus_routes.count > 0 %>
 	      <div id='tabs-bus' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
 	        <h3>
-	          <%= raw t(:bus_routes, :count => @region.bus_routes.count, :national => national_route_link(@region, @national_region, 'tabs-bus')) %>
+	          <%= raw t('locations.show_route_region.bus_routes', :count => @region.bus_routes.count, :national => national_route_link(@region, @national_region, 'tabs-bus')) %>
 	        </h3>
 	        <!-- Lots of routes - do alphabetical links -->
 	        <%- if @region.bus_routes.count > 20 %>
@@ -93,7 +93,7 @@
 	    <%- if @region.train_routes.count > 0   %>
 	      <div id='tabs-train' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
 	        <h3>
-	          <%= raw t(:train_routes, :count => @region.train_routes.count, :national => national_route_link(@region, @national_region, 'tabs-train')) %>
+	          <%= raw t('locations.show_route_region.train_routes', :count => @region.train_routes.count, :national => national_route_link(@region, @national_region, 'tabs-train')) %>
 	        </h3>
         
 	        <!-- Lots of routes - do alphabetical links -->
@@ -137,7 +137,7 @@
 	  <%- if @region.tram_metro_routes.count > 0 %>
 	    <div id='tabs-metro' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
 	      <h3>
-	        <%= raw t(:tram_routes, :count => @region.tram_metro_routes.count, :national => national_route_link(@region, @national_region, 'tabs-metro')) %>
+	        <%= raw t('locations.show_route_region.tram_routes', :count => @region.tram_metro_routes.count, :national => national_route_link(@region, @national_region, 'tabs-metro')) %>
 	      </h3>
 	      <ul class="route-links">
 	      <%- @region.tram_metro_routes.each do |tram_metro_route| %>
@@ -152,7 +152,7 @@
 	  <%- if @region.ferry_routes.count > 0 %>
 	    <div id='tabs-ferry' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
 	      <h3>
-	        <%= raw t(:ferry_routes, :count => @region.ferry_routes.count, :national => national_route_link(@region, @national_region, 'tabs-ferry')) %>
+	        <%= raw t('locations.show_route_region.ferry_routes', :count => @region.ferry_routes.count, :national => national_route_link(@region, @national_region, 'tabs-ferry')) %>
 	      </h3>
 	      <ul class="route-links">
 	      <%- @region.ferry_routes.each do |ferry_route| %>
@@ -167,7 +167,7 @@
 	  <%- if @region.coach_routes.count > 0 %>
 	    <div id='tabs-coach' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
 	      <h3>
-	        <%= raw t(:coach_routes, :count => @region.coach_routes.count, :national => national_route_link(@region, @national_region, 'tabs-coach')) %>
+	        <%= raw t('locations.show_route_region.coach_routes', :count => @region.coach_routes.count, :national => national_route_link(@region, @national_region, 'tabs-coach')) %>
 	      </h3>
 	      <%- if @region.coach_routes.count > 20 %>
 	        <ul class='font-1 tabs-sub-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>

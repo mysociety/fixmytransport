@@ -1,6 +1,6 @@
 <div id="banner">
 	<div class="container">
-		<h1><%= t(:where_is_it) %></h1>
+		<h1><%= t('problems.find_stop.where_is_it') %></h1>
 	</div>
 </div>
 
@@ -10,9 +10,9 @@
 	<div class='error'><%= @error_message %></div>
 	<%- end %>
 	<div id="find-stop">
-		<label for="name" id='guidance-name' class='guidance'>Enter an area, town or postcode</label>
+		<label for="name" id='guidance-name' class='guidance'><%= t('problems.find_stop.instructions')%></label>
 		<%= raw text_field_tag 'name', params[:name], :size => 40 %>
-		<button class="point-go" type='submit'><%= t(:go) %></button>
+		<button class="point-go" type='submit'><%= t('problems.find_stop.go') %></button>
 	</div>
 	<%- end %>
 </div>

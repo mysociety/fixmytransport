@@ -1,5 +1,5 @@
 <div id="main-content" class="container">
-	<h2 class='main-header'><%= raw t(:change_your_password) %></h2>
+	<h2 class='main-header'><%= raw t('password_resets.edit.change_your_password') %></h2>
 
 	<%- form_for @user, :url => password_reset_path, :method => :put do |f| %>
 	  <div class='fieldset'>
@@ -23,7 +23,7 @@
 	      <%= f.label :password_confirmation  %>
 	      <%= raw f.password_field :password_confirmation  %>
 	    </div>
-		<button class="button" type="submit"><%= t(:update_password_and_login) %></button>
+		<button class="button" type="submit"><%= t('password_resets.edit.update_password_and_login') %></button>
 	  </div>
   
 	<%- end %>

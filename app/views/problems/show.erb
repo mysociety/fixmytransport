@@ -4,7 +4,7 @@
 		<h1><a href="<%= location_url(@problem.location) %>"><%= @problem.location.description %></a></h1>
 		<%- if @problem.status == :fixed %>
 		  <div class="right">
-			  <span class="ribbon">Fixed</span>
+			  <span class="ribbon"><%= t('problems.show.fixed')%></span>
   	  </div>
   	<%- end %>
 	</div>
@@ -16,8 +16,8 @@
     <%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH } %>
 		</div>				
 		<div class="clear">
-			<h5 class="left">Comments</h5>
-			<a class="comment button right comment-trigger" href="<%= add_comment_problem_url(@problem) %>">Comment</a>
+			<h5 class="left"><%= t('problems.show.comments')%></h5>
+			<a class="comment button right comment-trigger" href="<%= add_comment_problem_url(@problem) %>"><%= t('problems.show.comment')%></a>
 		</div>
 
 		<ul id="campaign-thread">
@@ -34,10 +34,13 @@
 		<h3><%= @problem.subject %></h3>
 			<p><%= raw simple_format(sanitize(@problem.description)) %></p>
 
-			<h5>Posted</h5>
+			<h5><%= t('problems.show.posted')%></h5>
 			<ul>
 				<li><a href="<%=  profile_url(@problem.reporter) %>"><%= @problem.reporter_name %></a></li>
 				<li><%= @problem.confirmed_at.to_date.to_s(:short) %></li>
+				<%- if @problem.sent_at %>
+				  <li><%= t('problems.show.sent_time', :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.recipients.map{ |recipient| recipient.name }.to_sentence) %></li>
+				<%- end %>
 			</ul>
 	</div>
 </div>

@@ -80,7 +80,7 @@ class Campaign < ActiveRecord::Base
       if problem.operator
         problem.operator.name
       else
-        "the operator of the #{problem.location.description}"
+        I18n.translate('campaigns.show.location_operator', :location => problem.location.description)
       end
     elsif problem.pte_responsible?
       problem.passenger_transport_executive.name
@@ -104,19 +104,19 @@ class Campaign < ActiveRecord::Base
   end
 
   def call_to_action
-    "Please help me persuade #{responsible_org_descriptor} to #{title}"
+    I18n.translate('campaigns.show.call_to_action', :org => self.responsible_org_descriptor, :title => self.title)
   end
 
   def short_call_to_action
-    "Campaign to #{title}"
+    I18n.translate('campaigns.show.short_call_to_action', :title => self.title)
   end
 
   def short_initiator_call_to_action
-    "Your campaign to #{title}"
+    I18n.translate('campaigns.show.initiator_call_to_action', :title => self.title)
   end
 
   def supporter_call_to_action
-    "I just joined the campaign to persuade #{responsible_org_descriptor} to #{title}"
+    I18n.translate('campaigns.show.supporter_call_to_action', :org => self.responsible_org_descriptor, :title => self.title)
   end
 
   def add_comment(user, text, mark_fixed=nil, mark_open=nil, comment_confirmed=false, token=nil)

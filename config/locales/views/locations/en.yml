@@ -1,14 +1,31 @@
 en:
-  live_departures: Next departures from here
-  other_problems_here: Problems
-  operated_by: Operated by %{operators}
-  routes_in: "Public transport routes in the %{region} region"
-  bus_routes: "%{count} bus routes %{national}"
-  ferry_routes: "%{count} ferry routes %{national}"
-  train_routes: "%{count} train routes %{national}"
-  tram_routes: "%{count} tram, metro or underground routes %{national}"
-  coach_routes: "%{count} coach routes %{national}"
-  routes_by_region: Public transport routes by region
-  see_also_national_routes: "(see also %{national})"
-  national_routes: national routes
-  national_routes_title: National public transport routes
+  locations:
+    show_route:
+      operated_by: "operated by %{operators}"
+      route_header: Route
+      information_wrong: "Is this information wrong?"
+      report_a_problem: Report a problem
+      stops_header: Stops
+    show_route_region:
+      route_region: Route Region
+      routes_in: "Public transport routes in the %{region} region"
+      national_routes_title: National public transport routes
+      bus_routes: "%{count} bus routes %{national}"
+      ferry_routes: "%{count} ferry routes %{national}"
+      train_routes: "%{count} train routes %{national}"
+      tram_routes: "%{count} tram, metro or underground routes %{national}"
+      coach_routes: "%{count} coach routes %{national}"
+      see_also_national_routes: "(see also %{national})"
+      national_routes: national routes     
+    show_route_regions:
+      route_regions: Route Regions
+      routes_by_region: Public transport routes by region
+    show_stop:
+      stop_marked_inactive: "This stop has been marked as inactive."
+      location_header: Location
+      routes_header: Routes
+      report_a_problem: Report a problem
+    show_stop_area:
+      location_header: Location
+      routes_header: Routes
+      report_a_problem: Report a problem

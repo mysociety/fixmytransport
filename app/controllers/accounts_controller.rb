@@ -18,7 +18,7 @@ class AccountsController < ApplicationController
       current_user.confirmed_password = true
     end
     if current_user.save
-      flash[:notice] = t(:account_updated)
+      flash[:notice] = t('accounts.edit.account_updated')
       redirect_to profile_url(current_user)
     else
       render :action => :edit
@@ -54,7 +54,7 @@ class AccountsController < ApplicationController
       if action_string = post_login_action_string
         @action = action_string
       else
-        @action = t(:your_account_wont_be_created)
+        @action = t('accounts.new.your_account_wont_be_created')
       end
       @account_user.reset_perishable_token!
       unconfirmed_model = save_post_login_action_to_database(@account_user)
@@ -91,9 +91,9 @@ class AccountsController < ApplicationController
       @account_user.registered = true
       @account_user.confirmed_password = true
       @account_user.save_without_session_maintenance
-      flash[:notice] = t(:successfully_confirmed_account)
+      flash[:notice] = t('accounts.confirm.successfully_confirmed_account')
     else
-      flash[:notice] = t(:logged_in_set_password)
+      flash[:notice] = t('accounts.confirm.logged_in_set_password')
       session[:return_to] = edit_account_url
     end
     # log in the user.
@@ -131,7 +131,7 @@ class AccountsController < ApplicationController
     # not currently using a timeout on the tokens
     @account_user = User.find_using_perishable_token(params[:email_token], token_age=0)
     unless @account_user
-      flash[:error] = t(:could_not_find_account)
+      flash[:error] = t('accounts.confirm.could_not_find_account')
       redirect_to root_url
     end
   end

@@ -8,7 +8,7 @@ class StaticController < ApplicationController
         format.html do
           if @feedback.valid? 
             ProblemMailer.deliver_feedback(params[:feedback])
-            flash[:notice] = t(:feedback_thanks)
+            flash[:notice] = t('static.feedback.feedback_thanks')
             redirect_to(root_url)
           else
             render 'feedback'

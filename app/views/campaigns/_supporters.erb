@@ -1,8 +1,8 @@
 <div class="box" id="campaign-supporters">
 	<div>
-		<h5 class="left">Campaign Supporters</h5>
+		<h5 class="left"><%= t('campaigns.show.campaign_supporters')%></h5>
 		<%- if ! show_all && @campaign.supporters.registered.count > SUPPORTER_MAX  %>
-		  <a class="view-all right" url="<%= get_supporters_campaign_path(@campaign) %>" href="<%= url_for(params.merge(:all_supporters => '1')) %>">View All</a>
+		  <a class="view-all right" url="<%= get_supporters_campaign_path(@campaign) %>" href="<%= url_for(params.merge(:all_supporters => '1')) %>"><%= t('campaigns.show.view_all')%></a>
 		<%- end %>
 	</div>
 	<ul class="user-list">

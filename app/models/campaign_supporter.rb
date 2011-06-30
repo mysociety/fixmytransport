@@ -8,11 +8,7 @@ class CampaignSupporter < ActiveRecord::Base
   def generate_confirmation_token
     self.token = MySociety::Util.generate_token
   end
-  
-  def send_confirmation_email
-    CampaignMailer.deliver_supporter_confirmation(supporter, self.campaign, token)
-  end
-  
+    
   def confirmed? 
     !confirmed_at.blank?
   end

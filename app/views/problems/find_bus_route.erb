@@ -6,7 +6,7 @@
 
 <div id="greybanner">
 	<div class="container">
-		<p><%= t(:what_was_the_number_and_area) %></p>
+		<p><%= t('problems.find_bus_route.what_was_the_number_and_area') %></p>
 	</div>
 </div>
 
@@ -20,17 +20,17 @@
     <%- end %>
 	<ul class="form-list">
 	    <li class="fieldset">
-	      <%= raw label_tag t(:enter_route_number) %>
+	      <%= raw label_tag t('problems.find_bus_route.enter_route_number') %>
 	      <%= raw text_field_tag 'route_number', params[:route_number] %>
 	      <div id='guidance-route-number' class='guidance'>e.g. C10</div>
 	    </li>
     
 	    <li class="fieldset">
-	      <%= raw label_tag t(:enter_town_or_area) %>
+	      <%= raw label_tag t('problems.find_bus_route.enter_town_or_area') %>
 	      <%= raw text_field_tag 'area', params[:area] %>
 	      <div id='guidance-area' class='guidance'>e.g. London </div>
 	    </li>
-		<li><button class="point-go" type="submit"><%= t(:go) %></button></li>
+		<li><button class="point-go" type="submit"><%= t('problems.find_bus_route.go') %></button></li>
     </ul>
 	<%- end %>
 </div>

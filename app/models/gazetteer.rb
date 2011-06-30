@@ -157,16 +157,16 @@ class Gazetteer
     # if there are multiple stations with the exact same name, don't ask the user to select one
     # just pass them all to find_all_by_locations, and see which one has the route
     if from_stops.size > 1 && from_stops.map{ |stop| stop.name }.uniq.size > 1
-      errors << :ambiguous_from_stop
+      errors << 'problems.find_other_route.ambiguous_from_stop'
     end
     if to_stops.size > 1 && to_stops.map{ |stop| stop.name }.uniq.size > 1
-      errors << :ambiguous_to_stop
+      errors << 'problems.find_other_route.ambiguous_to_stop'
     end
     if from_stops.size == 0
-      errors << :from_stop_not_found
+      errors << 'problems.find_other_route.from_stop_not_found'
     end
     if to_stops.size == 0
-      errors << :to_stop_not_found
+      errors << 'problems.find_other_route.to_stop_not_found'
     end
     if ! errors.empty?
       return { :errors => errors,
@@ -189,16 +189,16 @@ class Gazetteer
     # if there are multiple stations with the exact same name, don't ask the user to select one
     # just pass them all to find_all_by_locations, and see which one has the route
     if from_stops.size > 1 && from_stops.map{ |stop| stop.name }.uniq.size > 1
-      errors << :ambiguous_from_stop
+      errors << 'problems.find_train_route.ambiguous_from_stop'
     end
     if to_stops.size > 1 && to_stops.map{ |stop| stop.name }.uniq.size > 1
-      errors << :ambiguous_to_stop
+      errors << 'problems.find_train_route.ambiguous_to_stop'
     end
     if from_stops.size == 0
-      errors << :from_stop_not_found
+      errors << 'problems.find_train_route.from_stop_not_found'
     end
     if to_stops.size == 0
-      errors << :to_stop_not_found
+      errors << 'problems.find_train_route.to_stop_not_found'
     end
     if ! errors.empty?
       return { :errors => errors,

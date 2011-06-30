@@ -14,7 +14,7 @@ class UserSessionsController < ApplicationController
     respond_to do |format|
       format.html do 
         if @user_session.save
-          flash[:notice] = t(:login_successful)
+          flash[:notice] = t('shared.login.login_successful')
           perform_post_login_action
           redirect_back_or_default root_path
         else
@@ -41,7 +41,7 @@ class UserSessionsController < ApplicationController
       return
     end
     current_user_session.destroy
-    flash[:notice] = t(:logout_successful)
+    flash[:notice] = t('shared.login.logout_successful')
     redirect_back_or_default root_url
   end
   
@@ -55,7 +55,7 @@ class UserSessionsController < ApplicationController
       User.handle_external_auth_token(access_token, source, remember_me)
       perform_post_login_action
     rescue # e.g., HTTP exception if FB is not responding or access_token is wrong: unexpected error at this stage
-      flash[:error] = "Unable to complete authentication with #{source} &mdash; try again later"
+      flash[:error] = t('shared.login.unexpected_external_auth_error')
     end      
     redirect_back_or_default path
   end

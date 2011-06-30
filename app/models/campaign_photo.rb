@@ -3,7 +3,7 @@ class CampaignPhoto < ActiveRecord::Base
   validates_attachment_presence :image
   validates_attachment_content_type :image, 
                                     :content_type => %w( image/jpeg image/png image/gif image/pjpeg image/x-png ),
-                                    :message => "Please upload a .jpeg, .gif or .png image"
+                                    :message => I18n.translate('campaigns.show.please_upload_valid_image')
   
   has_attached_file :image,
                     :path => "#{MySociety::Config.get('FILE_DIRECTORY', ':rails_root/public/system')}/paperclip/:class/:attachment/:id/:style/:filename",

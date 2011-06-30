@@ -42,10 +42,6 @@ class Problem < ActiveRecord::Base
     self.token = MySociety::Util.generate_token
   end
 
-  def send_confirmation_email
-    ProblemMailer.deliver_problem_confirmation(reporter, self, token)
-  end
-
   def create_assignments
     assignment_types = []
     if assignments.empty?

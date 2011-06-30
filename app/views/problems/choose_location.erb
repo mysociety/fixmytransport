@@ -1,12 +1,12 @@
 <div id="banner">
 	<div class="container">
-		<h1>Choose a Stop or Station</h1>
+		<h1><%= t('problems.choose_location.header')%></h1>
 	</div>
 </div>
 <%- if params[:choose_from_list] %>
 <div id="greybanner">
 	<div class="container">
-		<p>Choose a stop or station from the list below.</p>
+		<p><%= t('problems.choose_location.choose_location')%></p>
 	</div>
 </div>
 <div id="main-content" class="container">
@@ -23,8 +23,8 @@
 <div id="greybanner">
 	<div class="container">
 		<p>
-			<%= t(:multiple_locations_intro) %>
-			<%= raw t(:cant_see_the_map, :link => link_to(t(:choose_from_list), params.merge("choose_from_list" => 1)))%>
+			<%= t('problems.choose_location.multiple_locations_intro') %>
+			<%= raw t('problems.choose_location.cant_see_the_map', :link => link_to(t('problems.find_stop.choose_from_list'), params.merge("choose_from_list" => 1)))%>
 		</p>
 	</div>
 </div>

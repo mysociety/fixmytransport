@@ -17,7 +17,7 @@
       <%- else %>
         <div class='error error-email' style="display: none;"></div>
     <%- end %>
-		<label for="user_session_email">Email</label>
+		<label for="user_session_email"><%= t('shared.login_form.email') %></label>
 		<input name="user_session[email]" id="user_session_email" type="text" />
 	</li>
 	<li class="login-password">
@@ -28,13 +28,13 @@
     <%- else %>
       <div class='error error-password' style="display: none;"></div>
     <%- end %>
-		<label for="user_session_password">Password</label>
+		<label for="user_session_password"><%= t('shared.login_form.password') %></label>
 		<input name="user_session[password]" id="user_session_password" type="password" />
-		<a href="<%= new_password_reset_path %>">Forgot?</a>
+		<a href="<%= new_password_reset_path %>"><%= t('shared.login_form.forgot') %></a>
 	</li>	
 	<li>
-		<button class="button" type="submit">Sign In</button>
-		<label for="user_session_remember_me">Keep me signed in</label><input type="checkbox" class="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1" />    
+		<button class="button" type="submit"><%= t('shared.login_form.sign_in') %></button>
+		<label for="user_session_remember_me"><%= t('shared.login_form.keep_signed_in') %></label><input type="checkbox" class="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1" />    
 		<%- if !(controller.controller_name == 'user_sessions') %>
 		<input type="hidden" name="redirect" value="<%= request.request_uri %>" />
 		<%- end %>
@@ -43,12 +43,12 @@
 <%- end %>
 
     <div class="login-options">
-	<p>Don't have an account?</p>
-	<a href="<%= new_account_url %>" class="button" id="create-account">Create one</a>
+	<p><%= t('shared.login_form.no_account') %></p>
+	<a href="<%= new_account_url %>" class="button" id="create-account"><%= t('shared.login_form.create_one') %></a>
 
     <%- if ! MySociety::Config.get('FACEBOOK_APP_ID','').empty? %>
-	    <p>Sign in with Facebook</p>
-	    <a href="#" onclick="checkLoginOrCallFacebook()" id="facebook" class="facebook">Facebook Connect</a>
+	    <p><%= t('shared.login_form.sign_in_with_facebook') %></p>
+	    <a href="#" onclick="checkLoginOrCallFacebook()" id="facebook" class="facebook"><%= t('shared.login_form.facebook_connect') %></a>
 	<%- end %>
 </div>
 <div id="fb-root"></div>
