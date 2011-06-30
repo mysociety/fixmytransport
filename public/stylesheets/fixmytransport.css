@@ -224,7 +224,7 @@ form#search {
 	}
 	#banner .status {
 		display:inline-block;
-		margin-top: 35px;
+		/*margin-top: 35px;*/
 		color:#fff;
 		text-transform:uppercase;
 		font-size:0.8em;
@@ -251,6 +251,9 @@ form#search {
 	#greybanner h1,
 	#greybanner h2 {
 		font-size: 2em;
+	}
+	#banner h1 {
+		width:700px;
 	}
 		#banner h1 a {
 			color:#fff;
@@ -282,13 +285,14 @@ form#search {
 		margin:5px 0;
 	}
 #yellowbanner {
+	margin: 1em auto;
 	background: #FFFBD7;
 	padding:1em;
 	color:#fff;
 
-	-webkit-box-shadow: 0 0 34px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow: 0 0 34px rgba(0, 0, 0, 0.5);
-	box-shadow: 0 0 34px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
 	#yellowbanner h1 {
 		line-height:1.3;
@@ -654,13 +658,16 @@ ul.user-list {
     float:left;
     width:100px;
 }
-
+#email-share textarea,
 #comment-form textarea,
 .new_campaign_update textarea {
 	width:96%;
 	margin:5px;
 	border:none;
 	background: #f4f4f4;
+}
+#email-share label {
+	margin:5px;
 }
 #main-content #comment-form,
 #main-content .new_campaign_update,
@@ -669,8 +676,7 @@ ul.user-list {
 }
 #main-content #comment-form textarea,
 #main-content .new_campaign_update textarea,
-#main-content .update_campaign textarea,
-#email-share textarea {
+#main-content .update_campaign textarea {
 	margin:0;
 	width:96%;
 	background: #f4f4f4;
@@ -1207,11 +1213,14 @@ ul#campaign-thread {
 		    -webkit-border-radius: 20px;
 		}
 		ul#campaign-thread li a.thread-item span.title {
-		    display: inline-block;
+			overflow: hidden;
+		    white-space: nowrap;
+			display:block;
 		    float: left;
-			width:300px;
+			width:360px;
 			margin:10px 0;
 			line-height:1.5;
+			text-overflow:ellipsis;
 		}
 		ul#campaign-thread li a.thread-item span.date {
 			display: inline-block;
@@ -1452,7 +1461,7 @@ ul#process {
 
 /*===[Front Page]===*/
 #frontpage-top {
-	margin:1em auto;
+	margin:1em auto 0 auto;
 }
 	#frontpage-top .leftcol {
 		text-align:center;
@@ -1483,7 +1492,7 @@ ul#process {
 		#frontpage-top .leftcol .button {
 			font-size:1.6em;
 			padding:0.8em 1.1em;
-			margin:1.5em 0.7em;
+			margin:1em 0.7em;
 			text-transform:none;
 		}
 	#frontpage-top .rightcol {
@@ -1552,7 +1561,7 @@ ul#process {
 		#frontpage-top .rightcol .button {
 			font-size:1.5em;
 			padding:0.7em 1em;
-			margin:1em 2px;
+			margin:1.5em 2px 1em 2px;
 			text-transform:none;
 		}
 
@@ -1661,8 +1670,7 @@ ul#process {
 				margin:0 0 10px 37px;
 				padding-right:20px;
 			}
-/*===[Route Page]===*/		
-
+/*===[Route Page]===*/
 ol#large-ol,
 ul#large-ul,
 ul.route-links {
@@ -1673,7 +1681,8 @@ ul.route-links {
 }
 ul#large-ul,
 ul.route-links {
-	display:inline-block;
+	width:700px;
+	
 }
 	ol#large-ol li,
 	ul#large-ul li,
@@ -1744,3 +1753,44 @@ ul.route-links {
 		float:right;
 		margin:7px 13px 0 0;
 	}
+/*===[Find Route Page]===*/
+#route-type-list {
+	list-style-type:none;
+	padding:0;
+	margin:2em 0;
+	display:block;
+	width:100%;
+	height:100px;
+}
+	#route-type-list li {
+		display:block;
+		float:left;
+		width:21%;;
+	}
+		#route-type-list li span {
+			display:block;
+			color:#666;
+			text-transform:lowercase;
+			font-size:0.5em;
+			font-style:italic;
+			margin-top:1.5em;
+			font-weight:lighter;
+		}
+/*===[Route Regions Page]===*/
+#region-list {
+	list-style-type:none;
+	padding:0;
+	margin:0;
+	display:inline-block;
+	font-size:1.4em;
+	float:left;
+}
+		#region-list li.active a,
+		#region-list li a:hover {
+			color:#333;
+		}
+#region-map-wrap {
+	width:293px;
+	height:447px;
+	margin:0 auto;
+}

@@ -1,5 +1,5 @@
 <%- content_for :javascript do %>
-<%= raw javascript_include_tag('jquery.lightbox-0.5.min.js', :charset => 'utf-8') %>
+<%= raw javascript_include_tag('jquery.lightbox-0.5.min.js', 'jquery.text-overflow.js', :charset => 'utf-8') %>
 <%- end %>
 <%- content_for :stylesheets do %>
 <%= stylesheet_link_tag 'jquery.lightbox-0.5.css'  %>
@@ -12,6 +12,9 @@
 		url: document.location.protocol + '//' + document.location.host + "<%= campaign_path(@campaign) %>",
 		description: "<%= @campaign.description %>"
 	};
+	$(function(){
+		$("ul#campaign-thread li a.thread-item span.title").ellipsis();
+	});
 </script>
 <%- if (current_user && current_user.supporter_or_initiator(@campaign)) || @campaign.status == :successful %>
   <div id="banner" class="<%= 'supporter' %>">

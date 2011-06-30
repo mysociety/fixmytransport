@@ -20,9 +20,6 @@
     <div id="email-share" class="pane" style="min-height:340px;">
       <%= render :partial => 'shared/email' %>
     </div>
-    <%- end %>
-    
-	<%- if controller.controller_name == 'campaigns' and controller.action_name == 'show'%>
 	  <%- if current_user && current_user == @campaign.initiator %>
 	    <div id="campaign-update" class="pane">
         <%= render :partial => 'campaigns/update_form' %>
