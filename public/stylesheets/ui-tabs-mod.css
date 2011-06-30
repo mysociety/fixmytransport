@@ -139,7 +139,7 @@
 	}
 	#tabs-main-nav li#bus-tab,
 	#tabs-main-nav li#bus-tab.ui-state-active {
-		background: #048fc2, url(../images/icons.png) 8px -520px no-repeat; /* Old browsers */
+		background: #048fc2 url(../images/icons.png) 8px -520px no-repeat; /* Old browsers */
 		background: url(../images/icons.png) 8px -520px no-repeat, -moz-linear-gradient(top, #048fc2 0%, #0075a0 100%); /* FF3.6+ */
 		background: url(../images/icons.png) 8px -520px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#048fc2), color-stop(100%,#0075a0)); /* Chrome,Safari4+ */
 		background: url(../images/icons.png) 8px -520px no-repeat, -webkit-linear-gradient(top, #048fc2 0%,#0075a0 100%); /* Chrome10+,Safari5.1+ */
@@ -150,7 +150,7 @@
 	}
 	#tabs-main-nav li#train-tab,
 	#tabs-main-nav li#train-tab.ui-state-active {
-		background: #ea1174, url(../images/icons.png) 8px -441px no-repeat; /* Old browsers */
+		background: #ea1174 url(../images/icons.png) 8px -441px no-repeat; /* Old browsers */
 		background: url(../images/icons.png) 8px -441px no-repeat, -moz-linear-gradient(top, #ea1174 0%, #b71d6a 100%); /* FF3.6+ */
 		background: url(../images/icons.png) 8px -441px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ea1174), color-stop(100%,#b71d6a)); /* Chrome,Safari4+ */
 		background: url(../images/icons.png) 8px -441px no-repeat, -webkit-linear-gradient(top, #ea1174 0%,#b71d6a 100%); /* Chrome10+,Safari5.1+ */
@@ -161,7 +161,7 @@
 	}
 	#tabs-main-nav li#ferry-tab,
 	#tabs-main-nav li#ferry-tab.ui-state-active {
-		background: #73ce24, url(../images/icons.png) 8px -369px no-repeat; /* Old browsers */
+		background: #73ce24 url(../images/icons.png) 8px -369px no-repeat; /* Old browsers */
 		background: url(../images/icons.png) 8px -369px no-repeat, -moz-linear-gradient(top, #73ce24 0%, #70b222 100%); /* FF3.6+ */
 		background: url(../images/icons.png) 8px -369px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#73ce24), color-stop(100%,#70b222)); /* Chrome,Safari4+ */
 		background: url(../images/icons.png) 8px -369px no-repeat, -webkit-linear-gradient(top, #73ce24 0%,#70b222 100%); /* Chrome10+,Safari5.1+ */
@@ -172,7 +172,7 @@
 	}
 	#tabs-main-nav li#tram-tab,
 	#tabs-main-nav li#tram-tab.ui-state-active {
-		background: #f78411, url(../images/icons.png) 8px -306px no-repeat; /* Old browsers */
+		background: #f78411 url(../images/icons.png) 8px -306px no-repeat; /* Old browsers */
 		background: url(../images/icons.png) 8px -306px no-repeat, -moz-linear-gradient(top, #f78411 0%, #cc6100 100%); /* FF3.6+ */
 		background: url(../images/icons.png) 8px -306px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f78411), color-stop(100%,#cc6100)); /* Chrome,Safari4+ */
 		background: url(../images/icons.png) 8px -306px no-repeat, -webkit-linear-gradient(top, #f78411 0%,#cc6100 100%); /* Chrome10+,Safari5.1+ */
