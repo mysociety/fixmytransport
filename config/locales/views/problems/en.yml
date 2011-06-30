@@ -69,12 +69,13 @@ en:
       go: Go
     find_route:
       find_a_route: Finding a route
-      is_it_on_a: Is it on a
-      or_on_a: or on a 
-      bus_or_coach_route: bus or coach route
-      train_route: "train route"
-      tram_metro_ferry_route: "tram, metro, underground or ferry route?"
-      subheader: Choose from one of the three options below
+      bus: bus
+      train: train
+      tram: "tram"
+      or_underground: (or metro/underground)
+      ferry: ferry
+      or_coach: (or coach)
+      subheader: Choose from one of the four options below
     find_stop:
       where_is_it: Where is it?
       instructions: 'Enter an area, town or postcode'
