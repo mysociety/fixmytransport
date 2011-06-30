@@ -1,5 +1,5 @@
 en:
-  operators:
+  route_operators:
     show:
       routes_header: Routes
       stations_header: Stations
