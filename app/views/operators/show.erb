@@ -7,17 +7,21 @@
 	
 	<div id='operator-tabs' class='ui-tabs ui-widget ui-content ui-corner-all'>
 		<ul id="tabs-main-nav" class='font-1 operator-tabs-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
-	        <li id="route-tab" class='ui-state-default ui-corner-top ui-tabs-selected ui-state-active'>
-	          <a href="#operator-tabs-routes">Routes<span class="num">120</span></a>
-	        </li>
+			<%- if !@operator.routes.empty?  %>
+			<li id="route-tab" class='ui-state-default ui-corner-top ui-tabs-selected ui-state-active'>
+				<a href="#operator-tabs-routes">Routes<span class="num"><%= @operator.routes.count %></span></a>
+			</li>
+			<%- end %>
+			<%- if !@operator.stop_areas.empty? %>
 	        <li id="area-tab" class='ui-state-default ui-corner-top'>
-	          <a href="#operator-tabs-areas">Areas<span class="num">9</span></a>
+	          <a href="#operator-tabs-areas">Areas<span class="num"><%= @operator.stop_areas.count %></span></a>
 	        </li>
+	<%- end %>
 	    </ul>
 		<div id='operator-tabs-routes' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
 			<%- if !@operator.routes.empty?  %>
 			  <h3><%= t(:operates_routes, :operator => @operator.name, :count => @operator.routes.count) %></h3>
-			  <ul class='operator-routes'>
+			  <ul class='route-links'>
 			   <%- @operator.routes.each do |route| %>
 			      <li>
 			        <%= link_to(route.description, route_url(route.region, route)) %>
@@ -29,7 +33,7 @@
 		<div id='operator-tabs-areas' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
 			<%- if !@operator.stop_areas.empty? %>
 			  <h3><%= t(:is_responsible_for_stations, :operator => @operator.name, :count => @operator.stop_areas.count) %></h3>
-			  <ul class='operator-stations'>
+			  <ul class='route-links'>
 			    <%- @operator.stop_areas.each do |station| %>
 			      <li>
 			        <%= link_to(station.name, location_path(station)) %>

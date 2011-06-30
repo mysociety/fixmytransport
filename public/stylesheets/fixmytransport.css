@@ -1664,23 +1664,27 @@ ul#process {
 /*===[Route Page]===*/		
 
 ol#large-ol,
-ul#large-ul {
+ul#large-ul,
+ul.route-links {
     margin: 0 0 1em 0;
     padding: 0;
     clear: both;
 	display:block;
 }
-ul#large-ul {
+ul#large-ul,
+ul.route-links {
 	display:inline-block;
 }
 	ol#large-ol li,
-	ul#large-ul li {
+	ul#large-ul li,
+	ul.route-links li {
 	    list-style-type: none;
 	    border-bottom: 3px solid #fff;
 	    clear: both;
 	}
 		ol#large-ol li a,
-		ul#large-ul li a{
+		ul#large-ul li a,
+		ul.route-links li a {
 		    display: block;
 		    color: #444;
 		    background: #eee;
@@ -1689,12 +1693,15 @@ ul#large-ul {
 		ol#large-ol li a:hover,
 		ul#large-ul li a:hover,
 		ol#large-ol li a:focus,
-		ul#large-ul li a:focus {
+		ul#large-ul li a:focus,
+		ul.route-links li a:hover,
+		ul.route-links li a:focus {
 		    background: #0075a0;
 			color:#fff;
 		}
 		ol#large-ol li a span.num,
-		ul#large-ul li a span.num {
+		ul#large-ul li a span.num,
+		ul.route-links li a span.num  {
 		    display: block;
 		    float: left;
 		    text-align: center;
@@ -1709,8 +1716,6 @@ ul#large-ul {
 		    -moz-border-radius: 20px;
 		    -webkit-border-radius: 20px;
 		}
-
-/*===[Operator Page]===*/
 
 /*===[Find Stop Page]===*/
 #find-stop {
