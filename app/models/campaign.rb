@@ -119,7 +119,7 @@ class Campaign < ActiveRecord::Base
     "I just joined the campaign to persuade #{responsible_org_descriptor} to #{title}"
   end
 
-  def add_comment(user, text, comment_confirmed=false, token=nil)
+  def add_comment(user, text, mark_fixed=nil, mark_open=nil, comment_confirmed=false, token=nil)
     comment = comments.build(:text => text,
                              :user => user)
     comment.status = :new

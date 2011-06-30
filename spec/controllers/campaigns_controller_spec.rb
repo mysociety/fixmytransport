@@ -362,6 +362,8 @@ describe CampaignsController do
                                           :commented => @mock_campaign,
                                           :text => 'comment text',
                                           :confirm! => true,
+                                          :mark_fixed => nil,
+                                          :mark_open => nil,
                                           :skip_name_validation= => true,
                                           :campaign_events => [],
                                           :status= => true)

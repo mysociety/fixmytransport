@@ -1,4 +1,4 @@
 <div id="main-content" class="container">
     <h3><%= t(:add_a_comment)%></h3>
-    <%= render :partial => "shared/comment_form" %>
+    <%= render :partial => "shared/comment_form", :locals => { :context => controller.controller_name } %>
 </div>

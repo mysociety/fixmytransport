@@ -2,9 +2,11 @@
 <div id="banner">
 	<div class="container">
 		<h1><a href="<%= location_url(@problem.location) %>"><%= @problem.location.description %></a></h1>
-		<div class="right">
-			<span class="ribbon">Fixed</span>
-  		</div>
+		<%- if @problem.status == :fixed %>
+		  <div class="right">
+			  <span class="ribbon">Fixed</span>
+  	  </div>
+  	<%- end %>
 	</div>
 </div>			
 
@@ -15,12 +17,12 @@
 		</div>				
 		<div class="clear">
 			<h5 class="left">Comments</h5>
-			<a class="comment button right comment-trigger" href="#">Comment</a>
+			<a class="comment button right comment-trigger" href="<%= add_comment_problem_url(@problem) %>">Comment</a>
 		</div>
 
 		<ul id="campaign-thread">
 		  <%- @problem.comments.visible.each_with_index do |comment, index|  %>
-  		 <li>
+  		 <li class="open">
   		  <%= render :partial => 'shared/comment', :locals => { :comment => comment,  :index => index+1 }%>
 		   </li>
 		<%- end %>

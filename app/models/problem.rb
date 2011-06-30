@@ -174,7 +174,7 @@ class Problem < ActiveRecord::Base
     location.transport_modes.map{ |transport_mode| transport_mode.name }.join(", ")
   end
 
-  def add_comment(user, text, comment_confirmed=false, token=nil)
+  def add_comment(user, text, mark_fixed=nil, mark_open=nil, comment_confirmed=false, token=nil)
     comment = comments.build(:text => text,
                              :user => user)
     comment.status = :new

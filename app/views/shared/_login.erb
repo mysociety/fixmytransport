@@ -9,7 +9,7 @@
 
 	<%- if ['campaigns', 'problems'].include?(controller.controller_name) && controller.action_name == 'show' %>
   	<div id="comment-and-login" class="pane">
-  		<%= render :partial => 'shared/comment_form' %>
+  		<%= render :partial => 'shared/comment_form', :locals => { :context => controller.controller_name } %>
   	</div>
 	<%- end %>
 	
