@@ -16,6 +16,15 @@ $(document).ready(function(){
         }
       }) 
     }
+
+	/* Region map
+	   ================================================== */
+	$('#RegionMap area').hover(function(){
+		var regionclass = $(this).attr('id');
+		$('#region-list li.'+regionclass).addClass('active');
+	},function(){
+		$('#region-list li').removeClass('active');
+	});
     
 	/* Goto top
 	   ================================================== */
