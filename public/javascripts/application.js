@@ -139,11 +139,23 @@ function updateCommentCallback(response){
 function tabifyRouteLists() {
     if ($('#tabs').length > 0){
       $("#tabs").tabs();
-      $("#tabs-bus").tabs();
-      $("#tabs-coach").tabs();
-      $("#tabs-train").tabs();
-      $("#tabs-ferry").tabs();
-      $("#tabs-metro").tabs();
+
+      if ($('#tabs-bus .tabs-sub-nav').length > 0){
+        $("#tabs-bus").tabs();
+      }
+      if ($('#tabs-coach .tabs-sub-nav').length > 0){
+        $("#tabs-coach").tabs();
+      }      
+      if ($('#tabs-train .tabs-sub-nav').length > 0){
+        $("#tabs-train").tabs();
+      }
+      if ($('#tabs-ferry .tabs-sub-nav').length > 0){
+        $("#tabs-ferry").tabs();
+      }
+      if ($('#tabs-metro .tabs-sub-nav').length > 0){
+        $("#tabs-metro").tabs();
+      }
+      
       tabshook();
     }
 }
