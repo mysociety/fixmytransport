@@ -4,6 +4,7 @@ class LocationsController < ApplicationController
   include ApplicationHelper
 
   def show_stop
+    
     @stop = Stop.full_find(params[:id], params[:scope])
     @title = @stop.full_name
     respond_to do |format|
@@ -58,10 +59,6 @@ class LocationsController < ApplicationController
     @title = @route.name
     respond_to do |format|
       format.html do
-        map_params_from_location(@route.points,
-                                 find_other_locations=false,
-                                 height=LOCATION_PAGE_MAP_HEIGHT,
-                                 width=LOCATION_PAGE_MAP_WIDTH)
       end
       format.atom do
         campaign_feed(@route)
