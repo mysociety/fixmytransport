@@ -61,7 +61,7 @@
   	</div>
   </div>
 <%- end %>
-<%- if current_user && current_user == @campaign.initiator %>
+<%- if current_user && current_user == @campaign.initiator && params[:first_time] == 'true' %>
 <div id="yellowbanner" class="container">
 	<h1><%= raw t('campaigns.show.campaign_initiator_first_time_header', :twitter_link => link_to(t('campaigns.show.twitter'), twitter_url(@campaign)), :facebook_link => link_to(t('campaigns.show.facebook'), facebook_url(@campaign)), :email_link => link_to(t('campaigns.show.email'), share_campaign_url(@campaign)))%></h1>
 </div>
