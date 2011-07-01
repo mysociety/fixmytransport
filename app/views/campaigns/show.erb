@@ -7,12 +7,12 @@
 
 <script>
 	var campaign_data = {
-		title: "<%= @campaign.title %>",
+		title: "<%= escape_javascript(@campaign.title) %>",
 		id: <%= @campaign.id %>,
 		url: document.location.protocol + '//' + document.location.host + "<%= campaign_path(@campaign) %>",
-		description: "<%= @campaign.description %>",
-	  facebook_description: "<%= facebook_description(@campaign, current_user) %>", 
-	  facebook_message: "<%= facebook_message(@campaign, current_user) %>",
+		description: "<%= escape_javascript(@campaign.description) %>",
+	  facebook_description: "<%= escape_javascript(facebook_description(@campaign, current_user)) %>", 
+	  facebook_message: "<%= escape_javascript(facebook_message(@campaign, current_user)) %>",
 	  initiator: <%= current_user && current_user == @campaign.initiator %>
 	};
 	
