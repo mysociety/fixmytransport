@@ -10,8 +10,11 @@
 		title: "<%= @campaign.title %>",
 		id: <%= @campaign.id %>,
 		url: document.location.protocol + '//' + document.location.host + "<%= campaign_path(@campaign) %>",
-		description: "<%= @campaign.description %>"
+		description: "<%= @campaign.description %>",
+	  facebook_description: "<%= facebook_description(@campaign, current_user) %>", 
+	  facebook_message: "<%= facebook_message(@campaign, current_user) %>"
 	};
+	
 	$(function(){
 		$("ul#campaign-thread li a.thread-item span.title").ellipsis();
 	});

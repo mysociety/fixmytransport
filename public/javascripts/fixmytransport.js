@@ -169,8 +169,8 @@ $(document).ready(function(){
               link:    campaign_data.url,
               picture: document.location.protocol + '//' + document.location.host + '/images/facebook-feed-logo.gif',
               caption: campaign_data.description,
-              description: "Please help this FixMyTransport campaign by spreading the word and encouraging your friends to support it.",
-              message: "I'm supporting this FixMyTransport campaign: "  + campaign_data.title + " ...will you join me?"
+              description: campaign_data.facebook_description,
+              message: campaign_data.facebook_message
           },
           function(response) {
               $('.login-box .pane').hide();

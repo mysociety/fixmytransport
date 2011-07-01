@@ -4,28 +4,28 @@ module ApplicationHelper
   def google_maps_key
     MySociety::Config.get('GOOGLE_MAPS_API_KEY', '')
   end
-  
+
   def library_js_link
-    javascript_include_tag('jquery-1.5.2.min', 
-                           'jquery-ui-1.8.13.custom.min', 
-                           'jquery.autofill.min', 
-                           'jquery.form.min', 
-                           'OpenLayers', 
+    javascript_include_tag('jquery-1.5.2.min',
+                           'jquery-ui-1.8.13.custom.min',
+                           'jquery.autofill.min',
+                           'jquery.form.min',
+                           'OpenLayers',
                            'map', :charset => 'utf-8', :cache => 'libraries')
   end
-  
+
   def admin_library_js_link
-     javascript_include_tag('jquery-1.5.2.min', 
-                            'jquery-ui-1.8.13.custom.min', 
-                            'OpenLayers-admin', 
+     javascript_include_tag('jquery-1.5.2.min',
+                            'jquery-ui-1.8.13.custom.min',
+                            'OpenLayers-admin',
                             'map',
                             'admin', :charset => 'utf-8', :cache => 'admin_libraries')
   end
-  
+
   def main_js_link
     javascript_include_tag('fixmytransport', 'application', 'fb', :charset => 'utf-8', :cache => 'main')
   end
-  
+
   # options:
   #  no_jquery - don't include a tag for the main jquery js file
   def map_javascript_include_tags(options={})
@@ -55,7 +55,7 @@ module ApplicationHelper
                :lon => stop.lon,
                :id => stop.id }
     else
-      
+
       data = { :lat => stop.lat,
                :lon => stop.lon,
                :id => stop.id,
@@ -91,9 +91,9 @@ module ApplicationHelper
         name += 'bus-magenta'
       end
     end
-    
+
     if small
-      name += '-sml' 
+      name += '-sml'
     else
       name += '-med'
     end
@@ -350,9 +350,29 @@ module ApplicationHelper
                        :via => 'FixMyTransport' }
     return "http://twitter.com/share?#{twitter_params.to_query}"
   end
-  
+
   def facebook_url(campaign)
     "http://www.facebook.com"
+  end
+
+  def facebook_description(campaign, user)
+    return '' if ! user
+    if user == campaign.initiator
+      text = t("campaigns.show.initiator_facebook_description")
+    else
+      text = t('campaigns.show.supporter_facebook_description')
+    end
+    return text
+  end
+
+  def facebook_message(campaign, user)
+    return '' if ! user
+    if user == campaign.initiator
+      text = t("campaigns.show.initiator_facebook_message", :title => campaign.title, :org => campaign.responsible_org_descriptor)
+    else
+      text = t("campaigns.show.supporter_facebook_message", :title => campaign.title, :org => campaign.responsible_org_descriptor)
+    end
+    return text
   end
 
   def sortable(column, title = nil)
@@ -361,7 +381,7 @@ module ApplicationHelper
     direction = (column == sort_column && sort_direction == "asc") ? "desc" : "asc"
     link_to title, admin_url(url_for(params.merge({:sort => column, :direction => direction}))), {:class => css_class}
   end
-  
+
   def assignment_title(assignment)
     case assignment.task_type
     when 'find_transport_organization'
@@ -372,18 +392,18 @@ module ApplicationHelper
       raise "No title set for assignment type #{assignment.task_type}"
     end
   end
-  
+
   def assignment_details(assignment)
     case assignment.task_type
     when 'find_transport_organization'
       return t('campaigns.show.find_operator_task_description', :location => readable_location_type(assignment.campaign.location))
     when 'find_transport_organization_contact_details'
       return t('campaigns.show.find_contact_task_description', :name => assignment.problem.operator.name)
-    else 
+    else
       raise "No details set for assignment type #{assignment.task_type}"
     end
   end
-    
+
   def assignment_icon(assignment)
     case assignment.task_type
     when 'find_transport_organization'
@@ -394,7 +414,7 @@ module ApplicationHelper
       raise "No icon set for assignment type #{assignment.task_type}"
     end
   end
-  
+
   def contact_description(contact_type, campaign)
     case contact_type
     when 'OperatorContact'
@@ -406,7 +426,7 @@ module ApplicationHelper
     else
       raise "No contact description set for contact_type #{contact_type}"
     end
-      
+
   end
-  
+
 end
