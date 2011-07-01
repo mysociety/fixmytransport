@@ -135,8 +135,15 @@ $(document).ready(function(){
   $('.facebook-trigger').click(function(e){
     e.preventDefault();
     $('.login-box .pane').hide();
-    $('#social-message').empty().append('<b>Tell the world you&rsquo;re a supporter</b><br/>' +
-       'Post to your Facebook wall and let everyone know!').show(); 
+    $('#social-message').empty();
+    if (campaign_data.initiator == true) {
+      $('#social-message').append('<b>Tell the world about your campaign</b><br/>' +
+         'Post to your Facebook wall and let everyone know!').show();
+    } else {
+      $('#social-message').append('<b>Tell the world you&rsquo;re a supporter</b><br/>' +
+         'Post to your Facebook wall and let everyone know!').show();
+    }
+     
     $('#social-share').show();
   	$("#login-box").dialog({title: "Facebook"});
   	$("#login-box").dialog("open");
