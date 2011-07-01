@@ -100,7 +100,7 @@ class CampaignsController < ApplicationController
       if (@campaign.update_attributes(params[:campaign]))
         @campaign.confirm
         @campaign.save!
-        redirect_to campaign_url(@campaign) 
+        redirect_to campaign_url(@campaign, :first_time => true) 
       else
         render :action => "add_details"
       end
