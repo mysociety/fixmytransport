@@ -1,7 +1,7 @@
-<h3><%= t(:comments) %></h3>
+<h3><%= t('admin.comments') %></h3>
 <table>
   <tr>
-    <th><%= t(:id) %></th>
+    <th><%= t('admin.id') %></th>
     <% for column in Comment.content_columns %>
       <th><%= column.human_name %></th>
     <% end %>

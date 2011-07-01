@@ -1,18 +1,18 @@
 <h2><%= @operator.name %></h2>
 <%- form_for @operator, :url => admin_url(admin_operator_path(@operator)), :html => { :method => :delete, :class => 'destroy-link' } do |f| 
- %>  <%= raw hidden_field_tag :confirmation, t(:are_you_sure), {:id => 'destroy_confirmation'} %>
-  <%= raw submit_tag t(:destroy)  %>
+ %>  <%= raw hidden_field_tag :confirmation, t('admin.are_you_sure'), {:id => 'destroy_confirmation'} %>
+  <%= raw submit_tag t('admin.destroy')  %>
 <%-end %>
 
-<h3><%= t(:operator_contacts) %></h3>
-<%= link_to(t(:add_an_operator_contact), admin_url(new_admin_operator_contact_path(:operator_id => @operator.id))) %>
+<h3><%= t('admin.operator_contacts') %></h3>
+<%= link_to(t('admin.add_an_operator_contact'), admin_url(new_admin_operator_contact_path(:operator_id => @operator.id))) %>
 
 <%- if !@operator.operator_contacts.empty?  %>
   <table class='operators index-list'>
     <tr>
-      <th width='33%'><%= t(:category) %></th>
-      <th width='33%'><%= t(:email) %></th>
-      <th width='34%'><%= t(:location) %></th>
+      <th width='33%'><%= t('admin.category') %></th>
+      <th width='33%'><%= t('admin.email') %></th>
+      <th width='34%'><%= t('admin.location') %></th>
     </tr>
     <%- @operator.operator_contacts.each do |contact| %>
       <tr class='<%= cycle("odd", "even") %>'>
@@ -31,21 +31,21 @@
   </table>
 <%-end %>
 
-<h3><%= t(:merge) %></h3>
+<h3><%= t('admin.merge') %></h3>
 <%- form_tag admin_url(merge_admin_operators_path), :method => :get do  %>
-  <%= raw label_tag 'operators[]', t(:operator_merge_label) %>
+  <%= raw label_tag 'operators[]', t('admin.operator_merge_label') %>
   <%= raw text_field_tag 'operators[]', '' %>
   <%= raw hidden_field_tag 'operators[]', @operator.id %>
-  <%= raw submit_tag t(:operator_merge_submit)  %>
+  <%= raw submit_tag t('admin.operator_merge_submit')  %>
 <%- end %>
-<h3><%= t(:edit) %></h3>
+<h3><%= t('admin.edit') %></h3>
 <%-form_for :operator, @operator, :url => admin_url(admin_operator_path(@operator)), :html => { :method => :put,  :class => 'operator-form' } do |f| %>
   <%= render :partial => 'form', :locals => { :f => f }   %>
   <p>
-    <%= link_to t(:external_search_operator), external_search_link(@operator.name), :target => '_blank'  %>
+    <%= link_to t('admin.external_search_operator'), external_search_link(@operator.name), :target => '_blank'  %>
   </p>
-  <%= render :partial => 'route_operators', :locals => { :f => f, :route_operators => @operator.route_operators, :title => t(:routes) } %>
-  <%= render :partial => 'route_operators', :locals => { :f => f, :route_operators => @route_operators, :title => t(:routes_with_code) } %>
+  <%= render :partial => 'route_operators', :locals => { :f => f, :route_operators => @operator.route_operators, :title => t('admin.routes') } %>
+  <%= render :partial => 'route_operators', :locals => { :f => f, :route_operators => @route_operators, :title => t('admin.routes_with_code') } %>
 <%-end %>
 <script type="text/javascript">
   jQuery(document).ready(function(){

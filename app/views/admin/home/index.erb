@@ -1,6 +1,6 @@
-<h2><%= t(:things_to_do) %></h2>
+<h2><%= t('admin.things_to_do') %></h2>
 <div class='admin-task-list'>
-  <h3><%= t(:routes_without_operators_intro, :number => @routes_without_operators_total) %></h3>
+  <h3><%= t('admin.routes_without_operators_intro', :number => @routes_without_operators_total) %></h3>
   <ul>
     <%- @routes_without_operators.each do |route| %>
       <li class='route-link'>
@@ -10,18 +10,18 @@
   </ul>
 </div>
 <div class='admin-task-list'>
-  <h3><%= t(:codes_without_operators_intro, :number => @operator_codes_without_operators_total) %></h3>
+  <h3><%= t('admin.codes_without_operators_intro', :number => @operator_codes_without_operators_total) %></h3>
   <ul>
     <%- @operator_codes_without_operators.each do |code, count| %>
       <li class='operator-code-link'>
         <%= link_to code, admin_url(new_admin_operator_path(:code => code)) %>
-        <%= t(:num_unmatched_routes, :number => count) %>
+        <%= t('admin.num_unmatched_routes', :number => count) %>
       </li>
     <%- end%>
   </ul>
 </div>
 <div class='admin-task-list'>
-  <h3><%= t(:in_progress_assignments, :number => @assignments_needing_attention_total) %></h3>
+  <h3><%= t('admin.in_progress_assignments', :number => @assignments_needing_attention_total) %></h3>
   <ul>
     <%- @assignments_needing_attention.each do |assignment| %>
       <li class='assignment-link'>
@@ -32,7 +32,7 @@
 </div>
 <%- if @incoming_messages_without_campaign.size > 0 %>
 <div class='admin-task-list'>
-  <h3><%= t(:incoming_messages_without_campaigns, :number => @incoming_messages_without_campaign.size) %></h3>
+  <h3><%= t('admin.incoming_messages_without_campaigns', :number => @incoming_messages_without_campaign.size) %></h3>
   <ul>
     <%- @incoming_messages_without_campaign.each do |incoming| %>
       <li class='incoming-link'>

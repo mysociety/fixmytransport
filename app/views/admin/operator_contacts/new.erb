@@ -1,4 +1,4 @@
-<h2><%= t(:adding_an_operator_contact, :operator => @operator.name) %></h2>
+<h2><%= t('admin.adding_an_operator_contact', :operator => @operator.name) %></h2>
 <%- form_for :operator_contact, @operator_contact, :url => admin_url(admin_operator_contacts_path), :html => { :class => 'operator-contact-form' } do |f| %>
   <%= render :partial => 'form', :locals => { :f => f } %>
 <%- end %>

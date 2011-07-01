@@ -1,6 +1,6 @@
 <%- if !@stop.errors.empty? %>
   <div class='form-error'>
-    <%= t(:stop_form_error) %>
+    <%= t('admin.stop_form_error') %>
   </div>
 <%- end %>
 <%- [:atco_code, :naptan_code, :plate_code, :common_name, :short_common_name, :landmark, :street, :crossing, :indicator, :bearing, :lon, :lat].each do |field| %>
@@ -39,4 +39,4 @@
 </div>
 
 <%= raw f.hidden_field :loaded %>
-<%= raw submit_tag t(:go) %>
+<%= raw submit_tag t('admin.go') %>

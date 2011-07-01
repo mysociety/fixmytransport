@@ -8,10 +8,10 @@ class Admin::CommentsController < Admin::AdminController
     @comment = Comment.find(params[:id])
     @comment.status_code = params[:comment][:status_code]
     if @comment.update_attributes(params[:comment])
-      flash[:notice] = t(:comment_updated)
+      flash[:notice] = t('admin.comment_updated')
       redirect_to admin_url(admin_comment_path(@comment.id))
     else
-      flash[:error] = t(:comment_problem)
+      flash[:error] = t('admin.comment_problem')
       render :show
     end
   end

@@ -1,6 +1,6 @@
 <%- if !@campaign.errors.empty? %>
   <div class='form-error'>
-    <%= t(:campaign_form_error) %>
+    <%= t('admin.campaign_form_error') %>
   </div>
 <%- end %>
 
@@ -34,11 +34,11 @@
   <%= raw f.select :status_code, Campaign.statuses, {:prompt => true, :selected => @campaign.status_code } %>
 </div>
 <div>
-  <%= t(:created_at) %>: <%= @campaign.created_at %>
+  <%= t('admin.created_at') %>: <%= @campaign.created_at %>
 </div>
 <div> 
-  <%= t(:updated_at) %>: <%= @campaign.updated_at %>
+  <%= t('admin.updated_at') %>: <%= @campaign.updated_at %>
 </div>
-<%= raw submit_tag t(:go) %>
+<%= raw submit_tag t('admin.go') %>
 
 

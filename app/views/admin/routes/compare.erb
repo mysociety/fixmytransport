@@ -2,7 +2,7 @@
   <%= raw map_javascript_include_tags(:admin => true) %>
 <%- end %>
 
-<h2><%= t(:same_or_different) %></h2>
+<h2><%= t('admin.same_or_different') %></h2>
 <%= "#{@done} done of #{@count}"%>
 
 
@@ -11,18 +11,18 @@
 <%- form_tag '', :method => 'POST' do  %>
 <input type="hidden" name="is_same" value="yes">
 <input type="hidden" name="id" value="<%=@merge_candidate.id%>">
-<button class="button" type='submit'><%= t(:same) %></button>
+<button class="button" type='submit'><%= t('admin.same') %></button>
 <%- end %>
 
 <%- form_tag '', :method => 'POST' do  %>
 <input type="hidden" name="is_same" value="no">
 <input type="hidden" name="id" value="<%=@merge_candidate.id%>">
-<button class="button" type='submit'><%= t(:different) %></button>
+<button class="button" type='submit'><%= t('admin.different') %></button>
 <%- end %>
 </div>
 <%- form_tag '', :method => 'POST' do  %>
 <input type="hidden" name="id" value="<%=@merge_candidate.id%>">
-<button class="button" type='submit'><%= t(:skip) %></button>
+<button class="button" type='submit'><%= t('admin.skip') %></button>
 <%- end %>
 </div>
 <%- @routes.each_with_index do |route,index| %>

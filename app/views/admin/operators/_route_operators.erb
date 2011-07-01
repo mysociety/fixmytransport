@@ -3,37 +3,37 @@
 
   <%- if route_operators.empty?  %>
     <p>
-      <%= t(:no_routes) %>
+      <%= t('admin.no_routes') %>
     </p>
   <%- else %>
-    <%= link_to t(:check_all), '', :class => 'check-all-route-operators' %>
-    <%= link_to t(:uncheck_all), '', :class => 'uncheck-all-route-operators' %>
+    <%= link_to t('admin.check_all'), '', :class => 'check-all-route-operators' %>
+    <%= link_to t('admin.uncheck_all'), '', :class => 'uncheck-all-route-operators' %>
     <table class='new-operator-routes'>
       <tr>
-        <th><%= t(:name) %>
-        <th><%= t(:region) %></th>
-        <th><%= t(:description) %></th>
-        <th><%= t(:search)  %></th>
+        <th><%= t('admin.name') %>
+        <th><%= t('admin.region') %></th>
+        <th><%= t('admin.description') %></th>
+        <th><%= t('admin.search')  %></th>
         <%- if route_operators.first.new_record? %>
           <th>
-            <%= t(:assign_to_operator) %>
+            <%= t('admin.assign_to_operator') %>
           </th>
         <%- else %>
           <th>
-            <%= t(:remove_from_operator) %>
+            <%= t('admin.remove_from_operator') %>
           </th>
         <%-end %>
       </tr>
       <%- route_operators.each do |route_operator| %>
         <%- f.fields_for :route_operators, route_operator do |route_operator_fields|  %>
           <tr class='<%= cycle('odd', 'even') %>'>
-            <td><%= raw "#{link_to route_operator.route.name, main_url(location_path(route_operator.route)), :target => '_blank'} #{link_to("(#{t(:admin)})", admin_url(admin_route_path(route_operator.route.id)))}" %></td>
+            <td><%= raw "#{link_to route_operator.route.name, main_url(location_path(route_operator.route)), :target => '_blank'} #{link_to("(#{t('admin.admin')})", admin_url(admin_route_path(route_operator.route.id)))}" %></td>
             <td><%= route_operator.route.region.name %></td>
             <td class='route-terminuses'>
               <%= route_operator.route.description %>
             </td>
             <td>
-              <%= link_to t(:external_search_route), external_search_link("#{route_operator.route.description}"), :target => '_blank' %></td>
+              <%= link_to t('admin.external_search_route'), external_search_link("#{route_operator.route.description}"), :target => '_blank' %></td>
             <td>
               <%- if !route_operator.new_record? %>
                 <%= raw route_operator_fields.hidden_field :id %>

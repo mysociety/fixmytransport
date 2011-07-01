@@ -1,2 +1,3 @@
 en:
-  pte_form_error: There's a problem with this PTE - please see below.
+  admin:
+    pte_form_error: There's a problem with this PTE - please see below.

@@ -1,7 +1,7 @@
 <html lang='<%= I18n.locale %>'>
   <head>
     <title>
-      <%= "#{t(:site_name)} #{t(:admin)} #{yield :title}" %>
+      <%= "#{t('admin.site_name')} #{t('admin.admin')} #{yield :title}" %>
     </title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-type'>
     </meta>
@@ -13,17 +13,17 @@
     <%= yield :javascript %>
   </head>
   <body>
-    <h2><%= link_to_unless_current("#{t(:site_name)} #{t(:admin)}", admin_url(admin_root_path)) %></h2>
+    <h2><%= link_to_unless_current("#{t('admin.site_name')} #{t('admin.admin')}", admin_url(admin_root_path)) %></h2>
     <ul class='admin-navigation'>
-      <li><%= link_to t(:location_searches), admin_url(admin_location_searches_path) %></li>
-      <li><%= link_to t(:campaigns), admin_url(admin_campaigns_path) %></li>      
-      <li><%= link_to t(:problems), admin_url(admin_problems_path) %></li>
-      <li><%= link_to t(:operators), admin_url(admin_operators_path) %></li>
-      <li><%= link_to t(:routes), admin_url(admin_routes_path) %></li>
-      <li><%= link_to t(:stops), admin_url(admin_stops_path) %></li>
-      <li><%= link_to t(:stop_areas), admin_url(admin_stop_areas_path) %></li>
-      <li><%= link_to t(:ptes), admin_url(admin_ptes_path) %></li>
-      <li><%= link_to t(:councils), admin_url(admin_council_contacts_path) %></li>
+      <li><%= link_to t('admin.location_searches'), admin_url(admin_location_searches_path) %></li>
+      <li><%= link_to t('admin.campaigns'), admin_url(admin_campaigns_path) %></li>      
+      <li><%= link_to t('admin.problems'), admin_url(admin_problems_path) %></li>
+      <li><%= link_to t('admin.operators'), admin_url(admin_operators_path) %></li>
+      <li><%= link_to t('admin.routes'), admin_url(admin_routes_path) %></li>
+      <li><%= link_to t('admin.stops'), admin_url(admin_stops_path) %></li>
+      <li><%= link_to t('admin.stop_areas'), admin_url(admin_stop_areas_path) %></li>
+      <li><%= link_to t('admin.ptes'), admin_url(admin_ptes_path) %></li>
+      <li><%= link_to t('admin.councils'), admin_url(admin_council_contacts_path) %></li>
     </ul>
     <div id='main'>
       <%- [:notice, :error, :message].each do |key|  %>

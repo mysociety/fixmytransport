@@ -1,27 +1,27 @@
-<h2><%= t(:routes) %></h2>
-<%= link_to t(:add_a_route), admin_url(new_admin_route_path) %>
+<h2><%= t('admin.routes') %></h2>
+<%= link_to t('admin.add_a_route'), admin_url(new_admin_route_path) %>
 <%= render :partial => "admin/shared/index_js" %>
 <%= render :partial => "admin/shared/search_form", :locals => { :skip_transport_mode => false }  %>
 <form method='GET' action="<%= admin_url(merge_admin_routes_path)%>">
   <%= will_paginate @routes, { :admin => true } %>
-  <%= t(:select) %>
-  <%= link_to(t(:all), '', { :class => "index-select-all" }) %>
-  <%= link_to(t(:none), '', { :class => "index-select-none" }) %>
+  <%= t('admin.select') %>
+  <%= link_to(t('admin.all'), '', { :class => "index-select-all" }) %>
+  <%= link_to(t('admin.none'), '', { :class => "index-select-none" }) %>
   <table class='routes index-list'>
     <tr>
-      <th width='12%'><%= sortable('id', t(:id)) %></th>
-      <th width='5%'><%= sortable('number', t(:admin_route_number)) %></th>
-      <th width='14%'><%= sortable('name', t(:name)) %></th>
-      <th width='35%'><%= sortable('description', t(:description)) %></th>
-      <th width='23%'><%= t(:operators) %></th>
-      <th width='10%'><%= sortable('regions.name', t(:region)) %></th>
-      <th width='5%'><%= t(:select) %></th>
+      <th width='12%'><%= sortable('id', t('admin.id)') %></th>
+      <th width='5%'><%= sortable('number', t('admin.admin_route_number)') %></th>
+      <th width='14%'><%= sortable('name', t('admin.name)') %></th>
+      <th width='35%'><%= sortable('description', t('admin.description)') %></th>
+      <th width='23%'><%= t('admin.operators') %></th>
+      <th width='10%'><%= sortable('regions.name', t('admin.region)') %></th>
+      <th width='5%'><%= t('admin.select') %></th>
     </tr>
     <%-@routes.each do |route| %>
       <tr class='<%= cycle("odd", "even") %>'>
         <td>
           <%= link_to route.id, main_url(route_path(route.region, route)) %>
-          <%= link_to "(#{t(:admin)})", admin_url(admin_route_path(route.id)) %>
+          <%= link_to "(#{t('admin.admin')})", admin_url(admin_route_path(route.id)) %>
         <td><%= route.number   %></td>
         <td><%= route.read_attribute(:name) %></td>
         <td><%= route.description %></td>
@@ -32,8 +32,8 @@
     <%-end %>
     <tr class='footer'>
       <td colspan='8'>
-        <%= t(:selected_items) %>
-        <%= raw submit_tag t(:merge) %>
+        <%= t('admin.selected_items') %>
+        <%= raw submit_tag t('admin.merge') %>
       </td>
     </tr>
   </table>

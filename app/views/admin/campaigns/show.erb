@@ -3,16 +3,16 @@
   <%= render :partial => "form", :locals => { :f => f } %>
 <%- end %>
 
-<h3><%= t(:events) %></h3>
+<h3><%= t('admin.events') %></h3>
 <table>
   <tr>
-    <th><%= t(:id) %></th>
-    <th><%= t(:type) %></th>
-    <th><%= t(:data) %></th>
-    <th><%= t(:created_at) %></th>
-    <th><%= t(:updated_at) %></th>
-    <th><%= t(:visible) %></th>
-    <th><%= t(:described) %></th>
+    <th><%= t('admin.id') %></th>
+    <th><%= t('admin.type') %></th>
+    <th><%= t('admin.data') %></th>
+    <th><%= t('admin.created_at') %></th>
+    <th><%= t('admin.updated_at') %></th>
+    <th><%= t('admin.visible') %></th>
+    <th><%= t('admin.described') %></th>
   </tr>
 <%- @campaign.campaign_events.each do |event| %>
   <tr class='<%= cycle("odd", "even", :name => 'campaign_events') %>'>
@@ -25,25 +25,25 @@
     <td>
       <%- case event.described %>
       <%- when Assignment %>
-        <%= link_to("#{t(:assignment)}: #{event.described.task_type}", admin_assignment_path(event.described)) %>
+        <%= link_to("#{t('admin.assignment')}: #{event.described.task_type}", admin_assignment_path(event.described)) %>
       <%- when CampaignUpdate %>
-        <%= link_to("#{t(:campaign_update)}: #{event.described.id}", admin_campaign_update_path(event.described)) %>
+        <%= link_to("#{t('admin.campaign_update')}: #{event.described.id}", admin_campaign_update_path(event.described)) %>
       <%- when Comment %>
-        <%= "#{t(:comment)}: #{event.described.id}" %>
+        <%= "#{t('admin.comment')}: #{event.described.id}" %>
       <%- when IncomingMessage %>
-        <%= link_to("#{t(:incoming_message)}: #{event.described.id}", admin_incoming_message_path(event.described)) %>
+        <%= link_to("#{t('admin.incoming_message')}: #{event.described.id}", admin_incoming_message_path(event.described)) %>
       <%- when OutgoingMessage %>
-        <%= "#{t(:outgoing_message)}: #{event.described.id}" %>
+        <%= "#{t('admin.outgoing_message')}: #{event.described.id}" %>
       <%- end %>
     </td>
   </tr>
 <%- end %>
 </table>
 
-<h3><%= t(:incoming_messages) %></h3>
+<h3><%= t('admin.incoming_messages') %></h3>
 <table>
   <tr>
-    <th><%= t(:id) %></th>
+    <th><%= t('admin.id') %></th>
     <% for column in IncomingMessage.content_columns %>
       <th><%= column.human_name %></th>
     <% end %>
@@ -67,10 +67,10 @@
     </tr>
   <%- end %>
 </table>
-<h3><%= t(:outgoing_messages) %></h3>
+<h3><%= t('admin.outgoing_messages') %></h3>
 <table>
   <tr>
-    <th><%= t(:id) %></th>
+    <th><%= t('admin.id') %></th>
     <% for column in OutgoingMessage.content_columns %>
       <th><%= column.human_name %></th>
     <% end %>
@@ -96,10 +96,10 @@
 <%- end %>
 </table>
 
-<h3><%= t(:campaign_updates)%></h3>
+<h3><%= t('admin.campaign_updates')%></h3>
 <table>
   <tr>
-    <th><%= t(:id) %></th>
+    <th><%= t('admin.id') %></th>
     <% for column in CampaignUpdate.content_columns %>
       <th><%= column.human_name %></th>
     <% end %>
@@ -116,10 +116,10 @@
 <%- end %>
 </table>
 
-<h3><%= t(:assignments)%></h3>
+<h3><%= t('admin.assignments')%></h3>
 <table>
   <tr>
-    <th><%= t(:id) %></th>
+    <th><%= t('admin.id') %></th>
     <% for column in Assignment.content_columns %>
       <th><%= column.human_name %></th>
     <% end %>

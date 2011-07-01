@@ -13,7 +13,7 @@ class Admin::IncomingMessagesController < Admin::AdminController
   def destroy
     campaign = @incoming_message.campaign
     if @incoming_message.destroy
-      flash[:notice] = t(:incoming_message_destroyed)
+      flash[:notice] = t('admin.incoming_message_destroyed')
       if campaign
         campaign.campaign_events.create!(:event_type => 'incoming_message_deleted',
                                          :data => { :user => user_for_edits,
@@ -25,7 +25,7 @@ class Admin::IncomingMessagesController < Admin::AdminController
         redirect_to admin_url(admin_root_path)
       end
     else
-      flash.now[:error] = t(:incoming_message_destroy_problem)
+      flash.now[:error] = t('admin.incoming_message_destroy_problem')
       render :show
     end
   end
@@ -49,7 +49,7 @@ class Admin::IncomingMessagesController < Admin::AdminController
                                        :described => @incoming_message, 
                                        :data => { :user => user_for_edits })
     end
-    flash[:notice] = t(:incoming_message_moved)
+    flash[:notice] = t('admin.incoming_message_moved')
     redirect_to admin_url(admin_campaign_path(destination_campaign.id))
   end
   

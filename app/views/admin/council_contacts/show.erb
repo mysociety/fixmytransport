@@ -1,18 +1,18 @@
-<h2><%= t(:council_contacts_for, :council => @council_contact.name) %></h2>
-<h3><%= t(:edit) %></h3>
+<h2><%= t('admin.council_contacts_for', :council => @council_contact.name) %></h2>
+<h3><%= t('admin.edit') %></h3>
 <%-form_for :council_contact, @council_contact, :url => admin_url(admin_council_contact_path(@council_contact)), :html => { :method => :put,  :class => 'council-contact-form' } do |f| %>
   <%= render :partial => 'form', :locals => { :f => f } %>
 <%- end%>  
-<h3><%= t(:history) %></h3>
+<h3><%= t('admin.history') %></h3>
 <table class='history index-list'>
   <tr>
-    <th width='30%'><%= t(:updated_at) %></th>
-    <th width='30%'><%= t(:email) %></th>
-    <th width='8%'><%= t(:district_id) %></th>
-    <th width='6%'><%= t(:confirmed)  %></th>
-    <th width='6%'><%= t(:deleted)  %></th>
-    <th width='20%'><%= t(:editor)  %></th>
-    <th width='38%'><%= t(:notes) %></th>
+    <th width='30%'><%= t('admin.updated_at') %></th>
+    <th width='30%'><%= t('admin.email') %></th>
+    <th width='8%'><%= t('admin.district_id') %></th>
+    <th width='6%'><%= t('admin.confirmed')  %></th>
+    <th width='6%'><%= t('admin.deleted')  %></th>
+    <th width='20%'><%= t('admin.editor')  %></th>
+    <th width='38%'><%= t('admin.notes') %></th>
   </tr>
   <tr class='<%= cycle('odd', 'even') %>'>
     <td><%= @council_contact.updated_at %></td>

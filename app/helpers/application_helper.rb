@@ -129,9 +129,9 @@ module ApplicationHelper
   def stop_name_for_admin(stop)
     name = stop.full_name
     if ! stop.street.blank?
-      name += " #{t(:on_street, :street => stop.street)}"
+      name += " #{t('admin.on_street', :street => stop.street)}"
     end
-    name += " #{t(:in_locality, :locality => stop.locality_name)} (#{stop.id})"
+    name += " #{t('admin.in_locality', :locality => stop.locality_name)} (#{stop.id})"
     name
   end
 

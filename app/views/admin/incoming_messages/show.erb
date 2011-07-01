@@ -1,13 +1,13 @@
 <h2>Incoming Message <%= @incoming_message.id %></h2>
 <%- form_for @incoming_message, :url => admin_url(admin_incoming_message_path(@incoming_message.id)), :html => { :method => :delete, :class => 'destroy-link' } do |f|  %>
-  <%= raw hidden_field_tag :confirmation, t(:are_you_sure), {:id => 'destroy_confirmation'} %>
-  <%= raw submit_tag t(:destroy) %>
+  <%= raw hidden_field_tag :confirmation, t('admin.are_you_sure'), {:id => 'destroy_confirmation'} %>
+  <%= raw submit_tag t('admin.destroy') %>
 <%- end %>
 <div>
   
 <%- if @incoming_message.campaign %>
   Campaign: <%= link_to(@incoming_message.campaign.title, main_url(campaign_path(@incoming_message.campaign))) %>
-  (<%= link_to(t(:admin), admin_url(admin_campaign_path(@incoming_message.campaign.id))) %>)
+  (<%= link_to(t('admin.admin'), admin_url(admin_campaign_path(@incoming_message.campaign.id))) %>)
 <%- else %>
   This message has not been delivered to a campaign.
 <%- end %>
@@ -26,7 +26,7 @@
 
 <h3>Raw Email</h3>
 
-<%= link_to t(:download), admin_url(download_admin_incoming_message_path(@incoming_message.id))%>
+<%= link_to t('admin.download'), admin_url(download_admin_incoming_message_path(@incoming_message.id))%>
 <pre><%= h(@incoming_message.raw_email.data).gsub(/\n/, '<br>') %></pre>
 
 <script type="text/javascript">

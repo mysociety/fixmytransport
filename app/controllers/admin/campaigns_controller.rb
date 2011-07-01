@@ -29,10 +29,10 @@ class Admin::CampaignsController < Admin::AdminController
     @campaign = Campaign.find(params[:id])
     @campaign.status_code = params[:campaign][:status_code]
     if @campaign.update_attributes(params[:campaign])
-      flash[:notice] = t(:campaign_updated)
+      flash[:notice] = t('admin.campaign_updated')
       redirect_to admin_url(admin_campaign_path(@campaign.id))
     else
-      flash[:error] = t(:campaign_problem)
+      flash[:error] = t('admin.campaign_problem')
       render :show
     end
   end

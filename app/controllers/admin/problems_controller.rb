@@ -29,10 +29,10 @@ class Admin::ProblemsController < Admin::AdminController
     @problem = Problem.find(params[:id])
     @problem.status_code = params[:problem][:status_code]
     if @problem.update_attributes(params[:problem])
-      flash[:notice] = t(:problem_updated)
+      flash[:notice] = t('admin.problem_updated')
       redirect_to admin_url(admin_problem_path(@problem.id))
     else
-      flash[:error] = t(:problem_problem)
+      flash[:error] = t('admin.problem_problem')
       render :show
     end
   end

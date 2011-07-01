@@ -24,7 +24,7 @@
       <%= error_message_on @comment, :mark_fixed %>
     </div>
   <%- end %>
-  <%= raw f.label :mark_fixed, t(:admin_mark_fixed) %>
+  <%= raw f.label :mark_fixed, t('admin.admin_mark_fixed') %>
   <%= raw f.check_box :mark_fixed %>
 </div>
 
@@ -34,20 +34,20 @@
       <%= error_message_on @comment, :mark_open  %>
     </div>
   <%- end %>
-  <%= raw f.label :mark_open, t(:admin_mark_open) %>
+  <%= raw f.label :mark_open, t('admin.admin_mark_open') %>
   <%= raw f.check_box :mark_open %>
 </div>
 <div>
-  <%= t(:token) %>: <%= @comment.token %>
+  <%= t('admin.token') %>: <%= @comment.token %>
 </div>
 <div>
-  <%= t(:created_at) %>: <%= @comment.created_at %>
+  <%= t('admin.created_at') %>: <%= @comment.created_at %>
 </div>
 <div> 
-  <%= t(:updated_at) %>: <%= @comment.updated_at %>
+  <%= t('admin.updated_at') %>: <%= @comment.updated_at %>
 </div>
 <div> 
-  <%= t(:sent_at) %>: <%= @comment.sent_at %>
+  <%= t('admin.sent_at') %>: <%= @comment.sent_at %>
 </div>
 
-<%= raw submit_tag t(:go) %>
+<%= raw submit_tag t('admin.go') %>

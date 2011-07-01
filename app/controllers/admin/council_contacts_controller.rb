@@ -21,7 +21,7 @@ class Admin::CouncilContactsController < Admin::AdminController
   def create 
     @council_contact = CouncilContact.new(params[:council_contact])
     if @council_contact.save
-      flash[:notice] = t(:council_contact_created)
+      flash[:notice] = t('admin.council_contact_created')
       redirect_to(admin_url(admin_council_contact_path(@council_contact.id)))
     else
       @council = Council.find_by_id(params[:council_contact][:area_id])
@@ -32,10 +32,10 @@ class Admin::CouncilContactsController < Admin::AdminController
   def update
     @council_contact = CouncilContact.find(params[:id])
     if @council_contact.update_attributes(params[:council_contact])
-      flash[:notice] = t(:council_contact_updated)
+      flash[:notice] = t('admin.council_contact_updated')
       redirect_to admin_url(admin_council_contact_path(@council_contact.id))
     else
-      flash[:error] = t(:council_contact_problem)
+      flash[:error] = t('admin.council_contact_problem')
       render :show
     end
   end

@@ -53,7 +53,7 @@ class Admin::RoutesController < Admin::AdminController
     route_type = transport_mode.route_type.constantize
     @route = route_type.new(params[:route])
     if @route.save
-      flash[:notice] = t(:route_created)
+      flash[:notice] = t('admin.route_created')
       redirect_to(admin_url(admin_route_path(@route.id)))
     else
       render :new
@@ -66,11 +66,11 @@ class Admin::RoutesController < Admin::AdminController
     # model instances, otherwise changes don't get saved.
     @route = Route.find(params[:id], :include => {:journey_patterns => :route_segments})
     if @route.update_attributes(params[:route])
-      flash[:notice] = t(:route_updated)
+      flash[:notice] = t('admin.route_updated')
       redirect_to admin_url(admin_route_path(@route.id))
     else
       @route_operators = make_route_operators(@route)
-      flash[:error] = t(:route_problem)
+      flash[:error] = t('admin.route_problem')
       render :show
     end
   end
@@ -78,18 +78,18 @@ class Admin::RoutesController < Admin::AdminController
   def destroy 
     @route = Route.find(params[:id])
     if @route.campaigns.size > 0
-      flash[:error] = t(:route_has_campaigns)
+      flash[:error] = t('admin.route_has_campaigns')
       @route_operators = make_route_operators(@route)
       render :show
     else
       @route.destroy
-      flash[:notice] = t(:route_destroyed)
+      flash[:notice] = t('admin.route_destroyed')
       redirect_to admin_url(admin_routes_path)
     end
   end
   
   def compare
-    @done = MergeCandidate.count(:conditions => 'been_seen is not null')
+    @done = MergeCandidate.count('admin.conditions => 'been_seen is not null'')
     @count = MergeCandidate.count
     if request.post?
       @merge_candidate = MergeCandidate.find(params[:id])
@@ -119,7 +119,7 @@ class Admin::RoutesController < Admin::AdminController
     if request.post? 
       @merge_to = Route.find(params[:merge_to])
       Route.merge!(@merge_to, @routes)
-      flash[:notice] = t(:routes_merged)
+      flash[:notice] = t('admin.routes_merged')
       redirect_to admin_url(admin_route_path(@merge_to.id))
     end
   end

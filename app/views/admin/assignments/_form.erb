@@ -1,6 +1,6 @@
 <%- if !@assignment.errors.empty? %>
   <div class='form-error'>
-    <%= t(:assignment_form_error) %>
+    <%= t('admin.assignment_form_error') %>
   </div>
 <%- end %>
 <div class='form-field'>
@@ -8,28 +8,28 @@
   <%= raw f.select :status_code, Assignment.statuses, {:prompt => true, :selected => @assignment.status_code } %>
 </div>
 <div class="assignment-campaign-link">
-  <strong><%= t(:campaign).titleize %>:</strong> 
+  <strong><%= t('admin.campaign').titleize %>:</strong> 
   <%= link_to(@assignment.campaign.title, main_url(campaign_path(@assignment.campaign))) %>
 </div>
 <div class="assignment-problem-link">
-  <strong><%= t(:problem).titleize %>:</strong> 
+  <strong><%= t('admin.problem').titleize %>:</strong> 
   <%= link_to(@assignment.problem.subject, admin_url(admin_problem_path(@assignment.problem))) %>
 </div>
 <div class="assignment-location-link">
-  <strong><%= t(:location) %>:</strong>
+  <strong><%= t('admin.location') %>:</strong>
   <%= link_to(@assignment.campaign.location.name, admin_location_url(@assignment.campaign.location))%>
 </div>
 <%- if @assignment.campaign.problem.operator %>
 <div class="assignment-operator-link">
-  <strong><%= t(:operator).titleize %></strong>
+  <strong><%= t('admin.operator').titleize %></strong>
   <%= link_to(@assignment.campaign.problem.operator.name, admin_operator_url(@assignment.campaign.problem.operator.id))%>
 </div>
 <%- end %>
-<h3><%= t(:assignment_data) %></h3>
+<h3><%= t('admin.assignment_data') %></h3>
 <%- @assignment.data.keys.each do |key| %>
   <div class="assignment-data">
   <strong><%= key.to_s.humanize %>:</strong> <%= @assignment.data[key].inspect %>
   </div>
 <%- end %>
 
-<%= raw submit_tag t(:go) %>
+<%= raw submit_tag t('admin.go') %>

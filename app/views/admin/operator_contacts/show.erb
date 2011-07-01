@@ -1,18 +1,18 @@
-<h2><%= t(:operator_contacts_for, :operator => @operator_contact.name) %></h2>
-<h3><%= t(:edit) %></h3>
+<h2><%= t('admin.operator_contacts_for', :operator => @operator_contact.name) %></h2>
+<h3><%= t('admin.edit') %></h3>
 <%-form_for :operator_contact, @operator_contact, :url => admin_url(admin_operator_contact_path(@operator_contact)), :html => { :method => :put,  :class => 'operator-contact-form' } do |f| %>
   <%= render :partial => 'form', :locals => { :f => f } %>
 <%- end %>
-<h3><%= t(:history) %></h3>
+<h3><%= t('admin.history') %></h3>
 <table class='history index-list'>
   <tr>
-    <th width='20%'><%= t(:updated_at) %></th>
-    <th width='20%'><%= t(:email) %></th>
-    <th width='7%'><%= t(:confirmed)  %></th>
-    <th width='7%'><%= t(:deleted)  %></th>
-    <th width='10%'><%= t(:editor)  %></th>
-    <th width='10%'><%= t(:location)  %></th>
-    <th width='28%'><%= t(:notes) %></th>
+    <th width='20%'><%= t('admin.updated_at') %></th>
+    <th width='20%'><%= t('admin.email') %></th>
+    <th width='7%'><%= t('admin.confirmed')  %></th>
+    <th width='7%'><%= t('admin.deleted')  %></th>
+    <th width='10%'><%= t('admin.editor')  %></th>
+    <th width='10%'><%= t('admin.location')  %></th>
+    <th width='28%'><%= t('admin.notes') %></th>
   </tr>
   <tr class="<%= cycle('odd', 'even') %>">
     <td><%= @operator_contact.updated_at %></td>

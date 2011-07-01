@@ -21,7 +21,7 @@ class Admin::StopsController < Admin::AdminController
   def create 
     @stop = Stop.new(params[:stop])
     if @stop.save
-      flash[:notice] = t(:stop_created)
+      flash[:notice] = t('admin.stop_created')
       redirect_to(admin_url(admin_stop_path(@stop.id)))
     else
       render :new
@@ -31,10 +31,10 @@ class Admin::StopsController < Admin::AdminController
   def update
     @stop = Stop.find(params[:id])
     if @stop.update_attributes(params[:stop])
-      flash[:notice] = t(:stop_updated)
+      flash[:notice] = t('admin.stop_updated')
       redirect_to admin_url(admin_stop_path(@stop.id))
     else
-      flash[:error] = t(:stop_problem)
+      flash[:error] = t('admin.stop_problem')
       render :show
     end
   end
@@ -42,14 +42,14 @@ class Admin::StopsController < Admin::AdminController
   def destroy
     @stop = Stop.find(params[:id])
     if @stop.campaigns.size > 0
-      flash[:error] = t(:stop_has_campaigns)
+      flash[:error] = t('admin.stop_has_campaigns')
       render :show
     elsif @stop.routes.size > 0
-      flash[:error] = t(:stop_has_routes)
+      flash[:error] = t('admin.stop_has_routes')
       render :show
     else
       @stop.destroy
-      flash[:notice] = t(:stop_destroyed)
+      flash[:notice] = t('admin.stop_destroyed')
       redirect_to admin_url(admin_stops_path)
     end
   end

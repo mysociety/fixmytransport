@@ -1,19 +1,19 @@
-<h2><%= t(:problems) %></h2>
+<h2><%= t('admin.problems') %></h2>
 <%= render :partial => "admin/shared/index_js" %>
 <%= render :partial => "admin/shared/search_form", :locals => { :skip_transport_mode => true }  %>
 <%= will_paginate @problems, { :admin => true } %>
 <table class='problems index-list'>
   <tr>
-    <th width='5%'><%= t(:id) %></th>
-    <th width='10%'><%= t(:subject) %></th>
-    <th width='10%'><%= t(:problem_campaign) %></th>
-    <th width='10%'><%= t(:location) %></th>
-    <th width='10%'><%= t(:transport_mode) %></th>
-    <th width='10%'><%= t(:reporter) %></th>
-    <th width='10%'><%= t(:responsible_org) %></th>
-    <th width='5%'><%= t(:status) %></th>
-    <th width='5%'><%= t(:created_at) %></th>
-    <th width='5%'><%= t(:updated_at) %></th>
+    <th width='5%'><%= t('admin.id') %></th>
+    <th width='10%'><%= t('admin.subject') %></th>
+    <th width='10%'><%= t('admin.problem_campaign') %></th>
+    <th width='10%'><%= t('admin.location') %></th>
+    <th width='10%'><%= t('admin.transport_mode') %></th>
+    <th width='10%'><%= t('admin.reporter') %></th>
+    <th width='10%'><%= t('admin.responsible_org') %></th>
+    <th width='5%'><%= t('admin.status') %></th>
+    <th width='5%'><%= t('admin.created_at') %></th>
+    <th width='5%'><%= t('admin.updated_at') %></th>
   </tr>
   <%-@problems.each do |problem| %>
     <tr class='<%= cycle("odd", "even") %>'>
@@ -23,7 +23,7 @@
         <%- else %>
           <%= link_to(problem.id, main_url(problem_path(problem)), :target => '_blank') %>
         <%- end %>
-        <%= link_to("(#{t(:admin)})", admin_url(admin_problem_path(problem.id)), :target => '_blank') %></td>
+        <%= link_to("(#{t('admin.admin')})", admin_url(admin_problem_path(problem.id)), :target => '_blank') %></td>
       <td><%= problem.subject %></td>
       <td><%- if problem.campaign %><%= link_to(problem.campaign.title, admin_url(admin_campaign_path(problem.campaign)))%><%- end %></td>
       <td><%= link_to(problem.location.name, admin_location_url(problem.location))%></td>

@@ -1,6 +1,6 @@
 <%- if !@operator.errors.empty? %>
   <div class='form-error'>
-    <%= t(:operator_form_error) %>
+    <%= t('admin.operator_form_error') %>
   </div>
 <%- end %>
 <div class='form-field'>
@@ -24,4 +24,4 @@
   <%= raw f.label :notes %>
   <%= raw f.text_field :notes %>
 </div>
-<%= raw submit_tag t(:go) %>
+<%= raw submit_tag t('admin.go') %>

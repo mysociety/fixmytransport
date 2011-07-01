@@ -1,6 +1,6 @@
 <%- if !@council_contact.errors.empty? %>
   <div class='form-error'>
-    <%= t(:council_contact_form_error) %>
+    <%= t('admin.council_contact_form_error') %>
   </div>
 <%- end %>
 <%= raw f.hidden_field :area_id %>
@@ -43,4 +43,4 @@
   <%= raw f.text_area :notes, :cols => 50, :rows => 4 %>
 </div>
 
-<%= raw submit_tag t(:go) %>
+<%= raw submit_tag t('admin.go') %>
