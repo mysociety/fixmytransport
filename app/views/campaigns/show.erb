@@ -59,7 +59,7 @@
 <%- end %>
 <%- if current_user && current_user == @campaign.initiator %>
 <div id="yellowbanner" class="container">
-	<h1><%= raw t('campaigns.show.campaign_initiator_first_time_header', :twitter_link => link_to(t('campaigns.show.twitter'),''), :facebook_link => link_to(t('campaigns.show.facebook'),''), :email_link => link_to(t('campaigns.show.email'), ''))%></h1>
+	<h1><%= raw t('campaigns.show.campaign_initiator_first_time_header', :twitter_link => link_to(t('campaigns.show.twitter'), twitter_url(@campaign)), :facebook_link => link_to(t('campaigns.show.facebook'), facebook_url(@campaign)), :email_link => link_to(t('campaigns.show.email'), share_campaign_url(@campaign)))%></h1>
 </div>
 <%- end %>
 <div id="main-content" class="container">
@@ -159,7 +159,7 @@
 	<div class="rightcol">
 		<%- if current_user && current_user.new_supporter?(@campaign) %>
 	    <div class="contrib-tools-initial">
-			<a href="#" class="facebook-trigger">
+			<a href="<%= facebook_url(@campaign) %>" class="facebook-trigger">
 				<span class="icon facebook"></span>
 				<%= t('campaigns.show.facebook_title') %>
 			</a>
@@ -167,7 +167,7 @@
 				<span class="icon twitter"></span>
 				<%= t('campaigns.show.twitter_title') %>
 			</a>
-			<a href="#" class="email-trigger">
+			<a href="<%= share_campaign_url(@campaign) %>" class="email-trigger">
 				<span class="icon grey email"></span>
 				<%= t('campaigns.show.email_title') %>
 			</a>
@@ -176,7 +176,7 @@
 
 	  <%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
 		<div class="contrib-tools">
-			<a href="#" class="facebook-trigger">
+			<a href="<%= facebook_url(@campaign) %>" class="facebook-trigger">
 				<span class="icon facebook"></span>
 				<%= t('campaigns.show.facebook_title') %>
 			</a>
@@ -184,7 +184,7 @@
 				<span class="icon twitter"></span>
 				<%= t('campaigns.show.twitter_title') %>
 			</a>
-			<a href="#" class="email-trigger">
+			<a href="<%= share_campaign_url(@campaign) %>" class="email-trigger">
 				<span class="icon grey email"></span>
 				<%= t('campaigns.show.email_title') %>
 			</a>

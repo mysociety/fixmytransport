@@ -153,6 +153,10 @@ $(document).ready(function(){
   	$("#login-box").dialog("open");
   	return false;    
   });
+  
+  $('#email-share .email-body').click(function(){
+    $(this).select();
+  })
 
   $('.fb-feed-button').click(function(e){
       e.preventDefault();

@@ -350,6 +350,10 @@ module ApplicationHelper
                        :via => 'FixMyTransport' }
     return "http://twitter.com/share?#{twitter_params.to_query}"
   end
+  
+  def facebook_url(campaign)
+    "http://www.facebook.com"
+  end
 
   def sortable(column, title = nil)
     title ||= column.titleize

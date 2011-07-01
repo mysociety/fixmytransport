@@ -80,6 +80,7 @@ en:
       org_email_replacement: "[%{name} problem reporting email]"
       please_upload_valid_image: "Please upload a .jpeg, .gif or .png image"
       user_says: "%{name} commented"
+      back: Back
     add_details:
       add_details: Add Details
       add_details_instructions: Give your campaign a headline and description
