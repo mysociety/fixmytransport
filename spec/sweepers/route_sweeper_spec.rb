@@ -17,7 +17,7 @@ describe RouteSweeper do
                                       :url_for => '/routes/east-anglia', 
                                       :main_url => 'localhost:3000/routes/east-anglia')
       @route_sweeper.should_receive(:expire_fragment).with("localhost:3000/routes/east-anglia")
-      @route_sweeper.after_update(mock_route)
+      @route_sweeper.after_update(@mock_route)
     end
     
     after do 
