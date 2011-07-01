@@ -1,4 +1,4 @@
-<h2><%= t('admin.council_contacts_for, :council => @council.name') %></h2>
+<h2><%= t('admin.council_contacts_for', :council => @council.name) %></h2>
 <%= link_to t('admin.add_a_council_contact'), admin_url(new_admin_council_contact_path(:area_id => @council.id)) %>
 <table class='council-contacts index-list'>
   <tr>

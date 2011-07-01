@@ -1,5 +1,12 @@
 en:
   admin:
+    site_name: FixMyTransport
+    go: go
+    title: Title
+    key: Key
+    transport_mode: Transport mode
+    initiator: Initiator
+    subject: Subject
     route_created: Route created.
     route_problem: There was a problem updating this route.
     route_updated: Route updated.
