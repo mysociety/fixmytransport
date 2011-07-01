@@ -13,7 +13,7 @@
   	</div>
 	<%- end %>
 	
-	<%- if controller.controller_name == 'campaigns' && controller.action_name == 'show' %>
+	<%- if controller.controller_name == 'campaigns' && controller.action_name == 'show' && current_user && current_user.supporter_or_initiator(@campaign) %>
     <div id="social-share" class="pane" style="min-height:340px;">
       <%= render :partial => 'shared/facebook' %>
     </div>

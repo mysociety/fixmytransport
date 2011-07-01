@@ -227,9 +227,6 @@
 		<%- end %>
 
 		<%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
-		    <div>
-			    <fb:like href="<%= campaign_url(@campaign) %>" send="false" width="310" show_faces="true" action="recommend" font=""></fb:like>
-			</div>
 		<%- end %>
 		
 	</div>
