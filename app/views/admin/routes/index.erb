@@ -9,12 +9,12 @@
   <%= link_to(t('admin.none'), '', { :class => "index-select-none" }) %>
   <table class='routes index-list'>
     <tr>
-      <th width='12%'><%= sortable('id', t('admin.id)') %></th>
-      <th width='5%'><%= sortable('number', t('admin.admin_route_number)') %></th>
-      <th width='14%'><%= sortable('name', t('admin.name)') %></th>
-      <th width='35%'><%= sortable('description', t('admin.description)') %></th>
+      <th width='12%'><%= sortable('id', t('admin.id')) %></th>
+      <th width='5%'><%= sortable('number', t('admin.admin_route_number')) %></th>
+      <th width='14%'><%= sortable('name', t('admin.name')) %></th>
+      <th width='35%'><%= sortable('description', t('admin.description')) %></th>
       <th width='23%'><%= t('admin.operators') %></th>
-      <th width='10%'><%= sortable('regions.name', t('admin.region)') %></th>
+      <th width='10%'><%= sortable('regions.name', t('admin.region')) %></th>
       <th width='5%'><%= t('admin.select') %></th>
     </tr>
     <%-@routes.each do |route| %>
