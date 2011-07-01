@@ -32,7 +32,7 @@ class ProblemsController < ApplicationController
   end
   
   def frontpage
-    @version = 0
+    @version = 1
     expires_in 60.seconds, :public => true unless current_user
     @title = t('problems.frontpage.title')
   end
