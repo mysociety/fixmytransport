@@ -19,10 +19,6 @@
 		<h5><%= t('locations.show_route.route_header') %></h5>
     <div id="medium-map">
       <%- cache(:action => 'show_route', :action_suffix => 'map') do %>
-        <%- map_params_from_location(@route.points,
-                                 find_other_locations=false,
-                                 height=LOCATION_PAGE_MAP_HEIGHT,
-                                 width=LOCATION_PAGE_MAP_WIDTH) %>
         <%= render :partial => 'shared/map', :locals => { :locations => [@route], :other_locations => @other_locations, :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH  } %>
       <%- end %>
     </div>
