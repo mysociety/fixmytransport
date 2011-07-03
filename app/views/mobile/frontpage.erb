@@ -1,0 +1,113 @@
+<%- content_for :javascript do %>
+<%= raw javascript_include_tag('jquery.cycle.min.js', :charset => 'utf-8') %>
+<%- end %>
+<%# note: had problems with jquery.cycle.min.js being included at the bottom page %>
+<script type="text/javascript">
+$(function(){
+    $('#problems-frontpage').live('pageshow', function (event, ui) { $('#frontpage-problem-scroller').cycle() });
+    $('#problems-frontpage').live('pagebeforehide', function (event, ui) { $('#frontpage-problem-scroller').cycle('stop') });
+});
+</script>
+<div id="frontpage" class="container">
+	<noscript>
+		<style>
+		#frontpage-top .leftcol ul#frontpage-problem-scroller li:not(:first-child){
+			display:none;
+		}
+		</style>
+	</noscript>
+	<div id="front-page-scroller-box">
+    	<ul id="frontpage-problem-scroller">
+    		<li><h1>Had a bad train journey?</h1></li>
+    		<li><h1>Had a bad bus journey?</h1></li>
+    		<li><h1>Does the ferry stink?</h1></li>
+    	</ul>
+    </div>
+	<p class="font-1">Report your problem:</p>
+	
+<!--	<div class="ui-grid-a"><div class="ui-block-a"> -->
+		    <%= link_to('STOP or STATION', find_stop_problems_url, "data-role" => "button") %>
+<!--        </div><div class="ui-block-b"> -->
+		    <%= raw link_to('JOURNEY or ROUTE', find_route_problems_url, "data-role" => "button") %>
+<!--		</div> </div> -->
+	
+	<p class="font-1">and we will help you get it fixed</p>
+
+	<div class="ui-grid-a">
+	    <div class="ui-block-a">
+	        <a href="<%= issues_url %>" data-role="button">Recent Issues</a>
+        </div>
+	    <div class="ui-block-b">
+            <a href="<%= routes_url %>" data-role="button">Browse Routes</a>
+		</div>
+    </div><!-- /grid-a -->
+
+	<h2>What FixMyTransport does</h2>
+	<ul id="secret-list">
+		<li class="secret-report">Reports problems</li>
+		<li class="secret-find">Finds people responsible</li>
+		<li class="secret-grow">Grows support</li>
+		<li class="secret-track">Tracks progress</li>
+		<li class="secret-done">Gets things done</li>
+	</ul>
+	<a href="#how-does-it-work" data-role="button" data-rel="dialog">How does it work?</a>		
+
+    <a href="#frontpage-" data-role="button">bus</a>
+
+</div>
+
+
+<% content_for :mobile_pages do %>
+
+<div data-role="page" id="how-does-it-work">
+
+	<div data-role="header">
+		<h1>How does it work?</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+        <div class="container">
+        	<div id="fg-head">
+        		<div id="fg-head-inner">
+        			<h2 class="font-1">How does it work?</h2>
+        			<p>We give you the tools to report your public transport problems to the correct operator or authority.</p>
+        			<p>All reports and responses are posted online so that other people can support, respond and give advice.</p>
+        		</div>
+        	</div>
+        	<ol id="frontpage-grid">
+        		<li class="fg-top">
+        			<div id="fg-img-1" class="fg-img"></div>
+        			<h3 class="font-1">1. Report your problem</h3>
+        			<p>It might have been a one of incident you’d just like to log, or a recurring problem you’d like fixing.</p>
+        		</li>
+        		<li class="fg-top end">
+        			<div id="fg-img-2" class="fg-img"></div>
+        			<h3 class="font-1">2. Find who's responsible</h3>
+        			<p>From the information you provide we can send your problem through to the correct department of the operator or local authority in charge.</p>
+        		</li>
+        		<li>
+        			<div id="fg-img-3" class="fg-img"></div>
+        			<h3 class="font-1">3. Gather Support</h3>
+        			<p>All reports are posted to the site, and you can share them with friends and followers and fellow passengers.</p>
+        		</li>
+        		<li>
+        			<div id="fg-img-4" class="fg-img"></div>
+        			<h3 class="font-1">4. Track Progress</h3>
+        			<p>Gather responses, comments and advice from operators, authorities, supporters, as well as our transport boffins.</p>
+        		</li>
+        		<li class="end">
+        			<div id="fg-img-5" class="fg-img"></div>
+        			<h3 class="font-1">5. Get it sorted!</h3>
+        			<p>See your campaign gain momentum and hopefully get resolved. Get a warm fuzzy feeling for making public transport better for everybody.</p>
+        		</li>
+        	</ol>
+        </div>
+	</div><!-- /content -->
+
+	<div data-role="footer">
+	    <a href="#main-page" data-rel="back" data-role="button">back</a> <!-- FIXME: doesn't behave as documented *sigh* -->	    
+	</div><!-- /footer -->
+
+</div><!-- /page -->
+
+<% end %>

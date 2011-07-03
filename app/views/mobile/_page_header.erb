@@ -1,0 +1,25 @@
+<div data-role="header">
+    <!--
+        <%- if MySociety::Config.getbool('STAGING_SITE', true) %>
+	        <div style="font-size:80%; background-color:#996666;text-align:center;padding:4px;border-bottom:1px solid red;">
+		        <%= t(:development_site) %>
+	        </div>
+	    <%- end %>
+	-->
+	<%- if request.fullpath != '/' %>
+	    <div style="float:left;margin-left:1em;">
+	        <a href="/" data-role="button" data-icon="home" data-iconpos="notext">home</a>
+	    </div>
+	<%- end %>
+	
+	<div style="float:right;margin-right:1em;" id="member-info">
+	    Hi
+	    <%- if current_user %>
+		    <a href="<%= profile_path(current_user) %>"><%= current_user.name %></a>. 
+		    <a href="<%= logout_path(:redirect => request.request_uri) %>" data-role="button">Logout</a>
+    	<%- else %>
+		    Guest. <a class="auth" href="<%= login_path(:redirect => request.request_uri) %>" data-role="button">Sign in</a>
+		<%- end %>
+	</div>
+	<h1 style="text-overflow:hidden;margin:0.6em auto;"><%= "#{t(:site_name)}" %></h1> <!-- no space for meaningful title? -->
+</div><!-- /header -->

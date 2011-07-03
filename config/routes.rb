@@ -122,6 +122,10 @@ ActionController::Routing::Routes.draw do |map|
                             :conditions => { :method => [:get, :post] }
   map.facebook '/facebook', :controller => 'static', :action => 'facebook'
 
+  # mobile
+  map.mobile '/mobile', :controller => 'mobile', :action => 'index', :conditions => { :method => [:get, :post] }
+  map.select_device '/select_device', :controller => 'mobile', :action => 'select_device'
+
   # admin
   map.namespace :admin do |admin|
     admin.root :controller => 'home'

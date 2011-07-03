@@ -34,6 +34,9 @@ class ProblemsController < ApplicationController
   def frontpage
     expires_in 60.seconds, :public => true unless current_user
     @title = t(:get_problems_fixed)
+    if session[:device] == :mobile
+      render :template => 'mobile/frontpage'
+    end
   end
   
   def create

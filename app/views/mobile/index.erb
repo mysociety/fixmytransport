@@ -1,0 +1,33 @@
+<div id="static-mobile" class="container">
+    <p>
+       <%= @question.html_safe %>
+    </p>
+     <%- @buttons.each do |raw| %>
+        <%-
+            # if raw doesn't have a | delimiter, work the val|text pair out from the sentence:
+            # val uses the first non-trivial word it finds: note duplicate vals on this page not detected
+            val, text = raw.split('|', 2)
+            val.strip!
+            text = val if text.blank?
+            words = val.split(" ")
+            if words.length > 1
+                val = words.select{|item| not item =~ /^(a|the|some)$/i }.first
+            end
+            val.downcase!
+        %>
+        <div class='error'>
+            <form action="/mobile" method="post" data-rel="no-ajax">
+                <input type="hidden" name="answer" value="<%= val %>" />
+                <input type="submit" value="<%= text %>" />
+            </form>
+        </div>
+    <%- end %>
+
+    <hr />
+    
+    Answer: <%= @answer %>
+    <br/>
+    session: <%= session[:mobile_answers] %>
+	    
+</div>
+

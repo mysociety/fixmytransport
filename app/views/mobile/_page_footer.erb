@@ -1,0 +1,8 @@
+<div data-role="footer">
+    <div style="padding:8px;">
+		<div style="float:right"><a href="http://mysociety.org" data-role="button">MySociety</a></div>
+		<%- if controller.controller_name != 'static' && controller.action_name != 'about' %>
+            <a href="<%= about_url %>" data-role="button" data-rel="dialog" >About FixMyTransport</a>
+        <%- end %>
+	</div>
+</div><!-- /footer -->

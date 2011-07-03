@@ -1,0 +1,35 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title><%= "#{t(:site_name)}#{@title ? ':' : ''} #{@title}" %></title> 
+    <%= csrf_meta_tag %>    
+    <!-- %= raw library_js_link % -->
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.js"></script>
+	<%= raw javascript_include_tag('OpenLayers') %>
+	<%= raw javascript_include_tag('map', 'geo') %>
+    <%= raw stylesheet_link_tag('map', 'mobile', :cache => 'main') %>
+    <%= yield :javascript %>	
+</head> 
+<body> 
+<div data-role="page" id="<%= controller.controller_name %>-<%= controller.action_name %>" data-url="<%= request.fullpath %>">
+    <%= render :partial => "mobile/page_header" %>
+	<div data-role="content">
+        <%= render :partial => "mobile/page_content_top" %>
+        <%= yield %>
+        <p style="border-top:1px dashed gray; padding:8px 0; text-align:center"> 
+            That was page <%= request.fullpath %>,
+            page&nbsp;id=<%= controller.controller_name %>-<%= controller.action_name %>
+            <br/>
+            current device: <%= session[:device] %> | 
+            <a href="<%= select_device_url(:device=>'mobile') %>" data-rel="external">mobile</a> |
+            <a href="<%= select_device_url(:device=>'desktop') %>" data-rel="external">desktop</a> 
+        </p>
+	</div><!-- /content -->
+    <%= render :partial => "mobile/page_footer" %>
+</div><!-- /page -->
+<%= yield :mobile_pages %>
+<!-- %= render :partial => "shared/login" % -->
+</body>
+</html>

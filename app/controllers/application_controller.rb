@@ -17,6 +17,7 @@ class ApplicationController < ActionController::Base
   url_mapper # See MySociety::UrlMapper
   # Scrub sensitive parameters from the log
   filter_parameter_logging :password, :password_confirmation
+  layout :device_based_layout
 
   private
 
@@ -370,4 +371,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # really should be by user-agent unless the user has explicitly chosen
+  def device_based_layout
+    if session[:device].blank?
+      return :application # check user-agent FIXME: but for now, force default (application)
+    else 
+      return session[:device]
+    end
+  end
 end
