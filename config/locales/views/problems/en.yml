@@ -28,6 +28,7 @@ en:
       no_explanation: "If your issue was a small one-off incident that you<br />just wanted to report, then your job is done."
       yes_explanation: "If it's a big issue that's going to require a few<br />more voices, you should start a campaign."
       or: or
+      thanks: Thanks for reporting this problem!
     find_bus_route:
       what_was_the_number_and_area: "What was the route number and town or area?"
       enter_route_number: Route number

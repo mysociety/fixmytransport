@@ -73,7 +73,7 @@ class ProblemsController < ApplicationController
       redirect_to(add_details_campaign_url(@problem.campaign)) and return 
     elsif params[:convert] == 'no' 
       @problem.confirm!
-      flash[:notice] = t('problems.confirm.thanks')
+      flash[:notice] = t('problems.convert.thanks')
       redirect_to problem_url(@problem) and return
     end
   end
@@ -194,7 +194,7 @@ class ProblemsController < ApplicationController
         @error_message = t('problems.find_bus_route.route_not_found')
       elsif route_info[:routes].size == 1
         location = route_info[:routes].first
-        redirect_to new_problem_url(:location_id => location.id, :location_type => location.type)
+        redirect_to new_problem_url(:location_id => location.id, :location_type => 'Route')
       else 
         if route_info[:error] == :area_not_found
           @error_message = t('problems.find_bus_route.area_not_found_routes', :area => params[:area])
@@ -275,7 +275,7 @@ class ProblemsController < ApplicationController
           @error_messages << t('problems.find_other_route.route_not_found')
         elsif route_info[:routes].size == 1
           location = route_info[:routes].first
-          redirect_to new_problem_url(:location_id => location.id, :location_type => location.type)
+          redirect_to new_problem_url(:location_id => location.id, :location_type => 'Route')
         else
           @locations = route_info[:routes]
           map_params_from_location(@locations, find_other_locations=false)                  
