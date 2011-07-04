@@ -33,6 +33,19 @@ module ApplicationHelper
     tags << "<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=#{google_maps_key}\" type=\"text/javascript\"></script>"
     tags.join("\n")
   end
+  
+  # if the request has params that will determine map display (usually means javascript is not enabled)
+  # then regenerate the content and don't cache. Otherwise, save new content to cache, and allow existing
+  # cache to be used.
+  def cache_unless_map_params(cache_options)
+    if params[:lat] or params[:lon] or params[:zoom] 
+      yield
+    else
+      cache(cache_options) do
+        yield
+      end
+    end
+  end
 
   def icon_style(location, center_y, center_offset_y, center_x, center_offset_x, zoom)
     top = Map.lat_to_y_offset(center_y, center_offset_y, location[:lat], zoom) - location[:height]

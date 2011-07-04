@@ -37,7 +37,7 @@
 	<div class="leftcol">
 		<h5><%= t('locations.show_stop_area.location_header') %></h5>
 		<div id="medium-map">
-		   <%- cache(:action => 'show_stop_area', :action_suffix => 'map') do %>
+		   <%- cache_unless_map_params(:action => 'show_stop_area', :action_suffix => 'map') do %>
        <%= render :partial => 'shared/map', :locals => { :locations => @stop_area.points, :other_locations => @other_locations, :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH  } %>
         <%- end %>
  	  </div>
