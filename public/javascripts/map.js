@@ -216,7 +216,7 @@ function addRouteMarker(stopCoords, bounds, markers, item, other) {
   if (stopsById[item.id] == undefined) {
     bounds.extend(stopCoords);
     var size = new OpenLayers.Size(item.width, item.height);
-    var offset = new OpenLayers.Pixel(-(size.w/2), -(size.h/2));
+    var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
     var stopIcon = new OpenLayers.Icon(item.icon + ".png", size, offset);
     stopIcon.imageDiv.style.cursor = 'pointer';
     var marker = new OpenLayers.Marker(stopCoords, stopIcon);

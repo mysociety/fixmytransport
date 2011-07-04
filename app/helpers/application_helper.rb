@@ -35,7 +35,7 @@ module ApplicationHelper
   end
 
   def icon_style(location, center_y, center_offset_y, center_x, center_offset_x, zoom)
-    top = Map.lat_to_y_offset(center_y, center_offset_y, location[:lat], zoom) - (location[:height] / 2)
+    top = Map.lat_to_y_offset(center_y, center_offset_y, location[:lat], zoom) - location[:height]
     left = Map.lon_to_x_offset(center_x, center_offset_x, location[:lon], zoom) - (location[:width] / 2)
     "position: absolute; top: #{top}px; left: #{left}px;"
   end
