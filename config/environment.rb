@@ -78,7 +78,8 @@ Rails::Initializer.run do |config|
   config.i18n.load_path += Dir[File.join(RAILS_ROOT, 'config', 'locales', '**', '*.{rb,yml}')]
 
   # Set the cache store
-  config.cache_store = :file_store, File.join(RAILS_ROOT, 'cache')
+  cache_base_dir = MySociety::Config.get('CACHE_PARENT_DIRECTORY', RAILS_ROOT)
+  config.cache_store = :file_store, File.join(cache_base_dir, 'cache')
 
   # override default fieldWithError divs in model-associated forms
   config.action_view.field_error_proc = Proc.new{ |html_tag, instance| html_tag }
