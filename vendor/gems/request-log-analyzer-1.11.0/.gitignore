@@ -1,0 +1,14 @@
+.svn/
+.DS_Store
+request-log-analyzer-*.gem
+requests.db
+/pkg
+/doc
+.yardoc/
+/tmp
+/classes
+/files
+/coverage
+Gemfile.lock
+/.bundle/
+*.rbc

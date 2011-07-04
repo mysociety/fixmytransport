@@ -1,0 +1,130 @@
+--- !ruby/object:Gem::Specification 
+name: request-log-analyzer
+version: !ruby/object:Gem::Version 
+  hash: 59
+  prerelease: 
+  segments: 
+  - 1
+  - 11
+  - 0
+  version: 1.11.0
+platform: ruby
+authors: 
+- Willem van Bergen
+- Bart ten Brinke
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2011-04-27 00:00:00 Z
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: rake
+  prerelease: false
+  requirement: &id001 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 3
+        segments: 
+        - 0
+        version: "0"
+  type: :development
+  version_requirements: *id001
+- !ruby/object:Gem::Dependency 
+  name: rspec
+  prerelease: false
+  requirement: &id002 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ~>
+      - !ruby/object:Gem::Version 
+        hash: 3
+        segments: 
+        - 2
+        - 0
+        version: "2.0"
+  type: :development
+  version_requirements: *id002
+- !ruby/object:Gem::Dependency 
+  name: activerecord
+  prerelease: false
+  requirement: &id003 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 3
+        segments: 
+        - 0
+        version: "0"
+  type: :development
+  version_requirements: *id003
+- !ruby/object:Gem::Dependency 
+  name: sqlite3-ruby
+  prerelease: false
+  requirement: &id004 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 3
+        segments: 
+        - 0
+        version: "0"
+  type: :development
+  version_requirements: *id004
+description: "    Request log analyzer's purpose is to find out how your web application is being used, how it performs and to\n    focus your optimization efforts. This tool will parse all requests in the application's log file and aggregate the \n    information. Once it is finished parsing the log file(s), it will show the requests that take op most server time \n    using various metrics. It can also insert all parsed request information into a database so you can roll your own\n    analysis. It supports Rails-, Merb- and Rack-based applications logs, Apache and Amazon S3 access logs and MySQL \n    slow query logs out of the box, but file formats of other applications can easily be supported by supplying an \n    easy to write log file format definition.\n"
+email: 
+- willem@railsdoctors.com
+- bart@railsdoctors.com
+executables: 
+- request-log-analyzer
+extensions: []
+
+extra_rdoc_files: 
+- README.rdoc
+files: 
+- bin/request-log-analyzer
+- README.rdoc
+homepage: http://railsdoctors.com
+licenses: []
+
+post_install_message: 
+rdoc_options: 
+- --title
+- request-log-analyzer
+- --main
+- README.rdoc
+- --line-numbers
+- --inline-source
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+requirements: 
+- To use the database inserter, ActiveRecord and an appropriate database adapter are required.
+rubyforge_project: r-l-a
+rubygems_version: 1.7.2
+signing_key: 
+specification_version: 3
+summary: A command line tool to analyze request logs for Apache, Rails, Merb, MySQL and other web application servers
+test_files: []
+
