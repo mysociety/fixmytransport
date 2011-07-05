@@ -5,5 +5,5 @@ en:
         campaign_update:
           attributes: 
             text:
-              blank: "Please enter an update"
+              blank: "Please enter some text"
   
