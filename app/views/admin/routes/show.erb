@@ -23,7 +23,7 @@
 <%- form_for [:admin, @route.becomes(Route)], :url => admin_url(admin_route_path(@route.id)), :html => { :class => 'route-form' } do |f| %>
   <%= render :partial => "form", :locals => { :f => f } %>
   <%- f.object.journey_patterns.build(:_add => "1") %>
-  <h3><%= link_to(t('admin.route_segments'), params.merge(:show_journeys => 1) )%></h3>
+  <h3><%= link_to(t('admin.route_segments'), admin_url(admin_route_path(@route.id, :show_journeys => 1)) )%></h3>
   <%- if params[:show_journeys] %>
   <div><%= render :partial => "route_segments", :locals => { :f => f } %></div>
   <%- end %>
