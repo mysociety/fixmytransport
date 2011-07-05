@@ -11,7 +11,8 @@ class Admin::StopAreasController < Admin::AdminController
     end
     @stop_areas = StopArea.paginate :page => params[:page], 
                                     :conditions => conditions, 
-                                    :order => 'name'
+                                    :include => :locality,
+                                    :order => 'lower(name)'
   end
   
   def new
