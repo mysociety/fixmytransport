@@ -5,7 +5,9 @@ class Admin::RoutesController < Admin::AdminController
 
   def show
     @route = Route.find(params[:id], :include => [ {:journey_patterns => 
-                                                      {:route_segments  => [:from_stop, :to_stop]}}])
+                                                   {:route_segments  => [:from_stop, :to_stop]}},
+                                                   {:route_operators => :operator},
+                                                   :region])
     @route_operators = make_route_operators(@route)
   end
   

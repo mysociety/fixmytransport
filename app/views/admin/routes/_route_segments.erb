@@ -32,9 +32,9 @@
             <tr class='<%= cycle("odd", "even") %>' id='route_segment_<%= segment_fields.object.id %>'>
               <td><%= segment_fields.object.id %></td>
               <td><%= pattern_fields.object.id %></td>
-              <td><%= raw "#{segment_fields.object.from_stop.common_name} (#{link_to(segment_fields.object.from_stop.id, admin_url(admin_stop_path(segment_fields.object.from_stop.id)))}) #{link_to(t('admin.on_main_site'), main_url(location_path(segment_fields.object.from_stop)), :target => '_blank')}" %></td>
+              <td><%= raw "#{segment_fields.object.from_stop.common_name} (#{link_to(segment_fields.object.from_stop.id, admin_url(admin_stop_path(segment_fields.object.from_stop.id)))}) " %></td>
               <td><%= raw segment_fields.check_box :from_terminus %></td>
-              <td><%= raw "#{segment_fields.object.to_stop.common_name} (#{link_to(segment_fields.object.to_stop.id, admin_url(admin_stop_path(segment_fields.object.to_stop.id)))}) #{link_to(t('admin.on_main_site'), main_url(location_path(segment_fields.object.to_stop)), :target => '_blank')}" %></td>
+              <td><%= raw "#{segment_fields.object.to_stop.common_name} (#{link_to(segment_fields.object.to_stop.id, admin_url(admin_stop_path(segment_fields.object.to_stop.id)))})" %></td>
               <td><%= raw segment_fields.check_box :to_terminus %></td>
               <td>
                 <%= raw segment_fields.hidden_field :id %>
