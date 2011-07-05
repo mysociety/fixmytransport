@@ -6,7 +6,7 @@ function setupAssignAllAndNone(){
     event.preventDefault();
   })
   
-  $('.uncheck-all-route-operators').click(function(){
+  $('.uncheck-all-route-operators').click(function(event){
     var operators = $(this).closest('.route-operators').find('.check-route-operator')
     operators.attr('checked', false);
     operators.parents('tr').removeClass("selected");
@@ -15,14 +15,14 @@ function setupAssignAllAndNone(){
 }
 
 function setupIndexSelectAllAndNone(){
-  $('.index-select-all').click(function(){
+  $('.index-select-all').click(function(event){
     var items = $('.index-list').find('.select-item');
     items.attr('checked', true);
     items.closest('tr').addClass("selected");
     event.preventDefault();
   })
 
-  $('.index-select-none').click(function(){
+  $('.index-select-none').click(function(event){
     var items = $('.index-list').find('.select-item');
     items.attr('checked', false);
     items.closest('tr').removeClass("selected");
@@ -90,7 +90,8 @@ function setupLocalityAutocomplete(){
 
 // link to add new route segments to a journey pattern
 function setupAddSegmentLink(){
-  $('.add-segment-link').click(function(){
+  $('.add-segment-link').click(function(event){
+    
     // copy the hidden template
     var template_segment_row = $(this).closest('tr').next('.add-segment-template');
     var new_segment_row = template_segment_row.clone();
@@ -104,7 +105,7 @@ function setupAddSegmentLink(){
     new_segment_row = popoutRouteSegmentRow(new_segment_row, display_class);
     // insert into the DOM
     template_segment_row.after(new_segment_row);
-    event.preventDefault();
+    event.preventDefault(event);
   });
 }
 
