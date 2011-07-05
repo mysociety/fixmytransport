@@ -3,6 +3,19 @@ require 'spec_helper'
 describe Admin::StopsController do
 
   describe 'GET #index' do 
+    
+    describe 'when the app is in closed beta' do 
+
+      before do 
+        @controller.stub!(:app_status).and_return('closed_beta')
+      end
+      
+      it 'should not require http authentication' do 
+        get :index
+        response.status.should == '200 OK'
+      end
+    
+    end
   
     it 'should ask for all stops, ordered by common name, paginated by default' do 
       Stop.should_receive(:paginate).with(:page => nil, 

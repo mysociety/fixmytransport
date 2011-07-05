@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery if :current_user # See ActionController::RequestForgeryProtection for details
   skip_before_filter :verify_authenticity_token, :unless => :current_user
   before_filter :make_cachable
+  before_filter :require_beta_password
   
   helper_method :location_search,
                 :main_url,
@@ -128,13 +129,13 @@ class ApplicationController < ActionController::Base
     "shared.access.#{controller_name}_#{@action_name}_access_message"
   end
 
-  # For administration interface, return display name of authenticated user.
-  # Otherwise, currently logged in user
+  # Currently logged in user, otherwise
+  # for administration interface, return display name of authenticated user.
   def user_for_edits
-    if request.env["REMOTE_USER"]
-      return request.env["REMOTE_USER"]
-    elsif current_user
+    if current_user
       return current_user
+    elsif request.env["REMOTE_USER"]
+      return request.env["REMOTE_USER"]
     else
       return "*unknown*";
     end
@@ -386,4 +387,17 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def app_status
+    MySociety::Config.get('APP_STATUS', 'live')
+  end
+  
+  def require_beta_password
+    beta_username = MySociety::Config.get('BETA_USERNAME', 'username')
+    beta_password = MySociety::Config.get('BETA_PASSWORD', 'password')
+    if app_status == 'closed_beta'
+      authenticate_or_request_with_http_basic('Closed Beta') do |username, password|
+        username == beta_username && password == beta_password
+      end
+    end
+  end
 end

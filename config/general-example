@@ -79,4 +79,8 @@ define('OPTION_FILE_DIRECTORY', ':rails_root/public/system');
 // Base URL for paperclip files
 define('OPTION_PAPERCLIP_URL_BASE', '/system/paperclip');
 
+// Is the app in beta?
+define('OPTION_APP_STATUS', 'beta');
+define('OPTION_BETA_USERNAME', 'username');
+define('OPTION_BETA_PASSWORD', 'password');
 ?>

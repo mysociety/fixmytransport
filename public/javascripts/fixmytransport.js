@@ -629,8 +629,10 @@ window.fbAsyncInit = function() {
 (function() {
     var e = document.createElement('script'); e.async = true;
     e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-    document.getElementById('fb-root').appendChild(e);
-    if (document.getElementById('fb-like')) {
-      FB.XFBML.parse(document.getElementById('fb-like'));
+    if (document.getElementById('fb-root')){
+      document.getElementById('fb-root').appendChild(e);
+      if (document.getElementById('fb-like')) {
+        FB.XFBML.parse(document.getElementById('fb-like'));
+      }
     }
 }());

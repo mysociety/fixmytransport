@@ -4,16 +4,71 @@ describe ProblemsController do
 
   describe 'GET #frontpage' do 
     
-    def make_request
-      get :frontpage 
+    def make_request(params={})
+      get :frontpage, params
     end  
+    
+    describe 'when the app is in closed beta' do 
+      
+      before do 
+        @controller.stub!(:app_status).and_return('closed_beta')
+      end
+      
+      describe 'if the user has not authenticated with the beta credentials' do
+        
+        describe 'if the "beta" param is passed' do   
+         
+         it 'should challenge the user for beta credentials' do 
+           make_request(:beta => 1)
+           response.status.should == "401 Unauthorized"
+           response.headers['WWW-Authenticate'].should == 'Basic realm="Closed Beta"'
+         end
+         
+        end
+        
+        describe 'if the beta param is not passed' do 
+        
+           it 'should show the "beta" template' do 
+            make_request
+            response.status.should == '200 OK'
+            response.should render_template('problems/beta')
+           end
+           
+        end
+        
+      end
+    
+      describe 'if the user has authenticated with the beta credentials' do 
+      
+        it 'should show the frontpage template' do 
+          @request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64("username:password")
+          make_request
+          response.status.should == '200 OK'
+          response.should render_template('problems/frontpage')
+        end
+      end
+      
+    end
     
   end
   
   describe 'GET #issues_index' do 
-  
+      
     def make_request
       get :issues_index
+    end
+    
+    describe 'when the app is in closed beta' do 
+
+      before do 
+        @controller.stub!(:app_status).and_return('closed_beta')
+      end
+      
+      it 'should require http authentication' do 
+        make_request
+        response.status.should == '401 Unauthorized'
+      end
+    
     end
     
     it 'should render the issues_index template' do 

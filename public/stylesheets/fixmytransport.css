@@ -1459,6 +1459,19 @@ ul#process {
 				margin-bottom: 20px;
 			}
 
+
+/*===[Beta Front Page]===*/
+
+#beta-frontpage {
+  text-align: center;
+}
+#beta-frontpage .button {
+	font-size:1.6em;
+	padding:0.8em 1.1em;
+	margin:1em 0.7em;
+	text-transform:none;
+}
+
 /*===[Front Page]===*/
 #frontpage-top {
 	margin:1em auto 0 auto;

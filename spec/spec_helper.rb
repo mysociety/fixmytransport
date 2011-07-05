@@ -22,9 +22,14 @@ Spec::Runner.configure do |config|
   config.use_instantiated_fixtures  = false
   config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
 
-  # make sure we don't call the live API when running tests
   config.before(:each) do 
+    # make sure we don't call the live API when running tests
     MySociety::MaPit.stub!(:call)
+  end
+  
+  config.before(:each, :type => :controller) do 
+    # have all controllers act as if in 'live' status by default
+    @controller.stub!(:app_status).and_return('live')
   end
   
 end

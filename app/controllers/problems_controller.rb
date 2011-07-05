@@ -8,6 +8,7 @@ class ProblemsController < ApplicationController
                                                :find_other_route]
   before_filter :find_visible_problem, :only => [:show, :update, :add_comment]
   before_filter :require_problem_reporter, :only => [:convert]
+  skip_before_filter :require_beta_password, :only => [:frontpage]
   
   def issues_index
     @issues = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
@@ -32,8 +33,20 @@ class ProblemsController < ApplicationController
   end
   
   def frontpage
+    beta_username = MySociety::Config.get('BETA_USERNAME', 'username')
+    beta_password = MySociety::Config.get('BETA_PASSWORD', 'password')
+    if app_status == 'closed_beta'
+      if !params[:beta] 
+        unless authenticate_with_http_basic{ |username, password| username == beta_username && password == beta_password }
+          render :template => 'problems/beta', :layout => 'beta'
+          return
+        end
+      end
+      authenticate_or_request_with_http_basic('Closed Beta') do |username, password|
+        username == beta_username && password == beta_password
+      end
+    end
     @version = 0
-    expires_in 60.seconds, :public => true unless current_user
     @title = t('problems.frontpage.title')
   end
   

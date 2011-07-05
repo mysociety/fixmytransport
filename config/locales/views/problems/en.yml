@@ -87,6 +87,9 @@ en:
       area_not_found: "We couldn't find a town, area or postcode that matches what you entered."
       choose_from_list: "Choose from a list of stops and stations"
     frontpage: 
+      coming_soon: "FixMyTransport is coming soon...currently in closed beta testing."
+      im_a_beta_tester: "I'm a beta tester"
+      find_out_more: "Find out more"
       title: "Report, view and campaign on public transport problems"
       bad_bus: Had a bad bus journey?
       bad_train: Had a bad train journey?
