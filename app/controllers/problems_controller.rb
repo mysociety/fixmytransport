@@ -37,13 +37,13 @@ class ProblemsController < ApplicationController
     beta_password = MySociety::Config.get('BETA_PASSWORD', 'password')
     if app_status == 'closed_beta'
       if !params[:beta] 
-        unless authenticate_with_http_basic{ |username, password| username == beta_username && password == beta_password }
+        unless authenticate_with_http_basic{ |username, password| username == beta_username && Digest::MD5.hexdigest(password) == beta_password }
           render :template => 'problems/beta', :layout => 'beta'
           return
         end
       end
       authenticate_or_request_with_http_basic('Closed Beta') do |username, password|
-        username == beta_username && password == beta_password
+        username == beta_username && Digest::MD5.hexdigest(password) == beta_password
       end
     end
     @version = 0

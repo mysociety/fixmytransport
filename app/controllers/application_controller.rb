@@ -1,5 +1,6 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
+require 'digest'
 
 class ApplicationController < ActionController::Base
   # send exception mails
@@ -396,7 +397,7 @@ class ApplicationController < ActionController::Base
     beta_password = MySociety::Config.get('BETA_PASSWORD', 'password')
     if app_status == 'closed_beta'
       authenticate_or_request_with_http_basic('Closed Beta') do |username, password|
-        username == beta_username && password == beta_password
+        username == beta_username && Digest::MD5.hexdigest(password) == beta_password
       end
     end
   end

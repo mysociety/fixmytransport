@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'digest'
 
 describe ProblemsController do
 
@@ -12,6 +13,8 @@ describe ProblemsController do
       
       before do 
         @controller.stub!(:app_status).and_return('closed_beta')
+        MySociety::Config.stub!(:get).with('BETA_USERNAME', 'username').and_return('username')
+        MySociety::Config.stub!(:get).with('BETA_PASSWORD', 'password').and_return(Digest::MD5.hexdigest('password'))
       end
       
       describe 'if the user has not authenticated with the beta credentials' do
