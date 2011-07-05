@@ -6,9 +6,9 @@
         <%= error_message_on @account_user, :base %>
       </div>
     <%- else %>
-      <div class='error error-base' style="display: none;"></div>
+      <div class='error error-base' style="display: none;" role="alert"></div>
     <%- end %>
-    <div class='notice' style="display: none;"></div>
+    <div class='notice' style="display: none;" role="alert"></div>
     
     <div class='form-field'>
       <%- if @account_user.errors.on('name') %>
@@ -16,7 +16,7 @@
           <%= error_message_on @account_user, :name %>
         </div>
       <%- else %>
-        <div class='error error-name' style="display: none;"></div>
+        <div class='error error-name' style="display: none;" role="alert"></div>
       <%- end %>
       <%= f.label :name %>
       <%= raw f.text_field :name %>
@@ -28,7 +28,7 @@
           <%= error_message_on @account_user, :email %>
         </div>
       <%- else %>
-        <div class='error error-email' style="display: none;"></div>
+        <div class='error error-email' style="display: none;" role="alert"></div>
       <%- end %>
       <%= f.label :email %>
       <%= raw f.text_field :email %>
@@ -40,7 +40,7 @@
           <%= error_message_on @account_user, :password %>
         </div>
         <%- else %>
-          <div class='error error-password' style="display: none;"></div>
+          <div class='error error-password' style="display: none;" role="alert"></div>
       <%- end %>
       <%= f.label :password %>
       <%= raw f.password_field :password %>
@@ -52,7 +52,7 @@
           <%= error_message_on @account_user, :password_confirmation %>
         </div>
         <%- else %>
-          <div class='error error-password_confirmation' style="display: none;"></div>
+          <div class='error error-password_confirmation' style="display: none;" role="alert"></div>
       <%- end %>
       <%= f.label :password_confirmation  %>
       <%= raw f.password_field :password_confirmation  %>

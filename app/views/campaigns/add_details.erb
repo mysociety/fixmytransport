@@ -58,7 +58,7 @@
 			  <%- else %>
 			    <%- title_error_style = 'display: none;'%>
 			  <%- end %>
-          <div class='error' style="<%= title_error_style %>">
+          <div class='error' style="<%= title_error_style %>" role="alert">
             <%= @campaign.errors.on('title') %>
           </div>
           <%=  f.label :title, raw("Please help me persuade <span>#{@campaign.responsible_org_descriptor}</span> to:") %>

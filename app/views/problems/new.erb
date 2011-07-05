@@ -62,7 +62,7 @@
               <%= error_message_on @problem, :operator_id %>
             </div>
           <%- else %>
-            <div class='error error-operator_id' style="display: none;"></div>
+            <div class='error error-operator_id' style="display: none;" role="alert"></div>
            <%- end %>
             <%= raw f.collection_select("operator_id", @problem.location.operators, :id, :name, :include_blank => t('problems.new.select_operator')) %>
           <%- elsif @problem.location.operators.size == 1 %>
@@ -97,7 +97,7 @@
             <%= error_message_on @problem, 'subject' %>
           </div>
         <%- else %>
-           <div class='error error-subject' style="display: none;"></div>
+           <div class='error error-subject' style="display: none;" role="alert"></div>
         <%- end %>
 				<label for="problem_subject"><%= t('problems.new.subject')%></label>
 				<input id="problem_subject" type="text" name="problem[subject]" value="<%= @problem.subject %>"/>
@@ -115,7 +115,7 @@
               <%= error_message_on @problem, :category %>
             </div>
           <%- else %>
-           <div class='error error-category' style="display: none;"></div>
+           <div class='error error-category' style="display: none;" role="alert"></div>
           <%- end %>
           <label for="problem_category"><%= t('problems.new.category')%></label>
           <%= raw f.select("category", @problem.categories, { :include_blank => t('problems.new.pick_a_category') }) %>
@@ -131,7 +131,7 @@
             <%= error_message_on @problem, 'description' %>
           </div>
         <%- else %>
-         <div class='error error-description' style="display: none;"></div>
+         <div class='error error-description' style="display: none;" role="alert"></div>
         <%- end %>
 				<label for="problem_description"><%= t('problems.new.description')%></label>
 				<textarea id="problem_description" name="problem[description]" ><%= @problem.description %></textarea>

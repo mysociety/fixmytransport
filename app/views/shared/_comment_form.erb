@@ -5,7 +5,7 @@
     <%= error_message_on @comment, :text %>
   </div>
   <%- else %>
-    <div class='error error-text' style="display: none;"></div>
+    <div class='error error-text' style="display: none;" role="alert"></div>
 <%- end %>
 <%= raw f.label :text, {}, {:style => 'display:none'} %>
 <%= raw f.text_area :text %>
