@@ -1,2 +1,4 @@
 <h2>Location Searches</h2>
+<%= will_paginate @searches, { :admin => true } %>
 <%= render :partial => 'search', :collection => @searches %>
+<%= will_paginate @searches, { :admin => true } %>

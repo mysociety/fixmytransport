@@ -4,6 +4,6 @@
  <%- div_class = 'search' %>
 <%- end %>
 <div class='<%= div_class %>'>
-  <%= link_to search.description, admin_url(admin_location_search_path(search)) %>
+  <%= search.description %>
   <%= search.created_at.to_s(:short) %>
 </div>
