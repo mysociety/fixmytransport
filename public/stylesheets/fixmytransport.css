@@ -924,7 +924,7 @@ form#create-campaign {
 
 /*===[Campaign Status]===*/
 
-.stat-current, .stat-successful, .stat-pending{
+.stat-current, .stat-fixed, .stat-pending{
 	color:#fff;
 	font-size: 10px;
 	text-transform: uppercase;
@@ -940,7 +940,7 @@ form#create-campaign {
 	}
 
 .stat-current{background:#ff6600;}
-.stat-successful{background:#9bce24;}
+.stat-fixed{background:#9bce24;}
 .stat-pending{background:#f4053d;}
 
 

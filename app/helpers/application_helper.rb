@@ -347,8 +347,21 @@ module ApplicationHelper
     case campaign.status
     when :confirmed
       'current'
+    when :successful
+      'fixed'
     else
       campaign.status.to_s
+    end
+  end
+
+  def problem_display_status(problem)
+    case problem.status
+    when :confirmed
+      'current'
+    when :successful
+      'fixed'
+    else
+      problem.status.to_s
     end
   end
 

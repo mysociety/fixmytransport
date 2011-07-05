@@ -2,8 +2,8 @@ en:
   shared: 
     campaign: 
       location: "Location:"
-      started: "Started:"
-      by: by
+      started: "Added:"
+      by: Started by
       followers: "Followers:"
       status: "Status:"
     comment_form:
@@ -51,8 +51,8 @@ en:
     problem:
       added:
       posted_time: "%{time} ago"
-      by: "by %{name}"
-      added: added
+      by: "Reported by"
+      added: "Added:"
       on_the: on the
       at_the: at the
       at: at
