@@ -1841,7 +1841,8 @@ ul.route-links {
 	float:left;
 }
 		#region-list li.active a,
-		#region-list li a:hover {
+		#region-list li a:hover,
+		#region-list li a:focus{
 			color:#333;
 		}
 #region-map-wrap {
