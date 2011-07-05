@@ -255,6 +255,8 @@
 			width: 32px;
 		}
 	.ui-tabs .tabs-sub-nav li.ui-state-hover,
+	.ui-tabs .tabs-sub-nav li.ui-state-focus,
+  
 	.ui-tabs .tabs-sub-nav li.ui-tabs-selected {
 		background:#1C769E;
 		padding-bottom:0;
