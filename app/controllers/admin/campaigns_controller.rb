@@ -22,6 +22,7 @@ class Admin::CampaignsController < Admin::AdminController
     conditions = [query_clauses.join(" AND ")] + conditions
     @campaigns = Campaign.paginate :page => params[:page], 
                                    :conditions => conditions, 
+                                   :include => [:location, :problem],
                                    :order => 'id desc'
   end
   
