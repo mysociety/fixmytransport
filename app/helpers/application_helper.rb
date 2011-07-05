@@ -353,6 +353,14 @@ module ApplicationHelper
       campaign.status.to_s
     end
   end
+  
+  def campaign_list_image_url(campaign)
+    if ! campaign.campaign_photos.empty?
+      campaign.campaign_photos.first.image.url(:list)
+    else
+      'http://dummyimage.com/90x90'
+    end
+  end
 
   def problem_display_status(problem)
     case problem.status

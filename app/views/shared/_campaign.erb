@@ -1,4 +1,4 @@
-<a href="<%= campaign_url(campaign) %>"><img src="http://dummyimage.com/90x90" alt="<%= MySociety::Format.ucfirst(campaign.title) %>" /></a>
+<a href="<%= campaign_url(campaign) %>"><img src="<%= campaign_list_image_url(campaign) %>" alt="<%= MySociety::Format.ucfirst(campaign.title) %>" /></a>
 <div class="wrapper">
 	<h4><a href="<%= campaign_url(campaign) %>"><%= MySociety::Format.ucfirst(campaign.title) %></a></h4>
     <p><%= raw link_to(campaign.location.description, location_url(campaign.location)) %></p>
