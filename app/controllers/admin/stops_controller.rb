@@ -11,7 +11,8 @@ class Admin::StopsController < Admin::AdminController
     end
     @stops = Stop.paginate :page => params[:page], 
                            :conditions => conditions, 
-                           :order => 'common_name'
+                           :include => :locality,
+                           :order => 'lower(common_name)'
   end
   
   def new
