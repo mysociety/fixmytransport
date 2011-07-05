@@ -1,21 +1,6 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
-var feedbackTab;
-
-// Close the feedback form panel on success,
-// display error messages on failure
-function feedbackCallback(response) {
-  if (response.success) {
-      feedbackTab.hideTab();
-   } else {
-     $('.error').html('');
-     for (var key in response.errors){
-       $('#error-' + key).html( response.errors[key] );
-     }
-   }
-}
-
 function clearFormElements(element) {
   $(element).find(':input').each(function() {
       switch(this.type) {
