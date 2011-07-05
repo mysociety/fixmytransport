@@ -12,6 +12,14 @@
   <%- unless static %><noscript><%- end %>
     <div id="drag">
       <img class="static-map-element" alt="Map" src="<%= Map.google_tile_url(@lat, @lon, @zoom, height, width) %>" style="top:0px; left:0;" />
+      <div id="markers">
+        <%- center_y = Map.lat_to_y(@lat) %>
+        <%- center_offset_y = height / 2 %>
+        <%- center_x = Map.lon_to_x(@lon) %>
+        <%- center_offset_x = width / 2 %>
+        <%= render :partial => 'shared/location_marker', :collection => other_location_data, :as => :location, :locals => {:small => true,  :center_y => center_y, :center_x => center_x, :center_offset_y => center_offset_y, :center_offset_x => center_offset_x } %>
+        <%= render :partial => 'shared/location_marker', :collection => location_data, :as => :location, :locals => {:small => false, :center_y => center_y, :center_x => center_x, :center_offset_y => center_offset_y, :center_offset_x => center_offset_x } %>
+      </div>
       <%- unless static %>
       <div id="pan_up" class="map-control static-map-element" style="left: 13px; top: 4px; width: 18px; height: 18px; position: absolute;">
         <a rel="nofollow" href="<%= url_for(params.merge(:lat => Map.top(@lat, @zoom, height))) %>">
@@ -55,15 +63,7 @@
         </a>
       </div>
       <%- end %>
-      <div id="markers">
-        <%- center_y = Map.lat_to_y(@lat) %>
-        <%- center_offset_y = height / 2 %>
-        <%- center_x = Map.lon_to_x(@lon) %>
-        <%- center_offset_x = width / 2 %>
-        <%= render :partial => 'shared/location_marker', :collection => other_location_data, :as => :location, :locals => {:small => true,  :center_y => center_y, :center_x => center_x, :center_offset_y => center_offset_y, :center_offset_x => center_offset_x } %>
-        <%= render :partial => 'shared/location_marker', :collection => location_data, :as => :location, :locals => {:small => false, :center_y => center_y, :center_x => center_x, :center_offset_y => center_offset_y, :center_offset_x => center_offset_x } %>
 
-      </div>
     </div>
   <%- unless static %></noscript><%- end %> 
 </div>
