@@ -9,7 +9,12 @@
 	</div>
 </div>
 <div id="main-content" class="container">
-	  <%- form_tag find_train_route_problems_path, :id => 'train_route_form', :method => 'GET' do  %>  
+	  <%- form_tag find_train_route_problems_path, :id => 'train_route_form', :method => 'GET' do  %> 
+	  <%- @error_messages[:base].each do |error_message| %>
+      <div class='error'>
+        <%= error_message %>
+      </div>
+    <%- end %> 
     <ul class="form-list">
 	    <li class="fieldset">
 	      <%- @error_messages[:from_stop].each do |error_message| %>
