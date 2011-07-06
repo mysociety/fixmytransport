@@ -46,7 +46,8 @@ namespace :temp do
                  'MN' => 'Arriva London',
                  'KIM' => 'Kimes',
                  'ML' => 'Metroline Travel', 
-                 'FL' => 'First Leeds'}
+                 'FL' => 'First Leeds',
+                 'FCH' => 'First in Calerdale and Huddersfield' }
     mappings.each do |code, operator_name|
       operator = Operator.find_by_name(operator_name)
       routes = Route.find(:all, :conditions => ['operator_code = ?
