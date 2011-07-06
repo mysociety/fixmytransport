@@ -63,8 +63,8 @@ en:
       from_example: e.g. London Euston
       to_example: e.g. Birmingham New Street
       please_enter_from_and_to: Please enter the names of the stations where you got on and off the train. 
-      ambiguous_from_stop: "'%{station_name}' could mean more than one station - please the which one you meant from the drop-down list."
-      ambiguous_to_stop: "'%{station_name}' could mean more than one station - please the which one you meant from the drop-down list."
+      ambiguous_from_stop: "'%{station_name}' could mean more than one station - please pick the one you meant from the drop-down list."
+      ambiguous_to_stop: "'%{station_name}' could mean more than one station - please pick the one you meant from the drop-down list."
       from_stop_not_found: We didn't recognize the name of the stop you got on at. 
       to_stop_not_found: We didn't recognize the name of the stop you got off at. 
       go: Go
