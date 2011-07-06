@@ -76,25 +76,26 @@ class Parsers::OperatorContactsParser
           if category.blank?
             category = 'Other'
           end
-          if operator.operator_contacts.empty?
-            if dryrun
-              puts "new contact for #{operator.name}: #{email} #{category}" 
-            else
-              contact = operator.operator_contacts.build(:email => email, :category => category, :deleted => false)            
-            end
-          else
-            matches = operator.operator_contacts.select{ |contact| contact.email == email && contact.category == category }
-            
-            if matches.empty?
+          if !email.blank?
+            if operator.operator_contacts.empty?
               if dryrun
-                existing_info = operator.operator_contacts.map{|contact| [contact.email, contact.category]}
-                puts "new contact for #{operator.name}: #{email} #{category} existing #{existing_info.inspect}"
+                puts "new contact for #{operator.name}: #{email} #{category}" 
               else
                 contact = operator.operator_contacts.build(:email => email, :category => category, :deleted => false)            
               end
+            else
+              matches = operator.operator_contacts.select{ |contact| contact.email == email && contact.category == category }
+            
+              if matches.empty?
+                if dryrun
+                  existing_info = operator.operator_contacts.map{|contact| [contact.email, contact.category]}
+                  puts "new contact for #{operator.name}: #{email} #{category} existing #{existing_info.inspect}"
+                else
+                  contact = operator.operator_contacts.build(:email => email, :category => category, :deleted => false)            
+                end
+              end
             end
           end
-          
         end
       else
         if dryrun
