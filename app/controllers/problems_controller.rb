@@ -235,7 +235,7 @@ class ProblemsController < ApplicationController
       @from_stop = params[:from]
       @to_stop = params[:to]
       if @to_stop.blank? or @from_stop.blank?
-        @error_messages = [t('problems.find_train_route.please_enter_from_and_to')]
+        @error_messages[:base] = [t('problems.find_train_route.please_enter_from_and_to')]
       else
         location_search = LocationSearch.new_search!(session_id, :from => @from_stop,
                                                                  :to => @to_stop, 
@@ -268,7 +268,7 @@ class ProblemsController < ApplicationController
       @from_stop = params[:from]
       @to_stop = params[:to]
       if @from_stop.blank? or @to_stop.blank?
-        @error_messages << t('problems.find_other_route.please_enter_from_and_to')
+        @error_messages[:base] << t('problems.find_other_route.please_enter_from_and_to')
       else
         location_search = LocationSearch.new_search!(session_id, :from => @from_stop,
                                                                  :to => @to_stop, 

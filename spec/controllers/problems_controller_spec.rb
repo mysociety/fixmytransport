@@ -125,7 +125,7 @@ describe ProblemsController do
       it 'should display an error message' do 
         make_request({:to => '', :from => ''})
         expected_message = 'Please enter the names of the stations where you got on and off the train.'
-        assigns[:error_messages].should == [expected_message]
+        assigns[:error_messages][:base].should == [expected_message]
       end
       
     end
