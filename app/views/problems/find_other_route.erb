@@ -11,13 +11,18 @@
 </div>
 <div id="main-content" class="container">
 	  <%- form_tag find_other_route_problems_path, :id => 'other_route_form', :method => 'GET' do  %>
-	    <%- @error_messages.each do |error_message| %>
+	    <%- @error_messages[:base].each do |error_message| %>
 	      <div class='error'>
 	        <%= error_message %>
 	      </div>
 	    <%- end %>
     <ul class="form-list">
 	    <li class="fieldset">
+	      <%- @error_messages[:from_stop].each do |error_message| %>
+  	      <div class='error'>
+  	        <%= error_message %>
+  	      </div>
+  	    <%- end %>
 	      <%= raw label_tag t('problems.find_other_route.where_did_you_get_on') %>
 	     <%- if @from_stops %>
 	        <%= raw select_tag 'from', options_for_select(@from_stops.map{ |stop| [stop.name, stop.name] }.uniq) %>
@@ -29,6 +34,11 @@
 	    </li>
     
 	    <li class="fieldset">
+	      <%- @error_messages[:to_stop].each do |error_message| %>
+  	      <div class='error'>
+  	        <%= error_message %>
+  	      </div>
+  	    <%- end %>
 	      <%= raw label_tag t('problems.find_other_route.where_did_you_get_off') %>
 	      <%- if @to_stops %>
 	        <%= raw select_tag 'to',options_for_select(@to_stops.map{ |stop| [stop.name, stop.name] }.uniq) %>

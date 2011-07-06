@@ -230,7 +230,7 @@ class ProblemsController < ApplicationController
   end
   
   def find_train_route
-    @error_messages = []
+    @error_messages = Hash.new{ |hash, key| hash[key] = [] }
     if params[:to]
       @from_stop = params[:from]
       @to_stop = params[:to]
@@ -247,7 +247,7 @@ class ProblemsController < ApplicationController
         setup_from_and_to_stops(route_info)
         if route_info[:errors]
           location_search.fail
-          @error_messages = route_info[:errors].map{ |message| t(message) }
+          @error_messages = route_info[:errors]
           render :find_train_route
           return
         else
@@ -263,7 +263,7 @@ class ProblemsController < ApplicationController
   end
   
   def find_other_route
-    @error_messages = []
+    @error_messages = Hash.new{ |hash, key| hash[key] = [] }
     if params[:to]
       @from_stop = params[:from]
       @to_stop = params[:to]
@@ -279,13 +279,13 @@ class ProblemsController < ApplicationController
                                                          params[:to_exact])
         setup_from_and_to_stops(route_info)
         if route_info[:errors]
-          @error_messages = route_info[:errors].map{ |message| t(message) }
+          @error_messages = route_info[:errors]
           location_search.fail
           render :find_other_route
           return
         elsif route_info[:routes].empty? 
           location_search.fail
-          @error_messages << t('problems.find_other_route.route_not_found')
+          @error_messages[:base] << t('problems.find_other_route.route_not_found')
         elsif route_info[:routes].size == 1
           location = route_info[:routes].first
           redirect_to new_problem_url(:location_id => location.id, :location_type => 'Route')

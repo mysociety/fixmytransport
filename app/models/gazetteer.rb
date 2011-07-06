@@ -148,7 +148,7 @@ class Gazetteer
   end
 
   def self.other_route_from_stations(from, from_exact, to, to_exact)
-    errors = []
+    errors = Hash.new{ |hash, key| hash[key] = [] }
     station_types = ['GTMU', 'GFTD']
 
     from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => station_types)
@@ -156,17 +156,18 @@ class Gazetteer
 
     # if there are multiple stations with the exact same name, don't ask the user to select one
     # just pass them all to find_all_by_locations, and see which one has the route
+    
     if from_stops.size > 1 && from_stops.map{ |stop| stop.name }.uniq.size > 1
-      errors << 'problems.find_other_route.ambiguous_from_stop'
+      errors[:from_stop] << I18n.translate('problems.find_other_route.ambiguous_from_stop', :station_name => from.strip)
     end
     if to_stops.size > 1 && to_stops.map{ |stop| stop.name }.uniq.size > 1
-      errors << 'problems.find_other_route.ambiguous_to_stop'
+      errors[:to_stop] << I18n.translate('problems.find_other_route.ambiguous_to_stop', :station_name => to.strip)
     end
     if from_stops.size == 0
-      errors << 'problems.find_other_route.from_stop_not_found'
+      errors[:from_stop] << I18n.translate('problems.find_other_route.from_stop_not_found')
     end
     if to_stops.size == 0
-      errors << 'problems.find_other_route.to_stop_not_found'
+      errors[:to_stop] << I18n.translate('problems.find_other_route.to_stop_not_found')
     end
     if ! errors.empty?
       return { :errors => errors,
@@ -181,7 +182,7 @@ class Gazetteer
   end
 
   def self.train_route_from_stations(from, from_exact, to, to_exact)
-    errors = []
+    errors = Hash.new{ |hash, key| hash[key] = [] }
 
     from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => ['GRLS'])
     to_stops = Gazetteer.find_stations_from_name(to.strip, to_exact, :types => ['GRLS'])
@@ -189,16 +190,16 @@ class Gazetteer
     # if there are multiple stations with the exact same name, don't ask the user to select one
     # just pass them all to find_all_by_locations, and see which one has the route
     if from_stops.size > 1 && from_stops.map{ |stop| stop.name }.uniq.size > 1
-      errors << 'problems.find_train_route.ambiguous_from_stop'
+      errors[:from_stop] << I18n.translate('problems.find_train_route.ambiguous_from_stop', :station_name => from.strip)
     end
     if to_stops.size > 1 && to_stops.map{ |stop| stop.name }.uniq.size > 1
-      errors << 'problems.find_train_route.ambiguous_to_stop'
+      errors[:to_stop] << I18n.translate('problems.find_train_route.ambiguous_to_stop', :station_name => to.strip)
     end
     if from_stops.size == 0
-      errors << 'problems.find_train_route.from_stop_not_found'
+      errors[:from_stop] << I18n.translate('problems.find_train_route.from_stop_not_found')
     end
     if to_stops.size == 0
-      errors << 'problems.find_train_route.to_stop_not_found'
+      errors[:to_stop] << I18n.translate('problems.find_train_route.to_stop_not_found')
     end
     if ! errors.empty?
       return { :errors => errors,
