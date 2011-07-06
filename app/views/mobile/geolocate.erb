@@ -1,0 +1,46 @@
+<div id="auto-locate-status">
+    <p>Geolocation</p>
+</div>
+<script type="text/javascript">
+    $('#mobile-geolocate').live('pageshow', function (event, ui) { doGeolocate(event, ui) });
+    
+    function deployPostcode(postcode) {
+        $('#auto-locate-status').html("<p>OK Postcode: " + postcode + "</p>");
+        $('.ui-dialog').dialog('close')
+        // find stop
+        $('#name').val(postcode);
+        $('#stop_name_form').submit();
+        console.log("did the submit")
+    }
+
+    function doGeolocate(event, ui) {
+        $('#auto-locate-status').html("<p>OK... fetching location...</p>");
+        if (false) { // NB debugging shortcut: repeated location lookups were sometimes taking aaaaaages
+            deployPostcode("TW20 9LB")//TW20 9LB
+        } else {
+            if (geo_position_js.init()) {
+                geo_position_js.getCurrentPosition(
+                    function(position) {
+                        $('#auto-locate-status').html("<p>OK... fetching location done: now fetching postcode...</p>");
+                        pc_url = '/request_postcode?lat=' + position.coords.latitude + "&long=" + position.coords.longitude;
+                        $.ajax({
+                            url: pc_url,
+                            success: function(postcode) {deployPostcode(postcode)},
+                            error: function (request, status, error) {
+                                $('#auto-locate-status').html("<p>Sorry: failed to determine postcode for you current location :-(<br/>" 
+                                    + request.responseText + "</p>");
+                                console.log("ajax error: " + status + ": " + request.responseText);
+                            }
+                        });
+                    }, 
+                    function(err) {
+                        $('#auto-locate-status').html("<p>Sorry: failed to auto-locate you!<br/>" + err + "</p>");
+                    }
+                );
+            } else {
+                $('#auto-locate-status').html("<p>Sorry... can't auto-locate you.</p>");
+            }
+        }
+    }
+    
+</script>

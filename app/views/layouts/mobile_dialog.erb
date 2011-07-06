@@ -1,0 +1,27 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title><%= "#{t(:site_name)}#{@title ? ':' : ''} #{@title}" %></title> 
+    <%= csrf_meta_tag %>    
+    <!-- %= raw library_js_link % -->
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.js"></script>
+    <%= raw stylesheet_link_tag('map','mobile', :cache => 'main') %>
+</head> 
+<body> 
+    <div data-role="page" id="<%= controller.controller_name %>-<%= controller.action_name %>" data-url="<%= request.fullpath %>">
+        <div data-role="header">
+        	<h1 style="text-overflow:hidden;margin:0.6em auto;"><%= "#{t(:site_name)}" %></h1> <!-- no space for meaningful title? -->
+        </div><!-- /header -->
+        <div data-role="content">
+            <%= yield %>
+        </div>
+        <div data-role="footer">
+                That was page <%= request.fullpath %>,
+                page&nbsp;id=<%= controller.controller_name %>-<%= controller.action_name %>            
+        </div><!-- /footer -->
+    </div>
+    <%= yield :javascript %>	
+</body>
+</html>

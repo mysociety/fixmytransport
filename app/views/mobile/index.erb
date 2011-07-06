@@ -9,11 +9,12 @@
             val, text = raw.split('|', 2)
             val.strip!
             text = val if text.blank?
-            words = val.split(" ")
-            if words.length > 1
-                val = words.select{|item| not item =~ /^(a|the|some)$/i }.first
+            if val.include? " "
+                words = val.downcase.split(" ")
+                val = words.select{|item| not ["a","an","the","some","it","it's","is","of","i","can't","cannot"].include?(item)}.first
+            else
+                val.downcase!
             end
-            val.downcase!
         %>
         <div class='error'>
             <form action="/mobile" method="post" data-rel="no-ajax">

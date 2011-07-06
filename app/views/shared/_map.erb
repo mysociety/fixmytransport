@@ -1,5 +1,5 @@
-<%- if defined?(static) == nil %>
-<%- static = false %>
+<%- if defined?(static) == nil || session[:device] == :mobile %>
+<%- static = true %>
 <%- end %>
 <%- location_data = location_stops_coords(locations, small=false, link_type) %>
 <%- other_location_data = location_stops_coords(other_locations, small=true, link_type) %>

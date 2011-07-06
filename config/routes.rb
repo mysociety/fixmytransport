@@ -101,6 +101,11 @@ ActionController::Routing::Routes.draw do |map|
                                          :action => 'request_country',
                                          :conditions => { :method => :get }
 
+  # little service url for getting request postcode
+  map.request_country 'request_postcode', :controller => 'services',
+                                          :action => 'request_postcode',
+                                          :conditions => { :method => :get }
+
   # user sessions
   map.login 'login', :controller => 'user_sessions', :action => 'new'
   map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
@@ -125,6 +130,7 @@ ActionController::Routing::Routes.draw do |map|
   # mobile
   map.mobile '/mobile', :controller => 'mobile', :action => 'index', :conditions => { :method => [:get, :post] }
   map.select_device '/select_device', :controller => 'mobile', :action => 'select_device'
+  map.geolocate '/geolocate', :controller => 'mobile', :action => 'geolocate'
 
   # admin
   map.namespace :admin do |admin|

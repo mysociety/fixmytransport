@@ -31,7 +31,7 @@
 </div>
 <div id="main-content" class="container">
 	<div id='large-map'>
-		<%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => @other_locations, :link_type => :problem, :height => LARGE_MAP_HEIGHT, :width => LARGE_MAP_WIDTH  } %>
+		<%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => @other_locations, :link_type => :problem, :height => map_sizes(:large_map_height), :width => map_sizes(:large_map_width)  } %>
 	</div>
 <%- end %>
 	<div class="container">

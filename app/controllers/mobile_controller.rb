@@ -25,6 +25,41 @@ class MobileController < ApplicationController
                     "a station",
                     "a route"
                   ],
+                  
+      'train|station' => [
+                    "OK, what's the problem with the station?",
+                    "the information is wrong or unhelpful",
+                    "broken | something is broken",
+                    "the toilets or waiting room are locked",
+                    "the ticket machine isn't working",
+                    "something else"
+                  ],
+                  
+      'train|station|broken' => [
+                    "What's busted?",
+                    "escalators",
+                    "lifts",
+                    "information displays",
+                    "ticket machine",
+                    "something else"
+                  ],
+
+      'train|station|broken|escalators' => ["The escalators at this station are not working."],
+      'train|station|broken|lifts' => ["The lifts at this station are not working."],
+      'train|station|broken|information' => ["The information displays at this station are not working."],
+      'train|station|broken|ticket' => ["The ticket machines at this station are not working."],
+
+      'train|station|information' => [
+                    "What's wrong with the information here?",
+                    "displays aren't readable",
+                    "wrong|displays showing the wrong trains",
+                    "no announcements for delays",
+                    "no timetables displayed",
+                    "can't understand the announcements",
+                    "something else"
+                  ],
+
+
       'bus' =>  [
                     "And this problem is related to a...?",
                     "on   | bus you're currently on",
@@ -66,9 +101,16 @@ class MobileController < ApplicationController
     @buttons ||= phone_tree[:index]
     @question = @buttons.shift
     if @buttons.length == 0
-      @buttons = ['OK'] # this is a leaf node: go to mainsteam FMT, populating the input
+      # store the problem
+      # identify where this is happening
+      render :template => "problems/find_stop" and return
+      # @buttons = ['OK'] # this is a leaf node: go to mainsteam FMT, populating the input
     end
     render :layout => 'mobile'
+  end
+
+  def geolocate
+    render :layout => 'mobile_dialog'
   end
 
   # allow user to manually force device (overrides useragent)

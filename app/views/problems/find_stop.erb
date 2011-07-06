@@ -4,8 +4,14 @@
 	</div>
 </div>
 
+<%- if is_mobile? %>
+    <div class="solitary-button">
+        <a href="<%= geolocate_url %>" id="geo-find-stop" data-rel="dialog" data-role="button">Here! (auto-locate)</a>
+    </div>
+<%- end %>
+
 <div id="main-content" class="container">
-	<%- form_tag find_stop_problems_path, :id => 'stop_name_form', :method => 'GET' do  %>
+	<%- form_tag find_stop_problems_path, :id => 'stop_name_form', :method => 'GET', "data-ajax" => "false" do  %>
 	<%- if @error_message %>
 	<div class='error'><%= @error_message %></div>
 	<%- end %>

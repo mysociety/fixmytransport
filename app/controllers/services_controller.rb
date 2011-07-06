@@ -23,6 +23,14 @@ class ServicesController < ApplicationController
     end
   end
   
+  # gazetteer provides JSON like: '{"place": ["Egham, Surrey", "267"], "postcode": ["TW20 9ED", "5"], ... ]}'
+  # request_postcode extracts and returns "TW20 9ED"
+  def request_postcode
+    gaz_url = "http://gazetteer.dracos.vm.bytemark.co.uk/point/#{params[:lat]},#{params[:long]}.json" # TODO url_encode
+    location_data = JSON.parse(open(gaz_url).read)
+    render :text => location_data['postcode'][0]
+  end
+  
   private
   
   # none of these actions require user (or any other) session, so skip it

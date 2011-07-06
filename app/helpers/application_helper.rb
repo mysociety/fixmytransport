@@ -443,4 +443,23 @@ module ApplicationHelper
       
   end
   
+  def is_mobile?
+    return session[:device] == :mobile
+  end
+  
+  # returns dimensions that could be determined by user agent
+  def map_sizes(size_key)
+    case size_key
+    when :map_width
+      return MAP_WIDTH
+    when :map_height
+      return MAP_HEIGHT
+    when :large_map_width
+      return is_mobile? ? 380 : LARGE_MAP_WIDTH
+    when :large_map_height
+      return is_mobile? ? 400 : LARGE_MAP_HEIGHT
+    else
+      raise "unknown map size key (#{key})"
+    end
+  end
 end
