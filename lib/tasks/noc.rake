@@ -4,6 +4,15 @@ namespace :noc do
 
   include DataLoader
 
+  namespace :pre_load do 
+  
+    desc "Parses operator contact information and produces output about what would be loaded. Required a CSV file specified as FILE=filename"
+    task :operator_contacts => :environment do 
+      parser = Parsers::OperatorContactsParser.new
+      parser.parse_operator_contacts(ENV['FILE'], dryrun=true)
+    end
+  end
+  
   namespace :load do
 
     desc "Loads operators from a CSV file specified as FILE=filename"
