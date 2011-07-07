@@ -22,7 +22,7 @@
 	<%= raw javascript_include_tag("http://use.typekit.com/fji8ime.js")%>
 	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   </head>
-	<body role="application">
+	<body role="application" <%-if @body_class %>class="<%= @body_class %>"<%- end %>>
 		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
 		<div class="staging-banner top-notice">
 			<div class="container"><%= t('shared.header.development_site') %></div>
