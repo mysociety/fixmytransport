@@ -1,7 +1,13 @@
 en:
   admin:
     assignment: "assignment"
-    assignment_updated: "The assignment has been updated."
+    assignment_updated: "The assignment has been marked as complete."
+    assignment_updated_no_contact: "The operator data has been added. There isn't a contact email, so the assignment is not complete."
     assignment_problem: "There's been a problem editing this assignment. Please see below for details."
     assignment_data: "Data"
+    assignment_operator_not_found: "There is no operator with id 66"
+    assignment_location_only: "This contact only applies to this location"
     operator: "operator"
+    campaign: "Campaign"
+    assignment_override_contact: "Override the existing contact"
+    assignment_need_to_choose_override: "Do you want to overwrite the existing email %{existing}?"

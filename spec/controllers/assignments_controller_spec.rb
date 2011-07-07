@@ -277,7 +277,8 @@ describe AssignmentsController do
 
         it 'should add the organization name to the assignment data' do
           @mock_assignment.should_receive(:data=).with({ :organization_name => 'test name',
-                                                         :organization_email => nil })
+                                                         :organization_email => nil,
+                                                         :location_only => false })
           make_request(@default_params)
         end
 

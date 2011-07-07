@@ -48,7 +48,8 @@ class AssignmentsController < ApplicationController
       return false
     end
     @assignment.data = { :organization_name => params[:organization_name],
-                         :organization_email => params[:organization_email] }
+                         :organization_email => params[:organization_email],
+                         :location_only => params[:location_only] == 'on' }
     @assignment.status = :in_progress
     if @assignment.save
       flash[:notice] = t('assignments.edit.confirming_organization')

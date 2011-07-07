@@ -1,4 +1,12 @@
 <h2><%= @assignment.task_type.humanize %> <%= t('admin.assignment') %></h2>
-<%-form_for :assignment, @assignment, :url => admin_url(admin_assignment_path(@assignment)), :html => { :method => :put,  :class => 'assignment-form' } do |f| %>
+
+
+<%-form_for :assignment, @assignment, :url => admin_url(check_admin_assignment_path(@assignment)), :html => { :method => :post,  :class => 'assignment-form' } do |f| %>
   <%= render :partial => 'form', :locals => { :f => f }   %>
 <%- end %>
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+    setupOperatorAutocomplete();
+  });
+</script>

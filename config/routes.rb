@@ -131,7 +131,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :problems, :only => [:show, :index, :update]
     admin.resources :campaigns, :only => [:show, :index, :update]
     admin.resources :campaign_updates, :only => [:show, :update]
-    admin.resources :assignments, :only => [:show, :update]
+    admin.resources :assignments, :only => [:show], :member => { :check => [:post] }
     admin.resources :comments, :only => [:show, :update]
     admin.resources :incoming_messages, :only => [:show, :update, :destroy],
                                         :member => { :download => [:get],

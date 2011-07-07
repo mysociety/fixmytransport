@@ -1850,3 +1850,12 @@ ul.route-links {
 	height:447px;
 	margin:0 auto;
 }
+
+/*===[Assignment Page]===*/
+.edit_assignment .checkbox label {
+	display:inline;
+}
+.edit_assignment .checkbox {
+  height: 2em;
+}
+
