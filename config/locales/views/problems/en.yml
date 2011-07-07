@@ -70,9 +70,9 @@ en:
       go: Go
     find_route:
       find_a_route: Finding a route
-      bus: bus
+      bus: bus / coach
       train: train
-      tram: "tram"
+      tram: "tram / metro underground"
       or_underground: (or metro/underground)
       ferry: ferry
       or_coach: (or coach)

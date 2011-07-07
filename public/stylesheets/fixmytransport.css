@@ -1821,16 +1821,9 @@ ul.route-links {
 		display:block;
 		float:left;
 		width:21%;;
+
 	}
-		#route-type-list li span {
-			display:block;
-			color:#666;
-			text-transform:lowercase;
-			font-size:0.5em;
-			font-style:italic;
-			margin-top:1.5em;
-			font-weight:lighter;
-		}
+
 /*===[Route Regions Page]===*/
 #region-list {
 	list-style-type:none;
