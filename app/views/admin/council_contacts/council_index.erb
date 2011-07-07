@@ -1,14 +1,14 @@
-<h2><%= t(:council_contacts_for, :council => @council.name) %></h2>
-<%= link_to t(:add_a_council_contact), admin_url(new_admin_council_contact_path(:area_id => @council.id)) %>
+<h2><%= t('admin.council_contacts_for', :council => @council.name) %></h2>
+<%= link_to t('admin.add_a_council_contact'), admin_url(new_admin_council_contact_path(:area_id => @council.id)) %>
 <table class='council-contacts index-list'>
   <tr>
-    <th width='14%'><%= t(:category) %></th>
-    <th width='34%'><%= t(:email) %></th>
-    <th width='8%'><%= t(:district_id) %></th>
-    <th width='6%'><%= t(:confirmed)  %></th>
-    <th width='30%'><%= t(:last_editor)  %></th>
-    <th width='30%'><%= t(:notes) %></th>
-    <th width='34%'><%= t(:updated_at)  %></th>
+    <th width='14%'><%= t('admin.category') %></th>
+    <th width='34%'><%= t('admin.email') %></th>
+    <th width='8%'><%= t('admin.district_id') %></th>
+    <th width='6%'><%= t('admin.confirmed')  %></th>
+    <th width='30%'><%= t('admin.last_editor')  %></th>
+    <th width='30%'><%= t('admin.notes') %></th>
+    <th width='34%'><%= t('admin.updated_at')  %></th>
   </tr>
   <%-@council.contacts.each do |contact| %>
     <tr class="<%= cycle('odd', 'even') %>">

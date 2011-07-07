@@ -1,0 +1,16 @@
+<div class='fieldset'>
+	<div class="email-instructions"><%= t('shared.email.email_instructions')%></div>
+<textarea class="email-body">
+<%= t('shared.email.email_text', :call_to_action => @campaign.short_call_to_action)%>
+  	
+<%= @campaign.description %>
+  	
+<%= t("shared.email.please_support")%>
+  	
+<%= request.url %>
+  	
+<%= t('shared.email.email_signoff')%>
+  	
+<%= @campaign.initiator.name %>
+</textarea>
+</div>

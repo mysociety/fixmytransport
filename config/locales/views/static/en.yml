@@ -1,7 +1,7 @@
 en:
-  feedback_thanks: "Thanks for your feedback!"
-  feedback_error: "An error occurred while sending this email."
-  send: "Send"
-  cancel: Cancel
-  please_give_feedback: "We'd love to hear what you think of this site. Please fill in the form, or send an email to %{email}"
-  about_this_site: About this site
+  static:
+    feedback: 
+      feedback_thanks: "Thanks for your feedback!"
+      feedback_error: "An error occurred while sending this email."
+      send: "Send"
+      please_give_feedback: "We'd love to hear what you think of this site. Please fill in the form, or send an email to %{email}"

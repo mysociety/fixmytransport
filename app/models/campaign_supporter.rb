@@ -1,7 +1,6 @@
 class CampaignSupporter < ActiveRecord::Base
   belongs_to :campaign
   belongs_to :supporter, :class_name => 'User'
-  after_create :send_confirmation_email, :unless => :confirmed?
   before_create :generate_confirmation_token
   named_scope :confirmed, :conditions => ["confirmed_at is not null"], :order => "confirmed_at desc"
   
@@ -9,11 +8,7 @@ class CampaignSupporter < ActiveRecord::Base
   def generate_confirmation_token
     self.token = MySociety::Util.generate_token
   end
-  
-  def send_confirmation_email
-    CampaignMailer.deliver_supporter_confirmation(supporter, self.campaign, token)
-  end
-  
+    
   def confirmed? 
     !confirmed_at.blank?
   end

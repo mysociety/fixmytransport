@@ -1,24 +1,24 @@
-<h2><%= t(:stop_areas) %></h2>
-<%= link_to t(:add_a_stop_area), admin_url(new_admin_stop_area_path) %>
+<h2><%= t('admin.stop_areas') %></h2>
+<%= link_to t('admin.add_a_stop_area'), admin_url(new_admin_stop_area_path) %>
 <%= render :partial => "admin/shared/index_js" %>
 <%= render :partial => "admin/shared/search_form", :locals => { :skip_transport_mode => false }  %>
 <%= will_paginate @stop_areas, { :admin => true } %>
-<%= t(:select) %>
-<%= link_to(t(:all), '', { :class => "index-select-all" }) %>
-<%= link_to(t(:none), '', { :class => "index-select-none" }) %>
+<%= t('admin.select') %>
+<%= link_to(t('admin.all'), '', { :class => "index-select-all" }) %>
+<%= link_to(t('admin.none'), '', { :class => "index-select-none" }) %>
 <table class='stops index-list'>
   <tr>
-    <th width='15%'><%= t(:id) %></th>
-    <th width='40%'><%= t(:name) %></th>
-    <th width='35%'><%= t(:code) %></th>
-    <th width='5%'><%= t(:area_type) %></th>
-    <th width='5%'><%= t(:select) %></th>
+    <th width='15%'><%= t('admin.id') %></th>
+    <th width='40%'><%= t('admin.name') %></th>
+    <th width='35%'><%= t('admin.code') %></th>
+    <th width='5%'><%= t('admin.area_type') %></th>
+    <th width='5%'><%= t('admin.select') %></th>
   </tr>
   <%-@stop_areas.each do |stop_area| %>
     <tr class='<%= cycle("odd", "even") %>'>
       <td>
         <%= link_to(stop_area.id, main_url(location_path(stop_area)), :target => '_blank') %>
-        <%= link_to("(#{t(:admin)})", admin_url(admin_stop_area_path(stop_area.id)), :target => '_blank') %></td>
+        <%= link_to("(#{t('admin.admin')})", admin_url(admin_stop_area_path(stop_area.id)), :target => '_blank') %></td>
       <td><%= stop_area.name %></td>
       <td><%= stop_area.code %></td>
       <td><%= stop_area.area_type %></td>

@@ -1,0 +1,7 @@
+<li <%-if issue.is_a?(Problem) %>class="problem"<%- end %>>
+<%- if issue.is_a?(Campaign) %>
+  <%= render :partial => 'shared/campaign', :locals => { :campaign => issue, :context => context }%>
+<%- else %>
+  <%= render :partial => 'shared/problem', :locals => { :problem => issue, :context => context } %>
+<%- end %>
+</li>

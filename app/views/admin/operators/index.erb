@@ -1,27 +1,27 @@
-<h2><%= t(:operators) %></h2>
-<%= link_to t(:add_an_operator), admin_url(new_admin_operator_path) %>
+<h2><%= t('admin.operators') %></h2>
+<%= link_to t('admin.add_an_operator'), admin_url(new_admin_operator_path) %>
 <%= render :partial => "admin/shared/index_js" %>
 <%= render :partial => "admin/shared/search_form", :locals => { :skip_transport_mode => true }  %>
 <%= will_paginate @operators, {:admin => true} %>
 
 <form method='GET' action='<%= admin_url(merge_admin_operators_path) %>'>
-  <%= t(:select) %>
-  <%= link_to(t(:all), '', { :class => "index-select-all" }) %>
-  <%= link_to(t(:none), '', { :class => "index-select-none" }) %>
+  <%= t('admin.select') %>
+  <%= link_to(t('admin.all'), '', { :class => "index-select-all" }) %>
+  <%= link_to(t('admin.none'), '', { :class => "index-select-none" }) %>
   <table class='operators index-list'>
     <tr>
-      <th width='14%'><%= t(:id) %></th>
-      <th width='34%'><%= t(:name) %></th>
-      <th width='34%'><%= t(:short_name)  %></th>
-      <th width='6%'><%= t(:code) %></th>
-      <th width='6%'><%= t(:routes) %></th>
-      <th width='6%'><%= t(:select) %></th>
+      <th width='14%'><%= t('admin.id') %></th>
+      <th width='34%'><%= t('admin.name') %></th>
+      <th width='34%'><%= t('admin.short_name')  %></th>
+      <th width='6%'><%= t('admin.code') %></th>
+      <th width='6%'><%= t('admin.routes') %></th>
+      <th width='6%'><%= t('admin.select') %></th>
     </tr>
     <%-@operators.each do |operator| %>
       <tr class="<%= cycle('odd', 'even') %>">
         <td>
           <%= operator.id %>
-          <%= link_to "(#{t(:admin)})", admin_url(admin_operator_path(operator)) %></td>
+          <%= link_to "(#{t('admin.admin')})", admin_url(admin_operator_path(operator)) %></td>
         <td><%= operator.name %></td>
         <td><%= operator.short_name %></td>
         <td><%= operator.code %></td>
@@ -31,8 +31,8 @@
     <%- end %>
     <tr class='footer'>
       <td colspan='6'>
-        <%= t(:selected_items) %>
-        <%= raw submit_tag t(:merge) %>
+        <%= t('admin.selected_items') %>
+        <%= raw submit_tag t('admin.merge') %>
       </td>
     </tr>
   </table>

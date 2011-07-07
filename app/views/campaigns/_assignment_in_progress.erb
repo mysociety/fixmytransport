@@ -1,5 +1,5 @@
-<%-if assignment.task_type_name == 'find-transport-organization' %>
-  <%= assignment.user.name %> found the company that runs <%= assignment.campaign.location.description %>. 
+<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%-if assignment.task_type_name == 'find-transport-organization' %>
+  <%= t('campaigns.show.responsible_org_found', :user_name => assignment.user.name,  :location => readable_location_type(assignment.campaign.location)) %> 
 <%-elsif assignment.task_type_name == 'find-transport-organization-contact-details' %>
-  <%= assignment.user.name %> found an email address for <%= assignment.campaign.problem.operator.name %>
-<%- end %>
+  <%= t('campaigns.show.contact_found', :user_name => assignment.user.name, :operator_name => assignment.campaign.problem.operator.name ) %>
+<%- end %></span><span class="date"><%= event.created_at.to_s(:standard_with_date) %></span></a>

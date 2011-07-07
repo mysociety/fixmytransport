@@ -6,17 +6,19 @@ class ProblemsController < ApplicationController
                                                :find_bus_route, 
                                                :find_train_route, 
                                                :find_other_route]
-  before_filter :find_visible_problem, :only => [:show, :update]
+  before_filter :find_visible_problem, :only => [:show, :update, :add_comment]
+  before_filter :require_problem_reporter, :only => [:convert]
+  skip_before_filter :require_beta_password, :only => [:frontpage]
   
-  def index
-    @problems = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
-      problems = Problem.latest(pager.per_page, :offset => pager.offset)
+  def issues_index
+    @issues = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
+      issues = Problem.find_recent_issues(pager.per_page, :offset => pager.offset)
       # inject the result array into the paginated collection:
-      pager.replace(problems)
+      pager.replace(issues)
 
       unless pager.total_entries
         # the pager didn't manage to guess the total count, do it manually
-        pager.total_entries = Problem.visible.count
+        pager.total_entries = Campaign.visible.count + Problem.visible.count
       end
     end
   end
@@ -31,100 +33,83 @@ class ProblemsController < ApplicationController
   end
   
   def frontpage
-    @title = t(:get_problems_fixed)
+    beta_username = MySociety::Config.get('BETA_USERNAME', 'username')
+    beta_password = MySociety::Config.get('BETA_PASSWORD', 'password')
+    if app_status == 'closed_beta'
+      if !params[:beta] 
+        unless authenticate_with_http_basic{ |username, password| username == beta_username && Digest::MD5.hexdigest(password) == beta_password }
+          render :template => 'problems/beta', :layout => 'beta'
+          return
+        end
+      end
+      authenticate_or_request_with_http_basic('Closed Beta') do |username, password|
+        username == beta_username && Digest::MD5.hexdigest(password) == beta_password
+      end
+    end
+    @version = 0
+    @title = t('problems.frontpage.title')
   end
   
   def create
-    cleanup_time_params
     @problem = Problem.new(params[:problem])
     @problem.status = :new
-    if @problem.is_campaign == "1"
-      campaign = @problem.build_campaign({ :location_id => params[:problem][:location_id], 
-                                           :location_type => params[:problem][:location_type],
-                                           :initiator => @problem.reporter })
-      campaign.status = :new
-    end
-    
     if @problem.valid?
-      # save the user account if it doesn't exist, but don't log it in
-      @problem.save_reporter
-      @problem.save
-      # create task assignment
-      @problem.create_assignments
       if current_user
-        @problem.confirm!
-        if @problem.campaign
-          redirect_to edit_campaign_url(@problem.campaign)
-        else
-          flash[:notice] = t(:problem_created)
-          redirect_to problem_url(@problem)
-        end
+        handle_problem_current_user
       else
-        @problem.send_confirmation_email
-        @action = t(:your_problem_will_not_be_posted)
-        @worry = t(:holding_on_to_problem)
-        render 'shared/confirmation_sent'
-        return
+        handle_problem_no_current_user
       end
     else
-      map_params_from_location(@problem.location.points, find_other_locations=false)
-      render :new
+      render_or_return_invalid_problem
     end
   end
   
   def show
+    @commentable = @problem
     map_params_from_location(@problem.location.points, find_other_locations=false)
     @new_comment = Comment.new(:commented => @problem, 
                                :user => current_user ? current_user : User.new,
                                :user_name => current_user ? current_user.name : '')
   end
-
-  def confirm
-    @problem = Problem.find_by_token(params[:email_token])
-    if @problem
-      @problem.confirm!
+  
+  def convert
+    if @problem.status != :new
       if @problem.campaign
-        redirect_to edit_campaign_url(@problem.campaign, :token => params[:email_token])
+        redirect_to(add_details_campaign_url(@problem.campaign)) and return
+      else
+        redirect_to problem_url(@problem) and return
       end
-    else
-      @error = t(:problem_not_found)
+    end
+    if params[:convert] == 'yes'
+      @problem.create_new_campaign
+      @problem.confirm!
+      redirect_to(add_details_campaign_url(@problem.campaign)) and return 
+    elsif params[:convert] == 'no' 
+      @problem.confirm!
+      flash[:notice] = t('problems.convert.thanks')
+      redirect_to problem_url(@problem) and return
     end
   end
   
-  def update
-    # just accept params for a new comment for now
-    if current_user && params[:problem][:comments][:user_attributes].has_key?(:id) && 
-      current_user.id != params[:problem][:comments][:user_attributes][:id].to_i
-      raise "Comment added with user_id that isn't logged in user"
-    end
-    @new_comment = @problem.comments.build(params[:problem][:comments])
-    @new_comment.status = :new
-    if @new_comment.valid? 
-      # save the user account if it doesn't exist, but don't log it in
-      @new_comment.save_user
-      @new_comment.save
+  def add_comment
+    @commentable = @problem
+    if request.post?
+      @comment = @problem.comments.build(params[:comment])
+      @comment.status = :new
       if current_user
-        @new_comment.confirm!
-        flash[:notice] = t(:thanks_for_update)
-        redirect_to problem_url(@problem)
+        return handle_comment_current_user
       else
-        @new_comment.send_confirmation_email
-        @action = t(:your_update_will_not_be_posted)
-        @worry = t(:holding_on_to_update)
-        render 'shared/confirmation_sent'
-        return
+        return handle_comment_no_user
       end
-    else
-      map_params_from_location(@problem.location.points, find_other_locations=false)
-      render :show
     end
+    render :template => 'shared/add_comment'
   end
   
   def find_stop
-    @title = t(:find_a_stop_or_station)
+    @title = t('problems.find_stop.title')
     if params[:name]
       if params[:name].blank?
-        @error_message = t(:please_enter_an_area)
+        @error_message = t('problems.find_stop.please_enter_an_area')
         render :find_stop
         return
       end
@@ -163,7 +148,7 @@ class ProblemsController < ApplicationController
         postcode_info = stop_info[:postcode_info]
         if postcode_info[:error]
           location_search.fail
-          @error_message = t(:postcode_not_found)
+          @error_message = t('problems.find_stop.postcode_not_found')
           render :find_stop
           return
         else
@@ -179,7 +164,7 @@ class ProblemsController < ApplicationController
       else
         # didn't find anything
         location_search.fail
-        @error_message = t(:area_not_found)
+        @error_message = t('problems.find_stop.area_not_found')
         render :find_stop
         return
       end
@@ -190,7 +175,7 @@ class ProblemsController < ApplicationController
   end
   
   def find_bus_route
-    @title = t(:finding_a_bus_route)
+    @title = t('problems.find_bus_route.title')
     if params[:show_all]
       @limit = nil
     else
@@ -198,7 +183,7 @@ class ProblemsController < ApplicationController
     end
     if params[:route_number]
       if params[:route_number].blank? or params[:area].blank?
-        @error_message = t(:please_enter_route_number_and_area)
+        @error_message = t('problems.find_bus_route.please_enter_route_number_and_area')
         render :find_bus_route 
         return
       end
@@ -219,17 +204,17 @@ class ProblemsController < ApplicationController
       end
       if route_info[:routes].empty? 
         location_search.fail
-        @error_message = t(:route_not_found)
+        @error_message = t('problems.find_bus_route.route_not_found')
       elsif route_info[:routes].size == 1
         location = route_info[:routes].first
-        redirect_to new_problem_url(:location_id => location.id, :location_type => location.type)
+        redirect_to new_problem_url(:location_id => location.id, :location_type => 'Route')
       else 
         if route_info[:error] == :area_not_found
-          @error_message = t(:area_not_found_routes, :area => params[:area])
+          @error_message = t('problems.find_bus_route.area_not_found_routes', :area => params[:area])
         elsif route_info[:error] == :postcode_not_found
-          @error_message = t(:postcode_not_found_routes)
+          @error_message = t('problems.find_bus_route.postcode_not_found_routes')
         elsif route_info[:error] == :route_not_found_in_area
-          @error_message = t(:route_not_found_in_area, :area => params[:area], 
+          @error_message = t('problems.find_bus_route.route_not_found_in_area', :area => params[:area], 
                                                        :route_number => params[:route_number])
         end
         @locations = []
@@ -245,12 +230,12 @@ class ProblemsController < ApplicationController
   end
   
   def find_train_route
-    @error_messages = []
+    @error_messages = Hash.new{ |hash, key| hash[key] = [] }
     if params[:to]
       @from_stop = params[:from]
       @to_stop = params[:to]
       if @to_stop.blank? or @from_stop.blank?
-        @error_messages = [t(:please_enter_from_and_to)]
+        @error_messages[:base] = [t('problems.find_train_route.please_enter_from_and_to')]
       else
         location_search = LocationSearch.new_search!(session_id, :from => @from_stop,
                                                                  :to => @to_stop, 
@@ -262,18 +247,15 @@ class ProblemsController < ApplicationController
         setup_from_and_to_stops(route_info)
         if route_info[:errors]
           location_search.fail
-          @error_messages = route_info[:errors].map{ |message| t(message) }
+          @error_messages = route_info[:errors]
           render :find_train_route
           return
         else
           #create the subroute
           sub_route = SubRoute.make_sub_route(route_info[:from_stops].first, 
                                               route_info[:to_stops].first,
-                                              TransportMode.find_by_name('Train'))
-          route_info[:routes].each do |route|
-            RouteSubRoute.create!(:route => route, 
-                                  :sub_route => sub_route)
-          end
+                                              TransportMode.find_by_name('Train'),
+                                              route_info[:routes])
           redirect_to new_problem_url(:location_id => sub_route.id, :location_type => sub_route.class.to_s)
         end
       end
@@ -281,12 +263,12 @@ class ProblemsController < ApplicationController
   end
   
   def find_other_route
-    @error_messages = []
+    @error_messages = Hash.new{ |hash, key| hash[key] = [] }
     if params[:to]
       @from_stop = params[:from]
       @to_stop = params[:to]
       if @from_stop.blank? or @to_stop.blank?
-        @error_messages << t(:please_enter_from_and_to)
+        @error_messages[:base] << t('problems.find_other_route.please_enter_from_and_to')
       else
         location_search = LocationSearch.new_search!(session_id, :from => @from_stop,
                                                                  :to => @to_stop, 
@@ -297,16 +279,16 @@ class ProblemsController < ApplicationController
                                                          params[:to_exact])
         setup_from_and_to_stops(route_info)
         if route_info[:errors]
-          @error_messages = route_info[:errors].map{ |message| t(message) }
+          @error_messages = route_info[:errors]
           location_search.fail
           render :find_other_route
           return
         elsif route_info[:routes].empty? 
           location_search.fail
-          @error_messages << t(:route_not_found)
+          @error_messages[:base] << t('problems.find_other_route.route_not_found')
         elsif route_info[:routes].size == 1
           location = route_info[:routes].first
-          redirect_to new_problem_url(:location_id => location.id, :location_type => location.type)
+          redirect_to new_problem_url(:location_id => location.id, :location_type => 'Route')
         else
           @locations = route_info[:routes]
           map_params_from_location(@locations, find_other_locations=false)                  
@@ -324,6 +306,13 @@ class ProblemsController < ApplicationController
   
   def find_visible_problem
     @problem = Problem.visible.find(params[:id])
+  end
+  
+  def require_problem_reporter
+    @problem = Problem.find(params[:id])
+    return true if current_user && current_user == @problem.reporter
+    render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+    return false
   end
   
   def setup_from_and_to_stops(route_info)
@@ -351,65 +340,114 @@ class ProblemsController < ApplicationController
       end
     end
     if num_organizations == 1
-      advice_params[:organization] = @template.org_names(problem, :responsible_organizations, t(:or))
-      advice_params[:organization_unstrong] = @template.org_names(problem, :responsible_organizations, t(:or), '', '')
+      advice_params[:organization] = @template.org_names(problem, :responsible_organizations, t('problems.new.or'))
+      advice_params[:organization_unstrong] = @template.org_names(problem, :responsible_organizations, t('problems.new.or'), '', '')
     elsif num_organizations > 1
-      advice_params[:organizations] = @template.org_names(problem, :responsible_organizations, t(:or))
+      advice_params[:organizations] = @template.org_names(problem, :responsible_organizations, t('problems.new.or'))
     end
     # don't know who is responsible for the location
     if num_organizations == 0
-      advice = :no_organizations_for_problem
+      advice = 'problems.new.no_organizations_for_problem'
     # all responsible organizations contactable
     elsif num_organizations == num_organizations_with_email
       if num_organizations == 1
-        advice = :problem_will_be_sent
+        advice = 'problems.new.problem_will_be_sent'
       else
         # for operators you get to choose which to email
         if problem.operators_responsible? 
-          advice = :problem_will_be_sent_multiple_operators
+          advice = 'problems.new.problem_will_be_sent_multiple_operators'
         else
           # for councils, it goes to all or one depending on category
-          advice = :problem_will_be_sent_multiple
+          advice = 'problems.new.problem_will_be_sent_multiple'
         end
       end
     # no responsible organizations contactable
     elsif num_organizations_with_email == 0
       if num_organizations == 1
-        advice = :no_details_for_organization
+        advice = 'problems.new.no_details_for_organization'
       else
-        advice = :no_details_for_organizations
+        advice = 'problems.new.no_details_for_organizations'
       end
     # some responsible organizations contactable
     else
 
-      advice_params[:contactable] = @template.org_names(problem, :emailable_organizations, t(:or))
-      advice_params[:uncontactable] = @template.org_names(problem, :unemailable_organizations, t(:or)) 
+      advice_params[:contactable] = @template.org_names(problem, :emailable_organizations, t('problems.new.or'))
+      advice_params[:uncontactable] = @template.org_names(problem, :unemailable_organizations, t('problems.new.or')) 
 
       if problem.operators_responsible? 
         if problem.unemailable_organizations.size > 2
-          advice_params[:uncontactable] = "one of the companies we don't have an email address for"
+          advice_params[:uncontactable] = t('problems.new.one_of_the_uncontactable_companies')
         end
         if problem.emailable_organizations.size > 2
-          advice_params[:contactable] = "one of the companies we have an email address for"
+          advice_params[:contactable] = t('problems.new.one_of_the_contactable_companies')
         end
-        advice = :no_details_for_some_operators
+        advice = 'problems.new.no_details_for_some_operators'
       else
-        advice_params[:councils] = @template.org_names(problem, :responsible_organizations, t(:or))
-        advice = :no_details_for_some_councils
+        advice_params[:councils] = @template.org_names(problem, :responsible_organizations, t('problems.new.or'))
+        advice = 'problems.new.no_details_for_some_councils'
       end
     end
     @sending_advice = t(advice, advice_params)
   end
-    
-  def cleanup_time_params
-    # fix for https://rails.lighthouseapp.com/projects/8994/tickets/4346
-    # from http://www.ruby-forum.com/topic/100815
-    if params[:problem]['time(4i)'] && ! params[:problem]['time(4i)'].blank? && 
-      params[:problem]['time(5i)'] && !params[:problem]['time(5i)'].blank?
-      params[:problem][:time] = "#{params[:problem]['time(4i)']}:#{params[:problem]['time(5i)']}:00"
-    end
-    (1..5).each do |num|
-      params[:problem].delete("time(#{num}i)")
+
+  def handle_problem_current_user
+    @problem.save
+    respond_to do |format|
+      format.html do
+        redirect_to convert_problem_url(@problem)
+        return false
+      end
+      format.json do 
+        @json = {}
+        @json[:success] = true
+        @json[:redirect] = convert_problem_url(@problem)
+        render :json => @json
+        return false
+      end
     end
   end
+  
+  def handle_problem_no_current_user
+    problem_data = { :action => :create_problem,
+                     :subject => @problem.subject,
+                     :description => @problem.description,
+                     :location_id => @problem.location_id, 
+                     :location_type => @problem.location_type,
+                     :category => @problem.category,
+                     :operator_id => @problem.operator_id, 
+                     :passenger_transport_executive_id => @problem.passenger_transport_executive_id, 
+                     :council_info => @problem.council_info,
+                     :notice => t('problems.new.create_account_to_report_problem') }
+    session[:next_action] = data_to_string(problem_data)
+    respond_to do |format|
+      format.html do
+        flash[:notice] = problem_data[:notice]
+        redirect_to(login_url)
+      end
+      format.json do
+        @json = { :success => true,
+                  :requires_login => true,
+                  :notice => problem_data[:notice] }
+        render :json => @json
+        return
+      end
+    end
+  end
+  
+  def render_or_return_invalid_problem
+    respond_to do |format|
+      format.html do
+        setup_problem_advice(@problem)
+        map_params_from_location(@problem.location.points, find_other_locations=false)
+        render :new
+      end
+      format.json do
+        @json = {}
+        @json[:success] = false
+        add_json_errors(@problem, @json)
+        render :json => @json
+      end
+    end
+  end
+
 end

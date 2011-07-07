@@ -5,7 +5,9 @@ class Admin::RoutesController < Admin::AdminController
 
   def show
     @route = Route.find(params[:id], :include => [ {:journey_patterns => 
-                                                      {:route_segments  => [:from_stop, :to_stop]}}])
+                                                   {:route_segments  => [:from_stop, :to_stop]}},
+                                                   {:route_operators => :operator},
+                                                   :region])
     @route_operators = make_route_operators(@route)
   end
   
@@ -53,7 +55,7 @@ class Admin::RoutesController < Admin::AdminController
     route_type = transport_mode.route_type.constantize
     @route = route_type.new(params[:route])
     if @route.save
-      flash[:notice] = t(:route_created)
+      flash[:notice] = t('admin.route_created')
       redirect_to(admin_url(admin_route_path(@route.id)))
     else
       render :new
@@ -66,11 +68,11 @@ class Admin::RoutesController < Admin::AdminController
     # model instances, otherwise changes don't get saved.
     @route = Route.find(params[:id], :include => {:journey_patterns => :route_segments})
     if @route.update_attributes(params[:route])
-      flash[:notice] = t(:route_updated)
+      flash[:notice] = t('admin.route_updated')
       redirect_to admin_url(admin_route_path(@route.id))
     else
       @route_operators = make_route_operators(@route)
-      flash[:error] = t(:route_problem)
+      flash[:error] = t('admin.route_problem')
       render :show
     end
   end
@@ -78,14 +80,36 @@ class Admin::RoutesController < Admin::AdminController
   def destroy 
     @route = Route.find(params[:id])
     if @route.campaigns.size > 0
-      flash[:error] = t(:route_has_campaigns)
+      flash[:error] = t('admin.route_has_campaigns')
       @route_operators = make_route_operators(@route)
       render :show
     else
       @route.destroy
-      flash[:notice] = t(:route_destroyed)
+      flash[:notice] = t('admin.route_destroyed')
       redirect_to admin_url(admin_routes_path)
     end
+  end
+  
+  def compare
+    @done = MergeCandidate.count(:conditions => 'been_seen is not null')
+    @count = MergeCandidate.count
+    if request.post?
+      @merge_candidate = MergeCandidate.find(params[:id])
+      if params[:is_same] == 'yes'
+        @merge_candidate.update_attribute('is_same', true)
+      end
+      if params[:is_same] == 'no'
+        @merge_candidate.update_attribute('is_same', false)
+      end
+      @merge_candidate.update_attribute('been_seen', true)
+      redirect_to admin_url(compare_admin_routes_path())
+    end
+    @merge_candidate = MergeCandidate.find(:first, :conditions => 'is_same is null and been_seen is null', :order => 'random()')
+    route_ids = @merge_candidate.regional_route_ids.split("|")
+  
+    regional_routes = Route.find(:all, :conditions => ['id in (?)', route_ids],
+                                       :include => {:journey_patterns => {:route_segments => [:from_stop, :to_stop] }})
+    @routes = [@merge_candidate.national_route] + regional_routes
   end
   
   def merge
@@ -97,12 +121,13 @@ class Admin::RoutesController < Admin::AdminController
     if request.post? 
       @merge_to = Route.find(params[:merge_to])
       Route.merge!(@merge_to, @routes)
-      flash[:notice] = t(:routes_merged)
+      flash[:notice] = t('admin.routes_merged')
       redirect_to admin_url(admin_route_path(@merge_to.id))
     end
   end
   
   private
+
   
   def make_route_operators route
     codes = route.route_source_admin_areas.map{ |route_source_admin_area| route_source_admin_area.operator_code }

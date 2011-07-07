@@ -1,11 +1,11 @@
 <%- if !@route.errors.empty? %>
   <div class='form-error'>
-    <%= t(:route_form_error) %>
+    <%= t('admin.route_form_error') %>
   </div>
 <%- end %>
 <div class='form-field'>
   <%- if @route.errors.on(:region_id) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @route, :region_id %>
     </div>
   <%- end %>
@@ -15,7 +15,7 @@
 
 <div class='form-field'>
   <%- if @route.errors.on(:transport_mode_id) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @route, :transport_mode_id %>
     </div>
   <%- end %>
@@ -25,7 +25,7 @@
 
 <div class='form-field'>
   <%- if @route.errors.on(:number) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @route, :number %>
     </div>
   <%- end %>
@@ -35,7 +35,7 @@
 
 <div class='form-field'>
   <%- if @route.errors.on(:name) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @route, :name %>
     </div>
   <%- end %>
@@ -45,5 +45,5 @@
 
 <%= raw f.hidden_field :loaded %>
 <div class='form-field'>
-  <%= raw submit_tag t(:go) %>
+  <%= raw submit_tag t('admin.go') %>
 </div>

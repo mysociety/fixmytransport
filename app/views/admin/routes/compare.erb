@@ -1,0 +1,46 @@
+<%- content_for :javascript do %>
+  <%= raw map_javascript_include_tags(:admin => true) %>
+<%- end %>
+
+<h2><%= t('admin.same_or_different') %></h2>
+<%= "#{@done} done of #{@count}"%>
+
+
+<h2 style="display:block;"><%= @routes.first.description %></h2>
+<div style="">
+<%- form_tag '', :method => 'POST' do  %>
+<input type="hidden" name="is_same" value="yes">
+<input type="hidden" name="id" value="<%=@merge_candidate.id%>">
+<button class="button" type='submit'><%= t('admin.same') %></button>
+<%- end %>
+
+<%- form_tag '', :method => 'POST' do  %>
+<input type="hidden" name="is_same" value="no">
+<input type="hidden" name="id" value="<%=@merge_candidate.id%>">
+<button class="button" type='submit'><%= t('admin.different') %></button>
+<%- end %>
+</div>
+<%- form_tag '', :method => 'POST' do  %>
+<input type="hidden" name="id" value="<%=@merge_candidate.id%>">
+<button class="button" type='submit'><%= t('admin.skip') %></button>
+<%- end %>
+</div>
+<%- @routes.each_with_index do |route,index| %>
+<div class="compare_map" style="float:left; margin: 2em;">
+  <div id="map_<%=index%>" style="width:300px;height:300px;">
+  </div>
+</div>
+<%- end %>
+
+
+
+
+<script type="text/javascript">
+  var routeSegments = [];
+  <%- @routes.each_with_index do |route, index| %>
+  routeSegments[<%=index%>] = <%= raw route_segment_js(route, line_only=true) %>;
+  <%- end %>
+  jQuery(document).ready(function(){
+    setupShowRoutes();
+  });
+</script>

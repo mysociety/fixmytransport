@@ -1,0 +1,53 @@
+<div class='form-field'>
+  <%- if @comment.errors.on(:text) %>
+    <div class='error'>
+      <%= error_message_on @comment, :text   %>
+    </div>
+  <%- end %>
+  <%= raw label(:comment, :text) %>
+  <%= raw f.text_area :text, :rows => 6 %>
+</div>
+
+<div class='form-field'>
+  <%- if @comment.errors.on(:status_code) %>
+    <div class='error'>
+      <%= error_message_on @comment, :status_code %>
+    </div>
+  <%- end %>
+  <%= raw f.label :status %>
+  <%= raw f.select :status_code, Comment.statuses, {:prompt => true, :selected => @comment.status_code } %>
+</div>
+
+<div class='form-field'>
+  <%- if @comment.errors.on(:mark_fixed) %>
+    <div class='error'>
+      <%= error_message_on @comment, :mark_fixed %>
+    </div>
+  <%- end %>
+  <%= raw f.label :mark_fixed, t('admin.admin_mark_fixed') %>
+  <%= raw f.check_box :mark_fixed %>
+</div>
+
+<div class='form-field'>
+  <%- if @comment.errors.on(:mark_open) %>
+    <div class='error'>
+      <%= error_message_on @comment, :mark_open  %>
+    </div>
+  <%- end %>
+  <%= raw f.label :mark_open, t('admin.admin_mark_open') %>
+  <%= raw f.check_box :mark_open %>
+</div>
+<div>
+  <%= t('admin.token') %>: <%= @comment.token %>
+</div>
+<div>
+  <%= t('admin.created_at') %>: <%= @comment.created_at %>
+</div>
+<div> 
+  <%= t('admin.updated_at') %>: <%= @comment.updated_at %>
+</div>
+<div> 
+  <%= t('admin.sent_at') %>: <%= @comment.sent_at %>
+</div>
+
+<%= raw submit_tag t('admin.go') %>

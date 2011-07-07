@@ -34,7 +34,7 @@ class Admin::OperatorsController < Admin::AdminController
   def create
     @operator = Operator.new(params[:operator])
     if @operator.save
-      flash[:notice] = t(:operator_created)
+      flash[:notice] = t('admin.operator_created')
       redirect_to admin_url(admin_operator_path(@operator))
     else 
       if params[:operator][:code]
@@ -54,11 +54,11 @@ class Admin::OperatorsController < Admin::AdminController
   def update
     @operator = Operator.find(params[:id])
     if @operator.update_attributes(params[:operator])
-      flash[:notice] = t(:operator_updated)
+      flash[:notice] = t('admin.operator_updated')
       redirect_to admin_url(admin_operator_path(@operator))
     else
       @route_operators = make_route_operators(@operator.codes)
-      flash[:error] = t(:operator_problem)
+      flash[:error] = t('admin.operator_problem')
       render :show
     end
   end
@@ -66,7 +66,7 @@ class Admin::OperatorsController < Admin::AdminController
   def destroy 
     @operator = Operator.find(params[:id])
     @operator.destroy
-    flash[:notice] = t(:operator_destroyed)
+    flash[:notice] = t('admin.operator_destroyed')
     redirect_to admin_url(admin_operators_path)
   end
 
@@ -79,7 +79,7 @@ class Admin::OperatorsController < Admin::AdminController
     if request.post? 
       @merge_to = Operator.find(params[:merge_to])
       Operator.merge!(@merge_to, @operators)
-      flash[:notice] = t(:operators_merged)
+      flash[:notice] = t('admin.operators_merged')
       redirect_to admin_url(admin_operator_path(@merge_to))
     end
   end

@@ -12,108 +12,99 @@ class Parsers::OperatorContactsParser
       :encoding => 'N' }
   end
   
-  def parse_operator_contacts(filepath)
+  def normalize_address(address)
+    address.gsub("\n", ', ').split(" ").join(" ").gsub(",,", ',').gsub(" ,", ',').chomp(',')
+  end
+  
+  def clean_field(value)
+    if !value.blank?
+      value.strip!
+    end
+    value
+  end
+  
+  def parse_operator_contacts(filepath, dryrun=false)
     csv_data = File.read(filepath)
-    manual_matches = {"Anitas Coaches" => "Anita's Coaches", 
-                      "Bakers" => nil, 
-                      "BATH & NE SOMERSET COUNC" => "Bath & North East Somerset Council", 
-                      "BELLE VUE MANCHESTER LTD" => "Belle Vue Coaches", 
-                      "Blue Bus (Lancashire) Ltd" => "Blue Bus (Lancashire)", 
-                      "Bostocks Coaches" => nil, 
-                      "BU-VAL BUSES LIMITED" => "Bu-Val Buses", 
-                      "BULLOCK TRANSPORT LTD" => "R Bullock Buses", 
-                      "Burtons Coaches" => "Burtons Coaches", 
-                      "Central Connect Ltd" => "Central Connect Ltd", 
-                      "Centrebus Ltd Trading as Bowers Coaches" => nil, 
-                      "Clarkes Coaches" => "Clarkes Coaches", 
-                      "Compass Travel" => "Compass Travel (Sussex)", 
-                      "D & G Coaches" => "D & G Coach & Bus", 
-                      "De Courcey Travel" => "Mike De Courcey Travel", 
-                      "East cYorkshire Motor Services" => "East Yorkshire Motor Services", 
-                      "FINGLANDS SOUTH M/CR C'WAYS" => "Finglands",
-                      "First Hampshire & Dorset" => "First in Hants & Dorset", 
-                      "First Scotrail" => "ScotRail", 
-                      "GHA Coaches" => "G H A Coaches", 
-                      "Gorran & District Community Bus Association Ltd" => "Gorran & District Community Bus", 
-                      "GOSPORT FERRY LTD" => "Gosport Ferry", 
-                      "GREATER M/CR BUSES SOUTH LTD" => "Stagecoach in Manchester", 
-                      "Hull Trains" => "First Hull Trains", 
-                      "J Durbin" => "South Gloucestershire Bus & Coach", 
-                      "J.P. Minicoaches" => "J P Minicoaches", 
-                      "Keighley and District Travel Ltd" => "Transdev Keighley & District Travel", 
-                      "London Central" => "London Central", 
-                      "MERSEYSIDE TRANSPORT LTD." => "Arriva Merseyside", 
-                      "Metrobus" => "Metrobus", 
-                      "MR J M COX" => "Checkmate Mini Coaches", 
-                      "MR S LEWIS" => "Olympia Travel", 
-                      "Muirs Coaches" => nil, 
-                      "National Express West Midlands" => "West Midlands Travel", 
-                      "R. Kime & Co. Ltd." => "Kimes", 
-                      "Rackford Coaches" => nil, 
-                      "RIBBLE MOTOR SERVICES LTD." => "Stagecoach in Lancashire", 
-                      "ROSSENDALE TRANSPORT LTD." => "Rossendale Transport", 
-                      "Scarborough and District Motor Services" => nil, 
-                      "Scottish Citylink" => "Scottish Citylink", 
-                      "Southern" => "Southern", 
-                      "Stagecoach" => nil, 
-                      "Stagecoach Cambridgeshire" => "Stagecoach in Cambridge", 
-                      "STAGECOACH COASTLINE" => "Stagecoach in the South Downs", 
-                      "STAGECOACH DEVON" => "Stagecoach South West", 
-                      "Stagecoach East Midlands" => nil, 
-                      "STAGECOACH IN WYE AND DE" => "Stagecoach in Wye & Dean", 
-                      "Stagecoach Manchester" => "Stagecoach in Manchester", 
-                      "STAGECOACH MERSEYSIDE" => "Stagecoach in Merseyside", 
-                      "Stagecoach Sheffield" => "Stagecoach in Sheffield", 
-                      "Stagecoach Wye & Dean" => "Stagecoach in Wye & Dean", 
-                      "TM Travel" => "T M Travel Ltd", 
-                      "Translink" => nil, 
-                      "Travel Surrey" => "Abellio Surrey", 
-                      "Trent Barton" => "Trent Barton", 
-                      "WARR BORO" => "Warrington Borough Transport", 
-                      "Williams" => "Williams", 
-                      "Wrexham + Shropshire" => "Wrexham & Shropshire" }
     FasterCSV.parse(csv_data, csv_options) do |row|
       data = {}
-      data[:operator] = row['Operator']
-      data[:short_name] = row['Short name']
-      data[:email] = row['Contact email for complaints (this is the most important data to collect!)']
-      data[:company_no] = row['Company Number']
-      data[:reg_address] = row["Company's Registered Postal Address"]
-      data[:notes] = row['Notes/Observations of Interest']
-      data[:url] = row['URL']
-      if data[:notes] && /^https?:\/\/[^ ]+$/.match(data[:notes].strip)
-        data[:url] = data[:notes].strip
-        data[:notes] = nil
-      end
-      all_fields = [:operator, :short_name, :email, :company_no, :reg_address, :notes, :url]
-      contact_fields = [:email]
-      operator = nil
-      if contact_fields.any?{ |field| ! data[field].blank? } 
-        name = data[:operator].blank? ? data[:short_name].strip : data[:operator].strip
-        if manual_matches[name]
-          operators = Operator.find(:all, :conditions => ['name = ?', manual_matches[name]])
-        else
-          operators = Operator.find(:all, :conditions => ['lower(name) like ?
-                                                          or lower(vosa_license_name) like ?', 
-                                                          "#{name.downcase}%","#{name.downcase}%"])
-        end
-        if operators.size == 1
-          operator = operators.first   
-        end
-        if operator
-          operator.url = data[:url]
-          operator.company_no = data[:company_no]
-          if data[:reg_address]
-            registered_address = data[:reg_address].strip.gsub("\n", ", ").gsub(" ,", ",").gsub(",,", ',')
-            operator.registered_address = registered_address.chomp(",")
-          end
-          operator.notes = data[:notes]
-          contact = operator.operator_contacts.build(:email => data[:email].strip, 
-                                                     :category => 'Other')
-          yield operator
-        end
-      end
+      data[:id] = row['ID']
+      data[:operator] = row['Operator name']
+      data[:email] = row['Contact email']
+      data[:phone] = row['Phone number']
+      data[:company_no] = row['Registered company no']
+      data[:registered_address] = row["Registered address"]
+      data[:notes] = row['Notes']
+      data[:url] = row['Company URL']
+      data[:contact_category] = row['Contact category']
+      data[:contact_location] = row['Contact location']
+            
+      id = data[:id].to_i
+      name = data[:operator].strip
+      operator_fields = [:phone, :company_no, :registered_address, :notes, :url]
+      contact_fields = [:email, :contact_category, :contact_location]
 
+      if id != 0
+        operator = Operator.find(id)
+        if operator.name != name
+          puts "Name mismatch for id #{id}: #{name} vs. #{operator.name}" if dryrun
+        else
+          
+          operator_fields.each do |operator_field|
+            existing_value = operator.send(operator_field)
+            new_value = data[operator_field]
+            new_value = nil if new_value == '???'
+            if operator_field == :registered_address && !new_value.blank?
+              new_value = normalize_address(new_value)
+            end
+            new_value = clean_field(new_value)
+            if existing_value.blank? && !new_value.blank?
+              if dryrun
+                puts "#{id} #{operator_field} new value #{new_value}" 
+              else 
+                operator.send("#{operator_field}=", new_value)
+              end
+            elsif (!existing_value.blank?) && (!new_value.blank?) && existing_value != new_value
+              if dryrun
+                puts "Conflict #{id} #{operator_field}: was #{existing_value} now #{new_value}" 
+              else
+                operator.send("#{operator_field}=", new_value)
+              end
+            end
+          end
+          email = clean_field(data[:email])
+          category = clean_field(data[:contact_category])
+          if category.blank?
+            category = 'Other'
+          end
+          if !email.blank?
+            if operator.operator_contacts.empty?
+              if dryrun
+                puts "new contact for #{operator.name}: #{email} #{category}" 
+              else
+                contact = operator.operator_contacts.build(:email => email, :category => category, :deleted => false)            
+              end
+            else
+              matches = operator.operator_contacts.select{ |contact| contact.email == email && contact.category == category }
+            
+              if matches.empty?
+                if dryrun
+                  existing_info = operator.operator_contacts.map{|contact| [contact.email, contact.category]}
+                  puts "new contact for #{operator.name}: #{email} #{category} existing #{existing_info.inspect}"
+                else
+                  contact = operator.operator_contacts.build(:email => email, :category => category, :deleted => false)            
+                end
+              end
+            end
+          end
+        end
+      else
+        if dryrun
+          puts "New record? #{name}"
+        end
+      end
+      if block_given?
+        yield operator
+      end
     end
   end
 

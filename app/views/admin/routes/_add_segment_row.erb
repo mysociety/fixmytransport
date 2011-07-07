@@ -3,12 +3,12 @@
   <%= segment_fields.object.journey_pattern.id %>
 </td>
 <td>
-  <%= raw text_field_tag :from_stop_name, segment_fields.object.from_stop ? stop_name_for_admin(segment_fields.object.from_stop) : '', { :class => 'from_stop_name_auto', :size => 30 }   %>
+  <%= raw text_field_tag :from_stop_name, segment_fields.object.from_stop_id ? stop_name_for_admin(segment_fields.object.from_stop) : '', { :class => 'from_stop_name_auto', :size => 30 }   %>
   <%= raw segment_fields.hidden_field :from_stop_id, { :class => 'from-stop-id' }  %>
 </td>
 <td><%= raw segment_fields.check_box :from_terminus %></td>
 <td>
-  <%= raw text_field_tag :to_stop_name, segment_fields.object.to_stop ? stop_name_for_admin(segment_fields.object.to_stop) : '', { :class => 'to_stop_name_auto', :size => 30 }   %>
+  <%= raw text_field_tag :to_stop_name, segment_fields.object.to_stop_id ? stop_name_for_admin(segment_fields.object.to_stop) : '', { :class => 'to_stop_name_auto', :size => 30 }   %>
   <%= raw segment_fields.hidden_field :to_stop_id, { :class => 'to-stop-id' }  %>
   <%= raw segment_fields.hidden_field :_add, { :value => "1" } %>
 </td>

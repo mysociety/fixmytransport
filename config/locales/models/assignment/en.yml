@@ -1,5 +1,4 @@
 en:
-  the_problem_reporter: The person who reported the problem
   activerecord:
     errors:
       models:
@@ -7,6 +6,8 @@ en:
           attributes: 
             name:
               blank: "Please give the name of the person or organisation to write to"
+            description:
+              blank: "Please give a description of this person or organization"
             email:
               blank: "Please give the email address to write to"
               invalid: "Please check the format of the email address"

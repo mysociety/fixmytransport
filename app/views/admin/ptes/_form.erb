@@ -1,11 +1,11 @@
 <%- if !@pte.errors.empty? %>
   <div class='form-error'>
-    <%= t(:pte_form_error) %>
+    <%= t('admin.pte_form_error') %>
   </div>
 <%-end %>
 <div class='form-field'>
   <%- if @pte.errors.on(:name) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @pte, :name %>
     </div>
   <%- end %>
@@ -15,7 +15,7 @@
 
 <div class='form-field'>
   <%- if @pte.errors.on(:wikipedia_url) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @pte, :wikipedia_url %>
     </div>
   <%-end %>
@@ -25,7 +25,7 @@
 
 <div class='form-field'>
   <%- if @pte.errors.on(:email) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @pte, :email %>
     </div>
   <%- end %>
@@ -43,4 +43,4 @@
   <%= raw f.text_field :notes %>
 </div>
 
-<%= raw submit_tag t(:go) %>
+<%= raw submit_tag t('admin.go') %>

@@ -1,0 +1,16 @@
+<div id="main-content" class="container">
+  <div id="choose" class="container font-1">
+	<h1><%= t('problems.convert.header') %></h1>
+	<h2><%= t('problems.convert.subheader') %></h2>
+	<p><%= raw t('problems.convert.intro')%></p>
+    <div class="left">
+      <a href="?convert=no" class="button red"><%= t('problems.convert.no_thanks')%></a>
+      <p><%= raw t('problems.convert.no_explanation')%></p>
+    </div>
+	<span class="middle"><%= t('problems.convert.or')%></span>
+    <div class="right">
+      <a href="?convert=yes" class="button green"><%= t('problems.convert.start_campaign') %></a>
+      <p><%= raw t('problems.convert.yes_explanation') %></p>
+    </div>
+  </div>
+</div>

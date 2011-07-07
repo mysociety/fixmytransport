@@ -2,40 +2,23 @@ require 'spec_helper'
 
 describe Problem do
   
-  describe 'when validating a reporter_name' do 
-    
-    before do 
-      @problem = Problem.new()
-      @problem.stub!(:location).and_return(mock('location'))
-      @full_name_error = "Please enter your full name"
+  describe 'when asked if it is visible' do 
+  
+    it 'should return true if the status is confirmed' do 
+      @problem = Problem.new
+      @problem.status = :confirmed
+      @problem.visible?.should == true
     end
     
-    it 'should add an error if the name is some variant of "anon"' do 
-      ['anon', 'anonymous', 'anonymos', 'anonymously'].each do |anon_variant|
-        @problem.errors.clear
-        @problem.reporter_name = anon_variant
-        @problem.validate_reporter_name
-        @problem.errors.on(:reporter_name).should == @full_name_error
-      end
-    end
-    
-    it 'should add an error if the name is less than 5 characters' do 
-      @problem.reporter_name = 'A B'
-      @problem.valid?
-      @problem.errors.on(:reporter_name).should == @full_name_error
-    end
-    
-    it 'should add an error if the name does not have a non space, followed by a space, followed by a non space' do 
-      ['Firstname ', ' Lastname'].each do |no_space|
-        @problem.errors.clear
-        @problem.reporter_name = no_space
-        @problem.validate_reporter_name
-        @problem.errors.on(:reporter_name).should == @full_name_error
-      end
+    it 'should return false if the status is new' do 
+      @problem = Problem.new
+      @problem.status = :new
+      @problem.visible?.should == false
     end
     
   end
   
+    
   describe 'when confirming' do 
     
     before do
@@ -46,6 +29,7 @@ describe Problem do
       @problem.stub!(:save!).and_return(true)
       @problem.stub!(:organization_info).and_return([])
       @problem.stub!(:emailable_organizations).and_return([])
+      @problem.stub!(:create_assignments)
       Assignment.stub!(:complete_problem_assignments)
     end
     
@@ -69,6 +53,11 @@ describe Problem do
         @problem.confirm!
         @problem.status.should == :confirmed
         @problem.confirmed_at.should > @confirmation_time
+      end
+      
+      it 'should create assignments associated with the problem' do 
+        @problem.should_receive(:create_assignments)
+        @problem.confirm!
       end
 
       it 'should set the "publish-problem" assignments associated with this user and problem as complete' do 
@@ -133,7 +122,7 @@ describe Problem do
     it 'should give the campaign email address of the reporter if there is an associated campaign' do 
       mock_campaign = mock_model(Campaign)
       @problem.stub!(:campaign).and_return(mock_campaign)
-      @mock_reporter.should_receive(:campaign_email_address).with(mock_campaign)
+      mock_campaign.should_receive(:email_address)
       @problem.reply_email
     end
     

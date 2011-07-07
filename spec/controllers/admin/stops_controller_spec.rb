@@ -3,11 +3,25 @@ require 'spec_helper'
 describe Admin::StopsController do
 
   describe 'GET #index' do 
+    
+    describe 'when the app is in closed beta' do 
+
+      before do 
+        @controller.stub!(:app_status).and_return('closed_beta')
+      end
+      
+      it 'should not require http authentication' do 
+        get :index
+        response.status.should == '200 OK'
+      end
+    
+    end
   
     it 'should ask for all stops, ordered by common name, paginated by default' do 
       Stop.should_receive(:paginate).with(:page => nil, 
                                            :conditions => [], 
-                                           :order => 'common_name')
+                                           :include => :locality,
+                                           :order => 'lower(common_name)')
       get :index
     end
     
@@ -16,7 +30,8 @@ describe Admin::StopsController do
       Stop.should_receive(:paginate).with(:page => nil, 
                                           :conditions => [query_string, 
                                           "something%", "%something%", "something%", "%something%"],
-                                          :order => 'common_name')
+                                          :include => :locality,
+                                          :order => 'lower(common_name)')
       get :index, :query => 'Something'
     end
     
@@ -25,7 +40,8 @@ describe Admin::StopsController do
       Stop.should_receive(:paginate).with(:page => nil, 
                                            :conditions => [query_string, 
                                             "34%", "%34%", "34%", "%34%", 34],
-                                            :order => 'common_name')
+                                            :include => :locality,
+                                            :order => 'lower(common_name)')
       get :index, :query => '34'
     end
     
@@ -33,7 +49,8 @@ describe Admin::StopsController do
       Stop.stub!(:name_or_id_conditions).and_return("conditions")
       Stop.should_receive(:paginate).with(:page => nil, 
                                           :conditions => "conditions",
-                                          :order => 'common_name')
+                                          :include => :locality,
+                                          :order => 'lower(common_name)')
       get :index, :mode => '1'
     end
     
@@ -43,14 +60,16 @@ describe Admin::StopsController do
       query_string = '(LOWER(common_name) LIKE ? OR LOWER(common_name) LIKE ? OR LOWER(street) LIKE ? OR LOWER(street) LIKE ?) AND stop_type in (?)'
       Stop.should_receive(:paginate).with(:page => nil, 
                                            :conditions => "conditions",
-                                            :order => 'common_name')
+                                           :include => :locality,
+                                          :order => 'lower(common_name)')
       get :index, :mode => '1', :query => 'something'
     end
     
     it 'should ask for routes by page' do 
       Stop.should_receive(:paginate).with(:page => '3', 
                                            :conditions => [], 
-                                           :order => 'common_name')
+                                           :include => :locality,
+                                           :order => 'lower(common_name)')
       get :index, :page => '3'
     end
   

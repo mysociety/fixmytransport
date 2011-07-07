@@ -1,16 +1,18 @@
 Hi <%= raw @user.name %>,
 
 You just tried to sign up to FixMyTransport, when you
-already have an account. Your name and password have been
+already have an account. Your account details have been
 left as they previously were.
 
-Please click on the link below to log in:
+Please click on the link below to sign in<%-if @action%><%=" and #{@action}"%><%- end %>:
 
 <%= raw @account_confirmation_url %>
 
-You can then use the account page to change your password if you like. 
-
 If your email program does not let you click on this link, copy
-and paste it into your web browser and press return.
+and paste it into your web browser and press return. If you continue to have problems please contact us.
 
-If you continue to have problems please contact us.
+You can then use the account page to change your password if you like. 
+<%= render :partial => 'shared/mailer/model_confirmation', :locals => { :model => @unconfirmed_model }%>
+Yours,
+
+The FixMyTransport team

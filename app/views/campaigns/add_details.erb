@@ -1,0 +1,94 @@
+<%- content_for :javascript do %>
+<noscript>
+	<style>
+		#banner {
+			padding:10px;
+		}
+		.form-1 ul li {
+			width:100%;
+		}
+		.form-1 input,
+		.form-1 textarea {
+			clear:both;
+		}
+		.tipbox, .tipbox.fixed {
+			position:relative;
+			left: 0;
+			top:10px;
+			display:inline;
+			float:left;
+			width:380px;
+			background:#F4F4F4;
+			color: #333333;
+		}
+		.tipbox a, .tipbox.fixed a {
+			color:#048fc2;
+		}
+		.tipbox .tip-close, .tipbox.fixed .tip-close,
+		.tipbox h5, .tipbox.fixed h5 {
+			display:none;
+		}
+		.button {
+			display:block;
+			float:left;
+			clear:left;
+			margin-top:20px;
+		}
+	</style>
+</noscript>
+<%- end %>
+
+<div id="banner">
+	<div class="container">
+		<h1><%= t('campaigns.add_details.add_details') %></h1>
+	</div>
+</div>
+
+<div id="greybanner">
+	<div class="container">
+		<p><%= t('campaigns.add_details.add_details_instructions') %></p>
+	</div>
+</div>
+	<div id="main-content" class="container">
+  <%- form_for @campaign, :url => add_details_campaign_path(@campaign), :html => {:class => 'form-1', :method => :post, :multipart => true} do |f| %>
+		<ul>
+			<li>
+			  <%- if @campaign.errors.on('title') %>
+			    <%- title_error_style = '' %>
+			  <%- else %>
+			    <%- title_error_style = 'display: none;'%>
+			  <%- end %>
+          <div class='error' style="<%= title_error_style %>" role="alert">
+            <%= @campaign.errors.on('title') %>
+          </div>
+          <%=  f.label :title, raw("Please help me persuade <span>#{@campaign.responsible_org_descriptor}</span> to:") %>
+          <%= raw f.text_field :title %>
+				<div class="tipbox">
+					<a href="#" class="tip-close"><%= t('campaigns.add_details.tip_close') %></a>
+					<h5><%= t('campaigns.add_details.make_a_headline')%></h5>
+					<p><%= t('campaigns.add_details.good_headline') %></p>
+					<p><%= t('campaigns.add_details.eg') %>"<em><%= t('campaigns.add_details.headline_example')%></em>"</p>
+				</div>
+			</li>
+
+			<li>
+			  <%- if @campaign.errors.on('description') %>
+			    <%- description_error_style = '' %>
+			  <%- else %>
+			    <%- description_error_style = 'display: none;'%>
+			  <%- end %>
+          <div class='error' style="<%= description_error_style %>">
+            <%= @campaign.errors.on('description') %>
+          </div>
+			   <%= f.label :description, "Description" %>
+			   <%= raw f.text_area :description %>
+				<div class="tipbox">
+					<a href="#" class="tip-close"><%= t('campaigns.add_details.tip_close') %></a>
+					<h5><%= t('campaigns.add_details.add_short_description') %></h5>
+					<p><%= t('campaigns.add_details.description_advice')%></p>
+				</div>
+				<button type="submit" class="button"><%= t('campaigns.add_details.details_submit') %></button>
+			</li>
+		</ul>
+	<%- end %>
+	</div>

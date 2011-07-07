@@ -8,7 +8,6 @@ class JourneyPattern < ActiveRecord::Base
   has_paper_trail
 
   def route_segment_invalid(attributes)
-    puts "trying route segment attributes #{attributes}"
     (attributes['_add'] != "1" and attributes['_destroy'] != "1") or \
     attributes['from_stop_id'].blank? or attributes['to_stop_id'].blank?
   end

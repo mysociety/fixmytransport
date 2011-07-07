@@ -1,0 +1,44 @@
+<%- if !@campaign.errors.empty? %>
+  <div class='form-error'>
+    <%= t('admin.campaign_form_error') %>
+  </div>
+<%- end %>
+
+<div class='form-field'>
+  <%- if @campaign.errors.on(:title) %>
+    <div class='error'>
+      <%= error_message_on @campaign, :title   %>
+    </div>
+  <%- end %>
+  <%= raw label(:campaign, :title) %>
+  <%= raw f.text_field :title %>
+</div>
+
+<div class='form-field'>
+  <%- if @campaign.errors.on(:description) %>
+    <div class='error'>
+      <%= error_message_on @campaign, :description   %>
+    </div>
+  <%- end %>
+  <%= raw label(:campaign, :description) %>
+  <%= raw f.text_area :description, :rows => 6 %>
+</div>
+
+<div class='form-field'>
+  <%- if @campaign.errors.on(:status_code) %>
+    <div class='error'>
+      <%= error_message_on @campaign, :status_code %>
+    </div>
+  <%- end %>
+  <%= raw f.label :status %>
+  <%= raw f.select :status_code, Campaign.statuses, {:prompt => true, :selected => @campaign.status_code } %>
+</div>
+<div>
+  <%= t('admin.created_at') %>: <%= @campaign.created_at %>
+</div>
+<div> 
+  <%= t('admin.updated_at') %>: <%= @campaign.updated_at %>
+</div>
+<%= raw submit_tag t('admin.go') %>
+
+

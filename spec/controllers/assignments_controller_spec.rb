@@ -19,7 +19,7 @@ describe AssignmentsController do
       it 'should assign variables for an appropriate message' do
         make_request
         assigns[:name].should == 'a FixMyTransport boffin'
-        assigns[:access_message].should == @expected_access_message
+        assigns[:access_message].should == "shared.access.#{@expected_access_message}"
       end
 
     end
@@ -30,7 +30,7 @@ describe AssignmentsController do
         controller.stub!(:current_user).and_return(nil)
         make_request
         response.should redirect_to(login_url)
-        flash[:notice].should == "Login as a FixMyTransport boffin to create an assignment for this campaign"
+        flash[:notice].should == "Sign in as a FixMyTransport boffin to create an assignment for this campaign"
       end
 
     end
@@ -96,6 +96,7 @@ describe AssignmentsController do
     def make_request
       post :create, { :campaign_id => 44,
                       :name => 'A name',
+                      :description => 'A description',
                       :email => 'An email',
                       :reason => 'A reason',
                       :subject => 'subject',
@@ -114,6 +115,7 @@ describe AssignmentsController do
 
       it 'should create an assignment from the attributes passed' do
         expected_data = { :name => 'A name',
+                          :description => 'A description',
                           :email => 'An email',
                           :reason => 'A reason',
                           :subject => 'subject',
@@ -176,62 +178,19 @@ describe AssignmentsController do
     end
   end
 
-  describe 'GET #show' do
-
-    before do
-      @campaign = mock_model(Campaign, :editable? => true,
-                                       :visible? => true,
-                                       :assignments => [])
-      Campaign.stub!(:find).and_return(@campaign)
-      @default_params = { :campaign_id => 55, :id => 22 }
-      @mock_assignment = mock_model(Assignment, :task_type => 'write_to_other')
-      @campaign.assignments.stub!(:find).and_return(@mock_assignment)
-    end
-
-    def make_request(params=@default_params)
-      get :show, params
-    end
-
-    it_should_behave_like "an action requiring a visible campaign"
-
-    it 'should get the assignment' do
-      @campaign.assignments.should_receive(:find).with("22")
-      make_request
-    end
-
-    describe 'if the assignment task type is "write_to_transport_organization"' do
-
-      before do
-        @mock_assignment.stub!(:task_type).and_return('write_to_transport_organization')
-      end
-
-      it 'should return a 404' do
-        make_request
-        response.status.should == '404 Not Found'
-      end
-
-    end
-
-    describe 'if the assignment task type is "write_to_other"' do
-
-      before do
-        @mock_assignment.stub!(:task_type).and_return('write_to_other')
-      end
-
-      it 'should render the "show" template' do
-        make_request
-        response.should render_template('show')
-      end
-
-    end
-
-  end
-
   describe 'GET #edit' do
 
     before do
       @default_params = { :campaign_id => 55, :id => 1 }
       @expected_access_message = :assignments_edit_access_message
+      @mock_assignment = mock_model(Assignment)
+      @campaign_user = mock_model(User, :name => 'Test Name')
+      @mock_campaign = mock_model(Campaign, :assignments => [@mock_assignment],
+                                            :editable? => true,
+                                            :visible? => true,
+                                            :initiator => @campaign_user)
+      Campaign.stub!(:find).and_return(@mock_campaign)
+      @mock_campaign.assignments.stub!(:find).and_return(@mock_assignment)
     end
 
     def make_request(params)
@@ -243,15 +202,7 @@ describe AssignmentsController do
     describe 'when responding to a request from the campaign initiator' do
 
       before do
-        @mock_assignment = mock_model(Assignment)
-        @mock_user = mock_model(User)
-        @mock_campaign = mock_model(Campaign, :assignments => [@mock_assignment],
-                                              :editable? => true,
-                                              :visible? => true,
-                                              :initiator => @mock_user)
-        Campaign.stub!(:find).and_return(@mock_campaign)
-        @mock_campaign.assignments.stub!(:find).and_return(@mock_assignment)
-        @controller.stub!(:current_user).and_return(@mock_user)
+        @controller.stub!(:current_user).and_return(@campaign_user)
       end
 
       it 'should return a 404 if the assignment is not to find a transport organization or the contact details for one' do
@@ -281,6 +232,17 @@ describe AssignmentsController do
     before do
       @default_params = { :campaign_id => 55, :id => 1, :organization_name => 'test name'}
       @expected_access_message = :assignments_update_access_message
+      @mock_assignment = mock_model(Assignment, :data= => true,
+                                                :status= => true,
+                                                :save => false)
+      @mock_user = mock_model(User, :name => 'Test Name')
+      @mock_campaign = mock_model(Campaign, :assignments => [@mock_assignment],
+                                            :editable? => true,
+                                            :visible? => true,
+                                            :initiator => @mock_user,
+                                            :campaign_events => [])
+      Campaign.stub!(:find).and_return(@mock_campaign)
+      @mock_campaign.assignments.stub!(:find).and_return(@mock_assignment)
     end
 
     def make_request(params)
@@ -292,17 +254,6 @@ describe AssignmentsController do
     describe 'when responding to a request from the campaign initiator' do
 
       before do
-        @mock_assignment = mock_model(Assignment, :data= => true,
-                                                  :status= => true,
-                                                  :save => false)
-        @mock_user = mock_model(User)
-        @mock_campaign = mock_model(Campaign, :assignments => [@mock_assignment],
-                                              :editable? => true,
-                                              :visible? => true,
-                                              :initiator => @mock_user,
-                                              :campaign_events => [])
-        Campaign.stub!(:find).and_return(@mock_campaign)
-        @mock_campaign.assignments.stub!(:find).and_return(@mock_assignment)
         @controller.stub!(:current_user).and_return(@mock_user)
       end
 
@@ -326,7 +277,8 @@ describe AssignmentsController do
 
         it 'should add the organization name to the assignment data' do
           @mock_assignment.should_receive(:data=).with({ :organization_name => 'test name',
-                                                         :organization_email => nil })
+                                                         :organization_email => nil,
+                                                         :location_only => false })
           make_request(@default_params)
         end
 

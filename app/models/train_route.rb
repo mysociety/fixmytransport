@@ -31,19 +31,8 @@ class TrainRoute < Route
   end
   
   def description
+    return cached_description if cached_description
     name
-  end
-  
-  def self.match_terminus(route_segment, route, type)
-    if type == :to
-      (route_segment.to_terminus? && 
-      (route.terminuses.include? route_segment.to_stop_area or 
-      !route.stops_or_stations.include? route_segment.to_stop_area))
-    elsif type == :from
-      (route_segment.from_terminus? && 
-      (route.terminuses.include? route_segment.from_stop_area or 
-      !route.stops_or_stations.include? route_segment.from_stop_area))
-    end
   end
   
 end

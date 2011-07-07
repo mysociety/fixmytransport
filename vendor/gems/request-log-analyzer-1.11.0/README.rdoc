@@ -1,0 +1,49 @@
+= Request-log-analyzer
+
+This is a simple command line tool to analyze request log files in various formats to produce a performance report. Its purpose is to find what actions are best candidates for optimization.
+
+* Analyzes log files. Currently supports: Amazon S3, Apache, Delayed::Job, Merb, Mysql, PostgreSQL, Rack, Rails and more.
+* Combines multiple files and decompresses compressed files, which comes in handy if you are using logrotate.
+* Uses several metrics, including cumulative request time, mean request time, process blockers, database and rendering time, HTTP methods and statuses, Rails action cache statistics, etc.) (Sample output: http://github.com/wvanbergen/request-log-analyzer/wiki/sample-output)
+* Low memory footprint and reasonably fast, so it is safe to run on a production server.
+* MIT licensed
+
+See the project wiki at http://github.com/wvanbergen/request-log-analyzer/wiki for documentation and additional information.
+
+== Installation & basic usage
+
+Install request-log-analyzer as a Ruby gem (you might need to run this command
+as root by prepending +sudo+ to it):
+
+  $ gem install request-log-analyzer
+
+To analyze a Rails log file and produce a performance report, run
+request-log-analyzer like this:
+
+  $ request-log-analyzer log/production.log
+
+For more details, other file formats, and available command line options, see the project's wiki at http://github.com/wvanbergen/request-log-analyzer/wiki
+
+== Benchmarking on different rubies
+
+  $ time ./bin/request-log-analyzer 40MBRailsFile.log
+
+  ruby-1.9.2-p0   15.19s user 0.95s system 99% cpu 16.143 total
+  ruby-1.8.7      25.21s user 1.02s system 99% cpu 26.238 total
+  jruby-1.5.3     32.64s user 4.84s system 99% cpu 37.629 total
+  rbx             46.60s user 2.71s system 108% cpu 45.324 total
+  macruby         75.00s user 20.10s system 110% cpu 1:26.13 total
+
+== Additional information
+
+Request-log-analyzer was designed and built by Willem van Bergen and Bart ten
+Brinke.
+
+Do you have a rails application that is not performing as it should? If you need
+an expert to analyze your application, feel free to contact either Willem van
+Bergen (willem@railsdoctors.com) or Bart ten Brinke (bart@railsdoctors.com).
+
+* Project wiki at GitHub: http://github.com/wvanbergen/request-log-analyzer/wiki
+* Issue tracker at GitHub: http://github.com/wvanbergen/request-log-analyzer/issues
+* railsdoctors homepage: http://railsdoctors.com
+* wvanbergen's blog posts: http://techblog.floorplanner.com/tag/request-log-analyzer

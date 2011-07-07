@@ -1,0 +1,47 @@
+<h2><%= t('admin.campaigns') %></h2>
+<%= render :partial => "admin/shared/index_js" %>
+<%= render :partial => "admin/shared/search_form", :locals => { :skip_transport_mode => true }  %>
+<%= will_paginate @campaigns, { :admin => true } %>
+
+<table class='campaigns index-list'>
+  <tr>
+    <th width='5%'><%= t('admin.id') %></th>
+    <th width='10%'><%= t('admin.title') %></th>
+    <th width='10%'><%= t('admin.key') %></th>
+    <th width='10%'><%= t('admin.campaign_problem') %></th>
+    <th width='10%'><%= t('admin.location') %></th>
+    <th width='10%'><%= t('admin.transport_mode') %></th>
+    <th width='10%'><%= t('admin.initiator') %></th>
+    <th width='10%'><%= t('admin.responsible_org') %></th>
+    <th width='5%'><%= t('admin.status') %></th>
+    <th width='5%'><%= t('admin.created_at') %></th>
+    <th width='5%'><%= t('admin.updated_at') %></th>
+  </tr>
+  <%-@campaigns.each do |campaign| %>
+    <tr class='<%= cycle("odd", "even") %>'>
+      <td>
+        <%= link_to(campaign.id, main_url(campaign_path(campaign)), :target => '_blank') %>
+        <%= link_to("(#{t('admin.admin')})", admin_url(admin_campaign_path(campaign.id)), :target => '_blank') %></td>
+      <td><%= campaign.title %></td>
+      <td><%= link_to(campaign.problem.subject, admin_url(problem_path(campaign.problem)))%></td>
+      <td><%= campaign.key %></td>
+      <td><%= link_to(campaign.location.name, admin_location_url(campaign.location))%></td>
+      <td><%= campaign.problem.transport_mode_text %></td>
+      <td><%= campaign.initiator.name %></td>
+      <td><%- if campaign.problem.operator %>
+            <%= link_to(campaign.problem.operator.name, admin_operator_url(campaign.problem.operator.id)) %>
+          <%- end %>
+          <%- if campaign.problem.council_info%>
+            <%= campaign.problem.council_info %>
+          <%- end %>
+          <%- if campaign.problem.passenger_transport_executive %>
+            <%= link_to(campaign.problem.passenger_transport_executive.name, admin_pte_url(campaign.problem.passenger_transport_executive.id))%>
+          <%- end %>
+      </td>
+      <td><%= campaign.status %></td>
+      <td><%= campaign.created_at.to_s(:short) %></td>
+      <td><%= campaign.updated_at.to_s(:short) %></td>
+    </tr>
+  <%- end %>
+</table>
+<%= will_paginate @campaigns, { :admin => true } %>

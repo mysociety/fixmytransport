@@ -82,6 +82,22 @@ namespace :nptg do
     
   end
   
-
+  namespace :post_load do
+    
+    desc 'Split the name and qualifier for localities, which in the 2010 data release are in one field with the qualifier in brackets'
+    task :split_locality_qualifiers => :environment do 
+      Locality.find_each(:conditions => ["name like ?", '%%(%%']) do |locality|
+        name_pattern = /\s*(.*)\s+\((.*)\)\s*/
+        match_data = name_pattern.match(locality.name)
+        name = match_data[1]
+        qualifier = match_data[2]
+        puts "name: #{name}, qualifier: #{qualifier}"
+        locality.name = name
+        locality.qualifier_name = qualifier
+        locality.save!
+      end
+    end
+    
+  end
   
 end

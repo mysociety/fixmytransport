@@ -1,0 +1,23 @@
+<div class='form-field'>
+  <%- if @campaign_update.errors.on(:text) %>
+    <div class='error'>
+      <%= error_message_on @campaign_update, :text   %>
+    </div>
+  <%- end %>
+  <%= raw label(:campaign_update, :text) %>
+  <%= raw f.text_area :text, :rows => 6 %>
+</div>
+
+<div>
+  <%= t('admin.created_at') %>: <%= @campaign_update.created_at %>
+</div>
+<div> 
+  <%= t('admin.updated_at') %>: <%= @campaign_update.updated_at %>
+</div>
+<div> 
+  <%= t('admin.sent_at') %>: <%= @campaign_update.sent_at %>
+</div>
+
+<%= raw submit_tag t('admin.go') %>
+
+

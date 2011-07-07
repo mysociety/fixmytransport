@@ -51,7 +51,7 @@ class OutgoingMessage < ActiveRecord::Base
   
   def quoted_incoming_message
     if incoming_message
-      return "\n\n-----Original Message-----\n\n#{incoming_message.body_for_quoting}\n"
+      return "\n\n-----#{I18n.translate('outgoing_messages.new.original_message')}-----\n\n#{incoming_message.body_for_quoting}\n"
     else
       return ""
     end
@@ -59,7 +59,7 @@ class OutgoingMessage < ActiveRecord::Base
   
   def reply_to_incoming_subject
     if incoming_message
-      return "Re: #{incoming_message.subject}"
+      return "#{I18n.translate('outgoing_messages.new.re')}: #{incoming_message.subject}"
     else
       return ""
     end
@@ -79,7 +79,7 @@ class OutgoingMessage < ActiveRecord::Base
     if recipient
       return recipient.name
     elsif incoming_message
-      return incoming_message.from
+      return incoming_message.safe_from
     elsif assignment 
       return assignment.data[:name]
     else

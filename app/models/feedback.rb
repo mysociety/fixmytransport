@@ -15,6 +15,7 @@ class Feedback < ActiveRecord::BaseWithoutTable
   column :name, :string
   column :subject, :string
   column :message, :string
+  column :feedback_on_uri, :string
 
   validates_presence_of :email, :name, :subject, :message
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")

@@ -5,33 +5,35 @@
 </div>
 <h2 class='route-header'><%= @route.name %></h2>
 <%- form_for @route, :url => admin_url(admin_route_path(@route.id)), :html => { :method => :delete, :class => 'destroy-link' } do |f| %>
-  <%= raw hidden_field_tag :confirmation, t(:are_you_sure), {:id => 'destroy_confirmation'} %>
-  <%= raw submit_tag t(:destroy) %>
+  <%= raw hidden_field_tag :confirmation, t('admin.are_you_sure'), {:id => 'destroy_confirmation'} %>
+  <%= raw submit_tag t('admin.destroy') %>
 <%- end %>
 <div class='source-admin-areas'>
   <b><%= "Admin areas:" %></b>
   <%= @route.source_admin_areas.map{|admin_area| admin_area.name }.to_sentence %>
 </div>
 
-<h3><%= t(:merge) %></h3>
+<h3><%= t('admin.merge') %></h3>
 <%- form_tag admin_url(merge_admin_routes_path), :method => :get do %>
-  <%= raw label_tag 'routes[]', t(:route_merge_label) %>
+  <%= raw label_tag 'routes[]', t('admin.route_merge_label') %>
   <%= raw text_field_tag 'routes[]', '' %>
   <%= raw hidden_field_tag 'routes[]', @route.id %>
-  <%= raw submit_tag t(:route_merge_submit) %>
+  <%= raw submit_tag t('admin.route_merge_submit') %>
 <%- end %>
 <%- form_for [:admin, @route.becomes(Route)], :url => admin_url(admin_route_path(@route.id)), :html => { :class => 'route-form' } do |f| %>
   <%= render :partial => "form", :locals => { :f => f } %>
   <%- f.object.journey_patterns.build(:_add => "1") %>
-  <h3 class='admin-section-control'><%= t(:route_segments) %></h3>
-  <div class='admin-section'><%= render :partial => "route_segments", :locals => { :f => f } %></div>
-  <p><%= link_to t(:on_main_site), main_url(route_path(@route.region, @route)), :target => '_blank' %></p>
-  <p><%= link_to t(:external_search_route), external_search_link("#{@route.description}"), :target => '_blank' %></p>
+  <h3><%= link_to(t('admin.route_segments'), admin_url(admin_route_path(@route.id, :show_journeys => 1)) )%></h3>
+  <%- if params[:show_journeys] %>
+  <div><%= render :partial => "route_segments", :locals => { :f => f } %></div>
+  <%- end %>
+  <p><%= link_to t('admin.on_main_site'), main_url(route_path(@route.region, @route)), :target => '_blank' %></p>
+  <p><%= link_to t('admin.external_search_route'), external_search_link("#{@route.description}"), :target => '_blank' %></p>
   
-  <%= render :partial => "route_operators", :locals => { :f => f, :route_operators => @route.route_operators, :title => t(:operators) } %>
-  <%= render :partial => "route_operators", :locals => { :f => f, :route_operators => @route_operators, :title => t(:operator_code_matches) } %>
+  <%= render :partial => "route_operators", :locals => { :f => f, :route_operators => @route.route_operators, :title => t('admin.operators') } %>
+  <%= render :partial => "route_operators", :locals => { :f => f, :route_operators => @route_operators, :title => t('admin.operator_code_matches') } %>
   
-  <h3><%= t(:assign_an_operator) %></h3>
+  <h3><%= t('admin.assign_an_operator') %></h3>
   <%- f.fields_for :route_operators, RouteOperator.new do |route_operator_fields| %>
     <div class='form-field'>
       <%= raw label_tag :operator_name %>
@@ -43,7 +45,7 @@
   <%- end %>
 <%- end %>
 <script type="text/javascript">
-  var routeSegments = <%= raw route_segment_js(@route) %>;
+  var routeSegments = <%= raw route_segment_js(@route, line_only=true) %>;
   jQuery(document).ready(function(){
     setupShowRoute();
   });

@@ -1,6 +1,36 @@
-<p class='large-map-intro'>
-  <%= t(:multiple_locations_intro) %>
-</p>
-<div id='large-map'>
-  <%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => @other_locations, :link_type => :problem, :height => LARGE_MAP_HEIGHT, :width => LARGE_MAP_WIDTH  } %>
+<div id="banner">
+	<div class="container">
+		<h1><%= t('problems.choose_location.header')%></h1>
+	</div>
+</div>
+<%- if params[:choose_from_list] %>
+<div id="greybanner">
+	<div class="container">
+		<p><%= t('problems.choose_location.choose_location')%></p>
+	</div>
+</div>
+<div id="main-content" class="container">
+   <%- page_results = (@locations + @other_locations).paginate({:page => params[:page], :per_page => 20 }) %>
+  <ul id="large-ul">
+  <%- page_results.each do |location| %>
+    <li class='location'>
+      <%= link_to(location.description, map_link_url(location, :problem)) %>
+    </li>
+  <%- end %>
+  </ul>
+  <%= will_paginate page_results %>
+<%- else %>
+<div id="greybanner">
+	<div class="container">
+		<p>
+			<%= t('problems.choose_location.multiple_locations_intro') %>
+			<%= raw t('problems.choose_location.cant_see_the_map', :link => link_to(t('problems.find_stop.choose_from_list'), params.merge("choose_from_list" => 1)))%>
+		</p>
+	</div>
+</div>
+<div id="main-content" class="container">
+	<div id='large-map'>
+		<%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => @other_locations, :link_type => :problem, :height => LARGE_MAP_HEIGHT, :width => LARGE_MAP_WIDTH  } %>
+	</div>
+<%- end %>
 </div>

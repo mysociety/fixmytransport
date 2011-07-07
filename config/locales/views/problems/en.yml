@@ -1,90 +1,159 @@
 en:
-  title: 'Title'
-  description: 'Description'
-  transport_mode: 'Transport type'
-  email: 'Email'
-  name: 'Name'
-  phone: Phone
-  optional: optional
-  location_name: 'Station/stop name'
-  area: 'Town/area/postcode'
-  route_number: 'Route'
-  location_type: 'Stop, station or route'
-  problem_location_not_found: "Sorry, we couldn't find that location."
-  postcode_not_found: "That postcode wasn't recognized."
-  area_not_found: "We couldn't find a town, area or postcode that matches what you entered."
-  go: Go!
-  multiple_localities: "We found more than one place matching \"%{name}\". Please select one, or try a different search if yours is not here:"
-  within_multiple_localities: "We found more than one place with matches for \"%{name}\". Please select one, or try a different search if yours is not here:"
-  multiple_locations_intro: "Choose a stop or station by clicking on it, or zoom in on an area to see other stops and stations."
-  multiple_routes_intro: "Choose a route by clicking on it, or try a different search if yours is not here: "
-  problem_not_found: "We couldn't locate your problem in the database. If you've copied the URL from an email, please check that you copied it exactly."
-  is_this: This is
-  a_one_off: a problem relating to a particular journey
-  an_ongoing_problem: an ongoing problem that affects many journeys
-  posted_time: "%{time} ago"
-  and: and
-  added: added
-  reported: reported
-  problem_time: Journey time
-  problem_date: Journey date
-  by: "by %{name}"
-  pte_advice: "%{pte_link} is responsible for public transport in this area."
-  problem_will_be_sent: "Your problem will be sent by email to %{organization}. It will also be displayed on the site, with your name."
-  problem_will_be_sent_multiple_operators: "More than one company operates this %{location_type}. Your problem <strong>will be sent to the operator</strong> you select below. It will also be displayed on the site, with your name."
-  problem_will_be_sent_multiple: "Your problem will be sent by email to %{organizations}. It will also be displayed on the site, with your name."
-  no_organizations_for_problem: "We do not yet know who is responsible for this %{location_type}. If you submit a problem it will be displayed on the site, with your name, but will not be sent to the responsible organization until you find out who that is."
-  no_details_for_organization: "We do not yet have contact details for %{organization}. If you submit a problem here it will be displayed on the site, with your name, but it will <strong>not</strong> be sent to %{organization_unstrong} until you find an email address for them."
-  no_details_for_organizations: "We do not yet have contact details for %{organizations}.  If you submit a problem here it will be displayed on the site, with your name, but it will <strong>not</strong> be sent to them until you find an email address for them."
-  no_details_for_some_operators: "We do not yet have all the contact details for this %{location_type}. If you submit a problem here relating to %{uncontactable}, it will be displayed on the site, with your name, but it will <strong>not</strong> be sent to them until you find an email address for them. If your problem relates to %{contactable}, it will be sent straight away."
-  no_details_for_some_councils: "Your problem will be sent by email to %{councils}. It will also be displayed on the site, with your name."
-  thanks_for_adding_problem: "Thanks, you've successfully confirmed your problem. "
-  nearly_ready: "Brilliant! We're nearly ready to send your message."
-  see_your_problem: See your problem on the site
-  reported_at: "Reported at %{time}"
-  problem_location: "to %{link}"
-  report_a_problem_here: Report a problem here
-  report_a_problem: Report a problem
-  reporting_a_problem: "%{location}: Reporting a problem"
-  never_show_email: (We never show your email address or phone number)
-  sent_time: "Sent to %{recipient} %{interval} later"
-  include_journey_detail: "If your problem relates to a specific journey, please include as much detail as possible about your journey:" 
-  where_to_and_from: where you were travelling to and from
-  time_and_date: the time and the date
-  driver_and_registration: "any other details you may have that will help identify the %{type} (like its registration number) and the driver."
-  give_details: Please fill in the details of the problem below.
-  the: The
-  stop_include_details: "%{responsible} won't be able to help unless you give as much detail as you can about the problem, so please describe the exact nature of the problem, what it is, how long it has been there, etc."
-  pick_a_category: -- Pick a category --
-  select_operator: -- Choose the name of the company --
-  next_steps: Next steps
-  latest_news: Latest News
-  provide_an_update: Provide an update
-  post: Post
-  mark_fixed: This problem has been fixed
-  reported_on: "Reported on %{date}"
-  update_not_found: "We couldn't locate your comment or update in the database. If you've copied the URL from an email, please check that you copied it exactly."
-  error_on_join: "Sorry, we couldn't locate your membership of this campaign in the database. If you've copied the URL from an email, please check that you copied it exactly - if you have, please %{link} what happened."
-  error_on_leave: "Sorry, we couldn't locate your membership of this campaign in the database. If you've copied the URL from an email, please check that you copied it exactly - if you have, please %{link} what happened."
-  let_us_know: let us know
-  thanks_for_adding_update: You've successfully confirmed your update.
-  see_your_update: See your update on the site
-  updates: Updates
-  user_updates: "%{name} added an update: "
-  update_help: "Please note that updates are not sent to the organisation responsible for this %{location_type}. Your name will be public. Your information will only be used in accordance with our %{privacy_link}."
-  privacy_policy: privacy policy
-  problem_has_been_fixed: This problem has been fixed.
-  marked_as_fixed: and marked the problem as fixed.
-  or: or
-  council: council
-  passenger_transport_executive: Passenger Transport Executive
-  company: company
-  submit: Submit
-  your_problem_will_not_be_posted: your problem will not be posted.
-  holding_on_to_problem: "we'll hold on to your problem while you check your email"
-  your_update_will_not_be_posted: your update will not be posted
-  holding_on_to_update: "we'll hold on to your update while you check your email"
-  problem_created: Thanks! Your problem report has been created.
-  thanks_for_update: Thanks for adding an update!
-  problem_occurred: "This problem occurred %{date_and_time}"
-  show_all: Show all results
+  problems:
+    list:
+      reported_on: "Reported on %{date}"
+      reported_by: "by %{name}"
+    choose_area:   
+      multiple_localities: "We found more than one place matching \"%{name}\". Please select one, or try a different search if yours is not here:"
+      choose_area: Choose Area
+    choose_localities:
+      multiple_localities: "We found more than one place matching \"%{name}\". Please select one, or try a different search if yours is not here:"
+      within_multiple_localities: "We found more than one place with matches for \"%{name}\". Please select one, or try a different search if yours is not here:"
+      choose_locality: Choose Locality
+    choose_location: 
+      header: Choose a Stop or Station
+      choose_location: Choose a stop or station from the list below.
+      multiple_locations_intro: "Choose a stop or station by clicking on it, or zoom in on an area to see other stops and stations."
+      cant_see_the_map: "Can't see the map? %{link}"
+    choose_route: 
+      header: Choose a Route
+      multiple_routes_intro: "Choose a route by clicking on it, or try a different search if yours is not here: "
+      show_all: Show all results
+    convert:
+      header: "Create a Campaign?"
+      subheader: "Use FixMy Transport to create a campaign."
+      intro: "Share your report with friends, let others support<br />you and get your problem fixed."
+      no_thanks: No Thanks
+      start_campaign: Start Campaign
+      no_explanation: "If your issue was a small one-off incident that you<br />just wanted to report, then your job is done."
+      yes_explanation: "If it's a big issue that's going to require a few<br />more voices, you should start a campaign."
+      or: or
+      thanks: Thanks for reporting this problem!
+    find_bus_route:
+      what_was_the_number_and_area: "What was the route number and town or area?"
+      enter_route_number: Route number
+      enter_town_or_area: Town/Area
+      please_enter_route_number_and_area: "Please enter the route number and area"
+      title: Finding a bus route
+      route_not_found: "We could not find the route you entered."
+      area_not_found_routes: "We could not find an area called %{area}."
+      postcode_not_found_routes: "The postcode you entered wasn't recognized."
+      route_not_found_in_area: "We couldn't find a route number %{route_number} in %{area}."
+      go: Go
+    find_other_route:
+      header: Other Routes
+      subheader: "Find a Tram, Metro, Underground or Ferry route."
+      where_did_you_get_on_and_off: "Where did you get on and off?"
+      where_did_you_get_on: Where did you get on?
+      where_did_you_get_off: Where did you get off? 
+      go: Go
+      from_example: "e.g. Leicester Square"
+      to_example: "e.g. Piccadilly Circus"
+      please_enter_from_and_to: Please enter the names of the stations where you got on and off the train. 
+      route_not_found: "We could not find the route you entered."
+      ambiguous_from_stop: "'%{station_name}' could mean more than one station - please pick the one you meant from the drop-down list."
+      ambiguous_to_stop: "'%{station_name}' could mean more than one station - please pick the one you meant from the drop-down list."
+      from_stop_not_found: We didn't recognize the name of the stop you got on at. 
+      to_stop_not_found: We didn't recognize the name of the stop you got off at. 
+    find_train_route:
+      header: Find a Train Route
+      where_did_you_get_on_and_off: Where did you get on and off?
+      where_did_you_get_on: Where did you get on?
+      where_did_you_get_off: Where did you get off? 
+      from_example: e.g. London Euston
+      to_example: e.g. Birmingham New Street
+      please_enter_from_and_to: Please enter the names of the stations where you got on and off the train. 
+      ambiguous_from_stop: "'%{station_name}' could mean more than one station - please pick the one you meant from the drop-down list."
+      ambiguous_to_stop: "'%{station_name}' could mean more than one station - please pick the one you meant from the drop-down list."
+      from_stop_not_found: We didn't recognize the name of the stop you got on at. 
+      to_stop_not_found: We didn't recognize the name of the stop you got off at. 
+      go: Go
+    find_route:
+      find_a_route: Finding a route
+      bus: bus
+      train: train
+      tram: "tram"
+      or_underground: (or metro/underground)
+      ferry: ferry
+      or_coach: (or coach)
+      subheader: Choose from one of the four options below
+    find_stop:
+      where_is_it: Where is it?
+      instructions: 'Enter an area, town or postcode'
+      go: 'Go'
+      title: Finding a stop or station
+      please_enter_an_area: "Please enter an area, town or postcode"
+      postcode_not_found: "That postcode wasn't recognized."
+      area_not_found: "We couldn't find a town, area or postcode that matches what you entered."
+      choose_from_list: "Choose from a list of stops and stations"
+    frontpage: 
+      coming_soon: "FixMyTransport is coming soon...currently in closed beta testing."
+      im_a_beta_tester: "I'm a beta tester"
+      find_out_more: "Find out more"
+      title: "Report, view and campaign on public transport problems"
+      bad_bus: Had a bad bus journey?
+      bad_train: Had a bad train journey?
+      bad_ferry: Did the ferry sink?
+      report_problem: "Report your problem:"
+      get_it_fixed: and we will help you get it fixed
+      follow_on_facebook: Follow us on Facebook
+      follow_on_twitter: Follow us on Twitter
+      what_it_does: What FixMyTransport does
+      reports_problems: Reports problems
+      finds_responsible: Finds people responsible
+      grows_support: Grows support
+      tracks_progress: Tracks progress
+      gets_things_done: Gets things done
+      how_does_it_work: How does it work?
+      recent_issues: Browse Recent Issues
+      browse_routes: Bored? Browse Routes by region
+      how_details_one: We give you the tools to report your public transport problems to the correct operator or authority.
+      how_details_two: All reports and responses are posted online so that other people can support, respond and give advice.
+      step_one: "1. Report your problem"
+      step_two: "2. Find who's responsible"
+      step_three: "3. Gather Support"
+      step_four: "4. Track Progress"
+      step_five: "5. Get it sorted!"
+      step_one_details: "It might have been a one of incident you’d just like to log, or a recurring problem you’d like fixing"
+      step_two_details: "From the information you provide we can send your problem through to the correct department of the operator or local authority in charge."
+      step_three_details: "All reports are posted to the site, and you can share them with friends and followers and fellow passengers."
+      step_four_details: "Gather responses, comments and advice from operators, authorities, supporters, as well as our transport boffins."
+      step_five_details: "See your campaign gain momentum and hopefully get resolved. Get a warm fuzzy feeling for making public transport better for everybody."
+    new: 
+      reporting_a_problem: "Reporting a problem: %{location}"
+      header: Write a message.
+      write_a_message: "Please write a message below,"
+      to: To
+      operator: "The operator of the %{location}"
+      subject_help_header: Subject
+      subject_help: The subject of your message.
+      subject: Subject
+      category: Category
+      description: Description
+      description_help_header: Description
+      description_help: Try to be descriptive, but concise. 
+      or: or
+      one_of_the_uncontactable_companies: "one of the companies we don't have an email address for"
+      one_of_the_contactable_companies: "one of the companies we have an email address for"
+      create_account_to_report_problem: "Please create an account to finish reporting your problem."
+      select_operator: -- Choose the name of the company --
+      pick_a_category: -- Pick a category --
+      no_organizations_for_problem: "We do not yet know who is responsible for this %{location_type}. Your message will be public, but will not be sent to the responsible organization until you find out who that is."
+      problem_will_be_sent: "We'll then send it to %{organization}. Your message will be public."
+      problem_will_be_sent_multiple_operators: "More than one company operates this %{location_type}. Your problem <strong>will be sent to the operator</strong> you select below. Your message will be public."
+      problem_will_be_sent_multiple: "We'll then send it to %{organizations}. Your message will be public."
+      no_details_for_organization: "We do not yet have contact details for %{organization}. Your message will be public, but it will <strong>not</strong> be sent to %{organization_unstrong} until you find an email address for them."
+      no_details_for_organizations: "We do not yet have contact details for %{organizations}. Your message will be public, but it will <strong>not</strong> be sent to them until you find an email address for them."
+      no_details_for_some_operators: "We do not yet have all the contact details for this %{location_type}. If your message is for %{uncontactable}, it will be public, but it will <strong>not</strong> be sent to them until you find an email address for them. If your problem relates to %{contactable}, it will be sent straight away."
+      no_details_for_some_councils: "We'll then send it to %{councils}. Your message will be public."
+    show: 
+      fixed: Fixed
+      comments: Updates
+      comment: Update
+      posted: Posted
+      mark_fixed: This problem has been fixed
+      mark_open: This problem has not been fixed
+      sent_time: "Sent to %{recipient} %{interval} later"
+      updates: Updates
+      marked_as_fixed: and marked the problem as fixed.
+      user_says: "%{name} added an update"

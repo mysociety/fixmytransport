@@ -1,30 +1,35 @@
 en:
-  remove_operator: remove
-  check_all: Check all
-  uncheck_all: Uncheck all
-  routes: Routes
-  route: Route
-  add_operator: Add operator(s)
-  cached_description: Description
-  admin_route_number: Number
-  assign_to_route: Assign to route?
-  remove_from_route: Remove from route?
-  operator_code_matches: Operator code matches
-  no_operators: There are no operators
-  assign_an_operator: Assign an operator
-  operator_code: Operator code
-  route_segments: Route segments
-  add_a_segment: Add a segment
-  from_stop: From stop
-  to_stop: To stop
-  terminus: Terminus?
-  order: Order
-  remove: Remove
-  add_a_route: Add a route
-  route_form_error: There's a problem with this route - please see below.
-  route_has_campaigns: This route cannot be deleted as there are campaigns associated with it. 
-  merging_routes: Merging routes
-  route_merge_label: ID of route to merge with
-  route_merge_submit: Merge with another route
-  journey_pattern: Journey pattern
-  add_a_journey_pattern: Add a journey pattern
+  admin:
+    remove_operator: remove
+    check_all: Check all
+    uncheck_all: Uncheck all
+    routes: Routes
+    route: Route
+    add_operator: Add operator(s)
+    description: Description
+    admin_route_number: Number
+    assign_to_route: Assign to route?
+    remove_from_route: Remove from route?
+    operator_code_matches: Operator code matches
+    no_operators: There are no operators
+    assign_an_operator: Assign an operator
+    operator_code: Operator code
+    route_segments: Route segments
+    add_a_segment: Add a segment
+    from_stop: From stop
+    to_stop: To stop
+    terminus: Terminus?
+    order: Order
+    remove: Remove
+    add_a_route: Add a route
+    route_form_error: There's a problem with this route - please see below.
+    route_has_campaigns: This route cannot be deleted as there are campaigns associated with it. 
+    merging_routes: Merging routes
+    route_merge_label: ID of route to merge with
+    route_merge_submit: Merge with another route
+    journey_pattern: Journey pattern
+    add_a_journey_pattern: Add a journey pattern
+    same: Definitely the same
+    different: Definitely different
+    skip: Skip - some are the same
+    same_or_different: Are these routes the same or different?

@@ -1,5 +1,7 @@
-<%- if @error %>
-  <%= raw t(@error, :link => link_to(t(:let_us_know), feedback_path)) %>
-<%- else %>
-  <%= raw t(:you_are_no_longer_a_supporter, :campaign => link_to(h(@campaign.title), campaign_url(@campaign)))  %>
-<%- end %>
+<div id="main-content" class="container">
+  <%- if @error %>
+    <%= raw t(@error, :link => link_to(t('campaigns.confirm_leave.let_us_know'), feedback_path)) %>
+  <%- else %>
+    <%= raw t('campaigns.confirm_leave.you_are_no_longer_a_supporter', :campaign => link_to(h(@campaign.title), campaign_url(@campaign)))  %>
+  <%- end %>
+</div>

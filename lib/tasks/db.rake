@@ -9,6 +9,10 @@ namespace :db do
     # Load Localities, Regions, Districts, AdminAreas
     ENV['DIR'] = MySociety::Config.get('NPTG_DIR', '')
     Rake::Task['nptg:load:all'].execute
+    
+    # In 2010, the locality qualifier name was included in the name field - split it out
+    Rake::Task['nptg:post_load:split_locality_qualifiers']
+    
     Rake::Task['naptan:geo:convert_localities'].execute
 
     # Load Stops, StopAreas, give StopAreas lat/lon

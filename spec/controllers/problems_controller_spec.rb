@@ -1,28 +1,86 @@
 require 'spec_helper'
+require 'digest'
 
 describe ProblemsController do
 
   describe 'GET #frontpage' do 
     
-    def make_request
-      get :frontpage 
+    def make_request(params={})
+      get :frontpage, params
     end  
+    
+    describe 'when the app is in closed beta' do 
+      
+      before do 
+        @controller.stub!(:app_status).and_return('closed_beta')
+        MySociety::Config.stub!(:get).with('BETA_USERNAME', 'username').and_return('username')
+        MySociety::Config.stub!(:get).with('BETA_PASSWORD', 'password').and_return(Digest::MD5.hexdigest('password'))
+      end
+      
+      describe 'if the user has not authenticated with the beta credentials' do
+        
+        describe 'if the "beta" param is passed' do   
+         
+         it 'should challenge the user for beta credentials' do 
+           make_request(:beta => 1)
+           response.status.should == "401 Unauthorized"
+           response.headers['WWW-Authenticate'].should == 'Basic realm="Closed Beta"'
+         end
+         
+        end
+        
+        describe 'if the beta param is not passed' do 
+        
+           it 'should show the "beta" template' do 
+            make_request
+            response.status.should == '200 OK'
+            response.should render_template('problems/beta')
+           end
+           
+        end
+        
+      end
+    
+      describe 'if the user has authenticated with the beta credentials' do 
+      
+        it 'should show the frontpage template' do 
+          @request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64("username:password")
+          make_request
+          response.status.should == '200 OK'
+          response.should render_template('problems/frontpage')
+        end
+      end
+      
+    end
     
   end
   
-  describe 'GET #index' do 
-  
+  describe 'GET #issues_index' do 
+      
     def make_request
-      get :index
+      get :issues_index
     end
     
-    it 'should render the index template' do 
+    describe 'when the app is in closed beta' do 
+
+      before do 
+        @controller.stub!(:app_status).and_return('closed_beta')
+      end
+      
+      it 'should require http authentication' do 
+        make_request
+        response.status.should == '401 Unauthorized'
+      end
+    
+    end
+    
+    it 'should render the issues_index template' do 
       make_request
-      response.should render_template('index')
+      response.should render_template('issues_index')
     end
     
-    it 'should ask for latest problems' do 
-      Problem.should_receive(:latest).and_return([])
+    it 'should ask for recent issues' do 
+      Problem.should_receive(:find_recent_issues).and_return([])
       make_request
     end
   
@@ -67,12 +125,17 @@ describe ProblemsController do
       it 'should display an error message' do 
         make_request({:to => '', :from => ''})
         expected_message = 'Please enter the names of the stations where you got on and off the train.'
-        assigns[:error_messages].should == [expected_message]
+        assigns[:error_messages][:base].should == [expected_message]
       end
       
     end
     
     describe 'when the "to" and "from" params are supplied' do
+    
+      before do 
+        @sub_route = mock_model(SubRoute, :type => SubRoute)
+        SubRoute.stub!(:make_sub_route).and_return(@sub_route)
+      end
     
       it 'should ask the gazetteer for routes' do 
         Gazetteer.should_receive(:train_route_from_stations).and_return({:routes => [], 
@@ -86,8 +149,6 @@ describe ProblemsController do
         before do 
           @from_stop = mock_model(StopArea, :name => 'London Euston')
           @to_stop = mock_model(StopArea, :name => 'Birmingham New Street')
-          @sub_route = mock_model(SubRoute, :type => SubRoute)
-          SubRoute.stub!(:make_sub_route).and_return(@sub_route)
           RouteSubRoute.stub!(:create!).and_return(true)
           @transport_mode = mock_model(TransportMode)
           TransportMode.stub!(:find).and_return(@transport_mode)
@@ -97,7 +158,7 @@ describe ProblemsController do
         end
         
         it 'should find or create a sub-route for the stations' do 
-          SubRoute.should_receive(:make_sub_route).with(@from_stop, @to_stop, @transport_mode)
+          SubRoute.should_receive(:make_sub_route).with(@from_stop, @to_stop, @transport_mode, [@mock_route, @mock_route])
           make_request({:to => "london euston", :from => 'birmingham new street'})
         end
         
@@ -356,18 +417,28 @@ describe ProblemsController do
                                           :confirm! => true,
                                           :campaign => nil,
                                           :status= => true,
+                                          :subject => nil, 
+                                          :description => nil, 
+                                          :location_id => nil, 
+                                          :location_type => nil,
+                                          :category => nil,
+                                          :operator_id => nil, 
+                                          :passenger_transport_executive_id => nil, 
+                                          :council_info => nil,
                                           :is_campaign= => true, 
                                           :is_campaign => '0',
-                                          :send_confirmation_email => true,
+                                          :errors => [],
                                           :create_assignments => true)
       Problem.stub!(:new).and_return(@mock_problem)
       @mock_assignment = mock_model(Assignment)
+      @controller.stub!(:setup_problem_advice)
       Assignment.stub!(:create_assignments).and_return(@mock_assignment)
       @problem_attributes = { "location_id" => 55, "location_type" => 'Stop' }
+      @default_params = { :problem => @problem_attributes }
     end
     
-    def make_request
-      post :create, { :problem => @problem_attributes }
+    def make_request(params=@default_params)
+      post :create, params
     end
     
     it 'should create a new problem using the attributes passed to it' do 
@@ -380,226 +451,257 @@ describe ProblemsController do
       make_request
     end
     
-    it 'should try to save the problem if it is valid' do 
-      @mock_problem.should_receive(:save)
-      make_request
-    end
-    
-    it 'should try to save the reporter if the problem is valid' do 
-      @mock_problem.should_receive(:save_reporter)
-      make_request
-    end
-    
-    it 'should render the "new" template if the problem is not valid' do 
-      @mock_problem.stub!(:valid?).and_return(false)
-      make_request
-      response.should render_template('problems/new')
-    end
-    
-    describe 'if there is no logged in user' do 
-      
-      it 'should render the "confirmation_sent" template if the problem can be saved' do 
-        make_request
-        response.should render_template('shared/confirmation_sent')
-      end
-      
-      it 'should send a confirmation email' do 
-        @mock_problem.should_receive(:send_confirmation_email)
-        make_request
-      end
-    
-    end
-    
-    describe 'if there is a logged in user' do 
-      
-      before do 
-        @controller.stub!(:current_user).and_return(@mock_user)
-      end
-      
-      it 'should set the problem status to confirmed' do 
-        @mock_problem.should_receive(:confirm!)
-        make_request
-      end
-       
-      describe 'if the problem is associated with a campaign' do 
-        
-        before do
-          @mock_campaign = mock_model(Campaign)
-          @mock_problem.stub!(:campaign).and_return(@mock_campaign)
-        end
-        
-        it 'should redirect to the campaign edit url' do 
-          make_request
-          response.should redirect_to(edit_campaign_url(@mock_campaign))
-        end
-      end
-      
-      describe 'if the problem is not associated with a campaign' do 
 
-        before do
-          @mock_problem.stub!(:campaign).and_return(nil)
-        end
+    describe 'if the problem is not valid' do
+    
+      before do
+        @mock_problem.stub!(:valid?).and_return(false)
+        @mock_problem.stub!(:errors).and_return([[:text, "Please enter some text"]])
+      end
+      
+      describe 'if the request asks for HTML' do 
         
-        it 'should show a message that the problem has been created' do 
+        it 'should render the "new" template' do 
           make_request
-          flash[:notice].should == 'Thanks! Your problem report has been created.'
-        end
-        
-        it 'should redirect to the problem page' do 
-          make_request
-          response.should redirect_to(problem_url(@mock_problem))
+          response.should render_template('problems/new')
         end
         
       end
       
+      describe 'if the request asks for JSON' do 
+      
+        it 'should return a JSON hash with the success key set to false' do 
+          make_request(@default_params.merge(:format => 'json'))
+          JSON.parse(response.body)['success'].should == false
+        end
+        
+        it 'should return a JSON hash with the errors key populated' do 
+          make_request(@default_params.merge(:format => 'json'))
+          JSON.parse(response.body)['errors'].should == {'text' => 'Please enter some text'}
+        end
+        
+      end
+    
     end
     
-    it 'should create assignments associated with the problem' do 
-      @mock_problem.should_receive(:create_assignments).and_return(@mock_assignment)
+    describe 'if the problem is valid' do
+    
+      describe 'if there is no logged in user' do 
+      
+        it 'should save the problem data to the session' do 
+          @controller.should_receive(:data_to_string)
+          make_request
+        end
+      
+        describe 'if the request asks for HTML' do
+        
+          it 'should show a notice asking the user to login' do 
+            make_request
+            flash[:notice].should == 'Please create an account to finish reporting your problem.'
+          end
+        
+          it 'should redirect to the login URL' do 
+            make_request
+            response.should redirect_to(login_url)
+          end
+        
+        end
+      
+        describe 'if the request asks for JSON' do 
+      
+          it 'should return a hash with the success key set to true' do 
+            make_request(@default_params.merge(:format => 'json'))
+            JSON.parse(response.body)['success'].should == true
+          end
+        
+          it 'should return a hash with the requires_login key set to true' do 
+            make_request(@default_params.merge(:format => 'json'))
+            JSON.parse(response.body)['requires_login'].should == true
+          end
+        
+          it 'should return a hash with the notice key set to a message asking the user to login' do
+            make_request(@default_params.merge(:format => 'json'))
+            JSON.parse(response.body)['notice'].should == 'Please create an account to finish reporting your problem.'
+          end
+
+        end
+    
+      end
+    
+      describe 'if there is a logged in user' do 
+      
+        before do 
+          @controller.stub!(:current_user).and_return(@mock_user)
+        end
+        
+        it 'should try to save the problem if it is valid' do 
+          @mock_problem.should_receive(:save)
+          make_request
+        end
+       
+        describe 'if the request asks for HTML' do
+
+          it 'should redirect to the problem conversion url' do 
+            make_request
+            response.should redirect_to(convert_problem_url(@mock_problem))
+          end
+      
+        end
+      
+        describe 'if the request asks for JSON' do 
+        
+          it 'should return a hash with the success key set to true' do 
+            make_request(@default_params.merge(:format => 'json'))
+            JSON.parse(response.body)['success'].should == true
+          end
+        
+          it 'should return a hash with the redirect set to the problem conversion url' do 
+            make_request(@default_params.merge(:format => 'json'))
+            JSON.parse(response.body)['redirect'].should == convert_problem_url(@mock_problem)
+          end
+        
+        end
+          
+      end
+
+    end
+  end
+
+  describe 'GET #add_comment' do 
+    
+    before do
+      @mock_problem = mock_model(Problem, :visible? => true)
+      Problem.stub!(:find).and_return(@mock_problem)
+      @mock_user = mock_model(User)
+      @controller.stub!(:current_user).and_return(@mock_user)
+    end
+
+    def make_request(params=nil)
+      params = { :id => 55 } if !params
+      get :add_comment, params
+    end
+
+    it 'should render the template "add_comment"' do
       make_request
+      response.should render_template('shared/add_comment')
     end
-    
-    it 'should create a campaign with status "New" associated with the problem if passed the parameter "is_campaign"' do 
-      mock_campaign = mock_model(Campaign)
-      @problem_attributes[:is_campaign] = '1'
-      @mock_problem.stub!(:is_campaign).and_return("1")
-      @mock_problem.should_receive(:build_campaign).with({ :location_id => @problem_attributes["location_id"], 
-                                                           :location_type => @problem_attributes["location_type"],
-                                                           :initiator => @mock_user }).and_return(mock_campaign)
-      mock_campaign.should_receive(:status=).with(:new)
-      make_request
-    end
-    
+
   end
   
-  describe "PUT #update" do 
-  
-    before do 
-      @mock_problem = mock_model(Problem, :comments => [])
-      @mock_comment = mock_model(Comment, :valid? => true, 
-                                          :save => true, 
-                                          :save_user => true,
-                                          :status= => true,
-                                          :send_confirmation_email => true,
-                                          :confirm! => true)
-      @mock_problem.comments.stub!(:build).and_return(@mock_comment)
-      Problem.stub!(:find).and_return(@mock_problem)
-    end
+  describe 'POST #add_comment' do 
     
-    def make_request
-      put :update, default_params
+    before do
+      @mock_user = mock_model(User)
+      @mock_problem = mock_model(Problem, :visible? => true)
+      Problem.stub!(:find).and_return(@mock_problem)
+      @mock_comment = mock_model(Comment, :save => true,
+                                          :valid? => true,
+                                          :user= => true,
+                                          :commented_id => 55,
+                                          :commented_type => 'Problem',
+                                          :commented => @mock_problem,
+                                          :text => 'comment text',
+                                          :confirm! => true,
+                                          :skip_name_validation= => true,
+                                          :mark_fixed => true, 
+                                          :mark_open => true,
+                                          :status= => true)
+      @mock_problem.stub!(:comments).and_return(mock('comments', :build => @mock_comment))
+      @expected_notice = "Please sign in or create an account to add your comment to this problem"
+      @expected_redirect = problem_url(@mock_problem)
+    end
+
+    def make_request params
+      post :add_comment, params
     end
     
     def default_params
-      { :id => 55, 
-        :problem => { :title => 'a new title', 
-                      :comments => { 'text' => 'test',
-                                     'user_attributes' => {'email' => 'test@example.com'} } } }
+      { :id => 55,
+        :comment => { :commentable_id => 55,
+                      :commentable_type => 'Problem'} }
     end
     
-    it 'should find the problem by id' do 
-      Problem.should_receive(:find).with('55')
-      make_request
-    end
-    
-    it 'should only pass on parameters for a new update' do 
-      @mock_problem.comments.should_receive(:build).with(default_params[:problem][:comments])
-      make_request
-    end
-    
-    it 'should set the update status to :new' do 
-      @mock_comment.should_receive(:status=).with(:new)
-      make_request
-    end
-    
-    describe 'if the update is valid' do 
-    
-      it 'should save the update' do 
-        @mock_comment.should_receive(:save)
-        make_request
-      end
-    
-      it 'should save the update user' do 
-        @mock_comment.should_receive(:save_user)
-        make_request
-      end
-      
-      describe 'if the user is logged in' do 
-        
-        before do 
-          @controller.stub!(:current_user).and_return(mock_model(User))
-        end
-        
-        it 'should confirm the update' do 
-          @mock_comment.should_receive(:confirm!)
-          make_request
-        end
-        
-        it 'should show the user a message' do 
-          make_request
-          flash[:notice].should == "Thanks for adding an update!"
-        end
-        
-        it 'should redirect to the problem page' do 
-          make_request
-          @response.should redirect_to(problem_url(@mock_problem))
-        end
-        
-      end
-      
-      describe 'if the user is not logged in' do 
-        
-        it 'should render the "confirmation_sent" template ' do 
-          make_request
-          response.should render_template('shared/confirmation_sent')
-        end
-        
-        it 'should send a confirmation email' do 
-          @mock_comment.should_receive(:send_confirmation_email)
-          make_request
-        end
-        
-      end
-      
-    end
+    it_should_behave_like "an action that receives a POSTed comment"
     
   end
   
-  describe "GET #confirm" do 
-     
+  
+  describe '#GET convert' do 
+    
+    def make_request(params=default_params)
+      get :convert, params
+    end
+  
+    def default_params
+      { :id => 22 }
+    end
+    
     before do 
-      @mock_assignment = mock_model(Assignment)
-      @mock_problem = mock_model(Problem, :campaign => nil, 
-                                          :confirm! => true)
-      Problem.stub!(:find_by_token).and_return(@mock_problem)
-    end
-
-    def make_request
-      get :confirm, { :email_token => "my-test-token" }
-    end
-
-    it 'should look for the problem by token' do 
-      Problem.should_receive(:find_by_token).with("my-test-token")
-      make_request
-    end
-    
-    it 'should confirm the problem' do
-      @mock_problem.should_receive(:confirm!)
-      make_request
-    end
-    
-    it 'should render the "confirm" view if there is no campaign associated with the problem' do 
-      make_request
-      response.should render_template("problems/confirm")
-    end
-    
-    it 'should redirect to the campaign edit page passing the token if there is a campaign associated with the problem' do 
+      @mock_reporter = mock_model(User)
       @mock_campaign = mock_model(Campaign)
-      @mock_problem.stub!(:campaign).and_return(@mock_campaign)
-      make_request
-      response.should redirect_to(edit_campaign_url(@mock_campaign, :token => 'my-test-token'))
+      @mock_problem = mock_model(Problem, :campaign => @mock_campaign, 
+                                          :confirm! => true, 
+                                          :status => :new,
+                                          :reporter => @mock_reporter,
+                                          :create_new_campaign => @mock_campaign)
+      Problem.stub!(:find).and_return(@mock_problem)
+      
     end
+    
+    describe 'if the user is not the problem reporter' do 
+    
+      it 'should return a 404' do 
+        make_request
+        response.status.should == '404 Not Found'
+      end
+      
+    end
+  
+    describe 'if the user is the problem reporter' do 
+      
+      before do 
+        @controller.stub!(:current_user).and_return(@mock_reporter)
+      end
+      
+      it 'should show the "convert" template' do 
+        make_request
+        response.should render_template("convert")
+      end
 
+      describe 'if the "convert" param is "yes"' do 
+        
+        it 'should confirm the problem' do
+          @mock_problem.should_receive(:confirm!)
+          make_request({:id => 22, :convert => 'yes'})
+        end
+        
+        it 'should create a campaign for the problem' do 
+          @mock_problem.should_receive(:create_new_campaign)
+          make_request({:id => 22, :convert => 'yes'})
+        end
+        
+        it 'should redirect to the campaign add details url' do 
+          make_request({:id => 22, :convert => 'yes'})
+          response.should redirect_to(add_details_campaign_url(@mock_campaign))
+        end
+        
+      end
+      
+      describe 'if the "convert" param is "no"' do 
+        
+        it 'should confirm the problem' do 
+          @mock_problem.should_receive(:confirm!)
+          make_request({:id => 22, :convert => 'no'})
+        end
+        
+        it 'should redirect to the problem url' do 
+          make_request({:id => 22, :convert => 'no'})
+          response.should redirect_to(problem_url(@mock_problem))
+        end
+      
+      end
+      
+    end
   end
   
   describe 'when setting up problem advice' do 
@@ -619,8 +721,7 @@ describe ProblemsController do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'])
       mock_problem = mock_model(Problem, :location => mock_stop,
                                          :responsible_organizations => [mock_pte])
-      expected = ["Your problem will be sent by email to <strong>test PTE</strong>.",
-                  "It will also be displayed on the site, with your name."].join(' ')
+      expected = ["We'll then send it to <strong>test PTE</strong>. Your message will be public."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -632,10 +733,10 @@ describe ProblemsController do
       mock_problem = mock_model(Problem, :location => mock_stop, 
                                          :responsible_organizations => [mock_council_one, mock_council_two],
                                          :operators_responsible? => false)
-      expected = ["We do not yet have contact details for <strong>Test Council One</strong>",
-                  "or <strong>Test Council Two</strong>.  If you submit a problem here",
-                  "it will be displayed on the site, with your name, but it will",
-                  "<strong>not</strong> be sent to them until you find an email address for them."].join(' ')
+      expected = ["We do not yet have contact details for <strong>Test Council",
+                  "One</strong> or <strong>Test Council Two</strong>. Your message",
+                  "will be public, but it will <strong>not</strong> be sent to them until you find an",
+                  "email address for them."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -646,9 +747,8 @@ describe ProblemsController do
                                          :responsible_organizations => [mock_council])
       
       expected = ["We do not yet have contact details for <strong>Test Council</strong>.",
-                  "If you submit a problem here it will be displayed on the site, with your name,",
-                  "but it will <strong>not</strong> be sent to Test",
-                  "Council until you find an email address for them."].join(' ')
+                  "Your message will be public, but it will <strong>not</strong> be sent",
+                  "to Test Council until you find an email address for them."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -657,8 +757,7 @@ describe ProblemsController do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'])
       mock_problem = mock_model(Problem, :location => mock_stop, 
                                          :responsible_organizations => [mock_council])
-      expected = ["Your problem will be sent by email to <strong>Test Council</strong>.",
-                  "It will also be displayed on the site, with your name."].join(' ')
+      expected = ["We'll then send it to <strong>Test Council</strong>. Your message will be public."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -669,9 +768,8 @@ describe ProblemsController do
       mock_problem = mock_model(Problem, :location => mock_stop, 
                                          :responsible_organizations => [mock_council_one, mock_council_two],
                                          :operators_responsible? => false)
-      expected = ["Your problem will be sent by email to <strong>Test Council One</strong>",
-                  "or <strong>Test Council Two</strong>.",
-                  "It will also be displayed on the site, with your name."].join(' ')
+      expected = ["We'll then send it to <strong>Test Council One</strong> or <strong>Test Council",
+                  "Two</strong>. Your message will be public."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -685,8 +783,8 @@ describe ProblemsController do
                                          :unemailable_organizations => [mock_council_one],
                                          :operators_responsible? => false, 
                                          :councils_responsible? => true)
-      expected = ["Your problem will be sent by email to <strong>Test Council One</strong> or <strong>Test Council",
-                  "Two</strong>. It will also be displayed on the site, with your name."].join(' ')
+      expected = ["We'll then send it to <strong>Test Council One</strong> or <strong>Test",
+                  "Council Two</strong>. Your message will be public."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -694,9 +792,9 @@ describe ProblemsController do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'])
       mock_problem = mock_model(Problem, :location => mock_stop, 
                                          :responsible_organizations => [])
-      expected = ["We do not yet know who is responsible for this stop. If you submit a problem",
-                  "it will be displayed on the site, with your name, but will not be sent to the", 
-                  "responsible organization until you find out who that is."].join(' ')
+      expected = ["We do not yet know who is responsible for this stop. Your message",
+                  "will be public, but will not be sent to the responsible organization",
+                  "until you find out who that is."].join(' ')
       expect_advice(mock_problem, expected)
     end
 
@@ -704,9 +802,9 @@ describe ProblemsController do
       mock_sub_route = mock_model(SubRoute, :transport_mode_names => ['Train'])
       mock_problem = mock_model(Problem, :location => mock_sub_route, 
                                          :responsible_organizations => [])
-      expected = ["We do not yet know who is responsible for this route. If you submit a problem",
-                 "it will be displayed on the site, with your name, but will not be sent to the", 
-                 "responsible organization until you find out who that is."].join(' ')
+      expected = ["We do not yet know who is responsible for this route. Your message will",
+                  "be public, but will not be sent to the responsible organization until you",
+                  "find out who that is."].join(' ')
       expect_advice(mock_problem, expected)
     end
         
@@ -714,9 +812,9 @@ describe ProblemsController do
       mock_route = mock_model(Route, :transport_mode_names => ['Bus'])
       mock_problem = mock_model(Problem, :location => mock_route, 
                                          :responsible_organizations => [])
-      expected = ["We do not yet know who is responsible for this route. If you submit a problem",
-                "it will be displayed on the site, with your name, but will not be sent to the", 
-                "responsible organization until you find out who that is."].join(' ')
+      expected = ["We do not yet know who is responsible for this route. Your message will",
+                  "be public, but will not be sent to the responsible organization until you",
+                  "find out who that is."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -730,9 +828,8 @@ describe ProblemsController do
                                          :unemailable_organizations => [mock_operator_two],
                                          :operators_responsible? => true)
     
-    expected = ["More than one company operates this route.",
-                "Your problem <strong>will be sent to the operator</strong> you select below.",
-                "It will also be displayed on the site, with your name."].join(' ')
+    expected = ["More than one company operates this route. Your problem <strong>will be sent",
+                "to the operator</strong> you select below. Your message will be public."].join(' ')
     expect_advice(mock_problem, expected)
     end
     
@@ -746,11 +843,10 @@ describe ProblemsController do
                                          :unemailable_organizations => [mock_operator_two],
                                          :operators_responsible? => true)
       
-      expected = ["We do not yet have all the contact details for this route. If you submit a problem",
-                  "here relating to <strong>Test Operator Two</strong>, it will be displayed on the site,",
-                  "with your name, but it will <strong>not</strong> be sent to them until you find an",
-                  "email address for them. If your problem relates to <strong>Test",
-                  "Operator One</strong>, it will be sent straight away."].join(' ')
+      expected = ["We do not yet have all the contact details for this route. If your message is for",
+                  "<strong>Test Operator Two</strong>, it will be public, but it will <strong>not</strong>",
+                  "be sent to them until you find an email address for them. If your problem relates to",
+                  "<strong>Test Operator One</strong>, it will be sent straight away."].join(' ')
       expect_advice(mock_problem, expected)
     end
         
@@ -758,9 +854,9 @@ describe ProblemsController do
       mock_station = mock_model(Stop, :transport_mode_names => ['Train'])
       mock_problem = mock_model(Problem, :location => mock_station, 
                                          :responsible_organizations => [])
-      expected = ["We do not yet know who is responsible for this station. If you submit a problem",
-               "it will be displayed on the site, with your name, but will not be sent to the", 
-               "responsible organization until you find out who that is."].join(' ')
+      expected = ["We do not yet know who is responsible for this station. Your message will be",
+                  "public, but will not be sent to the responsible organization until you find",
+                  "out who that is."].join(' ')
       expect_advice(mock_problem, expected)
     end
     

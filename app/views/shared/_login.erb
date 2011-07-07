@@ -1,0 +1,34 @@
+<div id="login-box" class="login-box" role="dialog">
+	<div id="login-landing" class="pane">
+    <%= render :partial => "shared/login_form" %>
+	</div>
+
+	<div id="login-create-account" class="pane">
+		<%= render :partial => 'shared/create_account' %>
+	</div>
+
+	<%- if ['campaigns', 'problems'].include?(controller.controller_name) && controller.action_name == 'show' %>
+  	<div id="comment-and-login" class="pane">
+  		<%= render :partial => 'shared/comment_form', :locals => { :context => controller.controller_name } %>
+  	</div>
+	<%- end %>
+	
+	<%- if controller.controller_name == 'campaigns' && controller.action_name == 'show' && current_user && current_user.supporter_or_initiator(@campaign) %>
+    <div id="social-share" class="pane" style="min-height:340px;">
+      <%= render :partial => 'shared/facebook' %>
+    </div>
+    <div id="email-share" class="pane" style="min-height:340px;">
+      <%= render :partial => 'shared/email' %>
+    </div>
+	  <%- if current_user && current_user == @campaign.initiator %>
+	    <div id="campaign-update" class="pane">
+        <%= render :partial => 'campaigns/update_form' %>
+      </div>
+
+		  <div id="campaign-add-photos" class="pane">
+        <%= render :partial => 'campaigns/add_photos_form' %>
+      </div>
+    <%- end %>
+  <%- end %>
+
+</div>

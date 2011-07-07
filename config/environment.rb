@@ -22,11 +22,11 @@ load "validate.rb"
 load "voting_area.rb"
 
 Rails::Initializer.run do |config|
-  
+
   # Load intial mySociety config
   MySociety::Config.set_file(File.join(config.root_path, 'config', 'general'), true)
   MySociety::Config.load_default
-  
+
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded.
@@ -39,19 +39,21 @@ Rails::Initializer.run do |config|
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
-  config.gem "rack", :version => '1.1.0'
+  config.gem 'authlogic', :version => '2.1.6'
+  config.gem 'bcrypt-ruby', :version => '2.1.4', :lib => 'bcrypt'
   config.gem "erubis", :version => '2.6.6'
   config.gem "fastercsv", :version => '1.5.3'
-  config.gem 'will_paginate', :version => '2.3.15'
   config.gem 'foreigner', :version => '0.9.1'
   config.gem "friendly_id", :version => '3.1.7'
   config.gem 'paper_trail', :version => '1.5.1'
-  config.gem 'authlogic', :version => '2.1.6'
-  config.gem 'session', :version => '3.1.0'
-  config.gem 'text', :version => '0.2.0'
+  config.gem "paperclip", :version => "~> 2.3"
+  config.gem "rack", :version => '1.1.0'
   config.gem 'rspec', :lib => false, :version => '1.3.1'
   config.gem 'rspec-rails', :lib => false, :version => '1.3.3'
-  
+  config.gem 'session', :version => '3.1.0'
+  config.gem 'text', :version => '0.2.0'
+  config.gem 'will_paginate', :version => '2.3.15'
+
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
@@ -63,7 +65,7 @@ Rails::Initializer.run do |config|
   # Activate observers that should always be running
   # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
 
-  # Set the schema format to sql 
+  # Set the schema format to sql
   config.active_record.schema_format :sql
 
   # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
@@ -74,10 +76,11 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
   config.i18n.load_path += Dir[File.join(RAILS_ROOT, 'config', 'locales', '**', '*.{rb,yml}')]
-  
+
   # Set the cache store
-  config.cache_store = :file_store, File.join(RAILS_ROOT, 'cache')
-  
+  cache_base_dir = MySociety::Config.get('CACHE_PARENT_DIRECTORY', RAILS_ROOT)
+  config.cache_store = :file_store, File.join(cache_base_dir, 'cache')
+
   # override default fieldWithError divs in model-associated forms
   config.action_view.field_error_proc = Proc.new{ |html_tag, instance| html_tag }
 
@@ -86,7 +89,7 @@ end
 
 # Use an asset host setting so that the admin interface can always get css, images, js.
 if (MySociety::Config.get("DOMAIN", "") != "")
-    ActionController::Base.asset_host = MySociety::Config.get("DOMAIN", 'localhost:3000')
+    ActionController::Base.asset_host = MySociety::Config.get("ASSET_HOST", 'localhost:3000')
 end
 
 # Domain for URLs (so can work for scripts, not just web pages)

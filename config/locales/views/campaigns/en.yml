@@ -1,72 +1,110 @@
 en:
-  now_add_campaign_info: "Because you've told us your problem is an ongoing one, we're going to make a web page where you can tell other people about the problem you've identified. It will put more pressure on the people you're writing to if your problem is public, and if other people can support it."
-  edit_campaign_info: "Please make sure the title and description are clear and add a short name to create an easy web address for your page."
-  other_campaigns_here: Campaigns
-  fixmytransport: "FixMyTransport"
-  campaign_start_date: Start date
-  write_to_operator: Write to the operator
-  login_to: "Login as %{user} to %{requested_action}"
-  wrong_user: "To %{requested_action}, you'll need to %{logout_link}, and login as %{name}."
-  password_confirmation: Password (again)
-  password_length_error: "Please enter a password that is at least %{length} characters long"
-  password_match_error: "The password confirmation does not match the password"
-  add_password_to_update: "You'll need a password to be able to log back into the site and update your campaign. Enter one here. "
-  tweet_this: Tweet this
-  save: Save
-  campaigns_add_update_access_message: "ask for advice on this campaign"
-  campaigns_update_access_message: "edit this campaign"
-  campaigns_confirm_problem: "confirm this problem"
-  campaigns_edit_access_message: "edit this campaign"
-  outgoing_messages_new_access_message: "write messages on behalf of this campaign"
-  assignments_new_access_message: "create an assignment for this campaign"
-  assignments_create_access_message: "create an assignment for this campaign"
-  join_this_campaign: Join this campaign
-  you_are_a_supporter: "You're now a supporter of \"%{campaign}\"!"
-  enter_your_email_to_join: Enter your email address to join this campaign
-  join: Join
-  back_to_campaign: "Go back to \"%{campaign}\""
-  started_on: "Started on %{date}"
-  campaign_has_n_supporters:
-    one: "and has %{n} supporter."
-    other: "and has %{n} supporters."
-  thanks_for_adding_comment: You've successfully confirmed your comment.
-  see_your_comment: See your comment
-  campaign_location: This campaign concerns the %{link}
-  join_confirmation_sent: We've sent you an email to confirm that you want to join this campaign.
-  you_will_not_be_a_supporter: "you will not be added as a supporter of \"%{campaign}\"."
-  you_support_this_campaign: "You are a supporter of this campaign"
-  leave_this_campaign: "Leave this campaign"
-  you_are_no_longer_a_supporter: "You are no longer a supporter of \"%{campaign}\""
-  campaign_received_emails: "The campaign has received the following emails:"
-  got_a_message: "%{sender} sent %{campaigner} %{link}"
-  a_reply: a reply
-  wrote_a_message: "%{sender} %{link} to %{recipient}%{assignment_text}"
-  wrote_to: wrote to
-  campaign: campaign
-  choose_a_short_name: Choose a short name (6 to 16 lowercase letters)
-  easy_web_address: This gives your page an easy web address. e.g. %{url}
-  update_added: Your update has been added. 
-  error_adding_update: "Sorry, there's been a problem adding your update. Please use the feedback form to let us know what happened."
-  user_says: "%{name} said:"
-  add_an_update: 'Add an update:'
-  request_advice: Ask for advice
-  ask_our_expert_panel: 'Ask your supporters and our expert panel what to do next:'
-  user_requested_advice: "%{name} asked for feedback from the campaign's supporters and FixMyTransport's expert panel:"
-  advice_request_added: Your advice request will be sent to your supporters and the panel.
-  expert_advised_writing: "%{expert} %{advised} %{user} to write to %{recipient}."
-  following_experts_advice: " following %{expert}'s advice."
-  add_comment: comment
-  advised: advised
-  message_from_expert: "This is a message from FixMyTransport boffin %{expert} to %{user} on their next step for keeping the %{campaign} campaign moving."
-  please_enter_some_text: Please enter some text
-  ago: "%{time} ago"
-  as_a_supporter: "As a campaign supporter, you can make comments on the progress of this and other campaigns."
-  login_to_comment: "You'll need to %{link} to comment"
-  write_again: "Write to %{name} again"
-  write_first_time: "Write to %{name}"
-  reply_to_this_message: "Reply to this message"
-  tell_to_write: "Tell %{user} who to write to next"
-  transport_experts: "Transport experts"
-  add_details_to_comment: "Please enter your name as you'd like it to appear, and create a password so you can log back into the site anytime."
-  find_responsible_org: Find out who the responsible organisation is
-  find_responsible_org_contact_info: Get contact details for the organisation responsible
+  campaigns:
+    show: 
+      location_operator: "the operator of the %{location}"
+      call_to_action: "Please help me persuade %{org} to %{title}"
+      short_call_to_action: "Campaign to %{title}"
+      initiator_call_to_action: "Your campaign to %{title}"
+      supporter_call_to_action: "I just joined the campaign to persuade %{org} to %{title}"
+      initiator_facebook_description: "Please help my campaign by spreading the word and encouraging your friends to support it."
+      supporter_facebook_description: "Please help this FixMyTransport campaign by spreading the word and encouraging your friends to support it."
+      initiator_facebook_message: "I've started a FixMyTransport campaign to persuade %{org} to %{title} ...will you join me?"
+      supporter_facebook_message: "I'm supporting this FixMyTransport campaign to persuade %{org} to %{title} ...will you join me?"
+      reported_issue: "%{name} reported the issue on FixMyTransport."
+      wrote_to_orgs: "%{name} wrote to %{orgs}" 
+      here_is_the_letter: "Here is the letter that %{name} wrote."
+      sign_in_to_join: "Please sign in or create an account to join this campaign"
+      you_are_no_longer_a_supporter: "You are no longer a supporter of \"%{campaign}\""
+      add_photos: Add photos
+      contact_found: "%{user_name} found an email address for %{operator_name}"
+      responsible_org_found: "%{user_name} found the company that runs this %{location}"
+      user_requested_advice: "%{name} asked for advice."
+      added_an_update: "%{name} added an update"
+      got_a_message: "%{sender} responded to %{campaigner}"
+      a_reply: a reply
+      manage_campaign: Manage this campaign
+      recommended_actions: Recommended actions
+      actions: Actions
+      ask_an_expert: Ask an expert
+      add_images: Add images
+      mark_as_complete: Mark as complete
+      edit_description: Edit description
+      find_operator: Find operator
+      add_contact: Add contact
+      your_contacts: Your contacts
+      contacts_description: "Useful people, that may be able to help with your campaign"
+      contacts_email: Email
+      whats_happening: "What's happening?"
+      post_update: Post
+      post_update_instructions: "Keep supporters up-to-date on how the campaign is progressing."
+      expert_advised_writing: "%{expert} %{advised} %{user} to write to %{recipient}."
+      advised: advised
+      following_experts_advice: " following %{expert}'s advice."
+      wrote_a_message: "%{sender} wrote to %{recipient}%{assignment_text}"
+      support_this: Support
+      campaign_supporters: Campaign Supporters
+      view_all: View All
+      request_advice: Ask for advice
+      add_update: "Add update"
+      your_campaign: Your Campaign
+      you_support_this: You support this
+      campaign_fixed: Fixed
+      campaign_supporter_first_time_header: "Yay! Thanks for supporting our campaign"
+      campaign_supporter_offer_opinions: "Offer opinions and advice to help make the campaign a success."
+      campaign_supporter_share: "And don't forget to tell your friends  and spread the word through Twitter &amp; Facebook"
+      campaign_initiator_first_time_header: "Congratulations you just made a campaign. To help make it a success get your friends involved through %{twitter_link}, %{facebook_link} or %{email_link}"
+      twitter: twitter
+      facebook: facebook
+      email: email
+      tell_to_write: "Tell %{user} who to write to next"
+      transport_experts: "Transport experts"
+      campaign_description_header: Description
+      images_and_media: Images and Media
+      campaign_comment: Comment
+      expand_all: Expand All
+      collapse_all: Collapse All
+      campaign_history: Campaign History
+      facebook_title: Facebook
+      twitter_title: Twitter
+      email_title: Email
+      campaign_manager: Campaign Manager
+      managing: Managing 
+      supporting: Supporting
+      find_operator_task_description: "In order to get your campaign started, you'll need to find out who operates this %{location}."
+      find_contact_task_description: "In order to get your campaign started, you'll need to find an email address for %{name}"
+      find_operator_task_title: "Find operator"
+      find_contact_task_title: "Add contact"
+      contact_council: "Council"
+      contact_passenger_transport_executive: "Passenger Transport Executive"
+      contact_operator: "%{location} operator"
+      show_quoted: show quoted sections
+      hide_quoted: hide quoted sections
+      campaign_email_replacement: "[%{title} email]"
+      app_email_replacement: "[FixMyTransport contact email]"
+      org_email_replacement: "[%{name} problem reporting email]"
+      please_upload_valid_image: "Please upload a .jpeg, .gif or .png image"
+      user_says: "%{name} commented"
+      back: Back
+    add_details:
+      add_details: Add Details
+      add_details_instructions: Give your campaign a headline and description
+      tip_close: Close
+      make_a_headline: Make a headline
+      good_headline: Give your campaign a good headline (in 40 to 80 characters)
+      eg: "E.g."
+      headline_example: "Please help me persuade The Operator to get rid of the awful smell between Manors and Monument on the Metro"
+      add_short_description: Add a short description
+      description_advice: "In no more than 40 words, provide a quick description of the issue. This will allow others to easily understand and support your campaign."
+      details_submit: Submit
+    add_update:
+      add_an_update: 'Add an update:'
+      ask_our_expert_panel: 'Ask your supporters and our expert panel what to do next:'
+      advice_request_added: Your advice request will be sent to your supporters and the panel.
+      update_added: Your update has been added. 
+    edit:
+      edit_campaign_description: 'Edit the campaign description:'
+      save: Save
+    confirm_leave:
+      you_are_no_longer_a_supporter: "You are no longer a supporter of \"%{campaign}\""
+      let_us_know: let us know
+      error_on_leave: "Sorry, we couldn't locate your membership of this campaign in the database. If you've copied the URL from an email, please check that you copied it exactly - if you have, please %{link} what happened."

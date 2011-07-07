@@ -7,25 +7,11 @@ en:
             category: 
               blank: "Please select a category for your problem"
             subject:
-              blank: "Please give your problem a subject"
+              blank: "Please give your message a subject"
             description:
               blank: "Please give a brief description of your problem"
-            transport_mode_id:
-              blank: "Please select a transport type"
-            location:
-              blank: "We can't figure out where this is"
-            location_type:
-              blank: "Please select stop, station or route"
-            location_attributes:
-              blank: "Please give the station/stop, town/area or route"
-              blank_stop: "Please give the stop or area"
-              blank_route: "Please give the route or area"
-            reporter_name:
-              blank: "Please enter your full name"
-              invalid: "Please enter your full name"
-              too_short:  "Please enter your full name"
-            is_campaign:
-              blank: "Please tell us whether this is an ongoing problem"
+            operator_id: 
+              blank: "Please choose a company to report the problem to"
         stop:
           attributes: 
             common_name:

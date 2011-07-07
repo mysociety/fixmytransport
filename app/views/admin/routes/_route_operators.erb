@@ -2,20 +2,20 @@
 <div class='route-operators'>
   <%- if route_operators.empty?  %>
     <p>
-      <%= t(:no_operators) %>
+      <%= t('admin.no_operators') %>
     </p>
   <%- else %>
-    <%= link_to t(:check_all), '', :class => 'check-all-route-operators' %>
-    <%= link_to t(:uncheck_all), '', :class => 'uncheck-all-route-operators' %>
+    <%= link_to t('admin.check_all'), '', :class => 'check-all-route-operators' %>
+    <%= link_to t('admin.uncheck_all'), '', :class => 'uncheck-all-route-operators' %>
     <table>
       <tr>
-        <th><%= t(:name) %></th>
-        <th><%= t(:short_name) %></th>
-        <th><%= t(:search)  %></th>
+        <th><%= t('admin.name') %></th>
+        <th><%= t('admin.short_name') %></th>
+        <th><%= t('admin.search')  %></th>
         <%- if route_operators.first.new_record? %>
-          <th><%= t(:assign_to_route) %></th>
+          <th><%= t('admin.assign_to_route') %></th>
         <%- else %>
-          <th><%= t(:remove_from_route) %></th>
+          <th><%= t('admin.remove_from_route') %></th>
         <%- end%>
       </tr>
       
@@ -24,7 +24,7 @@
           <tr class='<%= cycle("odd", "even") %>'>
             <td><%= link_to(route_operator.operator.name, admin_url(admin_operator_path(route_operator.operator_id)), :target => "_blank" ) %>
             <td><%= route_operator.operator.short_name %>
-            <td><%= link_to t(:external_search_operator), external_search_link("#{route_operator.operator.name}"), :target => '_blank' %></td>
+            <td><%= link_to t('admin.external_search_operator'), external_search_link("#{route_operator.operator.name}"), :target => '_blank' %></td>
             <td>
               <%- if route_operator.id %>
                 <%= raw route_operator_fields.hidden_field :id %>

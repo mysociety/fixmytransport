@@ -1,73 +1,172 @@
-<div class='homepage'>
-  <h2 class='main-header'><%= t(:get_problems_fixed) %></h2>
-  <div class='problem-form-wrapper'>
-    <div class='problem-form'>
-      <div class='problem-options'>
-        <%= t(:do_you_want_to_report) %>
-        <span class='link-button'>
-          <%= link_to(t(:stop_or_station), find_stop_problems_url) %>
-        </span>
-        <%= t(:or_on_a) %>
-        <span class='link-button'>
-          <%= raw link_to(t(:frontpage_route), find_route_problems_url) + '?' %>
-        </span>
-      </div>
-    </div>
-  </div>
-  
-  <%- if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com' %>
-    <div class='info-for-alpha-testers'>
-      <div class='video'>
-        <object height='192' width='320'>
-          <param name='movie' value='http://www.youtube.com/v/LGYEfOm_28I?fs=1&amp;hl=en_US' />
-          <param name='allowFullScreen' value='true' />
-          <param name='allowscriptaccess' value='always' />
-          <embed allowfullscreen='true' src='http://www.youtube.com/v/LGYEfOm_28I?fs=1&amp;hl=en_US' allowscriptaccess='always' type='application/x-shockwave-flash' height='192' width='320'/>
-        </object>
-      </div>
-    </div>
-  <%- end %>
-  
-  <div class='latest'>
-    
-    <div class='right-col'>
-      <div class='latest-campaigns'>
-        <h3><%= t(:recently_active_campaigns) %></h3>
-        <ul>
-          <%- Campaign.find_recent(5).each do |campaign| %>
-            <li class='campaign-update'>
-              <%= link_to(h(campaign.title), campaign_url(campaign)) %>
-              <span class='transport-modes-note'>
-                <%= campaign.transport_mode_text %>
-              </span>
-              <span class='event-type-note'><%= "(#{event_type_note(campaign.campaign_events.first)})" %>
-              </span>
-            </li>
-          <%- end %>
-        </ul>
-        <div class='more'>
-          <%= link_to(t(:more_campaigns), campaigns_path) %>
-        </div>
-      </div>
-    </div>
-    
-    <div class='left-col'>
-      <div class='latest-problems'>
-        <h3><%= t(:latest_problems) %></h3>
-        <ul>
-          <%- Problem.latest(5).each do |problem| %>
-            <li class='problem'>
-              <%= link_to(h(problem.subject), problem_url(problem)) %>
-              <span class='transport-modes-note'>
-                <%= problem.transport_mode_text %>
-              </span>
-            </li>
-          <%- end %>
-        </ul>
-        <div class='more'>
-          <%= link_to(t(:more_problems), problems_path) %>
-        </div>
-      </div>
-    </div>
-  </div>
+<%- content_for :javascript do %>
+<script type="text/javascript">
+function scroller(dsp, fsp){
+	$('#frontpage-problem-scroller li:not(".hidden")').delay(dsp).fadeOut(fsp, function(){
+		$(this).addClass('hidden');
+		
+		if($(this).hasClass('last')) {
+			$('#frontpage-problem-scroller li.first').removeClass('hidden').fadeIn(fsp, function(){
+				scroller(dsp, fsp);
+			});
+		} else {
+			$(this).next().removeClass('hidden').fadeIn(fsp, function(){
+				scroller(dsp, fsp);
+			});
+		}
+	});
+}
+$(function(){
+	//fix height
+	$('#frontpage-problem-scroller').each(function(){
+		var h = 0;
+		$(this).children('li').each(function(i){
+			if($(this).height() > h){h = $(this).height();}
+		});
+		$(this).children('li').css({'height': h}); 
+	});
+	//hide all but first one
+	$('#frontpage-problem-scroller li:not(:first)').addClass('hidden').hide();
+
+	//add classes for use in the function - for some reason
+	//the if statement didn't like the :first or :last's
+	$('#frontpage-problem-scroller li:first').addClass('first');
+	$('#frontpage-problem-scroller li:last').addClass('last');
+	
+	scroller(5000, 2000);
+});
+</script>
+<%- end %>
+<%- content_for :banner_content do %>
+<div class="top-notice" id="conditional-notice">
+	<div id="other-country-notice" class="container"></div>
+</div>
+<%- end %>
+<div id="frontpage-top" class="container">
+	<div class="leftcol">
+		<noscript>
+			<style>
+			#frontpage-top .leftcol ul#frontpage-problem-scroller li:not(:first-child){
+				display:none;
+			}
+			</style>
+		</noscript>
+		<ul id="frontpage-problem-scroller">
+			<li>
+				<h1><%= t('problems.frontpage.bad_train')%></h1>
+				<%- if @version == 1 %>
+				  <img src="/images/frontpage-trainwreck.jpg" alt="" />
+				<%- end %>
+			</li>
+			<li>
+				<h1><%= t('problems.frontpage.bad_bus') %></h1>
+				<%- if @version == 1 %>
+				  <img src="/images/frontpage-trainwreck2.jpg" alt="" />
+				<%- end %>
+			</li>
+			<li>
+				<h1><%= t('problems.frontpage.bad_ferry')%></h1>
+				<%- if @version == 1 %>
+				  <img src="/images/frontpage-trainwreck3.jpg" alt="" />
+				<%- end %>
+			</li>
+		</ul>
+		
+
+		<p class="font-1"><%= t('problems.frontpage.report_problem') %></p>
+		<%= link_to('STOP or STATION', find_stop_problems_url, :class => 'font-1 button green') %>
+		<%= raw link_to('JOURNEY or ROUTE', find_route_problems_url, :class => 'font-1 button green') %>
+		<p class="font-1"><%= t('problems.frontpage.get_it_fixed')%></p>
+		<%- if @version == 0 %>
+		<div id="followus" class="font-1">
+			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank">
+				<span class="icon facebook"></span>
+				<%= t('problems.frontpage.follow_on_facebook')%>
+			</a>
+			<a href="http://twitter.com/FixMyTransport" target="_target">
+				<span class="icon twitter"></span>
+				<%= t('problems.frontpage.follow_on_twitter')%>
+			</a>
+		</div>
+		<%- end %>
+	</div>
+	<div class="rightcol">
+		<h2><%= t('problems.frontpage.what_it_does')%></h2>
+		<ul id="secret-list">
+			<li class="secret-report"><%= t('problems.frontpage.reports_problems')%></li>
+			<li class="secret-find"><%= t('problems.frontpage.finds_responsible') %></li>
+			<li class="secret-grow"><%= t('problems.frontpage.grows_support') %></li>
+			<li class="secret-track"><%= t('problems.frontpage.tracks_progress')%></li>
+			<li class="secret-done"><%= t('problems.frontpage.gets_things_done')%></li>
+		</ul>
+		<a href="#main-content" class="font-1 button"><%= t('problems.frontpage.how_does_it_work')%></a>
+		<%- if @version == 1 %>
+		<div id="followus" class="font-1">
+			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank" title="Facebook (opens in new window)">
+				<span class="icon facebook"></span>
+					<%= t('problems.frontpage.follow_on_facebook')%>
+			</a>
+			<a href="http://twitter.com/FixMyTransport" target="_target" title="Twitter (opens in new window)">
+				<span class="icon twitter"></span>
+					<%= t('problems.frontpage.follow_on_twitter')%>
+			</a>
+		</div>
+		<%- end %>
+	</div>
+</div>
+
+<div id="banner" class="blue">
+	<div class="container">
+		<div id="frontpage-banner-left">
+			<div class="dotted-white">&nbsp;</div>
+			<div class="left">
+				<h2 class="font-1">Lorem ipsum dolor sit amet consectetur sitolart</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ante lorem, consequat vel tempor eu, fringilla ut diam. Ut vulputate, orci rhoncus elementum tempor, magna erat auctor purus, vel fringilla risus massa at dui. Proin bibendum placerat lorem. In egestas tristique sem in facilisis. In sollicitudin erat ac lectus gravida ullamcorper.</p>
+			</div>
+			<img class="right" src="/images/frontpage-banner-busstop.jpg" />
+			<div class="dotted-white">&nbsp;</div>
+		</div>
+		<div id="frontpage-banner-right">
+			<a href="<%= issues_url %>" class="font-1 fancybutton"><%= t('problems.frontpage.recent_issues')%></a>
+			<a href="<%= routes_url %>" class="font-1 grey button"><%= t('problems.frontpage.browse_routes')%></a>
+		</div>
+	</div>
+</div>
+<div id="main-content" class="container">
+	<div id="fg-head">
+		<div id="fg-head-inner">
+			<h2 class="font-1"><%= t('problems.frontpage.how_does_it_work')%></h2>
+			<p><%= t('problems.frontpage.how_details_one')%></p>
+			<p><%= t('problems.frontpage.how_details_two')%></p>
+		</div>
+	</div>
+	<ol id="frontpage-grid">
+		<li class="fg-top">
+			<div id="fg-img-1" class="fg-img"></div>
+			<h3 class="font-1"><%= t('problems.frontpage.step_one')%></h3>
+			<p><%= t('problems.frontpage.step_one_details')%></p>
+		</li>
+		<li class="fg-top end">
+			<div id="fg-img-2" class="fg-img"></div>
+			<h3 class="font-1"><%= t('problems.frontpage.step_two')%></h3>
+			<p><%= t('problems.frontpage.step_two_details')%></p>
+		</li>
+		
+		<div class="fg-bottom">
+		<li>
+			<div id="fg-img-3" class="fg-img"></div>
+			<h3 class="font-1"><%= t('problems.frontpage.step_three')%></h3>
+			<p><%= t('problems.frontpage.step_three_details')%></p>
+		</li>
+		<li>
+			<div id="fg-img-4" class="fg-img"></div>
+			<h3 class="font-1"><%= t('problems.frontpage.step_four')%></h3>
+			<p><%= t('problems.frontpage.step_four_details')%></p>
+		</li>
+		<li class="end">
+			<div id="fg-img-5" class="fg-img"></div>
+			<h3 class="font-1"><%= t('problems.frontpage.step_five')%></h3>
+			<p><%= t('problems.frontpage.step_five_details')%></p>
+		</li>
+		</div>
+	</ol>
 </div>

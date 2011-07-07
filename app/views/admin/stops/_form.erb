@@ -1,6 +1,6 @@
 <%- if !@stop.errors.empty? %>
   <div class='form-error'>
-    <%= t(:stop_form_error) %>
+    <%= t('admin.stop_form_error') %>
   </div>
 <%- end %>
 <%- [:atco_code, :naptan_code, :plate_code, :common_name, :short_common_name, :landmark, :street, :crossing, :indicator, :bearing, :lon, :lat].each do |field| %>
@@ -8,7 +8,7 @@
 <%- end %>
 <div class='form-field'>
   <%- if @stop.errors.on(:stop_type) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @stop, :stop_type   %>
     </div>
   <%- end %>
@@ -18,7 +18,7 @@
 
 <div class='form-field'>
   <%- if @stop.errors.on(:bus_stop_type) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @stop, :bus_stop_type   %>
     </div>
   <%- end %>
@@ -28,7 +28,7 @@
 
 <div class='form-field'>
   <%- if @stop.errors.on(:locality_id) %>
-    <div class='form-field-error'>
+    <div class='error'>
       <%= error_message_on @stop, :locality_id %>
     </div>
   <%- end %>
@@ -39,4 +39,4 @@
 </div>
 
 <%= raw f.hidden_field :loaded %>
-<%= raw submit_tag t(:go) %>
+<%= raw submit_tag t('admin.go') %>

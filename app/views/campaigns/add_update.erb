@@ -1,1 +1,13 @@
-<%= render :partial => 'update_form', :locals => { :text => t(:ask_our_expert_panel), :hidden => false, :update => @campaign_update } %>
+<div id="main-content" class="container">
+    <%- if @campaign_update.is_advice_request? %>
+      <%- id = 'advice-request-form' %>
+      <%- text = t('campaigns.add_update.ask_our_expert_panel') %>
+    <%- else %>
+      <%- id = 'campaign-update-form' %>
+      <%- text = t('campaigns.add_update.add_an_update') %>
+    <%- end %>
+
+    <h3><%= text %></h3>
+
+    <%= render :partial => 'update_form' %>
+</div>

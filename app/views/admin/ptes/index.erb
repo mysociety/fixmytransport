@@ -1,16 +1,16 @@
-<h2><%= t(:ptes) %></h2>
+<h2><%= t('admin.ptes') %></h2>
 <%= will_paginate @ptes, {:admin => true} %>
 <table class='ptes index-list'>
   <tr>
-    <th width='10%'><%= t(:id) %></th>
-    <th width='25%'><%= t(:name) %></th>
-    <th width='65%'><%= t(:wikipedia_url)  %></th>
+    <th width='10%'><%= t('admin.id') %></th>
+    <th width='25%'><%= t('admin.name') %></th>
+    <th width='65%'><%= t('admin.wikipedia_url')  %></th>
   </tr>
   <%-@ptes.each do |pte| %>
     <tr class="<%=cycle('odd', 'even') %>">
       <td>
         <%= pte.id %>
-        <%= link_to "(#{t(:admin)})", admin_url(admin_pte_path(pte)) %>
+        <%= link_to "(#{t('admin.admin')})", admin_url(admin_pte_path(pte)) %>
       <td><%= pte.name %></td>
       <td><%= link_to(pte.wikipedia_url) %></td>
     </td>

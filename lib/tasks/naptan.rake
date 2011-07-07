@@ -137,36 +137,46 @@ namespace :naptan do
     end
 
     def find_stop_area_locality(stop_area)
-      localities = stop_area.stops.map{ |stop| stop.locality }.uniq
-      if localities.size == 1
-        # only one locality, choose that
-        return localities.first
+      if stop_area.stops.empty?
+        nearest_stop = Stop.find_nearest(stop_area.easting, stop_area.northing)
+        return nearest_stop.locality
       else
-        parent_localities = []
-        localities.each do |locality|
-          parent_localities += locality.parents
-        end
-        # none of the localities has a parent - just pick one
-        if parent_localities.empty?
+        localities = stop_area.stops.map{ |stop| stop.locality }.uniq
+        if localities.size == 1
+          # only one locality, choose that
           return localities.first
-        end
+        else
+          parent_localities = []
+          localities.each do |locality|
+            parent_localities += locality.parents
+          end
+          # none of the localities has a parent - just pick one
+          if parent_localities.empty?
+            return localities.first
+          end
 
-        parent_localities.each do |parent_locality|
-          # there's a parent that's either identical to or a parent of all the localities with parents
-          if localities.all?{ |locality| locality == parent_locality || locality.parents.empty? || locality.parents.include?(parent_locality) }
-            # choose parent
-            return parent_locality
+          parent_localities.each do |parent_locality|
+            # there's a parent that's either identical to or a parent of all the localities with parents
+            if localities.all?{ |locality| locality == parent_locality || locality.parents.empty? || locality.parents.include?(parent_locality) }
+              # choose parent
+              return parent_locality
+            end
           end
         end
+        # just pick the first
+        return localities.first
       end
-      # just pick the first
-      return localities.first
     end
 
     desc 'Add locality_id to stop areas'
     task :add_locality_to_stop_areas => :environment do
+      StopArea.connection.execute("DELETE 
+                                   FROM slugs 
+                                   WHERE sluggable_type = 'StopArea' 
+                                   AND scope is null;")
       StopArea.paper_trail_off
       StopArea.find_each(:conditions => ['locality_id is NULL']) do |stop_area|
+        puts stop_area.name
         locality = find_stop_area_locality(stop_area)
         stop_area.locality = find_stop_area_locality(stop_area)
         stop_area.save!

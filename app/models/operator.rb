@@ -75,7 +75,7 @@ class Operator < ActiveRecord::Base
   end
 
   # return the appropriate contact for a particular type of problem
-  def contact_for_category_and_location(category, location)
+  def contact_for_category_and_location(category, location, exception_on_fail=true)
     location_contacts = self.contacts_for_location(location)
     if category_contact = contact_for_category(location_contacts, category)
       return category_contact
@@ -88,13 +88,21 @@ class Operator < ActiveRecord::Base
       elsif other_contact = contact_for_category(general_contacts, "Other")
         return other_contact
       else
-        raise "No \"Other\" category contact for #{self.name} (operator ID: #{self.id})"
+        if exception_on_fail
+          raise "No \"Other\" category contact for #{self.name} (operator ID: #{self.id})"
+        else
+          return nil
+        end
       end
     end
   end
 
   def emails
     self.operator_contacts.map{ |contact| contact.email }.uniq.compact
+  end
+
+  def self.count_without_contacts
+    count(:conditions => ['id not in (select operator_id from operator_contacts where deleted = ?)', false])
   end
 
   def self.find_all_by_nptdr_code(transport_mode, code, region, route)

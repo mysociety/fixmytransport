@@ -27,6 +27,7 @@ define('OPTION_COOKIE_STORE_SESSION_SECRET', 'your secret key here, make it long
 define('OPTION_STAGING_SITE', 1);
 
 define('OPTION_DOMAIN', '127.0.0.1:3000');
+define('OPTION_ASSET_HOST', '127.0.0.1:3000'); # set up an asset host with wildcards
 
 // Address that email comes from
 define('OPTION_CONTACT_EMAIL', 'contact@localhost');
@@ -39,6 +40,11 @@ define('OPTION_BUGS_EMAIL', 'bugs@localhost');
 
 define('OPTION_GOOGLE_MAPS_API_KEY', 'Your Google Maps API key');
 
+// Facebook: 
+// APP_ID is typically a 16-digit code regestered for this app by your "owner" Facebook account.
+// If you leave it blank, facebook stuff (connect/login)  won't be displayed.
+define('OPTION_FACEBOOK_APP_ID', '');
+
 // Using a database with spatial extensions? PostGIS or MySQL with Spatial Extensions
 define('OPTION_USE_SPATIAL_EXTENSIONS', 1);
 
@@ -47,6 +53,7 @@ define('OPTION_ADMIN_BASE_URL', 'http://example.com/secure/');
 
 // Service locations
 define('OPTION_MAPIT_URL', 'http://mapit.mysociety.org');
+define('OPTION_GAZE_URL', '');
 
 // Locations of transport data
 define('OPTION_NAPTAN_DIR', '/my/naptan/dir');
@@ -56,13 +63,24 @@ define('OPTION_NOC_DIR', '/my/noc/dir');
 define('OPTION_NPTDR_DERIVED_DIR', '/my/nptdr-derived/dir');
 
 // Incoming email
-define('OPTION_INCOMING_EMAIL_DOMAIN', 'localhost'); // e.g. 'fixmytransport.com'
-define('OPTION_INCOMING_EMAIL_BASE_DOMAIN', 'localhost'); // e.g. 'fixmytransport.com'
 
-define('OPTION_MAIL_CONF_LIVE_DIR', '/my/live/conf/dir');
-define('OPTION_INCOMING_EMAIL_LOCAL_USER', 'fmt');
-define('OPTION_MAILSERVERS', 'email_one|email_two');
+define('OPTION_INCOMING_EMAIL_DOMAIN', 'localhost'); // e.g. 'fixmytransport.com'
+define('OPTION_INCOMING_EMAIL_PREFIX', ''); // e.g. fmt-
 
 // Is the site currently visible? 
 define('OPTION_SITE_VISIBLE', 1);
+
+// Where to store fragments of cached HTML
+define('OPTION_CACHE_PARENT_DIRECTORY', '');
+
+// Where to store uploaded files like profile images
+define('OPTION_FILE_DIRECTORY', ':rails_root/public/system');
+
+// Base URL for paperclip files
+define('OPTION_PAPERCLIP_URL_BASE', '/system/paperclip');
+
+// Is the app in beta?
+define('OPTION_APP_STATUS', 'beta');
+define('OPTION_BETA_USERNAME', 'username');
+define('OPTION_BETA_PASSWORD', 'password');
 ?>

@@ -6,7 +6,7 @@ class AssignmentsController < ApplicationController
 
   def new
     @initiator = @campaign.initiator
-    reason =  t(:default_reason_text, :user => @initiator.first_name,
+    reason =  t('assignments.new.default_reason_text', :user => @initiator.first_name,
                                       :expert => current_user.name)
     @assignment = @campaign.assignments.build(:user => @initiator, :data => {:reason => reason})
   end
@@ -15,6 +15,7 @@ class AssignmentsController < ApplicationController
     @initiator = @campaign.initiator
     assignment_data = { :name => params[:name],
                         :email => params[:email],
+                        :description => params[:description],
                         :draft_text => params[:draft_text],
                         :reason => params[:reason],
                         :subject => params[:subject] }
@@ -32,7 +33,7 @@ class AssignmentsController < ApplicationController
       # add an event to the campaign
       @campaign.campaign_events.create!(:event_type => 'assignment_given',
                                         :described => @assignment)
-      flash[:notice] = t(:sent_your_advice, :user => @initiator.name)
+      flash[:notice] = t('assignments.new.sent_your_advice', :user => @initiator.name)
       redirect_to campaign_path(@campaign)
     else
       render :new
@@ -47,10 +48,11 @@ class AssignmentsController < ApplicationController
       return false
     end
     @assignment.data = { :organization_name => params[:organization_name],
-                         :organization_email => params[:organization_email] }
+                         :organization_email => params[:organization_email],
+                         :location_only => params[:location_only] == 'on' }
     @assignment.status = :in_progress
     if @assignment.save
-      flash[:notice] = t(:confirming_organization)
+      flash[:notice] = t('assignments.edit.confirming_organization')
       CampaignMailer.deliver_completed_assignment(@campaign, @assignment)
       @campaign.campaign_events.create!(:event_type => 'assignment_in_progress',
                                         :described => @assignment)
@@ -66,15 +68,6 @@ class AssignmentsController < ApplicationController
   def edit
     @assignment = @campaign.assignments.find(params[:id])
     if ! editable_assignments.include?(@assignment.task_type.to_sym)
-      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
-      return false
-    end
-  end
-
-  def show
-    visible_assignments = [:write_to_other]
-    @assignment = @campaign.assignments.find(params[:id])
-    if ! visible_assignments.include?(@assignment.task_type.to_sym)
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end

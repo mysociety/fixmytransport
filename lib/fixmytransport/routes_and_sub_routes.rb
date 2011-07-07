@@ -25,7 +25,7 @@ module FixMyTransport
         if short
           text = ""
         else
-          text = transport_mode.name.downcase
+          text = MySociety::Format.ucfirst(transport_mode.name.downcase)
         end
         if from_stop
           if terminuses.size > 1

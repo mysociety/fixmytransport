@@ -1,4 +1,1 @@
-<%= "#{assignment.user_name} reported the issue on FixMyTransport." %>
-<span class='date'>
-  <%= t(:ago, :time => time_ago_in_words(event.created_at)) %>
-</span>
+<a href="#" class="thread-item compact"><span class="num"><%= index %></span><span class="title"><%= t('campaigns.show.reported_issue', :name => assignment.user_name) %></span><span class="close">close</span><span class="date"><%= event.created_at.to_s(:standard_with_date) %></span></a>

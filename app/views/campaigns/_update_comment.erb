@@ -1,7 +1,0 @@
-<li class='campaign-comment'>
-  <span class='status'><%= campaign_status(comment.user, @campaign) %></span>
-  <%= raw "#{h(comment.user_name)}: #{sanitize(comment.text)}" %>
-  <div class='date'>
-		<%= t(:ago, :time => time_ago_in_words(comment.created_at)) %>
-	</div>
-</li>

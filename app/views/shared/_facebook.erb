@@ -1,0 +1,15 @@
+<fb:like href="<%= campaign_url(@campaign) %>" send="false" width="490" show_faces="true" action="recommend" font=""></fb:like>
+<div class="fb-item-container">
+    <div>
+        <fb:send href="<%= campaign_url(@campaign) %>" font=""></fb:send>
+    </div>
+    <p>
+        <b><%= t('shared.facebook.send')%></b><br/>
+       <%= t('shared.facebook.send')%>
+    </p>
+</div>
+<div class="fb-item-container">
+    <a href="#" class="fb-post-to-wall fb-feed-button" ><%= t('shared.facebook.post')%></a>
+    <p id="social-message">
+    </p>
+</div>

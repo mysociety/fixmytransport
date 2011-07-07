@@ -12,10 +12,10 @@ class Admin::PtesController < Admin::AdminController
   def update
     @pte = PassengerTransportExecutive.find(params[:id])
     if @pte.update_attributes(params[:pte])
-      flash[:notice] = t(:pte_updated)
+      flash[:notice] = t('admin.pte_updated')
       redirect_to admin_url(admin_pte_path(@pte))
     else
-      flash[:error] = t(:pte_problem)
+      flash[:error] = t('admin.pte_problem')
       render :show
     end
   end

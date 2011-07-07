@@ -70,11 +70,6 @@ describe StopArea do
       @stop_area = StopArea.new(@valid_attributes)
       @stop_area.loaded = true
     end
-    
-    it 'should require locality' do 
-      @stop_area.locality_id = nil
-      @stop_area.valid?.should be_false
-    end
   
   end
   
@@ -104,10 +99,13 @@ describe StopArea do
     
     describe 'for stop areas with an area attribute' do 
   
-      fixtures default_fixtures
+      before do
+        @stop_area = StopArea.new(:name => 'London Victoria Rail Station')
+        @stop_area.stub!(:area).and_return('Victoria')
+      end
     
       it 'should be of the form "name in area" ' do 
-        stop_areas(:victoria_station_leaf).description.should == "London Victoria Rail Station in Victoria"
+        @stop_area.description.should == "London Victoria Rail Station in Victoria"
       end
     
     end

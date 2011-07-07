@@ -1,3 +1,15 @@
 en: 
-  forgot_password: Forgot your password?
-  reset_my_password: Reset my password
+  password_resets:
+    edit:
+      change_your_password: Change your password
+      update_password_and_login: "Update my password and sign me in"
+      password_updated: "Your password has been successfully updated."
+      could_not_find_account: "We're sorry, but we could not locate your account. If you are having issues try copying and pasting the URL from your email into your browser or restarting the reset password process."
+    new:
+      forgot_password: Forgot your password?
+      enter_your_email_address: "Enter your e-mail address, then click Continue. We'll email you a link to a page where you can easily create a new password."
+      continue: Continue
+      your_password_will_not_be_changed: "your password will not be changed."
+      no_user_found_with_email: "No user was found with that email address."
+      email: Email
+      

@@ -1,46 +1,61 @@
 <%- content_for :javascript do  %>
   <%= raw map_javascript_include_tags %>
 <%- end %>
-<div id='map-col'>
-  <%= render :partial => 'shared/map', :locals => { :locations => @stop_area.points, :other_locations => @other_locations, :link_type => :location, :height => MAP_HEIGHT, :width => MAP_WIDTH  } %>
-  <div class='extra-info'>
-    
-    <%- if StopAreaType.atomic_types.include? @stop_area.area_type %>
-      <%= render :partial => "shared/route_list", :locals => { :stop_or_station => @stop_area } %>
-    <%- else %>
-      The following stops are here: 
-      <%- @stop_area.stops.each do |stop| %>
-        <div class='stop'>
-          <%= link_to("#{stop.name_with_long_indicator}", stop_url(stop.locality, stop)) %>
-          <%- if !stop.routes.empty?  %>
-            <%= render :partial => 'shared/route_list', :locals => {:stop_or_station => stop} %>
-          <%- end %>
-        </div>
+<%- content_for :meta do %>
+  <meta property="og:title" content="<%= @stop_area.full_name %>" />
+  <meta property="og:type" content="landmark" />
+  <meta property="og:latitude" content="<%= @stop_area.lat %>" />
+  <meta property="og:longitude" content="<%= @stop_area.lon %>" />
+  <meta property="og:locality" content="<%= @stop_area.locality_name %>" />
+  <meta property="og:country-name" content="Great Britain" />
+  <meta property="og:url" content="<%= request.url %>"/>
+  <meta property="og:image" content="<%=  main_url("#{stop_icon(@stop_area, small=false)}.png") %>"/>
+  <meta property="og:description" content="<%= @stop_area.description %>"/>
+  <meta property="og:site_name" content="FixMyTransport"/>
+<%- end %>
+
+<div id="banner">
+	<div class="container">
+		<h1><%= "#{@stop_area.full_name}" %></h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+      <%- if !@stop_area.operators.empty?  %>
+          
+          <h2 class="route-operator">operated by <%= operator_links(@stop_area.operators) %></h2>
+        <%- end %>
+        
+      <%- if !@stop_area.area.blank? %>
+        <p><span class='locality'>
+          <%= "In #{@stop_area.locality_name}" %>
+        </span></p>
       <%- end %>
-    <%- end %>
-  </div>
+	</div>
 </div>
+<div id="main-content" class="container">
+	<div class="leftcol">
+		<h5><%= t('locations.show_stop_area.location_header') %></h5>
+		<div id="medium-map">
+		   <%- cache_unless_map_params(:action => 'show_stop_area', :action_suffix => 'map') do %>
+       <%= render :partial => 'shared/map', :locals => { :locations => @stop_area.points, :other_locations => @other_locations, :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH  } %>
+        <%- end %>
+ 	  </div>
 
-<div class='stop-area'>
-  <a href="<%= location_url(@stop_area, :format => 'atom') %>" class='rss-link campaign-rss'>
-    <span><%= t(:feed) %></span>
-    <img title='<%= t(:feed) %>' src='/images/feed.png' alt='<%= t(:campaigns_feed) %>'/>
-  </a>
-  <h3 class='name'><%= @stop_area.full_name %></h3>
-  <div class='details'>
-    
-    <%- if !@stop_area.area.blank? %>
-      <span class='locality'>
-        <%= "In #{@stop_area.area}" %>
-      </span>
-    <%- end %>
-    <%- if !@stop_area.operators.empty?  %>
-      <div class='operators'>
-        <%= raw t(:operated_by, :operators => @stop_area.operators.map{ |operator| link_to(operator.name, operator_path(operator)) }.join(", ")) %>
-      </div>
-    <%- end %>
-    
-  </div>
+	  <%= render :partial => "shared/location_content",  :locals => { :location => @stop_area } %>
+	</div>
+
+	<div class="rightcol">
+		<a class="button big red report" href="<%= new_problem_url(:location_id => @stop_area.id, :location_type => @stop_area.type, :to => params[:to], :from => params[:from])%>"><%= t('locations.show_stop_area.report_a_problem') %></a>
+    <%- cache(:action => 'show_stop_area', :action_suffix => 'route_list') do %>
+		  <h5 class="left"><%= t('locations.show_stop_area.routes_header') %></h5>
+      <ol id="large-ol">
+        <%- @stop_area.routes.sort_by(&:short_name).each do |route| %>
+        <li><a href="<%= location_url(route)%>">
+         <%= route.short_name %>
+        </a></li>
+        <%- end %>
+      </ol> 
+	  <%- end %>
+	</div>
 </div>
-
-<%= render :partial => 'shared/location_content', :locals => { :location => @stop_area } %>

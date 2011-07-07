@@ -1,27 +1,36 @@
-<h2 class='main-header'><%= t(:what_was_the_number_and_area) %></h2>
-<div class='problem-form-wrapper'>
+<div id="banner">
+	<div class="container">
+		<h1>Find a Bus or Coach Route</h1>
+	</div>
+</div>
 
-<%- form_tag find_bus_route_problems_path, :id => 'bus_route_form', :method => 'GET' do  %>
-    
-    <%- if @error_message %>
-      <div class='form-field-error'>
+<div id="greybanner">
+	<div class="container">
+		<p><%= t('problems.find_bus_route.what_was_the_number_and_area') %></p>
+	</div>
+</div>
+
+
+<div id="main-content" class="container">
+	<%- form_tag find_bus_route_problems_path, :id => 'bus_route_form', :method => 'GET' do  %>
+	<%- if @error_message %>
+      <div class='error'>
         <%= @error_message %>
       </div>
     <%- end %>
+	<ul class="form-list">
+	    <li class="fieldset">
+	      <%= raw label_tag t('problems.find_bus_route.enter_route_number') %>
+	      <%= raw text_field_tag 'route_number', params[:route_number] %>
+	      <div id='guidance-route-number' class='guidance'>e.g. C10</div>
+	    </li>
     
-    <div class='form-field'>
-      <%= raw label_tag t(:enter_route_number) %>
-      <%= raw text_field_tag 'route_number', params[:route_number] %>
-      <div id='guidance-route-number' class='guidance'>e.g. C10</div>
-    </div>
-    
-    <div class='form-field'>
-      <%= raw label_tag t(:enter_town_or_area) %>
-      <%= raw text_field_tag 'area', params[:area] %>
-      <div id='guidance-area' class='guidance'>e.g. London </div>
-    </div>
-    
-    <input type="submit" value="<%= t(:go) %>" />
-
-<%- end %>
+	    <li class="fieldset">
+	      <%= raw label_tag t('problems.find_bus_route.enter_town_or_area') %>
+	      <%= raw text_field_tag 'area', params[:area] %>
+	      <div id='guidance-area' class='guidance'>e.g. London </div>
+	    </li>
+		<li><button class="point-go" type="submit"><%= t('problems.find_bus_route.go') %></button></li>
+    </ul>
+	<%- end %>
 </div>

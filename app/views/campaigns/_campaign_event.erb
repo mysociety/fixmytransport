@@ -1,16 +1,18 @@
-<div class='campaign-event'>
+<li class="open">
   <%- case event.event_type %>
   <%- when 'incoming_message_received' %>
-    <%= render :partial => 'incoming_message', :locals => { :message => event.described, :event => event, :always_show_commentbox => always_show_commentbox } %>
+    <%= render :partial => 'incoming_message', :locals => { :message => event.described, :event => event, :index => index } %>
   <%- when 'outgoing_message_sent' %>
-    <%= render :partial => 'outgoing_message', :locals => { :message => event.described, :event => event, :always_show_commentbox => always_show_commentbox } %>
+    <%= render :partial => 'outgoing_message', :locals => { :message => event.described, :event => event, :index => index } %>
   <%- when 'assignment_completed' %>
-    <%= render :partial => "shared/complete_assignments/#{event.described.task_type}", :locals => { :assignment => event.described, :event => event } %>
+    <%= render :partial => "shared/complete_assignments/#{event.described.task_type}", :locals => { :assignment => event.described, :event => event, :index => index } %>
   <%- when 'assignment_given' %>
-    <%= render :partial => 'new_assignment', :locals => { :assignment => event.described, :event => event } %>
+    <%= render :partial => 'new_assignment', :locals => { :assignment => event.described, :event => event, :index => index } %>
   <%- when 'assignment_in_progress'%>
-    <%= render :partial => 'assignment_in_progress', :locals => { :assignment => event.described, :event => event }%>
+    <%= render :partial => 'assignment_in_progress', :locals => { :assignment => event.described, :event => event, :index => index }%>
   <%- when 'campaign_update_added' %>
-    <%= render :partial => 'campaign_update', :locals => { :update => event.described, :always_show_commentbox => always_show_commentbox } %>
+    <%= render :partial => 'campaign_update', :locals => { :update => event.described, :index => index } %>
+  <%- when 'comment_added' %>
+    <%= render :partial => 'shared/comment', :locals => { :comment => event.described, :index => index } %>
   <%- end %>
-</div>
+</li>

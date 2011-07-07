@@ -1,18 +1,12 @@
-<a name='problem_<%= problem.id %>'></a>
-<div class='problem'>
-  <h4 class='subject'>
-    <%= link_to(problem.subject, problem_url(problem))  %>
-  </h4>
-  <div class='details'>
-    <%= t(:added) %>
-    <span class='posted-time'>
-      <%= t(:posted_time, :time => time_ago_in_words(problem.created_at)) %>
-    </span>
-    <span class='reporter'>
-      <%= t(:by, :name => problem.reporter_name) %>
-    </span>
-  </div>
-  <p class='problem'>
-    <%= raw sanitize(problem.description) %>
-  </p>
-</div>
+<h4><a href="<%= problem_url(problem) %>"><%= problem.subject %></a></h4>
+  <p><%= raw link_to(problem.location.description, location_url(problem.location)) %></p>
+<p><%= t('shared.problem.by')%> <a href="<%= profile_url(problem.reporter) %>"><%= problem.reporter.name %></a></p>
+<dl>
+	<dt><%= t('shared.problem.added') %></dt>
+	<dd><%= problem.confirmed_at.to_s(:short) %></dd>
+	<div class="status-item">
+		<dt>Status:</dt>
+		<dd class="status stat-<%= problem_display_status(problem) %>"><%= problem_display_status(problem).titleize %></dd>
+	</div>
+</dl>	
+

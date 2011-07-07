@@ -42,25 +42,25 @@ class StopArea < ActiveRecord::Base
   has_many :routes_as_from_stop_area, :through => :route_segments_as_from_stop_area, :source => 'route'
   has_many :routes_as_to_stop_area, :through => :route_segments_as_to_stop_area, :source => 'route'
   has_paper_trail
-  validates_presence_of :locality, :if => :loaded?
+  before_save :cache_description
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
+  is_location
 
   def routes
-    stops.map{ |stop| stop.routes }.flatten.uniq
+    Route.find(:all, :conditions => ['id in (SELECT route_id
+                                             FROM route_segments
+                                             WHERE from_stop_area_id = ?
+                                             OR to_stop_area_id = ?)', self.id, self.id],
+                     :include => :region)
   end
 
   def route_terminuses
     routes.map{ |route| route.terminuses }.flatten.uniq.sort_by(&:name)
   end
 
-  def next_stops
-    route_segments_as_from_stop_area.map do |route_segment|
-      route_segment.to_stop_area or route_segment.to_stop
-    end.uniq.sort_by(&:name)
-  end
-
   def description
+    return cached_description if cached_description
     text = name
     text += " in #{area}" if area
     text
@@ -96,13 +96,12 @@ class StopArea < ActiveRecord::Base
   memoize :area
 
   def self.find_in_bounding_box(min_lat, min_lon, max_lat, max_lon)
-    stops = find_by_sql(["SELECT  *
-                          FROM stop_areas
-                          WHERE stop_areas.area_type in (?)
+    stops = find(:all, :conditions => ["stop_areas.area_type in (?)
                           AND stop_areas.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
                             ST_Point(?, ?),
       	                    ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})",
-    	                    StopAreaType.primary_types, min_lon, min_lat, max_lon, max_lat])
+    	                    StopAreaType.primary_types, min_lon, min_lat, max_lon, max_lat],
+    	                 :include => :locality)
   end
 
   def self.find_parents(stop, station_type)
@@ -158,8 +157,7 @@ class StopArea < ActiveRecord::Base
   end
 
   def self.full_find(id, scope)
-    find(id, :scope => scope,
-         :include => { :stops => [ {:routes_as_from_stop => :region}, {:routes_as_to_stop, :region}, :locality ] } )
+    find(id, :scope => scope, :include => :locality)
   end
 
   def self.find_by_code(code)

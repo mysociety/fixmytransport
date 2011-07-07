@@ -1,22 +1,22 @@
-<h2><%= t(:merging_operators) %></h2>
+<h2><%= t('admin.merging_operators') %></h2>
 <%- form_tag(admin_url(merge_admin_operators_path), :method => "POST") do  %>
   <table class='operators merge-list'>
     <tr>
-      <th width='10%'><%= t(:id) %>
-      <th width='20%'><%= t(:name) %></th>
-      <th width='20%'><%= t(:short_name)  %></th>
-      <th width='5%'><%= t(:code) %></th>
-      <th width='20%'><%= t(:email) %></th>
-      <th width='10%'><%= t(:email_confirmed) %></th>
-      <th width='5%'><%= t(:routes) %></th>
-      <th width='5%'><%= t(:merge_to) %></th>
+      <th width='10%'><%= t('admin.id') %>
+      <th width='20%'><%= t('admin.name') %></th>
+      <th width='20%'><%= t('admin.short_name')  %></th>
+      <th width='5%'><%= t('admin.code') %></th>
+      <th width='20%'><%= t('admin.email') %></th>
+      <th width='10%'><%= t('admin.email_confirmed') %></th>
+      <th width='5%'><%= t('admin.routes') %></th>
+      <th width='5%'><%= t('admin.merge_to') %></th>
     </th>
     
     <%-@operators.each do |operator| %>
       <tr class='<%= cycle("odd", "even") %>'>
         <td>
           <%= operator.id %>
-          <%= link_to "(#{t(:admin)})", admin_url(admin_operator_path(operator)), {:target => "_blank"} %></td>
+          <%= link_to "(#{t('admin.admin')})", admin_url(admin_operator_path(operator)), {:target => "_blank"} %></td>
         <td><%= operator.name %></td>
         <td><%= operator.short_name %></td>
         <td><%= operator.code %></td>
@@ -31,7 +31,7 @@
     <%-end %>
     <tr class='footer'>
       <td colspan='8'>
-        <%= raw submit_tag t(:merge) %>
+        <%= raw submit_tag t('admin.merge') %>
       </td>
     </tr>
   </table>

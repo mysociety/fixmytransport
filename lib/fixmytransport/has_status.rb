@@ -47,7 +47,7 @@ module FixMyTransport
       def status=(symbol)
         code = self.symbol_to_status_code[symbol]
         if code.nil? 
-          raise "Unknown status for assignment #{symbol}"
+          raise "Unknown status for #{self.class} #{symbol}"
         end
         self.status_code = code
       end

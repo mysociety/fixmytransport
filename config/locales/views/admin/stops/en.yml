@@ -1,9 +1,10 @@
 en:
-  street: Street
-  locality: Locality
-  stop_type: Stop type
-  indicator: Indicator
-  add_a_stop: Add a stop
-  stop_form_error: There's a problem with this stop - please see below.
-  stop_has_campaigns: This stop cannot be deleted as there are campaigns associated with it. 
-  stop_has_routes: This stop cannot be deleted as there are routes that go through it. 
+  admin:
+    street: Street
+    locality: Locality
+    stop_type: Stop type
+    indicator: Indicator
+    add_a_stop: Add a stop
+    stop_form_error: There's a problem with this stop - please see below.
+    stop_has_campaigns: This stop cannot be deleted as there are campaigns associated with it. 
+    stop_has_routes: This stop cannot be deleted as there are routes that go through it. 

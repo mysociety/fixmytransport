@@ -1,25 +1,33 @@
-<div id='map-col'>
-  <%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => [], :link_type => :problem, :height => MAP_HEIGHT, :width => MAP_WIDTH  } %>
+<div id="banner">
+	<div class="container">
+		<h1><%= t('problems.choose_route.header')%></h1>
+	</div>
 </div>
+<div id="greybanner">
+	<div class="container">
+		<p><%= t('problems.choose_route.multiple_routes_intro', :num_locations => MAX_LOCATION_RESULTS) %></p>
+	</div>
+</div>
+<div id="main-content" class="container">
+	<div id='map-col'>
+	  <%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => [], :link_type => :problem, :height => MAP_HEIGHT, :width => MAP_WIDTH  } %>
+	</div>
 
-<%- if @error_message %>
-  <div class='location-error'>
-    <%= @error_message %>
-  </div>
-<%- end %>
+	<%- if @error_message %>
+	  <div class='location-error'>
+	    <%= @error_message %>
+	  </div>
+	<%- end %>
 
-<p>
-  <%= t(:multiple_routes_intro, :num_locations => MAX_LOCATION_RESULTS) %>
-</p>
+	<ul class='location-list'>
+	  <%- @locations.each do |location| %>
+	    <li>
+	      <%= link_to "#{location.description_with_operators}", new_problem_url(:location_id => location.id, :location_type => location.type) %>
+	    </li>
+	  <%- end %>
+	</ul>
 
-<ul class='location-list'>
-  <%- @locations.each do |location| %>
-    <li>
-      <%= link_to "#{location.description_with_operators}", new_problem_url(:location_id => location.id, :location_type => location.type) %>
-    </li>
-  <%- end %>
-</ul>
-
-<%- if @limit and @locations.size == @limit %>
-  <%= link_to(t(:show_all), url_for(params.merge(:show_all => 1))) %>
-<%- end %>
+	<%- if @limit and @locations.size == @limit %>
+	  <%= link_to(t('problems.choose_route.show_all'), url_for(params.merge(:show_all => 1))) %>
+	<%- end %>
+</div>

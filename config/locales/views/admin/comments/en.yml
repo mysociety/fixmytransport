@@ -1,0 +1,5 @@
+en:
+  admin:
+    admin_mark_fixed: Mark fixed
+    admin_mark_open: Mark open
+    token: Token

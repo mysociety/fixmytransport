@@ -1,21 +1,6 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
-var feedbackTab;
-
-// Close the feedback form panel on success,
-// display error messages on failure
-function feedbackCallback(response) {
-  if (response.success) {
-      feedbackTab.hideTab();
-   } else {
-     $('.form-field-error').html('');
-     for (var key in response.errors){
-       $('#form-field-error-' + key).html( response.errors[key] );
-     }
-   }
-}
-
 function clearFormElements(element) {
   $(element).find(':input').each(function() {
       switch(this.type) {
@@ -55,22 +40,6 @@ function addSearchGuidance() {
   
 }
 
-// For an ongoing issue, don't show the date and time fields
-function hideProblemDateTimeForOngoing() {
-  if ($('#is-campaign-0').is(':not(:checked)')){
-    $('#date-field').hide();
-    $('#time-field').hide();    
-  }
-  $('input[name="problem[is_campaign]"]').click(function(){
-    if ($('#is-campaign-1').is(':checked')){
-      $('#date-field').hide("slow");
-      $('#time-field').hide("slow");
-    }else{
-      $('#date-field').show("slow");
-      $('#time-field').show("slow");
-    }
-  })
-}
 
 // Add listeners for link click events
 function addLinkActions() {
@@ -110,7 +79,7 @@ function setupForm(selector, callback) {
 function highlightEmptyTextArea(arr, form, options){
   textarea = $('textarea', form);
   if ($.trim(textarea.val()) == ''){
-    textarea.parent().prepend('<div class="form-field-error">Please enter some text</div>')
+    textarea.parent().prepend('<div class="error">Please enter some text</div>')
     return false;  
   }else {
     return true; 
@@ -118,18 +87,18 @@ function highlightEmptyTextArea(arr, form, options){
 }
 
 function show_error(element, message){
-  element.parent().prepend('<div class="form-field-error">'+message+'</div>');
+  element.parent().prepend('<div class="error">'+message+'</div>');
 }
 
 function adviceCallback(response){
-  $('.latest-news').after(response.html);
+  $('.campaign-history').after(response.html);
   $('#advice-request-form textarea').val('');
   $('#advice-request-form').hide();
   setupForm('.new_campaign_comment', updateCommentCallback);
 }
 
 function updateCallback(response){
-  $('.latest-news').after(response.html);
+  $('.campaign-history').after(response.html);
   $('#campaign-update-form textarea').val('');
   setupForm('.new_campaign_comment', updateCommentCallback);
 }
@@ -137,7 +106,7 @@ function updateCallback(response){
 function updateCommentCallback(response){
   commentbox_div = $('#commentbox_' + response.commented_id);
   commentbox = $("#comment_text_" + response.commented_id);
-  $('.form-field-error', commentbox_div).remove();
+  $('.error', commentbox_div).remove();
   
   if (response.success){
     commentbox.val("");
@@ -152,65 +121,43 @@ function updateCommentCallback(response){
 }
 
 
-// Make the feedback tab popup the form, 
-// make the form submit via AJAX,
-// setup the cancel button to clear fields
-// and close the panel
- 
-function setupFeedbackForm() {
-  feedbackTab = {
-       speed:800,
-       containerWidth:$('#feedback-panel-container').outerWidth(),
-       containerHeight:$('#feedback-panel-container').outerHeight(),
-       tabWidth:$('#feedback-tab').outerWidth(),
-       showTab:function(){
-         $('#feedback-panel-container').animate({left:'0'},  feedbackTab.speed,  function(){$('#feedback-tab').removeClass().addClass('feedback-tab-open')})
-       },
-       hideTab:function(){
-         $('#feedback-panel-container').animate({left:"-" + feedbackTab.containerWidth}, feedbackTab.speed, function(){$('#feedback-tab').removeClass().addClass('feedback-tab-closed')});
-         clearFormElements('#ajax-feedback');
-         $('#ajax-feedback .form-field-error').html('')
-       },
-       init:function(){
-           $('#feedback-tab').addClass('feedback-tab-closed');
-           $('#feedback-panel-container').css('height',feedbackTab.containerHeight + 'px');
-           $('#feedback-tab').click(function(event){
-               if ($('#feedback-tab').hasClass('feedback-tab-open')) {
-                 feedbackTab.hideTab()
-               } else {
-                feedbackTab.showTab()
-               }
-               event.preventDefault();
-           });
-       }
-   };
-
-  feedbackTab.init();
-  var options = {
-     success: feedbackCallback,
-     data: {
-       _method: 'post'
-     },
-     dataType: 'json'
-   };
-  $('#ajax-feedback').ajaxForm(options);
-  
-  $('.feedback-cancel').click(function() {
-    feedbackTab.hideTab();
-    event.preventDefault();
-  });  
-  
-}
-
 function tabifyRouteLists() {
     if ($('#tabs').length > 0){
       $("#tabs").tabs();
-      $("#tabs-bus").tabs();
-      $("#tabs-coach").tabs();
-      $("#tabs-train").tabs();
-      $("#tabs-ferry").tabs();
-      $("#tabs-metro").tabs();
+
+      if ($('#tabs-bus .tabs-sub-nav').length > 0){
+        $("#tabs-bus").tabs();
+      }
+      if ($('#tabs-coach .tabs-sub-nav').length > 0){
+        $("#tabs-coach").tabs();
+      }      
+      if ($('#tabs-train .tabs-sub-nav').length > 0){
+        $("#tabs-train").tabs();
+      }
+      if ($('#tabs-ferry .tabs-sub-nav').length > 0){
+        $("#tabs-ferry").tabs();
+      }
+      if ($('#tabs-metro .tabs-sub-nav').length > 0){
+        $("#tabs-metro").tabs();
+      }
+      
+      tabshook();
     }
+}
+
+function tabifyOperatorLists() {
+    if ($('#operator-tabs').length > 0){
+      $("#operator-tabs").tabs();
+      tabshook();
+    }
+}
+
+function tabshook(){
+	var activetab = 'childactive-'+$('#tabs-main-nav li.ui-state-active').attr('id');
+	$("#tabs-main-nav").removeClass (function (index, css) {
+	    return (css.match (/\bchildactive-\S+/g) || []).join(' ');
+	});
+	$('#tabs-main-nav').addClass(activetab);
 }
 
 
@@ -220,9 +167,15 @@ $(document).ready(function() {
     'beforeSend': function(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content')); }
   });
   tabifyRouteLists();
+  tabifyOperatorLists();
   addSearchGuidance();  
-  setupFeedbackForm();
-  hideProblemDateTimeForOngoing();
   addLinkActions();
-});
 
+	$('#tabs').bind('tabsshow', function(event, ui) {
+		tabshook();
+	});
+	
+	$('#operator-tabs').bind('tabsshow', function(event, ui) {
+		tabshook();
+	});
+});

@@ -104,6 +104,17 @@ describe Campaign do
      
   end
   
+  describe 'when asked for its email address' do 
+  
+    it 'should return an email address generated from the prefix, key and domain' do 
+      @campaign = Campaign.new
+      @campaign.stub!(:id).and_return(5049322)
+      @campaign.key = @campaign.generate_key
+      @campaign.email_address.should match(/campaign-lbhks-[a-z]{6}@localhost/)
+    end
+    
+  end
+    
   describe 'validating on update' do 
     
     before do 
@@ -117,55 +128,20 @@ describe Campaign do
       @campaign.errors.on(:description).should == 'Please give a brief description of your issue'
     end
   
-    it 'should be invalid without a title' do 
-      @campaign.errors.on(:title).should == 'Please give your page a title'
+    it 'should be invalid if the title is too short' do 
+      @campaign.errors.on(:title).should == 'Please enter a headline that is at least 40 characters long.'
     end
     
-    it 'should be invalid without a subdomain' do 
-      @campaign.errors.on(:subdomain).should == 'Please give your page a short name'
-    end
-    
-    it 'should be invalid if the subdomain is longer than 16 characters' do 
-      @campaign.subdomain = 'testtesttesttestt'
-      @campaign.valid?
-      @campaign.errors.on(:subdomain).should == 'The short name must be 16 characters or less'
-    end
-    
-    it 'should be invalid if the subdomain is shorter than 6 characters' do 
-      @campaign.subdomain = 'test'
-      @campaign.valid?
-      @campaign.errors.on(:subdomain).should == 'The short name must be at least 6 characters long'
-    end
-    
-    it 'should be invalid if the subdomain does not have at least one letter' do 
-      @campaign.subdomain = '99999999'
-      @campaign.valid?
-      @campaign.errors.on(:subdomain).should == 'The short name must contain at least one letter'
-    end
-    
-    it 'should be invalid if the subdomain contains non alphanumeric characters' do
-      @campaign.subdomain = '%testtest'
-      @campaign.valid?
-      @campaign.errors.on(:subdomain).should == 'The short name can only contain lowercase letters and numbers'
-    end
-    
-    it 'should be invalid if it contains uppercase letters' do 
-      @campaign.subdomain = 'TESTtest'
-      @campaign.valid? 
-      @campaign.errors.on(:subdomain).should == 'The short name can only contain lowercase letters and numbers'
-    end
-  
   end
   
   describe 'when finding a campaign by campaign email' do 
     
-    it 'should look for a campaign whose subdomain is the subdomain of the email' do 
+    it 'should look for a campaign whose key is the key of the email' do 
       Campaign.stub!(:email_domain).and_return("example.com")
-      Campaign.should_receive(:find).with(:first, :conditions => ["subdomain = ?", "campaign"])
-      Campaign.find_by_campaign_email("test@campaign.example.com")
+      Campaign.should_receive(:find).with(:first, :conditions => ["lower(key) = ?", "cx-vgfdf"])
+      Campaign.find_by_campaign_email("campaign-cx-vgfdf@example.com")
     end
   
   end
-  
   
 end

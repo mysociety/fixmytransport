@@ -1,13 +1,11 @@
-<div class='report-problem-link'>
-  <%= link_to(t(:report_a_problem_here), new_problem_url(:location_id => location.id, :location_type => location.type, :to => params[:to], :from => params[:from])) %>
-</div>
-
-<%- if !location.campaigns.visible.empty? %>
-  <h3><%= t(:other_campaigns_here) %></h3>
-  <%= render :partial => 'shared/campaign', :collection => location.campaigns.visible, :locals => { :context => :location } %>
+<h3><%= t('shared.location_content.related_issues')%></h3>
+<%- if !location.related_issues.empty? %>
+<ul class="issues-list">
+	<%- location.related_issues.each do |issue| %>
+     <%= render :partial => 'shared/issue', :locals => { :issue => issue, :context => :location } %>
+  <%- end %>
+</ul>
+<%- else %>
+<%= t('shared.location_content.no_issues')%>
 <%- end %>
 
-<%- if !location.problems.visible.empty? %>
-  <h3><%= t(:other_problems_here) %></h3>
-  <%= render :partial => 'shared/problem', :collection => location.problems.visible, :locals => { :context => :location } %>
-<%- end %>

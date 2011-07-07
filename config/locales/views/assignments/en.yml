@@ -1,20 +1,29 @@
 en:
-  new_assignment_help: "Use this form to send a public message to %{user} suggesting the next person that they should contact to keep \"%{campaign}\" moving."
-  why_write_to_this_person: "Why should %{user} write to this person?"
-  subject_line_for_email: "Subject line"
-  for_advice_email: "For the email we'll send to %{user}"
-  text_to_get_them_started: "Optional - give %{user} some draft text for their email"
-  send_advice: Send advice
-  reason: Reason
-  your_message: "Your message to %{user}"
-  draft_text: "Draft text"
-  sent_your_advice: "Thanks! We've sent your advice to %{user}"
-  default_reason_text: "Hi %{user},\n\nI've got some advice for you about your campaign. What I think you should do next is write to Joe Bloggs. They know how to get this type of issue fixed.\n\nGood luck!\n\n%{expert}"
-  who_should_they_write_to: "Who should %{user} write to? (we'll set up a form for them with these details and put a link to it in your message so it's really easy)"
-  organization_name: Company name
-  organization_email: Company email address
-  confirming_organization: "Well done, as soon as we've added the company and contact information into the database, your problem will be on its way!"
-  assignments_edit_access_message: "try this assignment"
-  assignments_update_access_message: "try this assignment"
-  find_transport_org_explanation: "We don't know yet who operates the %{location}. If you can find out the company name and a contact email address, and let us know, we'll send your problem report on its way to them."
-  find_contact_details_explanation: "We don't yet have a contact email address for %{organization}. If you can find one, we can send your problem report on its way."
+  assignments:
+    new:
+      default_reason_text: "Hi %{user},\n\nI've got some advice for you about your campaign. What I think you should do next is write to Joe Bloggs. They know how to get this type of issue fixed.\n\nGood luck!\n\n%{expert}"
+      sent_your_advice: "Thanks! We've sent your advice to %{user}"
+      new_assignment_help: "Use this form to send a public message to %{user} suggesting the next person that they should contact to keep \"%{campaign}\" moving."
+      subject_line_for_email: "Subject line"
+      for_advice_email: "For the email we'll send to %{user}"
+      your_message: "Your message to %{user}"
+      why_write_to_this_person: "Why should %{user} write to this person?"
+      who_should_they_write_to: "Who should %{user} write to? (we'll set up a form for them with these details and put a link to it in your message so it's really easy)"      
+      text_to_get_them_started: "Optional - give %{user} some draft text for their email"
+      send_advice: Send advice
+      draft_text: "Draft text"
+      description: 'Description'
+      email: 'Email'
+      name: 'Name'      
+    edit:
+      confirming_organization: "Well done, as soon as we've added the company and contact information into the database, your problem will be on its way!"
+      find_transport_org_explanation: "We don't know yet who operates the %{location}. If you can find out the company name and a contact email address, and let us know, we'll send your problem report on its way to them."
+      find_contact_details_explanation: "We don't yet have a contact email address for %{organization}. If you can find one, we can send your problem report on its way."
+      find_transport_org_header: "Find out the company that runs the %{location}"
+      find_contact_details_header: "Find an email address for %{name}"
+      message_from_expert: "This is a message from FixMyTransport boffin %{expert} to %{user} on their next step for keeping the %{campaign} campaign moving."
+      organization_name: Company name
+      organization_email: Company email address
+      subject: Subject
+      submit: Submit
+      contact_for_location: "Is this email address just for problems at this station?"

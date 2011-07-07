@@ -17,41 +17,6 @@ describe ProblemMailer do
                                   :transport_mode_names => ['Bus', 'Tram/Metro'])
   end
   
-  describe 'when sending problem confirmations' do
- 
-    before do
-      @problem = mock_model(Problem, :subject => "My Problem", 
-                                     :description => "Some description",
-                                     :reporter_name => "Problem Reporter",
-                                     :time => nil, 
-                                     :date => nil)
-      @recipient = mock_model(User, :email => "problemreporter@example.com", 
-                                    :name_and_email => "Problem Reporter <problemreporter@example.com>")
-      @token = "test-token"
-    end
-  
-    describe "when creating a problem confirmation" do
-
-      it "should render successfully" do
-        lambda { ProblemMailer.create_problem_confirmation(@recipient, @problem, @token) }.should_not raise_error
-      end
-      
-    end
-  
-    describe 'when delivering a problem confirmation' do 
-    
-      before do 
-        @mailer = ProblemMailer.create_problem_confirmation(@recipient, @problem, @token)
-      end
-
-      it "should deliver successfully" do
-        lambda { ProblemMailer.deliver(@mailer) }.should_not raise_error
-      end
-
-    end
-    
-  end
-  
   describe 'when sending problem reports' do 
         
     before do
@@ -230,14 +195,7 @@ describe ProblemMailer do
                                                          [@emailable_council], 
                                                          [@unemailable_council])
       ProblemMailer.send_reports
-    end
-    
-    it "shouldn't send a report email for a problem which has an operator email but is associated with a campaign with no subdomain" do
-      mock_campaign = mock_model(Campaign, :subdomain => nil)
-      @mock_problem_email_operator.stub!(:campaign).and_return(mock_campaign)
-      ProblemMailer.should_not_receive(:deliver_report).with(@mock_problem_email_operator, @operator_with_mail, [@operator_with_mail], [])
-      ProblemMailer.send_reports
-    end  
+    end 
     
     it 'should create a sent email record for each problem report delivered' do 
       SentEmail.should_receive(:create!).with(:problem => @mock_problem_email_operator, 

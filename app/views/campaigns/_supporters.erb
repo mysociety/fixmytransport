@@ -1,0 +1,24 @@
+<div class="box" id="campaign-supporters">
+	<div>
+		<h5 class="left"><%= t('campaigns.show.campaign_supporters')%></h5>
+		<%- if ! show_all && @campaign.supporters.registered.count > SUPPORTER_MAX  %>
+		  <a class="view-all right" url="<%= get_supporters_campaign_path(@campaign) %>" href="<%= url_for(params.merge(:all_supporters => '1')) %>"><%= t('campaigns.show.view_all')%></a>
+		<%- end %>
+	</div>
+	<ul class="user-list">
+	  <%- if show_all %>
+	  <%- supporters = @campaign.supporters.registered %>
+	  <%- else %>
+	  <%- supporters = @campaign.supporters.registered.slice(0...SUPPORTER_MAX) %>
+	  <%- end %>
+		<%- supporters.each do |supporter| %>
+		<li>
+			<div class="avatar"><img src="<%= supporter.profile_photo.url(:small_thumb) %>" alt=""/></div>
+			<div class="user-info">
+				<a class="name" href="<%= profile_url(supporter) %>"><%= supporter.name %></a>
+				<p class="location"><%= supporter.location %></p>
+			</div>
+		</li>
+		<%- end %>
+	</ul>
+</div>

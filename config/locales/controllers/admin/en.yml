@@ -1,32 +1,51 @@
 en:
-  route_created: Route created.
-  route_problem: There was a problem updating this route.
-  route_updated: Route updated.
-  route_destroyed: Route destroyed.
-  operator_created: Operator created.
-  operator_problem: There was a problem updating this operator.
-  operator_updated: Operator updated.
-  operator_destroyed: Operator was destroyed. 
-  stop_created: Stop created.
-  stop_problem: There was a problem updating this stop.
-  stop_updated: Stop updated.
-  stop_destroyed: Stop area was destroyed.
-  stop_area_created: Stop area created.
-  stop_area_problem: There was a problem updating this stop area.
-  stop_area_updated: Stop area updated.
-  stop_area_destroyed: Stop area was destroyed.
-  destroy: Destroy
-  operators_merged: The operators have been merged
-  routes_merged: The routes have been merged
-  on_street: "on %{street}"
-  in_locality: "in %{locality}"
-  ptes: PTEs
-  wikipedia_url: Wikipedia URL
-  pte_problem: There was a problem updating this PTE. 
-  pte_updated: PTE updated.
-  council_contact_updated: Council contact updated. 
-  council_contact_problem: There was a problem updating this council contact.
-  council_contact_created: Council contact created.
-  operator_contact_updated: Operator contact updated. 
-  operator_contact_problem: There was a problem updating this operator contact.
-  operator_contact_created: Operator contact created.
+  admin:
+    site_name: FixMyTransport
+    go: go
+    title: Title
+    key: Key
+    transport_mode: Transport mode
+    initiator: Initiator
+    subject: Subject
+    route_created: Route created.
+    route_problem: There was a problem updating this route.
+    route_updated: Route updated.
+    route_destroyed: Route destroyed.
+    operator_created: Operator created.
+    operator_problem: There was a problem updating this operator.
+    operator_updated: Operator updated.
+    operator_destroyed: Operator was destroyed. 
+    stop_created: Stop created.
+    stop_problem: There was a problem updating this stop.
+    stop_updated: Stop updated.
+    stop_destroyed: Stop area was destroyed.
+    stop_area_created: Stop area created.
+    stop_area_problem: There was a problem updating this stop area.
+    stop_area_updated: Stop area updated.
+    stop_area_destroyed: Stop area was destroyed.
+    destroy: Destroy
+    operators_merged: The operators have been merged.
+    routes_merged: The routes have been merged.
+    on_street: "on %{street}"
+    in_locality: "in %{locality}"
+    ptes: PTEs
+    wikipedia_url: Wikipedia URL
+    pte_problem: There was a problem updating this PTE. 
+    pte_updated: PTE updated.
+    council_contact_updated: Council contact updated. 
+    council_contact_problem: There was a problem updating this council contact.
+    council_contact_created: Council contact created.
+    operator_contact_updated: Operator contact updated. 
+    operator_contact_problem: There was a problem updating this operator contact.
+    operator_contact_created: Operator contact created.
+    incoming_message_destroyed: Incoming message destroyed.
+    incoming_message_destroy_problem: There was a probem destroying this incoming message.
+    incoming_message_moved: Incoming message has been moved to this campaign.
+    problem_updated: Problem updated.
+    problem_problem: There was a problem updating this problem.
+    campaign_updated: Campaign updated.
+    campaign_problem: There was a problem updating this campaign.
+    campaign_update_updated: Campaign update updated.
+    campaign_update_problem: There was a problem updating this campaign.
+    comment_updated: Comment updated.
+    comment_problem: There was a problem updating this comment.
