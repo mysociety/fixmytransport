@@ -38,8 +38,10 @@ en:
       no_account: "Don't have an account?"
       create_one: Create one
       sign_in_with_facebook: Sign in with Facebook
+      create_sign_in_with_facebook: Sign in with Facebook
       facebook_connect: Facebook Connect
       create_account: Create account
+      got_account: "Have an account?"
     login:
       must_be_logged_in: "You must be logged in to %{requested_action}"
       must_be_logged_out: "You must be logged out to access this page"

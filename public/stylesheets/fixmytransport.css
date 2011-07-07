@@ -494,9 +494,12 @@ ul.user-list {
 		display: block;
 	}
 	#create-account-form {
-		width: auto;
+    width: 250px;
 		float: left;
 		display: block;
+	}
+	#create-account-form input {
+	  width: 230px;
 	}
 	#static-login-box #login-form {
 		margin-left:180px;
@@ -605,7 +608,7 @@ ul.user-list {
 	-webkit-border-radius:0;
 }
 	.login-options p{
-		margin-top: 2em;
+		margin-top: 1em;
 	}
 
 		#facebook{

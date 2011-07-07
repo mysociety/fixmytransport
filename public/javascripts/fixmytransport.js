@@ -401,8 +401,6 @@ $(document).ready(function(){
           $('.login-box .pane').hide();
           $("#login-box").dialog({title: "Create a FixMyTransport Account"});
         	$('#login-create-account').fadeIn();
-        	$("#login-to-account").before("Got an account? ")
-        	$("#login-to-account").html("Sign in")
       		$("#login-box").dialog("open");
 
         }else{

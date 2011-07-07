@@ -1,5 +1,5 @@
-
-<%- form_for((@account_user ||= User.new), :url => account_path, :html => { :id => 'create-account-form' }) do |f| %>
+<div class='notice' style="display: none;" role="alert"></div>
+<%- form_for(@account_user ||= User.new, :url => account_path, :html => { :id => 'create-account-form' }) do |f| %>
   <div class='fieldset'>
     <%- if @account_user.errors.on('base') %>
       <div class='error error-base'>
@@ -8,8 +8,6 @@
     <%- else %>
       <div class='error error-base' style="display: none;" role="alert"></div>
     <%- end %>
-    <div class='notice' style="display: none;" role="alert"></div>
-    
     <div class='form-field'>
       <%- if @account_user.errors.on('name') %>
         <div class='error error-name'>
@@ -59,6 +57,13 @@
     </div>
     
 	<button class="button" type="submit"><%= t('shared.login_form.create_account') %></button>
-    <%= link_to("back", login_url, :id => 'login-to-account')%>
   </div>
 <%- end %>
+<div class="login-options">
+  <p><%= t('shared.login_form.got_account') %></p>
+	<a href="<%= login_url %>" class="button" id="login-to-account"><%= t('shared.login_form.sign_in') %></a>
+    <%- if ! MySociety::Config.get('FACEBOOK_APP_ID','').empty? %>
+	    <p><%= t('shared.login_form.create_sign_in_with_facebook') %></p>
+	    <a href="#" onclick="checkLoginOrCallFacebook()" id="facebook" class="facebook"><%= t('shared.login_form.facebook_connect') %></a>
+	<%- end %>
+</div>
