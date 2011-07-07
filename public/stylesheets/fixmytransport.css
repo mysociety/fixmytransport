@@ -1665,10 +1665,11 @@ ul#process {
 	width:216px;
 	display:block;
 	float:left;
-	padding:40px;
+	padding:10px  0 0 50px;
 	margin:10px 0;
 }
-	#frontpage-banner-left h2 {
+	#frontpage-banner-left h2,
+	#frontpage-banner-right h2 {
 		font-size:1.7em;
 		color:#fff;
 	}
@@ -1683,10 +1684,11 @@ ul#process {
 		border:3px solid #fff;
 		margin:10px 0 0 20px;
 	}
-	#frontpage-banner-right .fancybutton {
-		width:220px;
-		font-size:2em;
-	}
+
+	#frontpage-banner-right ul{margin: 0px;padding: 0px;list-style: none; width: 190px;}
+	#frontpage-banner-right ul li{margin: 0px;padding: 0px;}
+	#frontpage-banner-right ul a{color:#fff;font-size: 15px;border-bottom: 1px solid #fff;display: block;padding: 5px 0;}
+
 
 #fg-head {
 	display:inline-block;
