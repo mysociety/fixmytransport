@@ -295,21 +295,45 @@ form#search {
 	background: #FFFBD7;
 	padding:1em;
 	color:#fff;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+	border: 2px solid #FFD45A
 
-	-webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-	-moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-	box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
 	#yellowbanner h1 {
 		line-height:1.3;
 		font-size:2.2em;
 	}
 /* ===[ Supporter Notice ]=== */
+
+div.supporter-notice-arrow{
+	background: url(../images/share-arrow.png);
+	width: 201px;
+	height: 135px;
+	box-shadow:none;
+	-moz-box-shadow:none;
+	-webkit-box-shadow:none;
+	position: absolute;
+	margin-top: -11em;
+	margin-left: 627px;
+	}
+
+.container-wide{
+	width: 970px;
+	margin: 0px auto;
+}
+
 .supporter-notice {
+	width: 602px;
 	background:#FFFBD7;
-	margin-bottom:3em;
-	width:100%;
-	padding:1em 0;
+	margin:3em 0;
+	padding:10px 10px;
+	margin-left: 10px;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+	border: 2px solid #FFD45A
 }
 	.supporter-notice h1 {
 		font-size: 1.9em;
