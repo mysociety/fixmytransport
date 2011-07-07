@@ -1,4 +1,7 @@
 <div id="login-landing-wrap">
+  <%- if title %>
+  <h3><%= title %></h3>
+  <%- end %>
 <%- form_for (@user_session ||= UserSession.new), :url => user_sessions_path, :html => {:id => 'login-form' } do |f|  %>
   <%- if @user_session.errors.on_base %>
     <div class='error error-base'>
