@@ -1867,3 +1867,7 @@ ul.route-links {
 	height:447px;
 	margin:0 auto;
 }
+
+/*===[Facebook Canvas]===*/
+
+body.facebook-canvas .container{width:760px;}
