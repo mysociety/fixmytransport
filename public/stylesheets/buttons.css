@@ -284,24 +284,8 @@ a.button {
 
 /* Route finding page buttons
    ================================================== */
-#route-type-list li {
-	display:block;
-	height:70px;
-	font-size:22px;
-	line-height: 22px;
-	margin:10px;
-	height: 80px;
-	padding-top: 120px;
-	padding: left: 0px;
-}
-	#route-type-list li a {
-		color:#fff;
-		display:block;
-		margin:15px 0 0 0px;
-		text-align:center;
-	}
 
-	#route-type-list li.bus {
+	#route-type-list li.bus a{
 		background: #048fc2 url(../images/transport-icons/bus.png) center 40px no-repeat; /* Old browsers */
 		background: url(../images/transport-icons/white-bus.png) center 40px no-repeat, -moz-linear-gradient(top, #048fc2 0%, #006699 100%); /* FF3.6+ */
 		background: url(../images/transport-icons/white-bus.png) center 40px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#048fc2), color-stop(100%,#006699)); /* Chrome,Safari4+ */
@@ -311,8 +295,8 @@ a.button {
 		filter: none; /* IE6-9 */
 		background: url(../images/transport-icons/white-bus.png) center 40px no-repeat, linear-gradient(top, #048fc2 0%,#006699 100%); /* W3C */
 	}
-	#route-type-list li:hover.bus,
-	#route-type-list li:focus.bus {
+	#route-type-list li.bus a:hover,
+	#route-type-list li.but a:focus{
 		background: #006699 url(../images/transport-icons/white-bus.png) center 40px no-repeat; /* Old browsers */
 		background: url(../images/transport-icons/white-bus.png) center 40px no-repeat, -moz-linear-gradient(top, #006699 0%, #048fc2 100%); /* FF3.6+ */
 		background: url(../images/transport-icons/white-bus.png) center 40px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006699), color-stop(100%,#048fc2)); /* Chrome,Safari4+ */
@@ -322,7 +306,7 @@ a.button {
 		filter: none; /* IE6-9 */
 		background: url(../images/transport-icons/white-bus.png) center 40px no-repeat, linear-gradient(top, #006699 0%,#048fc2 100%); /* W3C */
 	}
-	#route-type-list li.train {
+	#route-type-list li.train a{
 		background: #cc3366 url(../images/transport-icons/white-train.png) center 40px no-repeat; /* Old browsers */
 		background:url(../images/transport-icons/white-train.png) center 40px no-repeat, -moz-linear-gradient(top, #cc3366 0%, #9d1f60 100%); /* FF3.6+ */
 		background:url(../images/transport-icons/white-train.png) center 40px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cc3366), color-stop(100%,#9d1f60)); /* Chrome,Safari4+ */
@@ -333,8 +317,8 @@ a.button {
 		background:url(../images/transport-icons/white-train.png) center 40px no-repeat, linear-gradient(top, #cc3366 0%,#9d1f60 100%); /* W3C */
 	}
 
-	#route-type-list li:hover.train,
-	#route-type-list li:focus.train {
+	#route-type-list li.train a:hover,
+	#route-type-list li.train a:focus;{
 		background: #9d1f60 url(../images/transport-icons/white-train.png) center 40px no-repeat; /* Old browsers */
 		background:url(../images/transport-icons/white-train.png) center 40px no-repeat, -moz-linear-gradient(top, #9d1f60 0%, #cc3366 100%); /* FF3.6+ */
 		background:url(../images/transport-icons/white-train.png) center 40px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9d1f60), color-stop(100%,#cc3366)); /* Chrome,Safari4+ */
@@ -345,7 +329,7 @@ a.button {
 		background:url(../images/transport-icons/white-train.png) center 40px no-repeat, linear-gradient(top, #9d1f60 0%,#cc3366 100%); /* W3C */
 	}
 
-	#route-type-list li.tram {
+	#route-type-list li.tram a{
 		padding-top: 110px;
 		height: 90px;
 		background: #ffb600 url(../images/transport-icons/white-tram.png) center 25px no-repeat; /* Old browsers */
@@ -357,8 +341,8 @@ a.button {
 		filter: none; /* IE6-9 */
 		background:url(../images/transport-icons/white-tram.png) center 25px no-repeat, linear-gradient(top, #ffb600 0%,#d89700 100%); /* W3C */
 	}
-	#route-type-list li:hover.tram,
-	#route-type-list li:focus.tram {
+	#route-type-list li.tram a:hover,
+	#route-type-list li.tram a:focus {
 		background: #d89700 url(../images/transport-icons/white-tram.png) center 25px no-repeat; /* Old browsers */
 		background:url(../images/transport-icons/white-tram.png) center 25px no-repeat, -moz-linear-gradient(top, #d89700 0%, #ffb600 100%); /* FF3.6+ */
 		background:url(../images/transport-icons/white-tram.png) center 25px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d89700), color-stop(100%,#ffb600)); /* Chrome,Safari4+ */
@@ -368,7 +352,7 @@ a.button {
 		filter: none; /* IE6-9 */
 		background:url(../images/transport-icons/white-tram.png) center 25px no-repeat, linear-gradient(top, #d89700 0%,#ffb600 100%); /* W3C */
 	}
-	#route-type-list li.ferry {
+	#route-type-list li.ferry a {
 		background: #99cc33 url(../images/transport-icons/white-ferry.png) center 40px no-repeat; /* Old browsers */
 		background:url(../images/transport-icons/white-ferry.png) center 40px no-repeat, -moz-linear-gradient(top, #99cc33 0%, #669933 100%); /* FF3.6+ */
 		background:url(../images/transport-icons/white-ferry.png) center 40px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#99cc33), color-stop(100%,#669933)); /* Chrome,Safari4+ */
@@ -378,8 +362,8 @@ a.button {
 		filter: none; /* IE6-9 */
 		background:url(../images/transport-icons/white-ferry.png) center 40px no-repeat, linear-gradient(top, #99cc33 0%,#669933 100%); /* W3C */
 	}
-	#route-type-list li:hover.ferry,
-	#route-type-list li:focus.ferry {
+	#route-type-list li.ferry a:hover,
+	#route-type-list li.ferry a:focus {
 		background: #669933 url(../images/transport-icons/white-ferry.png) center 40px no-repeat; /* Old browsers */
 		background:url(../images/transport-icons/white-ferry.png) center 40px no-repeat, -moz-linear-gradient(top, #669933 0%, #99cc33 100%); /* FF3.6+ */
 		background:url(../images/transport-icons/white-ferry.png) center 40px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#669933), color-stop(100%,#99cc33)); /* Chrome,Safari4+ */

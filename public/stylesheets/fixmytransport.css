@@ -883,6 +883,11 @@ input.checkbox {
 			position:absolute;
 			top:-2em;
 		}
+		
+			.form-list li.fieldset .error{
+				margin-top: 10px;
+				position: absolute;
+			}
 
 /*TIP BOX*/	
 .tipbox {
@@ -896,6 +901,7 @@ input.checkbox {
 	  top:20px;
 	  margin-top: -8px;
 	  overflow:visible !important;
+	clear: left;
 }
 	.tipbox.fixed {
 		right: -350px;
@@ -1810,6 +1816,7 @@ ul.route-links {
 	display:block;
 	width:518px;
 	height:70px;
+	overflow: visible;
 	margin:100px auto 0 auto;
 	background:url(../images/find_stop.jpg) -10px -86px no-repeat;
 }
@@ -1832,6 +1839,8 @@ ul.route-links {
 		float:right;
 		margin:7px 13px 0 0;
 	}
+	
+	
 /*===[Find Route Page]===*/
 #route-type-list {
 	list-style-type:none;
@@ -1867,6 +1876,13 @@ ul.route-links {
 	height:447px;
 	margin:0 auto;
 }
+
+/*===[Error Positioning]===*/
+
+.error{clear: both;float:left;margin: 4px 0 0 4px;}
+.find-stop-error{margin: 10px 0 0 223px;}
+.form-field p{clear: left;}
+
 
 /*===[Facebook Canvas]===*/
 
