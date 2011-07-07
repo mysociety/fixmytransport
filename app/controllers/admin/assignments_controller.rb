@@ -2,8 +2,12 @@ class Admin::AssignmentsController < Admin::AdminController
 
   def show
     @assignment = Assignment.find(params[:id])
-    if @assignment.data[:organization_name]
-      @operator = Operator.find(:first, :conditions => ['lower(name) = ?', @assignment.data[:organization_name].downcase])
+    if @assignment.problem.operator
+      @operator = @assignment.problem.operator
+    else
+      if @assignment.data[:organization_name]
+        @operator = Operator.find(:first, :conditions => ['lower(name) = ?', @assignment.data[:organization_name].downcase])
+      end
     end
   end
 
@@ -67,13 +71,13 @@ class Admin::AssignmentsController < Admin::AdminController
           @operator.save!
           problem.save!
           location.save! 
-          @assignment.save!
           if @contact
             @contact.save!
           end
           if @assignment_complete
             complete_assignment(@assignment, problem)
           end
+          @assignment.save!
         end        
       rescue Exception => e
         flash[:error] = e.message
