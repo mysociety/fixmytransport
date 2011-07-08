@@ -71,11 +71,12 @@ en:
       login_successful: "Sign in successful!"
       must_be_logged_in: "You must be logged in to %{requested_action}"
       sign_out: Sign out
+      sign_in: Sign in or sign up
     login_form:
       sign_in: "Sign In"
       sign_in_with_facebook: "Sign in with Facebook - We'll never spam your wall!"
       forgot: "Forgot?"
-      create_account: "Create a FixMyTransport Account or Login with Facebook"
+      create_account: "Create Account"
       create_one: "Create one"
       no_account: "Don't have an account?"
       keep_signed_in: "Keep me signed in"
