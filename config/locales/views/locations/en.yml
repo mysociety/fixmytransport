@@ -2,30 +2,30 @@ en:
   locations:
     show_route:
       operated_by: "operated by %{operators}"
-      route_header: Route
+      report_a_problem: "Report a problem here"
       information_wrong: "Is this information wrong?"
-      report_a_problem: Report a problem
-      stops_header: Stops
+      route_header: "Route"
+      stops_header: "Stops"
     show_route_region:
-      route_region: Route Region
-      routes_in: "Public transport routes in the %{region} region"
-      national_routes_title: National public transport routes
+      see_also_national_routes: "(see also %{national})"
+      route_region: "Route Region"
       bus_routes: "%{count} bus routes %{national}"
       ferry_routes: "%{count} ferry routes %{national}"
+      national_routes_title: "National public transport routes"
       train_routes: "%{count} train routes %{national}"
-      tram_routes: "%{count} tram, metro or underground routes %{national}"
+      national_routes: "national routes"
+      routes_in: "Public transport routes in the %{region} region"
       coach_routes: "%{count} coach routes %{national}"
-      see_also_national_routes: "(see also %{national})"
-      national_routes: national routes     
+      tram_routes: "%{count} tram, metro or underground routes %{national}"
     show_route_regions:
-      route_regions: Route Regions
-      routes_by_region: Public transport routes by region
+      route_regions: "Route Regions"
+      routes_by_region: "Public transport routes by region"
     show_stop:
+      report_a_problem: "Report a problem"
+      location_header: "Location"
+      routes_header: "Routes"
       stop_marked_inactive: "This stop has been marked as inactive."
-      location_header: Location
-      routes_header: Routes
-      report_a_problem: Report a problem
     show_stop_area:
-      location_header: Location
-      routes_header: Routes
-      report_a_problem: Report a problem
+      report_a_problem: "Report a problem"
+      location_header: "Location"
+      routes_header: "Routes"

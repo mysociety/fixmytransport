@@ -1,110 +1,112 @@
 en:
   campaigns:
-    show: 
-      location_operator: "the operator of the %{location}"
-      call_to_action: "Please help me persuade %{org} to %{title}"
-      short_call_to_action: "Campaign to %{title}"
-      initiator_call_to_action: "Your campaign to %{title}"
-      supporter_call_to_action: "I just joined the campaign to persuade %{org} to %{title}"
-      initiator_facebook_description: "Please help my campaign by spreading the word and encouraging your friends to support it."
-      supporter_facebook_description: "Please help this FixMyTransport campaign by spreading the word and encouraging your friends to support it."
-      initiator_facebook_message: "I've started a FixMyTransport campaign to persuade %{org} to %{title} ...will you join me?"
-      supporter_facebook_message: "I'm supporting this FixMyTransport campaign to persuade %{org} to %{title} ...will you join me?"
-      reported_issue: "%{name} reported the issue on FixMyTransport."
-      wrote_to_orgs: "%{name} wrote to %{orgs}" 
-      here_is_the_letter: "Here is the letter that %{name} wrote."
-      sign_in_to_join: "Please sign in or create an account to join this campaign"
-      you_are_no_longer_a_supporter: "You are no longer a supporter of \"%{campaign}\""
-      add_photos: Add photos
-      contact_found: "%{user_name} found an email address for %{operator_name}"
-      responsible_org_found: "%{user_name} found the company that runs this %{location}"
-      user_requested_advice: "%{name} asked for advice."
-      added_an_update: "%{name} added an update"
-      got_a_message: "%{sender} responded to %{campaigner}"
-      a_reply: a reply
-      manage_campaign: Manage this campaign
-      recommended_actions: Recommended actions
-      actions: Actions
-      ask_an_expert: Ask an expert
-      add_images: Add images
-      mark_as_complete: Mark as complete
-      edit_description: Edit description
-      find_operator: Find operator
-      add_contact: Add contact
-      your_contacts: Your contacts
-      contacts_description: "Useful people, that may be able to help with your campaign"
-      contacts_email: Email
-      whats_happening: "What's happening?"
-      post_update: Post
-      post_update_instructions: "Keep supporters up-to-date on how the campaign is progressing."
-      expert_advised_writing: "%{expert} %{advised} %{user} to write to %{recipient}."
-      advised: advised
-      following_experts_advice: " following %{expert}'s advice."
-      wrote_a_message: "%{sender} wrote to %{recipient}%{assignment_text}"
-      support_this: Support
-      campaign_supporters: Campaign Supporters
-      view_all: View All
-      request_advice: Ask for advice
-      add_update: "Add update"
-      your_campaign: Your Campaign
-      you_support_this: You support this
-      campaign_fixed: Fixed
-      campaign_supporter_first_time_header: "Yay! Thanks for supporting our campaign"
-      campaign_supporter_offer_opinions: "Offer opinions and advice to help make the campaign a success."
-      campaign_supporter_share: "And don't forget to tell your friends  and spread the word through Twitter &amp; Facebook"
-      campaign_initiator_first_time_header: "Congratulations you just made a campaign. To help make it a success get your friends involved through %{twitter_link}, %{facebook_link} or %{email_link}"
-      twitter: twitter
-      facebook: facebook
-      email: email
-      tell_to_write: "Tell %{user} who to write to next"
-      transport_experts: "Transport experts"
-      campaign_description_header: Description
-      images_and_media: Images and Media
-      campaign_comment: Comment
-      expand_all: Expand All
-      collapse_all: Collapse All
-      campaign_history: Campaign History
-      facebook_title: Facebook
-      twitter_title: Twitter
-      email_title: Email
-      campaign_manager: Campaign Manager
-      managing: Managing 
-      supporting: Supporting
-      find_operator_task_description: "In order to get your campaign started, you'll need to find out who operates this %{location}."
-      find_contact_task_description: "In order to get your campaign started, you'll need to find an email address for %{name}"
-      find_operator_task_title: "Find operator"
-      find_contact_task_title: "Add contact"
-      contact_council: "Council"
-      contact_passenger_transport_executive: "Passenger Transport Executive"
-      contact_operator: "%{location} operator"
-      show_quoted: show quoted sections
-      hide_quoted: hide quoted sections
-      campaign_email_replacement: "[%{title} email]"
-      app_email_replacement: "[FixMyTransport contact email]"
-      org_email_replacement: "[%{name} problem reporting email]"
-      please_upload_valid_image: "Please upload a .jpeg, .gif or .png image"
-      user_says: "%{name} commented"
-      back: Back
     add_details:
-      add_details: Add Details
-      add_details_instructions: Give your campaign a headline and description
-      tip_close: Close
-      make_a_headline: Make a headline
-      good_headline: Give your campaign a good headline (in 40 to 80 characters)
+      tip_close: "Close"
+      add_details_instructions: Write a headline and description
+      good_headline: "Give your supporters page a good headline (in 40 to 80 characters)"
       eg: "E.g."
       headline_example: "Please help me persuade The Operator to get rid of the awful smell between Manors and Monument on the Metro"
-      add_short_description: Add a short description
-      description_advice: "In no more than 40 words, provide a quick description of the issue. This will allow others to easily understand and support your campaign."
-      details_submit: Submit
+      details_submit: "Submit"
+      add_details: "OK - We're going to set up a simple webpage so that other people can support you"
+      make_a_headline: "Complete this sentence!"
+      description_advice: "Here you should describe in a bit more detail why you've lodged a complaint, and why you want other people to support you. Be as clear and concise as you can, for maximum impact."
+      add_short_description: "Add a short description"
     add_update:
-      add_an_update: 'Add an update:'
-      ask_our_expert_panel: 'Ask your supporters and our expert panel what to do next:'
-      advice_request_added: Your advice request will be sent to your supporters and the panel.
-      update_added: Your update has been added. 
-    edit:
-      edit_campaign_description: 'Edit the campaign description:'
-      save: Save
+      advice_request_added: "Your advice request will be sent to your supporters and the panel."
+      update_added: "Your update has been added."
+      add_an_update: "Add an update:"
+      ask_our_expert_panel: "Ask your supporters and our expert panel what to do next:"
     confirm_leave:
+      error_on_leave: "Sorry, we couldn't locate your support for this problem in the database. If you've copied the URL from an email, please check that you copied it exactly - if you have, please %{link} what happened."
+      let_us_know: "let us know"
       you_are_no_longer_a_supporter: "You are no longer a supporter of \"%{campaign}\""
-      let_us_know: let us know
-      error_on_leave: "Sorry, we couldn't locate your membership of this campaign in the database. If you've copied the URL from an email, please check that you copied it exactly - if you have, please %{link} what happened."
+    edit:
+      edit_campaign_description: "Edit your description:"
+      save: "Save"
+    show:
+      contacts_email: "Email"
+      contacts_description: "Useful people who may be able to help with your campaign"
+      campaign_supporter_share: "And don't forget to tell your friends:spread the word through email, Twitter & Facebook."
+      wrote_a_message: "%{sender} wrote to %{recipient}%{assignment_text}"
+      add_photos: "Add photos"
+      actions: "Actions"
+      expert_advised_writing: "%{expert} %{advised} %{user} to write to %{recipient}."
+      reported_issue: "%{name} reported the issue on FixMyTransport."
+      mark_as_complete: "Click this when you win!"
+      whats_happening: "What's happening?"
+      campaign_initiator_first_time_header: "Congratulations - your new page is now public. However, it will only help create extra pressure if you spread the word offline, or via %{twitter_link}, %{facebook_link} or %{email_link}"
+      campaign_history: "Problem History"
+      twitter_title: "Twitter"
+      ask_an_expert: "Ask an expert"
+      add_images: "Add images"
+      find_operator_task_title: "Find operator"
+      email: "email"
+      expand_all: "Expand All"
+      post_update: "Post"
+      you_support_this: "You support this"
+      a_reply: "a reply"
+      campaign_description_header: "Description"
+      show_quoted: "show quoted sections"
+      campaign_fixed: "Fixed"
+      call_to_action: "Please help me persuade %{org} to %{title}"
+      got_a_message: "%{sender} responded to %{campaigner}"
+      user_says: "%{name} commented"
+      request_advice: "Ask for advice from one of FixMyTransport's mostly volunteer experts"
+      managing: "Managing"
+      following_experts_advice: " following %{expert}'s advice."
+      advised: "advised"
+      contact_passenger_transport_executive: "Passenger Transport Executive"
+      org_email_replacement: "[%{name} problem reporting email]"
+      initiator_call_to_action: "You're currently trying to %{title}"
+      responsible_org_found: "%{user_name} found the company that runs this %{location}"
+      twitter: "Twitter"
+      you_are_no_longer_a_supporter: "You are no longer a supporter of \"%{campaign}\""
+      here_is_the_letter: "Here is the letter that %{name} wrote."
+      add_update: "Add update"
+      contact_operator: "%{location} operator"
+      collapse_all: "Collapse all"
+      tell_to_write: "Tell %{user} who to write to next"
+      manage_campaign: "Actions you can take to get your problem fixed"
+      your_contacts: "Your contacts"
+      view_all: "View all"
+      short_call_to_action: "We're trying to %{title}"
+      campaign_supporters: "Supporters"
+      facebook: "Facebook"
+      add_contact: "VERY IMPORTANT: Add missing email address"
+      images_and_media: "Images and media"
+      email_title: "Email"
+      campaign_email_replacement: "[%{title} email]"
+      hide_quoted: "hide quoted sections"
+      wrote_to_orgs: "%{name} wrote to %{orgs}"
+      find_operator_task_description: "We're sorry but we don't know who operates this %{location}. In order to be able to persuade them of anything, you'll need to find out. Please add the information here."
+      contact_found: "%{user_name} found an email address for %{operator_name}"
+      find_operator: "Find operator"
+      find_contact_task_description: "We're sorry but we don't know the email address of %{name}. In order to be able to persuade them of anything, finding their address is a vital first step. Please find it out and add it here."
+      your_campaign: "Your problem page"
+      location_operator: "the operator of the %{location}"
+      app_email_replacement: "[FixMyTransport contact email]"
+      recommended_actions: "Recommended actions"
+      support_this: "Support"
+      campaign_comment: "Comment"
+      supporting: "Supporting"
+      edit_description: "Edit description"
+      please_upload_valid_image: "Please upload a .jpeg, .gif or .png image"
+      campaign_manager: "Problem Reporter"
+      campaign_supporter_first_time_header: "Yay! Thanks for supporting our campaign"
+      contact_council: "Council"
+      sign_in_to_join: "Please sign in or create an account to help get this problem fixed"
+      transport_experts: "Transport experts"
+      added_an_update: "%{name} added an update"
+      user_requested_advice: "%{name} asked for advice."
+      campaign_supporter_offer_opinions: "Offer opinions and advice to help get this problem fixed"
+      facebook_title: "Facebook"
+      post_update_instructions: "Keep supporters up-to-date on how things are progressing"
+      supporter_call_to_action: "I'm trying to persuade %{org} to %{title} - help me!"
+      find_contact_task_title: "Add contact"
+      initiator_facebook_message: "I'm trying to persuade %{org} to %{title} ...will you join me?"
+      back: Back
+      supporter_facebook_description: Please help by spreading the word and encouraging your friends to support this.
+      supporter_facebook_message: I'm helping to persuade %{org} to %{title} ...will you join me?
+      initiator_facebook_description: Please help by spreading the word and encouraging your friends to support this.
+      
+      

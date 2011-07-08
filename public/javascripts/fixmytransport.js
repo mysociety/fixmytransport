@@ -88,7 +88,7 @@ $(document).ready(function(){
 		hide: "fade",
 		modal: true,
 		width: 500,
-		title: "Sign In",
+		title: "Sign In or Sign Up",
 		beforeClose: function(event, ui) {
       // get rid of any next actions
 		  $("#login-box form").find("#next_action").remove();
@@ -105,7 +105,7 @@ $(document).ready(function(){
 	  e.preventDefault();
   	$('.login-box .pane').hide();
   	$('#login-landing').show();
-		$("#login-box").dialog({title: "Sign In"});
+		$("#login-box").dialog({title: "Sign In or Sign Up"});
 		$("#login-box").dialog("open");
 		return false;
 	});
@@ -126,7 +126,7 @@ $(document).ready(function(){
   $('.pane #login-to-account').click(function(e){
   	e.preventDefault();
   	$('.pane:visible').fadeOut(500, function(){
-  	  $("#login-box").dialog({title: "Sign In"});
+  	  $("#login-box").dialog({title: "Sign In or Sign Up"});
   		$('#login-landing').fadeIn();
   	});
   });
@@ -319,7 +319,7 @@ $(document).ready(function(){
 
       // show the login form
       $('.login-box .pane').hide();
-      $("#login-box").dialog({title: "Sign In"});
+      $("#login-box").dialog({title: "Sign In or Sign Up"});
   		$('#login-landing').show();
   		$("#login-box").dialog("open");
 
@@ -443,7 +443,7 @@ $(document).ready(function(){
 
           // show the login form
           $('.login-box .pane').hide();
-          $("#login-box").dialog({title: "Sign In"});
+          $("#login-box").dialog({title: "Sign In or Sign Up"});
       		$('#login-landing').show();
 
         }else{

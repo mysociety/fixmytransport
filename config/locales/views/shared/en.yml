@@ -1,98 +1,96 @@
 en:
-  shared: 
-    campaign: 
-      location: "Location:"
-      started: "Added:"
-      by: Started by
-      followers: "Followers:"
-      status: "Status:"
-    comment_form:
-      post: Post
-    confirmation_sent:
-      nearly_done: Nearly Done! Now check your email...
-      please_be_patient: "The confirmation email <strong>may</strong> take a few minutes to arrive &mdash; <em>please</em> be patient."
-      check_your_junkmail_filters: "If you use web-based email or have 'junk mail' filters, you may wish to check your bulk/spam mail folders: sometimes, our messages are marked that way."
-      click_the_link: "You must now click the link in the email we've just sent you &mdash; if you do not, %{action}"
-      dont_worry: "(Don't worry &mdash; %{worry})"
-      you_will_not_be_a_supporter: "you will not be added as a campaign supporter."
-      your_comment_will_not_be_added: your comment will not be added.
-      your_problem_will_not_be_created: your problem will not be created.
-    location_content:
-      related_issues: Related Issues
-      no_issues: No reported issues.
-    email:
-      email_text: "I've just started a campaign on FixMyTransport to %{call_to_action}."
-      please_support: "Please come and support me at:"
-      email_signoff: "Thanks!"
-      email_instructions: Copy this text and paste into an email to your friends.
-    facebook: 
-      send: Send via Facebook
-      share:  Share this campaign through friends and email
-      post: Post to wall
-    login_form:
-      email: Email
-      password: Password 
-      forgot: Forgot?
-      sign_in: Sign In
-      keep_signed_in: Keep me signed in
-      no_account: "Don't have an account?"
-      create_one: Create one
-      sign_in_with_facebook: Sign in with Facebook
-      create_sign_in_with_facebook: Sign in with Facebook
-      facebook_connect: Facebook Connect
-      create_account: Create account
-      got_account: "Have an account?"
-    login:
-      must_be_logged_in: "You must be logged in to %{requested_action}"
-      must_be_logged_out: "You must be logged out to access this page"
-      a_fixmytransport_boffin: "a FixMyTransport boffin"
-      login_to: "Sign in as %{user} to %{requested_action}"
-      login_successful: "Sign in successful!"
-      logout_successful: "Sign out successful!"
-      unexpected_external_auth_error: "Unable to complete authentication with %{source} &mdash; try again later"
-    problem:
-      added:
-      posted_time: "%{time} ago"
-      by: "Reported by"
-      added: "Added:"
-      on_the: on the
-      at_the: at the
-      at: at
-      the: The
+  shared:
+    access:
+      campaigns_share_access_message: "share this problem page"
+      campaigns_complete_access_message: "mark this campaign as successful"
+      outgoing_messages_new_access_message: "write messages on behalf of this campaign"
+      assignments_create_access_message: "create an assignment for this campaign"
+      campaigns_add_comment_access_message: "add a comment"
+      assignments_new_access_message: "create an assignment for this campaign"
+      campaigns_add_details_access_message: "add details to this campaign"
+      campaigns_update_access_message: "edit this problem page"
+      assignments_update_access_message: "try this assignment"
+      campaigns_add_photos_access_message: "add photos to this problem page"
+      campaigns_edit_access_message: "edit this problem page"
+      assignments_edit_access_message: "try this assignment"
+      campaigns_add_update_access_message: "ask for advice on this problem"
+      access_this_page: "access this page."
     add_comment:
-      add_a_comment: 'Add a comment:'
+      add_a_comment: "Add a comment:"
       thanks_for_comment: "Thanks for your comment!"
       sign_in_to_comment: "Please sign in or create an account to add your comment to this %{commented_type}"
-    wrong_user: 
-      wrong_user: "To %{requested_action}, you'll need to %{logout_link}, and sign in as %{name}."
-      logout_link: sign out
-    access:
-      assignments_edit_access_message: "try this assignment"
-      assignments_update_access_message: "try this assignment"
-      campaigns_add_comment_access_message: "add a comment"
-      campaigns_add_details_access_message: "add details to this campaign"
-      campaigns_share_access_message: 'share this campaign'
-      campaigns_add_photos_access_message: "add photos to this campaign"
-      campaigns_complete_access_message: "mark this campaign as complete"
-      campaigns_add_update_access_message: "ask for advice on this campaign"
-      campaigns_update_access_message: "edit this campaign"
-      campaigns_edit_access_message: "edit this campaign"
-      outgoing_messages_new_access_message: "write messages on behalf of this campaign"
-      assignments_new_access_message: "create an assignment for this campaign"
-      assignments_create_access_message: "create an assignment for this campaign"
-      access_this_page: "access this page."
+    campaign:
+      location: "Location:"
+      by: "by"
+      followers: "Followers:"
+      started: "Started:"
+      status: "Status:"
+    comment_form:
+      post: "Post"
+    confirmation_sent:
+      nearly_done: "Nearly Done! Now check your email..."
+      click_the_link: "You must now click the link in the email we've just sent you &mdash; if you do not, %{action}"
+      your_problem_will_not_be_created: "your problem will not be created."
+      you_will_not_be_a_supporter: "you will not be added as a campaign supporter."
+      dont_worry: "(Don't worry &mdash; %{worry})"
+      check_your_junkmail_filters: "If you use web-based email or have 'junk mail' filters, you may wish to check your bulk/spam mail folders: sometimes, our messages end up there."
+      please_be_patient: "The confirmation email <strong>may</strong> take a few minutes to arrive &mdash; <em>please</em> be patient."
+      your_comment_will_not_be_added: "your comment will not be added."
+    email:
+      email_text: "I'm using FixMyTransport to persuade %{org} to %{call_to_action}."
+      email_instructions: "Copy this text and paste into an email to your friends."
+      email_signoff: "Thanks!"
+      please_support: Please come and support me at
+    facebook:
+      share: "Share this through friends and email"
+      post: "Post to wall"
+      send: "Send to people via Facebook"
+    footer:
+      top_of_page: "Top of page"
+      built_by: "Built by %{mysociety_link}, which is supported by the %{indigo_link}, the %{esmee_link}, and many %{donor_link}."
+      small_donors: "small donors"
     header:
-      site_name: "FixMyTransport"
+      hi: "Hi"
       site_tagline: "Euston, we have a problem."
       development_site: "This is a developer site; things might break at any time, and the database will be periodically deleted."
-      donate: Donate
-      our_sites: Our Sites
-      about: About
-      feedback: Feedback
-      hi: Hi
-      guest: Guest
-    footer:
-      top_of_page: Top of page  
-      built_by: "Built by %{mysociety_link}, which is supported by the %{indigo_link}, the %{esmee_link}, and many %{donor_link}."
-      small_donors: small donors
-      
+      our_sites: "Our Sites"
+      donate: "Donate"
+      about: "About"
+      guest: "Guest"
+      site_name: "FixMyTransport"
+      feedback: "Feedback"
+    location_content:
+      no_issues: "No reported issues."
+      related_issues: "Related Issues"
+    login:
+      a_fixmytransport_boffin: "a FixMyTransport boffin"
+      must_be_logged_out: "You must be logged out to access this page"
+      unexpected_external_auth_error: "Unable to complete authentication with %{source} &mdash; try again later"
+      login_to: "Sign in as %{user} to %{requested_action}"
+      logout_successful: "Sign out successful!"
+      login_successful: "Sign in successful!"
+      must_be_logged_in: "You must be logged in to %{requested_action}"
+    login_form:
+      sign_in: "Sign In"
+      sign_in_with_facebook: "Sign in with Facebook - We'll never spam your wall!"
+      forgot: "Forgot?"
+      create_account: "Create a FixMyTransport Account or Login with Facebook"
+      create_one: "Create one"
+      no_account: "Don't have an account?"
+      keep_signed_in: "Keep me signed in"
+      password: "Password"
+      email: "Email"
+      facebook_connect: "Facebook Connect"
+      got_account: Have an account?
+      create_sign_in_with_facebook: Sign in with Facebook
+    problem:
+      added: "added"
+      by: "by"
+      posted_time: "%{time} ago"
+      the: "The"
+      at_the: "at the"
+      on_the: "on the"
+      at: "at"
+    wrong_user:
+      wrong_user: "To %{requested_action}, you'll need to %{logout_link}, and sign in as %{name}."
+      logout_link: "sign out"

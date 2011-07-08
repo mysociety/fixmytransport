@@ -1,16 +1,15 @@
 en:
   outgoing_messages:
     new:
-      your_message_has_been_sent: Your message has been sent on its way.
-      message_to: "Write your message to %{organization}"
+      your_message_has_been_sent: "Your message has been sent on its way."
+      submit: "Submit"
+      original_message: "Original Message"
+      re: "Re"
       new_message_to: "Write your new message to %{organization}"
-      message: Message
-      submit: Submit
-      original_message: Original Message
-      re: Re
+      message: "Message"
+      message_to: "Write your message to %{organization}"
     show:
-      what_does_this_mean: What does this message mean for your campaign? Post an update to let your supporters know. 
+      what_does_this_mean: "What does this message mean for you or your supporters?"
       add_update: "Add update"
       login_as: "Sign in as %{user}"
       login_to_add_update: "%{link} to add an update about this message to \"%{campaign}\""
-      

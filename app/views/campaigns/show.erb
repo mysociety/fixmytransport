@@ -220,8 +220,8 @@
 					<%- if @campaign.initiator.location %>
 					<p class="location"><%= @campaign.initiator.location %></p>
 					<%- end %>
-					<p><%= t('campaigns.show.managing') %> <a href="<%= profile_url(@campaign.initiator, :anchor => "managing") %>"><%= pluralize(@campaign.initiator.initiated_campaigns.count, 'Campaign') %></a></p>
-					<p><%= t('campaigns.show.supporting') %> <a href="<%= profile_url(@campaign.initiator, :anchor => "supporting") %>"><%= pluralize(@campaign.initiator.campaigns.count, 'Campaign') %></a></p>
+					<p><%= t('campaigns.show.managing') %> <a href="<%= profile_url(@campaign.initiator, :anchor => "managing") %>"><%= pluralize(@campaign.initiator.initiated_campaigns.count, 'Issues') %></a></p>
+					<p><%= t('campaigns.show.supporting') %> <a href="<%= profile_url(@campaign.initiator, :anchor => "supporting") %>"><%= pluralize(@campaign.initiator.campaigns.count, 'Issues') %></a></p>
 				</div>
 			</div>
 		</div>

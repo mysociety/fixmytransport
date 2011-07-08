@@ -1,12 +1,12 @@
 en:
   incoming_messages:
     show:
-      reply_to_this_message: "Reply to this message"      
-      this_message_was_sent_to: "This message was sent to the %{campaign} campaign."
-      subject: Subject
-      no_body:  "[ Email has no body, please see attachments ]"
-      what_does_this_mean: What does this message mean for your campaign? Post an update to let your supporters know.
+      reply_to_this_message: "Reply to this message"
+      this_message_was_sent_to: "This message was sent to the %{campaign} supporters."
+      from: "From: %{sender}"
+      no_body: "[ Email has no body, please see attachments ]"
+      subject: "Subject"
+      what_does_this_mean: "What does this message mean for you and your supporters?"
       add_update: "Add update"
       login_as: "Sign in as %{user}"
       login_to_add_update: "%{link} to add an update about this message to \"%{campaign}\""
-      from: "From: %{sender}"

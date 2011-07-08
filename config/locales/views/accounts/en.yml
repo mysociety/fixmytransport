@@ -1,16 +1,16 @@
 en:
   accounts:
-    edit: 
-      account_updated: "Your account has been updated."
-      your_account: Your account
-      only_needed_if_want_to_change: Only if you want to change it.
-      update_account: Update account
-    new: 
-      your_account_wont_be_created: "your account won't be created."
-      create_an_account: Create an account
-      password_length_error: "Please enter a password that is at least %{length} characters long"
-      password_match_error: "The password confirmation does not match the password"
     confirm:
-      successfully_confirmed_account: You have successfully confirmed your account.
-      logged_in_set_password: You've successfully logged in. Set a password on your account to make it easier to come back.  
-      could_not_find_account: "We're sorry, but we could not locate your account. If you are having issues try copying and pasting the URL from your email into your browser or restarting the reset password process."
+      successfully_confirmed_account: "You have successfully confirmed your account."
+      logged_in_set_password: "You've successfully logged in. Set a password on your account to make it easier to come back."
+      could_not_find_account: "We're sorry, but we could not locate your account. If you are having issues, try copying and pasting the URL from your email into your browser, or restarting the reset password process."
+    edit:
+      account_updated: "Your account has been updated."
+      your_account: "Your account"
+      update_account: "Update account"
+      only_needed_if_want_to_change: "Only if you want to change it"
+    new:
+      password_match_error: "The password confirmation does not match the password"
+      your_account_wont_be_created: "your account won't be created."
+      create_an_account: "Create an account"
+      password_length_error: "Please enter a password that is at least %{length} characters long"

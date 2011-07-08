@@ -1,7 +1,7 @@
 <div class='fieldset'>
 	<div class="email-instructions"><%= t('shared.email.email_instructions')%></div>
 <textarea class="email-body">
-<%= t('shared.email.email_text', :call_to_action => @campaign.short_call_to_action)%>
+<%= t('shared.email.email_text', :org => @campaign.responsible_org_descriptor, :call_to_action => @campaign.title)%>
   	
 <%= @campaign.description %>
   	
