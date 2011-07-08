@@ -360,7 +360,7 @@ describe AccountsController do
 
       it 'should show an error message saying that the account cannot be found' do
         make_request
-        flash[:error].should == "We're sorry, but we could not locate your account. If you are having issues try copying and pasting the URL from your email into your browser or restarting the reset password process."
+        flash[:error].should == "We're sorry, but we could not locate your account. If you are having issues, try copying and pasting the URL from your email into your browser, or restarting the reset password process."
       end
 
       it 'should redirect to the root url' do

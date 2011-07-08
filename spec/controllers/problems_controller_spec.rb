@@ -222,7 +222,7 @@ describe ProblemsController do
           Gazetteer.stub!(:bus_route_from_route_number).and_return( { :routes => [@mock_route, @mock_route], 
                                                                       :error => :postcode_not_found })
           make_request(:route_number => 'C10', :area => 'London')
-          assigns[:error_message].should == "The postcode you entered wasn't recognized."
+          assigns[:error_message].should == "The postcode you entered wasn't recognised. Please modify it and try again!"
         end
       
       end
@@ -353,7 +353,7 @@ describe ProblemsController do
              
             it 'should display an appropriate error message' do 
               make_request({:name => 'ZZ9 9ZZ'})
-              assigns[:error_message].should == "That postcode wasn't recognized."
+              assigns[:error_message].should == "That postcode wasn't recognised. Please modify it and try again!"
             end
 
           end
@@ -732,11 +732,14 @@ describe ProblemsController do
     
       mock_problem = mock_model(Problem, :location => mock_stop, 
                                          :responsible_organizations => [mock_council_one, mock_council_two],
-                                         :operators_responsible? => false)
-      expected = ["We do not yet have contact details for <strong>Test Council",
-                  "One</strong> or <strong>Test Council Two</strong>. Your message",
-                  "will be public, but it will <strong>not</strong> be sent to them until you find an",
-                  "email address for them."].join(' ')
+                                         :operators_responsible? => false)                                         
+      expected = ["IMPORTANT: We do not yet have contact details for <strong>Test Council",
+                  "One</strong> or <strong>Test Council Two</strong>, and so your message",
+                  "will <strong>not be sent until an email address is found</strong>.",
+                  "However, if you write a message we will a) keep it ready to send as soon",
+                  "as an email address is found and b) publish it online for others to see.",
+                  "You'll have the opportunity to find the email address yourself, once the",
+                  "email is written."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
@@ -745,10 +748,9 @@ describe ProblemsController do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'])
       mock_problem = mock_model(Problem, :location => mock_stop, 
                                          :responsible_organizations => [mock_council])
-      
-      expected = ["We do not yet have contact details for <strong>Test Council</strong>.",
-                  "Your message will be public, but it will <strong>not</strong> be sent",
-                  "to Test Council until you find an email address for them."].join(' ')
+      expected = ["We do not yet have contact details for <strong>Test Council</strong>. Your message",
+                  "will be public, but it will <strong>not be sent</strong> to",
+                  "Test Council until you find an email address for them."].join(' ')
       expect_advice(mock_problem, expected)
     end
     

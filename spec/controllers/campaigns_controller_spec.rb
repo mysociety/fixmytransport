@@ -635,7 +635,7 @@ describe CampaignsController do
         it 'should return a hash with a notice key giving a notice to show to the user' do 
           make_request(@default_params.update(:format => 'json'))
           json_hash = JSON.parse(response.body)
-          json_hash['notice'].should == 'Please sign in or create an account to join this campaign'
+          json_hash['notice'].should == 'Please sign in or create an account to help get this problem fixed'
         end
       
       end
@@ -649,7 +649,7 @@ describe CampaignsController do
         
         it 'should display a notice that the user needs to login to join the campaign' do
           make_request(@default_params)
-          flash[:notice].should == 'Please sign in or create an account to join this campaign'
+          flash[:notice].should == 'Please sign in or create an account to help get this problem fixed'
         end
         
       end
