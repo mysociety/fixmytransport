@@ -42,7 +42,7 @@
 				</ul>
 				<a id="logo" href="<%= root_url %>">FixMyTransport</a>
 				<%- if current_user %>
-				<p id="member-info"><%= t('shared.header.hi')%> <a href="<%= profile_path(current_user) %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>">Logout</a></p>
+				<p id="member-info"><%= t('shared.header.hi')%> <a href="<%= profile_path(current_user) %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>"><%= t('shared.login.sign_out')%></a></p>
 				<%- else %>
 				<p id="member-info"><%= t('shared.header.hi') %> <%= t('shared.header.guest') %>. <a class="auth" href="<%= login_path(:redirect => request.request_uri) %>">Sign in</a></p>
 				<%- end %>

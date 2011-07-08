@@ -70,6 +70,7 @@ en:
       logout_successful: "Sign out successful!"
       login_successful: "Sign in successful!"
       must_be_logged_in: "You must be logged in to %{requested_action}"
+      sign_out: Sign out
     login_form:
       sign_in: "Sign In"
       sign_in_with_facebook: "Sign in with Facebook - We'll never spam your wall!"
