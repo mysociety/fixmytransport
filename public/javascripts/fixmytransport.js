@@ -269,7 +269,7 @@ $(document).ready(function(){
 	  	$('.login-box .pane').hide();
 	  	$('#campaign-add-photos').show();
 	
-	  	$("#login-box").dialog({title: "Add images:"});
+	  	$("#login-box").dialog({title: "Add a photo"});
 	  	$("#login-box").dialog("open");
 	  	return false;
 	  });

@@ -26,9 +26,10 @@ en:
     show:
       contacts_email: "Email"
       contacts_description: "Useful people who may be able to help with your campaign"
-      campaign_supporter_share: "And don't forget to tell your friends:spread the word through email, Twitter & Facebook."
+      campaign_supporter_share: "And don't forget to tell your friends: spread the word through email, Twitter & Facebook."
       wrote_a_message: "%{sender} wrote to %{recipient}%{assignment_text}"
-      add_photos: "Add photos"
+      add_photos: "Add photo"
+      photo: Photo
       actions: "Actions"
       expert_advised_writing: "%{expert} %{advised} %{user} to write to %{recipient}."
       reported_issue: "%{name} reported the issue on FixMyTransport."
@@ -38,7 +39,7 @@ en:
       campaign_history: "Problem History"
       twitter_title: "Twitter"
       ask_an_expert: "Ask an expert"
-      add_images: "Add images"
+      add_images: "Add photos"
       find_operator_task_title: "Find operator"
       email: "email"
       expand_all: "Expand All"

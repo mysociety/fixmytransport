@@ -8,7 +8,7 @@
           <%= error_message_on photo_fields.object, :image_content_type %>
         </div>
       <%- end %>
-      <%= photo_fields.label :image %>
+      <%= photo_fields.label :image, t("campaigns.show.photo") %>
       <%= raw photo_fields.file_field :image %>
     </div>
   <%- end %>
