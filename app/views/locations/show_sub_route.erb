@@ -21,7 +21,7 @@
       <%= render :partial => 'shared/map', :locals => { :locations => [@sub_route], :other_locations => @other_locations, :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH  } %>
  	  </div>
 
- 		<a href="<%= feedback_url(:url => CGI.escape(request.request_uri)) %>">Is this information wrong?</a>
+ 		<a href="<%= feedback_url(:url => CGI.escape(request.request_uri), :location_id => @sub_route.id, :location_type => 'SubRoute') %>"><%= t('locations.show_sub_route.information_wrong') %></a>
 	  <%= render :partial => "shared/location_content",  :locals => { :location => @sub_route } %>
 	</div>
 

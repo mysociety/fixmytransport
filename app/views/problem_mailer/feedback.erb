@@ -7,3 +7,15 @@ Feedback from <%= raw @name %>:
 ---
 
 URL: <%= @uri %>
+
+<%- if @operator %>
+Operator: <%= @operator.name %>
+
+Operator URL: <%= @operator_url %>
+<%- end %>  
+
+<%- if @location %>
+Location: <%= @location.name %>
+
+Location URL: <%= @location_url %>
+<%- end %>

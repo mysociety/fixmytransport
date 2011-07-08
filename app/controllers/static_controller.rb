@@ -1,31 +1,25 @@
 class StaticController < ApplicationController
   
   def feedback
+    @email = MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    allowed_types = ['Route', 'SubRoute']
+    if params[:location_id] and params[:location_type]
+      @location = instantiate_location(params[:location_id], params[:location_type])
+    end
+    if params[:operator_id]
+      @operator = Operator.find(:first, :conditions => ['id = ?', params[:operator_id]])
+    end
     @feedback = Feedback.new
     if request.post?
       @feedback = Feedback.new(params[:feedback]) 
-      respond_to do |format|
-        format.html do
-          if @feedback.valid? 
-            ProblemMailer.deliver_feedback(params[:feedback])
-            flash[:notice] = t('static.feedback.feedback_thanks')
-            redirect_to(root_url)
-          else
-            render 'feedback'
-          end
-        end
-        format.json do 
-          @json = {}
-          if @feedback.valid? 
-            ProblemMailer.deliver_feedback(params[:feedback])
-            @json[:success] = true
-          else
-            @json[:success] = false
-            add_json_errors(@feedback, @json)
-          end
-          render :json => @json
-        end
+      if @feedback.valid? 
+        ProblemMailer.deliver_feedback(params[:feedback], @location, @operator)
+        flash[:notice] = t('static.feedback.feedback_thanks')
+        redirect_to(root_url)
+      else
+        render 'feedback'
       end
+        
     end
   end
   

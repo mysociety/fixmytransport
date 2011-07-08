@@ -194,7 +194,15 @@ module ApplicationHelper
     end
     location.class.to_s.tableize.singularize.humanize.downcase
   end
-
+  
+  def name_in_sentence(location)
+    if location.is_a?(TrainRoute) || location.is_a?(SubRoute)
+      return location.name[0, 1].downcase + location.name[1..-1]
+    else
+      return location.name
+    end
+  end
+    
   def org_names(problem, method, connector, wrapper_start='<strong>', wrapper_end='</strong>')
     return '' unless problem
     names = problem.send(method).map{ |org| "#{wrapper_start}#{org.name}#{wrapper_end}" }

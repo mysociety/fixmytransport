@@ -1,5 +1,11 @@
 <div id="main-content" class="container">
-	<%= raw t('static.feedback.please_give_feedback', :email => mail_to(MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost'))) %>
+  <%- if @operator %>
+  <%= raw t('static.feedback.operator_feedback', :operator => @operator.name) %>
+  <%- elsif @location %>
+  <%= raw t('static.feedback.location_feedback', :location => name_in_sentence(@location)) %>
+  <%- else %>
+	<%= raw t('static.feedback.please_give_feedback', :email => mail_to(@email)) %>
+	<%- end %>
 	<div class='feedback-form'>
 	  <%- form_for(@feedback, :url => feedback_path) do |form|  %>
 	    <div class='fieldset'>
@@ -45,7 +51,14 @@
 	      <%- if params[:url] %>
 	        <%= raw hidden_field_tag 'feedback[feedback_on_uri]', params[:url] %>
 	      <%- end %>
-
+	      <%- if @operator %>
+	        <%= raw hidden_field_tag 'operator_id', @operator.id %>
+	      <%- end %>
+	      <%- if @location %>
+	        <%= raw hidden_field_tag 'location_id', @location.id %>
+	        <%= raw hidden_field_tag 'location_type', @location.class.to_s %>
+	      <%- end %>
+	      
 	      <div class='form-field'>
 	        <%- if @feedback.errors.on(:message) %>
 	          <div class='error'>

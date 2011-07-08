@@ -9,11 +9,22 @@ class ProblemMailer < ApplicationMailer
    body :problem => problem, :recipient => recipient, :link => main_url(confirm_problem_path(:email_token => token))
   end  
     
-  def feedback(email_params)
+  def feedback(email_params, location=nil, operator=nil)
     recipients contact_from_name_and_email
     from email_params[:name] + " <" + email_params[:email] + ">"
     subject I18n.translate('mailers.app_subject_prefix') << email_params[:subject]
-    body :message => email_params[:message], :name => email_params[:name], :uri => email_params[:feedback_on_uri]
+    body_params = { :message => email_params[:message], 
+                    :name => email_params[:name], 
+                    :uri => email_params[:feedback_on_uri] }
+    if location
+      body_params[:location] = location
+      body_params[:location_url] = main_url(location_path(location))
+    end
+    if operator
+      body_params[:operator] = operator
+      body_params[:operator_url] = main_url(operator_path(operator))
+    end
+    body(body_params)
   end
   
   def report(problem, recipient, recipient_models, missing_recipient_models=[])

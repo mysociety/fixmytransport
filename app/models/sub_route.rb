@@ -59,7 +59,7 @@ class SubRoute < ActiveRecord::Base
   end
   
   def name
-    name_by_terminuses(transport_mode, from_stop=nil, short=true)
+    name_by_terminuses(transport_mode, from_stop=nil, short=false)
   end
   
   def description

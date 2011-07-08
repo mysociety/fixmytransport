@@ -24,7 +24,7 @@ class ProblemsController < ApplicationController
   end
   
   def new
-    location = params[:location_type].constantize.find(params[:location_id])
+    location = instantiate_location(params[:location_id], params[:location_type])
     @problem = Problem.new(:location => location, 
                            :reporter => current_user ? current_user : User.new, 
                            :reporter_name => current_user ? current_user.name : '')

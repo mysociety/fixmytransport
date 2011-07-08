@@ -16,7 +16,8 @@ class ApplicationController < ActionController::Base
                 :main_url,
                 :admin_url,
                 :current_user_session,
-                :current_user
+                :current_user,
+                :instantiate_location
   url_mapper # See MySociety::UrlMapper
   # Scrub sensitive parameters from the log
   filter_parameter_logging :password, :password_confirmation
@@ -281,6 +282,16 @@ class ApplicationController < ActionController::Base
     json_hash[:errors] = {}
     model_instance.errors.each do |attribute,message|
       json_hash[:errors][attribute] = message
+    end
+  end
+  
+  # Turn a location id and type from params into a model
+  def instantiate_location(location_id, location_type)
+    allowed_types = ['Route', 'StopArea', 'Stop', 'SubRoute']
+    if allowed_types.include?(location_type)  
+      return location_type.constantize.find(:first, :conditions => ['id = ?', location_id])
+    else
+      return nil
     end
   end
 
