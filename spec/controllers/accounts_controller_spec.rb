@@ -131,8 +131,12 @@ describe AccountsController do
                                     :password_confirmation= => true,
                                     :ignore_blank_passwords= => true,
                                     :registered= => true,
-                                    :registered? => false)
+                                    :new_record? => true,
+                                    :registered? => false, 
+                                    :save_without_session_maintenance => true,
+                                    :reset_perishable_token! => true)
       User.stub!(:find_or_initialize_by_email).and_return(@mock_user)
+      UserMailer.stub!(:deliver_new_account_confirmation)
     end
 
     def make_request(format="html")
@@ -144,7 +148,7 @@ describe AccountsController do
     end
 
     it 'should find or initialize a user object using the email address' do
-      User.should_receive(:find_or_initialize_by_email).with("new_user@example.com")
+      User.should_receive(:find_or_initialize_by_email).with("new_user@example.com").and_return(@mock_user)
       make_request
     end
 
@@ -156,7 +160,7 @@ describe AccountsController do
     end
 
     it 'should test the user object to see if it is valid' do
-      @mock_user.should_receive(:valid?)
+      @mock_user.should_receive(:valid?).and_return(true)
       make_request
     end
 
@@ -164,10 +168,7 @@ describe AccountsController do
 
       before do
         @mock_user.stub!(:valid?).and_return(true)
-        @mock_user.stub!(:save_without_session_maintenance)
-        @mock_user.stub!(:reset_perishable_token!)
         @controller.stub!(:save_post_login_action_to_database)
-        UserMailer.stub!(:deliver_new_account_confirmation)
       end
 
       describe 'if this is a new email address' do
@@ -277,8 +278,40 @@ describe AccountsController do
 
     describe 'if the user model is not valid' do
 
+      describe 'if the user model is not a new record' do 
+      
+        before do 
+          @clone_mock_user = mock_model(User, 
+                                        :skip_email_uniqueness_validation => nil, 
+                                        :skip_email_uniqueness_validation= => true,
+                                        :password= => true,
+                                        :valid? => false,
+                                        :password_confirmation= => true)
+          @mock_user.stub!(:new_record?).and_return(false)
+          @mock_user.stub!(:valid?).and_return(false)
+          @mock_user.stub!(:clone).and_return(@clone_mock_user)
+        end
+        
+        it 'should clone the model' do 
+          @mock_user.should_receive(:clone).and_return(@clone_mock_user)
+          make_request
+        end
+        
+        it 'should set the flag to skip the email uniqueness validation' do 
+          @clone_mock_user.should_receive(:skip_email_uniqueness_validation=).with(true)
+          make_request
+        end
+        
+        it 'should validate the model' do 
+          @clone_mock_user.should_receive(:valid?).and_return(false)
+          make_request
+        end
+      
+      end
+      
       before do
         @mock_user.stub!(:valid?).and_return(false)
+        @mock_user.stub!(:new_record?).and_return(true)
         @mock_user.stub!(:errors).and_return([[:base, "Test error message"]])
       end
 

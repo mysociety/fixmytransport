@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   validates_presence_of :email
   validates_presence_of :name
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
-  validates_uniqueness_of :email, :case_sensitive => false
+  validates_uniqueness_of :email, :case_sensitive => false, :unless => :skip_email_uniqueness_validation
   attr_protected :password, :password_confirmation, :is_expert
   has_many :assignments
   has_many :campaign_supporters, :foreign_key => :supporter_id
@@ -32,7 +32,8 @@ class User < ActiveRecord::Base
                                  :small_thumb => "40x40#",
                                  :medium_thumb => "46x46#" }
 
-  attr_accessor :ignore_blank_passwords
+  attr_accessor :ignore_blank_passwords, :skip_email_uniqueness_validation
+  
   has_friendly_id :name, :use_slug => true, :allow_nil => true
 
   named_scope :registered, :conditions => { :registered => true }

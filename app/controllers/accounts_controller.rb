@@ -68,6 +68,17 @@ class AccountsController < ApplicationController
         end
       end
     else
+      # Could be an existing user - but until they enter valid details, we want to 
+      # treat them just the same as a new user - if we send an existing record back 
+      # to the form, the form will assume it's an account update, not creation. So
+      # create a new record and validate it (we know the email exists, so skip that validation)
+      if !@account_user.new_record? 
+        @account_user = @account_user.clone
+        @account_user.password = params[:user][:password]
+        @account_user.password_confirmation = params[:user][:password_confirmation]
+        @account_user.skip_email_uniqueness_validation = true
+        @account_user.valid?
+      end
       respond_to do |format|
         format.html do
           render :action => :new  
@@ -115,7 +126,6 @@ class AccountsController < ApplicationController
           session[:return_to] = convert_problem_url(problem)
         end
       end
-      
       @account_user.post_login_action = nil
       @account_user.save_without_session_maintenance
     end
