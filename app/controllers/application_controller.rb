@@ -106,19 +106,20 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_bad_user
+    store_location
     if current_user
-      store_location
       render :template => "shared/wrong_user"
       return false
     end
     flash[:notice] = t('shared.login.login_to', :user => @name, :requested_action => t(@access_message))
-    store_location
     redirect_to login_url
     return false
   end
 
   def store_location
-    session[:return_to] = request.request_uri
+    if request.get?
+      session[:return_to] = request.request_uri
+    end
   end
 
   def redirect_back_or_default(default)

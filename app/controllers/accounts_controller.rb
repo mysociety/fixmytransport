@@ -1,6 +1,6 @@
 class AccountsController < ApplicationController
 
-  before_filter :require_user, :except => [:new, :create, :confirm]
+  before_filter :require_user, :only => [:edit, :update]
   before_filter :load_user_using_perishable_token, :only => [:confirm]
 
   def update
