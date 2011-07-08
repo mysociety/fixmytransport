@@ -61,9 +61,9 @@
   	</div>
   </div>
 <%- end %>
-<%- if current_user && current_user == @campaign.initiator && params[:first_time] == 'true' %>
+<%- if 1 %>
 <div id="yellowbanner" class="container">
-	<h1><%= raw t('campaigns.show.campaign_initiator_first_time_header', :twitter_link => link_to(t('campaigns.show.twitter'), twitter_url(@campaign)), :facebook_link => link_to(t('campaigns.show.facebook'), facebook_url(@campaign)), :email_link => link_to(t('campaigns.show.email'), share_campaign_url(@campaign)))%></h1>
+	<h1><%= raw t('campaigns.show.campaign_initiator_first_time_header', :twitter_link => link_to(t('campaigns.show.twitter'), twitter_url(@campaign), :target => "_blank", :class => "twitter-popup", :title =>"Twitter (opens in a new window)"), :facebook_link => link_to(t('campaigns.show.facebook'), facebook_url(@campaign), :class => "facebook-trigger"), :email_link => link_to(t('campaigns.show.email'), share_campaign_url(@campaign), :class => "email-trigger"))%></h1>
 </div>
 <%- end %>
 <div id="main-content" class="container">
