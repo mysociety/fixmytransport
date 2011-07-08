@@ -3,7 +3,6 @@ en:
     errors:
       models:
         campaign_update:
-          attributes: 
+          attributes:
             text:
               blank: "Please enter some text"
-  

@@ -3,13 +3,13 @@ en:
     errors:
       models:
         outgoing_message:
-          missing_recipient: "Sorry, there's been an error creating your message. Please use the feedback form to let us know what happened."
-          attributes: 
-            subject: 
-              blank: "Please give your message a subject"
+          attributes:
             body:
               blank: "Please write your message"
-            recipient:
-              invalid: "Sorry, there's been an error creating your message. Please use the feedback form to let us know what happened."
             incoming_message:
               invalid: "Sorry, there's been an error creating your message. Please use the feedback form to let us know what happened."
+            recipient:
+              invalid: "Sorry, there's been an error creating your message. Please use the feedback form to let us know what happened."
+            subject:
+              blank: "Please give your message a subject"
+          missing_recipient: "Sorry, there's been an error creating your message. Please use the feedback form to let us know what happened."

@@ -3,25 +3,12 @@ en:
     errors:
       models:
         problem:
-          attributes: 
-            category: 
+          attributes:
+            category:
               blank: "Please select a category for your problem"
-            subject:
-              blank: "Please give your message a subject"
             description:
               blank: "Please give a brief description of your problem"
-            operator_id: 
+            operator_id:
               blank: "Please choose a company to report the problem to"
-        stop:
-          attributes: 
-            common_name:
-              blank: "Please enter the station/stop name"
-            locality_name:
-              blank: "Please enter the town or area"   
-            locality_id:
-              blank: "Please find the locality"
-        route:
-          attributes:
-            number:
-              blank: "Please enter a route"
-   
+            subject:
+              blank: "Please give your message a subject"

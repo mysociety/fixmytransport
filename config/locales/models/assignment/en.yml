@@ -3,20 +3,20 @@ en:
     errors:
       models:
         assignment:
-          attributes: 
-            name:
-              blank: "Please give the name of the person or organisation to write to"
+          attributes:
             description:
-              blank: "Please give a description of this person or organization"
+              blank: "Please give a description of this person or organisation"
             email:
               blank: "Please give the email address to write to"
               invalid: "Please check the format of the email address"
+            name:
+              blank: "Please give the name of the person or organisation to write to"
+            organization_email:
+              blank: "Please give the company's email address"
+              invalid: "Please check the format of the email address"
+            organization_name:
+              blank: "Please give the company name"
             reason:
               blank: "Please give a reason for writing to this person or organisation"
             subject:
               blank: "Please give a subject line for your message"
-            organization_name: 
-              blank: "Please give the company name"
-            organization_email:
-              blank: "Please give the company's email address"
-              invalid: "Please check the format of the email address"
