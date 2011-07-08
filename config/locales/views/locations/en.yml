@@ -29,3 +29,5 @@ en:
       report_a_problem: "Report a problem"
       location_header: "Location"
       routes_header: "Routes"
+    show_sub_route:
+      information_wrong: "Is this information wrong?"

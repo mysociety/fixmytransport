@@ -33,7 +33,7 @@ en:
       actions: "Actions"
       expert_advised_writing: "%{expert} %{advised} %{user} to write to %{recipient}."
       reported_issue: "%{name} reported the issue on FixMyTransport."
-      mark_as_complete: "Click this when you win!"
+      mark_as_complete: "Click when you win!"
       whats_happening: "What's happening?"
       campaign_initiator_first_time_header: "Congratulations - your new page is now public. However, it will only help create extra pressure if you spread the word offline, or via %{twitter_link}, %{facebook_link} or %{email_link}"
       campaign_history: "Problem History"
@@ -73,7 +73,7 @@ en:
       short_call_to_action: "We're trying to %{title}"
       campaign_supporters: "Supporters"
       facebook: "Facebook"
-      add_contact: "VERY IMPORTANT: Add missing email address"
+      add_contact: "Add missing email"
       images_and_media: "Images and media"
       email_title: "Email"
       campaign_email_replacement: "[%{title} email]"
@@ -103,7 +103,7 @@ en:
       facebook_title: "Facebook"
       post_update_instructions: "Keep supporters up-to-date on how things are progressing"
       supporter_call_to_action: "I'm trying to persuade %{org} to %{title} - help me!"
-      find_contact_task_title: "Add contact"
+      find_contact_task_title: "Add missing email"
       initiator_facebook_message: "I'm trying to persuade %{org} to %{title} ...will you join me?"
       back: Back
       supporter_facebook_description: Please help by spreading the word and encouraging your friends to support this.

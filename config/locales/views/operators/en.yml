@@ -1,6 +1,7 @@
 en:
   route_operators:
     show:
+      information_wrong: Is this information wrong? 
       routes_header: "Routes"
       stations_header: "Stations"
       operates_routes:
