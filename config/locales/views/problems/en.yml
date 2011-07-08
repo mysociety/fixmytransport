@@ -121,7 +121,7 @@ en:
       reported_by: "by %{name}"
     new:
       write_a_message: "Please write an email to the operator, using the form below."
-      subject_help: "The subject of your message."
+      subject_help: "This will be included in the subject line of the email we send."
       one_of_the_uncontactable_companies: "one of the companies we don't have an email address for"
       category: "Category"
       description_help_header: "Description"
