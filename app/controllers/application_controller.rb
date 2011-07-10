@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   skip_before_filter :verify_authenticity_token, :unless => :current_user
   before_filter :make_cachable
   before_filter :require_beta_password
-  
+
   helper_method :location_search,
                 :main_url,
                 :admin_url,
@@ -23,10 +23,10 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password, :password_confirmation
 
   private
-  
+
   def make_cachable
     unless current_user
-      expires_in 60.seconds, :public => true 
+      expires_in 60.seconds, :public => true
       response.headers['Vary'] = 'Cookie'
     end
   end
@@ -178,14 +178,14 @@ class ApplicationController < ActionController::Base
 
   def save_post_login_action_to_session
     if post_login_action_data = get_action_data(params)
-      
+
       session[:next_action] = params[:next_action]
       if post_login_action_data[:action] == :join_campaign
         flash.now[:notice] = post_login_action_data[:notice]
       end
     end
   end
-  
+
   def save_post_login_action_to_database(user)
     if post_login_action_data = get_action_data(session)
       session.delete(:next_action)
@@ -200,7 +200,7 @@ class ApplicationController < ActionController::Base
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
         commented = commented_type.titleize.constantize.find(id)
-        comment = commented.add_comment(user, 
+        comment = commented.add_comment(user,
                               post_login_action_data[:text],
                               post_login_action_data[:mark_fixed],
                               post_login_action_data[:mark_open],
@@ -211,9 +211,9 @@ class ApplicationController < ActionController::Base
         return problem
       end
     end
-    
+
   end
-  
+
   def post_login_action_string
     if post_login_action_data = get_action_data(session)
       case post_login_action_data[:action]
@@ -223,16 +223,16 @@ class ApplicationController < ActionController::Base
         return t('shared.confirmation_sent.your_comment_will_not_be_added')
       when :create_problem
         return t('shared.confirmation_sent.your_problem_will_not_be_created')
-      else 
+      else
         return nil
       end
     end
   end
-  
+
   def post_login_actions
     [:join_campaign, :add_comment, :create_problem]
   end
-  
+
   def get_action_data(data_hash)
     if data_hash[:next_action]
       next_action_data = string_to_data(data_hash[:next_action])
@@ -254,7 +254,7 @@ class ApplicationController < ActionController::Base
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
         commented = commented_type.titleize.constantize.find(id)
-        commented.add_comment(current_user, 
+        commented.add_comment(current_user,
                              post_login_action_data[:text],
                              post_login_action_data[:mark_fixed],
                              post_login_action_data[:mark_open],
@@ -284,11 +284,20 @@ class ApplicationController < ActionController::Base
       json_hash[:errors][attribute] = message
     end
   end
-  
+
   # Turn a location id and type from params into a model
   def instantiate_location(location_id, location_type)
-    allowed_types = ['Route', 'StopArea', 'Stop', 'SubRoute']
-    if allowed_types.include?(location_type)  
+    allowed_types = ['BusRoute',
+                     'FerryRoute',
+                     'TrainRoute',
+                     'TramMetroRoute',
+                     'Route',
+                     'StopArea',
+                     'Stop',
+                     'SubRoute',
+                     'CoachRoute',
+                     ]
+    if allowed_types.include?(location_type)
       return location_type.constantize.find(:first, :conditions => ['id = ?', location_id])
     else
       return nil
@@ -326,7 +335,7 @@ class ApplicationController < ActionController::Base
       @other_locations = []
     end
   end
-  
+
   # handle a posted comment if there is a current user
   def handle_comment_current_user
     @comment.user = current_user
@@ -340,12 +349,12 @@ class ApplicationController < ActionController::Base
         end
         format.json do
           index = params[:last_thread_index].to_i + 1
-          comment_html = render_to_string :partial => "shared/comment", 
-                                          :locals => { :comment => @comment, 
+          comment_html = render_to_string :partial => "shared/comment",
+                                          :locals => { :comment => @comment,
                                                        :index => index }
           @json = { :success => true,
                     :html => "<li>#{comment_html}</li>",
-                    :mark_fixed => @comment.mark_fixed, 
+                    :mark_fixed => @comment.mark_fixed,
                     :mark_open => @comment.mark_open }
           render :json => @json
         end
@@ -354,7 +363,7 @@ class ApplicationController < ActionController::Base
       render_or_return_for_invalid_comment and return false
     end
   end
-  
+
   # handle a posted comment if there's no current user logged in
   def handle_comment_no_user
     @comment.skip_name_validation = true
@@ -364,8 +373,8 @@ class ApplicationController < ActionController::Base
                        :id => @comment.commented_id,
                        :commented_type => commented_type,
                        :text => @comment.text,
-                       :mark_fixed => @comment.mark_fixed, 
-                       :mark_open => @comment.mark_open, 
+                       :mark_fixed => @comment.mark_fixed,
+                       :mark_open => @comment.mark_open,
                        :redirect => @template.commented_url(@comment.commented),
                        :notice => t('shared.add_comment.sign_in_to_comment', :commented_type => commented_type) }
       session[:next_action] = data_to_string(comment_data)
@@ -385,7 +394,7 @@ class ApplicationController < ActionController::Base
       render_or_return_for_invalid_comment and return false
     end
   end
-  
+
   def render_or_return_for_invalid_comment
     respond_to do |format|
       format.html do
@@ -403,7 +412,7 @@ class ApplicationController < ActionController::Base
   def app_status
     MySociety::Config.get('APP_STATUS', 'live')
   end
-  
+
   def require_beta_password
     beta_username = MySociety::Config.get('BETA_USERNAME', 'username')
     beta_password = MySociety::Config.get('BETA_PASSWORD', 'password')
