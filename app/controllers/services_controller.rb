@@ -1,9 +1,9 @@
 class ServicesController < ApplicationController
   
   include ApplicationHelper
+  caches_page :in_area
   
   def in_area
-    expires_in 60.seconds, :public => true 
     map_height = (params[:height].to_i or MAP_HEIGHT)
     map_width = (params[:width].to_i or MAP_WIDTH)
     map_height = MAP_HEIGHT if ! ALL_HEIGHTS.include? map_height
