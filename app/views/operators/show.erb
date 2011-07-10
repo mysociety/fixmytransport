@@ -24,7 +24,7 @@
 			  <ul class='route-links'>
 			   <%- @operator.routes.each do |route| %>
 			      <li>
-			        <%= link_to(route.description, route_url(route.region, route)) %>
+			        <a href="<%= route_url(route.region, route) %>"><%= route.description %></a>
 			      </li>
 			   <%- end %>
 			  </ul>
@@ -36,7 +36,7 @@
 			  <ul class='route-links'>
 			    <%- @operator.stop_areas.each do |station| %>
 			      <li>
-			        <%= link_to(station.name, station_path(station.locality, station)) %>
+			        <a href="<%= station_path(station.locality, station) %>"><%= station.name %></a>
 			      </li>
 			    <%- end %>
 			  </ul>
