@@ -21,12 +21,12 @@ en:
       route_regions: "Route Regions"
       routes_by_region: "Public transport routes by region"
     show_stop:
-      report_a_problem: "Report a problem"
+      report_a_problem: "Report a problem here"
       location_header: "Location"
       routes_header: "Routes"
       stop_marked_inactive: "This stop has been marked as inactive."
     show_stop_area:
-      report_a_problem: "Report a problem"
+      report_a_problem: "Report a problem here"
       location_header: "Location"
       routes_header: "Routes"
     show_sub_route:
