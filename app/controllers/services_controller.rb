@@ -1,7 +1,6 @@
 class ServicesController < ApplicationController
   
   include ApplicationHelper
-  caches_page :in_area
   
   def in_area
     map_height = (params[:height].to_i or MAP_HEIGHT)
