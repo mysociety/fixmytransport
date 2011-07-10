@@ -22,7 +22,7 @@
 			<%- if @route_count != 0  %>
 			  <h3><%= t('route_operators.show.operates_routes', :operator => @operator.name, :count => @route_count) %></h3>
 			  <ul class='route-links'>
-			   <%- @operator.routes.each do |route| %>
+			   <%- @routes.each do |route| %>
 			      <li>
 			        <a href="<%= "/routes/#{route.slug.scope}/#{route.slug.name}#{route.slug.sequence == 1 ? "" : "--#{route.slug.sequence}"}"%>"><%= route.description %></a>
 			      </li>
@@ -34,7 +34,7 @@
 			<%- if @station_count != 0 %>
 			  <h3><%= t('route_operators.show.is_responsible_for_stations', :operator => @operator.name, :count => @station_count) %></h3>
 			  <ul class='route-links'>
-			    <%- @operator.stop_areas.each do |station| %>
+			    <%- @stations.each do |station| %>
 			      <li>
 			        <a href="<%= "/stations/#{station.slug.scope}/#{station.slug.name}#{station.slug.sequence == 1 ? "" : "--#{station.slug.sequence}"}" %>"><%= station.name %></a>
 			      </li>

@@ -2,9 +2,17 @@ class OperatorsController < ApplicationController
   
   def show
     
-    @operator = Operator.find(params[:id],
-                              :include => [ { :route_operators => { :route => :slug } }, 
-                                            { :stop_areas => :slug } ])
+    @operator = Operator.find(params[:id])
+    @routes = Route.find(:all, :conditions => ["id in (SELECT route_id
+                                                              FROM route_operators
+                                                              WHERE operator_id = #{@operator.id})"],
+                                      :include => :slug,
+                                      :order => 'cached_description asc')
+    @stations = StopArea.find(:all, :conditions => ["id in (SELECT stop_area_id 
+                                                            FROM stop_area_operators
+                                                            WHERE operator_id = #{@operator.id})"],
+                                    :include => :slug,
+                                    :order => 'name asc')
     @route_count = Operator.connection.select_value("SELECT count(DISTINCT routes.id) AS count_routes_id 
                                                      FROM routes 
                                                      INNER JOIN route_operators 
