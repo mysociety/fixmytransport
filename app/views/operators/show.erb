@@ -24,7 +24,7 @@
 			  <ul class='route-links'>
 			   <%- @operator.routes.each do |route| %>
 			      <li>
-			        <a href="<%= route_url(route.region, route) %>"><%= route.description %></a>
+			        <a href="<%= "/routes/#{route.slug.scope}/#{route.slug.name}#{route.slug.sequence == 1 ? "" : "--#{route.slug.sequence}"}"%>"><%= route.description %></a>
 			      </li>
 			   <%- end %>
 			  </ul>
@@ -36,7 +36,7 @@
 			  <ul class='route-links'>
 			    <%- @operator.stop_areas.each do |station| %>
 			      <li>
-			        <a href="<%= station_path(station.locality, station) %>"><%= station.name %></a>
+			        <a href="<%= "/stations/#{station.slug.scope}/#{station.slug.name}#{station.slug.sequence == 1 ? "" : "--#{station.slug.sequence}"}" %>"><%= station.name %></a>
 			      </li>
 			    <%- end %>
 			  </ul>
