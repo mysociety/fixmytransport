@@ -58,7 +58,9 @@ namespace :temp do
                  # 'IF' => 'East London Bus & Coach', # not all
                  'BCC' => 'Diamond Bus',
                  'NX' => 'National Express', 
-                 '2222' => 'Arriva North West' }
+                 '2222' => 'Arriva North West',
+                 'MT00' => 'Morris Travel (Carmathenshire)',
+                 'LC' => 'London Central'}
     mappings.each do |code, operator_name|
       operator = Operator.find_by_name(operator_name)
       routes = Route.find(:all, :conditions => ['operator_code = ?
