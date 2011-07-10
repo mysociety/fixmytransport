@@ -61,7 +61,10 @@ namespace :temp do
                  '2222' => 'Arriva North West',
                  'MT00' => 'Morris Travel (Carmathenshire)',
                  'LC' => 'London Central',
-                 'RB00' => 'Richards Bros'}
+                 'RB00' => 'Richards Bros', 
+                 '2079' => 'Rossendale Transport', 
+                 '2383' => 'Arriva Merseyside', 
+                 }
     mappings.each do |code, operator_name|
       operator = Operator.find_by_name(operator_name)
       routes = Route.find(:all, :conditions => ['operator_code = ?
