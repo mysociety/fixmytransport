@@ -43,6 +43,7 @@ namespace :temp do
     # FL - First Leeds
     # SIH - In East Anglia is Stagecoach in Huntingdonshire 
     # AM - In the East Midlands is Arriva Midlands
+    # IF - East London in London 
     mappings = { 'BL' => 'First Somerset & Avon',
                  'FC00' => 'First Cymru', 
                  'MN' => 'Arriva London',
@@ -52,7 +53,8 @@ namespace :temp do
                  # 'FCH' => 'First in Calderdale and Huddersfield', # not all of them anymore
                  'SIF' => 'Stagecoach in Huntingdonshire', 
                  'YRB' => 'First Bradford',
-                 'AM' => 'Arriva Midlands' }
+                 'AM' => 'Arriva Midlands',
+                 'IF' => 'East London Bus & Coach' }
     mappings.each do |code, operator_name|
       operator = Operator.find_by_name(operator_name)
       routes = Route.find(:all, :conditions => ['operator_code = ?
