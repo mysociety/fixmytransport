@@ -7,20 +7,20 @@
 	<a href="<%= feedback_url(:url => CGI.escape(request.request_uri), :operator_id => @operator.id) %>"><%= t('route_operators.show.information_wrong') %></a>
 	<div id='operator-tabs' class='ui-tabs ui-widget ui-content ui-corner-all'>
 		<ul id="tabs-main-nav" class='font-1 operator-tabs-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
-			<%- if !@operator.routes.empty?  %>
+			<%- if @route_count != 0  %>
 			<li id="route-tab" class='ui-state-default ui-corner-top ui-tabs-selected ui-state-active'>
-				<a href="#operator-tabs-routes"><%= t('route_operators.show.routes_header')%><span class="num"><%= @operator.routes.count %></span></a>
+				<a href="#operator-tabs-routes"><%= t('route_operators.show.routes_header')%><span class="num"><%= @route_count %></span></a>
 			</li>
 			<%- end %>
-			<%- if !@operator.stop_areas.empty? %>
+			<%- if @station_count != 0 %>
 	        <li id="area-tab" class='ui-state-default ui-corner-top'>
-	          <a href="#operator-tabs-areas"><%= t('route_operators.show.stations_header')%><span class="num"><%= @operator.stop_areas.count %></span></a>
+	          <a href="#operator-tabs-areas"><%= t('route_operators.show.stations_header')%><span class="num"><%= @station_count %></span></a>
 	        </li>
 	<%- end %>
 	    </ul>
 		<div id='operator-tabs-routes' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
-			<%- if !@operator.routes.empty?  %>
-			  <h3><%= t('route_operators.show.operates_routes', :operator => @operator.name, :count => @operator.routes.count) %></h3>
+			<%- if @route_count != 0  %>
+			  <h3><%= t('route_operators.show.operates_routes', :operator => @operator.name, :count => @route_count) %></h3>
 			  <ul class='route-links'>
 			   <%- @operator.routes.each do |route| %>
 			      <li>
@@ -31,12 +31,12 @@
 			<%- end %>
 		</div>
 		<div id='operator-tabs-areas' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
-			<%- if !@operator.stop_areas.empty? %>
-			  <h3><%= t('route_operators.show.is_responsible_for_stations', :operator => @operator.name, :count => @operator.stop_areas.count) %></h3>
+			<%- if @station_count != 0 %>
+			  <h3><%= t('route_operators.show.is_responsible_for_stations', :operator => @operator.name, :count => @station_count) %></h3>
 			  <ul class='route-links'>
 			    <%- @operator.stop_areas.each do |station| %>
 			      <li>
-			        <%= link_to(station.name, location_path(station)) %>
+			        <%= link_to(station.name, station_path(station.locality, station)) %>
 			      </li>
 			    <%- end %>
 			  </ul>
