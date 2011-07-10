@@ -71,7 +71,7 @@ module ApplicationHelper
       data = { :lat => stop.lat,
                :lon => stop.lon,
                :id => stop.id,
-               :url => map_link_url(location, link_type),
+               :url => map_link_path(location, link_type),
                :description => location.description,
                :icon => stop_icon(stop, small),
                :height => icon_height(small),
@@ -234,19 +234,19 @@ module ApplicationHelper
     end
   end
 
-  def location_path(location)
+  def location_path(location, attributes={})
     if location.is_a? Stop
-      return stop_path(location.locality, location)
+      return stop_path(location.locality, location, attributes)
     elsif location.is_a? StopArea
       if StopAreaType.station_types.include?(location.area_type)
-         return station_path(location.locality, location)
+         return station_path(location.locality, location, attributes)
        elsif StopAreaType.ferry_terminal_types.include?(location.area_type)
-         return ferry_terminal_path(location.locality, location)
+         return ferry_terminal_path(location.locality, location, attributes)
        else
-         return stop_area_path(location.locality, location)
+         return stop_area_path(location.locality, location, attributes)
       end
     elsif location.is_a? Route
-      return route_path(location.region, location)
+      return route_path(location.region, location, attributes)
     elsif location.is_a? SubRoute
       return sub_route_path(location, attributes)
     end
@@ -304,11 +304,11 @@ module ApplicationHelper
     end
   end
 
-  def map_link_url(location, link_type)
+  def map_link_path(location, link_type)
     if link_type == :location
-      return location_url(location, :escape => false)
+      return location_path(location, :escape => false)
     elsif link_type == :problem
-      return new_problem_url({:location_id => location.id, :location_type => location.class, :escape => false})
+      return new_problem_path({:location_id => location.id, :location_type => location.class, :escape => false})
     else
       raise "Unknown link_type in map_link_url: #{link_type}"
     end

@@ -14,7 +14,7 @@
   <ul id="large-ul">
   <%- page_results.each do |location| %>
     <li class='location'>
-      <%= link_to(location.description, map_link_url(location, :problem)) %>
+      <%= link_to(location.description, map_link_path(location, :problem)) %>
     </li>
   <%- end %>
   </ul>
