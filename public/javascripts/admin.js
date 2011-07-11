@@ -1,5 +1,5 @@
 function setupAssignAllAndNone(){
-  $('.check-all-route-operators').click(function(){
+  $('.check-all-route-operators').click(function(event){
     var operators = $(this).closest('.route-operators').find('.check-route-operator')
     operators.attr('checked', true);
     operators.parents('tr').addClass("selected");
