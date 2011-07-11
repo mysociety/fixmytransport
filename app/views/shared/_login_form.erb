@@ -39,9 +39,11 @@
 		<button class="button" type="submit"><%= t('shared.login_form.sign_in') %></button>
 		<label for="user_session_remember_me"><%= t('shared.login_form.keep_signed_in') %></label><input type="checkbox" class="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1" />    
 		<%- if !(controller.controller_name == 'user_sessions') %>
-		<input type="hidden" name="redirect" value="<%= request.request_uri %>" />
+		  <input type="hidden" name="redirect" value="<%= request.request_uri %>" />
 		<%- end %>
+		<a href="about#privacy" target="_blank">Privacy policy</a>
 	</li>
+	<li>Read our <a href="http://www.mysociety.org/privacy-online/">guide to privacy online</a></li>
 </ul>
 <%- end %>
 
