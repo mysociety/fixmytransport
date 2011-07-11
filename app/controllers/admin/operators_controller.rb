@@ -48,7 +48,7 @@ class Admin::OperatorsController < Admin::AdminController
         @operator = Operator.find(params[:operator][:id])
         if @operator.update_attributes(params[:operator])
           flash[:notice] = t('admin.operator_routes_added')
-          redirect_to admin_root_url
+          redirect_to admin_url(admin_root_path)
         else
           render :assign_routes
         end
