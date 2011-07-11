@@ -54,13 +54,13 @@ en:
       ambiguous_to_stop: "'%{station_name}' could mean more than one station - please pick the one you meant from the drop-down list."
     find_route:
       find_a_route: "First, select the kind of transport you had a problem with"
-      bus: "bus"
-      or_coach: " (or coach)"
-      tram: "tram"
-      or_underground: " (or metro/underground)"
       ferry: "ferry"
       subheader: "Choose from one of the four options below"
       train: "train"
+      bus: bus / coach
+      tram: "tram / metro underground"
+      ferry: ferry
+      subheader: Choose from one of the four options below
     find_stop:
       choose_from_list: "Choose from a list of stops and stations"
       title: "Finding a stop or station"
@@ -92,7 +92,9 @@ en:
       step_three: "3. Gather support"
       step_one_details: "It might have been a one-off incident you’d just like to log, or a recurring problem you’d like fixing."
       bad_train: "Had a bad train journey?"
-      browse_routes: "Browse routes"
+      how_does_it_work: How does it work?
+      recent_issues: View recent Issues
+      browse_routes: View routes by region
       how_details_one: "We give you the tools to report your public transport problems to the correct operator or authority."
       follow_on_twitter: "Follow us on Twitter"
       grows_support: "Grows support"
@@ -110,7 +112,6 @@ en:
       reports_problems: "Reports problems"
       step_five: "5. Get it sorted!"
       finds_responsible: "Finds people responsible"
-      recent_issues: "Recent Issues"
       step_one: "1. Report your problem"
       step_four_details: "Gather responses, comments and advice from operators, authorities, supporters, and our own transport boffins."
       im_a_beta_tester: "I'm a beta tester"

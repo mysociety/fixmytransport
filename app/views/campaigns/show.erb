@@ -42,13 +42,16 @@
   		</div>
   	</div>
   </div>
+
+
   <%- if current_user && current_user.new_supporter?(@campaign) %>
+  <div class="container-wide">
     <div class="supporter-notice">
-      <div class="container">
-        <h1><%= t('campaigns.show.campaign_supporter_first_time_header')%></h1>
-        <p><%= t('campaigns.show.campaign_supporter_offer_opinions') %> <br /><%= t('campaigns.show.campaign_supporter_share') %></p>
-      </div>
-    </div>
+	      <h1><%= t('campaigns.show.campaign_supporter_first_time_header')%></h1>
+	      <p><%= t('campaigns.show.campaign_supporter_offer_opinions') %> <br /><%= t('campaigns.show.campaign_supporter_share') %></p>
+	  </div>
+	<div class="supporter-notice-arrow"></div>	
+</div>
   <%- end %>
 <%- else %>
   <div id="yellowbanner" class="container">

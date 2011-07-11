@@ -92,15 +92,16 @@
       <%- end %>
 
 			<li>
-			  <%- if @problem.errors.on('subject') %>
-          <div class='error error-subject'>
-            <%= error_message_on @problem, 'subject' %>
-          </div>
-        <%- else %>
-           <div class='error error-subject' style="display: none;" role="alert"></div>
-        <%- end %>
 				<label for="problem_subject"><%= t('problems.new.subject')%></label>
 				<input id="problem_subject" type="text" name="problem[subject]" value="<%= @problem.subject %>"/>
+				<%- if @problem.errors.on('subject') %>
+					<div class='error error-subject'>
+					<%= error_message_on @problem, 'subject' %>
+					</div>
+				<%- else %>
+					<div class='error error-subject' style="display: none;" role="alert"></div>
+				<%- end %>
+				
 				<div class="tipbox">
 				  <a href="#" class="tip-close">Close</a>
 					<h5><%= t('problems.new.subject_help_header')%></h5>
@@ -110,6 +111,9 @@
 			
 			<%- if @problem.categories.size > 1 %>
         <li>
+          <label for="problem_category"><%= t('problems.new.category')%></label>
+          <%= raw f.select("category", @problem.categories, { :include_blank => t('problems.new.pick_a_category') }) %>
+
           <%- if @problem.errors.on('category') %>
             <div class='error'>
               <%= error_message_on @problem, :category %>
@@ -117,8 +121,7 @@
           <%- else %>
            <div class='error error-category' style="display: none;" role="alert"></div>
           <%- end %>
-          <label for="problem_category"><%= t('problems.new.category')%></label>
-          <%= raw f.select("category", @problem.categories, { :include_blank => t('problems.new.pick_a_category') }) %>
+
         </li>
       <%- else %>
         <%= raw f.hidden_field :category, :value => "Other" %>
@@ -126,15 +129,16 @@
       
       
 			<li>
-			  <%- if @problem.errors.on('description') %>
-          <div class='error'>
-            <%= error_message_on @problem, 'description' %>
-          </div>
-        <%- else %>
-         <div class='error error-description' style="display: none;" role="alert"></div>
-        <%- end %>
 				<label for="problem_description"><%= t('problems.new.description')%></label>
 				<textarea id="problem_description" name="problem[description]" ><%= @problem.description %></textarea>
+					  <%- if @problem.errors.on('description') %>
+		          <div class='error'>
+		            <%= error_message_on @problem, 'description' %>
+		          </div>
+		        <%- else %>
+		         <div class='error error-description' style="display: none;" role="alert"></div>
+		        <%- end %>
+
 				<div class="tipbox">
 				  <a href="#" class="tip-close">Close</a>
 					<h5><%= t('problems.new.description_help_header')%></h5>

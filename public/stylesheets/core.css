@@ -84,7 +84,7 @@ fieldset {padding:0 1.4em 1.4em 1.4em;margin:0 0 1.5em 0;border:1px solid #ccc;}
 legend {font-weight:bold;font-size:1.2em;margin-top:-0.2em;margin-bottom:1em;}
 fieldset, #IE8#HACK {padding-top:1.4em;}
 legend, #IE8#HACK {margin-top:0;margin-bottom:0;}
-input[type=text], input[type=password], input.text, input.title, textarea {background-color:#fff;border:1px solid #bbb;}
+input[type=text], input[type=password], input.text, input.title, textarea {background-color:#fff;border:1px solid #bbb;clear:left;float:left;}
 input[type=text]:focus, input[type=password]:focus, input.text:focus, input.title:focus, textarea:focus, .form-1 textarea:focus {border-color:#666;}
 select {background-color:#fff;border-width:1px;border-style:solid;}
 input[type=text], input[type=password], input.text, input.title, textarea, select {margin:0.5em 0;}
@@ -95,8 +95,8 @@ form.inline {line-height:3;}
 form.inline p {margin-bottom:0;}
 .error, .alert, .notice, .success, .info {line-height:1.2;display:inline-block;font-size:12px;padding:3px;margin-bottom:0.5em;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;}
 .error, .alert {background:#cc0000;color:#fff;border-color:#fbc2c4;}
-.notice {background: #FFF6BF;border: 1px solid #E6DB55;color: #514721;padding: 6px;}
-.top-notice {line-height:1.2;display:block;font-size:12px;padding:3px;margin:0;background:#fff6bf;color:#514721;border:1px solid #E6DB55;}
+.notice {border: 2px solid #FFD45A;background:#FFFBD7;color: #514721;padding: 6px;}
+.top-notice {line-height:1.2;display:block;font-size:12px;padding:3px;margin:0;color:#514721;border: 2px solid #FFD45A;background:#FFFBD7;}
 .success {background:#e6efc2;color:#264409;border-color:#c6d880;}
 .info {background:#d5edf8;color:#205791;border-color:#92cae4;}
 .error a, .alert a {color:#8a1f11;}
