@@ -364,13 +364,26 @@ module ApplicationHelper
   def campaign_list_image_url(campaign)
     if ! campaign.campaign_photos.empty?
       campaign.campaign_photos.first.image.url(:list)
-      
-      # something like this would be needed to swap the images around
-    elsif campaign.transport_mode == 'Bus'
-      '/images/transport-icons/default-bus.jpg'
-      
+    elsif campaign.location.is_a? Route
+      if campaign.location.transport_mode_name == 'Train'
+        '/images/transport-icons/default-train.jpg'
+      elsif campaign.location.transport_mode_name == 'Tram/Metro'
+        '/images/transport-icons/default-tram.jpg'
+      elsif campaign.location.transport_mode_name == 'Ferry'
+        '/images/transport-icons/default-ferry.jpg'
+      else
+        '/images/transport-icons/default-bus.jpg'
+      end
     else
-      '/images/transport-icons/default.jpg'
+      if campaign.location.respond_to?(:area_type) && campaign.location.area_type == 'GRLS'
+        '/images/transport-icons/default-train.jpg'
+      elsif campaign.location.respond_to?(:area_type) && campaign.location.area_type == 'GTMU'
+        '/images/transport-icons/default-tram.jpg'
+      elsif campaign.location.respond_to?(:area_type) && campaign.location.area_type == 'GFTD'
+        '/images/transport-icons/default-ferry.jpg'
+      else
+        '/images/transport-icons/default-bus.jpg'
+      end
     end
   end
 
