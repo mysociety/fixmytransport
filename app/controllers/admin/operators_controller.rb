@@ -37,12 +37,22 @@ class Admin::OperatorsController < Admin::AdminController
       flash[:notice] = t('admin.operator_created')
       redirect_to admin_url(admin_operator_path(@operator))
     else 
-      if params[:operator][:code]
-        @route_operators = make_route_operators([params[:operator][:code]])
-      else
-        @route_operators = []
-      end
       render :new
+    end
+  end
+  
+  def assign_routes
+    @route_operators = make_route_operators([params[:code]])
+    if request.post? 
+      if params[:operator][:id]
+        @operator = Operator.find(params[:operator][:id])
+        if @operator.update_attributes(params[:operator])
+          flash[:notice] = t('admin.operator_routes_added')
+          redirect_to admin_url(admin_root_path)
+        else
+          render :assign_routes
+        end
+      end
     end
   end
   

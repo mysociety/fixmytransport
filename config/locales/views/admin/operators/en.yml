@@ -15,6 +15,8 @@ en:
     merging_operators: Merging Operators
     email_confirmed: Email confirmed?
     merge_to: Merge to
+    assign_routes: Assign routes to operator
+    operator_routes_added: Routes have been added to operator
     operator_form_error: There's a problem with this operator - please see below.
     operator_merge_label: ID of operator to merge with
     operator_merge_submit: Merge with another operator

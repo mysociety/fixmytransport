@@ -21,7 +21,7 @@ class ServicesController < ApplicationController
     if gaze != ''
       render :text => open("#{gaze}/gaze-rest?f=get_country_from_ip;ip=#{request.remote_ip}").read.strip
     else
-      render :text => ''
+      render :text => 'GB'
     end
   end
   
