@@ -1902,7 +1902,8 @@ ul.route-links {
 
 /*===[Facebook Canvas]===*/
 
-body.facebook-canvas .container{width:760px; text-align:center }
+body.facebook-canvas{ width: 660px; background: #ffffff}
+body.facebook-canvas .container{width:660px; text-align:center }
 body.facebook-canvas .button {
 	font-size:1.6em;
 	padding:0.8em 1.1em;
@@ -1910,7 +1911,6 @@ body.facebook-canvas .button {
 	text-transform:none;
 }
 
-body.facebook-canvas #wrapper { min-height: 500px; height: 100% }
 
 /*===[Assignment Page]===*/
 .edit_assignment .checkbox label {
