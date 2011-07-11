@@ -6,13 +6,14 @@
 
 <div id="main-content" class="container">
 	<%- form_tag find_stop_problems_path, :id => 'stop_name_form', :method => 'GET' do  %>
-	<%- if @error_message %>
-	<div class='error'><%= @error_message %></div>
-	<%- end %>
 	<div id="find-stop">
 		<label for="name" id='guidance-name' class='guidance'><%= t('problems.find_stop.instructions')%></label>
 		<%= raw text_field_tag 'name', params[:name], :size => 40 %>
 		<button class="point-go" type='submit'><%= t('problems.find_stop.go') %></button>
 	</div>
+	<%- if @error_message %>
+	<div class='error find-stop-error'><%= @error_message %></div>
+	<%- end %>
+
 	<%- end %>
 </div>

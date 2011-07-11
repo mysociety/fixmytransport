@@ -13,11 +13,6 @@
 
 <div id="main-content" class="container">
 	<%- form_tag find_bus_route_problems_path, :id => 'bus_route_form', :method => 'GET' do  %>
-	<%- if @error_message %>
-      <div class='error'>
-        <%= @error_message %>
-      </div>
-    <%- end %>
 	<ul class="form-list">
 	    <li class="fieldset">
 	      <%= raw label_tag t('problems.find_bus_route.enter_route_number') %>
@@ -31,6 +26,13 @@
 	      <div id='guidance-area' class='guidance'>e.g. London </div>
 	    </li>
 		<li><button class="point-go" type="submit"><%= t('problems.find_bus_route.go') %></button></li>
+		<li>
+		<%- if @error_message %>
+	      <div class='error'>
+	        <%= @error_message %>
+	      </div>
+	    <%- end %>
+		</li>
     </ul>
 	<%- end %>
 </div>

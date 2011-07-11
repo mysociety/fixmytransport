@@ -15,37 +15,39 @@
             <%= form.hidden_field :email, :value => current_user.email %>
         <%- else %>
 	        <div class='form-field'>
+  	        <%= form.label :name  %>
+  	        <%= raw form.text_field :name %>
   	        <%- if @feedback.errors.on(:name) %>
   	          <div class='error'>
   	            <%= error_message_on @feedback, :name %>
   	          </div>
   	        <%- end %>
-  	        <%= form.label :name  %>
-  	        <%= raw form.text_field :name %>
+
   	      </div>
 
 
   	      <div class='form-field'>
+  	        <%= form.label :email  %>
+  	        <%= raw form.text_field :email  %>
   	        <%- if @feedback.errors.on(:email) %>
   	          <div class='error'>
   	            <%= error_message_on @feedback, :email %>
   	          </div>
   	        <%- end %>
-  	        <%= form.label :email  %>
-  	        <%= raw form.text_field :email  %>
+
   	      </div>
 
         <%- end %>
 
 
 	      <div class='form-field'>
+	        <%= form.label :subject %>
+	        <%= raw form.text_field :subject  %>
 	        <%- if @feedback.errors.on(:subject) %>
 	          <div class='error'>
 	            <%= error_message_on @feedback, :subject %>
 	          </div>
 	        <%- end %>
-	        <%= form.label :subject %>
-	        <%= raw form.text_field :subject  %>
 	      </div>
 
 	      <%- if params[:url] %>
@@ -60,13 +62,14 @@
 	      <%- end %>
 	      
 	      <div class='form-field'>
+	        <%= form.label :message %>
+	        <%= raw form.text_area :message, {:rows => 8, :cols => 50} %>
 	        <%- if @feedback.errors.on(:message) %>
 	          <div class='error'>
 	            <%= error_message_on @feedback, :message %>
 	          </div>
 	        <%- end %>
-	        <%= form.label :message %>
-	        <%= raw form.text_area :message, {:rows => 8, :cols => 50} %>
+
 	      </div>
 
 		  <button stype="submit"><%= t('static.feedback.send') %></button>

@@ -126,8 +126,11 @@ $(function(){
 			<div class="dotted-white">&nbsp;</div>
 		</div>
 		<div id="frontpage-banner-right">
-			<a href="<%= issues_url %>" class="font-1 fancybutton"><%= t('problems.frontpage.recent_issues')%></a>
-			<a href="<%= routes_url %>" class="font-1 grey button"><%= t('problems.frontpage.browse_routes')%></a>
+			<h2 class="font-1">Browse Site</h2>
+			<ul>
+				<li><a href="<%= issues_url %>" class="font-1"><%= t('problems.frontpage.recent_issues')%></a></li>
+				<li><a href="<%= routes_url %>" class="font-1"><%= t('problems.frontpage.browse_routes')%></a></li>
+			</ul>
 		</div>
 	</div>
 </div>
