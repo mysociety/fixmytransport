@@ -26,6 +26,7 @@ class StaticController < ApplicationController
   # probably won't end up living in the static_controller, but for now it's a home
   def facebook
     @body_class = "facebook-canvas"
+    render :template => 'static/facebook', :layout => 'facebook'
     # NB max width for canvas should be 760px
     # process incoming request_ids here (if any): test code for this has been deleted
   end
