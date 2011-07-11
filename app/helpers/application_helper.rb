@@ -68,7 +68,6 @@ module ApplicationHelper
                :lon => stop.lon,
                :id => stop.id }
     else
-
       data = { :lat => stop.lat,
                :lon => stop.lon,
                :id => stop.id,
@@ -299,9 +298,9 @@ module ApplicationHelper
 
   def map_link_url(location, link_type)
     if link_type == :location
-      return location_url(location)
+      return location_url(location, :escape => false)
     elsif link_type == :problem
-      return new_problem_url(:location_id => location.id, :location_type => location.class)
+      return new_problem_url({:location_id => location.id, :location_type => location.class, :escape => false})
     else
       raise "Unknown link_type in map_link_url: #{link_type}"
     end

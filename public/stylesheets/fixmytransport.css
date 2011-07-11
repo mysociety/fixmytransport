@@ -1889,3 +1889,11 @@ ul.route-links {
 /*===[Facebook Canvas]===*/
 
 body.facebook-canvas .container{width:760px;}
+
+/*===[Assignment Page]===*/
+.edit_assignment .checkbox label {
+	display:inline;
+}
+.edit_assignment .checkbox {
+  height: 2em;
+}

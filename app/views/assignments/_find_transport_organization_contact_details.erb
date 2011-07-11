@@ -13,7 +13,15 @@
       <%= label_tag :organization_email, t('assignments.edit.organization_email') %>
       <%= raw text_field_tag :organization_email, @assignment.data[:organization_email], :size => 45 %>
     </div>
-    
+    <%- if @assignment.problem.location.is_a?(StopArea) %>
+    <div class='form-field'>
+      <div class="checkbox">
+        <%= raw check_box_tag :location_only, @assignment.data[:location_only] %>
+        <%= label_tag :location_only, t('assignments.edit.contact_for_location') %>
+       
+    </div>
+    </div>
+    <%- end %>
     <div class='form-field'>
       <%= raw f.submit t('assignments.edit.submit') %>
     </div>

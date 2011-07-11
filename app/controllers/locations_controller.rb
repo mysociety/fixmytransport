@@ -4,7 +4,6 @@ class LocationsController < ApplicationController
   include ApplicationHelper
 
   def show_stop
-    
     @stop = Stop.full_find(params[:id], params[:scope])
     @title = @stop.full_name
     respond_to do |format|
