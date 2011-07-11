@@ -5,10 +5,13 @@ The problem report below has been sent to you via the website FixMyTransport.com
 It refers to a problem <%= raw at_the_location(@problem.location) %>
 
 -----------------
- 
-From: <%= raw @problem.reporter_name %>,  <%= raw @problem.reply_email %>
+
+From: <%= raw @problem.reporter_name %>,  <<%= raw @problem.reply_email %>>
+
 Subject: <%= raw(@problem.subject) %>
+
 Details: 
+
 <%= raw(@problem.description) %>
 
 ------------------
