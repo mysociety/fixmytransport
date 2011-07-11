@@ -1,39 +1,6 @@
 <%- content_for :javascript do %>
 <script type="text/javascript">
-function scroller(dsp, fsp){
-	$('#frontpage-problem-scroller li:not(".hidden")').delay(dsp).fadeOut(fsp, function(){
-		$(this).addClass('hidden');
-		
-		if($(this).hasClass('last')) {
-			$('#frontpage-problem-scroller li.first').removeClass('hidden').fadeIn(fsp, function(){
-				scroller(dsp, fsp);
-			});
-		} else {
-			$(this).next().removeClass('hidden').fadeIn(fsp, function(){
-				scroller(dsp, fsp);
-			});
-		}
-	});
-}
-$(function(){
-	//fix height
-	$('#frontpage-problem-scroller').each(function(){
-		var h = 0;
-		$(this).children('li').each(function(i){
-			if($(this).height() > h){h = $(this).height();}
-		});
-		$(this).children('li').css({'height': h}); 
-	});
-	//hide all but first one
-	$('#frontpage-problem-scroller li:not(:first)').addClass('hidden').hide();
 
-	//add classes for use in the function - for some reason
-	//the if statement didn't like the :first or :last's
-	$('#frontpage-problem-scroller li:first').addClass('first');
-	$('#frontpage-problem-scroller li:last').addClass('last');
-	
-	scroller(5000, 2000);
-});
 </script>
 <%- end %>
 <%- content_for :banner_content do %>
@@ -43,13 +10,6 @@ $(function(){
 <%- end %>
 <div id="frontpage-top" class="container">
 	<div class="leftcol">
-		<noscript>
-			<style>
-			#frontpage-top .leftcol ul#frontpage-problem-scroller li:not(:first-child){
-				display:none;
-			}
-			</style>
-		</noscript>
 		<ul id="frontpage-problem-scroller">
 			<li>
 				<h1><%= t('problems.frontpage.bad_train')%></h1>
