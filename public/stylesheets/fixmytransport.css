@@ -1902,7 +1902,13 @@ ul.route-links {
 
 /*===[Facebook Canvas]===*/
 
-body.facebook-canvas .container{width:760px;}
+body.facebook-canvas .container{width:760px; text-align:center}
+body.facebook-canvas .button {
+	font-size:1.6em;
+	padding:0.8em 1.1em;
+	margin:1em 0.7em;
+	text-transform:none;
+}
 
 /*===[Assignment Page]===*/
 .edit_assignment .checkbox label {

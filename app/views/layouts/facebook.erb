@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang='<%= I18n.locale %>' xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml">
+  <head>
+    <title>
+      <%= t('shared.header.site_name')%>
+    </title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-type' />
+    <%= yield :meta %>
+    <%= csrf_meta_tag %>
+    <%= raw stylesheet_link_tag('core', 'fixmytransport', 'map', 'buttons', :cache => 'main') %>
+
+	<!--[if lte IE 7]><%= raw stylesheet_link_tag('ie67') %><![endif]-->
+	
+	<!--[if lte IE 8]><%= raw stylesheet_link_tag('ie678') %><![endif]-->
+
+    <%= yield :stylesheets %>
+    <%= raw library_js_link %>
+    <script type="text/javascript">
+      var fmt_facebook_app_id = '<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>';
+    </script>
+	<%= raw javascript_include_tag("http://use.typekit.com/fji8ime.js")%>
+	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  </head>
+	<body role="application" class="facebook-canvas">
+		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
+		<div class="staging-banner top-notice">
+			<div class="container"><%= t('shared.header.development_site') %></div>
+		</div>
+		<%- end %>
+    <%= yield :banner_content %>
+		<div id="wrapper">
+			<div id="top" class="container" role="banner">
+				<ul id="mysociety-tab" role="navigation">
+					<li><a id="mysociety-logo" href="http://www.mysociety.org">MySociety</a></li>
+					<li><a href="http://mysociety.org/donate"><%= t('shared.header.donate') %></a></li>
+					<li><a href="http://www.mysociety.org/projects/"><%= t('shared.header.our_sites') %></a></li>
+				</ul>
+				<a id="logo" href="<%= root_url %>">FixMyTransport</a>
+
+			</div>
+
+
+		
+			<%= yield %>
+			<div id="goto-top-wrap" class="container">
+				<a href="#top" class="goto-top right"><%= t('shared.footer.top_of_page') %></a>
+			</div>
+    </div>
+
+		<%= yield :javascript %>
+		<%= raw main_js_link %>
+		<!--[if lte IE 8]><%= raw javascript_include_tag('ie', :charset => 'utf-8') %><![endif]-->
+		<%= render :partial => 'shared/tracking' %>
+	</body>
+</html>
