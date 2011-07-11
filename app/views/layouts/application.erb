@@ -21,6 +21,10 @@
     </script>
 	<%= raw javascript_include_tag("http://use.typekit.com/fji8ime.js")%>
 	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	
+	<noscript>
+		<%= raw stylesheet_link_tag('no-js', :cache => 'main') %>
+	</noscript>
   </head>
 	<body role="application" <%-if @body_class %>class="<%= @body_class %>"<%- end %>>
 		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>

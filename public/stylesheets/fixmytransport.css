@@ -1858,9 +1858,20 @@ ul.route-links {
 	#route-type-list li {
 		display:block;
 		float:left;
-		width:21%;;
-
+		width:21%;
+		margin:0 2%;
 	}
+		#route-type-list li a {
+			display:block;
+			padding-top: 135px;
+			height: 65px;
+			font-size:1.6em;
+			line-height:1.2;
+		}
+		#route-type-list li a.tram {
+			padding-top:125px;
+			height:75px;
+		}
 
 /*===[Route Regions Page]===*/
 #region-list {

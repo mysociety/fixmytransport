@@ -364,8 +364,13 @@ module ApplicationHelper
   def campaign_list_image_url(campaign)
     if ! campaign.campaign_photos.empty?
       campaign.campaign_photos.first.image.url(:list)
+      
+      # something like this would be needed to swap the images around
+    elsif campaign.transport_mode == 'Bus'
+      '/images/transport-icons/default-bus.jpg'
+      
     else
-      'http://dummyimage.com/90x90'
+      '/images/transport-icons/default.jpg'
     end
   end
 
