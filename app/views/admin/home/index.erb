@@ -14,7 +14,7 @@
   <ul>
     <%- @operator_codes_without_operators.each do |code, count| %>
       <li class='operator-code-link'>
-        <%= link_to code, admin_url(new_admin_operator_path(:code => code)) %>
+        <%= link_to code, admin_url(assign_routes_admin_operators_path(:code => code)) %>
         <%= t('admin.num_unmatched_routes', :number => count) %>
       </li>
     <%- end%>

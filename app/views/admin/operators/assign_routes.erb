@@ -1,12 +1,12 @@
-<h2><%= t('admin.add_an_operator') %></h2>
-<%-form_for :operator, @operator, :url => admin_url(admin_operators_path), :html => { :class => 'operator-form' } do |f| %>
-  <%- if params[:code] %>
+<h2><%= t('admin.assign_routes') %></h2>
+<%-form_for :operator, @operator ||= Operator.new, :url => admin_url(assign_routes_admin_operators_path), :html => { :class => 'operator-form' } do |f| %>
   <%- if !@operator.errors.empty? %>
    <div class='form-error'>
      <%= t('admin.operator_form_error') %>
    </div>
    <%- end %>
 
+   <h3>Operator code: <%= params[:code] %></h3>
   <div class='form-field'>
     <%= raw label_tag :operator_name %>
     <%= raw hidden_field_tag :operator_name_autocomplete_url, admin_url("/admin/autocomplete_for_operator_name") %>
@@ -21,9 +21,6 @@
       setupOperatorAutocomplete();
     });
   </script>
-  <%- else %>
-    <%= render :partial => 'form', :locals => { :f => f }  %>
-  <%- end %>
   
   <%- if ! @route_operators.empty? %>
     <%= render :partial => 'route_operators', :locals => { :f => f, :route_operators => @route_operators, :title => t('admin.routes_with_code') } %>
