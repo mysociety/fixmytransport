@@ -1902,13 +1902,14 @@ ul.route-links {
 
 /*===[Facebook Canvas]===*/
 
-body.facebook-canvas .container{width:760px; text-align:center }
+body.facebook-canvas {width:760px; text-align:center; background: #ffffff; }
 body.facebook-canvas .button {
 	font-size:1.6em;
 	padding:0.8em 1.1em;
 	margin:1em 0.7em;
 	text-transform:none;
 }
+
 
 body.facebook-canvas #wrapper { min-height: 500px; height: 100% }
 
