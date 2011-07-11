@@ -4,18 +4,7 @@
  */
 
 $(document).ready(function(){
-    if ($('#other-country-notice').length > 0) {
-      $.ajax({
-        url: "/request_country",
-        dataType: 'html',
-        success: function(country_code){
-          if (country_code != 'GB'){
-            $('#other-country-notice').html("Want to set up a site like this in your country? Get <a href='advice'>our advice</a>");
-            $('#conditional-notice').show();
-          }
-        }
-      }) 
-    }
+
 
 	/* Region map
 	   ================================================== */
@@ -602,6 +591,21 @@ $(document).ready(function(){
 	}).mouseout(function(){
 		$(this).removeClass('mousedown');
 	});
+	
+	/* Banner for people coming from other countries
+	   ============================================== */
+	if ($('#other-country-notice').length > 0) {
+    $.ajax({
+      url: "/request_country",
+      dataType: 'html',
+      success: function(country_code){
+        if (country_code != 'GB'){
+          $('#other-country-notice').html("Want to set up a site like this in your country? Get <a href='advice'>our advice</a>");
+          $('#conditional-notice').show();
+        }
+      }
+    }) 
+  }
 });
 
 /* External authentication
