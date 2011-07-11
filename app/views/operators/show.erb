@@ -2,7 +2,7 @@
   <%= stylesheet_link_tag 'ui-tabs-mod' %>
 <%- end %>
 
-<div id="main-content" class="container operators">
+<div id="main-content" class="container operators has-tabs">
 	<h2><%= @operator.name %></h2>
 	<a href="<%= feedback_url(:url => CGI.escape(request.request_uri), :operator_id => @operator.id) %>"><%= t('route_operators.show.information_wrong') %></a>
 	<div id='operator-tabs' class='ui-tabs ui-widget ui-content ui-corner-all'>
