@@ -122,7 +122,8 @@
 
 .has-tabs #tabs-main-nav { -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0; }
 
-.has-tabs #tabs-main-nav.childactive-bus-tab {border-bottom:4px solid #0075a0;}
+.has-tabs #tabs-main-nav.childactive-bus-tab,
+.has-tabs #tabs-main-nav.childactive-coach-tab {border-bottom:4px solid #0075a0;}
 .has-tabs #tabs-main-nav.childactive-train-tab {border-bottom:4px solid #b71d6a;}
 .has-tabs #tabs-main-nav.childactive-ferry-tab {border-bottom:4px solid #70b222;}
 .has-tabs #tabs-main-nav.childactive-tram-tab {border-bottom:4px solid #cc6100;}
@@ -138,7 +139,9 @@
 		margin-right:10px;
 	}
 	.has-tabs #tabs-main-nav li#bus-tab,
-	.has-tabs #tabs-main-nav li#bus-tab.ui-state-active {
+	.has-tabs #tabs-main-nav li#bus-tab.ui-state-active,
+	.has-tabs #tabs-main-nav li#coach-tab,
+	.has-tabs #tabs-main-nav li#coach-tab.ui-state-active {
 		background: #048fc2 url(../images/icons.png) 8px -520px no-repeat; /* Old browsers */
 		background: url(../images/icons.png) 8px -520px no-repeat, -moz-linear-gradient(top, #048fc2 0%, #0075a0 100%); /* FF3.6+ */
 		background: url(../images/icons.png) 8px -520px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#048fc2), color-stop(100%,#0075a0)); /* Chrome,Safari4+ */
