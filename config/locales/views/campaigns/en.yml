@@ -33,7 +33,7 @@ en:
       actions: "Actions"
       expert_advised_writing: "%{expert} %{advised} %{user} to write to %{recipient}."
       reported_issue: "%{name} reported the issue on FixMyTransport."
-      mark_as_complete: "Click when you win!"
+      mark_as_complete: "Problem fixed!"
       whats_happening: "What's happening?"
       campaign_initiator_first_time_header: "Congratulations - your new page is now public. However, it will only help create extra pressure if you spread the word offline, or via %{twitter_link}, %{facebook_link} or %{email_link}"
       campaign_history: "Problem History"
