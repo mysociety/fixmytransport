@@ -1898,7 +1898,8 @@ body.facebook-canvas .button {
 	margin:1em 0.7em;
 	text-transform:none;
 }
-body.facebook-canvas #wrapper{ min-height: 400px}
+
+body.facebook-canvas #wrapper { min-height: 500px; height: 100% }
 
 /*===[Assignment Page]===*/
 .edit_assignment .checkbox label {
