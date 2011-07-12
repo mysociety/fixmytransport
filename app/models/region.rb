@@ -56,7 +56,7 @@ class Region < ActiveRecord::Base
   memoize :coach_route_letters
 
   def coach_routes_by_letter
-    by_letter(coach_routes){ |route| route.name }
+    by_letter(coach_routes){ |route| route.short_name }
   end
   memoize :coach_routes_by_letter
 
