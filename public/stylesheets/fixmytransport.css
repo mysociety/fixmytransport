@@ -1859,6 +1859,14 @@ body.facebook-canvas .button {
 		width:100%;
 	}
 	
+	/* ===[ Reporting a Problem Page ]=== */
+
+  #problem-map {
+  position:absolute;
+  right:0;
+  }
+
+  
 /*===[Problem Page]===*/
 
 .problem-details {
