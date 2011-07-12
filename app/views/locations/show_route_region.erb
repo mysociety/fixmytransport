@@ -69,7 +69,7 @@
 	            <div class='region-bus-routes ui-tabs-panel ui-widget-content ui-corner-bottom' id='bus_starts_with_<%= first %>'>
 	              <h4 class='first'><%= first %></h4>
 	              <ul class="route-links">
-	              <%- @region.bus_routes_by_letter[first].sort_by(&:number).each do |route| %>
+	              <%- @region.bus_routes_by_letter[first].sort_by(&:name).each do |route| %>
 	                <li>
 	                  <%= link_to(route.description, location_url(route))  %>
 	                </li>

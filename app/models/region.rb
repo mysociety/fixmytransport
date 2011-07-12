@@ -46,7 +46,7 @@ class Region < ActiveRecord::Base
   memoize :bus_route_letters
 
   def bus_routes_by_letter
-    by_letter(bus_routes){ |route| route.number }
+    by_letter(bus_routes){ |route| route.short_name }
   end
   memoize :bus_routes_by_letter
 
@@ -56,7 +56,7 @@ class Region < ActiveRecord::Base
   memoize :coach_route_letters
 
   def coach_routes_by_letter
-    by_letter(coach_routes){ |route| route.number }
+    by_letter(coach_routes){ |route| route.name }
   end
   memoize :coach_routes_by_letter
 
