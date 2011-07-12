@@ -1,4 +1,19 @@
+<div class="fb-item-container">
+  <a href="#" class="fb-post-to-wall fb-feed-button" ><%= t('shared.facebook.post')%></a>
+  <p id="social-message">
+  </p>
+</div>
+
+<%- if MySociety::Config.get('APP_STATUS', 'live') == 'closed_beta' %>
+<div class="fb-item-container">
+<%= t('shared.facebook.more_options_to_come') %>
+</div>
+<%- else %>
+<div class="fb-item-container">
+
 <fb:like href="<%= campaign_url(@campaign) %>" send="false" width="490" show_faces="true" action="recommend" font=""></fb:like>
+</div>
+
 <div class="fb-item-container">
     <div>
         <fb:send href="<%= campaign_url(@campaign) %>" font=""></fb:send>
@@ -8,8 +23,4 @@
        <%= t('shared.facebook.send')%>
     </p>
 </div>
-<div class="fb-item-container">
-    <a href="#" class="fb-post-to-wall fb-feed-button" ><%= t('shared.facebook.post')%></a>
-    <p id="social-message">
-    </p>
-</div>
+<%- end %>

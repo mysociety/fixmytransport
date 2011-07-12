@@ -7,7 +7,8 @@ en:
       date: "Date:"
       no_body: "[ Email has no body, please see attachments ]"
       subject: "Subject"
-      what_does_this_mean: "What does this message mean for you and your supporters?"
+      what_does_this_mean: "If this message is important, please add an update for your supporters letting them know what it says:"
       add_update: "Add update"
       login_as: "Sign in as %{user}"
-      login_to_add_update: "%{link} to add an update about this message to \"%{campaign}\""
+      login_to_add_update: "%{link} to reply or add an update about this message."
+      header: Incoming Message

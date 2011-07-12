@@ -29,7 +29,7 @@ en:
       no_thanks: "No Thanks"
     find_bus_route:
       title: "Finding a bus route"
-      route_not_found: "We could not find the route you entered."
+      route_not_found: "Sorry, we could not find the route you entered. Please modify it and try again!"
       please_enter_route_number_and_area: "Please enter the route number and area"
       what_was_the_number_and_area: "What was the route number and town or area?"
       enter_town_or_area: "Town/Area"
