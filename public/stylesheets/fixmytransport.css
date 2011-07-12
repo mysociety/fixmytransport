@@ -1872,7 +1872,9 @@ ul.route-links {
 			padding-top:125px;
 			height:75px;
 		}
-
+.wrong-info-link {
+  padding-top: 1em;
+}
 /*===[Route Regions Page]===*/
 #region-list {
 	list-style-type:none;
