@@ -1,13 +1,25 @@
-<div id="main-content" class="container">
-    <%- if @campaign_update.is_advice_request? %>
-      <%- id = 'advice-request-form' %>
-      <%- text = t('campaigns.add_update.ask_our_expert_panel') %>
-    <%- else %>
-      <%- id = 'campaign-update-form' %>
-      <%- text = t('campaigns.add_update.add_an_update') %>
-    <%- end %>
+<%- if @campaign_update.is_advice_request? %>
+  <%- id = 'advice-request-form' %>
+  <%- text = t('campaigns.add_update.ask_our_expert_panel') %>
+<%- else %>
+  <%- id = 'campaign-update-form' %>
+  <%- text = t('campaigns.add_update.add_an_update') %>
+<%- end %>
 
-    <h3><%= text %></h3>
+<div id="banner">
+  <div class="container">
+    <h1><%= text %></h1>
+  </div>
+</div>
+
+<div id="greybanner">
+  <div class="container">
+    <p>
+    </p>
+  </div>
+</div>
+
+<div id="main-content" class="container">
 
     <%= render :partial => 'update_form' %>
 </div>

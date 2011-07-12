@@ -26,7 +26,7 @@
 			<h3 class="font-1"><%= t('campaigns.show.actions')%></h3>
 			<ul>
 				<li>
-					<a href="<%= raw add_update_campaign_url(@campaign, :is_advice_request => true) %>" role="menuitem" class="advice-trigger">
+					<a href="<%= raw add_update_campaign_url(@campaign, :is_advice_request => true) %>" role="menuitem" class="advice-trigger" data-title="<%= t('campaigns.show.ask_our_expert_panel') %>">
 						<span class="icon question"></span>
 						<%= t('campaigns.show.ask_an_expert') %>
 					</a>

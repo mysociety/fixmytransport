@@ -15,7 +15,7 @@ en:
       advice_request_added: "Your advice request will be sent to your supporters and the panel."
       update_added: "Your update has been added."
       add_an_update: "Add an update:"
-      ask_our_expert_panel: "Ask your supporters and our expert panel what to do next:"
+      ask_our_expert_panel: "Ask for advice from one of FixMyTransport's mostly volunteer experts and your supporters"
     confirm_leave:
       error_on_leave: "Sorry, we couldn't locate your support for this problem in the database. If you've copied the URL from an email, please check that you copied it exactly - if you have, please %{link} what happened."
       let_us_know: "let us know"
@@ -25,6 +25,7 @@ en:
       save: "Save"
     show:
       contacts_email: "Email"
+      ask_our_expert_panel: "Ask for advice from one of FixMyTransport's mostly volunteer experts and your supporters"
       contacts_description: "Useful people who may be able to help with your campaign"
       wrote_a_message: "%{sender} wrote to %{recipient}%{assignment_text}"
       add_photos: "Add photo"
@@ -51,7 +52,7 @@ en:
       call_to_action: "Please help me persuade %{org} to %{title}"
       got_a_message: "%{sender} responded to %{campaigner}"
       user_says: "%{name} commented"
-      request_advice: "Ask for advice from one of FixMyTransport's mostly volunteer experts"
+      request_advice: "Ask advice"
       managing: "Managing"
       following_experts_advice: " following %{expert}'s advice."
       advised: "advised"

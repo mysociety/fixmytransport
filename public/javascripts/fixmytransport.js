@@ -221,7 +221,7 @@ $(document).ready(function(){
                   .attr('class', 'last_thread_index')
                   .val(last_thread_index));
 
-    	$("#login-box").dialog({title: "Ask for advice:"});
+    	$("#login-box").dialog({title: $('.advice-trigger').attr('data-title')});
       // Set the button text
       $('#campaign-update-form-modal button[type=submit]').html("Ask for advice")
       // Add the hidden field
