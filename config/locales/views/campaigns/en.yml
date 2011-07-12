@@ -3,7 +3,7 @@ en:
     add_details:
       tip_close: "Close"
       add_details_instructions: Write a headline and description
-      good_headline: "Give your supporters page a good headline (in 40 to 80 characters)"
+      good_headline: "Give your supporters page a good headline (in 30 to 80 characters)"
       eg: "E.g."
       headline_example: "Please help me persuade The Operator to get rid of the awful smell between Manors and Monument on the Metro"
       details_submit: "Submit"
@@ -89,6 +89,7 @@ en:
       recommended_actions: "Recommended actions"
       support_this: "Support"
       campaign_comment: "Comment"
+      campaign_comment_title: "Leave a public comment (will be mailed to supporters)"
       supporting: "Supporting"
       edit_description: "Edit description"
       please_upload_valid_image: "Please upload a .jpeg, .gif or .png image"

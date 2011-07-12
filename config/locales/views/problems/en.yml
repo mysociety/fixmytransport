@@ -14,6 +14,7 @@ en:
       cant_see_the_map: "Can't see the map? %{link}"
     choose_route:
       show_all: "Show all results"
+      information_wrong: "Is this route information wrong?"
       header: "Choose a Route"
       multiple_routes_intro: "Choose a route by clicking on it, or try a different search if yours is not here: "
     convert:
@@ -150,6 +151,7 @@ en:
     show:
       fixed: "Fixed"
       comment: "Update"
+      comment_title: "Leave a public update"
       posted: "Posted"
       sent_time: "Sent to %{recipient} %{interval} later"
       comments: "Updates"

@@ -90,7 +90,7 @@ describe CampaignMailer do
         CampaignMailer.send_update(@mock_update, @mock_campaign)
         ActionMailer::Base.deliveries.size.should == 2
         expert_mail = ActionMailer::Base.deliveries.first
-        expert_mail.body.should match(/Hi transport experts/)
+        expert_mail.body.should match(/Hello lovely transport boffins/)
         expert_mail.body.should match(/would like some advice/)    
         expert_mail.body.should_not match(/stop receiving update/) 
        
