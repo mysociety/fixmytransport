@@ -19,7 +19,8 @@
     <script type="text/javascript">
       var fmt_facebook_app_id = '<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>';
     </script>
-	
+	  <%= raw javascript_include_tag("http://use.typekit.com/fji8ime.js")%>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 	<noscript>
 		<%= raw stylesheet_link_tag('no-js', :cache => 'no-js') %>
 	</noscript>
