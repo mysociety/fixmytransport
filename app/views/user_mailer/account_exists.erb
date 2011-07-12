@@ -1,17 +1,15 @@
 Hi <%= raw @user.name %>,
 
-You just tried to sign up to FixMyTransport, when you
-already have already got an account, but haven't set a password on it.
+You just tried to sign up to FixMyTransport, but you already have an account. Your account details have been left as they previously were.
 
 Please click on the link below to sign in<%-if @action%><%=" and #{@action}"%><%- end %>:
 
 <%= raw @account_confirmation_url %>
 
-If your email program does not let you click on this link, copy
-and paste it into your web browser and press return. If you continue to have problems please contact us.
+If your email program does not let you click on this link, copy and paste it into your web browser and press return. If you continue to have problems please contact us.
 
-You can then use the account page to set a password on your account if you like. 
+You can then use the account page to change your password if you like. 
 <%= render :partial => 'shared/mailer/model_confirmation', :locals => { :model => @unconfirmed_model }%>
-Yours,
 
-The FixMyTransport team
+Thanks,
+FixMyTransport

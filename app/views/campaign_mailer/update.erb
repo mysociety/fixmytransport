@@ -1,15 +1,11 @@
 Hi<%= " #{raw @recipient.name}" %>,
 
-<%= raw(update_text(@update, @link)) %> 
-
-<%= raw @update.user.name %> says:
+<%= raw @update.user.name %> has just left an update on their FixMyTransport page:
 
 "<%= raw(@update.text) %>"
 
 To comment on this update, please follow this link: <%= raw @link %>
 
-Yours,
-The FixMyTransport team
 <%- if @unsubscribe_link %>
 
 To leave this campaign and stop receiving updates, please follow this link: <%= raw @unsubscribe_link %>

@@ -41,7 +41,7 @@
 <%- if !@operator_contact.operator.stop_areas.empty? %>
   <div class='form-field'>
     <%= raw f.label :location %>
-    <%= raw f.collection_select(admin.stop_area_id, @operator_contact.operator.stop_areas.sort_by(&:name), :id, :name, :prompt => true) %>
+    <%= raw f.collection_select(:stop_area_id, @operator_contact.operator.stop_areas.sort_by(&:name), :id, :name, :prompt => true) %>
   </div>
 <%- end %>
 <div class='form-field'>

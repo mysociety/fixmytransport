@@ -1,49 +1,22 @@
 Dear <%= raw @recipient.name %>,
-<%- if @recipient_models.size > 1 %>
 
-[ This email has been sent to both councils covering the location of the problem; 
-please ignore it if you're not the correct council to deal with the issue, 
-or let us know so we can add the information to our system. ]
-<%- end %>
-<%- if @missing_recipient_models.size > 0 %>
+The problem report below has been sent to you via the website FixMyTransport.com.
 
-[ We realise this problem might be the responsibility of 
-<%= raw @missing_recipient_models.map{ |recipient| recipient.name }.to_sentence %>; however, we don't 
-currently have any contact details for them. If you know of an appropriate contact address, 
-please do get in touch. ]
-<%- end %>
+It refers to a problem <%= raw at_the_location(@problem.location) %>
 
-A user of FixMyTransport has submitted the following report of a problem <%= raw at_the_location(@problem.location) %> 
-that they believe might require your attention.
- 
-<%- if MySociety::Config.getbool('SITE_VISIBLE', true) %> 
-To view a map of the precise location of this issue, or to provide an update on the problem, 
-please visit the following link:
+-----------------
 
-<%= raw @problem_link %>
-<%- end %>
+From: <%= raw @problem.reporter_name %>,  <<%= raw @problem.reply_email %>>
 
-----------
-
-Name: <%= raw @problem.reporter_name %>
-
-Email: <%= raw @problem.reply_email %>
-
-<%- if !@problem.reporter_phone.blank? && !@problem.campaign %>
-Phone: <%= raw @problem.reporter_phone %>
-
-<%- end %>
 Subject: <%= raw(@problem.subject) %>
 
-Details: <%= raw(@problem.description) %>
+Details: 
 
-<%- if @problem.time %>
-Time: <%= raw @problem.time.to_s(:standard) %>
-<%- end %>
+<%= raw(@problem.description) %>
 
-<%- if @problem.date %>
-Date: <%= raw @problem.date.to_s(:standard) %>
-<%- end %>
+------------------
+
+THE FOLLOWING DETAILS ARE INCLUDED BY FIXMYTRANSPORT TO HELP YOU MANAGE THIS PROBLEM
 
 Location name: <%= raw @problem.location.name %>
 
@@ -61,7 +34,7 @@ Location NaPTAN code: <%= raw @problem.location.naptan_code %>
 <%- end %>
 
 <%- if @problem.location.is_a? Stop and !@problem.location.landmark.blank? %>
-Landmark: <%= raw(@problem.location.landmark) %>
+Nearby landmark: <%= raw(@problem.location.landmark) %>
 
 <%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.street.blank? %>
@@ -90,30 +63,73 @@ Northing: <%= raw @problem.location.northing %>
 <%- end %>
 ----------
 
-<%- if @problem.campaign %>
-Replies to this email will be public.
+ABOUT THIS PROBLEM REPORT
 
-<%- else %>
-Replies to this email will be public, and will go to the user who submitted the problem.
+Sender: <%= raw @problem.reply_email %>
+
+<%- if @problem.campaign %>
+PLEASE NOTE: Your replies to this problem report WILL BE PUBLISHED ONLINE
 
 <%- end %>
-Yours,
 
-The FixMyTransport team
+<%- if MySociety::Config.getbool('SITE_VISIBLE', true) %> 
+To view a map of the precise location of this issue, or to provide an update on the problem, 
+please visit the following link:
+
+<%- if @problem.campaign %>
+<%= raw @campaign_link %>
+<%- else %>
+<%= raw @problem_link %>
+<%- end %>
+<%- end %>
+
+Thanks,
+
+FixMyTransport
 
 <%- if MySociety::Config.getbool('SITE_VISIBLE', true) %> 
 
-[ This message was sent via FixMyTransport, a project of UKCOD, registered charity number 1076346. Replies 
-to this email will be public. Our privacy policy: <<%= raw @privacy_link %>>. If there is a more appropriate 
-email address for messages about this type of problem, please let us know by visiting 
-<<%= raw @feedback_link %>>. This will help improve the service for people travelling. We also welcome any 
-other feedback you may have. ]
+[ This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. If there is a more appropriate email address for messages about this type of problem, please let us know by visiting <<%= raw @feedback_link %>>. This will help improve the service for people travelling. We also welcome any other feedback you may have. ]
 
 <%- else %>
 
-[ This message was sent via FixMyTransport, a project of UKCOD, registered charity number 1076346. Replies 
-to this email will be public. If there is a more appropriate email address for messages about this type of 
-problem, please let us know by emailing <%=MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')%>. 
-This will help improve the service for people travelling. We also welcome any other feedback you may have. ]
+[ This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. If there is a more appropriate email address for messages about this type of problem, please let us know by  emailing <%=MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')%>. This will help improve the service for people travelling. We also welcome any other feedback you may have. ]
 
 <%- end %>
+
+<%- if @recipient_models.size > 1 %>
+
+[ This email has been sent to both councils covering the location of the problem; 
+please ignore it if you're not the correct council to deal with the issue, 
+or let us know so we can add the information to our system. ]
+<%- end %>
+<%- if @missing_recipient_models.size > 0 %>
+
+[ We realise this problem might be the responsibility of 
+<%= raw @missing_recipient_models.map{ |recipient| recipient.name }.to_sentence %>; however, we don't 
+currently have any contact details for them. If you know of an appropriate contact address, please do get in touch. ]
+<%- end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

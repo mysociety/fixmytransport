@@ -1,15 +1,15 @@
 Hi<%= raw " #{@recipient.name}" %>,
 
-<%= raw @advice_request.user.name %> would like some advice about the FixMyTransport campaign "<%= raw(@campaign.title) %>" (<%= raw(@link) %>).
+<%= raw @advice_request.user.name %> would like some advice about how to "<%= raw(@campaign.title) %>".
 
-<%= raw @advice_request.user.name %> says:
+<%= raw @advice_request.user.name %> is asking:
 
 "<%= sanitize(raw(@advice_request.text)) %>"
 
 To give some advice, follow this link: <%= raw @link %>
 
-Yours,
-The FixMyTransport team
+Thanks,
+FixMyTransport
 <%- if @unsubscribe_link %>
 
 To leave this campaign and stop receiving updates, please follow this link: <%= raw @unsubscribe_link %>
