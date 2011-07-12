@@ -1,8 +1,16 @@
+<div id="banner">
+  <div class="container">
+    <h1><%= t('assignments.new.suggesting_a_new_person', :user => @initiator.name) %></h1>
+  </div>
+</div>  
+<div id="greybanner">
+  <div class="container">
+    <p>	<%= raw t('assignments.new.new_assignment_help', :user => h(@initiator.first_name), :campaign => link_to(@campaign.title, campaign_url(@campaign))) %>
+    </p>
+  </div>
+</div>
 <div id="main-content" class="container">
-  <h3><%= t('assignments.new.suggesting_a_new_person', :user => @initiator.name) %></h3>
-  
-<p>	<%= raw t('assignments.new.new_assignment_help', :user => h(@initiator.first_name), :campaign => link_to(@campaign.title, campaign_url(@campaign))) %>
-</p>
+
 	<%- form_for [@campaign, @assignment] do |f| %>
   
 	  <div class='fieldset'>
