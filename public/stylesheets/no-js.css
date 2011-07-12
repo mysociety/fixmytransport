@@ -15,3 +15,7 @@
 .tipbox h5, .tipbox.fixed h5 {
 	display:none;
 }
+
+#frontpage-top .leftcol ul#frontpage-problem-scroller li:not(:first-child){
+	display:none;
+}

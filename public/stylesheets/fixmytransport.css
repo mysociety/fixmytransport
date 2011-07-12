@@ -309,19 +309,22 @@ form#search {
 
 div.supporter-notice-arrow{
 	background: url(../images/share-arrow.png);
-	width: 201px;
-	height: 135px;
 	box-shadow:none;
 	-moz-box-shadow:none;
 	-webkit-box-shadow:none;
-	position: absolute;
-	margin-top: -11em;
+	bottom: -40px;
+	height: 135px;
 	margin-left: 627px;
-	}
+	margin-top: -11em;
+	position: absolute;
+	right: 142px;
+	width: 201px;
+}
 
 .container-wide{
 	width: 970px;
 	margin: 0px auto;
+	position:relative;
 }
 
 .supporter-notice {
@@ -345,7 +348,8 @@ div.supporter-notice-arrow{
 		line-height: 1.2em;
 	}
 /* ===[ Main Content ]=== */
-#main-content {
+#main-content,
+#beta-frontpage {
 	min-height:400px;
 }
 	#main-content div {
@@ -1921,3 +1925,39 @@ body.facebook-canvas .button {
 .edit_assignment .checkbox {
   height: 2em;
 }
+
+
+/*===[Incoming Messages]===*/
+
+.email-set {
+	border-bottom:2px solid #048fc2;
+	margin:0 0 1em 0;
+	padding:0 0 1em 0;
+}
+.email-set:last-child {
+	border-bottom:0;
+}
+	.email-set label {
+		display:block;
+		width:100px;
+		margin-right:20px;
+		float:left;
+		text-align:right;
+		color:#B3B3B3;
+		font-wieght:normal;
+	}
+	.email-set p,
+	.email-set div.message,
+	.email-set div.attachments {
+		margin:0 0 0.25em 0;
+		display:block;
+		float:left;
+		width:470px;
+	}
+		.email-set div.message textarea {
+			width:458px;
+		}
+	.email-set .sign-in-link {
+		display:inline-block;
+		width:100%;
+	}

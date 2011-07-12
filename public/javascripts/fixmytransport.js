@@ -4,7 +4,28 @@
  */
 
 $(document).ready(function(){
+	/* Frontpage scroller
+	   ================================================== */
+	if($('#frontpage-problem-scroller').length > 0){
+		//fix height to tallest child
+		var h = 0;
+		if($('#frontpage-problem-scroller li img').length > 0){h = 250;} //quick chrome hack
+		$('#frontpage-problem-scroller').children('li').each(function(i){
+			if($(this).height() > h){h = $(this).height();}
+		});
+		$('#frontpage-problem-scroller').children('li').css({'height': h}); 
 
+		//hide all but first one
+		$('#frontpage-problem-scroller li:not(:first)').addClass('hidden').hide();
+		
+		//add classes for use in the function - for some reason
+		//the if statement didn't like the :first or :last's
+		$('#frontpage-problem-scroller li:first').addClass('first');
+		$('#frontpage-problem-scroller li:last').addClass('last');
+		
+		//run the function
+		frontpageScroller(5000, 2000);
+	}
 
 	/* Region map
 	   ================================================== */
@@ -638,3 +659,22 @@ window.fbAsyncInit = function() {
       }
     }
 }());
+
+
+/* Frontpage scroller function
+   ================================================== */
+function frontpageScroller(dsp, fsp){
+	$('#frontpage-problem-scroller li:not(".hidden")').delay(dsp).fadeOut(fsp, function(){
+		$(this).addClass('hidden');
+
+		if($(this).hasClass('last')) {
+			$('#frontpage-problem-scroller li.first').removeClass('hidden').fadeIn(fsp, function(){
+				frontpageScroller(dsp, fsp);
+			});
+		} else {
+			$(this).next().removeClass('hidden').fadeIn(fsp, function(){
+				frontpageScroller(dsp, fsp);
+			});
+		}
+	});
+}

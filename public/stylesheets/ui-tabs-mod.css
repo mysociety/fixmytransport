@@ -140,27 +140,27 @@
 	}
 	.has-tabs #tabs-main-nav li#bus-tab,
 	.has-tabs #tabs-main-nav li#coach-tab {
-		background: #c5c6c8 url(../images/icons.png) 8px -520px no-repeat; /* Old browsers */
-		background: url(../images/icons.png) 8px -520px no-repeat, -moz-linear-gradient(top, #c5c6c8 0%, #7F8183 100%); /* FF3.6+ */
-		background: url(../images/icons.png) 8px -520px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c5c6c8), color-stop(100%,#7F8183)); /* Chrome,Safari4+ */
-		background: url(../images/icons.png) 8px -520px no-repeat, -webkit-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* Chrome10+,Safari5.1+ */
-		background: url(../images/icons.png) 8px -520px no-repeat, -o-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* Opera11.10+ */
-		background: url(../images/icons.png) 8px -520px no-repeat, -ms-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* IE10+ */
+		background: #AFB0B2 url(../images/icons.png) 8px -520px no-repeat; /* Old browsers */
+		background: url(../images/icons.png) 8px -520px no-repeat, -moz-linear-gradient(top, #AFB0B2 0%, #707173 100%); /* FF3.6+ */
+		background: url(../images/icons.png) 8px -520px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#AFB0B2), color-stop(100%,#707173)); /* Chrome,Safari4+ */
+		background: url(../images/icons.png) 8px -520px no-repeat, -webkit-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* Chrome10+,Safari5.1+ */
+		background: url(../images/icons.png) 8px -520px no-repeat, -o-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* Opera11.10+ */
+		background: url(../images/icons.png) 8px -520px no-repeat, -ms-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* IE10+ */
 		filter: none; /* IE6-9 */
-		background: url(../images/icons.png) 8px -520px no-repeat, linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* W3C */
+		background: url(../images/icons.png) 8px -520px no-repeat, linear-gradient(top, #AFB0B2 0%,#707173 100%); /* W3C */
 	}
 	.has-tabs #tabs-main-nav li:hover#bus-tab,
 	.has-tabs #tabs-main-nav li:hover#coach-tab,
 	.has-tabs #tabs-main-nav li#bus-tab.ui-state-hover,
 	.has-tabs #tabs-main-nav li#coach-tab.ui-state-hover {
-		background: #c5c6c8 url(../images/icons.png) 8px -520px no-repeat; /* Old browsers */
-		background: url(../images/icons.png) 8px -520px no-repeat, -moz-linear-gradient(top, #c5c6c8 0%, #6f7072 100%); /* FF3.6+ */
-		background: url(../images/icons.png) 8px -520px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c5c6c8), color-stop(100%,#6f7072)); /* Chrome,Safari4+ */
-		background: url(../images/icons.png) 8px -520px no-repeat, -webkit-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* Chrome10+,Safari5.1+ */
-		background: url(../images/icons.png) 8px -520px no-repeat, -o-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* Opera11.10+ */
-		background: url(../images/icons.png) 8px -520px no-repeat, -ms-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* IE10+ */
+		background: #9E9FA1 url(../images/icons.png) 8px -520px no-repeat; /* Old browsers */
+		background: url(../images/icons.png) 8px -520px no-repeat, -moz-linear-gradient(top, #9E9FA1 0%, #5D5E5F 100%); /* FF3.6+ */
+		background: url(../images/icons.png) 8px -520px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9E9FA1), color-stop(100%,#5D5E5F)); /* Chrome,Safari4+ */
+		background: url(../images/icons.png) 8px -520px no-repeat, -webkit-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* Chrome10+,Safari5.1+ */
+		background: url(../images/icons.png) 8px -520px no-repeat, -o-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* Opera11.10+ */
+		background: url(../images/icons.png) 8px -520px no-repeat, -ms-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* IE10+ */
 		filter: none; /* IE6-9 */
-		background: url(../images/icons.png) 8px -520px no-repeat, linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* W3C */
+		background: url(../images/icons.png) 8px -520px no-repeat, linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* W3C */
 	}
 	.has-tabs #tabs-main-nav li#bus-tab.ui-state-active,
 	.has-tabs #tabs-main-nav li#coach-tab.ui-state-active {
@@ -174,25 +174,25 @@
 		background: url(../images/icons.png) 8px -520px no-repeat, linear-gradient(top, #048fc2 0%,#0075a0 100%); /* W3C */
 	}
 	.has-tabs #tabs-main-nav li#train-tab {
-		background: #c5c6c8 url(../images/icons.png) 8px -441px no-repeat; /* Old browsers */
-		background: url(../images/icons.png) 8px -441px no-repeat, -moz-linear-gradient(top, #c5c6c8 0%, #7F8183 100%); /* FF3.6+ */
-		background: url(../images/icons.png) 8px -441px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c5c6c8), color-stop(100%,#7F8183)); /* Chrome,Safari4+ */
-		background: url(../images/icons.png) 8px -441px no-repeat, -webkit-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* Chrome10+,Safari5.1+ */
-		background: url(../images/icons.png) 8px -441px no-repeat, -o-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* Opera11.10+ */
-		background: url(../images/icons.png) 8px -441px no-repeat, -ms-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* IE10+ */
+		background: #AFB0B2 url(../images/icons.png) 8px -441px no-repeat; /* Old browsers */
+		background: url(../images/icons.png) 8px -441px no-repeat, -moz-linear-gradient(top, #AFB0B2 0%, #707173 100%); /* FF3.6+ */
+		background: url(../images/icons.png) 8px -441px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#AFB0B2), color-stop(100%,#707173)); /* Chrome,Safari4+ */
+		background: url(../images/icons.png) 8px -441px no-repeat, -webkit-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* Chrome10+,Safari5.1+ */
+		background: url(../images/icons.png) 8px -441px no-repeat, -o-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* Opera11.10+ */
+		background: url(../images/icons.png) 8px -441px no-repeat, -ms-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* IE10+ */
 		filter: none; /* IE6-9 */
-		background: url(../images/icons.png) 8px -441px no-repeat, linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* W3C */
+		background: url(../images/icons.png) 8px -441px no-repeat, linear-gradient(top, #AFB0B2 0%,#707173 100%); /* W3C */
 	}
 	.has-tabs #tabs-main-nav li:hover#train-tab,
 	.has-tabs #tabs-main-nav li#train-tab.ui-state-hover {
-		background: #c5c6c8 url(../images/icons.png) 8px -441px no-repeat; /* Old browsers */
-		background: url(../images/icons.png) 8px -441px no-repeat, -moz-linear-gradient(top, #c5c6c8 0%, #6f7072 100%); /* FF3.6+ */
-		background: url(../images/icons.png) 8px -441px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c5c6c8), color-stop(100%,#6f7072)); /* Chrome,Safari4+ */
-		background: url(../images/icons.png) 8px -441px no-repeat, -webkit-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* Chrome10+,Safari5.1+ */
-		background: url(../images/icons.png) 8px -441px no-repeat, -o-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* Opera11.10+ */
-		background: url(../images/icons.png) 8px -441px no-repeat, -ms-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* IE10+ */
+		background: #9E9FA1 url(../images/icons.png) 8px -441px no-repeat; /* Old browsers */
+		background: url(../images/icons.png) 8px -441px no-repeat, -moz-linear-gradient(top, #9E9FA1 0%, #5D5E5F 100%); /* FF3.6+ */
+		background: url(../images/icons.png) 8px -441px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9E9FA1), color-stop(100%,#5D5E5F)); /* Chrome,Safari4+ */
+		background: url(../images/icons.png) 8px -441px no-repeat, -webkit-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* Chrome10+,Safari5.1+ */
+		background: url(../images/icons.png) 8px -441px no-repeat, -o-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* Opera11.10+ */
+		background: url(../images/icons.png) 8px -441px no-repeat, -ms-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* IE10+ */
 		filter: none; /* IE6-9 */
-		background: url(../images/icons.png) 8px -441px no-repeat, linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* W3C */
+		background: url(../images/icons.png) 8px -441px no-repeat, linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* W3C */
 	}
 	.has-tabs #tabs-main-nav li#train-tab.ui-state-active {
 		background: #ea1174 url(../images/icons.png) 8px -441px no-repeat; /* Old browsers */
@@ -205,25 +205,25 @@
 		background: url(../images/icons.png) 8px -441px no-repeat, linear-gradient(top, #ea1174 0%,#b71d6a 100%); /* W3C */
 	}
 	.has-tabs #tabs-main-nav li#ferry-tab {
-		background: #c5c6c8 url(../images/icons.png) 8px -369px no-repeat; /* Old browsers */
-		background: url(../images/icons.png) 8px -369px no-repeat, -moz-linear-gradient(top, #c5c6c8 0%, #7F8183 100%); /* FF3.6+ */
-		background: url(../images/icons.png) 8px -369px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c5c6c8), color-stop(100%,#7F8183)); /* Chrome,Safari4+ */
-		background: url(../images/icons.png) 8px -369px no-repeat, -webkit-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* Chrome10+,Safari5.1+ */
-		background: url(../images/icons.png) 8px -369px no-repeat, -o-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* Opera11.10+ */
-		background: url(../images/icons.png) 8px -369px no-repeat, -ms-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* IE10+ */
+		background: #AFB0B2 url(../images/icons.png) 8px -369px no-repeat; /* Old browsers */
+		background: url(../images/icons.png) 8px -369px no-repeat, -moz-linear-gradient(top, #AFB0B2 0%, #707173 100%); /* FF3.6+ */
+		background: url(../images/icons.png) 8px -369px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#AFB0B2), color-stop(100%,#707173)); /* Chrome,Safari4+ */
+		background: url(../images/icons.png) 8px -369px no-repeat, -webkit-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* Chrome10+,Safari5.1+ */
+		background: url(../images/icons.png) 8px -369px no-repeat, -o-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* Opera11.10+ */
+		background: url(../images/icons.png) 8px -369px no-repeat, -ms-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* IE10+ */
 		filter: none; /* IE6-9 */
-		background: url(../images/icons.png) 8px -369px no-repeat, linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* W3C */
+		background: url(../images/icons.png) 8px -369px no-repeat, linear-gradient(top, #AFB0B2 0%,#707173 100%); /* W3C */
 	}
 	.has-tabs #tabs-main-nav li:hover#ferry-tab,
 	.has-tabs #tabs-main-nav li#ferry-tab.ui-state-hover {
-		background: #c5c6c8 url(../images/icons.png) 8px -369px no-repeat; /* Old browsers */
-		background: url(../images/icons.png) 8px -369px no-repeat, -moz-linear-gradient(top, #c5c6c8 0%, #6f7072 100%); /* FF3.6+ */
-		background: url(../images/icons.png) 8px -369px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c5c6c8), color-stop(100%,#6f7072)); /* Chrome,Safari4+ */
-		background: url(../images/icons.png) 8px -369px no-repeat, -webkit-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* Chrome10+,Safari5.1+ */
-		background: url(../images/icons.png) 8px -369px no-repeat, -o-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* Opera11.10+ */
-		background: url(../images/icons.png) 8px -369px no-repeat, -ms-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* IE10+ */
+		background: #9E9FA1 url(../images/icons.png) 8px -369px no-repeat; /* Old browsers */
+		background: url(../images/icons.png) 8px -369px no-repeat, -moz-linear-gradient(top, #9E9FA1 0%, #5D5E5F 100%); /* FF3.6+ */
+		background: url(../images/icons.png) 8px -369px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9E9FA1), color-stop(100%,#5D5E5F)); /* Chrome,Safari4+ */
+		background: url(../images/icons.png) 8px -369px no-repeat, -webkit-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* Chrome10+,Safari5.1+ */
+		background: url(../images/icons.png) 8px -369px no-repeat, -o-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* Opera11.10+ */
+		background: url(../images/icons.png) 8px -369px no-repeat, -ms-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* IE10+ */
 		filter: none; /* IE6-9 */
-		background: url(../images/icons.png) 8px -369px no-repeat, linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* W3C */
+		background: url(../images/icons.png) 8px -369px no-repeat, linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* W3C */
 	}
 	.has-tabs #tabs-main-nav li#ferry-tab.ui-state-active {
 		background: #73ce24 url(../images/icons.png) 8px -369px no-repeat; /* Old browsers */
@@ -236,25 +236,25 @@
 		background: url(../images/icons.png) 8px -369px no-repeat, linear-gradient(top, #73ce24 0%,#70b222 100%); /* W3C */
 	}
 	.has-tabs #tabs-main-nav li#metro-tab {
-		background: #c5c6c8 url(../images/icons.png) 8px -306px no-repeat; /* Old browsers */
-		background: url(../images/icons.png) 8px -306px no-repeat, -moz-linear-gradient(top, #c5c6c8 0%, #7F8183 100%); /* FF3.6+ */
-		background: url(../images/icons.png) 8px -306px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c5c6c8), color-stop(100%,#7F8183)); /* Chrome,Safari4+ */
-		background: url(../images/icons.png) 8px -306px no-repeat, -webkit-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* Chrome10+,Safari5.1+ */
-		background: url(../images/icons.png) 8px -306px no-repeat, -o-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* Opera11.10+ */
-		background: url(../images/icons.png) 8px -306px no-repeat, -ms-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* IE10+ */
+		background: #AFB0B2 url(../images/icons.png) 8px -306px no-repeat; /* Old browsers */
+		background: url(../images/icons.png) 8px -306px no-repeat, -moz-linear-gradient(top, #AFB0B2 0%, #707173 100%); /* FF3.6+ */
+		background: url(../images/icons.png) 8px -306px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#AFB0B2), color-stop(100%,#707173)); /* Chrome,Safari4+ */
+		background: url(../images/icons.png) 8px -306px no-repeat, -webkit-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* Chrome10+,Safari5.1+ */
+		background: url(../images/icons.png) 8px -306px no-repeat, -o-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* Opera11.10+ */
+		background: url(../images/icons.png) 8px -306px no-repeat, -ms-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* IE10+ */
 		filter: none; /* IE6-9 */
-		background: url(../images/icons.png) 8px -306px no-repeat, linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* W3C */
+		background: url(../images/icons.png) 8px -306px no-repeat, linear-gradient(top, #AFB0B2 0%,#707173 100%); /* W3C */
 	}
 	.has-tabs #tabs-main-nav li:hover#metro-tab,
 	.has-tabs #tabs-main-nav li#metro-tab.ui-state-hover {
-		background: #c5c6c8 url(../images/icons.png) 8px -306px no-repeat; /* Old browsers */
-		background: url(../images/icons.png) 8px -306px no-repeat, -moz-linear-gradient(top, #c5c6c8 0%, #6f7072 100%); /* FF3.6+ */
-		background: url(../images/icons.png) 8px -306px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c5c6c8), color-stop(100%,#6f7072)); /* Chrome,Safari4+ */
-		background: url(../images/icons.png) 8px -306px no-repeat, -webkit-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* Chrome10+,Safari5.1+ */
-		background: url(../images/icons.png) 8px -306px no-repeat, -o-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* Opera11.10+ */
-		background: url(../images/icons.png) 8px -306px no-repeat, -ms-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* IE10+ */
+		background: #9E9FA1 url(../images/icons.png) 8px -306px no-repeat; /* Old browsers */
+		background: url(../images/icons.png) 8px -306px no-repeat, -moz-linear-gradient(top, #9E9FA1 0%, #5D5E5F 100%); /* FF3.6+ */
+		background: url(../images/icons.png) 8px -306px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9E9FA1), color-stop(100%,#5D5E5F)); /* Chrome,Safari4+ */
+		background: url(../images/icons.png) 8px -306px no-repeat, -webkit-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* Chrome10+,Safari5.1+ */
+		background: url(../images/icons.png) 8px -306px no-repeat, -o-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* Opera11.10+ */
+		background: url(../images/icons.png) 8px -306px no-repeat, -ms-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* IE10+ */
 		filter: none; /* IE6-9 */
-		background: url(../images/icons.png) 8px -306px no-repeat, linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* W3C */
+		background: url(../images/icons.png) 8px -306px no-repeat, linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* W3C */
 	}
 	.has-tabs #tabs-main-nav li#metro-tab.ui-state-active {
 		background: #f78411 url(../images/icons.png) 8px -306px no-repeat; /* Old browsers */
@@ -270,27 +270,27 @@
 	/*operator page*/
 	.has-tabs #tabs-main-nav li#route-tab,
 	.has-tabs #tabs-main-nav li#area-tab {
-		background: #c5c6c8; /* Old browsers */
-		background: -moz-linear-gradient(top, #c5c6c8 0%, #7F8183 100%); /* FF3.6+ */
-		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c5c6c8), color-stop(100%,#7F8183)); /* Chrome,Safari4+ */
-		background: -webkit-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* Opera11.10+ */
-		background: -ms-linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* IE10+ */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c5c6c8', endColorstr='#7F8183',GradientType=0 ); /* IE6-9 */
-		background: linear-gradient(top, #c5c6c8 0%,#7F8183 100%); /* W3C */
+		background: #AFB0B2; /* Old browsers */
+		background: -moz-linear-gradient(top, #AFB0B2 0%, #707173 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#AFB0B2), color-stop(100%,#707173)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* Opera11.10+ */
+		background: -ms-linear-gradient(top, #AFB0B2 0%,#707173 100%); /* IE10+ */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#AFB0B2', endColorstr='#707173',GradientType=0 ); /* IE6-9 */
+		background: linear-gradient(top, #AFB0B2 0%,#707173 100%); /* W3C */
 	}
 	.has-tabs #tabs-main-nav li:hover#route-tab,
 	.has-tabs #tabs-main-nav li:hover#area-tab,
 	.has-tabs #tabs-main-nav li#route-tab.ui-state-hover,
 	.has-tabs #tabs-main-nav li#area-tab.ui-state-hover {
-		background: #c5c6c8; /* Old browsers */
-		background: -moz-linear-gradient(top, #c5c6c8 0%, #6f7072 100%); /* FF3.6+ */
-		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c5c6c8), color-stop(100%,#6f7072)); /* Chrome,Safari4+ */
-		background: -webkit-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* Opera11.10+ */
-		background: -ms-linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* IE10+ */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c5c6c8', endColorstr='#6f7072',GradientType=0 ); /* IE6-9 */
-		background: linear-gradient(top, #c5c6c8 0%,#6f7072 100%); /* W3C */
+		background: #9E9FA1; /* Old browsers */
+		background: -moz-linear-gradient(top, #9E9FA1 0%, #5D5E5F 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9E9FA1), color-stop(100%,#5D5E5F)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* Opera11.10+ */
+		background: -ms-linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* IE10+ */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9E9FA1', endColorstr='#5D5E5F',GradientType=0 ); /* IE6-9 */
+		background: linear-gradient(top, #9E9FA1 0%,#5D5E5F 100%); /* W3C */
 	}
 	.has-tabs #tabs-main-nav li#route-tab.ui-state-active,
 	.has-tabs #tabs-main-nav li#area-tab.ui-state-active {
