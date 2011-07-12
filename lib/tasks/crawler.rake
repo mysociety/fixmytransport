@@ -4,6 +4,7 @@ namespace :crawler do
     require 'net/http'
     require 'uri'
     include ActionController::UrlWriter
+    include ApplicationHelper
     default_url_options[:host] = MySociety::Config.get("DOMAIN", 'localhost:3000')
     url = URI.parse(root_url)
     puts "HOST: #{url.host}"
@@ -51,8 +52,8 @@ namespace :crawler do
   desc 'Spider the site stop area pages' 
   task :stop_areas => :environment do 
     connect_to_site do |http|
-      StopArea.find_each(:include => 'locality') do |stop_area|
-        path = stop_area_path(stop_area.locality, stop_area)
+      StopArea.find_each(:include => 'locality', :conditions => ['area_type in (?)', StopAreaType.primary_types]) do |stop_area|
+        path = location_path(stop_area)
         make_request(http, path)
       end
     end
