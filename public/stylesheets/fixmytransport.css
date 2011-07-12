@@ -1961,3 +1961,9 @@ body.facebook-canvas .button {
 		display:inline-block;
 		width:100%;
 	}
+	
+/*===[Problem Page]===*/
+
+.problem-details {
+  list-style-type: none;  
+}

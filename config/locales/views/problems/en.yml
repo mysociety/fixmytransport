@@ -160,3 +160,6 @@ en:
       marked_as_fixed: "and marked the problem as fixed."
       user_says: "%{name} added an update"
       mark_open: "This problem has not been fixed"
+      reported_at: "on "
+      reported_by: "By "
+        
