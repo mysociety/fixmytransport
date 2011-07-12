@@ -2,8 +2,11 @@ en:
   assignments:
     edit:
       submit: "Submit"
-      find_contact_details_explanation: "We don't yet have a contact email address for %{organization}. If you can find one, we can send your problem report on its way."
-      find_transport_org_explanation: "We don't know yet who operates the %{location}. If you can find out the company name and a contact email address, and let us know, we'll send your problem report on its way to them."
+      click_to_search: "Click to search for \"%{search}\""
+      find_contact_details_explanation: "We don't yet have a contact email address for %{organization}. If you can find one, we can send your problem report on its way. Sometimes it can be as simple as googling for \"%{link}\" and checking the results. The contact email address may be listed on the operator's website, but sometimes a phone call is the most effective way to find out."
+      find_transport_org_explanation: "We don't know yet who operates the %{location}. If you can find out the company name and a contact email address, and let us know, we'll send your problem report on its way to them. Sometimes it can be as simple as googling for \"%{link}\" and checking the results to see if they say who runs it. The contact email address may be listed on the operator's website, but sometimes a phone call is the most effective way to find out. "
+      find_transport_org_explanation_more: If you find out the company name but not an email address, let us know anyway, as we may well already have a contact email address for them.
+      find_transport_org_use_feedback: "If you're stumped, use the feedback link to let us know, and we'll try and find the information for you."
       confirming_organization: "Well done, as soon as we've added the company and contact information into the database, your problem will be on its way!"
       organization_name: "Company name"
       subject: "Subject"

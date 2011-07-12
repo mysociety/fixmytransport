@@ -1,5 +1,11 @@
 <h2 class="main-header"><%= t('assignments.edit.find_transport_org_header', :location => @assignment.problem.location.description) %></h2>
-<%= t('assignments.edit.find_transport_org_explanation', :location => @assignment.problem.location.description)%>
+<p><%= raw t('assignments.edit.find_transport_org_explanation', :location => @assignment.problem.location.description, :link => link_to( @assignment.problem.location.description, external_search_link(@assignment.problem.location.description), :title => t('assignments.edit.click_to_search', :search => @assignment.problem.location.description), :target => '_blank'))%>
+</p>
+<%= t('assignments.edit.find_transport_org_explanation_more')%>
+<p>
+<p>
+<%= t('assignments.edit.find_transport_org_use_feedback')%>
+</p>
 <%- form_for [@campaign, @assignment] do |f| %>
   
   <div class='fieldset'>
