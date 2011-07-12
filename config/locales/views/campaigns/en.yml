@@ -89,6 +89,7 @@ en:
       recommended_actions: "Recommended actions"
       support_this: "Support"
       campaign_comment: "Comment"
+      campaign_comment_title: "Leave a public comment (will be mailed to supporters)"
       supporting: "Supporting"
       edit_description: "Edit description"
       please_upload_valid_image: "Please upload a .jpeg, .gif or .png image"

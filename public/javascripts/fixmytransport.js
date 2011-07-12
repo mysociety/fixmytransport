@@ -247,7 +247,7 @@ $(document).ready(function(){
                 .attr('name', 'last_thread_index')
                 .attr('class', 'last_thread_index')
                 .val(last_thread_index));
-  	$("#login-box").dialog({title: $('.comment-trigger').html()+":"});
+  	$("#login-box").dialog({title: $('.comment-trigger').attr('data-title')+":"});
   	$("#login-box").dialog("open");
   	return false;
   });

@@ -29,7 +29,7 @@
 		</div>
 		<div class="clear">
 			<h5 class="left"><%= t('problems.show.comments')%></h5>
-			<a class="comment button right comment-trigger" href="<%= add_comment_problem_url(@problem) %>"><%= t('problems.show.comment')%></a>
+			<a class="comment button right comment-trigger" href="<%= add_comment_problem_url(@problem) %>" data-title="<%= t('problems.show.comment_title') %>"><%= t('problems.show.comment')%></a>
 		</div>
 
 		<ul id="campaign-thread">
