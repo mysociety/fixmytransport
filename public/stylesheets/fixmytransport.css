@@ -1209,6 +1209,13 @@ ul.campaign-meta li span{
 				font-size:0.8em;
 			}
 
+.expert-tools {
+  text-align: center;
+}
+  .expert-tools .button{
+    width: 300px;
+    margin: 0.5em 0;
+    }
 /* ===[ Campaign Thread ]=== */
 
 .thread-controls {
