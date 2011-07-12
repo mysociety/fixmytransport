@@ -309,19 +309,22 @@ form#search {
 
 div.supporter-notice-arrow{
 	background: url(../images/share-arrow.png);
-	width: 201px;
-	height: 135px;
 	box-shadow:none;
 	-moz-box-shadow:none;
 	-webkit-box-shadow:none;
-	position: absolute;
-	margin-top: -11em;
+	bottom: -40px;
+	height: 135px;
 	margin-left: 627px;
-	}
+	margin-top: -11em;
+	position: absolute;
+	right: 142px;
+	width: 201px;
+}
 
 .container-wide{
 	width: 970px;
 	margin: 0px auto;
+	position:relative;
 }
 
 .supporter-notice {
