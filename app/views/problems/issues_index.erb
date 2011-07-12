@@ -1,14 +1,9 @@
 <div id="main-content" class="container">
-
-
-
-
-
-<div class="leftcol">
-<%= will_paginate @issues %>
-<ul class="issues-list">
-<%= render :partial => "shared/issue", :collection => @issues, :locals => {:context => :issue_list } %>
-</ul>
-<%= will_paginate @issues %>
-</div>
+  <div class="leftcol">
+  <%= will_paginate @issues %>
+    <ul class="issues-list">
+      <%= render :partial => "shared/issue", :collection => @issues, :locals => {:context => :issue_list } %>
+    </ul>
+  <%= will_paginate @issues %>
+  </div>
 </div>

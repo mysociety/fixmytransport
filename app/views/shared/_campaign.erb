@@ -8,9 +8,9 @@
 		<dd><%= campaign.created_at.to_s(:short) %></dd>
 		<dt><%= t('shared.campaign.followers') %></dt>
 		<dd><%= campaign.supporters.count %></dd>
-		<div class="status-item">
+		<span class="status-item">
 			<dt><%= t('shared.campaign.status')%></dt>
 			<dd class="status stat-<%= campaign_display_status(campaign) %>"><%= campaign_display_status(campaign).titleize %></dd>
-		</div>
-	</dl>	
+		</span>
+	</dl>
 </div>

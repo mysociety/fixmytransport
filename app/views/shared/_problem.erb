@@ -4,9 +4,8 @@
 <dl>
 	<dt><%= t('shared.problem.added') %></dt>
 	<dd><%= problem.confirmed_at.to_s(:short) %></dd>
-	<div class="status-item">
+	<span class="status-item">
 		<dt>Status:</dt>
 		<dd class="status stat-<%= problem_display_status(problem) %>"><%= problem_display_status(problem).titleize %></dd>
-	</div>
-</dl>	
-
+	</span>
+</dl>
