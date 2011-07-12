@@ -23,6 +23,10 @@ class ProblemsController < ApplicationController
     end
   end
   
+  def index 
+    redirect_to :action => 'issues_index'
+  end
+  
   def new
     location = instantiate_location(params[:location_id], params[:location_type])
     @problem = Problem.new(:location => location, 

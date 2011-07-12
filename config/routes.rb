@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # campaigns
   map.confirm_leave '/l/:email_token', :action => 'confirm_leave', :controller => 'campaigns'
-  map.resources :campaigns, :except => [:destroy, :index],
+  map.resources :campaigns, :except => [:destroy],
                             :member => { :join => [:get, :post],
                                          :leave => [:post],
                                          :add_update => [:get, :post],
@@ -28,7 +28,7 @@ ActionController::Routing::Routes.draw do |map|
     campaign.resources :assignments, :only => [:new, :create, :update, :edit]
   end
 
-  map.resources :problems, :except => [:destroy, :edit, :update, :index],
+  map.resources :problems, :except => [:destroy, :edit, :update],
                            :member => {:convert => [:get],
                                       :add_comment => [:get, :post] },
                            :collection => { :choose_location => :get,

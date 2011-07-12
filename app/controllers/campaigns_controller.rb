@@ -23,6 +23,10 @@ class CampaignsController < ApplicationController
                             width=CAMPAIGN_PAGE_MAP_WIDTH)
      @collapse_quotes = params[:unfold] ? false : true
   end
+  
+  def index
+    redirect_to(:controller => 'problems', :action => 'issues_index')
+  end
 
   def update
     @campaign.attributes=(params[:campaign])
