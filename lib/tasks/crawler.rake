@@ -1,7 +1,6 @@
 namespace :crawler do 
 
-  desc 'Spider the site route pages' 
-  task :routes => :environment do 
+  def connect_to_site
     require 'net/http'
     require 'uri'
     include ActionController::UrlWriter
@@ -10,20 +9,51 @@ namespace :crawler do
     puts "HOST: #{url.host}"
     puts "PORT: #{url.port}"
     Net::HTTP.start(url.host, url.port) do |http|
+      yield http
+    end
+  end
+  
+  def make_request(http, path)
+    puts path
+    req = Net::HTTP::Get.new(path)
+    if MySociety::Config.get('APP_STATUS', 'live') == 'closed_beta'
+      beta_username = MySociety::Config.get('BETA_USERNAME', 'username')
+      unless ENV['PASSWORD']
+        usage_message "usage: This task requires PASSWORD=[beta testing password]"
+      end
+      beta_password = ENV['PASSWORD']
+      req.basic_auth beta_username, beta_password
+    end
+    response = http.request(req)
+    puts response.code
+  end
+  
+  desc 'Spider the site route pages' 
+  task :routes => :environment do 
+    connect_to_site do |http|
       Route.find_each(:include => 'region') do |route|
         path = route_path(route.region, route) 
-        puts path
-        req = Net::HTTP::Get.new(path)
-        if MySociety::Config.get('APP_STATUS', 'live') == 'closed_beta'
-          beta_username = MySociety::Config.get('BETA_USERNAME', 'username')
-          unless ENV['PASSWORD']
-            usage_message "usage: This task requires PASSWORD=[beta testing password]"
-          end
-          beta_password = ENV['PASSWORD']
-          req.basic_auth beta_username, beta_password
-        end
-        response = http.request(req)
-        puts response.code
+        make_request(http, path)
+      end
+    end
+  end
+  
+  desc 'Spider the site stop pages' 
+  task :stops => :environment do 
+    connect_to_site do |http|
+      Stop.find_each(:include => 'locality') do |stop|
+        path = stop_path(stop.locality, stop)
+        make_request(http, path)
+      end
+    end
+  end
+  
+  desc 'Spider the site stop area pages' 
+  task :stop_areas => :environment do 
+    connect_to_site do |http|
+      StopArea.find_each(:include => 'locality') do |stop_area|
+        path = stop_area_path(stop_area.locality, stop_area)
+        make_request(http, path)
       end
     end
   end
