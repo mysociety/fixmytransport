@@ -26,7 +26,7 @@ en:
     show:
       contacts_email: "Email"
       ask_our_expert_panel: "Ask for advice from one of FixMyTransport's mostly volunteer experts and your supporters"
-      contacts_description: "Useful people who may be able to help with your campaign"
+      contacts_description: "Useful people who may be able to help you resolve your problem"
       wrote_a_message: "%{sender} wrote to %{recipient}%{assignment_text}"
       add_photos: "Add photo"
       photo: Photo

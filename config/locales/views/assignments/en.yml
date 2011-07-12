@@ -13,7 +13,7 @@ en:
       find_transport_org_header: "Find out the company that runs the %{location}"
       organization_email: "Company email address"
       find_contact_details_header: "Find an email address for %{name}"
-      message_from_expert: This is a message from FixMyTransport boffin %{expert} to %{user} on their next step for keeping the %{campaign} campaign moving.
+      message_from_expert: This is a message from FixMyTransport boffin %{expert} to %{user} on their next step for keeping the \"%{campaign}\" moving.
       contact_for_location: Is this email address just for problems at this station?
     new:
       sent_your_advice: "Thanks! We've sent your advice to %{user}"

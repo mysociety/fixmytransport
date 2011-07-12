@@ -30,7 +30,7 @@ en:
     find_bus_route:
       title: "Finding a bus route"
       route_not_found: "Sorry, we could not find the route you entered. Please modify it and try again!"
-      please_enter_route_number_and_area: "Please enter the route number and area"
+      please_enter_route_number_and_area: "Please enter the route number of the bus and the area where it runs"
       what_was_the_number_and_area: "What was the route number and town or area?"
       enter_town_or_area: "Town/Area"
       area_not_found_routes: "We could not find an area called %{area}."
