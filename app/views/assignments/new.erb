@@ -12,9 +12,7 @@
 <div id="main-content" class="container">
 
 	<%- form_for [@campaign, @assignment] do |f| %>
-  
-	  <div class='fieldset'>
-  
+    
 	    <div class='form-field'>
 
 	      <%= label_tag :subject, t('assignments.new.subject_line_for_email',  :user => @initiator.first_name) %>
@@ -26,8 +24,6 @@
 	      <%= raw text_field_tag :subject, @assignment.data[:subject], :size => 45 %>
 	    </div>
 	    
-	  </div>
-
 	   <div class='fieldset'>
 	    <strong><%= t('assignments.new.who_should_they_write_to', :user => @initiator.first_name) %></strong>
 	    <div class='form-field'>
