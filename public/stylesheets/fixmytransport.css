@@ -889,6 +889,7 @@ input.checkbox {
 			display:block;
 			position:absolute;
 			top:-2em;
+			left:4px;
 		}
 		
 			.form-list li.fieldset .error{
