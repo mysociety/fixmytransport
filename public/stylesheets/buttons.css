@@ -286,7 +286,7 @@ a.button {
    ================================================== */
 
 #route-type-list a.bus {
-	background: #048fc2 url(../images/transport-icons/bus.png) center 50px no-repeat; /* Old browsers */
+	background: #048fc2 url(../images/transport-icons/white-bus.png) center 50px no-repeat; /* Old browsers */
 	background: url(../images/transport-icons/white-bus.png) center 50px no-repeat, -moz-linear-gradient(top, #048fc2 0%, #006699 100%); /* FF3.6+ */
 	background: url(../images/transport-icons/white-bus.png) center 50px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#048fc2), color-stop(100%,#006699)); /* Chrome,Safari4+ */
 	background: url(../images/transport-icons/white-bus.png) center 50px no-repeat, -webkit-linear-gradient(top, #048fc2 0%,#006699 100%); /* Chrome10+,Safari5.1+ */

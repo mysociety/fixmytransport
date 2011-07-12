@@ -17,7 +17,9 @@
 * html .form-list li input {
 	width:100%;
 }
-
+* html ul.issues-list li{
+	display:inline-block;
+}
 
 
 /*Hacks for IE6 and IE7*/
@@ -26,13 +28,16 @@
 	float:left;
 }
 
-ol#frontpage-grid li,
-#fg-head-inner {
-	margin-top:0;
-}
-
 .form-list li .button {
 	padding:0.1em 0.25em;
+}
+
+#route-type-list li {
+	width:20%;
+}
+
+.fg-bottom {
+	float:none;
 }
 
 
