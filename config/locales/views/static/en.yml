@@ -4,8 +4,8 @@ en:
       feedback_thanks: "Thanks for your feedback!"
       feedback_error: "An error occurred while sending this email."
       send: "Send"
-      please_give_feedback: "We'd love to hear what you think of this site. Please fill in the form, or send an email to %{email}"
-      operator_feedback: "You are letting us know there's an issue with our information about %{operator}."
-      location_feedback: "You are letting us know there's an issue with our information about the %{location}."
+      please_give_feedback: "We'd love to hear what you think of this site. Please fill in the form, or send an email to %{email}. If something's gone wrong or you think we have incorrect information, please give as much detail as possible to help us sort it out."
+      operator_feedback: "You are letting us know there's an issue with our information about %{operator}. Please give us as much detail as you can to help us sort it out."
+      location_feedback: "You are letting us know there's an issue with our information about the %{location}. Please give us as much detail as you can to help us sort it out."
     facebook:
       visit_the_site: "Go to FixMyTransport"  
