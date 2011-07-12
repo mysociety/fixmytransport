@@ -1,77 +1,85 @@
 <div id="main-content" class="container">
-	<%= t('assignments.new.new_assignment_help', :user => @initiator.name, :campaign => @campaign.title) %>
-
+  <h3><%= t('assignments.new.suggesting_a_new_person', :user => @initiator.name) %></h3>
+  
+<p>	<%= raw t('assignments.new.new_assignment_help', :user => h(@initiator.first_name), :campaign => link_to(@campaign.title, campaign_url(@campaign))) %>
+</p>
 	<%- form_for [@campaign, @assignment] do |f| %>
   
 	  <div class='fieldset'>
   
 	    <div class='form-field'>
+
+	      <%= label_tag :subject, t('assignments.new.subject_line_for_email',  :user => @initiator.first_name) %>
 	      <%- if @assignment.errors.on('subject') %>
 	        <div class='error'>
 	          <%= @assignment.errors.on(:subject) %>
 	        </div>
 	      <%- end %>
-	      <%= label_tag :subject, t('assignments.new.subject_line_for_email') %>
 	      <%= raw text_field_tag :subject, @assignment.data[:subject], :size => 45 %>
-	      <span class='optional-note'>
-	        <%= t('assignments.new.for_advice_email', :user => @initiator.first_name) %>
-	      </span>
 	    </div>
-    
-    
+	    
+	  </div>
+
+	   <div class='fieldset'>
+	    <strong><%= t('assignments.new.who_should_they_write_to', :user => @initiator.first_name) %></strong>
 	    <div class='form-field'>
-	      <%- if @assignment.errors.on('reason') %>
-	        <div class='error'>
-	          <%= @assignment.errors.on(:reason) %>
-	        </div>
-	      <%- end %>
-	      <%= label_tag :reason, t('assignments.new.your_message', :user => @initiator.first_name) %>
-	      <%= raw text_area_tag :reason, @assignment.data[:reason], :cols => 50, :rows => 10 %>
-	      <span class='textarea-optional-note'>
-	        <%= t('assignments.new.why_write_to_this_person', :user => @initiator.first_name) %>
-	      </span>
-	    </div>
-    
-    
-	    <%= t('assignments.new.who_should_they_write_to', :user => @initiator.first_name) %>
-	    <div class='form-field'>
-	      <%- if @assignment.errors.on('name') %>
-	        <div class='error'>
-	          <%= @assignment.errors.on(:name) %>
-	        </div>
-	      <%- end %>
+	   
 	      <%= label_tag :name, t('assignments.new.name') %>
+	         <%- if @assignment.errors.on('name') %>
+    	        <div class='error'>
+    	          <%= @assignment.errors.on(:name) %>
+    	        </div>
+    	      <%- end %>
 	      <%= raw text_field_tag :name, @assignment.data[:name], :size => 35 %>
 	    </div>
   
 	    <div class='form-field'>
+	      
+	      <%= label_tag :description, t('assignments.new.description') %>
 	      <%- if @assignment.errors.on('description') %>
 	        <div class='error'>
 	          <%= @assignment.errors.on(:description) %>
 	        </div>
 	      <%- end %>
-	      <%= label_tag :description, t('assignments.new.description') %>
 	      <%= raw text_field_tag :description, @assignment.data[:description], :size => 35 %>
 	    </div>
     
 	    <div class='form-field'>
+
+	      <%= label_tag :email, t('assignments.new.email') %>
 	      <%- if @assignment.errors.on('email') %>
 	        <div class='error'>
-	          <%= @assignment.errors.on('assignments.new.email') %>
+	          <%= @assignment.errors.on('email') %>
 	        </div>
 	      <%- end %>
-	      <%= label_tag :email, t('assignments.new.email') %>
 	      <%= raw text_field_tag :email, @assignment.data[:email], :size => 35 %>
 	    </div>
-  
+	    
+    
+    <div class="fieldset">
 	    <div class='form-field'>
-	      <%= label_tag :draft_text, t('assignments.new.draft_text') %>
-	      <%= raw text_area_tag :draft_text, @assignment.data[:draft_text], :cols => 50, :rows => 10 %>
-	      <span class='textarea-optional-note'><%= t('assignments.new.text_to_get_them_started', :user => @initiator.first_name) %>
-	        <div class='form-field'>
-	          <%= raw f.submit t('assignments.new.send_advice') %>
+
+	      <%= label_tag :reason, t('assignments.new.your_message', :user => @initiator.first_name) %>
+	      <%- if @assignment.errors.on('reason') %>
+	        <div class='error'>
+	          <%= @assignment.errors.on(:reason) %>
 	        </div>
-	      </span>
+	      <%- end %>
+	      <%= raw text_area_tag :reason, @assignment.data[:reason], :cols => 50, :rows => 10 %>
+	    </div>
+	  </div>
+    
+    
+    <div class="fieldset">
+	    <div class='form-field'>
+	      <%= label_tag :draft_text, t('assignments.new.draft_text', :user => @initiator.first_name) %>
+	      <%= raw text_area_tag :draft_text, @assignment.data[:draft_text], :cols => 50, :rows => 10 %>
+	    </div>
+	  </div>
+	    <div class="fieldset">  
+        <div class='form-field'>
+          <%= raw f.submit t('assignments.new.send_advice') %>
+        </div>
 	    </div>
 	  </div>
 	<%- end %>

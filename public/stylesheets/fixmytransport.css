@@ -1872,3 +1872,12 @@ body.facebook-canvas .button {
 .problem-details {
   list-style-type: none;  
 }
+
+/*===[New Assignment Page]===*/
+.new_assignment textarea{
+  height: 10em;
+}
+
+.new_assignment div.fieldset{
+  margin: 2em 0;
+}

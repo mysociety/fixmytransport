@@ -112,13 +112,14 @@
      <div class="clear">
        <h3><%= t('campaigns.show.transport_experts') %></h3>
        <div class='expert-tools'>
-         <div class='optional-assignment'>
+         <h4><%= t('campaigns.show.special_powers') %></h4>
+         <div >
            <a href="<%= new_campaign_assignment_path(@campaign) %>" class="button"><%= t('campaigns.show.tell_to_write', :user => @campaign.initiator.first_name) %></a>
          </div>
-         <div class='optional-assignment'>
-           <a href="<%= edit_campaign_path(@campaign)%>" class="button"><%= t('campaigns.show.edit_description') %></a>
+         <div >
+           <a href="<%= edit_campaign_path(@campaign)%>" class="button"><%= t('campaigns.show.expert_edit_description', :user => @campaign.initiator.first_name) %></a>
          </div>
-         <div class='optional-assignment-end'>
+         <div >
          </div>
        </div>
      </div>
