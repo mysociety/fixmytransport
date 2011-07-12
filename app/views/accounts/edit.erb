@@ -43,7 +43,7 @@
 	          <%= error_message_on current_user, :location %>
 	        </div>
 	      <%- end %>
-	      <%= f.label :location %>
+	      <%= f.label :location, t('accounts.edit.your_location') %>
 	      <%= raw f.text_field :location %>
 
 	    </div>
@@ -54,7 +54,7 @@
 	          <%= error_message_on current_user, :profile_photo %>
 	        </div>
 	      <%- end %>
-	      <%= f.label :profile_photo %>
+	      <%= f.label :profile_photo, t('accounts.edit.upload_profile_photo') %>
 	      <%= raw f.file_field :profile_photo %>
 
 	    </div>

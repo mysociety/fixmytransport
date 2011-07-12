@@ -6,9 +6,11 @@ en:
       could_not_find_account: "We're sorry, but we could not locate your account. If you are having issues, try copying and pasting the URL from your email into your browser, or restarting the reset password process."
     edit:
       account_updated: "Your account has been updated."
-      your_account: "Your account"
+      your_account: "Edit your account"
       update_account: "Update account"
       only_needed_if_want_to_change: "Only if you want to change it"
+      your_location: "Your location (will be public)"
+      upload_profile_photo: Upload a profile photo
     new:
       password_match_error: "The password confirmation does not match the password"
       your_account_wont_be_created: "your account won't be created."
