@@ -9,49 +9,57 @@
 	</div>
 </div>
 <div id="main-content" class="container">
-	<div class='campaign-email'>
-	  <h2>
-	    <div class='from'>
-	      <%= t('incoming_messages.show.from', :sender => @incoming_message.safe_from) %>
+	<div class='leftcol'>
+	  <div class="email-set">
+	    <label for="from"><%= t('incoming_messages.show.from') %></label>
+	    <p name="from"><strong><a href="#">Louise Crow</a></strong></p>
+
+	    <label for="date"><%= t('incoming_messages.show.date') %></label>
+	    <p name="date"><em><%= short_date(@incoming_message.sent_at) %></em></p>
+
+	    <label for="subject"><%= "#{t('incoming_messages.show.subject')}:" %></label>
+	    <p name="subject"><strong><%= @incoming_message.subject %></strong></p>
+	    
+	    <!-- Needs conditionals and can the links have after them the filesize like this: ' (118kb)' and be separated by this: ', ' except for the last one-->
+	    <label for="attachments">Attachments:</label>
+	    <div name="attachments" class="attachments">
+	    <%- FixMyTransport::Email.get_display_attachments(@incoming_message.mail).each do |attachment| %>
+	      <%= link_to(attachment.display_filename, campaign_attachment_url(@incoming_message.campaign, :id => @incoming_message, :url_part_number => attachment.url_part_number)) %>
+	    <%- end %>
 	    </div>
-	    <div class='date'>
-	      <%= short_date(@incoming_message.sent_at) %>
+	    <!-- Needs conditionals -->
+	  </div>
+	  <div class="email-set">
+	    <label for="message">Message:</label>
+	    <div name="message" class="message">
+	      <%= raw @incoming_message.get_body_for_html_display(@collapse_quotes) %>
 	    </div>
-	  </h2>
-	  <div class='subject'>
-	    <b><%= "#{t('incoming_messages.show.subject')}:" %></b>
-	    <%= @incoming_message.subject %>
+	    <%= raw link_to(t('incoming_messages.show.reply_to_this_message'), new_campaign_outgoing_message_path(@incoming_message.campaign, :incoming_message_id => @incoming_message), :class => 'button right') %>
 	  </div>
-	  <%- FixMyTransport::Email.get_display_attachments(@incoming_message.mail).each do |attachment| %>
-	    <%= link_to(attachment.display_filename, campaign_attachment_url(@incoming_message.campaign, :id => @incoming_message, :url_part_number => attachment.url_part_number)) %>
-	  <%- end %>
-	  <div class='body'>
-	    <%= raw @incoming_message.get_body_for_html_display(@collapse_quotes) %>
-	  </div>
-	  <div class='reply-link'>
-	    <%= raw link_to(t('incoming_messages.show.reply_to_this_message'), new_campaign_outgoing_message_path(@incoming_message.campaign, :incoming_message_id => @incoming_message)) %>
+
+	  <div class="email-set">
+	    <%- if current_user && current_user == @incoming_message.campaign.initiator %>
+	      <%- form_for @campaign_update, :url => add_update_campaign_url(@incoming_message.campaign) do |f| %>
+	            <%= f.label :text, t('incoming_messages.show.what_does_this_mean'), :for => 'update' %> <!-- can I even do this? -->
+
+	            <%= raw f.hidden_field :incoming_message_id %>
+	            <%= raw f.hidden_field :user_id %>
+	            <div class="message">
+	              <%= raw f.text_area :text, :name => 'update' %> <!-- can I even do this? -->
+	              <%- if @campaign_update.errors.on('text') %>
+	              <div class='error'>
+	                <%= error_message_on @campaign_update, :text %>
+	                this would be an error
+	              </div>
+	              <%- end %>
+	              <button class="button right" type="submit"><%= t('incoming_messages.show.add_update') %></button>
+	            </div>
+	          
+	       <%- end %>
+	     </form>
+	    <%- else  %>
+	      <p class="sign-in-link"><%= raw t('incoming_messages.show.login_to_add_update', :link => link_to(t('incoming_messages.show.login_as', :user => h(@incoming_message.campaign.initiator.name)), login_url(:redirect => request.request_uri)), :campaign => h(@incoming_message.campaign.title)) %></p>
+	    <%- end %>
 	  </div>
 	</div>
-
-	<%- if current_user && current_user == @incoming_message.campaign.initiator %>
-	  <%- form_for @campaign_update, :url => add_update_campaign_url(@incoming_message.campaign) do |f| %>
-	    <div class='fieldset'>
-      
-	      <div class='form-field'>
-	        <%- if @campaign_update.errors.on('text') %>
-	          <div class='error'>
-	            <%= error_message_on @campaign_update, :text %>
-	          </div>
-	        <%- end %>
-	        <%= f.label :text, t('incoming_messages.show.what_does_this_mean') %>
-	        <%= raw f.hidden_field :incoming_message_id %>
-	        <%= raw f.hidden_field :user_id %>
-	        <%= raw f.text_area :text, :cols => 40, :rows => 5 %>
-	        <button class="button" type="submit"><%= t('incoming_messages.show.add_update') %></button>
-	      </div>
-	    </div>
-	  <%- end %>
-	<%- else  %>
-	  <%= raw t('incoming_messages.show.login_to_add_update', :link => link_to(t('incoming_messages.show.login_as', :user => h(@incoming_message.campaign.initiator.name)), login_url(:redirect => request.request_uri)), :campaign => h(@incoming_message.campaign.title)) %>
-	<%- end %>
 </div>

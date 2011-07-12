@@ -1,9 +1,10 @@
 en:
   incoming_messages:
     show:
-      reply_to_this_message: "Reply to this message"
+      reply_to_this_message: "Reply"
       this_message_was_sent_to: "This message was sent to the %{campaign} supporters."
-      from: "From: %{sender}"
+      from: "From:"
+      date: "Date:"
       no_body: "[ Email has no body, please see attachments ]"
       subject: "Subject"
       what_does_this_mean: "What does this message mean for you and your supporters?"
