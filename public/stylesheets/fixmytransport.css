@@ -38,7 +38,7 @@
     font-style: normal;
 }
 
-h1, h2, h3, h4, h5, h6, .font-1, #greybanner p {
+h1, h2, h3, .font-1, #greybanner p {
 	font-family: 'UbuntuTitlingBold', Arial, sans-serif;
 	letter-spacing: 0;
 }
