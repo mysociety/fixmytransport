@@ -129,7 +129,7 @@ en:
       description_help_header: "Description"
       no_details_for_some_councils: "We'll then send it to %{councils}. Your message will be public."
       or: "or"
-      header: "Now tell the authority about the problem"
+      header: "Now tell the people responsible about the problem"
       subject_help_header: "Subject"
       problem_will_be_sent_multiple_operators: "More than one company operates this %{location_type}. Your problem <strong>will be sent to the operator</strong> you select below. Your message will be public."
       no_details_for_organizations: "IMPORTANT: We do not yet have contact details for %{organizations}, and so your message will <strong>not be sent until an email address is found</strong>. However, if you write a message we will a) keep it ready to send when an email address is found and b) publish it online for others to see."
