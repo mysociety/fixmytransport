@@ -24,18 +24,28 @@ class ProblemsController < ApplicationController
   
   def new
     location = params[:location_type].constantize.find(params[:location_id])
-    @problem = Problem.new(:location => location, 
-                           :reporter => current_user ? current_user : User.new, 
-                           :reporter_name => current_user ? current_user.name : '')
-    map_params_from_location(@problem.location.points, find_other_locations=false)
-    setup_problem_advice(@problem)
+    if session[:device] == :mobile
+      @problem = Problem.new(:location => location, 
+                             :description => session[:mobile_problem_text],
+                             :subject => "FIXME mobile subject", # determined from answer path (session[:mobile_answers]?)
+                             :reporter => current_user ? current_user : User.new, 
+                             :reporter_name => current_user ? current_user.name : '')
+      setup_problem_advice(@problem)
+      render :template => 'mobile/new_problem'
+    else
+      @problem = Problem.new(:location => location, 
+                             :reporter => current_user ? current_user : User.new, 
+                             :reporter_name => current_user ? current_user.name : '')
+      map_params_from_location(@problem.location.points, find_other_locations=false)
+      setup_problem_advice(@problem)
+    end
   end
   
   def frontpage
     expires_in 60.seconds, :public => true unless current_user
     @title = t(:get_problems_fixed)
     if session[:device] == :mobile
-      render :template => 'mobile/frontpage'
+      render :template => 'mobile/frontpage', :layout => 'mobile'
     end
   end
   

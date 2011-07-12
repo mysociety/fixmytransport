@@ -15,7 +15,7 @@
   <ul>
   <%- page_results.each do |location| %>
     <li class='location'>
-      <%= link_to(location.description, map_link_url(location, :problem)) %>
+      <%= link_to(location.description, map_link_url(location, :problem), "data-ajax" => "false") %>
     </li>
   <%- end %>
   </ul>
@@ -25,7 +25,7 @@
 	<div class="container">
 		<p>
 			<%= t(:multiple_locations_intro) %>
-			<%= raw t(:cant_see_the_map, :link => link_to(t(:choose_from_list), params.merge("choose_from_list" => 1)))%>
+			<%= raw t(:cant_see_the_map, :link => link_to(t(:choose_from_list), params.merge("choose_from_list" => 1), "data-ajax" => "false"))%>
 		</p>
 	</div>
 </div>

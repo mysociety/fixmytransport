@@ -1,0 +1,104 @@
+<%- @title = t(:reporting_a_problem, :location => @problem.location.name) %>
+<div id="banner">
+	<div class="container">
+		<h1>Write a message.</h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+		<p>Please write a message below, <%= raw @sending_advice %></p>
+	</div>
+</div>
+<div id="main-content" class="container">
+	<div class="container">
+	  <%- form_for @problem, :url => problems_url, :html => {:id => 'create-problem', :class => 'form-1'} do |f|  %>
+    <%= raw f.hidden_field :location_id %>
+    <%= raw f.hidden_field :location_type %>
+		<ul>
+			<li>
+				<label>To</label>
+				<%- if @problem.operators_responsible?  %>
+        
+         <%- if @problem.location.operators.size > 1 %>
+           <%- if @problem.errors.on('operator_id') %>
+            <div class='error error-operator_id'>
+              <%= error_message_on @problem, :operator_id %>
+            </div>
+          <%- else %>
+            <div class='error error-operator_id' style="display: none;"></div>
+           <%- end %>
+            <%= raw f.collection_select("operator_id", @problem.location.operators, :id, :name, :include_blank => t(:select_operator)) %>
+          <%- elsif @problem.location.operators.size == 1 %>
+            <%= raw f.hidden_field :operator_id, :value => @problem.location.operators.first.id %>
+            <div class="static-value"><%= @problem.location.operators.first.name %></div>
+          <%- else %>
+            <div class="static-value">
+              The operator of the <%= @problem.location.description %>
+            </div>
+          <%- end %>
+
+        <%- elsif @problem.pte_responsible?  %>
+          <%= raw f.hidden_field :passenger_transport_executive_id, :value => @problem.location.passenger_transport_executive.id %>
+          <div class="static-value"><%= @problem.location.passenger_transport_executive.name %></div>
+        <%- elsif @problem.councils_responsible? %>
+          <%= raw f.hidden_field :council_info, :value => @problem.location.council_info %>
+          <div class="static-value"><%= raw org_names(@problem, :responsible_organizations, t(:or))%></div>
+        <%- end %>
+				
+			</li>
+    
+  		<input id="problem_reporter_name" name="problem[reporter_name]" type="hidden" value="<%= @problem.reporter_name %>"/>
+			<%- f.fields_for :reporter, @problem.reporter do |reporter_fields| %>
+        <%- if current_user %>
+            <%= raw reporter_fields.hidden_field :email, :value => current_user.email %>
+        <%- end %>
+      <%- end %>
+
+			<li>
+			  <%- if @problem.errors.on('subject') %>
+          <div class='error error-subject'>
+            <%= error_message_on @problem, 'subject' %>
+          </div>
+        <%- else %>
+           <div class='error error-subject' style="display: none;"></div>
+        <%- end %>
+				<label for="problem_subject">Subject</label>
+				<input id="problem_subject" type="text" name="problem[subject]" value="<%= @problem.subject %>"/>
+			</li>
+			
+			<%- if @problem.categories.size > 1 %>
+        <li>
+          <%- if @problem.errors.on('category') %>
+            <div class='error'>
+              <%= error_message_on @problem, :category %>
+            </div>
+          <%- else %>
+           <div class='error error-category' style="display: none;"></div>
+          <%- end %>
+          <label for="problem_category">Category</label>
+          <%= raw f.select("category", @problem.categories, { :include_blank => t(:pick_a_category) }) %>
+        </li>
+      <%- else %>
+        <%= raw f.hidden_field :category, :value => "Other" %>
+      <%- end %>
+      
+      
+			<li>
+			  <%- if @problem.errors.on('description') %>
+          <div class='error'>
+            <%= error_message_on @problem, 'description' %>
+          </div>
+        <%- else %>
+         <div class='error error-description' style="display: none;"></div>
+        <%- end %>
+				<label for="problem_description">Description</label>
+				<textarea id="problem_description" name="problem[description]" ><%= @problem.description %></textarea>
+			</li>
+			<li>
+				<button type="submit" class="button" value="clicked">Submit</button>
+			</li>
+		</ul>
+
+		<%- end %>
+	</div>
+</div>

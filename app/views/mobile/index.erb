@@ -1,6 +1,6 @@
 <div id="static-mobile" class="container">
     <p>
-       <%= @question.html_safe %>
+       <%= @preamble.html_safe %>
     </p>
      <%- @buttons.each do |raw| %>
         <%-
@@ -11,7 +11,7 @@
             text = val if text.blank?
             if val.include? " "
                 words = val.downcase.split(" ")
-                val = words.select{|item| not ["a","an","the","some","it","it's","is","of","i","can't","cannot"].include?(item)}.first
+                val = words.select{|item| not ["a","an","the","some","something","it","it's","is","of","i","can't","cannot","too"].include?(item)}.first
             else
                 val.downcase!
             end
@@ -25,9 +25,8 @@
     <%- end %>
 
     <hr />
-    
-    Answer: <%= @answer %>
-    <br/>
+    DEBUG: 
+    Answer: <%= @answer %>,
     session: <%= session[:mobile_answers] %>
 	    
 </div>

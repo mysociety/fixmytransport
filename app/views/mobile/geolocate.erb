@@ -15,7 +15,7 @@
 
     function doGeolocate(event, ui) {
         $('#auto-locate-status').html("<p>OK... fetching location...</p>");
-        if (false) { // NB debugging shortcut: repeated location lookups were sometimes taking aaaaaages
+        if (true) { // NB debugging shortcut: repeated location lookups were sometimes taking aaaaaages
             deployPostcode("TW20 9LB")//TW20 9LB
         } else {
             if (geo_position_js.init()) {
