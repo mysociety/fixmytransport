@@ -587,7 +587,7 @@ $(document).ready(function(){
     });
   }
   
-  $('.unfold_link').click(function(event){
+  $('#campaign-thread .unfold_link').click(function(event){
       event.preventDefault();
       swap_copy($(this).parents('.thread-details'));
   });

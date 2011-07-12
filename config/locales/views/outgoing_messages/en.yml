@@ -9,7 +9,7 @@ en:
       message: "Message"
       message_to: "Write your message to %{organization}"
     show:
-      what_does_this_mean: "What does this message mean for you or your supporters?"
+      what_does_this_mean: "Great! Your message is on its way. Please add an update to let your supporters know what you've done."
       add_update: "Add update"
       login_as: "Sign in as %{user}"
       login_to_add_update: "%{link} to add an update about this message to \"%{campaign}\""

@@ -4,6 +4,7 @@ class IncomingMessagesController < ApplicationController
   
   def show
     @incoming_message = IncomingMessage.find(params[:id])
+    @attachments = FixMyTransport::Email.get_display_attachments(@incoming_message.mail)
     if @campaign != @incoming_message.campaign 
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
