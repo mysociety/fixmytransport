@@ -345,7 +345,8 @@ div.supporter-notice-arrow{
 		line-height: 1.2em;
 	}
 /* ===[ Main Content ]=== */
-#main-content {
+#main-content,
+#beta-frontpage {
 	min-height:400px;
 }
 	#main-content div {
