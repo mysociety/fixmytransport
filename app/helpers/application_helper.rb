@@ -242,6 +242,8 @@ module ApplicationHelper
          return station_path(location.locality, location, attributes)
        elsif StopAreaType.ferry_terminal_types.include?(location.area_type)
          return ferry_terminal_path(location.locality, location, attributes)
+       elsif StopAreaType.bus_station_types.include?(location.area_type)
+         return bus_station_path(location.locality, location, attributes)
        else
          return stop_area_path(location.locality, location, attributes)
       end
