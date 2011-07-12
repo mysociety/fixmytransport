@@ -28,13 +28,16 @@
 	float:left;
 }
 
-ol#frontpage-grid li,
-#fg-head-inner {
-	margin-top:0;
-}
-
 .form-list li .button {
 	padding:0.1em 0.25em;
+}
+
+#route-type-list li {
+	width:20%;
+}
+
+.fg-bottom {
+	float:none;
 }
 
 
