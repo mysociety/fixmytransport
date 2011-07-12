@@ -47,8 +47,8 @@
   <%- if current_user && current_user.new_supporter?(@campaign) %>
   <div class="container-wide">
     <div class="supporter-notice">
-	      <h1><%= t('campaigns.show.campaign_supporter_first_time_header')%></h1>
-	      <p><%= t('campaigns.show.campaign_supporter_offer_opinions') %> <br /><%= t('campaigns.show.campaign_supporter_share') %></p>
+	      <h1><%= t('campaigns.show.campaign_supporter_first_time_header', :user => @campaign.initiator.first_name)%></h1>
+	      
 	  </div>
 	<div class="supporter-notice-arrow"></div>	
 </div>
@@ -67,7 +67,7 @@
 <%- if current_user && current_user == @campaign.initiator && params[:first_time] == 'true' %>
   <div class="container-wide">
     <div class="supporter-notice">
-      <h1><%= raw t('campaigns.show.campaign_initiator_first_time_header', :twitter_link => link_to(t('campaigns.show.twitter'), twitter_url(@campaign), :target => "_blank", :class => "twitter-popup", :title =>"Twitter (opens in a new window)"), :facebook_link => link_to(t('campaigns.show.facebook'), facebook_url(@campaign), :class => "facebook-trigger"), :email_link => link_to(t('campaigns.show.email'), share_campaign_url(@campaign), :class => "email-trigger"))%></h1>
+      <h1><%= raw t('campaigns.show.campaign_initiator_first_time_header')%></h1>
     </div>
     <div class="supporter-notice-arrow"></div>
   </div>
