@@ -71,7 +71,7 @@ class Gazetteer
 
     stations = self.find_stations_from_name(name, exact=false, {:types => StopAreaType.primary_types})
     candidates = stops + stations
-    # are the stops/stations in multiple areas?
+    # are the stops/stations in multiple areas? Simplify things by showing the areas
     if stops.size > 1 or stations.size > 1
       localities = candidates.map{ |stop_or_station| stop_or_station.locality }.uniq.sort_by(&:name)
       if localities.size > 1 and localities.size < candidates.size
@@ -234,7 +234,35 @@ class Gazetteer
   # - name - stop/station name
   # options
   # - limit - Number of results to return
+  # - types - The area_types to constrain the search
   def self.find_stations_from_name(name, exact, options={})
+    results = self._find_stations_from_name(name, exact, options)
+    
+    # try variations on and
+    if results.empty? and !exact
+      name_with_ampersand = name.gsub(' and ', ' & ')
+      if name_with_ampersand != name
+        results = self._find_stations_from_name(name_with_ampersand, exact, options)
+      else
+        name_with_and = name.gsub(' & ', ' and ')
+        if name_with_and != name
+          results = self._find_stations_from_name(name_with_and, exact, options)
+        end
+      end  
+    end
+      
+    if results.empty? and !exact
+      results = self.find_stations_by_double_metaphone(name, options)
+    end
+
+    # reduce redundant results for stop areas
+    if results.size > 1
+      results = StopArea.map_to_common_areas(results)
+    end
+    results
+  end
+  
+  def self._find_stations_from_name(name, exact, options)
     query = 'area_type in (?)'
     params = [options[:types]]
     name = name.downcase.strip
@@ -263,17 +291,5 @@ class Gazetteer
     conditions = [query] + params
     results = StopArea.find(:all, :conditions => conditions,
                                   :limit => options[:limit], :order => 'name')
-
-    if results.empty? and !exact
-      results = self.find_stations_by_double_metaphone(name, options)
-    end
-
-    # reduce redundant results for stop areas
-    if results.size > 1
-      results = StopArea.map_to_common_areas(results)
-    end
-    results
   end
-
-
 end
