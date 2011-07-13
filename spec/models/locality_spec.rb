@@ -50,8 +50,27 @@ describe Locality do
     it 'should query for the name ignoring case' do 
       Locality.should_receive(:find).with(:all, :order => 'localities.name asc',
                                                 :conditions => ['LOWER(localities.name) = ?', 'london'],
-                                                :include => [:admin_area, :district])
+                                                :include => [:admin_area, :district]).and_return([mock('result')])
       Locality.find_all_by_full_name('London')
+    end
+    
+    
+    describe 'when a name with and " and " is given and there are no results' do 
+      
+      before do 
+        Locality.stub!(:find).with(:all, :order => 'localities.name asc',
+                                         :conditions => ['LOWER(localities.name) = ?', 'upwood and the raveleys'],
+                                         :include => [:admin_area, :district]).and_return([])
+      end
+      
+      
+      it 'should try a version with " & "' do 
+        Locality.should_receive(:find).with(:all, :order => 'localities.name asc',
+                                            :conditions => ['LOWER(localities.name) = ?', 'upwood & the raveleys'],
+                                            :include => [:admin_area, :district]).and_return([])
+        Locality.find_all_by_full_name('Upwood and the Raveleys')
+      end
+    
     end
     
     describe 'when a name with a comma is given' do 
@@ -63,7 +82,7 @@ describe Locality do
                          'euston', 'london', 'london', 'london']
         Locality.should_receive(:find).with(:all, :conditions => expected_conditions,
                                                   :include => [:admin_area, :district],
-                                                  :order => 'localities.name asc')
+                                                  :order => 'localities.name asc').and_return([mock('result')])
         Locality.find_all_by_full_name('Euston, London')
       end
     end
