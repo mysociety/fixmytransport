@@ -5,7 +5,11 @@ class AccountsController < ApplicationController
 
   def update
     current_user.update_attributes(params[:user])
-    current_user.email = params[:user][:email]
+    user_email = params[:user][:email]
+    if user_email
+      user_email.strip!
+    end
+    current_user.email = user_email
     current_user.password = params[:user][:password]
     current_user.password_confirmation = params[:user][:password_confirmation]
     # if someone logged in by confirmation creates a password here, register their account
@@ -27,13 +31,21 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @account_user = User.find_or_initialize_by_email(params[:user][:email])
+    user_email = params[:user][:email]
+    if user_email
+      user_email.strip!
+    end
+    user_name = params[:user][:name]
+    if user_name
+      user_name.strip!
+    end
+    @account_user = User.find_or_initialize_by_email(user_email)
     already_registered = @account_user.registered?
     @account_user.ignore_blank_passwords = false
     # want to force validation of passwords
     @account_user.registered = true
-    @account_user.name = params[:user][:name]
-    @account_user.email = params[:user][:email]
+    @account_user.name = user_name
+    @account_user.email = user_email
     @account_user.password = params[:user][:password]
     @account_user.password_confirmation = params[:user][:password_confirmation]
     if @account_user.valid?
@@ -45,7 +57,7 @@ class AccountsController < ApplicationController
       else
         new_account = false
         # Refresh the user, discard all the changes
-        @account_user = User.find_or_initialize_by_email(params[:user][:email])
+        @account_user = User.find_or_initialize_by_email(user_email)
       end
       post_login_action_data = get_action_data(session)
       if action_string = post_login_action_string
