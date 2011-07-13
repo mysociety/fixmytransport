@@ -22,11 +22,11 @@ class StopAreaSweeper < ActionController::Caching::Sweeper
     # in it, as this code may be called from an admin controller via some proxied url
       
     # expire the stop page fragments
-    stop_path = url_for(:controller => '/locations', 
-                         :action => 'show_stop_area', 
-                         :scope => stop_area.locality,
-                         :id => stop_area,
-                         :only_path => true)
+    stop_area_path = url_for(:controller => '/locations', 
+                             :action => 'show_stop_area', 
+                             :scope => stop_area.locality,
+                             :id => stop_area,
+                             :only_path => true)
     stop_area_cache = main_url(stop_area_path, { :skip_protocol => true })
   
     expire_fragment("#{stop_area_cache}.action_suffix=route_list")
