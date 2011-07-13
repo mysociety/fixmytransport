@@ -749,8 +749,8 @@ describe ProblemsController do
                                          :responsible_organizations => [mock_council])
         
       expected = ["IMPORTANT: We do not yet have contact details for <strong>Test Council</strong>. Your message",
-                  "will be public, but it will <strong>not be sent</strong> to Test Council until",
-                  "you find an email address for them."].join(' ')
+                  "will be public, but it will <strong>not be sent</strong> to Test Council. However, if you write a message",
+                  "we will a) keep it ready to send when an email address is found and b) publish it online for others to see."].join(' ')
       expect_advice(mock_problem, expected)
     end
     
