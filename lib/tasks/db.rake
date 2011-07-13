@@ -53,6 +53,7 @@ namespace :db do
     Rake::Task['naptan:post_load:add_stops_codes'].execute
     Rake::Task['naptan:post_load:mark_metro_stops'].execute
     Rake::Task['naptan:post_load:add_station_metaphones'].execute
+    Rake::Task['naptan:post_load:add_locality_metaphones'].execute
     # Needs station operators file to be specified
     # Rake::Task['noc:load:station_operators'].execute
     
