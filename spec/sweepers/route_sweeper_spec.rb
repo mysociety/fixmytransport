@@ -7,7 +7,8 @@ describe RouteSweeper do
     before do 
       @mock_region = mock_model(Region)
       @mock_route = mock_model(Route, :region => @mock_region, 
-                                     :previous_version => nil)
+                                     :previous_version => nil, 
+                                     :all_locations => [])
       @route_sweeper = RouteSweeper.instance
       @route_sweeper.stub!(:expire_fragment)
     end
