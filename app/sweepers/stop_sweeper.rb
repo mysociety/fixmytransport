@@ -27,8 +27,7 @@ class StopSweeper < ActionController::Caching::Sweeper
                          :scope => stop.locality,
                          :id => stop,
                          :only_path => true)
-    stop_cache = main_url(stop_path, { :skip_protocol => true })
-  
+    stop_cache = stop_cache_path(stop)
     expire_fragment("#{stop_cache}.action_suffix=route_list")
     expire_fragment("#{stop_cache}.action_suffix=map")
   end
