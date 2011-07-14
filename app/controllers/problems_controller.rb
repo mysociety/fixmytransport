@@ -50,7 +50,7 @@ class ProblemsController < ApplicationController
         username == beta_username && Digest::MD5.hexdigest(password) == beta_password
       end
     end
-    @version = 0
+    @version = 1
     @title = t('problems.frontpage.title')
   end
   
