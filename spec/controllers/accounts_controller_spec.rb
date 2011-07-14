@@ -346,6 +346,25 @@ describe AccountsController do
     def make_request
       get :confirm, :email_token => 'my_token'
     end
+    
+    describe 'if a user is already logged in' do 
+    
+      before do
+        @mock_user = mock_model(User)
+        @controller.stub!(:current_user).and_return(@mock_user)
+      end
+      
+      it 'should redirect the user to the front page' do 
+        make_request
+        response.should redirect_to(root_url)
+      end
+      
+      it "should show them a message that you can't be logged in to access that url" do 
+        make_request
+        flash[:notice].should == 'You must be logged out to access this page'
+      end
+      
+    end
 
     it 'should look for a user by perishable token' do
       User.should_receive(:find_using_perishable_token)

@@ -1,7 +1,7 @@
 class AccountsController < ApplicationController
 
   before_filter :require_user, :only => [:edit, :update]
-  before_filter :load_user_using_perishable_token, :only => [:confirm]
+  before_filter :require_no_user, :load_user_using_perishable_token, :only => [:confirm]
 
   def update
     current_user.update_attributes(params[:user])
