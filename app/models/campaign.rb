@@ -105,7 +105,7 @@ class Campaign < ActiveRecord::Base
       end
       return campaign_supporter
     else
-      return campaign_supporters.detect{ |campaign_supporter| campaign_supporter.user_id == user.id }
+      return campaign_supporters.detect{ |campaign_supporter| campaign_supporter.supporter_id == user.id }
     end
   end
 

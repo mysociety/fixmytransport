@@ -152,7 +152,7 @@ describe Campaign do
       @mock_supporters = mock('campaign supporter association')
       @campaign.stub!(:campaign_supporters).and_return(@mock_supporters)
       @mock_campaign_supporter = mock_model(CampaignSupporter)
-      @existing_campaign_supporter = mock_model(CampaignSupporter, :user_id => @user.id)
+      @existing_campaign_supporter = mock_model(CampaignSupporter, :supporter_id => @user.id)
       @mock_supporters.stub!(:create!).and_return(@mock_campaign_supporter)
     end
     
