@@ -67,7 +67,7 @@ describe UserMailer do
     describe 'when there is a post-login action of adding a campaign comment' do 
       
       before do 
-        @mock_comment = mock_model(Comment, :text => "Some test text", :commentable => mock_model(Campaign))
+        @mock_comment = mock_model(Comment, :text => "Some test text", :commented => mock_model(Campaign))
         @post_login_action_data = { :action => :add_comment }
       end
     
@@ -86,7 +86,7 @@ describe UserMailer do
     describe 'when there is a post-login action of adding a problem comment' do 
   
       before do 
-        @mock_comment = mock_model(Comment, :text => "Some test text", :commentable => mock_model(Problem))
+        @mock_comment = mock_model(Comment, :text => "Some test text", :commented => mock_model(Problem))
         @post_login_action_data = { :action => :add_comment }
       end
   
