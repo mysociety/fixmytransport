@@ -9,7 +9,11 @@
 
 <div id="greybanner">
   <div class="container">
+    <%- if current_user && current_user == @user %>
     <a href="<%= edit_account_path %>"><img src="<%= @user.profile_photo.url(:large_thumb) %>" class="avatar" alt="" /></a>
+    <%- else %>
+    <img src="<%= @user.profile_photo.url(:large_thumb) %>" class="avatar" alt="" />
+    <%- end %>
     <h2><%= @user.name %></h2>
     <%- if @user.location %>
       <p><%= @user.location %></p>
