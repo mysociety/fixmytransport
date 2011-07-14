@@ -68,11 +68,7 @@
 			</div>
     	</div>
 
-		<div id="footer">
-			<div class="container">
-				<p><%= raw t('shared.footer.built_by', :mysociety_link => link_to('mySociety', 'http://mysociety.org'), :indigo_link => link_to('Indigo Trust', 'http://indigotrust.wordpress.com/'), :donor_link => link_to(t('shared.footer.small_donors'), 'http://mysociety.org/donate'), :esmee_link => link_to('Esmée Fairbairn Foundation', 'http://www.esmeefairbairn.org.uk'), :omidyar_link => link_to("Omidyar Network", 'http://www.omidyar.com/')) %></p>
-			</div>
-		</div>
+	  <%= render :partial => 'shared/footer' %>
 		<%= yield :javascript %>
 		<%= raw main_js_link %>
 		<!--[if lte IE 8]><%= raw javascript_include_tag('ie', :charset => 'utf-8') %><![endif]-->

@@ -497,7 +497,8 @@ $(document).ready(function(){
              window.location = response.redirect;
            }
            else if (response.html){
-             $(form_selector).html("<div class='ui-dialog-content'>"+response.html+"</div>");
+             $("#login-box").dialog("close");
+             $('body').html(response.html);
            }else{
              window.location.reload();
            }

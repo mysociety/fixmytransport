@@ -65,6 +65,7 @@ class AccountsController < ApplicationController
       else
         @action = t('accounts.new.your_account_wont_be_created')
       end
+      @worry = post_login_action_worry
       @account_user.reset_perishable_token!
       unconfirmed_model = save_post_login_action_to_database(@account_user)
       send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model, new_account)
@@ -75,7 +76,7 @@ class AccountsController < ApplicationController
         format.json do
           @json = {}
           @json[:success] = true
-          @json[:html] = render_to_string :partial => 'shared/confirmation_sent'
+          @json[:html] = render_to_string :template => 'shared/confirmation_sent', :layout => 'confirmation'
           render :json => @json
         end
       end
