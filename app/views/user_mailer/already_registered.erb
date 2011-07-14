@@ -4,7 +4,7 @@ You just tried to sign up to FixMyTransport, when you
 already have an account. Your account details have been
 left as they previously were.
 
-Please click on the link below to sign in<%-if @action%><%=" and #{@action}"%><%- end %>:
+Please click on the link below to sign in<%-if @action%><%=" and #{raw @action}"%><%- end %>:
 
 <%= raw @account_confirmation_url %>
 
