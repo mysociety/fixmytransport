@@ -12,7 +12,7 @@
 	<div class='leftcol'>
 	  <div class="email-set">
 	    <label for="from"><%= t('incoming_messages.show.from') %></label>
-	    <p name="from"><strong><a href="">Louise Crow</a></strong></p>
+	    <p name="from"><strong><%= @incoming_message.safe_from %></strong></p>
 
 	    <label for="date"><%= t('incoming_messages.show.date') %></label>
 	    <p name="date"><em><%= short_date(@incoming_message.sent_at) %></em></p>

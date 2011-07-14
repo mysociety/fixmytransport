@@ -78,6 +78,22 @@ class Locality < ActiveRecord::Base
   
   def self.find_all_by_full_name(name)
     name, qualifier_name = self.get_name_and_qualifier(name)
+    results = self._find_all_by_name_and_qualifier(name, qualifier_name)
+    if results.empty?
+      name_with_ampersand = name.gsub(' and ', ' & ')
+      if name_with_ampersand != name
+        results = self._find_all_by_name_and_qualifier(name_with_ampersand, qualifier_name)
+      else
+        name_with_and = name.gsub(' & ', ' and ')
+        if name_with_and != name
+          results = self._find_all_by_name_and_qualifier(name_with_and, qualifier_name)
+        end
+      end
+    end
+    return results
+  end
+  
+  def self._find_all_by_name_and_qualifier(name, qualifier_name)
     query_clause = "LOWER(localities.name) = ?"
     query_params = [ name ]
     includes = [:admin_area, :district]
@@ -87,8 +103,9 @@ class Locality < ActiveRecord::Base
                          OR LOWER(admin_areas.name) = ?)"
       3.times{ query_params << qualifier_name }
     end
-    find(:all, :conditions => [query_clause] + query_params,
-               :include => includes, :order => "localities.name asc")
+    
+    return find(:all, :conditions => [query_clause] + query_params,
+                :include => includes, :order => "localities.name asc")
   end
   
   def self.get_name_and_qualifier(name)

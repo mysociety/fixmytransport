@@ -109,6 +109,26 @@ namespace :temp do
       end
     end
   end
+  
+  desc 'Moved cached stops'
+  task :move_cached_stops => :environment do 
+    cache_base_dir = MySociety::Config.get('CACHE_PARENT_DIRECTORY', RAILS_ROOT)
+    domain = MySociety::Config.get("DOMAIN", '127.0.0.1:3000')
+    domain.gsub!(":", '.')
+    stop_cache = File.join(cache_base_dir, 'cache', 'views', domain, 'stops')
+    puts stop_cache
+    Dir.glob(File.join(stop_cache, '*')).each do |dir|
+      if /#{stop_cache}\/[a-z][a-z]/.match(dir)
+        locality_slug = dir.gsub("#{stop_cache}/", '')
+        puts "needs moving #{locality_slug}"
+        letter = locality_slug[0].chr
+        FileUtils.mkdir_p("#{stop_cache}/#{letter}")
+        puts "#{dir}/"
+        puts "#{stop_cache}/#{letter}/"
+        FileUtils.mv("#{dir}/", "#{stop_cache}/#{letter}/")
+      end
+    end
+  end
 
 end
 

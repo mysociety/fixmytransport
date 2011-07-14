@@ -1,5 +1,7 @@
 class Admin::StopsController < Admin::AdminController
 
+  cache_sweeper :stop_sweeper
+  
   def show 
     @stop = Stop.find(params[:id])
   end

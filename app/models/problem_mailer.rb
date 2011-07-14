@@ -1,6 +1,7 @@
 class ProblemMailer < ApplicationMailer
 
   cattr_accessor :sent_count, :dryrun
+  include ApplicationHelper
   
   def problem_confirmation(recipient, problem, token)
    recipients recipient.name_and_email

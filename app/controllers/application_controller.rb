@@ -17,7 +17,8 @@ class ApplicationController < ActionController::Base
                 :admin_url,
                 :current_user_session,
                 :current_user,
-                :instantiate_location
+                :instantiate_location,
+                :stop_cache_path
   url_mapper # See MySociety::UrlMapper
   # Scrub sensitive parameters from the log
   filter_parameter_logging :password, :password_confirmation
@@ -407,6 +408,19 @@ class ApplicationController < ActionController::Base
         render :json => @json
       end
     end
+  end
+  
+  # Path to cache file for a stop with a given suffix. Adds a directory into the path 
+  # for the first letter of the locality, in order to spread the directories and not hit the 
+  # ext3 32,000 links per inode limit
+  def stop_cache_path(stop, suffix=nil)
+    locality_slug = stop.locality.to_param
+    domain = MySociety::Config.get("DOMAIN", '127.0.0.1:3000')
+    stop_path = "#{domain}/stops/#{locality_slug[0].chr}/#{locality_slug}/#{stop.to_param}"
+    if suffix
+      stop_path = "#{stop_path}.action_suffix=#{suffix}"
+    end
+    stop_path
   end
 
   def app_status
