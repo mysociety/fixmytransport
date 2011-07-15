@@ -18,6 +18,11 @@ class AccountsController < ApplicationController
       current_user.registered = true
       current_user.confirmed_password = true
     end
+    
+    # if the user is uploading a photo, make sure the the remote url field is set to nil
+    if params[:user][:profile_photo]
+      current_user.profile_photo_remote_url = nil
+    end
     if current_user.save
       flash[:notice] = t('accounts.edit.account_updated')
       redirect_to profile_url(current_user)

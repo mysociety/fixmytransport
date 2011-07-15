@@ -76,6 +76,15 @@ describe AccountsController do
         end
         
       end
+      
+      describe 'if the user adds a profile photo' do 
+      
+        it 'should set the profile photo remote url to nil' do 
+          @mock_user.should_receive(:profile_photo_remote_url=).with(nil)
+          make_request(@default_params.merge({:user => {:profile_photo => mock('profile photo')}}))          
+        end
+        
+      end
 
       describe 'if the update is successful' do
 
