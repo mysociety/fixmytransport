@@ -896,7 +896,8 @@ input.checkbox {
 		}
 		
 			.form-list li.fieldset .error{
-				margin-top: 10px;
+				top: 50px;
+				margin:0;
 				position: absolute;
 			}
 

@@ -45,6 +45,25 @@
 }
 
 
+.form-list li {
+	display:block;
+	height:2.7em;
+}
+.form-list li input {
+	width:90%;
+}
+.form-list li.fieldset .error{
+	top:10px;
+	position: relative;
+	float:none;
+	margin:4px 0 0 4px;
+}
+* html .form-list li.fieldset .error{
+	position:absolute;
+	top:50px;
+}
+
+
 /*sort this*/
 .error, .alert, .notice, .success, .info {
 	display:inline;
