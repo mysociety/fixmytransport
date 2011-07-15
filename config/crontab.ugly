@@ -19,6 +19,9 @@ MAILTO=louise@mysociety.org
 # Once a day - send update about missing emails/missing operators
 9 9 * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/send-problem-reports.lock "/data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-problem-reports verbose" || echo "stalled?"
 
+# Once a day - check Facebook for updated profile pictures 
+6 4 * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/update-remote-profile-photos.lock "/data/vhost/!!(*= $vhost *)!!/fixmytransport/script/update-remote-profile-photos verbose" || echo "stalled?"
+
 # Every 11 minutes
 */11 * * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/send-campaign-updates.lock /data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-campaign-updates || echo "stalled?"
 

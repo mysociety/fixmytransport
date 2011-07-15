@@ -1,0 +1,10 @@
+#!/bin/bash
+
+LOC=`dirname $0`
+
+if [ "$1" == "verbose" ]
+    then 
+    $LOC/runner 'User.update_remote_profile_photos(verbose=true)'
+    else
+    $LOC/runner 'User.update_remote_profile_photos(verbose=false)'
+fi 

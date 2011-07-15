@@ -44,6 +44,8 @@ define('OPTION_GOOGLE_MAPS_API_KEY', 'Your Google Maps API key');
 // APP_ID is typically a 16-digit code regestered for this app by your "owner" Facebook account.
 // If you leave it blank, facebook stuff (connect/login)  won't be displayed.
 define('OPTION_FACEBOOK_APP_ID', '');
+define('OPTION_FACEBOOK_APP_SECRET', '');
+define('OPTION_FACEBOOK_GRAPH_API_URL', '');
 
 // Using a database with spatial extensions? PostGIS or MySQL with Spatial Extensions
 define('OPTION_USE_SPATIAL_EXTENSIONS', 1);
