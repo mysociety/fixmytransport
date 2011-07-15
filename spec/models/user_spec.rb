@@ -56,8 +56,8 @@ describe User do
         User.stub!(:open).and_return(@mock_io)
       end
       
-      it 'should make a call to the facebook graph URL, passing the access token' do 
-        User.should_receive(:open).with("https://graph.facebook.com/me?access_token=mytoken").and_return(@mock_io)
+      it 'should make a call to the facebook graph URL, passing the access token and asking for name, email and profile photo' do 
+        User.should_receive(:open).with("https://graph.facebook.com/me?access_token=mytoken&fields=name,email,picture&type=large").and_return(@mock_io)
         User.get_facebook_data('mytoken')
       end
 

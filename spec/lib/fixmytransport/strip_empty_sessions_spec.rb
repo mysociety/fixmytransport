@@ -1,5 +1,4 @@
 require 'spec_helper'
-# require 'rack/test'
 describe FixMyTransport::StripEmptySessions do
   
   def make_response(session_data, response_headers)
