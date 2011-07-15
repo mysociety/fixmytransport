@@ -1,4 +1,8 @@
 /*Hacks for IE6*/
+* html body {
+	width: auto;
+}
+
 * html #banner {
   background-color: expression(this.className == "grey" ? "#f4f4f4" : this.className == "yellow" ? "#FFFBD7" : "#048fc2");
 }
