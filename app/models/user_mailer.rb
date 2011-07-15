@@ -41,7 +41,7 @@ class UserMailer < ApplicationMailer
   private
 
   def supporter_confirmation_subject(campaign)
-    I18.translate('mailers.supporter_confirmation_subject', :title => campaign.title)
+    I18n.translate('mailers.supporter_confirmation_subject', :title => campaign.title)
   end
   
   def get_action_description(post_login_action_data)

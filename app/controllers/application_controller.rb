@@ -230,6 +230,21 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def post_login_action_worry
+    if post_login_action_data = get_action_data(session)
+      case post_login_action_data[:action]
+      when :join_campaign
+        return nil
+      when :add_comment
+        return t('shared.confirmation_sent.well_hold_on_to_your_comment')
+      when :create_problem
+        return t('shared.confirmation_sent.well_hold_on_to_your_problem')
+      else
+        return nil
+      end
+    end
+  end
+
   def post_login_actions
     [:join_campaign, :add_comment, :create_problem]
   end

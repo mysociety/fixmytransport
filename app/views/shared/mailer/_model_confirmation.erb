@@ -1,6 +1,6 @@
 <%- if model.is_a? Comment %>
 
-  <%- if model.commentable.is_a?(Problem) %>
+  <%- if model.commented.is_a?(Problem) %>
 Your update reads: <%= raw(model.text) %> 
   <%- else %>
 Your comment reads: <%= raw(model.text) %>

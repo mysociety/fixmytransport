@@ -144,4 +144,47 @@ describe Campaign do
   
   end
   
+  describe 'when adding user as a supporter' do 
+    
+    before do 
+      @user = mock_model(User)
+      @campaign = Campaign.new
+      @mock_supporters = mock('campaign supporter association')
+      @campaign.stub!(:campaign_supporters).and_return(@mock_supporters)
+      @mock_campaign_supporter = mock_model(CampaignSupporter)
+      @existing_campaign_supporter = mock_model(CampaignSupporter, :supporter_id => @user.id)
+      @mock_supporters.stub!(:create!).and_return(@mock_campaign_supporter)
+    end
+    
+    describe 'if the user is not already a supporter' do 
+    
+      before do
+        @campaign.stub!(:supporters).and_return([])
+      end
+      
+      it 'should add the user as a supporter' do 
+        @mock_supporters.should_receive(:create!).with(:supporter => @user)
+        @campaign.add_supporter(@user)
+      end
+      
+      it 'should return the new campaign supporter model' do 
+        @campaign.add_supporter(@user).should == @mock_campaign_supporter
+      end
+    
+    end
+    
+    describe 'if the user is already a supporter' do
+      
+      before do 
+        @campaign.stub!(:supporters).and_return([@user])
+        @campaign.stub!(:campaign_supporters).and_return([@existing_campaign_supporter])
+      end
+    
+      it 'should return the existing campaign supporter model' do 
+        @campaign.add_supporter(@user).should == @existing_campaign_supporter
+      end
+      
+    end
+  end
+  
 end

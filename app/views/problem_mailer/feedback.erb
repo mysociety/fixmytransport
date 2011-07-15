@@ -5,8 +5,9 @@ Feedback from <%= raw @name %>:
 <%= raw(@message) %>
 
 ---
-
+<%- if @uri %>
 URL: <%= CGI.unescape(@uri) %>
+<%- end %>
 
 <%- if @operator %>
 Operator: <%= @operator.name %>

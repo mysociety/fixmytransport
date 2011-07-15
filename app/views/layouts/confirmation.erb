@@ -1,0 +1,30 @@
+<body role="application">
+	<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
+	<div class="staging-banner top-notice">
+		<div class="container"><%= t('shared.header.development_site') %></div>
+	</div>
+	<%- end %>
+  <%= yield :banner_content %>
+	<div id="wrapper">
+		<div id="top" class="container" role="banner">
+			<ul id="mysociety-tab" role="navigation">
+				<li><a id="mysociety-logo" href="http://www.mysociety.org">MySociety</a></li>
+				<li><a href="http://mysociety.org/donate"><%= t('shared.header.donate') %></a></li>
+				<li><a href="http://www.mysociety.org/projects/"><%= t('shared.header.our_sites') %></a></li>
+			</ul>
+			<a id="logo" href="<%= root_url %>">FixMyTransport</a>
+
+		</div>
+
+		<%= yield %>
+		<div id="goto-top-wrap" class="container">
+			<a href="#top" class="goto-top right"><%= t('shared.footer.top_of_page') %></a>
+		</div>
+  	</div>
+
+  <%= render :partial => 'shared/footer' %>
+	<%= yield :javascript %>
+	<%= raw main_js_link %>
+	<!--[if lte IE 8]><%= raw javascript_include_tag('ie', :charset => 'utf-8') %><![endif]-->
+	<%= render :partial => 'shared/tracking' %>
+</body>

@@ -95,6 +95,9 @@ class ProblemMailer < ApplicationMailer
     self.sent_count = 0
     Problem.sendable.each do |problem|
       
+      # if campaign mail, wait until the campaign has a title
+      next if problem.campaign and problem.campaign.title.blank?
+      
       check_for_council_change(problem)
       
       if !problem.emailable_organizations.empty?

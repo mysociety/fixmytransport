@@ -89,6 +89,10 @@ class Campaign < ActiveRecord::Base
     end
   end
 
+  # Add a user as a supporter of a campaign 
+  # if a token is passed, set the token on the CampaignSupporter model.
+  # If the user is already a supporter of the campaign, their
+  # CampaignSupporter model is returned.
   def add_supporter(user, supporter_confirmed=false, token=nil)
     if ! supporters.include?(user)
       supporter_attributes = { :supporter => user }
@@ -100,6 +104,8 @@ class Campaign < ActiveRecord::Base
         campaign_supporter.update_attributes(:token => token)
       end
       return campaign_supporter
+    else
+      return campaign_supporters.detect{ |campaign_supporter| campaign_supporter.supporter_id == user.id }
     end
   end
 

@@ -209,7 +209,7 @@ describe AccountsController do
           
           it 'should set the action for the confirmation template to a problem creation message' do 
             make_request
-            assigns[:action].should == "your problem will not be created."
+            assigns[:action].should == "your problem will not be sent."
           end
            
         end
@@ -226,7 +226,7 @@ describe AccountsController do
         describe 'if the request asks for json' do 
         
           it 'should return the "confirmation_sent" template rendered as a string in the response' do 
-            @controller.stub!(:render_to_string).with(:partial => 'shared/confirmation_sent').and_return("content")
+            @controller.stub!(:render_to_string).with(:template => 'shared/confirmation_sent', :layout => 'confirmation').and_return("content")
             make_request(format="json")
             JSON.parse(response.body)['html'].should == "content"
           end
@@ -345,6 +345,25 @@ describe AccountsController do
 
     def make_request
       get :confirm, :email_token => 'my_token'
+    end
+    
+    describe 'if a user is already logged in' do 
+    
+      before do
+        @mock_user = mock_model(User)
+        @controller.stub!(:current_user).and_return(@mock_user)
+      end
+      
+      it 'should redirect the user to the front page' do 
+        make_request
+        response.should redirect_to(root_url)
+      end
+      
+      it "should show them a message that you can't be logged in to access that url" do 
+        make_request
+        flash[:notice].should == 'You must be logged out to access this page'
+      end
+      
     end
 
     it 'should look for a user by perishable token' do

@@ -30,13 +30,13 @@
       <td><%= problem.transport_mode_text %></td>
       <td><%= problem.reporter_name %></td>
       <td><%- if problem.operator %>
-            <%= link_to(problem.operator.name, admin_operator_url(problem.operator.id)) %>
+            <%= link_to(problem.operator.name, admin_url(admin_operator_path(problem.operator.id))) %>
           <%- end %>
           <%- if problem.council_info%>
             <%= problem.council_info %>
           <%- end %>
           <%- if problem.passenger_transport_executive %>
-            <%= link_to(problem.passenger_transport_executive.name, admin_pte_url(problem.passenger_transport_executive.id))%>
+            <%= link_to(problem.passenger_transport_executive.name, admin_url(admin_pte_path(problem.passenger_transport_executive.id)))%>
           <%- end %>
       </td>
       <td><%= problem.status %></td>
