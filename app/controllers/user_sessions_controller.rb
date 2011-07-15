@@ -55,7 +55,7 @@ class UserSessionsController < ApplicationController
       User.handle_external_auth_token(access_token, source, remember_me)
       perform_post_login_action
     rescue # e.g., HTTP exception if FB is not responding or access_token is wrong: unexpected error at this stage
-      flash[:error] = t('shared.login.unexpected_external_auth_error')
+      flash[:error] = t('shared.login.unexpected_external_auth_error', :source => source)
     end      
     redirect_back_or_default path
   end
