@@ -26,6 +26,56 @@
 }
 
 
+/*remove all png images from IE6 only*/
+* html .icon,
+* html .button,
+* html .has-tabs #tabs-main-nav li#bus-tab,
+* html .has-tabs #tabs-main-nav li#coach-tab,
+* html .has-tabs #tabs-main-nav li:hover#bus-tab,
+* html .has-tabs #tabs-main-nav li:hover#coach-tab,
+* html .has-tabs #tabs-main-nav li#bus-tab.ui-state-hover,
+* html .has-tabs #tabs-main-nav li#coach-tab.ui-state-hover,
+* html .has-tabs #tabs-main-nav li#bus-tab.ui-state-active,
+* html .has-tabs #tabs-main-nav li#coach-tab.ui-state-active,
+* html .has-tabs #tabs-main-nav li#train-tab,
+* html .has-tabs #tabs-main-nav li:hover#train-tab,
+* html .has-tabs #tabs-main-nav li#train-tab.ui-state-hover,
+* html .has-tabs #tabs-main-nav li#train-tab.ui-state-active,
+* html .has-tabs #tabs-main-nav li#ferry-tab,
+* html .has-tabs #tabs-main-nav li:hover#ferry-tab,
+* html .has-tabs #tabs-main-nav li#ferry-tab.ui-state-hover,
+* html .has-tabs #tabs-main-nav li#ferry-tab.ui-state-active,
+* html .has-tabs #tabs-main-nav li#metro-tab,
+* html .has-tabs #tabs-main-nav li:hover#metro-tab,
+* html .has-tabs #tabs-main-nav li#metro-tab.ui-state-hover,
+* html .has-tabs #tabs-main-nav li#metro-tab.ui-state-active {
+	background-image:none !important;
+	text-indent:0;
+}
+* html button.point-go {
+	display:block;
+	text-indent:0;
+	line-height:1;
+	border:none;
+	color:#ffffff;
+	text-transform:uppercase;
+	padding:0;
+	cursor:pointer;
+	font-size: 2em;
+	height:50px;
+	width:80px;
+	text-align:center;
+	background: #048fc2; /* Old browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#048fc2', endColorstr='#006699',GradientType=0 ); /* IE6-9 */
+}
+* html #find-stop button.point-go {
+	height:40px;
+	width:60px;
+	top:10px;
+	left:-15px;
+	position:relative;
+}
+
 /*Hacks for IE6 and IE7*/
 .ui-dialog-title,
 #footer {
@@ -48,9 +98,6 @@
 .form-list li {
 	display:block;
 	height:2.7em;
-}
-.form-list li input {
-	width:90%;
 }
 .form-list li.fieldset .error{
 	top:10px;
