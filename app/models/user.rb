@@ -265,6 +265,7 @@ class User < ActiveRecord::Base
       graph_uri = URI.parse(graph_api_url)
       http = Net::HTTP.new(graph_uri.host, graph_uri.port)
       http.use_ssl = true
+      http.ca_path = MySociety::Config.get("SSL_CA_PATH", "/etc/ssl/certs/")
       http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 
       # get an app access token
