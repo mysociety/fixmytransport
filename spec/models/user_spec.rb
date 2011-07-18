@@ -139,7 +139,9 @@ describe User do
     before do 
       User.stub!(:get_facebook_app_access_token).and_return('app_token')
       User.stub!(:get_facebook_batch_api_data)
-      @mock_http = mock('http session', :use_ssl= => nil, :verify_mode= => nil)
+      @mock_http = mock('http session', :use_ssl= => nil, 
+                                        :verify_mode= => nil,
+                                        :ca_path= => nil)
       Net::HTTP.stub!(:new).and_return(@mock_http)
     end
 
