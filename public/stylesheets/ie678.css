@@ -24,3 +24,14 @@ ul#campaign-thread li.open .thread-details .thread-alternative-copy {
 ul#campaign-thread li.open .thread-details .thread-furniture {
 	margin: 0 10px 0 0;
 }
+
+.form-list li input {
+	width:97%;
+}
+.form-list li.fieldset .error{
+	left:0;
+}
+.form-list li.fieldset {
+	max-width:none;
+	width:36%;
+}

@@ -72,6 +72,7 @@
 /* ===[ Body ]=== */
 body {
     background: #048fc2 url(../images/top-nav-bg.jpg) 0 0 repeat-x;
+	min-width: 980px;
 }
 /* ===[ Wrapper ]=== */
 #wrapper {
@@ -895,7 +896,8 @@ input.checkbox {
 		}
 		
 			.form-list li.fieldset .error{
-				margin-top: 10px;
+				top: 50px;
+				margin:0;
 				position: absolute;
 			}
 
