@@ -151,6 +151,7 @@ describe Campaign do
       @campaign = Campaign.new
       @mock_supporters = mock('campaign supporter association')
       @campaign.stub!(:campaign_supporters).and_return(@mock_supporters)
+      @campaign.stub!(:initiator).and_return(mock_model(User))
       @mock_campaign_supporter = mock_model(CampaignSupporter)
       @existing_campaign_supporter = mock_model(CampaignSupporter, :supporter_id => @user.id)
       @mock_supporters.stub!(:create!).and_return(@mock_campaign_supporter)
@@ -179,12 +180,31 @@ describe Campaign do
         @campaign.stub!(:supporters).and_return([@user])
         @campaign.stub!(:campaign_supporters).and_return([@existing_campaign_supporter])
       end
-    
-      it 'should return the existing campaign supporter model' do 
-        @campaign.add_supporter(@user).should == @existing_campaign_supporter
+          
+      it 'should return nil' do 
+        @campaign.add_supporter(@user).should == nil
       end
       
     end
+    
+    describe 'if the user is the campaign initiator' do 
+    
+      before do 
+        @campaign.stub!(:supporters).and_return([])
+        @campaign.stub!(:initiator).and_return(@user)
+      end
+    
+      it 'should not add the user as a supporter' do
+        @mock_supporters.should_not_receive(:create!)
+        @campaign.add_supporter(@user)
+      end
+      
+      it 'should return nil' do 
+        @campaign.add_supporter(@user).should == nil
+      end
+      
+    end  
+    
   end
   
 end

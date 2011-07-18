@@ -91,10 +91,10 @@ class Campaign < ActiveRecord::Base
 
   # Add a user as a supporter of a campaign 
   # if a token is passed, set the token on the CampaignSupporter model.
-  # If the user is already a supporter of the campaign, their
-  # CampaignSupporter model is returned.
+  # If the user is already a supporter or initiator of the campaign,
+  # nil is returned
   def add_supporter(user, supporter_confirmed=false, token=nil)
-    if ! supporters.include?(user)
+    if ! self.supporters.include?(user) && user != self.initiator
       supporter_attributes = { :supporter => user }
       if supporter_confirmed
         supporter_attributes[:confirmed_at] = Time.now
@@ -105,7 +105,7 @@ class Campaign < ActiveRecord::Base
       end
       return campaign_supporter
     else
-      return campaign_supporters.detect{ |campaign_supporter| campaign_supporter.supporter_id == user.id }
+      return nil
     end
   end
 

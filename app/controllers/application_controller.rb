@@ -196,8 +196,8 @@ class ApplicationController < ActionController::Base
       case post_login_action_data[:action]
       when :join_campaign
         campaign = Campaign.find(id)
-        supporter = campaign.add_supporter(user, confirmed=false, token=user.perishable_token)
-        return supporter
+        campaign.add_supporter(user, confirmed=false, token=user.perishable_token)
+        return campaign
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
         commented = commented_type.titleize.constantize.find(id)

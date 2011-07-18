@@ -64,7 +64,7 @@ class UserMailer < ApplicationMailer
     if post_login_action_data
       case post_login_action_data[:action]
       when :join_campaign
-        return supporter_confirmation_subject(unconfirmed_model.campaign)
+        return supporter_confirmation_subject(unconfirmed_model)
       when :add_comment
         return comment_confirmation_subject(unconfirmed_model)
       when :create_problem
