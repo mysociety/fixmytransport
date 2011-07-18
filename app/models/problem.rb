@@ -171,8 +171,10 @@ class Problem < ActiveRecord::Base
   end
 
   def add_comment(user, text, mark_fixed=nil, mark_open=nil, comment_confirmed=false, token=nil)
-    comment = comments.build(:text => text,
-                             :user => user)
+    comment = self.comments.build(:text => text,
+                                  :user => user,
+                                  :mark_fixed => mark_fixed,
+                                  :mark_open => mark_open)
     comment.status = :new
     comment.save
     if comment_confirmed

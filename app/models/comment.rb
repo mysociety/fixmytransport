@@ -50,12 +50,12 @@ class Comment < ActiveRecord::Base
     ActiveRecord::Base.transaction do
       self.status = :confirmed
       self.confirmed_at = Time.now
-      if commented.is_a? Problem
+      if self.commented.is_a? Problem
         if mark_fixed
-          commented.status = :fixed
+          self.commented.status = :fixed
         end
         if mark_open && self.user == commented.reporter
-          commented.status = :confirmed
+          self.commented.status = :confirmed
         end
         commented.updated_at = Time.now
         commented.save!
