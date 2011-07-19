@@ -2,12 +2,12 @@ en:
   campaigns:
     add_details:
       tip_close: "Close"
-      add_details_instructions: Write a headline and description
+      add_details_instructions: "Write a headline and description for the page and we'll send your problem on its way."
       good_headline: "Give your supporters page a good headline (in 30 to 80 characters)"
       eg: "E.g."
       headline_example: "Please help me persuade The Operator to get rid of the awful smell between Manors and Monument on the Metro"
       details_submit: "Submit"
-      add_details: "OK - We're going to set up a simple webpage so that other people can support you"
+      add_details: "OK - We're going to set up a simple webpage so that other people can support you."
       make_a_headline: "Complete this sentence!"
       description_advice: "Here you should describe in a bit more detail why you've lodged a complaint, and why you want other people to support you. Be as clear and concise as you can, for maximum impact."
       add_short_description: "Add a short description"
