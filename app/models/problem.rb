@@ -5,6 +5,8 @@ class Problem < ActiveRecord::Base
   belongs_to :operator
   belongs_to :passenger_transport_executive
   belongs_to :campaign, :autosave => true
+  has_many :subscriptions, :as => :target
+  has_many :subscribers, :through => :subscriptions, :source => :user
   has_many :assignments
   has_many :comments, :as => :commented
   has_many :sent_emails
@@ -128,6 +130,8 @@ class Problem < ActiveRecord::Base
     # save new values without validation - don't want to validate any associated campaign yet
     self.update_attribute('status', :confirmed)
     self.update_attribute('confirmed_at', Time.now)
+    # create a subscription for the problem reporter
+    Subscription.create!(:user => self.reporter, :target => self)
   end
 
   def create_new_campaign

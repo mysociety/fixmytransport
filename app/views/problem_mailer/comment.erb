@@ -1,0 +1,20 @@
+Hi<%= " #{raw @recipient.name}" %>,
+
+<%= raw @comment.user_name %> has just left an update on your problem report:
+
+"<%= raw(@comment.text) %>"
+
+<%- if @comment.mark_fixed %>
+
+They also marked the problem as fixed.
+
+<%- end %>
+To add an update<%- if @comment.mark_fixed %> or mark the problem as not fixed<%- end %>, please follow this link: <%= raw @link %>
+
+Thanks,
+
+FixMyTransport
+
+<%- if @unsubscribe_link %>
+Unsubscribe: To stop receiving updates on this problem report please follow this link: <%= raw @unsubscribe_link %>
+<%- end %>
