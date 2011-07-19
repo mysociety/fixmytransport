@@ -40,7 +40,8 @@ class User < ActiveRecord::Base
   attr_accessor :ignore_blank_passwords,
                 :skip_email_uniqueness_validation,
                 :profile_photo_url,
-                :error_on_bad_profile_photo_url
+                :error_on_bad_profile_photo_url,
+                :force_password_validation
 
   has_friendly_id :name, :use_slug => true, :allow_nil => true
 
@@ -64,6 +65,9 @@ class User < ActiveRecord::Base
   end
 
   def password_not_required
+    if force_password_validation == true
+      return false
+    end
     unregistered? or !access_tokens.empty?
   end
 

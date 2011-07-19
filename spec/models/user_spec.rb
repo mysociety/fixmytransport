@@ -44,7 +44,38 @@ describe User do
     it 'should be valid if there is a name' do 
       @user.valid?.should be_true
     end
-        
+    
+    it 'should be invalid without a password if registered and without access tokens' do 
+      @user.registered = true
+      @user.password = nil
+      @user.password_confirmation = nil
+      @user.valid?.should be_false 
+    end
+       
+    it 'should be valid without a password if unregistered' do 
+      @user.registered = false
+      @user.password = nil
+      @user.password_confirmation = nil
+      @user.valid?.should be_true
+    end
+    
+    it 'should be valid without a password if there are access tokens (i.e. login via Facebook)' do 
+      @user.registered = true
+      @user.stub!(:access_tokens).and_return([mock_model(AccessToken)])
+      @user.password = nil
+      @user.password_confirmation = nil
+      @user.valid?.should be_true
+    end
+         
+    it 'should be invalid without a password if there are access tokens, but the force_password_validation flag is set' do 
+      @user.registered = true
+      @user.stub!(:access_tokens).and_return([mock_model(AccessToken)])
+      @user.password = nil
+      @user.password_confirmation = nil
+      @user.force_password_validation = true
+      @user.valid?.should be_false
+    end
+    
   end
   
   describe 'when handling an external auth token' do 

@@ -46,8 +46,9 @@ class AccountsController < ApplicationController
     end
     @account_user = User.find_or_initialize_by_email(user_email)
     already_registered = @account_user.registered?
+    # want to force validation of passwords even if this account exists and doesn't have one
     @account_user.ignore_blank_passwords = false
-    # want to force validation of passwords
+    @account_user.force_password_validation = true
     @account_user.registered = true
     @account_user.name = user_name
     @account_user.email = user_email
