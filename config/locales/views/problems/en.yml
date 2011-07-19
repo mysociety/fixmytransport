@@ -19,7 +19,7 @@ en:
       multiple_routes_intro: "Choose a route by clicking on it, or try a different search if yours is not here: "
     convert:
       intro: "Share your report with friends, gather supporters<br />and get advice from people with similar experiences"
-      yes_explanation: "If it's a big issue that's going to require a few<br />more voices, you should start choose this option."
+      yes_explanation: "If it's a big issue that's going to require a few<br />more voices, you should choose this option."
       or: "or"
       thanks: Thanks for reporting this problem!
       header: "Do you want others to support you?"
