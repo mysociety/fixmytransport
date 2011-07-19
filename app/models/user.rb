@@ -54,11 +54,17 @@ class User < ActiveRecord::Base
 
     # we validate the email with activerecord validation above
     c.validate_email_field = false
-    c.merge_validates_confirmation_of_password_field_options({:message => I18n.translate('accounts.new.password_match_error')})
+    c.merge_validates_confirmation_of_password_field_options({:unless => :password_not_required,
+                                                              :message => I18n.translate('accounts.new.password_match_error')})
     password_min_length = 5
-    c.merge_validates_length_of_password_field_options({:minimum => password_min_length,
+    c.merge_validates_length_of_password_field_options({:unless => :password_not_required,
+                                                        :minimum => password_min_length,
                                                         :message => I18n.translate('accounts.new.password_length_error',
                                                         :length => password_min_length)})
+  end
+
+  def password_not_required
+    unregistered? or !access_tokens.empty?
   end
 
   # object level attribute overrides the config level
