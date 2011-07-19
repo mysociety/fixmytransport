@@ -132,17 +132,20 @@ class AccountsController < ApplicationController
         if campaign_supporter
           campaign_supporter.confirm!
           session[:return_to] = campaign_path(campaign_supporter.campaign)
+          flash[:notice] = t('accounts.confirm.successfully_confirmed_support')
         end
       when :add_comment
         comment = Comment.find_by_token(params[:email_token])
         if comment
           comment.confirm!
           session[:return_to] = @template.commented_url(comment.commented)
+          flash[:notice] = t('accounts.confirm.successfully_confirmed_comment')
         end
       when :create_problem
         problem = Problem.find_by_token(params[:email_token])
         if problem
           session[:return_to] = convert_problem_url(problem)
+          flash[:notice] = t('accounts.confirm.successfully_confirmed_problem')
         end
       end
       @account_user.post_login_action = nil

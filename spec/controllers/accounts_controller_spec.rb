@@ -134,11 +134,12 @@ describe AccountsController do
 
     before do
       @mock_user = mock_model(User, :valid? => false,
-                                    :name= => true,
-                                    :email= => true,
-                                    :password= => true,
-                                    :password_confirmation= => true,
-                                    :ignore_blank_passwords= => true,
+                                    :name= => nil,
+                                    :email= => nil,
+                                    :password= => nil,
+                                    :password_confirmation= => nil,
+                                    :ignore_blank_passwords= => nil,
+                                    :force_password_validation= => nil,
                                     :registered= => true,
                                     :new_record? => true,
                                     :registered? => false, 
@@ -417,6 +418,11 @@ describe AccountsController do
         response.should redirect_to(root_url)
       end
       
+      it 'should show a notice saying that the user has confirmed their account' do 
+        make_request
+        flash[:notice].should == 'You have successfully confirmed your account.'
+      end
+      
       describe 'if the user model has a post login action' do 
     
         
@@ -444,6 +450,11 @@ describe AccountsController do
             make_request
             response.should redirect_to(campaign_url(@mock_campaign))
           end
+          
+          it 'should show a notice telling the user they have confirmed their campaign membership' do 
+            make_request
+            flash[:notice].should == 'You have successfully confirmed your support for this issue.'
+          end
 
         end
         
@@ -463,6 +474,11 @@ describe AccountsController do
           it 'should redirect to the problem conversion url' do 
             make_request
             response.should redirect_to(convert_problem_url(@mock_problem))
+          end
+          
+          it 'should show a notice telling the user that they have confirmed their problem and need to pick an option to send it' do 
+            make_request
+            flash[:notice].should == "You have successfully confirmed your problem report. Decide if you want other people's support and we'll send your report on its way."
           end
           
         end
@@ -489,6 +505,11 @@ describe AccountsController do
           it 'should redirect to the url of the thing being commented on' do 
             make_request
             response.should redirect_to(problem_url(@mock_problem))
+          end
+          
+          it 'should show a notice telling the user that they have confirmed their comment' do 
+            make_request
+            flash[:notice].should == 'You have successfully confirmed your comment.'
           end
           
         end
