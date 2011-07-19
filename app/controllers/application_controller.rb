@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery if :current_user # See ActionController::RequestForgeryProtection for details
   skip_before_filter :verify_authenticity_token, :unless => :current_user
   before_filter :make_cachable
-  before_filter :require_beta_password
+  before_filter :require_beta_password, :check_mobile_domain
 
   helper_method :location_search,
                 :main_url,
@@ -451,4 +451,14 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+  
+  def check_mobile_domain
+    mobile_domain = MySociety::Config.get('MOBILE_DOMAIN', '')
+    if !mobile_domain.blank? 
+      if request.host == mobile_domain
+        render :template => 'shared/mobile_placeholder', :layout => 'mobile'
+      end
+    end
+  end
+  
 end

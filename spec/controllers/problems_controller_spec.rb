@@ -9,10 +9,25 @@ describe ProblemsController do
       get :frontpage, params
     end  
     
+    describe 'when the app gets a request on the mobile hostname' do 
+    
+      before do 
+        MySociety::Config.stub!(:get)
+        MySociety::Config.stub!(:get).with('MOBILE_DOMAIN', '').and_return('test.host')
+      end
+      
+      it 'should render the template mobile_placeholder in the mobile layout' do 
+        make_request
+        response.should render_template('shared/mobile_placeholder')
+      end
+      
+    end
+    
     describe 'when the app is in closed beta' do 
       
       before do 
         @controller.stub!(:app_status).and_return('closed_beta')
+        MySociety::Config.stub!(:get)
         MySociety::Config.stub!(:get).with('BETA_USERNAME', 'username').and_return('username')
         MySociety::Config.stub!(:get).with('BETA_PASSWORD', 'password').and_return(Digest::MD5.hexdigest('password'))
       end

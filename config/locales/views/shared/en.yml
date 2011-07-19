@@ -87,6 +87,9 @@ en:
       facebook_connect: "Facebook Connect"
       got_account: Have an account?
       create_sign_in_with_facebook: Sign in with Facebook
+    mobile_placeholder:
+      follow_twitter: "Our mobile app is coming soon. Please follow our %{twitter} account for updates."
+      twitter: Twitter
     problem:
       added: "added"
       by: "by"
