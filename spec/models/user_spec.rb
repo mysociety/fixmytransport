@@ -27,6 +27,7 @@ describe User do
       @user.email = 'test@example.com'
       @user.password = 'password'
       @user.password_confirmation = 'password'
+      @user.name = 'A Test Name'
       @user.registered = true
     end
     
@@ -36,11 +37,11 @@ describe User do
     end
     
     it 'should not be valid if there is no user name' do 
+      @user.name = nil
       @user.valid?.should be_false
     end
     
     it 'should be valid if there is a name' do 
-      @user.name = 'A Test Name'
       @user.valid?.should be_true
     end
         
