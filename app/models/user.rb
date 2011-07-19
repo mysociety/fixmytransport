@@ -58,7 +58,7 @@ class User < ActiveRecord::Base
     password_min_length = 5
     c.merge_validates_length_of_password_field_options({:minimum => password_min_length,
                                                         :message => I18n.translate('accounts.new.password_length_error',
-                                                                                   :length => password_min_length)})
+                                                        :length => password_min_length)})
   end
 
   # object level attribute overrides the config level
