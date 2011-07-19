@@ -13,6 +13,37 @@
   <%= raw f.label :name %>
   <%= raw f.text_field :name %>
 </div>
+
+<div class='form-field'>
+  <%- if @operator.errors.on(:company_no) %>
+    <div class='error'>
+      <%= error_message_on @operator, :company_no %>
+    </div>
+  <%-end %>
+  <%= raw f.label :company_no %>
+  <%= raw f.text_field :company_no %>
+</div>
+
+<div class='form-field'>
+  <%- if @operator.errors.on(:registered_address) %>
+    <div class='error'>
+      <%= error_message_on @operator, :registered_address %>
+    </div>
+  <%-end %>
+  <%= raw f.label :registered_address %>
+  <%= raw f.text_field :registered_address %>
+</div>
+
+<div class='form-field'>
+  <%- if @operator.errors.on(:url) %>
+    <div class='error'>
+      <%= error_message_on @operator, :url %>
+    </div>
+  <%-end %>
+  <%= raw f.label :url %>
+  <%= raw f.text_field :url %>
+</div>
+
 <div class='form-field'>
   <%= raw f.label :notes %>
   <%= raw f.text_field :notes %>
