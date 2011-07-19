@@ -34,6 +34,11 @@
 </div>
 
 <div class='form-field'>
+  <%= raw f.label :deleted %>
+  <%= raw f.check_box :deleted %>
+</div>
+
+<div class='form-field'>
   <%= raw f.label :district_id %>
   <%= raw f.text_field :district_id %>
 </div>
