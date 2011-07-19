@@ -5,12 +5,10 @@
       <%= t('shared.header.site_name')%>
     </title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-type' />
-    <%= yield :meta %>
-    <%= csrf_meta_tag %>
     <%= raw stylesheet_link_tag('core', 'fixmytransport', 'map', 'buttons', :cache => 'main') %>
 
 	<!--[if lte IE 7]><%= raw stylesheet_link_tag('ie67') %><![endif]-->
-	
+
 	<!--[if lte IE 8]><%= raw stylesheet_link_tag('ie678') %><![endif]-->
 
     <%= yield :stylesheets %>
@@ -34,11 +32,7 @@
 				<a id="logo" href="<%= root_url %>">FixMyTransport</a>
 
 			</div>
-
-
-		
 			<%= yield %>
-
     </div>
 
 		<%= yield :javascript %>
