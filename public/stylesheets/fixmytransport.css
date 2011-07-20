@@ -825,6 +825,13 @@ ul.user-list {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
 }
+
+.form-1 input[type=hidden] {
+  height: 0;
+  border: none;
+  padding: 0;
+}
+
 .form-1 input {
     height: 20px
 }
