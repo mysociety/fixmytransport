@@ -4,6 +4,5 @@ class RenameSubdomainToKey < ActiveRecord::Migration
   end
 
   def self.down
-    rename_column :campaigns, :key, :subdomain
   end
 end
