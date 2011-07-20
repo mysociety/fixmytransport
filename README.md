@@ -1,33 +1,31 @@
-FixMyTransport
---------------
+#FixMyTransport
 
-Prerequisites
--------------
+#Prerequisites
 
 Ruby 1.8.7
 
-Installation
-============
+#Installation
 
-OS X
------
 
-1. Get the code:
+##OS X
 
-git clone https://github.com/mysociety/fixmytransport
+
+###Get the code:
+
+    git clone https://github.com/mysociety/fixmytransport
 
 In a terminal, navigate to the fixmytransport folder where this
 install guide lives.
 
 You will also want to install mySociety's common ruby libraries. Run:
 
-  git submodule update --init
+    git submodule update --init
 
 to fetch the contents of the submodule.
 
 Copy config/general.example to config/general
 
-2. Configure the database:
+###Configure the database:
 
 Install Postgres and PostGIS - OSX installers are available at
 http://www.kyngchaos.com/software/postgres
@@ -38,10 +36,10 @@ http://www.kyngchaos.com/software/postgres
 
 Become the 'postgres' user (sudo su - postgres) (or whatever user postgres is running as)
 
-psql template1
-   to get into command tool
+```psql template1``` to get into command tool
 
-\l to list databases
+```\l``` to list databases
+
     CREATE DATABASE fixmytransport_development encoding = 'UTF8';
     CREATE DATABASE fixmytransport_test encoding = 'UTF8';
 
@@ -59,13 +57,13 @@ permissions on this database.
 
 The following commands need to be run at the command line following db creation for each of fixmytransport_development and fixmytransport_test:
 
-createlang  plpgsql [database name]
-psql [yourdb] < /usr/local/pgsql/share/contrib/postgis-1.5/postgis.sql
-psql [yourdb] < /usr/local/pgsql/share/contrib/postgis-1.5/spatial_ref_sys.sql
+    createlang  plpgsql [database name]
+    psql [yourdb] < /usr/local/pgsql/share/contrib/postgis-1.5/postgis.sql
+    psql [yourdb] < /usr/local/pgsql/share/contrib/postgis-1.5/spatial_ref_sys.sql
 
 Also, SRID 27700 (British National Grid) is incorrect in some installs of PostGIS. After you’ve installed and got a PostGIS template, log in to it and make sure the proj4text column of SRID 27700 in the spatial_ref_sys table includes +datum=OSGB36.
 
-To load a new binary Postgres dump file:
-----------------------------------------
-1) Create the file from an existing database with pg_dump -p [Postgres port number] --schema=public -Fc YOURDB > YOURDB.sql.dump
-2) rake db:load_from_binary FILE=YOURDB.sql.dump
+###To load a new binary Postgres dump file:
+
+1. Create the file from an existing database with ```pg_dump -p [Postgres port number] --schema=public -Fc YOURDB > YOURDB.sql.dump```
+2. ```rake db:load_from_binary FILE=YOURDB.sql.dump```

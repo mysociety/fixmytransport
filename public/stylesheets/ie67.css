@@ -25,6 +25,13 @@
 	display:inline-block;
 }
 
+* html #choose .left {
+	margin-left:50px;
+}
+* html #choose .right {
+	margin-right:50px;
+}
+
 
 /*remove all png images from IE6 only*/
 * html .icon,
@@ -109,6 +116,12 @@
 	position:absolute;
 	top:50px;
 }
+
+#choose .middle {
+	float:left;
+	width:60px;
+}
+
 
 
 /*sort this*/
