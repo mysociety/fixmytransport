@@ -31,6 +31,7 @@
   width: 500px; 
   height: 500px;
   margin: auto;
+  overflow: visible !important;
 }
 
 
@@ -45,6 +46,7 @@
   height: 490px;
   margin: auto;
   border: none;
+  overflow: visible !important;
 }
 
 #problem-map {
@@ -58,6 +60,7 @@
   height: 350px;
   margin: auto;
   border: none;
+  overflow: visible !important;
 }
 
 #small-map {
