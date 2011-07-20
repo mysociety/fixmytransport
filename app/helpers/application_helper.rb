@@ -226,14 +226,6 @@ module ApplicationHelper
     link_to(pte.name, pte.wikipedia_url, :target => '_blank')
   end
 
-  def responsible_name_type(location)
-    if location.pte_responsible?
-      responsible = location.passenger_transport_executive.name
-    else
-      responsible = "#{t('shared.problem.the')} #{t(location.responsible_organization_type)}"
-    end
-  end
-
   def location_path(location, attributes={})
     if location.is_a? Stop
       return stop_path(location.locality, location, attributes)

@@ -17,24 +17,20 @@ module FixMyTransport
 
     module InstanceMethods
       extend ActiveSupport::Memoizable
-      attr_accessor :responsible_organization_type
       
       def responsible_organizations
         responsible = []
         # train stations are run by operators
         if transport_mode_names.include? 'Train' and self.respond_to?(:operators)
           responsible = operators
-          @responsible_organization_type = :company
         # but for bus, coach, tram, metro and ferry stops
         else
           # if there's a PTE, they're responsible
           if passenger_transport_executive
             responsible = [ passenger_transport_executive ]
-            @responsible_organization_type = :passenger_transport_executive
           # otherwise, the council
           else
             responsible = councils
-            @responsible_organization_type = :council
           end
         end
         responsible

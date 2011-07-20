@@ -50,10 +50,6 @@ class SubRoute < ActiveRecord::Base
     operators
   end
   
-  def responsible_organization_type
-    :company
-  end
-  
   def responsible_organizations
     operators
   end
