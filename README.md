@@ -65,5 +65,5 @@ Also, SRID 27700 (British National Grid) is incorrect in some installs of PostGI
 
 ###To load a new binary Postgres dump file:
 
-1. Create the file from an existing database with pg_dump -p [Postgres port number] --schema=public -Fc YOURDB > YOURDB.sql.dump
-2. rake db:load_from_binary FILE=YOURDB.sql.dump
+1. Create the file from an existing database with ```pg_dump -p [Postgres port number] --schema=public -Fc YOURDB > YOURDB.sql.dump```
+2. ```rake db:load_from_binary FILE=YOURDB.sql.dump```
