@@ -2,4 +2,4 @@
 
 LOC=`dirname $0`
 
-$LOC/runner 'ProblemMailer.send_comments(dryrun=true)'
+$LOC/runner 'ProblemMailer.send_comments(dryrun=false)'
