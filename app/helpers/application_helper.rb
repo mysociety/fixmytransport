@@ -222,10 +222,6 @@ module ApplicationHelper
     end
   end
 
-  def pte_link(pte)
-    link_to(pte.name, pte.wikipedia_url, :target => '_blank')
-  end
-
   def location_path(location, attributes={})
     if location.is_a? Stop
       return stop_path(location.locality, location, attributes)
