@@ -470,7 +470,7 @@ module ApplicationHelper
       return t('campaigns.show.contact_operator', :location => MySociety::Format.ucfirst(readable_location_type(campaign.location)))
     when 'CouncilContact'
       return t('campaigns.show.contact_council')
-    when 'PassengerTransportExecutive'
+    when 'PassengerTransportExecutiveContact'
       return t('campaigns.show.contact_passenger_transport_executive')
     else
       raise "No contact description set for contact_type #{contact_type}"

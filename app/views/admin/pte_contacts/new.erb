@@ -1,0 +1,4 @@
+<h2><%= t('admin.adding_a_pte_contact', :pte => @pte.name) %></h2>
+<%- form_for :pte_contact, @pte_contact, :url => admin_url(admin_pte_contacts_path), :html => { :class => 'pte-contact-form' } do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+<%- end %>

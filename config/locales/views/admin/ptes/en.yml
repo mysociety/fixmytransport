@@ -1,3 +1,5 @@
 en:
   admin:
     pte_form_error: There's a problem with this PTE - please see below.
+    add_a_pte_contact: Add a contact
+    pte_contacts: Contacts

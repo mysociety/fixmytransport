@@ -129,6 +129,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :ptes, :only => [:index, :show, :update]
     admin.resources :council_contacts, :only => [:show, :index, :new, :create, :update]
     admin.resources :operator_contacts, :only => [:show, :new, :create, :update]
+    admin.resources :pte_contacts, :only => [:show, :new, :create, :update]
     admin.resources :stops
     admin.resources :stop_areas
     admin.resources :problems, :only => [:show, :index, :update]

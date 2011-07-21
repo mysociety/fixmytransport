@@ -1,4 +1,32 @@
 <h2><%= @pte.name %></h2>
+<h3><%= t('admin.pte_contacts') %></h3>
+<%= link_to(t('admin.add_a_pte_contact'), admin_url(new_admin_pte_contact_path(:pte_id => @pte.id))) %>
+
+<%- if !@pte.pte_contacts.empty?  %>
+  <table class='ptes index-list'>
+    <tr>
+      <th width='33%'><%= t('admin.category') %></th>
+      <th width='33%'><%= t('admin.email') %></th>
+      <th width='34%'><%= t('admin.location_type') %></th>
+    </tr>
+    <%- @pte.pte_contacts.each do |contact| %>
+      <tr class='<%= cycle("odd", "even") %>'>
+        <td>
+          <%= link_to(contact.category, admin_url(admin_pte_contact_path(contact))) %>
+        <td>
+          <%= contact.email %>
+        </td>
+        <td>
+          <%- if contact.location_type %>
+            <%= contact.location_type %>
+          <%-end %>
+        </td>
+      </tr>
+    <%-end%>
+  </table>
+<%-end %>
+
+
 <h3><%= t('admin.edit') %></h3>
 <%-form_for :pte, @pte, :url => admin_url(admin_pte_path(@pte)), :html => { :method => :put,  :class => 'pte-form' } do |f| %>
   <%= render :partial => 'form', :locals => { :f => f }   %>

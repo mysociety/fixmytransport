@@ -313,6 +313,9 @@ class Route < ActiveRecord::Base
   end
 
   def responsible_organizations
+    if transport_mode_name == 'Bus' && region.name == 'London'
+      return [PassengerTransportExecutive.find_by_name('Transport for London')]
+    end
     operators
   end
 
@@ -320,12 +323,26 @@ class Route < ActiveRecord::Base
     false
   end
 
+  def passenger_transport_executive
+    if transport_mode_name == 'Bus' && region.name == 'London'
+      return PassengerTransportExecutive.find_by_name('Transport for London')
+    else 
+      return nil
+    end
+  end
+
   def pte_responsible?
-    false
+    if transport_mode_name == 'Bus' && region.name == 'London'
+      return true
+    end
+    return false
   end
 
   def operators_responsible?
-    true
+    if transport_mode_name == 'Bus' && region.name == 'London'
+      return false
+    end
+    return true
   end
 
   def sub_route_problems

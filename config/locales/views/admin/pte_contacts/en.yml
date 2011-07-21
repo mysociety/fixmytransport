@@ -1,0 +1,7 @@
+en:
+  admin:
+    adding_a_pte_contact: "Adding a contact for %{pte}"
+    pte_contacts_for: "Contacts for %{pte}"
+    email: Email
+    location_type: Location type
+    

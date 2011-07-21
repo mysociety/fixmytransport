@@ -93,8 +93,10 @@ class ProblemMailer < ApplicationMailer
       return recipient.contact_for_category_and_location(problem.category, problem.location)
     elsif recipient.is_a?(Operator)
       return recipient.contact_for_category_and_location(problem.category, problem.location)
+    elsif recipient.is_a?(PassengerTransportExecutive)
+      return recipient.contact_for_category_and_location_type(problem.category, problem.location)
     else
-      return recipient
+      raise "Unknown recipient type: #{recipient.class.to_s}"
     end
   end
 

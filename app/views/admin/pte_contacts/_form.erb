@@ -1,0 +1,50 @@
+<%- if !@pte_contact.errors.empty? %>
+  <div class='form-error'>
+    <%= t('admin.pte_contact_form_error') %>
+  </div>
+<%- end %>
+<%= raw f.hidden_field :passenger_transport_executive_id %>
+<div class='form-field'>
+  <%- if @pte_contact.errors.on(:category) %>
+    <div class='error'>
+      <%= error_message_on @pte_contact, :category %>
+    </div>
+  <%- end %>
+  <%= raw f.label :category %>
+  <%- if @pte_contact.new_record?  %>
+    <%= raw f.text_field :category %>
+  <%- else %>
+    <%= raw @pte_contact.category %>
+  <%- end %>
+</div>
+
+<div class='form-field'>
+  <%- if @pte_contact.errors.on(:email) %>
+    <div class='error'>
+      <%= error_message_on @pte_contact, :email %>
+    </div>
+  <%- end %>
+  <%= raw f.label :email %>
+  <%= raw f.text_field :email %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :confirmed %>
+  <%= raw f.check_box :confirmed %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :deleted %>
+  <%= raw f.check_box :deleted %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :location_type %>
+  <%= raw f.text_field :location_type %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :notes %>
+  <%= raw f.text_area :notes, :cols => 50, :rows => 4 %>
+</div>
+<%= raw submit_tag t('admin.go') %>

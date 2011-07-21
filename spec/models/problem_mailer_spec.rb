@@ -175,10 +175,11 @@ describe ProblemMailer do
       @operator_without_mail = mock_model(Operator, :name => "Unemailable operator")
       @operator_without_mail.stub!(:contact_for_category_and_location).and_return(nil)
 
-      @pte_with_mail = mock_model(PassengerTransportExecutive, :email => 'pte@example.com',
-                                                               :name => 'Emailable PTE')
-      @pte_without_mail = mock_model(PassengerTransportExecutive, :email => nil,
-                                                                  :name => 'Unemailable PTE')
+      @pte_with_mail = mock_model(PassengerTransportExecutive, :name => 'Emailable PTE')
+      @pte_contact = mock_model(PassengerTransportExecutiveContact, :email => 'pte@example.com')
+      @pte_with_mail.stub!(:contact_for_category_and_location_type).and_return(@pte_contact)
+      @pte_without_mail = mock_model(PassengerTransportExecutive, :name => 'Unemailable PTE')
+      @pte_without_mail.stub!(:contact_for_category_and_location_type).and_return(nil)
 
       @mock_problem_email_operator = make_mock_problem([@operator_with_mail], [])
       @mock_problem_no_email_operator = make_mock_problem([], [@operator_without_mail])
@@ -257,7 +258,7 @@ describe ProblemMailer do
       SentEmail.should_receive(:create!).with(:problem => @mock_problem_email_operator,
                                               :recipient => @operator_contact)
       SentEmail.should_receive(:create!).with(:problem => @mock_problem_email_pte,
-                                              :recipient => @pte_with_mail)
+                                              :recipient => @pte_contact)
       ProblemMailer.send_reports
     end
 
