@@ -373,9 +373,9 @@ describe Route do
 
   end
 
-  describe 'if a bus route across regions' do 
-    
-    before do 
+  describe 'if a bus route across regions' do
+
+    before do
       @mock_operator = mock_model(Operator)
       @route = Route.new
       @route.stub!(:operators).and_return([@mock_operator])
@@ -384,41 +384,70 @@ describe Route do
     end
 
     describe 'when asked for responsible organizations' do
-    
+
       it 'should return the operators' do
         @route.responsible_organizations.should == [@mock_operator]
       end
-      
+
     end
-    
-    describe 'when asked for the passenger transport executive' do 
-      
-      it 'should return nil' do 
+
+    describe 'when asked for the passenger transport executive' do
+
+      it 'should return nil' do
         @route.passenger_transport_executive.should == nil
       end
-    
+
     end
-    
-    describe 'when asked if the PTE is responsible' do 
-    
-      it 'should return false' do 
+
+    describe 'when asked if the PTE is responsible' do
+
+      it 'should return false' do
         @route.pte_responsible?.should == false
       end
-      
+
     end
-    
-    describe 'when asked if the operators are responsible' do 
-    
+
+    describe 'when asked if the operators are responsible' do
+
       it 'should return true' do
         @route.operators_responsible?.should == true
       end
-    
+
     end
-    
+
   end
-    
-  describe 'if in London, and a bus route' do 
-    
+
+
+  describe 'if the test London bus route ZZ9' do
+
+    before do
+      mock_operator = mock_model(Operator)
+      @route = Route.new(:number => 'ZZ9')
+      @route.stub!(:operators).and_return([mock_operator])
+      @route.stub!(:region).and_return(mock_model(Region, :name => 'London'))
+      @route.stub!(:transport_mode_name).and_return('Bus')
+    end
+
+    describe 'when asked if the PTE is responsible' do
+
+      it 'should return false' do
+        @route.pte_responsible?.should == false
+      end
+
+    end
+
+     describe 'when asked if the operators are responsible' do
+
+        it 'should return true' do
+          @route.operators_responsible?.should == true
+        end
+
+      end
+
+  end
+
+  describe 'if in London, and a bus route' do
+
     before do
       @tfl = mock_model(PassengerTransportExecutive)
       PassengerTransportExecutive.stub!(:find_by_name).with('Transport for London').and_return(@tfl)
@@ -428,15 +457,15 @@ describe Route do
       @route.stub!(:region).and_return(mock_model(Region, :name => 'London'))
       @route.stub!(:transport_mode_name).and_return('Bus')
     end
-    
+
     describe 'when asked if the operators are responsible' do
 
-      it 'should return false' do 
+      it 'should return false' do
         @route.operators_responsible?.should == false
       end
-      
+
     end
-    
+
     describe 'when asked if the PTE is responsible' do
 
       it 'should return true' do
@@ -444,19 +473,19 @@ describe Route do
       end
 
     end
-    
-    describe 'when asked for the Passenger Transport Executive' do 
 
-      it 'should return Transport for London' do 
+    describe 'when asked for the Passenger Transport Executive' do
+
+      it 'should return Transport for London' do
         @route.passenger_transport_executive.should == @tfl
       end
 
      end
-    
-    
+
+
     describe 'when asked for responsible organizations' do
-  
-      it 'should return TfL' do 
+
+      it 'should return TfL' do
         @route.responsible_organizations.should == [@tfl]
       end
     end
