@@ -484,9 +484,9 @@ module ApplicationHelper
   def problem_operator_links(problem)
     location = problem.location
     if problem.operator
-      return t('campaigns.show.operated_by', :operators => operator_links([problem.operator]))
+      return t('shared.operator_links.operated_by', :operators => operator_links([problem.operator]))
     elsif location.respond_to?(:operators) && !location.operators.empty? && location.operators.size <= 2 
-	    return t('campaigns.show.operated_by', :operators => operator_links(location.operators))
+	    return t('shared.operator_links.operated_by', :operators => operator_links(location.operators))
 	  else
 	    return nil
     end
