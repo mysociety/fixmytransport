@@ -371,6 +371,10 @@ div.supporter-notice-arrow{
 	    color: #fff;
 	    text-decoration: underline;
 	}
+
+	#footer a:hover, #footer a:focus {
+	  color: #000;
+	}
 /* ===[ Gallery ]=== */
 ul.gallery {
     padding: 10px 0 10px 10px;
