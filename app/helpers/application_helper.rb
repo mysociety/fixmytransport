@@ -164,7 +164,8 @@ module ApplicationHelper
   def at_the_location(location)
     location_string = location.name
     location_string.gsub!(/^Train route/, 'train route')
-    location_string.gsub!(/^Bus route/, 'bus route')
+    location_string.gsub!(/^Number /, 'number ')
+    
     location_string = "#{on_or_at_the(location)} #{location_string}"
     if location.is_a?(Stop) && location.transport_mode_names.include?('Bus')
       location_string += " bus stop"
