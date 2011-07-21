@@ -177,9 +177,9 @@ describe ProblemMailer do
 
       @pte_with_mail = mock_model(PassengerTransportExecutive, :name => 'Emailable PTE')
       @pte_contact = mock_model(PassengerTransportExecutiveContact, :email => 'pte@example.com')
-      @pte_with_mail.stub!(:contact_for_category_and_location_type).and_return(@pte_contact)
+      @pte_with_mail.stub!(:contact_for_category_and_location).and_return(@pte_contact)
       @pte_without_mail = mock_model(PassengerTransportExecutive, :name => 'Unemailable PTE')
-      @pte_without_mail.stub!(:contact_for_category_and_location_type).and_return(nil)
+      @pte_without_mail.stub!(:contact_for_category_and_location).and_return(nil)
 
       @mock_problem_email_operator = make_mock_problem([@operator_with_mail], [])
       @mock_problem_no_email_operator = make_mock_problem([], [@operator_without_mail])
