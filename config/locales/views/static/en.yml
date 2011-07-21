@@ -1,5 +1,7 @@
 en:
   static:
+    about:
+      about_this_site: "About this site"
     feedback:
       feedback_thanks: "Thanks for your feedback!"
       feedback_error: "An error occurred while sending this email."

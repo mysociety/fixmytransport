@@ -86,9 +86,15 @@ class LocationsController < ApplicationController
   def show_route_region
     @region = Region.find(params[:id])
     @national_region = Region.find_by_name('Great Britain')
+    if @region == @national_region 
+      @title = t('locations.show_route_region.national_routes_title')
+    else
+      @title = t('locations.show_route_region.routes_in', :region => @region.name)
+    end
   end
 
   def show_route_regions
+    @title = t('locations.show_route_regions.routes_by_region')
     @regions = Region.find(:all, :order => 'name asc')
   end
 

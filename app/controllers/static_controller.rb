@@ -19,8 +19,11 @@ class StaticController < ApplicationController
       else
         render 'feedback'
       end
-        
     end
+  end
+
+  def about
+    @title = t("static.about.about_this_site")
   end
   
   # probably won't end up living in the static_controller, but for now it's a home

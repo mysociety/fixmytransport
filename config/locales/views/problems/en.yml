@@ -28,7 +28,7 @@ en:
       subheader: "Use FixMyTransport to create more pressure for a fix"
       no_thanks: "No Thanks"
     find_bus_route:
-      title: "Finding a bus route"
+      title: "Finding a bus or coach route"
       route_not_found: "Sorry, we could not find the route you entered. Please modify it and try again!"
       please_enter_route_number_and_area: "Please enter the route number of the bus and the area where it runs"
       what_was_the_number_and_area: "What was the route number and town or area?"
@@ -39,6 +39,7 @@ en:
       go: "Go"
       route_not_found_in_area: "We couldn't find a route number %{route_number} in %{area}."
     find_other_route:
+      title: "Finding a tram, metro, underground or ferry route"
       to_stop_not_found: "We didn't recognise the name of the stop you got off at."
       where_did_you_get_on: "Where did you get on?"
       route_not_found: "We could not find the route you entered. Please use the back button on your browser to try again."
@@ -55,6 +56,7 @@ en:
       ambiguous_to_stop: "'%{station_name}' could mean more than one station - please pick the one you meant from the drop-down list."
     find_route:
       find_a_route: "First, select the kind of transport you had a problem with"
+      find_a_route_title: "Select the kind of transport you had a problem with"
       ferry: "ferry"
       subheader: "Choose from one of the four options below"
       train: "train"
@@ -72,6 +74,7 @@ en:
       instructions: "Enter an area, town or postcode"
       where_is_it: "Where is it?"
     find_train_route:
+      title: "Finding a train route"
       to_stop_not_found: "We didn't recognise the name of the stop you got off at."
       where_did_you_get_on: "Where did you get on?"
       from_example: "e.g. London Euston"
@@ -118,6 +121,8 @@ en:
       im_a_beta_tester: "I'm a beta tester"
       find_out_more: Find out more
       coming_soon: "FixMyTransport is coming soon...currently in closed beta testing."
+    issues_index:
+      title: "Recent issues"
     list:
       reported_on: "Reported on %{date}"
       reported_by: "by %{name}"

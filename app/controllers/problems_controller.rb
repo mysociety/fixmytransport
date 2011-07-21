@@ -11,6 +11,7 @@ class ProblemsController < ApplicationController
   skip_before_filter :require_beta_password, :only => [:frontpage]
   
   def issues_index
+    @title = t('problems.issues_index.title')
     @issues = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
       issues = Problem.find_recent_issues(pager.per_page, :offset => pager.offset)
       # inject the result array into the paginated collection:
@@ -176,6 +177,7 @@ class ProblemsController < ApplicationController
   end
   
   def find_route
+    @title = t('problems.find_route.find_a_route_title')
   end
   
   def find_bus_route
@@ -234,6 +236,7 @@ class ProblemsController < ApplicationController
   end
   
   def find_train_route
+    @title = t('problems.find_train_route.title')
     @error_messages = Hash.new{ |hash, key| hash[key] = [] }
     if params[:to]
       @from_stop = params[:from]
@@ -267,6 +270,7 @@ class ProblemsController < ApplicationController
   end
   
   def find_other_route
+    @title = t('problems.find_other_route.title')
     @error_messages = Hash.new{ |hash, key| hash[key] = [] }
     if params[:to]
       @from_stop = params[:from]

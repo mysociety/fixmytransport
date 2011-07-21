@@ -5,13 +5,7 @@
 </div>
 <div id="greybanner">
 	<div class="container">
-		<p>
-		<%- if @region != @national_region %>
-		    <%= t('locations.show_route_region.routes_in', :region => @region.name) %>
-		<%- else %>
-		    <%= t('locations.show_route_region.national_routes_title') %>
-		<%- end %>
-		</p>
+		<p><%= @title %></p>
 	</div>
 </div>
 <div id="main-content" class="container has-tabs">
