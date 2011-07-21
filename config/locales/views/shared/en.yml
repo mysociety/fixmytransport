@@ -90,6 +90,7 @@ en:
     mobile_placeholder:
       follow_twitter: "Our mobile app is coming soon. Please follow our %{twitter} account for updates."
       twitter: Twitter
+      main_site: "Non-mobile optimised site"
     problem:
       added: "added"
       by: "by"
