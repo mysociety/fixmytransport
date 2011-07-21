@@ -622,7 +622,7 @@ describe ProblemsController do
                                           :mark_open => true,
                                           :status= => true)
       @mock_problem.stub!(:comments).and_return(mock('comments', :build => @mock_comment))
-      @expected_notice = "Please sign in or create an account to add your comment to this problem"
+      @expected_notice = "Please sign in or create an account to add your comment to this problem report"
       @expected_redirect = problem_url(@mock_problem)
     end
 

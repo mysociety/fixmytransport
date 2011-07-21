@@ -5,6 +5,7 @@ class LocationsController < ApplicationController
 
   def show_stop
     @stop = Stop.full_find(params[:id], params[:scope])
+    @commentable = @stop
     @title = @stop.full_name
     respond_to do |format|
       format.html do
@@ -22,7 +23,7 @@ class LocationsController < ApplicationController
 
   def show_stop_area
     @stop_area = StopArea.full_find(params[:id], params[:scope])
-
+    @commentable = @stop_area
     # redirect to a station/ferry terminal url if appropriate
     if params[:type] != :station && StopAreaType.station_types.include?(@stop_area.area_type)
       redirect_to @template.location_url(@stop_area) and return false
@@ -51,6 +52,7 @@ class LocationsController < ApplicationController
 
   def show_route
     @route = Route.full_find(params[:id], params[:scope])
+    @commentable = @route
     if @route.friendly_id_status.numeric?
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
@@ -72,6 +74,7 @@ class LocationsController < ApplicationController
 
   def show_sub_route
     @sub_route = SubRoute.find(params[:id])
+    @commentable = @sub_route
     if @sub_route.friendly_id_status.numeric?
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
@@ -86,7 +89,7 @@ class LocationsController < ApplicationController
   def show_route_region
     @region = Region.find(params[:id])
     @national_region = Region.find_by_name('Great Britain')
-    if @region == @national_region 
+    if @region == @national_region
       @title = t('locations.show_route_region.national_routes_title')
     else
       @title = t('locations.show_route_region.routes_in', :region => @region.name)
@@ -98,11 +101,44 @@ class LocationsController < ApplicationController
     @regions = Region.find(:all, :order => 'name asc')
   end
 
+  def add_comment_to_route
+    @commentable = Route.find(params[:id], :scope => params[:scope])
+    return add_comment_to_location
+  end
+
+  def add_comment_to_stop
+    @commentable = Stop.find(params[:id], :scope => params[:scope])
+    return add_comment_to_location
+  end
+
+  def add_comment_to_stop_area
+    @commentable = StopArea.find(params[:id], :scope => params[:scope])
+    return add_comment_to_location
+  end
+
+  def add_comment_to_sub_route
+    @commentable = SubRoute.find(params[:id])
+    return add_comment_to_location
+  end
+
   private
 
   def campaign_feed(source)
     @campaigns = source.campaigns.visible
     render :template => 'shared/campaigns.atom.builder', :layout => false
+  end
+
+  def add_comment_to_location
+    if request.post?
+      @comment = @commentable.comments.build(params[:comment])
+      @comment.status = :new
+      if current_user
+        return handle_comment_current_user
+      else
+        return handle_comment_no_user
+      end
+    end
+    render :template => 'shared/add_comment'
   end
 
 end

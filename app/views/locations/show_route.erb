@@ -28,6 +28,7 @@
     
 	<div class="rightcol">
 		<a class="button big red report" href="<%= new_problem_url(:location_id => @route.id, :location_type => @route.type, :to => params[:to], :from => params[:from])%>"><%= t('locations.show_route.report_a_problem') %></a>
+		<a class="button big report comment-trigger" href="<%= add_comment_route_url(@route.region, @route) %>" data-title="<%= t('locations.show_route.comment_title', :location => at_the_location(@route)) %>"><%= t('locations.show_route.say_something_nice') %></a>
 		<%- cache(:action => 'show_route', :action_suffix => 'stop_list') do %>
 		<h5 class="left"><%= t('locations.show_route.stops_header') %></h5>
   		<ol id="large-ol">

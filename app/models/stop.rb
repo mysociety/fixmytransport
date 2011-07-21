@@ -52,6 +52,7 @@ class Stop < ActiveRecord::Base
   has_many :route_segments_as_to_stop, :foreign_key => 'to_stop_id', :class_name => 'RouteSegment'
   has_many :routes_as_from_stop, :through => :route_segments_as_from_stop, :source => 'route'
   has_many :routes_as_to_stop, :through => :route_segments_as_to_stop, :source => 'route'
+  has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   belongs_to :locality
   validates_presence_of :locality_id, :lon, :lat, :if => :loaded?
   validates_uniqueness_of :atco_code, :allow_nil => true

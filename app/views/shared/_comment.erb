@@ -1,13 +1,9 @@
 <a href="#" class="thread-item">
   <span class="num"><%= index %></span>
   <span class="title">
-  <%- if comment.commented.is_a?(Campaign) %>
-    <%= raw t('campaigns.show.user_says', :name => h(comment.user.name)) %>
-  <%- else %>
-    <%= t('problems.show.user_says', :name => h(comment.user.name)) %>
-    <%- if comment.mark_fixed? %> 
-      <%= t('problems.show.marked_as_fixed')%>
-    <%- end %>
+  <%= raw comment_header(comment) %>
+  <%- if comment.commented.is_a?(Problem) && comment.mark_fixed? %>
+    <%= t('problems.show.marked_as_fixed')%>
   <%- end %>
   </span>
   <span class="close">close</span>
@@ -15,7 +11,6 @@
     <%= comment.created_at.localtime.to_s(:standard_with_date) %>
   </span>
 </a>
-
 <div class="thread-details">
 	<div class="thread-copy">
 		<%= raw sanitize("#{comment.text}") %>

@@ -174,22 +174,6 @@ class Problem < ActiveRecord::Base
     location.transport_modes.map{ |transport_mode| transport_mode.name }.join(", ")
   end
 
-  def add_comment(user, text, mark_fixed=nil, mark_open=nil, comment_confirmed=false, token=nil)
-    comment = self.comments.build(:text => text,
-                                  :user => user,
-                                  :mark_fixed => mark_fixed,
-                                  :mark_open => mark_open)
-    comment.status = :new
-    comment.save
-    if comment_confirmed
-      comment.confirm!
-    end
-    if token
-      comment.update_attributes(:token => token)
-    end
-    comment
-  end
-
   def visible?
     [:confirmed, :fixed].include?(self.status)
   end

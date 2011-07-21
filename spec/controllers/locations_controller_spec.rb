@@ -3,51 +3,266 @@ require 'spec_helper'
 describe LocationsController do
 
   describe 'GET #show_stop_area' do
-    
+
     def make_request
       get :show_stop_area, { :type => :stop_area, :scope => 'london', :id => 'euston' }
     end
-    
-    it 'should redirect to a station url if the stop area is a train station' do 
+
+    it 'should redirect to a station url if the stop area is a train station' do
       mock_stop_area = mock_model(StopArea, :area_type => 'GRLS', :locality => 'london')
       StopArea.stub!(:full_find).and_return(mock_stop_area)
       make_request
       response.should redirect_to(station_url(mock_stop_area.locality, mock_stop_area))
     end
-    
+
     it 'should redirect to a station url if the stop area is a metro station' do
       mock_stop_area = mock_model(StopArea, :area_type => 'GTMU', :locality => 'london')
       StopArea.stub!(:full_find).and_return(mock_stop_area)
       make_request
       response.should redirect_to(station_url(mock_stop_area.locality, mock_stop_area))
     end
-    
-    it 'should redirect to a ferry terminal url if the stop area is a ferry terminal' do 
+
+    it 'should redirect to a ferry terminal url if the stop area is a ferry terminal' do
       mock_stop_area = mock_model(StopArea, :area_type => 'GFTD', :locality => 'london')
       StopArea.stub!(:full_find).and_return(mock_stop_area)
       make_request
       response.should redirect_to(ferry_terminal_url(mock_stop_area.locality, mock_stop_area))
     end
-    
+
   end
-  
-  describe 'GET #show_route' do 
-    
+
+  describe 'GET #show_route' do
+
     fixtures default_fixtures
-    
-    before do 
+
+    before do
       @route = routes(:victoria_to_haywards_heath)
     end
-    
+
     def make_request(params)
       get :show_route, params
     end
-    
-    it 'should not find a route by its id' do 
+
+    it 'should not find a route by its id' do
       make_request({:id => @route.id, :scope => 'great-britain'})
       response.status.should == '404 Not Found'
     end
-    
+
   end
-  
+
+  describe 'GET #add_comment_to_route' do
+
+    before do
+      @mock_route = mock_model(Route)
+      Route.stub!(:find).and_return(@mock_route)
+    end
+
+    def make_request
+      get :add_comment_to_route, {:id => 44, :scope => 66 }
+    end
+
+    it 'should look for the route' do
+      Route.should_receive(:find).with("44", :scope => "66")
+      make_request
+    end
+
+    it 'should render the template "add_comment"' do
+      make_request
+      response.should render_template('shared/add_comment')
+    end
+
+  end
+
+  describe 'GET #add_comment_to_stop' do
+
+    before do
+      @mock_stop = mock_model(Stop)
+      Stop.stub!(:find).and_return(@mock_stop)
+    end
+
+    def make_request
+      get :add_comment_to_stop, {:id => 44, :scope => 66 }
+    end
+
+    it 'should look for the stop' do
+      Stop.should_receive(:find).with("44", :scope => "66")
+      make_request
+    end
+
+    it 'should render the template "add_comment"' do
+      make_request
+      response.should render_template('shared/add_comment')
+    end
+
+  end
+
+  describe 'GET #add_comment_to_stop_area' do
+
+    before do
+      @mock_stop_area = mock_model(StopArea)
+      StopArea.stub!(:find).and_return(@mock_stop_area)
+    end
+
+    def make_request
+      get :add_comment_to_stop_area, {:id => 44, :scope => 66 }
+    end
+
+    it 'should look for the stop' do
+      StopArea.should_receive(:find).with("44", :scope => "66")
+      make_request
+    end
+
+    it 'should render the template "add_comment"' do
+      make_request
+      response.should render_template('shared/add_comment')
+    end
+
+  end
+
+  describe 'GET #add_comment_to_sub_route' do
+
+    before do
+      @mock_sub_route = mock_model(SubRoute)
+      SubRoute.stub!(:find).and_return(@mock_sub_route)
+    end
+
+    def make_request
+      get :add_comment_to_sub_route, { :id => 44 }
+    end
+
+    it 'should look for the sub route' do
+      SubRoute.should_receive(:find).with("44")
+      make_request
+    end
+
+    it 'should render the template "add_comment"' do
+      make_request
+      response.should render_template('shared/add_comment')
+    end
+
+  end
+
+  def make_mock_comment(type, instance)
+    comment = mock_model(Comment, :save => true,
+                                  :valid? => true,
+                                  :user= => true,
+                                  :commented_id => 22,
+                                  :commented_type => type,
+                                  :commented => instance,
+                                  :text => 'comment text',
+                                  :confirm! => true,
+                                  :mark_fixed => nil,
+                                  :mark_open => nil,
+                                  :skip_name_validation= => true,
+                                  :status= => true)
+    instance.stub!(:comments).and_return(mock('comments', :build => comment))
+    comment
+  end
+
+  describe 'POST #add_comment_to_route' do
+
+    before do
+      @mock_user = mock_model(User)
+      @mock_region = mock_model(Region)
+      @mock_route = mock_model(Route, :region => @mock_region)
+      Route.stub!(:find).and_return(@mock_route)
+      @mock_comment = make_mock_comment('Route', @mock_route)
+      @expected_notice = "Please sign in or create an account to add your comment to this route"
+      @expected_redirect = route_url(@mock_region, @mock_route)
+    end
+
+    def make_request params
+      post :add_comment_to_route, params
+    end
+
+    def default_params
+      { :id => 22,
+        :scope => 43,
+        :comment => { :commentable_id => 55,
+                      :commentable_type => 'Route'} }
+    end
+
+    it_should_behave_like "an action that receives a POSTed comment"
+
+  end
+
+
+  describe 'POST #add_comment_to_stop' do
+
+    before do
+      @mock_user = mock_model(User)
+      @mock_locality = mock_model(Locality)
+      @mock_stop = mock_model(Stop, :locality => @mock_locality)
+      Stop.stub!(:find).and_return(@mock_stop)
+      @mock_comment = make_mock_comment('Stop', @mock_stop)
+      @expected_notice = "Please sign in or create an account to add your comment to this stop"
+      @expected_redirect = stop_url(@mock_locality, @mock_stop)
+    end
+
+    def make_request params
+      post :add_comment_to_stop, params
+    end
+
+    def default_params
+      { :id => 22,
+        :scope => 43,
+        :comment => { :commentable_id => 55,
+                      :commentable_type => 'Stop'} }
+    end
+
+    it_should_behave_like "an action that receives a POSTed comment"
+
+  end
+
+  describe 'POST #add_comment_to_stop_area' do
+
+    before do
+      @mock_user = mock_model(User)
+      @mock_locality = mock_model(Locality)
+      @mock_stop_area = mock_model(StopArea, :locality => @mock_locality, :area_type => 'GRLS')
+      StopArea.stub!(:find).and_return(@mock_stop_area)
+      @mock_comment = make_mock_comment('StopArea', @mock_stop_area)
+      @expected_notice = "Please sign in or create an account to add your comment to this station"
+      @expected_redirect = station_url(@mock_locality, @mock_stop_area)
+    end
+
+    def make_request params
+      post :add_comment_to_stop_area, params
+    end
+
+    def default_params
+      { :id => 22,
+        :scope => 43,
+        :comment => { :commentable_id => 55,
+                      :commentable_type => 'StopArea'} }
+    end
+
+    it_should_behave_like "an action that receives a POSTed comment"
+
+  end
+
+  describe 'POST #add_comment_to_sub_route' do
+
+    before do
+      @mock_user = mock_model(User)
+      @mock_sub_route = mock_model(SubRoute)
+      SubRoute.stub!(:find).and_return(@mock_sub_route)
+      @mock_comment = make_mock_comment('SubRoute', @mock_sub_route)
+      @expected_notice = "Please sign in or create an account to add your comment to this route"
+      @expected_redirect = sub_route_url(@mock_sub_route)
+    end
+
+    def make_request params
+      post :add_comment_to_sub_route, params
+    end
+
+    def default_params
+      { :id => 22,
+        :comment => { :commentable_id => 55,
+                      :commentable_type => 'SubRoute'} }
+    end
+
+    it_should_behave_like "an action that receives a POSTed comment"
+
+  end
 end

@@ -28,9 +28,9 @@ describe ApplicationHelper do
   
   describe 'when giving an "at_the_location" string' do 
     
-    it 'should describe a bus stop as "at the Williams Avenue bus/tram stop"' do
+    it 'should describe a bus stop as "at the Williams Avenue bus stop"' do
       stop = mock_model(Stop, :name => "Williams Avenue", :transport_mode_names => ['Bus'])
-      helper.at_the_location(stop).should == "at the Williams Avenue bus/tram stop"
+      helper.at_the_location(stop).should == "at the Williams Avenue bus stop"
     end 
     
     it 'should describe a bus route as "on the C10"' do 
@@ -56,7 +56,7 @@ describe ApplicationHelper do
       station = mock_model(StopArea, :area_type => 'GFTD', 
                                      :name => 'Armadale Ferry Terminal',
                                      :transport_mode_names => ['Ferry'])
-      helper.at_the_location(station).should == 'at the Armadale Ferry Terminal'
+      helper.at_the_location(station).should == 'at Armadale Ferry Terminal'
     end
     
     it 'should describe a bus station as "at the Sevenoaks Bus Station"' do 

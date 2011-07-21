@@ -1,13 +1,13 @@
 <div id="login-box" class="login-box" role="dialog">
 	<div id="login-landing" class="pane">
-    <%= render :partial => "shared/login_form", :locals => {:title => nil} %>
+    <%= render :partial => "shared/login_form", :locals => { :title => nil } %>
 	</div>
 
 	<div id="login-create-account" class="pane">
 		<%= render :partial => 'shared/create_account' %>
 	</div>
 
-	<%- if ['campaigns', 'problems'].include?(controller.controller_name) && controller.action_name == 'show' %>
+	<%- if ['campaigns', 'problems', 'locations'].include?(controller.controller_name) && ['show', 'show_route', 'show_stop', 'show_stop_area', 'show_sub_route'].include?(controller.action_name) %>
   	<div id="comment-and-login" class="pane">
   		<%= render :partial => 'shared/comment_form', :locals => { :context => controller.controller_name } %>
   	</div>

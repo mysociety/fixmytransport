@@ -18,26 +18,6 @@ describe Problem do
 
   end
 
-  describe 'when adding a comment' do
-
-    it 'should build a comment with the params passed' do
-      comments = mock('comments association')
-      problem = Problem.new
-      problem.stub!(:comments).and_return(comments)
-      mock_comment = mock_model(Comment, :save => true,
-                                         :status= => nil,
-                                         :confirm! => nil)
-      user = mock_model(User, :name => "A Test Name")
-      expected_params = { :user => user,
-                          :text => 'some text',
-                          :mark_fixed => true,
-                          :mark_open => false }
-      comments.should_receive(:build).with(expected_params).and_return(mock_comment)
-      problem.add_comment(user, "some text", mark_fixed=true, mark_open=false, comment_confirmed=true)
-    end
-
-  end
-
   describe 'when confirming' do
 
     before do

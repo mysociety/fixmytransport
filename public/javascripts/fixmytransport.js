@@ -460,7 +460,7 @@ $(document).ready(function(){
 
           // close the dialog box
           $("#login-box").dialog("close");
-
+          $(".no-comments-text").hide();
           addCampaignItem(response.html);
 
         }

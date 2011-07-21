@@ -6,6 +6,8 @@ en:
       information_wrong: "Is this information wrong?"
       route_header: "Route"
       stops_header: "Stops"
+      say_something_nice: "Say something nice"
+      comment_title: "Had a good experience %{location}? Tell the world"
     show_route_region:
       see_also_national_routes: "(see also %{national})"
       route_region: "Route Region"
@@ -25,9 +27,18 @@ en:
       location_header: "Location"
       routes_header: "Routes"
       stop_marked_inactive: "This stop has been marked as inactive."
+      say_something_nice: "Say something nice"
+      comment_title: "Had a good experience %{location}? Tell the world"
     show_stop_area:
       report_a_problem: "Report a problem here"
       location_header: "Location"
       routes_header: "Routes"
+      say_something_nice: "Say something nice"
+      comment_title: "Had a good experience %{location}? Tell the world"
     show_sub_route:
       information_wrong: "Is this information wrong?"
+      say_something_nice: "Say something nice"
+      comment_title: "Had a good experience %{location}? Tell the world"
+      report_a_problem: "Report a problem here"
+      route_header: "Route"
+      stops_header: "Stops"

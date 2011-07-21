@@ -68,5 +68,21 @@ class Comment < ActiveRecord::Base
     end
   end
 
+  # class methods
+  def self.add(user, model, text, mark_fixed=nil, mark_open=nil, comment_confirmed=false, token=nil)
+    comment = model.comments.build(:text => text,
+                                   :user => user,
+                                   :mark_fixed => mark_fixed,
+                                   :mark_open => mark_open)
+    comment.status = :new
+    comment.save
+    if comment_confirmed
+      comment.confirm!
+    end
+    if token
+      comment.update_attributes(:token => token)
+    end
+    comment
+  end
   
 end

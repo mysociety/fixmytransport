@@ -32,6 +32,7 @@ class Route < ActiveRecord::Base
   has_many :problems, :as => :location, :order => 'created_at desc'
   has_many :route_localities, :dependent => :destroy
   has_many :localities, :through => :route_localities
+  has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   belongs_to :region
   belongs_to :default_journey, :class_name => 'JourneyPattern'
   has_many :route_source_admin_areas, :dependent => :destroy

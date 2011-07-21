@@ -42,25 +42,48 @@ ActionController::Routing::Routes.draw do |map|
                                             :find_other_route => :get }
 
   # stops
+  map.add_comment_stop "/stops/:scope/:id/add_comment", :controller => "locations",
+                                                        :action => 'add_comment_to_stop',
+                                                        :conditions => { :method => [:get, :post] }
+
   map.stop "/stops/:scope/:id.:format", :controller => "locations",
                                 :action => 'show_stop',
                                 :conditions => { :method => :get }
 
   # stop areas
+  map.add_comment_stop_area "/stop-areas/:scope/:id/add_comment", :controller => "locations",
+                                                                  :action => 'add_comment_to_stop_area',
+                                                                  :conditions => { :method => [:get, :post] }
+
   map.stop_area "/stop-areas/:scope/:id.:format", :controller => "locations",
                                                   :action => 'show_stop_area',
                                                   :type => :stop_area,
                                                   :conditions => { :method => :get }
+
+  # bus stations
+  map.add_comment_bus_station "/bus-stations/:scope/:id/add_comment", :controller => "locations",
+                                                                      :action => 'add_comment_to_stop_area',
+                                                                      :conditions => { :method => [:get, :post] }
 
   map.bus_station "/bus-stations/:scope/:id.:format", :controller => "locations",
                                                       :action => 'show_stop_area',
                                                       :type => :bus_station,
                                                       :conditions => { :method => :get }
 
+  # stations
+  map.add_comment_station "/stations/:scope/:id/add_comment", :controller => "locations",
+                                                              :action => 'add_comment_to_stop_area',
+                                                              :conditions => { :method => [:get, :post] }
+
   map.station "/stations/:scope/:id.:format", :controller => "locations",
                                               :action => 'show_stop_area',
                                               :type => :station,
                                               :conditions => { :method => :get }
+
+  # ferry terminals
+  map.add_comment_ferry_terminal  "/ferry-terminals/:scope/:id/add_comment", :controller => "locations",
+                                                                             :action => 'add_comment_to_stop_area',
+                                                                             :conditions => { :method => [:get, :post] }
 
   map.ferry_terminal "/ferry-terminals/:scope/:id.:format", :controller => "locations",
                                                             :action => 'show_stop_area',
@@ -68,10 +91,12 @@ ActionController::Routing::Routes.draw do |map|
                                                             :conditions => { :method => :get }
 
   # routes and sub routes
-
-
   map.routes "/routes/", :controller => 'locations',
                          :action => "show_route_regions"
+
+  map.add_comment_sub_route "/sub-routes/:id/add_comment", :controller => "locations",
+                                                           :action => 'add_comment_to_sub_route',
+                                                           :conditions => { :method => [:get, :post] }
 
   map.sub_route "/sub-routes/:id.:format", :controller => "locations",
                                            :action => 'show_sub_route',
@@ -81,9 +106,14 @@ ActionController::Routing::Routes.draw do |map|
                                           :action => 'show_route_region',
                                           :conditions => { :method => :get }
 
+  map.add_comment_route "/routes/:scope/:id/add_comment", :controller => "locations",
+                                                          :action => 'add_comment_to_route',
+                                                          :conditions => { :method => [:get, :post] }
+
   map.route "/routes/:scope/:id.:format", :controller => "locations",
                                           :action => 'show_route',
                                           :conditions => { :method => :get }
+
 
 
   # other locations for maps

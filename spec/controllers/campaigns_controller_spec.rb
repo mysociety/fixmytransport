@@ -368,7 +368,7 @@ describe CampaignsController do
                                           :campaign_events => [],
                                           :status= => true)
       @mock_campaign.stub!(:comments).and_return(mock('comments', :build => @mock_comment))
-      @expected_notice = "Please sign in or create an account to add your comment to this campaign"
+      @expected_notice = "Please sign in or create an account to add your comment to this issue"
       @expected_redirect = campaign_url(@mock_campaign)
     end
 

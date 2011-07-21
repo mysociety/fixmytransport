@@ -64,6 +64,9 @@ en:
     location_content:
       no_issues: "No reported issues."
       related_issues: "Related Issues"
+      praise: "Praise"
+      user_says: "%{name} added some praise"
+      no_praise: None yet.
     login:
       a_fixmytransport_boffin: "a FixMyTransport boffin"
       must_be_logged_out: "You must be logged out to access this page"

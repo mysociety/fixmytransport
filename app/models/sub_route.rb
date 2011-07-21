@@ -6,6 +6,7 @@ class SubRoute < ActiveRecord::Base
   belongs_to :transport_mode
   has_many :campaigns, :as => :location, :order => 'created_at desc'
   has_many :problems, :as => :location, :order => 'created_at desc'
+  has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   has_friendly_id :name, :use_slug => true  
   attr_accessor :show_as_point
   is_route_or_sub_route

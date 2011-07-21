@@ -201,7 +201,8 @@ class ApplicationController < ActionController::Base
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
         commented = commented_type.titleize.constantize.find(id)
-        comment = commented.add_comment(user,
+        comment = Comment.add(user, 
+                              commented,
                               post_login_action_data[:text],
                               post_login_action_data[:mark_fixed],
                               post_login_action_data[:mark_open],
@@ -270,11 +271,12 @@ class ApplicationController < ActionController::Base
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
         commented = commented_type.titleize.constantize.find(id)
-        commented.add_comment(current_user,
-                             post_login_action_data[:text],
-                             post_login_action_data[:mark_fixed],
-                             post_login_action_data[:mark_open],
-                             confirmed=true)
+        Comment.add(current_user,
+                    commented,
+                    post_login_action_data[:text],
+                    post_login_action_data[:mark_fixed],
+                    post_login_action_data[:mark_open],
+                    confirmed=true)
         flash[:notice] = t('shared.add_comment.thanks_for_comment')
       when :create_problem
         problem = Problem.create_from_hash(post_login_action_data, current_user)
@@ -392,7 +394,8 @@ class ApplicationController < ActionController::Base
                        :mark_fixed => @comment.mark_fixed,
                        :mark_open => @comment.mark_open,
                        :redirect => @template.commented_url(@comment.commented),
-                       :notice => t('shared.add_comment.sign_in_to_comment', :commented_type => commented_type) }
+                       :notice => t('shared.add_comment.sign_in_to_comment', 
+                                    :commented_type => commented_type_description(@comment.commented)) }
       session[:next_action] = data_to_string(comment_data)
       respond_to do |format|
         format.html do
@@ -422,6 +425,33 @@ class ApplicationController < ActionController::Base
         add_json_errors(@comment, @json)
         render :json => @json
       end
+    end
+  end
+  
+  def commented_type_description(commented)
+    case commented
+    when Stop
+     return 'stop'
+    when StopArea
+     if StopAreaType.station_types.include?(commented.area_type)
+       return 'station'
+     elsif StopAreaType.bus_station_types.include?(commented.area_type)
+       return 'bus station'
+     elsif StopAreaType.ferry_terminal_types.include?(commented.area_type)
+       return 'ferry terminal'
+     else
+       return 'stop area'
+     end
+    when Route
+     return 'route'
+    when SubRoute
+     return 'route'
+    when Campaign
+     return 'issue'
+    when Problem
+     return 'problem report'
+    else
+     raise "Unknown commented type: #{commented.class}"
     end
   end
   

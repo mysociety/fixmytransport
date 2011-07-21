@@ -33,12 +33,12 @@ module ApplicationHelper
     tags << "<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=#{google_maps_key}\" type=\"text/javascript\"></script>"
     tags.join("\n")
   end
-  
+
   # if the request has params that will determine map display (usually means javascript is not enabled)
   # then regenerate the content and don't cache. Otherwise, save new content to cache, and allow existing
   # cache to be used.
   def cache_unless_map_params(cache_options)
-    if params[:lat] or params[:lon] or params[:zoom] 
+    if params[:lat] or params[:lon] or params[:zoom]
       yield
     else
       cache(cache_options) do
@@ -154,7 +154,7 @@ module ApplicationHelper
   def on_or_at_the(location)
     if location.is_a? Route or location.is_a? SubRoute
       return t('shared.problem.on_the')
-    elsif location.is_a?(StopArea) && ['GRLS', 'GTMU'].include?(location.area_type)
+    elsif location.is_a?(StopArea) && ['GRLS', 'GTMU', 'GFTD'].include?(location.area_type)
       return t('shared.problem.at')
     else
       return t('shared.problem.at_the')
@@ -162,9 +162,12 @@ module ApplicationHelper
   end
 
   def at_the_location(location)
-    location_string = "#{on_or_at_the(location)} #{location.name}"
+    location_string = location.name
+    location_string.gsub!(/^Train route/, 'train route')
+    location_string.gsub!(/^Bus route/, 'bus route')
+    location_string = "#{on_or_at_the(location)} #{location_string}"
     if location.is_a?(Stop) && location.transport_mode_names.include?('Bus')
-      location_string += " bus/tram stop"
+      location_string += " bus stop"
     end
     location_string
   end
@@ -194,7 +197,7 @@ module ApplicationHelper
     end
     location.class.to_s.tableize.singularize.humanize.downcase
   end
-  
+
   def name_in_sentence(location)
     if location.is_a?(TrainRoute) || location.is_a?(SubRoute)
       return location.name[0, 1].downcase + location.name[1..-1]
@@ -202,7 +205,7 @@ module ApplicationHelper
       return location.name
     end
   end
-    
+
   def org_names(problem, method, connector, wrapper_start='<strong>', wrapper_end='</strong>')
     return '' unless problem
     names = problem.send(method).map{ |org| "#{wrapper_start}#{org.name}#{wrapper_end}" }
@@ -265,32 +268,62 @@ module ApplicationHelper
   end
 
   def admin_location_url(location)
-    if location.is_a? Stop
+    if location.is_a?(Stop)
       return admin_url(stop_path(location.id))
-    elsif location.is_a? StopArea
+    elsif location.is_a?(StopArea)
       return admin_url(stop_area_path(location.id))
-    elsif location.is_a? Route
+    elsif location.is_a?(Route)
       return admin_url(route_path(location.id))
     end
   end
 
   def add_comment_url(commentable)
-    if commentable.is_a?(Campaign)
+    case commentable
+    when Campaign
       return add_comment_campaign_url(commentable)
-    elsif commentable.is_a?(Problem)
+    when Problem
       return add_comment_problem_url(commentable)
+    when Route
+      return add_comment_route_url(commentable.region, commentable)
+    when Stop
+      return add_comment_stop_url(commentable.locality, commentable)
+    when StopArea
+      if StopAreaType.station_types.include?(commentable.area_type)
+         return add_comment_station_url(commentable.locality, commentable)
+       elsif StopAreaType.bus_station_types.include?(commentable.area_type)
+         return add_comment_bus_station_url(commentable.locality, commentable)
+       elsif StopAreaType.ferry_terminal_types.include?(commentable.area_type)
+         return add_comment_ferry_terminal_url(commentable.locality, commentable)
+       else
+         return add_comment_stop_area_url(commentable.locality, commentable)
+       end
+    when SubRoute
+      return add_comment_sub_route_url(commentable)
     else
-      raise "Unhandled commentable type in add_comment_url: #{commentable.type}"
+      raise "Unhandled commentable type in add_comment_url: #{commentable.class}"
     end
   end
 
   def commented_url(commentable)
-    if commentable.is_a?(Campaign)
+    case commentable
+    when Campaign
       return campaign_url(commentable)
-    elsif commentable.is_a?(Problem)
+    when Problem
       return problem_url(commentable)
+    when Route, Stop, StopArea, SubRoute
+      return location_url(commentable)
     else
       raise "Unhandled commentable type in commentable_url: #{commentable.type}"
+    end
+  end
+
+  def comment_header(comment)
+    if comment.commented.is_a?(Campaign)
+      return t('campaigns.show.user_says', :name => h(comment.user.name))
+    elsif comment.commented.is_a?(Problem)
+      return t('problems.show.user_says', :name => h(comment.user.name))
+    else
+      return t('shared.location_content.user_says', :name => h(comment.user.name))
     end
   end
 
@@ -350,7 +383,7 @@ module ApplicationHelper
       campaign.status.to_s
     end
   end
-  
+
   def campaign_list_image_url(campaign)
     if ! campaign.campaign_photos.empty?
       campaign.campaign_photos.first.image.url(:list)
@@ -477,7 +510,7 @@ module ApplicationHelper
     end
 
   end
-  
+
   # Operator links for the campaign and problem pages - if the problem was reported to an operator, just
   # display that. If not, but the location has operators (and there aren't too many to display nicely),
   # show those
@@ -485,7 +518,7 @@ module ApplicationHelper
     location = problem.location
     if problem.operator
       return t('shared.operator_links.operated_by', :operators => operator_links([problem.operator]))
-    elsif location.respond_to?(:operators) && !location.operators.empty? && location.operators.size <= 2 
+    elsif location.respond_to?(:operators) && !location.operators.empty? && location.operators.size <= 2
 	    return t('shared.operator_links.operated_by', :operators => operator_links(location.operators))
 	  else
 	    return nil

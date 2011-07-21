@@ -41,6 +41,7 @@ class StopArea < ActiveRecord::Base
   has_many :route_segments_as_to_stop_area, :foreign_key => 'to_stop_area_id', :class_name => 'RouteSegment'
   has_many :routes_as_from_stop_area, :through => :route_segments_as_from_stop_area, :source => 'route'
   has_many :routes_as_to_stop_area, :through => :route_segments_as_to_stop_area, :source => 'route'
+  has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   has_paper_trail
   before_save :cache_description
   # load common stop/stop area functions from stops_and_stop_areas
@@ -67,7 +68,7 @@ class StopArea < ActiveRecord::Base
   end
 
   def full_name
-    if area_type == 'GRLS' or area_type == 'GTMU'
+    if StopAreaType.atomic_types.include?(area_type)
       name
     else
       "#{name} stop area"

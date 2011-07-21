@@ -124,21 +124,7 @@ class Campaign < ActiveRecord::Base
   def supporter_call_to_action
     I18n.translate('campaigns.show.supporter_call_to_action', :org => self.responsible_org_descriptor, :title => self.title)
   end
-
-  def add_comment(user, text, mark_fixed=nil, mark_open=nil, comment_confirmed=false, token=nil)
-    comment = comments.build(:text => text,
-                             :user => user)
-    comment.status = :new
-    comment.save
-    if comment_confirmed
-      comment.confirm!
-    end
-    if token
-      comment.update_attributes(:token => token)
-    end
-    comment
-  end
-
+  
   def remove_supporter(user)
     if supporters.include?(user)
       supporters.delete(user)
