@@ -83,6 +83,8 @@ class ProblemMailer < ApplicationMailer
     # on a staging site, don't send live emails
     if MySociety::Config.getbool('STAGING_SITE', true)
       return MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+    elsif problem.location.is_a?(Route) && problem.location.number == 'ZZ9'
+      return MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
     else
       return self.recipient_model(recipient, problem).email
     end
