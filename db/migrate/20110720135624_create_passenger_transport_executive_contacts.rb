@@ -10,7 +10,7 @@ class CreatePassengerTransportExecutiveContacts < ActiveRecord::Migration
       t.string :notes
       t.timestamps
     end
-    add_index :passenger_transport_executive_contacts, :passenger_transport_executive_id
+    add_index :passenger_transport_executive_contacts, :passenger_transport_executive_id, :name => 'pte_contacts_index_on_pte_id'
   end
 
   def self.down
