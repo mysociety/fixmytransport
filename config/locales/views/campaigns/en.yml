@@ -112,4 +112,4 @@ en:
       supporter_facebook_message: I'm helping to persuade %{org} to %{title} ...will you join me?
       initiator_facebook_description: Please help by spreading the word and encouraging your friends to support this.
       issue: Issue
-      
+      operated_by: "operated by %{operators}"

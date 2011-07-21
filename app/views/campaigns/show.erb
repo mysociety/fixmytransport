@@ -11,11 +11,11 @@
 		id: <%= @campaign.id %>,
 		url: document.location.protocol + '//' + document.location.host + "<%= campaign_path(@campaign) %>",
 		description: "<%= escape_javascript(@campaign.description) %>",
-	  facebook_description: "<%= escape_javascript(facebook_description(@campaign, current_user)) %>", 
+	  facebook_description: "<%= escape_javascript(facebook_description(@campaign, current_user)) %>",
 	  facebook_message: "<%= escape_javascript(facebook_message(@campaign, current_user)) %>",
 	  initiator: <%= (current_user && current_user == @campaign.initiator) ? 'true' : 'false' %>
 	};
-	
+
 	$(function(){
 		$("ul#campaign-thread li a.thread-item span.title").ellipsis();
 	});
@@ -48,9 +48,9 @@
   <div class="container-wide">
     <div class="supporter-notice">
 	      <h1><%= t('campaigns.show.campaign_supporter_first_time_header', :user => @campaign.initiator.first_name)%></h1>
-	      
+
 	  </div>
-	<div class="supporter-notice-arrow"></div>	
+	<div class="supporter-notice-arrow"></div>
 </div>
   <%- end %>
 <%- else %>
@@ -88,9 +88,9 @@
 				<%- if !current_user || !(current_user.supporter_or_initiator(@campaign)) %>
 				<h4><a href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a></h4>
 				<%- end %>
-          
-			
-				  <%- if params[:full_description] %> 
+
+
+				  <%- if params[:full_description] %>
 				    <%= raw simple_format(sanitize(@campaign.description)) %>
 				  <%- else %>
 				    <div id="truncated-description">
@@ -210,7 +210,12 @@
 		<%- if @campaign.location %>
 		<div id="map-container">
 			<div id="small-map">
-			  <h5><%= @campaign.location.description %></h5>
+			  <h5>
+			    <%= @campaign.location.description %>
+			    <%- if @campaign.location.respond_to?(:operators) && !@campaign.location.operators.empty?  %>
+  			    <%= raw t('campaigns.show.operated_by', :operators => operator_links(@campaign.location.operators)) %>
+          <%- end %>
+			  </h5>
 			  <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => CAMPAIGN_PAGE_MAP_HEIGHT, :width => CAMPAIGN_PAGE_MAP_WIDTH, :static => true } %>
 			</div>
 			<a class="button grey right" href="<%= location_url(@campaign.location) %>">Larger Map</a>
@@ -239,6 +244,6 @@
 
 		<%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
 		<%- end %>
-		
+
 	</div>
 </div>
