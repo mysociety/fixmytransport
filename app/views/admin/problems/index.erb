@@ -40,8 +40,8 @@
           <%- end %>
       </td>
       <td><%= problem.status %></td>
-      <td><%= problem.created_at.to_s(:short) %></td>
-      <td><%= problem.updated_at.to_s(:short) %></td>
+      <td><%= problem.created_at.localtime.to_s(:short) %></td>
+      <td><%= problem.updated_at.localtime.to_s(:short) %></td>
     </tr>
   <%- end %>
 </table>

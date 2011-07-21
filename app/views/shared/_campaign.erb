@@ -5,7 +5,7 @@
 	<p><%= t('shared.campaign.by')%> <a href="<%= profile_url(campaign.initiator) %>"><%= campaign.initiator.name %></a></p>
 	<dl>
 		<dt><%= t('shared.campaign.started')%></dt>
-		<dd><%= campaign.created_at.to_s(:short) %></dd>
+		<dd><%= campaign.created_at.localtime.to_s(:short) %></dd>
 		<dt><%= t('shared.campaign.followers') %></dt>
 		<dd><%= campaign.supporters.count %></dd>
 		<span class="status-item">

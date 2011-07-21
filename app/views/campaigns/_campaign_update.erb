@@ -4,7 +4,14 @@
 <%- else %>
   <%- text = 'campaigns.show.added_an_update' %>
 <%- end %>
-<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= raw t(text, :name => h(update.user.name)) %></span><span class="close">close</span><span class="date"><%= update.created_at.to_s(:standard_with_date) %></span></a>
+<a href="#" class="thread-item">
+  <span class="num"><%= index %></span>
+  <span class="title"><%= raw t(text, :name => h(update.user.name)) %></span>
+  <span class="close">close</span>
+  <span class="date">
+    <%= update.created_at.localtime.to_s(:standard_with_date) %>
+  </span>
+</a>
 
 <div class="thread-details">
 	<div class="thread-copy"><%= raw sanitize("#{update.text}") %></div>

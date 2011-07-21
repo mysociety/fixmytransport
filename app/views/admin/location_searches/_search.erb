@@ -5,5 +5,5 @@
 <%- end %>
 <div class='<%= div_class %>'>
   <%= search.description %>
-  <%= search.created_at.to_s(:short) %>
+  <%= search.created_at.localtime.to_s(:short) %>
 </div>

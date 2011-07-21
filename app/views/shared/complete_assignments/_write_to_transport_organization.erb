@@ -1,4 +1,12 @@
-<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= t('campaigns.show.wrote_to_orgs', :orgs => assignment.data[:organizations].map{ |organization| organization[:name] }.to_sentence, :name => assignment.user.name) %></span><span class="close">close</span><span class="date"><%= event.created_at.to_s(:standard_with_date) %></span></a>
+<a href="#" class="thread-item">
+  <span class="num"><%= index %>
+  </span>
+  <span class="title"><%= t('campaigns.show.wrote_to_orgs', :orgs => assignment.data[:organizations].map{ |organization| organization[:name] }.to_sentence, :name => assignment.user.name) %>
+  </span>
+  <span class="close">close</span>
+  <span class="date"><%= event.created_at.localtime.to_s(:standard_with_date) %>
+  </span>
+</a>
 <div class="thread-details">
 	<div class="thread-copy">
 		<p><%= t('campaigns.show.here_is_the_letter', :name => assignment.user_name) %></p>

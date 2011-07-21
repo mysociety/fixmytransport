@@ -3,7 +3,7 @@
 <p><%= t('shared.problem.by')%> <a href="<%= profile_url(problem.reporter) %>"><%= problem.reporter.name %></a></p>
 <dl>
 	<dt><%= t('shared.problem.added') %></dt>
-	<dd><%= problem.confirmed_at.to_s(:short) %></dd>
+	<dd><%= problem.confirmed_at.localtime.to_s(:short) %></dd>
 	<span class="status-item">
 		<dt>Status:</dt>
 		<dd class="status stat-<%= problem_display_status(problem) %>"><%= problem_display_status(problem).titleize %></dd>

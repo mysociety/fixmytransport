@@ -39,8 +39,8 @@
           <%- end %>
       </td>
       <td><%= campaign.status %></td>
-      <td><%= campaign.created_at.to_s(:short) %></td>
-      <td><%= campaign.updated_at.to_s(:short) %></td>
+      <td><%= campaign.created_at.localtime.to_s(:short) %></td>
+      <td><%= campaign.updated_at.localtime.to_s(:short) %></td>
     </tr>
   <%- end %>
 </table>
