@@ -212,11 +212,7 @@
 			<div id="small-map">
 			  <h5>
 			    <%= @campaign.location.description %>
-			    <%- if @campaign.problem.operator %>
-			    <%= raw t('campaigns.show.operated_by', :operators => operator_links([@campaign.problem.operator])) %>
-			    <%- elsif @campaign.location.respond_to?(:operators) && !@campaign.location.operators.empty? && @campaign.location.operators.size <= 2 %>
-  			    <%= raw t('campaigns.show.operated_by', :operators => operator_links(@campaign.location.operators)) %>
-          <%- end %>
+			    <%= raw problem_operator_links(@campaign.problem) %>
 			  </h5>
 			  <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => CAMPAIGN_PAGE_MAP_HEIGHT, :width => CAMPAIGN_PAGE_MAP_WIDTH, :static => true } %>
 			</div>

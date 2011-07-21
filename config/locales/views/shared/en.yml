@@ -101,3 +101,5 @@ en:
     wrong_user:
       wrong_user: "To %{requested_action}, you'll need to %{logout_link}, and sign in as %{name}."
       logout_link: "sign out"
+    operator_links:
+      operated_by: "operated by %{operators}"

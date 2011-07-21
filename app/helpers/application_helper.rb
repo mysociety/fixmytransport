@@ -477,5 +477,19 @@ module ApplicationHelper
     end
 
   end
+  
+  # Operator links for the campaign and problem pages - if the problem was reported to an operator, just
+  # display that. If not, but the location has operators (and there aren't too many to display nicely),
+  # show those
+  def problem_operator_links(problem)
+    location = problem.location
+    if problem.operator
+      return t('campaigns.show.operated_by', :operators => operator_links([problem.operator]))
+    elsif location.respond_to?(:operators) && !location.operators.empty? && location.operators.size <= 2 
+	    return t('campaigns.show.operated_by', :operators => operator_links(location.operators))
+	  else
+	    return nil
+    end
+  end
 
 end

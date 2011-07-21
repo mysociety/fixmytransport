@@ -19,7 +19,8 @@
 </div>
 <div id="greybanner">
 	<div class="container">
-		<a href="<%= location_url(@problem.location) %>"><%= @problem.location.description %></a>
+		<a href="<%= location_url(@problem.location) %>"><%= @problem.location.description %></a> 
+		<%= raw problem_operator_links(@problem) %>
 	</div>
 </div>
 <div id="main-content" class="container">
