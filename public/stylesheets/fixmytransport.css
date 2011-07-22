@@ -1898,3 +1898,8 @@ body.facebook-canvas .button {
 .new_assignment div.fieldset{
   margin: 1.5em 0;
 }
+
+/*===[Stop, Station, Route Pages]===*/
+.location-content-header{
+  margin-top: 1em;
+}

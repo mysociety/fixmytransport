@@ -1,4 +1,4 @@
-<h3><%= t('shared.location_content.related_issues')%></h3>
+<h3 class="location-content-header"><%= t('shared.location_content.related_issues')%></h3>
 <%- if !location.related_issues.empty? %>
 <ul class="issues-list">
 	<%- location.related_issues.each do |issue| %>
@@ -9,7 +9,7 @@
 <%= t('shared.location_content.no_issues')%>
 <%- end %>
 
-<h3><%= t('shared.location_content.praise') %></h3>
+<h3 class="location-content-header"><%= t('shared.location_content.praise') %></h3>
 <%- if location.comments.visible.empty? %>
 <span class="no-comments-text"><%= t('shared.location_content.no_praise')%></span>
 <%- end %>
