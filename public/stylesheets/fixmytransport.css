@@ -311,7 +311,8 @@ form#search {
 /* ===[ Supporter Notice ]=== */
 
 div.supporter-notice-arrow{
-	background: url(../images/share-arrow.png);
+	background-image: url(../images/share-arrow.png);
+	background-repeat: no-repeat;
 	box-shadow:none;
 	-moz-box-shadow:none;
 	-webkit-box-shadow:none;
@@ -766,7 +767,10 @@ ul.user-list {
 	display:block;
 	width:116px;
 	height:38px;
-	background:transparent url('../images/ribbon.png') 0 0 no-repeat;
+	background-color: transparent;
+	background-image: url('../images/ribbon.png');
+	background-position: 0 0;
+	background-repeat: no-repeat;
 	color:#fff;
 	font-size:1em;
 	text-transform:uppercase;
@@ -1349,7 +1353,9 @@ ul#campaign-thread {
 		    overflow: hidden;
 		    float: right;
 		    text-indent: -999999em;
-		    background: url(../images/up-down.png) 0 -29px no-repeat;
+		    background-image: url(../images/up-down.png);
+		    background-position: 0 -29px;
+		    background-repeat: no-repeat;
 		}
 		ul#campaign-thread li a.thread-item.compact span.close {
 		    background:none;
@@ -1564,7 +1570,10 @@ ul#campaign-thread {
 		}
 			#frontpage-top .rightcol ul#secret-list li {
 				display:block;
-				background:transparent url(../images/icons.png) -122px 7px no-repeat;
+				background-color: transparent;
+				background-image: url(../images/icons.png);
+				background-position: -122px 7px;
+				background-repeat: no-repeat;
 				padding:0 0 10px 50px;
 			}
 			#frontpage-top .rightcol ul#secret-list li.secret-report {
