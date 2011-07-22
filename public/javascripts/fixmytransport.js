@@ -66,7 +66,7 @@ $(document).ready(function(){
 	}
 	
 	//init
-	$('ul#campaign-thread li').removeClass('open');
+	$('ul.closed-campaign-thread li').removeClass('open');
 	
 	//main toggle
 	$('ul#campaign-thread li a.thread-item').click(function(e){

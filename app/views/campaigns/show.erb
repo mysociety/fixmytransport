@@ -152,7 +152,7 @@
 				<a href="#" class="collapse-all"><%= t('campaigns.show.collapse_all') %></a>
 			</div>
 		</div>
-		<ul id="campaign-thread">
+		<ul id="campaign-thread" class="closed-campaign-thread">
 		<%- @event_index = 1 %>
 		<%- @campaign.campaign_events.visible.each do |campaign_event| %>
 		  <%- if !campaign_event.described.respond_to?(:visible?) or campaign_event.described.visible? %>
