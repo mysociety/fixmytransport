@@ -1426,16 +1426,21 @@ ul#campaign-thread {
 	#choose .right {
 	    text-align: center;
 	    width: 340px;
+		display:inline;
 	}
 	#choose .middle {
 		display:inline-block;
 		margin-top:0.5em;
 		font-size:3em;
+		float:left;
+		width:60px;
 	}
 	#choose .left {
+/*		margin-left:50px;*/
 		margin-left:100px;
 	}
 	#choose .right {
+/*		margin-right:50px;*/
 		margin-right:100px;
 	}
 		#choose .left .button,
