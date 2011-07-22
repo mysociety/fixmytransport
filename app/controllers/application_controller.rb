@@ -200,7 +200,7 @@ class ApplicationController < ActionController::Base
         return campaign
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
-        commented = commented_type.titleize.constantize.find(id)
+        commented = commented_type.constantize.find(id)
         comment = Comment.add(user, 
                               commented,
                               post_login_action_data[:text],
@@ -270,7 +270,7 @@ class ApplicationController < ActionController::Base
         campaign.add_supporter(current_user, confirmed=true)
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
-        commented = commented_type.titleize.constantize.find(id)
+        commented = commented_type.constantize.find(id)
         Comment.add(current_user,
                     commented,
                     post_login_action_data[:text],
@@ -386,7 +386,7 @@ class ApplicationController < ActionController::Base
   def handle_comment_no_user
     @comment.skip_name_validation = true
     if @comment.valid?
-      commented_type = @comment.commented_type.downcase
+      commented_type = @comment.commented_type
       comment_data = { :action => :add_comment,
                        :id => @comment.commented_id,
                        :commented_type => commented_type,
