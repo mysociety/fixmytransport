@@ -502,7 +502,7 @@ ul.user-list {
 
 	.ui-dialog-title{
 		color: #FFFFFF;
-		display: inline-block;
+		display: inline;
 		font-size: 1em;
 		font-weight: bolder;
 		margin: 0 10px;
@@ -526,12 +526,12 @@ ul.user-list {
 	#login-form {
 		width: 270px;
 		float: left;
-		display: block;
+		display: inline;
 	}
 	#create-account-form {
-    width: 250px;
+		width: 250px;
 		float: left;
-		display: block;
+		display: inline;
 	}
 	#create-account-form input {
 	  width: 230px;
@@ -619,6 +619,7 @@ ul.user-list {
 			}
 
 	.login-options{
+		display:inline;
 		float: right;
 		width: 200px;	
 		padding: 5px;
