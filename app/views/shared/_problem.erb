@@ -1,11 +1,14 @@
-<h4><a href="<%= problem_url(problem) %>"><%= problem.subject %></a></h4>
-  <p><%= raw link_to(problem.location.description, location_url(problem.location)) %></p>
-<p><%= t('shared.problem.by')%> <a href="<%= profile_url(problem.reporter) %>"><%= problem.reporter.name %></a></p>
-<dl>
-	<dt><%= t('shared.problem.added') %></dt>
-	<dd><%= problem.confirmed_at.localtime.to_s(:short) %></dd>
-	<span class="status-item">
-		<dt>Status:</dt>
-		<dd class="status stat-<%= problem_display_status(problem) %>"><%= problem_display_status(problem).titleize %></dd>
-	</span>
-</dl>
+<a href="<%= problem_url(problem) %>"><img src="/images/transport-icons/default-bus.jpg<%#= problem_list_image_url(problem) %>" alt="<%#= MySociety::Format.ucfirst(problem.title) %>" /></a>
+<div class="wrapper">
+	<h4><a href="<%= problem_url(problem) %>"><%= problem.subject %></a></h4>
+	<p><%= raw link_to(problem.location.description, location_url(problem.location)) %></p>
+	<p><%= t('shared.problem.by')%> <a href="<%= profile_url(problem.reporter) %>"><%= problem.reporter.name %></a></p>
+	<dl>
+		<dt><%= t('shared.problem.added') %></dt>
+		<dd><%= problem.confirmed_at.localtime.to_s(:short) %></dd>
+		<span class="status-item">
+			<dt>Status:</dt>
+			<dd class="status stat-<%= problem_display_status(problem) %>"><%= problem_display_status(problem).titleize %></dd>
+		</span>
+	</dl>
+</div>

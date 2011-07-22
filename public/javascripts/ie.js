@@ -1,4 +1,7 @@
 $(document).ready(function(){
+	$.ifixpng('images/pixel.gif');
+	$(document).ifixpng();
+	
 	/* Tip Box - explicitly declares .tip-nub's so they don't get left visible in ie8
 	   ================================================== */
 	$('.form-1 input, .form-1 textarea').focus(function(){
