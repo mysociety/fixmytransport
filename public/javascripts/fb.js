@@ -66,5 +66,5 @@ function paintFbButton(state) {
         default:
             bgPosY = '0px';
     }
-    $(".facebook").css('background-position', '0px ' + bgPosY); 
+    $("#facebook").css('background-position', '0px ' + bgPosY); 
 }
