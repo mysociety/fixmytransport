@@ -9,6 +9,8 @@ class ProblemsController < ApplicationController
   before_filter :find_visible_problem, :only => [:show, :update, :add_comment]
   before_filter :require_problem_reporter, :only => [:convert]
   skip_before_filter :require_beta_password, :only => [:frontpage]
+  skip_before_filter :make_cachable, :except => [:issues_index, :index, :show]
+  before_filter :long_cache, :except => [:issues_index, :index, :create, :show]
   
   def issues_index
     @title = t('problems.issues_index.title')

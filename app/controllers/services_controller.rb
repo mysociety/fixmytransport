@@ -1,7 +1,8 @@
 class ServicesController < ApplicationController
   
   include ApplicationHelper
-  before_filter :make_cachable, :except => [:request_country]
+  skip_before_filter :make_cachable
+  before_filter :long_cache, :except => [:request_country]
   
   def in_area
     map_height = (params[:height].to_i or MAP_HEIGHT)

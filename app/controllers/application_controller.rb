@@ -32,6 +32,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def long_cache
+    unless current_user
+      expires_in 60.minutes, :public => true
+      response.headers['Vary'] = 'Cookie'
+    end
+  end
+
   def current_user_session(refresh=false)
     return @current_user_session if (defined?(@current_user_session) && ! refresh)
     @current_user_session = UserSession.find
