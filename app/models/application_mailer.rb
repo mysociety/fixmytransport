@@ -19,10 +19,10 @@ class ApplicationMailer < ActionMailer::Base
   end
   
   def comment_confirmation_subject(comment)
-    if comment.commented.is_a?(Campaign)
-      comment_type = I18n.translate('mailers.comment_comment')
-    else
+    if comment.commented.is_a?(Problem)
       comment_type = I18n.translate('mailers.comment_update')
+    else
+      comment_type = I18n.translate('mailers.comment_comment')
     end
     I18n.translate('mailers.comment_confirmation_subject', :comment_type => comment_type)
   end
