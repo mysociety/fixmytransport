@@ -15,7 +15,7 @@
     </p>
 
     <p>
-    So this page is simply to say that <strong>if you're interested in running FixMyTransport within your own country or region, please do send us an email to say so</strong>. We won't demand money or anything - we just want to hear from you, to see if we can work better together.
+    So this page is simply to say that <strong>if you're interested in running FixMyTransport within your own country or region, please do <%= link_to('send us an email to say so', "mailto:#{MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')}") %></strong>. We won't demand money or anything - we just want to hear from you, to see if we can work better together.
     </p>
 
     <p>
