@@ -622,7 +622,7 @@ $(document).ready(function(){
       dataType: 'html',
       success: function(country_code){
         if (country_code != 'GB'){
-          $('#other-country-notice').html("Want to set up a site like this in your country? Get <a href='advice'>our advice</a>");
+          $('#other-country-notice').html("Hola! Bonjour! Howdy! We have an <a href='advice'>important message for visitors from outside the United Kingdom </a>");
           $('#conditional-notice').show();
         }
       }

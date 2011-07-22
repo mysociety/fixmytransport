@@ -1923,3 +1923,8 @@ body.facebook-canvas .button {
 .location-content-header{
   margin-top: 1em;
 }
+
+/*===[Advice]===*/
+.advice h1{
+ font-size: 2em; 
+}
