@@ -1049,6 +1049,7 @@ ul.issues-list{margin: 0px; padding: 0px;}
 			ul.issues-list dl .status-item dd{color:#fff; margin-right: 0px;}
 
 			ul.issues-list .wrapper{width: 470px;}
+			ul.issues-list li.problem .wrapper {width:468px;}
 
 			ul.issues-list li.problem {background: #fff; border: 1px solid #ddd;}
 
