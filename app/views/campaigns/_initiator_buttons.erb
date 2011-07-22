@@ -40,7 +40,7 @@
 				<%- if @campaign.status != :successful %>
 				  <%- form_for @campaign, :url => complete_campaign_url(@campaign), :html => { :method => 'POST', :id => 'campaign-complete' } do |f| %>
 				<li>
-					<button class="button" type="submit" role="menuitem" >
+					<button type="submit" role="menuitem" >
 						<span class="icon tick"></span>
 						<%= t('campaigns.show.mark_as_complete') %>
 					</button>
