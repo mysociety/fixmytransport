@@ -41,8 +41,13 @@ namespace :crawler do
   
   desc 'Spider the site stop pages' 
   task :stops => :environment do 
+    if ENV['START_ID']
+      conditions = ['id > ?', ENV['START_ID']]
+    else
+      conditions = nil
+    end
     connect_to_site do |http|
-      Stop.find_each(:include => 'locality') do |stop|
+      Stop.find_each(:conditions => conditions, :include => 'locality') do |stop|
         path = stop_path(stop.locality, stop)
         make_request(http, path)
       end
