@@ -89,7 +89,7 @@ class Campaign < ActiveRecord::Base
     end
   end
 
-  # Add a user as a supporter of a campaign 
+  # Add a user as a supporter of a campaign
   # if a token is passed, set the token on the CampaignSupporter model.
   # If the user is already a supporter or initiator of the campaign,
   # nil is returned
@@ -124,7 +124,7 @@ class Campaign < ActiveRecord::Base
   def supporter_call_to_action
     I18n.translate('campaigns.show.supporter_call_to_action', :org => self.responsible_org_descriptor, :title => self.title)
   end
-  
+
   def remove_supporter(user)
     if supporters.include?(user)
       supporters.delete(user)
@@ -189,9 +189,10 @@ class Campaign < ActiveRecord::Base
 
   def self.find_by_campaign_email(email)
     local_part, domain = email.split("@")
+    key = local_part.downcase
     prefix = MySociety::Config.get("INCOMING_EMAIL_PREFIX", 'campaign-')
-    key = local_part.gsub(/^#{prefix}/, '')
-    campaign = find(:first, :conditions => ['lower(key) = ?', key.downcase])
+    key = key.gsub(/^#{prefix}/, '')
+    campaign = find(:first, :conditions => ['lower(key) = ?', key])
   end
 
   def self.email_domain
