@@ -2,8 +2,22 @@ require 'spec_helper'
 
 describe CampaignsController do
 
-  describe 'GET #add_details' do 
+  it 'should route /campaigns' do 
+    route_for(:controller => "campaigns", :action => "index").should == "/campaigns"
+    params_from(:get, "/campaigns").should == { :controller => "campaigns", :action => "index" }
+  end
   
+  describe 'GET #index' do 
+  
+    it 'should redirect to the issues index' do
+      get :index 
+      response.should redirect_to("/issues") 
+    end
+    
+  end
+  
+  describe 'GET #add_details' do   
+
     before do 
       @default_params = {:id => 55}
       @mock_user = mock_model(User, :name => 'Test User')

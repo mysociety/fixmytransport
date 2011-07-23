@@ -3,7 +3,9 @@ class CampaignsController < ApplicationController
   before_filter :process_map_params, :only => [:show]
   before_filter :find_editable_campaign, :only => [:add_details]
   before_filter :find_visible_campaign, :except => [:add_details,
-                                                    :confirm_join, :confirm_leave]
+                                                    :confirm_join, 
+                                                    :confirm_leave,
+                                                    :index]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
                                                        :complete, :add_photos, :add_details, :share]
   before_filter :require_campaign_initiator_or_expert, :only => [:edit, :update]
