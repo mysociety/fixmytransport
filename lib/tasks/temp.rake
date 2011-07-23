@@ -60,5 +60,33 @@ namespace :temp do
     end
   end
 
+  desc 'Fix bad stop coordinates'
+  task :fix_bad_stop_coords => :environment do 
+    stop = Stop.find(408917)
+    stop.lat = 53.04782
+    stop.lon = -2.99633
+    stop.easting = 333307
+    stop.northing = 350524
+    stop.locality_id = 22406
+    stop.save!
+    
+    stop = Stop.find(408895)
+    stop.lat = 53.05162
+    stop.lon = -4.283
+    stop.easting = 247075
+    stop.northing = 352920
+    stop.locality_id = 18666
+    stop.save!
+
+    stop = Stop.find(409123)
+    stop.lat = 51.73167
+    stop.lon = -4.72044
+    stop.easting = 212236
+    stop.northing = 207165
+    stop.locality_id = 20177
+    stop.save!
+    
+  end
+
 end
 
