@@ -118,7 +118,7 @@ class Parsers::OperatorContactsParser
           contact = operator.operator_contacts.build(:email => email, :category => category, :deleted => false)
         end
       else
-        matches = operator.operator_contacts.select{ |contact| contact.email == email && contact.category == category }
+        matches = operator.operator_contacts.select{ |contact| contact.email.downcase == email.downcase && contact.category == category }
 
         if matches.empty?
           if dryrun
