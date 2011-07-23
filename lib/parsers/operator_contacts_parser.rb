@@ -67,6 +67,9 @@ class Parsers::OperatorContactsParser
           load_new_operator_fields(dryrun, operator, data)
           load_new_contact_fields(dryrun, operator, data)
         end
+        if block_given?
+          yield operator
+        end
       end
     end
   end
