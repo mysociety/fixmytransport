@@ -88,7 +88,7 @@ class Parsers::OperatorContactsParser
         else
           operator.send("#{operator_field}=", new_value)
         end
-      elsif (!existing_value.blank?) && (!new_value.blank?) && existing_value != new_value
+      elsif (!existing_value.blank?) && (!new_value.blank?) && existing_value.downcase != new_value.downcase
 
         if dryrun
           puts "Conflict #{operator.id} #{operator.name} #{operator_field}: was #{existing_value} now #{new_value}"
