@@ -55,8 +55,8 @@ class Stop < ActiveRecord::Base
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   belongs_to :locality
   validates_presence_of :locality_id, :lon, :lat, :if => :loaded?
-  validates_uniqueness_of :atco_code, :allow_nil => true
-  validates_uniqueness_of :other_code, :allow_nil => true
+  validates_uniqueness_of :atco_code, :allow_blank => true
+  validates_uniqueness_of :other_code, :allow_blank => true
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
   is_location
