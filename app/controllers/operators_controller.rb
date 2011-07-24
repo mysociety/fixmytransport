@@ -1,7 +1,6 @@
 class OperatorsController < ApplicationController
   
   def show
-    
     @operator = Operator.find(params[:id])
     @routes = Route.find(:all, :conditions => ["id in (SELECT route_id
                                                               FROM route_operators

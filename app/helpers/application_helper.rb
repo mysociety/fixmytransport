@@ -385,28 +385,36 @@ module ApplicationHelper
     end
   end
 
-  def campaign_list_image_url(campaign)
-    if ! campaign.campaign_photos.empty?
-      campaign.campaign_photos.first.image.url(:list)
-    elsif campaign.location.is_a? Route
-      if campaign.location.transport_mode_name == 'Train'
-        '/images/transport-icons/default-train.jpg'
-      elsif campaign.location.transport_mode_name == 'Tram/Metro'
-        '/images/transport-icons/default-tram.jpg'
-      elsif campaign.location.transport_mode_name == 'Ferry'
-        '/images/transport-icons/default-ferry.jpg'
+  def issue_list_image_url(issue)
+    icon_path = '/images/transport-icons/'
+    if issue.is_a?(Campaign) && !issue.campaign_photos.empty?
+      issue.campaign_photos.first.image.url(:list)
+    elsif issue.location.is_a? Route
+      transport_mode = issue.location.transport_mode_name
+      case transport_mode
+      when 'Train'
+        return "#{icon_path}default-train.jpg"
+      when 'Tram/Metro'
+        return "#{icon_path}default-tram.jpg"
+      when 'Ferry'
+        return "#{icon_path}default-ferry.jpg"
       else
-        '/images/transport-icons/default-bus.jpg'
+        return "#{icon_path}default-bus.jpg"
       end
     else
-      if campaign.location.respond_to?(:area_type) && campaign.location.area_type == 'GRLS'
-        '/images/transport-icons/default-train.jpg'
-      elsif campaign.location.respond_to?(:area_type) && campaign.location.area_type == 'GTMU'
-        '/images/transport-icons/default-tram.jpg'
-      elsif campaign.location.respond_to?(:area_type) && campaign.location.area_type == 'GFTD'
-        '/images/transport-icons/default-ferry.jpg'
+      if issue.location.respond_to?(:area_type)
+        case issue.location.area_type
+        when 'GRLS'
+          return "#{icon_path}default-train.jpg"
+        when 'GTMU'
+          return "#{icon_path}default-tram.jpg"
+        when 'GFTD'
+          return "#{icon_path}default-ferry.jpg"
+        else 
+          return "#{icon_path}default-bus.jpg" 
+        end
       else
-        '/images/transport-icons/default-bus.jpg'
+        return "#{icon_path}default-bus.jpg"
       end
     end
   end

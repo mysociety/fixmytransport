@@ -1,4 +1,7 @@
-<a href="<%= problem_url(problem) %>"><img src="/images/transport-icons/default-bus.jpg<%#= problem_list_image_url(problem) %>" alt="<%#= MySociety::Format.ucfirst(problem.title) %>" /></a>
+<a href="<%= problem_url(problem) %>">
+  
+  <img src="<%= issue_list_image_url(problem) %>" alt="<%problem.subject %>" />  
+</a>
 <div class="wrapper">
 	<h4><a href="<%= problem_url(problem) %>"><%= problem.subject %></a></h4>
 	<p><%= raw link_to(problem.location.description, location_url(problem.location)) %></p>
