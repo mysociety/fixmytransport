@@ -95,7 +95,7 @@ en:
       twitter: Twitter
       main_site: "Non-mobile optimised site"
     problem:
-      added: "added"
+      added: "Added:"
       by: "by"
       posted_time: "%{time} ago"
       the: "The"
