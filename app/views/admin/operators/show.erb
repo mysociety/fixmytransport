@@ -31,13 +31,13 @@
   </table>
 <%-end %>
 
-<h3><%= t('admin.merge') %></h3>
+<!--  <h3><%= t('admin.merge') %></h3>
 <%- form_tag admin_url(merge_admin_operators_path), :method => :get do  %>
   <%= raw label_tag 'operators[]', t('admin.operator_merge_label') %>
   <%= raw text_field_tag 'operators[]', '' %>
   <%= raw hidden_field_tag 'operators[]', @operator.id %>
   <%= raw submit_tag t('admin.operator_merge_submit')  %>
-<%- end %>
+<%- end %> -->
 <h3><%= t('admin.edit') %></h3>
 <%-form_for :operator, @operator, :url => admin_url(admin_operator_path(@operator)), :html => { :method => :put,  :class => 'operator-form' } do |f| %>
   <%= render :partial => 'form', :locals => { :f => f }   %>

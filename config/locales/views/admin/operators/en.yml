@@ -20,3 +20,5 @@ en:
     operator_form_error: There's a problem with this operator - please see below.
     operator_merge_label: ID of operator to merge with
     operator_merge_submit: Merge with another operator
+    url: URL
+    reference_name: Reference name
