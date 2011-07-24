@@ -1,5 +1,8 @@
 class OperatorsController < ApplicationController
   
+  skip_before_filter :make_cachable
+  before_filter :long_cache
+  
   def show
     @operator = Operator.find(params[:id])
     @routes = Route.find(:all, :conditions => ["id in (SELECT route_id
