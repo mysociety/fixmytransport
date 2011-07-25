@@ -5,7 +5,8 @@
 <%= stylesheet_link_tag 'jquery.lightbox-0.5.css'  %>
 <%- end %>
 <%- content_for :meta do %>
-<meta property="og:title" content="FixMyTransport: <%= @title %>"/>
+<meta property="fb:app_id" content="<%= MySociety::Config.get("FACEBOOK_APP_ID", '') %>"/>
+<meta property="og:title" content="FixMyTransport: <%= MySociety::Format.ucfirst(@title) %>"/>
 <meta property="og:image" content="<%= main_url("/images/facebook-feed-logo.gif") %>"/>
 <meta property="og:url" content="<%= request.url %>"/>
 <meta property="og:type" content="cause"/>

@@ -2,6 +2,7 @@
   <%= raw map_javascript_include_tags %>
 <%- end %>
 <%- content_for :meta do %>
+  <meta property="fb:app_id" content="<%= MySociety::Config.get("FACEBOOK_APP_ID", '') %>"/>
   <meta property="og:title" content="<%= @stop_area.full_name %>" />
   <meta property="og:type" content="landmark" />
   <meta property="og:latitude" content="<%= @stop_area.lat %>" />
