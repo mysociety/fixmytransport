@@ -9,6 +9,7 @@ en:
               invalid: "Please enter a valid email address"
             name:
               blank: "Please enter your name"
+              not_real: "Please enter your full name. See our %{link}."
             password:
               not_confirmed: "Either your email address or password was not recognised. Please try again."
   authlogic:

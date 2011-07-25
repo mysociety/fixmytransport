@@ -139,7 +139,7 @@ describe AccountsController do
                                     :password= => nil,
                                     :password_confirmation= => nil,
                                     :ignore_blank_passwords= => nil,
-                                    :force_password_validation= => nil,
+                                    :force_new_record_validation= => nil,
                                     :registered= => true,
                                     :new_record? => true,
                                     :registered? => false, 

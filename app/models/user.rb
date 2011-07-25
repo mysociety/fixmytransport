@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
   validates_presence_of :email
   validates_presence_of :name
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
+  validate :validate_real_name
   validates_uniqueness_of :email, :case_sensitive => false, :unless => :skip_email_uniqueness_validation
   attr_protected :password, :password_confirmation, :is_expert
   has_many :assignments
@@ -41,7 +42,7 @@ class User < ActiveRecord::Base
                 :skip_email_uniqueness_validation,
                 :profile_photo_url,
                 :error_on_bad_profile_photo_url,
-                :force_password_validation
+                :force_new_record_validation
 
   has_friendly_id :name, :use_slug => true, :allow_nil => true
 
@@ -65,11 +66,19 @@ class User < ActiveRecord::Base
   end
 
   def password_not_required
-    if force_password_validation == true
+    if force_new_record_validation == true
       return false
     end
     unregistered? or !access_tokens.empty?
   end
+
+  def validate_real_name
+    if force_new_record_validation == true || new_record? 
+      if /\ba\s*n+on+((y|o)mo?u?s)?(ly)?\b/i.match(name) || ! /\S\s\S/.match(name) || name.size < 5
+        errors.add(:name, ActiveRecord::Error.new(self, :name, :not_real, :link => "<a href='/about#names'>policy on names</a>").to_s)
+      end
+    end
+   end
 
   # object level attribute overrides the config level
   # attribute

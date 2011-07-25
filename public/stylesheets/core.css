@@ -99,10 +99,10 @@ form.inline p {margin-bottom:0;}
 .top-notice {line-height:1.2;display:block;font-size:12px;padding:3px;margin:0;color:#514721;border: 2px solid #FFD45A;background:#FFFBD7;}
 .success {background:#e6efc2;color:#264409;border-color:#c6d880;}
 .info {background:#d5edf8;color:#205791;border-color:#92cae4;}
-.error a, .alert a {color:#8a1f11;}
+.error a, .alert a {color:#fff; text-decoration:underline;}
 .notice a {color:#514721;}
 .success a {color:#264409;}
-.info a {color:#205791;}
+.info a {color:#205791}
 
 
 hr {background:#ddd;color:#ddd;clear:both;float:none;width:100%;height:1px;margin:0 0 1.45em;border:none;}
