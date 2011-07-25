@@ -53,6 +53,7 @@ en:
       top_of_page: "Top of page"
       built_by: "Built by %{mysociety_link}, which is supported by the %{indigo_link}, the %{esmee_link}, the %{omidyar_link} and many %{donor_link}."
       small_donors: "small donors"
+      dedicated_to: "Dedicated to %{link}."
     header:
       hi: "Hi"
       site_tagline: "Euston, we have a problem."

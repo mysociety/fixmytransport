@@ -385,6 +385,10 @@ div.supporter-notice-arrow{
 	#footer a:hover, #footer a:focus {
 	  color: #000;
 	}
+
+	#footer p {
+	  text-align: center;
+	}
 /* ===[ Gallery ]=== */
 ul.gallery {
     padding: 10px 0 10px 10px;
@@ -422,11 +426,11 @@ ul.user-list {
 	    list-style-type: none;
 	    margin: 0 0 1.5em 0;
 	}
-	
+
 	ul.user-list li p {
 	   white-space:nowrap;
 	}
-	
+
 	ul.user-list li:last-child {
 	    margin-bottom: 0.5em
 	}
@@ -577,7 +581,7 @@ ul.user-list {
 		margin:2em auto;
 		display:block;
 		border: 4px solid #F4F4F4;
-		
+
 		border-radius:5px;
 		-moz-border-radius:5px;
 		-webkit-border-radius:5px;
@@ -620,13 +624,13 @@ ul.user-list {
 				margin-right: 10px;
 			}
 
-			#login-form ul li.login-username label,	
+			#login-form ul li.login-username label,
 			#login-form ul li.login-password label,
 			.fieldset label,
 			.form-field label {
 				width: 100%;
 				display: block;
-			}	
+			}
 
 			#login-form button,
 			.fieldset button,
@@ -644,7 +648,7 @@ ul.user-list {
 	.login-options{
 		display:inline;
 		float: right;
-		width: 200px;	
+		width: 200px;
 		padding: 5px;
 		border-radius:0 0 5px 0;
 		-moz-border-radius:0 0 5px 0;
@@ -655,7 +659,7 @@ ul.user-list {
 		font-style:italic;
 		margin-bottom: 0.5em;
 	}
-	
+
 	.login-options a.button {
 		font-size:0.9em;
 	}
@@ -845,7 +849,7 @@ ul.user-list {
 	color:#0075A0;
 }
 .form-1 input,
-.form-1 textarea, 
+.form-1 textarea,
 .form-1 select{
 	padding: 2px 4px;
 	width: 400px;
@@ -932,14 +936,14 @@ input.checkbox {
 			top:-2em;
 			left:4px;
 		}
-		
+
 			.form-list li.fieldset .error{
 				top: 50px;
 				margin:0;
 				position: absolute;
 			}
 
-/*TIP BOX*/	
+/*TIP BOX*/
 .tipbox {
     display: block;
     width: 350px;
@@ -997,7 +1001,7 @@ form#create-campaign {
 
 
 /*===[Pagination]===*/
-.pagination span, 
+.pagination span,
 .pagination a {
   padding: 0 0.5em;
 }
@@ -1008,7 +1012,7 @@ form#create-campaign {
 	color:#fff;
 	font-size: 10px;
 	text-transform: uppercase;
-	display: block; 
+	display: block;
 	width: 6em;
 	text-align: center ;
 	padding: 4px 3px 4px 3px;
@@ -1016,7 +1020,7 @@ form#create-campaign {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
 	text-shadow:0 1px 1px rgba(100, 100, 100, 0.3);
-    
+
 	}
 
 .stat-current{background:#ff6600;}
@@ -1042,8 +1046,8 @@ ul.issues-list{margin: 0px; padding: 0px;}
 		ul.issues-list dl{
 			width: 460px;
 			font-size: 0.9em;
-			padding: 0px; 
-			margin: 1em 0 0 0; 
+			padding: 0px;
+			margin: 1em 0 0 0;
 			float:left;
 			width: 100%;
 			padding-top: 0.5em;
@@ -1269,7 +1273,7 @@ ul.campaign-meta li span{
 	    height: 18px;
 	    text-indent: -999999em;
 	    background: url(../images/thread-controls.gif) 0 0 no-repeat;
-	
+
 		-webkit-box-shadow: none ;
 		-moz-box-shadow: none ;
 		box-shadow: none ;
@@ -1412,7 +1416,7 @@ ul#campaign-thread {
 				display:inline-block;
 				line-height:1.5;
 			}
-			
+
 			ul#campaign-thread li.open .thread-details .thread-alternative-copy {
 			  display: none;
 			}
@@ -1426,7 +1430,7 @@ ul#campaign-thread {
 					float:right;
 					margin:0 0 0 10px;
 				}
-		
+
 .manager-tools,
 .contrib-tools,
 .expert-tools,
@@ -1511,7 +1515,7 @@ ul#campaign-thread {
 			display:block;
 			width:100%;
 			height:auto;
-			
+
 			list-style-type:none;
 			padding:0;
 			margin:0 0 1em 0;
@@ -1539,7 +1543,7 @@ ul#campaign-thread {
 	#frontpage-top .rightcol {
 		text-align:center;
 	}
-	
+
 		#frontpage-top .rightcol h2 {
 			color:#808080;
 			text-align:left;
@@ -1572,7 +1576,7 @@ ul#campaign-thread {
 			list-style-type:none;
 			margin:0;
 			padding:6px 16px;
-			
+
 			border-radius:6px;
 			-moz-border-radius:6px;
 			-webkit-border-radius:6px;
@@ -1728,7 +1732,7 @@ ul.route-links {
 ul#large-ul,
 ul.route-links {
 	width:700px;
-	
+
 }
 	ol#large-ol li,
 	ul#large-ul li,
@@ -1800,8 +1804,8 @@ ul.route-links {
 		float:right;
 		margin:7px 13px 0 0;
 	}
-	
-	
+
+
 /*===[Find Route Page]===*/
 #route-type-list {
 	list-style-type:none;
@@ -1913,7 +1917,7 @@ body.facebook-canvas .button {
 		display:inline-block;
 		width:100%;
 	}
-	
+
 	/* ===[ Reporting a Problem Page ]=== */
 
   #problem-map {
@@ -1921,11 +1925,11 @@ body.facebook-canvas .button {
   right:0;
   }
 
-  
+
 /*===[Problem Page]===*/
 
 .problem-details {
-  list-style-type: none;  
+  list-style-type: none;
 }
 
 /*===[New Assignment Page]===*/
@@ -1944,5 +1948,5 @@ body.facebook-canvas .button {
 
 /*===[Advice]===*/
 .advice h1{
- font-size: 2em; 
+ font-size: 2em;
 }
