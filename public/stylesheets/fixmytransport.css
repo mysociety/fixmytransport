@@ -1639,6 +1639,11 @@ ul#campaign-thread {
 	#frontpage-banner-left p {
 		color:#fff;
 	}
+	
+	#frontpage-banner-left a {
+		color:#fff;
+		text-decoration: underline;
+	}
 	#frontpage-banner-left .left {
 		width:304px;
 	}
