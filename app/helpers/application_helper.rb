@@ -387,34 +387,41 @@ module ApplicationHelper
 
   def issue_list_image_url(issue)
     icon_path = '/images/transport-icons/'
+    if issue.is_a?(Campaign)
+      image_prefix = 'cam-'
+    else
+      image_prefix = 'rep-'
+    end
     if issue.is_a?(Campaign) && !issue.campaign_photos.empty?
-      issue.campaign_photos.first.image.url(:list)
-    elsif issue.location.is_a? Route
-      transport_mode = issue.location.transport_mode_name
+      return issue.campaign_photos.first.image.url(:list)
+    end
+    image_start = "#{icon_path}#{image_prefix}"
+    if issue.location.is_a?(Route) or issue.location.is_a?(SubRoute)
+      transport_mode = issue.location.transport_mode.name
       case transport_mode
       when 'Train'
-        return "#{icon_path}default-train.jpg"
+        return "#{image_start}train.jpg"
       when 'Tram/Metro'
-        return "#{icon_path}default-tram.jpg"
+        return "#{image_start}tram.jpg"
       when 'Ferry'
-        return "#{icon_path}default-ferry.jpg"
+        return "#{image_start}ferry.jpg"
       else
-        return "#{icon_path}default-bus.jpg"
+        return "#{image_start}bus.jpg"
       end
     else
       if issue.location.respond_to?(:area_type)
         case issue.location.area_type
         when 'GRLS'
-          return "#{icon_path}default-train.jpg"
+          return "#{image_start}train.jpg"
         when 'GTMU'
-          return "#{icon_path}default-tram.jpg"
+          return "#{image_start}tram.jpg"
         when 'GFTD'
-          return "#{icon_path}default-ferry.jpg"
+          return "#{image_start}ferry.jpg"
         else 
-          return "#{icon_path}default-bus.jpg" 
+          return "#{image_start}bus.jpg" 
         end
       else
-        return "#{icon_path}default-bus.jpg"
+        return "#{image_start}bus.jpg"
       end
     end
   end

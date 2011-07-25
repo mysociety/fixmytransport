@@ -25,6 +25,7 @@ en:
       followers: "Followers:"
       started: "Started:"
       status: "Status:"
+      seeking_support: Seeking support
     comment_form:
       post: "Post"
     confirmation_sent:
@@ -102,6 +103,7 @@ en:
       at_the: "at the"
       on_the: "on the"
       at: "at"
+      one_off_report: "one-off report"
     wrong_user:
       wrong_user: "To %{requested_action}, you'll need to %{logout_link}, and sign in as %{name}."
       logout_link: "sign out"

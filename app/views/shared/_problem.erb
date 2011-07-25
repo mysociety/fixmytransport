@@ -1,5 +1,5 @@
 <a href="<%= problem_url(problem) %>">
-  <img src="<%= issue_list_image_url(problem) %>" alt="<%problem.subject %>" />  
+  <img src="<%= issue_list_image_url(problem) %>" alt="<%= problem.subject %> - <%= t('shared.problem.one_off_report') %>" />
 </a>
 <div class="wrapper">
 	<h4><a href="<%= problem_url(problem) %>"><%= problem.subject %></a></h4>
