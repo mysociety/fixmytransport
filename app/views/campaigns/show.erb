@@ -4,7 +4,9 @@
 <%- content_for :stylesheets do %>
 <%= stylesheet_link_tag 'jquery.lightbox-0.5.css'  %>
 <%- end %>
-
+<%- content_for :meta do %>
+<meta property="og:image" content="<%= "http://#{MySociety::Config.get("DOMAIN", 'localhost:3000')}/images/facebook-feed-logo.gif" %>"/>
+<%- end %>
 <script>
 	var campaign_data = {
 		title: "<%= escape_javascript(@campaign.title) %>",
