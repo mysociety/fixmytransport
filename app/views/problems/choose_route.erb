@@ -31,6 +31,6 @@
 	  <%= link_to(t('problems.choose_route.show_all'), url_for(params.merge(:show_all => 1))) %>
 	<%- end %>
   <div class="wrong-info-link">
-    <a href="<%= feedback_url(:url => CGI.escape(request.request_uri)) %>"><%= t('problems.choose_route.information_wrong') %></a>
+    <a href="<%= feedback_url(:url => CGI.escape(request.request_uri)) %>" rel="nofollow"><%= t('problems.choose_route.information_wrong') %></a>
   </div>
 </div>

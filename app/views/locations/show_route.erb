@@ -22,7 +22,7 @@
         <%= render :partial => 'shared/map', :locals => { :locations => [@route], :other_locations => @other_locations, :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH  } %>
       <%- end %>
     </div>
- 		<a href="<%= feedback_url(:url => CGI.escape(request.request_uri), :location_id => @route.id, :location_type => 'Route') %>"><%= t('locations.show_route.information_wrong') %></a>
+ 		<a href="<%= feedback_url({ :url => CGI.escape(request.request_uri), :location_id => @route.id, :location_type => 'Route'}) %>" rel="nofollow"><%= t('locations.show_route.information_wrong') %></a>
 	  <%= render :partial => "shared/location_content",  :locals => { :location => @route } %>
 	</div>
     
