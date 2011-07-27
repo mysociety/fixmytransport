@@ -77,10 +77,6 @@
 
 /*Hacks for IE6 and IE7*/
 
-#medium-map #map, #large-map #map, #problem-map #map {
-  overflow: hidden !important;
-}
-
 .ui-dialog-title,
 #footer {
 	float:left;
