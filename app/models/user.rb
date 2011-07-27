@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
   def validate_real_name
     if force_new_record_validation == true || new_record? 
       if /\ba\s*n+on+((y|o)mo?u?s)?(ly)?\b/i.match(name) || ! /\S\s\S/.match(name) || name.size < 5
-        errors.add(:name, ActiveRecord::Error.new(self, :name, :not_real, :link => "<a href='/about#names'>policy on names</a>").to_s)
+        errors.add(:name, ActiveRecord::Error.new(self, :name, :not_real, :link => "<a href='/about#names'>policy on names</a>").to_s.html_safe)
       end
     end
    end
