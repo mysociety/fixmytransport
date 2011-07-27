@@ -29,6 +29,41 @@
 <%- if (current_user && current_user.supporter_or_initiator(@campaign)) || @campaign.status == :successful %>
   <div id="banner" class="<%= 'supporter' %>">
   	<div class="container">
+  		<div class="right">
+  		  <div class="campaign-options">
+  		  <%- if current_user && current_user == @campaign.initiator %>
+  			  <span class="status"><%= t('campaigns.show.your_campaign')%></span>
+  			<%- elsif current_user &&  current_user.supporter_or_initiator(@campaign) %>
+  			  <span class="status"><%= t('campaigns.show.you_support_this') %></span>
+
+            <%- form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST', :id => 'campaign-leave' } do |f| %>
+    				<button type="submit" class="button" >
+    					<%= t('campaigns.show.leave') %>
+    				</button>
+    			<%- end %>
+    			<%- if current_user.subscribed_to?(@campaign)%>
+    			  <%- form_for @campaign, :url => unsubscribe_url, :html => { :method => 'POST', :id => 'campaign-unsubscribe' } do |f| %>
+    			  <input type="hidden" name="target_id" value="<%= @campaign.id %>">
+    			  <input type="hidden" name="target_type" value="Campaign">
+    				<button type="submit" class="button">
+    					<%= t('campaigns.show.unsubscribe') %>
+    				</button>
+    			  <%- end %>
+  			  <%- else %>
+    			  <%- form_for @campaign, :url => subscribe_url, :html => { :method => 'POST', :id => 'campaign-unsubscribe' } do |f| %>
+    			  <input type="hidden" name="target_id" value="<%= @campaign.id %>">
+    			  <input type="hidden" name="target_type" value="Campaign">
+    				<button type="submit" class="button">
+    					<%= t('campaigns.show.subscribe') %>
+    				</button>
+    			  <%- end %>
+  			  <%- end %>
+  			<%- end %>
+      </div>
+  		<%- if @campaign.status == :successful %>
+			<span class="ribbon"><%= t('campaigns.show.campaign_fixed') %></span>
+  		<%- end %>
+  		</div>
   		<h1>
   		  <%- if current_user && current_user == @campaign.initiator %>
   		  <a href="<%= location_url(@campaign.location) %>"><%= @campaign.short_initiator_call_to_action %></a>
@@ -36,16 +71,8 @@
   		  <a href="<%= location_url(@campaign.location) %>"><%= @campaign.short_call_to_action %></a>
   		  <%- end %>
   		</h1>
-  		<div class="right">
-  		  <%- if current_user && current_user == @campaign.initiator %>
-  			  <span class="status"><%= t('campaigns.show.your_campaign')%></span>
-  			<%- elsif current_user &&  current_user.supporter_or_initiator(@campaign) %>
-  			  <span class="status"><%= t('campaigns.show.you_support_this') %></span>
-  			<%- end %>
-  		<%- if @campaign.status == :successful %>
-			<span class="ribbon"><%= t('campaigns.show.campaign_fixed') %></span>
-  		<%- end %>
-  		</div>
+
+
   	</div>
   </div>
 

@@ -10,7 +10,14 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :operators, :only => [:show]
 
   # subscriptions
-  map.confirm_unsubscribe 'u/:email_token', :action => 'confirm_unsubscribe', :controller => 'subscriptions'
+  map.confirm_unsubscribe '/u/:email_token', :action => 'confirm_unsubscribe',
+                                            :controller => 'subscriptions'
+  map.unsubscribe '/unsubscribe', :action => 'unsubscribe',
+                                  :controller => 'subscriptions',
+                                  :conditions => { :method => :post }
+  map.subscribe '/subscribe', :action => 'subscribe',
+                              :controller => 'subscriptions',
+                              :conditions => { :method => :post }
 
   # campaigns
   map.confirm_leave '/l/:email_token', :action => 'confirm_leave', :controller => 'campaigns'

@@ -64,10 +64,10 @@ describe CampaignMailer do
                                       :name_and_email => 'Supporter <supporter@example.com>')
         @mock_update_user = mock_model(User, :name => 'Update Sender',
                                              :first_name => 'Update')
-        @mock_supporter = mock_model(CampaignSupporter, :supporter => @mock_user,
-                                                        :token => 'mytoken')
-        @mock_supporter_association = mock('supporter association', :confirmed => [@mock_supporter])
-        @mock_campaign = mock_model(Campaign, :campaign_supporters => @mock_supporter_association,
+        @mock_subscription = mock_model(Subscription, :user => @mock_user,
+                                                      :token => 'mytoken')
+        @mock_subscriptions = mock('subscription association', :confirmed => [@mock_subscription])
+        @mock_campaign = mock_model(Campaign, :subscriptions => @mock_subscriptions,
                                               :title => "A test campaign",
                                               :description => 'Some description',
                                               :initiator => @mock_initiator)
@@ -117,7 +117,7 @@ describe CampaignMailer do
         end
 
         it 'should not send an email to the person who created the update' do
-          @mock_supporter.stub!(:supporter).and_return(@mock_update_user)
+          @mock_subscription.stub!(:user).and_return(@mock_update_user)
           CampaignMailer.should_not_receive(:deliver_update)
           CampaignMailer.send_update(@mock_update, @mock_campaign)
         end

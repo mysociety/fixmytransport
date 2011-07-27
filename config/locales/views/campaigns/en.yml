@@ -61,7 +61,7 @@ en:
       initiator_call_to_action: "You're currently trying to %{title}"
       responsible_org_found: "%{user_name} found the company that runs this %{location}"
       twitter: "Twitter"
-      you_are_no_longer_a_supporter: "You are no longer a supporter of \"%{campaign}\""
+      you_are_no_longer_a_supporter: "You are no longer a supporter of this campaign."
       here_is_the_letter: "Here is the letter that %{name} wrote."
       add_update: "Add update"
       contact_operator: "%{location} operator"
@@ -112,3 +112,6 @@ en:
       supporter_facebook_message: I'm helping to persuade %{org} to %{title} ...will you join me?
       initiator_facebook_description: Please help by spreading the word and encouraging your friends to support this.
       issue: Issue
+      unsubscribe: Stop updates
+      subscribe: Get updates by email
+      leave: Withdraw support

@@ -2,145 +2,145 @@ require 'spec_helper'
 
 describe CampaignsController do
 
-  it 'should route /campaigns' do 
+  it 'should route /campaigns' do
     route_for(:controller => "campaigns", :action => "index").should == "/campaigns"
     params_from(:get, "/campaigns").should == { :controller => "campaigns", :action => "index" }
   end
-  
-  describe 'GET #index' do 
-  
-    it 'should redirect to the issues index' do
-      get :index 
-      response.should redirect_to("/issues") 
-    end
-    
-  end
-  
-  describe 'GET #add_details' do   
 
-    before do 
+  describe 'GET #index' do
+
+    it 'should redirect to the issues index' do
+      get :index
+      response.should redirect_to("/issues")
+    end
+
+  end
+
+  describe 'GET #add_details' do
+
+    before do
       @default_params = {:id => 55}
       @mock_user = mock_model(User, :name => 'Test User')
-      @mock_campaign = mock_model(Campaign, :editable? => true, 
+      @mock_campaign = mock_model(Campaign, :editable? => true,
                                             :visible? => false,
                                             :initiator => @mock_user)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @controller.stub!(:current_user).and_return(@mock_user)
     end
-    
+
     def make_request(params=@default_params)
       get :add_details, params
     end
-    
-    describe 'if the campaign is not new' do 
-      
-      before do 
+
+    describe 'if the campaign is not new' do
+
+      before do
         @mock_campaign.stub!(:status).and_return(:confirmed)
       end
-    
+
       it 'should redirect to the campaign URL' do
         make_request()
         response.should redirect_to(campaign_url(@mock_campaign))
       end
-      
+
     end
-    
+
     describe 'if the campaign is new' do
-    
+
       before do
         @mock_campaign.stub!(:status).and_return(:new)
       end
-      
+
       it 'should render the template "add_details"' do
         make_request()
         response.should render_template("add_details")
       end
-    
+
     end
-  
+
   end
-  
-  describe 'POST #add_details' do 
-  
-    before do 
+
+  describe 'POST #add_details' do
+
+    before do
       @mock_user = mock_model(User, :name => "Test User")
       @default_params = {:id => 55, :campaign => {:title => 'title', :description => 'description'}}
-      @mock_campaign = mock_model(Campaign, :editable? => true, 
+      @mock_campaign = mock_model(Campaign, :editable? => true,
                                             :visible? => false,
-                                            :update_attributes => true, 
+                                            :update_attributes => true,
                                             :initiator => @mock_user,
                                             :confirm => true,
                                             :save! => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @controller.stub!(:current_user).and_return(@mock_user)
     end
-    
+
     def make_request(params=@default_params)
       post :add_details, params
     end
-    
-    describe 'if the campaign is not new' do 
-      
-      before do 
+
+    describe 'if the campaign is not new' do
+
+      before do
         @mock_campaign.stub!(:status).and_return(:confirmed)
       end
-    
+
       it 'should redirect to the campaign URL' do
         make_request()
         response.should redirect_to(campaign_url(@mock_campaign))
       end
-      
+
     end
-    
+
     describe 'if the campaign is new' do
-      
-      before do 
+
+      before do
         @mock_campaign.stub!(:status).and_return(:new)
       end
-      
-      it 'should try to update the campaign attributes' do 
+
+      it 'should try to update the campaign attributes' do
         @mock_campaign.should_receive(:update_attributes).with({'title' => 'title', 'description' => 'description'})
         make_request
       end
-      
-      describe 'if the attributes can be updated' do 
-      
-        before do 
+
+      describe 'if the attributes can be updated' do
+
+        before do
           @mock_campaign.stub!(:update_attributes).and_return(true)
         end
-      
-        it 'should save the campaign' do 
+
+        it 'should save the campaign' do
           @mock_campaign.should_receive(:save!)
           make_request
         end
-        
-        it 'should confirm the campaign' do 
+
+        it 'should confirm the campaign' do
           @mock_campaign.should_receive(:confirm)
           make_request
         end
-        
-        it 'should redirect to the campaign url, passing the first_time param' do 
+
+        it 'should redirect to the campaign url, passing the first_time param' do
           make_request
           response.should redirect_to campaign_url(@mock_campaign, :first_time => true)
         end
-        
+
       end
-      
-      describe 'if the attributes cannot be updated' do 
-      
-        before do 
+
+      describe 'if the attributes cannot be updated' do
+
+        before do
           @mock_campaign.stub!(:update_attributes).and_return(false)
         end
-        
-        it 'should render the template "add_details"' do 
+
+        it 'should render the template "add_details"' do
           make_request
           response.should render_template("add_details")
         end
-      
+
       end
-      
+
     end
-    
+
   end
 
   describe 'GET #show' do
@@ -213,15 +213,15 @@ describe CampaignsController do
       @mock_campaign.should_receive(:attributes=).with("description" => 'Some stuff')
       make_request()
     end
-    
-    describe 'when the current user is an expert' do 
-      
+
+    describe 'when the current user is an expert' do
+
       it 'should do the default behaviour of the action' do
         controller.stub!(:current_user).and_return(@expert_user)
         make_request @default_params
         response.should do_default_behaviour
       end
-       
+
     end
 
     describe 'if the campaign can be saved' do
@@ -234,15 +234,15 @@ describe CampaignsController do
         make_request()
         response.should redirect_to(campaign_url(@mock_campaign))
       end
-      
+
     end
 
     describe 'if the campaign cannot be saved' do
 
-      before do 
+      before do
         @mock_campaign.stub!(:save).and_return(false)
       end
-      
+
       it 'should render the "edit" template' do
         make_request()
         response.should render_template("campaigns/edit")
@@ -281,17 +281,17 @@ describe CampaignsController do
     end
 
     it_should_behave_like "an action that requires the campaign initiator"
-    
-    describe 'when the current user is an expert' do 
-      
+
+    describe 'when the current user is an expert' do
+
       it 'should do the default behaviour of the action' do
         controller.stub!(:current_user).and_return(@expert_user)
         make_request @default_params
         response.should do_default_behaviour
       end
-       
-    end 
-  
+
+    end
+
   end
 
   describe 'GET #join' do
@@ -365,7 +365,7 @@ describe CampaignsController do
 
     before do
       @mock_user = mock_model(User)
-      @mock_campaign = mock_model(Campaign, :visible? => true, 
+      @mock_campaign = mock_model(Campaign, :visible? => true,
                                             :editable? => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @mock_comment = mock_model(Comment, :save => true,
@@ -395,62 +395,62 @@ describe CampaignsController do
         :comment => { :commentable_id => 55,
                       :commentable_type => 'Campaign'} }
     end
-    
+
     it_should_behave_like "an action that receives a POSTed comment"
 
   end
-  
-  describe 'POST #complete' do 
-    
-    before do 
+
+  describe 'POST #complete' do
+
+    before do
       @user = mock_model(User, :id => 55, :name => "Test User")
       @default_params = { :id => 55 }
       @controller.stub!(:current_user).and_return(@user)
       @mock_campaign = mock_model(Campaign, :visible? => true,
                                             :editable? => true,
                                             :status => :confirmed,
-                                            :initiator => @user, 
+                                            :initiator => @user,
                                             :status= => true,
                                             :save => true)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_access_message = :campaigns_complete_access_message
     end
-  
+
     def make_request(params)
       post :complete, params
     end
-    
+
     it_should_behave_like "an action that requires the campaign initiator"
-    
-    it 'should set the campaign status to complete and save it' do 
+
+    it 'should set the campaign status to complete and save it' do
       @mock_campaign.should_receive(:status=).with(:successful)
       @mock_campaign.should_receive(:save)
       make_request(@default_params)
     end
-    
-    it 'should redirect to the campaign page' do 
+
+    it 'should redirect to the campaign page' do
       make_request(@default_params)
       response.should redirect_to(campaign_url(@mock_campaign))
     end
-  
+
   end
-  
-  describe 'GET #add_photos' do 
-    
-    before do 
+
+  describe 'GET #add_photos' do
+
+    before do
       @user = mock_model(User, :id => 55, :name => "Test User")
       @default_params = { :id => 55 }
       @controller.stub!(:current_user).and_return(@user)
       @mock_campaign = mock_model(Campaign, :visible? => true,
                                             :editable? => true,
                                             :status => :confirmed,
-                                            :initiator => @user, 
+                                            :initiator => @user,
                                             :campaign_photos => [])
       @mock_campaign.campaign_photos.stub!(:build).and_return(true)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_access_message = :campaigns_add_photos_access_message
     end
-    
+
     def make_request(params)
       get :add_photos, params
     end
@@ -461,17 +461,17 @@ describe CampaignsController do
       make_request(@default_params)
       response.should render_template("add_photos")
     end
-    
-    it 'should build a new campaign photo associated with the campaign' do 
+
+    it 'should build a new campaign photo associated with the campaign' do
       @mock_campaign.campaign_photos.should_receive(:build).with({})
       make_request(@default_params)
     end
-    
+
   end
-  
-  describe 'POST #add_photos' do 
-    
-    before do 
+
+  describe 'POST #add_photos' do
+
+    before do
       @user = mock_model(User, :id => 55, :name => "Test User")
       @default_params = { :id => 55 }
       @controller.stub!(:current_user).and_return(@user)
@@ -482,37 +482,37 @@ describe CampaignsController do
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_access_message = :campaigns_add_photos_access_message
     end
-    
+
     def make_request(params)
       post :add_photos, params
     end
 
     it_should_behave_like "an action that requires the campaign initiator"
-    
-    describe 'if the campaign (with associated photo) can be saved' do 
+
+    describe 'if the campaign (with associated photo) can be saved' do
 
       before do
         @mock_campaign.stub!(:update_attributes).and_return(true)
       end
-            
-      it 'should redirect to the campaign url' do 
+
+      it 'should redirect to the campaign url' do
         make_request(@default_params)
         response.should redirect_to(campaign_url(@mock_campaign))
       end
-      
+
     end
-    
-    describe 'if the campaign (with associated photo) cannot be saved' do 
-      
+
+    describe 'if the campaign (with associated photo) cannot be saved' do
+
       before do
         @mock_campaign.stub!(:update_attributes).and_return(false)
       end
-      
-      it 'should render the add_photos template' do 
+
+      it 'should render the add_photos template' do
         make_request(@default_params)
         response.should render_template("add_photos")
       end
-    
+
     end
   end
 
@@ -584,7 +584,44 @@ describe CampaignsController do
         json_hash = JSON.parse(response.body)
         json_hash['html'].should_not be_nil
       end
-      
+
+    end
+
+  end
+
+  describe 'POST #leave' do
+
+    describe 'if there is a current user who is a campaign supporter' do
+
+      before do
+        @user = mock_model(User)
+        @controller.stub!(:current_user).and_return(@user)
+        @campaign = mock_model(Campaign, :editable? => true,
+                                         :visible? => true,
+                                         :title => 'A test campaign',
+                                         :remove_supporter => nil)
+        Campaign.stub!(:find).and_return(@campaign)
+      end
+
+      def make_request
+        post :leave, :id => 55
+      end
+
+      it 'should remove the campaign supporter' do
+        @campaign.should_receive(:remove_supporter).with(@user)
+        make_request
+      end
+
+      it 'should show a notice saying that the user is no longer a supporter' do
+        make_request
+        flash[:notice].should == 'You are no longer a supporter of this campaign.'
+      end
+
+      it 'should redirect to the campaign url' do
+        make_request
+        response.should redirect_to(campaign_path(@campaign))
+      end
+
     end
 
   end
@@ -624,52 +661,52 @@ describe CampaignsController do
 
     end
 
-    describe 'when there is no current user' do 
-      
-      it 'should store the next action in the session' do 
+    describe 'when there is no current user' do
+
+      it 'should store the next action in the session' do
         @controller.should_receive(:data_to_string)
         make_request
       end
-      
-      
-      describe 'if the request asks for json' do 
-        
-        it 'should return a hash with the success key set to true' do 
+
+
+      describe 'if the request asks for json' do
+
+        it 'should return a hash with the success key set to true' do
         make_request(@default_params.update(:format => 'json'))
         json_hash = JSON.parse(response.body)
         json_hash['success'].should == true
         end
-        
-        it 'should return a hash with the "requires login" flag set to true' do 
+
+        it 'should return a hash with the "requires login" flag set to true' do
           make_request(@default_params.update(:format => 'json'))
           json_hash = JSON.parse(response.body)
           json_hash['requires_login'].should == true
         end
-        
-        it 'should return a hash with a notice key giving a notice to show to the user' do 
+
+        it 'should return a hash with a notice key giving a notice to show to the user' do
           make_request(@default_params.update(:format => 'json'))
           json_hash = JSON.parse(response.body)
           json_hash['notice'].should == 'Please sign in or create an account to help get this problem fixed'
         end
-      
+
       end
-  
-      describe 'if the request asks for html' do 
-        
-        it 'should redirect to the login page' do 
+
+      describe 'if the request asks for html' do
+
+        it 'should redirect to the login page' do
           make_request(@default_params)
           response.should redirect_to(login_url)
         end
-        
+
         it 'should display a notice that the user needs to login to join the campaign' do
           make_request(@default_params)
           flash[:notice].should == 'Please sign in or create an account to help get this problem fixed'
         end
-        
+
       end
-      
+
     end
-  
+
   end
 
 

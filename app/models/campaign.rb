@@ -12,6 +12,8 @@ class Campaign < ActiveRecord::Base
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   has_many :campaign_events, :order => 'created_at asc'
   has_many :campaign_photos
+  has_many :subscriptions, :as => :target
+  has_many :subscribers, :through => :subscriptions, :source => :user, :conditions => ['subscriptions.confirmed_at is not null']
   validates_length_of :title, :within => 30..80, :on => :update
   validates_presence_of :description, :on => :update
   validates_associated :initiator, :on => :update
@@ -92,16 +94,21 @@ class Campaign < ActiveRecord::Base
   # Add a user as a supporter of a campaign
   # if a token is passed, set the token on the CampaignSupporter model.
   # If the user is already a supporter or initiator of the campaign,
-  # nil is returned
+  # nil is returned.
+  # Also create a subscription for the user to the campaign
   def add_supporter(user, supporter_confirmed=false, token=nil)
     if ! self.supporters.include?(user) && user != self.initiator
       supporter_attributes = { :supporter => user }
+      subscription_attributes = { :user => user }
       if supporter_confirmed
         supporter_attributes[:confirmed_at] = Time.now
+        subscription_attributes[:confirmed_at] = Time.now
       end
       campaign_supporter = campaign_supporters.create!(supporter_attributes)
+      subscription = subscriptions.create!(subscription_attributes)
       if token
         campaign_supporter.update_attributes(:token => token)
+        subscription.update_attributes(:token => token)
       end
       return campaign_supporter
     else
@@ -128,6 +135,9 @@ class Campaign < ActiveRecord::Base
   def remove_supporter(user)
     if supporters.include?(user)
       supporters.delete(user)
+    end
+    if subscribers.include?(user)
+      subscribers.delete(user)
     end
   end
 

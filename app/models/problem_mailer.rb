@@ -161,7 +161,7 @@ class ProblemMailer < ApplicationMailer
   def self.send_comment(comment, problem)
     sent_emails = SentEmail.find(:all, :conditions => ['comment_id = ?', comment])
     sent_recipients = sent_emails.map{ |sent_email| sent_email.recipient }
-    subscriptions = problem.subscriptions
+    subscriptions = problem.subscriptions.confirmed
     subscribers = subscriptions.map{ |subscription| [subscription, subscription.user] }
     subscribers = subscribers.select{ |subscription, subscriber| ! sent_recipients.include?(subscriber) }
     subscribers.each do |subscription, subscriber|
