@@ -13,7 +13,7 @@
 </a>
 <div class="thread-details">
 	<div class="thread-copy">
-		<%= raw sanitize("#{comment.text}") %>
+		<%= raw simple_format(sanitize("#{comment.text}")) %>
 	</div>
 	<div class="thread-furniture">
 		<div class="thumb"><img src="<%= comment.user.profile_photo.url(:large_thumb) %>" alt="" /></div>
