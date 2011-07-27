@@ -3,7 +3,7 @@ class CampaignsController < ApplicationController
   before_filter :process_map_params, :only => [:show]
   before_filter :find_editable_campaign, :only => [:add_details]
   before_filter :find_visible_campaign, :except => [:add_details,
-                                                    :confirm_join, 
+                                                    :confirm_join,
                                                     :confirm_leave,
                                                     :index]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
@@ -25,7 +25,7 @@ class CampaignsController < ApplicationController
                             width=CAMPAIGN_PAGE_MAP_WIDTH)
      @collapse_quotes = params[:unfold] ? false : true
   end
-  
+
   def index
     redirect_to(:controller => 'problems', :action => 'issues_index')
   end
@@ -72,16 +72,16 @@ class CampaignsController < ApplicationController
   end
 
   def leave
-    if current_user && params[:user_id] && current_user.id == params[:user_id].to_i
+    if current_user
       @campaign.remove_supporter(current_user)
-      flash[:notice] = t('campaigns.show.you_are_no_longer_a_supporter', :campaign => @campaign.title)
+      flash[:notice] = t('campaigns.show.you_are_no_longer_a_supporter')
       redirect_to campaign_url(@campaign)
       return
     end
     render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
     return false
   end
-  
+
   def confirm_leave
     @campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
     if @campaign_supporter
@@ -106,7 +106,7 @@ class CampaignsController < ApplicationController
       if (@campaign.update_attributes(params[:campaign]))
         @campaign.confirm
         @campaign.save!
-        redirect_to campaign_url(@campaign, :first_time => true) 
+        redirect_to campaign_url(@campaign, :first_time => true)
       else
         render :action => "add_details"
       end
@@ -138,10 +138,10 @@ class CampaignsController < ApplicationController
             redirect_to campaign_url(@campaign)
             return
           end
-          format.json do 
+          format.json do
             index = params[:last_thread_index].to_i + 1
-            render :json => { :success => true, 
-                              :html => render_to_string(:partial => 'campaign_event', 
+            render :json => { :success => true,
+                              :html => render_to_string(:partial => 'campaign_event',
                                                         :locals => { :event => @campaign_event,
                                                                      :index => index})}
             return
@@ -162,7 +162,7 @@ class CampaignsController < ApplicationController
                                                           :user_id => current_user.id)
     end
   end
-  
+
   def get_supporters
     render :partial => "supporters", :locals => {:show_all => true}, :layout => false
   end

@@ -65,9 +65,13 @@ describe Problem do
         @problem.confirm!
       end
 
-      it 'should create a subscription for the problem reporter' do
+      it 'should create a confirmed subscription for the problem reporter' do
+        time_now = Time.now
+        Time.stub!(:now).and_return(time_now)
+        
         Subscription.should_receive(:create!).with(:user => @problem.reporter,
-                                                   :target => @problem)
+                                                   :target => @problem, 
+                                                   :confirmed_at => time_now)
         @problem.confirm!
       end
 

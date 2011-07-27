@@ -60,32 +60,22 @@ namespace :temp do
     end
   end
 
-  desc 'Fix bad stop coordinates'
-  task :fix_bad_stop_coords => :environment do 
-    stop = Stop.find(408917)
-    stop.lat = 53.04782
-    stop.lon = -2.99633
-    stop.easting = 333307
-    stop.northing = 350524
-    stop.locality_id = 22406
-    stop.save!
-    
-    stop = Stop.find(408895)
-    stop.lat = 53.05162
-    stop.lon = -4.283
-    stop.easting = 247075
-    stop.northing = 352920
-    stop.locality_id = 18666
-    stop.save!
+  desc 'Mark problem subscriptions as confirmed'
+  task :mark_problem_subscriptions_confirmed => :environment do
+    Subscription.find(:all).each do |subscription|
+      subscription.confirmed_at = subscription.created_at
+      subscription.save!
+    end
+  end
 
-    stop = Stop.find(409123)
-    stop.lat = 51.73167
-    stop.lon = -4.72044
-    stop.easting = 212236
-    stop.northing = 207165
-    stop.locality_id = 20177
-    stop.save!
-    
+  desc 'Create campaign subscriptions'
+  task :create_campaign_subscriptions => :environment do
+    CampaignSupporter.find(:all).each do |campaign_supporter|
+      subscription = Subscription.create!(:target => campaign_supporter.campaign,
+                                          :user => campaign_supporter.supporter,
+                                          :confirmed_at => campaign_supporter.confirmed_at)
+      subscription.update_attribute('token', campaign_supporter.token)
+    end
   end
 
 end

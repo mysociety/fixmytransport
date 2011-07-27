@@ -18,6 +18,10 @@ class CampaignSupporter < ActiveRecord::Base
       self.confirmed_at = Time.now
       save!  
     end
+    # look for any subscription to the campaign for this user
+    subscription = Subscription.find_for_user_and_target(self.supporter, self.campaign.id, 'Campaign')
+    subscription.confirm! if subscription
+    self
   end
   
 end

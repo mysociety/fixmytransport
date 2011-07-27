@@ -150,17 +150,43 @@ describe Campaign do
 
   end
 
+  describe 'when removing a supporter' do 
+    
+    before do 
+      @campaign = Campaign.new
+      @user = User.new
+      @campaign.stub!(:supporters).and_return([@user])
+      @subscription = mock_model(Subscription, :user => @user)
+      @campaign.stub!(:subscriptions).and_return([@subscription])
+    end
+    
+    it 'should delete the supporter relationship' do 
+      @campaign.supporters.should_receive(:delete).with(@user)
+      @campaign.remove_supporter(@user)
+    end
+    
+    it 'should remove any subscription the user has to that campaign' do 
+      @campaign.subscribers.should_receive(:delete).with(@user)
+      @campaign.remove_supporter(@user)
+    end
+  
+  end
+  
   describe 'when adding user as a supporter' do
 
     before do
       @user = mock_model(User)
       @campaign = Campaign.new
       @mock_supporters = mock('campaign supporter association')
+      @mock_subscriptions = mock('subscriptions association')
       @campaign.stub!(:campaign_supporters).and_return(@mock_supporters)
       @campaign.stub!(:initiator).and_return(mock_model(User))
+      @campaign.stub!(:subscriptions).and_return(@mock_subscriptions)
       @mock_campaign_supporter = mock_model(CampaignSupporter)
+      @mock_subscriber = mock_model(User)
       @existing_campaign_supporter = mock_model(CampaignSupporter, :supporter_id => @user.id)
       @mock_supporters.stub!(:create!).and_return(@mock_campaign_supporter)
+      @mock_subscriptions.stub!(:create!).and_return(@mock_subscriber)
     end
 
     describe 'if the user is not already a supporter' do
@@ -171,6 +197,11 @@ describe Campaign do
 
       it 'should add the user as a supporter' do
         @mock_supporters.should_receive(:create!).with(:supporter => @user)
+        @campaign.add_supporter(@user)
+      end
+
+      it 'should create an unconfirmed subscription for the user' do 
+        @mock_subscriptions.should_receive(:create!).with(:user => @user)
         @campaign.add_supporter(@user)
       end
 

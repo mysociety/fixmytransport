@@ -1,5 +1,15 @@
 en:
   subscriptions:
     confirm_unsubscribe:
-      no_longer_subscribed_to_problem: "You are no longer subscribed to updates on this problem report."
-      could_not_find_subscription: "We're sorry, but we could not locate your subscription. If you are having issues, try copying and pasting the URL from your email into your browser. If that doesn't work, use the feedback link to get in touch."
+      no_longer_subscribed_to_campaign: "You will no longer receive emails about updates and comments on this issue."
+      no_longer_subscribed_to_problem: "You will no longer receive emails about updates on this problem report."
+      could_not_find_subscription: "We're sorry, but we could not find your subscription. If you are having issues, try copying and pasting the URL from your email into your browser. If that doesn't work, use the feedback link to get in touch."
+    unsubscribe: 
+      no_longer_subscribed_to_campaign: "You will no longer receive emails about updates or comments on this issue."
+      no_longer_subscribed_to_problem: "You will no longer receive emails about updates on this problem report."
+    subscribe:
+      already_subscribed_to_campaign: "You are already subscribed to updates and comments on this issue."
+      already_subscribed_to_problem: "You are already subscribed to updates on this problem."
+      could_not_find_subscription: "We're sorry, we couldn't find your subscription. Please use the feedback link to let us know what happened."
+      subscribed_to_campaign: "You will now receive updates and comments on this issue by email."
+      subscribed_to_problem: "You will now receive updates on this problem report by email."

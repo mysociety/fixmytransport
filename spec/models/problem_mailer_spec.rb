@@ -82,7 +82,7 @@ describe ProblemMailer do
       @mock_commenter = mock_model(User, :name => 'Commenter')
       @mock_subscription = mock_model(Subscription, :user => @mock_subscriber,
                                                     :token => 'mytoken')
-      @mock_problem = mock_model(Problem, :subscriptions => [@mock_subscription],
+      @mock_problem = mock_model(Problem, :subscriptions => [],
                                           :subject => 'A test subject')
       @mock_comment = mock_model(Comment, :commented => @mock_problem,
                                           :user => @mock_commenter,
@@ -90,6 +90,7 @@ describe ProblemMailer do
                                           :update_attribute => true,
                                           :mark_fixed => false,
                                           :text => 'A test comment')
+      @mock_problem.subscriptions.stub!(:confirmed).and_return([@mock_subscription])
       SentEmail.stub!(:find).and_return([])
     end
 
@@ -106,7 +107,8 @@ describe ProblemMailer do
     end
 
     it 'should not send an email to the person who created the comment' do
-      @mock_problem.stub!(:subscriptions).and_return([mock_model(Subscription, :user => @mock_commenter)])
+      @mock_problem.stub!(:subscriptions).and_return([])
+      @mock_problem.subscriptions.stub!(:confirmed).and_return([mock_model(Subscription, :user => @mock_commenter)])      
       ProblemMailer.should_not_receive(:deliver_comment)
       ProblemMailer.send_comment(@mock_comment, @mock_problem)
     end

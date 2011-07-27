@@ -131,7 +131,7 @@ class Problem < ActiveRecord::Base
     self.update_attribute('status', :confirmed)
     self.update_attribute('confirmed_at', Time.now)
     # create a subscription for the problem reporter
-    Subscription.create!(:user => self.reporter, :target => self)
+    Subscription.create!(:user => self.reporter, :target => self, :confirmed_at => Time.now)
   end
 
   def create_new_campaign

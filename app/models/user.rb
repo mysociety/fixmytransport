@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
   has_many :initiated_campaigns, :foreign_key => :initiator_id, :class_name => 'Campaign'
   has_many :sent_emails, :as => :recipient
   has_many :access_tokens
+  has_many :subscriptions
   before_validation :download_remote_profile_photo, :if => :profile_photo_url_provided?
 
   has_attached_file :profile_photo,
@@ -155,6 +156,11 @@ class User < ActiveRecord::Base
 
   def profile_photo_url_provided?
     !self.profile_photo_url.blank?
+  end
+  
+  def subscribed_to?(target)
+    !self.subscriptions.find(:first, :conditions => ['target_id = ? and target_type = ? and confirmed_at is not null', 
+                                                      target.id, target.class.to_s]).nil?
   end
 
   # class methods

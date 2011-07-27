@@ -10,7 +10,7 @@ class CampaignMailer < ApplicationMailer
     body :campaign => campaign, :recipient => recipient, :link => url
   end
 
-  def update(recipient, campaign, supporter, update)
+  def update(recipient, campaign, subscription, update)
     recipients recipient.name_and_email
     from contact_from_name_and_email
     subject I18n.translate('mailers.update_subject', :title => campaign.title)
@@ -18,13 +18,13 @@ class CampaignMailer < ApplicationMailer
                   :recipient => recipient,
                   :update => update,
                   :link => main_url(campaign_path(campaign)) }
-    if supporter
-      body_hash[:unsubscribe_link] = main_url(confirm_leave_path(:email_token => supporter.token))
+    if subscription
+      body_hash[:unsubscribe_link] = main_url(confirm_unsubscribe_path(:email_token => subscription.token))
     end
     body(body_hash)
   end
 
-  def comment(recipient, campaign, supporter, comment)
+  def comment(recipient, campaign, subscription, comment)
     recipients recipient.name_and_email
     from contact_from_name_and_email
     subject I18n.translate('mailers.comment_subject', :title => campaign.title)
@@ -32,8 +32,8 @@ class CampaignMailer < ApplicationMailer
                   :recipient => recipient, 
                   :comment => comment, 
                   :link => main_url(campaign_path(campaign)) }
-    if supporter 
-      body_hash[:unsubscribe_link] = main_url(confirm_leave_path(:email_token => supporter.token))
+    if subscription 
+      body_hash[:unsubscribe_link] = main_url(confirm_leave_path(:email_token => subscription.token))
     end
     body(body_hash)
   end
@@ -139,37 +139,38 @@ class CampaignMailer < ApplicationMailer
     end
     
     sent_recipients = sent_emails.map{ |sent_email| sent_email.recipient }
-    campaign_supporters = campaign.campaign_supporters.confirmed
-    recipients = campaign_supporters.map{ |campaign_supporter| [campaign_supporter, campaign_supporter.supporter] }
+    campaign_subscriptions = campaign.subscriptions.confirmed    
+    recipients = campaign_subscriptions.map{ |campaign_subscription| [campaign_subscription, 
+                                                                      campaign_subscription.user] }
     if update_or_comment.is_a?(Comment)
       recipients << [nil, campaign.initiator]
     end
     recipients = recipients.select{ |supporter, recipient| !sent_recipients.include? recipient }
-    recipients.each do |supporter, recipient|
+    recipients.each do |subscription, recipient|
       # don't send an email to the person who created the update or comment
       next if recipient == update_or_comment.user
       
       if self.dryrun
         STDERR.puts("Would send the following:")
         if update_or_comment.is_a?(CampaignUpdate) && update_or_comment.is_advice_request?
-          mail = create_advice_request(recipient, campaign, supporter, update_or_comment)
+          mail = create_advice_request(recipient, campaign, subscription, update_or_comment)
         elsif update_or_comment.is_a?(CampaignUpdate)
-          mail = create_update(recipient, campaign, supporter, update_or_comment)
+          mail = create_update(recipient, campaign, subscription, update_or_comment)
         else
-          mail = create_comment(recipient, campaign, supporter, update_or_comment)
+          mail = create_comment(recipient, campaign, subscription, update_or_comment)
         end
         STDERR.puts(mail)
       else
         if update_or_comment.is_a?(CampaignUpdate) && update_or_comment.is_advice_request?
-          deliver_advice_request(recipient, campaign, supporter, update_or_comment)
+          deliver_advice_request(recipient, campaign, subscription, update_or_comment)
         elsif update_or_comment.is_a?(CampaignUpdate)
-          deliver_update(recipient, campaign, supporter, update_or_comment)
+          deliver_update(recipient, campaign, subscription, update_or_comment)
         else
-          deliver_comment(recipient, campaign, supporter, update_or_comment)
+          deliver_comment(recipient, campaign, subscription, update_or_comment)
         end
         
-        sent_email_attributes = {:recipient => recipient,
-                                 :campaign => campaign}
+        sent_email_attributes = { :recipient => recipient,
+                                  :campaign => campaign }
         if update_or_comment.is_a?(CampaignUpdate)
           sent_email_attributes[:campaign_update] = update_or_comment
         else

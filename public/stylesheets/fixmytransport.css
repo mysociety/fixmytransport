@@ -1266,6 +1266,11 @@ ul.campaign-meta li span{
     width: 300px;
     margin: 0.5em 0;
     }
+
+.right .campaign-options {
+  text-align: right;
+  margin-top: 1.2em;
+}
 /* ===[ Campaign Thread ]=== */
 
 .thread-controls {
