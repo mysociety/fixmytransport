@@ -1950,6 +1950,10 @@ body.facebook-canvas .button {
   height: 10em;
 }
 
+.new_assignment div {
+  overflow: hidden;
+}
+
 .new_assignment div.fieldset{
   margin: 1.5em 0;
 }
