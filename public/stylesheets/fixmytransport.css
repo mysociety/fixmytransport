@@ -51,6 +51,7 @@ h1, h2, h3, h4, h5, h6, .font-1, #greybanner p {
     float: left;
     width: 590px;
     margin: 0.5em 40px 0.5em 0;
+    overflow: hidden;
 }
 .rightcol {
     float: left;
@@ -365,9 +366,7 @@ div.supporter-notice-arrow{
 #beta-frontpage {
 	min-height:400px;
 }
-	#main-content div {
-      overflow: hidden
-	}
+
 #goto-top-wrap {
 	padding:10px 0;
 }
@@ -1031,6 +1030,11 @@ form#create-campaign {
 /*===[Issues Lists]===*/
 
 ul.issues-list{margin: 0px; padding: 0px;}
+
+  ul.issues-list div{
+    overflow: hidden;
+  }
+
 	ul.issues-list li{
 		list-style: none;
 		overflow: hidden;
@@ -1088,6 +1092,10 @@ ul.issues-list{margin: 0px; padding: 0px;}
 /* Page Specific
    ================================================== */
 /* ===[ Campaign Page ]=== */
+
+.campaign-content div {
+  overflow: hidden;
+}
 
 .campaign-description {
 	display: block;
@@ -1639,7 +1647,7 @@ ul#campaign-thread {
 	#frontpage-banner-left p {
 		color:#fff;
 	}
-	
+
 	#frontpage-banner-left a {
 		color:#fff;
 		text-decoration: underline;
@@ -1931,13 +1939,13 @@ body.facebook-canvas .button {
   }
 
 
-/*===[Problem Page]===*/
+/*===[ Problem Page ]===*/
 
 .problem-details {
   list-style-type: none;
 }
 
-/*===[New Assignment Page]===*/
+/*===[ New Assignment Page ]===*/
 .new_assignment textarea{
   height: 10em;
 }
@@ -1946,12 +1954,18 @@ body.facebook-canvas .button {
   margin: 1.5em 0;
 }
 
-/*===[Stop, Station, Route Pages]===*/
+/*===[ Stop, Station, Route Pages ]===*/
 .location-content-header{
   margin-top: 1em;
 }
 
-/*===[Advice]===*/
+/*===[ Advice ]===*/
 .advice h1{
  font-size: 2em;
+}
+
+/*===[ Feedback Form ]===*/
+
+.feedback-form div {
+  overflow: hidden;
 }

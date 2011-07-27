@@ -10,15 +10,10 @@
   width: 400px; 
   height: 400px; 
   position:relative;
-  overflow: hidden;
 }  
 
 #map img {
     border: 0;
-}
-
-#map div {
-  overflow: visible !important;
 }
 
 #large-map {
