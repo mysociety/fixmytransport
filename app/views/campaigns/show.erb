@@ -11,6 +11,11 @@
 <meta property="og:url" content="<%= request.url %>"/>
 <meta property="og:type" content="cause"/>
 <%- end %>
+<%- if params[:first_time] %>
+  <%- content_for :tracking do %>
+    _gaq.push(['_trackPageview', '<%= raw url_for(params.merge(:location_type => @campaign.problem.location_type, :escape => false )) %>']);
+  <%- end %>
+<%- end %>
 <script>
 	var campaign_data = {
 		title: "<%= escape_javascript(@campaign.title) %>",

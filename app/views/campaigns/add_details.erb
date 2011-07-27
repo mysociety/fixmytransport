@@ -1,3 +1,7 @@
+<%- content_for :tracking do %>
+  _gaq.push(['_trackPageview', '<%= raw url_for(params.merge(:location_type => @campaign.problem.location_type, :escape => false)) %>']);
+<%- end %>
+
 <div id="banner">
 	<div class="container">
 		<h1><%= t('campaigns.add_details.add_details') %></h1>
