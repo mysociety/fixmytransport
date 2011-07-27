@@ -17,8 +17,8 @@
         <%- center_offset_y = height / 2 %>
         <%- center_x = Map.lon_to_x(@lon) %>
         <%- center_offset_x = width / 2 %>
-        <%= render :partial => 'shared/location_marker', :collection => other_location_data, :as => :location, :locals => {:small => true,  :center_y => center_y, :center_x => center_x, :center_offset_y => center_offset_y, :center_offset_x => center_offset_x } %>
-        <%= render :partial => 'shared/location_marker', :collection => location_data, :as => :location, :locals => {:small => false, :center_y => center_y, :center_x => center_x, :center_offset_y => center_offset_y, :center_offset_x => center_offset_x } %>
+        <%= render :partial => 'shared/location_marker', :collection => other_location_data, :as => :location, :locals => {:small => true,  :center_y => center_y, :center_x => center_x, :center_offset_y => center_offset_y, :center_offset_x => center_offset_x, :link_type => link_type } %>
+        <%= render :partial => 'shared/location_marker', :collection => location_data, :as => :location, :locals => {:small => false, :center_y => center_y, :center_x => center_x, :center_offset_y => center_offset_y, :center_offset_x => center_offset_x, :link_type => link_type } %>
       </div>
       <%- unless static %>
       <div id="pan_up" class="map-control static-map-element" style="left: 13px; top: 4px; width: 18px; height: 18px; position: absolute;">

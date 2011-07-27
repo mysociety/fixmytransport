@@ -47,7 +47,7 @@
 	</div>
 
 	<div class="rightcol">
-		<a class="button big red report" href="<%= new_problem_url(:location_id => @stop_area.id, :location_type => @stop_area.type, :to => params[:to], :from => params[:from])%>"><%= t('locations.show_stop_area.report_a_problem') %></a>
+		<a class="button big red report" href="<%= new_problem_url(:location_id => @stop_area.id, :location_type => @stop_area.type, :to => params[:to], :from => params[:from])%>" rel="nofollow"><%= t('locations.show_stop_area.report_a_problem') %></a>
 		<a class="button big report comment-trigger" href="<%= add_comment_stop_area_url(@stop_area.locality, @stop_area) %>" data-title="<%= t('locations.show_stop_area.comment_title', :location => at_the_location(@stop_area)) %>"><%= t('locations.show_stop_area.say_something_nice') %></a>
     <%- cache(:action => 'show_stop_area', :action_suffix => 'route_list') do %>
 		  <h5 class="left"><%= t('locations.show_stop_area.routes_header') %></h5>
