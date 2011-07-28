@@ -14,8 +14,8 @@ class Campaign < ActiveRecord::Base
   has_many :campaign_photos
   has_many :subscriptions, :as => :target
   has_many :subscribers, :through => :subscriptions, :source => :user, :conditions => ['subscriptions.confirmed_at is not null']
-  validates_length_of :title, :within => 30..80, :on => :update
-  validates_presence_of :description, :on => :update
+  validates_length_of :title, :maximum => 80, :on => :update, :allow_nil => true
+  validates_presence_of :title, :description, :on => :update
   validates_associated :initiator, :on => :update
   cattr_reader :per_page
   delegate :transport_mode_text, :to => :problem

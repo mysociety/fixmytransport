@@ -128,8 +128,8 @@ describe Campaign do
       @campaign.errors.on(:description).should == 'Please give a brief description of your issue'
     end
 
-    it 'should be invalid if the title is too short' do
-      @campaign.errors.on(:title).should == 'Please enter a headline that is at least 30 characters long'
+    it 'should be invalid if the title is nil' do
+      @campaign.errors.on(:title).should == 'Please enter a headline'
     end
 
   end

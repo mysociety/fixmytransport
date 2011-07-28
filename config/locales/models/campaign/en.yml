@@ -8,4 +8,4 @@ en:
               blank: "Please give a brief description of your issue"
             title:
               too_long: "Please enter a headline that is at most %{count} characters long"
-              too_short: "Please enter a headline that is at least %{count} characters long"
+              blank: "Please enter a headline"
