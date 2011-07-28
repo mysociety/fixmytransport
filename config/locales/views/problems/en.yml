@@ -19,7 +19,7 @@ en:
       multiple_routes_intro: "Choose a route by clicking on it, or try a different search if yours is not here: "
     convert:
       intro: "Share your report with friends, gather supporters<br />and get advice from people with similar experiences.<br />We'll hold on to your problem report until you decide:"
-      yes_explanation: "If it's a big issue that's going to require a few<br />more voices, you should choose this option."
+      yes_explanation: "If it's an issue where a few more voices<br />would help, you should choose this option."
       or: "or"
       thanks: Thanks for reporting this problem!
       header: "Do you want others to support you?"
@@ -27,6 +27,12 @@ en:
       no_explanation: "If your issue was a small one-off incident that you<br />just wanted to report, then your job is done."
       subheader: "Use FixMyTransport to create more pressure for a fix"
       no_thanks: "No Thanks"
+      makes_report_page: "Makes a problem report page"
+      reply_goes_to_you: "Any reply will go directly to you"
+      makes_support_page: "Makes a page for gathering support"
+      replies_appear_on_page: "Any replies you get will appear there"
+      get_advice_from_transport_experts: "Get advice from our transport experts"
+      tools_for_spreading_the_word: "Tools for spreading the word"
     find_bus_route:
       title: "Finding a bus or coach route"
       route_not_found: "Sorry, we could not find the route you entered. Please modify it and try again!"
