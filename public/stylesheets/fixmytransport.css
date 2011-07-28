@@ -1201,7 +1201,7 @@ ul.campaign-meta li span{
 				font-size:1.2em;
 			}
 			.manager-tools .actions li button {
-				font-size:1.1em;
+				font-size:1.2em;
 				color:#333;
 				text-align:left;
 				border:none;
@@ -1519,8 +1519,15 @@ ul#campaign-thread {
 		#choose .left p,
 		#choose .right p {
 		    width: 300px;
-		    margin: 2em auto;
+		    margin: 2em auto 1em auto;
 			font-size:1em;
+		}
+
+    #choose .left ul,
+		#choose .right ul {
+		   font-weight: bold;
+       text-align: left;
+       margin-left: 3.5em;
 		}
 
 /*===[Beta Front Page]===*/
