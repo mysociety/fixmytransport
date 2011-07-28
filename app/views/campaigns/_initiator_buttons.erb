@@ -109,11 +109,15 @@
           <div class='form-field'>
 
             <%= raw f.hidden_field :is_advice_request %>
+            <div class='error error-text' role="alert" style="display: none;">
+            </div>
+				    <div id="update-notice" class="notice" role="alert" style="display:none;">
+			      </div>
       			<input type="text" name="campaign_update[text]" id="campaign_update_text"/>
       			<button class="button" name="post-update" type="submit"><%= t('campaigns.show.post_update')%></button>
-				<div class='error error-text' role="alert" style="display: none;"></div>
-				<p><%= t('campaigns.show.post_update_instructions')%></p>
-				
+
+				    <p><%= t('campaigns.show.post_update_instructions')%></p>
+
 
           </div>
         </div>
