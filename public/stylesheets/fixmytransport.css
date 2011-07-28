@@ -1978,3 +1978,8 @@ body.facebook-canvas .button {
 .feedback-form div {
   overflow: hidden;
 }
+
+/*===[ Edit Account ]===*/
+.edit_account div {
+  overflow: hidden;
+}
