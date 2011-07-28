@@ -361,6 +361,11 @@ div.supporter-notice-arrow{
 		font-size: 1.3em;
 		line-height: 1.2em;
 	}
+
+	.supporter-notice a:visited {
+	  color: #048FC2;
+	}
+
 /* ===[ Main Content ]=== */
 #main-content,
 #beta-frontpage {
@@ -1256,12 +1261,12 @@ ul.campaign-meta li span{
     .manager-tools .error-text {
       position:absolute;
       margin-top:-2.1em;
-      left:1em; 
+      left:1em;
     }
     .manager-tools .notice{
       position:absolute;
       margin-top:-2.3em;
-      left:1em; 
+      left:1em;
     }
 
 		#map-container{

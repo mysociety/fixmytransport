@@ -24,21 +24,21 @@
 		description: "<%= escape_javascript(@campaign.description) %>",
 	  facebook_description: "<%= escape_javascript(facebook_description(@campaign, current_user)) %>",
 	  facebook_message: "<%= escape_javascript(facebook_message(@campaign, current_user)) %>",
-	  initiator: <%= (current_user && current_user == @campaign.initiator) ? 'true' : 'false' %>
+	  initiator: <%= (initiator_view(@campaign)) ? 'true' : 'false' %>
 	};
 
 	$(function(){
 		$("ul#campaign-thread li a.thread-item span.title").ellipsis();
 	});
 </script>
-<%- if (current_user && current_user.supporter_or_initiator(@campaign)) || @campaign.status == :successful %>
+<%- if (supporter_initiator_view(@campaign)) || @campaign.status == :successful %>
   <div id="banner" class="<%= 'supporter' %>">
   	<div class="container">
   		<div class="right">
   		  <div class="campaign-options">
-  		  <%- if current_user && current_user == @campaign.initiator %>
+  		  <%- if initiator_view(@campaign) %>
   			  <span class="status"><%= t('campaigns.show.your_campaign')%></span>
-  			<%- elsif current_user &&  current_user.supporter_or_initiator(@campaign) %>
+  			<%- elsif supporter_initiator_view(@campaign) %>
   			  <span class="status"><%= t('campaigns.show.you_support_this') %></span>
 
             <%- form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST', :id => 'campaign-leave' } do |f| %>
@@ -46,7 +46,7 @@
     					<%= t('campaigns.show.leave') %>
     				</button>
     			<%- end %>
-    			<%- if current_user.subscribed_to?(@campaign)%>
+    			<%- if current_user.subscribed_to?(@campaign) %>
     			  <%- form_for @campaign, :url => unsubscribe_url, :html => { :method => 'POST', :id => 'campaign-unsubscribe' } do |f| %>
     			  <input type="hidden" name="target_id" value="<%= @campaign.id %>">
     			  <input type="hidden" name="target_type" value="Campaign">
@@ -70,7 +70,7 @@
   		<%- end %>
   		</div>
   		<h1>
-  		  <%- if current_user && current_user == @campaign.initiator %>
+  		  <%- if initiator_view(@campaign) %>
   		  <a href="<%= location_url(@campaign.location) %>"><%= @campaign.short_initiator_call_to_action %></a>
   		  <%- else %>
   		  <a href="<%= location_url(@campaign.location) %>"><%= @campaign.short_call_to_action %></a>
@@ -102,10 +102,10 @@
   	</div>
   </div>
 <%- end %>
-<%- if current_user && current_user == @campaign.initiator && params[:first_time] == 'true' %>
+<%- if initiator_view(@campaign) && params[:first_time] == 'true' %>
   <div class="container-wide">
     <div class="supporter-notice">
-      <h1><%= raw t('campaigns.show.campaign_initiator_first_time_header')%></h1>
+      <h1><%= raw t('campaigns.show.campaign_initiator_first_time_header', :see => link_to(t('campaigns.show.see'), url_for(params.merge(:preview => 1)), :target => '_blank', :title => t('campaigns.show.preview_title')))%></h1>
     </div>
     <div class="supporter-notice-arrow"></div>
   </div>
@@ -113,17 +113,17 @@
 <div id="main-content" class="container campaign-content">
 
 	<div class="leftcol">
-	  	<%- if current_user && current_user == @campaign.initiator %>
+	  	<%- if initiator_view(@campaign) %>
       	<%= render :partial => "initiator_buttons" %>
     	<%- end %>
 
 		<div class="box campaign-description">
 			<h3><%= t('campaigns.show.campaign_description_header') %></h3>
-		  	<%- if (!current_user) || !(current_user.supporter_or_initiator(@campaign)) %>
+		  	<%- if !supporter_initiator_view(@campaign) %>
 			<img src="<%= @campaign.initiator.profile_photo.url(:small_thumb) %>" class="avatar" alt="" />
 			<%- end %>
 			<div>
-				<%- if !current_user || !(current_user.supporter_or_initiator(@campaign)) %>
+				<%- if !supporter_initiator_view(@campaign) %>
 				<h4><a href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a></h4>
 				<%- end %>
 
@@ -132,13 +132,13 @@
 				    <%= raw simple_format(sanitize(@campaign.description)) %>
 				  <%- else %>
 				    <div id="truncated-description">
-				    <%= raw simple_format(truncate(sanitize(@campaign.description), :length => 200)) %>
+				    <%= raw simple_format(truncate(sanitize(@campaign.description), :length => 400)) %>
 				    </div>
 				    <div id="full-description" style="display: none;">
 				      <%= raw simple_format(sanitize(@campaign.description)) %>
 				    </div>
 				  <%- end %>
-          <%- if sanitize(@campaign.description).size > 200 and ! params[:full_description] %>
+          <%- if sanitize(@campaign.description).size > 400 and ! params[:full_description] %>
 				  <a href="<%= url_for(params.merge(:full_description => '1')) %>" class="more-info">more</a>
 				  <%- end %>
 			</div>
@@ -199,7 +199,7 @@
 			<%- end %>
 		<%- end %>
 		</ul>
-    <%- if !((current_user && current_user.supporter_or_initiator(@campaign)) || @campaign.status == :successful) %>
+    <%- if !(supporter_initiator_view(@campaign) || @campaign.status == :successful) %>
     <%= render :partial => 'support_button', :locals => { :button_class => 'right support', :display_supporter => false, :display_initiator => false } %>
     <%- end %>
 	</div>
@@ -223,7 +223,7 @@
 	    </div>
 	  <%- end %>
 
-	  <%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
+	  <%- if supporter_initiator_view(@campaign) && ! current_user.new_supporter?(@campaign) %>
 		<div class="contrib-tools">
 			<a href="<%= facebook_url(@campaign) %>" class="facebook-trigger">
 				<span class="icon facebook"></span>
@@ -276,9 +276,6 @@
 
 		<%- if @campaign.supporters.registered.count > 0 %>
 		  <%= render :partial => "supporters", :locals => {:show_all => (params[:all_supporters] == '1') }%>
-		<%- end %>
-
-		<%- if current_user && current_user.supporter_or_initiator(@campaign) && ! current_user.new_supporter?(@campaign) %>
 		<%- end %>
 
 	</div>

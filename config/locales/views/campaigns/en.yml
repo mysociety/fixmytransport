@@ -35,7 +35,9 @@ en:
       reported_issue: "%{name} reported the issue on FixMyTransport."
       mark_as_complete: "Problem fixed!"
       whats_happening: "What's happening?"
-      campaign_initiator_first_time_header: "Congratulations - your new page is now public. However, it will only help create extra pressure if you spread the word offline, or via Twitter, Facebook or email."
+      see: see
+      preview_title: "Preview page - opens in new window"
+      campaign_initiator_first_time_header: "Congratulations - your new page is now public. You can %{see} how it will look to other people. However, it will only help create extra pressure if you spread the word offline, or via Twitter, Facebook or email."
       campaign_history: "Problem History"
       twitter_title: "Twitter"
       ask_an_expert: "Ask an expert"
