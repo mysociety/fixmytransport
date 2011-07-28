@@ -379,6 +379,10 @@ $(document).ready(function(){
          $(form_selector + " .error-text").hide()
         // clear the update field
         $(form_selector + " #campaign_update_text").val("");
+        $(form_selector + " #update-notice").html("Your update has been added to your problem history and will be sent to your supporters.");
+         $(form_selector + " #update-notice").fadeIn(1000, function(){
+           $(this).delay(5000).fadeOut(1000)
+         });
         // remove the hidden thread index field
         $(form_selector + " .last_thread_index").remove();
         addCampaignItem(response.html);
