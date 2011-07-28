@@ -12,6 +12,8 @@ en:
       header: "Choose a Stop or Station"
       multiple_locations_intro: "Choose a stop or station by clicking on it, or zoom in on an area to see other stops and stations."
       cant_see_the_map: "Can't see the map? %{link}"
+      cant_find_the_stop_or_station: "Can't find the stop or station you're looking for? %{link}"
+      let_us_know: "Please let us know."
     choose_route:
       show_all: "Show all results"
       information_wrong: "Is this route information wrong?"
@@ -71,7 +73,7 @@ en:
       ferry: ferry
       subheader: Choose from one of the four options below
     find_stop:
-      choose_from_list: "Choose from a list of stops and stations"
+      choose_from_list: "Choose from a list of stops and stations."
       title: "Finding a stop or station"
       please_enter_an_area: "Please enter an area, town or postcode"
       area_not_found: "We couldn't find a town, area or postcode that matches what you entered."
