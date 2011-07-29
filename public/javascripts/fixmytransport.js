@@ -571,14 +571,6 @@ $(document).ready(function(){
     });
   }
 
-  /* Campaign description 'more' link
-     ================================================== */
-  $('.more-info').click(function(event){
-    event.preventDefault();
-    $('#truncated-description').html($('#full-description').html());
-    $('.more-info').hide();
-  });
-
   /* Email quoting folding and unfolding
   ================================================== */
   function swap_copy(thread_element) {
