@@ -16,6 +16,6 @@
 		<%= raw simple_format(sanitize("#{comment.text}")) %>
 	</div>
 	<div class="thread-furniture">
-		<div class="thumb"><img src="<%= comment.user.profile_photo.url(:large_thumb) %>" alt="" /></div>
+		<div class="thumb"><a href="<%= profile_url(comment.user) %>"><img src="<%= comment.user.profile_photo.url(:large_thumb) %>" alt="" /></a></div>
 	</div>
 </div>

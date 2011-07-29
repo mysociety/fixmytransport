@@ -13,7 +13,7 @@
 	  <%- end %>
 		<%- supporters.each do |supporter| %>
 		<li>
-			<div class="avatar"><img src="<%= supporter.profile_photo.url(:small_thumb) %>" alt=""/></div>
+			<div class="avatar"><a href="<%= profile_url(supporter) %>"><img src="<%= supporter.profile_photo.url(:small_thumb) %>" alt=""/></a></div>
 			<div class="user-info">
 				<a class="name" href="<%= profile_url(supporter) %>"><%= supporter.name %></a>
 				<p class="location"><%= supporter.location %></p>
