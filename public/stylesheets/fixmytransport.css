@@ -2008,3 +2008,11 @@ body.facebook-canvas .button {
 .edit_account div {
   overflow: hidden;
 }
+.edit_account .optional-note {
+  padding: 0.8em 1em;
+}
+
+/*===[ Profile]===*/
+.user-bio {
+  display: block;
+}

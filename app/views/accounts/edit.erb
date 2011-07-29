@@ -22,9 +22,9 @@
 	      <%- end %>
 	      <%= f.label :password %>
 	      <%= raw f.password_field :password %>
-	      <span class='optional-note'>
+	      <div class='optional-note'>
 	        <%= "(#{t('accounts.edit.only_needed_if_want_to_change')})" %>
-	      </span>
+	      </div>
 	    </div>
 
 	    <div class='form-field'>
@@ -57,6 +57,20 @@
 	      <%= f.label :profile_photo, t('accounts.edit.upload_profile_photo') %>
 	      <%= raw f.file_field :profile_photo %>
 
+	    </div>
+
+      <div class='form-field'>
+	      <%- if current_user.errors.on('bio') %>
+	        <div class='error'>
+	          <%= error_message_on current_user, :bio %>
+	        </div>
+	      <%- end %>
+	      <%= f.label :bio, t('accounts.edit.add_bio') %>
+	      <%= raw f.text_area :bio %>
+        <div class='optional-note'>
+        <p><%= t('accounts.edit.will_appear_on_your_profile')%></p>
+        <p><%= raw t('accounts.edit.include_links', :link => link_to('http://www.twitter.com/fixmytransport', 'http://www.twitter.com/fixmytransport')) %></p>
+        </div>
 	    </div>
 
 		<button class="button" type="submit"><%= t('accounts.edit.update_account') %></button>

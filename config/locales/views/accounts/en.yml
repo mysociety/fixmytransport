@@ -14,6 +14,9 @@ en:
       only_needed_if_want_to_change: "Only if you want to change it"
       your_location: "Your location (will be public)"
       upload_profile_photo: Upload a profile photo
+      add_bio: "About you"
+      will_appear_on_your_profile: "This will appear on your profile, to help other people get a sense of why you're interested in sorting out transport issues."
+      include_links: "Include relevant links, such as to your blog or a twitter account. They will be made clickable. e.g. %{link}"
     new:
       password_match_error: "The password confirmation does not match the password"
       your_account_wont_be_created: "your account won't be created."

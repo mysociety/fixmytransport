@@ -24,8 +24,13 @@
 
 <div id="main-content" class="container">
   <div class="leftcol">
-  
-  
+
+  <%- if @user.bio %>
+     <h3><%= t('profiles.show.about') %></h3>
+
+      <%= raw MySociety::Format.make_clickable(simple_format(@user.bio)) %>
+   <%- end %>
+
   <%- if @user.initiated_campaigns.visible.count > 0 %>
   <a name="managing"></a>
   <h3><%= t('profiles.show.managing')%></h3>
@@ -35,7 +40,7 @@
     <%- end %>
   </ul>
   <%- end %>
-  
+
   <%- if @user.campaigns.visible.count > 0 %>
   <a name="supporting"></a>
   <h3><%= t('profiles.show.supporting')%></h3>
@@ -45,7 +50,7 @@
     <%- end %>
   </ul>
   <%- end %>
-  
+
   <%- if @user.problems.visible.count > 0 %>
   <a name="reported"></a>
   <h3><%= t('profiles.show.problems_reported')%></h3>
