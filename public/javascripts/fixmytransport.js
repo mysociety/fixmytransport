@@ -332,7 +332,9 @@ $(document).ready(function(){
       $("#login-box").dialog({title: "Sign In or Sign Up"});
   		$('#login-landing').show();
   		$("#login-box").dialog("open");
-
+  		
+  		// record a hit on the login box in analytics
+      _gaq.push(['_trackPageview', campaign_data.url + '/login']);
 	  };
 	  $(form_selector).ajaxForm(options);
 

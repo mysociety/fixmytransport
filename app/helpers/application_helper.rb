@@ -1,6 +1,13 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+  # Do we have content stored up for a yield of a particular name?
+  # Rough backport of method built-in to Rails in later versions
+  def content_for?(name)
+    ivar = "@content_for_#{name}"
+    !instance_variable_get(ivar).nil?
+  end
+
   def google_maps_key
     MySociety::Config.get('GOOGLE_MAPS_API_KEY', '')
   end
@@ -165,7 +172,7 @@ module ApplicationHelper
     location_string = location.name
     location_string.gsub!(/^Train route/, 'train route')
     location_string.gsub!(/^Number /, 'number ')
-    
+
     location_string = "#{on_or_at_the(location)} #{location_string}"
     if location.is_a?(Stop) && location.transport_mode_names.include?('Bus')
       location_string += " bus stop"
@@ -417,8 +424,8 @@ module ApplicationHelper
           return "#{image_start}tram.jpg"
         when 'GFTD'
           return "#{image_start}ferry.jpg"
-        else 
-          return "#{image_start}bus.jpg" 
+        else
+          return "#{image_start}bus.jpg"
         end
       else
         return "#{image_start}bus.jpg"
