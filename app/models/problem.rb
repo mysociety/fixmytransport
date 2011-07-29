@@ -10,7 +10,6 @@ class Problem < ActiveRecord::Base
   has_many :assignments
   has_many :comments, :as => :commented
   has_many :sent_emails
-  has_many :recipients, :through => :sent_emails
   validates_presence_of :description, :subject, :category, :if => :location
   validates_associated :reporter
   validates_presence_of :operator_id, :if => :location_has_operators
@@ -107,7 +106,7 @@ class Problem < ActiveRecord::Base
   end
 
   def recipients
-    self.sent_emails.collect { |sent_email| sent_email.recipient }.uniq
+    self.sent_emails.collect{ |sent_email| sent_email.recipient if !sent_email.comment_id }.compact.uniq
   end
 
   # if this email has never been used before, assign the name

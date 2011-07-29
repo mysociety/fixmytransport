@@ -18,6 +18,24 @@ describe Problem do
 
   end
 
+  describe 'when asked for recipients' do 
+  
+    it 'should not include recipients of comment emails' do 
+      problem = Problem.new
+      user = mock_model(User)
+      operator = mock_model(Operator)
+      comment_sent_email = mock_model(SentEmail, :problem => problem, 
+                                                 :comment_id => 22,
+                                                 :recipient => user)
+      problem_report_sent_email = mock_model(SentEmail, :problem => problem, 
+                                                        :comment_id => nil,
+                                                        :recipient => operator)
+      problem.stub!(:sent_emails).and_return([comment_sent_email, problem_report_sent_email])
+      problem.recipients.should == [operator]
+    end
+    
+  end
+
   describe 'when confirming' do
 
     before do
