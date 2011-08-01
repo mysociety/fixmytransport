@@ -1,6 +1,8 @@
-<a href="<%= problem_url(problem) %>">
-  <img src="<%= issue_list_image_url(problem) %>" alt="<%= problem.subject %> - <%= t('shared.problem.one_off_report') %>" />
-</a>
+<%- if context != :browse_issues %>
+  <a href="<%= problem_url(problem) %>">
+    <img src="<%= issue_list_image_url(problem) %>" alt="<%= problem.subject %> - <%= t('shared.problem.one_off_report') %>" />
+  </a>
+<%- end %>
 <div class="wrapper">
 	<h4><a href="<%= problem_url(problem) %>"><%= problem.subject %></a></h4>
 	<p><%= raw link_to(problem.location.description, location_url(problem.location)) %></p>

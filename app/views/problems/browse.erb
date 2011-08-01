@@ -1,0 +1,19 @@
+<div id="banner">
+	<div class="container">
+		<h1><%= t('problems.browse.where_do_you_want_to_browse') %></h1>
+	</div>
+</div>
+
+<div id="main-content" class="container">
+	<%- form_tag browse_issues_path, :id => 'stop_name_form', :method => 'GET' do  %>
+	<div id="find-stop">
+		<label for="name" id='guidance-name' class='guidance'><%= t('problems.find_stop.instructions')%></label>
+		<%= raw text_field_tag 'name', params[:name], :size => 40 %>
+		<button class="point-go" type='submit'><%= t('problems.find_stop.go') %></button>
+	</div>
+	<%- if @error_message %>
+	<div class='error find-stop-error'><%= @error_message %></div>
+	<%- end %>
+
+	<%- end %>
+</div>

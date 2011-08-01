@@ -1,5 +1,5 @@
 <div id="main-content" class="container">
-  <div class="leftcol">
+  <div class="leftcol widecol">
   <%= will_paginate @issues %>
     <ul class="issues-list">
       <%= render :partial => "shared/issue", :collection => @issues, :locals => {:context => :issue_list } %>

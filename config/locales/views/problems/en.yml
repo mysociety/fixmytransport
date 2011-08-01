@@ -1,5 +1,7 @@
 en:
   problems:
+    browse: 
+      where_do_you_want_to_browse: Where do you want to see issues for?
     choose_area:
       choose_area: "Choose area"
       multiple_localities: "We found more than one place matching \"%{name}\". Please select one, or try a different search if yours is not here:"
@@ -129,6 +131,7 @@ en:
       im_a_beta_tester: "I'm a beta tester"
       find_out_more: Find out more
       coming_soon: "FixMyTransport is coming soon...currently in closed beta testing."
+      browse_issues: Browse Issues
     issues_index:
       title: "Recent issues"
     list:

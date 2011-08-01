@@ -49,15 +49,21 @@ h1, h2, h3, h4, h5, h6, .font-1, #greybanner p {
 }
 .leftcol {
     float: left;
-    width: 590px;
     margin: 0.5em 40px 0.5em 0;
     overflow: hidden;
 }
 .rightcol {
     float: left;
-    width: 310px;
     margin: 0.5em 0 0.5em 10px;
 }
+
+.narrowcol {
+  width: 310px;
+}
+.widecol {
+  width: 590px;
+}
+
 .leftcol-banner {
     float: left;
     width: 615px;

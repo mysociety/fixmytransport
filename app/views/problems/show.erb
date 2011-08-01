@@ -24,7 +24,7 @@
 	</div>
 </div>
 <div id="main-content" class="container">
-	<div class="leftcol">	
+	<div class="leftcol widecol">	
 	  <div id="medium-map">
     <%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH } %>
 		</div>
@@ -43,7 +43,7 @@
 		
 	</div>
 
-	<div class="rightcol">
+	<div class="rightcol narrowcol">
 		<h3>Initial problem</h3>
 			<p><%= raw simple_format(sanitize(@problem.description)) %></p>
 

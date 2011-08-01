@@ -98,7 +98,7 @@
   		<h1>&ldquo;<%= @campaign.call_to_action %>&rdquo; &ndash; <%= @campaign.initiator.name %></h1>
   	</div>
 
-  	<div class="rightcol">
+  	<div class="rightcol narrowcol">
       <%= render :partial => 'support_button', :locals => { :button_class => 'support-big', :display_supporter => true, :display_initiator => true } %>
   	</div>
   </div>
@@ -113,7 +113,7 @@
 <%- end %>
 <div id="main-content" class="container campaign-content">
 
-	<div class="leftcol">
+	<div class="leftcol widecol">
 	  	<%- if initiator_view(@campaign) %>
       	<%= render :partial => "initiator_buttons" %>
     	<%- end %>
@@ -192,7 +192,7 @@
 	</div>
 
 
-	<div class="rightcol">
+	<div class="rightcol narrowcol">
 		<%- if current_user && current_user.new_supporter?(@campaign) %>
 	    <div class="contrib-tools-initial">
 			<a href="<%= facebook_url(@campaign) %>" class="facebook-trigger">

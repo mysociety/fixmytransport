@@ -3,9 +3,6 @@ ActionController::Routing::Routes.draw do |map|
   # home page
   map.root :controller => 'problems', :action => 'frontpage'
 
-  # issues index
-  map.issues '/issues', :action => 'issues_index', :controller => 'problems'
-
   # operator pages
   map.resources :operators, :only => [:show]
 
@@ -47,6 +44,10 @@ ActionController::Routing::Routes.draw do |map|
                                             :find_bus_route => :get,
                                             :find_train_route => :get,
                                             :find_other_route => :get }
+
+  # issues index
+  map.issues '/issues', :action => 'issues_index', :controller => 'problems'
+  map.browse_issues '/issues/browse', :action => 'browse', :controller => 'problems'
 
   # stops
   map.add_comment_stop "/stops/:scope/:id/add_comment", :controller => "locations",

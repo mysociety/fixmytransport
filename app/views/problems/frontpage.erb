@@ -9,7 +9,7 @@
 </div>
 <%- end %>
 <div id="frontpage-top" class="container">
-	<div class="leftcol">
+	<div class="leftcol widecol">
 		<ul id="frontpage-problem-scroller">
 			<li>
 				<h1><%= t('problems.frontpage.bad_train')%></h1>
@@ -49,7 +49,7 @@
 		</div>
 		<%- end %>
 	</div>
-	<div class="rightcol">
+	<div class="rightcol narrowcol">
 		<h2><%= t('problems.frontpage.what_it_does')%></h2>
 		<ul id="secret-list">
 			<li class="secret-report"><%= t('problems.frontpage.reports_problems')%></li>
@@ -98,6 +98,7 @@
 			<ul>
 				<li><a href="<%= issues_url %>" class="font-1"><%= t('problems.frontpage.recent_issues')%></a></li>
 				<li><a href="<%= routes_url %>" class="font-1"><%= t('problems.frontpage.browse_routes')%></a></li>
+				<li><a href="<%= browse_issues_url %>" class="font-1"><%= t('problems.frontpage.browse_issues')%></a></li>
 			</ul>
 		</div>
 	</div>
