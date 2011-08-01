@@ -14,7 +14,7 @@ var segmentStyle =
   strokeOpacity: 0.2,
   strokeWidth: 4
 };
-    
+
 var segmentSelectedStyle =
 {
   strokeColor: "#000000",
@@ -34,20 +34,31 @@ function area_init() {
   centerCoords =  new OpenLayers.LonLat(lon, lat);
   centerCoords.transform(proj, map.getProjectionObject());
   map.setCenter(centerCoords, zoom);
-  
+
   if (findOtherLocations == true) {
-    map.events.register('moveend', map, updateLocations); 
+    map.events.register('moveend', map, updateLocations);
   }
 
 }
 
 function updateLocations(event) {
-  center = map.getCenter();
-  center = center.transform(map.getProjectionObject(), proj);
-  url = "/locations/" + map.getZoom() + "/" + Math.round(center.lat*1000)/1000 + "/" + Math.round(center.lon*1000)/1000 + "/" + linkType;
-  params = "?height=" + $('#map').height() + "&width=" + $('#map').width();
-  params = params + "&highlight=" + highlight;
-  OpenLayers.loadURL(url + params, {}, this, loadNewMarkers, markerFail);
+  zoom = map.getZoom();
+  if (zoom >= minZoomForOtherMarkers){
+    for (var i=0; i < otherMarkers.markers.length; i++){
+      otherMarkers.markers[i].display(true);
+    }
+    center = map.getCenter();
+    center = center.transform(map.getProjectionObject(), proj);
+    url = "/locations/" + map.getZoom() + "/" + Math.round(center.lat*1000)/1000 + "/" + Math.round(center.lon*1000)/1000 + "/" + linkType;
+    params = "?height=" + $('#map').height() + "&width=" + $('#map').width();
+    params = params + "&highlight=" + highlight;
+    OpenLayers.loadURL(url + params, {}, this, loadNewMarkers, markerFail);
+  }else{
+    for (var i=0; i < otherMarkers.markers.length; i++){
+      otherMarkers.markers[i].display(false);
+    }
+  }
+
 }
 
 function loadNewMarkers(response) {
@@ -85,15 +96,15 @@ function pointCoords(lon, lat) {
 }
 
 function route_init(map_element, routeSegments) {
-		  
+
   createMap(map_element);
   bounds = new OpenLayers.Bounds();
-  
+
   var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer",{projection: proj});
   var markers = new OpenLayers.Layer.Markers( "Markers", {projection: proj});
   map.addLayer(vectorLayer);
   map.addLayer(markers);
-  
+
   addSelectedHandler(vectorLayer);
   for (var i=0; i < routeSegments.length; i++){
      var coords = routeSegments[i];
@@ -111,7 +122,7 @@ function route_init(map_element, routeSegments) {
      lineFeature.segment_id = coords[2];
      vectorLayer.addFeatures([lineFeature]);
    }
-   map.zoomToExtent(bounds, false); 
+   map.zoomToExtent(bounds, false);
 
 }
 
@@ -141,12 +152,12 @@ function segmentUnselected(event) {
   segment.style = segmentStyle;
   this.drawFeature(segment);
   $("#route_segment_" + segment.segment_id).toggleClass("selected");
-  
+
 }
 
 function createMap(map_element) {
   OpenLayers.ImgPath='/javascripts/img/';
-  var options = { 
+  var options = {
         'projection': new OpenLayers.Projection("EPSG:900913"),
         'units': "m",
         'numZoomLevels': 18,
@@ -155,12 +166,12 @@ function createMap(map_element) {
         'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
                                           20037508.34, 20037508.34)
       };
-  $('.static-map-element').hide();    
+  $('.static-map-element').hide();
   map = new OpenLayers.Map(map_element, options);
   var layer = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true,
                                                            'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
                                                                                             20037508.34, 20037508.34)});
-  map.addLayer(layer); 
+  map.addLayer(layer);
 }
 
 function stopSelected () {
@@ -191,7 +202,7 @@ function hoverStop(stop) {
   tooltipPopup.displayClass = 'tooltip-popup';
   tooltipPopup.backgroundColor='#FFFCCF';
   tooltipPopup.border='1px solid #CDCDC1';
-  tooltipPopup.div.style.fontSize='1em';  
+  tooltipPopup.div.style.fontSize='1em';
   tooltipPopup.contentDiv.style.overflow='hidden';
   tooltipPopup.closeOnMove = true;
   tooltipPopup.autoSize = true;
@@ -209,7 +220,7 @@ function stopUnhovered() {
 function unHoverStop(stop) {
   if (stop != null && stop.popup != null){
     map.removePopup(stop.popup);
-  }  
+  }
 }
 
 

@@ -10,6 +10,7 @@
    var areaStops = <%= raw locations.to_json %>;
    var otherAreaStops = <%= raw other_locations.to_json %>;
    var linkType = '<%= link_type %>';
+   var minZoomForOtherMarkers = <%= MIN_ZOOM_FOR_OTHER_MARKERS %>;
    var highlight = '<%= highlight %>';
    $(document).ready(function(){
      area_init();
