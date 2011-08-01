@@ -241,7 +241,7 @@ class Problem < ActiveRecord::Base
     else
       location_clause = ""
     end
-    # grab the ids of visiblecampaigns and problems, order them by most recently created
+    # grab the ids of visible campaigns and problems, order them by most recently created
     # (problems) or active (campaigns)
     visible_problem_codes = Problem.visible_status_codes.map{ |code| conn.quote(code) }.join(",")
     visible_campaign_codes = Campaign.visible_status_codes.map{ |code| conn.quote(code) }.join(",")
