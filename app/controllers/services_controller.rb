@@ -1,9 +1,9 @@
 class ServicesController < ApplicationController
-  
+
   include ApplicationHelper
   skip_before_filter :make_cachable
   before_filter :long_cache, :except => [:request_country]
-  
+
   def in_area
     map_height = (params[:height].to_i or MAP_HEIGHT)
     map_width = (params[:width].to_i or MAP_WIDTH)
@@ -11,13 +11,12 @@ class ServicesController < ApplicationController
     map_width = MAP_WIDTH if ! ALL_WIDTHS.include? map_width
     other_locations =  Map.other_locations(params[:lat].to_f, params[:lon].to_f, params[:zoom].to_i, map_height, map_width)
     link_type = params[:link_type].to_sym
-    render :json => "#{location_stops_coords(other_locations, small=true, link_type).to_json}"
+    highlight = params[:highlight].blank? ? nil : params[:highlight].to_sym
+    render :json => "#{location_stops_coords(other_locations, small=true, link_type, highlight).to_json}"
   end
-  
+
   def request_country
     require 'open-uri'
-    expires_in 1.day, :public => true
-    response.headers['Vary'] = '*'
     gaze = MySociety::Config.get('GAZE_URL', '')
     if gaze != ''
       render :text => open("#{gaze}/gaze-rest?f=get_country_from_ip;ip=#{request.remote_ip}").read.strip
@@ -25,9 +24,9 @@ class ServicesController < ApplicationController
       render :text => 'GB'
     end
   end
-  
+
   private
-  
+
   # none of these actions require user (or any other) session, so skip it
   def current_user(refresh=false)
     nil

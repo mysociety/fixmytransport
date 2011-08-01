@@ -46,6 +46,7 @@ function updateLocations(event) {
   center = center.transform(map.getProjectionObject(), proj);
   url = "/locations/" + map.getZoom() + "/" + Math.round(center.lat*1000)/1000 + "/" + Math.round(center.lon*1000)/1000 + "/" + linkType;
   params = "?height=" + $('#map').height() + "&width=" + $('#map').width();
+  params = params + "&highlight=" + highlight;
   OpenLayers.loadURL(url + params, {}, this, loadNewMarkers, markerFail);
 }
 

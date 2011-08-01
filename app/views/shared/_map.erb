@@ -1,10 +1,13 @@
 <%- if defined?(static) == nil %>
 <%- static = false %>
 <%- end %>
-<%- location_data = location_stops_coords(locations, small=false, link_type) %>
-<%- other_location_data = location_stops_coords(other_locations, small=true, link_type) %>
+<%- if defined?(highlight) == nil %>
+<%- highlight = nil %>
+<%- end %>
+<%- location_data = location_stops_coords(locations, small=false, link_type, highlight) %>
+<%- other_location_data = location_stops_coords(other_locations, small=true, link_type, highlight) %>
 <%- unless static %>
-<%= render :partial => 'shared/location_map_js', :locals => { :locations => location_data, :other_locations => other_location_data, :link_type => link_type } %>
+<%= render :partial => 'shared/location_map_js', :locals => { :locations => location_data, :other_locations => other_location_data, :link_type => link_type, :highlight => highlight } %>
 <%- end %>
 
 <div id="map" class="box">

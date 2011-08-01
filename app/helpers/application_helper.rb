@@ -68,9 +68,19 @@ module ApplicationHelper
     small ? SMALL_ICON_WIDTH : LARGE_ICON_WIDTH
   end
 
-  def stop_coords(stop, small=false, link_type=:location, location=nil, line_only=false)
-    location = (location or stop)
-    if line_only
+  # Generate a hash of data used to render the stop on a map
+  # Required options:
+  # :link_type - [:problem|:location] - link stop to problem reporting
+  # url or location url
+  # :highlight - is this stop to be rendered prominently
+  # :small - should a small marker be used
+  # Other options
+  # :line_only - just return enough data for a line map
+  # :location - generate the description and link for the location
+  # passed, not for the stop itself.
+  def stop_coords(stop, options)
+    location = (options[:location] or stop)
+    if options[:line_only]
       data = { :lat => stop.lat,
                :lon => stop.lon,
                :id => stop.id }
@@ -78,36 +88,49 @@ module ApplicationHelper
       data = { :lat => stop.lat,
                :lon => stop.lon,
                :id => stop.id,
-               :url => map_link_path(location, link_type),
+               :url => map_link_path(location, options[:link_type]),
                :description => location.description,
-               :icon => stop_icon(stop, small),
-               :height => icon_height(small),
-               :width => icon_width(small) }
+               :icon => stop_icon(stop, options[:small], options[:highlight]),
+               :height => icon_height(options[:small]),
+               :width => icon_width(options[:small]) }
     end
     return data
   end
 
-  def stop_icon(location, small=false)
+  def stop_icon(location, small=false, highlight=nil)
+    if highlight == :has_content
+      background = location.related_issues.empty?
+    else
+      background = false
+    end
     name = '/images/map-icons/map-'
     if location.is_a? Route
       if location.transport_mode_name == 'Train'
-        name += 'train-blue'
+        name += 'train-'
+        name += background ? 'grey' : 'blue'
       elsif location.transport_mode_name == 'Tram/Metro'
-        name += 'tram-green'
+        name += 'tram-'
+        name += background ? 'grey' : 'green'
       elsif location.transport_mode_name == 'Ferry'
-        name += 'boat-orange'
+        name += 'boat-'
+        name += background ? 'grey' : 'orange'
       else
-        name += 'bus-magenta'
+        name += 'bus-'
+        name += background ? 'grey' : 'magenta'
       end
     else
       if location.respond_to?(:area_type) && location.area_type == 'GRLS'
-        name += 'train-blue'
+        name += 'train-'
+        name += background ? 'grey' : 'blue'
       elsif location.respond_to?(:area_type) && location.area_type == 'GTMU'
-        name += 'tram-green'
+        name += 'tram-'
+        name += background ? 'grey' : 'green'
       elsif location.respond_to?(:area_type) && location.area_type == 'GFTD'
-        name += 'boat-orange'
+        name += 'boat-'
+        name += background ? 'grey' : 'orange'
       else
-        name += 'bus-magenta'
+        name += 'bus-'
+        name += background ? 'grey' : 'magenta'
       end
     end
 
@@ -120,26 +143,36 @@ module ApplicationHelper
   end
 
   def route_segment_js(route, line_only=false)
+    stop_options = {:small => true, :link_type => :location, :line_only => line_only}
     segments_js = route.journey_patterns.map{ |jp| jp.route_segments }.flatten.map do |segment|
-      [stop_coords(segment.from_stop, small=true, link_type=:location, location=nil, line_only=line_only),
-       stop_coords(segment.to_stop, small=true, link_type=:location, location=nil, line_only=line_only), segment.id]
+      [stop_coords(segment.from_stop, stop_options),
+       stop_coords(segment.to_stop, stop_options), segment.id]
     end
     segments_js.to_json
   end
 
-  def location_stops_coords(locations, small, link_type)
+  def location_stops_coords(locations, small, link_type, highlight=nil)
     array_content = []
     locations.each do |location|
       if location.is_a? Route or location.is_a? SubRoute
         if location.show_as_point
-          array_content << stop_coords(location, false, link_type)
+          array_content << stop_coords(location, { :small => false,
+                                                   :link_type => link_type,
+                                                   :highlight => highlight })
         elsif location.is_a? Route and link_type == :problem
-          array_content <<  location.points.map{ |stop| stop_coords(stop, true, link_type, location) }
+          array_content <<  location.points.map{ |stop| stop_coords(stop, { :small => true,
+                                                                            :link_type => link_type,
+                                                                            :location => location,
+                                                                            :highlight => highlight })}
         else
-          array_content <<  location.points.map{ |stop| stop_coords(stop, true, link_type) }
+          array_content <<  location.points.map{ |stop| stop_coords(stop, { :small => true,
+                                                                            :link_type => link_type,
+                                                                            :highlight => highlight })}
         end
       else
-       array_content << stop_coords(location, small, link_type)
+       array_content << stop_coords(location, { :small => small,
+                                                :link_type => link_type,
+                                                :highlight => highlight })
       end
     end
     array_content
