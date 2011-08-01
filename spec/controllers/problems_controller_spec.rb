@@ -395,7 +395,7 @@ describe ProblemsController do
             
             it 'should set the other locations based on the lat lon and zoom for the postcode' do 
               mock_location = mock('location')
-              Map.should_receive(:other_locations).with(51.1, 0.10, 15, LARGE_MAP_HEIGHT, LARGE_MAP_WIDTH).and_return([mock_location])
+              Map.should_receive(:other_locations).with(51.1, 0.10, 15, LARGE_MAP_HEIGHT, LARGE_MAP_WIDTH, nil).and_return([mock_location])
               make_request({:name => 'ZZ9 9ZZ'})
               assigns[:other_locations].should == [mock_location]
             end

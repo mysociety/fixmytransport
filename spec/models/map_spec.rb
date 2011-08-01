@@ -30,5 +30,56 @@ describe Map do
     Map.zoom_to_coords(-0.09144, -0.09028, 51.50104, 51.50098, MAP_HEIGHT, MAP_WIDTH).should == MAX_VISIBLE_ZOOM
   end
   
+  describe 'when asked for other locations' do 
+
+    describe 'when the current zoom level is >= the minimum zoom level for showing other markers' do 
+    
+      it 'should ask for stops and stop areas in the bounding box without passing any highlight param' do 
+        Stop.should_receive(:find_in_bounding_box).with(anything(), 
+                                                        anything(),
+                                                        anything(), 
+                                                        anything()).and_return([])
+        StopArea.should_receive(:find_in_bounding_box).with(anything(), 
+                                                            anything(), 
+                                                            anything(), 
+                                                            anything()).and_return([])
+        Map.other_locations(51.505720, -0.088872, MIN_ZOOM_FOR_OTHER_MARKERS, MAP_HEIGHT, MAP_WIDTH)
+      end
+      
+    end
+    
+    describe 'when the current zoom level is < the minimum zoom level for showing other markers' do 
+    
+      describe 'when no highlight param is passed' do 
+        
+        it 'should not ask for stops and stop areas in the bounding box' do 
+          Stop.should_not_receive(:find_in_bounding_box)
+          StopArea.should_not_receive(:find_in_bounding_box)
+          Map.other_locations(51.505720, -0.088872, MIN_ZOOM_FOR_OTHER_MARKERS - 1, MAP_HEIGHT, MAP_WIDTH)
+        end
+      
+      end
+      
+      describe 'when a highlight param is passed' do 
+      
+        it 'should ask for stops and stop areas in the bounding box' do 
+          Stop.should_receive(:find_in_bounding_box).with(anything(), 
+                                                          anything(), 
+                                                          anything(), 
+                                                          anything(),
+                                                          :has_content).and_return([])
+          StopArea.should_receive(:find_in_bounding_box).with(anything(), 
+                                                              anything(), 
+                                                              anything(), 
+                                                              anything(),
+                                                              :has_content).and_return([])
+          Map.other_locations(51.505720, -0.088872, MIN_ZOOM_FOR_OTHER_MARKERS - 1, MAP_HEIGHT, MAP_WIDTH, :has_content)
+        end
+        
+      end
+    
+    end
+    
+  end
   
 end

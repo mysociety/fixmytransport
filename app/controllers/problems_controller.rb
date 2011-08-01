@@ -254,6 +254,7 @@ class ProblemsController < ApplicationController
   end
 
   def browse
+    @highlight = :has_content
     @title = t('problems.browse.title')
     options = { :find_template => :browse,
                 :browse_template => :browse_area }
@@ -310,7 +311,7 @@ class ProblemsController < ApplicationController
           @lat = postcode_info[:lat] unless @lat
           @lon = postcode_info[:lon] unless @lon
           @zoom = postcode_info[:zoom] unless @zoom
-          @other_locations = Map.other_locations(@lat, @lon, @zoom, LARGE_MAP_HEIGHT, LARGE_MAP_WIDTH)
+          @other_locations = Map.other_locations(@lat, @lon, @zoom, LARGE_MAP_HEIGHT, LARGE_MAP_WIDTH, @highlight)
           @locations = []
           @find_other_locations = true
           render options[:browse_template]

@@ -47,17 +47,20 @@ function updateLocations(event) {
     for (var i=0; i < otherMarkers.markers.length; i++){
       otherMarkers.markers[i].display(true);
     }
-    center = map.getCenter();
-    center = center.transform(map.getProjectionObject(), proj);
-    url = "/locations/" + map.getZoom() + "/" + Math.round(center.lat*1000)/1000 + "/" + Math.round(center.lon*1000)/1000 + "/" + linkType;
-    params = "?height=" + $('#map').height() + "&width=" + $('#map').width();
-    params = params + "&highlight=" + highlight;
-    OpenLayers.loadURL(url + params, {}, this, loadNewMarkers, markerFail);
   }else{
     for (var i=0; i < otherMarkers.markers.length; i++){
-      otherMarkers.markers[i].display(false);
+      if (!otherMarkers.markers[i].highlight == true){
+        otherMarkers.markers[i].display(false);
+      }
     }
   }
+
+  center = map.getCenter();
+  center = center.transform(map.getProjectionObject(), proj);
+  url = "/locations/" + map.getZoom() + "/" + Math.round(center.lat*1000)/1000 + "/" + Math.round(center.lon*1000)/1000 + "/" + linkType;
+  params = "?height=" + $('#map').height() + "&width=" + $('#map').width();
+  params = params + "&highlight=" + highlight;
+  OpenLayers.loadURL(url + params, {}, this, loadNewMarkers, markerFail);
 
 }
 
@@ -235,6 +238,7 @@ function addRouteMarker(stopCoords, bounds, markers, item, other) {
     marker.url = item.url;
     marker.name = item.description;
     marker.id = item.id;
+    marker.highlight = item.highlight;
     stopsById[item.id] = marker;
     marker.events.register("click", marker, stopSelected);
     marker.events.register("mouseover", marker, stopHovered);

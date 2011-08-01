@@ -80,6 +80,9 @@ module ApplicationHelper
   # passed, not for the stop itself.
   def stop_coords(stop, options)
     location = (options[:location] or stop)
+    if options[:highlight] == :has_content
+      highlight = !location.related_issues.empty?
+    end
     if options[:line_only]
       data = { :lat => stop.lat,
                :lon => stop.lon,
@@ -93,6 +96,9 @@ module ApplicationHelper
                :icon => stop_icon(stop, options[:small], options[:highlight]),
                :height => icon_height(options[:small]),
                :width => icon_width(options[:small]) }
+      if options[:highlight]
+        data[:highlight] = highlight
+      end
     end
     return data
   end

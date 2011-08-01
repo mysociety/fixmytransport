@@ -227,14 +227,27 @@ class Stop < ActiveRecord::Base
     stops.empty? ? nil : stops.first
   end
 
-  def self.find_in_bounding_box(min_lat, min_lon, max_lat, max_lon)
-    stops = find(:all, :conditions => ["stops.stop_type in (?)
-                                        AND status = 'ACT'
-                                        AND stops.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
-                                        ST_Point(?, ?),
-    	                                  ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})",
-    	                                  StopType.primary_types, min_lon, min_lat, max_lon, max_lat],
-    	                  :include => :locality)
+  def self.find_in_bounding_box(min_lat, min_lon, max_lat, max_lon, highlight=nil)
+    query = "stops.stop_type in (?)
+             AND status = 'ACT'
+             AND stops.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
+             ST_Point(?, ?),
+             ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})"
+    params = [StopType.primary_types, min_lon, min_lat, max_lon, max_lat]
+    if highlight == :has_content
+      joins = "inner join problems on problems.location_id = stops.id 
+               AND problems.location_type = 'Stop'"
+    else
+      joins = nil
+    end
+    conditions = [query] + params
+    stops = find(:all, :joins => joins, 
+                       :conditions => conditions,
+    	                 :include => :locality)
+    if highlight == :has_content
+      stops = stops.select{ |stop| !stop.related_issues.empty? }
+    end
+    return stops
   end
 
   def self.find_by_atco_code(atco_code, options={})
