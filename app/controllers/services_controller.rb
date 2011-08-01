@@ -16,8 +16,6 @@ class ServicesController < ApplicationController
   
   def request_country
     require 'open-uri'
-    expires_in 1.day, :public => true
-    response.headers['Vary'] = '*'
     gaze = MySociety::Config.get('GAZE_URL', '')
     if gaze != ''
       render :text => open("#{gaze}/gaze-rest?f=get_country_from_ip;ip=#{request.remote_ip}").read.strip
