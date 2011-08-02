@@ -9,7 +9,7 @@
 <%- comments.each do |comment| %>
   <tr class='<%= cycle("odd", "even", :name => 'comments') %>'>
     <td>
-      <%= link_to(comment.id, admin_comment_path(comment)) %>
+      <%= link_to(comment.id, admin_url(admin_comment_path(comment))) %>
     </td>
     <%- Comment.content_columns.map { |c| c.name }.each do |column| %>
       <td><%= simple_format( comment.send(column) ) %></td>
