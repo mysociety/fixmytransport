@@ -284,45 +284,28 @@ class ProblemsController < ApplicationController
           render :choose_locality
           return
         else
-          map_params_from_location(stop_info[:localities],
+          return render_browse_template(stop_info[:localities], options[:map_options], options[:browse_template])
+        end
+      # got back district
+      elsif stop_info[:district]
+        return render_browse_template([stop_info[:district]], options[:map_options], options[:browse_template])
+      # got back admin area
+      elsif stop_info[:admin_area]
+        return render_browse_template([stop_info[:admin_area]], options[:map_options], options[:browse_template])
+      # got back stops/stations
+      elsif stop_info[:locations]
+        if options[:map_options][:mode] == :browse
+          return render_browse_template(stop_info[:locations], options[:map_options], options[:browse_template])          
+        else
+          map_params_from_location(stop_info[:locations],
                                    find_other_locations=true,
                                    LARGE_MAP_HEIGHT,
                                    LARGE_MAP_WIDTH,
                                    options[:map_options])
-          @locations = []
+          @locations = stop_info[:locations]
           render options[:browse_template]
           return
         end
-      # got back district
-      elsif stop_info[:district]
-        map_params_from_location([stop_info[:district]],
-                                 find_other_locations=true,
-                                 LARGE_MAP_HEIGHT,
-                                 LARGE_MAP_WIDTH,
-                                 options[:map_options])
-        @locations = []
-        render options[:browse_template]
-        return
-      # got back admin area
-      elsif stop_info[:admin_area]
-        map_params_from_location([stop_info[:admin_area]],
-                                 find_other_locations=true,
-                                 LARGE_MAP_HEIGHT,
-                                 LARGE_MAP_WIDTH,
-                                 options[:map_options])
-        @locations = []
-        render options[:browse_template]
-        return
-      # got back stops/stations
-      elsif stop_info[:locations]
-        map_params_from_location(stop_info[:locations],
-                                 find_other_locations=true,
-                                 LARGE_MAP_HEIGHT,
-                                 LARGE_MAP_WIDTH,
-                                 options[:map_options])
-        @locations = stop_info[:locations]
-        render options[:browse_template]
-        return
       # got back postcode info
       elsif stop_info[:postcode_info]
         postcode_info = stop_info[:postcode_info]
@@ -350,6 +333,17 @@ class ProblemsController < ApplicationController
       end
     end
 
+  end
+  
+  def render_browse_template(locations, map_options, template)
+    map_params_from_location(locations, 
+                             find_other_locations=true, 
+                             LARGE_MAP_HEIGHT, 
+                             LARGE_MAP_WIDTH, 
+                             map_options)
+    @locations = []
+    render template
+    return
   end
 
   def find_visible_problem

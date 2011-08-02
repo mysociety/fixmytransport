@@ -278,6 +278,25 @@ describe ProblemsController do
         make_request({:name => 'Euston'})
       end
       
+      describe 'when stops match the name given' do 
+        
+        before do
+          @mock_stop = mock_model(Stop)
+          Gazetteer.stub!(:place_from_name).and_return({:locations => [@mock_stop]})
+        end
+
+        it 'should display the area indicated by the stops and present them as the main locations being displayed' do 
+          @controller.should_receive(:map_params_from_location).with([@mock_stop], 
+                                                                      find_other_locations=true,
+                                                                      LARGE_MAP_HEIGHT, 
+                                                                      LARGE_MAP_WIDTH,
+                                                                      { :mode => :find })
+          make_request({:name => 'Euston'})
+          assigns[:locations].should == [@mock_stop]
+        end
+
+      end
+      
       describe 'when localities are returned by the gazetteer' do 
                 
         describe 'when there is only one locality returned' do 
@@ -893,12 +912,31 @@ describe ProblemsController do
   end
   
   describe 'GET #browse' do 
+    
+    def make_request
+      get :browse, :name => "London"
+    end    
   
-    describe 'when getting map params from locations' do 
+    describe 'when stops match the name given' do 
       
-      def make_request
-        get :browse, :name => "London"
+      before do
+        @mock_stop = mock_model(Stop)
+        Gazetteer.stub!(:place_from_name).and_return({:locations => [@mock_stop]})
       end
+    
+      it 'should display the area indicated by the stops but not present them as the main locations being displayed' do
+        @controller.should_receive(:map_params_from_location).with([@mock_stop], 
+                                                                    find_other_locations=true,
+                                                                    LARGE_MAP_HEIGHT, 
+                                                                    LARGE_MAP_WIDTH,
+                                                                    { :mode => :browse })
+        make_request()
+        assigns[:locations].should == []
+      end
+      
+    end
+    
+    describe 'when getting map params from locations' do 
       
       before do 
         @locality = mock_model(Locality, :lat => 51, :lon => 0.4)
