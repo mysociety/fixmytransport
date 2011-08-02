@@ -34,6 +34,11 @@ describe StopType do
   
   describe 'when giving conditions for transport modes' do 
     
+    before do 
+      @tram_metro = mock_model(TransportMode, :id => 7)
+      TransportMode.stub!(:find_by_name).with("Tram/Metro").and_return(@tram_metro)
+    end
+    
     it 'should return conditions specifying a set of stop types for buses' do 
       conditions, params = StopType.conditions_for_transport_mode(1)
       conditions.should ==  'stop_type in (?)'
