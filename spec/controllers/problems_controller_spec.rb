@@ -273,8 +273,8 @@ describe ProblemsController do
     
     describe 'when a name parameter is supplied' do 
       
-      it 'should ask the Gazetteer for a place from the name' do 
-        Gazetteer.should_receive(:place_from_name).with('Euston', nil).and_return({})
+      it 'should ask the Gazetteer for a place from the name with mode set to :find' do 
+        Gazetteer.should_receive(:place_from_name).with('Euston', nil, :find).and_return({})
         make_request({:name => 'Euston'})
       end
       
@@ -291,10 +291,16 @@ describe ProblemsController do
             @controller.should_receive(:map_params_from_location).with([@mock_locality], 
                                                                         find_other_locations=true,
                                                                         LARGE_MAP_HEIGHT,
-                                                                        LARGE_MAP_WIDTH)
+                                                                        LARGE_MAP_WIDTH,
+                                                                        { :mode => :find })
             make_request({:name => 'Euston'})
           end
-        
+          
+          it "should use that locality alone in calculating the map zoom" do
+            Locality.should_not_receive(:find_with_descendants)
+            make_request
+          end
+
           it 'should set the list of primary locations to display to empty' do 
             make_request({:name => 'Euston'})
             assigns[:locations].should == []
@@ -337,7 +343,8 @@ describe ProblemsController do
             @controller.should_receive(:map_params_from_location).with([@mock_stop], 
                                                                        find_other_locations=true,
                                                                        LARGE_MAP_HEIGHT,
-                                                                       LARGE_MAP_WIDTH)
+                                                                       LARGE_MAP_WIDTH,
+                                                                       { :mode => :find })
             make_request({:name => 'Euston'})
           end
           
@@ -881,6 +888,49 @@ describe ProblemsController do
                   "not be sent to the responsible organization. However, if you write a message we will a)",
                   "keep it ready to send when the organization is found and b) publish it online for others to see."].join(' ')
       expect_advice(mock_problem, expected)
+    end
+    
+  end
+  
+  describe 'GET #browse' do 
+  
+    describe 'when getting map params from locations' do 
+      
+      def make_request
+        get :browse, :name => "London"
+      end
+      
+      before do 
+        @locality = mock_model(Locality, :lat => 51, :lon => 0.4)
+        @district = mock_model(District)
+      end
+      
+      describe 'if one location is passed, and it is a locality' do 
+    
+        before do 
+          Gazetteer.stub!(:place_from_name).with('London', nil, :browse).and_return({ :localities => [@locality] })
+        end
+    
+        it "should use that locality and it's descendants in calculating the map zoom" do
+          Locality.should_receive(:find_with_descendants).and_return([@locality])
+          make_request
+        end
+      
+      end
+      
+      describe 'if a district is passed' do 
+      
+        before do 
+          Gazetteer.stub!(:place_from_name).with('London', nil, :browse).and_return({ :district => @district })
+        end
+      
+        it "should use the district and it's descendants in calculating the map zoom" do 
+          Locality.should_receive(:find_with_descendants).with(@district).and_return([@locality])
+          make_request
+        end
+        
+      end
+    
     end
     
   end

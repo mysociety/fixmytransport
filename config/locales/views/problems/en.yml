@@ -83,6 +83,7 @@ en:
       postcode_not_found: "That postcode wasn't recognised. Please modify it and try again!"
       instructions: "Enter an area, town or postcode"
       where_is_it: "Where is it?"
+      too_big: "Sorry, that's too big an area to show all the bus stops and stations for. Please choose something more specific."
     find_train_route:
       title: "Finding a train route"
       to_stop_not_found: "We didn't recognise the name of the stop you got off at."

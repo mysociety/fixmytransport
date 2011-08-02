@@ -116,7 +116,8 @@ class ProblemsController < ApplicationController
   def find_stop
     @title = t('problems.find_stop.title')
     options = { :find_template => :find_stop,
-                :browse_template => :choose_location }
+                :browse_template => :choose_location,
+                :map_options => { :mode => :find } }
     return find_area(options)
   end
 
@@ -257,7 +258,8 @@ class ProblemsController < ApplicationController
     @highlight = :has_content
     @title = t('problems.browse.title')
     options = { :find_template => :browse,
-                :browse_template => :browse_area }
+                :browse_template => :browse_area,
+                :map_options => { :mode => :browse } }
     return find_area(options)
   end
 
@@ -272,8 +274,8 @@ class ProblemsController < ApplicationController
       end
       location_search = LocationSearch.new_search!(session_id, :name => params[:name],
                                                                :location_type => 'Stop/station')
-      stop_info = Gazetteer.place_from_name(params[:name], params[:stop_name])
-      # got back areas
+      stop_info = Gazetteer.place_from_name(params[:name], params[:stop_name], options[:map_options][:mode])
+      # got back localities
       if stop_info[:localities]
         if stop_info[:localities].size > 1
           @localities = stop_info[:localities]
@@ -285,17 +287,39 @@ class ProblemsController < ApplicationController
           map_params_from_location(stop_info[:localities],
                                    find_other_locations=true,
                                    LARGE_MAP_HEIGHT,
-                                   LARGE_MAP_WIDTH)
+                                   LARGE_MAP_WIDTH,
+                                   options[:map_options])
           @locations = []
           render options[:browse_template]
           return
         end
+      # got back district
+      elsif stop_info[:district]
+        map_params_from_location([stop_info[:district]],
+                                 find_other_locations=true,
+                                 LARGE_MAP_HEIGHT,
+                                 LARGE_MAP_WIDTH,
+                                 options[:map_options])
+        @locations = []
+        render options[:browse_template]
+        return
+      # got back admin area
+      elsif stop_info[:admin_area]
+        map_params_from_location([stop_info[:admin_area]],
+                                 find_other_locations=true,
+                                 LARGE_MAP_HEIGHT,
+                                 LARGE_MAP_WIDTH,
+                                 options[:map_options])
+        @locations = []
+        render options[:browse_template]
+        return
       # got back stops/stations
       elsif stop_info[:locations]
         map_params_from_location(stop_info[:locations],
                                  find_other_locations=true,
                                  LARGE_MAP_HEIGHT,
-                                 LARGE_MAP_WIDTH)
+                                 LARGE_MAP_WIDTH,
+                                 options[:map_options])
         @locations = stop_info[:locations]
         render options[:browse_template]
         return

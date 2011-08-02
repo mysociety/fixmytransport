@@ -40,4 +40,18 @@ describe AdminArea do
   it "should create a new instance given valid attributes" do
     AdminArea.create!(@valid_attributes)
   end
+  
+  describe 'find all by name' do 
+    
+    before do 
+      @admin_area = mock_model(AdminArea)
+      AdminArea.stub!(:find).and_return([@admin_area])
+    end
+  
+    it 'should not return admin areas starting with "National -"' do 
+      AdminArea.find_all_by_full_name('National - National Coach').should == []
+    end
+    
+  end
+  
 end

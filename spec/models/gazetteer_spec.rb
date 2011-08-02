@@ -104,9 +104,38 @@ describe Gazetteer do
       end
       
       it 'should return the localities in a hash with the key :localities' do 
-        Gazetteer.place_from_name('London').should == {:localities => [@mock_locality]}
+        Gazetteer.place_from_name('London').should == { :localities => [@mock_locality] }
       end
       
+    end
+    
+    describe 'when no localities, but a district and some locations match the name' do 
+    
+      before do 
+        @mock_district = mock_model(District)
+        Locality.stub!(:find_all_by_full_name).and_return([])
+        District.stub!(:find_all_by_full_name).and_return([@mock_district])
+        @mock_stop = mock_model(Stop)
+        Stop.stub!(:find).and_return([@mock_stop])
+        StopArea.stub!(:find).and_return([])
+      end
+      
+      describe 'when the mode has been set as :browse' do 
+      
+        it 'should return the district in a hash with the key :district' do 
+          Gazetteer.place_from_name('London', nil, :browse).should == { :district => @mock_district }
+        end
+    
+      end
+      
+      describe 'when the mode has been set as :find' do 
+      
+        it 'should return the locations' do 
+          Gazetteer.place_from_name('London', nil, :find).should == { :locations => [@mock_stop] }
+        end
+        
+      end
+    
     end
     
     describe 'when one locality matches the name and a stop name has been passed' do 

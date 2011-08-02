@@ -337,11 +337,19 @@ class ApplicationController < ActionController::Base
 
   # set the lat, lon and zoom based on the locations being shown, and find other locations
   # within the bounding box
-  def map_params_from_location(locations, find_other_locations=false, height=MAP_HEIGHT, width=MAP_WIDTH)
+  def map_params_from_location(locations, find_other_locations=false, height=MAP_HEIGHT, width=MAP_WIDTH, options=nil)
     @find_other_locations = find_other_locations
     # check for an array of routes
     if locations.first.is_a?(Route) && !locations.first.show_as_point
       locations = locations.map{ |location| location.points }.flatten
+    end
+
+    # in order to show an appropriately zoomed map area, include locality children of
+    # a single area type location
+    if options && options[:mode] == :browse
+      if [Locality, District, AdminArea].include?(locations.first.class) && locations.size == 1
+        locations = Locality.find_with_descendants(locations.first)
+      end
     end
     lons = locations.map{ |element| element.lon }
     lats = locations.map{ |element| element.lat }

@@ -21,9 +21,9 @@ class Gazetteer
 
   # Accepts a name, full or partial postcode. Will return a hash of coord info about a postcode,
   # if a full or partial postcode is passed.
-  # Otherwise, a list of localities matching the area name if any do. If not, a list of stops or stations
-  # matching the name if any do.
-  def self.place_from_name(name, stop_name=nil)
+  # Otherwise, a list of localities matching the area name if any do. Failing this (in browse mode),
+  # a district, if any matches. If not, a list of stops or stations matching the name if any do.
+  def self.place_from_name(name, stop_name=nil, mode=:find)
     errors = []
 
     # is it a postcode/partial postcode
@@ -36,10 +36,9 @@ class Gazetteer
     elsif [:not_found, :bad_request].include?(coord_info)
       return { :postcode_info => {:error => coord_info }}
     end
-    # is there an area with this name?
+    # is there a locality with this name?
     name = name.downcase.strip
     localities = Locality.find_all_by_full_name(name)
-
     # we've been passed a unique place name and a stop name
     if localities.size == 1 and !stop_name.nil?
       stop_name = stop_name.downcase.strip
@@ -59,6 +58,19 @@ class Gazetteer
 
     if !localities.empty?
       return { :localities => localities }
+    end
+
+    # Is this the name of a larger area?
+    if mode == :browse
+      districts = District.find_all_by_full_name(name)
+      if !districts.empty?
+        return { :district => districts.first }
+      end
+      admin_areas = AdminArea.find_all_by_full_name(name)
+      if !admin_areas.empty?
+        return { :admin_area => admin_areas.first }
+      end
+
     end
 
     # is there a stop/station with this name?
@@ -156,7 +168,7 @@ class Gazetteer
 
     # if there are multiple stations with the exact same name, don't ask the user to select one
     # just pass them all to find_all_by_locations, and see which one has the route
-    
+
     if from_stops.size > 1 && from_stops.map{ |stop| stop.name }.uniq.size > 1
       errors[:from_stop] << I18n.translate('problems.find_other_route.ambiguous_from_stop', :station_name => from.strip)
     end
@@ -237,7 +249,7 @@ class Gazetteer
   # - types - The area_types to constrain the search
   def self.find_stations_from_name(name, exact, options={})
     results = self._find_stations_from_name(name, exact, options)
-    
+
     # try variations on and
     if results.empty? and !exact
       name_with_ampersand = name.gsub(' and ', ' & ')
@@ -248,9 +260,9 @@ class Gazetteer
         if name_with_and != name
           results = self._find_stations_from_name(name_with_and, exact, options)
         end
-      end  
+      end
     end
-      
+
     if results.empty? and !exact
       results = self.find_stations_by_double_metaphone(name, options)
     end
@@ -261,7 +273,7 @@ class Gazetteer
     end
     results
   end
-  
+
   def self._find_stations_from_name(name, exact, options)
     query = 'area_type in (?)'
     params = [options[:types]]
