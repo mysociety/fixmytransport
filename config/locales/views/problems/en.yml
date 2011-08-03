@@ -6,7 +6,6 @@ en:
       no_issues_on_map: No issues have been reported yet.
       nearest_issues: Closest issues
       title: Issues in this area
-      
     choose_area:
       choose_area: "Choose area"
       multiple_localities: "We found more than one place matching \"%{name}\". Please select one, or try a different search if yours is not here:"
@@ -113,7 +112,7 @@ en:
       step_one_details: "It might have been a one-off incident you’d just like to log, or a recurring problem you’d like fixing."
       bad_train: "Had a bad train journey?"
       how_does_it_work: How does it work?
-      recent_issues: View recent Issues
+      recent_issues: View recent issues
       browse_routes: View routes by region
       how_details_one: "We give you the tools to report your public transport problems to the correct operator or authority."
       follow_on_twitter: "Follow us on Twitter"
@@ -137,7 +136,7 @@ en:
       im_a_beta_tester: "I'm a beta tester"
       find_out_more: Find out more
       coming_soon: "FixMyTransport is coming soon...currently in closed beta testing."
-      browse_issues: Browse Issues
+      browse_issues: Browse issues
     issues_index:
       title: "Recent issues"
     list:
