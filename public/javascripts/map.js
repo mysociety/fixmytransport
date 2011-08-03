@@ -69,9 +69,9 @@ function loadNewMarkers(response) {
   markerData = json.read(response.responseText);
   newMarkers = markerData['locations'];
   addMarkerList(newMarkers, otherMarkers, true);
-  newContent = markerData['extra_data'];
-  if ($('#browse-issues-list').length > 0){
-    $('#browse-issues-list').html(newContent);
+  newContent = markerData['issue_content'];
+  if ($('#issues-in-area').length > 0){
+    $('#issues-in-area').html(newContent);
   }
 }
 

@@ -365,10 +365,12 @@ class ApplicationController < ActionController::Base
     if find_other_locations
       map_data = Map.other_locations(@lat, @lon, @zoom, height, width, @highlight)
       @other_locations = map_data[:locations]
-      @extra_data = map_data[:extra_data]
+      @issues_on_map = map_data[:issues_on_map]
+      @nearest_issues = map_data[:nearest_issues]
     else
       @other_locations = []
-      @extra_data = []
+      @issues_on_map = []
+      @nearest_issues = []
     end
   end
 

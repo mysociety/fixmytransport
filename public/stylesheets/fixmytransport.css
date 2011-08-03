@@ -60,9 +60,19 @@ h1, h2, h3, h4, h5, h6, .font-1, #greybanner p {
 .narrowcol {
   width: 310px;
 }
+
 .widecol {
   width: 590px;
 }
+
+.mediumwidecol {
+  width: 490px;
+}
+
+.mediumnarrowcol {
+  width: 410px;
+}
+
 
 .leftcol-banner {
     float: left;
@@ -1011,6 +1021,10 @@ form#create-campaign {
 
 
 /*===[Pagination]===*/
+.pagination {
+  margin: 0.5em 0;
+}
+
 .pagination span,
 .pagination a {
   padding: 0 0.5em;
@@ -1098,7 +1112,9 @@ ul.issues-list{margin: 0px; padding: 0px;}
 
 			ul.issues-list li.problem {background: #fff; border: 1px solid #ddd;}
 
-
+			ul#browse-issues-list .wrapper{ width: 100%; }
+			ul#browse-issues-list li.problem .wrapper { width:100%; }
+      ul#browse-issues-list dl{ float: none;}
 
 /* Page Specific
    ================================================== */
@@ -2018,7 +2034,12 @@ body.facebook-canvas .button {
   padding: 0.8em 1em;
 }
 
-/*===[ Profile]===*/
+/*===[ Profile ]===*/
 .user-bio {
   display: block;
+}
+
+/*===[ Issue Browsing ]===*/
+#issues-in-area h2{
+ font-size: 1.5em;
 }

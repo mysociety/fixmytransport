@@ -101,34 +101,35 @@ class Map
     "http://maps.google.com/maps/api/staticmap?center=#{lat},#{lon}&zoom=#{zoom}&size=#{map_width}x#{map_height}&sensor=false"
   end
 
-  def self.issue_data(bottom, left, top, right, options)
-    issue_locations, issues = Problem.find_issues_in_bounding_box(bottom, left, top, right, options)
-    stop_ids = []
-    stop_area_ids = []
-    issue_locations.each do |location|
+  def self.issue_data(bottom, left, top, right, lat, lon, options)
+    issue_data = Problem.find_issues_in_bounding_box(bottom, left, top, right, options)
+    issue_data[:stop_ids] = []
+    issue_data[:stop_area_ids] = []
+    issue_data[:locations].each do |location|
       case location
       when Stop
-        stop_ids << location.id
+        issue_data[:stop_ids] << location.id
       when StopArea
-        stop_area_ids << location.id
+        issue_data[:stop_area_ids] << location.id
       end
     end
-    return { :locations => issue_locations,
-             :issues => issues,
-             :stop_ids => stop_ids,
-             :stop_area_ids => stop_area_ids }
+    if issue_data[:issues].size < 10
+      issue_data[:nearest_issues] = Problem.find_nearest_issues(lat, lon, 10-issue_data[:issues].size)
+    end
+    return issue_data
   end
 
   def self.other_locations(lat, lon, zoom, map_height, map_width, highlight=nil)
     issues = []
+    nearest_issues = []
     locations = []
     exclude_stop_ids = []
     exclude_stop_area_ids = []
-    options = { :highlight => highlight } 
+    options = { :highlight => highlight }
     if zoom >= MIN_ZOOM_FOR_OTHER_MARKERS
       bottom, top, left, right = self.calculate_map_corners(lat, lon, zoom, map_height, map_width)
       if highlight == :has_content
-        issue_data = self.issue_data(bottom, left, top, right, options)
+        issue_data = self.issue_data(bottom, left, top, right, lat, lon, options)
         exclude_stop_ids = issue_data[:stop_ids]
         exclude_stop_area_ids = issue_data[:stop_area_ids]
       end
@@ -139,14 +140,18 @@ class Map
       if highlight == :has_content
         locations += issue_data[:locations]
         issues = issue_data[:issues]
+        nearest_issues = issue_data[:nearest_issues]
       end
     elsif highlight && zoom >= MIN_ZOOM_FOR_HIGHLIGHTED_MARKERS
       bottom, top, left, right = self.calculate_map_corners(lat, lon, zoom, map_height, map_width)
-      locations, issues = Problem.find_issues_in_bounding_box(bottom, left, top, right, options)
+      issue_data = self.issue_data(bottom, left, top, right, lat, lon, options)
+      locations = issue_data[:locations]
+      issues = issue_data[:issues]
+      nearest_issues = issue_data[:nearest_issues]
     else
       locations = []
     end
-    {:locations => locations, :extra_data => issues }
+    {:locations => locations, :issues_on_map => issues, :nearest_issues => nearest_issues }
   end
 
   def self.calculate_map_corners(lat, lon, zoom, map_height, map_width)

@@ -1,16 +1,16 @@
 
 #map-col {
-  float: right; 
+  float: right;
   max-width: 400px;
   margin-left: 0.5em;
   margin-right: 2em;
 }
 
 #map {
-  width: 400px; 
-  height: 400px; 
+  width: 400px;
+  height: 400px;
   position:relative;
-}  
+}
 
 #map img {
     border: 0;
@@ -23,7 +23,7 @@
 
 #large-map #map{
   text-align: center;
-  width: 500px; 
+  width: 500px;
   height: 500px;
   margin: auto;
 }
@@ -51,6 +51,19 @@
 #problem-map #map {
   width: 450px;
   height: 350px;
+  margin: auto;
+  border: none;
+}
+
+#browse-map {
+  width: 490px;
+  overflow: default;
+  padding: 5px 0;
+}
+
+#browse-map #map {
+  width: 490px;
+  height: 490px;
   margin: auto;
   border: none;
 }

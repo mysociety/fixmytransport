@@ -1,0 +1,16 @@
+<h2><%= t('problems.browse.on_and_around_the_map') %></h2>
+
+<%- if @issues_on_map.empty? %>
+  <p><%= t('problems.browse.no_issues_on_map') %></p>
+<%- else %>
+  <ul class="issues-list" id="browse-issues-list">
+    <%= render :partial => "shared/issue", :collection => @issues_on_map, :locals => { :context => :browse_issues } %>
+  </ul>
+<%- end %>
+
+<%- if @nearest_issues && ! @nearest_issues.empty? %>
+<h2><%= t('problems.browse.nearest_issues') %></h2>
+<ul class="issues-list" id="browse-issues-list">
+  <%= render :partial => "shared/issue", :collection => @nearest_issues, :locals => { :context => :browse_issues } %>
+</ul>
+<%- end %>

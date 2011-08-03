@@ -30,6 +30,28 @@ describe Map do
     Map.zoom_to_coords(-0.09144, -0.09028, 51.50104, 51.50098, MAP_HEIGHT, MAP_WIDTH).should == MAX_VISIBLE_ZOOM
   end
   
+  describe 'when asked for issue data' do 
+  
+    it 'should get issues in the bounding box' do
+      Problem.should_receive(:find_issues_in_bounding_box).with(1, 2, 3, 4, {}).and_return({ :locations => [], 
+                                                                                             :issues => [] })
+      Map.issue_data(1, 2, 3, 4, 51.498, -0.09358, {})
+    end
+    
+    describe 'when there are less than ten issues in the bounding box' do 
+      
+      it 'should ask for enough nearest issues to make the total ten' do 
+        problem = mock_model(Problem)
+        Problem.stub!(:find_issues_in_bounding_box).and_return({ :locations => [], 
+                                                                 :issues => [problem, problem, problem]})
+        Problem.should_receive(:find_nearest_issues).with(51.498, -0.09358, 7)
+        Map.issue_data(1, 2, 3, 4, 51.498, -0.09358, {})
+      end
+      
+    end
+    
+  end
+  
   describe 'when asked for other locations' do 
 
     describe 'when the current zoom level is >= the minimum zoom level for showing other markers' do 
@@ -93,7 +115,8 @@ describe Map do
         it 'should ask for issues in the bounding box' do 
           expected_options = { :highlight => :has_content }
           expected_params = [anything(), anything(), anything(), anything(), expected_options]
-          Problem.should_receive(:find_issues_in_bounding_box).with(*expected_params).and_return([])
+          issue_data = { :locations => [], :issues => [] }
+          Problem.should_receive(:find_issues_in_bounding_box).with(*expected_params).and_return(issue_data)
           Map.other_locations(51.505720, 
                               -0.088872,
                               MIN_ZOOM_FOR_OTHER_MARKERS - 1, 

@@ -199,7 +199,14 @@ class Problem < ActiveRecord::Base
         locations[location_key] = location
       end
     end
-    [locations.values, issues]
+    { :locations => locations.values, :issues => issues }
+  end
+
+  def self.find_nearest_issues(lat, lon, limit, options={})
+    order_clause = "order by ST_Distance(
+                    ST_Transform(ST_GeomFromText('POINT(#{lon} #{lat})', #{WGS_84}), #{BRITISH_NATIONAL_GRID}),
+                    coords) asc"
+    issues = self.find_recent_issues(limit, :order_clause => order_clause)
   end
 
   def self.create_from_hash(data, user, token=nil)
@@ -242,6 +249,12 @@ class Problem < ActiveRecord::Base
       bounding_box_clause = ''
     end
 
+    if options[:order_clause]
+      order_clause = options[:order_clause]
+    else
+      order_clause = 'ORDER by latest_date desc'
+    end
+
     if options[:location]
       location = options[:location]
       location_id = conn.quote(location.id)
@@ -277,21 +290,22 @@ class Problem < ActiveRecord::Base
     visible_campaign_codes = Campaign.visible_status_codes.map{ |code| conn.quote(code) }.join(",")
     issue_info = self.connection.select_rows("SELECT id, model_type
                                              FROM
-                                             (SELECT id, 'Problem' as model_type, confirmed_at as latest_date
+                                             (SELECT id, 'Problem' as model_type, confirmed_at as latest_date, coords
                                               FROM problems
                                               WHERE status_code in (#{visible_problem_codes})
                                               AND campaign_id is null
                                               #{location_clause}
                                               #{bounding_box_clause}
                                               UNION
-                                              SELECT campaigns.id, 'Campaign' as model_type, latest_event_at as latest_date
+                                              SELECT campaigns.id, 'Campaign' as model_type, latest_event_at as latest_date, coords
                                               FROM campaigns, problems
                                               WHERE campaigns.status_code in (#{visible_campaign_codes})
                                               #{location_clause}
                                               #{bounding_box_clause}
-                                              AND problems.campaign_id = campaigns.id)
+                                              AND problems.campaign_id = campaigns.id
+                                              )
                                              AS campaigns_and_problems
-                                             ORDER by latest_date desc
+                                             #{order_clause}
                                              #{limit_clause}
                                              #{offset_clause}")
     campaign_ids = {}

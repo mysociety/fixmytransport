@@ -5,8 +5,14 @@
 <%- end %>
 <div class="wrapper">
 	<h4><a href="<%= campaign_url(campaign) %>"><%= MySociety::Format.ucfirst(campaign.title) %></a></h4>
+    
     <p><%= raw link_to(campaign.location.description, location_url(campaign.location)) %></p>
-	<p><%= t('shared.campaign.by')%> <a href="<%= profile_url(campaign.initiator) %>"><%= campaign.initiator.name %></a></p>
+   <%- if context != :browse_issues %>
+      <p><%= t('shared.campaign.by')%> 
+        <a href="<%= profile_url(campaign.initiator) %>"><%= campaign.initiator.name %>
+        </a>
+      </p>
+    <%- end %>
 	<dl>
 		<dt><%= t('shared.campaign.started')%></dt>
 		<dd><%= campaign.created_at.localtime.to_s(:short) %></dd>

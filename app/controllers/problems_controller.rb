@@ -320,7 +320,8 @@ class ProblemsController < ApplicationController
           @zoom = postcode_info[:zoom] unless @zoom
           map_data = Map.other_locations(@lat, @lon, @zoom, LARGE_MAP_HEIGHT, LARGE_MAP_WIDTH, @highlight)
           @other_locations = map_data[:locations]
-          @extra_data = map_data[:extra_data]
+          @issues_on_map = map_data[:issues_on_map]
+          @nearest_issues = map_data[:nearest_issues]
           @locations = []
           @find_other_locations = true
           render options[:browse_template]

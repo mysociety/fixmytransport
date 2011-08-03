@@ -1,14 +1,18 @@
+<div id="banner">
+	<div class="container">
+		<h1><%= t('problems.browse.title') %></h1>
+	</div>
+</div>
 <div id="main-content" class="container">
 	
-	<div class="leftcol narrowcol">
-		<ul class="issues-list" id="browse-issues-list">
-		  <%= render :partial => "shared/issue", :collection => @extra_data, :locals => { :context => :browse_issues } %>
-    </ul>
-	 
+	<div class="leftcol mediumnarrowcol">
+    <div id="issues-in-area">
+      <%= render :partial => 'shared/issues_in_area'%>
+    </div>
 	</div>
-  <div class="rightcol widecol">
-	   <div id="medium-map">
-     			<%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => @other_locations, :link_type => :location, :highlight => :has_content, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH } %>
+  <div class="rightcol mediumwidecol">
+	   <div id="browse-map">
+     			<%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => @other_locations, :link_type => :location, :highlight => :has_content, :height => BROWSE_MAP_HEIGHT, :width => BROWSE_MAP_WIDTH } %>
   		</div>	
 
 	</div>

@@ -6,7 +6,12 @@
 <div class="wrapper">
 	<h4><a href="<%= problem_url(problem) %>"><%= problem.subject %></a></h4>
 	<p><%= raw link_to(problem.location.description, location_url(problem.location)) %></p>
-	<p><%= t('shared.problem.by')%> <a href="<%= profile_url(problem.reporter) %>"><%= problem.reporter.name %></a></p>
+	<%- if context != :browse_issues %>
+	  <p><%= t('shared.problem.by')%> 
+	    <a href="<%= profile_url(problem.reporter) %>"><%= problem.reporter.name %>
+	    </a>
+	  </p>
+	<%- end %>
 	<dl>
 		<dt><%= t('shared.problem.added') %></dt>
 		<dd><%= problem.confirmed_at.localtime.to_s(:short) %></dd>
