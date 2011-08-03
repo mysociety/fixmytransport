@@ -105,7 +105,7 @@ module ApplicationHelper
       background = false
     end
     name = '/images/map-icons/map-'
-    if [Route, SubRoute].include?(location.class)
+    if location.is_a?(Route) || location.is_a?(SubRoute)
       if location.is_a?(SubRoute) || location.transport_mode_name == 'Train'
         name += 'train-'
         name += background ? 'grey' : 'blue'
