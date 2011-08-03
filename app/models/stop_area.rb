@@ -96,22 +96,18 @@ class StopArea < ActiveRecord::Base
   end
   memoize :area
 
-  def self.find_in_bounding_box(min_lat, min_lon, max_lat, max_lon, highlight=nil)
-    if highlight == :has_content
-      joins = "inner join problems on problems.location_id = stop_areas.id and problems.location_type = 'StopArea'"
-    else
-      joins = nil
+  def self.find_in_bounding_box(min_lat, min_lon, max_lat, max_lon, options={})
+    query = "stop_areas.area_type in (?)
+             AND stop_areas.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
+             ST_Point(?, ?),
+             ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})"
+    params = [StopAreaType.primary_types, min_lon, min_lat, max_lon, max_lat]
+    if options[:exclude_ids] && ! options[:exclude_ids].empty?
+      query += " AND id not in (?)"
+      params << options[:exclude_ids]
     end
-    stop_areas = find(:all, :joins => joins,
-                        :conditions => ["stop_areas.area_type in (?)
-                          AND stop_areas.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
-                            ST_Point(?, ?),
-      	                    ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})",
-    	                    StopAreaType.primary_types, min_lon, min_lat, max_lon, max_lat],
-    	                 :include => :locality)
-    if highlight == :has_content
-      stop_areas = stop_areas.select{ |stop_area| !stop_area.related_issues.empty? }
-    end
+    stop_areas = find(:all, :conditions => [query] + params,
+     	                      :include => :locality)
     stop_areas
   end
 

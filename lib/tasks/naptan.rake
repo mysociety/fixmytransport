@@ -1,12 +1,12 @@
 require File.dirname(__FILE__) +  '/data_loader'
-require File.dirname(__FILE__) +  '/geo_functions'
+require File.dirname(__FILE__) +  '/../fixmytransport/geo_functions'
 
 namespace :naptan do
 
   namespace :load do
 
     include DataLoader
-    include GeoFunctions
+    include FixMyTransport::GeoFunctions
 
     desc "Loads stop data from a CSV file specified as FILE=filename"
     task :stops => :environment do

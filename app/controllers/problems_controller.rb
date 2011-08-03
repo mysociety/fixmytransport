@@ -318,7 +318,9 @@ class ProblemsController < ApplicationController
           @lat = postcode_info[:lat] unless @lat
           @lon = postcode_info[:lon] unless @lon
           @zoom = postcode_info[:zoom] unless @zoom
-          @other_locations = Map.other_locations(@lat, @lon, @zoom, LARGE_MAP_HEIGHT, LARGE_MAP_WIDTH, @highlight)
+          map_data = Map.other_locations(@lat, @lon, @zoom, LARGE_MAP_HEIGHT, LARGE_MAP_WIDTH, @highlight)
+          @other_locations = map_data[:locations]
+          @extra_data = map_data[:extra_data]
           @locations = []
           @find_other_locations = true
           render options[:browse_template]

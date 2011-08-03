@@ -47,6 +47,7 @@ describe Problem do
       @problem.stub!(:organization_info).and_return([])
       @problem.stub!(:emailable_organizations).and_return([])
       @problem.stub!(:create_assignments)
+      @problem.stub!(:add_coords)
       Assignment.stub!(:complete_problem_assignments)
     end
 

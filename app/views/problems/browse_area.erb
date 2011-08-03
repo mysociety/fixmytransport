@@ -1,8 +1,8 @@
 <div id="main-content" class="container">
 	
 	<div class="leftcol narrowcol">
-		<ul class="issues-list">
-      <%= render :partial => "shared/issue", :collection => (@locations + @other_locations).map{ |location| location.related_issues }.flatten.uniq, :locals => {:context => :browse_issues } %>
+		<ul class="issues-list" id="browse-issues-list">
+		  <%= render :partial => "shared/issue", :collection => @extra_data, :locals => { :context => :browse_issues } %>
     </ul>
 	 
 	</div>
@@ -11,6 +11,5 @@
      			<%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => @other_locations, :link_type => :location, :highlight => :has_content, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH } %>
   		</div>	
 
-		
 	</div>
 </div>

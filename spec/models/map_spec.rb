@@ -34,16 +34,44 @@ describe Map do
 
     describe 'when the current zoom level is >= the minimum zoom level for showing other markers' do 
     
-      it 'should ask for stops and stop areas in the bounding box without passing any highlight param' do 
-        Stop.should_receive(:find_in_bounding_box).with(anything(), 
-                                                        anything(),
-                                                        anything(), 
-                                                        anything()).and_return([])
-        StopArea.should_receive(:find_in_bounding_box).with(anything(), 
-                                                            anything(), 
-                                                            anything(), 
-                                                            anything()).and_return([])
-        Map.other_locations(51.505720, -0.088872, MIN_ZOOM_FOR_OTHER_MARKERS, MAP_HEIGHT, MAP_WIDTH)
+      describe 'if no highlight param is passed' do 
+    
+        it 'should ask for stops and stop areas in the bounding box passing the nil highlight param and an empty list of ids to exclude' do 
+          expected_options = { :highlight => nil, :exclude_ids => [] }
+          expected_params = [anything(), anything(), anything(), anything, expected_options]
+          [Stop, StopArea].each do |model|
+            model.should_receive(:find_in_bounding_box).with(*expected_params).and_return([])
+          end
+          Map.other_locations(51.505720, -0.088872, MIN_ZOOM_FOR_OTHER_MARKERS, MAP_HEIGHT, MAP_WIDTH)
+        end
+      
+      end
+      
+      describe 'if a highlight param is passed' do 
+      
+        it 'should ask for issues ' do 
+          Map.should_receive(:issue_data).and_return({:locations => [],
+                                                      :issues => [], 
+                                                      :stop_ids => [22], 
+                                                      :stop_area_ids => [44]})
+          Map.other_locations(51.505720, -0.088872, MIN_ZOOM_FOR_OTHER_MARKERS, MAP_HEIGHT, MAP_WIDTH, highlight=:has_content)
+        end
+      
+        it 'should ask for stops and stop areas in the bounding box, passing a list of ids to exclude from the issues' do 
+          Map.stub!(:issue_data).and_return({:locations => [],
+                                             :issues => [], 
+                                             :stop_ids => [22], 
+                                             :stop_area_ids => [44]})
+          expected_options = { :highlight => :has_content, :exclude_ids => [22] }
+          expected_params = [anything(), anything(), anything(), anything, expected_options]
+          Stop.should_receive(:find_in_bounding_box).with(*expected_params).and_return([])
+          
+          expected_options = { :highlight => :has_content, :exclude_ids => [44] }
+          expected_params = [anything(), anything(), anything(), anything, expected_options]
+          StopArea.should_receive(:find_in_bounding_box).with(*expected_params).and_return([])          
+          Map.other_locations(51.505720, -0.088872, MIN_ZOOM_FOR_OTHER_MARKERS, MAP_HEIGHT, MAP_WIDTH, highlight=:has_content)
+        end
+        
       end
       
     end
@@ -62,18 +90,16 @@ describe Map do
       
       describe 'when a highlight param is passed' do 
       
-        it 'should ask for stops and stop areas in the bounding box' do 
-          Stop.should_receive(:find_in_bounding_box).with(anything(), 
-                                                          anything(), 
-                                                          anything(), 
-                                                          anything(),
-                                                          :has_content).and_return([])
-          StopArea.should_receive(:find_in_bounding_box).with(anything(), 
-                                                              anything(), 
-                                                              anything(), 
-                                                              anything(),
-                                                              :has_content).and_return([])
-          Map.other_locations(51.505720, -0.088872, MIN_ZOOM_FOR_OTHER_MARKERS - 1, MAP_HEIGHT, MAP_WIDTH, :has_content)
+        it 'should ask for issues in the bounding box' do 
+          expected_options = { :highlight => :has_content }
+          expected_params = [anything(), anything(), anything(), anything(), expected_options]
+          Problem.should_receive(:find_issues_in_bounding_box).with(*expected_params).and_return([])
+          Map.other_locations(51.505720, 
+                              -0.088872,
+                              MIN_ZOOM_FOR_OTHER_MARKERS - 1, 
+                              MAP_HEIGHT, 
+                              MAP_WIDTH, 
+                              :has_content)
         end
         
       end

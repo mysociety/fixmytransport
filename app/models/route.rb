@@ -86,7 +86,7 @@ class Route < ActiveRecord::Base
     self.cached_area = nil
     self.cached_area = self.area
   end
-  
+
   def cache_short_name
     self.cached_short_name = nil
     self.cached_short_name = self.short_name
@@ -327,7 +327,7 @@ class Route < ActiveRecord::Base
   def passenger_transport_executive
     if self.london_bus_route?
       return PassengerTransportExecutive.find_by_name('Transport for London')
-    else 
+    else
       return nil
     end
   end

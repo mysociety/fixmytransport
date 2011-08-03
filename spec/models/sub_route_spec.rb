@@ -12,4 +12,5 @@ describe SubRoute do
     sub_route = SubRoute.new(@valid_attributes)
     sub_route.valid?.should == true
   end
+    
 end

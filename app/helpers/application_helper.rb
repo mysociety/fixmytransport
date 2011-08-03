@@ -80,9 +80,6 @@ module ApplicationHelper
   # passed, not for the stop itself.
   def stop_coords(stop, options)
     location = (options[:location] or stop)
-    if options[:highlight] == :has_content
-      highlight = !location.related_issues.empty?
-    end
     if options[:line_only]
       data = { :lat => stop.lat,
                :lon => stop.lon,
@@ -93,25 +90,23 @@ module ApplicationHelper
                :id => stop.id,
                :url => map_link_path(location, options[:link_type]),
                :description => location.description,
+               :highlight => location.highlighted == true, 
                :icon => stop_icon(stop, options[:small], options[:highlight]),
                :height => icon_height(options[:small]),
                :width => icon_width(options[:small]) }
-      if options[:highlight]
-        data[:highlight] = highlight
-      end
     end
     return data
   end
 
   def stop_icon(location, small=false, highlight=nil)
     if highlight == :has_content
-      background = location.related_issues.empty?
+      background = ! location.highlighted == true
     else
       background = false
     end
     name = '/images/map-icons/map-'
-    if location.is_a? Route
-      if location.transport_mode_name == 'Train'
+    if [Route, SubRoute].include?(location.class)
+      if location.is_a?(SubRoute) || location.transport_mode_name == 'Train'
         name += 'train-'
         name += background ? 'grey' : 'blue'
       elsif location.transport_mode_name == 'Tram/Metro'
@@ -160,9 +155,9 @@ module ApplicationHelper
   def location_stops_coords(locations, small, link_type, highlight=nil)
     array_content = []
     locations.each do |location|
-      if location.is_a? Route or location.is_a? SubRoute
-        if location.show_as_point
-          array_content << stop_coords(location, { :small => false,
+      if location.is_a? Route or location.is_a? SubRoute 
+        if location.show_as_point || highlight
+          array_content << stop_coords(location, { :small => highlight ? small : true,
                                                    :link_type => link_type,
                                                    :highlight => highlight })
         elsif location.is_a? Route and link_type == :problem

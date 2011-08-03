@@ -15,7 +15,7 @@ class Problem < ActiveRecord::Base
   validates_presence_of :operator_id, :if => :location_has_operators
   attr_accessor :location_attributes, :locations, :location_search, :is_campaign
   attr_protected :confirmed_at
-  before_create :generate_confirmation_token
+  before_create :generate_confirmation_token, :add_coords
   has_status({ 0 => 'New',
                1 => 'Confirmed',
                2 => 'Fixed',
@@ -41,6 +41,12 @@ class Problem < ActiveRecord::Base
   # Makes a random token, suitable for using in URLs e.g confirmation messages.
   def generate_confirmation_token
     self.token = MySociety::Util.generate_token
+  end
+
+  def add_coords
+    self.lat = self.location.lat
+    self.lon = self.location.lon
+    self.coords = self.location.coords
   end
 
   def create_assignments
@@ -179,6 +185,23 @@ class Problem < ActiveRecord::Base
 
   # class methods
 
+  def self.find_issues_in_bounding_box(min_lat, min_lon, max_lat, max_lon, options={})
+    bounding_box_clause = "AND problems.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
+                           ST_Point(#{min_lon}, #{min_lat}),
+                           ST_Point(#{max_lon}, #{max_lat})), #{WGS_84}), #{BRITISH_NATIONAL_GRID})"
+    issues = self.find_recent_issues(nil, :bounding_box => bounding_box_clause)
+    locations = {}
+    issues.each do |issue|
+      location = issue.location
+      location_key = "#{location.class}_#{location.id}"
+      if !locations.has_key?(location_key)
+        location.highlighted = true
+        locations[location_key] = location
+      end
+    end
+    [locations.values, issues]
+  end
+
   def self.create_from_hash(data, user, token=nil)
     problem = Problem.new(:subject => data[:subject],
                           :description => data[:description],
@@ -206,18 +229,25 @@ class Problem < ActiveRecord::Base
     else
       limit_clause = ""
     end
-    
+
     if options[:offset]
       offset_clause = " OFFSET #{conn.quote(options[:offset])}"
     else
       offset_clause = ""
     end
+
+    if options[:bounding_box]
+      bounding_box_clause = options[:bounding_box]
+    else
+      bounding_box_clause = ''
+    end
+
     if options[:location]
       location = options[:location]
       location_id = conn.quote(location.id)
       # make sure we have 'Route' for routes, not one of it's subclasses
-      if location.class.superclass == ActiveRecord::Base 
-        location_class = location.class.to_s 
+      if location.class.superclass == ActiveRecord::Base
+        location_class = location.class.to_s
       else
         location_class = location.class.superclass.to_s
       end
@@ -228,11 +258,11 @@ class Problem < ActiveRecord::Base
         operator_ids = location.operator_ids.map{ |id| conn.quote(id) }.join(',')
         location_clause = "AND ((problems.location_id = #{location_id}
                             AND problems.location_type = #{location_class})
-                            OR 
-                            (problems.location_id in (SELECT sub_route_id 
+                            OR
+                            (problems.location_id in (SELECT sub_route_id
                                              FROM route_sub_routes
-                                             WHERE route_id = #{location_id}) 
-                             AND problems.location_type = 'SubRoute' 
+                                             WHERE route_id = #{location_id})
+                             AND problems.location_type = 'SubRoute'
                              AND problems.operator_id in (#{operator_ids}))) "
       else
         location_clause = " AND problems.location_id = #{location_id}
@@ -252,11 +282,13 @@ class Problem < ActiveRecord::Base
                                               WHERE status_code in (#{visible_problem_codes})
                                               AND campaign_id is null
                                               #{location_clause}
+                                              #{bounding_box_clause}
                                               UNION
                                               SELECT campaigns.id, 'Campaign' as model_type, latest_event_at as latest_date
                                               FROM campaigns, problems
                                               WHERE campaigns.status_code in (#{visible_campaign_codes})
                                               #{location_clause}
+                                              #{bounding_box_clause}
                                               AND problems.campaign_id = campaigns.id)
                                              AS campaigns_and_problems
                                              ORDER by latest_date desc

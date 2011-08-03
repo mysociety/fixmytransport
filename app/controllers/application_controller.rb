@@ -363,9 +363,12 @@ class ApplicationController < ActionController::Base
       @zoom = Map::zoom_to_coords(lons.min, lons.max, lats.min, lats.max, height, width)
     end
     if find_other_locations
-      @other_locations = Map.other_locations(@lat, @lon, @zoom, height, width, @highlight)
+      map_data = Map.other_locations(@lat, @lon, @zoom, height, width, @highlight)
+      @other_locations = map_data[:locations]
+      @extra_data = map_data[:extra_data]
     else
       @other_locations = []
+      @extra_data = []
     end
   end
 

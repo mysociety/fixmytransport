@@ -1,11 +1,10 @@
 require 'zip/zip'
 require File.dirname(__FILE__) +  '/data_loader'
-require File.dirname(__FILE__) +  '/geo_functions'
 
 namespace :nptdr do
 
   include DataLoader
-  include GeoFunctions
+  include FixMyTransport::GeoFunctions
   
   def get_route_missing_stop_data()
     missing_route_stops_files = ["#{RAILS_ROOT}/data/NPTDR/oct_2010/missing_stops.csv",
@@ -662,7 +661,7 @@ namespace :nptdr do
     desc 'Adds lats and lons to routes calculated from stops'
     task :add_route_coords => :environment do
       Route.paper_trail_off
-      Route.find_each(:conditions => ["lat is null and number = '1'"]) do |route|
+      Route.find_each(:conditions => ["lat is null"]) do |route|
         puts route.name
         if ! route.lat
           lons = route.stops.map{ |element| element.lon }

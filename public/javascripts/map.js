@@ -66,8 +66,13 @@ function updateLocations(event) {
 
 function loadNewMarkers(response) {
   json = new OpenLayers.Format.JSON();
-  newMarkers = json.read(response.responseText);
+  markerData = json.read(response.responseText);
+  newMarkers = markerData['locations'];
   addMarkerList(newMarkers, otherMarkers, true);
+  newContent = markerData['extra_data'];
+  if ($('#browse-issues-list').length > 0){
+    $('#browse-issues-list').html(newContent);
+  }
 }
 
 function markerFail(){

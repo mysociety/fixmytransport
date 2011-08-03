@@ -1,6 +1,9 @@
 require File.dirname(__FILE__) +  '/data_loader'
+require File.dirname(__FILE__) +  '/../fixmytransport/geo_functions'
 
 namespace :temp do
+
+  include FixMyTransport::GeoFunctions
 
   desc 'Add some operators that had ambiguous codes'
   task :add_operators_for_ambiguous_codes => :environment do
@@ -76,6 +79,43 @@ namespace :temp do
                                           :confirmed_at => campaign_supporter.confirmed_at)
       subscription.update_attribute('token', campaign_supporter.token)
     end
+  end
+
+  desc 'Add coords to routes'
+  task :add_coords_to_routes => :environment do
+    Route.paper_trail_off
+    Route.find_each() do |route|
+      if route.lon.blank? or route.lat.blank?
+        raise "No coordinates for route #{route.id} #{route.name}"
+      end
+      easting, northing = get_easting_northing(route.lon, route.lat)
+      route.coords = Point.from_x_y(easting, northing, BRITISH_NATIONAL_GRID)
+      route.save!
+    end
+    Route.paper_trail_on
+  end
+
+  desc 'Add coords to sub routes'
+  task :add_coords_to_sub_routes => :environment do
+    SubRoute.find_each() do |sub_route|
+      lons = [sub_route.from_station.lon, sub_route.to_station.lon]
+      lats = [sub_route.from_station.lat, sub_route.to_station.lat]
+      sub_route.lon = lons.min + ((lons.max - lons.min)/2)
+      sub_route.lat = lats.min + ((lats.max - lats.min)/2)
+      easting, northing =  get_easting_northing(sub_route.lon, sub_route.lat)
+      sub_route.coords = Point.from_x_y(easting, northing, BRITISH_NATIONAL_GRID)
+      sub_route.save!
+    end
+  end
+
+  desc 'Add coords to problems'
+  task :add_coords_to_problems => :environment do
+    Problem.paper_trail_off
+    Problem.find_each do |problem|
+      problem.add_coords
+      problem.save!
+    end
+    Problem.paper_trail_on
   end
 
 end

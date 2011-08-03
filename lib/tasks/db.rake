@@ -67,6 +67,9 @@ namespace :db do
     # the localities the route actually goes through.
     Rake::Task['nptdr:post_load:add_route_regions'].execute
     
+    # Add coordinates for route mid points
+    Rake::Task['nptdr:post_load:add_route_coords'].execute
+    
     # Load PTEs
     Rake::Task['pte:load']
 
