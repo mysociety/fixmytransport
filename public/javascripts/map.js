@@ -41,6 +41,11 @@ function area_init() {
   
   // Enforce some zoom constraints
   map.events.register("zoomend", map, function() {
+      // World zoom resets map
+      if (map.getZoom() == 0) {
+        map.setCenter(centerCoords, zoom);
+        return;
+      }
       if (map.getZoom() < minZoom) map.zoomTo(minZoom);
       if (map.getZoom() > maxZoom) map.zoomTo(maxZoom);
   });
@@ -48,8 +53,8 @@ function area_init() {
 }
 
 function updateLocations(event) {
-  zoom = map.getZoom();
-  if (zoom >= minZoomForOtherMarkers){
+  var currentZoom = map.getZoom();
+  if (currentZoom >= minZoomForOtherMarkers){
     if ($('#map-zoom-notice').length > 0) {
       $('#map-zoom-notice').fadeOut(500);
     }
