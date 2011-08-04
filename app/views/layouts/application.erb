@@ -6,9 +6,11 @@
     </title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-type' />
 		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>    
-    <meta name="robots" content="noindex">
+      <meta name="robots" content="noindex">
     <%- end %>
-    
+    <%- if MySociety::Config.get('GOOGLE_SITE_VERIFICATION_CODE', '') != '' %>
+      <meta name="google-site-verification" content="<%= MySociety::Config.get('GOOGLE_SITE_VERIFICATION_CODE', '') %>" />
+    <%- end %>
     <%= yield :meta %>
     <%= yield :feeds %>
     <%= csrf_meta_tag %>

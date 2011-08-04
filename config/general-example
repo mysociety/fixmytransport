@@ -41,6 +41,7 @@ define('OPTION_EXPERT_EMAIL', 'contact@localhost');
 define('OPTION_BUGS_EMAIL', 'bugs@localhost');
 
 define('OPTION_GOOGLE_MAPS_API_KEY', 'Your Google Maps API key');
+define('OPTION_GOOGLE_SITE_VERIFICATION_CODE', 'Your Google Webmaster Tools code');
 
 // Facebook: 
 // APP_ID is typically a 16-digit code regestered for this app by your "owner" Facebook account.
