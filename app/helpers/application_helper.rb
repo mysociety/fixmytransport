@@ -68,26 +68,26 @@ module ApplicationHelper
     small ? SMALL_ICON_WIDTH : LARGE_ICON_WIDTH
   end
 
-  # Generate a hash of data used to render the stop on a map
+  # Generate a hash of data used to render the point on a map
   # Required options:
   # :link_type - [:problem|:location] - link stop to problem reporting
   # url or location url
-  # :highlight - is this stop to be rendered prominently
+  # :highlight - is this point to be rendered prominently
   # :small - should a small marker be used
   # Other options
   # :line_only - just return enough data for a line map
   # :location - generate the description and link for the location
   # passed, not for the stop itself.
-  def stop_coords(stop, options)
+  def point_coords(stop, options)
     location = (options[:location] or stop)
     if options[:line_only]
       data = { :lat => stop.lat,
                :lon => stop.lon,
-               :id => stop.id }
+               :id => "#{stop.class}_#{stop.id}" }
     else
       data = { :lat => stop.lat,
                :lon => stop.lon,
-               :id => stop.id,
+               :id => "#{stop.class}_#{stop.id}",
                :url => map_link_path(location, options[:link_type]),
                :description => location.description,
                :highlight => location.highlighted == true, 
@@ -146,8 +146,8 @@ module ApplicationHelper
   def route_segment_js(route, line_only=false)
     stop_options = {:small => true, :link_type => :location, :line_only => line_only}
     segments_js = route.journey_patterns.map{ |jp| jp.route_segments }.flatten.map do |segment|
-      [stop_coords(segment.from_stop, stop_options),
-       stop_coords(segment.to_stop, stop_options), segment.id]
+      [point_coords(segment.from_stop, stop_options),
+       point_coords(segment.to_stop, stop_options), segment.id]
     end
     segments_js.to_json
   end
@@ -157,23 +157,23 @@ module ApplicationHelper
     locations.each do |location|
       if location.is_a? Route or location.is_a? SubRoute 
         if location.show_as_point || highlight
-          array_content << stop_coords(location, { :small => highlight ? small : true,
+          array_content << point_coords(location, { :small => highlight ? small : true,
                                                    :link_type => link_type,
                                                    :highlight => highlight })
         elsif location.is_a? Route and link_type == :problem
-          array_content <<  location.points.map{ |stop| stop_coords(stop, { :small => true,
-                                                                            :link_type => link_type,
-                                                                            :location => location,
-                                                                            :highlight => highlight })}
+          array_content <<  location.points.map{ |stop| point_coords(stop, { :small => true,
+                                                                             :link_type => link_type,
+                                                                             :location => location,
+                                                                             :highlight => highlight })}
         else
-          array_content <<  location.points.map{ |stop| stop_coords(stop, { :small => true,
-                                                                            :link_type => link_type,
-                                                                            :highlight => highlight })}
+          array_content <<  location.points.map{ |stop| point_coords(stop, { :small => true,
+                                                                             :link_type => link_type,
+                                                                             :highlight => highlight })}
         end
       else
-       array_content << stop_coords(location, { :small => small,
-                                                :link_type => link_type,
-                                                :highlight => highlight })
+       array_content << point_coords(location, { :small => small,
+                                                 :link_type => link_type,
+                                                 :highlight => highlight })
       end
     end
     array_content
