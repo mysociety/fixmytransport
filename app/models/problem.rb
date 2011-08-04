@@ -185,28 +185,58 @@ class Problem < ActiveRecord::Base
 
   # class methods
 
-  def self.find_issues_in_bounding_box(min_lat, min_lon, max_lat, max_lon, options={})
+  def self.find_issues_in_bounding_box(coords)
     bounding_box_clause = "AND problems.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
-                           ST_Point(#{min_lon}, #{min_lat}),
-                           ST_Point(#{max_lon}, #{max_lat})), #{WGS_84}), #{BRITISH_NATIONAL_GRID})"
-    issues = self.find_recent_issues(nil, :bounding_box => bounding_box_clause)
+                           ST_Point(#{coords[:left]}, #{coords[:bottom]}),
+                           ST_Point(#{coords[:right]}, #{coords[:top]})), #{WGS_84}), #{BRITISH_NATIONAL_GRID})"
+    issues = self.find_recent_issues(nil, :other_condition => bounding_box_clause)
     locations = {}
+    problem_ids = []
+    stop_ids = []
+    stop_area_ids = []
     issues.each do |issue|
+      case issue
+      when Problem
+        problem_ids << issue.id
+      when Campaign
+        problem_ids << issue.problem.id
+      end
       location = issue.location
       location_key = "#{location.class}_#{location.id}"
       if !locations.has_key?(location_key)
+        case location
+        when Stop
+          stop_ids << location.id
+        when StopArea
+          stop_area_ids << location.id
+        end
         location.highlighted = true
         locations[location_key] = location
       end
     end
-    { :locations => locations.values, :issues => issues }
+    { :locations => locations.values,
+      :issues => issues,
+      :problem_ids => problem_ids,
+      :stop_ids => stop_ids,
+      :stop_area_ids => stop_area_ids }
   end
 
-  def self.find_nearest_issues(lat, lon, limit, options={})
-    order_clause = "order by ST_Distance(
-                    ST_Transform(ST_GeomFromText('POINT(#{lon} #{lat})', #{WGS_84}), #{BRITISH_NATIONAL_GRID}),
-                    coords) asc"
-    issues = self.find_recent_issues(limit, :order_clause => order_clause)
+  # find issues within a radius expressed in km
+  def self.find_nearest_issues(lat, lon, distance, options)
+    conn = self.connection
+    distance_clause = "ST_Distance(
+                        ST_Transform(
+                          ST_GeomFromText('POINT(#{conn.quote(lon)} #{conn.quote(lat)})', #{WGS_84}),
+                        #{BRITISH_NATIONAL_GRID}),
+                      coords)"
+    conditions = "AND #{distance_clause} < #{distance * 1000}"
+    if options[:exclude_ids] && !options[:exclude_ids].empty?
+      ids = options[:exclude_ids].map{ |id| conn.quote(id) }.join(",")
+      conditions += " AND problems.id not in (#{ids})"
+    end
+    order = "order by #{distance_clause} asc"
+    self.find_recent_issues(nil, :other_condition => conditions,
+                                 :order_clause => order)
   end
 
   def self.create_from_hash(data, user, token=nil)
@@ -243,10 +273,10 @@ class Problem < ActiveRecord::Base
       offset_clause = ""
     end
 
-    if options[:bounding_box]
-      bounding_box_clause = options[:bounding_box]
+    if options[:other_condition]
+      other_condition_clause = options[:other_condition]
     else
-      bounding_box_clause = ''
+      other_condition_clause = ''
     end
 
     if options[:order_clause]
@@ -295,13 +325,13 @@ class Problem < ActiveRecord::Base
                                               WHERE status_code in (#{visible_problem_codes})
                                               AND campaign_id is null
                                               #{location_clause}
-                                              #{bounding_box_clause}
+                                              #{other_condition_clause}
                                               UNION
                                               SELECT campaigns.id, 'Campaign' as model_type, latest_event_at as latest_date, coords
                                               FROM campaigns, problems
                                               WHERE campaigns.status_code in (#{visible_campaign_codes})
                                               #{location_clause}
-                                              #{bounding_box_clause}
+                                              #{other_condition_clause}
                                               AND problems.campaign_id = campaigns.id
                                               )
                                              AS campaigns_and_problems

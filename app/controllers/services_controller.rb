@@ -18,8 +18,9 @@ class ServicesController < ApplicationController
                                    highlight)
     other_locations = map_data[:locations]
     link_type = params[:link_type].to_sym
-    @issues_on_map = map_data[:issues_on_map]
+    @issues_on_map = map_data[:issues]
     @nearest_issues = map_data[:nearest_issues]
+    @distance = map_data[:distance]
     issue_content = render_to_string :partial => "shared/issues_in_area"
     area_data = { :locations => location_stops_coords(other_locations, small=true, link_type, highlight),
                   :issue_content => issue_content }

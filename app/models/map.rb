@@ -10,6 +10,10 @@ class Map
     85445659.44705395 # offset / Math::PI
   end
 
+  def self.radius_in_km
+    6371
+  end
+
   def self.zoom_in(zoom)
     (zoom < MAX_VISIBLE_ZOOM) ? zoom.to_i+1 : MAX_VISIBLE_ZOOM
   end
@@ -18,12 +22,12 @@ class Map
     (zoom > MIN_ZOOM_LEVEL) ? zoom.to_i-1 : MIN_ZOOM_LEVEL
   end
 
-  def self.top(lon, zoom, map_height)
-    adjust_lon_by_pixels(lon, zoom, map_height/2)
+  def self.top(lat, zoom, map_height)
+    adjust_lat_by_pixels(lat, zoom, -map_height/2)
   end
 
-  def self.bottom(lon, zoom, map_height)
-    adjust_lon_by_pixels(lon, zoom, -(map_height/2))
+  def self.bottom(lat, zoom, map_height)
+    adjust_lat_by_pixels(lat, zoom, (map_height/2))
   end
 
   def self.adjust_lon_by_pixels(lon, zoom, delta)
@@ -38,12 +42,12 @@ class Map
     (offset +  lon * (radius * (Math::PI / 180.0))).round
   end
 
-  def self.left(lat, zoom, map_width)
-    adjust_lat_by_pixels(lat, zoom, map_width/2)
+  def self.left(lon, zoom, map_width)
+    adjust_lon_by_pixels(lon, zoom, -map_width/2)
   end
 
-  def self.right(lat, zoom, map_width)
-    adjust_lat_by_pixels(lat, zoom, -map_width/2)
+  def self.right(lon, zoom, map_width)
+    adjust_lon_by_pixels(lon, zoom, map_width/2)
   end
 
   def self.adjust_lat_by_pixels(lat, zoom, delta)
@@ -75,10 +79,6 @@ class Map
     x_to_lon(lon_to_x(lon) + (delta << (MAX_ZOOM_LEVEL - zoom)))
   end
 
-  def self.x_to_lon(x)
-    ((x.round - offset) / radius) * 180 / Math::PI
-  end
-
   def self.zoom_to_coords(min_lon, max_lon, min_lat, max_lat, height, width)
     min_x = lon_to_x(min_lon)
     max_x = lon_to_x(max_lon)
@@ -97,61 +97,71 @@ class Map
     zoom
   end
 
+  # calculate the Haversine distance between two coords expressed as lats and lons
+  # http://www.movable-type.co.uk/scripts/latlong.html
+  # to one decimal place
+  def self.distance_in_km(from, to)
+
+    delta_lon = to[:lon] - from[:lon]
+    delta_lat = to[:lat] - from[:lat]
+
+    deg_to_rad = (Math::PI / 180.0)
+
+    delta_lon_rad = delta_lon * deg_to_rad
+    delta_lat_rad = delta_lat * deg_to_rad
+
+    from_lat_rad = from[:lat] * deg_to_rad
+    to_lat_rad = to[:lat] * deg_to_rad
+
+    a = (Math.sin(delta_lat_rad/2))**2 + Math.cos(from_lat_rad) * Math.cos(to_lat_rad) * (Math.sin(delta_lon_rad/2))**2
+    c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+
+    (self.radius_in_km * c).round(1) # delta in kilometers
+  end
+
   def self.google_tile_url(lat, lon, zoom, map_height, map_width)
     "http://maps.google.com/maps/api/staticmap?center=#{lat},#{lon}&zoom=#{zoom}&size=#{map_width}x#{map_height}&sensor=false"
   end
 
-  def self.issue_data(bottom, left, top, right, lat, lon, options)
-    issue_data = Problem.find_issues_in_bounding_box(bottom, left, top, right, options)
-    issue_data[:stop_ids] = []
-    issue_data[:stop_area_ids] = []
-    issue_data[:locations].each do |location|
-      case location
-      when Stop
-        issue_data[:stop_ids] << location.id
-      when StopArea
-        issue_data[:stop_area_ids] << location.id
-      end
-    end
+  def self.issue_data(map_corners, options)
+    issue_data = Problem.find_issues_in_bounding_box(map_corners)
     if issue_data[:issues].size < 10
-      issue_data[:nearest_issues] = Problem.find_nearest_issues(lat, lon, 10-issue_data[:issues].size)
+      lat = options[:lat]
+      lon = options[:lon]
+      zoom = options[:zoom]
+      # Calculate the distance from the centre of a map twice the size of the current map to its
+      # bottom right corner
+      bottom = self.bottom(lat, zoom, options[:map_height]*2)
+      right = self.right(lon, zoom, options[:map_width]*2)
+      issue_data[:distance] = self.distance_in_km({:lat => lat, :lon => lon}, {:lat => bottom, :lon => right})
+      nearest_options = { :exclude_ids => issue_data[:problem_ids] }
+      issue_data[:nearest_issues] = Problem.find_nearest_issues(lat, lon, issue_data[:distance], nearest_options)
     end
     return issue_data
   end
 
   def self.other_locations(lat, lon, zoom, map_height, map_width, highlight=nil)
-    issues = []
-    nearest_issues = []
-    locations = []
-    exclude_stop_ids = []
-    exclude_stop_area_ids = []
-    options = { :highlight => highlight }
+    options = { :highlight => highlight,
+                :lat => lat,
+                :lon => lon,
+                :zoom => zoom,
+                :map_height => map_height,
+                :map_width => map_width }
+    data = { :locations => [], :stop_ids => [], :stop_area_ids => [] }
     if zoom >= MIN_ZOOM_FOR_OTHER_MARKERS
-      bottom, top, left, right = self.calculate_map_corners(lat, lon, zoom, map_height, map_width)
+      map_corners = self.calculate_map_corners(lat, lon, zoom, map_height, map_width)
       if highlight == :has_content
-        issue_data = self.issue_data(bottom, left, top, right, lat, lon, options)
-        exclude_stop_ids = issue_data[:stop_ids]
-        exclude_stop_area_ids = issue_data[:stop_area_ids]
+        data = self.issue_data(map_corners, options)
       end
-      locations += Stop.find_in_bounding_box(bottom, left, top, right,
-                                             options.merge({:exclude_ids => exclude_stop_ids}))
-      locations += StopArea.find_in_bounding_box(bottom, left, top, right,
-                                             options.merge({:exclude_ids => exclude_stop_area_ids}))
-      if highlight == :has_content
-        locations += issue_data[:locations]
-        issues = issue_data[:issues]
-        nearest_issues = issue_data[:nearest_issues]
-      end
+      stop_data = Stop.find_in_bounding_box(map_corners, {:exclude_ids => data[:stop_ids]})
+      stop_area_data = StopArea.find_in_bounding_box(map_corners, {:exclude_ids => data[:stop_area_ids]})
+      # want issue data markers (if any) drawn last so they'll be on top
+      data[:locations] = stop_data + stop_area_data + data[:locations]
     elsif highlight && zoom >= MIN_ZOOM_FOR_HIGHLIGHTED_MARKERS
-      bottom, top, left, right = self.calculate_map_corners(lat, lon, zoom, map_height, map_width)
-      issue_data = self.issue_data(bottom, left, top, right, lat, lon, options)
-      locations = issue_data[:locations]
-      issues = issue_data[:issues]
-      nearest_issues = issue_data[:nearest_issues]
-    else
-      locations = []
+      map_corners = self.calculate_map_corners(lat, lon, zoom, map_height, map_width)
+      data = self.issue_data(map_corners, options)
     end
-    {:locations => locations, :issues_on_map => issues, :nearest_issues => nearest_issues }
+    data
   end
 
   def self.calculate_map_corners(lat, lon, zoom, map_height, map_width)
@@ -159,7 +169,7 @@ class Map
     top = top(lat, zoom, map_height)
     left = left(lon, zoom, map_width)
     right = right(lon, zoom, map_width)
-    return [bottom, top, left, right]
+    return { :bottom => bottom, :top => top, :left => left, :right => right }
   end
 
 end

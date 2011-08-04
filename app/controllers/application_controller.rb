@@ -365,8 +365,9 @@ class ApplicationController < ActionController::Base
     if find_other_locations
       map_data = Map.other_locations(@lat, @lon, @zoom, height, width, @highlight)
       @other_locations = map_data[:locations]
-      @issues_on_map = map_data[:issues_on_map]
+      @issues_on_map = map_data[:issues]
       @nearest_issues = map_data[:nearest_issues]
+      @distance = map_data[:distance]
     else
       @other_locations = []
       @issues_on_map = []

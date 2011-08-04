@@ -227,13 +227,13 @@ class Stop < ActiveRecord::Base
     stops.empty? ? nil : stops.first
   end
 
-  def self.find_in_bounding_box(min_lat, min_lon, max_lat, max_lon, options={})
+  def self.find_in_bounding_box(coords, options={})
     query = "stops.stop_type in (?)
              AND status = 'ACT'
              AND stops.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
              ST_Point(?, ?),
              ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})"
-    params = [StopType.primary_types, min_lon, min_lat, max_lon, max_lat]
+    params = [StopType.primary_types, coords[:left], coords[:bottom], coords[:right], coords[:top]]
     if options[:exclude_ids] && !options[:exclude_ids].empty?
       query += " AND id not in (?)"
       params << options[:exclude_ids]
