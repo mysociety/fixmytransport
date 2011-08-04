@@ -19,6 +19,8 @@
   var linkType = 'location';
   var areaStops = <%= raw location_stops_coords([@stop], small=false, :location).to_json %>;
   var otherAreaStops = [];
+  var minZoom = <%= MIN_ZOOM_LEVEL %>;
+  var maxZoom = <%= MAX_VISIBLE_ZOOM %>;
     jQuery(document).ready(function(){
     area_init();
     setupShowStop();

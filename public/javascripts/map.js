@@ -38,21 +38,27 @@ function area_init() {
   if (findOtherLocations == true) {
     map.events.register('moveend', map, updateLocations);
   }
+  
+  // Enforce some zoom constraints
+  map.events.register("zoomend", map, function() {
+      if (map.getZoom() < minZoom) map.zoomTo(minZoom);
+      if (map.getZoom() > maxZoom) map.zoomTo(maxZoom);
+  });
 
 }
 
 function updateLocations(event) {
   zoom = map.getZoom();
   if (zoom >= minZoomForOtherMarkers){
-    if ($('#map-zoom-notice').length > 0 && findOtherLocations == true) {
-      $('#map-zoom-notice').fadeOut(1000);
+    if ($('#map-zoom-notice').length > 0) {
+      $('#map-zoom-notice').fadeOut(500);
     }
     for (var i=0; i < otherMarkers.markers.length; i++){
       otherMarkers.markers[i].display(true);
     }
   }else{
-    if ($('#map-zoom-notice').length > 0 && findOtherLocations == true) {
-      $('#map-zoom-notice').fadeIn(1000);
+    if ($('#map-zoom-notice').length > 0) {
+      $('#map-zoom-notice').fadeIn(500);
     }
     for (var i=0; i < otherMarkers.markers.length; i++){
       if (!otherMarkers.markers[i].highlight == true){
