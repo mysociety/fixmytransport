@@ -248,7 +248,6 @@ namespace :naptan do
 
     desc "Adds 'coords' geometry values to Stops"
     task :add_stops_coords => :environment do
-      adapter = ActiveRecord::Base.configurations[RAILS_ENV]['adapter']
       Stop.find_each do |stop|
         coords = Point.from_x_y(stop.easting, stop.northing, BRITISH_NATIONAL_GRID)
         stop.coords = coords
