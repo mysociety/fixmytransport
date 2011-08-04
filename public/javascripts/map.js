@@ -44,10 +44,16 @@ function area_init() {
 function updateLocations(event) {
   zoom = map.getZoom();
   if (zoom >= minZoomForOtherMarkers){
+    if ($('#map-zoom-notice').length > 0 && findOtherLocations == true) {
+      $('#map-zoom-notice').fadeOut(1000);
+    }
     for (var i=0; i < otherMarkers.markers.length; i++){
       otherMarkers.markers[i].display(true);
     }
   }else{
+    if ($('#map-zoom-notice').length > 0 && findOtherLocations == true) {
+      $('#map-zoom-notice').fadeIn(1000);
+    }
     for (var i=0; i < otherMarkers.markers.length; i++){
       if (!otherMarkers.markers[i].highlight == true){
         otherMarkers.markers[i].display(false);

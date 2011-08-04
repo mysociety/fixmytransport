@@ -19,6 +19,7 @@
 #large-map {
   width: 500px;
   margin:auto;
+  margin-bottom: 3em;
 }
 
 #large-map #map{
@@ -88,4 +89,8 @@
 }
 .tooltip-popup-content{
   font-size: 1em;
+}
+
+#map-zoom-notice {
+  float: right
 }

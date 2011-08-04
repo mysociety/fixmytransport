@@ -70,3 +70,7 @@
     </div>
   <%- unless static %></noscript><%- end %> 
 </div>
+
+<div class="notice" role="alert" id="map-zoom-notice" <%- if @find_other_locations == false  || @zoom > MIN_ZOOM_FOR_OTHER_MARKERS %>style="display: none;"<%- end %>>
+Zoom in to see all stops and stations in the area.
+</div>
