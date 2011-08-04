@@ -5,6 +5,10 @@
       <%= "#{t('shared.header.site_name')}#{@title ? ':' : ''} #{@title}" %>
     </title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-type' />
+		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>    
+    <meta name="robots" content="noindex">
+    <%- end %>
+    
     <%= yield :meta %>
     <%= yield :feeds %>
     <%= csrf_meta_tag %>
