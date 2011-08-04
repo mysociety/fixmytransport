@@ -5,7 +5,7 @@ en:
       on_and_around_the_map: On and around the map
       no_issues_on_map: No issues have been reported yet.
       nearest_issues: Closest issues
-      title: Issues in this area
+      title: "Issues in '%{area}'"
     choose_area:
       choose_area: "Choose area"
       multiple_localities: "We found more than one place matching \"%{name}\". Please select one, or try a different search if yours is not here:"

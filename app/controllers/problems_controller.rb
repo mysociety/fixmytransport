@@ -256,7 +256,7 @@ class ProblemsController < ApplicationController
 
   def browse
     @highlight = :has_content
-    @title = t('problems.browse.title')
+    @title = t('problems.browse.title', :area => params[:name])
     options = { :find_template => :browse,
                 :browse_template => :browse_area,
                 :map_options => { :mode => :browse } }
