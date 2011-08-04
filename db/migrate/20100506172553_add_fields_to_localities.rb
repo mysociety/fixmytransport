@@ -7,11 +7,8 @@ class AddFieldsToLocalities < ActiveRecord::Migration
     add_column :localities, :grid_type, :string
     add_column :localities, :northing, :float
     add_column :localities, :easting, :float
-    spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
-    if spatial_extensions
-      add_column :localities, :coords, :point, :srid => 27700
-      add_index :localities, :coords, :spatial => true
-    end
+    add_column :localities, :coords, :point, :srid => 27700
+    add_index :localities, :coords, :spatial => true
   end
 
   def self.down
@@ -22,9 +19,6 @@ class AddFieldsToLocalities < ActiveRecord::Migration
     remove_column :localities, :easting
     remove_column :localities, :northing
     remove_column :localities, :grid_type
-    spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false) 
-    if spatial_extensions
-      remove_column :localities, :coords
-    end
+    remove_column :localities, :coords
   end
 end

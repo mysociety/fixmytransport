@@ -248,11 +248,7 @@ namespace :naptan do
 
     desc "Adds 'coords' geometry values to Stops"
     task :add_stops_coords => :environment do
-      spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false)
       adapter = ActiveRecord::Base.configurations[RAILS_ENV]['adapter']
-      if ! spatial_extensions or ! adapter == 'postgresql'
-        usage_message 'rake naptan:geo:add_stops_coords requires PostgreSQL with PostGIS'
-      end
       Stop.find_each do |stop|
         coords = Point.from_x_y(stop.easting, stop.northing, BRITISH_NATIONAL_GRID)
         stop.coords = coords
@@ -261,11 +257,6 @@ namespace :naptan do
     end
 
     def convert_coords(class_name, task_name, conditions = nil)
-      spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false)
-      adapter = ActiveRecord::Base.configurations[RAILS_ENV]['adapter']
-      if ! spatial_extensions or ! adapter == 'postgresql'
-        usage_message "rake naptan:geo:#{task_name} requires PostgreSQL with PostGIS"
-      end
       class_name.constantize.find_each(:conditions => conditions) do |instance|
         instance = set_lon_lat(instance, class_name)
         instance.save!

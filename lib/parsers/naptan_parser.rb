@@ -96,12 +96,7 @@ class Parsers::NaptanParser
   def parse_stop_areas filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false)
-      if spatial_extensions
-        coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
-      else
-        coords = nil
-      end
+      coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
       yield StopArea.new( :code                      => (row['StopAreaCode'] or row['GroupID']),
                           :name                      => (row['Name'] or row['GroupName']),
                           :administrative_area_code  => row['AdministrativeAreaCode'],
@@ -122,13 +117,7 @@ class Parsers::NaptanParser
 
   def parse_stops filepath
     csv_data = convert_encoding(filepath)
-    spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      if spatial_extensions
-        coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
-      else
-        coords = nil
-      end
       locality = Locality.find_by_code((row['NptgLocalityCode'] or row['NatGazID']))
       yield Stop.new( :atco_code                  => (row['AtcoCode'] or row['ATCOCode']),
                       :naptan_code                => (row['NaptanCode'] or row['SMSNumber']),

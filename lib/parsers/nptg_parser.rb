@@ -63,13 +63,7 @@ class Parsers::NptgParser
 
   def parse_localities filepath
     csv_data = convert_encoding(filepath)
-    spatial_extensions = MySociety::Config.getbool('USE_SPATIAL_EXTENSIONS', false)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      if spatial_extensions
-        coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
-      else
-        coords = nil
-      end
       admin_area = AdminArea.find_by_code((row['AdministrativeAreaCode'] or row['Admin Area ID']))
       district = District.find_by_code((row['NptgDistrictCode'] or row['District ID']))
       yield Locality.new(:code                      => (row['NptgLocalityCode'] or row['National Gazetteer ID']),
