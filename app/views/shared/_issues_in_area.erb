@@ -1,6 +1,6 @@
 <h2><%= t('problems.browse.on_and_around_the_map') %></h2>
 
-<%- if @issues_on_map || @issues_on_map.empty? %>
+<%- if !@issues_on_map || @issues_on_map.empty? %>
   <p><%= t('problems.browse.no_issues_on_map') %></p>
 <%- else %>
   <ul class="issues-list" id="browse-issues-list">
