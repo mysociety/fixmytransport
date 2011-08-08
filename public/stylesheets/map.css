@@ -59,7 +59,7 @@
 #browse-map {
   width: 490px;
   overflow: default;
-  padding: 5px 0;
+  margin: 5px 0;
 }
 
 #browse-map #map {
@@ -91,6 +91,14 @@
   font-size: 1em;
 }
 
+#notice-container{
+  min-height: 3em;
+}
+
 #map-zoom-notice {
-  float: right
+  float: right;
+}
+
+#notice-clear {
+  clear: both;
 }
