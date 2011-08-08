@@ -7,6 +7,7 @@ en:
       nearest_issues: "Closest other issues (within approx. %{distance} km)"
       title: "Issues in '%{area}'"
       no_other_issues: No issues have been reported yet.
+      title_no_name: "Browsing issues"
     choose_area:
       choose_area: "Choose area"
       multiple_localities: "We found more than one place matching \"%{name}\". Please select one, or try a different search if yours is not here:"
@@ -137,7 +138,7 @@ en:
       im_a_beta_tester: "I'm a beta tester"
       find_out_more: Find out more
       coming_soon: "FixMyTransport is coming soon...currently in closed beta testing."
-      browse_issues: View issues by area
+      browse_issues: Map of issues
     issues_index:
       title: "Recent issues"
     list:

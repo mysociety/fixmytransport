@@ -256,7 +256,11 @@ class ProblemsController < ApplicationController
 
   def browse
     @highlight = :has_content
-    @title = t('problems.browse.title', :area => params[:name])
+    if params[:name]
+      @title = t('problems.browse.title', :area => params[:name])
+    else
+      @title = t('problems.browse.title_no_name')
+    end
     options = { :find_template => :browse,
                 :browse_template => :browse_area,
                 :map_options => { :mode => :browse } }
@@ -295,7 +299,7 @@ class ProblemsController < ApplicationController
       # got back stops/stations
       elsif stop_info[:locations]
         if options[:map_options][:mode] == :browse
-          return render_browse_template(stop_info[:locations], options[:map_options], options[:browse_template])          
+          return render_browse_template(stop_info[:locations], options[:map_options], options[:browse_template])
         else
           map_params_from_location(stop_info[:locations],
                                    find_other_locations=true,
@@ -338,12 +342,12 @@ class ProblemsController < ApplicationController
     end
 
   end
-  
+
   def render_browse_template(locations, map_options, template)
-    map_params_from_location(locations, 
-                             find_other_locations=true, 
-                             LARGE_MAP_HEIGHT, 
-                             LARGE_MAP_WIDTH, 
+    map_params_from_location(locations,
+                             find_other_locations=true,
+                             LARGE_MAP_HEIGHT,
+                             LARGE_MAP_WIDTH,
                              map_options)
     @locations = []
     render template
