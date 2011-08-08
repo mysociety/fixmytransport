@@ -1063,7 +1063,7 @@ ul.issues-list{margin: 0px; padding: 0px;}
 	ul.issues-list li{
 		list-style: none;
 		overflow: hidden;
-		padding: 1em 10px 0.5em 10px ;
+    padding: 1em 10px 0.5em 10px ;
 		margin-bottom: 1em;
 		background: #f5f5f7;
 	}
@@ -1073,12 +1073,10 @@ ul.issues-list{margin: 0px; padding: 0px;}
 			margin-bottom: 10px;
 		}
 		ul.issues-list dl{
-			width: 460px;
 			font-size: 0.9em;
 			padding: 0px;
 			margin: 1em 0 0 0;
 			float:left;
-			width: 100%;
 			padding-top: 0.5em;
 		}
 			ul.issues-list dl dt,
@@ -1104,17 +1102,17 @@ ul.issues-list{margin: 0px; padding: 0px;}
 			ul.issues-list h4{float: left; margin-bottom: 0.25em; width: 100%;}
 			ul.issues-list p{float: left; margin-bottom: 0.25em;width: 100%; font-weight: normal;}
 
-			ul.issues-list dl .status-item{float: right;display: block;}
-			ul.issues-list dl .status-item dd{color:#fff; margin-right: 0px;}
+			ul.issues-list dl.status-item{float: right;display: block;}
+			ul.issues-list dl.status-item dd{color:#fff; margin-right: 0px;}
 
 			ul.issues-list .wrapper{width: 470px;}
 			ul.issues-list li.problem .wrapper {width:468px;}
 
 			ul.issues-list li.problem {background: #fff; border: 1px solid #ddd;}
 
-			ul#browse-issues-list .wrapper{ width: 100%; }
-			ul#browse-issues-list li.problem .wrapper { width:100%; }
-      ul#browse-issues-list dl{ float: none;}
+			ul#browse-issues-list .wrapper{ width: 390px; }
+			ul#browse-issues-list li.problem .wrapper { width:388px; }
+      ul.issues-list dl{ margin: 0}
 
 /* Page Specific
    ================================================== */

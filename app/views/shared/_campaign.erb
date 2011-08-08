@@ -5,22 +5,22 @@
 <%- end %>
 <div class="wrapper">
 	<h4><a href="<%= campaign_url(campaign) %>"><%= MySociety::Format.ucfirst(campaign.title) %></a></h4>
-    
+
     <p><%= raw link_to(campaign.location.description, location_url(campaign.location)) %></p>
    <%- if context != :browse_issues %>
-      <p><%= t('shared.campaign.by')%> 
+      <p><%= t('shared.campaign.by')%>
         <a href="<%= profile_url(campaign.initiator) %>"><%= campaign.initiator.name %>
         </a>
       </p>
     <%- end %>
-	<dl>
+	<dl class="details">
 		<dt><%= t('shared.campaign.started')%></dt>
 		<dd><%= campaign.created_at.localtime.to_s(:short) %></dd>
 		<dt><%= t('shared.campaign.followers') %></dt>
 		<dd><%= campaign.supporters.count %></dd>
-		<span class="status-item">
-			<dt><%= t('shared.campaign.status')%></dt>
-			<dd class="status stat-<%= campaign_display_status(campaign) %>"><%= campaign_display_status(campaign).titleize %></dd>
-		</span>
+	</dl>
+	<dl class="status-item">
+		<dt><%= t('shared.campaign.status')%></dt>
+		<dd class="status stat-<%= campaign_display_status(campaign) %>"><%= campaign_display_status(campaign).titleize %></dd>
 	</dl>
 </div>

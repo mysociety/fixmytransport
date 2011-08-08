@@ -7,17 +7,17 @@
 	<h4><a href="<%= problem_url(problem) %>"><%= problem.subject %></a></h4>
 	<p><%= raw link_to(problem.location.description, location_url(problem.location)) %></p>
 	<%- if context != :browse_issues %>
-	  <p><%= t('shared.problem.by')%> 
+	  <p><%= t('shared.problem.by')%>
 	    <a href="<%= profile_url(problem.reporter) %>"><%= problem.reporter.name %>
 	    </a>
 	  </p>
 	<%- end %>
-	<dl>
+	<dl class="details">
 		<dt><%= t('shared.problem.added') %></dt>
 		<dd><%= problem.confirmed_at.localtime.to_s(:short) %></dd>
-		<span class="status-item">
+	</dl>
+	<dl class="status-item">
 			<dt>Status:</dt>
 			<dd class="status stat-<%= problem_display_status(problem) %>"><%= problem_display_status(problem).titleize %></dd>
-		</span>
 	</dl>
 </div>
