@@ -26,6 +26,7 @@ class ApplicationController < ActionController::Base
   private
 
   def make_cachable
+    return if MySociety::Config.getbool('STAGING_SITE', true)
     unless current_user
       expires_in 60.seconds, :public => true
       response.headers['Vary'] = 'Cookie'
@@ -33,7 +34,8 @@ class ApplicationController < ActionController::Base
   end
 
   def long_cache
-    unless current_user
+    return if MySociety::Config.getbool('STAGING_SITE', true)
+    unless current_user 
       expires_in 60.minutes, :public => true
       response.headers['Vary'] = 'Cookie'
     end
