@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
     if request.host.starts_with?('assets')
       domain = MySociety::Config.get("DOMAIN", request.host_with_port)
       main_host_request = request.protocol + domain + request.request_uri
-      redirect_to main_host_request
+      redirect_to main_host_request, :status => :moved_permanently
     end
   end
 

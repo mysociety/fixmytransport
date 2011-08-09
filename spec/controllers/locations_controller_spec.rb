@@ -34,12 +34,17 @@ describe LocationsController do
       before do 
         MySociety::Config.stub!(:get)
         MySociety::Config.stub!(:get).with("DOMAIN", 'assets.example.com').and_return("test.host")
+        @request.host = "assets.example.com"
       end
       
       it 'should redirect to the main domain' do 
-        @request.host = "assets.example.com"
         make_request
         response.should redirect_to('http://test.host/stop-areas/london/euston')
+      end
+      
+      it 'should have a response code of 301 (moved permanently)' do 
+        make_request
+        response.status.should == '301 Moved Permanently'
       end
       
     end
