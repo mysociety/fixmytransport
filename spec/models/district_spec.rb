@@ -33,4 +33,24 @@ describe District do
   it "should create a new instance given valid attributes" do
     District.create!(@valid_attributes)
   end
+  
+  describe 'find all by name' do 
+  
+    it 'should find areas with their admin area, supplied as a comma-delimited string' do 
+      expected_conditions = ["LOWER(districts.name) = ? AND LOWER(admin_areas.name) = ?", 
+                             "bromley", "greater london"]
+      District.should_receive(:find).with(:all, :conditions => expected_conditions, 
+                                                :include => [:localities, :admin_area]).and_return([])
+      District.find_all_by_full_name('Bromley, Greater London')
+    end
+    
+    it 'should not return districts without localities' do 
+      district_no_localities = mock_model(District, :localities => [])
+      district_with_localities = mock_model(District, :localities => [mock_model(Locality)])
+      District.stub!(:find).and_return([district_with_localities, district_no_localities])
+      District.find_all_by_full_name('London')
+    end
+    
+  end
+  
 end

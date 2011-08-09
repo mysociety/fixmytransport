@@ -121,13 +121,14 @@ class Locality < ActiveRecord::Base
   end
   
   def self.find_areas_by_name(name, area_type)
+    area_types = ['Locality', 'AdminArea', 'District', 'Region']
     areas = []
-    if area_type 
+    if area_type && area_types.include?(area_type)
       areas = area_type.constantize.find_all_by_full_name(name)
       return areas
     end
-    [Locality, AdminArea, District, Region].each do |area_type|
-      areas += area_type.find_all_by_full_name(name)
+    area_types.each do |area_type|
+      areas += area_type.constantize.find_all_by_full_name(name)
     end
     areas.each do |area|
       if area.is_a?(Locality) && (areas.include?(area.admin_area.region) || areas.include?(area.admin_area) || areas.include?(area.district))
