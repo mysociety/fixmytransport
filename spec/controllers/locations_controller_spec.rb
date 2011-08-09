@@ -28,6 +28,21 @@ describe LocationsController do
       make_request
       response.should redirect_to(ferry_terminal_url(mock_stop_area.locality, mock_stop_area))
     end
+    
+    describe 'when request is directed at an asset server' do 
+    
+      before do 
+        MySociety::Config.stub!(:get)
+        MySociety::Config.stub!(:get).with("DOMAIN", 'assets.example.com').and_return("test.host")
+      end
+      
+      it 'should redirect to the main domain' do 
+        @request.host = "assets.example.com"
+        make_request
+        response.should redirect_to('http://test.host/stop-areas/london/euston')
+      end
+      
+    end
 
   end
 
@@ -240,6 +255,7 @@ describe LocationsController do
     it_should_behave_like "an action that receives a POSTed comment"
 
   end
+
 
   describe 'POST #add_comment_to_sub_route' do
 
