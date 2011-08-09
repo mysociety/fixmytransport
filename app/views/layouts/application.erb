@@ -11,10 +11,13 @@
     <%- if MySociety::Config.get('GOOGLE_SITE_VERIFICATION_CODE', '') != '' %>
       <meta name="google-site-verification" content="<%= MySociety::Config.get('GOOGLE_SITE_VERIFICATION_CODE', '') %>" />
     <%- end %>
+
+ 	<meta name="viewport" content="width=device-width" />
+
     <%= yield :meta %>
     <%= yield :feeds %>
     <%= csrf_meta_tag %>
-    <%= raw stylesheet_link_tag('core', 'fixmytransport', 'map', 'buttons', :cache => 'main') %>
+    <%= raw stylesheet_link_tag('core', 'fixmytransport', 'map', 'buttons', 'mobile-clientside', :cache => 'main') %>
 
 	<!--[if lte IE 7]><%= raw stylesheet_link_tag('ie67') %><![endif]-->
 	
@@ -47,7 +50,8 @@
 					<li><a href="<%= about_url %>"><%= t('shared.header.about') %></a></li>
 					<li><a href="<%= feedback_url(:url => CGI.escape(request.request_uri)) %>"><%= t('shared.header.feedback') %></a></li>
 				</ul>
-				<a id="logo" href="<%= root_url %>">FixMyTransport</a>
+				<a id="logo" href="<%= root_url %>"><img src="/images/logo-beta.jpg" /></a>
+				<!-- <a id="logo" href="<%= root_url %>">FixMyTransport</a> -->
 				<%- if current_user %>
 				<p id="member-info"><%= t('shared.header.hi')%> <a href="<%= profile_path(current_user) %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>"><%= t('shared.login.sign_out')%></a></p>
 				<%- else %>
