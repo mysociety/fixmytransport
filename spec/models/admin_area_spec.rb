@@ -52,6 +52,23 @@ describe AdminArea do
       AdminArea.find_all_by_full_name('National - National Coach').should == []
     end
     
+    it 'should find admin areas supplied with their region in a comma-delimited string' do 
+      expected_conditions = ["LOWER(admin_areas.name) = ? AND LOWER(regions.name) = ?", "warrington", "north west"]
+      AdminArea.should_receive(:find).with(:all, :include => [:region], 
+                                                 :conditions => expected_conditions)
+      AdminArea.find_all_by_full_name('Warrington, North West')
+    end
+    
+    it 'should find areas regardless of usage of ampersands or ands' do 
+      expected_conditions = ["LOWER(admin_areas.name) = ?", 'tyne & wear']
+      expected_substitute_conditions = ["LOWER(admin_areas.name) = ?", 'tyne and wear']
+      AdminArea.should_receive(:find).with(:all, :include => [], 
+                                                 :conditions  => expected_conditions).and_return([])
+      AdminArea.should_receive(:find).with(:all, :include => [], 
+                                                 :conditions => expected_substitute_conditions)
+      AdminArea.find_all_by_full_name('Tyne & Wear')
+    end
+    
   end
   
 end

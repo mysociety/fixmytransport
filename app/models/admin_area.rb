@@ -42,19 +42,44 @@ class AdminArea < ActiveRecord::Base
   
   # class methods 
   
+  def self.get_name_and_region_name(name)
+    name = name.downcase
+     name_parts = name.split(',', 2)
+     if name_parts.size == 2
+       name = name_parts.first.strip
+       region_name = name_parts.second.strip
+     else
+       region_name = nil
+     end
+     [name, region_name]
+  end
+  
   def self.find_all_by_full_name(name)
     name.downcase!
     return [] if name.starts_with?('national -')
+    name, region_name = self.get_name_and_region_name(name)
     query_string = "LOWER(admin_areas.name) = ?"
-    admin_areas = self.find(:all, :conditions => [query_string] + [name])
+    params = [name]
+    includes = []
+    if region_name
+      query_string += " AND LOWER(regions.name) = ?"
+      params << region_name
+      includes << :region
+    end
+    admin_areas = self.find(:all, :conditions => [query_string] + params, 
+                                  :include => includes)
     if admin_areas.empty?
       name_with_ampersand = name.gsub(' and ', ' & ')
       if name_with_ampersand != name
-        admin_areas = self.find(:all, :conditions => [query_string] + [name_with_ampersand])
+        params[0] = name_with_ampersand
+        admin_areas = self.find(:all, :conditions => [query_string] + params,
+                                      :include => includes)
       else
         name_with_and = name.gsub(' & ', ' and ')
         if name_with_and != name
-          admin_areas =  self.find(:all, :conditions => [query_string] + [name_with_and])
+          params[0] = name_with_and
+          admin_areas =  self.find(:all, :conditions => [query_string] + params,
+                                         :include => includes)
         end
       end
     end
