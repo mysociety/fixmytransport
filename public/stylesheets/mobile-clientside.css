@@ -1,0 +1,117 @@
+	<style type="text/css">
+		/* -------------------------------------------------------------------------------------------- */
+		/* unconditional changes here are for dev: really must change definitions in the original style */
+		#logo {
+			background: none; /* knock out the existing background-url, it's an image now */
+			text-indent: 0;
+			border:8px solid blue;
+			
+		}
+		#logo img{
+			max-width:100%;
+			margin: 0 auto;
+		}
+		
+		.mobile-only {
+		    display: none;
+		}
+		/* -------------------------------------------------------------------------------------------- */
+	
+		@media screen and (max-width: 600px) {
+		    .mobile-only {
+		        display: block;
+		    }
+		    ul#mob-footer-nav {
+		        width: 100%;
+		        padding: 0 0 1em 0;
+		        margin:0 auto 3px auto;
+		        text-align:center;
+		        border-bottom: 1px dotted white;
+		        display: inline-block;
+	        }
+
+		    ul#mob-footer-nav li{
+		        display: inline;
+		        padding: 0.2em;
+		    }
+		    
+			body {
+				min-width: 200px;
+			}
+			#yellowbanner {
+				width: auto;
+				border-left: none;
+				border-right: none;
+				margin-left: 0;
+				margin-right: 0;
+			}
+			.campaign-description {
+				width: 100%;
+			}
+			p#member-info {
+				margin-top:0.5em;
+				position: relative;
+				display: block;
+				float:right;
+				top: 0;
+				left: 0;
+				width:auto;
+				clear: both;
+				text-align: right;
+			}
+			#logo {
+			    background: none; /* knock out the existing background-url, it's an image now */
+				width: 90%;
+				visibility: visible;
+				text-indent: 0;
+				display: block;
+				margin: 0.5em auto;
+				float: none;
+				text-align: center;
+			}
+			.container {
+				width: 95%;
+			}
+			.support-big, .button.comment, .button.support {
+				padding: 10px;
+				font-size: 1.2em;
+				width: 80%;
+			}
+			#top-nav,
+			#mysociety-tab {
+				display: none;
+			}
+			
+			.leftcol-banner {
+				float: none;
+				width: 95%;
+				font-size: 1em;
+			}
+			.leftcol {
+				float:none;
+				width: auto;
+				margin-left: 0.25em;
+				margin-right: 0.25em;
+			}
+			.rightcol {
+				float:none;
+			}
+			/* daring: no right aligns? */
+			.right {
+			    float: none !important;
+			    margin-left:auto;
+			    margin-right:auto;
+			}
+			ul#campaign-thread li  {
+				background: #eee;
+			    line-height: 1em;
+			    clear: both;
+			}
+			ul#campaign-thread li a.thread-item {
+			    display: block;
+			}
+			ul#campaign-thread li a.thread-item span.title {
+				width: 80%;
+			}
+		}
+	</style>
