@@ -646,16 +646,21 @@ namespace :nptdr do
     task :add_route_locality_sets => :environment do
       offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : 1
       max = offset + 100
+      Route.paper_trail_off
       Route.find_each(:conditions => ['id >= ? AND id <= ?', offset, max]) do |route|
+        puts route.id
         locality_ids = []
         route.stops.each do |stop|
           locality_ids << stop.locality_id unless locality_ids.include? stop.locality_id
         end
         locality_ids.each do |locality_id|
-          route.route_localities.build(:locality_id => locality_id)
+          if ! route.route_localities.detect{ |existing| existing.locality_id == locality_id }
+            route.route_localities.build(:locality_id => locality_id)
+          end
         end
         route.save!
       end
+      Route.paper_trail_on
     end
 
     desc 'Adds lats and lons to routes calculated from stops'
