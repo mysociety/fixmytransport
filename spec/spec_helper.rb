@@ -46,6 +46,8 @@ def default_fixtures
    :stop_areas, 
    :regions,
    :routes, 
+   :route_sub_routes,
+   :sub_routes,
    :journey_patterns,
    :stop_area_memberships, 
    :stop_area_links,  
