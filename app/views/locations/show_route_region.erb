@@ -151,7 +151,7 @@
 	      <ul class="route-links">
 	      <%- @region.ferry_routes.each do |ferry_route| %>
 	        <li>
-	          <%= link_to(ferry_route.short_name, location_url(ferry_route)) %>
+	          <%= link_to(ferry_route.description, location_url(ferry_route)) %>
 	        </li>
 	      <%- end %>
 	      </ul>
