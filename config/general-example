@@ -88,4 +88,10 @@ define('OPTION_PAPERCLIP_URL_BASE', '/system/paperclip');
 define('OPTION_APP_STATUS', 'beta');
 define('OPTION_BETA_USERNAME', 'username');
 define('OPTION_BETA_PASSWORD', 'password');
+
+// x-header used for device class, if there's a cacheing system between FMT and the web inserting them
+// e.g., "X-Device-type"   
+// Leave blank if no such mechanism is set up. See application_controller.rb, get_device_from_user_agent
+define('OPTION_DEVICE_TYPE_X_HEADER', '');
+
 ?>
