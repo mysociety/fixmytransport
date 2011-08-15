@@ -472,12 +472,13 @@ class ProblemsController < ApplicationController
     respond_to do |format|
       format.html do
         flash[:notice] = problem_data[:notice]
-        redirect_to(login_url)
+        redirect_to(new_account_url)
       end
       format.json do
         @json = { :success => true,
                   :requires_login => true,
-                  :notice => problem_data[:notice] }
+                  :notice => problem_data[:notice],
+                  :redirect => new_account_url }
         render :json => @json
         return
       end

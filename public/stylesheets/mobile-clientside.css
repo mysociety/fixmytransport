@@ -23,6 +23,14 @@
 		    .mobile-only {
 		        display: block;
 		    }
+
+		    @font-face {
+	        font-family: Arial, sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6, .font-1, #greybanner p {
+          font-family: Arial, sans-serif;
+        }
+
 		    ul#mob-footer-nav {
 		        width: 100%;
 		        padding: 0 0 1em 0;
@@ -135,12 +143,18 @@
         font-size: 1.5em;
       }
 
+      h3 {
+        margin-bottom: 0.2em;
+      }
+
       .button, #login-form button, .fieldset button, .form-field button,
       .login-options a.button{
-				padding: 10px;
+				padding: 10px 0;
+				font-family: Arial, Helvetica, sans-serif;
 				font-size: 1.2em;
 				width: 100%;
-				margin: 1em auto;
+				margin: 0.2em auto;
+        line-height: normal;
 			}
 
 			.error, .alert, .notice, .success, .info {
@@ -173,19 +187,38 @@
 			}
 
 			/*===[Create account/Login]===*/
-			
+
 			.login-options {
 			  float: none;
+			  padding: 0;
+			  width: 100%;
+			  display: block;
 			}
+			  .login-options p {
+          margin: 0;
+        }
 
 			#create-account-form {
 			  width: 100%;
+			  float: none;
 			}
 
 			#main-content #login-landing-wrap {
-			  margin: 0.2em 0;
+			  margin: 0;
+			  padding: 0;
 			  width: 100%;
+			  border: 0;
 			}
+
+			#login-form {
+          padding: 0;
+          width: 100%;
+      }
+
+      #login-form ul li.login-username input,
+      #login-form ul li.login-password input {
+          width: 90%;
+      }
 
 			/*===[ Front page]===*/
 
