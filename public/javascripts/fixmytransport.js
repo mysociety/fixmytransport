@@ -4,6 +4,13 @@
  */
 
 $(document).ready(function(){
+  /* AJAX forms
+     ================================================== */
+     // Always send the authenticity_token with ajax
+     $.ajaxSetup({
+       'beforeSend': function(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content')); }
+     });
+  
 	/* Frontpage scroller
 	   ================================================== */
 	if($('#frontpage-problem-scroller').length > 0){
@@ -27,6 +34,59 @@ $(document).ready(function(){
 		frontpageScroller(5000, 2000);
 	}
 
+  /* Route and operator lists 
+     ================================================== */
+     
+     function tabifyRouteLists() {
+         if ($('#tabs').length > 0){
+           $("#tabs").tabs();
+
+           if ($('#tabs-bus .tabs-sub-nav').length > 0){
+             $("#tabs-bus").tabs();
+           }
+           if ($('#tabs-coach .tabs-sub-nav').length > 0){
+             $("#tabs-coach").tabs();
+           }      
+           if ($('#tabs-train .tabs-sub-nav').length > 0){
+             $("#tabs-train").tabs();
+           }
+           if ($('#tabs-ferry .tabs-sub-nav').length > 0){
+             $("#tabs-ferry").tabs();
+           }
+           if ($('#tabs-metro .tabs-sub-nav').length > 0){
+             $("#tabs-metro").tabs();
+           }
+
+           tabshook();
+         }
+     }
+
+     function tabifyOperatorLists() {
+         if ($('#operator-tabs').length > 0){
+           $("#operator-tabs").tabs();
+           tabshook();
+         }
+     }
+
+     function tabshook(){
+     	var activetab = 'childactive-'+$('#tabs-main-nav li.ui-state-active').attr('id');
+     	$("#tabs-main-nav").removeClass (function (index, css) {
+     	    return (css.match (/\bchildactive-\S+/g) || []).join(' ');
+     	});
+     	$('#tabs-main-nav').addClass(activetab);
+     }
+     tabifyRouteLists();
+     tabifyOperatorLists();
+     addSearchGuidance();  
+
+   	$('#tabs').bind('tabsshow', function(event, ui) {
+   		tabshook();
+   	});
+
+   	$('#operator-tabs').bind('tabsshow', function(event, ui) {
+   		tabshook();
+   	});
+  
 	/* Region map
 	   ================================================== */
 	$('#RegionMap area').hover(function(){
@@ -88,6 +148,30 @@ $(document).ready(function(){
 	});
 
 
+  /* Advice in input areas 
+     ================================================== */
+     
+     function addGuidanceField(guidance_selector, field_selector){
+       $(guidance_selector).hide();
+       $(field_selector).autofill({
+            value: $(guidance_selector).text(),
+            defaultTextColor: '#595454',
+            activeTextColor: '#000000'
+          });  
+     }
+
+     // Put guidance text as default in search boxes
+     function addSearchGuidance() {
+
+       addGuidanceField('#guidance-name', '#stop_name_form #name');
+       addGuidanceField('#guidance-route-number', '#bus_route_form #route_number');
+       addGuidanceField('#guidance-area', '#bus_route_form #area');
+       addGuidanceField('#guidance-to', '#train_route_form #to');
+       addGuidanceField('#guidance-to', '#other_route_form #to');
+       addGuidanceField('#guidance-from', '#train_route_form #from');
+       addGuidanceField('#guidance-from', '#other_route_form #from');
+
+     }
 
 	/* Dialog Boxes
 	   ================================================== */
