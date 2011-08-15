@@ -30,7 +30,7 @@ module ApplicationHelper
   end
 
   def main_js_link
-    javascript_include_tag('fixmytransport.min', 'fb', :charset => 'utf-8', :cache => 'main')
+    javascript_include_tag('fixmytransport', 'fb', :charset => 'utf-8', :cache => 'main')
   end
 
   # options:
