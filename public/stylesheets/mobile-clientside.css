@@ -17,12 +17,19 @@
 		}
 
 
+
 		/* -------------------------------------------------------------------------------------------- */
 
 		@media screen and (max-width: 600px) {
 		    .mobile-only {
 		        display: block;
 		    }
+
+        .mobile-only#site-name {
+          color: #ffffff;
+          text-align: center;
+          font-size: 2.2em;
+        }
 
 		    @font-face {
 	        font-family: Arial, sans-serif;
@@ -222,6 +229,10 @@
 
 			/*===[ Front page]===*/
 
+      #frontpage-top {
+      	margin:0.2em auto 0 auto;
+      }
+
 			#frontpage-top .leftcol ul#frontpage-problem-scroller {
 			  display: none;
 			}
@@ -275,7 +286,7 @@
 
       #frontpage-top .leftcol .button {
         padding: 0.8em 0;
-        margin: 1em 0;
+        margin: 0.5em 0;
       }
 
 			.twitter-text, .facebook-text {
@@ -323,21 +334,21 @@
           height: auto;
           width: 100%;
       }
-      
+
       #route-type-list li {
           float: none;
           margin: 0;
           width: 100%;
       }
-      
+
       #route-type-list a.tram, #route-type-list a.tram:focus, #route-type-list a.tram:hover {
         background: none no-repeat scroll center 50px, -moz-linear-gradient(center top , #FFB600 0%, #D89700 100%) repeat scroll 0 0 transparent;
       }
-     
+
       #route-type-list a.ferry, #route-type-list a.ferry:focus, #route-type-list a.ferry:hover {
         background: none no-repeat scroll center 50px, -moz-linear-gradient(center top , #669933 0%, #99CC33 100%) repeat scroll 0 0 transparent;
       }
-    
+
        #route-type-list a.bus, #route-type-list a.bus:focus, #route-type-list a.bus:hover {
       	background: #048fc2 none center 50px no-repeat; /* Old browsers */
       	background: none center 50px no-repeat, -moz-linear-gradient(top, #048fc2 0%, #006699 100%); /* FF3.6+ */
@@ -381,8 +392,8 @@
       	filter: none; /* IE6-9 */
       	background:none center 50px no-repeat, linear-gradient(top, #99cc33 0%,#669933 100%); /* W3C */
       }
-     
-    
+
+
       #route-type-list li a {
         padding: 10px 0;
         margin: 1em 0;
@@ -396,7 +407,7 @@
       #route-type-list a.tram {
         background: no-repeat scroll center 35px, -moz-linear-gradient(center top , #FFB600 0%, #D89700 100%) repeat scroll 0 0 transparent;
       }
-      
+
       .form-list {
       	display:block;
       	margin: 0;
@@ -414,7 +425,7 @@
             top: 0;
             position: relative;
         }
-        
+
       	.form-list li.fieldset {
       		padding:5px;
       		max-width:90%;
@@ -452,12 +463,12 @@
       				position: relative;
       				top: 3px;
       			}
-      			
+
     		  #map-col {
              display:none;
           }
-      			
-  
+
+
  		  /* ===[ Reporting a Problem Page ]=== */
 
       #problem-map {

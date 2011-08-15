@@ -3,6 +3,11 @@
 	<div id="other-country-notice" class="container"></div>
 </div>
 <%- end %>
+<%- content_for :body_content do %>
+<div class="mobile-only" id="site-name">
+  FixMyTransport
+</div>
+<%- end %>
 <div id="frontpage-top" class="container">
 	<div class="leftcol widecol">
 		<ul id="frontpage-problem-scroller">
@@ -25,7 +30,7 @@
 				<%- end %>
 			</li>
 		</ul>
-		
+
 
 		<p class="font-1"><%= raw t('problems.frontpage.report_problem') %></p>
 		<%= link_to('STOP or STATION', find_stop_problems_url, :class => 'font-1 button green') %>
@@ -117,7 +122,7 @@
 			<h3 class="font-1"><%= t('problems.frontpage.step_two')%></h3>
 			<p><%= t('problems.frontpage.step_two_details')%></p>
 		</li>
-		
+
 		<span class="fg-bottom">
 		<li>
 			<div id="fg-img-3" class="fg-img"></div>
