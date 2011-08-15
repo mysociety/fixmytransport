@@ -6,17 +6,19 @@
 <h3><%= t('admin.history') %></h3>
 <table class='history index-list'>
   <tr>
-    <th width='20%'><%= t('admin.updated_at') %></th>
-    <th width='20%'><%= t('admin.email') %></th>
+    <th width='10%'><%= t('admin.updated_at') %></th>
+    <th width='15%'><%= t('admin.email') %></th>
+    <th width='15%'><%= t('admin.cc_email') %></th>
     <th width='7%'><%= t('admin.confirmed')  %></th>
     <th width='7%'><%= t('admin.deleted')  %></th>
     <th width='10%'><%= t('admin.editor')  %></th>
     <th width='10%'><%= t('admin.location_type')  %></th>
-    <th width='28%'><%= t('admin.notes') %></th>
+    <th width='26%'><%= t('admin.notes') %></th>
   </tr>
   <tr class="<%= cycle('odd', 'even') %>">
     <td><%= @pte_contact.updated_at %></td>
     <td><%= @pte_contact.email %></td>
+    <td><%= @pte_contact.cc_email %></td>
     <td><%= @pte_contact.confirmed %></td>
     <td><%= @pte_contact.deleted %></td>
     <td><%= @pte_contact.last_editor %></td>
@@ -28,6 +30,7 @@
       <%- contact = version.reify %>
       <tr class="<%= cycle('odd', 'even') %>">
         <td><%= version.created_at %></td>
+        <td><%= contact.cc_email %></td>
         <td><%= contact.email %></td>
         <td><%= contact.confirmed %></td>
         <td><%= contact.deleted %></td>

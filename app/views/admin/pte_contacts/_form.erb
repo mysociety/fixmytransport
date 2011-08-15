@@ -44,6 +44,16 @@
 </div>
 
 <div class='form-field'>
+  <%- if @pte_contact.errors.on(:cc_email) %>
+    <div class='error'>
+      <%= error_message_on @pte_contact, :cc_email %>
+    </div>
+  <%- end %>
+  <%= raw f.label :cc_email %>
+  <%= raw f.text_field :cc_email %>
+</div>
+
+<div class='form-field'>
   <%= raw f.label :notes %>
   <%= raw f.text_area :notes, :cols => 50, :rows => 4 %>
 </div>

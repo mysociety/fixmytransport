@@ -4,6 +4,7 @@ class PassengerTransportExecutiveContact < ActiveRecord::Base
   has_many :outgoing_messages, :as => :recipient
   validates_presence_of :category
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
+  validates_format_of :cc_email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$"), :allow_blank => true
   has_paper_trail
   
   def name

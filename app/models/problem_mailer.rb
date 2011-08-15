@@ -29,8 +29,11 @@ class ProblemMailer < ApplicationMailer
   end
 
   def report(problem, recipient, recipient_models, missing_recipient_models=[])
-    recipient_email = ProblemMailer.get_recipient_email(recipient, problem)
-    recipients recipient_email
+    recipient_emails = ProblemMailer.get_recipient_emails(recipient, problem)
+    recipients recipient_emails[:to]
+    if recipient_emails[:cc]
+      cc recipient_emails[:cc]
+    end
     from problem.reply_name_and_email
     subject I18n.translate('mailers.problem_report_subject', :subject => problem.subject)
     campaign_link = problem.campaign ? main_url(campaign_path(problem.campaign)) : nil
@@ -79,14 +82,19 @@ class ProblemMailer < ApplicationMailer
     end
   end
 
-  def self.get_recipient_email(recipient, problem)
+  def self.get_recipient_emails(recipient, problem)
     # on a staging site, don't send live emails
     if MySociety::Config.getbool('STAGING_SITE', true)
-      return MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+      return { :to => MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost') }
     elsif problem.location.is_a?(Route) && problem.location.number == 'ZZ9'
-      return MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
+      return { :to => MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost') }
     else
-      return self.recipient_model(recipient, problem).email
+      contact = self.recipient_model(recipient, problem)
+      emails = { :to => contact.email }
+      if contact.respond_to?(:cc_email) && !contact.cc_email.blank?
+        emails[:cc] = contact.cc_email
+      end
+      return emails
     end
   end
 

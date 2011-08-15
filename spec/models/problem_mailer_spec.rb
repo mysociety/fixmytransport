@@ -20,7 +20,8 @@ describe ProblemMailer do
   describe 'when sending problem reports' do
 
     before do
-      @mock_operator = mock_model(Operator, :email => 'operator@example.com',
+      @mock_contact = mock_model(OperatorContact, :email => 'operator@example.com')
+      @mock_operator = mock_model(Operator, :contact_for_category_and_location => @mock_contact,
                                             :name => 'Test Operator')
       @mock_user = mock_model(User, :email => 'user@example.com')
       @mock_problem = mock_model(Problem, :operator => @mock_operator,
@@ -30,8 +31,7 @@ describe ProblemMailer do
                                           :reply_email => @mock_user.email,
                                           :reply_name_and_email => "Test User <#{@mock_user.email}>",
                                           :campaign => nil,
-                                          :time => nil,
-                                          :date => nil,
+                                          :category => 'Other',
                                           :subject => "Missing ticket machines",
                                           :description => "Desperately need more.",
                                           :emailable_organizations => [@mock_operator],

@@ -4,4 +4,5 @@ en:
     pte_contacts_for: "Contacts for %{pte}"
     email: Email
     location_type: Location type
-    
+    cc_email: CC email
+    pte_contact_form_error: There was a problem.
