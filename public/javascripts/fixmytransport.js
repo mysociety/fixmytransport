@@ -13,26 +13,26 @@ $(document).ready(function(){
   
 	/* Frontpage scroller
 	   ================================================== */
-	if($('#frontpage-problem-scroller').length > 0){
-		//fix height to tallest child
-		var h = 0;
-		if($('#frontpage-problem-scroller li img').length > 0){h = 250;} //quick chrome hack
-		$('#frontpage-problem-scroller').children('li').each(function(i){
-			if($(this).height() > h){h = $(this).height();}
-		});
-		$('#frontpage-problem-scroller').children('li').css({'height': h}); 
+  if($('#frontpage-problem-scroller').length > 0){
+   //fix height to tallest child
+   var h = 0;
+   if($('#frontpage-problem-scroller li img').length > 0){h = 250;} //quick chrome hack
+   $('#frontpage-problem-scroller').children('li').each(function(i){
+     if($(this).height() > h){h = $(this).height();}
+   });
+   $('#frontpage-problem-scroller').children('li').css({'height': h}); 
 
-		//hide all but first one
-		$('#frontpage-problem-scroller li:not(:first)').addClass('hidden').hide();
-		
-		//add classes for use in the function - for some reason
-		//the if statement didn't like the :first or :last's
-		$('#frontpage-problem-scroller li:first').addClass('first');
-		$('#frontpage-problem-scroller li:last').addClass('last');
-		
-		//run the function
-		frontpageScroller(5000, 2000);
-	}
+   //hide all but first one
+   $('#frontpage-problem-scroller li:not(:first)').addClass('hidden').hide();
+
+   //add classes for use in the function - for some reason
+   //the if statement didn't like the :first or :last's
+   $('#frontpage-problem-scroller li:first').addClass('first');
+   $('#frontpage-problem-scroller li:last').addClass('last');
+
+   //run the function
+   frontpageScroller(5000, 2000);
+  }
 
   /* Route and operator lists 
      ================================================== */
@@ -491,18 +491,20 @@ $(document).ready(function(){
 	  options['error'] = function() { generalError(form_selector + ' .error-text'); }
 	  options['success'] = function(response) {
 	    if (response.success) {
-
         if (response.requires_login) {
+          if ($(window).width() > 600 ) {
           // add the notice to the login form
-          $('#login-create-account .notice').text(response.notice);
-          $('#login-create-account .notice').show();
-
-          // show the login form
-          $('.login-box .pane').hide();
-          $("#login-box").dialog({title: "Create a FixMyTransport Account"});
-        	$('#login-create-account').fadeIn();
-      		$("#login-box").dialog("open");
-
+            $('#login-create-account .notice').text(response.notice);
+            $('#login-create-account .notice').show();
+ 
+            // show the login form
+            $('.login-box .pane').hide();
+            $("#login-box").dialog({title: "Create a FixMyTransport Account"});
+            $('#login-create-account').fadeIn();
+            $("#login-box").dialog("open");
+          } else {
+            window.location = response.redirect;
+          }
         }else{
           window.location = response.redirect;
         }
