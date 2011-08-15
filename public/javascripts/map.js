@@ -77,14 +77,16 @@ function updateLocations(event) {
     url = "/locations/" + map.getZoom() + "/" + Math.round(center.lat*1000)/1000 + "/" + Math.round(center.lon*1000)/1000 + "/" + linkType;
     params = "?height=" + $('#map').height() + "&width=" + $('#map').width();
     params = params + "&highlight=" + highlight;
-    OpenLayers.loadURL(url + params, {}, this, loadNewMarkers, markerFail);
+    $.ajax({
+      url: url + params,
+      dataType: 'json',
+      success: loadNewMarkers,
+      failure: markerFail})
   }
 
 }
 
-function loadNewMarkers(response) {
-  json = new OpenLayers.Format.JSON();
-  markerData = json.read(response.responseText);
+function loadNewMarkers(markerData) {
   newMarkers = markerData['locations'];
   addMarkerList(newMarkers, otherMarkers, true);
   newContent = markerData['issue_content'];
