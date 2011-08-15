@@ -37,6 +37,8 @@ victoria_station_root:
   administrative_area_code: "110"
   modification: rev
   locality: london
+  lon: -0.14455 
+  lat: 51.49526
 victoria_station_leaf:
   status: act
   northing: "179000"

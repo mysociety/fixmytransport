@@ -9,8 +9,12 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery if :current_user # See ActionController::RequestForgeryProtection for details
   skip_before_filter :verify_authenticity_token, :unless => :current_user
-  before_filter :make_cachable
-  before_filter :require_beta_password, :check_mobile_domain, :get_device_from_user_agent
+
+  before_filter :redirect_asset_host_requests,
+                :make_cachable,
+                :check_mobile_domain,
+                :get_device_from_user_agent,
+                :require_beta_password
 
   helper_method :location_search,
                 :main_url,
@@ -25,6 +29,14 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def redirect_asset_host_requests
+    if request.host.starts_with?('assets')
+      domain = MySociety::Config.get("DOMAIN", request.host_with_port)
+      main_host_request = request.protocol + domain + request.request_uri
+      redirect_to main_host_request, :status => :moved_permanently
+    end
+  end
+
   def make_cachable
     return if MySociety::Config.getbool('STAGING_SITE', true)
     unless current_user
@@ -35,7 +47,7 @@ class ApplicationController < ActionController::Base
 
   def long_cache
     return if MySociety::Config.getbool('STAGING_SITE', true)
-    unless current_user 
+    unless current_user
       expires_in 60.minutes, :public => true
       response.headers['Vary'] = 'Cookie'
     end
@@ -210,7 +222,7 @@ class ApplicationController < ActionController::Base
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
         commented = commented_type.constantize.find(id)
-        comment = Comment.add(user, 
+        comment = Comment.add(user,
                               commented,
                               post_login_action_data[:text],
                               post_login_action_data[:mark_fixed],
@@ -417,7 +429,7 @@ class ApplicationController < ActionController::Base
                        :mark_fixed => @comment.mark_fixed,
                        :mark_open => @comment.mark_open,
                        :redirect => @template.commented_url(@comment.commented),
-                       :notice => t('shared.add_comment.sign_in_to_comment', 
+                       :notice => t('shared.add_comment.sign_in_to_comment',
                                     :commented_type => commented_type_description(@comment.commented)) }
       session[:next_action] = data_to_string(comment_data)
       respond_to do |format|
@@ -450,7 +462,7 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
+
   def commented_type_description(commented)
     case commented
     when Stop
@@ -477,9 +489,9 @@ class ApplicationController < ActionController::Base
      raise "Unknown commented type: #{commented.class}"
     end
   end
-  
-  # Path to cache file for a stop with a given suffix. Adds a directory into the path 
-  # for the first letter of the locality, in order to spread the directories and not hit the 
+
+  # Path to cache file for a stop with a given suffix. Adds a directory into the path
+  # for the first letter of the locality, in order to spread the directories and not hit the
   # ext3 32,000 links per inode limit
   def stop_cache_path(stop, suffix=nil)
     locality_slug = stop.locality.to_param
@@ -496,18 +508,18 @@ class ApplicationController < ActionController::Base
   end
 
   def require_beta_password
-    beta_username = MySociety::Config.get('BETA_USERNAME', 'username')
-    beta_password = MySociety::Config.get('BETA_PASSWORD', 'password')
     if app_status == 'closed_beta'
+      beta_username = MySociety::Config.get('BETA_USERNAME', 'username')
+      beta_password = MySociety::Config.get('BETA_PASSWORD', 'password')
       authenticate_or_request_with_http_basic('Closed Beta') do |username, password|
         username == beta_username && Digest::MD5.hexdigest(password) == beta_password
       end
     end
   end
-  
+
   def check_mobile_domain
     mobile_domain = MySociety::Config.get('MOBILE_DOMAIN', '')
-    if !mobile_domain.blank? 
+    if !mobile_domain.blank?
       if request.host == mobile_domain
         render :template => 'shared/mobile_placeholder', :layout => 'mobile'
       end

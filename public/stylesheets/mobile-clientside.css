@@ -5,18 +5,20 @@
 			background: none; /* knock out the existing background-url, it's an image now */
 			text-indent: 0;
 			border:8px solid blue;
-			
+
 		}
 		#logo img{
 			max-width:100%;
 			margin: 0 auto;
 		}
-		
+
 		.mobile-only {
 		    display: none;
 		}
+
+
 		/* -------------------------------------------------------------------------------------------- */
-	
+
 		@media screen and (max-width: 600px) {
 		    .mobile-only {
 		        display: block;
@@ -34,7 +36,7 @@
 		        display: inline;
 		        padding: 0.2em;
 		    }
-		    
+
 			body {
 				min-width: 200px;
 			}
@@ -81,7 +83,7 @@
 			#mysociety-tab {
 				display: none;
 			}
-			
+
 			.leftcol-banner {
 				float: none;
 				width: 95%;
@@ -113,5 +115,297 @@
 			ul#campaign-thread li a.thread-item span.title {
 				width: 80%;
 			}
-		}
+
+			/*===[ General ]===*/
+
+			#top {
+			  display: none;
+			}
+
+			p#member-info {
+			  display: none;
+			}
+
+			#greybanner {
+      	margin-bottom: 0.2em;
+        padding: 1px 0;
+      }
+
+      #banner h1, #greybanner h1, #greybanner h2 {
+        font-size: 1.5em;
+      }
+
+      .button, #login-form button, .fieldset button, .form-field button,
+      .login-options a.button{
+				padding: 10px;
+				font-size: 1.2em;
+				width: 100%;
+				margin: 1em auto;
+			}
+
+			.error, .alert, .notice, .success, .info {
+			  font-size: 1em;
+			  width: 90%;
+			  margin: 0;
+			  float: none;
+			}
+
+			#create-account-form input {
+			  width: 90%;
+			}
+
+			#goto-top-wrap {
+      	display: none;
+      }
+
+			#footer {
+			  background: none;
+			  padding: 0;
+			}
+
+			#main-content {
+			  min-height: inherit;
+			  padding-bottom: 1.5em;
+			}
+
+			p {
+			  margin: 0;
+			}
+
+			/*===[Create account/Login]===*/
+			
+			.login-options {
+			  float: none;
+			}
+
+			#create-account-form {
+			  width: 100%;
+			}
+
+			#main-content #login-landing-wrap {
+			  margin: 0.2em 0;
+			  width: 100%;
+			}
+
+			/*===[ Front page]===*/
+
+			#frontpage-top .leftcol ul#frontpage-problem-scroller {
+			  display: none;
+			}
+
+			#what-it-does {
+			  display: none;
+			}
+
+		  #how-it-works {
+		    display: none;
+		  }
+
+			#frontpage-banner-left {
+			  display: none;
+			}
+
+
+			#frontpage-banner-right {
+        display: block;
+        float: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
+
+      #frontpage-banner-right h2 {
+        display: none;
+      }
+
+			#frontpage-banner-right ul {
+			  display: inline-block;
+			  border-bottom: 1px dotted white;
+        margin: 0 auto 3px;
+        padding: 0 0 1em;
+        text-align: center;
+        width: 100%;
+			}
+
+			#frontpage-banner-right ul li {
+        display: inline;
+        padding: 0.2em;
+        border: none;
+      }
+
+      #frontpage-banner-right ul li a {
+        border: none;
+        display: inline;
+        font-size: 1em;
+        text-decoration: underline;
+      }
+
+      #frontpage-top .leftcol .button {
+        padding: 0.8em 0;
+        margin: 1em 0;
+      }
+
+			.twitter-text, .facebook-text {
+			  display: none;
+			}
+
+			#frontpage-top .leftcol #followus a {
+        margin: 1em 1em 1em;
+      }
+
+			/*===[ Find stop]===*/
+			#find-stop {
+			  background: none;
+			  width: 90%;
+			  margin: 45% 5%;
+			}
+
+			#find-stop input {
+    		float:none;
+    		width:95% ;
+    	  font-size: 1.3em;
+ 		    margin: 1% 0 1% 0;
+ 		    border: 2px solid #048fc2;
+ 		    padding: 0.5em;
+ 		  }
+
+   		#find-stop .point-go {
+   		  float: none;
+   		  margin: 2em auto;
+ 		  }
+
+ 		  #large-map {
+ 		    width: 100%;
+ 		  }
+
+ 		  #problem-map #map {
+        width: 100%;
+        height: 10em;
+        margin: auto;
+        border: none;
+      }
+
+ 		  /* ===[ Reporting a Problem Page ]=== */
+
+      #problem-map {
+        position:relative;
+      }
+
+      #problem-map {
+        width: 100%;
+        overflow: default;
+        padding: 5px 0;
+      }
+
+      #problem-map #map {
+        width: 100%;
+        height: 10em;
+        margin: auto;
+        border: none;
+      }
+
+      #problem-map #notice-container {
+        display: none;
+      }
+
+      .form-1 ul li {
+        width: 100%;
+        margin: 0;
+      }
+      .form-1 input, .form-1 textarea, .form-1 select {
+        width: 98%;
+        margin:; 0 auto;
+        padding: 0;
+      }
+
+      .tipbox, .tipbox.fixed {
+      	position:relative;
+      	left: 0;
+      	top:10px;
+      	display:block;
+      	float:none;
+      	width:98%;
+      	padding: 0.5em 0.5em;
+      	margin-bottom: 1em;
+      	background:#F4F4F4;
+      	color: #333333;
+      }
+      .tipbox a, .tipbox.fixed a {
+      	color:#048fc2;
+      }
+      .tipbox .tip-close, .tipbox.fixed .tip-close,
+      .tipbox h5, .tipbox.fixed h5 {
+      	display:none;
+      }
+
+      /* ===[ Converting a problem ]=== */
+		  .left {
+		    float: none !important;
+		  }
+
+		  #choose {
+		    padding-bottom: 1em;
+		  }
+
+		  #choose h1 {
+        color: #048FC2;
+        margin: 0.5em;
+        font-size: 1.5em;
+      }
+
+      #choose h2 {
+        font-size: 1.5em;
+        margin-bottom: 0.25em;
+        line-height: 1.1;
+      }
+
+		  #choose p {
+        font-size: 1em;
+      }
+
+		  #choose .left {
+		    margin-left: 0;
+		  }
+
+		  #choose .left, #choose .right {
+		    width: inherit;
+		  }
+
+		  #choose .left .button, #choose .right .button {
+        font-size: 1.5em;
+        margin: 0.3em auto;
+        padding: 1em 0;
+        display: inline-block;
+        width: 100%;
+      }
+
+      #choose p br {
+        display:none;
+      }
+
+      #choose .middle {
+        display: none;
+      }
+
+    	#choose .left p, #choose .right p {
+        font-size: 1em;
+        margin: 0.5em auto 0.5em;
+        width: 100%;
+      }
+
+      #choose .left ul, #choose .right ul li {
+        text-align: left;
+      }
+
+      #choose .left ul, #choose .right ul {
+        margin: 0 auto;
+        text-align: left;
+        display: inline-block;
+      }
+
+      #choose .left p.convert-explanation,
+      #choose .right p.convert-explanation {
+        display: none;
+      }
+ 	}
 	</style>

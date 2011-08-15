@@ -276,6 +276,33 @@ describe Route do
       existing_route.route_operators.size.should == 2
     end
 
+    it 'should transfer route locality associations when merging overlapping routes' do
+      existing_route = routes(:victoria_to_haywards_heath)
+      existing_route.route_localities.size.should == 1
+      Route.stub!(:find_existing).and_return([existing_route])
+      route_locality = RouteLocality.new(:locality => Locality.new(:name => 'New Locality'))
+      route = Route.new(:transport_mode_id => 5,
+                        :number => '43',
+                        :route_localities => [route_locality])
+      Route.add!(route)
+      existing_route.route_localities.size.should == 2
+    end
+
+    it 'should transfer route sub route associations when merging overlapping routes' do
+      existing_route = routes(:victoria_to_haywards_heath)
+      existing_route.route_sub_routes.size.should == 1
+      Route.stub!(:find_existing).and_return([existing_route])
+      sub_route = SubRoute.new(:from_station => stop_areas(:victoria_station_root),
+                               :to_station => stop_areas(:haywards_heath_station),
+                               :transport_mode_id => 5)
+      route_sub_route = RouteSubRoute.new(:sub_route => sub_route)
+      route = Route.new(:transport_mode_id => 5,
+                        :number => '43',
+                        :route_sub_routes => [route_sub_route])
+      Route.add!(route)
+      existing_route.route_sub_routes.size.should == 2
+    end
+
     it 'should transfer route source admin area associations when merging overlapping routes' do
       existing_route = routes(:victoria_to_haywards_heath)
       existing_route.route_source_admin_areas.size.should == 1

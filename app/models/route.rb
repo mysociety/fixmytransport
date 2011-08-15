@@ -665,6 +665,7 @@ class Route < ActiveRecord::Base
   def self.merge_duplicate_route(duplicate, original)
     raise "Can't merge route with campaigns: #{duplicate.inspect}" if !duplicate.campaigns.empty?
     raise "Can't merge route with problems: #{duplicate.inspect}" if !duplicate.problems.empty?
+    raise "Can't merge route with comments: #{duplicate.inspect}" if !duplicate.comments.empty?
     duplicate.route_operators.each do |route_operator|
       if ! original.route_operators.detect { |existing| existing.operator == route_operator.operator }
         original.route_operators.build(:operator => route_operator.operator)
@@ -674,6 +675,18 @@ class Route < ActiveRecord::Base
       if ! original.route_source_admin_areas.detect{ |existing| existing.source_admin_area == route_source_admin_area.source_admin_area }
         original.route_source_admin_areas.build(:source_admin_area => route_source_admin_area.source_admin_area,
                                                 :operator_code => route_source_admin_area.operator_code)
+      end
+    end
+
+    duplicate.route_localities.each do |route_locality|
+      if ! original.route_localities.detect{ |existing| existing.locality == route_locality.locality }
+        original.route_localities.build(:locality => route_locality.locality)
+      end
+    end
+
+    duplicate.route_sub_routes.each do |route_sub_route|
+      if ! original.route_sub_routes.detect{ |existing| existing.sub_route == route_sub_route.sub_route }
+        original.route_sub_routes.build(:sub_route => route_sub_route.sub_route)
       end
     end
 

@@ -1,8 +1,3 @@
-<%- content_for :javascript do %>
-<script type="text/javascript">
-
-</script>
-<%- end %>
 <%- content_for :banner_content do %>
 <div class="top-notice" id="conditional-notice">
 	<div id="other-country-notice" class="container"></div>
@@ -32,25 +27,25 @@
 		</ul>
 		
 
-		<p class="font-1"><%= t('problems.frontpage.report_problem') %></p>
+		<p class="font-1"><%= raw t('problems.frontpage.report_problem') %></p>
 		<%= link_to('STOP or STATION', find_stop_problems_url, :class => 'font-1 button green') %>
 		<%= raw link_to('JOURNEY or ROUTE', find_route_problems_url, :class => 'font-1 button green') %>
-		<p class="font-1"><%= t('problems.frontpage.get_it_fixed')%></p>
+		<p class="font-1"><%= raw t('problems.frontpage.get_it_fixed')%></p>
 		<%- if @version == 0 %>
 		<div id="followus" class="font-1">
 			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank" title="Facebook (opens in a new window)">
 				<span class="icon facebook"></span>
-				<%= t('problems.frontpage.follow_on_facebook')%>
+				<span class="facebook-text"><%= t('problems.frontpage.follow_on_facebook')%></span>
 			</a>
 			<a href="http://twitter.com/FixMyTransport" title="Twitter (opens in a new window)" target="_target">
 				<span class="icon twitter"></span>
-				<%= t('problems.frontpage.follow_on_twitter')%>
+				<span class="twitter-text"><%= t('problems.frontpage.follow_on_twitter')%></span>
 			</a>
 		</div>
 		<%- end %>
 	</div>
-	<div class="rightcol narrowcol">
-		<h2><%= t('problems.frontpage.what_it_does')%></h2>
+	<div id="what-it-does" class="rightcol narrowcol">
+		<h2><%= t('problems.frontpage.what_it_does') %></h2>
 		<ul id="secret-list">
 			<li class="secret-report"><%= t('problems.frontpage.reports_problems')%></li>
 			<li class="secret-find"><%= t('problems.frontpage.finds_responsible') %></li>
@@ -58,7 +53,7 @@
 			<li class="secret-track"><%= t('problems.frontpage.tracks_progress')%></li>
 			<li class="secret-done"><%= t('problems.frontpage.gets_things_done')%></li>
 		</ul>
-		<a href="#main-content" class="font-1 button"><%= t('problems.frontpage.how_does_it_work')%></a>
+		<a href="#how-it-works" class="font-1 button"><%= t('problems.frontpage.how_does_it_work')%></a>
 		<%- if @version == 1 %>
 		<div id="followus" class="font-1">
 			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank" title="Facebook (opens in new window)">
@@ -103,7 +98,7 @@
 		</div>
 	</div>
 </div>
-<div id="main-content" class="container">
+<div id="how-it-works" class="container">
 	<div id="fg-head">
 		<div id="fg-head-inner">
 			<h2 class="font-1"><%= t('problems.frontpage.how_does_it_work')%></h2>
