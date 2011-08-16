@@ -89,3 +89,4 @@ BETA_PASSWORD: 'password'
 # e.g., "X-Device-type"   
 # Leave blank if no such mechanism is set up. See application_controller.rb, get_device_from_user_agent
 DEVICE_TYPE_X_HEADER: ''
+
