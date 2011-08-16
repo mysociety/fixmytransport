@@ -333,8 +333,8 @@ $(document).ready(function(){
   		$('#login-landing').show();
   		$("#login-box").dialog("open");
   		
-  		// record a hit on the login box in analytics
-      _gaq.push(['_trackPageview', campaign_data.url + '/login']);
+      // record a hit on the login box in analytics
+      _gaq.push(['_trackPageview', location.pathname + '/login']);
 	  };
 	  $(form_selector).ajaxForm(options);
 
@@ -418,6 +418,9 @@ $(document).ready(function(){
           $("#login-box").dialog({title: "Create a FixMyTransport Account"});
         	$('#login-create-account').fadeIn();
       		$("#login-box").dialog("open");
+
+          // record a hit on the login box in analytics
+          _gaq.push(['_trackPageview', location.pathname + '/login']);
 
         }else{
           window.location = response.redirect;
