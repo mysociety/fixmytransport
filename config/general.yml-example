@@ -8,7 +8,7 @@
 # have multiple config files and use a symlink to change between them.
 #
 # Copyright (c) 2010 UK Citizens Online Democracy. All rights reserved.
-# Email: louise@mysociety.org; WWW: http:#www.mysociety.org
+# Email: louise@mysociety.org; WWW: http://www.mysociety.org
 #
 # $Id: fixmytransport_config_general.ugly,v 1.75 2011-08-16 08:57:32 louise Exp $
 #
@@ -38,7 +38,7 @@ GOOGLE_MAPS_API_KEY: 'Your Google Maps API key'
 GOOGLE_SITE_VERIFICATION_CODE: 'Your Google Webmaster Tools code'
 
 # Facebook: 
-# APP_ID is typically a 16-digit code regestered for this app by your "owner" Facebook account.
+# APP_ID is typically a 16-digit code registered for this app by your "owner" Facebook account.
 # If you leave it blank, facebook stuff (connect/login)  won't be displayed.
 FACEBOOK_APP_ID: ''
 FACEBOOK_APP_SECRET: ''
@@ -48,10 +48,10 @@ FACEBOOK_GRAPH_API_URL: ''
 SSL_CA_PATH: ''
 
 # Base URL for admin pages through the secure server
-ADMIN_BASE_URL: 'http:#example.com/secure/'
+ADMIN_BASE_URL: 'http://example.com/secure/'
 
 # Service locations
-MAPIT_URL: 'http:#mapit.mysociety.org'
+MAPIT_URL: 'http://mapit.mysociety.org'
 GAZE_URL: ''
 
 # Locations of transport data
