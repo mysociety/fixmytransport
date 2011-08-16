@@ -609,11 +609,11 @@
 
 
 			.narrowcol {
-        width: 100%;
+        width: 98%;
       }
 
       .widecol {
-        width: 100%;
+        width: 98%;
       }
 
       #medium-map #notice-container {
@@ -623,5 +623,28 @@
       #main-content #comment-form, #main-content .new_campaign_update, #main-content .update_campaign {
         width: 100%;
       }
+
+      /* ===[ Issues list ]=== */
+      ul.issues-list li {
+          margin-bottom: 1em;
+          padding: 0.5em;
+      }
+      ul.issues-list li.problem .wrapper {
+        width: 75%;
+      }
+      ul.issues-list dl dt {
+        margin-right: 0.1em;
+      }
+
+      ul.issues-list img {
+        max-width: 20%;
+        margin-right: 0.5em;
+      }
+
+      ul.issues-list dl.status-item {
+        clear: left;
+        float: left;
+      }
+
  	}
 	</style>
