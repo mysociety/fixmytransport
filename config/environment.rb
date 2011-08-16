@@ -24,7 +24,7 @@ load "voting_area.rb"
 Rails::Initializer.run do |config|
 
   # Load intial mySociety config
-  MySociety::Config.set_file(File.join(config.root_path, 'config', 'general'), true)
+  MySociety::Config.set_file(File.join(config.root_path, 'config', 'general.yml'), true)
   MySociety::Config.load_default
 
   # Settings in config/environments/* take precedence over those specified here.
