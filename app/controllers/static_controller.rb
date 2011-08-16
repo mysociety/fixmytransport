@@ -1,6 +1,7 @@
 class StaticController < ApplicationController
   
   def feedback
+    @title = t('static.feedback.title')
     @email = MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
     allowed_types = ['Route', 'SubRoute']
     if params[:location_id] and params[:location_type]

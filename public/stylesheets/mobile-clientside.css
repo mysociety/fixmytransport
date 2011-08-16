@@ -633,7 +633,7 @@
         width: 75%;
       }
       ul.issues-list dl dt {
-        margin-right: 0.1em;
+        margin-right: 0.2em;
       }
 
       ul.issues-list img {
@@ -646,5 +646,12 @@
         float: left;
       }
 
+    /* ===[ Feedback ]=== */
+ 	  .feedback-form input, .feedback-form textarea {
+		  width: 96%;
+		}
+		.feedback-form textarea {
+		  height: auto;
+		}
  	}
 	</style>
