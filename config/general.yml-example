@@ -1,0 +1,91 @@
+#
+# general.yml-example:
+# Example values for the "general.yml" config file.
+
+# Configuration parameters, in YAML.
+#
+# Copy this file to one called "general.yml" in the same directory.  Or
+# have multiple config files and use a symlink to change between them.
+#
+# Copyright (c) 2010 UK Citizens Online Democracy. All rights reserved.
+# Email: louise@mysociety.org; WWW: http:#www.mysociety.org
+#
+# $Id: fixmytransport_config_general.ugly,v 1.75 2011-08-16 08:57:32 louise Exp $
+#
+
+# Secret key for signing cookie_store sessions
+COOKIE_STORE_SESSION_SECRET: 'your secret key here, make it long and random'
+
+STAGING_SITE: 1
+
+DOMAIN: '127.0.0.1:3000'
+# set up an asset host with wildcards
+ASSET_HOST: '127.0.0.1:3000'
+# mobile domain 
+MOBILE_DOMAIN: '' 
+
+
+# Address that email comes from
+CONTACT_EMAIL: 'contact@localhost'
+
+# Expert advice address
+EXPERT_EMAIL: 'contact@localhost'
+
+# Address for errors
+BUGS_EMAIL: 'bugs@localhost'
+
+GOOGLE_MAPS_API_KEY: 'Your Google Maps API key'
+GOOGLE_SITE_VERIFICATION_CODE: 'Your Google Webmaster Tools code'
+
+# Facebook: 
+# APP_ID is typically a 16-digit code regestered for this app by your "owner" Facebook account.
+# If you leave it blank, facebook stuff (connect/login)  won't be displayed.
+FACEBOOK_APP_ID: ''
+FACEBOOK_APP_SECRET: ''
+FACEBOOK_GRAPH_API_URL: ''
+
+# Where are the SSL trusted server certificates?
+SSL_CA_PATH: ''
+
+# Base URL for admin pages through the secure server
+ADMIN_BASE_URL: 'http:#example.com/secure/'
+
+# Service locations
+MAPIT_URL: 'http:#mapit.mysociety.org'
+GAZE_URL: ''
+
+# Locations of transport data
+NAPTAN_DIR: '/my/naptan/dir'
+NPTDR_DIR: '/my/nptdr/dir'
+NPTG_DIR: '/my/nptg/dir'
+NOC_DIR: '/my/noc/dir'
+NPTDR_DERIVED_DIR: '/my/nptdr-derived/dir'
+
+# Incoming email
+
+# e.g. 'fixmytransport.com'
+INCOMING_EMAIL_DOMAIN: 'localhost'
+# e.g. fmt- 
+INCOMING_EMAIL_PREFIX: '' 
+
+# Is the site currently visible? 
+SITE_VISIBLE: 1
+
+# Where to store fragments of cached HTML
+CACHE_PARENT_DIRECTORY: ''
+
+# Where to store uploaded files like profile images
+FILE_DIRECTORY: ':rails_root/public/system'
+
+# Base URL for paperclip files
+PAPERCLIP_URL_BASE: '/system/paperclip'
+
+# Is the app in beta?
+APP_STATUS: 'beta'
+BETA_USERNAME: 'username'
+BETA_PASSWORD: 'password'
+
+# x-header used for device class, if there's a cacheing system between FMT and the web inserting them
+# e.g., "X-Device-type"   
+# Leave blank if no such mechanism is set up. See application_controller.rb, get_device_from_user_agent
+DEVICE_TYPE_X_HEADER: ''
