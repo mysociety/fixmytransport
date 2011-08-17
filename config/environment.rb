@@ -24,6 +24,7 @@ load "voting_area.rb"
 # Patch Rails::GemDependency to cope with older versions of rubygems
 # Restores override removed in https://github.com/rails/rails/commit/c20a4d18e36a13b5eea3155beba36bb582c0cc87
 # without effecting method behaviour
+# and adds fallback gem call removed in https://github.com/rails/rails/commit/4c3725723f15fab0a424cb1318b82b460714b72f
 require 'lib/patches/old_rubygems_patch'
 
 

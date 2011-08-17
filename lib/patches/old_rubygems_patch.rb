@@ -2,13 +2,8 @@ require "vendor/rails/railties/lib/rails/gem_dependency.rb"
 module Rails
   class GemDependency < Gem::Dependency
   
-    if method_defined?(:requirement)
-      puts "got it already"
-      def requirement
-        req = super    
-      end
-    else
-      puts "loading new"
+    # This definition of the requirement method is a patch
+    if !method_defined?(:requirement)
       def requirement
         req = version_requirements
       end
@@ -29,6 +24,8 @@ module Rails
       rescue
         begin 
           gem self.name, self.requirement # <  1.8 unhappy way
+        # This second rescue is a patch - fall back to passing Rails::GemDependency to gem
+        # for older rubygems
         rescue ArgumentError
           gem self
         end
