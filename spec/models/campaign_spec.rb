@@ -143,9 +143,10 @@ describe Campaign do
     end
 
     it 'should find a campaign for an email address whose case has been changed' do
+      MySociety::Config.stub!(:get).with("INCOMING_EMAIL_PREFIX", 'campaign-').and_return('prefix-')
       Campaign.stub!(:email_domain).and_return("example.com")
       Campaign.should_receive(:find).with(:first, :conditions => ["lower(key) = ?", 'cx-vgfdf'])
-      Campaign.find_by_campaign_email("CAMPAIGN-CX-VGFDF")
+      Campaign.find_by_campaign_email("PREFIX-CX-VGFDF")
     end
 
   end
