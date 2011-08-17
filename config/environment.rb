@@ -86,6 +86,10 @@ Rails::Initializer.run do |config|
 
 end
 
+# Patch Rails::GemDependency to cope with older versions of rubygems
+# Restores override removed in https://github.com/rails/rails/commit/c20a4d18e36a13b5eea3155beba36bb582c0cc87
+# without effecting method behaviour
+require 'lib/patches/old_rubygems_patch'
 
 # Use an asset host setting so that the admin interface can always get css, images, js.
 if (MySociety::Config.get("DOMAIN", "") != "")
