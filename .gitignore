@@ -7,6 +7,8 @@ config/database.yml
 config/database.yml.deployed
 config/general
 config/general.deployed
+config/general.yml
+config/general.yml.deployed
 config/rails_env.rb
 config/httpd.conf
 config/httpd.conf.deployed

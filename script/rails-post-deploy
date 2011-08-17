@@ -1,8 +1,7 @@
 #!/bin/bash
 #
 # rails-post-deploy
-# For Ruby on Rails, run this in exec_extras in vhosts.pl. It makes symlinks
-# from vendor to the server version of rails, and migrates the db to the most
+# For Ruby on Rails, run this in exec_extras in vhosts.pl. It migrates the db to the most
 # recent version.
 #
 # Copyright (c) 2010 UK Citizens Online Democracy. All rights reserved.
@@ -20,7 +19,7 @@ APP_DIR=`pwd`
 cd app/..
 
 # read config file in for later (STAGING_SITE)
-if [ -e "config/general" ]
+if [ -e "config/general" ] || [ -e "config/general.yml" ]
 then
     . commonlib/shlib/deployfns
     read_conf config/general

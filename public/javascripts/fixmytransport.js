@@ -4,28 +4,88 @@
  */
 
 $(document).ready(function(){
+  /* AJAX forms
+     ================================================== */
+     // Always send the authenticity_token with ajax
+     $.ajaxSetup({
+       'beforeSend': function(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content')); }
+     });
+
 	/* Frontpage scroller
 	   ================================================== */
-	if($('#frontpage-problem-scroller').length > 0){
-		//fix height to tallest child
-		var h = 0;
-		if($('#frontpage-problem-scroller li img').length > 0){h = 250;} //quick chrome hack
-		$('#frontpage-problem-scroller').children('li').each(function(i){
-			if($(this).height() > h){h = $(this).height();}
-		});
-		$('#frontpage-problem-scroller').children('li').css({'height': h}); 
+  if($('#frontpage-problem-scroller').length > 0){
+   //fix height to tallest child
+   var h = 0;
+   if($('#frontpage-problem-scroller li img').length > 0){h = 250;} //quick chrome hack
+   $('#frontpage-problem-scroller').children('li').each(function(i){
+     if($(this).height() > h){h = $(this).height();}
+   });
+   $('#frontpage-problem-scroller').children('li').css({'height': h});
 
-		//hide all but first one
-		$('#frontpage-problem-scroller li:not(:first)').addClass('hidden').hide();
-		
-		//add classes for use in the function - for some reason
-		//the if statement didn't like the :first or :last's
-		$('#frontpage-problem-scroller li:first').addClass('first');
-		$('#frontpage-problem-scroller li:last').addClass('last');
-		
-		//run the function
-		frontpageScroller(5000, 2000);
-	}
+   //hide all but first one
+   $('#frontpage-problem-scroller li:not(:first)').addClass('hidden').hide();
+
+   //add classes for use in the function - for some reason
+   //the if statement didn't like the :first or :last's
+   $('#frontpage-problem-scroller li:first').addClass('first');
+   $('#frontpage-problem-scroller li:last').addClass('last');
+
+   //run the function
+   frontpageScroller(5000, 2000);
+  }
+
+  /* Route and operator lists
+     ================================================== */
+
+     function tabifyRouteLists() {
+         if ($('#tabs').length > 0){
+           $("#tabs").tabs();
+
+           if ($('#tabs-bus .tabs-sub-nav').length > 0){
+             $("#tabs-bus").tabs();
+           }
+           if ($('#tabs-coach .tabs-sub-nav').length > 0){
+             $("#tabs-coach").tabs();
+           }
+           if ($('#tabs-train .tabs-sub-nav').length > 0){
+             $("#tabs-train").tabs();
+           }
+           if ($('#tabs-ferry .tabs-sub-nav').length > 0){
+             $("#tabs-ferry").tabs();
+           }
+           if ($('#tabs-metro .tabs-sub-nav').length > 0){
+             $("#tabs-metro").tabs();
+           }
+
+           tabshook();
+         }
+     }
+
+     function tabifyOperatorLists() {
+         if ($('#operator-tabs').length > 0){
+           $("#operator-tabs").tabs();
+           tabshook();
+         }
+     }
+
+     function tabshook(){
+     	var activetab = 'childactive-'+$('#tabs-main-nav li.ui-state-active').attr('id');
+     	$("#tabs-main-nav").removeClass (function (index, css) {
+     	    return (css.match (/\bchildactive-\S+/g) || []).join(' ');
+     	});
+     	$('#tabs-main-nav').addClass(activetab);
+     }
+     tabifyRouteLists();
+     tabifyOperatorLists();
+     addSearchGuidance();
+
+   	$('#tabs').bind('tabsshow', function(event, ui) {
+   		tabshook();
+   	});
+
+   	$('#operator-tabs').bind('tabsshow', function(event, ui) {
+   		tabshook();
+   	});
 
 	/* Region map
 	   ================================================== */
@@ -35,7 +95,7 @@ $(document).ready(function(){
 	},function(){
 		$('#region-list li').removeClass('active');
 	});
-    
+
 	/* Goto top
 	   ================================================== */
   	$('.goto-top').click(function(e){
@@ -51,7 +111,7 @@ $(document).ready(function(){
 	$('#find-stop input, .form-list li input').blur(function(){
 		$(this).parent().removeClass('active');
 	});
-	
+
 	/* Thread
 	   ================================================== */
 	function thread(li){
@@ -64,10 +124,10 @@ $(document).ready(function(){
 			$('.thread-details', li).show('blind', '', 1000);
 		}
 	}
-	
+
 	//init
 	$('ul.closed-campaign-thread li').removeClass('open');
-	
+
 	//main toggle
 	$('ul#campaign-thread li a.thread-item').click(function(e){
 		e.preventDefault();
@@ -88,6 +148,30 @@ $(document).ready(function(){
 	});
 
 
+  /* Advice in input areas
+     ================================================== */
+
+     function addGuidanceField(guidance_selector, field_selector){
+       $(guidance_selector).hide();
+       $(field_selector).autofill({
+            value: $(guidance_selector).text(),
+            defaultTextColor: '#595454',
+            activeTextColor: '#000000'
+          });
+     }
+
+     // Put guidance text as default in search boxes
+     function addSearchGuidance() {
+
+       addGuidanceField('#guidance-name', '#stop_name_form #name');
+       addGuidanceField('#guidance-route-number', '#bus_route_form #route_number');
+       addGuidanceField('#guidance-area', '#bus_route_form #area');
+       addGuidanceField('#guidance-to', '#train_route_form #to');
+       addGuidanceField('#guidance-to', '#other_route_form #to');
+       addGuidanceField('#guidance-from', '#train_route_form #from');
+       addGuidanceField('#guidance-from', '#other_route_form #from');
+
+     }
 
 	/* Dialog Boxes
 	   ================================================== */
@@ -131,7 +215,7 @@ $(document).ready(function(){
   		$('#login-create-account').fadeIn();
   	});
   });
-  
+
   //login
   $('.pane #login-to-account').click(function(e){
   	e.preventDefault();
@@ -153,11 +237,11 @@ $(document).ready(function(){
       $('#social-message').append('<b>Tell the world you&rsquo;re a supporter</b><br/>' +
          'Post to your Facebook wall and let everyone know!').show();
     }
-     
+
     $('#social-share').show();
   	$("#login-box").dialog({title: "Facebook"});
   	$("#login-box").dialog("open");
-  	return false;    
+  	return false;
   });
 
   //email
@@ -168,9 +252,9 @@ $(document).ready(function(){
     $('#email-share').show();
   	$("#login-box").dialog({title: "Email"});
   	$("#login-box").dialog("open");
-  	return false;    
+  	return false;
   });
-  
+
   $('#email-share .email-body').click(function(){
     $(this).select();
   })
@@ -191,7 +275,7 @@ $(document).ready(function(){
           },
           function(response) {
               $('.login-box .pane').hide();
-              $('#social-message').empty(); 
+              $('#social-message').empty();
               if (response && response.post_id) {
                   $('<b>Posted on Facebook!</b><br/>' +
                     'Thanks for spreading the word about this campaign!<br/>').appendTo('#social-message');
@@ -251,26 +335,28 @@ $(document).ready(function(){
   	$("#login-box").dialog({title: "Update:"});
   	// Set the button text
     $('#campaign-update-form button[type=submit]').html("Add Update")
-    
+
   	$("#login-box").dialog("open");
   	return false;
   });
 
 		/* Comment */
   $('.comment-trigger').click(function(e){
-  	e.preventDefault();
-  	$('.login-box .pane').hide();
-  	$('#comment-and-login').show();
-  	// Add the index of the last campaign event being shown to the form
-  	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
-    $('#comment-form').append($('<input/>')
-                .attr('type', 'hidden')
-                .attr('name', 'last_thread_index')
-                .attr('class', 'last_thread_index')
-                .val(last_thread_index));
-  	$("#login-box").dialog({title: $('.comment-trigger').attr('data-title')+":"});
-  	$("#login-box").dialog("open");
-  	return false;
+    if ($(window).width() > 600 ) {
+    	e.preventDefault();
+    	$('.login-box .pane').hide();
+    	$('#comment-and-login').show();
+    	// Add the index of the last campaign event being shown to the form
+    	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
+      $('#comment-form').append($('<input/>')
+                  .attr('type', 'hidden')
+                  .attr('name', 'last_thread_index')
+                  .attr('class', 'last_thread_index')
+                  .val(last_thread_index));
+    	$("#login-box").dialog({title: $('.comment-trigger').attr('data-title')+":"});
+    	$("#login-box").dialog("open");
+    	return false;
+	  }
   });
 
 	/* Add Photos */
@@ -278,12 +364,12 @@ $(document).ready(function(){
 	  	e.preventDefault();
 	  	$('.login-box .pane').hide();
 	  	$('#campaign-add-photos').show();
-	
+
 	  	$("#login-box").dialog({title: "Add a photo"});
 	  	$("#login-box").dialog("open");
 	  	return false;
 	  });
-	
+
 
   /* Static Login Options for campaign creation page*/
 
@@ -332,7 +418,7 @@ $(document).ready(function(){
       $("#login-box").dialog({title: "Sign In or Sign Up"});
   		$('#login-landing').show();
   		$("#login-box").dialog("open");
-  		
+
   		// record a hit on the login box in analytics
       _gaq.push(['_trackPageview', campaign_data.url + '/login']);
 	  };
@@ -347,7 +433,7 @@ $(document).ready(function(){
 	  options['success'] = function(response) {
 	    if (response.success) {
         // close the dialog box
-      
+
         $("#login-box").dialog("close");
         // clear the update field
         $(form_selector + " #campaign_update_text").val("");
@@ -393,7 +479,7 @@ $(document).ready(function(){
       }
      }
      $(form_selector).ajaxForm(options);
-    
+
   }
 
   function generalError(selector) {
@@ -401,24 +487,26 @@ $(document).ready(function(){
     $(selector).show();
   }
 
-  // ajax submission of problem form 
+  // ajax submission of problem form
   function setupProblemForm(form_selector) {
     options = defaultFormOptions();
 	  options['error'] = function() { generalError(form_selector + ' .error-text'); }
 	  options['success'] = function(response) {
 	    if (response.success) {
-
         if (response.requires_login) {
+          if ($(window).width() > 600 ) {
           // add the notice to the login form
-          $('#login-create-account .notice').text(response.notice);
-          $('#login-create-account .notice').show();
+            $('#login-create-account .notice').text(response.notice);
+            $('#login-create-account .notice').show();
 
-          // show the login form
-          $('.login-box .pane').hide();
-          $("#login-box").dialog({title: "Create a FixMyTransport Account"});
-        	$('#login-create-account').fadeIn();
-      		$("#login-box").dialog("open");
-
+            // show the login form
+            $('.login-box .pane').hide();
+            $("#login-box").dialog({title: "Create a FixMyTransport Account"});
+            $('#login-create-account').fadeIn();
+            $("#login-box").dialog("open");
+          } else {
+            window.location = response.redirect;
+          }
         }else{
           window.location = response.redirect;
         }
@@ -427,7 +515,7 @@ $(document).ready(function(){
       }
 	  }
 	  $(form_selector).ajaxForm(options);
-	  
+
   }
 	// ajax submission of comment form
 	function setupCommentForm(form_selector) {
@@ -439,7 +527,7 @@ $(document).ready(function(){
         $(form_selector + " #comment_text").val("");
         $(form_selector + " #comment_mark_fixed").attr("checked", false);
         $(form_selector + " #comment_mark_open").attr("checked", false);
-        
+
         // mark a problem as fixed
         if (response.mark_fixed) {
           $("#banner .container").append('<div class="right"><span class="ribbon">Fixed</span></div>');
@@ -448,7 +536,7 @@ $(document).ready(function(){
         if (response.mark_open) {
           $("#banner .container .right").remove();
         }
-        
+
         // clear the hidden thread index field
         $(form_selector + " .last_thread_index").remove();
 
@@ -523,7 +611,7 @@ $(document).ready(function(){
   ajaxifyForm('.pane #login-form');
   ajaxifyForm('.pane #create-account-form');
 
-  /* Twitter button 
+  /* Twitter button
      ================================================== */
 
   $('.twitter-popup').click(function(event) {
@@ -554,7 +642,7 @@ $(document).ready(function(){
 		$('.tipbox').not('.fixed').css({'right':'-999999em'});
 		$('.tipbox', parent).not('.fixed').css({'right':'-350px', 'opacity':'0'}).animate({'opacity':'1'}, {duration: 500, queue: false});
 	});
-	
+
 	$('.tip-close').click(function(e){
 		e.preventDefault();
 		$('.tipbox').not('.fixed').animate({'opacity':'0'}, {duration: 500, queue: false});
@@ -585,7 +673,7 @@ $(document).ready(function(){
         swap_copy($(this).parents('.thread-details'));
     });
   }
-  
+
   $('#campaign-thread .unfold_link').click(function(event){
       event.preventDefault();
       swap_copy($(this).parents('.thread-details'));
@@ -601,7 +689,7 @@ $(document).ready(function(){
       }
     });
   });
-	
+
 	/* Fancy buttons - :active and IE don't play nice so lets do it js
 	    ================================================== */
 	$('.fancybutton').mousedown(function(){
@@ -611,7 +699,7 @@ $(document).ready(function(){
 	}).mouseout(function(){
 		$(this).removeClass('mousedown');
 	});
-	
+
 	/* Banner for people coming from other countries
 	   ============================================== */
 	if ($('#other-country-notice').length > 0) {
@@ -624,7 +712,7 @@ $(document).ready(function(){
           $('#conditional-notice').show();
         }
       }
-    }) 
+    })
   }
 });
 
@@ -645,8 +733,8 @@ function externalAuth(authParams) {
 }
 
 window.fbAsyncInit = function() {
-	// fmt_facebook_app_id declared in layouts/application.erb 
-    FB.init({appId: fmt_facebook_app_id, status: false, cookie: true, xfbml: true});      
+	// fmt_facebook_app_id declared in layouts/application.erb
+    FB.init({appId: fmt_facebook_app_id, status: false, cookie: true, xfbml: true});
 };
 (function() {
     var e = document.createElement('script'); e.async = true;

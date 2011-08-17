@@ -539,14 +539,14 @@ describe ProblemsController do
       
         describe 'if the request asks for HTML' do
         
-          it 'should show a notice asking the user to login' do 
+          it 'should show a notice asking the user to create an account' do 
             make_request
             flash[:notice].should == 'Please create an account to finish reporting your problem.'
           end
         
-          it 'should redirect to the login URL' do 
+          it 'should redirect to the account creation URL' do 
             make_request
-            response.should redirect_to(login_url)
+            response.should redirect_to(new_account_url)
           end
         
         end

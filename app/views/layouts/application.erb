@@ -5,7 +5,7 @@
       <%= "#{t('shared.header.site_name')}#{@title ? ':' : ''} #{@title}" %>
     </title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-type' />
-		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>    
+		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
       <meta name="robots" content="noindex">
     <%- end %>
     <%- if MySociety::Config.get('GOOGLE_SITE_VERIFICATION_CODE', '') != '' %>
@@ -20,7 +20,7 @@
     <%= raw stylesheet_link_tag('core', 'fixmytransport', 'map', 'buttons', 'mobile-clientside', :cache => 'main') %>
 
 	<!--[if lte IE 7]><%= raw stylesheet_link_tag('ie67') %><![endif]-->
-	
+
 	<!--[if lte IE 8]><%= raw stylesheet_link_tag('ie678') %><![endif]-->
 
     <%= yield :stylesheets %>
@@ -33,14 +33,17 @@
 	</noscript>
   </head>
 	<body <%-if @body_class %>class="<%= @body_class %>"<%- end %>>
+    <%= yield :body_content %>
 		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
-		<div class="staging-banner top-notice">
-			<div class="container"><%= t('shared.header.development_site') %></div>
-		</div>
+    <!-- <div class="staging-banner top-notice">
+      <div class="container"><%= t('shared.header.development_site') %></div>
+    </div> -->
 		<%- end %>
     <%= yield :banner_content %>
 		<div id="wrapper">
+
 			<div id="top" class="container" role="banner">
+
 				<ul id="mysociety-tab" role="navigation">
 					<li><a id="mysociety-logo" href="http://www.mysociety.org">MySociety</a></li>
 					<li><a href="http://mysociety.org/donate"><%= t('shared.header.donate') %></a></li>
@@ -50,8 +53,10 @@
 					<li><a href="<%= about_url %>"><%= t('shared.header.about') %></a></li>
 					<li><a href="<%= feedback_url(:url => CGI.escape(request.request_uri)) %>"><%= t('shared.header.feedback') %></a></li>
 				</ul>
+
 				<a id="logo" href="<%= root_url %>"><img src="/images/logo-beta.jpg" /></a>
 				<!-- <a id="logo" href="<%= root_url %>">FixMyTransport</a> -->
+
 				<%- if current_user %>
 				<p id="member-info"><%= t('shared.header.hi')%> <a href="<%= profile_path(current_user) %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>"><%= t('shared.login.sign_out')%></a></p>
 				<%- else %>
