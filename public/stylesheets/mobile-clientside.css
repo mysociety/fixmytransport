@@ -133,6 +133,11 @@
 
 			/*===[ General ]===*/
 
+      #banner {
+          background: url('/images/mobile-logo.png') no-repeat scroll 4px center #048FC2;
+          color: #FFFFFF;
+          padding: 10px 0 10px 31px;
+      }
 			#top {
 			  display: none;
 			}
@@ -146,7 +151,7 @@
         padding: 1px 0;
       }
 
-      #banner h1, #greybanner h1, #greybanner h2 {
+      #banner h1, #greybanner h1, #greybanner h2, h2 {
         font-size: 1.5em;
         width: 100%;
       }
