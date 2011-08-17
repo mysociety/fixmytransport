@@ -13,5 +13,32 @@ module Rails
         req = version_requirements
       end
     end
+  
+    def add_load_paths
+      self.class.add_frozen_gem_path
+      return if @loaded || @load_paths_added
+      if framework_gem?
+        @load_paths_added = @loaded = @frozen = true
+        return
+      end
+
+      begin
+        dep = Gem::Dependency.new(name, requirement)
+        spec = Gem.source_index.find { |_,s| s.satisfies_requirement?(dep) }.last
+        spec.activate           # a way that exists
+      rescue
+        begin 
+          gem self.name, self.requirement # <  1.8 unhappy way
+        rescue ArgumentError
+          gem self
+        end
+      end
+
+      @spec = Gem.loaded_specs[name]
+      @frozen = @spec.loaded_from.include?(self.class.unpacked_path) if @spec
+      @load_paths_added = true
+    rescue Gem::LoadError
+    end
   end
+  
 end
