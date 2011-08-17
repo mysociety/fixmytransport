@@ -264,7 +264,7 @@ describe Admin::AssignmentsController do
     
       it 'should redirect to the admin assignment url' do 
         make_request
-        response.should redirect_to(admin_assignment_url(@mock_assignment))
+        response.should redirect_to(controller.admin_url(admin_assignment_path(@mock_assignment)))
       end
       
     end

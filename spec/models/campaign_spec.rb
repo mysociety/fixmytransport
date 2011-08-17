@@ -106,11 +106,16 @@ describe Campaign do
 
   describe 'when asked for its email address' do
 
+    before do 
+      MySociety::Config.stub!(:get).with("INCOMING_EMAIL_PREFIX", 'campaign-').and_return('prefix-')
+      MySociety::Config.stub!(:get).with("INCOMING_EMAIL_DOMAIN", 'localhost').and_return('test.host')
+    end
+    
     it 'should return an email address generated from the prefix, key and domain' do
       @campaign = Campaign.new
       @campaign.stub!(:id).and_return(5049322)
       @campaign.key = @campaign.generate_key
-      @campaign.email_address.should match(/campaign-lbhks-[a-z]{6}@localhost/)
+      @campaign.email_address.should match(/prefix-lbhks-[a-z]{6}@test.host/)
     end
 
   end
@@ -136,14 +141,17 @@ describe Campaign do
 
   describe 'when finding a campaign by campaign email' do
 
+    before do 
+      MySociety::Config.stub!(:get).with("INCOMING_EMAIL_PREFIX", 'campaign-').and_return('prefix-')
+    end
+
     it 'should look for a campaign whose key is the key of the email' do
       Campaign.stub!(:email_domain).and_return("example.com")
       Campaign.should_receive(:find).with(:first, :conditions => ["lower(key) = ?", "cx-vgfdf"])
-      Campaign.find_by_campaign_email("campaign-cx-vgfdf@example.com")
+      Campaign.find_by_campaign_email("prefix-cx-vgfdf@example.com")
     end
 
     it 'should find a campaign for an email address whose case has been changed' do
-      MySociety::Config.stub!(:get).with("INCOMING_EMAIL_PREFIX", 'campaign-').and_return('prefix-')
       Campaign.stub!(:email_domain).and_return("example.com")
       Campaign.should_receive(:find).with(:first, :conditions => ["lower(key) = ?", 'cx-vgfdf'])
       Campaign.find_by_campaign_email("PREFIX-CX-VGFDF")
