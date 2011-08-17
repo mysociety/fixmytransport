@@ -526,12 +526,16 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def recognized_devices
+    ['android', 'iphone', 'ipad']
+  end
+  
   # later, more thorough user-agent sniffing would be appropriate
   # or idealy just pick it up from, e.g., request.headers["X-device-class"], set by varnish
   # sets up @user_device and @is_mobile
   # also: might not realy be using vary headers like this, but OK for now to show intent
   def get_device_from_user_agent
-    mobile_devices = ['android', 'iphone', 'ipad'] # see keyword search below
+    mobile_devices = recognized_devices() # see keyword search below
     x_header_name = MySociety::Config.get('DEVICE_TYPE_X_HEADER', '')
     if !x_header_name.blank?
       response.headers['Vary'] = x_header_name
