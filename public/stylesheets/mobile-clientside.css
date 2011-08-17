@@ -121,6 +121,7 @@
 			}
 			ul#campaign-thread li  {
 			    clear: both;
+			    position: relative; /* container for absolute positioned class='close' widgets */
 			}
 			ul#campaign-thread li a.thread-item {
 			    display: block;
@@ -691,6 +692,12 @@
             display: block;
             float: left;
             margin-top: 0em;
+        }
+        #main-content.campaign-content #campaign-thread span.close {
+            display: block;
+            position: absolute;
+            top: 0;
+            right: 0;
         }
         
 
