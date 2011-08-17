@@ -661,16 +661,4 @@
  	}
  	
 
- 	ul.issues-list dl.details { /* floating image right but keep details below it */
-		clear: both;	
-	}
-	ul.issues-list li img {
-		float: right;
-		margin-left: 10px;
-		margin-bottom: 10px;
-	} 	
- 	ul.issues-list li.problem .wrapper {
-        width: 100%;
-		display: inline;
-    }
 	</style>
