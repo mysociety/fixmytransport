@@ -60,7 +60,7 @@ describe Admin::AssignmentsController do
 
         it 'should redirect to the admin assignment template' do
           make_request(@default_params.merge({:operator_id => 66}))
-          response.should redirect_to(admin_assignment_url(@mock_assignment))
+          response.should redirect_to(controller.admin_url(admin_assignment_path(@mock_assignment)))
         end
         
       end
@@ -120,7 +120,7 @@ describe Admin::AssignmentsController do
           
           it 'should redirect to the admin assignment template' do
             make_request(@default_params.merge({:operator_id => 66}))
-            response.should redirect_to(admin_assignment_url(@mock_assignment))
+            response.should redirect_to(controller.admin_url(admin_assignment_path(@mock_assignment)))
           end
           
         end
@@ -148,7 +148,7 @@ describe Admin::AssignmentsController do
             
             it 'should redirect to the show template' do 
               make_request(@default_params.merge({:operator_id => 66}))
-              response.should redirect_to(admin_assignment_url(@mock_assignment))
+              response.should redirect_to(controller.admin_url(admin_assignment_path(@mock_assignment)))
             end
             
             it 'should set the assignment as complete' do 
