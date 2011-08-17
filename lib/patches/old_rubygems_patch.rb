@@ -1,4 +1,4 @@
-require "vendor/rails/railties/lib/rails/gem_dependency.rb"
+require File.join(File.dirname(__FILE__),'..','..','vendor','rails','railties','lib','rails','gem_dependency.rb')
 module Rails
   class GemDependency < Gem::Dependency
   
