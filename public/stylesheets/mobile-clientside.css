@@ -160,7 +160,7 @@
       }
 
       .button, #login-form button, .fieldset button, .form-field button,
-      .login-options a.button{
+      .login-options a.button, #share-by-email a.button {
 				padding: 10px 0;
 				font-family: Arial, Helvetica, sans-serif;
 				font-size: 1.2em;
@@ -172,6 +172,7 @@
 			.error, .alert, .notice, .success, .info {
 			  font-size: 1em;
 			  width: 97%;
+			  margin-top: 0.5em;
         padding: 6px 1%;
 			  float: none;
 			}
@@ -762,7 +763,7 @@
         right: 0;
     }
     
-    /* ==[ Route region indexes/Operator pages ]=== */
+    /*===[ Route region indexes/Operator pages ]=== */
     
     .has-tabs #tabs-main-nav li#route-tab, 
     .has-tabs #tabs-main-nav li#area-tab {
@@ -775,11 +776,16 @@
     }
 
     .has-tabs .operator-tabs-nav li a {
-/*        padding: 10px 1em 8px !important;*/
-/*        position: relative;*/
       padding-right: 33px;
         width: auto;
     }
+
+    /*===[Share by email]=== */
+    #share-by-email textarea, 
+    #share-by-email button{
+      width: 96%;
+    }
+
 	} /* end of media query */
 
 	</style>
