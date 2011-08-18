@@ -38,7 +38,13 @@ function area_init() {
   if (findOtherLocations == true) {
     map.events.register('moveend', map, updateLocations);
   }
-  
+
+  // if we're constrained to less than the expected map dimensions, try
+  // to make sure the markers are all shown
+  if ($('#map').width() < mapWidth || $('#map').height() < mapHeight) {
+    map.zoomToExtent(bounds, false);
+  }
+    
   // Enforce some zoom constraints
   map.events.register("zoomend", map, function() {
       // World zoom resets map

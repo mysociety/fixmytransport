@@ -658,5 +658,63 @@
 		.feedback-form textarea {
 		  height: auto;
 		}
+
+    /* ===[ Route index ]=== */
+    #region-map-wrap {
+      display: none;
+    }
+
+    /* ===[Profile page]=== */
+
+    #banner a#edit-account-button {
+      float: right !important;
+      font-size: 0.8em;
+      width: auto;
+    }
+
+    /* ===[Edit account]=== */
+    .form-field input, .form-field textarea {
+      width: 96%;
+    }
+
+    .edit_account .optional-note {
+      padding: 0.2em;
+      overflow: visible;
+    }
+    /*===[Incoming Messages]===*/
+
+    .email-set {
+    	margin:0 0 0.2em 0;
+    	padding:0 0 0.2em 0;
+    }
+
+    	.email-set label {
+        width:auto;
+        margin-right:0;
+        float:none;
+        text-align:left;
+    	}
+    	.email-set p,
+    	.email-set div.message,
+    	.email-set div.attachments {
+    		margin:0 0 0.25em 0;
+    		display:block;
+    		float:none;
+    		width:auto;
+    	}
+    		.email-set div.message textarea {
+    			width:auto;
+    		}
+
+    /*===[Outgoing Messages]===*/
+
+    #main-content #new_outgoing_message {
+    	width:100%;
+    }
+    /*===[Password Resets]==*/
+    #main-content .password_reset_email {
+      width: 100%;
+    }
+
  	}
 	</style>
