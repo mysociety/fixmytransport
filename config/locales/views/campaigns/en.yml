@@ -23,6 +23,8 @@ en:
     edit:
       edit_campaign_description: "Edit your description:"
       save: "Save"
+    share: 
+      share_by_email: Share by email
     show:
       contacts_email: "Email"
       ask_our_expert_panel: "Ask for advice from one of FixMyTransport's mostly volunteer experts and your supporters"
