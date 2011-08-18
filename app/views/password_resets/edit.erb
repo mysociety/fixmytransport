@@ -1,5 +1,10 @@
+<div id="banner">
+	<div class="container">
+		<h1><%= raw t('password_resets.edit.change_your_password') %></h1>
+	</div>
+</div>
+
 <div id="main-content" class="container">
-	<h2 class='main-header'><%= raw t('password_resets.edit.change_your_password') %></h2>
 
 	<%- form_for @user, :url => password_reset_path, :method => :put do |f| %>
 	  <div class='fieldset'>

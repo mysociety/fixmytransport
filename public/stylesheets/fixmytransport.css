@@ -244,9 +244,9 @@ form#search {
 	    background: url(../images/search.gif) 0 0 no-repeat;
 	}
 /* ===[ Banner ]=== */
-#banner {
-    padding:10px 0;
-    background: #048fc2;
+#banner, #frontpage-banner {
+  padding:10px 0;
+  background: #048fc2;
 	color:#fff;
 }
 
@@ -763,9 +763,13 @@ ul.user-list {
 }
 #main-content #comment-form,
 #main-content .new_campaign_update,
-#main-content .update_campaign {
+#main-content .update_campaign,
+#main-content #new_outgoing_message,
+#main-content .password_reset_email,
+#main-content #edit_user_1 {
 	width:500px;
 }
+#main-content #new_outgoing_message textarea,
 #main-content #comment-form textarea,
 #main-content .new_campaign_update textarea,
 #main-content .update_campaign textarea {
@@ -774,6 +778,20 @@ ul.user-list {
 	background: #f4f4f4;
 	border:1px solid #BDBDBD;
 }
+
+#main-content #new_outgoing_message input[type=text],
+#main-content .password_reset_email input[type=text],
+#main-content #edit_user_1 input[type=password] {
+  width: 96%;
+	background: #f4f4f4;
+}
+
+
+#main-content #new_outgoing_message button, 
+#main-content .password_reset_email button {
+    float: right;
+}
+
 #comment-login-options {
 	height:auto;
 	display:inline-block;
@@ -1949,7 +1967,8 @@ body.facebook-canvas .button {
 /*===[Incoming Messages]===*/
 
 .email-set {
-	border-bottom:2px solid #048fc2;
+  overflow: auto;
+  border-bottom:2px solid #048fc2;
 	margin:0 0 1em 0;
 	padding:0 0 1em 0;
 }
@@ -1963,7 +1982,7 @@ body.facebook-canvas .button {
 		float:left;
 		text-align:right;
 		color:#B3B3B3;
-		font-wieght:normal;
+		font-weight:normal;
 	}
 	.email-set p,
 	.email-set div.message,
@@ -2040,4 +2059,8 @@ body.facebook-canvas .button {
 /*===[ Issue Browsing ]===*/
 #issues-in-area h2{
  font-size: 1.5em;
+}
+
+#new_outgoing_message {
+  overflow: hidden;
 }
