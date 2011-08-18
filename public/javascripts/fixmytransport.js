@@ -246,13 +246,15 @@ $(document).ready(function(){
 
   //email
   $('.email-trigger').click(function(e){
-    e.preventDefault();
-    $('.login-box .pane').hide();
+    if ($(window).width() > 600 ) {
+      e.preventDefault();
+      $('.login-box .pane').hide();
 
-    $('#email-share').show();
-  	$("#login-box").dialog({title: "Email"});
-  	$("#login-box").dialog("open");
-  	return false;
+      $('#email-share').show();
+    	$("#login-box").dialog({title: "Email"});
+    	$("#login-box").dialog("open");
+    	return false;
+    }
   });
 
   $('#email-share .email-body').click(function(){
@@ -294,50 +296,56 @@ $(document).ready(function(){
 
     /* Advice request */
   $('.advice-trigger').click(function(e){
+      if ($(window).width() > 600 ) {
+    
+      	e.preventDefault();
+      	$('.login-box .pane').hide();
+      	$('#campaign-update').show();
+      	// Add the index of the last campaign event being shown to the form
+      	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
+        $('#campaign-update-form-modal').append($('<input/>')
+                    .attr('type', 'hidden')
+                    .attr('name', 'last_thread_index')
+                    .attr('class', 'last_thread_index')
+                    .val(last_thread_index));
+
+      	$("#login-box").dialog({title: $('.advice-trigger').attr('data-title')});
+        // Set the button text
+        $('#campaign-update-form-modal button[type=submit]').html("Ask for advice")
+        // Add the hidden field
+        $('#campaign-update-form-modal').append($('<input/>')
+                    .attr('type', 'hidden')
+                    .attr('id', 'campaign_update_is_advice_request')
+                    .attr('name', 'campaign_update[is_advice_request]')
+                    .val('true'));
+
+      	$("#login-box").dialog("open");
+      	return false;
+      }
+    });
+
+    /* Update */
+  $('.update-trigger').click(function(e){
+    if ($(window).width() > 600 ) {
+    
     	e.preventDefault();
     	$('.login-box .pane').hide();
     	$('#campaign-update').show();
     	// Add the index of the last campaign event being shown to the form
     	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
-      $('#campaign-update-form-modal').append($('<input/>')
+      $('#campaign-update-form').append($('<input/>')
                   .attr('type', 'hidden')
                   .attr('name', 'last_thread_index')
                   .attr('class', 'last_thread_index')
                   .val(last_thread_index));
 
-    	$("#login-box").dialog({title: $('.advice-trigger').attr('data-title')});
-      // Set the button text
-      $('#campaign-update-form-modal button[type=submit]').html("Ask for advice")
-      // Add the hidden field
-      $('#campaign-update-form-modal').append($('<input/>')
-                  .attr('type', 'hidden')
-                  .attr('id', 'campaign_update_is_advice_request')
-                  .attr('name', 'campaign_update[is_advice_request]')
-                  .val('true'));
+    	$("#login-box").dialog({title: "Update:"});
+    	// Set the button text
+      $('#campaign-update-form button[type=submit]').html("Add Update")
 
     	$("#login-box").dialog("open");
     	return false;
-    });
-
-    /* Update */
-  $('.update-trigger').click(function(e){
-  	e.preventDefault();
-  	$('.login-box .pane').hide();
-  	$('#campaign-update').show();
-  	// Add the index of the last campaign event being shown to the form
-  	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
-    $('#campaign-update-form').append($('<input/>')
-                .attr('type', 'hidden')
-                .attr('name', 'last_thread_index')
-                .attr('class', 'last_thread_index')
-                .val(last_thread_index));
-
-  	$("#login-box").dialog({title: "Update:"});
-  	// Set the button text
-    $('#campaign-update-form button[type=submit]').html("Add Update")
-
-  	$("#login-box").dialog("open");
-  	return false;
+    }
   });
 
 		/* Comment */
@@ -361,27 +369,16 @@ $(document).ready(function(){
 
 	/* Add Photos */
 	$('.add-photos-trigger').click(function(e){
-	  	e.preventDefault();
-	  	$('.login-box .pane').hide();
-	  	$('#campaign-add-photos').show();
+	    if ($(window).width() > 600 ) {
+  	  	e.preventDefault();
+  	  	$('.login-box .pane').hide();
+  	  	$('#campaign-add-photos').show();
 
-	  	$("#login-box").dialog({title: "Add a photo"});
-	  	$("#login-box").dialog("open");
-	  	return false;
+  	  	$("#login-box").dialog({title: "Add a photo"});
+  	  	$("#login-box").dialog("open");
+  	  	return false;
+	    }
 	  });
-
-
-  /* Static Login Options for campaign creation page*/
-
-	//create account
-	$('#static-create-account').click(function(e){
-		e.preventDefault();
-		$('.login-box .pane').hide();
-		$('#login-create-account').show();
-		$("#login-box").dialog({title: "Create Account"});
-		$("#login-box").dialog("open");
-		return false;
-	});
 
   function showFormErrors(form_selector, response) {
     $(form_selector + " .error").html();
@@ -603,7 +600,7 @@ $(document).ready(function(){
 	  $(form_selector).ajaxForm(options);
 	}
 
-  setupUpdateForm('#campaign-update-form-modal');
+  setupUpdateForm('.pane #campaign-update-form-modal');
   setupStaticUpdateForm('#campaign-update-form-static');
   setupProblemForm('#create-problem');
   setupCommentForm('.pane #comment-form');
