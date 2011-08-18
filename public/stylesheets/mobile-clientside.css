@@ -20,7 +20,7 @@
 
 		/* -------------------------------------------------------------------------------------------- */
 
-		@media screen and (max-width: 600px) {
+@media screen and (max-width: 600px) {
 		    .mobile-only {
 		        display: block;
 		    }
@@ -92,7 +92,7 @@
 			.support-big, .button.comment, .button.support {
 				padding: 10px;
 				font-size: 1.2em;
-				width: 80%;
+				width: 94%;
 			}
 			#top-nav,
 			#mysociety-tab {
@@ -120,9 +120,8 @@
 			    margin-right:auto;
 			}
 			ul#campaign-thread li  {
-				background: #eee;
-			    line-height: 1em;
 			    clear: both;
+			    position: relative; /* container for absolute positioned class='close' widgets */
 			}
 			ul#campaign-thread li a.thread-item {
 			    display: block;
@@ -151,7 +150,7 @@
         padding: 1px 0;
       }
 
-      #banner h1, #greybanner h1, #greybanner h2, h2 {
+      #banner h1, #greybanner h1, #greybanner h2, h2, #yellowbanner h1 {
         font-size: 1.5em;
         width: 100%;
       }
@@ -716,5 +715,50 @@
       width: 100%;
     }
 
- 	}
+
+    /* ==[ Campaign page]=== */
+    #campaign-manager {
+        display: none; /* can get this info by clicking on icon/name in Description */
+    }
+    
+    #main-content.campaign-content {
+        display: table;
+        caption-side: top;
+    }
+
+    #main-content.campaign-content .rightcol {
+        display: table-caption;
+        margin: 0.5em 0;
+    }
+
+    #main-content.campaign-content #map-container {
+        float: none;
+        width: 100%;
+    } 
+
+    #main-content.campaign-content #small-map {
+        width: 100%;
+    }
+    #main-content.campaign-content #small-map #map {
+        margin: 0.5em auto 0.25em auto;
+        display: block; /* otherwise: inline-block, which doesn't center */
+    }
+    #main-content.campaign-content #small-map .button {
+        border:1px solid red;; /* display at all? */
+    }
+    #main-content.campaign-content #campaign-thread span.date {
+        display: block;
+        float: left;
+        margin-top: 0em;
+    }
+    #main-content.campaign-content #campaign-thread span.close {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+        
+
+	} /* end of media query */
+
 	</style>
