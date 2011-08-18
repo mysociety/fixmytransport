@@ -1,6 +1,19 @@
-<div id="main-content" class="container">
+<div id="banner">
 	<div class="container">
-    <%= render :partial => "shared/email" %> 
+		<h1><%= t('campaigns.share.share_by_email') %></h1>
+	</div>
+</div>
+<div id="greybanner">
+  <div class="container">
+    <p><%= t('shared.email.email_instructions')%>
+    </p>
   </div>
-  	<a class="button" href="<%= campaign_url(@campaign) %>"><%= t('campaigns.show.back') %></a>
+</div>
+
+<div id="main-content" class="container">
+	<div id="share-by-email" class="container">
+    <%= render :partial => "shared/email" %> 
+    <a class="button" href="<%= campaign_url(@campaign) %>"><%= t('campaigns.show.back') %></a>
+  </div>
+  	
 </div>
