@@ -2064,3 +2064,13 @@ body.facebook-canvas .button {
 #new_outgoing_message {
   overflow: hidden;
 }
+
+/*===[ Operator ]===*/
+#operator-feedback-link {
+  display: block;
+  padding-top: 0.5em;
+}
+
+#share-by-email #email-instructions {
+ color: #333; 
+}
