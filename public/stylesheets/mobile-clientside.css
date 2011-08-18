@@ -761,8 +761,25 @@
         top: 0;
         right: 0;
     }
+    
+    /* ==[ Route region indexes/Operator pages ]=== */
+    
+    .has-tabs #tabs-main-nav li#route-tab, 
+    .has-tabs #tabs-main-nav li#area-tab {
+        margin-right: 4px;
+    }
 
+    .has-tabs .operator-tabs-nav li a span.num {
+        margin: 0 0.4em 2px;
+        position: relative;
+    }
 
+    .has-tabs .operator-tabs-nav li a {
+/*        padding: 10px 1em 8px !important;*/
+/*        position: relative;*/
+      padding-right: 33px;
+        width: auto;
+    }
 	} /* end of media query */
 
 	</style>

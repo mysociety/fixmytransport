@@ -1,7 +1,3 @@
-<%- content_for :stylesheets do %>
-  <%= stylesheet_link_tag 'ui-tabs-mod' %>
-<%- end %>
-
 <div id="main-content" class="container operators has-tabs">
 	<h2><%= @operator.name %></h2>
 	<a href="<%= feedback_url(:url => CGI.escape(request.request_uri), :operator_id => @operator.id) %>" rel="nofollow"><%= t('route_operators.show.information_wrong') %></a>
