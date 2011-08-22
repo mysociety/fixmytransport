@@ -812,7 +812,7 @@
         color: #FFFFFF;
         display: block;
         height: auto;
-        clear: right;
+        clear: both;
         line-height: 1.1;
         padding: 2px;
         position: relative;
@@ -820,7 +820,8 @@
         text-align: center;
         width: 6em;
         border-radius: 3px;
-        top: 0;
+        top: auto;
+        right: 0;
           -moz-border-radius: 3px;
           -webkit-border-radius: 3px;
         text-shadow:0 1px 1px rgba(100, 100, 100, 0.3);
