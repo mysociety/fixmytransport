@@ -452,7 +452,7 @@ class ApplicationController < ActionController::Base
   def render_or_return_for_invalid_comment
     respond_to do |format|
       format.html do
-        render :action => 'add_comment'
+        render :template => 'shared/add_comment'
       end
       format.json do
         @json = {}
