@@ -1,4 +1,5 @@
 <div id="banner">
+    <a id="home" href="/">FixMyTransport</a>
 	<div class="container">
 		<%- if current_user && current_user == @user %>
 	    	<%= raw link_to(t('profiles.show.edit_your_account'), edit_account_path, :id => 'edit-account-button', :class => 'button right') %>

@@ -27,15 +27,13 @@
 	  facebook_message: "<%= escape_javascript(facebook_message(@campaign, current_user)) %>",
 	  initiator: <%= (initiator_view(@campaign)) ? 'true' : 'false' %>
 	};
-
-	$(function(){
-		$("ul#campaign-thread li a.thread-item span.title").ellipsis();
-	});
 </script>
 <%- if (supporter_initiator_view(@campaign)) || @campaign.status == :successful %>
   <div id="banner" class="<%= 'supporter' %>">
+    <a id="home" href="/">FixMyTransport</a>
   	<div class="container">
   		<div class="right">
+  		  <%- if (supporter_initiator_view(@campaign)) %>
   		  <div class="campaign-options">
   		  <%- if initiator_view(@campaign) %>
   			  <span class="status"><%= t('campaigns.show.your_campaign')%></span>
@@ -46,8 +44,9 @@
     				<button type="submit" class="button" >
     					<%= t('campaigns.show.leave') %>
     				</button>
-    			<%- end %>
-    			<%- if current_user.subscribed_to?(@campaign) %>
+    		<%- end %>
+    		
+    		<%- if current_user.subscribed_to?(@campaign) %>
     			  <%- form_for @campaign, :url => unsubscribe_url, :html => { :method => 'POST', :id => 'campaign-unsubscribe' } do |f| %>
     			  <input type="hidden" name="target_id" value="<%= @campaign.id %>">
     			  <input type="hidden" name="target_type" value="Campaign">
@@ -55,17 +54,18 @@
     					<%= t('campaigns.show.unsubscribe') %>
     				</button>
     			  <%- end %>
-  			  <%- else %>
+  			<%- else %>
     			  <%- form_for @campaign, :url => subscribe_url, :html => { :method => 'POST', :id => 'campaign-unsubscribe' } do |f| %>
-    			  <input type="hidden" name="target_id" value="<%= @campaign.id %>">
-    			  <input type="hidden" name="target_type" value="Campaign">
-    				<button type="submit" class="button">
-    					<%= t('campaigns.show.subscribe') %>
-    				</button>
+    			    <input type="hidden" name="target_id" value="<%= @campaign.id %>">
+    			    <input type="hidden" name="target_type" value="Campaign">
+    				  <button type="submit" class="button">
+    					  <%= t('campaigns.show.subscribe') %>
+    				  </button>
     			  <%- end %>
-  			  <%- end %>
+  			 <%- end %>
   			<%- end %>
       </div>
+  		<%- end %>
   		<%- if @campaign.status == :successful %>
 			<span class="ribbon"><%= t('campaigns.show.campaign_fixed') %></span>
   		<%- end %>

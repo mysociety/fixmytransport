@@ -1,6 +1,7 @@
 <%- content_for :tracking do %>'<%= raw url_for(params.merge(:location_type => @campaign.problem.location_type, :escape => false)) %>'<%- end %>
 
 <div id="banner">
+  <a id="home" href="/">FixMyTransport</a>
 	<div class="container">
 		<h1><%= t('campaigns.add_details.add_details') %></h1>
 	</div>
