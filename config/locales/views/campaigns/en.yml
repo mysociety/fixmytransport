@@ -83,6 +83,10 @@ en:
       campaign_email_replacement: "[%{title} email]"
       hide_quoted: "hide quoted sections"
       wrote_to_orgs: "%{name} wrote to %{orgs}"
+      facebook: Facebook
+      post_to_wall: Post to your Facebook wall and let everyone know!
+      tell_about_your_campaign: Tell the world about your campaign
+      tell_youre_a_supporter: "Tell the world you&rsquo;re a supporter"
       find_operator_task_description: "We're sorry but we don't know who operates this %{location}. In order to be able to persuade them of anything, you'll need to find out. Please add the information here."
       contact_found: "%{user_name} found an email address for %{operator_name}"
       find_operator: "Find operator"

@@ -1,0 +1,17 @@
+<script>
+	var campaign_data = {
+		title: "<%= escape_javascript(@campaign.title) %>",
+		id: <%= @campaign.id %>,
+		url: document.location.protocol + '//' + document.location.host + "<%= campaign_path(@campaign) %>",
+		description: "<%= escape_javascript(@campaign.description) %>",
+	  facebook_description: "<%= escape_javascript(facebook_description(@campaign, current_user)) %>",
+	  facebook_message: "<%= escape_javascript(facebook_message(@campaign, current_user)) %>",
+	  initiator: <%= (initiator_view(@campaign)) ? 'true' : 'false' %>,
+	  <%- if initiator_view(@campaign) %>
+	  facebook_post_title: "<%= escape_javascript(t('campaigns.show.tell_about_your_campaign')) %>",
+	  <%- elsif supporter_view(@campaign) %>
+	  facebook_post_title: "<%= escape_javascript(t('campaigns.show.tell_youre_a_supporter')) %>",
+	  <%- end %>
+	  facebook_post_description: "<%= escape_javascript(t('campaigns.show.post_to_wall')) %>",	
+	};
+</script>

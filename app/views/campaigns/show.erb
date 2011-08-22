@@ -17,17 +17,7 @@
 <%- if current_user && current_user.new_supporter?(@campaign) %>
 <%- content_for :tracking do %>'<%= raw url_for(params.merge(:joined => 1, :escape => false )) %>'<%- end %>
 <%- end %>
-<script>
-	var campaign_data = {
-		title: "<%= escape_javascript(@campaign.title) %>",
-		id: <%= @campaign.id %>,
-		url: document.location.protocol + '//' + document.location.host + "<%= campaign_path(@campaign) %>",
-		description: "<%= escape_javascript(@campaign.description) %>",
-	  facebook_description: "<%= escape_javascript(facebook_description(@campaign, current_user)) %>",
-	  facebook_message: "<%= escape_javascript(facebook_message(@campaign, current_user)) %>",
-	  initiator: <%= (initiator_view(@campaign)) ? 'true' : 'false' %>
-	};
-</script>
+<%= render :partial => 'js_campaign_data' %>
 <%- if (supporter_initiator_view(@campaign)) || @campaign.status == :successful %>
   <div id="banner" class="<%= 'supporter' %>">
     <a id="home" href="/">FixMyTransport</a>
@@ -195,7 +185,7 @@
 	<div class="rightcol narrowcol">
 		<%- if current_user && current_user.new_supporter?(@campaign) %>
 	    <div class="contrib-tools-initial">
-			<a href="<%= facebook_url(@campaign) %>" class="facebook-trigger">
+			<a href="<%= facebook_campaign_url(@campaign) %>" class="facebook-trigger">
 				<span class="icon facebook"></span>
 				<%= t('campaigns.show.facebook_title') %>
 			</a>
@@ -212,7 +202,7 @@
 
 	  <%- if supporter_initiator_view(@campaign) && ! current_user.new_supporter?(@campaign) %>
 		<div class="contrib-tools">
-			<a href="<%= facebook_url(@campaign) %>" class="facebook-trigger">
+			<a href="<%= facebook_campaign_url(@campaign) %>" class="facebook-trigger">
 				<span class="icon facebook"></span>
 				<%= t('campaigns.show.facebook_title') %>
 			</a>

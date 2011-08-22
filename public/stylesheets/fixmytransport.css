@@ -711,6 +711,7 @@ ul.user-list {
 
 #social-share {
     padding: 1em;
+    min-height: 340px;
 }
 #social-share h2 {
     font-size: 110%;

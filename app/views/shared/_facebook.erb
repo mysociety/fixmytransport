@@ -1,26 +1,34 @@
-<div class="fb-item-container">
-  <a href="#" class="fb-post-to-wall fb-feed-button" ><%= t('shared.facebook.post')%></a>
-  <p id="social-message">
-  </p>
-</div>
-
-<%- if MySociety::Config.get('APP_STATUS', 'live') == 'closed_beta' %>
-<div class="fb-item-container">
-<%= t('shared.facebook.more_options_to_come') %>
-</div>
-<%- else %>
-<div class="fb-item-container">
-
-<fb:like href="<%= campaign_url(@campaign) %>" send="false" width="490" show_faces="true" action="recommend" font=""></fb:like>
-</div>
-
-<div class="fb-item-container">
-    <div>
-        <fb:send href="<%= campaign_url(@campaign) %>" font=""></fb:send>
-    </div>
-    <p>
-        <b><%= t('shared.facebook.send')%></b><br/>
-       <%= t('shared.facebook.send')%>
+<div id="social-share">
+  <div class="fb-item-container">
+    <a href="#" class="fb-post-to-wall fb-feed-button" ><%= t('shared.facebook.post')%></a>
+    <p id="social-message">
+      <%- if initiator_view(@campaign) %>
+      <b><%= t('campaigns.show.tell_about_your_campaign') %></b><br/>
+      <%- else %>
+      <b><%= t('campaigns.show.tell_youre_a_supporter') %></b><br/>
+      <%- end %>
+      <%= t('campaigns.show.post_to_wall') %>
     </p>
+  </div>
+
+  <%- if MySociety::Config.get('APP_STATUS', 'live') == 'closed_beta' %>
+  <div class="fb-item-container">
+  <%= t('shared.facebook.more_options_to_come') %>
+  </div>
+  <%- else %>
+  <div class="fb-item-container">
+
+  <fb:like href="<%= campaign_url(@campaign) %>" send="false" width="100%" show_faces="true" action="recommend" font=""></fb:like>
+  </div>
+
+  <div class="fb-item-container">
+      <div>
+          <fb:send href="<%= campaign_url(@campaign) %>" font=""></fb:send>
+      </div>
+      <p>
+        <b><%= t('shared.facebook.send')%></b><br/>
+      </p>
+  </div>
+  <%- end %>
+
 </div>
-<%- end %>

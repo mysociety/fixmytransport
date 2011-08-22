@@ -181,6 +181,9 @@ class CampaignsController < ApplicationController
     end
     render :template => 'shared/add_comment'
   end
+  
+  def facebook
+  end
 
   private
 

@@ -490,10 +490,6 @@ module ApplicationHelper
     return "http://twitter.com/share?#{twitter_params.to_query}"
   end
 
-  def facebook_url(campaign)
-    "http://www.facebook.com"
-  end
-
   def facebook_description(campaign, user)
     return '' if ! user
     if user == campaign.initiator
