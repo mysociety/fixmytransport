@@ -9,7 +9,7 @@
 	  initiator: <%= (initiator_view(@campaign)) ? 'true' : 'false' %>,
 	  <%- if initiator_view(@campaign) %>
 	  facebook_post_title: "<%= escape_javascript(t('campaigns.show.tell_about_your_campaign')) %>",
-	  <%- elsif supporter_view(@campaign) %>
+	  <%- elsif supporter_initiator_view(@campaign) %>
 	  facebook_post_title: "<%= escape_javascript(t('campaigns.show.tell_youre_a_supporter')) %>",
 	  <%- end %>
 	  facebook_post_description: "<%= escape_javascript(t('campaigns.show.post_to_wall')) %>",	
