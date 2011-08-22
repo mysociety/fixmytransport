@@ -1,11 +1,6 @@
 <%- content_for :javascript do %>
 <%= raw javascript_include_tag('jquery.text-overflow.js', :charset => 'utf-8') %>
 <%- end %>
-<script>
-	$(function(){
-		$("ul#campaign-thread li a.thread-item span.title").ellipsis();
-	});
-</script>
 <%- @title = "#{@problem.subject}" %>
 <div id="banner">
     <a id="home" href="/">FixMyTransport</a>
