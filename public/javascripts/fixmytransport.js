@@ -402,25 +402,26 @@ $(document).ready(function(){
 
   // ajax submission of support form
   function setupSupportForm(form_selector) {
-	  options = defaultFormOptions();
+    if ($(window).width() > 600 ) {
+  	  options = defaultFormOptions();
 
-    options['success'] = function(response) {
+      options['success'] = function(response) {
 
-      // add the notice to the login form
-      $('#login-landing .notice').text(response.notice);
-      $('#login-landing .notice').show();
+        // add the notice to the login form
+        $('#login-landing .notice').text(response.notice);
+        $('#login-landing .notice').show();
 
-      // show the login form
-      $('.login-box .pane').hide();
-      $("#login-box").dialog({title: "Sign In or Sign Up"});
-  		$('#login-landing').show();
-  		$("#login-box").dialog("open");
+        // show the login form
+        $('.login-box .pane').hide();
+        $("#login-box").dialog({title: "Sign In or Sign Up"});
+    		$('#login-landing').show();
+    		$("#login-box").dialog("open");
 
-  		// record a hit on the login box in analytics
-      _gaq.push(['_trackPageview', campaign_data.url + '/login']);
-	  };
-	  $(form_selector).ajaxForm(options);
-
+    		// record a hit on the login box in analytics
+        _gaq.push(['_trackPageview', campaign_data.url + '/login']);
+  	  };
+  	  $(form_selector).ajaxForm(options);
+    }
   }
 
   // ajax submission of update/advice form
