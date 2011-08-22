@@ -63,6 +63,7 @@ class CampaignsController < ApplicationController
             @json = {}
             @json[:success] = true
             @json[:requires_login] = true
+            @json[:redirect] = login_url
             @json[:notice] = join_data[:notice]
             render :json => @json
           end
