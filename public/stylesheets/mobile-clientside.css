@@ -78,7 +78,7 @@
 				text-align: right;
 			}
 			#logo {
-			    background: none; /* knock out the existing background-url, it's an image now */
+			    background: none;
 				width: 90%;
 				visibility: visible;
 				text-indent: 0;
@@ -902,6 +902,10 @@
     .supporter-notice-arrow {
       display:none;
       background: none;
+    }
+
+    #share-by-facebook {
+      overflow: visible;
     }
     
     /*===[ Route region indexes/Operator pages ]=== */

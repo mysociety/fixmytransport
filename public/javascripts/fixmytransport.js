@@ -230,9 +230,12 @@ $(document).ready(function(){
     if ($(window).width() > 600 ) {
       e.preventDefault();
       $('.login-box .pane').hide();
-      $('#social-message').empty();
+      $('#post-message').empty();
+      $('#send-message').empty();
       $('<b>' + campaign_data.facebook_post_title + '</b><br/>' + campaign_data.facebook_post_description +
-        '<br/>').appendTo('#social-message');
+        '<br/>').appendTo('#post-message');
+      $('<b>' + campaign_data.facebook_post_title + '</b><br/>' + campaign_data.facebook_post_description +
+        '<br/>').appendTo('#send-message');
       $('#fb-share').show();
     	$("#login-box").dialog({title: "Facebook"});
     	$("#login-box").dialog("open");
@@ -256,45 +259,59 @@ $(document).ready(function(){
   $('#email-share .email-body').click(function(){
     $(this).select();
   })
+  
+  function facebook_dialog_default_params() {
+   var ui_params = {
+        display: 'popup',
+        name:    'FixMyTransport campaign: ' + campaign_data.title,
+        link:    campaign_data.url,
+        picture: document.location.protocol + '//' + document.location.host + '/images/facebook-feed-logo.gif',
+        caption: campaign_data.description,
+        description: campaign_data.facebook_description,
+        message: campaign_data.facebook_message, 
+    };
+    // Let FB know device type
+    if ($(window).width() <= 600) {
+      FB.UIServer.touch = FB.UIServer.popup;
+      ui_params['display'] = "touch";
+    }
+    return ui_params;
+  }
+  
+  function facebook_response(response, element_selector) {
+    if ($(window).width() > 600) {
+      $('.login-box .pane').hide();
+    }
+    $('#post-message').empty();
+    if (response && response.post_id) {
+        $('<b>Posted on Facebook!</b><br/>' +
+          'Thanks for spreading the word about this campaign!<br/>').appendTo(element_selector);
+    } else {
+        $('<b>Oops &mdash; didn&rsquo;t post on Facebook</b><br/>' +
+          'You cancelled this time...<br/>but please do spread the word about this campaign.<br/>').appendTo(element_selector);
+    }
+    if ($(window).width() > 600) {
+      $('#fb-share').show();
+      $("#login-box").dialog({title: "Facebook"});
+      $("#login-box").dialog("open");
+      $('#post-message').fadeIn();
+    }
+  }
 
-  $('.fb-feed-button').click(function(e){
-      e.preventDefault();
-     
-      var ui_params = {
-          method:  'feed',
-          display: 'popup',
-          name:    'FixMyTransport campaign: ' + campaign_data.title,
-          link:    campaign_data.url,
-          picture: document.location.protocol + '//' + document.location.host + '/images/facebook-feed-logo.gif',
-          caption: campaign_data.description,
-          description: campaign_data.facebook_description,
-          message: campaign_data.facebook_message, 
-      };
-      // Let FB know device type
-      if ($(window).width() <= 600) {
-        FB.UIServer.touch = FB.UIServer.popup;
-        ui_params['display'] = "touch";
-      }
-      FB.ui(ui_params,
-          function(response) {
-              $('.login-box .pane').hide();
-              $('#social-message').empty();
-              if (response && response.post_id) {
-                  $('<b>Posted on Facebook!</b><br/>' +
-                    'Thanks for spreading the word about this campaign!<br/>').appendTo('#social-message');
-              } else {
-                  $('<b>Oops &mdash; didn&rsquo;t post on Facebook</b><br/>' +
-                    'You cancelled your post this time...<br/>but please do spread the word about this campaign.<br/>').appendTo('#social-message');
-              }
-              if ($(window).width() > 600) {
-                $('#fb-share').show();
-                $("#login-box").dialog({title: "Facebook"});
-                $("#login-box").dialog("open");
-                $('#social-message').fadeIn();
-              }
-          }
-      );
-     return false;
+  $('#fb-post-to-wall').click(function(e){
+    e.preventDefault();
+    var ui_params = facebook_dialog_default_params();
+    ui_params['method'] = 'feed';
+    FB.ui(ui_params, function(response) { facebook_response(response, '#post-message'); });
+    return false;
+  });
+  
+  $('#fb-send').click(function(e){
+    e.preventDefault();
+    var ui_params = facebook_dialog_default_params();
+    ui_params['method'] = 'send';
+    FB.ui(ui_params, function(response) { facebook_response(response, '#send-message'); });
+    return false;
   });
 
     /* Advice request */

@@ -721,7 +721,7 @@ ul.user-list {
 }
 
 /* --- facebook items in the social-share dialog  -- */
-.fb-post-to-wall { /* mimics fb button */
+.fb-feed-button { /* mimics fb button */
     color: #3B5998;
     background-color: #ECEEF5;
     border: 1px solid #CAD4E7;
@@ -737,8 +737,8 @@ ul.user-list {
     background-repeat: no-repeat;
     padding: 2px 6px 2px 24px;
 }
-.fb-post-to-wall:hover,
-.fb-post-to-wall:focus {
+.fb-feed-button:hover,
+.fb-feed-button:focus {
     border-color: #9DACCE;
     color: #3B5998;
 }
