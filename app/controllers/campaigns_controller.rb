@@ -183,6 +183,7 @@ class CampaignsController < ApplicationController
   end
   
   def facebook
+    @body_class = "facebook-body"
   end
 
   private

@@ -2080,3 +2080,7 @@ body.facebook-canvas .button {
 #share-by-email #email-instructions {
  color: #333; 
 }
+
+.facebook-body {
+  min-width: 425px;
+}

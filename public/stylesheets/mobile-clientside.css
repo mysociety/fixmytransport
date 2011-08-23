@@ -905,8 +905,7 @@
     }
 
     #share-by-facebook {
-      overflow: auto;
-      min-width: 401px;
+      min-width: 425px;
     }
     
     /*===[ Route region indexes/Operator pages ]=== */
