@@ -53,7 +53,7 @@
 
     <%- if ! MySociety::Config.get('FACEBOOK_APP_ID','').empty? %>
 	    <p><%= t('shared.login_form.sign_in_with_facebook') %></p>
-	    <a href="#" onclick="checkLoginOrCallFacebook()" id="facebook" class="facebook"><%= t('shared.login_form.facebook_connect') %></a>
+	    <a href="#" class="facebook-login"><%= t('shared.login_form.facebook_connect') %></a>
 	<%- end %>
 </div>
 <div id="fb-root"></div>

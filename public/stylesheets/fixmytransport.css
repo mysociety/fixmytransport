@@ -698,7 +698,7 @@ ul.user-list {
 		margin-top: 1em;
 	}
 
-		#facebook{
+		.facebook-login{
 			width:192px;
 			display: block;
 			height:28px;

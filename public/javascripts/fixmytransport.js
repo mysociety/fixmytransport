@@ -653,7 +653,10 @@ $(document).ready(function(){
 
    return false;
   });
-
+  
+  /* Login with Facebook
+     ================================================== */
+     $('.facebook-login').click(callFacebook);
 
 	/* Tip Box
 	   ================================================== */
@@ -764,6 +767,12 @@ function externalAuth(authParams) {
 window.fbAsyncInit = function() {
 	// fmt_facebook_app_id declared in layouts/application.erb
     FB.init({appId: fmt_facebook_app_id, status: false, cookie: true, xfbml: true});
+    FB.getLoginStatus(function(response) {
+      if (response.session && response.status && response.status == 'connected') {
+        $('.facebook-login').unbind('click');
+        $('.facebook-login').click(function(){ facebookLogin(response) });
+		  }
+	  });
 };
 (function() {
     var e = document.createElement('script'); e.async = true;
