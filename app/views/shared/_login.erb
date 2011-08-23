@@ -15,7 +15,7 @@
 	
 	<%- if controller.controller_name == 'campaigns' && controller.action_name == 'show' && current_user && current_user.supporter_or_initiator(@campaign) %>
     <div id="fb-share" class="pane">
-      <%= render :partial => 'shared/facebook' %>
+      <%= render :partial => 'shared/facebook', :locals => { :width => "400" } %>
     </div>
     <div id="email-share" class="pane">
       <div class='fieldset'>

@@ -6,6 +6,6 @@
   </div>
 </div>
 <div id="share-by-facebook" class="container">
-  <%= render :partial => 'shared/facebook' %>
+  <%= render :partial => 'shared/facebook', :locals => { :width => "240" } %>
   <a class="button" href="<%= campaign_url(@campaign) %>"><%= t('campaigns.show.back') %></a>
 </div>
