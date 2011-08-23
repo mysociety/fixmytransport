@@ -50,7 +50,7 @@ class PassengerTransportExecutive < ActiveRecord::Base
   end
   
   def general_contacts
-    self.pte_contacts.find(:all, :conditions => ['location_type is null'])
+    self.pte_contacts.find(:all, :conditions => ["location_type is null or location_type = ''"])
   end 
   
 end
