@@ -54,8 +54,9 @@ class Operator < ActiveRecord::Base
   end
 
   def general_contacts
-    self.operator_contacts.find(:all, :conditions => ['location_id is null
-                                                       AND location_type is null'])
+    self.operator_contacts.find(:all, :conditions => ["location_id is null
+                                                       AND (location_type is null
+                                                       OR location_type = '')"])
   end
 
   def codes
