@@ -771,8 +771,8 @@ window.fbAsyncInit = function() {
       if (response.session && response.status && response.status == 'connected') {
         $('.facebook-login').unbind('click');
         $('.facebook-login').click(function(){ facebookLogin(response) });
-		  }
-	  });
+      }
+    });
 };
 (function() {
     var e = document.createElement('script'); e.async = true;
