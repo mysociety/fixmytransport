@@ -11,6 +11,7 @@
 <meta property="og:url" content="<%= request.url %>"/>
 <meta property="og:type" content="cause"/>
 <%- end %>
+
 <%- if params[:first_time] %>
   <%- content_for :tracking do %>'<%= raw url_for(params.merge(:location_type => @campaign.problem.location_type, :escape => false )) %>'<%- end %>
 <%- end %>
@@ -83,6 +84,12 @@
 </div>
   <%- end %>
 <%- else %>
+<div id="banner" class="mobile-only">
+  <a id="home" href="/">FixMyTransport</a>
+  <div class="container">
+    <h1><%= t('shared.header.site_name') %></h1>
+  </div>
+</div>
   <div id="yellowbanner" class="container">
   	<div class="leftcol-banner">
   		<h1>&ldquo;<%= @campaign.call_to_action %>&rdquo; &ndash; <%= @campaign.initiator.name %></h1>

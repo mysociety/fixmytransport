@@ -7,6 +7,8 @@
 </div>
 
 <div id="main-content" class="container">
-
+  <div id="share-by-facebook" class="container">
     <%= render :partial => 'shared/facebook' %>
+    <a class="button" href="<%= campaign_url(@campaign) %>"><%= t('campaigns.show.back') %></a>
+  </div>
 </div>

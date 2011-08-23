@@ -16,19 +16,21 @@
   <%= t('shared.facebook.more_options_to_come') %>
   </div>
   <%- else %>
+ 
+  <div class="fb-item-container">
+       <div>
+           <fb:send href="<%= campaign_url(@campaign) %>" font=""></fb:send>
+       </div>
+       <p>
+         <b><%= t('shared.facebook.send')%></b><br/>
+       </p>
+   </div>
   <div class="fb-item-container">
 
   <fb:like href="<%= campaign_url(@campaign) %>" send="false" width="100%" show_faces="true" action="recommend" font=""></fb:like>
   </div>
 
-  <div class="fb-item-container">
-      <div>
-          <fb:send href="<%= campaign_url(@campaign) %>" font=""></fb:send>
-      </div>
-      <p>
-        <b><%= t('shared.facebook.send')%></b><br/>
-      </p>
-  </div>
+ 
   <%- end %>
 
 </div>
