@@ -18,7 +18,7 @@ function facebookLogin(response) {
 function callFacebook(){
     if (fbButtonState == 'idle'){
         fbButtonState = 'busy';
-        $(".facebook").css('background-repeat', 'repeat-y');
+        $(".facebook-login").css('background-repeat', 'repeat-y');
         paintFbButton(fbButtonState);
         var rememberMe = $('#user_session_remember_me').is(':checked');
         var path = 'https://www.facebook.com/dialog/oauth?';
@@ -70,5 +70,5 @@ function paintFbButton(state) {
         default:
             bgPosY = '0px';
     }
-    $("#facebook").css('background-position', '0px ' + bgPosY);
+    $(".facebook-login").css('background-position', '0px ' + bgPosY);
 }
