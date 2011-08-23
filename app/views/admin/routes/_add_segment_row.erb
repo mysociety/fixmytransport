@@ -3,6 +3,7 @@
   <%= segment_fields.object.journey_pattern.id %>
 </td>
 <td>
+  <%= raw segment_fields.hidden_field :route_id, :value => @route.id %>
   <%= raw text_field_tag :from_stop_name, segment_fields.object.from_stop_id ? stop_name_for_admin(segment_fields.object.from_stop) : '', { :class => 'from_stop_name_auto', :size => 30 }   %>
   <%= raw segment_fields.hidden_field :from_stop_id, { :class => 'from-stop-id' }  %>
 </td>

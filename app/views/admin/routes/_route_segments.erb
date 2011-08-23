@@ -37,6 +37,7 @@
               <td><%= raw "#{segment_fields.object.to_stop.common_name} (#{link_to(segment_fields.object.to_stop.id, admin_url(admin_stop_path(segment_fields.object.to_stop.id)))})" %></td>
               <td><%= raw segment_fields.check_box :to_terminus %></td>
               <td>
+                <%= raw segment_fields.hidden_field :route_id %>
                 <%= raw segment_fields.hidden_field :id %>
                 <%= raw segment_fields.check_box :_destroy, :class => 'check-route-segment' %>
               </td>
