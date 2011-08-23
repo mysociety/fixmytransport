@@ -905,7 +905,7 @@
     }
 
     #share-by-facebook {
-      overflow: visible;
+      overflow: auto;
     }
     
     /*===[ Route region indexes/Operator pages ]=== */
