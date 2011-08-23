@@ -20,14 +20,14 @@ describe PassengerTransportExecutive do
     end
     
     it 'should return true if there is a general contact for category "Other" or a specific contact for that type of location and category "Other"' do 
-      contact_conditions = ["category = 'Other' and (location_type = ? or location_type is null)", 'BusRoute']
+      contact_conditions = ["category = 'Other' and (location_type = ? or location_type is null or location_type = '')", 'BusRoute']
       @pte.pte_contacts.stub!(:find).with(:all, :conditions => contact_conditions).and_return([@pte_contact])
       @pte.emailable?(@mock_route).should be_true
     end
     
     
     it 'should return false if there is no specific contact for that type of location or general contact with category "Other"' do
-      contact_conditions = ["category = 'Other' and (location_type = ? or location_type is null)", 'BusRoute']
+      contact_conditions = ["category = 'Other' and (location_type = ? or location_type is null or location_type = '')", 'BusRoute']
       @pte.pte_contacts.stub!(:find).with(:all, :conditions => contact_conditions).and_return([])
       @pte.emailable?(@mock_route).should be_false
     end
