@@ -232,10 +232,10 @@ $(document).ready(function(){
       $('.login-box .pane').hide();
       $('#post-message').empty();
       $('#send-message').empty();
-      $('<b>' + campaign_data.facebook_post_title + '</b><br/>' + campaign_data.facebook_post_description +
-        '<br/>').appendTo('#post-message');
-      $('<b>' + campaign_data.facebook_post_title + '</b><br/>' + campaign_data.facebook_post_description +
-        '<br/>').appendTo('#send-message');
+      var message = '<b>' + campaign_data.facebook_post_title + '</b><br/>' + campaign_data.facebook_post_description +
+        '<br/>';
+      $(message).appendTo('#post-message');
+      $(message).appendTo('#send-message');
       $('#fb-share').show();
     	$("#login-box").dialog({title: "Facebook"});
     	$("#login-box").dialog("open");
@@ -282,7 +282,7 @@ $(document).ready(function(){
     if ($(window).width() > 600) {
       $('.login-box .pane').hide();
     }
-    $('#post-message').empty();
+    $(element_selector).empty();
     if (response && response.post_id) {
         $('<b>Posted on Facebook!</b><br/>' +
           'Thanks for spreading the word about this campaign!<br/>').appendTo(element_selector);
@@ -294,7 +294,7 @@ $(document).ready(function(){
       $('#fb-share').show();
       $("#login-box").dialog({title: "Facebook"});
       $("#login-box").dialog("open");
-      $('#post-message').fadeIn();
+      $(element_selector).fadeIn();
     }
   }
 
