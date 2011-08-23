@@ -1,5 +1,10 @@
 <div id="social-share">
   <div class="fb-item-container">
+
+  <fb:like href="<%= campaign_url(@campaign) %>"  font="arial" send="false" show_faces="true" action="recommend"></fb:like>
+  </div>
+
+  <div class="fb-item-container">
     <a href="#" id="fb-post-to-wall" class="fb-feed-button" ><%= t('shared.facebook.post')%></a>
     <p id="post-message">
       <%- if initiator_view(@campaign) %>
@@ -11,24 +16,11 @@
     </p>
   </div>
 
-  <%- if MySociety::Config.get('APP_STATUS', 'live') == 'closed_beta' %>
-  <div class="fb-item-container">
-  <%= t('shared.facebook.more_options_to_come') %>
-  </div>
-  <%- else %>
- 
   <div class="fb-item-container">
        <a href="#" id="fb-send" class="fb-feed-button" ><%= t('shared.facebook.send') %></a>
        <p id="send-message">
          <b><%= t('shared.facebook.send_to_people') %></b><br/>
        </p>
    </div>
-  <div class="fb-item-container">
-
-  <fb:like href="<%= campaign_url(@campaign) %>"  font="arial" send="false" width="100%" show_faces="true" action="recommend"></fb:like>
-  </div>
-
  
-  <%- end %>
-
 </div>

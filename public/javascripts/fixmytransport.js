@@ -225,6 +225,11 @@ $(document).ready(function(){
   	});
   });
 
+  function construct_message(title, description) {
+    var message = '<b>' + title + '</b><br/>' + description + '<br/>';
+    return message;
+  }
+  
   //facebook
   $('.facebook-trigger').click(function(e){
     if ($(window).width() > 600 ) {
@@ -232,10 +237,10 @@ $(document).ready(function(){
       $('.login-box .pane').hide();
       $('#post-message').empty();
       $('#send-message').empty();
-      var message = '<b>' + campaign_data.facebook_post_title + '</b><br/>' + campaign_data.facebook_post_description +
-        '<br/>';
-      $(message).appendTo('#post-message');
-      $(message).appendTo('#send-message');
+      var post_message = construct_message(campaign_data.facebook_post_title, campaign_data.facebook_post_description);
+      var send_message = construct_message(campaign_data.facebook_send_title, campaign_data.facebook_send_description); 
+      $(post_message).appendTo('#post-message');
+      $(send_message).appendTo('#send-message');
       $('#fb-share').show();
     	$("#login-box").dialog({title: "Facebook"});
     	$("#login-box").dialog("open");
