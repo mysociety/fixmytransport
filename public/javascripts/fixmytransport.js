@@ -273,11 +273,6 @@ $(document).ready(function(){
         picture: document.location.protocol + '//' + document.location.host + '/images/facebook-feed-logo.gif',
         description: campaign_data.facebook_description
     };
-    // Let FB know device type
-    if ($(window).width() <= 600) {
-      FB.UIServer.touch = FB.UIServer.popup;
-      ui_params['display'] = "touch";
-    }
     return ui_params;
   }
   
