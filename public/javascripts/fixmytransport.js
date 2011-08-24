@@ -229,18 +229,15 @@ $(document).ready(function(){
     var message = '<b>' + title + '</b><br/>' + description + '<br/>';
     return message;
   }
-  
+
   //facebook
   $('.facebook-trigger').click(function(e){
     if ($(window).width() > 600 ) {
       e.preventDefault();
       $('.login-box .pane').hide();
       $('#post-message').empty();
-      $('#send-message').empty();
       var post_message = construct_message(campaign_data.facebook_post_title, campaign_data.facebook_post_description);
-      var send_message = construct_message(campaign_data.facebook_send_title, campaign_data.facebook_send_description); 
       $(post_message).appendTo('#post-message');
-      $(send_message).appendTo('#send-message');
       $('#fb-share').show();
     	$("#login-box").dialog({title: "Facebook"});
     	$("#login-box").dialog("open");
@@ -264,7 +261,7 @@ $(document).ready(function(){
   $('#email-share .email-body').click(function(){
     $(this).select();
   })
-  
+
   function facebook_dialog_default_params() {
    var ui_params = {
         display: 'popup',
@@ -275,7 +272,7 @@ $(document).ready(function(){
     };
     return ui_params;
   }
-  
+
   function facebook_response(response, element_selector) {
     if ($(window).width() > 600) {
       $('.login-box .pane').hide();
@@ -289,7 +286,6 @@ $(document).ready(function(){
           'You cancelled this time...<br/>but please do spread the word about this campaign.<br/>').appendTo(element_selector);
     }
     if ($(window).width() > 600) {
-      $('#fb-share').show();
       $("#login-box").dialog({title: "Facebook"});
       $("#login-box").dialog("open");
       $(element_selector).fadeIn();
@@ -305,7 +301,7 @@ $(document).ready(function(){
     FB.ui(ui_params, function(response) { facebook_response(response, '#post-message'); });
     return false;
   });
-  
+
   $('#fb-send').click(function(e){
     e.preventDefault();
     var ui_params = facebook_dialog_default_params();
@@ -317,7 +313,7 @@ $(document).ready(function(){
     /* Advice request */
   $('.advice-trigger').click(function(e){
       if ($(window).width() > 600 ) {
-    
+
       	e.preventDefault();
       	$('.login-box .pane').hide();
       	$('#campaign-update').show();
@@ -347,7 +343,7 @@ $(document).ready(function(){
     /* Update */
   $('.update-trigger').click(function(e){
     if ($(window).width() > 600 ) {
-    
+
     	e.preventDefault();
     	$('.login-box .pane').hide();
     	$('#campaign-update').show();
@@ -648,7 +644,7 @@ $(document).ready(function(){
 
    return false;
   });
-  
+
   /* Login with Facebook
      ================================================== */
      $('.facebook-login').click(callFacebook);
@@ -680,12 +676,12 @@ $(document).ready(function(){
     });
   }
 
-  /* Ellipsis in campaign thread 
+  /* Ellipsis in campaign thread
   ================================================== */
   if ($('ul#campaign-thread li a.thread-item span.title').length > 0 && $(window).width() > 600){
    $("ul#campaign-thread li a.thread-item span.title").ellipsis();
   }
-  
+
   /* Email quoting folding and unfolding
   ================================================== */
   function swap_copy(thread_element) {
@@ -761,7 +757,11 @@ function externalAuth(authParams) {
 
 window.fbAsyncInit = function() {
 	// fmt_facebook_app_id declared in layouts/application.erb
-    FB.init({appId: fmt_facebook_app_id, status: false, cookie: true, xfbml: true});
+    FB.init({appId: fmt_facebook_app_id,
+             status: false,
+             cookie: true,
+             xfbml: true,
+             channelUrl: window.location.protocol + "//" + window.location.host + '/channel.html' });
     FB.getLoginStatus(function(response) {
       if (response.session && response.status && response.status == 'connected') {
         $('.facebook-login').unbind('click');
@@ -774,9 +774,6 @@ window.fbAsyncInit = function() {
     e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
     if (document.getElementById('fb-root')){
       document.getElementById('fb-root').appendChild(e);
-      if (document.getElementById('fb-like')) {
-        FB.XFBML.parse(document.getElementById('fb-like'));
-      }
     }
 }());
 
