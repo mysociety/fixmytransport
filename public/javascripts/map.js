@@ -41,7 +41,7 @@ function area_init() {
 
   // if we're constrained to less than the expected map dimensions, try
   // to make sure the markers are all shown
-  if ($('#map').width() < mapWidth || $('#map').height() < mapHeight) {
+  if (($('#map').width() < mapWidth || $('#map').height() < mapHeight) && (areaStops.length > 0)) {
     map.zoomToExtent(bounds, false);
   }
     
