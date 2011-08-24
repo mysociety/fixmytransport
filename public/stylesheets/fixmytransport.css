@@ -93,6 +93,9 @@ h1, h2, h3, h4, h5, h6, .font-1, #greybanner p {
 	width:100%;
 }
 
+#fb-root-container {
+  display:none !important;
+}
 /* Main Elements
    ================================================== */
 /* ===[ Body ]=== */
@@ -2077,10 +2080,13 @@ body.facebook-canvas .button {
   padding-top: 0.5em;
 }
 
+/*===[ Share by email ]===*/
 #share-by-email #email-instructions {
  color: #333; 
 }
 
+/*===[ Share by Facebook ]===*/
 .facebook-body {
   min-width: 425px;
 }
+
