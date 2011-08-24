@@ -3,6 +3,7 @@ en:
     about:
       about_this_site: "About this site"
     feedback:
+      title: Feedback
       feedback_thanks: "Thanks for your feedback!"
       feedback_error: "An error occurred while sending this email."
       send: "Send"

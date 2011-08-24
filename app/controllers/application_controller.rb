@@ -9,9 +9,11 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery if :current_user # See ActionController::RequestForgeryProtection for details
   skip_before_filter :verify_authenticity_token, :unless => :current_user
+
   before_filter :redirect_asset_host_requests,
                 :make_cachable,
                 :check_mobile_domain,
+                :get_device_from_user_agent,
                 :require_beta_password
 
   helper_method :location_search,
@@ -450,7 +452,7 @@ class ApplicationController < ActionController::Base
   def render_or_return_for_invalid_comment
     respond_to do |format|
       format.html do
-        render :action => 'add_comment'
+        render :template => 'shared/add_comment'
       end
       format.json do
         @json = {}
@@ -523,5 +525,38 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-
+  
+  def recognized_devices
+    ['android', 'iphone', 'ipad']
+  end
+  
+  # later, more thorough user-agent sniffing would be appropriate
+  # or idealy just pick it up from, e.g., request.headers["X-device-class"], set by varnish
+  # sets up @user_device and @is_mobile
+  # also: might not realy be using vary headers like this, but OK for now to show intent
+  def get_device_from_user_agent
+    mobile_devices = recognized_devices() # see keyword search below
+    x_header_name = MySociety::Config.get('DEVICE_TYPE_X_HEADER', '')
+    if !x_header_name.blank?
+      response.headers['Vary'] = x_header_name
+      @user_device = request.headers[x_header_name]
+      if @user_device.blank?
+        @user_device = :default_device
+      end
+      @is_mobile = mobile_devices.include?(@user_device)
+    else
+      response.headers['Vary'] = 'User-Agent'
+      @user_device = :default_device
+      @is_mobile = false
+      user_agent =  request.env['HTTP_USER_AGENT'].downcase 
+      mobile_devices.each do |keyword| # for now, just lazy search for keywords; later may be more complex
+        if user_agent.index(keyword)
+          @user_device = keyword
+          @is_mobile = true
+          break
+        end
+      end
+    end
+  end
+  
 end

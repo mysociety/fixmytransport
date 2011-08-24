@@ -1,10 +1,15 @@
+<%- if @outgoing_message.assignment && @outgoing_message.assignment.status != :complete %>
+  <%- @title = t('outgoing_messages.new.message_to', :organization => @outgoing_message.recipient_name) %>
+<%- else %>
+  <%- @title = t('outgoing_messages.new.new_message_to', :organization => @outgoing_message.recipient_name) %>
+<%- end %>
+<div id="banner">
+  <a id="home" href="/">FixMyTransport</a>
+	<div class="container">
+	  <h1><%= @title %></h1>
+  </div>
+</div>
 <div id="main-content" class="container">
-	<%- if @outgoing_message.assignment && @outgoing_message.assignment.status != :complete %>
-	  <%- @title = t('outgoing_messages.new.message_to', :organization => @outgoing_message.recipient_name) %>
-	<%- else %>
-	  <%- @title = t('outgoing_messages.new.new_message_to', :organization => @outgoing_message.recipient_name) %>
-	<%- end %>
-	<h2 class='main-header'><%= @title %></h2>
 	<%- form_for [@campaign, @outgoing_message], :html => {:class => 'create_outgoing_message'} do |f|  %>
   
 	  <%- if @outgoing_message.errors.on('recipient') %>

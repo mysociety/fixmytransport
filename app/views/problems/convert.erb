@@ -5,22 +5,22 @@
 	<h2 class="font-1"><%= t('problems.convert.subheader') %></h2>
 	<p class="font-1"><%= raw t('problems.convert.intro')%></p>
     <div class="left">
-      <a href="?convert=no" class="button red font-1"><%= t('problems.convert.no_thanks')%></a>
-      <p><%= raw t('problems.convert.no_explanation')%></p>
-      <ul>
-        <li><%= t('problems.convert.makes_report_page')%></li>
-        <li><%= t('problems.convert.reply_goes_to_you')%></li>
-      </ul>
-    </div>
-	<span class="middle font-1"><%= t('problems.convert.or')%></span>
-    <div class="right">
       <a href="?convert=yes" class="button green font-1"><%= t('problems.convert.start_campaign') %></a>
-      <p><%= raw t('problems.convert.yes_explanation') %></p>
+      <p class="convert-explanation"><%= raw t('problems.convert.yes_explanation') %></p>
       <ul>
         <li><%= t('problems.convert.makes_support_page')%></li>
         <li><%= t('problems.convert.replies_appear_on_page')%></li>
         <li><%= t('problems.convert.get_advice_from_transport_experts')%></li>
         <li><%= t('problems.convert.tools_for_spreading_the_word')%></li>
+      </ul>
+    </div>
+	<span class="middle font-1"><%= t('problems.convert.or')%></span>
+    <div class="right">
+      <a href="?convert=no" class="button red font-1"><%= t('problems.convert.no_thanks')%></a>
+      <p class="convert-explanation"><%= raw t('problems.convert.no_explanation')%></p>
+      <ul>
+        <li><%= t('problems.convert.makes_report_page')%></li>
+        <li><%= t('problems.convert.reply_goes_to_you')%></li>
       </ul>
     </div>
   </div>

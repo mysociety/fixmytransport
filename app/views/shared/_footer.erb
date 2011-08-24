@@ -1,5 +1,16 @@
 <div id="footer">
 	<div class="container">
+	    <div class="mobile-only">
+    	    <ul id="mob-footer-nav">
+    			<li><a href="<%= about_url %>"><%= t('shared.header.about') %></a></li>
+    			<li><a href="<%= feedback_url(:url => CGI.escape(request.request_uri)) %>"><%= t('shared.header.feedback') %></a></li>
+					<%- if current_user %>
+  				<li><%= t('shared.footer.logged_in_as')%>: <a href="<%= profile_path(current_user) %>"><%= current_user.name %></a></li> <li><a href="<%= logout_path(:redirect => request.request_uri) %>"><%= t('shared.login.sign_out')%></a></li>
+  				<%- else %>
+  				<li><a href="<%= login_path(:redirect => request.request_uri) %>" rel="nofollow"><%= t('shared.login.sign_in')%></a></li>
+  				<%- end %>
+    		</ul>
+    	</div>
 		<p><%= raw t('shared.footer.built_by', :mysociety_link => link_to('mySociety', 'http://mysociety.org'), :indigo_link => link_to('Indigo Trust', 'http://indigotrust.wordpress.com/'), :donor_link => link_to(t('shared.footer.small_donors'), 'http://mysociety.org/donate'), :esmee_link => link_to('Esmée Fairbairn Foundation', 'http://www.esmeefairbairn.org.uk'), :omidyar_link => link_to("Omidyar Network", 'http://www.omidyar.com/')) %></p>
 		<p><%= raw t('shared.footer.dedicated_to', :link => link_to('Angie Martin', 'http://www.mysociety.org/2009/07/20/rip-angie-ahl-1974-2009/')) %>
 		</p>

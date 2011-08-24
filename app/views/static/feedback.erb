@@ -1,11 +1,26 @@
+<div id="banner">
+    <a id="home" href="/">FixMyTransport</a>
+	<div class="container">
+		<h1><%= @title %></h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+
+  <p>
+   <%- if @operator %>
+   <%= raw t('static.feedback.operator_feedback', :operator => @operator.name) %>
+   <%- elsif @location %>
+   <%= raw t('static.feedback.location_feedback', :location => name_in_sentence(@location)) %>
+   <%- else %>
+  	<%= raw t('static.feedback.please_give_feedback', :email => mail_to(@email)) %>
+  	<%- end %>
+	</p>
+	</div>
+</div>
+
 <div id="main-content" class="container">
-  <%- if @operator %>
-  <%= raw t('static.feedback.operator_feedback', :operator => @operator.name) %>
-  <%- elsif @location %>
-  <%= raw t('static.feedback.location_feedback', :location => name_in_sentence(@location)) %>
-  <%- else %>
-	<%= raw t('static.feedback.please_give_feedback', :email => mail_to(@email)) %>
-	<%- end %>
+ 
 	<div class='feedback-form'>
 	  <%- form_for(@feedback, :url => feedback_path) do |form|  %>
 	    <div class='fieldset'>
@@ -72,7 +87,7 @@
 
 	      </div>
 
-		  <button type="submit"><%= t('static.feedback.send') %></button>
+		  <button class="button" type="submit"><%= t('static.feedback.send') %></button>
 
 	    </div>
 	  <%- end %>

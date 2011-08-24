@@ -1,0 +1,11 @@
+<%= render :partial => 'js_campaign_data' %>
+<div id="banner">
+  <a id="home" href="/">FixMyTransport</a>
+  <div class="container">
+    <h1><%= t('campaigns.show.facebook') %></h1>
+  </div>
+</div>
+<div id="share-by-facebook" class="container">
+  <%= render :partial => 'shared/facebook', :locals => { :width => "240" } %>
+  <a class="button" href="<%= campaign_url(@campaign) %>"><%= t('campaigns.show.back') %></a>
+</div>

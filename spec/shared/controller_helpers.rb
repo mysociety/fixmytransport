@@ -4,11 +4,11 @@ module SharedBehaviours
     
     shared_examples_for "add_comment when an invalid comment has been submitted" do
 
-      describe 'when handling a request asking for json' do 
+      describe 'when handling a request asking for HTML' do 
 
         it 'should render the "add_comment" template' do 
           make_request(default_params)
-          response.should render_template("add_comment")
+          response.should render_template("shared/add_comment")
         end
 
       end

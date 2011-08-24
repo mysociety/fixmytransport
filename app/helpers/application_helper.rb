@@ -30,7 +30,7 @@ module ApplicationHelper
   end
 
   def main_js_link
-    javascript_include_tag('fixmytransport', 'application', 'fb', :charset => 'utf-8', :cache => 'main')
+    javascript_include_tag('fixmytransport', 'fb', :charset => 'utf-8', :cache => 'main')
   end
 
   # options:
@@ -488,10 +488,6 @@ module ApplicationHelper
                        :text => text,
                        :via => 'FixMyTransport' }
     return "http://twitter.com/share?#{twitter_params.to_query}"
-  end
-
-  def facebook_url(campaign)
-    "http://www.facebook.com"
   end
 
   def facebook_description(campaign, user)

@@ -26,6 +26,7 @@ ActionController::Routing::Routes.draw do |map|
                                          :get_supporters => [:get],
                                          :complete => [:post],
                                          :add_photos => [:get, :post],
+                                         :facebook => [:get],
                                          :add_details => [:get, :post],
                                          :share => [:get] } do |campaign|
     campaign.resources :incoming_messages, :only => [:show]
