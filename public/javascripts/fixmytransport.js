@@ -286,6 +286,7 @@ $(document).ready(function(){
           'You cancelled this time...<br/>but please do spread the word about this campaign.<br/>').appendTo(element_selector);
     }
     if ($(window).width() > 600) {
+      $('#fb-share').show();
       $("#login-box").dialog({title: "Facebook"});
       $("#login-box").dialog("open");
       $(element_selector).fadeIn();
