@@ -271,7 +271,7 @@ $(document).ready(function(){
         name:    'FixMyTransport campaign: ' + campaign_data.title,
         link:    campaign_data.url,
         picture: document.location.protocol + '//' + document.location.host + '/images/facebook-feed-logo.gif',
-        description: campaign_data.facebook_description,
+        description: campaign_data.facebook_description
     };
     // Let FB know device type
     if ($(window).width() <= 600) {
