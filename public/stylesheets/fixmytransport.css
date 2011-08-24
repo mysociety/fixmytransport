@@ -800,7 +800,7 @@ ul.user-list {
 }
 
 
-#main-content #new_outgoing_message button, 
+#main-content #new_outgoing_message button,
 #main-content .password_reset_email button {
     float: right;
 }
@@ -2087,7 +2087,7 @@ body.facebook-canvas .button {
 
 /*===[ Share by email ]===*/
 #share-by-email #email-instructions {
- color: #333; 
+ color: #333;
 }
 
 /*===[ Share by Facebook ]===*/
@@ -2205,13 +2205,13 @@ body.facebook-canvas .button {
           color: #FFFFFF;
           padding: 10px 0 10px 28px;
       }
-      
+
       #site-name {
           background: url('/images/mobile-logo.png') no-repeat scroll 4px center #048FC2;
           position: relative;
           color: #FFFFFF;
       }
-      
+
 			#top {
 			  display: none;
 			}
@@ -2224,7 +2224,7 @@ body.facebook-canvas .button {
       	margin-bottom: 0.2em;
         padding: 1px 0;
       }
-      
+
       #banner #home
       {
         display: block;
@@ -2742,33 +2742,34 @@ body.facebook-canvas .button {
     /* ===[ Browse issues]=== */
     #browse-map {
 	    width: 100%;
-	    margin: 0.2em 0 0 0;
+	    margin: 0.2em 0;
 	  }
 
-    #wrapper {
-/*      position: relative;*/
-    }
     .browse-map-container {
       display: table;
+      margin: 0;
+      padding: 0;
       caption-side: top;
     }
 	  #browse-map #map{
       width: 100%;
       height: 300px;
     }
+
     .mediumnarrowcol {
       width: 100%;
-      margin: 0;
     }
+
     .mediumwidecol {
-      width: 100%;
+      width: 98%;
       display: table-caption;
       margin: 0;
-      padding: 0.2em 0 0 0; 
+      padding: 0.2em 1% 0 1%;
     }
     ul#browse-issues-list li.problem .wrapper {
       width: 100%;
     }
+
     /* ===[ Feedback ]=== */
  	  .feedback-form input, .feedback-form textarea {
 		  width: 96%;
@@ -2851,7 +2852,7 @@ body.facebook-canvas .button {
 
     .campaign-content div {
     }
-    
+
     #main-content.campaign-content .rightcol {
         display: table-caption;
         margin: 0;
@@ -2868,20 +2869,20 @@ body.facebook-canvas .button {
         margin: 0.5em auto 0.25em auto;
         display: block; /* otherwise: inline-block, which doesn't center */
     }
-    
+
     /* Campaign thread */
     #main-content.campaign-content #campaign-thread span.date {
         display: block;
         margin-top: 0;
     }
-    
+
     #main-content.campaign-content #campaign-thread span.close {
         display: block;
         position: absolute;
         top: 0;
         right: 0;
     }
-    
+
     ul#campaign-thread li.open .thread-details .thread-furniture {
         margin: 0 3% 10px 0;
         width: auto;
@@ -2890,11 +2891,11 @@ body.facebook-canvas .button {
     .thumb img {
       width: 100%;
     }
-    
+
     ul#campaign-thread li.open .thread-details .thread-copy, ul#campaign-thread li.open .thread-details .thread-alternative-copy {
         margin: 0 0 10px 3%;
     }
-    
+
     ul#campaign-thread li  {
 		    clear: both;
 		    position: relative; /* container for absolute positioned class='close' widgets */
@@ -2911,9 +2912,9 @@ body.facebook-canvas .button {
       margin: 10px 0 0;
       white-space: normal;
 		}
-    
+
     .ribbon {
-        
+
       font-size: 0.9em;
       font-weight:bolder;
       background: #9bce24;
@@ -2934,22 +2935,22 @@ body.facebook-canvas .button {
           -webkit-border-radius: 3px;
         text-shadow:0 1px 1px rgba(100, 100, 100, 0.3);
     }
-    
+
     .right .campaign-options {
         margin-top: 0;
         float: right;
     }
-  
-    form#campaign-unsubscribe.edit_campaign button, 
+
+    form#campaign-unsubscribe.edit_campaign button,
     form#campaign-leave.edit_campaign button {
       padding: 0.2em;
       font-size: 0.9em;
     }
-    
+
     #main-content.campaign-content #notice-container {
       display:none;
     }
-    
+
     #main-content.campaign-content .contacts .button {
         font-size: 0.9em;
         margin: 0.2em auto;
@@ -2957,17 +2958,17 @@ body.facebook-canvas .button {
         float: right !important;
         width: auto;
     }
-    
+
     .manager-tools h2 {
         padding: 0 0.2em;
     }
-    
+
     .manager-tools .actions li {
         float: left;
         margin-bottom: 1em;
         width: 100%;
     }
-    
+
     .manager-tools .share-update input {
         width: 95%;
     }
@@ -2980,31 +2981,31 @@ body.facebook-canvas .button {
       margin-top: 0;
       left: 0;
     }
-    
+
     .manager-tools, .contrib-tools, .expert-tools, .contrib-tools-initial {
         margin-bottom: 1em;
     }
-    
+
     .contrib-tools a, .contrib-tools-initial a {
         margin: auto;
         text-align: center;
         width: 33%;
     }
-		
+
 		.supporter-notice {
         margin: 0.5em;
         padding: 0 0.5em;
         width: auto;
     }
-    
+
 		.supporter-notice h1 {
       font-size: 1.2em;
     }
-    
+
     .container-wide {
         width: auto;
     }
-    
+
     .supporter-notice-arrow {
       display:none;
       background: none;
@@ -3013,10 +3014,10 @@ body.facebook-canvas .button {
     #share-by-facebook {
       min-width: 425px;
     }
-    
+
     /*===[ Route region indexes/Operator pages ]=== */
-    
-    .has-tabs #tabs-main-nav li#route-tab, 
+
+    .has-tabs #tabs-main-nav li#route-tab,
     .has-tabs #tabs-main-nav li#area-tab {
         margin-right: 4px;
     }
@@ -3032,7 +3033,7 @@ body.facebook-canvas .button {
     }
 
     /*===[Share by email]=== */
-    #share-by-email textarea, 
+    #share-by-email textarea,
     #share-by-email button{
       width: 96%;
     }
