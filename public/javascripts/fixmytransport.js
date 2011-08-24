@@ -271,9 +271,7 @@ $(document).ready(function(){
         name:    'FixMyTransport campaign: ' + campaign_data.title,
         link:    campaign_data.url,
         picture: document.location.protocol + '//' + document.location.host + '/images/facebook-feed-logo.gif',
-        caption: campaign_data.description,
         description: campaign_data.facebook_description,
-        message: campaign_data.facebook_message, 
     };
     // Let FB know device type
     if ($(window).width() <= 600) {
@@ -307,6 +305,8 @@ $(document).ready(function(){
     e.preventDefault();
     var ui_params = facebook_dialog_default_params();
     ui_params['method'] = 'feed';
+    ui_params['caption'] = campaign_data.description;
+    ui_params['message'] = campaign_data.facebook_message;
     FB.ui(ui_params, function(response) { facebook_response(response, '#post-message'); });
     return false;
   });
@@ -315,7 +315,7 @@ $(document).ready(function(){
     e.preventDefault();
     var ui_params = facebook_dialog_default_params();
     ui_params['method'] = 'send';
-    FB.ui(ui_params, function(response) { facebook_response(response, '#send-message'); });
+    FB.ui(ui_params);
     return false;
   });
 
