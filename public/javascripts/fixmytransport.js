@@ -679,8 +679,8 @@ $(document).ready(function(){
 
   /* Ellipsis in campaign thread
   ================================================== */
-  if ($('ul#campaign-thread li a.thread-item span.title').length > 0 && $(window).width() > 600){
-   $("ul#campaign-thread li a.thread-item span.title").ellipsis();
+  if ($('.campaign-content ul#campaign-thread li a.thread-item span.title').length > 0 && $(window).width() > 600){
+   $(".campaign-content ul#campaign-thread li a.thread-item span.title").ellipsis();
   }
 
   /* Email quoting folding and unfolding
