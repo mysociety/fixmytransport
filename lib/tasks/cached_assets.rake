@@ -17,7 +17,7 @@ namespace :cached_assets do
       path = "#{css_dir}#{basename}.css"
       system("rm #{path}") if (File.exist?(path))
     end
-    stylesheet_link_tag('core', 'fixmytransport', 'map', 'buttons', :cache => 'main')
+    stylesheet_link_tag('core', 'map', 'buttons', 'ui-tabs-mod', 'fixmytransport', :cache => 'main')
     library_js_link
     admin_library_js_link
     main_js_link
