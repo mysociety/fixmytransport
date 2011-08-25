@@ -25,6 +25,6 @@
   <%= render :partial => 'shared/footer' %>
 	<%= yield :javascript %>
 	<%= raw main_js_link %>
-	<!--[if lte IE 8]><%= raw javascript_include_tag('ie', :charset => 'utf-8') %><![endif]-->
+	<!--[if lte IE 8]><%= raw javascript_include_tag('ie.min', :charset => 'utf-8') %><![endif]-->
 	<%= render :partial => 'shared/tracking' %>
 </body>

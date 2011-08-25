@@ -19,9 +19,9 @@
     <%= csrf_meta_tag %>
     <%= raw main_style_link %>
 
-	<!--[if lte IE 7]><%= raw stylesheet_link_tag('ie67') %><![endif]-->
+	<!--[if lte IE 7]><%= raw stylesheet_link_tag('ie67.min') %><![endif]-->
 
-	<!--[if lte IE 8]><%= raw stylesheet_link_tag('ie678') %><![endif]-->
+	<!--[if lte IE 8]><%= raw stylesheet_link_tag('ie678.min') %><![endif]-->
 
     <%= yield :stylesheets %>
     <%= raw library_js_link %>
@@ -29,7 +29,7 @@
       var fmt_facebook_app_id = '<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>';
     </script>
 	<noscript>
-		<%= raw stylesheet_link_tag('no-js', :cache => 'no-js') %>
+		<%= raw stylesheet_link_tag('no-js.min', :cache => 'no-js.min') %>
 	</noscript>
   </head>
 	<body <%-if @body_class %>class="<%= @body_class %>"<%- end %>>
