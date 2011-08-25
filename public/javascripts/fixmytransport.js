@@ -737,7 +737,7 @@ $(document).ready(function(){
       dataType: 'html',
       success: function(country_code){
         if (country_code != 'GB'){
-          $('#other-country-notice').html("Hola! Bonjour! Howdy! We have an <a href='advice'>important message for visitors from outside the United Kingdom </a>");
+          $('#other-country-notice').html("Hola! Bonjour! Howdy! We have an <a href='advice'>important message for visitors from outside Great Britain </a>");
           $('#conditional-notice').show();
         }
       }
