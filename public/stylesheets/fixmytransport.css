@@ -582,11 +582,6 @@ ul.user-list {
 		color:#ccc;
 		font-weight: normal;
 	}
-	#login-form {
-		width: 270px;
-		float: left;
-		display: inline;
-	}
 	#create-account-form {
 		width: 250px;
 		float: left;
@@ -619,7 +614,9 @@ ul.user-list {
 		-webkit-border-radius:5px;
 	}
 		#login-form {
-			padding: 10px 20px 0px 10px;
+		  float: left;
+  		display: inline;
+			padding: 10px 20px 5px 10px;
 			width: 250px;
 			background:#ffffff;
 		}
