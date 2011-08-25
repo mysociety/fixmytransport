@@ -719,15 +719,6 @@ $(document).ready(function(){
     });
   });
 
-	/* Fancy buttons - :active and IE don't play nice so lets do it js
-	    ================================================== */
-	$('.fancybutton').mousedown(function(){
-		$(this).addClass('mousedown');
-	}).mouseup(function(){
-		$(this).removeClass('mousedown');
-	}).mouseout(function(){
-		$(this).removeClass('mousedown');
-	});
 
 	/* Banner for people coming from other countries
 	   ============================================== */
