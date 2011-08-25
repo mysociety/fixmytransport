@@ -2981,6 +2981,9 @@ body.facebook-canvas .button {
       margin-top: 0;
       left: 0;
     }
+    .manager-tools .recommended-actions li {
+        width: 100%;
+    }
 
     .manager-tools, .contrib-tools, .expert-tools, .contrib-tools-initial {
         margin-bottom: 1em;
