@@ -13,7 +13,6 @@ class ApplicationController < ActionController::Base
   before_filter :redirect_asset_host_requests,
                 :make_cachable,
                 :check_mobile_domain,
-                :get_device_from_user_agent,
                 :require_beta_password
 
   helper_method :location_search,
