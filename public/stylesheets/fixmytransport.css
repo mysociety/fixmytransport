@@ -584,11 +584,15 @@ ul.user-list {
 	}
 	#create-account-form {
 		width: 250px;
+    margin-bottom: 0.5em;
 		float: left;
 		display: inline;
 	}
 	#create-account-form input {
 	  width: 230px;
+	}
+	#create-account-privacy {
+	  margin: 0.5em 0;
 	}
 	#static-login-box #login-form {
 		margin-left:180px;

@@ -57,6 +57,7 @@
     </div>
     
 	<button class="button" type="submit"><%= t('shared.login_form.create_account') %></button>
+	 
   </div>
 <%- end %>
 <div class="login-options">
@@ -65,5 +66,13 @@
     <%- if ! MySociety::Config.get('FACEBOOK_APP_ID','').empty? %>
 	    <p><%= t('shared.login_form.create_sign_in_with_facebook') %></p>
 	    <a href="#" class="facebook-login"><%= t('shared.login_form.facebook_connect') %></a>
+      <div id="create-account-privacy">
+      <div>
+    	   <a href="/about#privacy" target="_blank" title="Privacy policy (opens in new window)">Privacy policy</a>
+       </div>
+       <div>
+        <a href="http://www.mysociety.org/privacy-online/" target="_blank" title="Guide to privacy online (opens in new window)">Guide to privacy online</a>
+       </div>
+       </div>
 	<%- end %>
 </div>
