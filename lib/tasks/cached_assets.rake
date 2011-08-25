@@ -37,13 +37,13 @@ namespace :cached_assets do
       puts "No YUI_COMPRESSOR_JAR config parameter, exiting."
       exit(0)
     end
-    js_files = ['map', 'fixmytransport', 'fb']
+    js_files = ['map', 'fixmytransport', 'fb', 'ie']
     js_files.each do |basename|
       asset_filename = "#{js_dir}#{basename}.js"
       minified_filename = "#{js_dir}#{basename}.min.js"
       system("java -jar #{compressor_jar} --type js -o #{minified_filename} #{asset_filename}")
     end
-    css_files = ['core', 'map', 'buttons', 'ui-tabs-mod', 'fixmytransport']
+    css_files = ['core', 'map', 'buttons', 'ui-tabs-mod', 'fixmytransport', 'ie67', 'ie678', 'no-js']
     css_files.each do |basename|
       asset_filename = "#{css_dir}#{basename}.css"
       minified_filename = "#{css_dir}#{basename}.min.css"
