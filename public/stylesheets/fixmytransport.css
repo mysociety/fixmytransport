@@ -2132,14 +2132,7 @@ body.facebook-canvas .button {
 			body {
 				min-width: 100px;
 			}
-			#yellowbanner {
-				width: auto;
-				margin-top: 0;
-				border-left: none;
-				border-right: none;
-				margin-left: 0;
-				margin-right: 0;
-			}
+
 			.campaign-description {
 				width: 100%;
 			}
@@ -2179,7 +2172,8 @@ body.facebook-canvas .button {
 
 			.leftcol-banner {
 				float: none;
-				width: 95%;
+				margin: 0 auto;
+				width: 100%;
 				font-size: 1em;
 			}
 			.leftcol {
@@ -2841,6 +2835,22 @@ body.facebook-canvas .button {
     }
 
     /* ==[ Campaign page]=== */
+
+    #yellowbanner {
+      width: auto;
+      border: 0;
+      margin-top: 0;
+      -webkit-box-shadow: none;
+      -moz-box-shadow:none;
+      box-shadow: none;
+      border: 2px solid #FFD45A
+		}
+		
+		#yellowbanner .rightcol {
+		  margin: 0;
+		  width: 100%;
+		}
+
     #campaign-manager {
         display: none; /* can get this info by clicking on icon/name in Description */
     }
@@ -2848,14 +2858,21 @@ body.facebook-canvas .button {
     #main-content.campaign-content {
         display: table;
         caption-side: top;
+        margin: 0;
+        padding-top: 0;
+        width: 100%;
+      position: relative;
     }
 
-    .campaign-content div {
+    #main-content.campaign-content .leftcol {
+        width: 96%;
+        margin: 0 auto;
+        padding: 0;
     }
-
     #main-content.campaign-content .rightcol {
         display: table-caption;
-        margin: 0;
+        margin: 0 auto;
+        width: 96%;
     }
 
     #main-content.campaign-content #map-container {
@@ -2958,6 +2975,7 @@ body.facebook-canvas .button {
         float: right !important;
         width: auto;
     }
+    
 
     .manager-tools h2 {
         padding: 0 0.2em;
