@@ -20,7 +20,6 @@ module ActionView
           end
         
           def asset_file_path(path)
-            asset_id = rails_asset_id(source)
             if !asset_id.blank?
               path = path.gsub(/^\/rel-\d+/, '')
             end 
