@@ -756,15 +756,16 @@ window.fbAsyncInit = function() {
 	// fmt_facebook_app_id declared in layouts/application.erb
     FB.init({appId: fmt_facebook_app_id,
              status: false,
-             cookie: true,
+             cookie: false,
              xfbml: true,
              channelUrl: window.location.protocol + "//" + window.location.host + '/channel.html' });
-    FB.getLoginStatus(function(response) {
-      if (response.session && response.status && response.status == 'connected') {
-        $('.facebook-login').unbind('click');
-        $('.facebook-login').click(function(){ facebookLogin(response) });
-      }
-    });
+      // If someone's already logged in, don't want to show the login popup.
+     FB.getLoginStatus(function(response) {
+       if (response.session && response.status && response.status == 'connected') {
+         $('.facebook-login').unbind('click');
+         $('.facebook-login').click(function(){ facebookLogin(response) });
+       }
+     });
 };
 (function() {
     var e = document.createElement('script'); e.async = true;
