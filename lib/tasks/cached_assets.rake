@@ -8,7 +8,7 @@ namespace :cached_assets do
     "#{RAILS_ROOT}/public/javascripts/"
   end
   
-  desc "Regenerate aggregate/cached files"
+  desc "Delete aggregate/cached files"
   task :regenerate => :environment do
     include ActionView::Helpers::TagHelper
     include ActionView::Helpers::UrlHelper
@@ -24,10 +24,6 @@ namespace :cached_assets do
       path = "#{css_dir}#{basename}.css"
       system("rm #{path}") if (File.exist?(path))
     end
-    main_style_link
-    library_js_link
-    admin_library_js_link
-    main_js_link
   end
   
   desc 'Minify asset files'
