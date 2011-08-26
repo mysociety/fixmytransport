@@ -20,9 +20,7 @@ module ActionView
           end
         
           def asset_file_path(path)
-            if !asset_id.blank?
-              path = path.gsub(/^\/rel-\d+/, '')
-            end 
+            path = path.gsub(/^\/rel-\d+/, '')
             file_path = File.join(ASSETS_DIR, path.split('?').first)
           end
         end
