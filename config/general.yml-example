@@ -21,6 +21,9 @@ STAGING_SITE: 1
 DOMAIN: '127.0.0.1:3000'
 # set up an asset host with wildcards
 ASSET_HOST: '127.0.0.1:3000'
+
+# Add a timestamped directory into asset paths as well as a querystring (requires webserver rewrite rule)
+USE_VERSIONED_ASSET_PATHS: 0
 # mobile domain 
 MOBILE_DOMAIN: '' 
 
