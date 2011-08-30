@@ -86,21 +86,21 @@ describe User do
         ['anon', 'anonymous', 'anonymos', 'anonymously'].each do |anon_variant|
           @user.name = anon_variant
           @user.valid?.should be_false
-          @user.errors.on(:name).should == "Please enter your full name. See our <a href='/about#names'>policy on names</a>."
+          @user.errors.on(:name).should == "Please enter your full name. See our <a href='/about#names' target='_blank'>policy on names</a>."
         end
       end
 
       it 'should add an error if the name is less than 5 characters' do
         @user.name = 'A B'
         @user.valid?.should be_false
-        @user.errors.on(:name).should == "Please enter your full name. See our <a href='/about#names'>policy on names</a>."
+        @user.errors.on(:name).should == "Please enter your full name. See our <a href='/about#names' target='_blank'>policy on names</a>."
       end
 
       it 'should add an error if the name does not have a non space, followed by a space, followed by a non space' do
         ['Firstname ', ' Lastname'].each do |no_space|
           @user.name = no_space
           @user.valid?.should be_false
-          @user.errors.on(:name).should == "Please enter your full name. See our <a href='/about#names'>policy on names</a>."
+          @user.errors.on(:name).should == "Please enter your full name. See our <a href='/about#names' target='_blank'>policy on names</a>."
         end
       end
 
@@ -116,7 +116,7 @@ describe User do
       it 'should add an error in the name is less than 5 characters' do
         @user.name = 'A B'
         @user.valid?.should be_false
-        @user.errors.on(:name).should == "Please enter your full name. See our <a href='/about#names'>policy on names</a>."
+        @user.errors.on(:name).should == "Please enter your full name. See our <a href='/about#names' target='_blank'>policy on names</a>."
       end
 
     end
