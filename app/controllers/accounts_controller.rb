@@ -113,45 +113,47 @@ class AccountsController < ApplicationController
   end
 
   def confirm
-    # if the account has a password, set the user as registered, save
-    if !@account_user.crypted_password.blank?
-      @account_user.registered = true
-      @account_user.confirmed_password = true
-      @account_user.save_without_session_maintenance
-      flash[:notice] = t('accounts.confirm.successfully_confirmed_account')
-    else
-      flash[:notice] = t('accounts.confirm.logged_in_set_password')
-      session[:return_to] = edit_account_url
-    end
-    # log in the user.
-    UserSession.login_by_confirmation(@account_user)
-    if @account_user.post_login_action
-      case @account_user.post_login_action.to_sym
-      when :join_campaign
-        campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
-        if campaign_supporter
-          campaign_supporter.confirm!
-          session[:return_to] = campaign_path(campaign_supporter.campaign)
-          flash[:notice] = t('accounts.confirm.successfully_confirmed_support')
-        end
-      when :add_comment
-        comment = Comment.find_by_token(params[:email_token])
-        if comment
-          comment.confirm!
-          session[:return_to] = @template.commented_url(comment.commented)
-          flash[:notice] = t('accounts.confirm.successfully_confirmed_comment')
-        end
-      when :create_problem
-        problem = Problem.find_by_token(params[:email_token])
-        if problem
-          session[:return_to] = convert_problem_url(problem)
-          flash[:notice] = t('accounts.confirm.successfully_confirmed_problem')
-        end
+    if request.post?
+      # if the account has a password, set the user as registered, save
+      if !@account_user.crypted_password.blank?
+        @account_user.registered = true
+        @account_user.confirmed_password = true
+        @account_user.save_without_session_maintenance
+        flash[:notice] = t('accounts.confirm.successfully_confirmed_account')
+      else
+        flash[:notice] = t('accounts.confirm.logged_in_set_password')
+        session[:return_to] = edit_account_url
       end
-      @account_user.post_login_action = nil
-      @account_user.save_without_session_maintenance
+      # log in the user.
+      UserSession.login_by_confirmation(@account_user)
+      if @account_user.post_login_action
+        case @account_user.post_login_action.to_sym
+        when :join_campaign
+          campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
+          if campaign_supporter
+            campaign_supporter.confirm!
+            session[:return_to] = campaign_path(campaign_supporter.campaign)
+            flash[:notice] = t('accounts.confirm.successfully_confirmed_support')
+          end
+        when :add_comment
+          comment = Comment.find_by_token(params[:email_token])
+          if comment
+            comment.confirm!
+            session[:return_to] = @template.commented_url(comment.commented)
+            flash[:notice] = t('accounts.confirm.successfully_confirmed_comment')
+          end
+        when :create_problem
+          problem = Problem.find_by_token(params[:email_token])
+          if problem
+            session[:return_to] = convert_problem_url(problem)
+            flash[:notice] = t('accounts.confirm.successfully_confirmed_problem')
+          end
+        end
+        @account_user.post_login_action = nil
+        @account_user.save_without_session_maintenance
+      end
+      redirect_back_or_default root_url
     end
-    redirect_back_or_default root_url
   end
 
   private

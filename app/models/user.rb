@@ -50,7 +50,10 @@ class User < ActiveRecord::Base
   named_scope :registered, :conditions => { :registered => true }
 
   acts_as_authentic do |c|
-
+    
+    # don't reset perishable tokens automatically
+    c.disable_perishable_token_maintenance = true
+    
     # moving from SHA512 to BCrypt - remove when done
     c.crypto_provider = Authlogic::CryptoProviders::BCrypt
     c.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha512

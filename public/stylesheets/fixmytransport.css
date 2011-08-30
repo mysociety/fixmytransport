@@ -2066,6 +2066,16 @@ body.facebook-canvas .button {
   padding: 0.8em 1em;
 }
 
+/*===[ Account confirmation ]===*/
+.confirm-form {
+  width: 100%;
+  text-align: center;
+}
+
+.confirm-form button {
+  margin-top: 2em;
+}
+
 /*===[ Profile ]===*/
 .user-bio {
   display: block;

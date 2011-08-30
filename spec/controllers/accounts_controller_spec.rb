@@ -351,10 +351,31 @@ describe AccountsController do
 
   end
 
-  describe 'GET #confirm' do
+  describe "GET #confirm" do 
 
     def make_request
       get :confirm, :email_token => 'my_token'
+    end
+    
+    describe 'if the user is found using perishable token' do 
+
+      before do
+        @mock_user = mock_model(User)
+        User.stub!(:find_using_perishable_token).with('my_token', 0).and_return(@mock_user)
+      end
+      
+      it 'should show the "confirm" template' do 
+        make_request
+        response.should render_template('accounts/confirm')
+      end
+    
+    end
+  end
+
+  describe 'POST #confirm' do
+
+    def make_request
+      post :confirm, :email_token => 'my_token'
     end
     
     describe 'if a user is already logged in' do 

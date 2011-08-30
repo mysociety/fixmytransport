@@ -1,6 +1,9 @@
 en:
   accounts:
     confirm:
+      confirming_your_account: Confirming your account
+      click_to_confirm: Click the 'Confirm' button to confirm your account
+      confirm: Confirm
       successfully_confirmed_account: "You have successfully confirmed your account."
       logged_in_set_password: "You've successfully logged in. Set a password on your account to make it easier to come back."
       could_not_find_account: "We're sorry, but we could not locate your account. If you are having issues, try copying and pasting the URL from your email into your browser. If that doesn't work, use the feedback link to get in touch."
