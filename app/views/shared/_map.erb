@@ -25,43 +25,43 @@
       <%- unless static %>
       <div id="pan_up" class="map-control static-map-element" style="left: 13px; top: 4px; width: 18px; height: 18px; position: absolute;">
         <a rel="nofollow" href="<%= url_for(params.merge(:lat => Map.top(@lat, @zoom, height))) %>">
-          <img style="width: 18px; height: 18px; position: relative;" src="/javascripts/img/north-mini.png" alt="N" />
+          <%= image_tag("/javascripts/img/north-mini.png", :style => "width: 18px; height: 18px; position: relative;", :alt => 'N') %>
         </a>
       </div>
 
       <div id="pan_left" class="map-control static-map-element" style="left: 4px; top: 22px; width: 18px; height: 18px; position: absolute; ">
         <a rel="nofollow" href="<%= url_for(params.merge(:lon => Map.left(@lon, @zoom, width))) %>">
-          <img style="width: 18px; height: 18px; position: relative;" src="/javascripts/img/west-mini.png" alt="W" />
+          <%= image_tag("/javascripts/img/west-mini.png", :style => "width: 18px; height: 18px; position: relative;", :alt => 'W') %>
         </a>
       </div>
 
       <div id="pan_right" class="map-control static-map-element" style="left: 22px; top: 22px; width: 18px; height: 18px; position: absolute; ">
         <a rel="nofollow" href="<%= url_for(params.merge(:lon => Map.right(@lon, @zoom, width))) %>">
-          <img style="width: 18px; height: 18px; position: relative;" src="/javascripts/img/east-mini.png" alt="E" />
+          <%= image_tag("/javascripts/img/east-mini.png", :style => "width: 18px; height: 18px; position: relative;", :alt => 'E') %>
         </a>
       </div>
 
       <div id="pan_down" class="map-control static-map-element" style="left: 13px; top: 40px; width: 18px; height: 18px; position: absolute;">
         <a rel="nofollow" href="<%= url_for(params.merge(:lat => Map.bottom(@lat, @zoom, height))) %>">
-          <img style="width: 18px; height: 18px; position: relative;" src="/javascripts/img/south-mini.png" alt="S" />
+        <%= image_tag("/javascripts/img/south-mini.png", :style => "width: 18px; height: 18px; position: relative;", :alt => 'S') %>
         </a>
       </div>
 
       <div id="zoom_in" class="map-control static-map-element" style="left: 13px; top: 63px; width: 18px; height: 18px; position: absolute;">
         <a rel="nofollow" href="<%= url_for(params.merge(:zoom => Map.zoom_in(@zoom))) %>">
-          <img style="width: 18px; height: 18px; position: relative;" src="/javascripts/img/zoom-plus-mini.png" alt="zoom in" />
+          <%= image_tag("/javascripts/img/zoom-plus-mini.png", :style => "width: 18px; height: 18px; position: relative;", :alt => 'zoom in') %>
         </a>
       </div>
 
       <div id="zoom_world" class="map-control static-map-element" style="left: 13px; top: 81px; width: 18px; height: 18px; position: absolute;">
         <a rel="nofollow" href="<%= url_for(params.merge(:zoom => nil, :lat => nil, :lon => nil)) %>">
-          <img style="width: 18px; height: 18px; position: relative;" src="/javascripts/img/zoom-world-mini.png" alt="reset map"/>
+          <%= image_tag("/javascripts/img/zoom-world-mini.png", :style => "width: 18px; height: 18px; position: relative;", :alt => 'reset map') %>
         </a>
       </div>
 
       <div id="zoom_out" class="map-control static-map-element" style="left: 13px; top: 99px; width: 18px; height: 18px; position: absolute; ">
         <a rel="nofollow" href="<%= url_for(params.merge(:zoom => Map.zoom_out(@zoom))) %>">
-          <img style="width: 18px; height: 18px; position: relative;" src="/javascripts/img/zoom-minus-mini.png" alt="zoom out" />
+          <%= image_tag("/javascripts/img/zoom-minus-mini.png", :style => "width: 18px; height: 18px; position: relative;", :alt => 'zoom out') %>
         </a>
       </div>
       <%- end %>
