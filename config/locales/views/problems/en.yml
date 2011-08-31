@@ -87,6 +87,7 @@ en:
       area_not_found: "We couldn't find a town, area or postcode that matches what you entered."
       go: "Go"
       postcode_not_found: "That postcode wasn't recognised. Please modify it and try again!"
+      postcode_area_not_known: "Sorry, we don't know the location of that postcode. Please try another."
       instructions: "Enter an area, town or postcode"
       where_is_it: "Where is it?"
       too_big: "Sorry, that's too big an area to show all the bus stops and stations for. Please choose something more specific."

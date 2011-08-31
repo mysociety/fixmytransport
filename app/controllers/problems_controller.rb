@@ -315,7 +315,11 @@ class ProblemsController < ApplicationController
         postcode_info = stop_info[:postcode_info]
         if postcode_info[:error]
           location_search.fail
-          @error_message = t('problems.find_stop.postcode_not_found')
+          if postcode_info[:error] == :area_not_known
+            @error_message = t('problems.find_stop.postcode_area_not_known')
+          else
+            @error_message = t('problems.find_stop.postcode_not_found')
+          end
           render options[:find_template]
           return
         else

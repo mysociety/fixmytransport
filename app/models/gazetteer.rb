@@ -30,9 +30,13 @@ class Gazetteer
     coord_info = self.coords_from_postcode(name)
     if ![:not_found, :bad_request, :not_postcode].include?(coord_info)
       zoom = MySociety::Validate.is_valid_postcode(name) ? MAX_VISIBLE_ZOOM : MAX_VISIBLE_ZOOM - 1
+      if coord_info['wgs84_lat'] && coord_info['wgs84_lon']
       return { :postcode_info => {:lat => coord_info['wgs84_lat'],
                                   :lon => coord_info['wgs84_lon'],
                                   :zoom => zoom }}
+      else
+        return { :postcode_info => {:error => :area_not_known }}
+      end                            
     elsif [:not_found, :bad_request].include?(coord_info)
       return { :postcode_info => {:error => coord_info }}
     end
@@ -120,7 +124,7 @@ class Gazetteer
       area = area.strip
       # area is postcode
       coord_info = self.coords_from_postcode(area)
-      if coord_info == :not_found or coord_info == :bad_request
+      if coord_info == :not_found or coord_info == :bad_request or !coord_info['easting']
         error = :postcode_not_found
       elsif coord_info == :not_postcode
         areas = Locality.find_areas_by_name(area, area_type)

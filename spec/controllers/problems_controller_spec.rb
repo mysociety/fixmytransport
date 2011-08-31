@@ -10,7 +10,7 @@ describe ProblemsController do
     end
 
     describe 'when the app gets a request on the mobile hostname' do
-      
+
       before do
         MySociety::Config.stub!(:get)
         MySociety::Config.stub!(:get).with('MOBILE_DOMAIN', '').and_return('test.host')
@@ -39,7 +39,7 @@ describe ProblemsController do
       end
 
       it 'should pass the user device to the view' do
-        pending do 
+        pending do
           make_request
           assigns[:user_device].should == 'a test device'
         end
@@ -275,6 +275,12 @@ describe ProblemsController do
         it 'should pass an appropriate error message to the template' do
           Gazetteer.stub!(:bus_route_from_route_number).and_return( { :routes => [@mock_route, @mock_route],
                                                                       :error => :postcode_not_found })
+          make_request(:route_number => 'C10', :area => 'London')
+          assigns[:error_message].should == "The postcode you entered wasn't recognised. Please modify it and try again!"
+
+
+          Gazetteer.stub!(:bus_route_from_route_number).and_return( { :routes => [@mock_route, @mock_route],
+                                                                      :error => :area_not_known })
           make_request(:route_number => 'C10', :area => 'London')
           assigns[:error_message].should == "The postcode you entered wasn't recognised. Please modify it and try again!"
         end
