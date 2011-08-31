@@ -58,7 +58,8 @@ describe CampaignMailer do
         SentEmail.stub!(:find).and_return([])
         SentEmail.stub!(:create!)
         @mock_initiator = mock_model(User, :name => 'Initiator',
-                                           :name_and_email => 'Initiator <initiator@example.com>')
+                                           :name_and_email => 'Initiator <initiator@example.com>',
+                                           :email => 'initiator@example.com')
         @mock_user = mock_model(User, :email => 'supporter@example.com',
                                       :name => 'Supporter',
                                       :name_and_email => 'Supporter <supporter@example.com>')

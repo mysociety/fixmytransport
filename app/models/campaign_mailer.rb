@@ -149,6 +149,7 @@ class CampaignMailer < ApplicationMailer
     recipients.each do |subscription, recipient|
       # don't send an email to the person who created the update or comment
       next if recipient == update_or_comment.user
+      next if recipient.email.nil?
       
       if self.dryrun
         STDERR.puts("Would send the following:")
