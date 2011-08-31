@@ -180,11 +180,13 @@ class User < ActiveRecord::Base
   def self.handle_external_auth_token(access_token, source, remember_me)
     case source
     when 'facebook'
+      success = false
       facebook_data = self.get_facebook_data(access_token)
       fb_id = facebook_data['id']
       existing_access_token = AccessToken.find(:first, :conditions => ['key = ? and token_type = ?', fb_id, source])
       if existing_access_token
         user = existing_access_token.user
+        success = true
       else
         name = facebook_data['name']
         email = facebook_data['email']
@@ -205,9 +207,13 @@ class User < ActiveRecord::Base
                                   :token_type => 'facebook',
                                   :key => fb_id,
                                   :token => access_token})
-        user.save_without_session_maintenance
+        success = user.save_without_session_maintenance
       end
-      UserSession.create(user, remember_me=remember_me)
+      if success
+        UserSession.create(user, remember_me=remember_me)
+      else
+        raise "Error in external auth. Facebook data #{facebook_data.inspect} #{user.errors.full_messages.join(",")}"
+      end
     end
   end
 

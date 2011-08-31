@@ -161,14 +161,14 @@ describe User do
     describe 'when the source is facebook' do
 
       before do
-        @mock_user = mock_model(User, :save! => true,
+        @mock_user = mock_model(User, :save_without_session_maintenance => true,
                                       :access_tokens => [],
                                       :registered= => true,
                                       :profile_photo_url= => nil,
                                       :profile_photo? => false,
-                                      :error_on_bad_profile_photo_url= => nil)
+                                      :error_on_bad_profile_photo_url= => nil,
+                                      :errors => mock('errors', :full_messages => []))
         @mock_user.access_tokens.stub!(:build).and_return(true)
-        @mock_user.stub!(:save_without_session_maintenance)
         User.stub!(:new).and_return(@mock_user)
         User.stub!(:get_facebook_data).and_return({'id' => 'myfbid',
                                                    'name' => 'Test Name',
@@ -191,6 +191,22 @@ describe User do
 
         before do
           AccessToken.stub!(:find).and_return(nil)
+        end
+
+        describe "when the facebook data does not contain enough information and the user can't be saved" do 
+        
+          before do 
+            User.stub!(:get_facebook_data).and_return({'id' => 'myfbid',
+                                                       'name' => 'Test Name',
+                                                       'email' => nil,
+                                                       'picture' => 'http://profile.example.com/mypicture.jpg'})
+            @mock_user.stub!(:save_without_session_maintenance).and_return(false)
+          end
+        
+          it 'should raise an exception' do 
+            lambda{ User.handle_external_auth_token('mytoken', 'facebook', false) }.should raise_exception()
+          end
+          
         end
 
         it 'should set the remote profile photo url' do
