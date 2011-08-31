@@ -112,6 +112,25 @@ describe StopArea do
   
   end 
   
+  describe 'when asked for a Passenger Transport Executive' do 
+    
+    before do 
+      @tfl = mock_model(PassengerTransportExecutive)
+      PassengerTransportExecutive.stub!(:find_by_name).with('Transport for London').and_return(@tfl)
+      MySociety::MaPit.stub!(:call).and_return({ 44 => {'name' => 'A council'}})
+    end  
+    
+    describe 'if its name ends with "Underground Station" and type is "GTMU"' do 
+  
+      it 'should return TfL' do 
+        @stop_area = StopArea.new(:name => 'Epping Underground Station', :area_type => 'GTMU')
+        @stop_area.passenger_transport_executive.should == @tfl
+      end
+    
+    end
+    
+  end
+  
   describe 'as a transport location' do 
     
     before do 

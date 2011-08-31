@@ -60,6 +60,10 @@ module FixMyTransport
 
       # is the location covered by a Public Transport Executive? 
       def passenger_transport_executive
+        # Some Underground stations are outside Greater London
+        if self.respond_to?(:area_type) && self.area_type == 'GTMU' && /Underground Station$/.match(self.name)
+          return PassengerTransportExecutive.find_by_name('Transport for London')
+        end
         self.councils.each do |council|
           if pte_area = PassengerTransportExecutiveArea.find_by_area_id(council.id)
             return pte_area.pte
