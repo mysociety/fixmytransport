@@ -124,13 +124,15 @@ class Gazetteer
       area = area.strip
       # area is postcode
       coord_info = self.coords_from_postcode(area)
-      if coord_info == :not_found or coord_info == :bad_request or !coord_info['easting']
+      if coord_info == :not_found or coord_info == :bad_request 
         error = :postcode_not_found
       elsif coord_info == :not_postcode
         areas = Locality.find_areas_by_name(area, area_type)
         if areas.size > 1
           return { :areas => areas }
         end
+      elsif !coord_info['easting']
+        error = :postcode_not_found
       else
         if MySociety::Validate.is_valid_partial_postcode(area)
           distance = 5000
