@@ -172,6 +172,48 @@ describe SubscriptionsController do
       make_request
     end
 
+    describe 'if there is a subscription' do
+
+      before do
+        @mock_campaign = mock_model(Campaign)
+        @mock_subscription = mock_model(Subscription, :destroy => true,
+                                                      :target => @mock_campaign)
+        Subscription.stub!(:find_by_token).and_return(@mock_subscription)
+      end
+
+      it 'should show the "confirm_unsubscribe" template' do
+        make_request
+        response.should render_template("confirm_unsubscribe")
+      end
+
+    end
+
+    describe 'if there is no subscription' do
+
+      before do
+        Subscription.stub!(:find_by_token).and_return(nil)
+      end
+
+      it 'should display an error flash' do
+        make_request
+        flash[:error].should == "We're sorry, but we could not find your subscription. If you are having issues, try copying and pasting the URL from your email into your browser. If that doesn't work, use the feedback link to get in touch."
+      end
+
+      it 'should redirect to the front page' do
+        make_request
+        response.should redirect_to(root_url)
+      end
+
+    end
+
+  end
+
+  describe 'POST #confirm_unusbscribe' do
+
+    def make_request
+      post :confirm_unsubscribe, :email_token => 'mytoken'
+    end
+
     describe 'if there is a subscription to a problem' do
 
       before do
@@ -224,24 +266,5 @@ describe SubscriptionsController do
 
     end
 
-    describe 'if there is no subscription' do
-
-      before do
-        Subscription.stub!(:find_by_token).and_return(nil)
-      end
-
-      it 'should display an error flash' do
-        make_request
-        flash[:error].should == "We're sorry, but we could not find your subscription. If you are having issues, try copying and pasting the URL from your email into your browser. If that doesn't work, use the feedback link to get in touch."
-      end
-
-      it 'should redirect to the front page' do
-        make_request
-        response.should redirect_to(root_url)
-      end
-
-    end
-
   end
-
 end

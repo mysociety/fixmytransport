@@ -493,6 +493,27 @@ describe ProblemsController do
 
   end
 
+  describe 'GET #new' do
+
+    def make_request
+      get :new, { :location_id => '55', :location_type => 'Route' }
+    end
+
+    describe 'when no location can be instantiated from the params' do
+
+      before do
+        @controller.stub!(:instantiate_location).and_return(nil)
+      end
+
+      it 'should render a 404' do
+        make_request
+        response.status.should == '404 Not Found'
+      end
+
+    end
+
+  end
+
   describe "POST #create" do
 
     before do

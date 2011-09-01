@@ -333,8 +333,7 @@ class ApplicationController < ActionController::Base
                      'StopArea',
                      'Stop',
                      'SubRoute',
-                     'CoachRoute',
-                     ]
+                     'CoachRoute']
     if allowed_types.include?(location_type)
       return location_type.constantize.find(:first, :conditions => ['id = ?', location_id])
     else

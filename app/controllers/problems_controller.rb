@@ -33,6 +33,10 @@ class ProblemsController < ApplicationController
 
   def new
     location = instantiate_location(params[:location_id], params[:location_type])
+    if !location
+      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+      return false
+    end
     @problem = Problem.new(:location => location,
                            :reporter => current_user ? current_user : User.new,
                            :reporter_name => current_user ? current_user.name : '')
