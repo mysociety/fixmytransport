@@ -315,11 +315,11 @@ module ApplicationHelper
 
   def admin_location_url(location)
     if location.is_a?(Stop)
-      return admin_url(stop_path(location.id))
+      return admin_url(admin_stop_path(location.id))
     elsif location.is_a?(StopArea)
-      return admin_url(stop_area_path(location.id))
+      return admin_url(admin_stop_area_path(location.id))
     elsif location.is_a?(Route)
-      return admin_url(route_path(location.id))
+      return admin_url(admin_route_path(location.id))
     end
   end
 
