@@ -3,14 +3,16 @@ class SubscriptionsController < ApplicationController
   def confirm_unsubscribe
     @subscription = Subscription.find_by_token(params[:email_token])
     if @subscription
-      target = @subscription.target
-      @subscription.destroy
-      if target.is_a?(Problem)
-        flash[:notice] = t('subscriptions.confirm_unsubscribe.no_longer_subscribed_to_problem')
-        redirect_to(problem_path(target))
-      elsif target.is_a?(Campaign)
-        flash[:notice] = t('subscriptions.confirm_unsubscribe.no_longer_subscribed_to_campaign')
-        redirect_to(campaign_path(target))
+      if request.post?
+        target = @subscription.target
+        @subscription.destroy
+        if target.is_a?(Problem)
+          flash[:notice] = t('subscriptions.confirm_unsubscribe.no_longer_subscribed_to_problem')
+          redirect_to(problem_path(target))
+        elsif target.is_a?(Campaign)
+          flash[:notice] = t('subscriptions.confirm_unsubscribe.no_longer_subscribed_to_campaign')
+          redirect_to(campaign_path(target))
+        end
       end
     else
       flash[:error] = t('subscriptions.confirm_unsubscribe.could_not_find_subscription')
