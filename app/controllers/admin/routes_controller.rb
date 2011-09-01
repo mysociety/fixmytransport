@@ -67,20 +67,26 @@ class Admin::RoutesController < Admin::AdminController
     # several callbacks on route use the associations and they need to all be acting on the same
     # model instances, otherwise changes don't get saved.
     @route = Route.find(params[:id], :include => {:journey_patterns => :route_segments})
-    if @route.update_attributes(params[:route])
-      flash[:notice] = t('admin.route_updated')
-      redirect_to admin_url(admin_route_path(@route.id))
-    else
+    begin
+      if @route.update_attributes(params[:route])
+        flash[:notice] = t('admin.route_updated')
+        redirect_to admin_url(admin_route_path(@route.id))
+      else
+        @route_operators = make_route_operators(@route)
+        flash.now[:error] = t('admin.route_problem')
+        render :show
+      end
+    rescue FixMyTransport::Exceptions::ProblemsExistError => e
       @route_operators = make_route_operators(@route)
-      flash[:error] = t('admin.route_problem')
+      flash.now[:error] = t('admin.route_update_problems_exist')
       render :show
     end
   end
   
   def destroy 
     @route = Route.find(params[:id])
-    if @route.campaigns.size > 0
-      flash[:error] = t('admin.route_has_campaigns')
+    if @route.campaigns.size > 0 || @route.problems.size > 0
+      flash.now[:error] = t('admin.route_has_campaigns')
       @route_operators = make_route_operators(@route)
       render :show
     else

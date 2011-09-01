@@ -6,6 +6,8 @@ en:
     indicator: Indicator
     add_a_stop_area: Add a stop area
     stop_area_form_error: There's a problem with this stop area - please see below.
-    stop_area_has_campaigns: This stop area cannot be deleted as there are campaigns associated with it. 
+    stop_area_has_campaigns: This stop area cannot be deleted as there are campaigns or problems associated with it. 
     stop_area_has_routes: This stop area cannot be deleted as there are routes that go through it.
     remove_from_stop_area: Remove from stop area
+    stop_area_update_problems_exist: Problems exist for this station and operator. Please update them before removing the operator from the station.
+    

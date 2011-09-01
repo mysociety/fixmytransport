@@ -23,7 +23,9 @@ class RouteOperator < ActiveRecord::Base
                   'Route', self.route_id, self.operator_id]
     problems = Problem.find(:all, :conditions => conditions)
     if !problems.empty?
-      raise "Cannot destroy association of route #{self.route.id} with operator #{self.operator.id} - problems need updating"
+      msg = "Cannot destroy association of route #{self.route.id} with operator #{self.operator.id}"
+      msg += " - problems need updating"
+      raise FixMyTransport::Exceptions::ProblemsExistError.new(msg)
     end
     return true
   end

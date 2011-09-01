@@ -62,22 +62,34 @@ class Admin::OperatorsController < Admin::AdminController
   end
    
   def update
-    @operator = Operator.find(params[:id])
-    if @operator.update_attributes(params[:operator])
-      flash[:notice] = t('admin.operator_updated')
-      redirect_to admin_url(admin_operator_path(@operator))
-    else
+    begin
+      @operator = Operator.find(params[:id])
+      if @operator.update_attributes(params[:operator])
+        flash[:notice] = t('admin.operator_updated')
+        redirect_to admin_url(admin_operator_path(@operator))
+      else
+        @route_operators = make_route_operators(@operator.codes)
+        flash.now[:error] = t('admin.operator_problem')
+        render :show
+      end
+    rescue FixMyTransport::Exceptions::ProblemsExistError => e
       @route_operators = make_route_operators(@operator.codes)
-      flash[:error] = t('admin.operator_problem')
+      flash.now[:error] = t('admin.operator_update_problems_exist')
       render :show
     end
   end
   
   def destroy 
     @operator = Operator.find(params[:id])
-    @operator.destroy
-    flash[:notice] = t('admin.operator_destroyed')
-    redirect_to admin_url(admin_operators_path)
+    if @operator.stop_areas.size > 0 || @operator.routes.size > 0
+      flash.now[:error] = t('admin.operator_has_routes_or_stop_areas')
+      @route_operators = make_route_operators(@operator.codes)
+      render :show
+    else
+      @operator.destroy
+      flash[:notice] = t('admin.operator_destroyed')
+      redirect_to admin_url(admin_operators_path)
+    end
   end
 
   def merge
