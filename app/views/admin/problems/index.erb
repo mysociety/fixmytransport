@@ -25,7 +25,7 @@
         <%- end %>
         <%= link_to("(#{t('admin.admin')})", admin_url(admin_problem_path(problem.id)), :target => '_blank') %></td>
       <td><%= problem.subject %></td>
-      <td><%- if problem.campaign %><%= link_to(problem.campaign.title, admin_url(admin_campaign_path(problem.campaign)))%><%- end %></td>
+      <td><%- if problem.campaign %><%= link_to(problem.campaign.title, admin_url(admin_campaign_path(problem.campaign.id)))%><%- end %></td>
       <td><%= link_to(problem.location.name, admin_location_url(problem.location))%></td>
       <td><%= problem.transport_mode_text %></td>
       <td><%= problem.reporter_name %></td>
