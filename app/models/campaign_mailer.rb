@@ -33,7 +33,7 @@ class CampaignMailer < ApplicationMailer
                   :comment => comment, 
                   :link => main_url(campaign_path(campaign)) }
     if subscription 
-      body_hash[:unsubscribe_link] = main_url(confirm_leave_path(:email_token => subscription.token))
+      body_hash[:unsubscribe_link] = main_url(confirm_unsubscribe_path(:email_token => subscription.token))
     end
     body(body_hash)
   end
@@ -48,7 +48,7 @@ class CampaignMailer < ApplicationMailer
            :advice_link => main_url(campaign_path(campaign)) })
   end
 
-  def advice_request(recipient, campaign, supporter, advice_request)
+  def advice_request(recipient, campaign, subscription, advice_request)
     recipients recipient.name_and_email
     from contact_from_name_and_email
     subject I18n.translate('mailers.advice_request_subject', :title => campaign.title)
@@ -56,8 +56,8 @@ class CampaignMailer < ApplicationMailer
                   :recipient => recipient,
                   :advice_request => advice_request,
                   :link => main_url(campaign_path(campaign)) }
-    if supporter
-      body_hash[:unsubscribe_link] = main_url(confirm_leave_path(:email_token => supporter.token))
+    if subscription
+      body_hash[:unsubscribe_link] = main_url(confirm_unsubscribe_path(:email_token => subscription.token))
     end
     body(body_hash)
   end
