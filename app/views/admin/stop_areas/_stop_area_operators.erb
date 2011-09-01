@@ -1,0 +1,45 @@
+<h3><%= title %></h3>
+<div class='stop-area-operators'>
+  <%- if stop_area_operators.empty?  %>
+    <p>
+      <%= t('admin.no_operators') %>
+    </p>
+  <%- else %>
+    <%= link_to t('admin.check_all'), '', :class => 'check-all-stop-area-operators' %>
+    <%= link_to t('admin.uncheck_all'), '', :class => 'uncheck-all-stop-area-operators' %>
+    <table>
+      <tr>
+        <th><%= t('admin.name') %></th>
+        <th><%= t('admin.short_name') %></th>
+        <th><%= t('admin.search')  %></th>
+        <%- if stop_area_operators.first.new_record? %>
+          <th><%= t('admin.assign_to_stop_area') %></th>
+        <%- else %>
+          <th><%= t('admin.remove_from_stop_area') %></th>
+        <%- end%>
+      </tr>
+      
+      <%- stop_area_operators.each do |stop_area_operator| %>
+        <%- f.fields_for :stop_area_operators, stop_area_operator do |stop_area_operator_fields| %>
+          <tr class='<%= cycle("odd", "even") %>'>
+            <td><%= link_to(stop_area_operator.operator.name, admin_url(admin_operator_path(stop_area_operator.operator_id)), :target => "_blank" ) %>
+            <td><%= stop_area_operator.operator.short_name %>
+            <td><%= link_to t('admin.external_search_operator'), external_search_link("#{stop_area_operator.operator.name}"), :target => '_blank' %></td>
+            <td>
+              <%- if stop_area_operator.id %>
+                <%= raw stop_area_operator_fields.hidden_field :id %>
+              <%- end %>
+              <%= raw stop_area_operator_fields.hidden_field :operator_id %>
+              <%- if stop_area_operator.new_record?  %>
+                <%= raw stop_area_operator_fields.check_box :_add, :class => 'check-stop-area-operator' %>
+              <%- else %>
+                <%= raw stop_area_operator_fields.check_box :_destroy, :class => 'check-stop-area-operator' %>
+              <%- end %>
+            </td>
+          </tr>
+        <%-end %>
+      <%- end %>
+  </table>
+  <%- end %>
+</div>
+

@@ -10,6 +10,18 @@
 <%- end %>
 <%- form_for [:admin, @stop_area], :url => admin_url(admin_stop_area_path(@stop_area.id)), :html => { :class => 'stop-area-form' } do |f|  %>
   <%= render :partial => "form", :locals => { :f => f } %>
+  
+    <%= render :partial => "stop_area_operators", :locals => { :f => f, :stop_area_operators => @stop_area.stop_area_operators, :title => t('admin.operators') } %>
+  <h3><%= t('admin.assign_an_operator') %></h3>
+  <%- f.fields_for :stop_area_operators, StopAreaOperator.new do |stop_area_operator_fields| %>
+    <div class='form-field'>
+      <%= raw label_tag :operator_name %>
+      <%= raw hidden_field_tag :operator_name_autocomplete_url, admin_url("/admin/autocomplete_for_operator_name") %>
+      <%= raw text_field_tag :operator_name, '', { :class => 'operator_name_auto', :size => 30 } %>
+      <%= raw stop_area_operator_fields.hidden_field :operator_id, { :class => 'operator-id' } %>
+      <%= raw stop_area_operator_fields.hidden_field :_add, { :value => "1" } %>
+    </div>
+  <%- end %>
 <%- end %>
 <script type="text/javascript">
   var zoom = <%= MAX_VISIBLE_ZOOM - 1 %>;
@@ -21,6 +33,8 @@
   var otherAreaStops = [];
   var minZoom = <%= MIN_ZOOM_LEVEL %>;
   var maxZoom = <%= MAX_VISIBLE_ZOOM %>;
+  var mapWidth = 400;
+  var mapHeight = 400;
   jQuery(document).ready(function(){
     area_init();
     setupShowStopArea();

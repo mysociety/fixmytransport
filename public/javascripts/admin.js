@@ -1,13 +1,13 @@
-function setupAssignAllAndNone(){
-  $('.check-all-route-operators').click(function(event){
-    var operators = $(this).closest('.route-operators').find('.check-route-operator')
+function setupAssignAllAndNone(all_selector, none_selector, table_selector, check_selector){
+  $(all_selector).click(function(event){
+    var operators = $(this).closest(table_selector).find(check_selector)
     operators.attr('checked', true);
     operators.parents('tr').addClass("selected");
     event.preventDefault();
   })
   
-  $('.uncheck-all-route-operators').click(function(event){
-    var operators = $(this).closest('.route-operators').find('.check-route-operator')
+  $(none_selector).click(function(event){
+    var operators = $(this).closest(table_selector).find(check_selector)
     operators.attr('checked', false);
     operators.parents('tr').removeClass("selected");
     event.preventDefault();
@@ -166,7 +166,7 @@ function setupShowRoutes() {
 function setupShowRoute(){
   setupOperatorAutocomplete();
   setupStopAutocompletes();
-  setupAssignAllAndNone();
+  setupAssignAllAndNone('.check-all-route-operators', '.uncheck-all-route-operators', '.route-operators','.check-route-operator');
   setupItemSelection('.check-route-operator');
   setupItemSelection('.check-route-segment');
   setupAddSegmentLink();
@@ -178,7 +178,7 @@ function setupShowRoute(){
 function setupNewRoute(){
   setupOperatorAutocomplete();
   setupStopAutocompletes();
-  setupAssignAllAndNone();
+  setupAssignAllAndNone('.check-all-route-operators','.uncheck-all-route-operators', '.route-operators','.check-route-operator');
   setupItemSelection('.check-route-operator');
   setupItemSelection('.check-route-segment');  
   setupAddSegmentLink();
@@ -195,6 +195,8 @@ function setupNewStop(){
 
 
 function setupShowStopArea(){
+  setupAssignAllAndNone('.check-all-stop-area-operators', '.uncheck-all-stop-area-operators', '.stop-area-operators','.check-stop-area-operator');
+  setupOperatorAutocomplete();
   setupLocalityAutocomplete();
   setupDestroyLink();
 }

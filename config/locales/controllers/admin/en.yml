@@ -47,7 +47,6 @@ en:
     problem_updated: Problem updated.
     problem_problem: There was a problem updating this problem.
     campaign_updated: Campaign updated.
-    campaign_problem: There was a problem updating this campaign.
     campaign_update_updated: Campaign update updated.
     campaign_update_problem: There was a problem updating this campaign.
     comment_updated: Comment updated.

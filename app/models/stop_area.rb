@@ -42,11 +42,17 @@ class StopArea < ActiveRecord::Base
   has_many :routes_as_from_stop_area, :through => :route_segments_as_from_stop_area, :source => 'route'
   has_many :routes_as_to_stop_area, :through => :route_segments_as_to_stop_area, :source => 'route'
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
+  accepts_nested_attributes_for :stop_area_operators, :allow_destroy => true, :reject_if => :stop_area_operator_invalid
+
   has_paper_trail
   before_save :cache_description
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
   is_location
+  
+  def stop_area_operator_invalid(attributes)
+    (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['operator_id'].blank?
+  end
 
   def routes
     Route.find(:all, :conditions => ['id in (SELECT route_id
