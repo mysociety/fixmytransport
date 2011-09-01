@@ -151,7 +151,7 @@ class CampaignsController < ApplicationController
       else
         respond_to do |format|
           format.html do 
-            render :template => "add_update"
+            render :action => "add_update"
           end
           format.json do
             @json = {}
