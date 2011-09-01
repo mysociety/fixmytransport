@@ -110,10 +110,10 @@ describe Admin::RoutesController do
   
   describe "DELETE #destroy" do 
  
-    describe 'when the route has no campaigns' do 
+    describe 'when the route has no campaigns or problems' do 
       
       before do 
-        @route = mock_model(Route, :campaigns => [])
+        @route = mock_model(Route, :campaigns => [], :problems => [])
         Route.stub!(:find).and_return(@route)
       end
       
@@ -141,6 +141,23 @@ describe Admin::RoutesController do
 
     end
  
+    describe 'when the route has problems' do 
+      
+      before do 
+        @route_source_admin_area = mock_model(RouteSourceAdminArea, :operator_code => 'TEST')
+        @route = mock_model(Route, :campaigns => [], 
+                                   :problems => [mock_model(Campaign)],
+                                   :route_source_admin_areas => [@route_source_admin_area], 
+                                   :id => 33)
+        Route.stub!(:find).and_return(@route)
+      end
+      
+      it 'should not destroy the route' do 
+        @route.should_not_receive(:destroy)
+        delete :destroy, :id => 33
+      end
+
+    end
   end
 
 end
