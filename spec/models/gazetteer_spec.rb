@@ -17,7 +17,7 @@ describe Gazetteer do
       stub_postcode_finder
     end
 
-    describe 'when the postcode finder returns an error' do
+    describe 'when the postcode finder returns a not found error' do
 
       before do
         MySociety::MaPit.stub!(:call).and_return(:not_found)
@@ -29,6 +29,22 @@ describe Gazetteer do
                                               10,
                                               ignore_area=false,
                                               area_type=nil)[:error].should == :postcode_not_found
+      end
+
+    end
+    
+    describe 'when the postcode finder returns a service unavailable error' do
+
+      before do
+        MySociety::MaPit.stub!(:call).and_return(:service_unavailable)
+      end
+
+      it 'should return the error :postcode_not_found in the results hash' do
+        Gazetteer.bus_route_from_route_number('C10',
+                                              'ZZ9 9ZZ',
+                                              10,
+                                              ignore_area=false,
+                                              area_type=nil)[:error].should == :service_unavailable
       end
 
     end
@@ -59,7 +75,7 @@ describe Gazetteer do
       stub_postcode_finder
     end
 
-    describe 'when the postcode finder returns an error' do
+    describe 'when the postcode finder returns a not found error' do
 
       before do
         MySociety::MaPit.stub!(:call).and_return(:not_found)
@@ -67,6 +83,18 @@ describe Gazetteer do
 
       it 'should return a hash of postcode information with an error key' do
         Gazetteer.place_from_name('ZZ9 9ZZ').should == { :postcode_info => { :error => :not_found } }
+      end
+
+    end
+    
+    describe 'when the postcode finder returns a service unavailable error' do
+
+      before do
+        MySociety::MaPit.stub!(:call).and_return(:service_unavailable)
+      end
+
+      it 'should return a hash of postcode information with an error key' do
+        Gazetteer.place_from_name('ZZ9 9ZZ').should == { :postcode_info => { :error => :service_unavailable } }
       end
 
     end

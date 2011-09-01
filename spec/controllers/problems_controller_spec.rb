@@ -283,6 +283,12 @@ describe ProblemsController do
                                                                       :error => :area_not_known })
           make_request(:route_number => 'C10', :area => 'London')
           assigns[:error_message].should == "The postcode you entered wasn't recognised. Please modify it and try again!"
+
+          Gazetteer.stub!(:bus_route_from_route_number).and_return( { :routes => [@mock_route, @mock_route],
+                                                                      :error => :service_unavailable })
+          make_request(:route_number => 'C10', :area => 'London')
+          assigns[:error_message].should == "Sorry, our postcode lookup service is currently unavailable, please try again in a few minutes."
+
         end
 
       end
@@ -426,7 +432,7 @@ describe ProblemsController do
 
         describe 'when the gazeteer returns postcode information' do
 
-          describe 'when the postcode information includes an error' do
+          describe 'when the postcode information includes a bad request error' do
 
             before do
               Gazetteer.stub!(:place_from_name).and_return({:postcode_info => {:error => :bad_request }})
@@ -440,6 +446,24 @@ describe ProblemsController do
             it 'should display an appropriate error message' do
               make_request({:name => 'ZZ9 9ZZ'})
               assigns[:error_message].should == "That postcode wasn't recognised. Please modify it and try again!"
+            end
+
+          end
+
+          describe 'when the postcode information includes a bad request error' do
+
+            before do
+              Gazetteer.stub!(:place_from_name).and_return({:postcode_info => {:error => :service_unavailable }})
+            end
+
+            it 'should render the "find_stop" template' do
+              make_request({:name => 'ZZ9 9ZZ'})
+              response.should render_template('find_stop')
+            end
+
+            it 'should display an appropriate error message' do
+              make_request({:name => 'ZZ9 9ZZ'})
+              assigns[:error_message].should == "Sorry, our postcode lookup service is currently unavailable. Please try again in a few minutes"
             end
 
           end

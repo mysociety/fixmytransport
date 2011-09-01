@@ -43,6 +43,10 @@ module FixMyTransport
         council_data = MySociety::MaPit.call('point', 
                                              "#{WGS_84}/#{lon},#{lat}", 
                                              :type => council_parent_types)
+        if [:bad_request, :service_unavailable, :not_found].include?(council_data)
+          raise "Council lookup service unavailable"
+        end
+        
         # Make them objects
         councils = council_data.values.map{ |council_info| Council.from_hash(council_info) }
         # Do we have contact information? 

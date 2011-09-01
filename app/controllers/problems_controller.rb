@@ -167,6 +167,8 @@ class ProblemsController < ApplicationController
           @error_message = t('problems.find_bus_route.area_not_found_routes', :area => params[:area])
         elsif route_info[:error] == :postcode_not_found
           @error_message = t('problems.find_bus_route.postcode_not_found_routes')
+        elsif route_info[:error] == :service_unavailable
+          @error_message = t('problems.find_bus_route.postcode_service_not_available')
         elsif route_info[:error] == :route_not_found_in_area
           @error_message = t('problems.find_bus_route.route_not_found_in_area', :area => params[:area],
                                                        :route_number => params[:route_number])
@@ -321,6 +323,8 @@ class ProblemsController < ApplicationController
           location_search.fail
           if postcode_info[:error] == :area_not_known
             @error_message = t('problems.find_stop.postcode_area_not_known')
+          elsif postcode_info[:error] == :service_unavailable
+            @error_message = t('problems.find_stop.postcode_service_unavailable')
           else
             @error_message = t('problems.find_stop.postcode_not_found')
           end
