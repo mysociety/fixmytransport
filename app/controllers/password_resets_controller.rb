@@ -6,6 +6,10 @@ class PasswordResetsController < ApplicationController
   def new
   end
   
+  def index
+    render :action => 'new'
+  end
+  
   def create  
     @user = User.find_by_email(params[:email])  
     if @user  

@@ -144,7 +144,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :user_sessions, :collection => { :external => :post }
 
   # accounts
-  map.resources :password_resets, :except => [:show, :destroy, :index]
+  map.resources :password_resets, :except => [:show, :destroy]
   map.resource :account, :except => [:index, :destroy, :show]
   map.confirm_account '/a/:email_token', :action => 'confirm', :controller => 'accounts'
 
