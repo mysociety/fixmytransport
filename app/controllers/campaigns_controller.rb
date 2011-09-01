@@ -150,6 +150,9 @@ class CampaignsController < ApplicationController
         end
       else
         respond_to do |format|
+          format.html do 
+            render :template => "add_update"
+          end
           format.json do
             @json = {}
             @json[:success] = false

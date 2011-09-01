@@ -301,11 +301,11 @@ class ApplicationController < ActionController::Base
       when :create_problem
         problem = Problem.create_from_hash(post_login_action_data, current_user)
         respond_to do |format|
-          format.json do
-            @json[:redirect] = convert_problem_url(problem)
-          end
           format.html do
             session[:return_to] = convert_problem_url(problem)
+          end
+          format.json do
+            @json[:redirect] = convert_problem_url(problem)
           end
         end
       end
