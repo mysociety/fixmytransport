@@ -363,6 +363,13 @@ module ApplicationHelper
     end
   end
 
+  # sort the stations to the beginning of a list of stations and stops (otherwise
+  # keep the order stable)
+  def sort_stations(locations)
+    stations, stops = locations.partition{ |location| location.is_a?(StopArea) }
+    return stations + stops
+  end
+
   def comment_header(comment)
     if comment.commented.is_a?(Campaign)
       return t('campaigns.show.user_says', :name => h(comment.user.name))

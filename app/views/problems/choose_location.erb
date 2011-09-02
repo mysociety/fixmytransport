@@ -11,7 +11,7 @@
 	</div>
 </div>
 <div id="main-content" class="container">
-   <%- page_results = (@locations + @other_locations).paginate({:page => params[:page], :per_page => 20 }) %>
+   <%- page_results = sort_stations(@locations + @other_locations).paginate({:page => params[:page], :per_page => 20 }) %>
   <ul id="large-ul">
   <%- page_results.each do |location| %>
     <li class='location'>
