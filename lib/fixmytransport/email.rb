@@ -388,7 +388,10 @@ module FixMyTransport
           IO.popen("/usr/bin/elinks -dump-charset utf-8 -dump-width 70 -force-html -dump " + tempfile.path, "r") do |child|
             text += child.read() + "\n\n"
           end
+          # Hack to get rid of badly translated chars.
+          text.gsub!(/Â|Ã/, ' ')
         end
+        
         tempfile.close
       end
     
