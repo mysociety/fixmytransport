@@ -25,13 +25,13 @@
     <td>
       <%- case event.described %>
       <%- when Assignment %>
-        <%= link_to("#{t('admin.assignment')}: #{event.described.task_type}", admin_assignment_path(event.described)) %>
+        <%= link_to("#{t('admin.assignment')}: #{event.described.task_type}", admin_url(admin_assignment_path(event.described))) %>
       <%- when CampaignUpdate %>
-        <%= link_to("#{t('admin.campaign_update')}: #{event.described.id}", admin_campaign_update_path(event.described)) %>
+        <%= link_to("#{t('admin.campaign_update')}: #{event.described.id}", admin_url(admin_campaign_update_path(event.described))) %>
       <%- when Comment %>
         <%= "#{t('admin.comment')}: #{event.described.id}" %>
       <%- when IncomingMessage %>
-        <%= link_to("#{t('admin.incoming_message')}: #{event.described.id}", admin_incoming_message_path(event.described)) %>
+        <%= link_to("#{t('admin.incoming_message')}: #{event.described.id}", admin_url(admin_incoming_message_path(event.described))) %>
       <%- when OutgoingMessage %>
         <%= "#{t('admin.outgoing_message')}: #{event.described.id}" %>
       <%- end %>
