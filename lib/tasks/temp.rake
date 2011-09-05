@@ -8,6 +8,7 @@ namespace :temp do
     IncomingMessage.find_each do |incoming_message|
       incoming_message.main_body_text(regenerate=true)
       incoming_message.main_body_text_folded(regenerate=true)
+      incoming_message.save
     end
   end
   
