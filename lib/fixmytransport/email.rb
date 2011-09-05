@@ -388,8 +388,7 @@ module FixMyTransport
           IO.popen("/usr/bin/elinks -eval 'set document.codepage.assume = \"utf-8\"' -dump-charset utf-8 -dump-width 70 -force-html -dump " + tempfile.path, "r") do |child|
             text += child.read() + "\n\n"
           end
-          # Hack to get rid of badly translated chars.
-          text.gsub!(/Â|Ã/, ' ')
+
         end
         
         tempfile.close
@@ -488,7 +487,7 @@ module FixMyTransport
     def self.clean_linebreaks(text)
       text.strip!
       text = text.gsub(/\n/, '<br>')
-      text = text.gsub(/(?:<br>\s*){2,}/, '<br><br>') # remove excess linebreaks that unnecessarily space it out
+      text = text.gsub(/(?:<br>\s*){2,}/u, '<br><br>') # remove excess linebreaks that unnecessarily space it out
       return text
     end
       
