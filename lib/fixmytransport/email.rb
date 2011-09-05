@@ -385,7 +385,7 @@ module FixMyTransport
         if content_type == 'text/html'
           # lynx wordwraps links in its output, which then don't get formatted properly
           # by WhatDoTheyKnow. We use elinks instead, which doesn't do that.
-          IO.popen("/usr/bin/elinks -dump-charset utf-8 -dump-width 70 -force-html -dump " + tempfile.path, "r") do |child|
+          IO.popen("/usr/bin/elinks -eval 'set document.codepage.assume = \"utf-8\"' -dump-charset utf-8 -dump-width 70 -force-html -dump " + tempfile.path, "r") do |child|
             text += child.read() + "\n\n"
           end
           # Hack to get rid of badly translated chars.
