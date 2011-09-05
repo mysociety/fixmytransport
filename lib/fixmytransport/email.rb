@@ -487,7 +487,8 @@ module FixMyTransport
     def self.clean_linebreaks(text)
       text.strip!
       text = text.gsub(/\n/, '<br>')
-      text = text.gsub(/(?:<br>\s*){2,}/u, '<br><br>') # remove excess linebreaks that unnecessarily space it out
+      # include a utf-8 non-breaking space explicitly
+      text = text.gsub(/(?:<br>(\s|\xC2\xA0)*){2,}/u, '<br><br>') # remove excess linebreaks that unnecessarily space it out
       return text
     end
       
