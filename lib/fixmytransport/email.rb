@@ -380,7 +380,8 @@ module FixMyTransport
         text += body + "\n\n"
       else
         tempfile = Tempfile.new('emailextract')
-        tempfile.print body
+        # replace any non-breaking spaces - these seem to cause conversion issues
+        tempfile.print body.gsub(/\xC2\xA0/u, ' ')
         tempfile.flush
         if content_type == 'text/html'
           # lynx wordwraps links in its output, which then don't get formatted properly
