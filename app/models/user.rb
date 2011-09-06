@@ -190,7 +190,7 @@ class User < ActiveRecord::Base
       else
         name = facebook_data['name']
         email = facebook_data['email']
-        user = User.find(:first, :conditions => ['email = ?', email])
+        user = User.find(:first, :conditions => ['lower(email) = ?', email.downcase])
         if not user
           user = User.new({:name => name, :email => email})
         end

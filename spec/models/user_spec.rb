@@ -208,6 +208,16 @@ describe User do
           end
           
         end
+        
+        
+        it 'should search for the user by email ignoring case' do 
+          User.stub!(:get_facebook_data).and_return({'id' => 'myfbid',
+                                                     'name' => 'Test Name',
+                                                     'email' => 'Test@Example.com',
+                                                     'picture' => 'http://profile.example.com/mypicture.jpg'})
+          User.should_receive(:find).with(:first, :conditions => ['lower(email) = ?', 'test@example.com'])
+          User.handle_external_auth_token('mytoken', 'facebook', false)
+        end
 
         it 'should set the remote profile photo url' do
           @mock_user.should_receive(:profile_photo_url=).with("http://profile.example.com/mypicture.jpg")
