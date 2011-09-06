@@ -146,6 +146,7 @@ ActionController::Routing::Routes.draw do |map|
   # accounts
   map.resources :password_resets, :except => [:show, :destroy]
   map.resource :account, :except => [:index, :destroy, :show]
+  map.account_index '/account', :action => 'new', :controller => 'accounts', :conditions => { :method => :get }
   map.confirm_account '/a/:email_token', :action => 'confirm', :controller => 'accounts'
 
   # user profiles
