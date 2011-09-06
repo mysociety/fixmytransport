@@ -29,13 +29,13 @@
       <td><%= campaign.problem.transport_mode_text %></td>
       <td><%= campaign.initiator.name %></td>
       <td><%- if campaign.problem.operator %>
-            <%= link_to(campaign.problem.operator.name, admin_operator_url(campaign.problem.operator.id)) %>
+            <%= link_to(campaign.problem.operator.name, admin_url(admin_operator_path(campaign.problem.operator.id))) %>
           <%- end %>
           <%- if campaign.problem.council_info%>
             <%= campaign.problem.council_info %>
           <%- end %>
           <%- if campaign.problem.passenger_transport_executive %>
-            <%= link_to(campaign.problem.passenger_transport_executive.name, admin_pte_url(campaign.problem.passenger_transport_executive.id))%>
+            <%= link_to(campaign.problem.passenger_transport_executive.name, admin_url(admin_pte_path(campaign.problem.passenger_transport_executive.id)))%>
           <%- end %>
       </td>
       <td><%= campaign.status %></td>
