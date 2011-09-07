@@ -1,25 +1,20 @@
+<h2><%= t('admin.stats')%></h2>
+
+<div class="admin-stats">
+  <strong><%= t('admin.problems') %>:</strong>
+  <%- Problem.statuses.each do |status, code| %>
+    <%= status.to_s %>: <%= Problem.count(:conditions => ['status_code = ?', code]) %>
+  <%- end %>
+</div>
+<div class="admin-stats">
+  <strong><%= t('admin.campaigns') %>:</strong>
+  <%- Campaign.statuses.each do |status, code| %>
+    <%= status.to_s %>: <%= Campaign.count(:conditions => ['status_code = ?', code]) %>
+  <%- end %>
+</div>
+
 <h2><%= t('admin.things_to_do') %></h2>
-<div class='admin-task-list'>
-  <h3><%= t('admin.routes_without_operators_intro', :number => @routes_without_operators_total) %></h3>
-  <ul>
-    <%- @routes_without_operators.each do |route| %>
-      <li class='route-link'>
-        <%= link_to route.name, admin_url(admin_route_path(route.id)) %>
-      </li>
-    <%- end%>
-  </ul>
-</div>
-<div class='admin-task-list'>
-  <h3><%= t('admin.codes_without_operators_intro', :number => @operator_codes_without_operators_total) %></h3>
-  <ul>
-    <%- @operator_codes_without_operators.each do |code, count| %>
-      <li class='operator-code-link'>
-        <%= link_to code, admin_url(assign_routes_admin_operators_path(:code => code)) %>
-        <%= t('admin.num_unmatched_routes', :number => count) %>
-      </li>
-    <%- end%>
-  </ul>
-</div>
+
 <div class='admin-task-list'>
   <h3><%= t('admin.in_progress_assignments', :number => @assignments_needing_attention_total) %></h3>
   <ul>
@@ -30,6 +25,7 @@
     <%- end%>
   </ul>
 </div>
+
 <%- if @incoming_messages_without_campaign.size > 0 %>
 <div class='admin-task-list'>
   <h3><%= t('admin.incoming_messages_without_campaigns', :number => @incoming_messages_without_campaign.size) %></h3>
@@ -42,3 +38,27 @@
   </ul>
 </div>
 <%- end %>
+
+<div class='admin-task-list'>
+  <h3><%= t('admin.routes_without_operators_intro', :number => @routes_without_operators_total) %></h3>
+  <ul>
+    <%- @routes_without_operators.each do |route| %>
+      <li class='route-link'>
+        <%= link_to route.name, admin_url(admin_route_path(route.id)) %>
+      </li>
+    <%- end%>
+  </ul>
+</div>
+
+<div class='admin-task-list'>
+  <h3><%= t('admin.codes_without_operators_intro', :number => @operator_codes_without_operators_total) %></h3>
+  <ul>
+    <%- @operator_codes_without_operators.each do |code, count| %>
+      <li class='operator-code-link'>
+        <%= link_to code, admin_url(assign_routes_admin_operators_path(:code => code)) %>
+        <%= t('admin.num_unmatched_routes', :number => count) %>
+      </li>
+    <%- end%>
+  </ul>
+</div>
+
