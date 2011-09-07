@@ -180,7 +180,7 @@ en:
       comment: "Update"
       comment_title: "Leave a public update"
       posted: "Posted"
-      sent_time: "Sent to %{recipient} %{interval} later"
+      sent_time: "Sent to %{recipient} on %{date}"
       comments: "Updates"
       mark_fixed: "This problem has been fixed"
       updates: "Updates"

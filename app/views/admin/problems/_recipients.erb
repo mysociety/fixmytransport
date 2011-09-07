@@ -1,0 +1,31 @@
+<%- if @problem.reports_sent.empty? %>
+  <h3><%= t('admin.problem_report_not_yet_sent') %></h3>
+<%- else %>
+  <h3><%= t("admin.problem_report_sent_to_orgs")%></h3>
+  <table>
+    <tr>
+    <th><%= t('admin.problem_organization') %>
+    </th>  
+    <th><%= t('admin.problem_contact') %>
+    </th>
+    <th><%= t('admin.problem_sent_at') %>
+    </th>
+    </tr>  
+  <%- @problem.reports_sent.each do |report| %>
+    <tr class='<%= cycle("odd", "even") %>'>
+      <td><%= report.recipient.name %>
+      </td>
+      <td>
+        <%- if report.recipient.deleted? %>
+          <%= report.recipient.email %> (<%= t('admin.deleted') %>)
+        <%- else %>
+          <%= link_to(report.recipient.email, admin_contact_url(report.recipient)) %>
+        <%- end %>
+      </td>
+      <td><%= report.created_at %>
+      </td>
+    </tr>
+  <%- end %>
+
+  </table>
+<%- end %>

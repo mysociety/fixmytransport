@@ -29,7 +29,7 @@ class ProblemMailer < ApplicationMailer
   end
 
   def report(problem, recipient, recipient_models, missing_recipient_models=[])
-    recipient_emails = ProblemMailer.get_recipient_emails(recipient, problem)
+    recipient_emails = problem.recipient_emails(recipient)
     recipients recipient_emails[:to]
     if recipient_emails[:cc]
       cc recipient_emails[:cc]
@@ -59,6 +59,7 @@ class ProblemMailer < ApplicationMailer
   end
 
   def self.send_report(problem, recipients, missing_recipients=[])
+    sent_emails = []
     recipients.each do |recipient|
       if self.dryrun
         STDERR.puts("Would send the following:")
@@ -67,11 +68,14 @@ class ProblemMailer < ApplicationMailer
       else
         deliver_report(problem, recipient, recipients, missing_recipients)
         problem.update_attribute(:sent_at, Time.now)
-        SentEmail.create!(:recipient => self.recipient_model(recipient, problem),
-                          :problem => problem)
+        sent_emails << SentEmail.create!(:recipient => problem.recipient_contact(recipient),
+                                        :problem => problem)
       end
-      self.sent_count += 1
+      if !self.sent_count.nil?
+        self.sent_count += 1
+      end
     end
+    return sent_emails
   end
 
   def self.check_for_council_change(problem)
@@ -81,35 +85,7 @@ class ProblemMailer < ApplicationMailer
       end
     end
   end
-
-  def self.get_recipient_emails(recipient, problem)
-    # on a staging site, don't send live emails
-    if MySociety::Config.getbool('STAGING_SITE', true)
-      return { :to => MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost') }
-    elsif problem.location.is_a?(Route) && problem.location.number == 'ZZ9'
-      return { :to => MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost') }
-    else
-      contact = self.recipient_model(recipient, problem)
-      emails = { :to => contact.email }
-      if contact.respond_to?(:cc_email) && !contact.cc_email.blank?
-        emails[:cc] = contact.cc_email
-      end
-      return emails
-    end
-  end
-
-  def self.recipient_model(recipient, problem)
-    if recipient.is_a?(Council)
-      return recipient.contact_for_category_and_location(problem.category, problem.location)
-    elsif recipient.is_a?(Operator)
-      return recipient.contact_for_category_and_location(problem.category, problem.location)
-    elsif recipient.is_a?(PassengerTransportExecutive)
-      return recipient.contact_for_category_and_location(problem.category, problem.location)
-    else
-      raise "Unknown recipient type: #{recipient.class.to_s}"
-    end
-  end
-
+  
   def self.send_reports(dryrun=false, verbose=false)
     self.dryrun = dryrun
 

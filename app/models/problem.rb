@@ -106,13 +106,41 @@ class Problem < ActiveRecord::Base
                                             :type => organization.class.to_s,
                                             :name => organization.name } }
   end
+  
+  def recipient_contact(recipient)
+    if [Council, Operator, PassengerTransportExecutive].include?(recipient.class)
+      return recipient.contact_for_category_and_location(category, location)
+    else
+      raise "Unknown recipient type: #{recipient.class.to_s}"
+    end
+  end
+  
+  def recipient_emails(recipient)
+    # on a staging site, don't send live emails
+    if MySociety::Config.getbool('STAGING_SITE', true)
+      return { :to => MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost') }
+    elsif self.location.is_a?(Route) && self.location.number == 'ZZ9'
+      return { :to => MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost') }
+    else
+      contact = self.recipient_contact(recipient)
+      emails = { :to => contact.email }
+      if contact.respond_to?(:cc_email) && !contact.cc_email.blank?
+        emails[:cc] = contact.cc_email
+      end
+      return emails
+    end
+  end
 
   def categories
     responsible_organizations.map{ |organization| organization.categories(self.location) }.flatten.uniq
   end
 
   def recipients
-    self.sent_emails.collect{ |sent_email| sent_email.recipient if !sent_email.comment_id }.compact.uniq
+    self.reports_sent.map{ |sent_email| sent_email.recipient }.compact.uniq
+  end
+
+  def reports_sent
+    self.sent_emails.select{ |sent_email| sent_email if !sent_email.comment_id }
   end
 
   # if this email has never been used before, assign the name

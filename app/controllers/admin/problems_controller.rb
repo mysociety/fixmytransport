@@ -25,6 +25,20 @@ class Admin::ProblemsController < Admin::AdminController
                                  :order => 'id desc'
   end
   
+  def resend
+    @problem = Problem.find(params[:id])
+    sent_emails = ProblemMailer.send_report(@problem, 
+                                            @problem.emailable_organizations, 
+                                            @problem.unemailable_organizations)
+    if @problem.campaign
+      @problem.campaign.campaign_events.create!(:event_type => 'problem_report_resent', 
+                                                :data => { :user => user_for_edits,
+                                                           :sent_emails => sent_emails.map{ |sent_email| sent_email.id } })
+    end
+    flash[:notice] = t('admin.problem_resent')
+    redirect_to :action => 'show'
+  end
+  
   def update
     @problem = Problem.find(params[:id])
     @problem.status_code = params[:problem][:status_code]

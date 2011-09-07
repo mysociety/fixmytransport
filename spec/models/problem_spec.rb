@@ -17,6 +17,77 @@ describe Problem do
     end
 
   end
+  
+  describe 'when asked for recipient emails' do 
+    
+    before do 
+      MySociety::Config.stub!(:get).with('CONTACT_EMAIL', 'contact@localhost').and_return('contact@example.com')
+      @problem = Problem.new
+    end
+    
+    it 'should return the a hash with the :to key set to the site contact address for a staging site' do 
+      MySociety::Config.stub!(:getbool).with('STAGING_SITE', true).and_return(true)
+      @problem.recipient_emails(mock_model(Operator)).should == { :to => 'contact@example.com' }
+    end
+    
+    describe 'when the site is not a staging site' do 
+      
+      before do 
+        MySociety::Config.stub!(:getbool).with('STAGING_SITE', true).and_return(false)
+        @operator_contact = mock_model(OperatorContact, :email => 'operator@example.com')
+        @operator = mock_model(Operator)
+        @problem.stub!(:recipient_contact).and_return(@operator_contact)
+      end
+    
+      it 'should return the site contact address for a route with number "ZZ9"' do 
+        @problem.stub!(:location).and_return(Route.new(:number => 'ZZ9'))
+        @problem.recipient_emails(@operator).should == { :to => 'contact@example.com' }
+      end      
+    
+      it 'should ask for the recipient contact for a recipient' do 
+        @problem.should_receive(:recipient_contact).with(@operator).and_return(@operator_contact)
+        @problem.recipient_emails(@operator)
+      end
+      
+      it 'should return a hash with key :to set to the email of the recipient contact' do
+        @problem.recipient_emails(@operator)[:to].should == 'operator@example.com'
+      end
+      
+      describe 'if the contact has a cc_email method' do 
+        
+        before do 
+          @operator_contact.stub!(:cc_email).and_return('cc@example.com')
+        end
+      
+        it 'should return a hash with key :cc set to the cc of the recipient contact' do 
+          puts @problem.recipient_emails(@operator)
+          @problem.recipient_emails(@operator)[:cc].should == 'cc@example.com'
+        end
+      end
+      
+    end
+  
+  end
+  
+  describe 'when asked for a recipient contact' do
+    
+    before do 
+      @stop = Stop.new
+      @problem = Problem.new(:location => @stop)
+      @problem.stub!(:category).and_return('Other')
+    end
+    
+    it 'should raise an error if asked for a contact for something other than a council, PTE or operator' do 
+      lambda{ @problem.recipient_contact(User.new) }.should raise_error('Unknown recipient type: User')
+    end
+    
+    it 'should ask an operator for its contact for a category and location' do
+      operator = mock_model(Operator)
+      operator.should_receive(:contact_for_category_and_location).with('Other', @stop)
+      @problem.recipient_contact(operator)
+    end
+     
+  end
 
   describe 'when asked for recipients' do
 

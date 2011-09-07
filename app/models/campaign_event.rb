@@ -9,7 +9,8 @@ class CampaignEvent < ActiveRecord::Base
                                               'assignment_given', 
                                               'assignment_completed', 
                                               'comment_added',
-                                              'assignment_in_progress']
+                                              'assignment_in_progress', 
+                                              'problem_report_resent']
   
   serialize :data
   named_scope :visible, :conditions => ["visible = ?", true], :order => 'created_at desc'

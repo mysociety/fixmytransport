@@ -27,9 +27,7 @@
 			<h5><%= t('problems.show.posted')%></h5>
 			<ul class="problem-details">
 				<li><%= t("problems.show.reported_by")%> <a href="<%=  profile_url(@problem.reporter) %>"><%= @problem.reporter_name %></a> <%= t("problems.show.reported_at")%> <%= @problem.confirmed_at.to_date.to_s(:short) %></li>
-				<%- if @problem.sent_at %>
-				  <li><%= t('problems.show.sent_time', :interval => distance_of_time_in_words(@problem.sent_at, @problem.confirmed_at), :recipient => @problem.recipients.map{ |recipient| recipient.name }.to_sentence) %></li>
-				<%- end %>
+				<%= raw problem_sending_history(@problem) %>
 			</ul>
 	</div>
 	<div class="leftcol widecol">	
