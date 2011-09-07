@@ -36,7 +36,7 @@ class Admin::ProblemsController < Admin::AdminController
                                                            :sent_emails => sent_emails.map{ |sent_email| sent_email.id } })
     end
     flash[:notice] = t('admin.problem_resent')
-    redirect_to :action => 'show'
+    redirect_to admin_url(admin_problem_path(@problem.id))
   end
   
   def update
