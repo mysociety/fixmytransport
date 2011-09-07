@@ -2,6 +2,7 @@ en:
   admin:
     admin: admin
     things_to_do: Things to do
+    stats: Stats
     routes_without_operators_intro: "Find the operators of the following routes (total %{number})"
     codes_without_operators_intro: "Find the operator(s) for the following codes (total %{number})"
     on_main_site: Public page
