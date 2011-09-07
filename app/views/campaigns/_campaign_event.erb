@@ -14,5 +14,7 @@
     <%= render :partial => 'campaign_update', :locals => { :update => event.described, :index => index } %>
   <%- when 'comment_added' %>
     <%= render :partial => 'shared/comment', :locals => { :comment => event.described, :index => index } %>
+  <%- when 'problem_report_resent' %>
+    <%= render :partial => 'problem_report_resent', :locals => { :event => event, :index => index } %>
   <%- end %>
 </li>

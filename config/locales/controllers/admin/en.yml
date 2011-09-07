@@ -46,6 +46,7 @@ en:
     incoming_message_moved: Incoming message has been moved to this campaign.
     problem_updated: Problem updated.
     problem_problem: There was a problem updating this problem.
+    problem_resent: This problem has been resent
     campaign_updated: Campaign updated.
     campaign_update_updated: Campaign update updated.
     campaign_update_problem: There was a problem updating this campaign.

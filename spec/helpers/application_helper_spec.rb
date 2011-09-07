@@ -26,6 +26,39 @@ describe ApplicationHelper do
   
   end
   
+  describe 'when returning a problem sending history' do 
+    
+    before do 
+      council_contact = mock_model(CouncilContact, :name => 'A test council')
+      operator_contact = mock_model(OperatorContact, :name => 'A test operator')
+      older_sent_email = mock_model(SentEmail, :created_at => DateTime.parse('2011-09-07'),
+                                               :recipient => council_contact)
+      other_council_contact = mock_model(CouncilContact, :name => 'another test council')
+      other_older_sent_email = mock_model(SentEmail, :created_at => DateTime.parse('2011-09-07'),
+                                               :recipient => other_council_contact)
+      newer_sent_email = mock_model(SentEmail, :created_at => DateTime.parse('2011-09-08'),
+                                               :recipient => operator_contact)
+      @problem = mock_model(Problem, :reports_sent => [newer_sent_email, older_sent_email])
+      @two_council_problem = mock_model(Problem, :reports_sent => [other_older_sent_email, older_sent_email])
+    end
+    
+    it 'should return an <li> element containing two reports sent on the same day in one sentence' do 
+      expected_elements = '<li>Sent to another test council and A test council on 07 Sep 2011</li>'
+      helper.problem_sending_history(@two_council_problem).should == expected_elements      
+    end
+    
+    it 'should return an <li> element for each day reports were sent on' do 
+      expected_elements = '<li>Sent to A test council on 07 Sep 2011</li><li>Sent to A test operator on 08 Sep 2011</li>'
+      helper.problem_sending_history(@problem).should == expected_elements
+    end
+    
+    it 'should return an empty string if there are no reports sent' do 
+      @problem.stub!(:reports_sent).and_return([])
+      helper.problem_sending_history(@problem).should == ''
+    end
+  
+  end
+  
   describe 'when giving an "at_the_location" string' do 
     
     it 'should describe a bus stop as "at the Williams Avenue bus stop"' do

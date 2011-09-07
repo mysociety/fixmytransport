@@ -172,7 +172,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :pte_contacts, :only => [:show, :new, :create, :update]
     admin.resources :stops
     admin.resources :stop_areas
-    admin.resources :problems, :only => [:show, :index, :update]
+    admin.resources :problems, :only => [:show, :index, :update], :member => { :resend => [:post] }
     admin.resources :campaigns, :only => [:show, :index, :update]
     admin.resources :campaign_updates, :only => [:show, :update]
     admin.resources :assignments, :only => [:show], :member => { :check => [:post] }

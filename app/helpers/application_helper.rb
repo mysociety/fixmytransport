@@ -322,6 +322,17 @@ module ApplicationHelper
       return admin_url(admin_route_path(location.id))
     end
   end
+  
+  def admin_contact_url(contact)
+    case contact
+    when PassengerTransportExecutiveContact
+      return admin_url(admin_pte_contact_path(contact.id))
+    when OperatorContact
+      return admin_url(admin_operator_contact_path(contact.id))
+    when CouncilContact
+      return admin_url(admin_council_contact_path(contact.id))
+    end
+  end
 
   def add_comment_url(commentable)
     case commentable
@@ -572,15 +583,29 @@ module ApplicationHelper
     else
       raise "No contact description set for contact_type #{contact_type}"
     end
-
   end
 
-  # Operator links for the campaign and problem pages - if the problem was reported to an operator, just
-  # display that. If not, but the location has operators (and there aren't too many to display nicely),
+  def problem_sending_history(problem)
+    history = ''
+    dates_hash = Hash.new{ |hash, key| hash[key] = [] }
+	  problem.reports_sent.each do |sent_email|
+	    dates_hash[sent_email.created_at.to_date] << sent_email.recipient.name
+	  end
+	  dates_hash.to_a.sort.each do |date, recipients|
+	    history_text = t('problems.show.sent_time', :date => date.to_s(:short), 
+	                                                :recipient => recipients.uniq.to_sentence) 
+	    history += "<li>#{history_text}</li>"
+	  end
+		history
+  end
+
+  # Operator links for the campaign and problem pages - if the problem was on a sub route, 
+  # and the user chose an operator, just show that. 
+  # If not, but the location has operators (and there aren't too many to display nicely),
   # show those
   def problem_operator_links(problem)
     location = problem.location
-    if problem.operator
+    if location.is_a?(SubRoute) && location.route_operators.empty? && problem.operator
       return t('shared.operator_links.operated_by', :operators => operator_links([problem.operator]))
     elsif location.respond_to?(:operators) && !location.operators.empty? && location.operators.size <= 2
 	    return t('shared.operator_links.operated_by', :operators => operator_links(location.operators))

@@ -1,0 +1,2 @@
+<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title">The problem report was resent to <%= event.data[:sent_emails].map{ |sent_email_id| SentEmail.find(sent_email_id).recipient.name}.uniq.to_sentence %>
+</span><span class="date"><%= event.created_at.localtime.to_s(:standard_with_date) %></span></a>

@@ -25,6 +25,8 @@ describe ProblemMailer do
                                             :name => 'Test Operator')
       @mock_user = mock_model(User, :email => 'user@example.com')
       @mock_problem = mock_model(Problem, :operator => @mock_operator,
+                                          :recipient_contact => @mock_contact, 
+                                          :recipient_emails => { :email => @mock_contact.email },
                                           :reporter => @mock_user,
                                           :reporter_name => 'Test User',
                                           :reporter_phone => '123',
@@ -134,10 +136,12 @@ describe ProblemMailer do
 
   describe 'when sending problem reports' do
 
-    def make_mock_problem(emailable_orgs, unemailable_orgs)
+    def make_mock_problem(emailable_orgs, unemailable_orgs, contact, contact_emails)
       mock_model(Problem, :responsible_organizations => emailable_orgs + unemailable_orgs,
                           :emailable_organizations => emailable_orgs,
                           :unemailable_organizations => unemailable_orgs,
+                          :recipient_contact => contact,
+                          :recipient_emails => contact_emails,
                           :update_attribute => true,
                           :reply_email => @reporter.email,
                           :reply_name_and_email => "Test User <#{@reporter.email}>",
@@ -166,29 +170,39 @@ describe ProblemMailer do
 
       @emailable_council = mock_model(Council, :name => 'Emailable council')
       @council_contact = mock_model(CouncilContact, :email => 'council@example.com')
-      @emailable_council.stub!(:contact_for_category_and_location).and_return(@council_contact)
 
       @unemailable_council = mock_model(Council, :name => 'Unemailable council')
 
       @operator_with_mail = mock_model(Operator, :name => "Emailable operator")
       @operator_contact = mock_model(OperatorContact, :email => 'operator@example.com')
-      @operator_with_mail.stub!(:contact_for_category_and_location).and_return(@operator_contact)
 
       @operator_without_mail = mock_model(Operator, :name => "Unemailable operator")
-      @operator_without_mail.stub!(:contact_for_category_and_location).and_return(nil)
 
       @pte_with_mail = mock_model(PassengerTransportExecutive, :name => 'Emailable PTE')
       @pte_contact = mock_model(PassengerTransportExecutiveContact, :email => 'pte@example.com')
-      @pte_with_mail.stub!(:contact_for_category_and_location).and_return(@pte_contact)
       @pte_without_mail = mock_model(PassengerTransportExecutive, :name => 'Unemailable PTE')
-      @pte_without_mail.stub!(:contact_for_category_and_location).and_return(nil)
 
-      @mock_problem_email_operator = make_mock_problem([@operator_with_mail], [])
-      @mock_problem_no_email_operator = make_mock_problem([], [@operator_without_mail])
-      @mock_problem_email_pte =  make_mock_problem([@pte_with_mail], [])
-      @mock_problem_no_email_pte = make_mock_problem([], [@pte_without_mail])
-      @mock_problem_some_council_mails = make_mock_problem([@emailable_council], [@unemailable_council])
-      @mock_problem_no_orgs = make_mock_problem([],[])
+      @mock_problem_email_operator = make_mock_problem([@operator_with_mail], 
+                                                       [], 
+                                                       @operator_contact, 
+                                                       { :email => @operator_contact.email })
+      @mock_problem_no_email_operator = make_mock_problem([], 
+                                                          [@operator_without_mail], 
+                                                          nil, 
+                                                          nil)
+      @mock_problem_email_pte =  make_mock_problem([@pte_with_mail], 
+                                                   [], 
+                                                   @pte_contact, 
+                                                   { :email => @pte_contact.email })
+      @mock_problem_no_email_pte = make_mock_problem([], 
+                                                     [@pte_without_mail], 
+                                                     nil,
+                                                     nil)
+      @mock_problem_some_council_mails = make_mock_problem([@emailable_council], 
+                                                           [@unemailable_council], 
+                                                           @council_contact, 
+                                                           { :email => @council_contact.email })
+      @mock_problem_no_orgs = make_mock_problem([],[], nil, nil)
 
       @sendable = [@mock_problem_email_operator,
                    @mock_problem_email_pte,
