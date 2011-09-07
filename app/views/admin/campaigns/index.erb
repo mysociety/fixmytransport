@@ -27,7 +27,12 @@
       <td><%= campaign.key %></td>
       <td><%= link_to(campaign.location.name, admin_location_url(campaign.location))%></td>
       <td><%= campaign.problem.transport_mode_text %></td>
-      <td><%= campaign.initiator.name %></td>
+      <td><%- if campaign.initiator.login_count > 0 %>
+            <%=  link_to(campaign.initiator.name, main_url(profile_path(campaign.initiator)), :target => '_blank' )%>
+          <%- else %>
+            <%= campaign.initiator.name %>
+          <%- end %>
+        </td>
       <td><%- if campaign.problem.operator %>
             <%= link_to(campaign.problem.operator.name, admin_url(admin_operator_path(campaign.problem.operator.id))) %>
           <%- end %>

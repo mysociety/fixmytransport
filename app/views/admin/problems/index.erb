@@ -28,7 +28,12 @@
       <td><%- if problem.campaign %><%= link_to(problem.campaign.title, admin_url(admin_campaign_path(problem.campaign.id)))%><%- end %></td>
       <td><%= link_to(problem.location.name, admin_location_url(problem.location))%></td>
       <td><%= problem.transport_mode_text %></td>
-      <td><%= problem.reporter_name %></td>
+      <td><%- if problem.reporter.login_count > 0 %>
+          <%=  link_to(problem.reporter_name, main_url(profile_path(problem.reporter)), :target => '_blank' )%>
+          <%- else %>
+           <%= problem.reporter_name %>
+          <%- end %>
+      </td>
       <td><%- if problem.operator %>
             <%= link_to(problem.operator.name, admin_url(admin_operator_path(problem.operator.id))) %>
           <%- end %>
