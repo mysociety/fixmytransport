@@ -1,4 +1,6 @@
 class Admin::CampaignsController < Admin::AdminController
+ 
+  helper_method :sort_column, :sort_direction
   
   def show
     @campaign = Campaign.find(params[:id])
@@ -23,7 +25,7 @@ class Admin::CampaignsController < Admin::AdminController
     @campaigns = Campaign.paginate :page => params[:page], 
                                    :conditions => conditions, 
                                    :include => [:location, :problem],
-                                   :order => 'id desc'
+                                   :order => "#{sort_column} #{sort_direction}"
   end
   
   def update
@@ -36,6 +38,15 @@ class Admin::CampaignsController < Admin::AdminController
       flash[:error] = t('admin.campaign_problem')
       render :show
     end
+  end
+  
+  def sort_column
+    columns = Campaign.column_names 
+    columns.include?(params[:sort]) ? params[:sort] : "id"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
   
 end

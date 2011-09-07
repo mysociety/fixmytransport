@@ -5,17 +5,17 @@
 
 <table class='campaigns index-list'>
   <tr>
-    <th width='5%'><%= t('admin.id') %></th>
-    <th width='10%'><%= t('admin.title') %></th>
+    <th width='5%'><%= sortable('id', t('admin.id')) %></th>
+    <th width='10%'><%= sortable('title', t('admin.title')) %></th>
     <th width='10%'><%= t('admin.campaign_problem') %></th>
-    <th width='10%'><%= t('admin.key') %></th>
+    <th width='10%'><%= sortable('key', t('admin.key')) %></th>
     <th width='10%'><%= t('admin.location') %></th>
     <th width='10%'><%= t('admin.transport_mode') %></th>
-    <th width='10%'><%= t('admin.initiator') %></th>
+    <th width='10%'><%= sortable('initiator.name', t('admin.initiator')) %></th>
     <th width='10%'><%= t('admin.responsible_org') %></th>
-    <th width='5%'><%= t('admin.status') %></th>
-    <th width='5%'><%= t('admin.created_at') %></th>
-    <th width='5%'><%= t('admin.updated_at') %></th>
+    <th width='5%'><%= sortable('status', t('admin.status')) %></th>
+    <th width='5%'><%= sortable('created_at', t('admin.created_at')) %></th>
+    <th width='5%'><%= sortable('updated_at',t('admin.updated_at')) %></th>
   </tr>
   <%-@campaigns.each do |campaign| %>
     <tr class='<%= cycle("odd", "even") %>'>
