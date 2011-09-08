@@ -1,5 +1,4 @@
-<h2><%= t('admin.stats')%></h2>
-
+<h2><%= t('admin.stats_all_time')%></h2>
 <div class="admin-stats">
   <strong><%= t('admin.problems') %>:</strong>
   <%- Problem.statuses.each do |status, code| %>
@@ -12,7 +11,19 @@
     <%= status.to_s %>: <%= Campaign.count(:conditions => ['status_code = ?', code]) %>
   <%- end %>
 </div>
-
+<h2><%= t('admin.stats_this_week')%></h2>
+<div class="admin-stats">
+  <strong><%= t('admin.problems') %>:</strong>
+  <%- Problem.statuses.each do |status, code| %>
+    <%= status.to_s %>: <%= Problem.count(:conditions => ['status_code = ? and created_at >= ?', code, (Time.now - 7.days)]) %>
+  <%- end %>
+</div>
+<div class="admin-stats">
+  <strong><%= t('admin.campaigns') %>:</strong>
+  <%- Campaign.statuses.each do |status, code| %>
+    <%= status.to_s %>: <%= Campaign.count(:conditions => ['status_code = ? and created_at >= ?', code, (Time.now - 7.days)]) %>
+  <%- end %>
+</div>
 <h2><%= t('admin.things_to_do') %></h2>
 
 <div class='admin-task-list'>
