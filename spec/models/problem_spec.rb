@@ -60,7 +60,6 @@ describe Problem do
         end
       
         it 'should return a hash with key :cc set to the cc of the recipient contact' do 
-          puts @problem.recipient_emails(@operator)
           @problem.recipient_emails(@operator)[:cc].should == 'cc@example.com'
         end
       end
