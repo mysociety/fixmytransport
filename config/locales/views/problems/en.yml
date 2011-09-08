@@ -34,7 +34,7 @@ en:
       thanks: Thanks for reporting this problem!
       header: "Do you want others to support you?"
       start_campaign: "Yes, why not?"
-      no_explanation: "If your issue was a small one-off incident that you<br /> just wanted to report, then your job is done."
+      no_explanation: "If your issue was a small one-off incident that you<br /> just wanted to report, click \"No thanks\", and your job is done."
       subheader: "Use FixMyTransport to create more pressure for a fix"
       no_thanks: "No Thanks"
       makes_report_page: "Makes a problem report page"
