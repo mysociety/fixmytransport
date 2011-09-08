@@ -131,6 +131,62 @@ describe StopArea do
     
   end
   
+  describe 'when asked for responsible organizations' do 
+  
+    describe 'if it is a ferry terminal' do 
+    
+      before do 
+        
+        @stop_area = StopArea.new
+        @stop_area.stub!(:transport_mode_names).and_return(['Ferry'])
+      end
+      
+      describe 'if there are operators' do 
+        
+        before do
+          @operator = mock_model(Operator)
+          @stop_area.stub!(:operators).and_return([@operator])
+        end
+        
+        it 'should return the operators' do 
+          @stop_area.responsible_organizations.should == [@operator]
+        end
+      
+      end
+      
+      describe 'if there are no operators' do 
+        
+        before do
+          @pte = mock_model(PassengerTransportExecutive)
+          @stop_area.stub!(:operators).and_return([])
+          @stop_area.stub!(:passenger_transport_executive).and_return(@pte)
+        end
+        
+        it 'should return any PTE' do 
+          @stop_area.responsible_organizations.should == [@pte]
+        end
+      
+      end
+      
+      describe 'if there are no operators and no PTE' do 
+      
+        before do 
+          @council = mock_model(Council)
+          @stop_area.stub!(:operators).and_return([])
+          @stop_area.stub!(:passenger_transport_executive).and_return(nil)
+          @stop_area.stub!(:councils).and_return([@council])
+        end
+        
+        it 'should return the council' do 
+          @stop_area.responsible_organizations.should == [@council]
+        end
+        
+      end
+       
+    end
+    
+  end
+  
   describe 'as a transport location' do 
     
     before do 
