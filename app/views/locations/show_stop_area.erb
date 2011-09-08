@@ -25,7 +25,7 @@
 	<div class="container">
       <%- if !@stop_area.operators.empty?  %>
           
-          <h2 class="route-operator">operated by <%= operator_links(@stop_area.operators) %></h2>
+          <h2 class="route-operator">operated by <%= raw operator_links(@stop_area.operators) %></h2>
       <%- end %>
         
       <%- if !@stop_area.area.blank? %>
