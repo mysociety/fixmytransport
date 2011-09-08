@@ -81,6 +81,10 @@
   <%= raw f.text_field :reporter_name %>
 </div>
 
+<div class='form-field'>
+  <%= raw label(:problem, :token) %>
+  <%= @problem.token %>
+</div>
 
 <%= raw submit_tag t('admin.go') %>
 
