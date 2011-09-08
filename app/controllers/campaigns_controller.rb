@@ -1,9 +1,7 @@
 class CampaignsController < ApplicationController
 
   before_filter :process_map_params, :only => [:show]
-  before_filter :find_editable_campaign, :only => [:add_details]
-  before_filter :find_visible_campaign, :except => [:add_details,
-                                                    :confirm_join,
+  before_filter :find_visible_campaign, :except => [:confirm_join,
                                                     :confirm_leave,
                                                     :index]
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
@@ -100,17 +98,15 @@ class CampaignsController < ApplicationController
   end
 
   def add_details
-    if @campaign.status != :new
-      redirect_to campaign_url(@campaign) and return false
-    end
     if request.post?
       if (@campaign.update_attributes(params[:campaign]))
-        @campaign.confirm
-        @campaign.save!
         redirect_to campaign_url(@campaign, :first_time => true)
       else
         render :action => "add_details"
       end
+    else
+      @campaign.title = nil
+      @campaign.description = nil
     end
   end
 

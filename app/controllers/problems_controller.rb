@@ -87,7 +87,7 @@ class ProblemsController < ApplicationController
   def convert
     if @problem.status != :new
       if @problem.campaign
-        redirect_to(add_details_campaign_url(@problem.campaign)) and return
+        redirect_to(add_details_campaign_url(@problem.campaign.id)) and return
       else
         redirect_to problem_url(@problem) and return
       end
@@ -95,7 +95,7 @@ class ProblemsController < ApplicationController
     if params[:convert] == 'yes'
       @problem.create_new_campaign
       @problem.confirm!
-      redirect_to(add_details_campaign_url(@problem.campaign)) and return
+      redirect_to(add_details_campaign_url(@problem.campaign.id)) and return
     elsif params[:convert] == 'no'
       @problem.confirm!
       flash[:notice] = t('problems.convert.thanks')

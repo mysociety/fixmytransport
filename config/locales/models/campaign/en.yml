@@ -1,4 +1,7 @@
 en:
+  models:
+    campaign: 
+      fix_this: "fix this:"
   activerecord:
     errors:
       models:

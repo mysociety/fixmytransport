@@ -172,8 +172,11 @@ class Problem < ActiveRecord::Base
     campaign = self.build_campaign({ :location_id => self.location_id,
                                      :location_type => self.location_type,
                                      :initiator => self.reporter,
-                                     :problem => self })
+                                     :problem => self,
+                                     :title => "#{I18n.translate("models.campaign.fix_this")} #{self.subject}", 
+                                     :description => self.description })
     campaign.status = :new
+    campaign.confirm
     self.save
     return campaign
   end

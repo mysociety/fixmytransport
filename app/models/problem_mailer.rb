@@ -36,7 +36,7 @@ class ProblemMailer < ApplicationMailer
     end
     from problem.reply_name_and_email
     subject I18n.translate('mailers.problem_report_subject', :subject => problem.subject)
-    campaign_link = problem.campaign ? main_url(campaign_path(problem.campaign)) : nil
+    campaign_link = problem.campaign ? main_url(campaign_path(problem.campaign.id)) : nil
     body({ :problem => problem,
            :problem_link => main_url(problem_path(problem)),
            :campaign_link => campaign_link,

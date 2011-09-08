@@ -1,13 +1,32 @@
 <%- form_for campaign, :url => campaign_url(campaign, :token => params[:token]), :html => { :class => 'update_campaign' } do |f| %>
   <div class='fieldset'>
+
+    <div class='form-field'>
+  		 <%- if campaign.errors.on('title') %>
+  		    <%- title_error_style = '' %>
+  		  <%- else %>
+  		    <%- title_error_style = 'display: none;'%>
+  		  <%- end %>
+          <div class='error' style="<%= title_error_style %>" role="alert">
+            <%= campaign.errors.on('title') %>
+          </div>
+        <%=  f.label :title, raw("Please help me persuade <span>#{campaign.responsible_org_descriptor}</span> to") %>
+        <%= raw f.text_field :title %>
+
+		</div>
 		<div class='form-field'>
+		  <%- if campaign.errors.on('description') %>
+  		    <%- description_error_style = '' %>
+  		  <%- else %>
+  		    <%- description_error_style = 'display: none;'%>
+  		  <%- end %>
+          <div class='error' style="<%= description_error_style %>" role="alert">
+            <%= campaign.errors.on('description') %>
+          </div>
+		  <%=  f.label :description %>
 		  <%= raw f.text_area :description, { :rows => 8, :cols => 50 } %>
 		</div>
-	    <%- if campaign.errors.on('description') %>
-	      <div class='error'><%= error_message_on campaign, :description %>
-				</div>
-			<%- end %>
 
 		<button type="submit" class="button right"><%= t('campaigns.edit.save') %></button>
 	</div>
-<%- end %> 
+<%- end %>

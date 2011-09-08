@@ -775,6 +775,10 @@ ul.user-list {
 #email-share label {
 	margin:5px;
 }
+.update_campaign label {
+  clear: both;
+}
+
 #main-content #comment-form,
 #main-content .new_campaign_update,
 #main-content .update_campaign,
@@ -795,6 +799,7 @@ ul.user-list {
 
 #main-content #new_outgoing_message input[type=text],
 #main-content .password_reset_email input[type=text],
+#main-content .update_campaign input[type=text],
 #main-content #edit_user_1 input[type=password] {
   width: 96%;
 	background: #f4f4f4;

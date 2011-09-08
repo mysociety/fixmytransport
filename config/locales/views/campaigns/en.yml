@@ -2,12 +2,12 @@ en:
   campaigns:
     add_details:
       tip_close: "Close"
-      add_details_instructions: "Write a headline and description for the page and we'll send your problem on its way."
-      good_headline: "Give your supporters page a good headline (in 30 to 80 characters)"
+      add_details_instructions: "Last step - write a headline for the page that will encourage them to join up."
+      good_headline: "Give your supporters page a good headline (in 80 characters or fewer)"
       eg: "E.g."
       headline_example: "Please help me persuade The Operator to get rid of the awful smell between Manors and Monument on the Metro"
       details_submit: "Submit"
-      add_details: "OK - We're going to set up a simple webpage so that other people can support you."
+      add_details: "OK - Your problem report is on its way and we've set up a simple web page so that other people can support you."
       make_a_headline: "Complete this sentence!"
       description_advice: "Here you should describe in a bit more detail why you've lodged a complaint, and why you want other people to support you. Be as clear and concise as you can, for maximum impact."
       add_short_description: "Add a short description"
@@ -21,7 +21,7 @@ en:
       let_us_know: "let us know"
       you_are_no_longer_a_supporter: "You are no longer a supporter of \"%{campaign}\""
     edit:
-      edit_campaign_description: "Edit your description:"
+      edit_campaign_description: "Edit your headline and description:"
       save: "Save"
     share: 
       share_by_email: Share by email
@@ -99,14 +99,14 @@ en:
       campaign_comment: "Comment"
       campaign_comment_title: "Leave a public comment (will be mailed to supporters)"
       supporting: "Supporting"
-      edit_description: "Edit description"
+      edit_description: "Edit"
       expert_edit_description: "Edit the campaign description for %{user}"
       please_upload_valid_image: "Please upload a .jpeg, .gif or .png image"
       campaign_manager: "Problem Reporter"
       campaign_supporter_first_time_header: "Yay! Thanks for becoming a supporter. As a supporter you can help in lots of ways, like offering advice. But in the first instance what %{user} really needs is for you to shout about it. Twitter, Facebook, email - whatever suits."
       contact_council: "Council"
       sign_in_to_join: "Please sign in or create an account to help get this problem fixed"
-      transport_experts: "Transport experts"
+      transport_experts: "Transport experts" 
       special_powers: "In order to help get this problem fixed, here are your special powers: "
       added_an_update: "%{name} added an update"
       user_requested_advice: "%{name} asked for advice."
