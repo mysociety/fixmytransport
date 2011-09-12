@@ -5,7 +5,10 @@
 	<h2 class="font-1"><%= t('problems.convert.subheader') %></h2>
 	<p class="font-1"><%= raw t('problems.convert.intro')%></p>
     <div class="left">
-      <a href="?convert=yes" class="button green font-1"><%= t('problems.convert.start_campaign') %></a>
+      <form action="" method="POST">
+        <input type="hidden" name="convert" value="yes">
+        <input type="submit" class="button green font-1" value="<%= t('problems.convert.start_campaign') %>">
+      </form>
       <p class="convert-explanation"><%= raw t('problems.convert.yes_explanation') %></p>
       <ul>
         <li><%= t('problems.convert.makes_support_page')%></li>
@@ -16,7 +19,10 @@
     </div>
 	<span class="middle font-1"><%= t('problems.convert.or')%></span>
     <div class="right">
-      <a href="?convert=no" class="button red font-1"><%= t('problems.convert.no_thanks')%></a>
+      <form action="" method="POST">
+        <input type="hidden" name="convert" value="no">
+        <input type="submit" class="button red font-1" value="<%= t('problems.convert.no_thanks')%>">
+      </form>
       <p class="convert-explanation"><%= raw t('problems.convert.no_explanation')%></p>
       <ul>
         <li><%= t('problems.convert.makes_report_page')%></li>

@@ -37,7 +37,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.resources :problems, :except => [:destroy, :edit, :update],
-                           :member => {:convert => [:get],
+                           :member => {:convert => [:get, :post],
                                       :add_comment => [:get, :post] },
                            :collection => { :choose_location => :get,
                                             :find_stop => :get,
