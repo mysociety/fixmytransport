@@ -82,28 +82,7 @@ class Assignment < ActiveRecord::Base
     self
   end
 
-  # Does this assignment depend on the completion of other assignments that haven't been
-  # completed yet?
-  def has_unmet_prerequisites?
-    prerequisites = Assignment.prerequisites[self.task_type.to_sym]
-    return false if prerequisites.nil?
-    any_unmet = false
-    prerequisites.each do |task_type|
-      if self.problem.assignments.incomplete.any?{ |assignment| assignment.task_type.to_sym == task_type }
-        any_unmet = true
-        break
-      end
-    end
-    any_unmet
-  end
-
   # class methods
-
-  def self.prerequisites
-    { :write_to_transport_organization => [:find_transport_organization_contact_details,
-                                           :find_transport_organization],
-      :find_transport_organization_contact_details => [:find_transport_organization] }
-  end
 
   def self.assignment_from_attributes(attributes)
     status = attributes.delete(:status)
