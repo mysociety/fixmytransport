@@ -11,8 +11,7 @@ namespace :temp do
                                                      AND created_at <= ?
                                                      and title is null', 0, Time.now - 2.weeks, Time.now - 1.day])
     campaigns.each do |campaign|
-      mail = ProblemMailer.create_one_off_followup_for_new_campaigns(campaign.initiator, campaign.problem)
-      puts mail
+      ProblemMailer.deliver_one_off_followup_for_new_campaigns(campaign.initiator, campaign.problem)
     end
   end
   
