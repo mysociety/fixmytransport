@@ -31,6 +31,7 @@ namespace :temp do
       end
       problem.campaign_id = nil
       problem.save!
+      puts "Destroyed."
     end
   end
   
