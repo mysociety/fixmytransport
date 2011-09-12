@@ -3,15 +3,34 @@ require File.dirname(__FILE__) +  '/../fixmytransport/geo_functions'
 
 namespace :temp do
 
-  desc "Deliver a one-off followup email to people who made a campaign but didn't add details"
-  task :deliver_one_off_campaign_followups => :environment do 
-    # get campaigns with :new status that have been created in the last couple of weeks
-    campaigns = Campaign.find(:all, :conditions => ['status_code = ? 
-                                                     AND created_at >= ?
-                                                     AND created_at <= ?
-                                                     and title is null', 0, Time.now - 2.weeks, Time.now - 1.day])
-    campaigns.each do |campaign|
-      ProblemMailer.deliver_one_off_followup_for_new_campaigns(campaign.initiator, campaign.problem)
+  desc 'Remove new campaign'
+  task :remove_new_campaign => :environment do 
+    unless ENV['PROBLEM_ID']
+      puts ''
+      puts 'Usage: Specify a problem ID'
+      puts ''
+      exit 0
+    end
+    problem_id = ENV['PROBLEM_ID']
+    problem = Problem.find(problem_id)
+    unless problem.campaign
+      puts "No campaign for problem #{problem.id}"
+      exit 0
+    end
+    unless problem.campaign.status == :new
+      puts "Campaign #{problem.campaign.id} is not new"
+      exit 0
+    end
+    puts "About to destroy campaign #{problem.campaign.id} for problem #{problem.id} : #{problem.subject}"
+    if ENV['CONFIRM']
+      problem.campaign.campaign_events.destroy_all
+      problem.campaign.destroy
+      problem.assignments.each do |assignment|
+        assignment.campaign_id = nil
+        assignment.save!
+      end
+      problem.campaign_id = nil
+      problem.save!
     end
   end
   
