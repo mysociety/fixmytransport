@@ -1,0 +1,20 @@
+Hello <%= raw @recipient.first_name %>,
+
+We're getting in touch as you recently started to report a problem using FixMyTransport but didn't quite get all the way through the process. This means that your problem report has not yet been sent to <%= @organization %>.
+
+Your problem subject was:
+
+<%= @problem.subject %>
+
+Your description was: 
+
+<%= @problem.description %>
+
+Problem ID: <%= @problem.id %>
+
+If you don't want to send the problem report, you don't need to do anything, and we won't bother you again. If you want to send the report, just reply to this email, letting us know if you want to create a public page for gathering support, or if you just want to send the problem report. We'll then get your report on its way!
+
+Best,
+
+The FixMyTransport team
+
