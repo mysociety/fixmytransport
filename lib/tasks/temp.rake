@@ -5,11 +5,14 @@ namespace :temp do
 
   desc "Deliver a one-off followup email to people who made a campaign but didn't add details"
   task :deliver_one_off_campaign_followups => :environment do 
+    # get campaigns with :new status that have been created in the last couple of weeks
     campaigns = Campaign.find(:all, :conditions => ['status_code = ? 
                                                      AND created_at >= ?
-                                                     and title is null', 0, Time.now - 2.weeks])
+                                                     AND created_at <= ?
+                                                     and title is null', 0, Time.now - 2.weeks, Time.now - 1.day])
     campaigns.each do |campaign|
-    
+      mail = ProblemMailer.create_one_off_followup_for_new_campaigns(campaign.initiator, campaign.problem)
+      puts mail
     end
   end
   

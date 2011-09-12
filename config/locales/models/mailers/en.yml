@@ -10,6 +10,7 @@ en:
     new_message_subject: "[FixMyTransport] New message to \"%{title}\""
     update_subject: "[FixMyTransport] Update on \"%{title}\""
     comment_subject: "[FixMyTransport] New comment on \"%{title}\""
+    one_off_followup_subject: "[FixMyTransport] Do you want to send your problem report?"
     advice_request_subject: "[FixMyTransport] Can you give advice to \"%{title}?\""
     completed_assignment_subject: "[FixMyTransport] Assignment completed for \"%{title}\""
     app_subject_prefix: "[FixMyTransport] "

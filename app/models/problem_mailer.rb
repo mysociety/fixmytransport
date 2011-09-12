@@ -57,6 +57,16 @@ class ProblemMailer < ApplicationMailer
                   :unsubscribe_link => main_url(confirm_unsubscribe_path(:email_token => subscription.token)) }
     body(body_hash)
   end
+  
+  def one_off_followup_for_new_campaigns(recipient, problem)
+    recipients recipient.name_and_email
+    from contact_from_name_and_email
+    subject I18n.translate('mailers.one_off_followup_subject')
+    body_hash = { :problem => problem, 
+                  :recipient => recipient, 
+                  :organization => problem.emailable_organizations.map{|org| org.name}.to_sentence }
+    body(body_hash)
+  end
 
   def self.send_report(problem, recipients, missing_recipients=[])
     sent_emails = []
