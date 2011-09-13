@@ -15,6 +15,7 @@
   <body>
     <h2><%= link_to_unless_current("#{t('admin.site_name')} #{t('admin.admin')}", admin_url(admin_root_path)) %></h2>
     <ul class='admin-navigation'>
+      <li><%= link_to t('admin.users'), admin_url(admin_users_path) %></li>
       <li><%= link_to t('admin.location_searches'), admin_url(admin_location_searches_path) %></li>
       <li><%= link_to t('admin.campaigns'), admin_url(admin_campaigns_path) %></li>      
       <li><%= link_to t('admin.problems'), admin_url(admin_problems_path) %></li>
