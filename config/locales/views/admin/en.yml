@@ -26,4 +26,5 @@ en:
     councils: Councils
     edit: Edit
     campaigns: Campaigns
+    users: Users
     incoming_messages_without_campaigns: "Assign these messages to a campaign (total %{number})"
