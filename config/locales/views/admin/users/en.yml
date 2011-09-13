@@ -1,0 +1,5 @@
+en: 
+  admin:
+    user_name: Name
+    email_address: Email
+    comment_count: Number of comments
