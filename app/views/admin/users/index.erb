@@ -1,0 +1,20 @@
+<table>
+  <tr>
+    <th><%= t('admin.user_name')%></th>
+    <th><%= t('admin.email_address')%></th>
+    <th><%= t('admin.comment_count')%></th>
+  </tr>
+<%- @users.each do |user| %>
+    <tr>
+      <td>
+        <%= user.name %>
+      </td>
+      <td>
+        <%= user.email %>
+      </td>
+      <td>
+        <%= user.comment_count %>
+      </td>
+    </tr>
+<%- end %>
+</table>
