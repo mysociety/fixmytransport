@@ -271,8 +271,13 @@ class Problem < ActiveRecord::Base
   end
 
   def self.create_from_hash(data, user, token=nil)
+    if data[:text_encoded] == true
+      description = ActiveSupport::Base64.decode64(data[:description])
+    else
+      description = data[:description]
+    end
     problem = Problem.new(:subject => data[:subject],
-                          :description => data[:description],
+                          :description => description,
                           :location_id => data[:location_id],
                           :location_type => data[:location_type],
                           :category => data[:category],

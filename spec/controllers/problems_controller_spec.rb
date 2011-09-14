@@ -551,16 +551,14 @@ describe ProblemsController do
                                           :confirm! => true,
                                           :campaign => nil,
                                           :status= => true,
-                                          :subject => nil,
-                                          :description => nil,
+                                          :subject => "a test subject",
+                                          :description => "a test description",
                                           :location_id => nil,
                                           :location_type => nil,
                                           :category => nil,
                                           :operator_id => nil,
                                           :passenger_transport_executive_id => nil,
                                           :council_info => nil,
-                                          :is_campaign= => true,
-                                          :is_campaign => '0',
                                           :errors => [],
                                           :create_assignments => true)
       Problem.stub!(:new).and_return(@mock_problem)
