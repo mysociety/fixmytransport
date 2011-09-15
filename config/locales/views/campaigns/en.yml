@@ -73,7 +73,7 @@ en:
       tell_to_write: "Tell %{user} who to write to next"
       manage_campaign: "Actions you can take to get your problem fixed"
       your_contacts: "Your contacts"
-      view_all: "View all (%{number})"
+      view_all: "View more (%{number})"
       short_call_to_action: "We're trying to %{title}"
       campaign_supporters: "Supporters (%{number})"
       facebook: "Facebook"
