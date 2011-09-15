@@ -1,6 +1,6 @@
 class Council
 
-  attr_accessor :name, :id, :emailable
+  attr_accessor :name, :id
 
   def initialize(attributes)
     @id = attributes[:id]
@@ -13,7 +13,7 @@ class Council
   end
 
   def emailable?(location)
-    @emailable
+    !self.contacts.empty?
   end
 
   def categories(location)
