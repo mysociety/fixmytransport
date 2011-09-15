@@ -132,6 +132,8 @@
     <%- Assignment.content_columns.map { |c| c.name }.each do |column| %>
       <%- if column == 'data' %>
       <td><pre><%= assignment.send(column).inspect %></pre></td>
+      <%- elsif column == 'task_type_name' %>
+      <td><%= link_to(assignment.send(column), admin_url(admin_assignment_path(assignment))) %></td>
       <%- else %>
         <td><%= simple_format( assignment.send(column) ) %></td>
       <%- end %>
