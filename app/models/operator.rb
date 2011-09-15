@@ -24,6 +24,7 @@ class Operator < ActiveRecord::Base
   belongs_to :transport_mode
   validates_presence_of :name
   has_many :operator_contacts, :conditions => ['deleted = ?', false]
+  has_many :responsibilities, :as => :organization
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   has_paper_trail
   cattr_reader :per_page
@@ -31,6 +32,7 @@ class Operator < ActiveRecord::Base
   named_scope :with_email, :conditions => ["email is not null and email != ''"]
   named_scope :without_email, :conditions => ["email is null or email = ''"]
   has_friendly_id :name, :use_slug => true
+
 
   # we only accept new or delete existing associations
   def route_operator_invalid(attributes)

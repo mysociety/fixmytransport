@@ -5,7 +5,7 @@ class PassengerTransportExecutive < ActiveRecord::Base
   has_many :pte_contacts, :class_name => 'PassengerTransportExecutiveContact',  
                           :foreign_key => 'passenger_transport_executive_id',
                           :conditions => ['deleted = ?', false]
-  
+  has_many :responsibilities, :as => :organization
   has_paper_trail
   
   def emailable?(location)
