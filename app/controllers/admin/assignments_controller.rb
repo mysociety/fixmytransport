@@ -29,7 +29,7 @@ class Admin::AssignmentsController < Admin::AdminController
       set_location_operator(location)
       problem.operator = @operator
       location_only = @assignment.data ? @assignment.data[:location_only] : nil
-      new_email = @assignment.data ? @assignment.data[:organization_email].strip : nil
+      new_email = (@assignment.data && @assignment.data[:organization_email]) ? @assignment.data[:organization_email].strip : nil
       @assignment_complete = false
       # does the operator already a contact for this location?
       existing_contact = @operator.contact_for_category_and_location("Other", location, exception_on_fail=false)
