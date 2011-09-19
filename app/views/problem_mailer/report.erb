@@ -21,7 +21,7 @@ Location NaPTAN code: <%= raw @problem.location.naptan_code %>
 
 <%- end %>
 
-<%- if @problem.location.respond_to?(:area) %>
+<%- if @problem.location.respond_to?(:area) and !@problem.area.blank? %>
 Area: <%= raw(@problem.location.area) %>
 
 <%- end %>
