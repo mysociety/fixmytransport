@@ -1,22 +1,10 @@
 Dear <%= raw @recipient.name %>,
 
-The problem report below has been sent to you via the website FixMyTransport.com.
-
-It refers to a problem <%= raw at_the_location(@problem.location) %>
-
------------------
-
-From: <%= raw @problem.reporter_name %>,  <<%= raw @problem.reply_email %>>
-
-Subject: <%= raw(@problem.subject) %>
-
-Details: 
-
 <%= raw(@problem.description) %>
 
 ------------------
 
-THE FOLLOWING DETAILS ARE INCLUDED BY FIXMYTRANSPORT TO HELP YOU MANAGE THIS PROBLEM
+Here is some information provided by <%= @problem.reporter_name %> about the location of this issue:
 
 Location name: <%= raw @problem.location.name %>
 
@@ -63,18 +51,8 @@ Northing: <%= raw @problem.location.northing %>
 <%- end %>
 ----------
 
-ABOUT THIS PROBLEM REPORT
-
-Sender: <%= raw @problem.reply_email %>
-
-<%- if @problem.campaign %>
-PLEASE NOTE: Your replies to this problem report WILL BE PUBLISHED ONLINE
-
-<%- end %>
-
 <%- if MySociety::Config.getbool('SITE_VISIBLE', true) %> 
-To view a map of the precise location of this issue, or to provide an update on the problem, 
-please visit the following link:
+To view a map of the precise location of this problem, or to provide an update on the problem, please visit the following link:
 
 <%- if @problem.campaign %>
 <%= raw @campaign_link %>
@@ -83,17 +61,13 @@ please visit the following link:
 <%- end %>
 <%- end %>
 
-Thanks,
-
-FixMyTransport
-
 <%- if MySociety::Config.getbool('SITE_VISIBLE', true) %> 
 
-[ This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. If there is a more appropriate email address for messages about this type of problem, please let us know by visiting <<%= raw @feedback_link %>>. This will help improve the service for people travelling. We also welcome any other feedback you may have. ]
+[<%- if @problem.campaign %> PLEASE NOTE: Your replies to this problem report will be sent to <%= @problem.reporter_name %> and will be published online.<%- end %> This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. If there is a more appropriate email address for messages about this type of problem, please let us know by visiting <<%= raw @feedback_link %>>. This will help improve the service for people travelling. We also welcome any other feedback you may have. ]
 
 <%- else %>
 
-[ This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. If there is a more appropriate email address for messages about this type of problem, please let us know by  emailing <%=MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')%>. This will help improve the service for people travelling. We also welcome any other feedback you may have. ]
+[<%- if @problem.campaign %> PLEASE NOTE: Your replies to this problem report will be sent to <%= @problem.reporter_name %> and will be published online.<%- end %>  This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. If there is a more appropriate email address for messages about this type of problem, please let us know by  emailing <%=MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')%>. This will help improve the service for people travelling. We also welcome any other feedback you may have. ]
 
 <%- end %>
 
