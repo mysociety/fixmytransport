@@ -252,9 +252,8 @@ module ApplicationHelper
     end
   end
 
-  def org_names(problem, method, connector, wrapper_start='<strong>', wrapper_end='</strong>')
-    return '' unless problem
-    names = problem.send(method).map{ |org| "#{wrapper_start}#{org.name}#{wrapper_end}" }
+  def org_names(orgs, connector, wrapper_start='<strong>', wrapper_end='</strong>')
+    names = orgs.map{ |org| "#{wrapper_start}#{org.name}#{wrapper_end}" }
     names.to_sentence(:last_word_connector => " #{connector} ", :two_words_connector => " #{connector} ")
   end
 
@@ -555,7 +554,8 @@ module ApplicationHelper
     when 'find_transport_organization'
       return t('campaigns.show.find_operator_task_description', :location => readable_location_type(assignment.campaign.location))
     when 'find_transport_organization_contact_details'
-      return t('campaigns.show.find_contact_task_description', :name => assignment.problem.operator.name)
+      names = assignment.problem.responsible_organizations.map{ |org| org.name }.to_sentence
+      return t('campaigns.show.find_contact_task_description', :name => names)
     else
       raise "No details set for assignment type #{assignment.task_type}"
     end
@@ -605,8 +605,8 @@ module ApplicationHelper
   # show those
   def problem_operator_links(problem)
     location = problem.location
-    if location.is_a?(SubRoute) && location.route_operators.empty? && problem.operator
-      return t('shared.operator_links.operated_by', :operators => operator_links([problem.operator]))
+    if location.is_a?(SubRoute) && location.route_operators.empty? && problem.responsible_operators.size == 1
+      return t('shared.operator_links.operated_by', :operators => operator_links(problem.responsible_operators))
     elsif location.respond_to?(:operators) && !location.operators.empty? && location.operators.size <= 2
 	    return t('shared.operator_links.operated_by', :operators => operator_links(location.operators))
 	  else
