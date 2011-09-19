@@ -9,10 +9,15 @@ class PassengerTransportExecutive < ActiveRecord::Base
   has_paper_trail
   
   def emailable?(location)
-    conditions = ["category = 'Other' and (location_type = ? or location_type is null or location_type = '')", location.class.to_s]
+    conditions = ["category = 'Other' and (location_type = ? or location_type is null or location_type = '')", 
+                  location.class.to_s]
     general_contacts = self.pte_contacts.find(:all, :conditions => conditions)
     return false if general_contacts.empty?
     return true
+  end
+  
+  def emails
+    self.pte_contacts.map{ |contact| contact.email }.uniq.compact
   end
   
   def categories(location)

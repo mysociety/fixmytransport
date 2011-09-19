@@ -121,12 +121,7 @@ class IncomingMessage < ActiveRecord::Base
   
   def mask_organization_emails(text, &block)
     campaign.problem.emailable_organizations.each do |organization|
-      if organization.is_a? Council or organization.is_a? Operator
-        emails = organization.emails
-      else
-        emails = [organization.email]
-      end
-      emails.each do |email|
+      organization.emails.each do |email|
         if block_given?
          text = yield [organization, email, text]
         else
