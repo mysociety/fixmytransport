@@ -3,7 +3,7 @@ class CreateResponsibilities < ActiveRecord::Migration
     create_table :responsibilities do |t|
       t.integer :problem_id
       t.string :organization_type
-      t.string :organization_id
+      t.integer :organization_id
       t.timestamps
     end
   end
