@@ -259,19 +259,5 @@ describe Stop do
 
   end
 
-  describe 'when asked for council info' do
-
-    it 'should create a pipe-delimited string of two comma delimited strings of emailable and not emailable council ids' do
-      stop = Stop.new
-      stop.stub!(:emailable_councils).and_return([mock('Council', :id => 44)])
-      stop.stub!(:unemailable_councils).and_return([])
-      stop.council_info.should == '44|'
-      stop.stub!(:emailable_councils).and_return([mock('Council', :id => 44), mock('Council', :id => 33)])
-      stop.stub!(:unemailable_councils).and_return([mock('Council', :id => 55)])
-      stop.council_info.should == '44,33|55'
-    end
-
-  end
-
 end
 

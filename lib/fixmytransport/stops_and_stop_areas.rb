@@ -52,16 +52,6 @@ module FixMyTransport
         
         # Make them objects
         councils = council_data.values.map{ |council_info| Council.from_hash(council_info) }
-        # Do we have contact information? 
-        councils.each do |council|
-          council_contacts = council.contacts
-          if council_contacts.empty? 
-            council.emailable = false
-          else
-            council.emailable = true
-          end
-        end
-        councils
       end
       memoize :councils
 
@@ -92,21 +82,6 @@ module FixMyTransport
         return false
       end
 
-      def emailable_councils
-        return [] unless self.councils
-        self.councils.select{ |council| council.emailable?(self) }
-      end
-
-      def unemailable_councils
-        return [] unless self.councils
-        self.councils.select{ |council| ! council.emailable?(self) }
-      end
-
-      def council_info
-        emailable_id_string = emailable_councils.map{ |council| council.id }.join(',')
-        unemailable_id_string = unemailable_councils.map{ |council| council.id }.join(',')
-        [emailable_id_string, unemailable_id_string].join("|")
-      end
       
       def name_without_suffix(transport_mode)
         if transport_mode.name == 'Train'
