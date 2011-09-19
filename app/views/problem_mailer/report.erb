@@ -21,6 +21,10 @@ Location NaPTAN code: <%= raw @problem.location.naptan_code %>
 
 <%- end %>
 
+<%- if @problem.location.respond_to?(:area) %>
+Area: <%= raw(@problem.location.area) %>
+
+<%- end %>
 <%- if @problem.location.is_a? Stop and !@problem.location.landmark.blank? %>
 Nearby landmark: <%= raw(@problem.location.landmark) %>
 
