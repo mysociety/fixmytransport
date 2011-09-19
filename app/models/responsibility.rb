@@ -3,6 +3,7 @@ class Responsibility < ActiveRecord::Base
   belongs_to :organization, :polymorphic => true
   validates_presence_of :organization_id, :message => I18n.translate('problems.new.choose_operator')
   validates_presence_of :organization_type
+  has_paper_trail
   
   def organization
     case self.organization_type
