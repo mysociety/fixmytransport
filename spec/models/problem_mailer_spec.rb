@@ -62,20 +62,6 @@ describe ProblemMailer do
 
   end
 
-  describe 'when checking for a problem change' do
-
-    it 'should print a message if the council info for the problem location is different from that stored on the problem' do
-      mock_stop = mock_model(Stop, :council_info => "33|44")
-      mock_problem = mock_model(Problem, :councils_responsible? => true,
-                                         :council_info => "33,44",
-                                         :location => mock_stop,
-                                         :id => 22)
-      STDERR.should_receive(:puts).with("Councils changed for problem 22. Was 33,44, now 33|44")
-      ProblemMailer.check_for_council_change(mock_problem)
-    end
-
-  end
-
   describe 'when sending a comment' do
 
     before do
@@ -219,7 +205,6 @@ describe ProblemMailer do
       Problem.stub!(:unsendable).and_return([@mock_problem_no_orgs])
       Stop.stub!(:find).with(@mock_stop.id).and_return(@mock_stop)
       ProblemMailer.stub!(:deliver_report)
-      ProblemMailer.stub!(:check_for_council_change)
       SentEmail.stub!(:create!)
       STDERR.stub!(:puts)
     end
@@ -288,12 +273,6 @@ describe ProblemMailer do
       STDERR.should_receive(:puts).with("Sent #{@sendable.size} reports")
       ProblemMailer.send_reports
     end
-
-    it 'should check for a change in the councils for the problem' do
-      ProblemMailer.should_receive(:check_for_council_change)
-      ProblemMailer.send_reports
-    end
-
 
     describe 'when in dryrun mode' do
 
