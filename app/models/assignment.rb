@@ -58,8 +58,8 @@ class Assignment < ActiveRecord::Base
   end
 
   def user_name
-    if problem
-      problem.reporter_name
+    if problem && problem.reporter
+      problem.reporter.name
     end
   end
 
