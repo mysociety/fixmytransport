@@ -18,6 +18,33 @@ describe Problem do
 
   end
   
+  describe 'when creating a problem from a hash' do 
+  
+    it 'should create responsibilities from a comma and pipe delimited string keyed by "responsibilities"' do 
+      mock_problem = mock_model(Problem, :responsibilities => [],
+                                         :status= => nil,
+                                         :reporter= => nil, 
+                                         :reporter_name= => nil, 
+                                         :save! => nil)
+      Problem.stub!(:new).and_return(mock_problem)
+      mock_problem.responsibilities.should_receive(:build).with(:organization_id => "22",
+                                                                :organization_type => 'Council')
+      mock_problem.responsibilities.should_receive(:build).with(:organization_id => "55", 
+                                                                :organization_type => 'Council')
+      
+      user = mock_model(User, :name => 'A Test User', :valid? => true)
+      problem_hash = { :subject => 'A Test Subject', 
+                       :description => 'A Test Description', 
+                       :location_id => 55, 
+                       :location_type => 'Route', 
+                       :category => 'Other', 
+                       :responsibilities => '22|Council,55|Council' }
+      p = Problem.create_from_hash(problem_hash, user)
+      
+    end
+    
+  end
+  
   describe 'when asked for recipient emails' do 
     
     before do 
