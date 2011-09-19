@@ -88,11 +88,11 @@ class Problem < ActiveRecord::Base
   end
 
   def emailable_organizations
-    responsible_organizations.select{ |organization| organization.emailable?(self.location) }
+    self.responsible_organizations.select{ |organization| organization.emailable?(self.location) }
   end
 
   def unemailable_organizations
-    responsible_organizations.select{ |organization| !organization.emailable?(self.location) }
+    self.responsible_organizations.select{ |organization| !organization.emailable?(self.location) }
   end
 
   def organization_info(method)
