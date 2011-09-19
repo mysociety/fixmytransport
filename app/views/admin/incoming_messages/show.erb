@@ -23,6 +23,8 @@
   </div>
 <%- end %>
 
+<h3>Unfiltered Text</h3>
+<%= simple_format(raw @incoming_message.main_part_text) %>
 
 <h3>Raw Email</h3>
 
