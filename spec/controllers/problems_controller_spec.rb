@@ -543,6 +543,10 @@ describe ProblemsController do
     before do
       @stop = mock_model(Stop, :points => [mock_model(Stop, :lat => 50, :lon => 0)])
       @mock_user = mock_model(User)
+      @responsibility_one = mock_model(Responsibility, :organization_id => 33,
+                                                      :organization_type => 'Council')
+      @responsibility_two = mock_model(Responsibility, :organization_id => 44,
+                                                       :organization_type => 'Operator')
       @mock_problem = mock_model(Problem, :valid? => true,
                                           :save => true,
                                           :save_reporter => true,
@@ -551,13 +555,13 @@ describe ProblemsController do
                                           :confirm! => true,
                                           :campaign => nil,
                                           :status= => true,
-                                          :subject => nil,
-                                          :description => nil,
-                                          :location_id => nil,
-                                          :location_type => nil,
-                                          :category => nil,
+                                          :subject => 'A Test Subject',
+                                          :description => 'A Test Description',
+                                          :location_id => 55,
+                                          :location_type => 'Route',
+                                          :category => "Other",
                                           :errors => [],
-                                          :responsibilities => [], 
+                                          :responsibilities => [@responsibility_one, @responsibility_two], 
                                           :create_assignments => true)
       Problem.stub!(:new).and_return(@mock_problem)
       @mock_assignment = mock_model(Assignment)
@@ -619,8 +623,14 @@ describe ProblemsController do
       describe 'if there is no logged in user' do
 
         it 'should save the problem data to the session' do
-          @controller.should_receive(:data_to_string)
-          make_request
+          @controller.should_receive(:data_to_string).with({:location_id => 55, 
+                                                            :subject => "A Test Subject", 
+                                                            :responsibilities => "33|Council,44|Operator", 
+                                                            :location_type => "Route", 
+                                                            :description => "A Test Description", 
+                                                            :action => :create_problem, 
+                                                            :notice => "Please create an account to finish reporting your problem.", :category=>"Other"})
+          make_request()
         end
 
         describe 'if the request asks for HTML' do

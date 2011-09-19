@@ -466,15 +466,14 @@ class ProblemsController < ApplicationController
   end
 
   def handle_problem_no_current_user
+    responsibilities = @problem.responsibilities.map{ |res| "#{res.organization_id}|#{res.organization_type}" }.join(",")
     problem_data = { :action => :create_problem,
                      :subject => @problem.subject,
                      :description => @problem.description,
                      :location_id => @problem.location_id,
                      :location_type => @problem.location_type,
                      :category => @problem.category,
-                     :operator_id => @problem.operator_id,
-                     :passenger_transport_executive_id => @problem.passenger_transport_executive_id,
-                     :council_info => @problem.council_info,
+                     :responsibilities => responsibilities,
                      :notice => t('problems.new.create_account_to_report_problem') }
     session[:next_action] = data_to_string(problem_data)
     respond_to do |format|
