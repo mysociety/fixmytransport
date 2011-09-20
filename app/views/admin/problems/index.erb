@@ -34,15 +34,9 @@
            <%= problem.reporter_name %>
           <%- end %>
       </td>
-      <td><%- if problem.operator %>
-            <%= link_to(problem.operator.name, admin_url(admin_operator_path(problem.operator.id))) %>
-          <%- end %>
-          <%- if problem.council_info%>
-            <%= problem.council_info %>
-          <%- end %>
-          <%- if problem.passenger_transport_executive %>
-            <%= link_to(problem.passenger_transport_executive.name, admin_url(admin_pte_path(problem.passenger_transport_executive.id)))%>
-          <%- end %>
+      <td><%- problem.responsible_organizations.each do |org| %>
+        <%= link_to(org.name, admin_organization_url(org))%>
+      <%- end %>
       </td>
       <td><%= problem.status %></td>
       <td><%= problem.created_at.localtime.to_s(:short) %></td>

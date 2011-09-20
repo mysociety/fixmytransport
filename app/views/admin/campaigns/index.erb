@@ -33,14 +33,9 @@
             <%= campaign.initiator.name %>
           <%- end %>
         </td>
-      <td><%- if campaign.problem.operator %>
-            <%= link_to(campaign.problem.operator.name, admin_url(admin_operator_path(campaign.problem.operator.id))) %>
-          <%- end %>
-          <%- if campaign.problem.council_info%>
-            <%= campaign.problem.council_info %>
-          <%- end %>
-          <%- if campaign.problem.passenger_transport_executive %>
-            <%= link_to(campaign.problem.passenger_transport_executive.name, admin_url(admin_pte_path(campaign.problem.passenger_transport_executive.id)))%>
+      <td>
+          <%- campaign.problem.responsible_organizations.each do |org| %>
+            <%= link_to(org.name, admin_organization_url(org))%>
           <%- end %>
       </td>
       <td><%= campaign.status %></td>
