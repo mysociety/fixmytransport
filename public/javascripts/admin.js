@@ -67,6 +67,12 @@ function setupAutocomplete(text_input_selector, url_input_selector, target_selec
   });
 }
 
+function setupOrganizationAutocomplete(){
+  setupAutocomplete('input.organization_name_auto', 
+                    'input#operator_name_autocomplete_url', 
+                    'input.organization-id');
+}
+
 function setupStopAutocompletes(){
   setupAutocomplete('input.from_stop_name_auto', 
                     'input#stop_name_autocomplete_url', 
@@ -206,7 +212,7 @@ function setupNewStopArea(){
 }
 
 function setupShowProblem(){
-  setupOperatorAutocomplete();
+  setupOrganizationAutocomplete();
 }
 
 function setupShowIncomingMessage(){
