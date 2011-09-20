@@ -14,6 +14,7 @@
     <%- @problem.responsibilities.each do |responsibility| %> 
       <%- if responsibility.organization.emailable?(@problem.location) %>
        <%= responsibility.organization.name %>
+       (<%= @problem.recipient_emails(responsibility.organization)[:to] %><%- if @problem.recipient_emails(responsibility.organization)[:cc] %>with a cc to <%=@problem.recipient_emails(responsibility.organization)[:cc] %><%- end %> <%= link_to('admin', admin_contact_url(@problem.recipient_contact(responsibility.organization)))%>)
       <%- end %>
     <%- end %>
   <%- end %>
