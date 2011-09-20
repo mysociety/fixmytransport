@@ -49,7 +49,11 @@ class Admin::ProblemsController < Admin::AdminController
       end
     end
     @problem.status_code = params[:problem][:status_code]
-    if @problem.update_attributes(params[:problem])
+    success = false
+    ActiveRecord::Base.transaction do
+      success = (@problem.update_attributes(params[:problem]) && @problem.update_assignments)
+    end
+    if success
       flash[:notice] = t('admin.problem_updated')
       redirect_to admin_url(admin_problem_path(@problem.id))
     else

@@ -74,6 +74,23 @@ class Problem < ActiveRecord::Base
 
     end
   end
+  
+  def update_assignments
+    # if there are now responsible organizations, remove any untried assignment to find
+    # out who's responsible
+    if !self.responsible_organizations.empty?
+      find_org_assignments = self.assignments.is_new.find(:all, :conditions => ["task_type_name = 'find-transport-organization'"])
+      find_org_assignments.each do |assignment|
+        assignment.destroy
+      end
+    end
+    # if there's an incomplete 'write-to-transport-organization' assignment, and
+    # emailable organizations, complete it
+    if !self.emailable_organizations.empty?
+      data = {:organizations => self.organization_info(:responsible_organizations) }
+      Assignment.complete_problem_assignments(self, {'write-to-transport-organization' => data })
+    end
+  end
 
   def responsible_organizations
     self.responsibilities.map{ |responsibility| responsibility.organization }
