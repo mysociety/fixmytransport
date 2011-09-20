@@ -11,7 +11,9 @@ en:
     problem: Problem
     resent_problem_will_go_to: "If sent now, this report will go to:"
     problem_unsendable: "We don't currently know who to send this problem report to."
-    problem_sendable: "This problem report is ready to be sent, it will be sent automatically."
+    problem_sendable: "This problem report is ready to be sent."
+    it_will_be_sent: "It will be send automatically to:"
+    no_emailable_organizations: "However, none of the responsible organizations have an appropriate email address."
     resend: Send
     problem_report_not_yet_sent: "This problem report has not yet been sent"
     problem_report_sent_to_orgs: "This problem report has been sent to the following organizations"
