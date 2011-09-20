@@ -207,6 +207,14 @@ class Problem < ActiveRecord::Base
   def visible?
     [:confirmed, :fixed].include?(self.status)
   end
+  
+  def sendable?
+    (self.status == :confirmed && self.sent_at.nil? && !self.responsibilities.empty?)
+  end
+  
+  def unsendable?
+    (self.status == :confirmed && self.sent_at.nil? && self.responsibilities.empty?)
+  end
 
   # class methods
 
