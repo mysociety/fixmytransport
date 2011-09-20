@@ -332,6 +332,16 @@ module ApplicationHelper
       return admin_url(admin_council_contact_path(contact.id))
     end
   end
+  
+  def admin_organization_url(organization)
+    if organization.is_a?(Operator)
+      return admin_url(admin_operator_path(organization.id))
+    elsif organization.is_a?(Council)
+      return nil
+    elsif organization.is_a?(PassengerTransportExecutive) 
+      return admin_url(admin_pte_path(organization.id))
+    end
+  end
 
   def add_comment_url(commentable)
     case commentable
