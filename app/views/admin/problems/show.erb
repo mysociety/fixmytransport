@@ -7,6 +7,16 @@
 <%= render :partial => "recipients" %>
 <%- if @problem.sendable? %>
   <%= t('admin.problem_sendable')%>
+  <%- if @problem.emailable_organizations.empty? %>
+    <%= t('admin.no_emailable_organizations')%>
+  <%- else %>
+    <%= t('admin.it_will_be_sent')%>
+    <%- @problem.responsibilities.each do |responsibility| %> 
+      <%- if responsibility.organization.emailable?(@problem.location) %>
+       <%= responsibility.organization.name %>
+      <%- end %>
+    <%- end %>
+  <%- end %>
 <%- elsif @problem.unsendable? %>
   <%= t('admin.problem_unsendable')%>
 <%- elsif @problem.sent_at && !@problem.emailable_organizations.empty? %>
