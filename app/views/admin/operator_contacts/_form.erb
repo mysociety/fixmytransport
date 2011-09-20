@@ -44,6 +44,17 @@
     <%= raw f.collection_select(:stop_area_id, @operator_contact.operator.stop_areas.sort_by(&:name), :id, :name, :prompt => true) %>
   </div>
 <%- end %>
+
+<div class='form-field'>
+  <%- if @operator_contact.errors.on(:cc_email) %>
+    <div class='error'>
+      <%= error_message_on @operator_contact, :cc_email %>
+    </div>
+  <%- end %>
+  <%= raw f.label :cc_email %>
+  <%= raw f.text_field :cc_email %>
+</div>
+
 <div class='form-field'>
   <%= raw f.label :notes %>
   <%= raw f.text_area :notes, :cols => 50, :rows => 4 %>

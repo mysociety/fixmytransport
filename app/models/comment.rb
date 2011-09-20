@@ -69,14 +69,19 @@ class Comment < ActiveRecord::Base
   end
 
   # class methods
-  def self.add(user, model, text, mark_fixed=nil, mark_open=nil, comment_confirmed=false, token=nil)
-    comment = model.comments.build(:text => text,
-                                   :user => user,
-                                   :mark_fixed => mark_fixed,
-                                   :mark_open => mark_open)
+  def self.create_from_hash(data, user, token=nil)
+    if data[:text_encoded] == true
+      text = ActiveSupport::Base64.decode64(data[:text])
+    else
+      text = data[:text]
+    end
+    comment = data[:model].comments.build(:text => text,
+                                          :user => user,
+                                          :mark_fixed => data[:mark_fixed],
+                                          :mark_open => data[:mark_open])
     comment.status = :new
     comment.save
-    if comment_confirmed
+    if data[:confirmed]
       comment.confirm!
     end
     if token

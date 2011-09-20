@@ -147,7 +147,8 @@ describe User do
       end
 
       it 'should make a call to the facebook graph URL, passing the access token and asking for name, email and profile photo' do
-        User.should_receive(:open).with("https://graph.facebook.com/me?access_token=mytoken&fields=name,email,picture&type=large").and_return(@mock_io)
+        MySociety::Config.stub!(:get).with('FACEBOOK_GRAPH_API_URL', '').and_return('http://example.com')
+        User.should_receive(:open).with("http://example.com/me?access_token=mytoken&fields=name,email,picture&type=large").and_return(@mock_io)
         User.get_facebook_data('mytoken')
       end
 

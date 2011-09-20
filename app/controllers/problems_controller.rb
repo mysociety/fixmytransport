@@ -467,9 +467,12 @@ class ProblemsController < ApplicationController
 
   def handle_problem_no_current_user
     responsibilities = @problem.responsibilities.map{ |res| "#{res.organization_id}|#{res.organization_type}" }.join(",")
+    # encoding the text to avoid YAML issues with multiline strings
+    # http://redmine.ruby-lang.org/issues/show/1311
     problem_data = { :action => :create_problem,
                      :subject => @problem.subject,
-                     :description => @problem.description,
+                     :description => ActiveSupport::Base64.encode64(@problem.description),
+                     :text_encoded => true,
                      :location_id => @problem.location_id,
                      :location_type => @problem.location_type,
                      :category => @problem.category,

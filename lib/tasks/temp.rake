@@ -47,6 +47,7 @@ namespace :temp do
         assignment.save!
       end
       problem.campaign_id = nil
+      problem.confirmed_at = Time.now
       problem.save!
       puts "Destroyed."
     end

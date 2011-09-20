@@ -25,7 +25,11 @@
     <td>
       <%- case event.described %>
       <%- when Assignment %>
-        <%= link_to("#{t('admin.assignment')}: #{event.described.task_type}", admin_url(admin_assignment_path(event.described))) %>
+        <%- if ['find-transport-organization', 'find-transport-organization-contact-details' ].include?(event.described.task_type)%>
+          <%= link_to("#{t('admin.assignment')}: #{event.described.task_type}", admin_url(admin_assignment_path(event.described))) %>
+        <%- else %>
+            <%= "#{t('admin.assignment')}: #{event.described.task_type}"%>
+        <%- end %>
       <%- when CampaignUpdate %>
         <%= link_to("#{t('admin.campaign_update')}: #{event.described.id}", admin_url(admin_campaign_update_path(event.described))) %>
       <%- when Comment %>
@@ -132,6 +136,8 @@
     <%- Assignment.content_columns.map { |c| c.name }.each do |column| %>
       <%- if column == 'data' %>
       <td><pre><%= assignment.send(column).inspect %></pre></td>
+      <%- elsif column == 'task_type_name' && ['find-transport-organization', 'find-transport-organization-contact-details' ].include?(assignment.send(column)) %>
+      <td><%= link_to(assignment.send(column), admin_url(admin_assignment_path(assignment))) %></td>
       <%- else %>
         <td><%= simple_format( assignment.send(column) ) %></td>
       <%- end %>

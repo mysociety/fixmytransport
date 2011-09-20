@@ -221,12 +221,13 @@ class ApplicationController < ActionController::Base
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
         commented = commented_type.constantize.find(id)
-        comment = Comment.add(user,
-                              commented,
-                              post_login_action_data[:text],
-                              post_login_action_data[:mark_fixed],
-                              post_login_action_data[:mark_open],
-                              confirmed=false, token=user.perishable_token)
+        comment_data = { :text => post_login_action_data[:text],
+                         :mark_fixed => post_login_action_data[:mark_fixed],
+                         :mark_open => post_login_action_data[:mark_open],
+                         :model => commented, 
+                         :confirmed => false,
+                         :text_encoded => post_login_action_data[:text_encoded] }
+        comment = Comment.create_from_hash(comment_data, user, token=user.perishable_token)
         return comment
       when :create_problem
         problem = Problem.create_from_hash(post_login_action_data, user, token=user.perishable_token)
@@ -291,12 +292,14 @@ class ApplicationController < ActionController::Base
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
         commented = commented_type.constantize.find(id)
-        Comment.add(current_user,
-                    commented,
-                    post_login_action_data[:text],
-                    post_login_action_data[:mark_fixed],
-                    post_login_action_data[:mark_open],
-                    confirmed=true)
+        comment_data = { :model => commented, 
+                         :text => post_login_action_data[:text],
+                         :mark_fixed => post_login_action_data[:mark_fixed],
+                         :mark_open => post_login_action_data[:mark_open],
+                         :confirmed => true,
+                         :text_encoded => post_login_action_data[:text_encoded] }
+        
+        Comment.create_from_hash(comment_data, current_user)
         flash[:notice] = t('shared.add_comment.thanks_for_comment')
       when :create_problem
         problem = Problem.create_from_hash(post_login_action_data, current_user)
@@ -420,10 +423,13 @@ class ApplicationController < ActionController::Base
     @comment.skip_name_validation = true
     if @comment.valid?
       commented_type = @comment.commented_type
+      # encoding the text to avoid YAML issues with multiline strings
+      # http://redmine.ruby-lang.org/issues/show/1311
       comment_data = { :action => :add_comment,
                        :id => @comment.commented_id,
                        :commented_type => commented_type,
-                       :text => @comment.text,
+                       :text => ActiveSupport::Base64.encode64(@comment.text),
+                       :text_encoded => true,
                        :mark_fixed => @comment.mark_fixed,
                        :mark_open => @comment.mark_open,
                        :redirect => @template.commented_url(@comment.commented),

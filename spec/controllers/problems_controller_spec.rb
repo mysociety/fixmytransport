@@ -622,13 +622,14 @@ describe ProblemsController do
 
       describe 'if there is no logged in user' do
 
-        it 'should save the problem data to the session' do
+        it 'should save the problem data to the session with the description encoded' do
           @controller.should_receive(:data_to_string).with({:location_id => 55, 
                                                             :subject => "A Test Subject", 
                                                             :responsibilities => "33|Council,44|Operator", 
                                                             :location_type => "Route", 
-                                                            :description => "A Test Description", 
+                                                            :description => "QSBUZXN0IERlc2NyaXB0aW9u\n", 
                                                             :action => :create_problem, 
+                                                            :text_encoded => true,
                                                             :notice => "Please create an account to finish reporting your problem.", :category=>"Other"})
           make_request()
         end

@@ -39,7 +39,7 @@ class IncomingMessage < ActiveRecord::Base
     return read_attribute(:main_body_text_folded)
   end
   
-  def generate_main_body_text
+  def main_part_text
     main_part = FixMyTransport::Email.get_main_body_text_part(self.mail)
     if main_part.nil?
       text = I18n.translate('incoming_messages.show.no_body')
@@ -52,11 +52,15 @@ class IncomingMessage < ActiveRecord::Base
     end
    
     text = FixMyTransport::Email.strip_uudecode_attachments(text)
-        
+
     if text.size > 1000000 # 1 MB ish
       raise "main body text more than 1 MB, need to implement clipping like for attachment text, or there is some other MIME decoding problem or similar"
     end
-    
+    return text
+  end
+  
+  def generate_main_body_text
+    text = self.main_part_text
     text = remove_privacy_sensitive_things(text)
     folded_quoted_text = FixMyTransport::Email.remove_quoting(text, 'FOLDED_QUOTED_SECTION')
     self.main_body_text = text
