@@ -10,7 +10,7 @@
       <%= error_message_on @problem, :subject   %>
     </div>
   <%- end %>
-  <%= raw label(:problem, :subject) %>
+  <strong><%= raw label(:problem, :subject) %></strong>
   <%= raw f.text_field :subject %>
 </div>
 
@@ -20,7 +20,7 @@
       <%= error_message_on @problem, :description   %>
     </div>
   <%- end %>
-  <%= raw label(:problem, :description) %>
+  <strong><%= raw label(:problem, :description) %></strong>
   <%= raw f.text_area :description, :rows => 6 %>
 </div>
 
@@ -30,35 +30,8 @@
       <%= error_message_on @problem, :category   %>
     </div>
   <%- end %>
-  <%= raw label(:problem, :category) %>
+  <strong><%= raw label(:problem, :category) %></strong>
   <%= raw f.select :category, (@problem.categories + ['Other']).uniq %>
-</div>
-
-<div class='form-field'>
-  <%= raw label_tag :operator_name %>
-  <%= raw hidden_field_tag :operator_name_autocomplete_url, admin_url("/admin/autocomplete_for_operator_name") %>
-  <%= raw text_field_tag :operator_name, @problem.operator ? @problem.operator.name : '', { :class => 'operator_name_auto', :size => 30 } %>
-  <%= raw f.text_field :operator_id, { :class => 'operator-id' } %>
-</div>
-
-<div class='form-field'>
-  <%- if @problem.errors.on(:passenger_transport_executive_id) %>
-    <div class='error'>
-      <%= error_message_on @problem, :passenger_transport_executive_id %>
-    </div>
-  <%- end %>
-  <%= raw label(:problem, :passenger_transport_executive_id) %>
-  <%= raw f.collection_select :passenger_transport_executive_id, PassengerTransportExecutive.find(:all), :id, :name, :prompt => true %>
-</div>
-
-<div class='form-field'>
-  <%- if @problem.errors.on(:council_info) %>
-    <div class='error'>
-      <%= error_message_on @problem, :council_info %>
-    </div>
-  <%- end %>
-  <%= raw label(:problem, :council_info) %>
-  <%= raw f.text_field :council_info %>
 </div>
 
 <div class='form-field'>
@@ -67,7 +40,7 @@
       <%= error_message_on @problem, :status_code %>
     </div>
   <%- end %>
-  <%= raw f.label :status %>
+  <strong><%= raw f.label :status %></strong>
   <%= raw f.select :status_code, Problem.statuses, {:prompt => true, :selected => @problem.status_code } %>
 </div>
 
@@ -77,14 +50,83 @@
       <%= error_message_on @problem, :reporter_name %>
     </div>
   <%- end %>
-  <%= raw label(:problem, :reporter_name) %>
+  <strong><%= raw label(:problem, :reporter_name) %></strong>
   <%= raw f.text_field :reporter_name %>
 </div>
 
 <div class='form-field'>
-  <%= raw label(:problem, :token) %>
+  <strong><%= raw label(:problem, :token) %></strong>
   <%= @problem.token %>
 </div>
+
+<div class='form-field'>
+<strong><%= t('admin.responsible_organizations') %></strong>
+<table>
+  <tr>
+    <th>Organization type
+    </th>
+    <th>Organization name
+    </th>
+    <th>Delete?
+    </th>
+  </tr>
+<%- @problem.responsibilities.each do |responsibility| %>
+<tr class='<%= cycle('odd', 'even') %>'>
+  <%- f.fields_for :responsibilities, responsibility do |responsibility_fields| %>
+    <td>
+      <%= responsibility.organization.class.to_s %>
+    </td>
+    <td>
+      <%= responsibility.organization.name %>
+    </td>
+    <td>
+      <%= responsibility_fields.check_box :_destroy %>
+    </td>
+  <%- end %>
+</tr>
+<%- end %>
+<%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
+  <tr>
+  <td>
+    <%= raw responsibility_fields.hidden_field :organization_type, :value => 'Operator', :class => 'organization-type' %><%= t('admin.operator').titleize %>
+  </td>
+  <td>
+    <%= raw hidden_field_tag :operator_name_autocomplete_url, admin_url("/admin/autocomplete_for_operator_name") %>
+
+    
+    <%= raw text_field_tag :organization_name, '', { :class => 'organization_name_auto', :size => 30 } %>
+    <%= raw responsibility_fields.text_field :organization_id, { :class => 'organization-id' } %>
+  </td>
+  <td>
+  </td>
+  </tr>
+<%- end %>
+
+<%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
+  <tr>
+  <td>
+    <%= raw responsibility_fields.hidden_field :organization_type, :value => 'PassengerTransportExecutive', :class => 'organization-type' %><%= t('admin.passenger_transport_executive').titleize %>
+  </td>
+  <td>
+    <%= raw responsibility_fields.select :organization_id, PassengerTransportExecutive.find(:all).map{ |pte| [pte.name, pte.id] }, :include_blank => true %>
+  </td>
+  <td>
+  </td>
+  </tr>
+<%- end %>  
+<%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
+  <tr>
+  <td>
+    <%= raw responsibility_fields.hidden_field :organization_type, :value => 'Council', :class => 'organization-type' %><%= t('admin.council').titleize %>
+  </td>
+  <td>
+    <%= raw responsibility_fields.select :organization_id, @councils = Council.find_all_without_ptes().map{ |council| [council.name, council.id] }, :include_blank => true %>
+  </td>
+  <td>
+  </td>
+  </tr>
+<%- end %>
+</table>
 
 <%= raw submit_tag t('admin.go') %>
 

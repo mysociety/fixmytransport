@@ -9,11 +9,16 @@ en:
     problem_form_error: There was a problem updating the problem. Please see below
     problem_updated: The problem has been updated.
     problem: Problem
-    resent_problem_will_go_to: "If resent now, this report will go to:"
-    resend: Resend
+    resent_problem_will_go_to: "If sent now, this report will go to:"
+    problem_unsendable: "We don't currently know who to send this problem report to."
+    problem_sendable: "This problem report is ready to be sent, it will be sent automatically."
+    resend: Send
     problem_report_not_yet_sent: "This problem report has not yet been sent"
     problem_report_sent_to_orgs: "This problem report has been sent to the following organizations"
     deleted: deleted
     problem_organization: Organisation
     problem_contact: Contact
     problem_sent_at: Sent at
+    responsible_organizations: Responsible organizations
+    passenger_transport_executive: Passenger Transport Executive
+    council: Council
