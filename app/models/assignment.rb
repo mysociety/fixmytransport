@@ -65,6 +65,9 @@ class Assignment < ActiveRecord::Base
 
   # complete an assignment, updating its data with any data passed
   def complete!(assignment_data={})
+    if self.status == :complete
+      return self
+    end
     self.status = :complete
     if self.data
       self.data.update(assignment_data)
