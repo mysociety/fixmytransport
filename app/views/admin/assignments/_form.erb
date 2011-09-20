@@ -15,19 +15,22 @@
   <strong><%= t('admin.location') %>:</strong>
   <%= link_to(@assignment.campaign.location.name, admin_location_url(@assignment.campaign.location))%>
 </div>
-<%- if @assignment.campaign.problem.operator %>
-<div class="assignment-operator-link">
-  <strong><%= t('admin.operator').titleize %></strong>
-  <%= link_to(@assignment.campaign.problem.operator.name, admin_operator_url(@assignment.campaign.problem.operator.id))%>
+<%- if !@assignment.campaign.problem.responsible_organizations.empty? %>
+<div class="assignment-organization-link">
+  <strong><%= t('admin.organizations').titleize %>:</strong>
+  <%- @assignment.campaign.problem.responsible_organizations.each do |org| %>
+    <%= link_to(org.name, admin_organization_url(org))%>
+  <%- end %>
 </div>
 <%- end %>
+
 <h3><%= t('admin.assignment_data') %></h3>
 <%- @assignment.data.keys.each do |key| %>
   <div class="assignment-data">
   <strong><%= key.to_s.humanize %>:</strong> <%= @assignment.data[key].inspect %>
   </div>
 <%- end %>
-<h3><%= t('admin.operator').titleize %></h3>
+<h3><%= t('admin.organization').titleize %></h3>
 Once the organization below looks correct to you, submit the form to update the problem assignment, and location.
 <div class='form-field'>
   <%= raw label_tag :operator_name %>
