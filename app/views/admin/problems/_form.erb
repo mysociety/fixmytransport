@@ -77,7 +77,7 @@
       <%= responsibility.organization.class.to_s %>
     </td>
     <td>
-      <%= link_to(responsibility.organization.name, admin_organization_url(responsibility.organization.name)) %>
+      <%= link_to(responsibility.organization.name, admin_organization_url(responsibility.organization)) %>
     </td>
     <td>
       <%= responsibility_fields.check_box :_destroy %>
