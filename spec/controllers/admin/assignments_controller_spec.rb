@@ -20,7 +20,7 @@ describe Admin::AssignmentsController do
       @stop_area = mock_model(StopArea, :stop_area_operators => @stop_area_operators, 
                                         :save! => true)
       @mock_problem = mock_model(Problem, :location => @route,
-                                          :operator= => true,
+                                          :responsibilities => mock('responsibilities', :build => nil),
                                           :save! => true,
                                           :emailable_organizations => [],
                                           :organization_info => {},
@@ -93,8 +93,8 @@ describe Admin::AssignmentsController do
           
         end
         
-        it 'should set the operator on the problem' do 
-          @mock_problem.should_receive(:operator=).with(@mock_operator)
+        it 'should add a responsibility for the operator to the problem' do 
+          @mock_problem.responsibilities.should_receive(:build).with({ :organization => @mock_operator })
           make_request(@default_params.merge({:operator_id => 66}))
         end
         
