@@ -1983,6 +1983,9 @@ body.facebook-canvas .button {
   height: 2em;
 }
 
+.edit_assignment label {
+  clear:both;
+}
 
 /*===[Incoming Messages]===*/
 
