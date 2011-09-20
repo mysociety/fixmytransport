@@ -3,6 +3,23 @@ require File.dirname(__FILE__) +  '/../fixmytransport/geo_functions'
 
 namespace :temp do
 
+  desc 'Move data about who is responsible for a problem to another table'
+  task :populate_responsibilities => :environment do 
+    Problem.find_each do |problem|
+      responsible_organizations = []
+      if problem.location.operators_responsible? && problem.operator
+        responsible_organizations << problem.operator
+      else
+        responsible_organizations =  problem.location.responsible_organizations
+      end
+      responsible_organizations.each do |organization|
+        problem.responsibilities.create(:organization_type => organization.class.to_s, 
+                                        :organization_id => organization.id)
+      end
+    end
+    sleep(3)
+  end
+
   desc 'Remove new campaign'
   task :remove_new_campaign => :environment do 
     unless ENV['PROBLEM_ID']
