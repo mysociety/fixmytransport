@@ -62,11 +62,15 @@
             <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
               <%= responsibility_fields.hidden_field :organization_type,  :value => 'Council' %>
               <%= responsibility_fields.hidden_field :organization_id,  :value => council.id %>
-              <div class="static-value">
-                <%= raw org_names(@problem.location.responsible_organizations, t('problems.new.or'))%>
-              </div>
               <%- end %>
             <%- end %>
+            <div class="static-value">
+              <%= raw org_names(@problem.location.responsible_organizations, t('problems.new.or'))%>
+            </div>
+            <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
+              <%= responsibility_fields.hidden_field :organization_type,  :value => 'Council' %>
+              <%= responsibility_fields.hidden_field :organization_id,  :value => 2650 %>
+              <%- end %>
         <%- end %>
 			
 			</li>

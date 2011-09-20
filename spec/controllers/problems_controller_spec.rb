@@ -541,12 +541,22 @@ describe ProblemsController do
   describe "POST #create" do
 
     before do
-      @stop = mock_model(Stop, :points => [mock_model(Stop, :lat => 50, :lon => 0)])
+      @council = mock('council', :id => 33, :name => 'A test council')
+      @other_council = mock('another council', :id => 55, :name => 'Another council')
+      @operator = mock_model(Operator, :id => 44)
+      @stop = mock_model(Stop, :points => [mock_model(Stop, :lat => 50, :lon => 0)],
+                               :responsible_organizations => [@operator, @council])
       @mock_user = mock_model(User)
-      @responsibility_one = mock_model(Responsibility, :organization_id => 33,
-                                                      :organization_type => 'Council')
-      @responsibility_two = mock_model(Responsibility, :organization_id => 44,
+      @responsibility_one = mock_model(Responsibility, :organization => @council, 
+                                                       :organization_id => @council.id,
+                                                       :organization_type => 'Council')
+      @responsibility_two = mock_model(Responsibility, :organization => @operator,
+                                                       :organization_id => @operator.id,
                                                        :organization_type => 'Operator')
+      @extra_responsibility = mock_model(Responsibility, :organization => @other_council,
+                                                         :organization_id => @other_council.id,
+                                                         :organization_type => 'Council',
+                                                         :destroy => true)
       @mock_problem = mock_model(Problem, :valid? => true,
                                           :save => true,
                                           :save_reporter => true,
@@ -577,6 +587,16 @@ describe ProblemsController do
 
     it 'should create a new problem using the attributes passed to it' do
       Problem.should_receive(:new).with(@problem_attributes)
+      make_request
+    end
+    
+    it 'should delete a responsibility for the problem for an organization that is passed as a param but not associated with the location' do 
+      @mock_problem.stub!(:responsibilities).and_return([@responsibility_one, 
+                                                         @responsibility_two,
+                                                         @extra_responsibility])
+      @mock_problem.responsibilities.should_receive(:delete).with(@extra_responsibility)
+      @mock_problem.responsibilities.should_not_receive(:delete).with(@responsibility_one)
+      @mock_problem.responsibilities.should_not_receive(:delete).with(@responsibility_two)
       make_request
     end
 

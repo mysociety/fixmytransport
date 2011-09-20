@@ -64,6 +64,11 @@ class ProblemsController < ApplicationController
 
   def create
     @problem = Problem.new(params[:problem])
+    @problem.responsibilities.each do |responsibility|
+      if !@problem.location.responsible_organizations.include?(responsibility.organization)
+        @problem.responsibilities.delete(responsibility)
+      end
+    end
     @problem.status = :new
     if @problem.valid?
       if current_user

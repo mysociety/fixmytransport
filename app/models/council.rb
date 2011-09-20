@@ -11,6 +11,10 @@ class Council
     return self.new(:id => attributes['id'],
                     :name => attributes['name'])
   end
+  
+  def ==(other)
+    (self.id == other.id) && (self.name == other.name)
+  end
 
   def emailable?(location)
     !self.contacts.empty?
