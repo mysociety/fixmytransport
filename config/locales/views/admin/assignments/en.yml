@@ -8,6 +8,8 @@ en:
     assignment_operator_not_found: "There is no operator with id 66"
     assignment_location_only: "This contact only applies to this location"
     operator: "operator"
+    organizations: organizations
+    organization: organization
     campaign: "Campaign"
     assignment_override_contact: "Override the existing contact"
     assignment_need_to_choose_override: "Do you want to overwrite the existing email %{existing}?"
