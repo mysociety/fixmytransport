@@ -337,7 +337,7 @@ module ApplicationHelper
     if organization.is_a?(Operator)
       return admin_url(admin_operator_path(organization.id))
     elsif organization.is_a?(Council)
-      return nil
+      return admin_url(admin_council_contacts_path(:area_id => organization.id))
     elsif organization.is_a?(PassengerTransportExecutive) 
       return admin_url(admin_pte_path(organization.id))
     end
