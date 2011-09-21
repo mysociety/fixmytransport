@@ -17,7 +17,6 @@ namespace :temp do
                                         :organization_id => organization.id)
       end
     end
-    sleep(3)
   end
 
   desc 'Remove new campaign'
