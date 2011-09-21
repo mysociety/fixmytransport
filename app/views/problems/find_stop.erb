@@ -15,32 +15,37 @@
 	<%- if @error_message %>
 	<div class='error find-stop-error'><%= @error_message %></div>
 	<%- end %>
-	
-	<p style="padding: 2em; text-align:center">
-	  <span id="auto-locate-status" style="display:inline;padding:8px;background:#ff6666">DW-FIXME-HERE</span>
-	</p>
+	<div id="geolocate-container">
+	  <span id="geolocate-button">Your current location</span>
+	</div>
 	<%- end %>
 </div>
 
 <!-- geolocating Javascript follows -->
 <script type="text/javascript">
-    $('#auto-locate-status').click(function(){ doGeolocate(event) });
     
-    function doGeolocate(event) {
-      $('#auto-locate-status').html("<span>OK... fetching location...</span>");
+    $(function() {
       if (geo_position_js.init()) {
+        $('#geolocate-container').show();
+        $('#geolocate-button').click(function(){ doGeolocate() });
+      }
+    });
+    
+    function doGeolocate() {
+      $('#geolocate-button').replaceWith("<p id='geolocate-status'>OK... fetching location...</p>");
+      if (geo_position_js.init()) { // overkill
         geo_position_js.getCurrentPosition(
           function(position) {
             var nearest_stop_url =  "<%= find_stop_problems_path %>?lat=" + position.coords.latitude + "&amp;lon=" + position.coords.longitude;
-            $('#auto-locate-status').html("<span>OK... fetching location done: ...<br/>" + nearest_stop_url + "</span>");
+            $('#geolocate-status').html("<span>OK... fetching location done, loading...</span>");
             document.location.href = nearest_stop_url
           }, 
           function(err) {
-            $('#auto-locate-status').html("<span>Sorry: failed to auto-locate you!<br/>" + err + "</span>");
+            $('#geolocate-status').html("<span>Sorry: failed to auto-locate you! " + err + "</span>");
           }
         );
       } else {
-        $('#auto-locate-status').html("<span>Sorry... can't auto-locate you.</span>");
+        $('#geolocate-status').html("<span>Sorry... can't auto-locate you.</span>");
       }
     }
     
