@@ -19,10 +19,14 @@ class RouteOperator < ActiveRecord::Base
   before_destroy :check_problems
 
   def check_problems
-    conditions = ['location_type = ? AND location_id = ? AND operator_id = ?', 
+    conditions = ["problems.location_type = ?
+                   AND problems.location_id = ?
+                   AND organization_id = ?
+                   AND organization_type = 'Operator'", 
                   'Route', self.route_id, self.operator_id]
-    problems = Problem.find(:all, :conditions => conditions)
-    if !problems.empty?
+    responsibilities = Responsibility.find(:all, :conditions => conditions,
+                                                 :include => :problem)
+    if !responsibilities.empty?
       msg = "Cannot destroy association of route #{self.route.id} with operator #{self.operator.id}"
       msg += " - problems need updating"
       raise FixMyTransport::Exceptions::ProblemsExistError.new(msg)
