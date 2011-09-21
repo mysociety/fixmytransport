@@ -15,6 +15,35 @@
 	<%- if @error_message %>
 	<div class='error find-stop-error'><%= @error_message %></div>
 	<%- end %>
-
+	
+	<p style="padding: 2em; text-align:center">
+	  <span id="auto-locate-status" style="display:inline;padding:8px;background:#ff6666">DW-FIXME-HERE</span>
+	</p>
 	<%- end %>
 </div>
+
+<!-- geolocating Javascript follows -->
+<script type="text/javascript">
+    $('#auto-locate-status').click(function(){ doGeolocate(event) });
+    
+    function doGeolocate(event) {
+      $('#auto-locate-status').html("<span>OK... fetching location...</span>");
+      if (geo_position_js.init()) {
+        geo_position_js.getCurrentPosition(
+          function(position) {
+            var nearest_stop_url =  "<%= find_stop_problems_path %>?lat=" + position.coords.latitude + "&amp;lon=" + position.coords.longitude;
+            $('#auto-locate-status').html("<span>OK... fetching location done: ...<br/>" + nearest_stop_url + "</span>");
+            document.location.href = nearest_stop_url
+          }, 
+          function(err) {
+            $('#auto-locate-status').html("<span>Sorry: failed to auto-locate you!<br/>" + err + "</span>");
+          }
+        );
+      } else {
+        $('#auto-locate-status').html("<span>Sorry... can't auto-locate you.</span>");
+      }
+    }
+    
+</script>
+<%= raw javascript_include_tag('geo') %>
+

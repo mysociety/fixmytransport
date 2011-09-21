@@ -12,7 +12,9 @@ class ProblemsController < ApplicationController
   skip_before_filter :require_beta_password, :only => [:frontpage]
   skip_before_filter :make_cachable, :except => [:issues_index, :index, :show]
   before_filter :long_cache, :except => [:issues_index, :index, :create, :show]
-
+  
+  include FixMyTransport::GeoFunctions
+  
   def issues_index
     @title = t('problems.issues_index.title')
     @issues = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
@@ -120,7 +122,7 @@ class ProblemsController < ApplicationController
   def find_stop
     @title = t('problems.find_stop.title')
     options = { :find_template => :find_stop,
-                :browse_template => :choose_location,
+                :browse_template => :choose_location, 
                 :map_options => { :mode => :find } }
     return find_area(options)
   end
@@ -276,81 +278,92 @@ class ProblemsController < ApplicationController
   private
 
   def find_area(options)
-    if params[:name]
-      if params[:name].blank?
-        @error_message = t('problems.find_stop.please_enter_an_area')
-        render options[:find_template]
+    has_position = ! (params[:lon].blank? or params[:lat].blank?)
+    if has_position
+      easting, northing = get_easting_northing(params[:lon], params[:lat])
+      nearest_stop = Stop.find_nearest(easting, northing, exclude_id = nil)
+      flash[:notice] = "Nearest stop is " + nearest_stop.name + " at " + nearest_stop.locality.name
+      map_params_from_location([nearest_stop],
+                               find_other_locations=true,
+                               LARGE_MAP_HEIGHT,
+                               LARGE_MAP_WIDTH,
+                               options[:map_options])
+      @locations = [nearest_stop]
+      render options[:browse_template]
+      return
+    elsif params[:name].blank?
+      @error_message = t('problems.find_stop.please_enter_an_area')
+      render options[:find_template]
+      return
+    end
+    location_search = LocationSearch.new_search!(session_id, :name => params[:name],
+                                                             :location_type => 'Stop/station')
+    stop_info = Gazetteer.place_from_name(params[:name], params[:stop_name], options[:map_options][:mode])
+    # got back localities
+    if stop_info[:localities]
+      if stop_info[:localities].size > 1
+        @localities = stop_info[:localities]
+        @matched_stops_or_stations = stop_info[:matched_stops_or_stations]
+        @name = params[:name]
+        render :choose_locality
         return
-      end
-      location_search = LocationSearch.new_search!(session_id, :name => params[:name],
-                                                               :location_type => 'Stop/station')
-      stop_info = Gazetteer.place_from_name(params[:name], params[:stop_name], options[:map_options][:mode])
-      # got back localities
-      if stop_info[:localities]
-        if stop_info[:localities].size > 1
-          @localities = stop_info[:localities]
-          @matched_stops_or_stations = stop_info[:matched_stops_or_stations]
-          @name = params[:name]
-          render :choose_locality
-          return
-        else
-          return render_browse_template(stop_info[:localities], options[:map_options], options[:browse_template])
-        end
-      # got back district
-      elsif stop_info[:district]
-        return render_browse_template([stop_info[:district]], options[:map_options], options[:browse_template])
-      # got back admin area
-      elsif stop_info[:admin_area]
-        return render_browse_template([stop_info[:admin_area]], options[:map_options], options[:browse_template])
-      # got back stops/stations
-      elsif stop_info[:locations]
-        if options[:map_options][:mode] == :browse
-          return render_browse_template(stop_info[:locations], options[:map_options], options[:browse_template])
-        else
-          map_params_from_location(stop_info[:locations],
-                                   find_other_locations=true,
-                                   LARGE_MAP_HEIGHT,
-                                   LARGE_MAP_WIDTH,
-                                   options[:map_options])
-          @locations = stop_info[:locations]
-          render options[:browse_template]
-          return
-        end
-      # got back postcode info
-      elsif stop_info[:postcode_info]
-        postcode_info = stop_info[:postcode_info]
-        if postcode_info[:error]
-          location_search.fail
-          if postcode_info[:error] == :area_not_known
-            @error_message = t('problems.find_stop.postcode_area_not_known')
-          elsif postcode_info[:error] == :service_unavailable
-            @error_message = t('problems.find_stop.postcode_service_unavailable')
-          else
-            @error_message = t('problems.find_stop.postcode_not_found')
-          end
-          render options[:find_template]
-          return
-        else
-          @lat = postcode_info[:lat] unless @lat
-          @lon = postcode_info[:lon] unless @lon
-          @zoom = postcode_info[:zoom] unless @zoom
-          map_data = Map.other_locations(@lat, @lon, @zoom, LARGE_MAP_HEIGHT, LARGE_MAP_WIDTH, @highlight)
-          @other_locations = map_data[:locations]
-          @issues_on_map = map_data[:issues]
-          @nearest_issues = map_data[:nearest_issues]
-          @distance = map_data[:distance]
-          @locations = []
-          @find_other_locations = true
-          render options[:browse_template]
-          return
-        end
       else
-        # didn't find anything
-        location_search.fail
-        @error_message = t('problems.find_stop.area_not_found')
-        render options[:find_template]
+        return render_browse_template(stop_info[:localities], options[:map_options], options[:browse_template])
+      end
+    # got back district
+    elsif stop_info[:district]
+      return render_browse_template([stop_info[:district]], options[:map_options], options[:browse_template])
+    # got back admin area
+    elsif stop_info[:admin_area]
+      return render_browse_template([stop_info[:admin_area]], options[:map_options], options[:browse_template])
+    # got back stops/stations
+    elsif stop_info[:locations]
+      if options[:map_options][:mode] == :browse
+        return render_browse_template(stop_info[:locations], options[:map_options], options[:browse_template])
+      else
+        map_params_from_location(stop_info[:locations],
+                                 find_other_locations=true,
+                                 LARGE_MAP_HEIGHT,
+                                 LARGE_MAP_WIDTH,
+                                 options[:map_options])
+        @locations = stop_info[:locations]
+        render options[:browse_template]
         return
       end
+    # got back postcode info
+    elsif stop_info[:postcode_info]
+      postcode_info = stop_info[:postcode_info]
+      if postcode_info[:error]
+        location_search.fail
+        if postcode_info[:error] == :area_not_known
+          @error_message = t('problems.find_stop.postcode_area_not_known')
+        elsif postcode_info[:error] == :service_unavailable
+          @error_message = t('problems.find_stop.postcode_service_unavailable')
+        else
+          @error_message = t('problems.find_stop.postcode_not_found')
+        end
+        render options[:find_template]
+        return
+      else
+        @lat = postcode_info[:lat] unless @lat
+        @lon = postcode_info[:lon] unless @lon
+        @zoom = postcode_info[:zoom] unless @zoom
+        map_data = Map.other_locations(@lat, @lon, @zoom, LARGE_MAP_HEIGHT, LARGE_MAP_WIDTH, @highlight)
+        @other_locations = map_data[:locations]
+        @issues_on_map = map_data[:issues]
+        @nearest_issues = map_data[:nearest_issues]
+        @distance = map_data[:distance]
+        @locations = []
+        @find_other_locations = true
+        render options[:browse_template]
+        return
+      end
+    else
+      # didn't find anything
+      location_search.fail
+      @error_message = t('problems.find_stop.area_not_found')
+      render options[:find_template]
+      return
     end
 
   end
