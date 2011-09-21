@@ -92,4 +92,53 @@ namespace :temp do
     end
   end
   
+  desc 'Fix manual ferry stops'
+  task :fix_manual_ferry_stops => :environment do 
+    riverside = Stop.find_by_other_code('9300RQP')
+    # correct the name and coords
+    riverside.common_name = 'Riverside Quarter Pier'
+    riverside.lat = 51.46277
+    riverside.lon = -0.19901
+    # associate to the correct terminal
+    riverside_terminal = StopArea.find_by_code('930GWRQ')
+    riverside.stop_area_memberships.build(:stop_area => riverside_terminal)
+    # update the locality
+    riverside.locality = Locality.find_by_name('Wandsworth')
+    
+    riverside.save!
+    riverside.routes.each do |route|
+      puts route.id
+      route.route_segments.each do |segment|
+        segment.from_stop_area = nil
+        segment.to_stop_area = nil
+        segment.save!
+      end
+      route.save!
+    end
+    
+    woolwich = Stop.find_by_other_code('9300WAP')
+    # correct the name and coords
+    woolwich.common_name = 'Woolwich Arsenal Pier'
+    woolwich.lat = 51.495858
+    woolwich.lon = 0.070982
+    # associate to correct terminal
+    woolwich.stop_area_memberships.clear
+    woolwich_terminal = StopArea.find_by_code('930GWAS')
+    woolwich.stop_area_memberships.build(:stop_area => woolwich_terminal)
+    # update the locality
+    woolwich.locality = Locality.find_by_name("Woolwich")
+    
+    woolwich.save!
+    woolwich.routes.each do |route|
+      puts route.id 
+      route.route_segments.each do |segment|
+        segment.from_stop_area = nil
+        segment.to_stop_area = nil
+        segment.save!
+      end
+      route.save!
+    end
+        
+  end
+  
 end
