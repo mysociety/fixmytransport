@@ -54,6 +54,8 @@ class Stop < ActiveRecord::Base
   has_many :routes_as_to_stop, :through => :route_segments_as_to_stop, :source => 'route'
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   belongs_to :locality
+  has_many :stop_operators, :dependent => :destroy
+  has_many :operators, :through => :stop_operators, :uniq => true
   validates_presence_of :locality_id, :lon, :lat, :if => :loaded?
   validates_uniqueness_of :atco_code, :allow_blank => true
   validates_uniqueness_of :other_code, :allow_blank => true

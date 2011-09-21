@@ -21,13 +21,13 @@ module FixMyTransport
       def responsible_organizations
         responsible = []
         # train stations are run by operators
-        if transport_mode_names.include?('Train') && self.respond_to?(:operators)
+        if transport_mode_names.include?('Train') && self.is_a?(StopArea)
           responsible = operators
-        # ferry terminals *might* be run by operators
-        elsif transport_mode_names.include?('Ferry') && self.respond_to?(:operators) && !self.operators.empty?
+        # other stops and stop areas *might* be run by operators
+        elsif !self.operators.empty?
           responsible = operators
         else
-          # but for bus, coach, tram, metro and ferry terminals in general
+          # but in general
           # if there's a PTE, they're responsible
           if passenger_transport_executive
             responsible = [ passenger_transport_executive ]
@@ -78,8 +78,7 @@ module FixMyTransport
       end
 
       def operators_responsible?
-        return true if self.respond_to?(:operators) && responsible_organizations == operators
-        return false
+        responsible_organizations == operators
       end
 
       
