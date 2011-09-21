@@ -190,8 +190,18 @@ class Stop < ActiveRecord::Base
     query_params = []
     if ! query.blank?
       query = query.downcase
-      query_clause = "(LOWER(common_name) LIKE ? OR LOWER(common_name) LIKE ? OR LOWER(street) LIKE ? OR LOWER(street) LIKE ?"
-      query_params = [ "#{query}%", "%#{query}%", "#{query}%", "%#{query}%" ]
+      query_clause = "(LOWER(common_name) LIKE ?
+                      OR LOWER(common_name) LIKE ? 
+                      OR LOWER(street) LIKE ? 
+                      OR LOWER(street) LIKE ?
+                      OR LOWER(atco_code) LIKE ?
+                      OR LOWER(atco_code) LIKE ?
+                      OR LOWER(other_code) LIKE ?
+                      OR LOWER(other_code) LIKE ?"
+      query_params = [ "#{query}%", "%#{query}%", 
+                       "#{query}%", "%#{query}%", 
+                       "#{query}%", "%#{query}%", 
+                       "#{query}%", "%#{query}%" ]
       # numeric?
       if query.to_i.to_s == query
         query_clause += " OR id = ?"
