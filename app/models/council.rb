@@ -13,7 +13,7 @@ class Council
   end
   
   def ==(other)
-    (@id == other.id) && (@name == other.name)
+    (other.is_a?(Council)) && (@id == other.id) && (@name == other.name)
   end
 
   def emailable?(location)
