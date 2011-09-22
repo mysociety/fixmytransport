@@ -9,5 +9,5 @@ en:
     stop_area_has_campaigns: This stop area cannot be deleted as there are campaigns or problems associated with it. 
     stop_area_has_routes: This stop area cannot be deleted as there are routes that go through it.
     remove_from_stop_area: Remove from stop area
-    stop_area_update_problems_exist: Problems exist for this station and operator. Please update them before removing the operator from the station.
+    stop_area_update_problems_exist: The operators you just removed are listed as responsible for some problems at this station. Please update these problems if necessary.
     

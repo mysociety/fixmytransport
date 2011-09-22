@@ -29,9 +29,9 @@
     <div id='main'>
       <%- [:notice, :error, :message].each do |key|  %>
         <%- unless flash[key].blank?  %>
-          <p class='flash flash_<%= key %>'>
+          <div class='flash flash_<%= key %>'>
             <%= raw flash[key] %>
-          </p>
+          </div>
         <%- end %>
       <%- end %>
       <%= yield %>

@@ -1,5 +1,5 @@
 class Admin::OperatorsController < Admin::AdminController
-
+  
   def index
     conditions = []
     query_clauses = []
@@ -62,19 +62,14 @@ class Admin::OperatorsController < Admin::AdminController
   end
    
   def update
-    begin
-      @operator = Operator.find(params[:id])
-      if @operator.update_attributes(params[:operator])
-        flash[:notice] = t('admin.operator_updated')
-        redirect_to admin_url(admin_operator_path(@operator))
-      else
-        @route_operators = make_route_operators(@operator.codes)
-        flash.now[:error] = t('admin.operator_problem')
-        render :show
-      end
-    rescue FixMyTransport::Exceptions::ProblemsExistError => e
+    @operator = Operator.find(params[:id])
+    if @operator.update_attributes(params[:operator])
+      flash[:notice] = t('admin.operator_updated')
+      add_responsibilities_notice(:operator, :route_operators_attributes, 'Route', :route_id, @operator)
+      redirect_to admin_url(admin_operator_path(@operator))
+    else
       @route_operators = make_route_operators(@operator.codes)
-      flash.now[:error] = t('admin.operator_update_problems_exist')
+      flash.now[:error] = t('admin.operator_problem')
       render :show
     end
   end

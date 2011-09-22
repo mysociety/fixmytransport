@@ -2,46 +2,5 @@
 <%= render :partial => "admin/shared/index_js" %>
 <%= render :partial => "admin/shared/search_form", :locals => { :skip_transport_mode => true }  %>
 <%= will_paginate @problems, { :admin => true } %>
-<table class='problems index-list'>
-  <tr>
-    <th width='5%'><%= sortable('id', t('admin.id')) %></th>
-    <th width='10%'><%= sortable('subject', t('admin.subject')) %></th>
-    <th width='10%'><%= t('admin.problem_campaign') %></th>
-    <th width='10%'><%= t('admin.location') %></th>
-    <th width='10%'><%= t('admin.transport_mode') %></th>
-    <th width='10%'><%= sortable('reporter_name', t('admin.reporter')) %></th>
-    <th width='10%'><%= t('admin.responsible_org') %></th>
-    <th width='5%'><%= sortable('status_code', t('admin.status')) %></th>
-    <th width='5%'><%= sortable('created_at', t('admin.created_at')) %></th>
-    <th width='5%'><%= sortable('updated_at', t('admin.updated_at')) %></th>
-  </tr>
-  <%-@problems.each do |problem| %>
-    <tr class='<%= cycle("odd", "even") %>'>
-      <td>
-        <%- if problem.campaign %>
-          <%= problem.id %>
-        <%- else %>
-          <%= link_to(problem.id, main_url(problem_path(problem)), :target => '_blank') %>
-        <%- end %>
-        <%= link_to("(#{t('admin.admin')})", admin_url(admin_problem_path(problem.id)), :target => '_blank') %></td>
-      <td><%= problem.subject %></td>
-      <td><%- if problem.campaign %><%= link_to(problem.campaign.title, admin_url(admin_campaign_path(problem.campaign.id)))%><%- end %></td>
-      <td><%= link_to(problem.location.name, admin_location_url(problem.location))%></td>
-      <td><%= problem.transport_mode_text %></td>
-      <td><%- if problem.reporter && problem.reporter.login_count > 0 %>
-          <%=  link_to(problem.reporter_name, main_url(profile_path(problem.reporter)), :target => '_blank' )%>
-          <%- else %>
-           <%= problem.reporter_name %>
-          <%- end %>
-      </td>
-      <td><%- problem.responsible_organizations.each do |org| %>
-        <%= link_to(org.name, admin_organization_url(org))%>
-      <%- end %>
-      </td>
-      <td><%= problem.status %></td>
-      <td><%= problem.created_at.localtime.to_s(:short) %></td>
-      <td><%= problem.updated_at.localtime.to_s(:short) %></td>
-    </tr>
-  <%- end %>
-</table>
+<%= render :partial => 'admin/shared/problem_table', :locals => { :allow_sort => true, :problems => @problems }%>
 <%= will_paginate @problems, { :admin => true } %>

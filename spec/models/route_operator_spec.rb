@@ -33,20 +33,4 @@ describe RouteOperator do
     
   end
 
-  describe 'when destroying a route operator' do 
-    
-    it 'should raise an exception if problems exist with that route and responsible operator' do 
-      route_operator = RouteOperator.new(@valid_attributes)
-      conditions = ["problems.location_type = ?
-                   AND problems.location_id = ?
-                   AND organization_id = ?
-                   AND organization_type = 'Operator'", 
-                   'Route', route_operator.route.id, route_operator.operator.id]
-      Responsibility.should_receive(:find).with(:all, :conditions => conditions,
-                                                      :include => :problem).and_return([@mock_problem])
-      expected_error_message = "Cannot destroy association of route #{@mock_route.id} with operator #{@mock_operator.id} - problems need updating"
-      lambda{ route_operator.check_problems() }.should raise_error(expected_error_message)
-    end
-    
-  end
 end

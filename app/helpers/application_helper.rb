@@ -541,11 +541,15 @@ module ApplicationHelper
     return text
   end
 
-  def sortable(column, title = nil)
+  def sortable(column, title = nil, allow_sort=true)
     title ||= column.titleize
-    css_class = column == sort_column ? "current #{sort_direction}" : nil
-    direction = (column == sort_column && sort_direction == "asc") ? "desc" : "asc"
-    link_to title, admin_url(url_for(params.merge({:sort => column, :direction => direction}))), {:class => css_class}
+    if allow_sort
+      css_class = column == sort_column ? "current #{sort_direction}" : nil
+      direction = (column == sort_column && sort_direction == "asc") ? "desc" : "asc"
+      link_to title, admin_url(url_for(params.merge({:sort => column, :direction => direction}))), {:class => css_class}
+    else
+      title
+    end
   end
 
   def assignment_title(assignment)

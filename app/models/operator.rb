@@ -64,7 +64,7 @@ class Operator < ActiveRecord::Base
   def codes
     operator_codes.map{ |operator_code| operator_code.code }.uniq
   end
-  
+
   def categories(location)
     contacts = self.contacts_for_location(location)
     if contacts.empty?
@@ -202,6 +202,15 @@ class Operator < ActiveRecord::Base
       end
       merge_to.save!
     end
+  end
+
+  def self.problems_at_location(location_type, location_id, operator_id)
+    conditions = ["problems.location_type = ?
+                   AND problems.location_id = ?
+                   AND responsibilities.organization_id = ?
+                   AND responsibilities.organization_type = 'Operator'",
+                  location_type, location_id, operator_id]
+    return Problem.find(:all, :conditions => conditions, :include => :responsibilities)
   end
 
 end

@@ -22,5 +22,5 @@ en:
     operator_merge_submit: Merge with another operator
     url: URL
     reference_name: Reference name
-    operator_update_problems_exist: Problems exist for this route and operator. Please update them before removing the operator from the route.
+    operator_update_problems_exist: This operator is listed as responsible for some problems on the routes you just removed. Please update these problems if necessary.
     operator_has_routes_or_stop_areas: This operator cannot be deleted as it has routes or stop areas associated with it.

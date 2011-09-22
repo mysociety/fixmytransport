@@ -33,4 +33,4 @@ en:
     different: Definitely different
     skip: Skip - some are the same
     same_or_different: Are these routes the same or different?
-    route_update_problems_exist: Problems exist for this route and operator. Please update them before removing the operator from the route.
+    route_update_problems_exist: The operators you just removed are listed as responsible for some problems on this route. Please update these problems if necessary.
