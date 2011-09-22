@@ -312,7 +312,7 @@ describe ProblemsController do
     def make_request(params={})
       get :find_stop, params
     end
-
+    
     describe 'when a geolocation (lon/lat) is supplied' do
     
       before do
@@ -331,7 +331,12 @@ describe ProblemsController do
         assigns[:locations].should == [@mock_stop]
         response.should render_template('problems/choose_location')
       end
-      
+
+      it 'should ignore it if params are not both numeric' do
+        make_request({:lon => '0.01', :lat => 'foo'})
+        response.should render_template('find_stop')
+      end
+
     end
     
     describe 'when an incomplete geolocation (lon/lat) is supplied' do

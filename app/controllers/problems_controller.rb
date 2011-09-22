@@ -283,18 +283,24 @@ class ProblemsController < ApplicationController
   private
 
   def find_area(options)
-    has_position = ! (params[:lon].blank? or params[:lat].blank?)
-    if has_position
+    if is_valid_lon_lat?(params[:lon], params[:lat])
+      location_search = LocationSearch.new_search!(session_id, :name => "geolocate:#{params[:lon]},#{params[:lat]}",
+                                                               :location_type => 'Stop/station')
       easting, northing = get_easting_northing(params[:lon], params[:lat])
       nearest_stop = Stop.find_nearest(easting, northing, exclude_id = nil)
-      map_params_from_location([nearest_stop],
-                               find_other_locations=true,
-                               LARGE_MAP_HEIGHT,
-                               LARGE_MAP_WIDTH,
-                               options[:map_options])
-      @locations = [nearest_stop]
-      render options[:browse_template]
-      return
+      if nearest_stop
+        map_params_from_location([nearest_stop],
+                                 find_other_locations=true,
+                                 LARGE_MAP_HEIGHT,
+                                 LARGE_MAP_WIDTH,
+                                 options[:map_options])
+        @locations = [nearest_stop]
+        render options[:browse_template]
+        return
+      else # no nearest stop suggests empty database
+        location_search.fail
+        @error_message = t('problems.find_stop.please_enter_an_area')
+      end
     elsif params[:name]
       if params[:name].blank?
         @error_message = t('problems.find_stop.please_enter_an_area')
@@ -374,6 +380,10 @@ class ProblemsController < ApplicationController
     
   end
 
+  def is_valid_lon_lat?(lon, lat)
+    return !(lon.blank? or lat.blank?) && MySociety::Validate.is_valid_lon_lat(lon, lat)
+  end
+  
   def render_browse_template(locations, map_options, template)
     map_params_from_location(locations,
                              find_other_locations=true,
