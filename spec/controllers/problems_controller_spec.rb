@@ -313,6 +313,36 @@ describe ProblemsController do
       get :find_stop, params
     end
 
+    describe 'when a geolocation (lon/lat) is supplied' do
+    
+      before do
+        @mock_locality = mock_model(Locality, :name => 'Euston')
+        @mock_stop = mock_model(Stop, :locality => @mock_locality, :name =>"London Euston rail station")
+        Stop.stub!(:find_nearest).and_return(@mock_stop)
+      end
+      
+      it 'should display the nearest stop and present it as the main location displayed' do
+        @controller.should_receive(:map_params_from_location).with([@mock_stop],
+                                                                    find_other_locations=true,
+                                                                    LARGE_MAP_HEIGHT,
+                                                                    LARGE_MAP_WIDTH,
+                                                                    { :mode => :find })
+        make_request({:lon => '0.01', :lat => '51.1'})
+        assigns[:locations].should == [@mock_stop]
+        response.should render_template('problems/choose_location')
+      end
+      
+    end
+    
+    describe 'when an incomplete geolocation (lon/lat) is supplied' do
+            
+      it 'should ignore it and render the template "find_stop"' do
+        make_request({:lon => '0.01'})
+        response.should render_template('find_stop')
+      end
+      
+    end
+
     describe 'when a name parameter is not supplied' do
 
       it 'should render the template "find_stop"' do

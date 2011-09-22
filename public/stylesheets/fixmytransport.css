@@ -2114,6 +2114,33 @@ body.facebook-canvas .button {
   min-width: 425px;
 }
 
+/*===[ Geo-location: not yet properly styled, but js uses these ids ]===*/
+#geolocate-container {
+  padding: 2em;
+  text-align: center;
+  clear: both;
+}
+#geolocate-button {
+  background: #048FC2;
+  color: #fff;
+  padding: 0.5em;
+  font-weight: bold;
+  font-size: 110%;
+  border:4px solid #cdeaf2;
+}
+#geolocate-button:hover{
+  cursor:pointer;
+  border:4px solid #048FC2;
+}
+#geolocate-status {
+  background: #cdeaf2;
+  color: #048FC2;
+  padding: 6px;
+  margin: 0 auto;
+  display: inline-block;
+}
+
+
 /*===[ Narrow screens]===*/
 @media screen and (max-width: 600px) {
 		    .mobile-only {

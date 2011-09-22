@@ -12,7 +12,9 @@ class ProblemsController < ApplicationController
   skip_before_filter :require_beta_password, :only => [:frontpage]
   skip_before_filter :make_cachable, :except => [:issues_index, :index, :show]
   before_filter :long_cache, :except => [:issues_index, :index, :create, :show]
-
+  
+  include FixMyTransport::GeoFunctions
+  
   def issues_index
     @title = t('problems.issues_index.title')
     @issues = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
@@ -125,7 +127,7 @@ class ProblemsController < ApplicationController
   def find_stop
     @title = t('problems.find_stop.title')
     options = { :find_template => :find_stop,
-                :browse_template => :choose_location,
+                :browse_template => :choose_location, 
                 :map_options => { :mode => :find } }
     return find_area(options)
   end
@@ -281,7 +283,19 @@ class ProblemsController < ApplicationController
   private
 
   def find_area(options)
-    if params[:name]
+    has_position = ! (params[:lon].blank? or params[:lat].blank?)
+    if has_position
+      easting, northing = get_easting_northing(params[:lon], params[:lat])
+      nearest_stop = Stop.find_nearest(easting, northing, exclude_id = nil)
+      map_params_from_location([nearest_stop],
+                               find_other_locations=true,
+                               LARGE_MAP_HEIGHT,
+                               LARGE_MAP_WIDTH,
+                               options[:map_options])
+      @locations = [nearest_stop]
+      render options[:browse_template]
+      return
+    elsif params[:name]
       if params[:name].blank?
         @error_message = t('problems.find_stop.please_enter_an_area')
         render options[:find_template]
@@ -357,7 +371,7 @@ class ProblemsController < ApplicationController
         return
       end
     end
-
+    
   end
 
   def render_browse_template(locations, map_options, template)
