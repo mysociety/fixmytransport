@@ -7,17 +7,14 @@
 
 <div id="main-content" class="container">
 	<%- form_tag find_stop_problems_path, :id => 'stop_name_form', :method => 'GET' do  %>
-	<div id="find-stop">
-		<label for="name" id='guidance-name' class='guidance'><%= t('problems.find_stop.instructions')%></label>
-		<%= raw text_field_tag 'name', params[:name], :size => 40 %>
-		<button class="point-go" type='submit'><%= t('problems.find_stop.go') %></button>
-	</div>
-	<%- if @error_message %>
-	<div class='error find-stop-error'><%= @error_message %></div>
-	<%- end %>
-	<div id="geolocate-container">
-	  <span id="geolocate-button">Your current location</span>
-	</div>
+    <div id="find-stop">
+		  <label for="name" id='guidance-name' class='guidance'><%= t('problems.find_stop.instructions')%></label>
+		  <%= raw text_field_tag 'name', params[:name], :size => 40 %>
+		  <button class="point-go" type='submit'><%= t('problems.find_stop.go') %></button>
+	  </div>
+	  <%- if @error_message %>
+	  <div class='error find-stop-error'><%= @error_message %></div>
+	  <%- end %>
 	<%- end %>
 </div>
 
@@ -26,7 +23,7 @@
     
     $(function() {
       if (geo_position_js.init()) {
-        $('#geolocate-container').show();
+        $('#main-content').append('<div id="geolocate-container"><span id="geolocate-button">...or your current location</span></div>');
         $('#geolocate-button').click(function(){ doGeolocate() });
       }
     });
