@@ -2,14 +2,19 @@ require File.dirname(__FILE__) +  '/data_loader'
 require File.dirname(__FILE__) +  '/../fixmytransport/geo_functions'
 
 namespace :temp do
-
-  desc 'Populate the Isle of Wight bus stop and bus station operators'
-  task :populate_isle_of_wight_operators => :environment do 
-    southern_vectis = Operator.find_by_name('Southern Vectis')
-    isle_of_wight = AdminArea.find_by_name('Isle of Wight')
-    isle_of_wight.localities.each do |locality|
-      locality.stops.each do |stop|
-        stop.stop_operators.create!(:operator => southern_vectis)
+  
+  desc 'Move data about who is responsible for a problem to another table'
+  task :populate_responsibilities => :environment do
+    Problem.find_each do |problem|
+      responsible_organizations = []
+      if problem.location.operators_responsible? && problem.operator
+        responsible_organizations << problem.operator
+      else
+        responsible_organizations = problem.location.responsible_organizations
+      end
+      responsible_organizations.each do |organization|
+        problem.responsibilities.create(:organization_type => organization.class.to_s,
+                                        :organization_id => organization.id)
       end
     end
   end
