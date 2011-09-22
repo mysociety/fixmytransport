@@ -32,17 +32,13 @@ class Admin::StopAreasController < Admin::AdminController
   end
   
   def update
-    begin
-      @stop_area = StopArea.find(params[:id])
-      if @stop_area.update_attributes(params[:stop_area])
-        flash[:notice] = t('admin.stop_area_updated')
-        redirect_to admin_url(admin_stop_area_path(@stop_area.id))
-      else
-        flash.now[:error] = t('admin.stop_area_problem')
-        render :show
-      end
-    rescue FixMyTransport::Exceptions::ProblemsExistError => e
-      flash.now[:error] = t('admin.stop_area_update_problems_exist')
+    @stop_area = StopArea.find(params[:id])
+    if @stop_area.update_attributes(params[:stop_area])
+      flash[:notice] = t('admin.stop_area_updated')
+      add_responsibilities_notice(:stop_area, :stop_area_operators_attributes, 'StopArea', :operator_id, @stop_area)
+      redirect_to admin_url(admin_stop_area_path(@stop_area.id))
+    else
+      flash.now[:error] = t('admin.stop_area_problem')
       render :show
     end
   end

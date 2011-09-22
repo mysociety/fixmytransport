@@ -24,6 +24,7 @@ class Operator < ActiveRecord::Base
   belongs_to :transport_mode
   validates_presence_of :name
   has_many :operator_contacts, :conditions => ['deleted = ?', false]
+  has_many :responsibilities, :as => :organization
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   has_paper_trail
   cattr_reader :per_page
@@ -31,6 +32,7 @@ class Operator < ActiveRecord::Base
   named_scope :with_email, :conditions => ["email is not null and email != ''"]
   named_scope :without_email, :conditions => ["email is null or email = ''"]
   has_friendly_id :name, :use_slug => true
+
 
   # we only accept new or delete existing associations
   def route_operator_invalid(attributes)
@@ -62,7 +64,7 @@ class Operator < ActiveRecord::Base
   def codes
     operator_codes.map{ |operator_code| operator_code.code }.uniq
   end
-  
+
   def categories(location)
     contacts = self.contacts_for_location(location)
     if contacts.empty?
@@ -200,6 +202,15 @@ class Operator < ActiveRecord::Base
       end
       merge_to.save!
     end
+  end
+
+  def self.problems_at_location(location_type, location_id, operator_id)
+    conditions = ["problems.location_type = ?
+                   AND problems.location_id = ?
+                   AND responsibilities.organization_id = ?
+                   AND responsibilities.organization_type = 'Operator'",
+                  location_type, location_id, operator_id]
+    return Problem.find(:all, :conditions => conditions, :include => :responsibilities)
   end
 
 end

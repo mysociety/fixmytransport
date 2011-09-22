@@ -88,14 +88,6 @@ class ProblemMailer < ApplicationMailer
     return sent_emails
   end
 
-  def self.check_for_council_change(problem)
-    if problem.councils_responsible?
-      if problem.location.council_info != problem.council_info
-        STDERR.puts "Councils changed for problem #{problem.id}. Was #{problem.council_info}, now #{problem.location.council_info}"
-      end
-    end
-  end
-  
   def self.send_reports(dryrun=false, verbose=false)
     self.dryrun = dryrun
 
@@ -107,8 +99,6 @@ class ProblemMailer < ApplicationMailer
 
       # if campaign mail, wait until the campaign has a title
       next if problem.campaign and problem.campaign.title.blank?
-
-      check_for_council_change(problem)
 
       if !problem.emailable_organizations.empty?
         send_report(problem, problem.emailable_organizations, problem.unemailable_organizations)

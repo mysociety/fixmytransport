@@ -29,9 +29,8 @@ class Admin::ProblemsController < Admin::AdminController
   
   def resend
     @problem = Problem.find(params[:id])
-    sent_emails = ProblemMailer.send_report(@problem, 
-                                            @problem.emailable_organizations, 
-                                            @problem.unemailable_organizations)
+    responsibility = @problem.responsibilities.find(params[:responsibility_id])
+    sent_emails = ProblemMailer.send_report(@problem, [responsibility.organization], [])
     if @problem.campaign
       @problem.campaign.campaign_events.create!(:event_type => 'problem_report_resent', 
                                                 :data => { :user => user_for_edits,
@@ -43,8 +42,18 @@ class Admin::ProblemsController < Admin::AdminController
   
   def update
     @problem = Problem.find(params[:id])
+    # filter params for responsibilities without organization ids - from the blank form fields
+    params[:problem][:responsibilities_attributes].each do |key, value_hash|
+      if value_hash[:id].blank? && value_hash[:organization_id].blank?
+        params[:problem][:responsibilities_attributes].delete(key)
+      end
+    end
     @problem.status_code = params[:problem][:status_code]
-    if @problem.update_attributes(params[:problem])
+    success = false
+    ActiveRecord::Base.transaction do
+      success = (@problem.update_attributes(params[:problem]) && @problem.update_assignments)
+    end
+    if success
       flash[:notice] = t('admin.problem_updated')
       redirect_to admin_url(admin_problem_path(@problem.id))
     else

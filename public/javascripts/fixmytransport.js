@@ -401,8 +401,9 @@ $(document).ready(function(){
     $(form_selector + " .error").html();
     $(form_selector + " .error").hide();
     for (var key in response.errors){
-      $(form_selector + ' .error-' + key).html( response.errors[key] );
-      $(form_selector + ' .error-' + key).show();
+      error_class = key.replace('.', '_')
+      $(form_selector + ' .error-' + error_class).html( response.errors[key] );
+      $(form_selector + ' .error-' + error_class).show();
     }
   }
 

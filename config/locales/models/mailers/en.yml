@@ -14,7 +14,7 @@ en:
     advice_request_subject: "[FixMyTransport] Can you give advice to \"%{title}?\""
     completed_assignment_subject: "[FixMyTransport] Assignment completed for \"%{title}\""
     app_subject_prefix: "[FixMyTransport] "
-    problem_report_subject: "Problem Report: %{subject}" 
+    problem_report_subject: "%{subject}" 
     password_reset_subject: "[FixMyTransport] Password reset instructions"  
     supporter_confirmation_subject: "[FixMyTransport] Confirm that you want to join \"%{title}\""
     account_confirmation_subject: "[FixMyTransport] Confirm your account"

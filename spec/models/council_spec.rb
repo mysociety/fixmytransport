@@ -12,9 +12,9 @@ describe Council do
   end
 
   it 'should be able to respond to calls to emailable?' do
-    @council.emailable = true
+    @council.stub!(:contacts).and_return([mock_model(CouncilContact)])
     @council.emailable?(mock_model(Stop)).should be_true
-    @council.emailable = false
+    @council.stub!(:contacts).and_return([])
     @council.emailable?(mock_model(Stop)).should be_false
   end
 

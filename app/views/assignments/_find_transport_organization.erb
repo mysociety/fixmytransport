@@ -3,7 +3,6 @@
 </p>
 <%= t('assignments.edit.find_transport_org_explanation_more')%>
 <p>
-<p>
 <%= t('assignments.edit.find_transport_org_use_feedback')%>
 </p>
 <%- form_for [@campaign, @assignment] do |f| %>
@@ -39,6 +38,8 @@
     </div>
     <%- end %>
     <div class='form-field'>
-      <%= raw f.submit t('assignments.edit.submit') %>
+      <button type="submit" class="button"><%= t('assignments.edit.submit') %>
+      </button>
     </div>
+  </div>
 <%- end %>

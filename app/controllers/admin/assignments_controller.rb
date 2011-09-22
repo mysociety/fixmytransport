@@ -2,8 +2,8 @@ class Admin::AssignmentsController < Admin::AdminController
 
   def show
     @assignment = Assignment.find(params[:id])
-    if @assignment.problem.operator
-      @operator = @assignment.problem.operator
+    if @assignment.problem.responsible_operators.size == 1
+      @operator = @assignment.problem.responsible_operators.first
     else
       if @assignment.data[:organization_name]
         @operator = Operator.find(:first, :conditions => ['lower(name) = ?', @assignment.data[:organization_name].downcase])
@@ -27,7 +27,7 @@ class Admin::AssignmentsController < Admin::AdminController
       problem = @assignment.problem
       location = problem.location
       set_location_operator(location)
-      problem.operator = @operator
+      problem.responsibilities.build( :organization => @operator )
       location_only = @assignment.data ? @assignment.data[:location_only] : nil
       new_email = (@assignment.data && @assignment.data[:organization_email]) ? @assignment.data[:organization_email].strip : nil
       @assignment_complete = false

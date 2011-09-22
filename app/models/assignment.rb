@@ -58,13 +58,16 @@ class Assignment < ActiveRecord::Base
   end
 
   def user_name
-    if problem
-      problem.reporter_name
+    if problem && problem.reporter
+      problem.reporter.name
     end
   end
 
   # complete an assignment, updating its data with any data passed
   def complete!(assignment_data={})
+    if self.status == :complete
+      return self
+    end
     self.status = :complete
     if self.data
       self.data.update(assignment_data)

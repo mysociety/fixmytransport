@@ -4,7 +4,7 @@ describe IncomingMessage do
   
   before do 
     @mock_organization = mock("organization", :name => "a test organization", 
-                                              :email => "organization@example.com")
+                                              :emails => ["organization@example.com"])
     @mock_problem = mock_model(Problem, :emailable_organizations => [])
     @mock_campaign = mock_model(Campaign, :problem => @mock_problem, 
                                           :valid_local_parts => ['bob', 'ken'],

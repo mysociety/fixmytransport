@@ -16,18 +16,5 @@ class RouteOperator < ActiveRecord::Base
   has_paper_trail
   # virtual attribute used for adding new route operators
   attr_accessor :_add
-  before_destroy :check_problems
-
-  def check_problems
-    conditions = ['location_type = ? AND location_id = ? AND operator_id = ?', 
-                  'Route', self.route_id, self.operator_id]
-    problems = Problem.find(:all, :conditions => conditions)
-    if !problems.empty?
-      msg = "Cannot destroy association of route #{self.route.id} with operator #{self.operator.id}"
-      msg += " - problems need updating"
-      raise FixMyTransport::Exceptions::ProblemsExistError.new(msg)
-    end
-    return true
-  end
   
 end

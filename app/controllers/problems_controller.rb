@@ -66,6 +66,11 @@ class ProblemsController < ApplicationController
 
   def create
     @problem = Problem.new(params[:problem])
+    @problem.responsibilities.each do |responsibility|
+      if !@problem.location.responsible_organizations.include?(responsibility.organization)
+        @problem.responsibilities.delete(responsibility)
+      end
+    end
     @problem.status = :new
     if @problem.valid?
       if current_user
@@ -407,30 +412,25 @@ class ProblemsController < ApplicationController
 
   def setup_problem_advice(problem)
     advice_params = { :location_type => @template.readable_location_type(problem.location) }
-    num_organizations = problem.responsible_organizations.size
-    num_organizations_with_email = 0
+    responsible_orgs = problem.location.responsible_organizations    
+    emailable_orgs, unemailable_orgs = responsible_orgs.partition{ |org| org.emailable?(problem.location) }
 
-    problem.responsible_organizations.each do |organization|
-      if organization.emailable?(problem.location)
-        num_organizations_with_email += 1
-      end
-    end
-    if num_organizations == 1
-      advice_params[:organization] = @template.org_names(problem, :responsible_organizations, t('problems.new.or'))
-      advice_params[:organization_unstrong] = @template.org_names(problem, :responsible_organizations, t('problems.new.or'), '', '')
-    elsif num_organizations > 1
-      advice_params[:organizations] = @template.org_names(problem, :responsible_organizations, t('problems.new.or'))
+    if responsible_orgs.size == 1
+      advice_params[:organization] = @template.org_names(responsible_orgs, t('problems.new.or'))
+      advice_params[:organization_unstrong] = @template.org_names(responsible_orgs, t('problems.new.or'), '', '')
+    elsif responsible_orgs.size > 1
+      advice_params[:organizations] = @template.org_names(responsible_orgs, t('problems.new.or'))
     end
     # don't know who is responsible for the location
-    if num_organizations == 0
+    if responsible_orgs.size == 0
       advice = 'problems.new.no_organizations_for_problem'
     # all responsible organizations contactable
-    elsif num_organizations == num_organizations_with_email
-      if num_organizations == 1
+    elsif responsible_orgs.size == emailable_orgs.size
+      if responsible_orgs.size == 1
         advice = 'problems.new.problem_will_be_sent'
       else
         # for operators you get to choose which to email
-        if problem.operators_responsible?
+        if problem.location.operators_responsible?
           advice = 'problems.new.problem_will_be_sent_multiple_operators'
         else
           # for councils, it goes to all or one depending on category
@@ -438,8 +438,8 @@ class ProblemsController < ApplicationController
         end
       end
     # no responsible organizations contactable
-    elsif num_organizations_with_email == 0
-      if num_organizations == 1
+    elsif emailable_orgs.size == 0
+      if responsible_orgs.size == 1
         advice = 'problems.new.no_details_for_organization'
       else
         advice = 'problems.new.no_details_for_organizations'
@@ -447,19 +447,20 @@ class ProblemsController < ApplicationController
     # some responsible organizations contactable
     else
 
-      advice_params[:contactable] = @template.org_names(problem, :emailable_organizations, t('problems.new.or'))
-      advice_params[:uncontactable] = @template.org_names(problem, :unemailable_organizations, t('problems.new.or'))
 
-      if problem.operators_responsible?
-        if problem.unemailable_organizations.size > 2
+      advice_params[:contactable] = @template.org_names(emailable_orgs, t('problems.new.or'))
+      advice_params[:uncontactable] = @template.org_names(unemailable_orgs, t('problems.new.or'))
+
+      if problem.location.operators_responsible?
+        if unemailable_orgs.size > 2
           advice_params[:uncontactable] = t('problems.new.one_of_the_uncontactable_companies')
         end
-        if problem.emailable_organizations.size > 2
+        if emailable_orgs.size > 2
           advice_params[:contactable] = t('problems.new.one_of_the_contactable_companies')
         end
         advice = 'problems.new.no_details_for_some_operators'
       else
-        advice_params[:councils] = @template.org_names(problem, :responsible_organizations, t('problems.new.or'))
+        advice_params[:councils] = @template.org_names(responsible_orgs, t('problems.new.or'))
         advice = 'problems.new.no_details_for_some_councils'
       end
     end
@@ -484,6 +485,7 @@ class ProblemsController < ApplicationController
   end
 
   def handle_problem_no_current_user
+    responsibilities = @problem.responsibilities.map{ |res| "#{res.organization_id}|#{res.organization_type}" }.join(",")
     # encoding the text to avoid YAML issues with multiline strings
     # http://redmine.ruby-lang.org/issues/show/1311
     problem_data = { :action => :create_problem,
@@ -493,9 +495,7 @@ class ProblemsController < ApplicationController
                      :location_id => @problem.location_id,
                      :location_type => @problem.location_type,
                      :category => @problem.category,
-                     :operator_id => @problem.operator_id,
-                     :passenger_transport_executive_id => @problem.passenger_transport_executive_id,
-                     :council_info => @problem.council_info,
+                     :responsibilities => responsibilities,
                      :notice => t('problems.new.create_account_to_report_problem') }
     session[:next_action] = data_to_string(problem_data)
     respond_to do |format|

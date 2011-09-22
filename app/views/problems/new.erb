@@ -22,34 +22,54 @@
 		<ul>
 			<li>
 				<label><%= t('problems.new.to')%></label>
-				<%- if @problem.operators_responsible?  %>
-        
-         <%- if @problem.location.operators.size > 1 %>
-           <%- if @problem.errors.on('operator_id') %>
-            <div class='error error-operator_id'>
-              <%= error_message_on @problem, :operator_id %>
-            </div>
-          <%- else %>
-            <div class='error error-operator_id' style="display: none;" role="alert"></div>
-           <%- end %>
-            <%= raw f.collection_select("operator_id", @problem.location.operators, :id, :name, :include_blank => t('problems.new.select_operator')) %>
-          <%- elsif @problem.location.operators.size == 1 %>
-            <%= raw f.hidden_field :operator_id, :value => @problem.location.operators.first.id %>
-            <div class="static-value"><%= @problem.location.operators.first.name %></div>
-          <%- else %>
+
+				<%- if @problem.location.operators_responsible?  %>
+          <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
+            <%- if @problem.location.operators.size > 1 %>
+              <%- if responsibility_fields.object.errors.on('organization_id') %>
+                <div class='error error-responsibilities_organization_id'>
+                  <%= error_message_on responsibility_fields.object, :organization_id %>
+                </div>
+              <%- else %>
+                <div class='error error-responsibilities_organization_id' style="display: none;" role="alert">
+                </div>
+              <%- end %>
+              <%= raw responsibility_fields.collection_select("organization_id", @problem.location.operators, :id, :name, :include_blank => t('problems.new.select_operator')) %>
+              <%= responsibility_fields.hidden_field :organization_type,  :value => 'Operator' %>
+           
+            <%- elsif @problem.location.operators.size == 1 %>
+              <%= responsibility_fields.hidden_field :organization_type,  :value => 'Operator' %>
+              <%= responsibility_fields.hidden_field :organization_id,  :value => @problem.location.operators.first.id %>
+              <div class="static-value">
+                <%= @problem.location.operators.first.name %>
+              </div>
+            <%- else %>
+              <div class="static-value">
+                <%= t('problems.new.operator', :location => @problem.location.description)%>
+              </div>
+            <%- end %>
+          <%- end %>
+        <%- elsif @problem.location.pte_responsible?  %>
+          <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
+            <%= responsibility_fields.hidden_field :organization_type,  :value => 'PassengerTransportExecutive' %>
+            <%= responsibility_fields.hidden_field :organization_id,  :value => @problem.location.passenger_transport_executive.id %>
             <div class="static-value">
-              <%= t('problems.new.operator', :location => @problem.location.description)%>
+              <%= @problem.location.passenger_transport_executive.name %>
             </div>
           <%- end %>
-
-        <%- elsif @problem.pte_responsible?  %>
-          <%= raw f.hidden_field :passenger_transport_executive_id, :value => @problem.location.passenger_transport_executive.id %>
-          <div class="static-value"><%= @problem.location.passenger_transport_executive.name %></div>
-        <%- elsif @problem.councils_responsible? %>
-          <%= raw f.hidden_field :council_info, :value => @problem.location.council_info %>
-          <div class="static-value"><%= raw org_names(@problem, :responsible_organizations, t('problems.new.or'))%></div>
+        <%- elsif @problem.location.councils_responsible? %>
+          <%- @problem.location.councils.each do |council| %>
+            <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
+              <%= responsibility_fields.hidden_field :organization_type,  :value => 'Council' %>
+              <%= responsibility_fields.hidden_field :organization_id,  :value => council.id %>
+              <%- end %>
+            <%- end %>
+            <div class="static-value">
+              <%= raw org_names(@problem.location.responsible_organizations, t('problems.new.or'))%>
+            </div>
+            
         <%- end %>
-				
+			
 			</li>
     
   		<input id="problem_reporter_name" name="problem[reporter_name]" type="hidden" value="<%= @problem.reporter_name %>"/>

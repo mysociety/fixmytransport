@@ -18,30 +18,42 @@ describe Problem do
 
   end
 
-  describe 'when creating a problem from a hash' do
-
+  describe 'when creating a problem from a hash' do 
+    
+    
     before do
       @problem_data = { :subject => 'test subject',
                         :description => 'test description',
                         :category => 'Other',
                         :location_id => 55,
                         :location_type => 'Route',
-                        :operator_id => 22,
-                        :passenger_transport_executive_id => nil,
-                        :council_info => nil }
+                        :responsibilities => '22|Council' }
       @user = mock_model(User, :name => 'Test User')
       @expected_params = { :subject => 'test subject',
                            :description => 'test description',
                            :category => 'Other',
                            :location_id => 55,
-                           :location_type => 'Route',
-                           :operator_id => 22,
-                           :passenger_transport_executive_id => nil,
-                           :council_info => nil }
-      @mock_problem = mock_model(Problem, :status= => nil,
+                           :location_type => 'Route' }
+      @mock_problem = mock_model(Problem, :responsibilities => mock('responsibilities', :build => nil),
+                                          :status= => nil,
                                           :save! => true,
                                           :reporter= => true,
                                           :reporter_name= => true)
+    end
+  
+    it 'should create responsibilities from a comma and pipe delimited string keyed by "responsibilities"' do 
+      Problem.stub!(:new).and_return(@mock_problem)
+      @mock_problem.responsibilities.should_receive(:build).with(:organization_id => "22",
+                                                                :organization_type => 'Council')
+      @mock_problem.responsibilities.should_receive(:build).with(:organization_id => "55", 
+                                                                :organization_type => 'Council')
+      problem_hash = { :subject => 'A Test Subject', 
+                       :description => 'A Test Description', 
+                       :location_id => 55, 
+                       :location_type => 'Route', 
+                       :category => 'Other', 
+                       :responsibilities => '22|Council,55|Council' }
+      p = Problem.create_from_hash(problem_hash, @user)
     end
 
     it 'should build a problem with the params passed' do

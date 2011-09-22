@@ -1,5 +1,7 @@
-<h2 class="main-header"><%= t('assignments.edit.find_contact_details_header', :name => @assignment.problem.operator.name)%></h2>
-<p><%= raw t('assignments.edit.find_contact_details_explanation', :organization => @assignment.problem.operator.name, :link => link_to( @assignment.problem.operator.name, external_search_link(@assignment.problem.operator.name), :title => t('assignments.edit.click_to_search', :search => @assignment.problem.operator.name), :target => '_blank'))%>
+<h2 class="main-header">
+  <%= t('assignments.edit.find_contact_details_header', :name => @assignment.problem.operator_names) %>
+</h2>
+<p><%= raw t('assignments.edit.find_contact_details_explanation', :organization => @assignment.problem.operator_names, :link => link_to( @assignment.problem.operator_names, external_search_link(@assignment.problem.operator_names), :title => t('assignments.edit.click_to_search', :search => @assignment.problem.operator_names), :target => '_blank'))%>
 </p>
 <p>
 <%= t('assignments.edit.find_transport_org_use_feedback') %>
@@ -9,24 +11,29 @@
   <div class='fieldset'>
   
     <div class='form-field'>
+      
+      <%= label_tag :organization_email, t('assignments.edit.organization_email') %>
+      <%= raw text_field_tag :organization_email, @assignment.data[:organization_email], :size => 45 %>
       <%- if @assignment.errors.on('organization_email') %>
         <div class='error'>
           <%= @assignment.errors.on(:organization_email) %>
         </div>
       <%- end %>
-      <%= label_tag :organization_email, t('assignments.edit.organization_email') %>
-      <%= raw text_field_tag :organization_email, @assignment.data[:organization_email], :size => 45 %>
     </div>
+    
+    
     <%- if @assignment.problem.location.is_a?(StopArea) %>
     <div class='form-field'>
       <div class="checkbox">
         <%= raw check_box_tag :location_only, @assignment.data[:location_only] %>
         <%= label_tag :location_only, t('assignments.edit.contact_for_location') %>
        
-    </div>
+      </div>
     </div>
     <%- end %>
+    
     <div class='form-field'>
-      <%= raw f.submit t('assignments.edit.submit') %>
+      <button type="submit" id="assignment_submit" type="submit" value="Submit" name="commit" class="button"><%= t('assignments.edit.submit')%></button>
     </div>
+  </div>
 <%- end %>

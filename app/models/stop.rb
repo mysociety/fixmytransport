@@ -54,6 +54,8 @@ class Stop < ActiveRecord::Base
   has_many :routes_as_to_stop, :through => :route_segments_as_to_stop, :source => 'route'
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   belongs_to :locality
+  has_many :stop_operators, :dependent => :destroy
+  has_many :operators, :through => :stop_operators, :uniq => true
   validates_presence_of :locality_id, :lon, :lat, :if => :loaded?
   validates_uniqueness_of :atco_code, :allow_blank => true
   validates_uniqueness_of :other_code, :allow_blank => true
@@ -190,8 +192,18 @@ class Stop < ActiveRecord::Base
     query_params = []
     if ! query.blank?
       query = query.downcase
-      query_clause = "(LOWER(common_name) LIKE ? OR LOWER(common_name) LIKE ? OR LOWER(street) LIKE ? OR LOWER(street) LIKE ?"
-      query_params = [ "#{query}%", "%#{query}%", "#{query}%", "%#{query}%" ]
+      query_clause = "(LOWER(common_name) LIKE ?
+                      OR LOWER(common_name) LIKE ? 
+                      OR LOWER(street) LIKE ? 
+                      OR LOWER(street) LIKE ?
+                      OR LOWER(atco_code) LIKE ?
+                      OR LOWER(atco_code) LIKE ?
+                      OR LOWER(other_code) LIKE ?
+                      OR LOWER(other_code) LIKE ?"
+      query_params = [ "#{query}%", "%#{query}%", 
+                       "#{query}%", "%#{query}%", 
+                       "#{query}%", "%#{query}%", 
+                       "#{query}%", "%#{query}%" ]
       # numeric?
       if query.to_i.to_s == query
         query_clause += " OR id = ?"

@@ -1,0 +1,4 @@
+<%- if ! problems.empty? %>
+  <%= t("admin.#{model}_update_problems_exist")%>
+  <%= render :partial => 'admin/shared/problem_table', :locals => { :allow_sort => false, :problems => problems }%>
+<%- end %>

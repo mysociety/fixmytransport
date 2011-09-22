@@ -30,6 +30,7 @@ class Locality < ActiveRecord::Base
   belongs_to :district
   has_dag_links :link_class_name => 'LocalityLink'
   has_many :stops, :order => 'common_name asc'
+  has_many :stop_areas
   has_many :route_localities
   has_many :routes, :through => :route_localities
   has_friendly_id :name_and_qualifier_name, :use_slug => true

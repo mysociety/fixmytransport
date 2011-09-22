@@ -144,8 +144,12 @@ class StopArea < ActiveRecord::Base
     query_params = []
     if ! query.blank?
       query = query.downcase
-      query_clause = "(LOWER(name) LIKE ? OR LOWER(name) LIKE ?"
-      query_params = [ "#{query}%", "%#{query}%"]
+      query_clause = "(LOWER(name) LIKE ? 
+                      OR LOWER(name) LIKE ?
+                      OR LOWER(code) LIKE ?
+                      OR LOWER(code) LIKE ?"
+      query_params = [ "#{query}%", "%#{query}%",
+                       "#{query}%", "%#{query}%" ]
       # numeric?
       if query.to_i.to_s == query
         query_clause += " OR id = ?"

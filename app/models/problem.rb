@@ -2,25 +2,25 @@ class Problem < ActiveRecord::Base
   belongs_to :location, :polymorphic => true
   belongs_to :reporter, :class_name => 'User'
   belongs_to :transport_mode
-  belongs_to :operator
-  belongs_to :passenger_transport_executive
   belongs_to :campaign, :autosave => true
   has_many :subscriptions, :as => :target
   has_many :subscribers, :through => :subscriptions, :source => :user
   has_many :assignments
   has_many :comments, :as => :commented
   has_many :sent_emails
+  belongs_to :operator
+  belongs_to :passenger_transport_executive
+  has_many :responsibilities
   validates_presence_of :description, :subject, :category, :if => :location
   validates_associated :reporter
-  validates_presence_of :operator_id, :if => :location_has_operators
-  attr_accessor :location_attributes, :locations, :location_search, :is_campaign
   attr_protected :confirmed_at
   before_create :generate_confirmation_token, :add_coords
   has_status({ 0 => 'New',
                1 => 'Confirmed',
                2 => 'Fixed',
                3 => 'Hidden' })
-
+  accepts_nested_attributes_for :responsibilities, :allow_destroy => true
+  
   def self.visible_status_codes
     [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:fixed]]
   end
@@ -28,13 +28,6 @@ class Problem < ActiveRecord::Base
   named_scope :confirmed, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
   named_scope :visible, :conditions => ["status_code in (?) and campaign_id is null", Problem.visible_status_codes], :order => "confirmed_at desc"
   named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
-  named_scope :with_operator, :conditions => ['operator_id is not null'], :order => 'confirmed_at desc'
-  [:responsible_organizations,
-   :emailable_organizations,
-   :unemailable_organizations,
-   :councils_responsible?,
-   :pte_responsible?,
-   :operators_responsible? ].each { |method| delegate method, :to => :location }
 
   has_paper_trail
 
@@ -81,24 +74,42 @@ class Problem < ActiveRecord::Base
 
     end
   end
-
-  def location_has_operators
-    operators_responsible? && location.operators.size > 0
+  
+  def update_assignments
+    # if there are now responsible organizations, remove any untried assignment to find
+    # out who's responsible
+    if !self.responsible_organizations.empty?
+      find_org_assignments = self.assignments.is_new.find(:all, :conditions => ["task_type_name = 'find-transport-organization'"])
+      find_org_assignments.each do |assignment|
+        assignment.destroy
+      end
+    end
+    # if there's an incomplete 'write-to-transport-organization' assignment, and
+    # emailable organizations, complete it
+    if !self.emailable_organizations.empty?
+      data = {:organizations => self.organization_info(:responsible_organizations) }
+      Assignment.complete_problem_assignments(self, {'write-to-transport-organization' => data })
+    end
   end
 
   def responsible_organizations
-    if operators_responsible? && operator
-      return [operator]
-    end
-    return location.responsible_organizations
+    self.responsibilities.map{ |responsibility| responsibility.organization }
+  end
+  
+  def responsible_operators
+    self.responsible_organizations.select{ |org| org.is_a?(Operator) }
+  end
+  
+  def operator_names
+    self.responsible_operators.map{ |operator| operator.name }.to_sentence
   end
 
   def emailable_organizations
-    responsible_organizations.select{ |organization| organization.emailable?(self.location) }
+    self.responsible_organizations.select{ |organization| organization.emailable?(self.location) }
   end
 
   def unemailable_organizations
-    responsible_organizations.select{ |organization| !organization.emailable?(self.location) }
+    self.responsible_organizations.select{ |organization| !organization.emailable?(self.location) }
   end
 
   def organization_info(method)
@@ -213,6 +224,14 @@ class Problem < ActiveRecord::Base
   def visible?
     [:confirmed, :fixed].include?(self.status)
   end
+  
+  def sendable?
+    (self.status == :confirmed && self.sent_at.nil? && !self.responsibilities.empty?)
+  end
+  
+  def unsendable?
+    (self.status == :confirmed && self.sent_at.nil? && self.responsibilities.empty?)
+  end
 
   # class methods
 
@@ -280,10 +299,12 @@ class Problem < ActiveRecord::Base
                           :description => description,
                           :location_id => data[:location_id],
                           :location_type => data[:location_type],
-                          :category => data[:category],
-                          :operator_id => data[:operator_id],
-                          :passenger_transport_executive_id => data[:passenger_transport_executive_id],
-                          :council_info => data[:council_info])
+                          :category => data[:category])
+    data[:responsibilities].split(",").each do |responsibility_string|
+      organization_id, organization_type = responsibility_string.split("|")
+      problem.responsibilities.build(:organization_id => organization_id, 
+                                     :organization_type => organization_type)
+    end
     problem.status = :new
     problem.reporter = user
     problem.reporter_name = user.name
@@ -331,10 +352,11 @@ class Problem < ActiveRecord::Base
         location_class = location.class.superclass.to_s
       end
       location_class = conn.quote(location_class)
-      if location_class == 'Route' && !location.sub_routes.empty?
+      if location_class == "'Route'" && !location.sub_routes.empty?
         # for a train route, we want to include problems on sub-routes of this route
         # that were reported to a matching operator
         operator_ids = location.operator_ids.map{ |id| conn.quote(id) }.join(',')
+        extra_tables = ", responsibilities"
         location_clause = "AND ((problems.location_id = #{location_id}
                             AND problems.location_type = #{location_class})
                             OR
@@ -342,12 +364,16 @@ class Problem < ActiveRecord::Base
                                              FROM route_sub_routes
                                              WHERE route_id = #{location_id})
                              AND problems.location_type = 'SubRoute'
-                             AND problems.operator_id in (#{operator_ids}))) "
+                             AND problems.id = responsibilities.problem_id
+                             AND responsibilities.organization_type = 'Operator'
+                             AND responsibilities.organization_id in (#{operator_ids}))) "
       else
+        extra_tables = ''
         location_clause = " AND problems.location_id = #{location_id}
                             AND problems.location_type = #{location_class} "
       end
     else
+      extra_tables = ''
       location_clause = ""
     end
     # grab the ids of visible campaigns and problems, order them by most recently created
@@ -356,15 +382,15 @@ class Problem < ActiveRecord::Base
     visible_campaign_codes = Campaign.visible_status_codes.map{ |code| conn.quote(code) }.join(",")
     issue_info = self.connection.select_rows("SELECT id, model_type
                                              FROM
-                                             (SELECT id, 'Problem' as model_type, confirmed_at as latest_date, coords
-                                              FROM problems
+                                             (SELECT problems.id, 'Problem' as model_type, confirmed_at as latest_date, coords
+                                              FROM problems #{extra_tables}
                                               WHERE status_code in (#{visible_problem_codes})
                                               AND campaign_id is null
                                               #{location_clause}
                                               #{other_condition_clause}
                                               UNION
                                               SELECT campaigns.id, 'Campaign' as model_type, latest_event_at as latest_date, coords
-                                              FROM campaigns, problems
+                                              FROM campaigns, problems #{extra_tables}
                                               WHERE campaigns.status_code in (#{visible_campaign_codes})
                                               #{location_clause}
                                               #{other_condition_clause}
@@ -396,17 +422,15 @@ class Problem < ActiveRecord::Base
     return issues
   end
 
-  # Sendable reports - confirmed, with operator, PTE, or council, but not sent
+  # Sendable reports - confirmed, with responsible_organizations, but not sent
   def self.sendable
-    confirmed.unsent.find(:all, :conditions => ['(operator_id is not null
-                                                  OR council_info is not null
-                                                  OR passenger_transport_executive_id is not null)'])
+    confirmed.unsent.find(:all, :include => :responsibilities,
+                                :conditions => ['responsibilities.id is not null'])
   end
 
   def self.unsendable
-    confirmed.unsent.find(:all, :conditions => ['(operator_id is null
-                                                  AND council_info is null
-                                                  AND passenger_transport_executive_id is null)'])
+    confirmed.unsent.find(:all, :include => :responsibilities,
+                                :conditions => ['responsibilities.id is null'])
   end
 
 end

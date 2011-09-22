@@ -1,6 +1,6 @@
 class Council
 
-  attr_accessor :name, :id, :emailable
+  attr_accessor :name, :id
 
   def initialize(attributes)
     @id = attributes[:id]
@@ -11,9 +11,13 @@ class Council
     return self.new(:id => attributes['id'],
                     :name => attributes['name'])
   end
+  
+  def ==(other)
+    (other.is_a?(Council)) && (@id == other.id) && (@name == other.name)
+  end
 
   def emailable?(location)
-    @emailable
+    !self.contacts.empty?
   end
 
   def categories(location)

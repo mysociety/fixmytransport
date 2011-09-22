@@ -5,12 +5,14 @@ describe Admin::ProblemsController do
   describe 'POST #resend' do 
     
     def make_request
-      post :resend, { :id => 55 }
+      post :resend, { :id => 55, :responsibility_id => 66 }
     end
     
     before do 
-      @problem = mock_model(Problem, :emailable_organizations => [], 
-                                     :unemailable_organizations => [],
+      @operator =  mock_model(Operator)
+      @responsibility = mock_model(Responsibility, :organization =>@operator)
+      @responsibilities = mock('responsibilities', :find => @responsibility)
+      @problem = mock_model(Problem, :responsibilities => @responsibilities, 
                                      :campaign => nil)
       Problem.stub!(:find).and_return(@problem)
       @sent_email = mock_model(SentEmail)
@@ -22,10 +24,13 @@ describe Admin::ProblemsController do
       make_request
     end
     
-    it 'should resend the problem to its emailable organizations' do 
-      ProblemMailer.should_receive(:send_report).with(@problem, 
-                                                      @problem.emailable_organizations, 
-                                                      @problem.unemailable_organizations)
+    it 'should look for the problem responsibility by id' do 
+      @problem.responsibilities.should_receive(:find).with('66')
+      make_request
+    end
+    
+    it 'should resend the problem to the responsible organization' do 
+      ProblemMailer.should_receive(:send_report).with(@problem, [@operator], [])
       make_request
     end
     

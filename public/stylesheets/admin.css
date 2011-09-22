@@ -23,6 +23,10 @@ ul.admin-navigation li {
   border: 1px solid #437DD4;
 }
 
+  .flash_notice .index-list {
+    margin: 0.5em 0;
+  }
+
 .flash_error {
   padding: 5px;
   margin: 5px;
@@ -88,6 +92,7 @@ h2.route-header {
 table.index-list { 
   width: 100%;
   table-layout: fixed ;
+  background-color: #ffffff;
 }
 
 /* Maps */

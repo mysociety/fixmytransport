@@ -26,20 +26,40 @@ describe Admin::StopsController do
     end
     
     it 'should ask for stops with part of the common name or street matching the query param' do 
-      query_string = '(LOWER(common_name) LIKE ? OR LOWER(common_name) LIKE ? OR LOWER(street) LIKE ? OR LOWER(street) LIKE ?)'
+      query_string = "(LOWER(common_name) LIKE ?
+                      OR LOWER(common_name) LIKE ? 
+                      OR LOWER(street) LIKE ? 
+                      OR LOWER(street) LIKE ?
+                      OR LOWER(atco_code) LIKE ?
+                      OR LOWER(atco_code) LIKE ?
+                      OR LOWER(other_code) LIKE ?
+                      OR LOWER(other_code) LIKE ?)"
       Stop.should_receive(:paginate).with(:page => nil, 
                                           :conditions => [query_string, 
-                                          "something%", "%something%", "something%", "%something%"],
+                                          "something%", "%something%", 
+                                          "something%", "%something%",
+                                          "something%", "%something%",
+                                          "something%", "%something%"],
                                           :include => :locality,
                                           :order => 'lower(common_name)')
       get :index, :query => 'Something'
     end
     
     it 'should ask for stops with part of the common name or street or the id matching the query param if it is numeric' do
-      query_string = '(LOWER(common_name) LIKE ? OR LOWER(common_name) LIKE ? OR LOWER(street) LIKE ? OR LOWER(street) LIKE ? OR id = ?)'
+      query_string ="(LOWER(common_name) LIKE ?
+                      OR LOWER(common_name) LIKE ? 
+                      OR LOWER(street) LIKE ? 
+                      OR LOWER(street) LIKE ?
+                      OR LOWER(atco_code) LIKE ?
+                      OR LOWER(atco_code) LIKE ?
+                      OR LOWER(other_code) LIKE ?
+                      OR LOWER(other_code) LIKE ? OR id = ?)"
       Stop.should_receive(:paginate).with(:page => nil, 
                                            :conditions => [query_string, 
-                                            "34%", "%34%", "34%", "%34%", 34],
+                                            "34%", "%34%", 
+                                            "34%", "%34%",
+                                            "34%", "%34%",
+                                            "34%", "%34%", 34],
                                             :include => :locality,
                                             :order => 'lower(common_name)')
       get :index, :query => '34'

@@ -58,6 +58,16 @@ describe Assignment do
                                    :problem => @mock_problem)
       @assignment.stub!(:save!).and_return(true)
     end
+    
+    describe 'if the assignment is already complete' do
+    
+      it 'should not update the assignment' do 
+        @assignment.should_not_receive(:save!)
+        @assignment.stub!(:status).and_return(:complete)
+        @assignment.complete!
+      end
+      
+    end
    
     it 'should update the data on the assignment' do
       @assignment.data.should_receive(:update).with(:x => :y)

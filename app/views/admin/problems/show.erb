@@ -5,17 +5,34 @@
 
 
 <%= render :partial => "recipients" %>
-
-<%- if !@problem.emailable_organizations.empty? %>
-  <form action="<%= admin_url(resend_admin_problem_path(@problem)) %>" method="POST">
-
-    <%= t('admin.resent_problem_will_go_to')%>
-    <%- @problem.emailable_organizations.each do |org| %> 
-      <%= org.name %>
-      (<%= @problem.recipient_emails(org)[:to] %><%- if @problem.recipient_emails(org)[:cc] %>with a cc to <%=@problem.recipient_emails(org)[:cc] %><%- end %> <%= link_to('admin', admin_contact_url(@problem.recipient_contact(org)))%>)
+<%- if @problem.sendable? %>
+  <%= t('admin.problem_sendable')%>
+  <%- if @problem.emailable_organizations.empty? %>
+    <%= t('admin.no_emailable_organizations')%>
+  <%- else %>
+    <%= t('admin.it_will_be_sent')%>
+    <%- @problem.responsibilities.each do |responsibility| %> 
+      <%- if responsibility.organization.emailable?(@problem.location) %>
+       <%= responsibility.organization.name %>
+       (<%= @problem.recipient_emails(responsibility.organization)[:to] %><%- if @problem.recipient_emails(responsibility.organization)[:cc] %>with a cc to <%=@problem.recipient_emails(responsibility.organization)[:cc] %><%- end %> <%= link_to('admin', admin_contact_url(@problem.recipient_contact(responsibility.organization)))%>)
+      <%- end %>
     <%- end %>
-    <%= submit_tag(t('admin.resend'), :type => 'submit', :confirm => t('admin.are_you_sure')) %>    
-  </form>
+  <%- end %>
+<%- elsif @problem.unsendable? %>
+  <%= t('admin.problem_unsendable')%>
+<%- elsif @problem.sent_at && !@problem.emailable_organizations.empty? %>
+    <%= t('admin.resent_problem_will_go_to')%>
+    <%- @problem.responsibilities.each do |responsibility| %> 
+      <%- if responsibility.organization.emailable?(@problem.location) %>
+        <form action="<%= admin_url(resend_admin_problem_path(@problem)) %>" method="POST">
+        <%= responsibility.organization.name %>
+        (<%= @problem.recipient_emails(responsibility.organization)[:to] %><%- if @problem.recipient_emails(responsibility.organization)[:cc] %>with a cc to <%=@problem.recipient_emails(responsibility.organization)[:cc] %><%- end %> <%= link_to('admin', admin_contact_url(@problem.recipient_contact(responsibility.organization)))%>)
+        <%= hidden_field_tag :responsibility_id, responsibility.id %>
+        <%= submit_tag(t('admin.resend'), :type => 'submit', :confirm => t('admin.are_you_sure')) %>    
+        </form>
+      <%- end %>
+    <%- end %>
+
 <%- end %>
 
 <%= render :partial => 'admin/shared/comment', :locals => { :comments => @problem.comments } %>

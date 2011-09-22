@@ -206,34 +206,62 @@ describe Stop do
 
   describe 'when asked for responsible organizations' do
 
-    it 'should return the operators if the only transport mode is train' do
-      mock_operator = mock_model(Operator)
-      stop = Stop.new
-      stop.stub!(:transport_mode_names).and_return(['Train'])
-      stop.stub!(:operators).and_return([mock_operator])
-      stop.responsible_organizations.should == [mock_operator]
+    before do
+      @stop = Stop.new
     end
 
     describe 'when the transport mode is not train' do
 
-      it 'should return the PTE if there is one' do
-        mock_pte = mock_model(PassengerTransportExecutive)
-        stop = Stop.new
-        stop.stub!(:transport_mode_names).and_return(['Bus', 'Coach'])
-        stop.stub!(:passenger_transport_executive).and_return(mock_pte)
-        stop.responsible_organizations.should == [mock_pte]
+      before do
+        @stop.stub!(:transport_mode_names).and_return(['Bus', 'Coach'])
       end
 
-      it 'should return the councils if there is no PTE' do
-        mock_council = mock_model(Council)
-        stop = Stop.new
-        stop.stub!(:transport_mode_names).and_return(['Bus', 'Coach'])
-        stop.stub!(:passenger_transport_executive).and_return(nil)
-        stop.stub!(:councils).and_return([mock_council])
-        stop.responsible_organizations.should == [mock_council]
+      describe 'if there are operators' do
+
+        before do
+          @operator = mock_model(Operator)
+          @stop.stub!(:operators).and_return([@operator])
+        end
+
+        it 'should return the operators ' do
+          @stop.responsible_organizations.should == [@operator]
+        end
+
+      end
+
+      describe 'if there are no operators' do
+
+        before do
+          @stop.stub!(:operators).and_return([])
+        end
+
+        it 'should return the PTE if there is one' do
+          mock_pte = mock_model(PassengerTransportExecutive)
+          @stop.stub!(:passenger_transport_executive).and_return(mock_pte)
+          @stop.responsible_organizations.should == [mock_pte]
+        end
+
+        it 'should return the councils if there is no PTE' do
+          mock_council = mock_model(Council)
+          @stop.stub!(:passenger_transport_executive).and_return(nil)
+          @stop.stub!(:councils).and_return([mock_council])
+          @stop.responsible_organizations.should == [mock_council]
+        end
+
       end
 
     end
+  end
+
+  describe 'when asked if a PTE is responsible' do
+
+    it 'should return false if the responsible organization is a council' do
+      stop = Stop.new
+      stop.stub!(:responsible_organizations).and_return(Council.from_hash('id' => 33, :name => 'A test council'))
+      stop.stub!(:passenger_transport_executive).and_return(nil)
+      stop.pte_responsible?.should == false
+    end
+
   end
 
   describe 'as a transport location' do
@@ -255,20 +283,6 @@ describe Stop do
       stop = Stop.new
       stop.stub!(:councils).and_return([mock('Council', :id => 33)])
       stop.passenger_transport_executive.should == mock_pte
-    end
-
-  end
-
-  describe 'when asked for council info' do
-
-    it 'should create a pipe-delimited string of two comma delimited strings of emailable and not emailable council ids' do
-      stop = Stop.new
-      stop.stub!(:emailable_councils).and_return([mock('Council', :id => 44)])
-      stop.stub!(:unemailable_councils).and_return([])
-      stop.council_info.should == '44|'
-      stop.stub!(:emailable_councils).and_return([mock('Council', :id => 44), mock('Council', :id => 33)])
-      stop.stub!(:unemailable_councils).and_return([mock('Council', :id => 55)])
-      stop.council_info.should == '44,33|55'
     end
 
   end

@@ -351,14 +351,6 @@ class Route < ActiveRecord::Base
     return (self.transport_mode_name == 'Bus' && self.region.name == 'London')
   end
 
-  def sub_route_problems
-    problem_list = sub_routes.map{ |sub_route| sub_route.problems }
-    if operators
-      problem_list = problem_list.select{ |problem| operators.include?(problem.operator) }
-    end
-    problem_list
-  end
-
   def cache_route_coords
     return if stops.empty?
     lons = self.stops.map{ |element| element.lon }

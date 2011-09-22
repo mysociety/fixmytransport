@@ -174,6 +174,7 @@ en:
       select_operator: "-- Choose the name of the company --"
       problem_will_be_sent: "We'll then send it to %{organization}."
       problem_will_be_sent_multiple: "We'll then send it to %{organizations}."
+      choose_operator: "Please choose a company to report the problem to"
       no_details_for_some_operators: "We do not yet have all the contact details for this %{location_type}. If your message is for %{uncontactable}, it will <strong>not</strong> be sent to them until an email address for them is found. If your problem relates to %{contactable}, it will be sent straight away."
     show:
       fixed: "Fixed"

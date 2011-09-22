@@ -78,15 +78,9 @@ class Campaign < ActiveRecord::Base
   end
 
   def responsible_org_descriptor
-    if problem.operators_responsible?
-      if problem.operator
-        problem.operator.name
-      else
-        I18n.translate('campaigns.show.location_operator', :location => problem.location.description)
-      end
-    elsif problem.pte_responsible?
-      problem.passenger_transport_executive.name
-    elsif problem.councils_responsible?
+    if problem.responsible_organizations.empty?
+      I18n.translate('campaigns.show.location_operator', :location => problem.location.description)
+    else
       problem.responsible_organizations.map{ |org| org.name }.to_sentence
     end
   end
