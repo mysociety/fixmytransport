@@ -27,6 +27,7 @@
 
 class StopArea < ActiveRecord::Base
   extend ActiveSupport::Memoizable
+  include FixMyTransport::Locations
 
   has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships

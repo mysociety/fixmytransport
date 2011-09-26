@@ -1,4 +1,7 @@
 class Problem < ActiveRecord::Base
+  
+  include FixMyTransport::Status
+  
   belongs_to :location, :polymorphic => true
   belongs_to :reporter, :class_name => 'User'
   belongs_to :transport_mode

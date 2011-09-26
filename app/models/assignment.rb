@@ -1,4 +1,7 @@
 class Assignment < ActiveRecord::Base
+  
+  include FixMyTransport::Status
+  
   belongs_to :campaign
   belongs_to :user
   belongs_to :creator, :class_name => 'User'

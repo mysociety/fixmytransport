@@ -18,6 +18,8 @@
 
 class Route < ActiveRecord::Base
   extend ActiveSupport::Memoizable
+  
+  include FixMyTransport::Locations
 
   has_many :route_sub_routes
   has_many :sub_routes, :through => :route_sub_routes
