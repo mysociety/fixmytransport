@@ -257,6 +257,12 @@ describe Route do
       route = Route.new(:campaigns => [mock_model(Campaign)], :transport_mode_id => 5, :number => '43')
       lambda{ Route.add!(route) }.should raise_error(/Can't merge route with campaigns/)
     end
+    
+    it 'should raise an exception if asked to merge two routes with different statuses' do 
+      Route.stub!(:find_existing).and_return([routes(:victoria_to_haywards_heath)])
+      route = Route.new(:transport_mode_id => 5, :number => '43', :status => 'DEL')
+      lambda{ Route.add!(route) }.should raise_error(/Can't merge routes with different statuses: DEL vs ACT/)
+    end
 
     it 'should save the route if no existing routes are found' do
       Route.stub!(:find_existing).and_return([])
@@ -272,7 +278,8 @@ describe Route do
       route_operator = RouteOperator.new(:operator => Operator.new)
       route = Route.new(:transport_mode_id => 5,
                         :number => '43',
-                        :route_operators => [route_operator])
+                        :route_operators => [route_operator],
+                        :status => 'ACT')
       Route.add!(route)
       existing_route.route_operators.size.should == 2
     end
@@ -284,7 +291,8 @@ describe Route do
       route_locality = RouteLocality.new(:locality => Locality.new(:name => 'New Locality'))
       route = Route.new(:transport_mode_id => 5,
                         :number => '43',
-                        :route_localities => [route_locality])
+                        :route_localities => [route_locality],
+                        :status => 'ACT')
       Route.add!(route)
       existing_route.route_localities.size.should == 2
     end
@@ -299,7 +307,8 @@ describe Route do
       route_sub_route = RouteSubRoute.new(:sub_route => sub_route)
       route = Route.new(:transport_mode_id => 5,
                         :number => '43',
-                        :route_sub_routes => [route_sub_route])
+                        :route_sub_routes => [route_sub_route],
+                        :status => 'ACT')
       Route.add!(route)
       existing_route.route_sub_routes.size.should == 2
     end
@@ -311,7 +320,8 @@ describe Route do
       route_source_admin_area = RouteSourceAdminArea.new(:source_admin_area => AdminArea.new(:name => 'Kently'))
       route = Route.new(:transport_mode_id => 5,
                         :number => '43',
-                        :route_source_admin_areas => [route_source_admin_area])
+                        :route_source_admin_areas => [route_source_admin_area],
+                        :status => 'ACT')
       Route.add!(route)
       existing_route.route_source_admin_areas.size.should == 2
     end
@@ -323,7 +333,8 @@ describe Route do
       Route.stub!(:find_existing).and_return([existing_route])
       route = Route.new(:transport_mode_id => 5,
                         :number => '43',
-                        :route_operators => [RouteOperator.new(:operator => existing_operator)])
+                        :route_operators => [RouteOperator.new(:operator => existing_operator)],
+                        :status => 'ACT')
       Route.add!(route)
       existing_route.route_operators.size.should == 1
     end
@@ -339,7 +350,8 @@ describe Route do
                                               :route_segments => [route_segment])
       route = Route.new(:transport_mode_id => 5,
                         :number => '43',
-                        :journey_patterns => [journey_pattern])
+                        :journey_patterns => [journey_pattern],
+                        :status => 'ACT')
       Route.add!(route)
       # need to reload the route segments to see the update as the new one is assigned
       # via the journey pattern

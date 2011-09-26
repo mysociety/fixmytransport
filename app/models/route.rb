@@ -672,6 +672,7 @@ class Route < ActiveRecord::Base
     raise "Can't merge route with campaigns: #{duplicate.inspect}" if !duplicate.campaigns.empty?
     raise "Can't merge route with problems: #{duplicate.inspect}" if !duplicate.problems.empty?
     raise "Can't merge route with comments: #{duplicate.inspect}" if !duplicate.comments.empty?
+    raise "Can't merge routes with different statuses: #{duplicate.status} vs #{original.status}" if duplicate.status != original.status
     duplicate.route_operators.each do |route_operator|
       if ! original.route_operators.detect { |existing| existing.operator == route_operator.operator }
         original.route_operators.build(:operator => route_operator.operator)
