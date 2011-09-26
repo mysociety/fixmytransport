@@ -148,6 +148,11 @@ describe ApplicationHelper do
       helper.readable_location_type(location).should == 'station'
     end 
     
+    it 'should return "terminal" for a ferry stop area' do
+      location = mock_model(StopArea, :area_type => 'GTFS', :transport_mode_names => ['Ferry'])
+      helper.readable_location_type(location).should == 'terminal'
+    end
+    
 
     
   end
