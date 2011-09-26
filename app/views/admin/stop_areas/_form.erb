@@ -18,6 +18,16 @@
 </div>
 
 <div class='form-field'>
+  <%- if @stop_area.errors.on(:status) %>
+    <div class='error'>
+      <%= error_message_on @stop_area, :status %>
+    </div>
+  <%- end %>
+  <%= raw label(:stop_area, :status) %>
+  <%= f.select(:status, StopArea.statuses) %>
+</div>
+
+<div class='form-field'>
   <%- if @stop_area.errors.on(:locality_id) %>
     <div class='error'>
       <%= error_message_on @stop_area, :locality_id %>

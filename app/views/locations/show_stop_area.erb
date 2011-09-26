@@ -33,6 +33,11 @@
           <%= "In #{@stop_area.locality_name}" %>
         </span></p>
       <%- end %>
+       <%- if @stop_area.status == 'DEL' %>
+          <div class='location-status'>
+            <%= t('locations.show_stop_area.stop_area_marked_inactive', :location => readable_location_type(@stop_area)) %>
+          </div>
+        <%- end %>
 	</div>
 </div>
 <div id="main-content" class="container">

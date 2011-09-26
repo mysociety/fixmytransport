@@ -13,6 +13,11 @@
 			<h2 class="route-operator"><%= raw t('locations.show_route.operated_by', :operators => operator_links(@route.operators)) %></h2>
 			<%- end %>
 			<p><%= "#{@route.area}." %></p>
+			 <%- if @route.status == 'DEL' %>
+          <div class='location-status'>
+            <%= t('locations.show_route.route_marked_inactive') %>
+          </div>
+       <%- end %>
 	</div>
 </div>
 <div id="main-content" class="container">

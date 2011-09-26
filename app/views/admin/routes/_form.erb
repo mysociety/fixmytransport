@@ -34,6 +34,16 @@
 </div>
 
 <div class='form-field'>
+  <%- if @route.errors.on(:status) %>
+    <div class='error'>
+      <%= error_message_on @route, :status %>
+    </div>
+  <%- end %>
+  <%= raw label(:route, :status) %>
+  <%= f.select(:status, Route.statuses) %>
+</div>
+
+<div class='form-field'>
   <%- if @route.errors.on(:name) %>
     <div class='error'>
       <%= error_message_on @route, :name %>

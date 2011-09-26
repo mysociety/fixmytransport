@@ -241,7 +241,8 @@ class Parsers::TransxchangeParser
 
   def handle_service
     route_type = @mode.route_type.constantize
-    @route = route_type.new(:transport_mode => @mode)
+    @route = route_type.new(:transport_mode => @mode,
+                            :status => 'ACT')
     until_element_end(@reader.name) do
       case @reader.name
       when 'ServiceCode'

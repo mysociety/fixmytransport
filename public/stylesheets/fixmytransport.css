@@ -2060,6 +2060,21 @@ body.facebook-canvas .button {
  font-size: 2em;
 }
 
+.location-status {
+  line-height:1.2;
+  display:inline-block;
+  font-size:12px;
+  padding:3px;
+  margin-bottom:0.5em;
+  border-radius:3px;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  border: 2px solid #FFD45A;
+  background:#FFFBD7;
+  color: #514721;
+  padding: 6px;
+}
+
 /*===[ Feedback Form ]===*/
 
 .feedback-form div {
