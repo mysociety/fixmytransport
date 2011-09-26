@@ -43,6 +43,7 @@ class StopArea < ActiveRecord::Base
   has_many :routes_as_to_stop_area, :through => :route_segments_as_to_stop_area, :source => 'route'
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   accepts_nested_attributes_for :stop_area_operators, :allow_destroy => true, :reject_if => :stop_area_operator_invalid
+  validates_inclusion_of :status, :in => self.statuses
 
   has_paper_trail
   before_save :cache_description

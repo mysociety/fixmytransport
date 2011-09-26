@@ -24,7 +24,8 @@ describe Route do
     @valid_attributes = {
       :transport_mode_id => 1,
       :number => "value for number",
-      :region_id => 1
+      :region_id => 1,
+      :status => 'ACT'
     }
   end
 
@@ -354,7 +355,8 @@ describe Route do
 
       journey_pattern = existing_route.journey_patterns.first
       route = Route.new(:transport_mode_id => 5,
-                        :number => '43')
+                        :number => '43',
+                        :status => 'ACT')
       new_journey_pattern = route.journey_patterns.build(:destination => journey_pattern.destination)
       journey_pattern.route_segments.each do |route_segment|
         new_journey_pattern.route_segments.build(:from_stop => route_segment.from_stop,

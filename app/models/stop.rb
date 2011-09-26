@@ -41,8 +41,7 @@
 
 class Stop < ActiveRecord::Base
   extend ActiveSupport::Memoizable
-
-  named_scope :active, :conditions => { :status => 'act' }
+  
   has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
   validates_presence_of :common_name
@@ -59,6 +58,7 @@ class Stop < ActiveRecord::Base
   validates_presence_of :locality_id, :lon, :lat, :if => :loaded?
   validates_uniqueness_of :atco_code, :allow_blank => true
   validates_uniqueness_of :other_code, :allow_blank => true
+  validates_inclusion_of :status, :in => self.statuses
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
   is_location

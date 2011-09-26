@@ -15,6 +15,10 @@ module FixMyTransport
     def is_location()
       send :include, InstanceMethods
     end
+    
+    def statuses
+      ['ACT', 'DEL', 'PEN']
+    end
 
   end
 
