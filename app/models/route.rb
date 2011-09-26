@@ -18,7 +18,7 @@
 
 class Route < ActiveRecord::Base
   extend ActiveSupport::Memoizable
-  
+
   include FixMyTransport::Locations
 
   has_many :route_sub_routes
@@ -308,6 +308,17 @@ class Route < ActiveRecord::Base
     text = "#{description}"
     if !operators.empty?
       text += " (#{operator_text})"
+    end
+    if self.status == 'DEL'
+      text += " (#{I18n.translate('problems.choose_route.route_inactive')})"
+    end
+    text
+  end
+
+  def description_with_inactive
+    text = "#{description}"
+    if self.status == 'DEL'
+      text += " (#{I18n.translate('locations.show_route_region.inactive')})"
     end
     text
   end

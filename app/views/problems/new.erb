@@ -8,6 +8,9 @@
 <div id="greybanner">
 	<div class="container">
 		<p><%= t('problems.new.write_a_message')%></p><p> <%= raw @sending_advice %> <strong><%= t('problems.new.your_message_will_be_public')%></strong></p>
+		<%- if @problem.location.status == 'DEL' %>
+		<p><%= t('problems.new.location_inactive', :location_type => readable_location_type(@problem.location)) %></p>
+		<%- end %>
 	</div>
 </div>
 <div id="main-content" class="container">

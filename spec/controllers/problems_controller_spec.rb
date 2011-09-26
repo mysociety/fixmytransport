@@ -880,7 +880,8 @@ describe ProblemsController do
       mock_pte = mock_model(PassengerTransportExecutive, :emailable? => true,
                                                          :name => 'test PTE')
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'],
-                                   :responsible_organizations => [mock_pte])
+                                   :responsible_organizations => [mock_pte],
+                                   :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_stop)
       expected = ["We'll then send it to <strong>test PTE</strong>."].join(' ')
       expect_advice(mock_problem, expected)
@@ -891,7 +892,8 @@ describe ProblemsController do
       mock_council_two = mock_model(Council, :emailable? => false, :name => "Test Council Two")
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'],
                                    :operators_responsible? => false,
-                                   :responsible_organizations => [mock_council_one, mock_council_two])
+                                   :responsible_organizations => [mock_council_one, mock_council_two],
+                                   :status => 'ACT')
 
       mock_problem = mock_model(Problem, :location => mock_stop)
 
@@ -906,7 +908,8 @@ describe ProblemsController do
     it 'should generate advice text for a bus/coach stop with one uncontactable council' do
       mock_council = mock_model(Council, :emailable? => false, :name => "Test Council")
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'],
-                                   :responsible_organizations => [mock_council])
+                                   :responsible_organizations => [mock_council],
+                                   :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_stop)
 
       expected = ["IMPORTANT: We do not yet have contact details for <strong>Test Council</strong>. Your message",
@@ -918,7 +921,8 @@ describe ProblemsController do
     it 'should generate advice text for a bus/coach stop with one contactable council' do
       mock_council = mock_model(Council, :emailable? => true, :name => "Test Council")
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'],
-                                   :responsible_organizations => [mock_council])
+                                   :responsible_organizations => [mock_council],
+                                   :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_stop)
       expected = ["We'll then send it to <strong>Test Council</strong>."].join(' ')
       expect_advice(mock_problem, expected)
@@ -929,7 +933,8 @@ describe ProblemsController do
       mock_council_two = mock_model(Council, :emailable? => true, :name => "Test Council Two")
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'],
                                    :operators_responsible? => false,
-                                   :responsible_organizations => [mock_council_one, mock_council_two])
+                                   :responsible_organizations => [mock_council_one, mock_council_two],
+                                   :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_stop)
       expected = ["We'll then send it to <strong>Test Council One</strong> or <strong>Test Council",
                   "Two</strong>."].join(' ')
@@ -942,7 +947,8 @@ describe ProblemsController do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'],
                                    :operators_responsible? => false,
                                    :responsible_organizations => [mock_council_one, mock_council_two],
-                                   :councils_responsible? => true)
+                                   :councils_responsible? => true,
+                                   :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_stop)
       expected = ["We'll then send it to <strong>Test Council One</strong> or <strong>Test",
                   "Council Two</strong>."].join(' ')
@@ -951,7 +957,8 @@ describe ProblemsController do
 
     it 'should generate advice text for a bus/coach stop with no responsible organization' do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'],
-                                   :responsible_organizations => [])
+                                   :responsible_organizations => [],
+                                   :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_stop)
       expected = ["IMPORTANT: We do not yet know who is responsible for this stop. Your message",
                   "will not be sent to the responsible organization.",
@@ -962,7 +969,8 @@ describe ProblemsController do
 
     it 'should generate advice text for a sub route with no operators' do
       mock_sub_route = mock_model(SubRoute, :transport_mode_names => ['Train'],
-                                            :responsible_organizations => [])
+                                            :responsible_organizations => [],
+                                            :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_sub_route)
 
       expected = ["IMPORTANT: We do not yet know who is responsible for this route. Your message",
@@ -974,7 +982,8 @@ describe ProblemsController do
 
     it 'should generate advice text for a bus route with no operators' do
       mock_route = mock_model(Route, :transport_mode_names => ['Bus'],
-                                     :responsible_organizations => [])
+                                     :responsible_organizations => [],
+                                     :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_route)
 
       expected = ["IMPORTANT: We do not yet know who is responsible for this route. Your message",
@@ -989,7 +998,8 @@ describe ProblemsController do
       mock_operator_two = mock_model(Operator, :name => 'Test Operator Two', :emailable? => true)
       mock_route = mock_model(Route, :transport_mode_names => ['Bus'],
                                      :operators_responsible? => true,
-                                     :responsible_organizations => [mock_operator_one, mock_operator_two])
+                                     :responsible_organizations => [mock_operator_one, mock_operator_two],
+                                     :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_route)
 
     expected = ["More than one company operates this route. Your problem <strong>will be sent",
@@ -1002,7 +1012,8 @@ describe ProblemsController do
       mock_operator_two = mock_model(Operator, :name => 'Test Operator Two', :emailable? => false)
       mock_route = mock_model(Route, :transport_mode_names => ['Bus'],  
                                      :operators_responsible? => true,
-                                     :responsible_organizations => [mock_operator_one, mock_operator_two])
+                                     :responsible_organizations => [mock_operator_one, mock_operator_two],
+                                     :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_route,
                                          :emailable_organizations => [mock_operator_one],
                                          :unemailable_organizations => [mock_operator_two])
@@ -1015,7 +1026,8 @@ describe ProblemsController do
 
     it 'should generate advice text for a train station with no operators' do
       mock_station = mock_model(Stop, :transport_mode_names => ['Train'], 
-                                      :responsible_organizations => [])
+                                      :responsible_organizations => [],
+                                      :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_station)
 
       expected = ["IMPORTANT: We do not yet know who is responsible for this station. Your message will",

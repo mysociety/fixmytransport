@@ -63,7 +63,7 @@
 	              <ul class="route-links">
 	              <%- @region.bus_routes_by_letter[first].sort_by(&:name).each do |route| %>
 	                <li>
-	                  <%= link_to(route.description, location_url(route))  %>
+	                  <%= link_to(route.description_with_inactive, location_url(route))  %>
 	                </li>
 	              <%- end %>
 	              </ul>
@@ -74,7 +74,10 @@
 	          <ul class="route-links">
 	          <%- @region.bus_routes.each do |bus_route| %>
 	            <li>
-	              <%= link_to(route.description, location_url(route)) %>
+	              <%= link_to(route.description_with_inactive, location_url(route)) %>
+	              <%- if route.status == 'DEL' %>
+                  <%= t('locations.show_route_region.inactive') %>
+                <%- end %>
 	            </li>
 	          <%- end %>
 	          </ul>
@@ -149,7 +152,7 @@
 	      <ul class="route-links">
 	      <%- @region.ferry_routes.each do |ferry_route| %>
 	        <li>
-	          <%= link_to(ferry_route.description, location_url(ferry_route)) %>
+	          <%= link_to(ferry_route.description_with_inactive, location_url(ferry_route)) %>
 	        </li>
 	      <%- end %>
 	      </ul>
@@ -176,7 +179,7 @@
 	           <ul class="route-links">
 	           <%- @region.coach_routes_by_letter[first].each do |route| %>
 	              <li>
-	                <%= link_to(route.description, location_url(route)) %>
+	                <%= link_to(route.description_with_inactive, location_url(route)) %>
 	              </li>
 	           <%- end %>
 	           </ul>
@@ -186,7 +189,7 @@
 	        <ul class="route-links">
 	        <%- @region.coach_routes.each do |coach_route| %>
 	          <li>
-	            <%= link_to(coach_route.description, location_url(coach_route)) %>
+	            <%= link_to(coach_route.description_with_inactive, location_url(coach_route)) %>
 	          </li>
 	        <%- end %>
 	        </ul>

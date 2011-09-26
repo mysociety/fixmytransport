@@ -20,6 +20,7 @@ en:
       routes_in: "Public transport routes in the %{region} region"
       coach_routes: "%{count} coach routes %{national}"
       tram_routes: "%{count} tram, metro or underground routes %{national}"
+      inactive: "inactive"
     show_route_regions:
       route_regions: "Route Regions"
       routes_by_region: "Public transport routes by region"
