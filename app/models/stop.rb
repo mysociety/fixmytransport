@@ -59,7 +59,7 @@ class Stop < ActiveRecord::Base
   validates_presence_of :locality_id, :lon, :lat, :if => :loaded?
   validates_uniqueness_of :atco_code, :allow_blank => true
   validates_uniqueness_of :other_code, :allow_blank => true
-  validates_inclusion_of :status, :in => self.statuses
+  validates_inclusion_of :status, :in => self.statuses.keys
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
   is_location

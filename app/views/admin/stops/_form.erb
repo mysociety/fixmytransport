@@ -33,7 +33,7 @@
     </div>
   <%- end %>
   <%= raw label(:stop, :status) %>
-  <%= f.select(:status, Stop.statuses) %>
+  <%= f.select(:status, Stop.statuses.invert) %>
 </div>
 
 

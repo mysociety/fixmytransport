@@ -40,7 +40,7 @@
     </div>
   <%- end %>
   <%= raw label(:route, :status) %>
-  <%= f.select(:status, Route.statuses) %>
+  <%= f.select(:status, Route.statuses.invert) %>
 </div>
 
 <div class='form-field'>

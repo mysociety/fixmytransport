@@ -24,7 +24,7 @@
     </div>
   <%- end %>
   <%= raw label(:stop_area, :status) %>
-  <%= f.select(:status, StopArea.statuses) %>
+  <%= f.select(:status, StopArea.statuses.invert) %>
 </div>
 
 <div class='form-field'>

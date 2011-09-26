@@ -43,7 +43,7 @@ class Route < ActiveRecord::Base
   accepts_nested_attributes_for :journey_patterns, :allow_destroy => true, :reject_if => :journey_pattern_invalid
   validates_presence_of :number, :transport_mode_id
   validates_presence_of :region_id, :if => :loaded?
-  validates_inclusion_of :status, :in => self.statuses
+  validates_inclusion_of :status, :in => self.statuses.keys
   cattr_reader :per_page
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
