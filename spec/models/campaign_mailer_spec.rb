@@ -44,6 +44,11 @@ describe CampaignMailer do
         CampaignMailer.receive(@raw_email)
       end
 
+      it 'should send a message to the contact address saying there is an unmatched incoming message' do
+        CampaignMailer.should_receive(:deliver_unmatched_incoming_message)
+        CampaignMailer.receive(@raw_email)
+      end
+
     end
 
   end

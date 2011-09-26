@@ -87,6 +87,13 @@ class CampaignMailer < ApplicationMailer
     body({ :assignment => assignment,
            :campaign => campaign })
   end
+  
+  def unmatched_incoming_message()
+    recipients contact_from_name_and_email
+    from contact_from_name_and_email
+    subject I18n.translate('mailers.unmatched_incoming_message_subject')
+    body({ :admin_link => admin_url(admin_root_path) })
+  end
 
   def campaigns_matching_email(email)
     campaigns = []
@@ -106,6 +113,7 @@ class CampaignMailer < ApplicationMailer
     if campaigns.empty? 
       # no matching campaigns
       IncomingMessage.create_from_tmail(email, raw_email, nil)
+      CampaignMailer.deliver_unmatched_incoming_message()
     else
       campaigns.each do |campaign, recipient|
         incoming_message = IncomingMessage.create_from_tmail(email, raw_email, campaign)
