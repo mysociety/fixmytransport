@@ -279,15 +279,30 @@ class ProblemsController < ApplicationController
                 :map_options => { :mode => :browse } }
     return find_area(options)
   end
+  
+  # return a truncated stop (don't need all the data)
+  def request_nearest_stop
+    if is_valid_lon_lat?(params[:lon], params[:lat]) # don't expose this is a service without a session_id?
+      nearest_stop = find_nearest_stop(params[:lon], params[:lat])
+      render :json => {:name  => nearest_stop.name, :area => nearest_stop.area}
+    else
+      render :json => "invalid" # harsh
+    end
+  end
+  
 
   private
 
+  def find_nearest_stop(lon, lat)
+    location_search = LocationSearch.new_search!(session_id, :name => "geolocate:#{lon},#{lat}",
+                                                             :location_type => 'Stop/station')
+    easting, northing = get_easting_northing(lon, lat)
+    return Stop.find_nearest(easting, northing, exclude_id = nil)
+  end
+    
   def find_area(options)
     if is_valid_lon_lat?(params[:lon], params[:lat])
-      location_search = LocationSearch.new_search!(session_id, :name => "geolocate:#{params[:lon]},#{params[:lat]}",
-                                                               :location_type => 'Stop/station')
-      easting, northing = get_easting_northing(params[:lon], params[:lat])
-      nearest_stop = Stop.find_nearest(easting, northing, exclude_id = nil)
+      nearest_stop = find_nearest_stop(params[:lon], params[:lat])
       if nearest_stop
         map_params_from_location([nearest_stop],
                                  find_other_locations=true,

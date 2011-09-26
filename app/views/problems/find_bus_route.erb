@@ -21,7 +21,7 @@
 	      <div id='guidance-route-number' class='guidance'>e.g. C10</div>
 	    </li>
     
-	    <li class="fieldset">
+	    <li class="fieldset fmt-has-geolocation">
 	      <%= raw label_tag t('problems.find_bus_route.enter_town_or_area') %>
 	      <%= raw text_field_tag 'area', params[:area] %>
 	      <div id='guidance-area' class='guidance'>e.g. London </div>
@@ -37,3 +37,5 @@
     </ul>
 	<%- end %>
 </div>
+
+<%= raw javascript_include_tag('geo', 'fmt_geo') %>

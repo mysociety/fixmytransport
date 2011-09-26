@@ -2115,12 +2115,17 @@ body.facebook-canvas .button {
 }
 
 /*===[ Geo-location: not yet properly styled, but js uses these ids ]===*/
-#geolocate-container {
-  padding: 2em;
+.fmt-has-geolocation {
+	position: relative; /* allow absolute positioning of geolocate label (for now) */
+}
+.geolocate-container {
+  position: absolute;
+  top: 100px;
+  left:0px;
   text-align: center;
   clear: both;
 }
-#geolocate-button {
+.geolocate-button {
   background: #048FC2;
   color: #fff;
   padding: 0.5em;
@@ -2128,18 +2133,17 @@ body.facebook-canvas .button {
   font-size: 110%;
   border:4px solid #cdeaf2;
 }
-#geolocate-button:hover{
+.geolocate-button:hover{
   cursor:pointer;
   border:4px solid #048FC2;
 }
-#geolocate-status {
+.geolocate-status {
   background: #cdeaf2;
   color: #048FC2;
   padding: 6px;
   margin: 0 auto;
   display: inline-block;
 }
-
 
 /*===[ Narrow screens]===*/
 @media screen and (max-width: 600px) {
@@ -3104,6 +3108,6 @@ body.facebook-canvas .button {
       width: 96%;
     }
 
-	} /* end of media query */
+} /* end of media query */
 
 
