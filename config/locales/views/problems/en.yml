@@ -26,7 +26,6 @@ en:
       show_all: "Show all results"
       information_wrong: "Is this route information wrong?"
       header: "Choose a Route"
-      route_inactive: inactive
       multiple_routes_intro: "Choose a route by clicking on it, or try a different search if yours is not here: "
     convert:
       intro: "Share your report with friends, gather supporters<br /> and get advice from people with similar experiences.<br /> We'll hold on to your problem report until you decide:"

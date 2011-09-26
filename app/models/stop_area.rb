@@ -83,6 +83,14 @@ class StopArea < ActiveRecord::Base
     end
   end
 
+  def name_with_inactive
+    text = "#{name}"
+    if self.status == 'DEL'
+      text += " (#{I18n.translate('models.stop_area.inactive')})"
+    end
+    text
+  end
+
   def transport_modes
     TransportMode.find(StopAreaType.transport_modes_for_code(area_type))
   end

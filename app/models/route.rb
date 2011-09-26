@@ -139,6 +139,14 @@ class Route < ActiveRecord::Base
     return self.cached_short_name if self.cached_short_name
     name(from_stop=nil, short=true)
   end
+  
+  def short_name_with_inactive
+    text = "#{short_name}"
+    if self.status == 'DEL'
+      text += " (#{I18n.translate('models.route.inactive')})"
+    end
+    text
+  end
 
   def full_name
     "#{name} route"
@@ -310,7 +318,7 @@ class Route < ActiveRecord::Base
       text += " (#{operator_text})"
     end
     if self.status == 'DEL'
-      text += " (#{I18n.translate('problems.choose_route.route_inactive')})"
+      text += " (#{I18n.translate('models.route.inactive')})"
     end
     text
   end
@@ -318,7 +326,7 @@ class Route < ActiveRecord::Base
   def description_with_inactive
     text = "#{description}"
     if self.status == 'DEL'
-      text += " (#{I18n.translate('locations.show_route_region.inactive')})"
+      text += " (#{I18n.translate('models.route.inactive')})"
     end
     text
   end

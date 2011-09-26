@@ -1,4 +1,7 @@
 en:
+  models:
+    route:
+      inactive: inactive
   activerecord:
     errors:
       models:
