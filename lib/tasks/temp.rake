@@ -2,7 +2,28 @@ require File.dirname(__FILE__) +  '/data_loader'
 require File.dirname(__FILE__) +  '/../fixmytransport/geo_functions'
 
 namespace :temp do
-  
+
+  desc 'Set status to active on all stops without status'
+  task :set_stop_statuses => :environment do
+    conn = ActiveRecord::Base.connection
+    conn.execute("UPDATE stops SET status = 'ACT'
+                  WHERE status is null")
+  end
+
+  desc 'Set status to active on all stop areas'
+  task :set_stop_area_statuses => :environment do
+    conn = ActiveRecord::Base.connection
+    conn.execute("UPDATE stop_areas SET status = 'ACT'
+                  WHERE status is null")
+  end
+
+  desc 'Set status to active on all routes'
+  task :set_route_statuses => :environment do
+    conn = ActiveRecord::Base.connection
+    conn.execute("UPDATE routes set status = 'ACT'
+                  WHERE status is null")
+  end
+
   desc 'Move data about who is responsible for a problem to another table'
   task :populate_responsibilities => :environment do
     Problem.find_each do |problem|
@@ -20,7 +41,7 @@ namespace :temp do
   end
 
   desc 'Remove new campaign'
-  task :remove_new_campaign => :environment do 
+  task :remove_new_campaign => :environment do
     unless ENV['PROBLEM_ID']
       puts ''
       puts 'Usage: Specify a problem ID'
@@ -51,5 +72,5 @@ namespace :temp do
       puts "Destroyed."
     end
   end
-  
+
 end
