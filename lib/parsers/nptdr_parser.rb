@@ -125,6 +125,7 @@ class Parsers::NptdrParser
       route = route_type.new(:number => route_number,
                              :transport_mode => transport_mode,
                              :region => region,
+                             :status => 'ACT',
                              :operator_code => operator_code)
       if admin_area == :national
         source_admin_area = nil

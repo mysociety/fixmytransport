@@ -85,7 +85,7 @@ describe Admin::RoutesController do
     before do 
       TransportMode.stub!(:find).and_return(mock_model(TransportMode, :name => 'Train', 
                                                                       :route_type => 'TrainRoute'))
-      @route = mock_model(Route, :id => 400, :save => true)
+      @route = mock_model(Route, :id => 400, :save => true, :status= => nil)
       Route.stub!(:new).and_return(@route)
       TrainRoute.stub!(:new).and_return(@route)
     end

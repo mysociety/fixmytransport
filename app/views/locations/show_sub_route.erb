@@ -33,7 +33,15 @@
 
 		<ol id="large-ol">
 		  <%- @sub_route.terminuses.each_with_index do |stop_or_station, index| %>
-        <li><a href="<%= location_url(stop_or_station) %>"><span class="num"><%= index+1 %></span><%= stop_or_station.is_a?(Stop) ? stop_or_station.name_with_long_indicator : stop_or_station.name %></a></li>
+        <li>
+          <a href="<%= location_url(stop_or_station) %>">
+            <span class="num"><%= index+1 %></span>
+            <%= stop_or_station.is_a?(Stop) ? stop_or_station.name_with_long_indicator : stop_or_station.name %>
+            <%- if stop_or_station.status == 'DEL' %>
+  			      <%= t('locations.show_sub_route.stop_or_station_inactive')%>
+  			    <%- end %>
+          </a>
+        </li>
       <%- end %>
 		</ol>
 			

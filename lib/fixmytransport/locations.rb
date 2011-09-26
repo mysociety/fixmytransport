@@ -16,6 +16,12 @@ module FixMyTransport
       send :include, InstanceMethods
     end
 
+    def statuses
+      { 'ACT' => 'Active',
+        'DEL' => 'Deleted',
+        'PEN' => 'Pending' }
+    end
+
   end
 
   module InstanceMethods
@@ -25,7 +31,7 @@ module FixMyTransport
       issues = Problem.find_recent_issues(nil, { :location => self })
       return issues
     end
-    
+
     def cache_description
       self.cached_description = nil
       self.cached_description = self.description

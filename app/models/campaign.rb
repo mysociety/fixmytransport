@@ -1,4 +1,7 @@
 class Campaign < ActiveRecord::Base
+  
+  include FixMyTransport::Status
+  
   belongs_to :initiator, :class_name => 'User'
   has_many :campaign_supporters
   has_many :supporters, :through => :campaign_supporters, :class_name => 'User', :conditions => ['campaign_supporters.confirmed_at is not null']

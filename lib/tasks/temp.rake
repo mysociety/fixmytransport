@@ -1,26 +1,21 @@
 require File.dirname(__FILE__) +  '/data_loader'
-require File.dirname(__FILE__) +  '/../fixmytransport/geo_functions'
 
 namespace :temp do
-  
-  desc 'Move data about who is responsible for a problem to another table'
-  task :populate_responsibilities => :environment do
-    Problem.find_each do |problem|
-      responsible_organizations = []
-      if problem.location.operators_responsible? && problem.operator
-        responsible_organizations << problem.operator
-      else
-        responsible_organizations = problem.location.responsible_organizations
+
+  desc 'Fix stations with codes starting 650' 
+  task :fix_650_station_codes => :environment do 
+    StopArea.find_each(:conditions => "area_type = 'GRLS' and code like '650%%'") do |station|
+      puts "#{station.name} #{station.id}"
+      if !station.routes.empty?
+        raise "station #{station.name} has routes"
       end
-      responsible_organizations.each do |organization|
-        problem.responsibilities.create(:organization_type => organization.class.to_s,
-                                        :organization_id => organization.id)
-      end
+      station.area_type = 'GCLS'
+      station.save!
     end
   end
-
+  
   desc 'Remove new campaign'
-  task :remove_new_campaign => :environment do 
+  task :remove_new_campaign => :environment do
     unless ENV['PROBLEM_ID']
       puts ''
       puts 'Usage: Specify a problem ID'
@@ -51,5 +46,5 @@ namespace :temp do
       puts "Destroyed."
     end
   end
-  
+
 end

@@ -1,4 +1,7 @@
 class Problem < ActiveRecord::Base
+  
+  include FixMyTransport::Status
+  
   belongs_to :location, :polymorphic => true
   belongs_to :reporter, :class_name => 'User'
   belongs_to :transport_mode
@@ -8,8 +11,6 @@ class Problem < ActiveRecord::Base
   has_many :assignments
   has_many :comments, :as => :commented
   has_many :sent_emails
-  belongs_to :operator
-  belongs_to :passenger_transport_executive
   has_many :responsibilities
   validates_presence_of :description, :subject, :category, :if => :location
   validates_associated :reporter

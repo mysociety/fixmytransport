@@ -291,6 +291,7 @@ namespace :nptdr do
                               :easting => stop_info[:easting],
                               :northing => stop_info[:northing],
                               :coords => coords,
+                              :status => 'ACT',
                               :locality => locality,
                               :stop_type => stop_type)
         end
@@ -340,6 +341,7 @@ namespace :nptdr do
                          :northing => row['Northing'] ? row['Northing'].strip : nil,
                          :lat => row['Lat'] ? row['Lat'].strip : nil,
                          :lon => row['Lon'] ? row['Lon'].strip : nil,
+                         :status => 'ACT',
                          :other_code => row['ATCO code'] ? row['ATCO code'].strip : nil,
                          :stop_type => row['Stop type'] ? row['Stop type'].strip : nil)
 

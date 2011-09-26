@@ -41,7 +41,7 @@ describe StopArea do
       :modification_datetime => Time.now,
       :revision_number => 1,
       :modification => "value for modification",
-      :status => "value for status"
+      :status => "ACT"
     }
   end
 

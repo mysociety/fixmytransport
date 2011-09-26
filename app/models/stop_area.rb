@@ -27,6 +27,7 @@
 
 class StopArea < ActiveRecord::Base
   extend ActiveSupport::Memoizable
+  include FixMyTransport::Locations
 
   has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships
@@ -43,6 +44,7 @@ class StopArea < ActiveRecord::Base
   has_many :routes_as_to_stop_area, :through => :route_segments_as_to_stop_area, :source => 'route'
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   accepts_nested_attributes_for :stop_area_operators, :allow_destroy => true, :reject_if => :stop_area_operator_invalid
+  validates_inclusion_of :status, :in => self.statuses.keys
 
   has_paper_trail
   before_save :cache_description
@@ -81,6 +83,14 @@ class StopArea < ActiveRecord::Base
     end
   end
 
+  def name_with_inactive
+    text = "#{name}"
+    if self.status == 'DEL'
+      text += " (#{I18n.translate('models.stop_area.inactive')})"
+    end
+    text
+  end
+
   def transport_modes
     TransportMode.find(StopAreaType.transport_modes_for_code(area_type))
   end
@@ -104,6 +114,7 @@ class StopArea < ActiveRecord::Base
 
   def self.find_in_bounding_box(coords, options={})
     query = "stop_areas.area_type in (?)
+             AND status = 'ACT'
              AND stop_areas.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
              ST_Point(?, ?),
              ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})"

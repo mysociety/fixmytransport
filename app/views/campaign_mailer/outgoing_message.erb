@@ -2,10 +2,10 @@
 
 <%- if MySociety::Config.getbool('SITE_VISIBLE', true) %>
 
-[ IMPORTANT: ANY REPLY YOU SEND TO THIS MESSAGE WILL BE PUBLISHED ONLINE. This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. To give feedback on FixMyTransport, please visit <<%= raw @feedback_link %>>. ]
+[ PLEASE NOTE: Any reply you send to this message will be sent to <%= @outgoing_message.author.name %> and will be published online. This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. To give feedback on FixMyTransport, please visit <<%= raw @feedback_link %>>. ]
 
 <%- else %>
 
-[ IMPORTANT: ANY REPLY YOU SEND TO THIS MESSAGE WILL BE PUBLISHED ONLINE. This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. To give feedback on FixMyTransport, please email  <%=MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')%>. ]
+[ PLEASE NOTE: Any reply you send to this message will be sent to <%= @outgoing_message.author.name %> and will be published online. This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. To give feedback on FixMyTransport, please email  <%=MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')%>. ]
 
 <%- end %>
