@@ -1,7 +1,26 @@
 require File.dirname(__FILE__) +  '/data_loader'
-require File.dirname(__FILE__) +  '/../fixmytransport/geo_functions'
 
 namespace :temp do
+
+  desc 'Remove cached fragments for deleted stops'
+  task :remove_deleted_stop_cached_fragments => :environment do
+    include ActionController::UrlWriter
+    include ApplicationHelper
+
+    default_url_options[:host] = MySociety::Config.get("DOMAIN", 'localhost:3000')
+    Stop.find_each(:conditions => ["status = 'DEL'"]) do |stop|
+      stop.routes.each do |route|
+        route_path = url_for(:controller => '/locations',
+                             :action => 'show_route',
+                             :scope => route.region,
+                             :id => route,
+                             :only_path => true)
+        route_cache = MySociety::Config.get("DOMAIN", 'localhost:3000') + route_path
+        puts "#{route_cache}.action_suffix=stop_list"
+        ApplicationController.new.expire_fragment("#{route_cache}.action_suffix=stop_list")
+      end
+    end
+  end
 
   desc 'Set status to active on all stops without status'
   task :set_stop_statuses => :environment do
