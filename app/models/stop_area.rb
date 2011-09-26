@@ -105,6 +105,7 @@ class StopArea < ActiveRecord::Base
 
   def self.find_in_bounding_box(coords, options={})
     query = "stop_areas.area_type in (?)
+             AND status = 'ACT'
              AND stop_areas.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
              ST_Point(?, ?),
              ST_Point(?, ?)), #{WGS_84}), #{BRITISH_NATIONAL_GRID})"
