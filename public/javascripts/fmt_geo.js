@@ -4,21 +4,40 @@
 $(function() {
   if (geo_position_js.init()) {
     $('.fmt-has-geolocation').each(function(index){
-		var inputId = $(this).find('input').attr("id") || index;
-		$(this).find('label').after('<div class="geolocate-container"><span class="geolocate-button" id="geolocate-button-' + inputId + '">Use your current location</span></div>');
-	    $('.geolocate-button').click(function(e){ doGeolocate(e, inputId) });
+		var inputId = $(this).find('input, select').not(":hidden").attr("id") || index; // ignore hidden inputs
+		$(this).find('label').after('<div class="geolocate-container" id="geolocate-container-' + inputId 
+		    + '"><span class="geolocate-button" id="geolocate-button-' + inputId
+		    + '">Use your current location</span></div>');
+	    $('#geolocate-button-' + inputId).click(function(e){ doGeolocate(e, inputId) });
 	});
   }
 });
 
 function doGeolocate(e, inputId) {
   e.preventDefault();
-  $('.geolocate-button').replaceWith("<p class='geolocate-status'>OK... fetching location...</p>");
+  $('#geolocate-button-' + inputId).replaceWith("<p class='geolocate-status' id='geolocate-status-" + inputId + "'>Fetching location...</p>");
+  $(".geolocate-container").not("#geolocate-container-" + inputId).fadeOut('slow'); // if there are multiple buttons, hide the other(s)  
   if (geo_position_js.init()) { // overkill
     geo_position_js.getCurrentPosition(
       function(position) {
-        $('.geolocate-status').html("<span>OK... fetching location done, loading...</span>");
-        if ($('#bus_route_form').size()) { // this is find_bus_route: get locality of nearest stop
+        $('#geolocate-status-' + inputId).text("Fetching location done, loading...");
+        if ($('#train_route_form').size()) { // this is find_train_route: get the nearest station: no auto submit here, user must press Go
+          $.getJSON(
+            '/request_nearest_stop',
+            {lon:position.coords.longitude, lat:position.coords.latitude},
+            function(stop_data){
+              var $input =  $("#"+inputId);
+              if ($input[0].nodeName.toLowerCase() == 'select') { // replace select with an input
+                $("#geolocate-container-" + inputId).parent().find(".error").fadeOut(); // select is accompanied by an error message which no longer applies
+                $input.replaceWith("<input type='text' id='" + inputId + "'\>");
+                $input =  $("#"+inputId);
+              }
+              $input.val(stop_data.area);
+              $(".geolocate-container").hide(); // hide all geolocation buttons
+              $input.closest('form').find("input:text, select").not("#" + inputId).focus(); // ugh: the other input(s) in this form
+            }
+          );
+        } else if ($('#bus_route_form').size()) { // this is find_bus_route: get locality of nearest stop, auto submits if we have a route number
           $.getJSON(
             '/request_nearest_stop',
             {lon:position.coords.longitude, lat:position.coords.latitude},
@@ -48,7 +67,7 @@ function doGeolocate(e, inputId) {
         } else { // Unknown
           errMsg = "Unknown error";
         }
-        $('.geolocate-status').html("<span>" + errMsg + "</span>");
+        $('.geolocate-status').text(errMsg);
       }
     );
   } else {

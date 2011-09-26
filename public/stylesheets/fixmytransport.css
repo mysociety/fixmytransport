@@ -2122,7 +2122,7 @@ body.facebook-canvas .button {
   position: absolute;
   top: 100px;
   left:0px;
-  text-align: center;
+  text-align: left;
   clear: both;
   font-size: 110%;
 }
@@ -2142,7 +2142,6 @@ body.facebook-canvas .button {
   color: #048FC2;
   padding: 0.5em;
   line-height: 1.1em;
-  display: inline;
 }
 
 /*===[ Narrow screens]===*/
