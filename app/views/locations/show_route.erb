@@ -31,7 +31,7 @@
  		<a href="<%= feedback_url({ :url => CGI.escape(request.request_uri), :location_id => @route.id, :location_type => 'Route'}) %>" rel="nofollow"><%= t('locations.show_route.information_wrong') %></a>
 	  <%= render :partial => "shared/location_content",  :locals => { :location => @route } %>
 	</div>
-    
+
 	<div class="rightcol narrowcol">
 		<a class="button big red report" href="<%= new_problem_url(:location_id => @route.id, :location_type => @route.type, :to => params[:to], :from => params[:from])%>" rel="nofollow"><%= t('locations.show_route.report_a_problem') %></a>
 		<a class="button big report comment-trigger" href="<%= add_comment_route_url(@route.region, @route) %>" data-title="<%= t('locations.show_route.comment_title', :location => at_the_location(@route)) %>" rel="nofollow"><%= t('locations.show_route.say_something_nice') %></a>
@@ -39,7 +39,14 @@
 		<h5 class="left"><%= t('locations.show_route.stops_header') %></h5>
   		<ol id="large-ol">
   			<%- @route.default_journey_locations.each_with_index do |stop_or_station, index| %>
-  			<li><a href="<%= location_url(stop_or_station) %>"><span class="num"><%= index+1 %></span><%= stop_or_station.is_a?(Stop) ? stop_or_station.name_with_long_indicator : stop_or_station.name %></a></li>
+  			<li><a href="<%= location_url(stop_or_station) %>">
+  			    <span class="num"><%= index+1 %></span>
+  			    <%= stop_or_station.is_a?(Stop) ? stop_or_station.name_with_long_indicator : stop_or_station.name %>
+  			    <%- if stop_or_station.status == 'DEL' %>
+  			      <%= t('locations.show_route.stop_or_station_inactive')%>
+  			    <%- end %>
+  			  </a>
+  			</li>
   			<%- end %>
   		</ol>
 		<%- end %>

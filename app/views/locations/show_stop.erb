@@ -64,6 +64,9 @@
 		  <%- @stop.routes.each do |route| %>
 			<li><a href="<%= location_url(route)%>"><span class="num"> <%=route.name(from_stop=@stop, short=true) %></span>
 			<%= route.final_stops(@stop).map{ |stop| stop.name_without_suffix(route.transport_mode) }.to_sentence %>
+			<%- if route.status == 'DEL' %>
+			<%= t('locations.show_stop.route_inactive') %>
+		  <%- end %>
 			</a></li>
       <%- end %>
 		</ol>	

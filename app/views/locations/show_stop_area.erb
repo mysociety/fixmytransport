@@ -24,10 +24,10 @@
 <div id="greybanner">
 	<div class="container">
       <%- if !@stop_area.operators.empty?  %>
-          
+
           <h2 class="route-operator">operated by <%= raw operator_links(@stop_area.operators) %></h2>
       <%- end %>
-        
+
       <%- if !@stop_area.area.blank? %>
         <p><span class='locality'>
           <%= "In #{@stop_area.locality_name}" %>
@@ -61,9 +61,12 @@
         <%- @stop_area.routes.sort_by(&:short_name).each do |route| %>
         <li><a href="<%= location_url(route)%>">
          <%= route.short_name %>
+         <%- if route.status == 'DEL' %>
+   			<%= t('locations.show_stop_area.route_inactive') %>
+   		  <%- end %>
         </a></li>
         <%- end %>
-      </ol> 
+      </ol>
 	  <%- end %>
 	</div>
 </div>
