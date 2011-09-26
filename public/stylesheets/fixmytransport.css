@@ -2124,13 +2124,13 @@ body.facebook-canvas .button {
   left:0px;
   text-align: center;
   clear: both;
+  font-size: 110%;
 }
 .geolocate-button {
   background: #048FC2;
   color: #fff;
   padding: 0.5em;
   font-weight: bold;
-  font-size: 110%;
   border:4px solid #cdeaf2;
 }
 .geolocate-button:hover{
@@ -2140,9 +2140,9 @@ body.facebook-canvas .button {
 .geolocate-status {
   background: #cdeaf2;
   color: #048FC2;
-  padding: 6px;
-  margin: 0 auto;
-  display: inline-block;
+  padding: 0.5em;
+  line-height: 1.1em;
+  display: inline;
 }
 
 /*===[ Narrow screens]===*/
@@ -3106,6 +3106,15 @@ body.facebook-canvas .button {
     #share-by-email textarea,
     #share-by-email button{
       width: 96%;
+    }
+
+    /*===[ geolocation can't sensibly be absolutely positioned on narrow screens]=== */
+    .geolocate-container {
+        position: static;
+        text-align: center;
+        clear: both;
+        margin:0.5em;
+        padding: 0.5em;
     }
 
 } /* end of media query */

@@ -18,34 +18,5 @@
 	<%- end %>
 </div>
 
-<!-- geolocating Javascript follows -->
-<script type="text/javascript">
-    
-    // $(function() {
-    //   if (geo_position_js.init()) {
-    //     $('#main-content').append('<div id="geolocate-container"><span id="geolocate-button">...or your current location</span></div>');
-    //     $('#geolocate-button').click(function(){ doGeolocate() });
-    //   }
-    // });
-    // 
-    // function doGeolocate() {
-    //   $('#geolocate-button').replaceWith("<p id='geolocate-status'>OK... fetching location...</p>");
-    //   if (geo_position_js.init()) { // overkill
-    //     geo_position_js.getCurrentPosition(
-    //       function(position) {
-    //         var nearest_stop_url =  "<%= find_stop_problems_path %>?lat=" + position.coords.latitude + "&amp;lon=" + position.coords.longitude;
-    //         $('#geolocate-status').html("<span>OK... fetching location done, loading...</span>");
-    //         document.location.href = nearest_stop_url
-    //       }, 
-    //       function(err) {
-    //         $('#geolocate-status').html("<span>Sorry: failed to auto-locate you! " + err + "</span>");
-    //       }
-    //     );
-    //   } else {
-    //     $('#geolocate-status').html("<span>Sorry... can't auto-locate you.</span>");
-    //   }
-    // }
-    
-</script>
 <%= raw javascript_include_tag('geo', 'fmt_geo') %>
 
