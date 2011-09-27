@@ -1,4 +1,7 @@
 class SubRoute < ActiveRecord::Base
+  
+  include FixMyTransport::Locations
+  
   has_many :route_sub_routes
   has_many :routes, :through => :route_sub_routes
   belongs_to :from_station, :class_name => 'StopArea'

@@ -63,7 +63,7 @@
 	              <ul class="route-links">
 	              <%- @region.bus_routes_by_letter[first].sort_by(&:name).each do |route| %>
 	                <li>
-	                  <%= link_to(route.description, location_url(route))  %>
+	                  <%= link_to(route.description_with_inactive, location_url(route))  %>
 	                </li>
 	              <%- end %>
 	              </ul>
@@ -74,7 +74,7 @@
 	          <ul class="route-links">
 	          <%- @region.bus_routes.each do |bus_route| %>
 	            <li>
-	              <%= link_to(route.description, location_url(route)) %>
+	              <%= link_to(route.description_with_inactive, location_url(route)) %>
 	            </li>
 	          <%- end %>
 	          </ul>
@@ -105,7 +105,7 @@
 	              <ul class="route-links">
 	              <%- @region.train_routes_by_letter[first].each do |route| %>
 	                <li>
-	                  <%= link_to(route.short_name, location_url(route)) %>
+	                  <%= link_to(route.short_name_with_inactive, location_url(route)) %>
 	                </li>
 	              <%- end %>
 	              </ul>
@@ -116,7 +116,7 @@
 	          <ul class="route-links">
 	          <%- @region.train_routes.each do |train_route| %>
 	            <li>
-	              <%= link_to(train_route.short_name, location_url(train_route)) %>
+	              <%= link_to(train_route.short_name_with_inactive, location_url(train_route)) %>
 	            </li>
 	          <%- end %>
 	          </ul>
@@ -134,7 +134,7 @@
 	      <ul class="route-links">
 	      <%- @region.tram_metro_routes.each do |tram_metro_route| %>
 	          <li>
-	            <%= link_to(tram_metro_route.short_name, location_url(tram_metro_route)) %>
+	            <%= link_to(tram_metro_route.short_name_with_inactive, location_url(tram_metro_route)) %>
 	          </li>
 	      <%- end %>
 	      </ul>
@@ -149,7 +149,7 @@
 	      <ul class="route-links">
 	      <%- @region.ferry_routes.each do |ferry_route| %>
 	        <li>
-	          <%= link_to(ferry_route.description, location_url(ferry_route)) %>
+	          <%= link_to(ferry_route.description_with_inactive, location_url(ferry_route)) %>
 	        </li>
 	      <%- end %>
 	      </ul>
@@ -176,7 +176,7 @@
 	           <ul class="route-links">
 	           <%- @region.coach_routes_by_letter[first].each do |route| %>
 	              <li>
-	                <%= link_to(route.description, location_url(route)) %>
+	                <%= link_to(route.description_with_inactive, location_url(route)) %>
 	              </li>
 	           <%- end %>
 	           </ul>
@@ -186,7 +186,7 @@
 	        <ul class="route-links">
 	        <%- @region.coach_routes.each do |coach_route| %>
 	          <li>
-	            <%= link_to(coach_route.description, location_url(coach_route)) %>
+	            <%= link_to(coach_route.description_with_inactive, location_url(coach_route)) %>
 	          </li>
 	        <%- end %>
 	        </ul>

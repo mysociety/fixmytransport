@@ -1,4 +1,7 @@
 class Comment < ActiveRecord::Base
+  
+  include FixMyTransport::Status
+  
   belongs_to :user
   belongs_to :commented, :polymorphic => true
   validates_presence_of :text

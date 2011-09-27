@@ -1,4 +1,7 @@
 class OutgoingMessage < ActiveRecord::Base
+  
+  include FixMyTransport::Status
+  
   belongs_to :campaign
   belongs_to :author, :class_name => 'User'
   belongs_to :recipient, :polymorphic => :true

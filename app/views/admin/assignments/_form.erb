@@ -13,7 +13,11 @@
 </div>
 <div class="assignment-location-link">
   <strong><%= t('admin.location') %>:</strong>
-  <%= link_to(@assignment.campaign.location.name, admin_location_url(@assignment.campaign.location))%>
+  <%- if admin_location_url(@assignment.campaign.location) %>
+    <%= link_to(@assignment.campaign.location.name, admin_location_url(@assignment.campaign.location)) %>
+  <%- else %>
+    <%= @assignment.campaign.location.name %>
+  <%- end %>
 </div>
 <%- if !@assignment.campaign.problem.responsible_organizations.empty? %>
 <div class="assignment-organization-link">

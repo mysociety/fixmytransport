@@ -279,22 +279,43 @@ class ProblemsController < ApplicationController
                 :map_options => { :mode => :browse } }
     return find_area(options)
   end
+  
+  # return a truncated stop (don't need all the data)
+  def request_nearest_stop
+    if is_valid_lon_lat?(params[:lon], params[:lat]) # don't expose this is a service without a session_id?
+      nearest_stop = find_nearest_stop(params[:lon], params[:lat])
+      render :json => {:name  => nearest_stop.name, :area => nearest_stop.area}
+    else
+      render :json => "invalid" # harsh
+    end
+  end
+  
 
   private
 
+  def find_nearest_stop(lon, lat)
+    location_search = LocationSearch.new_search!(session_id, :name => "geolocate:#{lon},#{lat}",
+                                                             :location_type => 'Stop/station')
+    easting, northing = get_easting_northing(lon, lat)
+    return Stop.find_nearest(easting, northing, exclude_id = nil)
+  end
+    
   def find_area(options)
-    has_position = ! (params[:lon].blank? or params[:lat].blank?)
-    if has_position
-      easting, northing = get_easting_northing(params[:lon], params[:lat])
-      nearest_stop = Stop.find_nearest(easting, northing, exclude_id = nil)
-      map_params_from_location([nearest_stop],
-                               find_other_locations=true,
-                               LARGE_MAP_HEIGHT,
-                               LARGE_MAP_WIDTH,
-                               options[:map_options])
-      @locations = [nearest_stop]
-      render options[:browse_template]
-      return
+    if is_valid_lon_lat?(params[:lon], params[:lat])
+      nearest_stop = find_nearest_stop(params[:lon], params[:lat])
+      if nearest_stop
+        map_params_from_location([nearest_stop],
+                                 find_other_locations=true,
+                                 LARGE_MAP_HEIGHT,
+                                 LARGE_MAP_WIDTH,
+                                 options[:map_options])
+        @locations = [nearest_stop]
+        render options[:browse_template]
+        return
+      else # no nearest stop suggests empty database
+        location_search.fail
+        @error_message = t('problems.find_stop.please_enter_an_area')
+      end
     elsif params[:name]
       if params[:name].blank?
         @error_message = t('problems.find_stop.please_enter_an_area')
@@ -374,6 +395,10 @@ class ProblemsController < ApplicationController
     
   end
 
+  def is_valid_lon_lat?(lon, lat)
+    return !(lon.blank? or lat.blank?) && MySociety::Validate.is_valid_lon_lat(lon, lat)
+  end
+  
   def render_browse_template(locations, map_options, template)
     map_params_from_location(locations,
                              find_other_locations=true,

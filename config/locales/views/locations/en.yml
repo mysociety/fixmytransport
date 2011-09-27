@@ -7,7 +7,10 @@ en:
       route_header: "Route"
       stops_header: "Stops"
       say_something_nice: "Say something nice"
+      route_marked_inactive: "This route has been marked as inactive"
       comment_title: "Had a good experience %{location}? Tell the world"
+      stop_or_station_inactive: "(inactive)"
+      admin_route: Admin page
     show_route_region:
       see_also_national_routes: "(see also %{national})"
       route_region: "Route Region"
@@ -29,12 +32,17 @@ en:
       stop_marked_inactive: "This stop has been marked as inactive."
       say_something_nice: "Say something nice"
       comment_title: "Had a good experience %{location}? Tell the world"
+      route_inactive: "(inactive)"
+      admin_stop: Admin page
     show_stop_area:
       report_a_problem: "Report a problem here"
       location_header: "Location"
       routes_header: "Routes"
       say_something_nice: "Say something nice"
       comment_title: "Had a good experience %{location}? Tell the world"
+      stop_area_marked_inactive: "This %{location} has been marked as inactive."
+      route_inactive: "(inactive)"
+      admin_stop_area: Admin page
     show_sub_route:
       information_wrong: "Is this information wrong?"
       say_something_nice: "Say something nice"
@@ -42,3 +50,4 @@ en:
       report_a_problem: "Report a problem here"
       route_header: "Route"
       stops_header: "Stops"
+      stop_or_station_inactive: "(inactive)"

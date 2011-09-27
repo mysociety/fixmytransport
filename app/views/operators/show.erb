@@ -26,7 +26,7 @@
 			  <ul class='route-links'>
 			   <%- @routes.each do |route| %>
 			      <li>
-			        <a href="<%= "/routes/#{route.slug.scope}/#{route.slug.to_friendly_id}"%>"><%= route.description %></a>
+			        <a href="<%= "/routes/#{route.slug.scope}/#{route.slug.to_friendly_id}"%>"><%= route.description_with_inactive %></a>
 			      </li>
 			   <%- end %>
 			  </ul>
@@ -38,7 +38,7 @@
 			  <ul class='route-links'>
 			    <%- @stations.each do |station| %>
 			      <li>
-			        <a href="<%= "/stations/#{station.slug.scope}/#{station.slug.to_friendly_id}" %>"><%= station.name %></a>
+			        <a href="<%= "/stations/#{station.slug.scope}/#{station.slug.to_friendly_id}" %>"><%= station.name_with_inactive %></a>
 			      </li>
 			    <%- end %>
 			  </ul>

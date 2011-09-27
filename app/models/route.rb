@@ -19,6 +19,8 @@
 class Route < ActiveRecord::Base
   extend ActiveSupport::Memoizable
 
+  include FixMyTransport::Locations
+
   has_many :route_sub_routes
   has_many :sub_routes, :through => :route_sub_routes
   has_many :route_operators, :dependent => :destroy, :uniq => true
@@ -41,6 +43,7 @@ class Route < ActiveRecord::Base
   accepts_nested_attributes_for :journey_patterns, :allow_destroy => true, :reject_if => :journey_pattern_invalid
   validates_presence_of :number, :transport_mode_id
   validates_presence_of :region_id, :if => :loaded?
+  validates_inclusion_of :status, :in => self.statuses.keys
   cattr_reader :per_page
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
@@ -135,6 +138,14 @@ class Route < ActiveRecord::Base
   def short_name
     return self.cached_short_name if self.cached_short_name
     name(from_stop=nil, short=true)
+  end
+  
+  def short_name_with_inactive
+    text = "#{short_name}"
+    if self.status == 'DEL'
+      text += " (#{I18n.translate('models.route.inactive')})"
+    end
+    text
   end
 
   def full_name
@@ -305,6 +316,17 @@ class Route < ActiveRecord::Base
     text = "#{description}"
     if !operators.empty?
       text += " (#{operator_text})"
+    end
+    if self.status == 'DEL'
+      text += " (#{I18n.translate('models.route.inactive')})"
+    end
+    text
+  end
+
+  def description_with_inactive
+    text = "#{description}"
+    if self.status == 'DEL'
+      text += " (#{I18n.translate('models.route.inactive')})"
     end
     text
   end
@@ -658,6 +680,7 @@ class Route < ActiveRecord::Base
     raise "Can't merge route with campaigns: #{duplicate.inspect}" if !duplicate.campaigns.empty?
     raise "Can't merge route with problems: #{duplicate.inspect}" if !duplicate.problems.empty?
     raise "Can't merge route with comments: #{duplicate.inspect}" if !duplicate.comments.empty?
+    raise "Can't merge routes with different statuses: #{duplicate.status} vs #{original.status}" if duplicate.status != original.status
     duplicate.route_operators.each do |route_operator|
       if ! original.route_operators.detect { |existing| existing.operator == route_operator.operator }
         original.route_operators.build(:operator => route_operator.operator)

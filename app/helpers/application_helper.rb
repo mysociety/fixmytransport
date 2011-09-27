@@ -228,10 +228,13 @@ module ApplicationHelper
         end
       end
       transport_mode_names = location.transport_mode_names
-      if transport_mode_names.include? 'Train' or transport_mode_names == ['Tram/Metro']
+      if transport_mode_names.include?('Train') or transport_mode_names == ['Tram/Metro']
         return "station"
       end
-      if transport_mode_names.include? 'Bus'
+      if transport_mode_names.include?('Ferry')
+        return 'terminal'
+      end
+      if transport_mode_names.include?('Bus')
         return "stop"
       end
     end

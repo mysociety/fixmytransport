@@ -138,6 +138,11 @@ ActionController::Routing::Routes.draw do |map|
                                          :action => 'request_country',
                                          :conditions => { :method => :get }
 
+  # service url for getting info for nearest stop from lon/lat (NB requires session)
+  map.request_nearest_stop 'request_nearest_stop', :controller => 'problems',
+                                           :action => 'request_nearest_stop',
+                                           :conditions => { :method => :get }
+
   # user sessions
   map.login 'login', :controller => 'user_sessions', :action => 'new'
   map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
