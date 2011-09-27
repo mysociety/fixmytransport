@@ -86,7 +86,7 @@ describe IncomingMessage do
       @incoming_message.safe_from.should == '[email address]'
     end
   end
-
+  
   describe 'when creating a message from a tmail instance' do 
   
     before do 

@@ -5,6 +5,7 @@
   <a id="home" href="/">FixMyTransport</a>
 	<div class="container">
 		<h1 class="route-name"><%= @route.name %></h1>
+
 	</div>
 </div>
 <div id="greybanner">
@@ -18,6 +19,9 @@
             <%= t('locations.show_route.route_marked_inactive') %>
           </div>
        <%- end %>
+       <%- if current_user && current_user.is_admin? %>
+   		<a href="<%= admin_url(admin_route_path(@route.id)) %>" class="button"><%= t('locations.show_route.admin_route') %></a>
+   		<%- end %>
 	</div>
 </div>
 <div id="main-content" class="container">

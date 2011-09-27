@@ -154,9 +154,22 @@ describe Campaign do
     it 'should find a campaign for an email address whose case has been changed' do
       Campaign.stub!(:email_domain).and_return("example.com")
       Campaign.should_receive(:find).with(:first, :conditions => ["lower(key) = ?", 'cx-vgfdf'])
-      Campaign.find_by_campaign_email("PREFIX-CX-VGFDF")
+      Campaign.find_by_campaign_email("PREFIX-CX-VGFDF@example.com")
     end
 
+  end
+  
+  describe 'when guessing which campaigns might match a given email' do 
+    
+    before do 
+      MySociety::Config.stub!(:get).with("INCOMING_EMAIL_PREFIX", 'campaign-').and_return('prefix-')
+      @mock_campaign = mock_model(Campaign)
+    end
+    
+    it 'should look for a campaign whose id matches the decoded email id in the email' do 
+      Campaign.should_receive(:find).with(:first, :conditions => ['id = ?', 75]).and_return(@mock_campaign)
+      Campaign.guess_by_campaign_email('prefix-cx-vgfdf@example.com').should == @mock_campaign
+    end
   end
 
   describe 'when removing a supporter' do 

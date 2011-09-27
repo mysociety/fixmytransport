@@ -38,6 +38,9 @@
             <%= t('locations.show_stop_area.stop_area_marked_inactive', :location => readable_location_type(@stop_area)) %>
           </div>
         <%- end %>
+        <%- if current_user && current_user.is_admin? %>
+     		<a href="<%= admin_url(admin_stop_area_path(@stop_area.id)) %>" class="button"><%= t('locations.show_stop_area.admin_stop_area') %></a>
+     		<%- end %>
 	</div>
 </div>
 <div id="main-content" class="container">

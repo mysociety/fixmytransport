@@ -107,6 +107,8 @@ en:
       contact_council: "Council"
       sign_in_to_join: "Please sign in or create an account to help get this problem fixed"
       transport_experts: "Transport experts" 
+      site_admins: "Site admins"
+      admin_campaign: "Admin page"
       special_powers: "In order to help get this problem fixed, here are your special powers: "
       added_an_update: "%{name} added an update"
       user_requested_advice: "%{name} asked for advice."
