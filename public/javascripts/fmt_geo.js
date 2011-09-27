@@ -17,6 +17,7 @@ function doGeolocate(e, inputId) {
   e.preventDefault();
   $('#geolocate-button-' + inputId).replaceWith("<p class='geolocate-status' id='geolocate-status-" + inputId + "'>Fetching location...</p>");
   $(".geolocate-container").not("#geolocate-container-" + inputId).fadeOut('slow'); // if there are multiple buttons, hide the other(s)  
+  $("#geolocate-container-" + inputId).parent().find(".error").fadeOut('slow'); // error message probably no longer applies
   if (geo_position_js.init()) { // overkill?
     geo_position_js.getCurrentPosition(
       function(position) {
@@ -28,7 +29,6 @@ function doGeolocate(e, inputId) {
             function(stop_data){
               var $input =  $("#"+inputId);
               if ($input[0].nodeName.toLowerCase() == 'select') { // replace select with an input
-                $("#geolocate-container-" + inputId).parent().find(".error").fadeOut(); // select's error message no longer applies
                 $input.replaceWith("<input type='text' id='" + inputId + "'\>");
                 $input =  $("#"+inputId);
               }
