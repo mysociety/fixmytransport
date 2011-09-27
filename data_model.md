@@ -1,8 +1,8 @@
 #FixMyTransport data model
 
-In terms of transport locations, in the interface, there are bus stops, stations and ferry terminals and routes. In the application itself, the models more closely reflect one of the chief data sources, NaPTAN (http://data.gov.uk/dataset/naptan). Stops represent transport access points - so bus stops, but also station platforms and entrances. Stop areas represent stations and ferry terminals, but also groups of related bus stops. Sub-routes are used for problems on train routes to represent the sub-part of the larger route where the problem is.
+In terms of transport locations, in the interface, there are bus stops, stations, ferry terminals and routes. In the application itself, the models more closely reflect one of the chief data sources, NaPTAN (http://data.gov.uk/dataset/naptan). Stops represent transport access points - so bus stops, but also station platforms and entrances. Stop areas represent stations and ferry terminals, but also groups of related bus stops. Stops can be associated to zero or more stop areas. In FixMyTransport, Sub-routes are used for problems on train routes to represent the sub-part of the larger route where the problem is.
 
-Each route is associated with a single mode of transport and has one or more associated journey patterns. Each journey pattern for a route has one or more route segments - a segment represents one leg of the journey and is associated with the stop it comes from and the stop is goes to.
+Each route is associated with a single mode of transport and has one or more associated journey patterns. Each journey pattern for a route has one or more route segments - a segment represents one leg of the journey and is associated with the stop it comes from and the stop is goes to. It may be marked as a terminus for that journey pattern.
 
 A hierarchy of places is used to help identify what transport location users want to report problems at - stops and stop areas belong to localities (towns, villages etc), and these can belong to each other and to larger administrative areas.
 
