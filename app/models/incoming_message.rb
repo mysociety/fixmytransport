@@ -149,6 +149,18 @@ class IncomingMessage < ActiveRecord::Base
     self.mail.date || self.created_at
   end
   
+  # Return a list of guessed campaigns that this message might be intended for
+  def campaign_guesses
+    addresses = (self.mail.to || []) + (self.mail.cc || [])
+    addresses.uniq!
+    campaigns = []
+    addresses.each do |address|
+      campaign = Campaign.guess_by_campaign_email(address)
+      campaigns << campaign if campaign
+    end
+    campaigns
+  end
+  
   # class methods
   def self.create_from_tmail(tmail, raw_email_data, campaign)
     ActiveRecord::Base.transaction do

@@ -10,6 +10,12 @@
   (<%= link_to(t('admin.admin'), admin_url(admin_campaign_path(@incoming_message.campaign.id))) %>)
 <%- else %>
   This message has not been delivered to a campaign.
+  <%- if !@incoming_message.campaign_guesses.empty? %>
+    Possible campaign matches:
+    <%- @incoming_message.campaign_guesses.each do |campaign| %>
+      <%= link_to("#{campaign.title} (#{campaign.id})", admin_url(admin_campaign_path(campaign))) %>
+    <%- end %>
+  <%- end %>
 <%- end %>
 </div>
 

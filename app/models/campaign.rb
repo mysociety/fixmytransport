@@ -194,18 +194,29 @@ class Campaign < ActiveRecord::Base
     FileUtils.mkdir_p(dir)
   end
 
-  def self.find_by_campaign_email(email)
+  def self.key_from_email(email)
     local_part, domain = email.split("@")
     key = local_part.downcase
     prefix = MySociety::Config.get("INCOMING_EMAIL_PREFIX", 'campaign-')
     key = key.gsub(/^#{prefix}/, '')
+  end
+
+  # Return the campaign that an email address references
+  def self.find_by_campaign_email(email)
+    key = self.key_from_email(email)
     campaign = find(:first, :conditions => ['lower(key) = ?', key])
+  end
+  
+  # Guess which campaign an email address references using only the encoded ID
+  def self.guess_by_campaign_email(email)
+    key = self.key_from_email(email)
+    email_id, random_string = key.split('-')
+    id = email_id_to_id(email_id)
+    Campaign.find(:first, :conditions => ['id = ?', id])
   end
 
   def self.email_domain
     MySociety::Config.get('INCOMING_EMAIL_DOMAIN', 'localhost')
   end
-
-
 
 end
