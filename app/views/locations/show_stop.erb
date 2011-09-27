@@ -41,6 +41,9 @@
         </div>
       <%- end %>
 	</p>
+	<%- if current_user && current_user.is_admin? %>
+	<a href="<%= admin_url(admin_stop_path(@stop.id)) %>" class="button"><%= t('locations.show_stop.admin_stop') %></a>
+	<%- end %>
 	</div>
 </div>
 <div id="main-content" class="container">

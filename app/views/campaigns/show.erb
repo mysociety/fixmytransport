@@ -128,6 +128,18 @@
 			</div>
 		</div>
 
+   <%- if current_user && current_user.is_admin? %>
+
+   <div class="clear">
+     <h3><%= t('campaigns.show.site_admins') %></h3>
+     <div class='expert-tools'>
+       <div>
+         <a href="<%= admin_url(admin_campaign_path(@campaign.id)) %>" class="button"><%= t('campaigns.show.admin_campaign') %></a>
+       </div>
+     </div>
+   </div>
+   
+   <%- end %>
 
    <%- if current_user && current_user.is_expert? %>
 

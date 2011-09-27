@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
   validate :validate_real_name
   validates_uniqueness_of :email, :case_sensitive => false, :unless => :skip_email_uniqueness_validation
-  attr_protected :password, :password_confirmation, :is_expert
+  attr_protected :password, :password_confirmation, :is_expert, :is_admin
   has_many :assignments
   has_many :campaign_supporters, :foreign_key => :supporter_id
   has_many :campaigns, :through => :campaign_supporters
