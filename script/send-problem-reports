@@ -3,9 +3,14 @@
 LOC=`dirname $0`
 
 if [ "$1" == "verbose" ]
-    then 
-    $LOC/runner 'ProblemMailer.send_reports(dryrun=false, verbose=true)'
+then
+    if [ "$2" != "" ]
+    then
+        $LOC/runner 'ProblemMailer.send_reports(dryrun=false, verbose=true)' 2>&1 | mail -s "[FixMyTransport] Missing operators and emails" $2
     else
+        $LOC/runner 'ProblemMailer.send_reports(dryrun=false, verbose=true)'
+    fi
+else
     $LOC/runner 'ProblemMailer.send_reports(dryrun=false)'
 fi 
 
