@@ -65,7 +65,7 @@ class ProblemsController < ApplicationController
   def create
     @problem = Problem.new(params[:problem])
     @problem.responsibilities.each do |responsibility|
-      if !@problem.location.responsible_organizations.include?(responsibility.organization)
+      if responsibility.organization_id && !@problem.location.responsible_organizations.include?(responsibility.organization)
         @problem.responsibilities.delete(responsibility)
       end
     end
