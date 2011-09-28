@@ -22,17 +22,25 @@ function doGeolocate(e, inputId) {
     geo_position_js.getCurrentPosition(
       function(position) {
         $('#geolocate-status-' + inputId).text("Fetching location done, loading...");
-        if ($('.fmt-has-geolocation').size()==2) { // page with two geolocates: train/ferry/metro: no auto submit here, user must press Go
+        if ($('.fmt-has-geolocation').size()==2) { 
+          // page with two geolocates: train/ferry/metro: no auto submit here, user must press Go, using title to determine mode
+          var transport_mode = 'Train';
+          if (document.title.search(/metro/i) != -1) {
+              transport_mode = 'Tram/Metro'
+          } else if (document.title.search(/ferry/i) != -1) {
+              transport_mode = 'Ferry'
+          }
+          $('#geolocate-status-' + inputId).text("Fetching location done, loading " + transport_mode.toLowerCase() + "...");
           $.getJSON(
             '/request_nearest_stop',
-            {lon:position.coords.longitude, lat:position.coords.latitude},
+            {lon:position.coords.longitude, lat:position.coords.latitude, transport_mode:transport_mode}, 
             function(stop_data){
               var $input =  $("#"+inputId);
               if ($input[0].nodeName.toLowerCase() == 'select') { // replace select with an input
                 $input.replaceWith("<input type='text' id='" + inputId + "'\>");
                 $input =  $("#"+inputId);
               }
-              $input.val(stop_data.area);
+              $input.val(stop_data.name);
               $(".geolocate-container").hide(); // hide all geolocation buttons
               $input.closest('form').find("input:text, select").not("#" + inputId).focus(); // ugh: the other input(s) in this form
             }
@@ -53,7 +61,7 @@ function doGeolocate(e, inputId) {
             }
           );
         } else { // this is find_stop (goes straight to lon/lat)
-          document.location.href = document.location.href + "?lon=" + position.coords.longitude + "&amp;lat=" + position.coords.latitude
+          document.location.href = document.location.href + "?lon=" + position.coords.longitude + "&lat=" + position.coords.latitude
         }
       }, 
       function(err) {
