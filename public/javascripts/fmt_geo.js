@@ -41,8 +41,9 @@ function doGeolocate(e, inputId) {
                 $input =  $("#"+inputId);
               }
               $input.val(stop_data.name);
-              $(".geolocate-container").hide(); // hide all geolocation buttons
+              $(".geolocate-container").fadeOut('slow'); // hide all geolocation buttons
               $input.closest('form').find("input:text, select").not("#" + inputId).focus(); // ugh: the other input(s) in this form
+              $('.geolocate-status').removeClass('geolocate-busy');
             }
           );
         } else if ($('#bus_route_form').size()) { // this is find_bus_route: get locality of nearest stop, auto submits if we have a route number
@@ -51,13 +52,11 @@ function doGeolocate(e, inputId) {
             {lon:position.coords.longitude, lat:position.coords.latitude},
             function(stop_data){
               $("#"+inputId).val(stop_data.area);
+              $('.geolocate-container').fadeOut('slow');
               if ($("#route_number").val() == $("#guidance-route-number").text()) {
-                $('.geolocate-container').hide();
                 $('#route_number').focus();
-              } else {
-                $('.geolocate-status').html("<span>OK... using " + stop_data.area +"...</span>");
-                $("#bus_route_form").submit();                    
               }
+              $('.geolocate-status').removeClass('geolocate-busy');
             }
           );
         } else { // this is find_stop (goes straight to lon/lat)
@@ -75,12 +74,11 @@ function doGeolocate(e, inputId) {
         } else { // Unknown
           errMsg = "Unknown error";
         }
-        $('.geolocate-status').text(errMsg);
-        $('.geolocate-status').removeClass('geolocate-busy');
+        $('#geolocate-status-' + inputId).removeClass('geolocate-busy').text(errMsg);
       }
     );
   } else {
-    $('.geolocate-status').html("<span>Sorry... can't auto-locate you.</span>");
+    $('#geolocate-status-' + inputId).removeClass('geolocate-busy').text("Sorry... can't auto-locate you.");
   }
 }
 
