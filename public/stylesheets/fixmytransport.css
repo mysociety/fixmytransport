@@ -2156,7 +2156,12 @@ body.facebook-canvas .button {
   background: #cdeaf2;
   color: #048FC2;
   padding: 0.5em;
-  line-height: 1.1em;
+}
+.geolocate-busy { /* spinner */
+  background-image: url('/images/busy_spinner_24_x_24.gif');
+  background-position: 4px 4px;
+  background-repeat: no-repeat;
+  padding-left: 36px;
 }
 
 /*===[ Narrow screens]===*/

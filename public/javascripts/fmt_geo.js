@@ -15,7 +15,7 @@ $(function() {
 
 function doGeolocate(e, inputId) {
   e.preventDefault();
-  $('#geolocate-button-' + inputId).replaceWith("<p class='geolocate-status' id='geolocate-status-" + inputId + "'>Fetching location...</p>");
+  $('#geolocate-button-' + inputId).replaceWith("<p class='geolocate-status geolocate-busy' id='geolocate-status-" + inputId + "'>Fetching location...</p>");
   $(".geolocate-container").not("#geolocate-container-" + inputId).fadeOut('slow'); // if there are multiple buttons, hide the other(s)  
   $("#geolocate-container-" + inputId).parent().find(".error").fadeOut('slow'); // error message probably no longer applies
   if (geo_position_js.init()) { // overkill?
@@ -25,7 +25,7 @@ function doGeolocate(e, inputId) {
         if ($('.fmt-has-geolocation').size()==2) { 
           // page with two geolocates: train/ferry/metro: no auto submit here, user must press Go, using title to determine mode
           var transport_mode = 'Train';
-          if (document.title.search(/metro/i) != -1) {
+          if (document.title.search(/xxxmetro/i) != -1) {
               transport_mode = 'Tram/Metro'
           } else if (document.title.search(/ferry/i) != -1) {
               transport_mode = 'Ferry'
@@ -76,6 +76,7 @@ function doGeolocate(e, inputId) {
           errMsg = "Unknown error";
         }
         $('.geolocate-status').text(errMsg);
+        $('.geolocate-status').removeClass('geolocate-busy');
       }
     );
   } else {
