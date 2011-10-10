@@ -5,6 +5,7 @@ class ProblemsController < ApplicationController
                                                :find_stop,
                                                :find_bus_route,
                                                :find_train_route,
+                                               :find_ferry_route,
                                                :find_other_route,
                                                :browse]
   before_filter :find_visible_problem, :only => [:show, :update, :add_comment]
@@ -264,6 +265,45 @@ class ProblemsController < ApplicationController
     end
   end
 
+  # currently dupped from find_other_route
+  def find_ferry_route
+    @title = t('problems.find_ferry_route.title')
+    @error_messages = Hash.new{ |hash, key| hash[key] = [] }
+    if params[:to]
+      @from_stop = params[:from]
+      @to_stop = params[:to]
+      if @from_stop.blank? or @to_stop.blank?
+        @error_messages[:base] << t('problems.find_ferry_route.please_enter_from_and_to')
+      else
+        location_search = LocationSearch.new_search!(session_id, :from => @from_stop,
+                                                                 :to => @to_stop,
+                                                                 :location_type => 'Ferry route')
+        route_info = Gazetteer.ferry_route_from_stations(@from_stop,
+                                                         params[:from_exact],
+                                                         @to_stop,
+                                                         params[:to_exact])
+        setup_from_and_to_stops(route_info)
+        if route_info[:errors]
+          @error_messages = route_info[:errors]
+          location_search.fail
+          render :find_ferry_route
+          return
+        elsif route_info[:routes].empty?
+          location_search.fail
+          @error_messages[:base] << t('problems.find_ferry_route.route_not_found')
+        elsif route_info[:routes].size == 1
+          location = route_info[:routes].first
+          redirect_to new_problem_url(:location_id => location.id, :location_type => 'Route')
+        else
+          @locations = route_info[:routes]
+          map_params_from_location(@locations, find_other_locations=false)
+          render :choose_route
+          return
+        end
+      end
+    end
+  end
+  
   def choose_location
   end
 

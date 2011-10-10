@@ -169,7 +169,7 @@ class Gazetteer
 
   def self.other_route_from_stations(from, from_exact, to, to_exact)
     errors = Hash.new{ |hash, key| hash[key] = [] }
-    station_types = ['GTMU', 'GFTD']
+    station_types = ['GTMU']
 
     from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => station_types)
     to_stops = Gazetteer.find_stations_from_name(to.strip, to_exact, :types => station_types)
@@ -200,6 +200,40 @@ class Gazetteer
     routes = Route.find_all_by_locations([from_stops, to_stops], find_options)
     return { :routes => routes, :from_stops => from_stops, :to_stops => to_stops }
   end
+
+  def self.ferry_route_from_stations(from, from_exact, to, to_exact)
+    errors = Hash.new{ |hash, key| hash[key] = [] }
+    station_types = ['GFTD', 'GTMU']
+
+    from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => station_types)
+    to_stops = Gazetteer.find_stations_from_name(to.strip, to_exact, :types => station_types)
+
+    # if there are multiple stations with the exact same name, don't ask the user to select one
+    # just pass them all to find_all_by_locations, and see which one has the route
+
+    if from_stops.size > 1 && from_stops.map{ |stop| stop.name }.uniq.size > 1
+      errors[:from_stop] << I18n.translate('problems.find_ferry_route.ambiguous_from_stop', :station_name => from.strip)
+    end
+    if to_stops.size > 1 && to_stops.map{ |stop| stop.name }.uniq.size > 1
+      errors[:to_stop] << I18n.translate('problems.find_ferry_route.ambiguous_to_stop', :station_name => to.strip)
+    end
+    if from_stops.size == 0
+      errors[:from_stop] << I18n.translate('problems.find_ferry_route.from_stop_not_found')
+    end
+    if to_stops.size == 0
+      errors[:to_stop] << I18n.translate('problems.find_ferry_route.to_stop_not_found')
+    end
+    if ! errors.empty?
+      return { :errors => errors,
+               :from_stops => from_stops,
+               :to_stops => to_stops }
+    end
+    find_options = { :transport_modes => [TransportMode.find_by_name('Ferry').id],
+                     :as_terminus => false }
+    routes = Route.find_all_by_locations([from_stops, to_stops], find_options)
+    return { :routes => routes, :from_stops => from_stops, :to_stops => to_stops }
+  end
+
 
   def self.train_route_from_stations(from, from_exact, to, to_exact)
     errors = Hash.new{ |hash, key| hash[key] = [] }

@@ -55,6 +55,23 @@ en:
       enter_route_number: "Route number"
       go: "Go"
       route_not_found_in_area: "We couldn't find a route number %{route_number} in %{area}."
+    find_ferry_route:
+      title: "Finding a ferry route"
+      to_stop_not_found: "We didn't recognise the name of the ferry stop you got off at."
+      where_did_you_get_on: "Where did you get on?"
+      route_not_found: "We could not find the route you entered. Please use the back button on your browser to try again."
+      header: "Ferry Routes"
+      subheader: 'Find a ferry or "river bus" route.'
+      from_example: "e.g. Blackfriars Pier"
+      to_example: "e.g. Putney Pier"
+      please_enter_from_and_to: "Please enter the names of the stops where you got on and off the ferry."
+      where_did_you_get_off: "Where did you get off?"
+      where_did_you_get_on: "Where did you get on?"
+      where_did_you_get_on_and_off: "Where did you get on and off?"
+      go: "Go"
+      from_stop_not_found: "We didn't recognise the name of the stop you got on at."
+      ambiguous_from_stop: "'%{station_name}' could mean more than one ferry stop - please pick the one you meant from the drop-down list."
+      ambiguous_to_stop: "'%{station_name}' could mean more than one ferry stop - please pick the one you meant from the drop-down list."
     find_other_route:
       title: "Finding a tram, metro, underground or ferry route"
       to_stop_not_found: "We didn't recognise the name of the stop you got off at."

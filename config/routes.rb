@@ -44,6 +44,7 @@ ActionController::Routing::Routes.draw do |map|
                                             :find_route => :get,
                                             :find_bus_route => :get,
                                             :find_train_route => :get,
+                                            :find_ferry_route => :get,
                                             :find_other_route => :get }
 
   # issues index

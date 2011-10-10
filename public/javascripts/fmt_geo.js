@@ -25,7 +25,7 @@ function doGeolocate(e, inputId) {
         if ($('.fmt-has-geolocation').size()==2) { 
           // page with two geolocates: train/ferry/metro: no auto submit here, user must press Go, using title to determine mode
           var transport_mode = 'Train';
-          if (document.title.search(/xxxmetro/i) != -1) {
+          if (document.title.search(/metro/i) != -1) {
               transport_mode = 'Tram/Metro'
           } else if (document.title.search(/ferry/i) != -1) {
               transport_mode = 'Ferry'

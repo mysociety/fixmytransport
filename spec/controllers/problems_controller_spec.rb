@@ -307,6 +307,59 @@ describe ProblemsController do
 
   end
 
+  describe "GET #find_ferry_route" do
+
+    def make_request(params={})
+      get :find_ferry_route, params
+    end
+
+    before do
+      @mock_route = mock_model(Route, :region => mock_model(Region, :name => 'Great Britain'))
+    end
+
+    describe 'when the "to" or "from" param is present but empty' do
+
+      it 'should render the "find_ferry_route" template' do
+        make_request({:to => '', :from => ''})
+        response.should render_template("find_ferry_route")
+      end
+
+      it 'should display an error message' do
+        make_request({:to => '', :from => ''})
+        expected_message = 'Please enter the names of the stops where you got on and off the ferry.'
+        assigns[:error_messages][:base].should == [expected_message]
+      end
+
+    end
+
+    describe 'when the "to" and "from" params are supplied' do
+
+      it 'should ask the gazetteer for routes' do
+        Gazetteer.should_receive(:ferry_route_from_stations).and_return({:routes => [],
+                                                                         :from_stops => [],
+                                                                         :to_stops => []})
+        make_request({:to => "putney pier", :from => 'festival pier'})
+      end
+
+      describe 'when no errors are returned' do
+
+        before do
+          @from_stop = mock_model(StopArea, :name => 'Putney Pier')
+          @to_stop = mock_model(StopArea, :name => 'Festival Pier')
+          RouteSubRoute.stub!(:create!).and_return(true)
+          @transport_mode = mock_model(TransportMode)
+          TransportMode.stub!(:find).and_return(@transport_mode)
+          Gazetteer.stub!(:ferry_route_from_stations).and_return(:routes => [@mock_route, @mock_route],
+                                                                 :from_stops => [@from_stop],
+                                                                 :to_stops => [@to_stop])
+        end
+
+      end
+
+    end
+
+  end
+
   describe "GET #find_stop" do
 
     def make_request(params={})
@@ -551,6 +604,7 @@ describe ProblemsController do
     end
 
   end
+
 
   describe 'GET #new' do
 
