@@ -165,6 +165,7 @@ describe User do
         @mock_user = mock_model(User, :save_without_session_maintenance => true,
                                       :access_tokens => [],
                                       :registered= => true,
+                                      :suspended? => false,
                                       :profile_photo_url= => nil,
                                       :profile_photo? => false,
                                       :error_on_bad_profile_photo_url= => nil,
@@ -187,7 +188,19 @@ describe User do
         AccessToken.should_receive(:find).with(:first, :conditions => ['key = ? and token_type = ?', 'myfbid', 'facebook'])
         User.handle_external_auth_token('mytoken', 'facebook', false)
       end
-
+      
+      describe 'if the user is suspended' do
+      
+        before do
+          @mock_user.stub!(:suspended?).and_return(true)
+        end
+        
+        it 'should throw an exception' do
+          lambda{ User.handle_external_auth_token('mytoken', 'facebook', false) }.should raise_exception()
+        end
+        
+      end
+      
       describe 'when an access token does not exist' do
 
         before do

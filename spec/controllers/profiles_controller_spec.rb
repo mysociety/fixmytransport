@@ -33,9 +33,25 @@ describe ProfilesController do
       it 'should render the "show" template' do 
         make_request
       end
-    
+
     end
-    
+
+    # describe 'if the user whose profile is requested is suspended' do 
+    # 
+    #       before do 
+    #         @user = mock_model(User, :registered? => true,
+    #                                  :suspended? => true,
+    #                                  :name => "Test User")
+    #         User.should_receive(:find).with('55', :conditions => ['login_count > 0']).and_return(@user)
+    #       end
+    # 
+    #       it 'should render the "show" template' do 
+    #         make_request
+    #         response.should have_tag("p#{user_suspended}")
+    #       end
+    #       
+    #     end
+        
   end
 
 end

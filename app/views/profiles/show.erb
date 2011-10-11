@@ -26,40 +26,48 @@
 <div id="main-content" class="container">
   <div class="leftcol widecol">
 
-  <%- if @user.bio %>
-     <h3><%= t('profiles.show.about') %></h3>
+  <%- if @user.suspended? %>
 
-      <%= raw MySociety::Format.make_clickable(simple_format(@user.bio)) %>
-   <%- end %>
+    <p id="user_suspended"><%= t('profiles.show.suspended')%></p>
 
-  <%- if @user.initiated_campaigns.visible.count > 0 %>
-  <a name="managing"></a>
-  <h3><%= t('profiles.show.managing')%></h3>
-  <ul class="issues-list">
-  	<%- @user.initiated_campaigns.visible.each do |campaign| %>
-       <%= render :partial => 'shared/issue', :locals => { :context => :profile, :issue => campaign } %>
+  <%- else %>
+
+    <%- if @user.bio %>
+       <h3><%= t('profiles.show.about') %></h3>
+
+        <%= raw MySociety::Format.make_clickable(simple_format(@user.bio)) %>
+     <%- end %>
+
+    <%- if @user.initiated_campaigns.visible.count > 0 %>
+    <a name="managing"></a>
+    <h3><%= t('profiles.show.managing')%></h3>
+    <ul class="issues-list">
+    	<%- @user.initiated_campaigns.visible.each do |campaign| %>
+         <%= render :partial => 'shared/issue', :locals => { :context => :profile, :issue => campaign } %>
+      <%- end %>
+    </ul>
     <%- end %>
-  </ul>
-  <%- end %>
 
-  <%- if @user.campaigns.visible.count > 0 %>
-  <a name="supporting"></a>
-  <h3><%= t('profiles.show.supporting')%></h3>
-  <ul class="issues-list">
-  	<%- @user.campaigns.visible.each do |campaign| %>
-       <%= render :partial => 'shared/issue', :locals => { :context => :profile, :issue => campaign } %>
+    <%- if @user.campaigns.visible.count > 0 %>
+    <a name="supporting"></a>
+    <h3><%= t('profiles.show.supporting')%></h3>
+    <ul class="issues-list">
+    	<%- @user.campaigns.visible.each do |campaign| %>
+         <%= render :partial => 'shared/issue', :locals => { :context => :profile, :issue => campaign } %>
+      <%- end %>
+    </ul>
     <%- end %>
-  </ul>
-  <%- end %>
 
-  <%- if @user.problems.visible.count > 0 %>
-  <a name="reported"></a>
-  <h3><%= t('profiles.show.problems_reported')%></h3>
-  <ul class="issues-list">
-  	<%- @user.problems.visible.each do |problem| %>
-       <%= render :partial => 'shared/issue', :locals => { :context => :profile, :issue => problem } %>
+    <%- if @user.problems.visible.count > 0 %>
+    <a name="reported"></a>
+    <h3><%= t('profiles.show.problems_reported')%></h3>
+    <ul class="issues-list">
+    	<%- @user.problems.visible.each do |problem| %>
+         <%= render :partial => 'shared/issue', :locals => { :context => :profile, :issue => problem } %>
+      <%- end %>
+    </ul>
     <%- end %>
-  </ul>
+  
   <%- end %>
   </div>
 </div>

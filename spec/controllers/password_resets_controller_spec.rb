@@ -12,7 +12,7 @@ describe PasswordResetsController do
     describe 'if an unregisted user is found using the perishable token' do 
 
       before do 
-        User.stub!(:find_using_perishable_token).with('1', 0).and_return(mock_model(User, :registered? => false))
+        User.stub!(:find_using_perishable_token).with('1', 0).and_return(mock_model(User, :registered? => false, :suspended? => false))
       end
 
       it 'should show a notice saying that the account cannot be found' do 
@@ -67,7 +67,7 @@ describe PasswordResetsController do
     describe 'if a registered user can be found using the perishable token param' do
     
       before do 
-        User.stub!(:find_using_perishable_token).with('1', 0).and_return(mock_model(User, :registered? => true))
+        User.stub!(:find_using_perishable_token).with('1', 0).and_return(mock_model(User, :registered? => true, :suspended? => false))
       end
     
       it 'should render the "edit" template' do 
@@ -145,6 +145,7 @@ describe PasswordResetsController do
         @user = mock_model(User, :password= => true, 
                                  :password_confirmation= => true,
                                  :registered? => true,
+                                 :suspended? => false,
                                  :ignore_blank_passwords= => true, 
                                  :save => true)
         User.stub!(:find_using_perishable_token).and_return(@user)
