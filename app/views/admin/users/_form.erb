@@ -50,7 +50,7 @@
   <%= raw f.text_field :profile_photo_remote_url %>
 </div>
 
-<div style="border:1px solid grey; padding:1em;margin:1em 0; background:#eeeeee;">
+<div class="admin-suspended-box-<%= @user.is_suspended? ? 'true' : 'false' %>">
   <div class='form-field'>
     <%= raw f.label :is_suspended %>
     <%= raw f.check_box :is_suspended %>

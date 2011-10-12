@@ -170,6 +170,29 @@ class User < ActiveRecord::Base
                                                       target.id, target.class.to_s]).nil?
   end
 
+  def self.name_or_email_or_id_conditions(query)
+    query_clauses = []
+    query_params = []
+    if ! query.blank?
+      query = query.downcase
+      query_clause = "(LOWER(name) LIKE ?
+                      OR LOWER(name) LIKE ? 
+                      OR LOWER(email) LIKE ? 
+                      OR LOWER(email) LIKE ?"
+      query_params = [ "#{query}%", "%#{query}%", 
+                       "#{query}%", "%#{query}%"]
+      # numeric?
+      if query.to_i.to_s == query
+        query_clause += " OR id = ?"
+        query_params << query.to_i
+      end
+      query_clause += ")"
+      query_clauses << query_clause
+    end
+    conditions = [query_clauses.join(" AND ")] + query_params
+  end
+
+
   # class methods
 
   def self.get_facebook_data(access_token)

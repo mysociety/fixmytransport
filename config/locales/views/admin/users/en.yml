@@ -13,4 +13,5 @@ en:
     user_suspend_hide_contrib: hides all contributions on profile page if suspended
     user_suspended_reason_note: public, may contain HTML
     user_suspended_notes_note: only seen by admin
+    user_no_name: User has no name
     

@@ -1,12 +1,25 @@
 class Admin::UsersController < Admin::AdminController
   
   def index
+    conditions = []
+    if !params[:query].blank?
+      conditions = User.name_or_email_or_id_conditions(params[:query])
+    end
+    @users = User.paginate :page => params[:page], 
+                           :conditions => conditions, 
+      #                     :include => :comment_count,
+                           :order => 'lower(name)'
+
+  end
+  
+  # displays a flat table of users ordered by number of comments
+  def comment_league
     @users = User.find_by_sql("SELECT users.*, comment_count 
                                FROM users, (SELECT user_id, count(*) as comment_count
                                             FROM comments 
                                             GROUP BY user_id) as comment_counts
                                WHERE users.id = comment_counts.user_id
-                               ORDER by comment_count desc")
+                               ORDER by comment_count desc, users.is_admin desc, users.is_expert desc")                              
   end
 
   def show
