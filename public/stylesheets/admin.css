@@ -183,3 +183,10 @@ td.route-terminuses {
   background-color: #CAD4E6;
   padding: 0.2em;
 }
+
+.admin-suspended-true {
+  text-decoration: line-through;
+}
+.admin-star {
+  font-family: 'Hiragino Kaku Gothic Pro' 
+}

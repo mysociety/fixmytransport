@@ -1,0 +1,65 @@
+<%- if !@user.errors.empty? %>
+  <div class='form-error'>
+    <%= t('admin.user_form_error') %>
+  </div>
+<%- end %>
+<%= raw f.hidden_field :id %>
+
+<div class='form-field'>
+  <%= raw f.label :name %>
+  <%= raw f.text_field :name %>
+</div>
+
+<div class='form-field'>
+  <%- if @user.errors.on(:email) %>
+    <div class='error'>
+      <%= error_message_on @user, :email %>
+    </div>
+  <%- end %>
+  <%= raw f.label :email %>
+  <%= raw f.text_field :email %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :is_admin %>
+  <%= raw f.check_box :is_admin %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :is_expert %>
+  <%= raw f.check_box :is_expert %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :wants_fmt_updates %>
+  <%= raw f.check_box :wants_fmt_updates %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :location %>
+  <%= raw f.text_field :location %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :phone %>
+  <%= raw f.text_field :phone %>
+</div>
+
+<div class='form-field'>
+  <%= raw f.label :profile_photo_remote_url %>
+  <%= raw f.text_field :profile_photo_remote_url %>
+</div>
+
+<div style="border:1px solid grey; padding:1em;margin:1em 0; background:#eeeeee;">
+  <div class='form-field'>
+    <%= raw f.label :is_suspended %>
+    <%= raw f.check_box :is_suspended %>
+  </div>
+  <div class='form-field'>
+    <%= raw f.label :suspended_notes %>
+    <br/>
+    <%= raw f.text_area :suspended_notes, :rows => 4 %>
+  </div>
+</div>
+
+<%= raw submit_tag t('admin.go') %>
