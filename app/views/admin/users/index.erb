@@ -1,16 +1,19 @@
 <table>
   <tr>
     <th></th>
+    <th></th>
     <th><%= t('admin.user_name')%></th>
     <th><%= t('admin.email_address')%></th>
     <th><%= t('admin.comment_count')%></th>
   </tr>
 <%- @users.each do |user| %>
     <tr>
-      <td style="text-align:right;">
+      <td style="text-align:center;">
         <%- if user.is_admin %>
           <span class="admin-star" title="administrator!">&#9733;</span>
         <%- end %>
+      </td>
+      <td style="text-align:center;">
         <%- if user.is_expert %>
           <span class="admin-star" title="expert">&#9734;</span>
         <%- end %>        
