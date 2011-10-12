@@ -4,16 +4,17 @@
 <%- end %>
 
 <h2>
-  <%- if @user.is_admin %>
-    <span class="admin-star" title="administrator!">&#9733;</span>
-  <%- end %>
-  <%- if @user.is_expert %>
-    <span class="admin-star" title="expert">&#9734;</span>
-  <%- end %>
-  <span class="admin-suspended-<%= @user.is_suspended %>"><%= @user.name %></span>
-  
+  <%= raw admin_star_html(@user.is_admin) %>
+  <%= raw admin_star_html(@user.is_expert, :expert) %>
+  <span class="admin-suspended-<%= @user.is_suspended %>">
+    <%- if @user.name.blank? %>
+      <i>&lt;<%= t('admin.user_no_name')%>&gt;</i>
+    <%- else %>
+      <%= @user.name %>
+    <%- end %>
+  </span>
 </h2>
-<p>
+<p style="display:inline; padding-left:1em;">
   <%= mail_to @user.email %>
 </p>  
 <h3><%= t('admin.edit') %></h3>
