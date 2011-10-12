@@ -56,10 +56,21 @@
     <%= raw f.check_box :is_suspended %>
   </div>
   <div class='form-field'>
-    <%= raw f.label :suspended_notes %>
+    <%= raw f.label :suspended_notes %> (<%= t('admin.user_suspended_notes_note') %>)
     <br/>
     <%= raw f.text_area :suspended_notes, :rows => 4 %>
   </div>
+  <div class='form-field'>
+    <%= raw f.label :suspended_hide_contribs %>
+    <%= raw f.check_box :suspended_hide_contribs %>
+    (<%= t('admin.user_suspend_hide_contrib') %>)
+  </div>
+  <div class='form-field'>
+    <%= raw f.label :suspended_reason %>  (<%= t('admin.user_suspended_reason_note') %>)
+    <br/>
+    <%= raw f.text_area :suspended_reason, :rows => 4 %>
+  </div>
+  
 </div>
 
 <%= raw submit_tag t('admin.go') %>

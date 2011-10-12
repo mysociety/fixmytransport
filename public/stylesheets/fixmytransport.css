@@ -2104,6 +2104,16 @@ body.facebook-canvas .button {
   display: block;
 }
 
+/*===[ Suspended profiles ]===*/
+.user-suspended {
+  border: 1px dashed #dddddd;
+  padding: 0.5em 1em;
+}
+
+.user-suspended-reason {
+  padding:0.5em 0;
+}
+
 /*===[ Issue Browsing ]===*/
 #issues-in-area h2{
  font-size: 1.5em;
