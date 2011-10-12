@@ -2108,6 +2108,7 @@ body.facebook-canvas .button {
 .user-suspended {
   border: 1px dashed #dddddd;
   padding: 0.5em 1em;
+  margin: 1em 0;
 }
 
 .user-suspended-reason {
