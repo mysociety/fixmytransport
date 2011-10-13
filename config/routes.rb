@@ -187,9 +187,8 @@ ActionController::Routing::Routes.draw do |map|
                                                  :action => 'autocomplete_for_name'
     admin.connect "/autocomplete_for_locality_name", :controller => 'localities',
                                                  :action => 'autocomplete_for_name'
-
-    map.comment_league '/admin/comment_league', :action => 'comment_league', :controller => 'admin/users'
-
+    admin.connect '/comment_league', :controller => 'users', :action => 'comment_league'
+    
   end
 
 end
