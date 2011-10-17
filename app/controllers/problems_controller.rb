@@ -98,8 +98,12 @@ class ProblemsController < ApplicationController
       end
     end
     if params[:convert] == 'yes'
-      @problem.create_new_campaign
-      @problem.confirm!
+      # make sure we have a lock on the record for creating a campaign to prevent duplicates
+      Problem.transaction do
+        @problem = Problem.find(params[:id], :lock => true)
+        @problem.create_new_campaign
+        @problem.confirm!
+      end
       redirect_to(add_details_campaign_url(@problem.campaign.id)) and return
     elsif params[:convert] == 'no'
       @problem.confirm!
@@ -398,7 +402,7 @@ class ProblemsController < ApplicationController
 
   def setup_problem_advice(problem)
     advice_params = { :location_type => @template.readable_location_type(problem.location) }
-    responsible_orgs = problem.location.responsible_organizations    
+    responsible_orgs = problem.location.responsible_organizations
     emailable_orgs, unemailable_orgs = responsible_orgs.partition{ |org| org.emailable?(problem.location) }
 
     if responsible_orgs.size == 1
