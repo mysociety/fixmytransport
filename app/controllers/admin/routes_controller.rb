@@ -46,7 +46,7 @@ class Admin::RoutesController < Admin::AdminController
   
   def create
     @route_operators = []
-    if params[:route][:transport_mode_id].blank?
+    if (!params[:route]) || (params[:route][:transport_mode_id].blank?)
       @route = Route.new(params[:route])
       render :new
       return
