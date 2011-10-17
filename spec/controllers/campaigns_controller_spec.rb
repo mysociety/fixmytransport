@@ -265,16 +265,17 @@ describe CampaignsController do
   describe 'GET #join' do
 
     before do
-      Campaign.stub!(:find).and_return(mock_model(Campaign, :visible? => true, :editable? => true))
+      @campaign = mock_model(Campaign, :visible? => true, :editable? => true)
+      Campaign.stub!(:find).and_return(@campaign)
     end
 
     def make_request
       get :join, { :id => 44 }
     end
 
-    it "should render the 'join' template" do
+    it "should redirect to the campaign page" do
       make_request
-      response.should render_template("campaigns/join")
+      response.should redirect_to(campaign_url(@campaign))
     end
 
   end
