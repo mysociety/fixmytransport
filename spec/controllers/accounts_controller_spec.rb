@@ -15,8 +15,10 @@ describe AccountsController do
         controller.stub!(:current_user).and_return(mock_model(User, :suspended? => true))
       end
       
-      it 'should reject' do 
-        @current_user_session.should_receive(:destroy)
+      it 'should destroy the user session and return an error message saying the account is suspended' do 
+        user_session_mock = mock('User session')
+        controller.stub!(:current_user_session).and_return(user_session_mock)
+        user_session_mock.should_receive(:destroy)
         make_request
         flash[:error].should == 'Unable to authenticate &mdash; this account has been suspended.'
       end
