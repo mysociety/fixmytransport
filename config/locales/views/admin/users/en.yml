@@ -3,3 +3,15 @@ en:
     user_name: Name
     email_address: Email
     comment_count: Number of comments
+    user_form_error: There was a problem.
+    user_now_unsuspended: This user is now unsuspended, and is free to log in.
+    user_now_suspended: This user is now suspended, and cannot log in or make changes.
+    user_now_not_admin: The user's admin privileges have been revoked.
+    user_now_administrator: The user now has admin privileges.
+    user_now_expert: The user is now a transport expert.
+    user_now_normal_user: The user's expert status has been revoked.
+    user_suspend_hide_contrib: hides all contributions on profile page if suspended
+    user_suspended_reason_note: public, may contain HTML
+    user_suspended_notes_note: only seen by admin
+    user_no_name: User has no name
+    

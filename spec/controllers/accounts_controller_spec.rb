@@ -9,6 +9,22 @@ describe AccountsController do
       flash[:notice].should == 'You must be logged in to access this page.'
     end
 
+    describe 'if the logged-in user is suspended' do
+    
+      before do
+        controller.stub!(:current_user).and_return(mock_model(User, :suspended? => true))
+      end
+      
+      it 'should destroy the user session and return an error message saying the account is suspended' do 
+        user_session_mock = mock('User session')
+        controller.stub!(:current_user_session).and_return(user_session_mock)
+        user_session_mock.should_receive(:destroy)
+        make_request
+        flash[:error].should == 'Unable to authenticate &mdash; this account has been suspended.'
+      end
+
+    end
+    
   end
 
   describe 'GET #edit' do
@@ -26,7 +42,8 @@ describe AccountsController do
                                       :name => '',
                                       :email => '',
                                       :password => '',
-                                      :password_confirmation => '')
+                                      :password_confirmation => '',
+                                      :suspended? => false)
         controller.stub!(:current_user).and_return(@mock_user)
       end
 
@@ -58,7 +75,8 @@ describe AccountsController do
                                       :password= => true,
                                       :password_confirmation= => true,
                                       :save => true,
-                                      :update_attributes => true)
+                                      :update_attributes => true,
+                                      :suspended? => false)
         controller.stub!(:current_user).and_return(@mock_user)
       end
 
@@ -144,7 +162,8 @@ describe AccountsController do
                                     :new_record? => true,
                                     :registered? => false, 
                                     :save_without_session_maintenance => true,
-                                    :reset_perishable_token! => true)
+                                    :reset_perishable_token! => true,
+                                    :suspended? => false)
       User.stub!(:find_or_initialize_by_email).and_return(@mock_user)
       UserMailer.stub!(:deliver_new_account_confirmation)
     end
@@ -271,7 +290,7 @@ describe AccountsController do
           @mock_user.stub!(:registered?).and_return(true)
           UserMailer.stub!(:deliver_already_registered)
         end
-
+        
         it 'should ask the user mailer to send an "already registered" email' do
           UserMailer.should_receive(:deliver_already_registered)
           make_request
@@ -360,7 +379,7 @@ describe AccountsController do
     describe 'if the user is found using perishable token' do 
 
       before do
-        @mock_user = mock_model(User)
+        @mock_user = mock_model(User, :suspended? => nil)
         User.stub!(:find_using_perishable_token).with('my_token', 0).and_return(@mock_user)
       end
       
@@ -430,7 +449,8 @@ describe AccountsController do
                                       :crypted_password => "password",
                                       :post_login_action => nil,
                                       :save_without_session_maintenance => true,
-                                      :post_login_action= => nil)
+                                      :post_login_action= => nil,
+                                      :suspended? => false)
         User.stub!(:find_using_perishable_token).with('my_token', 0).and_return(@mock_user)
       end
 
@@ -442,6 +462,19 @@ describe AccountsController do
       it 'should show a notice saying that the user has confirmed their account' do 
         make_request
         flash[:notice].should == 'You have successfully confirmed your account.'
+      end
+
+      describe 'if the user model is suspended' do
+        
+        before do 
+          @mock_user.stub!(:suspended?).and_return(true)
+        end
+        
+        it 'should fail by showing an error message saying that the account is suspended' do
+          make_request
+          flash[:error].should == "Unable to authenticate &mdash; this account has been suspended."
+        end
+        
       end
       
       describe 'if the user model has a post login action' do 

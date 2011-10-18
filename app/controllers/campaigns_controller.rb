@@ -41,7 +41,9 @@ class CampaignsController < ApplicationController
   end
 
   def join
-    if request.post?
+    if !request.post?
+      redirect_to campaign_url(@campaign)
+    else
       if current_user
         @campaign.add_supporter(current_user, confirmed=true)
         redirect_to campaign_url(@campaign)

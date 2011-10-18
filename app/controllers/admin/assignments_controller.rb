@@ -27,7 +27,8 @@ class Admin::AssignmentsController < Admin::AdminController
       problem = @assignment.problem
       location = problem.location
       set_location_operator(location)
-      problem.responsibilities.build( :organization => @operator )
+      problem.responsibilities.build( :organization_id => @operator.id,
+                                      :organization_type => 'Operator' )
       location_only = @assignment.data ? @assignment.data[:location_only] : nil
       new_email = (@assignment.data && @assignment.data[:organization_email]) ? @assignment.data[:organization_email].strip : nil
       @assignment_complete = false

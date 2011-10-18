@@ -1,20 +1,33 @@
-<table>
+<h2><%= t('admin.users') %></h2>
+<%= render :partial => "admin/shared/search_form", :locals => { :skip_transport_mode => true }  %>
+<%= will_paginate @users, { :admin => true } %>
+<%= t('admin.select') %>
+<%= link_to(t('admin.all'), '', { :class => "index-select-all" }) %>
+<%= link_to(t('admin.none'), '', { :class => "index-select-none" }) %>
+<table class='users index-list'>
   <tr>
-    <th><%= t('admin.user_name')%></th>
-    <th><%= t('admin.email_address')%></th>
-    <th><%= t('admin.comment_count')%></th>
+    <th width='2%'></th>
+    <th width='2%'></th>
+    <th width='10%'><%= t('admin.id') %></th>
+    <th width='34%'><%= t('admin.name') %></th>
+    <th width='32%'><%= t('admin.email') %></th>
+    <th width='20%'></th>
   </tr>
-<%- @users.each do |user| %>
-    <tr>
+  <%-@users.each do |user| %>
+    <tr class='<%= cycle("odd", "even") %>'>
+      <td ><%= raw admin_star_html(user.is_admin) %></td>
+      <td ><%= raw admin_star_html(user.is_expert, :expert) %></td>
       <td>
-        <%= user.name %>
+        <%= link_to(user.id, main_url(profile_path(user)), :target => '_blank') %>
+        <%= link_to("(#{t('admin.admin')})", admin_url(admin_user_path(user)), :target => '_blank') %>
       </td>
-      <td>
-        <%= user.email %>
-      </td>
-      <td>
-        <%= user.comment_count %>
-      </td>
+      <td><span class="admin-suspended-<%= user.is_suspended %>"><%= user.name %></span> </td>
+      <td><%= user.email %></td>
+      <td><%= user.cached_slug %></td>
     </tr>
-<%- end %>
+  <%- end %>
 </table>
+<%= will_paginate @users, { :admin => true } %>
+<p>
+  <%= link_to "Comment league", "comment_league" %>
+</p>

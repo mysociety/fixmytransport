@@ -45,7 +45,11 @@ class PasswordResetsController < ApplicationController
     unless @user && @user.registered?
       flash[:error] = t('password_resets.edit.could_not_find_account')
       redirect_to root_url  
-    end  
+    end
+    if @user && @user.suspended? # disallow attempts to reset passwords from suspended acccounts
+      flash[:error] = t('shared.suspended.forbidden')
+      redirect_to root_url
+    end        
   end
   
 end

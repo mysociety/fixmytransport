@@ -94,7 +94,8 @@ describe Admin::AssignmentsController do
         end
         
         it 'should add a responsibility for the operator to the problem' do 
-          @mock_problem.responsibilities.should_receive(:build).with({ :organization => @mock_operator })
+          @mock_problem.responsibilities.should_receive(:build).with({ :organization_id => @mock_operator.id,
+                                                                       :organization_type => 'Operator' })
           make_request(@default_params.merge({:operator_id => 66}))
         end
         

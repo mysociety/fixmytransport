@@ -71,6 +71,12 @@ class ApplicationController < ActionController::Base
       redirect_to new_user_session_url
       return false
     end
+    if current_user && current_user.suspended?
+      flash[:error] = t('shared.suspended.forbidden')
+      current_user_session.destroy
+      redirect_to root_url
+      return false
+    end
   end
 
   # filter method for requiring no logged-in user

@@ -165,6 +165,10 @@ class AccountsController < ApplicationController
       flash[:error] = t('accounts.confirm.could_not_find_account')
       redirect_to root_url
     end
+    if @account_user && @account_user.suspended? # disallow attempts to confirm from suspended acccounts
+      flash[:error] = t('shared.suspended.forbidden')
+      redirect_to root_url
+    end
   end
 
   def send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model, new_account)
@@ -177,6 +181,7 @@ class AccountsController < ApplicationController
       UserMailer.deliver_account_exists(@account_user, post_login_action_data, unconfirmed_model)
     else
       # this person already registered, send them an email to let them know
+      # if this account is suspended, send the token anyway: it won't work while the account remains suspended
       UserMailer.deliver_already_registered(@account_user, post_login_action_data, unconfirmed_model)
     end
   end

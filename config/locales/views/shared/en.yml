@@ -107,6 +107,8 @@ en:
       on_the: "on the"
       at: "at"
       one_off_report: "one-off report"
+    suspended:
+      forbidden: "Unable to authenticate &mdash; this account has been suspended."
     wrong_user:
       wrong_user: "To %{requested_action}, you'll need to %{logout_link}, and sign in as %{name}."
       logout_link: "sign out"

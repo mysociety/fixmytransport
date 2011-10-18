@@ -1,0 +1,108 @@
+
+<%- if !@user.profile_photo_remote_url.blank? %>
+  <%= image_tag(@user.profile_photo_remote_url, :style => "border:1px solid #999999; margin:0 0 1em 1em; max-width:300px;max-height:300px;float:right;")  %>
+<%- end %>
+
+<h2>
+  <%= raw admin_star_html(@user.is_admin) %>
+  <%= raw admin_star_html(@user.is_expert, :expert) %>
+  <span class="admin-suspended-<%= @user.is_suspended %>">
+    <%- if @user.name.blank? %>
+      <i>&lt;<%= t('admin.user_no_name')%>&gt;</i>
+    <%- else %>
+      <%= @user.name %>
+    <%- end %>
+  </span>
+</h2>
+<p style="display:inline; padding-left:1em;">
+  <%= mail_to @user.email %>
+</p>  
+<h3><%= t('admin.edit') %></h3>
+
+<%-form_for :user, @user, :url => admin_url(admin_user_path(@user)), :html => { :method => :put,  :class => 'user-form' } do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f }   %>
+<%-end %>
+
+
+<table>
+  <tr>
+    <td>
+      registered
+    </td>
+    <td>
+      <%= @user.registered %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      confirmed_password
+    </td>
+    <td>
+      <%= @user.confirmed_password %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      created_at
+    </td>
+    <td>
+      <%= @user.created_at %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      updated_at
+    </td>
+    <td>
+      <%= @user.updated_at %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      last_request_at
+    </td>
+    <td>
+      <%= @user.last_request_at %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      current_login_at
+    </td>
+    <td>
+      <%= @user.current_login_at %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      last_login_at
+    </td>
+    <td>
+      <%= @user.last_login_at %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      login_count
+    </td>
+    <td>
+      <%= @user.login_count %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      failed_login_count
+    </td>
+    <td>
+      <%= @user.failed_login_count %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      cached_slug
+    </td>
+    <td>
+      <%= @user.cached_slug %>
+    </td>
+  </tr>
+</table>
