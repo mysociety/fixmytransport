@@ -159,6 +159,7 @@ ActionController::Routing::Routes.draw do |map|
                             :action => 'feedback',
                             :conditions => { :method => [:get, :post] }
   map.facebook '/facebook', :controller => 'static', :action => 'facebook'
+  map.howto '/howto', :controller => 'static', :action => 'howto'
 
   # admin
   map.namespace :admin do |admin|
