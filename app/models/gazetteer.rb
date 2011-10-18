@@ -203,7 +203,7 @@ class Gazetteer
 
   def self.ferry_route_from_stations(from, from_exact, to, to_exact)
     errors = Hash.new{ |hash, key| hash[key] = [] }
-    station_types = ['GFTD', 'GTMU']
+    station_types = ['GFTD']
 
     from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => station_types)
     to_stops = Gazetteer.find_stations_from_name(to.strip, to_exact, :types => station_types)
