@@ -69,7 +69,7 @@ en:
       where_did_you_get_on: "Where did you get on?"
       where_did_you_get_on_and_off: "Where did you get on and off?"
       go: "Go"
-      from_stop_not_found: "We didn't recognise the name of the ferrystop you got on at."
+      from_stop_not_found: "We didn't recognise the name of the ferry stop you got on at."
       ambiguous_from_stop: "'%{station_name}' could mean more than one ferry stop - please pick the one you meant from the drop-down list."
       ambiguous_to_stop: "'%{station_name}' could mean more than one ferry stop - please pick the one you meant from the drop-down list."
     find_other_route:
