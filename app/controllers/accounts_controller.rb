@@ -1,7 +1,7 @@
 class AccountsController < ApplicationController
 
   before_filter :require_user, :only => [:edit, :update]
-  before_filter :require_no_user, :load_user_using_perishable_token, :only => [:confirm]
+  before_filter :load_user_using_perishable_token, :only => [:confirm]
 
   def update
     current_user.update_attributes(params[:user])
@@ -167,6 +167,10 @@ class AccountsController < ApplicationController
     end
     if @account_user && @account_user.suspended? # disallow attempts to confirm from suspended acccounts
       flash[:error] = t('shared.suspended.forbidden')
+      redirect_to root_url
+    end
+    if @account_user && current_user && @account_user != current_user
+      flash[:notice] = t('shared.login.must_be_logged_out')
       redirect_to root_url
     end
   end
