@@ -205,7 +205,6 @@ class ApplicationController < ActionController::Base
 
   def save_post_login_action_to_session
     if post_login_action_data = get_action_data(params)
-
       session[:next_action] = params[:next_action]
       if post_login_action_data[:action] == :join_campaign
         flash.now[:notice] = post_login_action_data[:notice]
@@ -219,11 +218,12 @@ class ApplicationController < ActionController::Base
       id = post_login_action_data[:id]
       user.post_login_action = post_login_action_data[:action].to_s
       user.save_without_session_maintenance
+      confirmation_target = nil
       case post_login_action_data[:action]
       when :join_campaign
         campaign = Campaign.find(id)
-        campaign.add_supporter(user, confirmed=false, token=user.perishable_token)
-        return campaign
+        confirmation_target = campaign.add_supporter(user, confirmed=false, token=user.perishable_token)
+        return_model = campaign
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
         commented = commented_type.constantize.find(id)
@@ -234,13 +234,25 @@ class ApplicationController < ActionController::Base
                          :confirmed => false,
                          :text_encoded => post_login_action_data[:text_encoded] }
         comment = Comment.create_from_hash(comment_data, user, token=user.perishable_token)
-        return comment
+        confirmation_target = comment
+        return_model = comment
       when :create_problem
         problem = Problem.create_from_hash(post_login_action_data, user, token=user.perishable_token)
-        return problem
+        confirmation_target = problem
+        return_model = problem
       end
+      ActionConfirmation.create!(:user => user, 
+                                 :token => user.perishable_token,
+                                 :target => confirmation_target)
+      return return_model
+    else
+      # just add an action confirmation without target so the user can log in with 
+      # their current token
+      ActionConfirmation.create!(:user => user,
+                                 :token => user.perishable_token)
+      return nil
     end
-
+    
   end
 
   def post_login_action_string
@@ -273,14 +285,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def post_login_actions
-    [:join_campaign, :add_comment, :create_problem]
-  end
-
   def get_action_data(data_hash)
     if data_hash[:next_action]
       next_action_data = string_to_data(data_hash[:next_action])
-      if next_action_data.is_a?(Hash) and post_login_actions.include?(next_action_data[:action])
+      if next_action_data.is_a?(Hash) and ActionConfirmation.actions.include?(next_action_data[:action])
         return next_action_data
       end
     end

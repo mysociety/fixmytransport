@@ -92,7 +92,7 @@ class ProblemsController < ApplicationController
   def convert
     if @problem.status != :new
       if @problem.campaign
-        redirect_to(add_details_campaign_url(@problem.campaign.id)) and return
+        redirect_to(campaign_url(@problem.campaign.id)) and return
       else
         redirect_to problem_url(@problem) and return
       end
