@@ -2166,6 +2166,10 @@ body.facebook-canvas .button {
   padding: 0.5em;
   font-weight: bold;
   border:4px solid #cdeaf2;
+  border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+
 }
 .geolocate-button:hover{
   cursor:pointer;
@@ -2180,6 +2184,9 @@ body.facebook-canvas .button {
   background-image: url('/images/busy_spinner_24_x_24.gif');
   background-position: 4px 4px;
   background-repeat: no-repeat;
+  padding-left: 36px;
+}
+.geolocate-done { /* spinner removed */
   padding-left: 36px;
 }
 

@@ -325,9 +325,18 @@ class ProblemsController < ApplicationController
   end
   
   # return a truncated stop (don't need all the data)
+  # note: params[:transport_mode] is a canonical string because it's also being used for translation: see fmt_geos.js
   def request_nearest_stop
     if is_valid_lon_lat?(params[:lon], params[:lat]) # don't expose this is a service without a session_id?
-      nearest_stop = find_nearest_stop(params[:lon], params[:lat], params[:transport_mode])
+      transport_mode = case params[:transport_mode]
+        when 'ferry'
+          'Ferry'
+        when 'other'
+          'Tram/Metro'
+        when 'train'
+          'Train'
+      end
+      nearest_stop = find_nearest_stop(params[:lon], params[:lat], transport_mode)
       render :json => {:name  => nearest_stop.name, :area => nearest_stop.area}
     else
       render :json => "invalid" # harsh

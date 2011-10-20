@@ -72,6 +72,10 @@ module ApplicationHelper
     small ? SMALL_ICON_WIDTH : LARGE_ICON_WIDTH
   end
 
+  def js_translation_list(keys)
+      keys.map {|k| "'#{k}': \"#{I18n.translate(k)}\""}.join(",\n        ")
+  end
+  
   # Generate a hash of data used to render the point on a map
   # Required options:
   # :link_type - [:problem|:location] - link stop to problem reporting

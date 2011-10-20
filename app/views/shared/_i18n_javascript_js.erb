@@ -1,0 +1,35 @@
+<script type="text/javascript">
+  $(function() {
+    var fmt_translations = {
+      <%= raw js_translation_list([
+        'shared.geolocate.cancelled',
+        'shared.geolocate.no_lookup',
+        'shared.geolocate.unknown_error',
+        'shared.geolocate.cannot_locate',
+        'shared.geolocate.unknown_error',
+        'shared.geolocate.use_current_location',
+        'shared.geolocate.cancelled',
+        'shared.geolocate.no_lookup',
+        'shared.geolocate.no_result',
+        'shared.geolocate.unknown_error',
+        'shared.geolocate.cannot_locate',
+        'shared.geolocate.fetching',
+        'shared.geolocate.loading',
+        'shared.geolocate.loading_bus',
+        'shared.geolocate.loading_train',
+        'shared.geolocate.loading_ferry',
+        'shared.geolocate.loading_other',
+        'shared.geolocate.loading_done'
+        ])
+      %>
+    };
+    
+    $.fn.fmt_translate = function(key) {
+      if (fmt_translations[key]) {
+        return fmt_translations[key]
+      } else {
+        return key
+      }
+    }
+  });
+</script>
