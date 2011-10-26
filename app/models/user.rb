@@ -43,7 +43,8 @@ class User < ActiveRecord::Base
                 :skip_email_uniqueness_validation,
                 :profile_photo_url,
                 :error_on_bad_profile_photo_url,
-                :force_new_record_validation
+                :force_new_record_validation,
+                :force_password_validation
 
   has_friendly_id :name, :use_slug => true, :allow_nil => true
 
@@ -70,7 +71,7 @@ class User < ActiveRecord::Base
   end
 
   def password_not_required
-    if force_new_record_validation == true
+    if (force_new_record_validation == true) || (force_password_validation == true)
       return false
     end
     unregistered? or !access_tokens.empty?

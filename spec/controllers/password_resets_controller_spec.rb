@@ -194,7 +194,7 @@ describe PasswordResetsController do
                                  :save => true,
                                  :registered= => nil,
                                  :confirmed_password= => true, 
-                                 :force_new_record_validation= => true)
+                                 :force_password_validation= => true)
         @mock_confirmation = mock_model(ActionConfirmation, :user => @user, :target => nil)
         ActionConfirmation.stub!(:find_by_token).with('mytoken', :include => :user).and_return(@mock_confirmation)
       end

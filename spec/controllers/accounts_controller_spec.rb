@@ -87,10 +87,10 @@ describe AccountsController do
 
       describe 'if the user enters a password' do
 
-        it 'should set the account as registered and set the confirmed password flag and force validation as if a new record' do
+        it 'should set the account as registered and set the confirmed password flag and force password validation' do
           @mock_user.should_receive(:registered=).with(true)
           @mock_user.should_receive(:confirmed_password=).with(true)
-          @mock_user.should_receive(:force_new_record_validation=).with(true)
+          @mock_user.should_receive(:force_password_validation=).with(true)
           make_request(@default_params.merge({:user => {:password => 'password'}}))
         end
 

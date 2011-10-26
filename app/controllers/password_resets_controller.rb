@@ -65,7 +65,7 @@ class PasswordResetsController < ApplicationController
     @account_user.password_confirmation = params[:user][:password_confirmation]
     @account_user.registered = true
     @account_user.confirmed_password = true
-    @account_user.force_new_record_validation = true
+    @account_user.force_password_validation = true
     if @account_user.save
       flash[:notice] = t('password_resets.edit.password_updated')
       # a false return value indicates that a redirect has been performed

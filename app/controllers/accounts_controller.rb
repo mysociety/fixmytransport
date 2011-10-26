@@ -16,7 +16,7 @@ class AccountsController < ApplicationController
     # and set the flag showing that they've confirmed their password, also validate the password
     # as if new
     if params[:user][:password]
-      current_user.force_new_record_validation = true
+      current_user.force_password_validation = true
       current_user.registered = true
       current_user.confirmed_password = true
     end
