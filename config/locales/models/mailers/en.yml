@@ -21,4 +21,4 @@ en:
     account_confirmation_subject: "[FixMyTransport] Confirm your account"
     confirm_join_campaign: "confirm that you want to join \"%{title}\""
     confirm_comment: "confirm your comment"
-    confirm_create_problem: "confirm your problem"
+    confirm_create_problem: "confirm your problem report"

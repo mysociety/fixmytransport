@@ -117,11 +117,6 @@ class User < ActiveRecord::Base
     return true
   end
 
-  def deliver_password_reset_instructions!
-    reset_perishable_token!
-    UserMailer.deliver_password_reset_instructions(self)
-  end
-
   def mark_seen(campaign)
     if current_supporter = self.campaign_supporters.confirmed.detect{ |supporter| supporter.campaign == campaign }
       if current_supporter.new_supporter?

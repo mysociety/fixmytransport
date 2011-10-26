@@ -13,8 +13,10 @@ class AccountsController < ApplicationController
     current_user.password = params[:user][:password]
     current_user.password_confirmation = params[:user][:password_confirmation]
     # if someone logged in by confirmation creates a password here, register their account
-    # and set the flag showing that they've confirmed their password
+    # and set the flag showing that they've confirmed their password, also validate the password
+    # as if new
     if params[:user][:password]
+      current_user.force_new_record_validation = true
       current_user.registered = true
       current_user.confirmed_password = true
     end
@@ -123,36 +125,9 @@ class AccountsController < ApplicationController
       flash[:notice] = t('accounts.confirm.logged_in_set_password')
       session[:return_to] = edit_account_url
     end
-    case @action_confirmation.target
-    when CampaignSupporter
-      @action_confirmation.target.confirm!
-      session[:return_to] = campaign_path(@action_confirmation.target.campaign)
-      flash[:notice] = t('accounts.confirm.successfully_confirmed_support')
-    when Comment
-      comment = @action_confirmation.target
-      if comment.status == :new && comment.created_at < (Time.now - 1.month)
-        flash[:error] = t('accounts.confirm.comment_token_expired')
-        redirect_to(root_url)
-        return
-      else
-        comment.confirm!
-        session[:return_to] = @template.commented_url(comment.commented)
-        flash[:notice] = t('accounts.confirm.successfully_confirmed_comment')
-      end
-    when Problem
-      problem = @action_confirmation.target
-      if problem.status == :new && problem.created_at < (Time.now - 1.month)
-        flash[:error] = t('accounts.confirm.problem_token_expired')
-        redirect_to(root_url)
-        return
-      else
-        if problem.status == :new
-          flash[:notice] = t('accounts.confirm.successfully_confirmed_problem_first_time')
-        else
-          flash[:notice] = t('accounts.confirm.successfully_confirmed_problem')
-        end
-        session[:return_to] = convert_problem_url(problem)
-      end
+    # a false return value indicates that a redirect has been performed
+    if perform_saved_login_action == false
+      return
     end
     # log in the user.
     UserSession.login_by_confirmation(@account_user)      
@@ -161,24 +136,6 @@ class AccountsController < ApplicationController
 
   private
 
-  def load_user_using_action_confirmation_token
-    @action_confirmation = ActionConfirmation.find_by_token(params[:email_token], :include => :user)
-    if @action_confirmation
-      @account_user = @action_confirmation.user
-    end
-    if ! @account_user
-      flash[:error] = t('accounts.confirm.could_not_find_account')
-      redirect_to root_url
-    end
-    if @account_user && @account_user.suspended? # disallow attempts to confirm from suspended acccounts
-      flash[:error] = t('shared.suspended.forbidden')
-      redirect_to root_url
-    end
-    if @account_user && current_user && @account_user != current_user
-      flash[:notice] = t('shared.login.must_be_logged_out')
-      redirect_to root_url
-    end
-  end
 
   def send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model, new_account)
     # no one's used this email before

@@ -1,55 +1,95 @@
 class PasswordResetsController < ApplicationController
 
-  before_filter :load_user_using_perishable_token, :only => [:edit, :update]  
+  before_filter :load_user_using_action_confirmation_token, :only => [:edit, :update]
   before_filter :require_no_user
-  
+
   def new
   end
-  
+
   def index
     render :action => 'new'
   end
-  
-  def create  
-    @user = User.find_by_email(params[:email])  
-    if @user  
-      @user.deliver_password_reset_instructions!  
-      @action = t('password_resets.new.your_password_will_not_be_changed')
-      render 'shared/confirmation_sent'
-    else  
-      flash[:error] = t('password_resets.new.no_user_found_with_email')
-      render :action => :new  
-    end  
+
+  def create
+    if params[:email].to_s !~ Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
+      @error_email = t('password_resets.create.please_enter_valid_email')
+      respond_to do |format|
+        format.html do
+          render :action => :new
+          return
+        end
+        format.json do
+          @json = {}
+          @json[:success] = false
+          @json[:errors] = { 'email' => @error_email }
+          render :json => @json
+          return
+        end
+      end
+    end
+    @action = t('password_resets.new.your_password_will_not_be_changed')
+    @user = User.find_by_email(params[:email])
+    if @user
+      post_login_action_data = get_action_data(session)
+      if action_string = post_login_action_string
+        @action = action_string
+      end
+      @user.reset_perishable_token!
+      unconfirmed_model = save_post_login_action_to_database(@user)
+      UserMailer.deliver_password_reset_instructions(@user, post_login_action_data, unconfirmed_model)
+    end
+    respond_to do |format|
+      @password_reset = true
+      format.html do
+        render :template => 'shared/confirmation_sent'
+        return
+      end
+      format.json do
+        @json = {}
+        @json[:success] = true
+        @json[:html] = render_to_string :template => 'shared/confirmation_sent', :layout => 'confirmation'
+        render :json => @json
+        return
+      end
+    end
+
   end
-  
-  def edit    
+
+  def edit
+    set_next_action_text
   end
-  
+
   def update
-    @user.ignore_blank_passwords = false
-    @user.password = params[:user][:password]  
-    @user.password_confirmation = params[:user][:password_confirmation]  
-    if @user.save  
+    @account_user.ignore_blank_passwords = false
+    @account_user.password = params[:user][:password]
+    @account_user.password_confirmation = params[:user][:password_confirmation]
+    @account_user.registered = true
+    @account_user.confirmed_password = true
+    @account_user.force_new_record_validation = true
+    if @account_user.save
       flash[:notice] = t('password_resets.edit.password_updated')
+      # a false return value indicates that a redirect has been performed
+      if perform_saved_login_action == false
+        return
+      end
       redirect_back_or_default root_path
-    else  
-      render :action => :edit  
+    else
+      set_next_action_text
+      render :action => :edit
     end
   end
-  
+
   private
-  
-  def load_user_using_perishable_token 
-    # not currently using a timeout on the tokens
-    @user = User.find_using_perishable_token(params[:id], token_age=0)  
-    unless @user && @user.registered?
-      flash[:error] = t('password_resets.edit.could_not_find_account')
-      redirect_to root_url  
+
+  def set_next_action_text
+    @next_action_text = t('password_resets.edit.update_password_and_login')
+    case @action_confirmation.target
+    when CampaignSupporter
+      @next_action_text = t('password_resets.edit.update_password_and_confirm_support')
+    when Comment
+      @next_action_text = t('password_resets.edit.update_password_and_confirm_comment')
+    when Problem
+      @next_action_text = t('password_resets.edit.update_password_and_confirm_problem')
     end
-    if @user && @user.suspended? # disallow attempts to reset passwords from suspended acccounts
-      flash[:error] = t('shared.suspended.forbidden')
-      redirect_to root_url
-    end        
   end
-  
 end

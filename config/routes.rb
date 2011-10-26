@@ -144,7 +144,14 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :user_sessions, :collection => { :external => :post }
 
   # accounts
-  map.resources :password_resets, :except => [:show, :destroy]
+  map.edit_password_reset '/password_resets/:email_token/edit', :action => 'edit',
+                                                                :controller => 'password_resets',
+                                                                :conditions => { :method => :get }
+  map.password_reset '/password_resets/:email_token', :action => 'update',
+                                                      :controller => 'password_resets',
+                                                      :conditions => { :method => :put }
+
+  map.resources :password_resets, :except => [:show, :destroy, :edit, :update]
   map.resource :account, :except => [:index, :destroy, :show]
   map.account_index '/account', :action => 'new', :controller => 'accounts', :conditions => { :method => :get }
   map.confirm_account '/a/:email_token', :action => 'confirm', :controller => 'accounts'
@@ -189,7 +196,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.connect "/autocomplete_for_locality_name", :controller => 'localities',
                                                  :action => 'autocomplete_for_name'
     admin.connect '/comment_league', :controller => 'users', :action => 'comment_league'
-    
+
   end
 
 end
