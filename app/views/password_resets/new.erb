@@ -10,13 +10,5 @@
 	</div>
 </div>
 <div id="main-content" class="container">
-	<%- form_tag password_resets_path, :class => 'password_reset_email' do  %>
-	  
-	    <div class="form-field">
-	    <label><%= raw t('password_resets.new.email') %></label>
-	    <%= raw text_field_tag :email  %>
-	    </div>
-		<button class="button" type="submit"><%= t('password_resets.new.continue') %></button>
-	  
-	<%- end %>
+	 <%= render :partial => 'shared/forgot_password_form' %>
 </div>

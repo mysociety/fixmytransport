@@ -332,6 +332,54 @@ class ApplicationController < ActionController::Base
       session.delete(:next_action)
     end
   end
+  
+  # a false return value indicates that a redirect has been performed
+  def perform_saved_login_action
+    case @action_confirmation.target
+    when CampaignSupporter
+      @action_confirmation.target.confirm!
+      session[:return_to] = campaign_path(@action_confirmation.target.campaign)
+      flash[:notice] = t('accounts.confirm.successfully_confirmed_support')
+    when Comment
+      comment = @action_confirmation.target
+      if comment.status == :new && comment.created_at < (Time.now - 1.month)
+        flash[:error] = t('accounts.confirm.comment_token_expired')
+        redirect_to(root_url)
+        return false
+      else
+        comment.confirm!
+        session[:return_to] = @template.commented_url(comment.commented)
+        if self.controller_name == "password_resets"
+          flash[:notice] = t('password_resets.update.successfully_confirmed_comment')
+        else
+          flash[:notice] = t('accounts.confirm.successfully_confirmed_comment')
+        end
+      end
+    when Problem
+      problem = @action_confirmation.target
+      if problem.status == :new && problem.created_at < (Time.now - 1.month)
+        flash[:error] = t('accounts.confirm.problem_token_expired')
+        redirect_to(root_url)
+        return false
+      else
+        if problem.status == :new
+          if self.controller_name == "password_resets"
+            flash[:notice] = t('password_resets.update.successfully_confirmed_problem_first_time')
+          else
+            flash[:notice] = t('accounts.confirm.successfully_confirmed_problem_first_time')
+          end
+        else
+          if self.controller_name == "password_resets"
+            flash[:notice] = t('password_resets.update.successfully_confirmed_problem')
+          else
+            flash[:notice] = t('accounts.confirm.successfully_confirmed_problem')
+          end
+        end
+        session[:return_to] = convert_problem_url(problem)
+      end
+    end
+    return true
+  end
 
   def add_json_errors(model_instance, json_hash)
     json_hash[:errors] = {}
@@ -574,6 +622,25 @@ class ApplicationController < ActionController::Base
           break
         end
       end
+    end
+  end
+  
+  def load_user_using_action_confirmation_token
+    @action_confirmation = ActionConfirmation.find_by_token(params[:email_token], :include => :user)
+    if @action_confirmation
+      @account_user = @action_confirmation.user
+    end
+    if ! @account_user
+      flash[:error] = t('accounts.confirm.could_not_find_account')
+      redirect_to root_url
+    end
+    if @account_user && @account_user.suspended? # disallow attempts to confirm from suspended acccounts
+      flash[:error] = t('shared.suspended.forbidden')
+      redirect_to root_url
+    end
+    if @account_user && current_user && @account_user != current_user
+      flash[:notice] = t('shared.login.must_be_logged_out')
+      redirect_to root_url
     end
   end
   
