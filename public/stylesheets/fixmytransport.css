@@ -1269,6 +1269,7 @@ ul.campaign-meta li span{
 				text-transform:none;
 				background:none;
 				box-shadow:none;
+				filter: none;
 				-moz-box-shadow:none;
 				-webkit-box-shadow:none;
 			}
