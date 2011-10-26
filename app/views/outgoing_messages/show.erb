@@ -1,24 +1,32 @@
-<div id="main-content" class="container">
+
 	<%- if current_user && current_user == @outgoing_message.author %>
-	  <%- form_for @campaign_update, :url => add_update_campaign_url(@outgoing_message.campaign) do |f| %>
-	    <div class='fieldset'>
+    <div id="banner">
+      <a id="home" href="/">FixMyTransport</a>
+      <div class="container">
+        <h1><%= t('campaigns.add_update.add_an_update') %></h1>
+      </div>
+    </div>
+     <div id="main-content" class="container">
+  	  <%- form_for @campaign_update, :url => add_update_campaign_url(@outgoing_message.campaign) do |f| %>
+  	    <div class='fieldset'>
 
-	      <div class='form-field'>
-	        <%- if @campaign_update.errors.on('text') %>
-	          <div class='error'>
-	            <%= error_message_on @campaign_update, :text %>
-	          </div>
-	        <%- end %>
-	        <%= f.label :text, t('outgoing_messages.show.what_does_this_mean') %>
-	        <%= raw f.hidden_field :outgoing_message_id %>
-	        <%= raw f.hidden_field :user_id %>
-	        <%= raw f.text_area :text, :cols => 40, :rows => 5 %>
-			<button class="button" type="submit"><%= t('outgoing_messages.show.add_update') %></button>
-	      </div>
-	    </div>
-
+  	      <div class='form-field'>
+  	        <%- if @campaign_update.errors.on('text') %>
+  	          <div class='error'>
+  	            <%= error_message_on @campaign_update, :text %>
+  	          </div>
+  	        <%- end %>
+  	        <%= f.label :text, t('outgoing_messages.show.what_does_this_mean') %>
+  	        <%= raw f.hidden_field :outgoing_message_id %>
+  	        <%= raw f.hidden_field :user_id %>
+  	        <%= raw f.text_area :text, :cols => 40, :rows => 5 %>
+  			    <button class="button" type="submit"><%= t('outgoing_messages.show.add_update') %></button>
+  	      </div>
+  	    </div>
+      </div>
 	  <%- end %>
 	<%- else  %>
+	  <div id="main-content" class="container">
 	  <%= raw t('outgoing_messages.show.login_to_add_update', :link => link_to(t('outgoing_messages.show.login_as', :user => h(@outgoing_message.campaign.initiator.name)), login_url(:redirect => request.request_uri)), :campaign => h(@outgoing_message.campaign.title)) %>
+	  </div>
 	<%- end %>
-</div>

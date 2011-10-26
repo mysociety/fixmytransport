@@ -676,6 +676,7 @@ ul.user-list {
 			}
 			#main-content .new_campaign_update .fieldset button {
 				margin: 10px 2px;
+				float: right;
 			}
 
 	.login-options{
