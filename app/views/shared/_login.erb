@@ -7,12 +7,16 @@
 		<%= render :partial => 'shared/create_account' %>
 	</div>
 
+	<div id="login-forgot-password" class="pane">
+    <%= render :partial => 'shared/forgot_password' %>
+	</div>
+
 	<%- if ['campaigns', 'problems', 'locations'].include?(controller.controller_name) && ['show', 'show_route', 'show_stop', 'show_stop_area', 'show_sub_route'].include?(controller.action_name) %>
   	<div id="comment-and-login" class="pane">
   		<%= render :partial => 'shared/comment_form', :locals => { :context => controller.controller_name } %>
   	</div>
 	<%- end %>
-	
+
 	<%- if controller.controller_name == 'campaigns' && controller.action_name == 'show' && current_user && current_user.supporter_or_initiator(@campaign) %>
     <div id="fb-share" class="pane">
       <%= render :partial => 'shared/facebook', :locals => { :width => "400" } %>

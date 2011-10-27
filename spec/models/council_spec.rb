@@ -18,6 +18,36 @@ describe Council do
     @council.emailable?(mock_model(Stop)).should be_false
   end
 
+  describe 'when asked for all councils' do
+
+    before do
+      MySociety::MaPit.stub!(:call).and_return({44 => {'name' => 'A council', 'id' => 44}})
+    end
+
+    it 'should map a hash of data returned by MaPit into model instances' do
+      councils = Council.find_all()
+      councils.first.name.should == 'A council'
+      councils.first.id.should == 44
+      councils.first.is_a?(Council).should == true
+    end
+
+  end
+  
+  describe 'when asked for all councils without PTEs' do 
+  
+    before do 
+      pte_area = mock_model(PassengerTransportExecutiveArea, :area_id => 44)
+      PassengerTransportExecutiveArea.stub!(:find).and_return([pte_area])
+      MySociety::MaPit.stub!(:call).and_return({44 => {'name' => 'A council', 'id' => 44}})
+    end
+  
+    it 'should not return any council whose area is covered by a PTE' do 
+      councils = Council.find_all_without_ptes()
+      councils.size.should == 0
+    end
+  
+  end
+
   describe 'when asked for a contact for a problem category' do
 
     before do

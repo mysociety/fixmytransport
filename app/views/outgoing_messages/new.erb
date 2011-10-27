@@ -29,22 +29,22 @@
 	  <%- end %>
 
 	  <div class='form-field'>
+	    <%= f.label :subject %>
 	    <%- if @outgoing_message.errors.on('subject') %>
 	      <div class='error'>
 	        <%= error_message_on @outgoing_message, 'subject' %>
 	      </div>
 	    <%- end %>
-	    <%= f.label :subject %>
 	    <%= raw f.text_field :subject, :size => 60 %>
 	  </div>
   
 	  <div class='form-field'>
+	    <%= f.label :body, t('outgoing_messages.new.message') %>
 	    <%- if @outgoing_message.errors.on('body') %>
 	      <div class='error'>
 	        <%= error_message_on @outgoing_message, 'body' %>
 	      </div>
 	    <%- end %>
-	    <%= f.label :body, t('outgoing_messages.new.message') %>
 	    <%= raw f.text_area :body, :rows => 12, :cols => 40 %>
 	    <%- if @outgoing_message.recipient %>
 	      <%= raw f.hidden_field :recipient_id %>

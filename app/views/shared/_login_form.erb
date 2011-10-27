@@ -33,7 +33,7 @@
     <%- end %>
 		<label for="user_session_password"><%= t('shared.login_form.password') %></label>
 		<input name="user_session[password]" id="user_session_password" type="password" />
-		<a href="<%= new_password_reset_path %>"><%= t('shared.login_form.forgot') %></a>
+		<a href="<%= new_password_reset_path %>" id="forgot-password"><%= t('shared.login_form.forgot') %></a>
 	</li>	
 	<li>
 		<button class="button" type="submit"><%= t('shared.login_form.sign_in') %></button>

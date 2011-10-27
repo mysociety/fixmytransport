@@ -1,14 +1,23 @@
 en:
   password_resets:
+    create:
+      please_enter_valid_email: "Please enter a valid email address"
     edit:
       password_updated: "Your password has been successfully updated."
       change_your_password: "Change your password"
-      could_not_find_account: "We're sorry, but we could not locate your account. If you are having issues, try copying and pasting the URL from your email into your browser, or restarting the reset password process."
       update_password_and_login: "Update my password and sign me in"
+      update_password_and_confirm_problem: "Reset my password and confirm my problem report"
+      update_password_and_confirm_support: "Reset my password and confirm my support"
+      update_password_and_confirm_comment: "Reset my password and confirm my comment"
+      could_not_find_account: "We're sorry, but we could not locate your account. If you are having issues, try copying and pasting the URL from your email into your browser, or restarting the reset password process."
     new:
-      no_user_found_with_email: "No user was found with that email address."
       forgot_password: "Forgot your password?"
       your_password_will_not_be_changed: "your password will not be changed."
       continue: "Continue"
       enter_your_email_address: "Enter your e-mail address, then click Continue. We'll email you a link to a page where you can easily create a new password."
       email: "Email"
+    update:
+      successfully_confirmed_problem_first_time: "You've successfully reset your password. <strong>Decide if you want other people's support and we'll send your problem report on its way.</strong>"
+      successfully_confirmed_comment: "You have successfully reset your password and confirmed your comment."
+      successfully_confirmed_support: "You have successfully reset your password and confirmed your support for this issue."
+      successfully_confirmed_problem: "You've successfully reset your password and confirmed your problem report."

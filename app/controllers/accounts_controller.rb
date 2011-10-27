@@ -1,7 +1,7 @@
 class AccountsController < ApplicationController
 
   before_filter :require_user, :only => [:edit, :update]
-  before_filter :require_no_user, :load_user_using_perishable_token, :only => [:confirm]
+  before_filter :load_user_using_action_confirmation_token, :only => [:confirm]
 
   def update
     current_user.update_attributes(params[:user])
@@ -13,8 +13,10 @@ class AccountsController < ApplicationController
     current_user.password = params[:user][:password]
     current_user.password_confirmation = params[:user][:password_confirmation]
     # if someone logged in by confirmation creates a password here, register their account
-    # and set the flag showing that they've confirmed their password
+    # and set the flag showing that they've confirmed their password, also validate the password
+    # as if new
     if params[:user][:password]
+      current_user.force_password_validation = true
       current_user.registered = true
       current_user.confirmed_password = true
     end
@@ -113,63 +115,27 @@ class AccountsController < ApplicationController
   end
 
   def confirm
-    if request.post?
-      # if the account has a password, set the user as registered, save
-      if !@account_user.crypted_password.blank?
-        @account_user.registered = true
-        @account_user.confirmed_password = true
-        @account_user.save_without_session_maintenance
-        flash[:notice] = t('accounts.confirm.successfully_confirmed_account')
-      else
-        flash[:notice] = t('accounts.confirm.logged_in_set_password')
-        session[:return_to] = edit_account_url
-      end
-      # log in the user.
-      UserSession.login_by_confirmation(@account_user)
-      if @account_user.post_login_action
-        case @account_user.post_login_action.to_sym
-        when :join_campaign
-          campaign_supporter = CampaignSupporter.find_by_token(params[:email_token])
-          if campaign_supporter
-            campaign_supporter.confirm!
-            session[:return_to] = campaign_path(campaign_supporter.campaign)
-            flash[:notice] = t('accounts.confirm.successfully_confirmed_support')
-          end
-        when :add_comment
-          comment = Comment.find_by_token(params[:email_token])
-          if comment
-            comment.confirm!
-            session[:return_to] = @template.commented_url(comment.commented)
-            flash[:notice] = t('accounts.confirm.successfully_confirmed_comment')
-          end
-        when :create_problem
-          problem = Problem.find_by_token(params[:email_token])
-          if problem
-            session[:return_to] = convert_problem_url(problem)
-            flash[:notice] = t('accounts.confirm.successfully_confirmed_problem')
-          end
-        end
-        @account_user.post_login_action = nil
-        @account_user.save_without_session_maintenance
-      end
-      redirect_back_or_default root_url
+    # if the account has a password, set the user as registered, save
+    if !@account_user.crypted_password.blank?
+      @account_user.registered = true
+      @account_user.confirmed_password = true
+      @account_user.save_without_session_maintenance
+      flash[:notice] = t('accounts.confirm.successfully_confirmed_account')
+    else
+      flash[:notice] = t('accounts.confirm.logged_in_set_password')
+      session[:return_to] = edit_account_url
     end
+    # a false return value indicates that a redirect has been performed
+    if perform_saved_login_action == false
+      return
+    end
+    # log in the user.
+    UserSession.login_by_confirmation(@account_user)      
+    redirect_back_or_default root_url
   end
 
   private
 
-  def load_user_using_perishable_token
-    # not currently using a timeout on the tokens
-    @account_user = User.find_using_perishable_token(params[:email_token], token_age=0)
-    unless @account_user
-      flash[:error] = t('accounts.confirm.could_not_find_account')
-      redirect_to root_url
-    end
-    if @account_user && @account_user.suspended? # disallow attempts to confirm from suspended acccounts
-      flash[:error] = t('shared.suspended.forbidden')
-      redirect_to root_url
-    end
-  end
 
   def send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model, new_account)
     # no one's used this email before
