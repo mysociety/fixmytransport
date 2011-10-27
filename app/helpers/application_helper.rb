@@ -72,6 +72,10 @@ module ApplicationHelper
     small ? SMALL_ICON_WIDTH : LARGE_ICON_WIDTH
   end
 
+  def js_translation_list(keys)
+      keys.map {|k| "'#{k}': \"#{I18n.translate(k)}\""}.join(",\n        ")
+  end
+  
   # Generate a hash of data used to render the point on a map
   # Required options:
   # :link_type - [:problem|:location] - link stop to problem reporting
@@ -346,6 +350,19 @@ module ApplicationHelper
     end
   end
 
+  def admin_star_html(want_display, star_type=:administrator)
+    if want_display
+      if star_type == :expert
+        star_html = '&#9734;'
+        title = t('admin.user_role_expert')
+      else
+        star_html = '&#9733;'
+        title = t('admin.user_role_admin')
+      end
+      return "<span class='admin-star' title='#{title}'>#{star_html}</span>"
+    end
+  end
+  
   def add_comment_url(commentable)
     case commentable
     when Campaign

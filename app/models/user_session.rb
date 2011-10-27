@@ -5,7 +5,11 @@ class UserSession < Authlogic::Session::Base
 
   # login a user without validating them - to be used in the context of confirmation tokens
   def self.login_by_confirmation(user)
-    session = UserSession.create(user, remember_me=false)
+    if user && user.suspended?
+      session = nil
+    else
+      session = UserSession.create(user, remember_me=false)
+    end
   end
   
   # set a flag that indicates that the user is trying to log in with a password

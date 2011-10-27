@@ -5,6 +5,7 @@ class ProblemsController < ApplicationController
                                                :find_stop,
                                                :find_bus_route,
                                                :find_train_route,
+                                               :find_ferry_route,
                                                :find_other_route,
                                                :browse]
   before_filter :find_visible_problem, :only => [:show, :update, :add_comment]
@@ -67,7 +68,7 @@ class ProblemsController < ApplicationController
   def create
     @problem = Problem.new(params[:problem])
     @problem.responsibilities.each do |responsibility|
-      if !@problem.location.responsible_organizations.include?(responsibility.organization)
+      if responsibility.organization_id && !@problem.location.responsible_organizations.include?(responsibility.organization)
         @problem.responsibilities.delete(responsibility)
       end
     end
@@ -100,8 +101,12 @@ class ProblemsController < ApplicationController
       end
     end
     if params[:convert] == 'yes'
-      @problem.create_new_campaign
-      @problem.confirm!
+      # make sure we have a lock on the record for creating a campaign to prevent duplicates
+      Problem.transaction do
+        @problem = Problem.find(params[:id], :lock => true)
+        @problem.create_new_campaign
+        @problem.confirm!
+      end
       redirect_to(add_details_campaign_url(@problem.campaign.id)) and return
     elsif params[:convert] == 'no'
       @problem.confirm!
@@ -136,7 +141,7 @@ class ProblemsController < ApplicationController
     @title = t('problems.find_route.find_a_route_title')
   end
 
-  def find_bus_route
+  def find_bus_route    
     @title = t('problems.find_bus_route.title')
     if params[:show_all]
       @limit = nil
@@ -149,6 +154,10 @@ class ProblemsController < ApplicationController
         render :find_bus_route
         return
       end
+      
+      # locality id is only valid if user did not edit the area name after geolocation autofilled in their form
+      locality_id = params[:geo_area_name] == params[:area]? params[:locality_id] : nil
+
       location_search = LocationSearch.new_search!(session_id, :route_number => params[:route_number],
                                                                :location_type => 'Bus route',
                                                                :area => params[:area])
@@ -156,7 +165,8 @@ class ProblemsController < ApplicationController
                                                          params[:area],
                                                          @limit,
                                                          ignore_area=false,
-                                                         params[:area_type])
+                                                         params[:area_type],
+                                                         locality_id)
       if route_info[:areas]
         @areas = route_info[:areas]
         @name = params[:area]
@@ -169,7 +179,7 @@ class ProblemsController < ApplicationController
       elsif route_info[:routes].size == 1
         location = route_info[:routes].first
         redirect_to new_problem_url(:location_id => location.id, :location_type => 'Route')
-      else
+      else        
         if route_info[:error] == :area_not_found
           @error_message = t('problems.find_bus_route.area_not_found_routes', :area => params[:area])
         elsif route_info[:error] == :postcode_not_found
@@ -264,6 +274,45 @@ class ProblemsController < ApplicationController
     end
   end
 
+  # currently dupped from find_other_route
+  def find_ferry_route
+    @title = t('problems.find_ferry_route.title')
+    @error_messages = Hash.new{ |hash, key| hash[key] = [] }
+    if params[:to]
+      @from_stop = params[:from]
+      @to_stop = params[:to]
+      if @from_stop.blank? or @to_stop.blank?
+        @error_messages[:base] << t('problems.find_ferry_route.please_enter_from_and_to')
+      else
+        location_search = LocationSearch.new_search!(session_id, :from => @from_stop,
+                                                                 :to => @to_stop,
+                                                                 :location_type => 'Ferry route')
+        route_info = Gazetteer.ferry_route_from_stations(@from_stop,
+                                                         params[:from_exact],
+                                                         @to_stop,
+                                                         params[:to_exact])
+        setup_from_and_to_stops(route_info)
+        if route_info[:errors]
+          @error_messages = route_info[:errors]
+          location_search.fail
+          render :find_ferry_route
+          return
+        elsif route_info[:routes].empty?
+          location_search.fail
+          @error_messages[:base] << t('problems.find_ferry_route.route_not_found')
+        elsif route_info[:routes].size == 1
+          location = route_info[:routes].first
+          redirect_to new_problem_url(:location_id => location.id, :location_type => 'Route')
+        else
+          @locations = route_info[:routes]
+          map_params_from_location(@locations, find_other_locations=false)
+          render :choose_route
+          return
+        end
+      end
+    end
+  end
+  
   def choose_location
   end
 
@@ -281,12 +330,21 @@ class ProblemsController < ApplicationController
   end
   
   # return a truncated stop (don't need all the data)
+  # note: params[:transport_mode] is a canonical string because it's also being used for translation: see fmt_geos.js
   def request_nearest_stop
-    if is_valid_lon_lat?(params[:lon], params[:lat]) # don't expose this is a service without a session_id?
-      nearest_stop = find_nearest_stop(params[:lon], params[:lat], params[:transport_mode])
-      render :json => {:name  => nearest_stop.name, :area => nearest_stop.area}
+    if is_valid_lon_lat?(params[:lon], params[:lat]) # don't expose this as a service without a session_id?
+      transport_mode = case params[:transport_mode]
+        when 'ferry'
+          'Ferry'
+        when 'other'
+          'Tram/Metro'
+        when 'train'
+          'Train'
+      end
+      nearest_stop = find_nearest_stop(params[:lon], params[:lat], transport_mode)
+      render :json => {:name  => nearest_stop.name, :area => nearest_stop.area, :locality_id => nearest_stop.locality_id}
     else
-      render :json => "invalid" # harsh
+      render :json => "invalid lon/lat" # harsh
     end
   end
   
@@ -441,7 +499,7 @@ class ProblemsController < ApplicationController
 
   def setup_problem_advice(problem)
     advice_params = { :location_type => @template.readable_location_type(problem.location) }
-    responsible_orgs = problem.location.responsible_organizations    
+    responsible_orgs = problem.location.responsible_organizations
     emailable_orgs, unemailable_orgs = responsible_orgs.partition{ |org| org.emailable?(problem.location) }
 
     if responsible_orgs.size == 1

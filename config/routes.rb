@@ -44,6 +44,7 @@ ActionController::Routing::Routes.draw do |map|
                                             :find_route => :get,
                                             :find_bus_route => :get,
                                             :find_train_route => :get,
+                                            :find_ferry_route => :get,
                                             :find_other_route => :get }
 
   # issues index
@@ -164,6 +165,7 @@ ActionController::Routing::Routes.draw do |map|
                             :action => 'feedback',
                             :conditions => { :method => [:get, :post] }
   map.facebook '/facebook', :controller => 'static', :action => 'facebook'
+  map.howto '/howto', :controller => 'static', :action => 'howto'
 
   # admin
   map.namespace :admin do |admin|
@@ -177,7 +179,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :pte_contacts, :only => [:show, :new, :create, :update]
     admin.resources :stops
     admin.resources :stop_areas
-    admin.resources :users, :only => [:index]
+    admin.resources :users, :only => [:show, :index, :update]
     admin.resources :problems, :only => [:show, :index, :update], :member => { :resend => [:post] }
     admin.resources :campaigns, :only => [:show, :index, :update]
     admin.resources :campaign_updates, :only => [:show, :update]
@@ -192,6 +194,8 @@ ActionController::Routing::Routes.draw do |map|
                                                  :action => 'autocomplete_for_name'
     admin.connect "/autocomplete_for_locality_name", :controller => 'localities',
                                                  :action => 'autocomplete_for_name'
+    admin.connect '/comment_league', :controller => 'users', :action => 'comment_league'
+    
   end
 
 end

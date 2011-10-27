@@ -2060,6 +2060,14 @@ body.facebook-canvas .button {
  font-size: 2em;
 }
 
+/*===[ HowTo (some verbose lists) ]===*/
+.howto ul li, .howto ul li p {
+  margin: 1em 0;
+}
+.howto ul li ul {
+  list-style-type: circle;
+}
+
 .location-status {
   line-height:1.2;
   display:inline-block;
@@ -2102,6 +2110,17 @@ body.facebook-canvas .button {
 /*===[ Profile ]===*/
 .user-bio {
   display: block;
+}
+
+/*===[ Suspended profiles ]===*/
+.user-suspended {
+  border: 1px dashed #dddddd;
+  padding: 0.5em 1em;
+  margin: 1em 0;
+}
+
+.user-suspended-reason {
+  padding:0.5em 0;
 }
 
 /*===[ Issue Browsing ]===*/
@@ -2147,6 +2166,10 @@ body.facebook-canvas .button {
   padding: 0.5em;
   font-weight: bold;
   border:4px solid #cdeaf2;
+  border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+
 }
 .geolocate-button:hover{
   cursor:pointer;
@@ -2156,7 +2179,15 @@ body.facebook-canvas .button {
   background: #cdeaf2;
   color: #048FC2;
   padding: 0.5em;
-  line-height: 1.1em;
+}
+.geolocate-busy { /* spinner */
+  background-image: url('/images/busy_spinner_24_x_24.gif');
+  background-position: 4px 4px;
+  background-repeat: no-repeat;
+  padding-left: 36px;
+}
+.geolocate-done { /* spinner removed */
+  padding-left: 36px;
 }
 
 /*===[ Narrow screens]===*/

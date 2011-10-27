@@ -37,7 +37,8 @@ describe UserSessionsController do
     
     before do
       @controller.stub!(:current_user).and_return(nil)
-      @user_session = mock_model(UserSession, :save => true)
+      @mock_user = mock_model(User, :suspended? => false)
+      @user_session = mock_model(UserSession, :save => true, :destroy => true, :record => @mock_user)
       UserSession.stub!(:new).and_return(@user_session) 
       @default_params = {:format=>"html", :user_session => {:login => 'test@example.com', 
                                                             :password => 'mypassword',
@@ -86,7 +87,42 @@ describe UserSessionsController do
           make_request(@default_params.update({:format=>"json"}))
           JSON.parse(response.body)['success'].should == true
         end
+              
+      end
       
+      describe 'if the user is suspended' do
+        
+        before do
+          @mock_user.stub!(:suspended?).and_return(true)
+        end
+        
+        it 'should not create a user session and send an error message' do
+          @user_session.should_receive(:destroy)
+          make_request
+          flash[:error].should == 'Unable to authenticate &mdash; this account has been suspended.'
+        end
+
+        it 'should disregard any redirects' do
+          make_request(@default_params.update(:next_action => @next_action_data))
+          response.should_not redirect_to("/another_url")
+        end
+
+        describe 'if the request asks for json' do 
+
+          before do
+            @mock_errors = [[:base, "error text"]]
+            @user_session.stub!(:errors).and_return(@mock_errors)
+            @controller.stub!(:add_json_errors).and_return()
+          end
+          
+          it 'should return a json hash with failure and base error message' do
+            @mock_errors.should_receive(:add_to_base).with("Unable to authenticate &mdash; this account has been suspended.") 
+            make_request(@default_params.update({:format=>"json"}))
+            JSON.parse(response.body)['success'].should == false
+          end
+
+        end
+
       end
       
     end

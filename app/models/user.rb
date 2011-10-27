@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
   validate :validate_real_name
   validates_uniqueness_of :email, :case_sensitive => false, :unless => :skip_email_uniqueness_validation
-  attr_protected :password, :password_confirmation, :is_expert, :is_admin
+  attr_protected :password, :password_confirmation, :is_expert, :is_admin, :is_suspended
   has_many :assignments
   has_many :campaign_supporters, :foreign_key => :supporter_id
   has_many :campaigns, :through => :campaign_supporters
@@ -94,6 +94,10 @@ class User < ActiveRecord::Base
     !registered
   end
 
+  def suspended?
+    is_suspended
+  end
+  
   def first_name
     name.split(' ').first
   end
@@ -166,6 +170,29 @@ class User < ActiveRecord::Base
                                                       target.id, target.class.to_s]).nil?
   end
 
+  def self.name_or_email_or_id_conditions(query)
+    query_clauses = []
+    query_params = []
+    if ! query.blank?
+      query = query.downcase
+      query_clause = "(LOWER(name) LIKE ?
+                      OR LOWER(name) LIKE ? 
+                      OR LOWER(email) LIKE ? 
+                      OR LOWER(email) LIKE ?"
+      query_params = [ "#{query}%", "%#{query}%", 
+                       "#{query}%", "%#{query}%"]
+      # numeric?
+      if query.to_i.to_s == query
+        query_clause += " OR id = ?"
+        query_params << query.to_i
+      end
+      query_clause += ")"
+      query_clauses << query_clause
+    end
+    conditions = [query_clauses.join(" AND ")] + query_params
+  end
+
+
   # class methods
 
   def self.get_facebook_data(access_token)
@@ -210,7 +237,11 @@ class User < ActiveRecord::Base
         success = user.save_without_session_maintenance
       end
       if success
-        UserSession.create(user, remember_me=remember_me)
+        if user.suspended?
+          raise I18n.translate('shared.suspended.forbidden')
+        else
+          UserSession.create(user, remember_me=remember_me)
+        end
       else
         raise "Error in external auth. Facebook data #{facebook_data.inspect} #{user.errors.full_messages.join(",")}"
       end

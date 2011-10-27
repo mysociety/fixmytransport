@@ -90,6 +90,15 @@ describe Admin::RoutesController do
       TrainRoute.stub!(:new).and_return(@route)
     end
 
+    describe 'if no data is posted' do 
+    
+      it 'should render the "new" template' do 
+        post :create, {}
+        response.should render_template("new")
+      end
+    
+    end
+
     it 'should create a new route with the route params' do 
       TrainRoute.should_receive(:new).with('name' => 'a new route', 'transport_mode_id' => '6').and_return(@route)
       post :create, { :route => { :name => 'a new route', :transport_mode_id => '6' } }

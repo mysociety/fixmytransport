@@ -17,8 +17,8 @@ MAILTO=louise@mysociety.org
 */5 * * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/send-problem-reports.lock /data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-problem-reports || echo "stalled?"
 
 # Once a day - send update about missing emails/missing operators
-!!(* if ($vhost eq 'louise.transport.mysociety.org') { *)!!
-16 11 * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/send-problem-reports.lock "/data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-problem-reports verbose" || echo "stalled?" | mail -s "[FixMyTransport] Missing operators and emails" louise@mysociety.org
+!!(* if ($vhost eq 'www.fixmytransport.com') { *)!!
+9 9 * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/send-problem-reports.lock "/data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-problem-reports verbose team@fixmytransport.com" || echo "stalled?"
 !!(* } else { *)!!
 9 9 * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/send-problem-reports.lock "/data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-problem-reports verbose" || echo "stalled?"
 !!(* } *)!!

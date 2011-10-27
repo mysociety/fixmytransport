@@ -107,8 +107,30 @@ en:
       on_the: "on the"
       at: "at"
       one_off_report: "one-off report"
+    suspended:
+      forbidden: "Unable to authenticate &mdash; this account has been suspended."
     wrong_user:
       wrong_user: "To %{requested_action}, you'll need to %{logout_link}, and sign in as %{name}."
       logout_link: "sign out"
     operator_links:
       operated_by: "operated by %{operators}"
+    geolocate:
+      use_current_location: "Use your current location"
+      cancelled: "Geolocation cancelled"
+      no_lookup: "Could not look up location"
+      no_result: "No result returned"
+      unknown_error: "Unknown error"
+      cannot_locate: "Sorry... can't auto-locate you."
+      fetching: "Fetching location..."
+      loading: "Fetching location done, loading..."
+      loading_bus: "Fetching location done, loading bus stop..."
+      loading_train: "Fetching location done, loading train station..."
+      loading_ferry: "Fetching location done, loading ferry stop..."
+      loading_other: "Fetching location done, loading tram/metro/tube stop..."
+      loading_done: "done"
+      
+      
+      
+      
+      
+      

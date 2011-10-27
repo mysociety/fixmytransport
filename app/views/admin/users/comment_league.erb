@@ -1,0 +1,32 @@
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th><%= t('admin.user_name')%></th>
+    <th><%= t('admin.email_address')%></th>
+    <th><%= t('admin.comment_count')%></th>
+  </tr>
+  <%- @users.each do |user| %>
+    <tr class='<%= cycle("odd", "even") %>'>
+      <td><%= raw admin_star_html(user.is_admin) %></td>
+      <td><%= raw admin_star_html(user.is_expert, :expert) %></td>
+      <td>
+        <a href="<%= admin_url(admin_user_path(user)) %>">
+          <span class="admin-suspended-<%= user.is_suspended %>">
+            <%- if user.name.blank? %>
+              <i>&lt;<%= t('admin.user_no_name')%>&gt;</i>
+            <%- else %>
+              <%= user.name %>
+            <%- end %>
+          </span>
+        </a>
+      </td>
+      <td>
+        <%= user.email %>
+      </td>
+      <td>
+        <%= user.comment_count %>
+      </td>
+    </tr>
+  <%- end %>
+</table>
