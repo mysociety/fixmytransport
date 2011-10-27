@@ -106,7 +106,7 @@ class Gazetteer
     return {}
   end
 
-  def self.bus_route_from_route_number(route_number, area, limit, ignore_area=false, area_type=nil)
+  def self.bus_route_from_route_number(route_number, area, limit, ignore_area=false, area_type=nil, locality_id=nil)
     error = nil
     select_clause = 'SELECT distinct routes.id, routes.cached_description'
     from_clause = 'FROM routes'
@@ -121,27 +121,35 @@ class Gazetteer
     if ignore_area
       error = :route_not_found_in_area
     else
-      area = area.strip
-      # area is postcode
-      coord_info = self.coords_from_postcode(area)
-      if coord_info == :not_found or coord_info == :bad_request 
-        error = :postcode_not_found
-      elsif coord_info == :not_postcode
-        areas = Locality.find_areas_by_name(area, area_type)
-        if areas.size > 1
-          return { :areas => areas }
-        end
-      elsif coord_info == :service_unavailable
-        error = :service_unavailable
-      elsif !coord_info['easting']
-        error = :postcode_not_found
+      # currently specific_locality is only passed with geolocation, so perhaps this should be
+      # conditional on MySociety::Config.get('GEOLOCATION_ENABLED', false) being true
+      specific_locality = locality_id.nil? ? nil : Locality.find_by_id(locality_id)
+      if specific_locality
+        # FIXME:DW: this doesn't seem to be restricting in the way I expected: committed but not right yet
+        areas = Locality.find_by_coordinates(specific_locality.easting, specific_locality.northing, 1000)
       else
-        if MySociety::Validate.is_valid_partial_postcode(area)
-          distance = 5000
+        area = area.strip
+        # area is postcode
+        coord_info = self.coords_from_postcode(area)
+        if coord_info == :not_found or coord_info == :bad_request 
+          error = :postcode_not_found
+        elsif coord_info == :not_postcode
+          areas = Locality.find_areas_by_name(area, area_type)
+          if areas.size > 1
+            return { :areas => areas }
+          end
+        elsif coord_info == :service_unavailable
+          error = :service_unavailable
+        elsif !coord_info['easting']
+          error = :postcode_not_found
         else
-          distance = 1000
+          if MySociety::Validate.is_valid_partial_postcode(area)
+            distance = 5000
+          else
+            distance = 1000
+          end
+          areas = Locality.find_by_coordinates(coord_info['easting'], coord_info['northing'], distance)
         end
-        areas = Locality.find_by_coordinates(coord_info['easting'], coord_info['northing'], distance)
       end
       if areas.empty? and !error
         error = :area_not_found

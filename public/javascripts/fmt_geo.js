@@ -25,7 +25,7 @@ function doGeolocate(e, inputId) {
     geo_position_js.getCurrentPosition(
       function(position) {
         if ($('.fmt-has-geolocation').size()==2) { 
-          // page with two geolocates: train/ferry/metro: no auto submit here, user must press Go, using title to determine mode
+          // page with two geolocates: train/ferry/metro:
           var transport_mode = 'train';
           if (document.title.search(/metro/i) != -1) {
               transport_mode = 'other'
@@ -46,13 +46,22 @@ function doGeolocate(e, inputId) {
               $input.closest('form').find("input:text, select").not("#" + inputId).focus(); // ugh: the other input(s) in this form
             }
           );
-        } else if ($('#bus_route_form').size()) { // this is find_bus_route: get locality of nearest stop, auto submits if we have a route number
+        } else if ($('#bus_route_form').size()) { // this is find_bus_route: get locality of nearest stop
           $('#geolocate-status-' + inputId).text($().fmt_translate('shared.geolocate.loading_bus'));
           $.getJSON(
             '/request_nearest_stop',
             {lon:position.coords.longitude, lat:position.coords.latitude},
             function(stop_data){
               $("#"+inputId).val(stop_data.area);
+              // add hidden fields: id and area name (to detect edits *after* geolocation)
+              if ($("#locality_id").size() == 0) {
+                $('#bus_route_form').append("<input type='hidden' name='locality_id' id='locality_id'/>");
+              }
+              if ($("#geo_area_name").size() == 0) {
+                $('#bus_route_form').append("<input type='hidden' name='geo_area_name' id='geo_area_name'/>");
+              }
+              $("#locality_id").val(stop_data.locality_id);
+              $("#geo_area_name").val(stop_data.area);
               if ($("#route_number").val() == $("#guidance-route-number").text()) {
                 $('#route_number').focus();
               }

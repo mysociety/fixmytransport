@@ -249,7 +249,8 @@ describe ProblemsController do
                                                                     'London',
                                                                     10,
                                                                     ignore_area=false,
-                                                                    area_type=nil).and_return({ :routes => [] })
+                                                                    area_type=nil,
+                                                                    locality_id=nil).and_return({ :routes => [] })
         make_request(:route_number => 'C10', :area => 'London')
       end
 

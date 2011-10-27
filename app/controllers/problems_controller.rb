@@ -141,7 +141,7 @@ class ProblemsController < ApplicationController
     @title = t('problems.find_route.find_a_route_title')
   end
 
-  def find_bus_route
+  def find_bus_route    
     @title = t('problems.find_bus_route.title')
     if params[:show_all]
       @limit = nil
@@ -154,6 +154,10 @@ class ProblemsController < ApplicationController
         render :find_bus_route
         return
       end
+      
+      # locality id is only valid if user did not edit the area name after geolocation autofilled in their form
+      locality_id = params[:geo_area_name] == params[:area]? params[:locality_id] : nil
+
       location_search = LocationSearch.new_search!(session_id, :route_number => params[:route_number],
                                                                :location_type => 'Bus route',
                                                                :area => params[:area])
@@ -161,7 +165,8 @@ class ProblemsController < ApplicationController
                                                          params[:area],
                                                          @limit,
                                                          ignore_area=false,
-                                                         params[:area_type])
+                                                         params[:area_type],
+                                                         locality_id)
       if route_info[:areas]
         @areas = route_info[:areas]
         @name = params[:area]
@@ -174,7 +179,7 @@ class ProblemsController < ApplicationController
       elsif route_info[:routes].size == 1
         location = route_info[:routes].first
         redirect_to new_problem_url(:location_id => location.id, :location_type => 'Route')
-      else
+      else        
         if route_info[:error] == :area_not_found
           @error_message = t('problems.find_bus_route.area_not_found_routes', :area => params[:area])
         elsif route_info[:error] == :postcode_not_found
@@ -327,7 +332,7 @@ class ProblemsController < ApplicationController
   # return a truncated stop (don't need all the data)
   # note: params[:transport_mode] is a canonical string because it's also being used for translation: see fmt_geos.js
   def request_nearest_stop
-    if is_valid_lon_lat?(params[:lon], params[:lat]) # don't expose this is a service without a session_id?
+    if is_valid_lon_lat?(params[:lon], params[:lat]) # don't expose this as a service without a session_id?
       transport_mode = case params[:transport_mode]
         when 'ferry'
           'Ferry'
@@ -337,9 +342,9 @@ class ProblemsController < ApplicationController
           'Train'
       end
       nearest_stop = find_nearest_stop(params[:lon], params[:lat], transport_mode)
-      render :json => {:name  => nearest_stop.name, :area => nearest_stop.area}
+      render :json => {:name  => nearest_stop.name, :area => nearest_stop.area, :locality_id => nearest_stop.locality_id}
     else
-      render :json => "invalid" # harsh
+      render :json => "invalid lon/lat" # harsh
     end
   end
   
