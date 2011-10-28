@@ -7,10 +7,12 @@
 	<h4><a href="<%= problem_url(problem) %>"><%= problem.subject %></a></h4>
 	<p><%= raw link_to(problem.location.description, location_url(problem.location)) %></p>
 	<%- if context != :browse_issues %>
-	  <p><%= t('shared.problem.by')%>
-	    <a href="<%= profile_url(problem.reporter) %>"><%= problem.reporter.name %>
-	    </a>
-	  </p>
+	  <%- if problem.reporter %>
+	    <p><%= t('shared.problem.by')%>
+	      <a href="<%= profile_url(problem.reporter) %>"><%= problem.reporter.name %>
+	      </a>
+	    </p>
+	  <%- end %>
 	<%- end %>
 	<dl class="details">
 		<dt><%= t('shared.problem.added') %></dt>
