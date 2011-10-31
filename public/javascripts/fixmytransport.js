@@ -167,10 +167,11 @@ $(document).ready(function(){
        addGuidanceField('#guidance-route-number', '#bus_route_form #route_number');
        addGuidanceField('#guidance-area', '#bus_route_form #area');
        addGuidanceField('#guidance-to', '#train_route_form #to');
-       addGuidanceField('#guidance-to', '#other_route_form #to');
        addGuidanceField('#guidance-from', '#train_route_form #from');
+       addGuidanceField('#guidance-to', '#other_route_form #to');
        addGuidanceField('#guidance-from', '#other_route_form #from');
-
+       addGuidanceField('#guidance-to', '#ferry_route_form #to');
+       addGuidanceField('#guidance-from', '#ferry_route_form #from');
      }
 
 	/* Dialog Boxes

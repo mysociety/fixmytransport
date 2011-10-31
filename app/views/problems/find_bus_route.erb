@@ -17,14 +17,14 @@
 	<ul class="form-list">
 	    <li class="fieldset">
 	      <%= raw label_tag t('problems.find_bus_route.enter_route_number') %>
-	      <%= raw text_field_tag 'route_number', params[:route_number] %>
-	      <div id='guidance-route-number' class='guidance'>e.g. C10</div>
+	      <div class="input-border"><%= raw text_field_tag 'route_number', params[:route_number] %></div>
+	      <div id='guidance-route-number' class='guidance'><%= t('problems.find_bus_route.route_number_example')%></div>
 	    </li>
     
 	    <li class="fieldset fmt-has-geolocation">
 	      <%= raw label_tag t('problems.find_bus_route.enter_town_or_area') %>
-	      <%= raw text_field_tag 'area', params[:area] %>
-	      <div id='guidance-area' class='guidance'>e.g. London </div>
+	      <div class="input-border"><%= raw text_field_tag 'area', params[:area] %></div>
+	      <div id='guidance-area' class='guidance'><%= t('problems.find_bus_route.area_example')%></div>
 	    </li>
 		<li><button class="point-go" type="submit"><%= t('problems.find_bus_route.go') %></button></li>
 		<li>

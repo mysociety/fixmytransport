@@ -54,6 +54,8 @@ en:
       postcode_service_not_available: "Sorry, our postcode lookup service is currently unavailable, please try again in a few minutes."
       enter_route_number: "Route number"
       go: "Go"
+      route_number_example: "e.g. C10"
+      area_example: "e.g. London"
       route_not_found_in_area: "We couldn't find a route number %{route_number} in %{area}."
     find_ferry_route:
       title: "Finding a ferry route"
