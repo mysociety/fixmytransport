@@ -32,7 +32,7 @@ describe Gazetteer do
       end
 
     end
-    
+
     describe 'when the postcode finder returns a service unavailable error' do
 
       before do
@@ -67,6 +67,16 @@ describe Gazetteer do
 
     end
 
+    describe 'when given some geolocation parameters' do
+
+      it 'should not return an "area not found" error' do
+        geolocation_data = {:lat => 51.4624884, :lon => -0.127943, :accuracy => 800 }
+        result = Gazetteer.bus_route_from_route_number('345', 'Clapham', 10,
+                                                       ignore_area=false, nil, geolocation_data)
+        result[:error].should_not == :area_not_found
+      end
+    end
+
   end
 
   describe 'when finding a place from a name' do
@@ -86,7 +96,7 @@ describe Gazetteer do
       end
 
     end
-    
+
     describe 'when the postcode finder returns a service unavailable error' do
 
       before do

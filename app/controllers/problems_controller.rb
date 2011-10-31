@@ -13,9 +13,9 @@ class ProblemsController < ApplicationController
   skip_before_filter :require_beta_password, :only => [:frontpage]
   skip_before_filter :make_cachable, :except => [:issues_index, :index, :show]
   before_filter :long_cache, :except => [:issues_index, :index, :create, :show]
-  
+
   include FixMyTransport::GeoFunctions
-  
+
   def issues_index
     @title = t('problems.issues_index.title')
     @issues = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
@@ -132,7 +132,7 @@ class ProblemsController < ApplicationController
   def find_stop
     @title = t('problems.find_stop.title')
     options = { :find_template => :find_stop,
-                :browse_template => :choose_location, 
+                :browse_template => :choose_location,
                 :map_options => { :mode => :find } }
     return find_area(options)
   end
@@ -141,7 +141,7 @@ class ProblemsController < ApplicationController
     @title = t('problems.find_route.find_a_route_title')
   end
 
-  def find_bus_route    
+  def find_bus_route
     @title = t('problems.find_bus_route.title')
     if params[:show_all]
       @limit = nil
@@ -154,10 +154,20 @@ class ProblemsController < ApplicationController
         render :find_bus_route
         return
       end
-      
-      # locality id is only valid if user did not edit the area name after geolocation autofilled in their form
-      locality_id = params[:geo_area_name] == params[:area]? params[:locality_id] : nil
 
+      # geolocation params are only valid if user did not edit the area name after geolocation
+      # autofilled their form
+      lat = params[:geo_area_name] == params[:area]? params[:lat] : nil
+      lon = params[:geo_area_name] == params[:area]? params[:lon] : nil
+      accuracy = params[:geo_area_name] == params[:area]? params[:accuracy] : nil
+      if is_valid_lon_lat?(lon, lat)
+        accuracy = accuracy.to_i
+        geolocation_data = { :lat => lat,
+                             :lon => lon,
+                             :accuracy => accuracy }
+      else
+        geolocation_data = {}
+      end
       location_search = LocationSearch.new_search!(session_id, :route_number => params[:route_number],
                                                                :location_type => 'Bus route',
                                                                :area => params[:area])
@@ -166,7 +176,7 @@ class ProblemsController < ApplicationController
                                                          @limit,
                                                          ignore_area=false,
                                                          params[:area_type],
-                                                         locality_id)
+                                                         geolocation_data)
       if route_info[:areas]
         @areas = route_info[:areas]
         @name = params[:area]
@@ -179,7 +189,7 @@ class ProblemsController < ApplicationController
       elsif route_info[:routes].size == 1
         location = route_info[:routes].first
         redirect_to new_problem_url(:location_id => location.id, :location_type => 'Route')
-      else        
+      else
         if route_info[:error] == :area_not_found
           @error_message = t('problems.find_bus_route.area_not_found_routes', :area => params[:area])
         elsif route_info[:error] == :postcode_not_found
@@ -312,7 +322,7 @@ class ProblemsController < ApplicationController
       end
     end
   end
-  
+
   def choose_location
   end
 
@@ -328,7 +338,7 @@ class ProblemsController < ApplicationController
                 :map_options => { :mode => :browse } }
     return find_area(options)
   end
-  
+
   # return a truncated stop (don't need all the data)
   # note: params[:transport_mode] is a canonical string because it's also being used for translation: see fmt_geos.js
   def request_nearest_stop
@@ -342,12 +352,14 @@ class ProblemsController < ApplicationController
           'Train'
       end
       nearest_stop = find_nearest_stop(params[:lon], params[:lat], transport_mode)
-      render :json => {:name  => nearest_stop.name, :area => nearest_stop.area, :locality_id => nearest_stop.locality_id}
+      render :json => { :name  => nearest_stop.name,
+                        :area => nearest_stop.area,
+                        :locality_id => nearest_stop.locality_id }
     else
       render :json => "invalid lon/lat" # harsh
     end
   end
-  
+
 
   private
 
@@ -361,7 +373,7 @@ class ProblemsController < ApplicationController
       return Stop.find_nearest(easting, northing, exclude_id = nil)
     end
   end
-    
+
   def find_area(options)
     if is_valid_lon_lat?(params[:lon], params[:lat])
       nearest_stop = find_nearest_stop(params[:lon], params[:lat], nil) # FIXME transport_mode from options?
@@ -454,13 +466,13 @@ class ProblemsController < ApplicationController
         return
       end
     end
-    
+
   end
 
   def is_valid_lon_lat?(lon, lat)
     return !(lon.blank? or lat.blank?) && MySociety::Validate.is_valid_lon_lat(lon, lat)
   end
-  
+
   def render_browse_template(locations, map_options, template)
     map_params_from_location(locations,
                              find_other_locations=true,
@@ -533,7 +545,6 @@ class ProblemsController < ApplicationController
       end
     # some responsible organizations contactable
     else
-
 
       advice_params[:contactable] = @template.org_names(emailable_orgs, t('problems.new.or'))
       advice_params[:uncontactable] = @template.org_names(unemailable_orgs, t('problems.new.or'))

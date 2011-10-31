@@ -36,7 +36,7 @@ class Gazetteer
                                     :zoom => zoom }}
       else
         return { :postcode_info => {:error => :area_not_known }}
-      end                            
+      end
     elsif [:not_found, :bad_request, :service_unavailable].include?(coord_info)
       return { :postcode_info => {:error => coord_info }}
     end
@@ -106,7 +106,7 @@ class Gazetteer
     return {}
   end
 
-  def self.bus_route_from_route_number(route_number, area, limit, ignore_area=false, area_type=nil, locality_id=nil)
+  def self.bus_route_from_route_number(route_number, area, limit, ignore_area=false, area_type=nil, geolocation_data={})
     error = nil
     select_clause = 'SELECT distinct routes.id, routes.cached_description'
     from_clause = 'FROM routes'
@@ -116,22 +116,33 @@ class Gazetteer
     params << route_number
     params << "%#{route_number}%"
     where_clause += " AND transport_mode_id in (?)"
+    order_clause = " ORDER BY cached_description"
     params << [TransportMode.find_by_name('Bus'), TransportMode.find_by_name('Coach')]
     areas = []
     if ignore_area
       error = :route_not_found_in_area
     else
-      # currently specific_locality is only passed with geolocation, so perhaps this should be
-      # conditional on MySociety::Config.get('GEOLOCATION_ENABLED', false) being true
-      specific_locality = locality_id.nil? ? nil : Locality.find_by_id(locality_id)
-      if specific_locality
-        # FIXME:DW: this doesn't seem to be restricting in the way I expected: committed but not right yet
-        areas = Locality.find_by_coordinates(specific_locality.easting, specific_locality.northing, 1000)
+      if geolocation_data[:lat] && geolocation_data[:lon]
+        lat = geolocation_data[:lat]
+        lon = geolocation_data[:lon]
+        accuracy = geolocation_data[:accuracy]
+        # get routes that with the number that pass within 10k of the
+        # geolocated point
+        from_clause += ", stops, route_segments"
+        where_clause += " AND routes.id = route_segments.route_id
+                          AND (stops.id = route_segments.from_stop_id
+                               OR stops.id = route_segments.to_stop_id)"
+        distance_clause = "ST_Distance(
+                            ST_Transform(
+                              ST_GeomFromText('POINT(#{lon} #{lat})', #{WGS_84}),
+                            #{BRITISH_NATIONAL_GRID}),
+                           stops.coords)"
+        where_clause += " AND #{distance_clause} < (10000 + #{accuracy})"
       else
         area = area.strip
         # area is postcode
         coord_info = self.coords_from_postcode(area)
-        if coord_info == :not_found or coord_info == :bad_request 
+        if coord_info == :not_found or coord_info == :bad_request
           error = :postcode_not_found
         elsif coord_info == :not_postcode
           areas = Locality.find_areas_by_name(area, area_type)
@@ -150,23 +161,24 @@ class Gazetteer
           end
           areas = Locality.find_by_coordinates(coord_info['easting'], coord_info['northing'], distance)
         end
-      end
-      if areas.empty? and !error
-        error = :area_not_found
-      end
-      if !areas.empty?
-        localities = Locality.find_with_descendants(areas.first)
-        from_clause += ", route_localities"
-        where_clause += " AND route_localities.route_id = routes.id
-                          AND route_localities.locality_id in (?)"
-        params << localities
+        if areas.empty? and !error
+          error = :area_not_found
+        end
+        if !areas.empty?
+          localities = Locality.find_with_descendants(areas.first)
+          from_clause += ", route_localities"
+          where_clause += " AND route_localities.route_id = routes.id
+                            AND route_localities.locality_id in (?)"
+          params << localities
+        end
       end
     end
-    where_clause += " order by cached_description"
     if limit
-      where_clause += " limit #{limit}"
+      limit_clause = " limit #{limit}"
+    else
+      limit_clause = ''
     end
-    params = ["#{select_clause} #{from_clause} #{where_clause}"] + params
+    params = ["#{select_clause} #{from_clause} #{where_clause} #{order_clause} #{limit_clause}"] + params
     routes = Route.find_by_sql(params)
     routes = Route.find(:all, :conditions => ['id in (?)', routes], :order => 'cached_description' )
     if routes.empty? and !ignore_area and !areas.empty?
@@ -178,7 +190,7 @@ class Gazetteer
   def self.train_route_from_stations(from, from_exact, to, to_exact)
     return route_from_stations(from, from_exact, to, to_exact, :train)
   end
-  
+
   def self.other_route_from_stations(from, from_exact, to, to_exact)
     return route_from_stations(from, from_exact, to, to_exact, :other)
   end
@@ -186,10 +198,10 @@ class Gazetteer
   def self.ferry_route_from_stations(from, from_exact, to, to_exact)
     return route_from_stations(from, from_exact, to, to_exact, :ferry)
   end
-  
+
   def self.route_from_stations(from, from_exact, to, to_exact, route_type)
     errors = Hash.new{ |hash, key| hash[key] = [] }
-    
+
     case route_type
     when :other
       i18n_name = 'other'
@@ -204,7 +216,7 @@ class Gazetteer
       station_types = ['GRLS']
       transport_mode = TransportMode.find_by_name('Train').id
     end
-          
+
     from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => station_types)
     to_stops = Gazetteer.find_stations_from_name(to.strip, to_exact, :types => station_types)
 

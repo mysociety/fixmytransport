@@ -54,13 +54,21 @@ function doGeolocate(e, inputId) {
             function(stop_data){
               $("#"+inputId).val(stop_data.area);
               // add hidden fields: id and area name (to detect edits *after* geolocation)
-              if ($("#locality_id").size() == 0) {
-                $('#bus_route_form').append("<input type='hidden' name='locality_id' id='locality_id'/>");
+              if ($("#lat").size() == 0) {
+                $('#bus_route_form').append("<input type='hidden' name='lat' id='lat'/>");
+              }
+              if ($("#lon").size() == 0) {
+                $('#bus_route_form').append("<input type='hidden' name='lon' id='lon'/>");
+              }
+              if ($("#accuracy").size() == 0) {
+                $('#bus_route_form').append("<input type='hidden' name='accuracy' id='accuracy'/>");
               }
               if ($("#geo_area_name").size() == 0) {
                 $('#bus_route_form').append("<input type='hidden' name='geo_area_name' id='geo_area_name'/>");
               }
-              $("#locality_id").val(stop_data.locality_id);
+              $("#lat").val(position.coords.latitude);
+              $("#lon").val(position.coords.longitude);
+              $("#accuracy").val(position.coords.accuracy);
               $("#geo_area_name").val(stop_data.area);
               if ($("#route_number").val() == $("#guidance-route-number").text()) {
                 $('#route_number').focus();
