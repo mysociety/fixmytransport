@@ -55,6 +55,7 @@ h1, h2, h3, h4, h5, h6, .font-1, #greybanner p {
 .rightcol {
     float: right;
     margin: 0.5em 0 0.5em 10px;
+    word-wrap: break-word;
 }
 
 .narrowcol {
@@ -594,6 +595,24 @@ ul.user-list {
 	#create-account-privacy {
 	  margin: 0.5em 0;
 	}
+
+	.pane #password-reset {
+	  float: left;
+	  width: 250px;
+	  display: inline;
+	  padding: 10px 20px 5px 10px;
+	  background: #ffffff;
+	}
+
+	#login-forgot-password {
+	  line-height:0;
+	}
+
+	.pane .password_reset_email input[type=text] {
+    float: none;
+    width: 240px;
+	}
+
 	#static-login-box #login-form {
 		margin-left:180px;
 	}
@@ -671,11 +690,13 @@ ul.user-list {
 			    font-size: 0.9em;
 				margin: 10px 10px 10px 2px;
 			}
+
 			#login-box .new_campaign_update .fieldset button {
 				margin:0;
 			}
 			#main-content .new_campaign_update .fieldset button {
 				margin: 10px 2px;
+				float: right;
 			}
 
 	.login-options{
@@ -784,14 +805,14 @@ ul.user-list {
 #main-content .update_campaign,
 #main-content #new_outgoing_message,
 #main-content .password_reset_email,
-#main-content #edit_user_1 {
+#main-content #reset_password {
 	width:500px;
 }
 #main-content #new_outgoing_message textarea,
 #main-content #comment-form textarea,
 #main-content .new_campaign_update textarea,
 #main-content .update_campaign textarea {
-	margin:0;
+	margin:0.5em 0;
 	width:96%;
 	background: #f4f4f4;
 	border:1px solid #BDBDBD;
@@ -800,7 +821,7 @@ ul.user-list {
 #main-content #new_outgoing_message input[type=text],
 #main-content .password_reset_email input[type=text],
 #main-content .update_campaign input[type=text],
-#main-content #edit_user_1 input[type=password] {
+#main-content #reset_password input[type=password]{
   width: 96%;
 	background: #f4f4f4;
 }
@@ -1056,6 +1077,12 @@ form#create-campaign {
 	display:block;
 }
 
+#reset_password .error,
+#new_outgoing_message .error
+ {
+  float: none;
+}
+
 
 /*===[Pagination]===*/
 .pagination {
@@ -1268,6 +1295,7 @@ ul.campaign-meta li span{
 				text-transform:none;
 				background:none;
 				box-shadow:none;
+				filter: none;
 				-moz-box-shadow:none;
 				-webkit-box-shadow:none;
 			}
@@ -1962,7 +1990,6 @@ ul.route-links {
 .find-stop-error{margin: 10px 0 0 223px;}
 .form-field p{clear: left;}
 
-
 /*===[Facebook Canvas]===*/
 
 body.facebook-canvas{ width: 660px; background: #ffffff}
@@ -2410,6 +2437,7 @@ body.facebook-canvas .button {
       #login-form ul li.login-password input {
           width: 90%;
       }
+
 
 			/*===[ Front page]===*/
 
@@ -2939,7 +2967,7 @@ body.facebook-canvas .button {
       box-shadow: none;
       border: 2px solid #FFD45A
 		}
-		
+
 		#yellowbanner .rightcol {
 		  margin: 0;
 		  width: 100%;
@@ -3069,7 +3097,7 @@ body.facebook-canvas .button {
         float: right !important;
         width: auto;
     }
-    
+
 
     .manager-tools h2 {
         padding: 0 0.2em;

@@ -913,6 +913,31 @@ describe ProblemsController do
       before do
         @controller.stub!(:current_user).and_return(@mock_reporter)
       end
+      
+      describe 'if the problem is not new' do 
+        
+        describe 'if the problem has a campaign' do 
+          
+          it 'should redirect to the campaign url' do 
+            @mock_problem.stub!(:status).and_return(:confirmed)
+            make_request
+            response.should redirect_to(campaign_url(@mock_campaign))
+          end
+          
+        end
+        
+        describe 'if the problem does not have a campaign' do 
+          
+          it 'should redirect to the problem url' do 
+            @mock_problem.stub!(:status).and_return(:confirmed)
+            @mock_problem.stub!(:campaign).and_return(nil)
+            make_request
+            response.should redirect_to(problem_url(@mock_problem))
+          end
+          
+        end
+        
+      end
 
       it 'should show the "convert" template' do
         make_request

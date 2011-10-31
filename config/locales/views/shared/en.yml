@@ -37,6 +37,7 @@ en:
       well_hold_on_to_your_problem: "We'll hold on to your problem while you do that" 
       well_hold_on_to_your_comment: "We'll hold on to your comment while you do that"
       check_your_junkmail_filters: "If you use web-based email or have 'junk mail' filters, you may wish to check your bulk/spam mail folders: sometimes, our messages end up there."
+      password_reset_please_be_patient: "The password reset email <strong>may</strong> take a few minutes to arrive &mdash; <em>please</em> be patient."
       please_be_patient: "The confirmation email <strong>may</strong> take a few minutes to arrive &mdash; <em>please</em> be patient."
       your_comment_will_not_be_added: "your comment will not be added."
     email:
@@ -94,6 +95,7 @@ en:
       facebook_connect: "Facebook Connect"
       got_account: Have an account?
       create_sign_in_with_facebook: Sign in with Facebook
+      know_your_password: Know your password?
     mobile_placeholder:
       follow_twitter: "Our mobile app is coming soon. Please follow our %{twitter} account for updates."
       twitter: Twitter

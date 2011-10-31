@@ -1,49 +1,51 @@
 class UserMailer < ApplicationMailer
 
-  def password_reset_instructions(user)  
-    subject I18n.translate('mailers.password_reset_subject')
+  def password_reset_instructions(user, post_login_action_data, unconfirmed_model)
+    subject get_subject(post_login_action_data, unconfirmed_model, 'mailers.password_reset_subject')
     from contact_from_name_and_email
-    recipients user.email  
-    body :edit_password_reset_url => main_url(edit_password_reset_path(user.perishable_token)), 
-         :user => user
+    recipients user.email
+    body :edit_password_reset_url => main_url(edit_password_reset_path(user.perishable_token)),
+         :user => user,
+         :unconfirmed_model => unconfirmed_model,
+         :action => get_action_description(post_login_action_data)
   end
 
   def new_account_confirmation(user, post_login_action_data, unconfirmed_model)
-    subject get_subject(post_login_action_data, unconfirmed_model)
+    subject get_subject(post_login_action_data, unconfirmed_model, 'mailers.account_confirmation_subject')
     from contact_from_name_and_email
     recipients user.email
-    body :account_confirmation_url => main_url(confirm_account_path(user.perishable_token)), 
+    body :account_confirmation_url => main_url(confirm_account_path(user.perishable_token)),
          :user => user,
          :unconfirmed_model => unconfirmed_model,
          :action => get_action_description(post_login_action_data)
   end
-  
+
   def account_exists(user, post_login_action_data, unconfirmed_model)
-    subject get_subject(post_login_action_data, unconfirmed_model)
+    subject get_subject(post_login_action_data, unconfirmed_model, 'mailers.account_confirmation_subject')
     from contact_from_name_and_email
     recipients user.email
-    body :account_confirmation_url => main_url(confirm_account_path(user.perishable_token)), 
+    body :account_confirmation_url => main_url(confirm_account_path(user.perishable_token)),
          :user => user,
          :unconfirmed_model => unconfirmed_model,
          :action => get_action_description(post_login_action_data)
   end
-  
+
   def already_registered(user, post_login_action_data, unconfirmed_model)
-    subject get_subject(post_login_action_data, unconfirmed_model)
+    subject get_subject(post_login_action_data, unconfirmed_model, 'mailers.account_confirmation_subject')
     from contact_from_name_and_email
     recipients user.email
-    body :account_confirmation_url => main_url(confirm_account_path(user.perishable_token)), 
+    body :account_confirmation_url => main_url(confirm_account_path(user.perishable_token)),
          :user => user,
          :unconfirmed_model => unconfirmed_model,
          :action => get_action_description(post_login_action_data)
   end
-  
+
   private
 
   def supporter_confirmation_subject(campaign)
     I18n.translate('mailers.supporter_confirmation_subject', :title => campaign.title)
   end
-  
+
   def get_action_description(post_login_action_data)
     if post_login_action_data
       case post_login_action_data[:action]
@@ -59,8 +61,8 @@ class UserMailer < ApplicationMailer
       return nil
     end
   end
-  
-  def get_subject(post_login_action_data, unconfirmed_model)
+
+  def get_subject(post_login_action_data, unconfirmed_model, default)
     if post_login_action_data
       case post_login_action_data[:action]
       when :join_campaign
@@ -73,8 +75,8 @@ class UserMailer < ApplicationMailer
         raise "Unexpected post login action #{post_login_action_data[:action]} when sending account confirmation email"
       end
     else
-      return I18n.translate('mailers.account_confirmation_subject')
+      return I18n.translate(default)
     end
   end
-  
+
 end

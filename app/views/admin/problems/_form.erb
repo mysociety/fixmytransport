@@ -120,7 +120,7 @@
     <%= raw responsibility_fields.hidden_field :organization_type, :value => 'Council', :class => 'organization-type' %><%= t('admin.council').titleize %>
   </td>
   <td>
-    <%= raw responsibility_fields.select :organization_id, @councils = Council.find_all_without_ptes().map{ |council| [council.name, council.id] }, :include_blank => true %>
+    <%= raw responsibility_fields.select :organization_id, @councils = Council.find_all().map{ |council| [council.name, council.id] }, :include_blank => true %>
   </td>
   <td>
   </td>

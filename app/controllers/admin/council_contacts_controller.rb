@@ -10,7 +10,7 @@ class Admin::CouncilContactsController < Admin::AdminController
       render :template => 'admin/council_contacts/council_index'
       return
     end
-    @councils = Council.find_all_without_ptes()
+    @councils = Council.find_all()
   end
   
   def new

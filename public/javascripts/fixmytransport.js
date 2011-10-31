@@ -225,6 +225,15 @@ $(document).ready(function(){
   	});
   });
 
+  //forgot password
+  $('.pane #forgot-password').click(function(e){
+	  e.preventDefault();
+	  $('.pane:visible').fadeOut(500, function(){
+      $("#login-box").dialog({title: "Reset Password"});
+      $('#login-forgot-password').fadeIn();
+    });
+  });
+
   function construct_message(title, description) {
     var message = '<b>' + title + '</b><br/>' + description + '<br/>';
     return message;
@@ -521,10 +530,10 @@ $(document).ready(function(){
             $("#login-box").dialog({title: "Create a FixMyTransport Account"});
             $('#login-create-account').fadeIn();
             $("#login-box").dialog("open");
-            
+
             // record a hit on the login box in analytics
             _gaq.push(['_trackPageview', location.pathname + '/login']);
-          
+
           } else {
             window.location = response.redirect;
           }
@@ -631,6 +640,7 @@ $(document).ready(function(){
   setupSupportForm('.login-to-support');
   ajaxifyForm('.pane #login-form');
   ajaxifyForm('.pane #create-account-form');
+  ajaxifyForm('.pane .password_reset_email');
 
   /* Twitter button
      ================================================== */

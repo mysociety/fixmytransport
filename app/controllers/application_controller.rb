@@ -205,7 +205,6 @@ class ApplicationController < ActionController::Base
 
   def save_post_login_action_to_session
     if post_login_action_data = get_action_data(params)
-
       session[:next_action] = params[:next_action]
       if post_login_action_data[:action] == :join_campaign
         flash.now[:notice] = post_login_action_data[:notice]
@@ -219,11 +218,12 @@ class ApplicationController < ActionController::Base
       id = post_login_action_data[:id]
       user.post_login_action = post_login_action_data[:action].to_s
       user.save_without_session_maintenance
+      confirmation_target = nil
       case post_login_action_data[:action]
       when :join_campaign
         campaign = Campaign.find(id)
-        campaign.add_supporter(user, confirmed=false, token=user.perishable_token)
-        return campaign
+        confirmation_target = campaign.add_supporter(user, confirmed=false, token=user.perishable_token)
+        return_model = campaign
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
         commented = commented_type.constantize.find(id)
@@ -234,13 +234,25 @@ class ApplicationController < ActionController::Base
                          :confirmed => false,
                          :text_encoded => post_login_action_data[:text_encoded] }
         comment = Comment.create_from_hash(comment_data, user, token=user.perishable_token)
-        return comment
+        confirmation_target = comment
+        return_model = comment
       when :create_problem
         problem = Problem.create_from_hash(post_login_action_data, user, token=user.perishable_token)
-        return problem
+        confirmation_target = problem
+        return_model = problem
       end
+      ActionConfirmation.create!(:user => user, 
+                                 :token => user.perishable_token,
+                                 :target => confirmation_target)
+      return return_model
+    else
+      # just add an action confirmation without target so the user can log in with 
+      # their current token
+      ActionConfirmation.create!(:user => user,
+                                 :token => user.perishable_token)
+      return nil
     end
-
+    
   end
 
   def post_login_action_string
@@ -273,14 +285,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def post_login_actions
-    [:join_campaign, :add_comment, :create_problem]
-  end
-
   def get_action_data(data_hash)
     if data_hash[:next_action]
       next_action_data = string_to_data(data_hash[:next_action])
-      if next_action_data.is_a?(Hash) and post_login_actions.include?(next_action_data[:action])
+      if next_action_data.is_a?(Hash) and ActionConfirmation.actions.include?(next_action_data[:action])
         return next_action_data
       end
     end
@@ -323,6 +331,54 @@ class ApplicationController < ActionController::Base
       end
       session.delete(:next_action)
     end
+  end
+  
+  # a false return value indicates that a redirect has been performed
+  def perform_saved_login_action
+    case @action_confirmation.target
+    when CampaignSupporter
+      @action_confirmation.target.confirm!
+      session[:return_to] = campaign_path(@action_confirmation.target.campaign)
+      flash[:notice] = t('accounts.confirm.successfully_confirmed_support')
+    when Comment
+      comment = @action_confirmation.target
+      if comment.status == :new && comment.created_at < (Time.now - 1.month)
+        flash[:error] = t('accounts.confirm.comment_token_expired')
+        redirect_to(root_url)
+        return false
+      else
+        comment.confirm!
+        session[:return_to] = @template.commented_url(comment.commented)
+        if self.controller_name == "password_resets"
+          flash[:notice] = t('password_resets.update.successfully_confirmed_comment')
+        else
+          flash[:notice] = t('accounts.confirm.successfully_confirmed_comment')
+        end
+      end
+    when Problem
+      problem = @action_confirmation.target
+      if problem.status == :new && problem.created_at < (Time.now - 1.month)
+        flash[:error] = t('accounts.confirm.problem_token_expired')
+        redirect_to(root_url)
+        return false
+      else
+        if problem.status == :new
+          if self.controller_name == "password_resets"
+            flash[:notice] = t('password_resets.update.successfully_confirmed_problem_first_time')
+          else
+            flash[:notice] = t('accounts.confirm.successfully_confirmed_problem_first_time')
+          end
+        else
+          if self.controller_name == "password_resets"
+            flash[:notice] = t('password_resets.update.successfully_confirmed_problem')
+          else
+            flash[:notice] = t('accounts.confirm.successfully_confirmed_problem')
+          end
+        end
+        session[:return_to] = convert_problem_url(problem)
+      end
+    end
+    return true
   end
 
   def add_json_errors(model_instance, json_hash)
@@ -566,6 +622,25 @@ class ApplicationController < ActionController::Base
           break
         end
       end
+    end
+  end
+  
+  def load_user_using_action_confirmation_token
+    @action_confirmation = ActionConfirmation.find_by_token(params[:email_token], :include => :user)
+    if @action_confirmation
+      @account_user = @action_confirmation.user
+    end
+    if ! @account_user
+      flash[:error] = t('accounts.confirm.could_not_find_account')
+      redirect_to root_url
+    end
+    if @account_user && @account_user.suspended? # disallow attempts to confirm from suspended acccounts
+      flash[:error] = t('shared.suspended.forbidden')
+      redirect_to root_url
+    end
+    if @account_user && current_user && @account_user != current_user
+      flash[:notice] = t('shared.login.must_be_logged_out')
+      redirect_to root_url
     end
   end
   

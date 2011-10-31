@@ -5,5 +5,9 @@
     <%= raw t('shared.confirmation_sent.dont_worry', :worry => @worry) %>
   </p>
 <%- end %>
+<%- if @password_reset %>
+<p><%= raw t('shared.confirmation_sent.password_reset_please_be_patient') %></p>
+<%- else %>
 <p><%= raw t('shared.confirmation_sent.please_be_patient') %></p>
+<%- end %>
 <p><%= raw t('shared.confirmation_sent.check_your_junkmail_filters') %></p>
