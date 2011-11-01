@@ -4,16 +4,69 @@ html, body {
   margin: 0.5em;
 }
 
-ul.admin-navigation {
-  list-style-type: none;
-  position: absolute;
-  right: 0.5em;
-  top: 0.5em;
-  margin: 0.5em;
+#admin-header {
+  text-align: right;
+  border-bottom: 1px solid #048FC2;
+  background-color: #EBEBEB;
+  margin: -1em -1em 1em -1em;
+  padding: 0.25em 0;
 }
 
-ul.admin-navigation li {
+#admin-header h2 {
+  float: left;
+  width: auto;
+  padding: 0 0.5em;
+}
+
+#admin-header ul {
+  list-style-type: none;
+  right: 0.5em;
+  top: 0.5em;
+  margin: 0.1em 0.5em;
+  display: block;
+  padding: 0 0.5em;
+}
+
+#admin-header ul li {
   display: inline-block;
+  padding: 0;
+  margin: 4px -2px;
+  line-height:1.25em;
+}
+
+#admin-header ul li a {
+  padding: 0.2em 0.35em;
+  text-decoration: none;
+  margin: 0px;
+  border-left: 1px solid #fff;
+  color: #fff;
+  background-color: #999;
+  text-shadow: -1px 0 #333, 0 1px #333, 1px 0 #333, 0 -1px #333; /* wee bit experimental */
+}
+#admin-header ul li a:visted {
+  color: #fff;
+}
+
+/* pretty shades for admin menu */
+#admin-header .admin-nav-ugc li:nth-child(1) a { background-color: #99B7DB; }
+#admin-header .admin-nav-ugc li:nth-child(2) a { background-color: #457CBE; }
+#admin-header .admin-nav-ugc li:nth-child(3) a { background-color: #003F87; }
+#admin-header .admin-nav-ugc li:nth-child(4) a { background-color: #2646DD; }
+
+#admin-header .admin-nav-places li:nth-child(1) a { background-color: #D6EBAD; }
+#admin-header .admin-nav-places li:nth-child(2) a { background-color: #B8DC6F; }
+#admin-header .admin-nav-places li:nth-child(3) a { background-color: #99CC32; }
+
+#admin-header .admin-nav-bodies li:nth-child(1) a { background-color: #E7A1A1; }
+#admin-header .admin-nav-bodies li:nth-child(2) a { background-color: #D55858; }
+#admin-header .admin-nav-bodies li:nth-child(3) a { background-color: #A62A2A; }
+ 	
+#admin-header .admin-nav-ugc li a:hover,
+#admin-header .admin-nav-places li a:hover,
+#admin-header .admin-nav-bodies li a:hover,
+#admin-header ul li a:hover, #admin-header ul li a:active {
+  background-color: #333;
+  color: #fff;
 }
 
 .flash_notice {
