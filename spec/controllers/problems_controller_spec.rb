@@ -249,7 +249,8 @@ describe ProblemsController do
                                                                     'London',
                                                                     10,
                                                                     ignore_area=false,
-                                                                    area_type=nil).and_return({ :routes => [] })
+                                                                    area_type=nil,
+                                                                    geolocation_data={}).and_return({ :routes => [] })
         make_request(:route_number => 'C10', :area => 'London')
       end
 
@@ -307,10 +308,98 @@ describe ProblemsController do
 
   end
 
+  describe "GET #find_ferry_route" do
+
+    def make_request(params={})
+      get :find_ferry_route, params
+    end
+
+    before do
+      @mock_route = mock_model(Route, :region => mock_model(Region, :name => 'Great Britain'))
+    end
+
+    describe 'when the "to" or "from" param is present but empty' do
+
+      it 'should render the "find_ferry_route" template' do
+        make_request({:to => '', :from => ''})
+        response.should render_template("find_ferry_route")
+      end
+
+      it 'should display an error message' do
+        make_request({:to => '', :from => ''})
+        expected_message = 'Please enter the names of the stops where you got on and off the ferry.'
+        assigns[:error_messages][:base].should == [expected_message]
+      end
+
+    end
+
+    describe 'when the "to" and "from" params are supplied' do
+
+      it 'should ask the gazetteer for routes' do
+        Gazetteer.should_receive(:ferry_route_from_stations).and_return({:routes => [],
+                                                                         :from_stops => [],
+                                                                         :to_stops => []})
+        make_request({:to => "putney pier", :from => 'festival pier'})
+      end
+
+      describe 'when no errors are returned' do
+
+        before do
+          @from_stop = mock_model(StopArea, :name => 'Putney Pier')
+          @to_stop = mock_model(StopArea, :name => 'Festival Pier')
+          RouteSubRoute.stub!(:create!).and_return(true)
+          @transport_mode = mock_model(TransportMode)
+          TransportMode.stub!(:find).and_return(@transport_mode)
+          Gazetteer.stub!(:ferry_route_from_stations).and_return(:routes => [@mock_route, @mock_route],
+                                                                 :from_stops => [@from_stop],
+                                                                 :to_stops => [@to_stop])
+        end
+
+      end
+
+    end
+
+  end
+
   describe "GET #find_stop" do
 
     def make_request(params={})
       get :find_stop, params
+    end
+    
+    describe 'when a geolocation (lon/lat) is supplied' do
+    
+      before do
+        @mock_locality = mock_model(Locality, :name => 'Euston')
+        @mock_stop = mock_model(Stop, :locality => @mock_locality, :name =>"London Euston rail station")
+        Stop.stub!(:find_nearest).and_return(@mock_stop)
+      end
+      
+      it 'should display the nearest stop and present it as the main location displayed' do
+        @controller.should_receive(:map_params_from_location).with([@mock_stop],
+                                                                    find_other_locations=true,
+                                                                    LARGE_MAP_HEIGHT,
+                                                                    LARGE_MAP_WIDTH,
+                                                                    { :mode => :find })
+        make_request({:lon => '0.01', :lat => '51.1'})
+        assigns[:locations].should == [@mock_stop]
+        response.should render_template('problems/choose_location')
+      end
+
+      it 'should ignore it if params are not both numeric' do
+        make_request({:lon => '0.01', :lat => 'foo'})
+        response.should render_template('find_stop')
+      end
+
+    end
+    
+    describe 'when an incomplete geolocation (lon/lat) is supplied' do
+            
+      it 'should ignore it and render the template "find_stop"' do
+        make_request({:lon => '0.01'})
+        response.should render_template('find_stop')
+      end
+      
     end
 
     describe 'when a name parameter is not supplied' do
@@ -516,6 +605,7 @@ describe ProblemsController do
     end
 
   end
+
 
   describe 'GET #new' do
 

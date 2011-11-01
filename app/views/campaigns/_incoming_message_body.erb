@@ -1,0 +1,12 @@
+<%- attachments = FixMyTransport::Email.get_display_attachments(message.mail) %>
+<%- if attachments.size > 0 %>
+<div class="email-set">
+<label for="attachments">Attachments:</label>
+<div name="attachments" class="attachments">
+  <%- attachments.each do |attachment| %>
+    <%= link_to(attachment.display_filename, campaign_attachment_url(message.campaign, :id => message, :url_part_number => attachment.url_part_number))  %>
+  <%- end %>
+</div> 
+</div>
+<%- end %>
+<%= raw message.get_body_for_html_display(collapse_quotes) %>

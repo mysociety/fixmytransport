@@ -1,21 +1,21 @@
 <div id="banner">
     <a id="home" href="/">FixMyTransport</a>
 	<div class="container">
-		<h1><%= t('problems.find_other_route.header')%></h1>
+		<h1><%= t('problems.find_ferry_route.header')%></h1>
 	</div>
 </div>
 <div id="greybanner">
 	<div class="container">
-		<p><%= t('problems.find_other_route.subheader') %></p>
-		<p><%= t('problems.find_other_route.where_did_you_get_on_and_off') %></p>
+		<p><%= t('problems.find_ferry_route.subheader') %></p>
+		<p><%= t('problems.find_ferry_route.where_did_you_get_on_and_off') %></p>
 	</div>
 </div>
 <div id="main-content" class="container">
-	  <%- form_tag find_other_route_problems_path, :id => 'other_route_form', :method => 'GET' do  %>
+	  <%- form_tag find_ferry_route_problems_path, :id => 'ferry_route_form', :method => 'GET' do  %>
     <ul class="form-list">
 	    <li class="fieldset fmt-has-geolocation">
-	      <%= raw label_tag t('problems.find_other_route.where_did_you_get_on') %>
-	     <div class="input-border">
+	      <%= raw label_tag t('problems.find_ferry_route.where_did_you_get_on') %>
+	    <div class="input-border">
 	     <%- if @from_stops %>
 	        <%= raw select_tag 'from', options_for_select(@from_stops.map{ |stop| [stop.name, stop.name] }.uniq) %>
 	        <%= raw hidden_field_tag 'from_exact', true %>
@@ -23,7 +23,7 @@
 	        <%= raw text_field_tag 'from', @from_stop %>
 	      <%- end %>
 	      </div>
-	      <div id='guidance-from' class='guidance'><%= t('problems.find_other_route.from_example')%></div>
+	      <div id='guidance-from' class='guidance'><%= t('problems.find_ferry_route.from_example')%></div>
 
 	      <%- @error_messages[:from_stop].each do |error_message| %>
   	      <div class='error'>
@@ -34,7 +34,7 @@
 	    </li>
     
 	    <li class="fieldset fmt-has-geolocation">
-	      <%= raw label_tag t('problems.find_other_route.where_did_you_get_off') %>
+	      <%= raw label_tag t('problems.find_ferry_route.where_did_you_get_off') %>
 	      <div class="input-border">
 	      <%- if @to_stops %>
 	        <%= raw select_tag 'to',options_for_select(@to_stops.map{ |stop| [stop.name, stop.name] }.uniq) %>
@@ -43,17 +43,17 @@
 	        <%= raw text_field_tag 'to', @to_stop %>
 	      <%- end %>
 	      </div>
-	      <div id='guidance-to' class='guidance'><%= t('problems.find_other_route.to_example')%></div>
+	      <div id='guidance-to' class='guidance'><%= t('problems.find_ferry_route.to_example')%></div>
 
 	      <%- @error_messages[:to_stop].each do |error_message| %>
   	      <div class='error'>
   	        <%= error_message %>
   	      </div>
   	    <%- end %>
-        
+
 	    </li>
 	
-		<li><button class="point-go" type="submit"><%= t('problems.find_other_route.go') %></button></li>
+		<li><button class="point-go" type="submit"><%= t('problems.find_ferry_route.go') %></button></li>
 
 		<li>
 		    <%- @error_messages[:base].each do |error_message| %>

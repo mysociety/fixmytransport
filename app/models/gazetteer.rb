@@ -36,7 +36,7 @@ class Gazetteer
                                     :zoom => zoom }}
       else
         return { :postcode_info => {:error => :area_not_known }}
-      end                            
+      end
     elsif [:not_found, :bad_request, :service_unavailable].include?(coord_info)
       return { :postcode_info => {:error => coord_info }}
     end
@@ -106,7 +106,7 @@ class Gazetteer
     return {}
   end
 
-  def self.bus_route_from_route_number(route_number, area, limit, ignore_area=false, area_type=nil)
+  def self.bus_route_from_route_number(route_number, area, limit, ignore_area=false, area_type=nil, geolocation_data={})
     error = nil
     select_clause = 'SELECT distinct routes.id, routes.cached_description'
     from_clause = 'FROM routes'
@@ -116,49 +116,69 @@ class Gazetteer
     params << route_number
     params << "%#{route_number}%"
     where_clause += " AND transport_mode_id in (?)"
+    order_clause = " ORDER BY cached_description"
     params << [TransportMode.find_by_name('Bus'), TransportMode.find_by_name('Coach')]
     areas = []
     if ignore_area
       error = :route_not_found_in_area
     else
-      area = area.strip
-      # area is postcode
-      coord_info = self.coords_from_postcode(area)
-      if coord_info == :not_found or coord_info == :bad_request 
-        error = :postcode_not_found
-      elsif coord_info == :not_postcode
-        areas = Locality.find_areas_by_name(area, area_type)
-        if areas.size > 1
-          return { :areas => areas }
-        end
-      elsif coord_info == :service_unavailable
-        error = :service_unavailable
-      elsif !coord_info['easting']
-        error = :postcode_not_found
+      if geolocation_data[:lat] && geolocation_data[:lon]
+        lat = geolocation_data[:lat]
+        lon = geolocation_data[:lon]
+        accuracy = geolocation_data[:accuracy]
+        # get routes that with the number that pass within 10k of the
+        # geolocated point
+        from_clause += ", stops, route_segments"
+        where_clause += " AND routes.id = route_segments.route_id
+                          AND (stops.id = route_segments.from_stop_id
+                               OR stops.id = route_segments.to_stop_id)"
+        distance_clause = "ST_Distance(
+                            ST_Transform(
+                              ST_GeomFromText('POINT(#{lon} #{lat})', #{WGS_84}),
+                            #{BRITISH_NATIONAL_GRID}),
+                           stops.coords)"
+        where_clause += " AND #{distance_clause} < (10000 + #{accuracy})"
       else
-        if MySociety::Validate.is_valid_partial_postcode(area)
-          distance = 5000
+        area = area.strip
+        # area is postcode
+        coord_info = self.coords_from_postcode(area)
+        if coord_info == :not_found or coord_info == :bad_request
+          error = :postcode_not_found
+        elsif coord_info == :not_postcode
+          areas = Locality.find_areas_by_name(area, area_type)
+          if areas.size > 1
+            return { :areas => areas }
+          end
+        elsif coord_info == :service_unavailable
+          error = :service_unavailable
+        elsif !coord_info['easting']
+          error = :postcode_not_found
         else
-          distance = 1000
+          if MySociety::Validate.is_valid_partial_postcode(area)
+            distance = 5000
+          else
+            distance = 1000
+          end
+          areas = Locality.find_by_coordinates(coord_info['easting'], coord_info['northing'], distance)
         end
-        areas = Locality.find_by_coordinates(coord_info['easting'], coord_info['northing'], distance)
-      end
-      if areas.empty? and !error
-        error = :area_not_found
-      end
-      if !areas.empty?
-        localities = Locality.find_with_descendants(areas.first)
-        from_clause += ", route_localities"
-        where_clause += " AND route_localities.route_id = routes.id
-                          AND route_localities.locality_id in (?)"
-        params << localities
+        if areas.empty? and !error
+          error = :area_not_found
+        end
+        if !areas.empty?
+          localities = Locality.find_with_descendants(areas.first)
+          from_clause += ", route_localities"
+          where_clause += " AND route_localities.route_id = routes.id
+                            AND route_localities.locality_id in (?)"
+          params << localities
+        end
       end
     end
-    where_clause += " order by cached_description"
     if limit
-      where_clause += " limit #{limit}"
+      limit_clause = " limit #{limit}"
+    else
+      limit_clause = ''
     end
-    params = ["#{select_clause} #{from_clause} #{where_clause}"] + params
+    params = ["#{select_clause} #{from_clause} #{where_clause} #{order_clause} #{limit_clause}"] + params
     routes = Route.find_by_sql(params)
     routes = Route.find(:all, :conditions => ['id in (?)', routes], :order => 'cached_description' )
     if routes.empty? and !ignore_area and !areas.empty?
@@ -167,9 +187,35 @@ class Gazetteer
     return { :routes => routes, :error => error }
   end
 
+  def self.train_route_from_stations(from, from_exact, to, to_exact)
+    return route_from_stations(from, from_exact, to, to_exact, :train)
+  end
+
   def self.other_route_from_stations(from, from_exact, to, to_exact)
+    return route_from_stations(from, from_exact, to, to_exact, :other)
+  end
+
+  def self.ferry_route_from_stations(from, from_exact, to, to_exact)
+    return route_from_stations(from, from_exact, to, to_exact, :ferry)
+  end
+
+  def self.route_from_stations(from, from_exact, to, to_exact, route_type)
     errors = Hash.new{ |hash, key| hash[key] = [] }
-    station_types = ['GTMU', 'GFTD']
+
+    case route_type
+    when :other
+      i18n_name = 'other'
+      station_types = ['GTMU']
+      transport_mode = TransportMode.find_by_name('Tram/Metro').id
+    when :ferry
+      i18n_name = 'ferry'
+      station_types = ['GFTD']
+      transport_mode = TransportMode.find_by_name('Ferry').id
+    else # assumes (from "stations") :train
+      i18n_name = 'train'
+      station_types = ['GRLS']
+      transport_mode = TransportMode.find_by_name('Train').id
+    end
 
     from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => station_types)
     to_stops = Gazetteer.find_stations_from_name(to.strip, to_exact, :types => station_types)
@@ -178,55 +224,23 @@ class Gazetteer
     # just pass them all to find_all_by_locations, and see which one has the route
 
     if from_stops.size > 1 && from_stops.map{ |stop| stop.name }.uniq.size > 1
-      errors[:from_stop] << I18n.translate('problems.find_other_route.ambiguous_from_stop', :station_name => from.strip)
+      errors[:from_stop] << I18n.translate("problems.find_#{i18n_name}_route.ambiguous_from_stop", :station_name => from.strip)
     end
     if to_stops.size > 1 && to_stops.map{ |stop| stop.name }.uniq.size > 1
-      errors[:to_stop] << I18n.translate('problems.find_other_route.ambiguous_to_stop', :station_name => to.strip)
+      errors[:to_stop] << I18n.translate("problems.find_#{i18n_name}_route.ambiguous_to_stop", :station_name => to.strip)
     end
     if from_stops.size == 0
-      errors[:from_stop] << I18n.translate('problems.find_other_route.from_stop_not_found')
+      errors[:from_stop] << I18n.translate("problems.find_#{i18n_name}_route.from_stop_not_found")
     end
     if to_stops.size == 0
-      errors[:to_stop] << I18n.translate('problems.find_other_route.to_stop_not_found')
+      errors[:to_stop] << I18n.translate("problems.find_#{i18n_name}_route.to_stop_not_found")
     end
     if ! errors.empty?
       return { :errors => errors,
                :from_stops => from_stops,
                :to_stops => to_stops }
     end
-    find_options = { :transport_modes => [TransportMode.find_by_name('Ferry').id,
-                                          TransportMode.find_by_name('Tram/Metro').id],
-                     :as_terminus => false }
-    routes = Route.find_all_by_locations([from_stops, to_stops], find_options)
-    return { :routes => routes, :from_stops => from_stops, :to_stops => to_stops }
-  end
-
-  def self.train_route_from_stations(from, from_exact, to, to_exact)
-    errors = Hash.new{ |hash, key| hash[key] = [] }
-
-    from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => ['GRLS'])
-    to_stops = Gazetteer.find_stations_from_name(to.strip, to_exact, :types => ['GRLS'])
-
-    # if there are multiple stations with the exact same name, don't ask the user to select one
-    # just pass them all to find_all_by_locations, and see which one has the route
-    if from_stops.size > 1 && from_stops.map{ |stop| stop.name }.uniq.size > 1
-      errors[:from_stop] << I18n.translate('problems.find_train_route.ambiguous_from_stop', :station_name => from.strip)
-    end
-    if to_stops.size > 1 && to_stops.map{ |stop| stop.name }.uniq.size > 1
-      errors[:to_stop] << I18n.translate('problems.find_train_route.ambiguous_to_stop', :station_name => to.strip)
-    end
-    if from_stops.size == 0
-      errors[:from_stop] << I18n.translate('problems.find_train_route.from_stop_not_found')
-    end
-    if to_stops.size == 0
-      errors[:to_stop] << I18n.translate('problems.find_train_route.to_stop_not_found')
-    end
-    if ! errors.empty?
-      return { :errors => errors,
-               :from_stops => from_stops,
-               :to_stops => to_stops }
-    end
-    find_options = { :transport_modes => [TransportMode.find_by_name('Train').id],
+    find_options = { :transport_modes => [ transport_mode ],
                      :as_terminus => false }
     routes = Route.find_all_by_locations([from_stops, to_stops], find_options)
     return { :routes => routes, :from_stops => from_stops, :to_stops => to_stops }

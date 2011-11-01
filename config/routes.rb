@@ -44,6 +44,7 @@ ActionController::Routing::Routes.draw do |map|
                                             :find_route => :get,
                                             :find_bus_route => :get,
                                             :find_train_route => :get,
+                                            :find_ferry_route => :get,
                                             :find_other_route => :get }
 
   # issues index
@@ -137,6 +138,11 @@ ActionController::Routing::Routes.draw do |map|
   map.request_country 'request_country', :controller => 'services',
                                          :action => 'request_country',
                                          :conditions => { :method => :get }
+
+  # service url for getting info for nearest stop from lon/lat (NB requires session)
+  map.request_nearest_stop 'request_nearest_stop', :controller => 'problems',
+                                           :action => 'request_nearest_stop',
+                                           :conditions => { :method => :get }
 
   # user sessions
   map.login 'login', :controller => 'user_sessions', :action => 'new'

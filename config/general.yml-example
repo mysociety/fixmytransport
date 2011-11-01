@@ -93,3 +93,5 @@ BETA_PASSWORD: 'password'
 # Leave blank if no such mechanism is set up. See application_controller.rb, get_device_from_user_agent
 DEVICE_TYPE_X_HEADER: ''
 
+# enable geolocation ("use my current location") features
+GEOLOCATION_ENABLED: 0

@@ -984,8 +984,9 @@ input.checkbox {
 	}
 	.form-list li.fieldset {
 		background:#DFEEF5;
-		padding:5px;
+		padding:5px 7px 5px 5px;
 		max-width:40%;
+    width: 350px;
 		margin-top:5px;
 	}
 	.form-list li.fieldset:hover,
@@ -993,17 +994,30 @@ input.checkbox {
 	.form-list li.fieldset:focus {
 		background:#048fc2;
 	}
+	
 		.form-list li input,
 		.form-list li select {
 			margin:0;
-			padding:4px;
+      padding: 4px;
 			height:1.2em;
 			font-size:1.6em;
-			border:1px solid #048fc2;
+      float:none;
+      width: 342px;
+      border: none;
+      border-radius:4px;
+      -moz-border-radius:4px;
+      -webkit-border-radius:4px;
+
+		}
+    .form-list li .input-border {
+      border:1px solid #048fc2;
+		  width:100%;
 			border-radius:4px;
 			-moz-border-radius:4px;
 			-webkit-border-radius:4px;
-		}
+
+    }
+    
 		.form-list li select {
 			width:100%;
 			height:1.7em;
@@ -2040,7 +2054,7 @@ body.facebook-canvas .button {
 		margin:0 0 0.25em 0;
 		display:block;
 		float:left;
-		width:470px;
+    width:70%;
 	}
 		.email-set div.message textarea {
 			width:458px;
@@ -2173,6 +2187,39 @@ body.facebook-canvas .button {
 /*===[ Share by Facebook ]===*/
 .facebook-body {
   min-width: 425px;
+}
+
+/*===[ Geo-location ]===*/
+.fmt-has-geolocation {
+	position: relative; /* allow absolute positioning of geolocate label */
+}
+.geolocate-container {
+  position: absolute;
+  top: 100px;
+  left:0px;
+  text-align: left;
+  clear: both;
+  font-size: 110%;
+}
+.geolocate-button {
+  padding: 0.5em;
+}
+.geolocate-status {
+  background: #cdeaf2;
+  color: #048FC2;
+  padding: 0.5em;
+  border-radius:5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+}
+.geolocate-busy { /* spinner */
+  background-image: url('/images/busy_spinner_24_x_24.gif');
+  background-position: 2% 50%;
+  background-repeat: no-repeat;
+  padding-left: 36px;
+}
+.geolocate-done { /* spinner removed */
+  padding-left: 36px;
 }
 
 /*===[ Narrow screens]===*/
@@ -2327,7 +2374,7 @@ body.facebook-canvas .button {
 				font-family: Arial, Helvetica, sans-serif;
 				font-size: 1.2em;
 				width: 100%;
-				margin: 0.2em auto;
+        margin: 0.2em auto;
         line-height: normal;
 			}
 
@@ -2596,9 +2643,9 @@ body.facebook-canvas .button {
 
       	.form-list li.fieldset {
       		padding:5px;
-      		max-width:90%;
-      		width: 90%;
-      		margin: 1em auto;
+      		max-width:100%;
+      		width: 100%;
+      		margin: 0.2em auto;
       		padding: 5px 0;
       		background: inherit;
       	}
@@ -2608,19 +2655,25 @@ body.facebook-canvas .button {
       		background: inherit;
       	}
       		.form-list li input,
-      		.form-list li select {
-      			margin:0;
-      			border:2px solid #048fc2;
-            width: 100%;
+      		.form-list li select{
+      			margin:0 auto;
+      			float: none;
+      			border: none;
       		}
-      		.form-list li select {
-      			width:100%;
+      		
+      		.form-list li input {
+      		    width: 96%;
       		}
       		.form-list li label {
       			display:block;
       			left: 0;
       			top: 0;
       			position:relative;
+      		}
+      		
+      		.form-list li .input-border {
+      		  border:2px solid #048fc2;
+            width: auto;
       		}
 
           .form-list .point-go {
@@ -3139,6 +3192,24 @@ body.facebook-canvas .button {
       width: 96%;
     }
 
-	} /* end of media query */
+    /*===[ geolocation can't sensibly be absolutely positioned on narrow screens]=== */
+    .geolocate-container {
+        position: static;
+        text-align: center;
+        clear: both;
+        margin: 0.5em 0;
+    }
+    
+    .geolocate-status {
+        margin-top: 0.2em;
+        margin-bottom: 0.2em;
+        padding: 10px 0;
+        line-height: normal;
+        font-size: 1.2em;
+        display: inline-block;
+        width: 100%;
+    }
+
+} /* end of media query */
 
 
