@@ -2054,7 +2054,7 @@ body.facebook-canvas .button {
 		margin:0 0 0.25em 0;
 		display:block;
 		float:left;
-		width:470px;
+    width:70%;
 	}
 		.email-set div.message textarea {
 			width:458px;
