@@ -35,7 +35,7 @@ en:
       actions: "Actions"
       expert_advised_writing: "%{expert} %{advised} %{user} to write to %{recipient}."
       reported_issue: "%{name} reported the issue on FixMyTransport."
-      mark_as_complete: "Problem fixed!"
+      mark_as_complete: "Mark as fixed"
       whats_happening: "What's happening?"
       see: see
       preview_title: "Preview page - opens in new window"
