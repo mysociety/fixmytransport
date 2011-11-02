@@ -95,3 +95,7 @@ DEVICE_TYPE_X_HEADER: ''
 
 # enable geolocation ("use my current location") features
 GEOLOCATION_ENABLED: 0
+
+# command to run YUI asset compression
+YUI_COMPRESSOR_JAR: 'yui-compressor'
+
