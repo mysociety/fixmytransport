@@ -16,7 +16,8 @@
     width: 560px;
 }
 * html .form-list li.fieldset {
-	width:40%;
+	max-width:40%;
+  width: 350px;
 }
 * html .form-list li input {
 	width:100%;
@@ -94,22 +95,25 @@
 	float:none;
 }
 
-
 .form-list li {
 	display:block;
 	height:2.7em;
 }
 .form-list li.fieldset .error{
-	top:10px;
-	position: relative;
-	float:none;
-	margin:4px 0 0 4px;
+  top:20px;
+  position: relative;
+  float:none;
+  margin:4px 0 0 4px;
 }
 * html .form-list li.fieldset .error{
-	position:absolute;
-	top:50px;
+  position:absolute;
+  top:80px;
 }
 
+.form-list li.base-error{
+  margin-top: 20px;
+  width: 40%;
+}
 
 /*sort this*/
 .error, .alert, .notice, .success, .info {

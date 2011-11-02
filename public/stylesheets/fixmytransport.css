@@ -982,13 +982,15 @@ input.checkbox {
 		position:relative;
 		margin-right:1.4em;
 	}
-	.form-list li.fieldset {
+	.form-list li.fieldset{
 		background:#DFEEF5;
 		padding:5px 7px 5px 5px;
 		max-width:40%;
     width: 350px;
 		margin-top:5px;
 	}
+
+
 	.form-list li.fieldset:hover,
 	.form-list li.active,
 	.form-list li.fieldset:focus {
@@ -1028,12 +1030,6 @@ input.checkbox {
 			top:-2em;
 			left:4px;
 		}
-
-			.form-list li.fieldset .error{
-				top: 50px;
-				margin:0;
-				position: absolute;
-			}
 
 /*TIP BOX*/
 .tipbox {
@@ -2680,10 +2676,11 @@ body.facebook-canvas .button {
             float: none;
             margin: 2em auto;
           }
-      			.form-list li.fieldset .error{
-      				position: relative;
-      				top: 3px;
-      			}
+
+    			.form-list li.fieldset .error{
+    				position: relative;
+    				top: 3px;
+    			}
 
     		  #map-col {
              display:none;
