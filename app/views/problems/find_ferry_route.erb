@@ -55,7 +55,7 @@
 	
 		<li><button class="point-go" type="submit"><%= t('problems.find_ferry_route.go') %></button></li>
 
-		<li>
+		<li class="base-error">
 		    <%- @error_messages[:base].each do |error_message| %>
 		      <div class='error'>
 		        <%= error_message %>

@@ -367,7 +367,7 @@ class ProblemsController < ApplicationController
     location_search = LocationSearch.new_search!(session_id, :name => "geolocate:#{lon},#{lat}",
                                                              :location_type => 'Stop/station')
     easting, northing = get_easting_northing(lon, lat)
-    if ! transport_mode_name.blank? # FIXME
+    if ! transport_mode_name.blank?
       return StopArea.find_nearest(lon, lat, transport_mode_name, 1, 1000)
     else
       return Stop.find_nearest(easting, northing, exclude_id = nil)
@@ -376,7 +376,7 @@ class ProblemsController < ApplicationController
 
   def find_area(options)
     if is_valid_lon_lat?(params[:lon], params[:lat])
-      nearest_stop = find_nearest_stop(params[:lon], params[:lat], nil) # FIXME transport_mode from options?
+      nearest_stop = find_nearest_stop(params[:lon], params[:lat], nil)
       if nearest_stop
         map_params_from_location([nearest_stop],
                                  find_other_locations=true,

@@ -27,7 +27,7 @@
 	      <div id='guidance-area' class='guidance'><%= t('problems.find_bus_route.area_example')%></div>
 	    </li>
 		<li><button class="point-go" type="submit"><%= t('problems.find_bus_route.go') %></button></li>
-		<li>
+		<li class="base-error">
 		<%- if @error_message %>
 	      <div class='error'>
 	        <%= @error_message %>

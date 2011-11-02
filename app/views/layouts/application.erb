@@ -19,9 +19,9 @@
     <%= csrf_meta_tag %>
     <%= raw main_style_link %>
 
-	<!--[if lte IE 7]><%= raw stylesheet_link_tag('ie67.min') %><![endif]-->
+	<!--[if lte IE 7]><%= raw stylesheet_link_tag('ie67') %><![endif]-->
 
-	<!--[if lte IE 8]><%= raw stylesheet_link_tag('ie678.min') %><![endif]-->
+	<!--[if lte IE 8]><%= raw stylesheet_link_tag('ie678') %><![endif]-->
 
     <%= yield :stylesheets %>
     <%= raw library_js_link %>

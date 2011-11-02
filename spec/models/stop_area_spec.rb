@@ -303,13 +303,15 @@ describe StopArea do
   end
   
   describe 'when searching for nearest stop areas' do        
-
-    fixtures default_fixtures
       
-    # it 'should return a list of stop_areas' do # FIXME check results
-    #   StopArea.should_receive(:find).with(:all, {:conditions=>["ST_Distance(ST_Transform(ST_GeomFromText('POINT(0.084 51.497)', 4326),27700),coords) < ?", 100000], :order=>"ST_Distance(ST_Transform(ST_GeomFromText('POINT(0.084 51.497)', 4326),27700),coords) asc", :limit=>1})
-    #   stop_area_list = StopArea.find_nearest(0.084, 51.497)
-    # end
+    it 'should return a list of stop_areas' do 
+      expected_conditions = ["ST_Distance(ST_Transform(ST_GeomFromText('POINT(0.084 51.497)', 4326),27700),coords) < ?", 100000]
+      expected_order = "ST_Distance(ST_Transform(ST_GeomFromText('POINT(0.084 51.497)', 4326),27700),coords) asc"
+      StopArea.should_receive(:find).with(:all, { :conditions=> expected_conditions,
+                                                  :order=> expected_order, 
+                                                  :limit=>1 }).and_return([])
+      stop_area_list = StopArea.find_nearest(0.084, 51.497)
+    end
     
     it 'shoud fail with invalid (lon,lat)' do
       expect { StopArea.find_nearest(0.01, 'foo') }.should raise_error
