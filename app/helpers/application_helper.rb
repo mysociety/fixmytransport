@@ -12,29 +12,41 @@ module ApplicationHelper
     MySociety::Config.get('GOOGLE_MAPS_API_KEY', '')
   end
 
+  def minify(filelist)
+    if !MySociety::Config.getbool('STAGING_SITE', true)
+      filelist = filelist.map{ |filename| "#{filename}.min" }
+    end
+    filelist
+  end
+  
   def library_js_link
-    javascript_include_tag('jquery-1.5.2.min',
-                           'jquery-ui-1.8.13.custom.min',
-                           'jquery.autofill.min',
-                           'jquery.form.min',
-                           'OpenLayers',
-                           'map.min', :charset => 'utf-8', :cache => 'libraries')
+    minified_js_files = ['jquery-1.5.2.min',
+                         'jquery-ui-1.8.13.custom.min',
+                         'jquery.autofill.min',
+                         'jquery.form.min',
+                         'OpenLayers']
+    js_files = ['map']
+    files = minified_js_files + minify(js_files)
+    javascript_include_tag(files, :charset => 'utf-8', :cache => 'libraries')
   end
 
   def admin_library_js_link
-     javascript_include_tag('jquery-1.5.2.min',
-                            'jquery-ui-1.8.13.custom.min',
-                            'OpenLayers-admin',
-                            'map.min',
-                            'admin', :charset => 'utf-8', :cache => 'admin_libraries')
+    minified_js_files = ['jquery-1.5.2.min',
+                         'jquery-ui-1.8.13.custom.min',
+                         'OpenLayers-admin']
+    js_files = ['map', 'admin']
+    files = minified_js_files + minify(js_files)
+    javascript_include_tag(files, :charset => 'utf-8', :cache => 'admin_libraries')
   end
 
   def main_js_link
-    javascript_include_tag('fixmytransport.min', 'fb.min', :charset => 'utf-8', :cache => 'main')
+    js_files = ['fixmytransport', 'fb']
+    javascript_include_tag(minify(js_files), :charset => 'utf-8', :cache => 'main')
   end
   
   def main_style_link
-    stylesheet_link_tag('core.min', 'map.min', 'buttons.min', 'ui-tabs-mod.min', 'fixmytransport.min', :cache => 'main')
+    css_files = ['core', 'map', 'buttons', 'ui-tabs-mod', 'fixmytransport']
+    stylesheet_link_tag(minify(css_files), :cache => 'main')
   end
 
   # options:

@@ -2,6 +2,6 @@
   <%# note i:  currently i18n_javascript only being used for geolocation %>
   <%# note ii: i18n_javascript must be added to jQuery.readyList before anything calls it! %>
   <%= render "shared/i18n_javascript_js" %>
-  <%= raw javascript_include_tag('geo', 'fmt_geo') %>
+  <%= raw javascript_include_tag(minify(['geo', 'fmt_geo'])) %>
 <%- end %>
 

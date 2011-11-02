@@ -10,9 +10,9 @@
     <%= csrf_meta_tag %>
     <%= raw main_style_link %>
 
-	<!--[if lte IE 7]><%= raw stylesheet_link_tag('ie67.min') %><![endif]-->
-	
-	<!--[if lte IE 8]><%= raw stylesheet_link_tag('ie678.min') %><![endif]-->
+  	<!--[if lte IE 7]><%= raw stylesheet_link_tag(minify(['ie67'])) %><![endif]-->
+
+  	<!--[if lte IE 8]><%= raw stylesheet_link_tag(minify(['ie678'])) %><![endif]-->
 
     <%= yield :stylesheets %>
     <%= raw library_js_link %>
@@ -52,7 +52,7 @@
     <%= render :partial => 'shared/footer' %>
 		<%= yield :javascript %>
 		<%= raw main_js_link %>
-		<!--[if lte IE 8]><%= raw javascript_include_tag('ie.min', 'jquery.ifixpng2.min', :charset => 'utf-8') %><![endif]-->
+		<!--[if lte IE 8]><%= raw javascript_include_tag((minify(['ie']) + ['jquery.ifixpng2.min']), :charset => 'utf-8') %><![endif]-->
 		<%= render :partial => 'shared/tracking' %>
 	</body>
 </html>

@@ -8,6 +8,14 @@ namespace :cached_assets do
     "#{RAILS_ROOT}/public/javascripts/"
   end
   
+  def js_files
+    ['map', 'fixmytransport', 'fb', 'ie', 'geo', 'fmt_geo', 'admin']
+  end
+  
+  def css_files
+    ['core', 'map', 'buttons', 'ui-tabs-mod', 'fixmytransport', 'ie67', 'ie678', 'no-js']
+  end
+  
   desc "Delete aggregate/cached files"
   task :regenerate => :environment do
     include ActionView::Helpers::TagHelper
@@ -26,6 +34,18 @@ namespace :cached_assets do
     end
   end
   
+  desc 'Clear minified asset files'
+  task :clear_minified => :environment do 
+    js_files.each do |basename|
+      minified_filename = "#{js_dir}#{basename}.min.js"
+      system("rm #{minified_filename}")
+    end
+    css_files.each do |basename|
+      minified_filename = "#{css_dir}#{basename}.min.css"
+      system("rm #{minified_filename}")
+    end
+  end
+  
   desc 'Minify asset files'
   task :minify => :environment do 
     compressor_jar = MySociety::Config.get('YUI_COMPRESSOR_JAR', '')
@@ -33,13 +53,11 @@ namespace :cached_assets do
       puts "No YUI_COMPRESSOR_JAR config parameter, exiting."
       exit(0)
     end
-    js_files = ['map', 'fixmytransport', 'fb', 'ie']
     js_files.each do |basename|
       asset_filename = "#{js_dir}#{basename}.js"
       minified_filename = "#{js_dir}#{basename}.min.js"
       system("java -jar #{compressor_jar} --type js -o #{minified_filename} #{asset_filename}")
     end
-    css_files = ['core', 'map', 'buttons', 'ui-tabs-mod', 'fixmytransport', 'ie67', 'ie678', 'no-js']
     css_files.each do |basename|
       asset_filename = "#{css_dir}#{basename}.css"
       minified_filename = "#{css_dir}#{basename}.min.css"
