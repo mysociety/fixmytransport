@@ -130,7 +130,11 @@ en:
       loading_ferry: "Loading ferry stop..."
       loading_other: "Loading tram/metro/tube stop..."
       loading_done: "done"
-      
+    user_flags: 
+      admin: admin
+      expert: anorak
+      admin_explanation: FixMyTransport administrator
+      expert_explanation: FixMyTransport expert    
       
       
       

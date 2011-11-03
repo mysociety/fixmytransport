@@ -1145,6 +1145,10 @@ form#create-campaign {
   margin-bottom: 0;
 }
 
+.user-flag abbr {
+  border-bottom: none;
+}
+
 .flag-expert{background: #ffb600;}
 .flag-admin{background: #9bce24;}
 

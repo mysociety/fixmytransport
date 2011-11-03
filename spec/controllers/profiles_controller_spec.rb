@@ -61,6 +61,8 @@ describe ProfilesController do
         @user = mock_model(User, :registered? => true,
                                  :suspended? => true,
                                  :is_hidden? => false,
+                                 :is_expert? => false,
+                                 :is_admin? => false,
                                  :suspended_reason => "User used too many rude words",
                                  :suspended_hide_contribs => false,
                                  :name => "Test User",
