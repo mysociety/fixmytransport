@@ -22,7 +22,7 @@ en:
     campaign:
       location: "Location:"
       by: "by"
-      followers: "Followers:"
+      supporters: "Supporters:"
       started: "Started:"
       status: "Status:"
       seeking_support: Seeking support

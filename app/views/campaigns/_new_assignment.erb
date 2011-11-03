@@ -10,7 +10,7 @@
 		<%= raw simple_format(h(assignment.data[:reason])) %>
 	</div>
 	<div class="thread-furniture">
-		<div class="thumb"><img src="<%= assignment.creator.profile_photo.url(:large_thumb) %>" alt="" />
+		<div class="thumb"><a href="<%= profile_url(assignment.creator) %>"><img src="<%= assignment.creator.profile_photo.url(:large_thumb) %>" alt="" /></a>
 			<%= raw role_flags(assignment.creator) %>
 		</div>
 	
