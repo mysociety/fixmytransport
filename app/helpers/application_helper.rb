@@ -661,14 +661,19 @@ module ApplicationHelper
   end
 
   def role_flags(user)
-    flags = ['<div class="user-flags">']
+    flags = []
+    if user.is_expert? or user.is_admin?
+      flags << '<div class="user-flags">' 
+    end
     if user.is_expert?
       flags << "<div class=\"user-flag flag-expert\"><abbr title=\"#{t('shared.user_flags.expert_explanation')}\">#{t('shared.user_flags.expert')}</abbr></div>"
     end
     if user.is_admin?
-      flags << "<div class=\"user-flag flag-admin\"><abbr title=\"#{t('shared.user_flags.admin_explanation')}\">#{t('shared.user_flags.admin')}</abbr</div>"
+      flags << "<div class=\"user-flag flag-admin\"><abbr title=\"#{t('shared.user_flags.admin_explanation')}\">#{t('shared.user_flags.admin')}</abbr></div>"
     end
-    flags << '</div>'
+    if user.is_expert? or user.is_admin?
+      flags << '</div>'
+    end
     flags.join(" ")
   end
 
