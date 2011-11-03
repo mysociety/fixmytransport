@@ -16,6 +16,9 @@
 <div class="thread-details">
 	<div class="thread-copy"><%= raw simple_format(sanitize(update.text)) %></div>
 	<div class="thread-furniture">
-		<div class="thumb"><img src="<%= update.user.profile_photo.url(:large_thumb) %>" alt="" /></div>
+		<div class="thumb"><img src="<%= update.user.profile_photo.url(:large_thumb) %>" alt="" />
+		  <%= raw role_flags(update.user) %>
+		</div>
+		
 	</div>
 </div>

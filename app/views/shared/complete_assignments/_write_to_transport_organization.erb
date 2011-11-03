@@ -14,6 +14,9 @@
 		<%= raw simple_format(sanitize(assignment.problem.description)) %>
 	</div>
 	<div class="thread-furniture">
-		<div class="thumb"><img src="<%= assignment.user.profile_photo.url(:large_thumb) %>" alt="" /></div>
+		<div class="thumb"><img src="<%= assignment.user.profile_photo.url(:large_thumb) %>" alt="" />
+			<%= raw role_flags(assignment.user) %>
+		</div>
+	
 	</div>
 </div>

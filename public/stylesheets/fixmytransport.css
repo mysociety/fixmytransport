@@ -272,7 +272,6 @@ form#search {
 	}
 	#banner .status {
 		display:inline-block;
-		/*margin-top: 35px;*/
 		color:#fff;
 		text-transform:uppercase;
 		font-size:0.8em;
@@ -1106,7 +1105,7 @@ form#create-campaign {
 
 /*===[Campaign Status]===*/
 
-.stat-current, .stat-fixed, .stat-pending{
+.stat-current, .stat-fixed, .stat-pending {
 	color:#fff;
 	font-size: 10px;
 	text-transform: uppercase;
@@ -1120,6 +1119,33 @@ form#create-campaign {
 	text-shadow:0 1px 1px rgba(100, 100, 100, 0.3);
 
 	}
+
+.user-flag {
+  font-size: 11px;
+  font-weight: bolder;
+  margin: 0.2em;
+  padding: 0;
+  float: right;
+  color:#fff;
+	text-transform: uppercase;
+	display: block;
+	width: 6em;
+	text-align: center ;
+	border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+	text-shadow:0 1px 1px rgba(100, 100, 100, 0.3);
+}
+
+.thumb .user-flag {
+  float: none;
+  font-size: 11px;
+  display: block;
+  line-height: 1.5em;
+}
+
+.flag-expert{background: #ffb600;}
+.flag-admin{background: #9bce24;}
 
 .stat-current{background:#ff6600;}
 .stat-fixed{background:#9bce24;}
@@ -3035,10 +3061,23 @@ body.facebook-canvas .button {
         width: auto;
         max-width:20%;
     }
-    .thumb img {
+    .thumb img{
       width: 100%;
     }
+    
+    .thumb .user-flag {
+       width: 95%;
+       font-size: 0.8em;
+    }
 
+    #greybanner .user-flags {
+      float: right;
+    }
+    
+    #greybanner .user-flags .user-flag {
+      float: none;
+    }
+    
     ul#campaign-thread li.open .thread-details .thread-copy, ul#campaign-thread li.open .thread-details .thread-alternative-copy {
         margin: 0 0 10px 3%;
     }

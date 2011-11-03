@@ -260,7 +260,7 @@
 			<div class="greybox">
 				<div class="avatar"><a href="<%= profile_url(@campaign.initiator) %>"><img src="<%= @campaign.initiator.profile_photo.url(:large_thumb) %>" alt="" /></a></div>
 				<div class="user-info">
-					<a class="name" href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a>
+					<a class="name" href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a> <%= raw role_flags(@campaign.initiator) %>
 					<%- if @campaign.initiator.location %>
 					<p class="location"><%= @campaign.initiator.location %></p>
 					<%- end %>

@@ -18,7 +18,7 @@ module ApplicationHelper
     end
     filelist
   end
-  
+
   def library_js_link
     minified_js_files = ['jquery-1.5.2.min',
                          'jquery-ui-1.8.13.custom.min',
@@ -43,7 +43,7 @@ module ApplicationHelper
     js_files = ['fixmytransport', 'fb']
     javascript_include_tag(minify(js_files), :charset => 'utf-8', :cache => 'main')
   end
-  
+
   def main_style_link
     css_files = ['core', 'map', 'buttons', 'ui-tabs-mod', 'fixmytransport']
     stylesheet_link_tag(minify(css_files), :cache => 'main')
@@ -87,7 +87,7 @@ module ApplicationHelper
   def js_translation_list(keys)
       keys.map {|k| "'#{k}': \"#{I18n.translate(k)}\""}.join(",\n        ")
   end
-  
+
   # Generate a hash of data used to render the point on a map
   # Required options:
   # :link_type - [:problem|:location] - link stop to problem reporting
@@ -110,7 +110,7 @@ module ApplicationHelper
                :id => "#{stop.class}_#{stop.id}",
                :url => map_link_path(location, options[:link_type]),
                :description => location.description,
-               :highlight => location.highlighted == true, 
+               :highlight => location.highlighted == true,
                :icon => stop_icon(stop, options[:small], options[:highlight]),
                :height => icon_height(options[:small]),
                :width => icon_width(options[:small]) }
@@ -175,7 +175,7 @@ module ApplicationHelper
   def location_stops_coords(locations, small, link_type, highlight=nil)
     array_content = []
     locations.each do |location|
-      if location.is_a? Route or location.is_a? SubRoute 
+      if location.is_a? Route or location.is_a? SubRoute
         if location.show_as_point || highlight
           array_content << point_coords(location, { :small => highlight ? small : true,
                                                    :link_type => link_type,
@@ -340,7 +340,7 @@ module ApplicationHelper
       return admin_url(admin_route_path(location.id))
     end
   end
-  
+
   def admin_contact_url(contact)
     case contact
     when PassengerTransportExecutiveContact
@@ -351,13 +351,13 @@ module ApplicationHelper
       return admin_url(admin_council_contact_path(contact.id))
     end
   end
-  
+
   def admin_organization_url(organization)
     if organization.is_a?(Operator)
       return admin_url(admin_operator_path(organization.id))
     elsif organization.is_a?(Council)
       return admin_url(admin_council_contacts_path(:area_id => organization.id))
-    elsif organization.is_a?(PassengerTransportExecutive) 
+    elsif organization.is_a?(PassengerTransportExecutive)
       return admin_url(admin_pte_path(organization.id))
     end
   end
@@ -374,7 +374,7 @@ module ApplicationHelper
       return "<span class='admin-star' title='#{title}'>#{star_html}</span>"
     end
   end
-  
+
   def add_comment_url(commentable)
     case commentable
     when Campaign
@@ -638,15 +638,15 @@ module ApplicationHelper
 	    dates_hash[sent_email.created_at.to_date] << sent_email.recipient.name
 	  end
 	  dates_hash.to_a.sort.each do |date, recipients|
-	    history_text = t('problems.show.sent_time', :date => date.to_s(:short), 
-	                                                :recipient => recipients.uniq.to_sentence) 
+	    history_text = t('problems.show.sent_time', :date => date.to_s(:short),
+	                                                :recipient => recipients.uniq.to_sentence)
 	    history += "<li>#{history_text}</li>"
 	  end
 		history
   end
 
-  # Operator links for the campaign and problem pages - if the problem was on a sub route, 
-  # and the user chose an operator, just show that. 
+  # Operator links for the campaign and problem pages - if the problem was on a sub route,
+  # and the user chose an operator, just show that.
   # If not, but the location has operators (and there aren't too many to display nicely),
   # show those
   def problem_operator_links(problem)
@@ -658,6 +658,18 @@ module ApplicationHelper
 	  else
 	    return nil
     end
+  end
+
+  def role_flags(user)
+    flags = ['<div class="user-flags">']
+    if user.is_expert?
+      flags << '<div class="user-flag flag-expert">anorak</div>'
+    end
+    if user.is_admin?
+      flags << '<div class="user-flag flag-admin">admin</div>'
+    end
+    flags << '</div>'
+    flags.join(" ")
   end
 
 end

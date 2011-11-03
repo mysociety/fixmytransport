@@ -15,10 +15,12 @@
     <%- else %>
     <img src="<%= @user.profile_photo.url(:large_thumb) %>" class="avatar" alt="" />
     <%- end %>
+    <%= raw role_flags(@user) %>
     <h2><%= @user.name %></h2>
     <%- if @user.location %>
       <p><%= @user.location %></p>
     <%- end %>
+    
   </div>
 </div>
 
