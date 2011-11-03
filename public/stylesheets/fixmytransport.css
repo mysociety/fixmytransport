@@ -1142,6 +1142,7 @@ form#create-campaign {
   font-size: 11px;
   display: block;
   line-height: 1.5em;
+  margin-bottom: 0;
 }
 
 .flag-expert{background: #ffb600;}
