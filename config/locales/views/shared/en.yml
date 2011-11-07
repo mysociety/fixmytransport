@@ -75,6 +75,7 @@ en:
     login:
       a_fixmytransport_boffin: "a FixMyTransport boffin"
       must_be_logged_out: "You must be logged out to access this page"
+      modal_must_be_logged_out: "You are already signed in to FixMyTransport"
       unexpected_external_auth_error: "Unable to complete authentication with %{source} &mdash; try again later"
       login_to: "Sign in as %{user} to %{requested_action}"
       logout_successful: "Sign out successful!"

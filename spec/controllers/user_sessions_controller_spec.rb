@@ -57,6 +57,31 @@ describe UserSessionsController do
       make_request
     end
         
+    describe 'if the user is already logged in ' do 
+    
+      before do
+        @mock_user = mock_model(User, :suspended? => false)
+        @controller.stub!(:current_user).and_return(@mock_user)
+        @user_session = mock_model(UserSession, :save => true, :destroy => true, :record => @mock_user)
+        UserSession.stub!(:new).and_return(@user_session) 
+      end
+    
+      describe 'if the request asks for json' do
+      
+        it 'should return failure' do
+          make_request(@default_params.update({:format=>"json"}))
+          JSON.parse(response.body)['success'].should == false
+        end
+        
+        it 'should return an error message saying the user is already logged in' do 
+          make_request(@default_params.update({:format=>"json"}))
+          JSON.parse(response.body)['errors']['base'].should == 'You are already signed in to FixMyTransport'
+        end
+        
+      end
+      
+    end    
+        
     describe 'if the user session is valid and the user has confirmed their password' do
     
       describe 'and a post-login action of joining a campaign is passed' do 

@@ -83,9 +83,20 @@ class ApplicationController < ActionController::Base
   def require_no_user
     if current_user
       store_location
-      flash[:notice] = t('shared.login.must_be_logged_out')
-      redirect_to root_url
-      return false
+      respond_to do |format|
+        format.html do 
+          flash[:notice] = t('shared.login.must_be_logged_out')
+          redirect_to root_url
+          return false
+        end
+        format.json do 
+          @json = {:errors => {}}
+          @json[:errors][:base] = t('shared.login.modal_must_be_logged_out')
+          @json[:success] = false
+          render :json => @json
+          return false
+        end
+      end
     end
   end
 
