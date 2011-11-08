@@ -257,7 +257,6 @@ function createMap(map_element) {
         'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
                                           20037508.34, 20037508.34)
       };
-  alert(OpenLayers.Util.getImagesLocation());
   $('.static-map-element').hide();
   map = new OpenLayers.Map(map_element, options);
   var layer = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true,
