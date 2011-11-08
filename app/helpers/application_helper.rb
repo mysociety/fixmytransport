@@ -543,7 +543,7 @@ module ApplicationHelper
 
   def twitter_url(campaign)
     if current_user == campaign.initiator
-      text = campaign.call_to_action
+      text = campaign.twitter_call_to_action
     else
       text = campaign.supporter_call_to_action
     end

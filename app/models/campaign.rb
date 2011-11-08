@@ -112,6 +112,10 @@ class Campaign < ActiveRecord::Base
       return nil
     end
   end
+  
+  def twitter_call_to_action
+    I18n.translate('campaigns.show.twitter_call_to_action', :org => self.responsible_org_descriptor, :title => self.title)
+  end
 
   def call_to_action
     I18n.translate('campaigns.show.call_to_action', :org => self.responsible_org_descriptor, :title => self.title)

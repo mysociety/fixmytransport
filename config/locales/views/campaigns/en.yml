@@ -54,6 +54,7 @@ en:
       show_quoted: "show quoted sections"
       campaign_fixed: "Fixed"
       call_to_action: "Please help me persuade %{org} to %{title}"
+      twitter_call_to_action: "Can anyone help me with this problem?"
       got_a_message: "%{sender} responded to %{campaigner}"
       user_says: "%{name} commented"
       request_advice: "Ask advice"
