@@ -22,15 +22,50 @@ var segmentSelectedStyle =
   strokeWidth: 4
 };
 
+// Handle a click on a marker - go to its URL
+function markerClick(evt) {
+  if (evt.feature.attributes.url) {
+    window.location =  evt.feature.attributes.url;
+  }
+  OpenLayers.Event.stop(evt);
+}
+
 function area_init() {
+  // Vector layers must be added onload for IE
+  if ($.browser.msie) {
+      $(window).load(createAreaMap);
+  } else {
+      createAreaMap();
+  }
+}
+
+function createAreaMap(){
   createMap('map');
   bounds = new OpenLayers.Bounds();
-  markers = new OpenLayers.Layer.Markers( "Markers" );
-  otherMarkers = new OpenLayers.Layer.Markers( "Other Markers" );
+  
+  // layers for markers that are the current focus (markers), other markers in the area
+  // (otherMarkers) and other markers that are significant (highlightedMarkers)
+  // - e.g. locations with problem reports, rather than without when browsing 
+  // an area.
+  markers = new OpenLayers.Layer.Vector( "Markers" );
+  otherMarkers = new OpenLayers.Layer.Vector( "Other Markers" );
+  highlightedMarkers = new OpenLayers.Layer.Vector( "Highlighted Markers" );
   map.addLayer(otherMarkers);
-  map.addLayer(markers);
-  addMarkerList(areaStops, markers, false);
-  addMarkerList(otherAreaStops, otherMarkers, true);
+  map.addLayer(highlightedMarkers);
+  map.addLayer(markers);  
+
+  // All markers should handle to a click event
+  markers.events.register( 'featureselected', markers, markerClick );
+  otherMarkers.events.register( 'featureselected', otherMarkers, markerClick );
+  highlightedMarkers.events.register( 'featureselected', highlightedMarkers, markerClick );
+  var select = new OpenLayers.Control.SelectFeature( [markers, otherMarkers, highlightedMarkers] );
+  map.addControl( select );
+  select.activate();
+  
+  // Load the main markers, and the background markers (in either the highlighted or other layer)
+  addMarkerList(areaStops, markers, false, null);
+  addMarkerList(otherAreaStops, otherMarkers, true, highlightedMarkers);
+
   centerCoords =  new OpenLayers.LonLat(lon, lat);
   centerCoords.transform(proj, map.getProjectionObject());
   map.setCenter(centerCoords, zoom);
@@ -56,6 +91,7 @@ function area_init() {
       if (map.getZoom() > maxZoom) map.zoomTo(maxZoom);
   });
 
+  
 }
 
 function updateLocations(event) {
@@ -64,19 +100,16 @@ function updateLocations(event) {
     if ($('#map-zoom-notice').length > 0) {
       $('#map-zoom-notice').fadeOut(500);
     }
-    for (var i=0; i < otherMarkers.markers.length; i++){
-      otherMarkers.markers[i].display(true);
-    }
+    // Show other, non-highlighted markers
+    otherMarkers.setVisibility(true)
   }else{
     if ($('#map-zoom-notice').length > 0) {
       $('#map-zoom-notice').fadeIn(500);
     }
-    for (var i=0; i < otherMarkers.markers.length; i++){
-      if (!otherMarkers.markers[i].highlight == true){
-        otherMarkers.markers[i].display(false);
-      }
-    }
+    // Hide other, non-highlighted markers
+    otherMarkers.setVisibility(false)
   }
+  // Request and load markers by ajax
   if (currentZoom >= minZoomForOtherMarkers || highlight == 'has_content'){
     center = map.getCenter();
     center = center.transform(map.getProjectionObject(), proj);
@@ -94,7 +127,9 @@ function updateLocations(event) {
 
 function loadNewMarkers(markerData) {
   newMarkers = markerData['locations'];
-  addMarkerList(newMarkers, otherMarkers, true);
+  // load new background markers
+  addMarkerList(newMarkers, otherMarkers, true, highlightedMarkers);
+  // update any associated list of issues
   newContent = markerData['issue_content'];
   if ($('#issues-in-area').length > 0){
     $('#issues-in-area').html(newContent);
@@ -102,31 +137,58 @@ function loadNewMarkers(markerData) {
 }
 
 function markerFail(){
+// do nothing
 }
 
-function addMarkerList(list, markers, others) {
-  var stopCoords;
-
+function addMarkerList(list, layer, others, highlightedLayer) {
   for (var i=0; i < list.length; i++){
     var item = list[i];
+    // an element in the list may be an individual marker or an array
+    // of markers representing a route
     if (item instanceof Array){
       for (var j=0; j < item.length; j++){
-        addMarker(item[j], bounds, markers, others);
+        addMarker(item[j], bounds, layer, others, highlightedLayer);
       }
     }else{
-      addMarker(item, bounds, markers, others);
+      addMarker(item, bounds, layer, others, highlightedLayer);
     }
   }
 }
 
 
-function addMarker(current, bounds, layer, other){
+function addMarker(current, bounds, layer, other, highlightedLayer){
   stopCoords = pointCoords(current.lon, current.lat);
-  addRouteMarker(stopCoords, bounds, layer, current, other);
+
+  if (stopsById[current.id] == undefined) {
+    bounds.extend(stopCoords);
+    var marker = new OpenLayers.Feature.Vector(stopCoords, {
+      url: current.url,
+      name: current.description,
+      id: current.id,
+      highlight: current.highlight,
+    },
+    {externalGraphic: current.icon + ".png",
+        graphicTitle: current.description,
+        graphicWidth: current.width,
+        graphicHeight: current.height,
+        graphicOpacity: 1,
+        graphicXOffset: -( current.width/2),
+        graphicYOffset: -current.height,
+        cursor: 'pointer'
+    });    
+
+    stopsById[current.id] = marker;
+    if (current.highlight == true && other == true) {
+      highlightedLayer.addFeatures( marker );
+    }else{
+      layer.addFeatures( marker );
+    }
+  }
+
 }
 
 function pointCoords(lon, lat) {
-  return new OpenLayers.LonLat(lon, lat).transform(proj, map.getProjectionObject());
+  return new OpenLayers.Geometry.Point(lon, lat).transform(proj, map.getProjectionObject());
 }
 
 function route_init(map_element, routeSegments) {
@@ -135,22 +197,18 @@ function route_init(map_element, routeSegments) {
   bounds = new OpenLayers.Bounds();
 
   var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer",{projection: proj});
-  var markers = new OpenLayers.Layer.Markers( "Markers", {projection: proj});
   map.addLayer(vectorLayer);
-  map.addLayer(markers);
 
   addSelectedHandler(vectorLayer);
   for (var i=0; i < routeSegments.length; i++){
      var coords = routeSegments[i];
      var fromCoords = pointCoords(coords[0].lon, coords[0].lat);
      var toCoords = pointCoords(coords[1].lon, coords[1].lat);
-     var fromPoint = new OpenLayers.Geometry.Point(fromCoords.lon, fromCoords.lat);
-     var toPoint = new OpenLayers.Geometry.Point(toCoords.lon, toCoords.lat);
      var points = [];
-     points.push(fromPoint);
-     points.push(toPoint)
-     bounds.extend(fromPoint);
-     bounds.extend(toPoint);
+     points.push(fromCoords);
+     points.push(toCoords)
+     bounds.extend(fromCoords);
+     bounds.extend(toCoords);
      lineString = new OpenLayers.Geometry.LineString(points);
      lineFeature = new OpenLayers.Feature.Vector(lineString, {projection: proj}, segmentStyle);
      lineFeature.segment_id = coords[2];
@@ -190,16 +248,16 @@ function segmentUnselected(event) {
 }
 
 function createMap(map_element) {
-  OpenLayers.ImgPath='/javascripts/img/';
   var options = {
         'projection': new OpenLayers.Projection("EPSG:900913"),
         'units': "m",
         'numZoomLevels': 18,
         'maxResolution': 156543.0339,
-        'theme': '/javascripts/theme/default/style.css',
+        'theme': null,
         'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
                                           20037508.34, 20037508.34)
       };
+  alert(OpenLayers.Util.getImagesLocation());
   $('.static-map-element').hide();
   map = new OpenLayers.Map(map_element, options);
   var layer = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true,
@@ -208,74 +266,8 @@ function createMap(map_element) {
   map.addLayer(layer);
 }
 
-function stopSelected () {
-  this.icon.imageDiv.style.cursor = 'wait';
-  document.location = this.url;
-}
-
-function stopHovered() {
-  hoverStop(this);
-}
-
-function hoverStop(stop) {
-  if (openHover){
-    stopUnhovered(openHover.stop);
-    openHover = null;
-  }
-  offset = (stop.icon.size.h/2)
-  tooltip_position = map.getPixelFromLonLat(stop.lonlat).offset(new OpenLayers.Pixel(0, offset + 5));
-  tooltip_lonlat = map.getLonLatFromPixel(tooltip_position);
-  var tooltipPopup = new OpenLayers.Popup("activetooltip",
-                                          tooltip_lonlat,
-                                          new OpenLayers.Size(100,12),
-                                          stop.name,
-                                          false);
-  // this class needs to appear in the css with the same font-size to get
-  // the tooltip to resize correctly
-  tooltipPopup.contentDisplayClass = 'tooltip-popup-content';
-  tooltipPopup.displayClass = 'tooltip-popup';
-  tooltipPopup.backgroundColor='#FFFCCF';
-  tooltipPopup.border='1px solid #CDCDC1';
-  tooltipPopup.div.style.fontSize='1em';
-  tooltipPopup.contentDiv.style.overflow='hidden';
-  tooltipPopup.closeOnMove = true;
-  tooltipPopup.autoSize = true;
-  tooltipPopup.updateSize();
-  stop.popup = tooltipPopup;
-  openHover = tooltipPopup;
-  tooltipPopup.stop = stop;
-  map.addPopup(tooltipPopup);
-}
-
-function stopUnhovered() {
-  unHoverStop(this);
-}
-
-function unHoverStop(stop) {
-  if (stop != null && stop.popup != null){
-    map.removePopup(stop.popup);
-  }
-}
 
 
-function addRouteMarker(stopCoords, bounds, markers, item, other) {
-  if (stopsById[item.id] == undefined) {
-    bounds.extend(stopCoords);
-    var size = new OpenLayers.Size(item.width, item.height);
-    var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-    var stopIcon = new OpenLayers.Icon(item.icon + ".png", size, offset);
-    stopIcon.imageDiv.style.cursor = 'pointer';
-    var marker = new OpenLayers.Marker(stopCoords, stopIcon);
-    marker.url = item.url;
-    marker.name = item.description;
-    marker.id = item.id;
-    marker.highlight = item.highlight;
-    stopsById[item.id] = marker;
-    marker.events.register("click", marker, stopSelected);
-    marker.events.register("mouseover", marker, stopHovered);
-    marker.events.register("mouseout", marker, stopUnhovered);
-    markers.addMarker(marker);
-  }
-}
+
 
 
