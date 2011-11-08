@@ -998,7 +998,7 @@ describe ProblemsController do
                                    :responsible_organizations => [mock_pte],
                                    :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_stop)
-      expected = ["We'll then send it to <strong>test PTE</strong>."].join(' ')
+      expected = ["Let's get your problem fixed. Write an email using the form below, and we'll send it to <strong>test PTE</strong>."].join(' ')
       expect_advice(mock_problem, expected)
     end
 
@@ -1039,7 +1039,7 @@ describe ProblemsController do
                                    :responsible_organizations => [mock_council],
                                    :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_stop)
-      expected = ["We'll then send it to <strong>Test Council</strong>."].join(' ')
+      expected = ["Let's get your problem fixed. Write an email using the form below, and we'll send it to <strong>Test Council</strong>."].join(' ')
       expect_advice(mock_problem, expected)
     end
 
@@ -1051,7 +1051,8 @@ describe ProblemsController do
                                    :responsible_organizations => [mock_council_one, mock_council_two],
                                    :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_stop)
-      expected = ["We'll then send it to <strong>Test Council One</strong> or <strong>Test Council",
+      expected = ["Let's get your problem fixed. Write an email using the form below, and we'll send it",
+                  "to <strong>Test Council One</strong> or <strong>Test Council",
                   "Two</strong>."].join(' ')
       expect_advice(mock_problem, expected)
     end
@@ -1065,7 +1066,8 @@ describe ProblemsController do
                                    :councils_responsible? => true,
                                    :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_stop)
-      expected = ["We'll then send it to <strong>Test Council One</strong> or <strong>Test",
+      expected = ["Let's get your problem fixed. Write an email using the form below, and we'll send it to",
+                  "<strong>Test Council One</strong> or <strong>Test",
                   "Council Two</strong>."].join(' ')
       expect_advice(mock_problem, expected)
     end
@@ -1117,8 +1119,9 @@ describe ProblemsController do
                                      :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_route)
 
-    expected = ["More than one company operates this route. Your problem <strong>will be sent",
-                "to the operator</strong> you select below."].join(' ')
+    expected = ["Let's get your problem fixed. More than one company operates this route.", 
+                "Write an email using the form below and we'll send your problem report",
+                "<strong>to the operator you select below</strong>."].join(' ')
     expect_advice(mock_problem, expected)
     end
 
