@@ -270,6 +270,9 @@ function createMap(map_element) {
   if (javascriptPath == ''){
     javascriptPath = jsPath('libraries')
   }
+  if (javascriptPath == ''){
+    javascriptPath = jsPath('admin_libraries')
+  }
   OpenLayers.ImgPath = javascriptPath + 'img/';
   var options = {
         'projection': new OpenLayers.Projection("EPSG:900913"),
