@@ -247,8 +247,30 @@ function segmentUnselected(event) {
 
 }
 
+function jsPath(filename) {
+    var r = new RegExp("(^|(.*?\\/))("+filename+"\.js)(\\?|$)"),
+        s = document.getElementsByTagName('script'),
+        src, m, l = "";
+    for(var i=0, len=s.length; i<len; i++) {
+        src = s[i].getAttribute('src');
+        if(src) {
+            var m = src.match(r);
+            if(m) {
+                l = m[1];
+                break;
+            }
+        }
+    }
+    return l;
+}
+
 function createMap(map_element) {
-  OpenLayers.ImgPath='/javascripts/img/';
+  // handle both cached and uncached js files in calculating image path
+  var javascriptPath = jsPath('OpenLayers');
+  if (javascriptPath == ''){
+    javascriptPath = jsPath('libraries')
+  }
+  OpenLayers.ImgPath = javascriptPath + 'img/';
   var options = {
         'projection': new OpenLayers.Projection("EPSG:900913"),
         'units': "m",
