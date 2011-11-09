@@ -248,6 +248,7 @@ function segmentUnselected(event) {
 }
 
 function createMap(map_element) {
+  OpenLayers.ImgPath='/javascripts/img/';
   var options = {
         'projection': new OpenLayers.Projection("EPSG:900913"),
         'units': "m",
