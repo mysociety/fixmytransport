@@ -33,7 +33,7 @@ module ApplicationHelper
   def admin_library_js_link
     minified_js_files = ['jquery-1.5.2.min',
                          'jquery-ui-1.8.13.custom.min',
-                         'OpenLayers-admin']
+                         'admin/OpenLayers']
     js_files = ['map', 'admin']
     files = minified_js_files + minify(js_files)
     javascript_include_tag(files, :charset => 'utf-8', :cache => 'admin_libraries')
@@ -45,8 +45,10 @@ module ApplicationHelper
   end
 
   def main_style_link
-    css_files = ['core', 'map', 'buttons', 'ui-tabs-mod', 'fixmytransport']
-    stylesheet_link_tag(minify(css_files), :cache => 'main')
+    minified_css_files = ['/javascripts/theme/default/style.tidy.css']
+    css_files = ['core', 'map', 'buttons', 'ui-tabs-mod', 'fixmytransport' ]
+    files = minified_css_files + minify(css_files)
+    stylesheet_link_tag(files, :cache => 'main')
   end
 
   # options:

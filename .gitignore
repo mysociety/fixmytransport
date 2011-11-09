@@ -27,6 +27,10 @@ public/files
 public/files/*
 public/images/.DS_Store
 public/system
+public/javascripts/admin/theme
+public/javascripts/admin/theme/*
+public/javascripts/admin/img
+public/javascripts/admin/img/*
 public/javascripts/libraries.js
 public/javascripts/admin_libraries.js
 public/javascripts/main.js

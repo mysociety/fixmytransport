@@ -77,11 +77,16 @@ function doGeolocate(e, inputId) {
           );
         } else { // this is find_stop (goes straight to lon/lat)
           $('#geolocate-status-' + inputId).text($().fmt_translate('shared.geolocate.loading')); // fleeting
-          document.location.href = document.location.href + "?lon=" + position.coords.longitude + "&lat=" + position.coords.latitude
+          param_join_char = "&"
+          if (document.location.href.indexOf("?") == -1){
+            param_join_char = "?"
+          }
+          document.location.href = document.location.href + param_join_char +"lon=" + position.coords.longitude + "&lat=" + position.coords.latitude
+
         }
         $('#geolocate-status-' + inputId).text($('#geolocate-status-' + inputId).text() + ' ' + $().fmt_translate('shared.geolocate.loading_done'));
         $('.geolocate-status').removeClass('geolocate-busy').addClass('geolocate-done');
-        $('.geolocate-container').fadeTo(verySlow, 0);
+        $('.geolocate-container').fadeTo('slow', 0);
       },
       function(err) {
         var errMsg;

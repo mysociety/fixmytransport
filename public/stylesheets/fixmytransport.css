@@ -2028,7 +2028,7 @@ ul.route-links {
 /*===[Error Positioning]===*/
 
 .error{clear: both;float:left;margin: 4px 0 0 4px;}
-.find-stop-error{margin: 10px 0 0 223px;}
+.find-stop-error{ margin: 5px 0 0 223px;}
 .form-field p{clear: left;}
 
 /*===[Facebook Canvas]===*/
@@ -2545,7 +2545,8 @@ body.facebook-canvas .button {
 			#find-stop {
 			  background: none;
 			  width: 90%;
-			  margin: 45% 5%;
+			  margin: 0 5%;
+			  height: auto;
 			}
 
 			#find-stop input {
@@ -2569,6 +2570,10 @@ body.facebook-canvas .button {
  		  #large-map #map{
         width: 100%;
         height: 400px;
+      }
+      
+      .find-stop-error{
+        margin: 0;
       }
 
       /* ===[ Find a route]=== */

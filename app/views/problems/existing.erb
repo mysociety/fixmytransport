@@ -1,0 +1,20 @@
+<div id="banner">
+  <a id="home" href="/">FixMyTransport</a>
+	<div class="container">
+		<h1><%= t('problems.existing.header')%></h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+		<p><%= t('problems.existing.intro', :location => @location.description) %> <%= raw t('problems.existing.continue_on', :link => link_to( t('problems.existing.report_your_problem'), new_problem_url(:location_id => @location.id, :location_type => @location.type)))%></p>
+	</div>
+</div>
+<div id="main-content" class="container">
+  <%- if !@issues.empty? %>
+  <ul class="issues-list">
+  	<%- @issues.each do |issue| %>
+       <%= render :partial => 'shared/issue', :locals => { :issue => issue, :context => :new_problem } %>
+    <%- end %>
+  </ul>
+  <%- end %>
+</div>
