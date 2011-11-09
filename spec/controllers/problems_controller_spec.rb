@@ -366,15 +366,15 @@ describe ProblemsController do
     def make_request(params={})
       get :find_stop, params
     end
-    
+
     describe 'when a geolocation (lon/lat) is supplied' do
-    
+
       before do
         @mock_locality = mock_model(Locality, :name => 'Euston')
         @mock_stop = mock_model(Stop, :locality => @mock_locality, :name =>"London Euston rail station")
         Stop.stub!(:find_nearest).and_return(@mock_stop)
       end
-      
+
       it 'should display the nearest stop and present it as the main location displayed' do
         @controller.should_receive(:map_params_from_location).with([@mock_stop],
                                                                     find_other_locations=true,
@@ -392,14 +392,14 @@ describe ProblemsController do
       end
 
     end
-    
+
     describe 'when an incomplete geolocation (lon/lat) is supplied' do
-            
+
       it 'should ignore it and render the template "find_stop"' do
         make_request({:lon => '0.01'})
         response.should render_template('find_stop')
       end
-      
+
     end
 
     describe 'when a name parameter is not supplied' do
@@ -606,6 +606,61 @@ describe ProblemsController do
 
   end
 
+  describe 'GET #existing' do
+
+    def make_request
+      get :existing, { :location_id => '55', :location_type => 'Route' }
+    end
+
+    before do
+      @controller.stub!(:instantiate_location)
+    end
+
+    it 'should try and instantiate a location from the params' do
+      @controller.should_receive(:instantiate_location)
+      make_request
+    end
+
+    describe 'when no location can be instantiated from the params' do
+
+      before do
+        @controller.stub!(:instantiate_location).and_return(nil)
+      end
+
+      it 'should render a 404' do
+        make_request
+        response.status.should == '404 Not Found'
+      end
+
+    end
+
+    describe 'when the location can be instantiated' do
+
+      before do
+        @mock_stop = mock_model(Stop, :type => 'Stop')
+        @controller.stub!(:instantiate_location).and_return(@mock_stop)
+      end
+
+      it 'should ask for related issues for the location' do
+        Problem.should_receive(:find_recent_issues).and_return([])
+        make_request
+      end
+
+      describe 'when there are no related issues for the location' do
+
+        before do
+          Problem.stub!(:find_recent_issues).and_return([])
+        end
+
+        it 'should redirect to the new problem url' do
+          make_request
+          response.should redirect_to(new_problem_url(:location_id => @mock_stop.id, :location_type => 'Stop'))
+        end
+
+      end
+    end
+
+  end
 
   describe 'GET #new' do
 
@@ -637,7 +692,7 @@ describe ProblemsController do
       @stop = mock_model(Stop, :points => [mock_model(Stop, :lat => 50, :lon => 0)],
                                :responsible_organizations => [@operator, @council])
       @mock_user = mock_model(User)
-      @responsibility_one = mock_model(Responsibility, :organization => @council, 
+      @responsibility_one = mock_model(Responsibility, :organization => @council,
                                                        :organization_id => @council.id,
                                                        :organization_type => 'Council')
       @responsibility_two = mock_model(Responsibility, :organization => @operator,
@@ -661,7 +716,7 @@ describe ProblemsController do
                                           :location_type => 'Route',
                                           :category => "Other",
                                           :errors => [],
-                                          :responsibilities => [@responsibility_one, @responsibility_two], 
+                                          :responsibilities => [@responsibility_one, @responsibility_two],
                                           :create_assignments => true)
       Problem.stub!(:new).and_return(@mock_problem)
       @mock_assignment = mock_model(Assignment)
@@ -679,9 +734,9 @@ describe ProblemsController do
       Problem.should_receive(:new).with(@problem_attributes)
       make_request
     end
-    
-    it 'should delete a responsibility for the problem for an organization that is passed as a param but not associated with the location' do 
-      @mock_problem.stub!(:responsibilities).and_return([@responsibility_one, 
+
+    it 'should delete a responsibility for the problem for an organization that is passed as a param but not associated with the location' do
+      @mock_problem.stub!(:responsibilities).and_return([@responsibility_one,
                                                          @responsibility_two,
                                                          @extra_responsibility])
       @mock_problem.responsibilities.should_receive(:delete).with(@extra_responsibility)
@@ -733,12 +788,12 @@ describe ProblemsController do
       describe 'if there is no logged in user' do
 
         it 'should save the problem data to the session with the description encoded' do
-          @controller.should_receive(:data_to_string).with({:location_id => 55, 
-                                                            :subject => "A Test Subject", 
-                                                            :responsibilities => "33|Council,44|Operator", 
-                                                            :location_type => "Route", 
-                                                            :description => "QSBUZXN0IERlc2NyaXB0aW9u\n", 
-                                                            :action => :create_problem, 
+          @controller.should_receive(:data_to_string).with({:location_id => 55,
+                                                            :subject => "A Test Subject",
+                                                            :responsibilities => "33|Council,44|Operator",
+                                                            :location_type => "Route",
+                                                            :description => "QSBUZXN0IERlc2NyaXB0aW9u\n",
+                                                            :action => :create_problem,
                                                             :text_encoded => true,
                                                             :notice => "Please create an account to finish reporting your problem.", :category=>"Other"})
           make_request()
@@ -913,30 +968,30 @@ describe ProblemsController do
       before do
         @controller.stub!(:current_user).and_return(@mock_reporter)
       end
-      
-      describe 'if the problem is not new' do 
-        
-        describe 'if the problem has a campaign' do 
-          
-          it 'should redirect to the campaign url' do 
+
+      describe 'if the problem is not new' do
+
+        describe 'if the problem has a campaign' do
+
+          it 'should redirect to the campaign url' do
             @mock_problem.stub!(:status).and_return(:confirmed)
             make_request
             response.should redirect_to(campaign_url(@mock_campaign))
           end
-          
+
         end
-        
-        describe 'if the problem does not have a campaign' do 
-          
-          it 'should redirect to the problem url' do 
+
+        describe 'if the problem does not have a campaign' do
+
+          it 'should redirect to the problem url' do
             @mock_problem.stub!(:status).and_return(:confirmed)
             @mock_problem.stub!(:campaign).and_return(nil)
             make_request
             response.should redirect_to(problem_url(@mock_problem))
           end
-          
+
         end
-        
+
       end
 
       it 'should show the "convert" template' do
@@ -1125,7 +1180,7 @@ describe ProblemsController do
     it 'should generate advice text for a bus route with multiple operators, some emailable' do
       mock_operator_one = mock_model(Operator, :name => 'Test Operator One', :emailable? => true)
       mock_operator_two = mock_model(Operator, :name => 'Test Operator Two', :emailable? => false)
-      mock_route = mock_model(Route, :transport_mode_names => ['Bus'],  
+      mock_route = mock_model(Route, :transport_mode_names => ['Bus'],
                                      :operators_responsible? => true,
                                      :responsible_organizations => [mock_operator_one, mock_operator_two],
                                      :status => 'ACT')
@@ -1140,7 +1195,7 @@ describe ProblemsController do
     end
 
     it 'should generate advice text for a train station with no operators' do
-      mock_station = mock_model(Stop, :transport_mode_names => ['Train'], 
+      mock_station = mock_model(Stop, :transport_mode_names => ['Train'],
                                       :responsible_organizations => [],
                                       :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_station)

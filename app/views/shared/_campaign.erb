@@ -5,8 +5,16 @@
 <%- end %>
 <div class="wrapper">
 	<h4><a href="<%= campaign_url(campaign) %>"><%= MySociety::Format.ucfirst(campaign.title) %></a></h4>
-
-    <p><%= raw link_to(campaign.location.description, location_url(campaign.location)) %></p>
+  	
+  	<%- if context == :new_problem %>
+  	  <p>
+  	  <%= truncate(campaign.description, :length => 200) %>
+  	  </p>
+    <%- else %>
+      <p>
+        <%= raw link_to(campaign.location.description, location_url(campaign.location)) %>
+      </p>
+    <%- end %>
    <%- if context != :browse_issues %>
       <p><%= t('shared.campaign.by')%>
         <a href="<%= profile_url(campaign.initiator) %>"><%= campaign.initiator.name %>
@@ -19,8 +27,9 @@
 		<dt><%= t('shared.campaign.supporters') %></dt>
 		<dd><%= campaign.supporters.count %></dd>
 	</dl>
-	<dl class="status-item">
-		<dt><%= t('shared.campaign.status')%></dt>
-		<dd class="status stat-<%= campaign_display_status(campaign) %>"><%= campaign_display_status(campaign).titleize %></dd>
-	</dl>
+  	<dl class="status-item">
+  		<dt><%= t('shared.campaign.status')%></dt>
+  		<dd class="status stat-<%= campaign_display_status(campaign) %>"><%= campaign_display_status(campaign).titleize %></dd>
+  	</dl>
+
 </div>

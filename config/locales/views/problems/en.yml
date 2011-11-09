@@ -43,6 +43,11 @@ en:
       replies_appear_on_page: "Any replies you get will appear there"
       get_advice_from_transport_experts: "Get advice from our transport experts"
       tools_for_spreading_the_word: "Tools for spreading the word"
+    existing:
+      header: "Issues at this location"
+      intro: "The following issues have been reported %{location}. Please check to see if the problem you want to report has already been reported - perhaps you can add your support."
+      continue_on: "If not, continue on to %{link}."
+      report_your_problem: "report your problem"
     find_bus_route:
       title: "Finding a bus or coach route"
       route_not_found: "Sorry, we could not find the route you entered. Please modify it and try again!"
@@ -57,6 +62,7 @@ en:
       route_number_example: "e.g. C10"
       area_example: "e.g. London"
       route_not_found_in_area: "We couldn't find a route number %{route_number} in %{area}."
+      find_a_bus_or_coach_route: Find a bus or coach route
     find_ferry_route:
       title: "Finding a ferry route"
       to_stop_not_found: "We didn't recognise the name of the ferry stop you got off at."
