@@ -38,14 +38,15 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :problems, :except => [:destroy, :edit, :update],
                            :member => {:convert => [:get, :post],
-                                      :add_comment => [:get, :post] },
+                                       :add_comment => [:get, :post] },
                            :collection => { :choose_location => :get,
                                             :find_stop => :get,
                                             :find_route => :get,
                                             :find_bus_route => :get,
                                             :find_train_route => :get,
                                             :find_ferry_route => :get,
-                                            :find_other_route => :get }
+                                            :find_other_route => :get,
+                                            :existing => :get }
 
   # issues index
   map.issues '/issues', :action => 'issues_index', :controller => 'problems'

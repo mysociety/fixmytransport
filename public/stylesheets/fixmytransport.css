@@ -2884,8 +2884,9 @@ body.facebook-canvas .button {
           padding: 0.5em;
       }
       ul.issues-list li.problem .wrapper {
-        width: 75%;
+        width: auto;
       }
+      
       ul.issues-list dl dt {
         margin-right: 0.2em;
       }

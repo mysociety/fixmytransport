@@ -47,6 +47,27 @@ class ProblemsController < ApplicationController
     setup_problem_advice(@problem)
   end
 
+  def existing
+    @location = instantiate_location(params[:location_id], params[:location_type])
+    if !@location
+      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+      return false
+    end
+    @issues = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
+      issues = Problem.find_recent_issues(pager.per_page, {:offset => pager.offset, :location => @location})
+      # inject the result array into the paginated collection:
+      pager.replace(issues)
+
+      unless pager.total_entries
+        # the pager didn't manage to guess the total count, do it manually
+        pager.total_entries = @location.campaigns.visible.count + @location.problems.visible.count
+      end
+    end
+    if @issues.empty?
+      redirect_to new_problem_url(:location_id => @location.id, :location_type => @location.type)
+    end
+  end
+
   def frontpage
     beta_username = MySociety::Config.get('BETA_USERNAME', 'username')
     beta_password = MySociety::Config.get('BETA_PASSWORD', 'password')
