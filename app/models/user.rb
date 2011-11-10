@@ -206,40 +206,42 @@ class User < ActiveRecord::Base
       success = false
       facebook_data = self.get_facebook_data(access_token)
       fb_id = facebook_data['id']
-      existing_access_token = AccessToken.find(:first, :conditions => ['key = ? and token_type = ?', fb_id, source])
-      if existing_access_token
-        user = existing_access_token.user
-        success = true
-      else
-        name = facebook_data['name']
-        email = facebook_data['email']
-        user = User.find(:first, :conditions => ['lower(email) = ?', email.downcase])
-        if not user
-          user = User.new({:name => name, :email => email})
-        end
-        user.registered = true
-        # don't replace an existing uploaded photo
-        if ! user.profile_photo?
-          # discard the profile photo if it's just the default
-          if facebook_data['picture'] and !self.facebook_static_profile_picture?(facebook_data['picture'])
-            user.profile_photo_url = facebook_data['picture']
-            user.error_on_bad_profile_photo_url = false
-          end
-        end
-        user.access_tokens.build({:user_id => user.id,
-                                  :token_type => 'facebook',
-                                  :key => fb_id,
-                                  :token => access_token})
-        success = user.save_without_session_maintenance
-      end
-      if success
-        if user.suspended?
-          raise I18n.translate('shared.suspended.forbidden')
+      AccessToken.transaction do
+        existing_access_token = AccessToken.find(:first, :conditions => ['key = ? and token_type = ?', fb_id, source])
+        if existing_access_token
+          user = existing_access_token.user
+          success = true
         else
-          UserSession.create(user, remember_me=remember_me)
+          name = facebook_data['name']
+          email = facebook_data['email']
+          user = User.find(:first, :conditions => ['lower(email) = ?', email.downcase])
+          if not user
+            user = User.new({:name => name, :email => email})
+          end
+          user.registered = true
+          # don't replace an existing uploaded photo
+          if ! user.profile_photo?
+            # discard the profile photo if it's just the default
+            if facebook_data['picture'] and !self.facebook_static_profile_picture?(facebook_data['picture'])
+              user.profile_photo_url = facebook_data['picture']
+              user.error_on_bad_profile_photo_url = false
+            end
+          end
+          user.access_tokens.build({:user_id => user.id,
+                                    :token_type => 'facebook',
+                                    :key => fb_id,
+                                    :token => access_token})
+          success = user.save_without_session_maintenance
         end
-      else
-        raise "Error in external auth. Facebook data #{facebook_data.inspect} #{user.errors.full_messages.join(",")}"
+        if success
+          if user.suspended?
+            raise I18n.translate('shared.suspended.forbidden')
+          else
+            UserSession.create(user, remember_me=remember_me)
+          end
+        else
+          raise "Error in external auth. Facebook data #{facebook_data.inspect} #{user.errors.full_messages.join(",")}"
+        end
       end
     end
   end
