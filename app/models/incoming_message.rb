@@ -165,10 +165,14 @@ class IncomingMessage < ActiveRecord::Base
   def self.create_from_tmail(tmail, raw_email_data, campaign)
     ActiveRecord::Base.transaction do
       raw_email = RawEmail.create!(:data => raw_email_data)
+      friendly_from = ''
+      if tmail.from
+        friendly_from = tmail.friendly_from
+      end
       incoming_message = create!(:subject => tmail.subject, 
                                  :campaign => campaign, 
                                  :raw_email => raw_email,
-                                 :from => tmail.friendly_from)
+                                 :from => friendly_from)
       if campaign                           
         campaign.campaign_events.create!(:event_type => 'incoming_message_received', 
                                          :described => incoming_message)
