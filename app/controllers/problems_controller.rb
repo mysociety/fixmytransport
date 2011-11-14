@@ -213,7 +213,7 @@ class ProblemsController < ApplicationController
         @error_message = t('problems.find_bus_route.route_not_found')
       elsif route_info[:routes].size == 1
         location = route_info[:routes].first
-        redirect_to new_problem_url(:location_id => location.id, :location_type => 'Route')
+        redirect_to existing_problems_url(:location_id => location.id, :location_type => 'Route')
       else
         if route_info[:error] == :area_not_found
           @error_message = t('problems.find_bus_route.area_not_found_routes', :area => params[:area])
@@ -265,7 +265,7 @@ class ProblemsController < ApplicationController
                                               route_info[:to_stops].first,
                                               TransportMode.find_by_name('Train'),
                                               route_info[:routes])
-          redirect_to new_problem_url(:location_id => sub_route.id, :location_type => sub_route.class.to_s)
+          redirect_to existing_problems_url(:location_id => sub_route.id, :location_type => sub_route.class.to_s)
         end
       end
     end
@@ -298,7 +298,7 @@ class ProblemsController < ApplicationController
           @error_messages[:base] << t('problems.find_other_route.route_not_found')
         elsif route_info[:routes].size == 1
           location = route_info[:routes].first
-          redirect_to new_problem_url(:location_id => location.id, :location_type => 'Route')
+          redirect_to existing_problems_url(:location_id => location.id, :location_type => 'Route')
         else
           @locations = route_info[:routes]
           map_params_from_location(@locations, find_other_locations=false)
@@ -337,7 +337,7 @@ class ProblemsController < ApplicationController
           @error_messages[:base] << t('problems.find_ferry_route.route_not_found')
         elsif route_info[:routes].size == 1
           location = route_info[:routes].first
-          redirect_to new_problem_url(:location_id => location.id, :location_type => 'Route')
+          redirect_to existing_problems_url(:location_id => location.id, :location_type => 'Route')
         else
           @locations = route_info[:routes]
           map_params_from_location(@locations, find_other_locations=false)

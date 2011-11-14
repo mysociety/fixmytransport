@@ -438,7 +438,7 @@ module ApplicationHelper
     if link_type == :location
       return location_path(location, :escape => false)
     elsif link_type == :problem
-      return new_problem_path({:location_id => location.id, :location_type => location.class, :escape => false})
+      return existing_problems_path({:location_id => location.id, :location_type => location.class, :escape => false})
     else
       raise "Unknown link_type in map_link_url: #{link_type}"
     end

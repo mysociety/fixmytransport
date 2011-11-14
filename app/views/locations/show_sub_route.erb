@@ -27,7 +27,7 @@
 	</div>
 
 	<div class="rightcol narrowcol">
-		<a class="button big red report" href="<%= new_problem_url(:location_id => @sub_route.id, :location_type => @sub_route.type, :to => params[:to], :from => params[:from])%>" rel="nofollow"><%= t('locations.show_sub_route.report_a_problem')%></a>
+		<a class="button big red report" href="<%= existing_problems_url(:location_id => @sub_route.id, :location_type => @sub_route.type, :to => params[:to], :from => params[:from])%>" rel="nofollow"><%= t('locations.show_sub_route.report_a_problem')%></a>
 		<a class="button big report comment-trigger" href="<%= add_comment_sub_route_url(@route) %>" data-title="<%= t('locations.show_sub_route.comment_title', :location => at_the_location(@sub_route)) %>" rel="nofollow"><%= t('locations.show_sub_route.say_something_nice') %></a>
 		<h5 class="left"><%= t('locations.show_sub_route.route_header') %></h5>
 
