@@ -46,7 +46,7 @@ en:
     existing:
       header: "Issues at this location"
       intro: "The following issues have been reported %{location}. Please check to see if the problem you want to report has already been reported - perhaps you can add your support."
-      report_your_problem: "report problem"
+      report_your_problem: "report a problem here"
     find_bus_route:
       title: "Finding a bus or coach route"
       route_not_found: "Sorry, we could not find the route you entered. Please modify it and try again!"
