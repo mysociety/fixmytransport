@@ -12,10 +12,10 @@
 	<div class="leftcol widecol">
 		<ul id="frontpage-problem-scroller">
 			<li>
-				<h1><%= t('problems.frontpage.bad_train')%></h1>			
+				<h1><%= t('problems.frontpage.bad_train')%></h1>
 			</li>
 			<li>
-				<h1><%= t('problems.frontpage.bad_bus') %></h1>	
+				<h1><%= t('problems.frontpage.bad_bus') %></h1>
 			</li>
 			<li>
 				<h1><%= t('problems.frontpage.bad_ferry')%></h1>
@@ -25,13 +25,8 @@
 		<%= link_to(t('problems.frontpage.stop_or_station'), find_stop_problems_url, :class => 'font-1 button green') %>
 		<%= raw link_to(t('problems.frontpage.journey_or_route'), find_route_problems_url, :class => 'font-1 button green') %>
     <p class="font-1"><%= raw t('problems.frontpage.get_it_fixed')%></p>
-    
-    <% if @version == 0 %>
-    <%= raw link_to(t('problems.frontpage.issues_near_you'), browse_issues_url, :class => 'font-1 button green', :style => 'text-transform: uppercase')%>
-    <% else %>
-    <p class="font-1"><%= raw t('problems.frontpage.see_issues', :link => raw( link_to(t('problems.frontpage.issues_near_you'), browse_issues_url)))%></p>
-    <% end %>
-    
+    <p id="issues-near-you-para" class="font-1"><%= raw t('problems.frontpage.see_issues', :link => raw( link_to(t('problems.frontpage.issues_near_you'), browse_issues_url, :id => 'issues-near-you')))%></p>
+
 		<div id="followus" class="font-1">
 			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank" title="Facebook (opens in a new window)">
 				<span class="icon facebook"></span>
@@ -125,3 +120,4 @@
 		</span>
 	</ol>
 </div>
+<%= render :partial=> "shared/geolocate_js"%>

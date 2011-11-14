@@ -1210,8 +1210,12 @@ describe ProblemsController do
 
   describe 'GET #browse' do
 
-    def make_request
-      get :browse, :name => "London"
+    before do
+      @default_params = { :name => "London" }
+    end
+
+    def make_request(params=@default_params)
+      get :browse, params
     end
 
     describe 'when stops match the name given' do
@@ -1231,6 +1235,20 @@ describe ProblemsController do
         assigns[:locations].should == []
       end
 
+    end
+    
+    describe 'if passed a geolocate_error param' do 
+      
+      it 'should assign an error message to the template' do 
+        make_request(:geolocate_error => 1)
+        assigns[:error_message].should == 'Automatic location cancelled.'
+      end
+      
+      it 'should display the browse template' do 
+        make_request(:geolocate_error => 1)
+        response.should render_template('browse')
+      end
+    
     end
 
     describe 'when getting map params from locations' do

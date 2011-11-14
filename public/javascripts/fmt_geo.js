@@ -3,6 +3,7 @@
 
 $(function() {
   if (geo_position_js.init()) {
+    $('#issues-near-you').click(function(e){ doGeolocate(e, this) });
     $('.fmt-has-geolocation').each(function(index){
       var inputId = $(this).find('input, select').not(":hidden").attr("id") || index; // ignore hidden inputs
       $(this).find('label').after('<div class="geolocate-container" id="geolocate-container-' + inputId
@@ -16,6 +17,7 @@ $(function() {
 
 function doGeolocate(e, inputId) {
   e.preventDefault();
+  $('#issues-near-you').parent().append(' <img src="/images/busy_spinner_24_x_24_white.gif" alt="">');
   $('#geolocate-button-' + inputId).replaceWith("<p class='geolocate-status geolocate-busy' id='geolocate-status-" + inputId
     + "'>" + $().fmt_translate('shared.geolocate.fetching') + "</p>");
   $(".geolocate-container").not("#geolocate-container-" + inputId).fadeTo('slow', 0); // if there are multiple buttons, hide the other(s)
@@ -75,6 +77,8 @@ function doGeolocate(e, inputId) {
               }
             }
           );
+        } else if ($('#issues-near-you').size()){
+          document.location.href = "/issues/browse?lon="+ position.coords.longitude + "&lat=" + position.coords.latitude
         } else { // this is find_stop (goes straight to lon/lat)
           $('#geolocate-status-' + inputId).text($().fmt_translate('shared.geolocate.loading')); // fleeting
           param_join_char = "&"
@@ -99,7 +103,11 @@ function doGeolocate(e, inputId) {
         } else { // Unknown
           errMsg = $().fmt_translate('shared.geolocate.unknown_error');
         }
-        $('#geolocate-status-' + inputId).removeClass('geolocate-busy').text(errMsg);
+        if ($('#issues-near-you').size()){
+          document.location.href = "/issues/browse?geolocate_error="+err.code;
+        }else {
+          $('#geolocate-status-' + inputId).removeClass('geolocate-busy').text(errMsg);
+        }
       }, { timeout:10000 }
     );
   } else {

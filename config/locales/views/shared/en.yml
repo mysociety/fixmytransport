@@ -119,7 +119,7 @@ en:
       operated_by: "operated by %{operators}"
     geolocate:
       use_current_location: "Use my current location"
-      cancelled: "Geolocation cancelled. "
+      cancelled: "Automatic location cancelled."
       no_lookup: "Sorry, can't auto-locate you."
       no_result: "Sorry, can't auto-locate you."
       unknown_error: "Sorry, there's been an error."

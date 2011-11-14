@@ -2485,7 +2485,7 @@ body.facebook-canvas .button {
   		#frontpage-top .leftcol p {
   			font-size:1.6em;
   		}
-  		
+
 			#what-it-does {
 			  display: none;
 			}
@@ -2915,6 +2915,7 @@ body.facebook-canvas .button {
       display: table;
       margin: 0;
       padding: 0;
+      width: 100%;
       caption-side: top;
     }
 	  #browse-map #map{
@@ -2923,12 +2924,11 @@ body.facebook-canvas .button {
     }
 
     .mediumnarrowcol {
-      width: 100%;
+      width: 98%;
     }
 
     .mediumwidecol {
       width: 98%;
-      display: block;
       margin: 0;
       padding: 0.2em 1% 0 1%;
     }
@@ -2940,6 +2940,7 @@ body.facebook-canvas .button {
     ul#browse-issues-list li.problem .wrapper {
       width: 100%;
     }
+
 
     /* ===[ Feedback ]=== */
  	  .feedback-form input, .feedback-form textarea {
