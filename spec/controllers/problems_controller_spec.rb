@@ -637,7 +637,7 @@ describe ProblemsController do
     describe 'when the location can be instantiated' do
 
       before do
-        @mock_stop = mock_model(Stop, :type => 'Stop')
+        @mock_stop = mock_model(Stop, :type => 'Stop', :lat => 51, :lon => 0)
         @controller.stub!(:instantiate_location).and_return(@mock_stop)
       end
 

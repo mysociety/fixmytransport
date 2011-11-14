@@ -66,6 +66,10 @@ class ProblemsController < ApplicationController
     if @issues.empty?
       redirect_to new_problem_url(:location_id => @location.id, :location_type => @location.type)
     end
+    map_params_from_location([@location],
+                             find_other_locations=false,
+                             PROBLEM_CREATION_MAP_HEIGHT,
+                             PROBLEM_CREATION_MAP_WIDTH)
   end
 
   def frontpage

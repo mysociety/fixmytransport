@@ -6,11 +6,19 @@
 </div>
 <div id="greybanner">
 	<div class="container">
-		<p><%= t('problems.existing.intro', :location => at_the_location(@location)) %> <%= raw t('problems.existing.continue_on', :link => link_to( t('problems.existing.report_your_problem'), new_problem_url(:location_id => @location.id, :location_type => @location.type)))%></p>
+		<p class="notice"><%= t('problems.existing.intro', :location => at_the_location(@location)) %></p>
+
 	</div>
 </div>
+
 <div id="main-content" class="container">
-  <div class="leftcol widecol">
+  <div id="problem-map">
+    <h5><%= @location.description %></h5>
+  			<%= render :partial => 'shared/map', :locals => { :locations => [@location], :other_locations => [], :link_type => :location, :height => PROBLEM_CREATION_MAP_HEIGHT, :width => PROBLEM_CREATION_MAP_WIDTH } %>
+		</div>
+
+	<div class="leftcol mediumwidecol">
+	  <%= link_to( t('problems.existing.report_your_problem'), new_problem_url(:location_id => @location.id, :location_type => @location.type), :class => 'button big report') %>
     <%= will_paginate @issues %>
     <ul class="issues-list">
     	<%- @issues.each do |issue| %>
@@ -18,5 +26,8 @@
       <%- end %>
     </ul>
     <%= will_paginate @issues %>
-  </div>
+	</div>
+
+
+
 </div>

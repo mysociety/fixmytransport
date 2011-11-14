@@ -5,11 +5,7 @@
 <%- end %>
 <div class="wrapper">
 	<h4><a href="<%= problem_url(problem) %>"><%= problem.subject %></a></h4>
-	<%- if context == :new_problem %>
-	  <p>
-	    <%= truncate(problem.description, :length => 200) %>
-	  </p>
-	<%- else%>
+	<%- if context != :new_problem %>
 	  <p>
 	    <%= raw link_to(problem.location.description, location_url(problem.location)) %>
 	  </p>
