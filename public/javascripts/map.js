@@ -165,7 +165,7 @@ function addMarker(current, bounds, layer, other, highlightedLayer){
       url: current.url,
       name: current.description,
       id: current.id,
-      highlight: current.highlight,
+      highlight: current.highlight
     },
     {externalGraphic: current.icon + ".png",
         graphicTitle: current.description,

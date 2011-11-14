@@ -115,6 +115,9 @@
   width: 40%;
 }
 
+ul.issues-list .wrapper{ width: 470px; }
+ul.issues-list li.problem .wrapper { width: 468px; }
+
 /*sort this*/
 .error, .alert, .notice, .success, .info {
 	display:inline;

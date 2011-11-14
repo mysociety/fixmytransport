@@ -216,9 +216,9 @@ describe ProblemsController do
           make_request({:to => "london euston", :from => 'birmingham new street'})
         end
 
-        it 'should redirect to the new problem URL, passing the sub-route ID and type' do
+        it 'should redirect to the existing problem URL, passing the sub-route ID and type' do
           make_request({:to => "london euston", :from => 'birmingham new street'})
-          response.should redirect_to(new_problem_url(:location_id => @sub_route.id, :location_type => 'SubRoute'))
+          response.should redirect_to(existing_problems_url(:location_id => @sub_route.id, :location_type => 'SubRoute'))
         end
 
       end
@@ -637,7 +637,7 @@ describe ProblemsController do
     describe 'when the location can be instantiated' do
 
       before do
-        @mock_stop = mock_model(Stop, :type => 'Stop')
+        @mock_stop = mock_model(Stop, :type => 'Stop', :lat => 51, :lon => 0)
         @controller.stub!(:instantiate_location).and_return(@mock_stop)
       end
 

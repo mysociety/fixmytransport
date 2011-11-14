@@ -995,7 +995,7 @@ input.checkbox {
 	.form-list li.fieldset:focus {
 		background:#048fc2;
 	}
-	
+
 		.form-list li input,
 		.form-list li select {
 			margin:0;
@@ -1018,7 +1018,7 @@ input.checkbox {
 			-webkit-border-radius:4px;
 
     }
-    
+
 		.form-list li select {
 			width:100%;
 			height:1.7em;
@@ -1210,8 +1210,8 @@ ul.issues-list{margin: 0px; padding: 0px;}
 			ul.issues-list dl.status-item{float: right;display: block;}
 			ul.issues-list dl.status-item dd{color:#fff; margin-right: 0px;}
 
-			ul.issues-list .wrapper{width: 470px;}
-			ul.issues-list li.problem .wrapper {width:468px;}
+			ul.issues-list .wrapper{width: auto;}
+			ul.issues-list li.problem .wrapper {width:auto;}
 
 			ul.issues-list li.problem {background: #fff; border: 1px solid #ddd;}
 
@@ -2099,6 +2099,7 @@ body.facebook-canvas .button {
   }
 
 
+
 /*===[ Problem Page ]===*/
 
 .problem-details {
@@ -2571,7 +2572,7 @@ body.facebook-canvas .button {
         width: 100%;
         height: 400px;
       }
-      
+
       .find-stop-error{
         margin: 0;
       }
@@ -2692,7 +2693,7 @@ body.facebook-canvas .button {
       			float: none;
       			border: none;
       		}
-      		
+
       		.form-list li input {
       		    width: 96%;
       		}
@@ -2702,7 +2703,7 @@ body.facebook-canvas .button {
       			top: 0;
       			position:relative;
       		}
-      		
+
       		.form-list li .input-border {
       		  border:2px solid #048fc2;
             width: auto;
@@ -2886,7 +2887,7 @@ body.facebook-canvas .button {
       ul.issues-list li.problem .wrapper {
         width: auto;
       }
-      
+
       ul.issues-list dl dt {
         margin-right: 0.2em;
       }
@@ -2924,10 +2925,15 @@ body.facebook-canvas .button {
 
     .mediumwidecol {
       width: 98%;
-      display: table-caption;
+      display: block;
       margin: 0;
       padding: 0.2em 1% 0 1%;
     }
+
+    .browse-map-container .mediumwidecol {
+     display: table-caption;
+    }
+
     ul#browse-issues-list li.problem .wrapper {
       width: 100%;
     }
@@ -3075,7 +3081,7 @@ body.facebook-canvas .button {
     .thumb img{
       width: 100%;
     }
-    
+
     .thumb .user-flag {
        width: 95%;
        font-size: 0.8em;
@@ -3084,11 +3090,11 @@ body.facebook-canvas .button {
     #greybanner .user-flags {
       float: right;
     }
-    
+
     #greybanner .user-flags .user-flag {
       float: none;
     }
-    
+
     ul#campaign-thread li.open .thread-details .thread-copy, ul#campaign-thread li.open .thread-details .thread-alternative-copy {
         margin: 0 0 10px 3%;
     }
@@ -3246,7 +3252,7 @@ body.facebook-canvas .button {
         clear: both;
         margin: 0.5em 0;
     }
-    
+
     .geolocate-status {
         margin-top: 0.2em;
         margin-bottom: 0.2em;
