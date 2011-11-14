@@ -86,7 +86,7 @@ class ProblemsController < ApplicationController
         username == beta_username && Digest::MD5.hexdigest(password) == beta_password
       end
     end
-    @version = 0
+    @version = (params[:version] ? params[:version].to_i : 0 )
     @title = t('problems.frontpage.title')
   end
 

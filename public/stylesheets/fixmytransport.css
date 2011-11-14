@@ -2482,6 +2482,10 @@ body.facebook-canvas .button {
 			  display: none;
 			}
 
+  		#frontpage-top .leftcol p {
+  			font-size:1.6em;
+  		}
+  		
 			#what-it-does {
 			  display: none;
 			}
@@ -2493,7 +2497,6 @@ body.facebook-canvas .button {
 			#frontpage-banner-left {
 			  display: none;
 			}
-
 
 			#frontpage-banner-right {
         display: block;
