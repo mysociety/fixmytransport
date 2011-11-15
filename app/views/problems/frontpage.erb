@@ -25,7 +25,7 @@
 		<%= link_to(t('problems.frontpage.stop_or_station'), find_stop_problems_url, :class => 'font-1 button green') %>
 		<%= raw link_to(t('problems.frontpage.journey_or_route'), find_route_problems_url, :class => 'font-1 button green') %>
     <p class="font-1"><%= raw t('problems.frontpage.get_it_fixed')%></p>
-    <p id="issues-near-you-para" class="font-1"><%= raw t('problems.frontpage.see_issues', :link => raw( link_to(t('problems.frontpage.issues_near_you'), browse_issues_url, :id => 'issues-near-you')))%></p>
+    <p class="font-1"><%= raw t('problems.frontpage.see_issues', :link => raw( link_to(t('problems.frontpage.issues_near_you'), browse_issues_url(:geolocate => 1))))%></p>
 
 		<div id="followus" class="font-1">
 			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank" title="Facebook (opens in a new window)">
@@ -120,4 +120,3 @@
 		</span>
 	</ol>
 </div>
-<%= render :partial=> "shared/geolocate_js"%>

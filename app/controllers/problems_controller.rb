@@ -414,19 +414,6 @@ class ProblemsController < ApplicationController
         location_search.fail
         @error_message = t('problems.find_stop.please_enter_an_area')
       end
-    elsif params[:geolocate_error]
-      @error_message = case params[:geolocate_error].to_i
-      when 1 # permission not given
-       t('shared.geolocate.cancelled')
-      when 2 # position unavailable
-        t('shared.geolocate.no_lookup')
-      when 3 # timeout
-        t('shared.geolocate.no_result')
-      else
-       t('shared.geolocate.unknown_error')
-      end
-      render options[:find_template]
-      return
     elsif params[:name]
       if params[:name].blank?
         @error_message = t('problems.find_stop.please_enter_an_area')

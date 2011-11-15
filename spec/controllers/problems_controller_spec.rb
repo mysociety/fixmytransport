@@ -1236,20 +1236,6 @@ describe ProblemsController do
       end
 
     end
-    
-    describe 'if passed a geolocate_error param' do 
-      
-      it 'should assign an error message to the template' do 
-        make_request(:geolocate_error => 1)
-        assigns[:error_message].should == 'Automatic location cancelled.'
-      end
-      
-      it 'should display the browse template' do 
-        make_request(:geolocate_error => 1)
-        response.should render_template('browse')
-      end
-    
-    end
 
     describe 'when getting map params from locations' do
 
