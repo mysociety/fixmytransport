@@ -6,7 +6,7 @@ if [ "$1" == "verbose" ]
 then
     if [ "$2" != "" ]
     then
-        $LOC/runner 'ProblemMailer.send_reports(dryrun=false, verbose=true)' 2>&1 | mail -s "[FixMyTransport] Missing operators and emails" $2
+        $LOC/runner 'ProblemMailer.send_reports(dryrun=false, verbose=true)' 2>&1 | mail -e -s "[FixMyTransport] Missing operators and emails" $2
     else
         $LOC/runner 'ProblemMailer.send_reports(dryrun=false, verbose=true)'
     fi
