@@ -115,21 +115,31 @@ class ProblemMailer < ApplicationMailer
     end
 
     if verbose
+      
+      empty_report = true
+        
       if missing_emails[:operator].size > 0
         STDERR.puts "Operator emails that need to be found:"
         missing_emails[:operator].each{ |operator_id, operator| STDERR.puts operator.name }
+        empty_report = false
       end
 
       if missing_emails[:passenger_transport_executive].size > 0
         STDERR.puts "PTE emails that need to be found:"
         missing_emails[:passenger_transport_executive].each{ |pte_id, pte| STDERR.puts pte.name }
+        empty_report = false
       end
 
       if missing_emails[:council].size > 0
         STDERR.puts "Council emails that need to be found:"
         missing_emails[:council].each{ |council_id, council| STDERR.puts council.name }
+        empty_report = false
       end
 
+      if empty_report
+        STDERR.puts "No operator, PTE, or council emails need to be found :-)"
+      end
+      
       unsendable_problems = Problem.unsendable
       if unsendable_problems.size > 0
         STDERR.puts "Organisations need to be found for the following problem locations:"
@@ -172,5 +182,4 @@ class ProblemMailer < ApplicationMailer
       send_comment(problem_comment, problem_comment.commented)
     end
   end
-
 end
