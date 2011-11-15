@@ -2288,6 +2288,10 @@ body.facebook-canvas .button {
 				min-width: 100px;
 			}
 
+      .not-found-message {
+        font-size: 1.2em;
+      }
+      
 			.campaign-description {
 				width: 100%;
 			}
@@ -3272,6 +3276,7 @@ body.facebook-canvas .button {
         display: inline-block;
         width: 100%;
     }
+
 
 } /* end of media query */
 
