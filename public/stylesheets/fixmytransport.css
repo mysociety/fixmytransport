@@ -2913,8 +2913,8 @@ body.facebook-canvas .button {
 
     /* ===[ Browse issues]=== */
     #browse-map {
-	    width: 100%;
-	    margin: 0.2em 0;
+	    width: 95%;
+	    margin: 0.2em auto;
 	  }
 
     .browse-map-container {
