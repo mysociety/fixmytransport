@@ -1947,12 +1947,15 @@ ul.route-links {
 		}
 
 /*===[Find Stop Page]===*/
+#find-stop-container {
+  margin:100px auto 0 auto;
+  width:518px
+}
 #find-stop {
 	display:block;
 	width:518px;
 	height:70px;
 	overflow: visible;
-	margin:100px auto 0 auto;
 	background:url(../images/find_stop.jpg) -10px -86px no-repeat;
 }
 #find-stop:hover,
@@ -1960,9 +1963,7 @@ ul.route-links {
 #find-stop:focus {
 	background-position:-10px -10px;
 }
-	#find-stop label {
-		display:none;
-	}
+
 	#find-stop input {
 		float:left;
 		width:375px;
@@ -2546,6 +2547,11 @@ body.facebook-canvas .button {
       }
 
 			/*===[ Find stop]===*/
+		  #find-stop-container {
+		    width: 90%;
+			  margin: 0 5%;
+		  }
+
 			#find-stop {
 			  background: none;
 			  width: 90%;
