@@ -1947,12 +1947,15 @@ ul.route-links {
 		}
 
 /*===[Find Stop Page]===*/
+#find-stop-container {
+  margin:100px auto 0 auto;
+  width:518px
+}
 #find-stop {
 	display:block;
 	width:518px;
 	height:70px;
 	overflow: visible;
-	margin:100px auto 0 auto;
 	background:url(../images/find_stop.jpg) -10px -86px no-repeat;
 }
 #find-stop:hover,
@@ -1960,9 +1963,7 @@ ul.route-links {
 #find-stop:focus {
 	background-position:-10px -10px;
 }
-	#find-stop label {
-		display:none;
-	}
+
 	#find-stop input {
 		float:left;
 		width:375px;
@@ -2482,6 +2483,10 @@ body.facebook-canvas .button {
 			  display: none;
 			}
 
+  		#frontpage-top .leftcol p {
+  			font-size:1.6em;
+  		}
+
 			#what-it-does {
 			  display: none;
 			}
@@ -2493,7 +2498,6 @@ body.facebook-canvas .button {
 			#frontpage-banner-left {
 			  display: none;
 			}
-
 
 			#frontpage-banner-right {
         display: block;
@@ -2543,6 +2547,11 @@ body.facebook-canvas .button {
       }
 
 			/*===[ Find stop]===*/
+		  #find-stop-container {
+		    width: 90%;
+			  margin: 0 5%;
+		  }
+
 			#find-stop {
 			  background: none;
 			  width: 90%;
@@ -2912,6 +2921,7 @@ body.facebook-canvas .button {
       display: table;
       margin: 0;
       padding: 0;
+      width: 100%;
       caption-side: top;
     }
 	  #browse-map #map{
@@ -2920,12 +2930,11 @@ body.facebook-canvas .button {
     }
 
     .mediumnarrowcol {
-      width: 100%;
+      width: 98%;
     }
 
     .mediumwidecol {
       width: 98%;
-      display: block;
       margin: 0;
       padding: 0.2em 1% 0 1%;
     }
@@ -2937,6 +2946,7 @@ body.facebook-canvas .button {
     ul#browse-issues-list li.problem .wrapper {
       width: 100%;
     }
+
 
     /* ===[ Feedback ]=== */
  	  .feedback-form input, .feedback-form textarea {

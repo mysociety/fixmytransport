@@ -1213,8 +1213,12 @@ describe ProblemsController do
 
   describe 'GET #browse' do
 
-    def make_request
-      get :browse, :name => "London"
+    before do
+      @default_params = { :name => "London" }
+    end
+
+    def make_request(params=@default_params)
+      get :browse, params
     end
 
     describe 'when stops match the name given' do

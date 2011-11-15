@@ -3,6 +3,7 @@
 
 $(function() {
   if (geo_position_js.init()) {
+
     $('.fmt-has-geolocation').each(function(index){
       var inputId = $(this).find('input, select').not(":hidden").attr("id") || index; // ignore hidden inputs
       $(this).find('label').after('<div class="geolocate-container" id="geolocate-container-' + inputId
@@ -10,6 +11,9 @@ $(function() {
             + '">' + $().fmt_translate('shared.geolocate.use_current_location') + '</span></div>');
       $('#geolocate-button-' + inputId).click(function(e){ doGeolocate(e, inputId) });
     });
+    if (geolocateOnload) {
+      $('#geolocate-button-name').click();
+    }
   }
 });
 

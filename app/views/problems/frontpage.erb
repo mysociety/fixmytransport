@@ -13,30 +13,20 @@
 		<ul id="frontpage-problem-scroller">
 			<li>
 				<h1><%= t('problems.frontpage.bad_train')%></h1>
-				<%- if @version == 1 %>
-				  <img src="/images/frontpage-train.jpg" alt="" />
-				<%- end %>
 			</li>
 			<li>
 				<h1><%= t('problems.frontpage.bad_bus') %></h1>
-				<%- if @version == 1 %>
-				  <img src="/images/frontpage-bus.jpg" alt="" />
-				<%- end %>
 			</li>
 			<li>
 				<h1><%= t('problems.frontpage.bad_ferry')%></h1>
-				<%- if @version == 1 %>
-				  <img src="/images/frontpage-boat.jpg" alt="" />
-				<%- end %>
 			</li>
 		</ul>
-
-
 		<p class="font-1"><%= raw t('problems.frontpage.report_problem') %></p>
-		<%= link_to('STOP or STATION', find_stop_problems_url, :class => 'font-1 button green') %>
-		<%= raw link_to('JOURNEY or ROUTE', find_route_problems_url, :class => 'font-1 button green') %>
-		<p class="font-1"><%= raw t('problems.frontpage.get_it_fixed')%></p>
-		<%- if @version == 0 %>
+		<%= link_to(t('problems.frontpage.stop_or_station'), find_stop_problems_url, :class => 'font-1 button green') %>
+		<%= raw link_to(t('problems.frontpage.journey_or_route'), find_route_problems_url, :class => 'font-1 button green') %>
+    <p class="font-1"><%= raw t('problems.frontpage.get_it_fixed')%></p>
+    <p class="font-1"><%= raw t('problems.frontpage.see_issues', :link => raw( link_to(t('problems.frontpage.issues_near_you'), browse_issues_url(:geolocate => 1))))%></p>
+
 		<div id="followus" class="font-1">
 			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank" title="Facebook (opens in a new window)">
 				<span class="icon facebook"></span>
@@ -47,7 +37,6 @@
 				<span class="twitter-text"><%= t('problems.frontpage.follow_on_twitter')%></span>
 			</a>
 		</div>
-		<%- end %>
 	</div>
 	<div id="what-it-does" class="rightcol narrowcol">
 		<h2><%= t('problems.frontpage.what_it_does') %></h2>
@@ -59,18 +48,7 @@
 			<li class="secret-done"><%= t('problems.frontpage.gets_things_done')%></li>
 		</ul>
 		<a href="#how-it-works" class="font-1 button"><%= t('problems.frontpage.how_does_it_work')%></a>
-		<%- if @version == 1 %>
-		<div id="followus" class="font-1">
-			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank" title="Facebook (opens in new window)">
-				<span class="icon facebook"></span>
-					<%= t('problems.frontpage.follow_on_facebook')%>
-			</a>
-			<a href="http://twitter.com/FixMyTransport" target="_target" title="Twitter (opens in new window)">
-				<span class="icon twitter"></span>
-					<%= t('problems.frontpage.follow_on_twitter')%>
-			</a>
-		</div>
-		<%- end %>
+
 	</div>
 </div>
 

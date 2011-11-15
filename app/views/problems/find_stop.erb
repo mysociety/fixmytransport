@@ -7,15 +7,19 @@
 
 <div id="main-content" class="container">
 	<%- form_tag find_stop_problems_path, :id => 'stop_name_form', :method => 'GET' do  %>
-    <div id="find-stop" class="fmt-has-geolocation">
-		  <label for="name" id='guidance-name' class='guidance'><%= t('problems.find_stop.instructions')%></label>
-		  <%= raw text_field_tag 'name', params[:name], :size => 40 %>
-		  <button class="point-go" type='submit'><%= t('problems.find_stop.go') %></button>
-	  </div>
-	  <%- if @error_message %>
-	  <div class='error find-stop-error'><%= @error_message %></div>
-	  <%- end %>
-	<%- end %>
+    <div id="find-stop-container" class="fmt-has-geolocation">
+  	  <label for="name" id='guidance-name' class='guidance'><%= t('problems.find_stop.instructions')%></label>
+      <div id="find-stop">
+  		  <%= raw text_field_tag 'name', params[:name], :size => 40 %>
+  		  <button class="point-go" type='submit'>
+  		    <%= t('problems.find_stop.go') %>
+  		  </button>
+  	  </div>
+  	</div>
+    <%- if @error_message %>
+    <div class='error find-stop-error'><%= @error_message %></div>
+    <%- end %>
+  <%- end %>
 </div>
 
 <%= render :partial=> "shared/geolocate_js"%>
