@@ -26,6 +26,26 @@
 	display:inline-block;
 }
 
+.button.support {
+    padding: 4px 8px 3px 25px;
+    font-size: 0.9em;
+    width: auto;
+    overflow: visible;
+}
+
+* html .button.support {
+  padding: 4px 8px 3px 8px;
+}
+
+a.button.comment {
+  padding: 5px 30px 5px 8px;
+  font-size: 0.9em;
+}
+
+* html a.button.comment {
+   padding: 5px 8px 5px 8px;
+}
+
 /*remove all png images from IE6 only*/
 * html .icon,
 * html .button,

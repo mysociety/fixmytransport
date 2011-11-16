@@ -49,7 +49,6 @@
 
 a.button {
 	padding:4px 10px;
-	line-heignt:1;
 }
 #banner a.button {
 	color:#fff;
@@ -162,9 +161,10 @@ a.button {
     padding: 30px 45px;
 }
 .button.support {
-    padding: 3px 8px 3px 25px;
+    padding: 5px 8px 5px 25px;
+    line-height: normal;
 
-	background: #99cc33 url(../images/support-tick.png) 6px center no-repeat; /* Old browsers */
+  background: #99cc33 url(../images/support-tick.png) 6px center no-repeat; /* Old browsers */
 	background:url(../images/support-tick.png) 6px center no-repeat, -moz-linear-gradient(top, #99cc33 0%, #669933 100%); /* FF3.6+ */
 	background:url(../images/support-tick.png) 6px center no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#99cc33), color-stop(100%,#669933)); /* Chrome,Safari4+ */
 	background:url(../images/support-tick.png) 6px center no-repeat, -webkit-linear-gradient(top, #99cc33 0%,#669933 100%); /* Chrome10+,Safari5.1+ */
@@ -186,8 +186,8 @@ a.button {
 }
 .button.comment {
     margin-bottom: 1em;
-    padding: 3px 30px 3px 8px;
-
+    line-height:normal;
+    padding: 5px 30px 5px 8px;
 	background: #048fc2 url(../images/comment-bubble.png) right center no-repeat; /* Old browsers */
 	background:url(../images/comment-bubble.png) right center no-repeat, -moz-linear-gradient(top, #048fc2 0%, #006699 100%); /* FF3.6+ */
 	background:url(../images/comment-bubble.png) right center no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#048fc2), color-stop(100%,#006699)); /* Chrome,Safari4+ */
