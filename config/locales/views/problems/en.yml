@@ -45,8 +45,8 @@ en:
       tools_for_spreading_the_word: "Tools for spreading the word"
     existing:
       header: "Issues at this location"
-      intro: "The following issues have been reported %{location}. Please check to see if the problem you want to report has already been reported - perhaps you can add your support."
-      report_your_problem: "report a problem here"
+      intro: "Attention: you're not the first person to have reported a problem %{location}. If your problem is listed then please add your support."
+      report_your_problem: "Report a new problem here"
     find_bus_route:
       title: "Finding a bus or coach route"
       route_not_found: "Sorry, we could not find the route you entered. Please modify it and try again!"
