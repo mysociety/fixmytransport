@@ -49,6 +49,9 @@ a.button.comment {
 * html ul#existing-issues-list .wrapper{ width: 370px; }
 * html ul#existing-issues-list li.problem .wrapper { width: 368px; }
 
+ul#browse-issues-list .wrapper{ width: 390px; }
+ul#browse-issues-list li.problem .wrapper { width:388px; }
+
 * html ul.issues-list .wrapper{ width: 470px; }
 * html ul.issues-list li.problem .wrapper { width: 468px; }
 
