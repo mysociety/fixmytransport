@@ -20,7 +20,7 @@
 	<div class="leftcol mediumwidecol">
 	  <%= link_to( t('problems.existing.report_your_problem'), new_problem_url(:location_id => @location.id, :location_type => @location.type), :class => 'button big red report') %>
     <%= will_paginate @issues %>
-    <ul class="issues-list">
+    <ul class="issues-list" id="existing-issues-list">
     	<%- @issues.each do |issue| %>
          <%= render :partial => 'shared/issue', :locals => { :issue => issue, :context => :new_problem } %>
       <%- end %>
