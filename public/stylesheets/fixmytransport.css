@@ -847,6 +847,10 @@ ul.user-list {
 #comment-login-options button {
 	float:right;
 }
+.button{
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
 
 /* Ribbons
    ================================================== */
