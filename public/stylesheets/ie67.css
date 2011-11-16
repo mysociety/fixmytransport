@@ -46,6 +46,13 @@ a.button.comment {
    padding: 5px 8px 5px 8px;
 }
 
+* html ul#existing-issues-list .wrapper{ width: 370px; }
+* html ul#existing-issues-list li.problem .wrapper { width: 368px; }
+
+* html ul.issues-list .wrapper{ width: 470px; }
+* html ul.issues-list li.problem .wrapper { width: 468px; }
+
+
 /*remove all png images from IE6 only*/
 * html .icon,
 * html .button,
@@ -134,9 +141,6 @@ a.button.comment {
   margin-top: 20px;
   width: 40%;
 }
-
-ul.issues-list .wrapper{ width: 470px; }
-ul.issues-list li.problem .wrapper { width: 468px; }
 
 /*sort this*/
 .error, .alert, .notice, .success, .info {

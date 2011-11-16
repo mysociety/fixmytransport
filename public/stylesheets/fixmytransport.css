@@ -1218,8 +1218,6 @@ ul.issues-list{margin: 0px; padding: 0px;}
 
 			ul.issues-list li.problem {background: #fff; border: 1px solid #ddd;}
 
-			ul#browse-issues-list .wrapper{ width: 390px; }
-			ul#browse-issues-list li.problem .wrapper { width:388px; }
       ul.issues-list dl{ margin: 0}
 
 /* Page Specific
