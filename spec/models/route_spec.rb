@@ -345,7 +345,8 @@ describe Route do
       existing_route.journey_patterns.size.should == 1
       Route.stub!(:find_existing).and_return([existing_route])
       route_segment = RouteSegment.create(:from_stop => stops(:borough_station),
-                                          :to_stop => stops(:staple_street))
+                                          :to_stop => stops(:staple_street),
+                                          :segment_order => 0)
       journey_pattern = JourneyPattern.create(:destination => 'Staple Street',
                                               :route_segments => [route_segment])
       route = Route.new(:transport_mode_id => 5,

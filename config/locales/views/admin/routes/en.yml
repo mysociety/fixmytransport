@@ -19,7 +19,7 @@ en:
     from_stop: From stop
     to_stop: To stop
     terminus: Terminus?
-    order: Order
+    segment_order: Order
     remove: Remove
     add_a_route: Add a route
     route_form_error: There's a problem with this route - please see below.

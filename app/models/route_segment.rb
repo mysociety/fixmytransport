@@ -20,6 +20,7 @@ class RouteSegment < ActiveRecord::Base
   belongs_to :to_stop_area, :class_name => 'StopArea'
   belongs_to :route
   belongs_to :journey_pattern
+  validates_presence_of :segment_order
   # virtual attribute used for adding new route segments
   attr_accessor :_add
   before_save :set_stop_areas

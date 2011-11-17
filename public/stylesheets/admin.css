@@ -106,6 +106,9 @@ table tr.odd {
 table tr.selected {
   background-color: #FFDA70;
 }
+table tr.error {
+  background-color: #FFADB9;
+}
 
 table tr.footer  {
   padding: 0;

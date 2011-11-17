@@ -69,7 +69,7 @@ describe Admin::RoutesController do
   describe "GET #new" do 
   
     it 'should create a new route' do 
-      Route.should_receive(:new)
+      Route.should_receive(:new).and_return(mock_model(Route, :journey_patterns => mock('patterns', :build => nil)))
       get :new
     end
     

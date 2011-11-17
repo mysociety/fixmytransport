@@ -22,7 +22,8 @@ describe RouteSegment do
       :to_stop_id => 1,
       :from_terminus => false,
       :to_terminus => false,
-      :route_id => 1
+      :route_id => 1,
+      :segment_order => 0
     }
   end
 

@@ -102,16 +102,31 @@ function setupAddSegmentLink(){
     var template_segment_row = $(this).closest('tr').next('.add-segment-template');
     var new_segment_row = template_segment_row.clone();
     // set the display class
-    var first_segment_row = template_segment_row.next();
-    if (first_segment_row.hasClass('odd')){
+    var route_segment_table = template_segment_row.closest('table.route-segments');
+    var last_segment_row = route_segment_table.find('tr').last();
+    if (last_segment_row.hasClass('odd')){
       display_class = 'even';
     } else {
       display_class = 'odd';
     }
+    var last_segment_order;
+    if (last_segment_row.length == 1){
+      last_segment_order = last_segment_row.find('.segment-order-input').val();
+    }
+    
     new_segment_row = popoutRouteSegmentRow(new_segment_row, display_class);
     // insert into the DOM
-    template_segment_row.after(new_segment_row);
+    route_segment_table.append(new_segment_row);
+    var last_segment_order = parseInt(last_segment_order);
+    if (!isNaN(last_segment_order)){
+      new_segment_order = last_segment_order + 1;
+    }else{
+      new_segment_order = 0;
+    }
+    new_segment_row.find('.segment-order-input').val(new_segment_order);
+
     event.preventDefault(event);
+
   });
 }
 

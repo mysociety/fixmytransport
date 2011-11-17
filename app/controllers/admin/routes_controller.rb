@@ -8,6 +8,7 @@ class Admin::RoutesController < Admin::AdminController
                                                    {:route_segments  => [:from_stop, :to_stop]}},
                                                    {:route_operators => :operator},
                                                    :region])
+    @route.journey_patterns.build( :_add => "1")
     @route_operators = make_route_operators(@route)
   end
   
@@ -41,6 +42,7 @@ class Admin::RoutesController < Admin::AdminController
   
   def new
     @route = Route.new(:loaded => true)
+    @route.journey_patterns.build( :_add => "1")
     @route_operators = []
   end
   
@@ -58,6 +60,7 @@ class Admin::RoutesController < Admin::AdminController
       flash[:notice] = t('admin.route_created')
       redirect_to(admin_url(admin_route_path(@route.id)))
     else
+      @route.journey_patterns.build( :_add => "1")
       render :new
     end
   end
@@ -74,6 +77,7 @@ class Admin::RoutesController < Admin::AdminController
     else
       @route_operators = make_route_operators(@route)
       flash.now[:error] = t('admin.route_problem')
+      @route.journey_patterns.build( :_add => "1")
       render :show
     end
   end
