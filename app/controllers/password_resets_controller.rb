@@ -28,7 +28,7 @@ class PasswordResetsController < ApplicationController
       end
     end
     @action = t('password_resets.new.your_password_will_not_be_changed')
-    @user = User.find_by_email(params[:email])
+    @user = User.find(:first, :conditions => ['LOWER(email) = ?', params[:email].downcase])
     if @user
       post_login_action_data = get_action_data(session)
       if action_string = post_login_action_string

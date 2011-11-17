@@ -80,7 +80,7 @@ describe PasswordResetsController do
 
   describe 'POST #create' do
 
-    def make_request(format='html', email="test@example.com")
+    def make_request(format='html', email="Test@example.com")
       post :create, :email => email, :format => format
     end
 
@@ -117,8 +117,8 @@ describe PasswordResetsController do
         ActionConfirmation.stub!(:create!)
       end
 
-      it 'should find the user by their email address' do
-        User.should_receive(:find_by_email).with('test@example.com')
+      it 'should find the user by their email address (ignoring case)' do
+        User.should_receive(:find).with(:first, :conditions => ['LOWER(email) = ?', 'test@example.com'])
         make_request
       end
 
@@ -127,7 +127,7 @@ describe PasswordResetsController do
         before do
           @user = mock_model(User, :reset_perishable_token! => true,
                                    :perishable_token => 'mytoken')
-          User.stub!(:find_by_email).and_return(@user)
+          User.stub!(:find).and_return(@user)
           ActionConfirmation.stub!(:create!)
           UserMailer.stub!(:deliver_password_reset_instructions)
         end
