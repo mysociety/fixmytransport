@@ -263,7 +263,44 @@ describe Campaign do
       end
 
     end
+    
+    describe 'when returning visible events' do 
+      
+      before do 
+        @campaign = Campaign.new
+        @mock_event = mock_model(CampaignEvent)
+        @mock_events_association = mock('events association', :visible => [@mock_event])
+        @campaign.stub!(:campaign_events).and_return(@mock_events_association)
+      end
+      
+      it 'should not return an event that describes something that is not visible' do 
+        @mock_event.stub!(:described).and_return(mock_model(Comment, :visible? => false))
+        @campaign.visible_events.should == []
+      end
+      
+      it 'should return an event that describes something that is visible' do 
+        @mock_event.stub!(:described).and_return(mock_model(Comment, :visible? => true))
+        @campaign.visible_events.should == [@mock_event]
+      end
+      
+      it 'should return an event that describes something that does not have a "visible?" method' do 
+        @mock_event.stub!(:described).and_return(mock_model(Comment))
+        @campaign.visible_events.should == [@mock_event]
+      end
+    
+    end
 
   end
-
+  
+  describe "when returning it's latest event in json" do 
+    
+    before do 
+      @campaign = Campaign.new
+    end
+    
+    it 'should return nil if there is no latest event' do 
+      JSON.parse(@campaign.to_json)[:latest_event].should == nil
+    end
+  
+  end
 end

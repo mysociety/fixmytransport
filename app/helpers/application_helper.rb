@@ -236,35 +236,6 @@ module ApplicationHelper
     location_string
   end
 
-  def readable_location_type(location)
-    if location.is_a? Stop or location.is_a? StopArea
-
-      # some stops could be bus or tram/metro - call these stops
-      if location.is_a?(StopArea)
-        if location.area_type == 'GBCS'
-          return 'bus/coach station'
-        end
-      end
-      transport_mode_names = location.transport_mode_names
-      if transport_mode_names.include?('Train') or transport_mode_names == ['Tram/Metro']
-        return "station"
-      end
-      if transport_mode_names.include?('Ferry')
-        return 'terminal'
-      end
-      if transport_mode_names.include?('Bus')
-        return "stop"
-      end
-    end
-    if location.is_a? TramMetroRoute
-      return 'route'
-    end
-    if location.is_a? SubRoute
-      return 'route'
-    end
-    location.class.to_s.tableize.singularize.humanize.downcase
-  end
-
   def name_in_sentence(location)
     if location.is_a?(TrainRoute) || location.is_a?(SubRoute)
       return location.name[0, 1].downcase + location.name[1..-1]
@@ -424,16 +395,6 @@ module ApplicationHelper
     return stations + stops
   end
 
-  def comment_header(comment)
-    if comment.commented.is_a?(Campaign)
-      return t('campaigns.show.user_says', :name => h(comment.user.name))
-    elsif comment.commented.is_a?(Problem)
-      return t('problems.show.user_says', :name => h(comment.user.name))
-    else
-      return t('shared.location_content.user_says', :name => h(comment.user.name))
-    end
-  end
-
   def map_link_path(location, link_type)
     if link_type == :location
       return location_path(location, :escape => false)
@@ -447,29 +408,6 @@ module ApplicationHelper
   def short_date(date)
     return date.strftime("%e %b %Y").strip
   end
-
-  def update_text(update, link)
-    extra_parts = []
-    if update.incoming_message
-      extra_parts << t('campaign_mailer.update.in_response_to', :subject => update.incoming_message.subject)
-      if !update.incoming_message.from.blank?
-        extra_parts << t('campaign_mailer.update.received_from', :from => update.incoming_message.from)
-      end
-    end
-    if update.outgoing_message
-      extra_parts << t('campaign_mailer.update.about_email', :name => update.outgoing_message.recipient_name)
-      extra_parts << t('campaign_mailer.update.with_subject', :subject => update.outgoing_message.subject)
-    end
-    if extra_parts.empty?
-      extra = ''
-    else
-      extra = " " + extra_parts.join(" ")
-    end
-    text = t('campaign_mailer.update.new_update', :name => update.user.name,
-                                                  :title => update.campaign.title,
-                                                  :link => link, :extra => extra)
-  end
-
 
   def national_route_link(region, national_region, anchor)
     if @region != @national_region
@@ -600,7 +538,7 @@ module ApplicationHelper
   def assignment_details(assignment)
     case assignment.task_type
     when 'find_transport_organization'
-      return t('campaigns.show.find_operator_task_description', :location => readable_location_type(assignment.campaign.location))
+      return t('campaigns.show.find_operator_task_description', :location => assignment.campaign.location.readable_type)
     when 'find_transport_organization_contact_details'
       names = assignment.problem.responsible_organizations.map{ |org| org.name }.to_sentence
       return t('campaigns.show.find_contact_task_description', :name => names)
@@ -623,7 +561,7 @@ module ApplicationHelper
   def contact_description(contact_type, campaign)
     case contact_type
     when 'OperatorContact'
-      return t('campaigns.show.contact_operator', :location => MySociety::Format.ucfirst(readable_location_type(campaign.location)))
+      return t('campaigns.show.contact_operator', :location => MySociety::Format.ucfirst(campaign.location.readable_type))
     when 'CouncilContact'
       return t('campaigns.show.contact_council')
     when 'PassengerTransportExecutiveContact'

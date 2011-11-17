@@ -1,7 +1,7 @@
 <a href="#" class="thread-item compact">
   <span class="num"><%= index %></span>
   <span class="title">
-    <%= t('campaigns.show.reported_issue', :name => assignment.user_name) %>
+    <%= event.title %>
   </span>
   <span class="close">close</span>
   <span class="date"><%= event.created_at.localtime.to_s(:standard_with_date) %>

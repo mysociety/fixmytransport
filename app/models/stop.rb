@@ -42,7 +42,7 @@
 class Stop < ActiveRecord::Base
   extend ActiveSupport::Memoizable
   include FixMyTransport::Locations
-  
+
   has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
   validates_presence_of :common_name
@@ -68,6 +68,9 @@ class Stop < ActiveRecord::Base
   before_save :cache_description
 
   # instance methods
+  def as_json(options={})
+    super({ :only => [:id, :type, :naptan_code, :atco_code] })
+  end
 
   def routes
     Route.find(:all, :conditions => ['id in (SELECT route_id
@@ -194,16 +197,16 @@ class Stop < ActiveRecord::Base
     if ! query.blank?
       query = query.downcase
       query_clause = "(LOWER(common_name) LIKE ?
-                      OR LOWER(common_name) LIKE ? 
-                      OR LOWER(street) LIKE ? 
+                      OR LOWER(common_name) LIKE ?
+                      OR LOWER(street) LIKE ?
                       OR LOWER(street) LIKE ?
                       OR LOWER(atco_code) LIKE ?
                       OR LOWER(atco_code) LIKE ?
                       OR LOWER(other_code) LIKE ?
                       OR LOWER(other_code) LIKE ?"
-      query_params = [ "#{query}%", "%#{query}%", 
-                       "#{query}%", "%#{query}%", 
-                       "#{query}%", "%#{query}%", 
+      query_params = [ "#{query}%", "%#{query}%",
+                       "#{query}%", "%#{query}%",
+                       "#{query}%", "%#{query}%",
                        "#{query}%", "%#{query}%" ]
       # numeric?
       if query.to_i.to_s == query

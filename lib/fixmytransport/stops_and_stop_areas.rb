@@ -99,6 +99,25 @@ module FixMyTransport
         [self]
       end
       
+      def readable_type
+        # some stops could be bus or tram/metro - call these stops
+        if self.is_a?(StopArea)
+          if self.area_type == 'GBCS'
+            return 'bus/coach station'
+          end
+        end
+        transport_mode_names = self.transport_mode_names
+        if transport_mode_names.include?('Train') or transport_mode_names == ['Tram/Metro']
+          return "station"
+        end
+        if transport_mode_names.include?('Ferry')
+          return 'terminal'
+        end
+        if transport_mode_names.include?('Bus')
+          return "stop"
+        end
+        return self.class.to_s.tableize.singularize.humanize.downcase
+      end
     end
   end
   

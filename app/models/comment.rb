@@ -35,6 +35,16 @@ class Comment < ActiveRecord::Base
     end
   end
   
+  def header
+    if self.commented.is_a?(Campaign)
+      return I18n.translate('campaigns.show.user_says', :name => self.user.name)
+    elsif self.commented.is_a?(Problem)
+      return I18n.translate('problems.show.user_says', :name => self.user.name)
+    else
+      return I18n.translate('shared.location_content.user_says', :name => self.user.name)
+    end
+  end
+  
   # create the user if it doesn't exist, but don't save it yet
   def user_attributes=(attributes)
     if !attributes[:id].blank?

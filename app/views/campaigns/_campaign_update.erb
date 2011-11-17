@@ -1,12 +1,7 @@
 <a id="update_<%= update.id %>"></a>
-<%- if update.is_advice_request? %>
-  <%- text = 'campaigns.show.user_requested_advice' %>
-<%- else %>
-  <%- text = 'campaigns.show.added_an_update' %>
-<%- end %>
 <a href="#" class="thread-item">
   <span class="num"><%= index %></span>
-  <span class="title"><%= raw t(text, :name => h(update.user.name)) %></span>
+  <span class="title"><%= event.title %></span>
   <span class="close">close</span>
   <span class="date">
     <%= update.created_at.localtime.to_s(:standard_with_date) %>

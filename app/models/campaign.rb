@@ -1,7 +1,7 @@
 class Campaign < ActiveRecord::Base
-  
+
   include FixMyTransport::Status
-  
+
   belongs_to :initiator, :class_name => 'User'
   has_many :campaign_supporters
   has_many :supporters, :through => :campaign_supporters, :class_name => 'User', :conditions => ['campaign_supporters.confirmed_at is not null']
@@ -46,6 +46,10 @@ class Campaign < ActiveRecord::Base
 
   # instance methods
 
+  def as_json(options={})
+    return super({ :only => [:id, :title, :description], :methods => [:latest_event, :location] })
+  end
+
   def confirm
     return unless self.status == :new
     self.status = :confirmed
@@ -88,6 +92,19 @@ class Campaign < ActiveRecord::Base
     end
   end
 
+  # should an event be displayed? Types of events may be visible or invisible
+  # but also the things they refer to e.g. comments may have been made invisible
+  # so we need to check both before showing
+  def visible_events
+    campaign_events.visible.select do |event|
+      !event.described.respond_to?(:visible?) or event.described.visible?
+    end
+  end
+
+  def latest_event()
+    self.visible_events.last
+  end
+
   # Add a user as a supporter of a campaign
   # if a token is passed, set the token on the CampaignSupporter model.
   # If the user is already a supporter or initiator of the campaign,
@@ -112,7 +129,7 @@ class Campaign < ActiveRecord::Base
       return nil
     end
   end
-  
+
   def twitter_call_to_action
     I18n.translate('campaigns.show.twitter_call_to_action', :org => self.responsible_org_descriptor, :title => self.title)
   end
@@ -210,7 +227,7 @@ class Campaign < ActiveRecord::Base
     key = self.key_from_email(email)
     campaign = find(:first, :conditions => ['lower(key) = ?', key])
   end
-  
+
   # Guess which campaign an email address references using only the encoded ID
   def self.guess_by_campaign_email(email)
     key = self.key_from_email(email)

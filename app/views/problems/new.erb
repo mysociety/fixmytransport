@@ -9,7 +9,7 @@
 	<div class="container">
 		<p><%= raw @sending_advice %> <strong><%= t('problems.new.your_message_will_be_public')%></strong></p>
 		<%- if @problem.location.respond_to?(:status) && @problem.location.status == 'DEL' %>
-		<p><%= t('problems.new.location_inactive', :location_type => readable_location_type(@problem.location)) %></p>
+		<p><%= t('problems.new.location_inactive', :location_type => @problem.location.readable_type) %></p>
 		<%- end %>
 	</div>
 </div>

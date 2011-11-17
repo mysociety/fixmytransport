@@ -1,7 +1,7 @@
 class SubRoute < ActiveRecord::Base
-  
+
   include FixMyTransport::Locations
-  
+
   has_many :route_sub_routes
   has_many :routes, :through => :route_sub_routes
   belongs_to :from_station, :class_name => 'StopArea'
@@ -16,6 +16,10 @@ class SubRoute < ActiveRecord::Base
   is_route_or_sub_route
   is_location
   include FixMyTransport::GeoFunctions
+
+  def as_json(options={})
+    super({ :only => [:id, :type] })
+  end
 
   def points
     [from_station, to_station]
@@ -76,7 +80,7 @@ class SubRoute < ActiveRecord::Base
       self.route_sub_routes.create!(:route => route)
     end
   end
-  
+
   # store a rough center point as coords and lat/lon
   def set_lat_lon_and_coords
     lons = [from_station.lon, to_station.lon]
@@ -93,7 +97,7 @@ class SubRoute < ActiveRecord::Base
                                           AND transport_mode_id = ?',
                           from_station, to_station, transport_mode])
     return exists if exists
-    
+
     sub_route = new({:from_station => from_station,
                      :to_station => to_station,
                      :transport_mode => transport_mode})
@@ -103,5 +107,9 @@ class SubRoute < ActiveRecord::Base
                             :sub_route => sub_route)
     end
     return sub_route
+  end
+
+  def readable_type()
+    return 'route'
   end
 end

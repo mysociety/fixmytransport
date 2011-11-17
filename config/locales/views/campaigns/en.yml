@@ -56,6 +56,7 @@ en:
       call_to_action: "Please help me persuade %{org} to %{title}"
       twitter_call_to_action: "Can anyone help me with this problem?"
       got_a_message: "%{sender} responded to %{campaigner}"
+      problem_report_resent: "The problem report was resent to %{recipients}"
       user_says: "%{name} commented"
       request_advice: "Ask advice"
       managing: "Managing"

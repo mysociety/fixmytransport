@@ -22,4 +22,8 @@ class TramMetroRoute < Route
     self.find_existing_routes(route)
   end
   
+  def readable_type()
+    return 'route'
+  end
+  
 end

@@ -28,6 +28,14 @@ class ProblemsController < ApplicationController
         pager.total_entries = Campaign.visible.count + Problem.visible.count
       end
     end
+    respond_to do |format|
+      format.html do
+       render :template => 'problems/issues_index'
+      end
+      format.json do 
+        render :json => @issues
+      end
+    end
   end
 
   def index
@@ -534,7 +542,7 @@ class ProblemsController < ApplicationController
   end
 
   def setup_problem_advice(problem)
-    advice_params = { :location_type => @template.readable_location_type(problem.location) }
+    advice_params = { :location_type => problem.location.readable_type }
     responsible_orgs = problem.location.responsible_organizations
     emailable_orgs, unemailable_orgs = responsible_orgs.partition{ |org| org.emailable?(problem.location) }
 

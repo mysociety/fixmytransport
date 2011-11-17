@@ -32,6 +32,10 @@ class Problem < ActiveRecord::Base
 
   has_paper_trail
 
+  def as_json(options={})
+    return super({ :only => [:id, :subject, :description, :confirmed_at], :methods => [:location_json] })
+  end
+
   # Makes a random token, suitable for using in URLs e.g confirmation messages.
   def generate_confirmation_token
     self.token = MySociety::Util.generate_token

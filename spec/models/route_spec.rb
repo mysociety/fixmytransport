@@ -39,6 +39,22 @@ describe Route do
     route.transport_mode_id = nil
     route.valid?.should be_false
   end
+  
+  describe 'when giving readable type' do
+    
+    it 'should return "route" for a route' do 
+      Route.new.readable_type.should == 'route'
+    end
+    
+    it 'should return "bus route" for a bus route' do 
+      BusRoute.new.readable_type.should == 'bus route'
+    end
+    
+    it 'should return "route" for a metro/tram route' do 
+      TramMetroRoute.new.readable_type.should == 'route'
+    end
+    
+  end
 
   describe 'when loading' do
 

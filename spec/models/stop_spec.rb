@@ -149,6 +149,34 @@ describe Stop do
     end
 
   end
+  
+  describe 'when giving a readable type' do
+    
+    it 'should return "station" for a metro/tram stop' do 
+      stop = Stop.new(:stop_type => 'TMU')
+      stop.stub!(:transport_mode_names).and_return(['Tram/Metro'])
+      stop.readable_type.should == 'station'
+    end
+    
+    it 'should return "station" for a train stop' do 
+      stop = Stop.new(:stop_type => 'RLY')
+      stop.stub!(:transport_mode_names).and_return(['Train'])
+      stop.readable_type.should == 'station'
+    end
+    
+    it 'should return "stop" for a stop' do 
+      stop = Stop.new(:stop_type => 'BCS')
+      stop.stub!(:transport_mode_names).and_return(['Bus', 'Coach', 'Tram/Metro'])
+      stop.readable_type.should == 'stop'
+    end
+    
+    it 'should return "stop" for a stop' do 
+      stop = Stop.new(:stop_type => 'BCT')
+      stop.stub!(:transport_mode_names).and_return(['Bus', 'Coach', 'Tram/Metro'])
+      stop.readable_type.should == 'stop'
+    end
+    
+  end
 
   describe 'when giving name without suffix' do
 

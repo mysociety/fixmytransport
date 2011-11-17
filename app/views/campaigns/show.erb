@@ -36,7 +36,7 @@
     					<%= t('campaigns.show.leave') %>
     				</button>
     		<%- end %>
-    		
+
     		<%- if current_user.subscribed_to?(@campaign) %>
     			  <%- form_for @campaign, :url => unsubscribe_url, :html => { :method => 'POST', :id => 'campaign-unsubscribe' } do |f| %>
     			  <input type="hidden" name="target_id" value="<%= @campaign.id %>">
@@ -138,7 +138,7 @@
        </div>
      </div>
    </div>
-   
+
    <%- end %>
 
    <%- if current_user && current_user.is_expert? %>
@@ -188,11 +188,9 @@
 		</div>
 		<ul id="campaign-thread" class="closed-campaign-thread">
 		<%- @event_index = 1 %>
-		<%- @campaign.campaign_events.visible.each do |campaign_event| %>
-		  <%- if !campaign_event.described.respond_to?(:visible?) or campaign_event.described.visible? %>
+		<%- @campaign.visible_events.each do |campaign_event| %>
 			<%= render :partial => 'campaign_event', :locals => { :event => campaign_event, :index => @event_index } %>
 			<%- @event_index += 1%>
-			<%- end %>
 		<%- end %>
 		</ul>
     <%- if !(supporter_initiator_view(@campaign) || @campaign.status == :successful) %>

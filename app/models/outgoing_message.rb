@@ -102,6 +102,15 @@ class OutgoingMessage < ActiveRecord::Base
     return nil
   end
   
+  def assignment_text
+    if self.completed_assignment
+      text = t('campaigns.show.following_experts_advice', :expert => self.assignment.creator.name)
+    else
+      text = ''
+    end
+    return text
+  end
+  
   # class methods
   def self.message_from_attributes(campaign, user, attrs)
     message = self.new(:campaign => campaign,

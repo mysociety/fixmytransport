@@ -49,7 +49,7 @@ ActionController::Routing::Routes.draw do |map|
                                             :existing => :get }
 
   # issues index
-  map.issues '/issues', :action => 'issues_index', :controller => 'problems'
+  map.issues '/issues.:format', :action => 'issues_index', :controller => 'problems'
   map.browse_issues '/issues/browse', :action => 'browse', :controller => 'problems'
 
   # stops

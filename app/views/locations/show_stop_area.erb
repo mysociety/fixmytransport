@@ -35,7 +35,7 @@
       <%- end %>
        <%- if @stop_area.status == 'DEL' %>
           <div class='location-status'>
-            <%= t('locations.show_stop_area.stop_area_marked_inactive', :location => readable_location_type(@stop_area)) %>
+            <%= t('locations.show_stop_area.stop_area_marked_inactive', :location => @stop_area.readable_type) %>
           </div>
         <%- end %>
         <%- if current_user && current_user.is_admin? %>

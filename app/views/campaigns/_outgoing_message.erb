@@ -1,12 +1,6 @@
-<%- if message.completed_assignment  %>
-  <%- assignment_text = t('campaigns.show.following_experts_advice', :expert => message.assignment.creator.name) %>
-<%- else %>
-  <%- assignment_text = '' %>
-<%- end %>
-
 <a href="#" class="thread-item">
   <span class="num"><%= index %></span>
-  <span class="title"><%= raw t('campaigns.show.wrote_a_message', :sender => h(message.author.name), :recipient => h(message.recipient_name), :assignment_text => assignment_text) %></span>
+  <span class="title"><%= event.title %></span>
   <span class="close">close</span>
   <span class="date">
     <%= event.created_at.localtime.to_s(:standard_with_date) %>

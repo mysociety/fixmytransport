@@ -55,6 +55,9 @@ class Route < ActiveRecord::Base
   @@per_page = 20
 
   # instance methods
+  def as_json(options={})
+    super({ :only => [:id, :type, :number, :name], :methods => [:transport_mode_name] })
+  end
 
   def route_operator_invalid(attributes)
     (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['operator_id'].blank?
@@ -139,7 +142,7 @@ class Route < ActiveRecord::Base
     return self.cached_short_name if self.cached_short_name
     name(from_stop=nil, short=true)
   end
-  
+
   def short_name_with_inactive
     text = "#{short_name}"
     if self.status == 'DEL'
@@ -392,6 +395,10 @@ class Route < ActiveRecord::Base
                                                         GROUP BY journey_pattern_id
                                                         ORDER BY cnt desc limit 1)
                                                       as tmp)", self.id])
+  end
+
+  def readable_type
+    self.class.to_s.tableize.singularize.humanize.downcase
   end
 
   # class methods
@@ -728,6 +735,5 @@ class Route < ActiveRecord::Base
     duplicate.destroy unless duplicate.new_record?
     original.save!
   end
-
 
 end

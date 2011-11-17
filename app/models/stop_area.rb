@@ -28,7 +28,7 @@
 class StopArea < ActiveRecord::Base
   extend ActiveSupport::Memoizable
   include FixMyTransport::Locations
-  
+
   has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships
   has_dag_links :link_class_name => 'StopAreaLink'
@@ -51,7 +51,11 @@ class StopArea < ActiveRecord::Base
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
   is_location
-  
+
+  def as_json(options={})
+    super({ :only => [:id, :type, :code] })
+  end
+
   def stop_area_operator_invalid(attributes)
     (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['operator_id'].blank?
   end
@@ -155,7 +159,7 @@ class StopArea < ActiveRecord::Base
     query_params = []
     if ! query.blank?
       query = query.downcase
-      query_clause = "(LOWER(name) LIKE ? 
+      query_clause = "(LOWER(name) LIKE ?
                       OR LOWER(name) LIKE ?
                       OR LOWER(code) LIKE ?
                       OR LOWER(code) LIKE ?"
@@ -219,5 +223,5 @@ class StopArea < ActiveRecord::Base
       raise "invalid (lon, lat): (#{lon}, #{lat})"
     end
   end
-  
+
 end

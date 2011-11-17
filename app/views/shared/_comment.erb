@@ -1,7 +1,7 @@
 <a href="#" class="thread-item">
   <span class="num"><%= index %></span>
   <span class="title">
-  <%= raw comment_header(comment) %>
+  <%= comment.header %>
   <%- if comment.commented.is_a?(Problem) && comment.mark_fixed? %>
     <%= t('problems.show.marked_as_fixed')%>
   <%- end %>

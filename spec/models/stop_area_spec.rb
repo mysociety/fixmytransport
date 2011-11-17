@@ -302,6 +302,34 @@ describe StopArea do
 
   end
   
+  describe 'when giving a readable type' do 
+    
+    it 'should return "station" for a train stop area' do 
+      stop_area = StopArea.new(:area_type => 'GRLS')
+      stop_area.stub!(:transport_mode_names).and_return(['Train'])
+      stop_area.readable_type.should == 'station'
+    end
+  
+    it 'should return "station" for a metro/tram stop area' do 
+      stop_area = StopArea.new(:area_type => 'GTMU')
+      stop_area.stub!(:transport_mode_names).and_return(['Tram/Metro'])
+      stop_area.readable_type.should == 'station'
+    end 
+    
+    it 'should return "terminal" for a ferry stop area' do
+      stop_area = StopArea.new(:area_type => 'GTFS')
+      stop_area.stub!(:transport_mode_names).and_return(['Ferry'])
+      stop_area.readable_type.should == 'terminal'
+    end
+    
+   it 'should return "stop area" for a stop area' do 
+     stop_area = StopArea.new(:area_type => 'GBCS')
+     stop_area.stub!(:transport_mode_names).and_return(['Bus', 'Coach', 'Tram/Metro'])
+     stop_area.readable_type.should == 'bus/coach station'
+   end
+  
+  end
+  
   describe 'when searching for nearest stop areas' do        
       
     it 'should return a list of stop_areas' do 

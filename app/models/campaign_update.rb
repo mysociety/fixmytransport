@@ -13,6 +13,15 @@ class CampaignUpdate < ActiveRecord::Base
   def user_name
     self.user.name
   end
+  
+  def update_text
+    if self.is_advice_request?
+      text = 'campaigns.show.user_requested_advice'
+    else
+      text = 'campaigns.show.added_an_update'
+    end
+    return text
+  end
 
   # Sendable updates - not sent 
   def self.sendable
