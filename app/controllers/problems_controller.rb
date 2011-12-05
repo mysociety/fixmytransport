@@ -392,7 +392,7 @@ class ProblemsController < ApplicationController
                                                              :location_type => 'Stop/station')
     easting, northing = get_easting_northing(lon, lat)
     if ! transport_mode_name.blank?
-      return StopArea.find_nearest(lon, lat, transport_mode_name, 1, 1000)
+      return StopArea.find_nearest(lon, lat, transport_mode_name)
     else
       return Stop.find_nearest(easting, northing, exclude_id = nil)
     end

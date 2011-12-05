@@ -193,15 +193,12 @@ class StopArea < ActiveRecord::Base
   end
 
   # find the nearest stop_area to a set of National Grid coordinates
-  # defaults to one (i.e., first) in a fairly large area
-  def self.find_nearest(lon, lat, transport_mode_name=nil, limit=1, distance=1000)
+  def self.find_nearest(lon, lat, transport_mode_name=nil)
     if MySociety::Validate.is_valid_lon_lat(lon, lat)
       query_clauses = []
       query_params = []
-      # validate lat lon
       distance_clause = "ST_Distance(ST_Transform(ST_GeomFromText('POINT(#{lon} #{lat})', #{WGS_84}),#{BRITISH_NATIONAL_GRID}),coords)"
-      query_clauses << "#{distance_clause} < ?"
-      query_params << distance * 100
+      # validate lat lon
       if !transport_mode_name.blank?
         transport_mode_id = TransportMode.find_by_name(transport_mode_name).id
         query_clause, query_param_list = StopAreaType.conditions_for_transport_mode(transport_mode_id)
@@ -209,12 +206,7 @@ class StopArea < ActiveRecord::Base
         query_params += query_param_list
       end
       conditions = [query_clauses.join(" AND ")] + query_params
-      stop_areas = find(:all, :order => "#{distance_clause} asc", :conditions => conditions, :limit => limit)
-      if stop_areas.length > 0
-        return stop_areas[0] # FIXME for now return one station
-      else
-        return nil # FIXME
-      end
+      return find(:first, :order => "#{distance_clause} asc", :conditions => conditions)
     else
       raise "invalid (lon, lat): (#{lon}, #{lat})"
     end
