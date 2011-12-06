@@ -158,11 +158,6 @@ class Problem < ActiveRecord::Base
     self.sent_emails.select{ |sent_email| sent_email if !sent_email.comment_id }
   end
 
-  # if this email has never been used before, assign the name
-  def reporter_attributes=(attributes)
-    self.reporter = User.find_or_initialize_by_email(:email => attributes[:email], :name => reporter_name)
-  end
-
   def confirm!
     return unless self.status == :new
     # complete the relevant assignments
@@ -194,10 +189,6 @@ class Problem < ActiveRecord::Base
     campaign.confirm
     self.save
     return campaign
-  end
-
-  def save_reporter
-    reporter.save_if_new
   end
 
   def reply_email
@@ -311,7 +302,6 @@ class Problem < ActiveRecord::Base
     end
     problem.status = :new
     problem.reporter = user
-    problem.reporter_name = user.name
     problem.save!
     if token
       problem.update_attributes(:token => token)

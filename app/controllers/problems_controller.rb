@@ -40,9 +40,7 @@ class ProblemsController < ApplicationController
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end
-    @problem = Problem.new(:location => location,
-                           :reporter => current_user ? current_user : User.new,
-                           :reporter_name => current_user ? current_user.name : '')
+    @problem = Problem.new(:location => location)
     map_params_from_location(@problem.location.points, find_other_locations=false)
     setup_problem_advice(@problem)
   end
@@ -590,6 +588,7 @@ class ProblemsController < ApplicationController
   end
 
   def handle_problem_current_user
+    @problem.reporter = current_user
     @problem.save
     respond_to do |format|
       format.html do

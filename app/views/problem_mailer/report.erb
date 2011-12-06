@@ -67,11 +67,11 @@ To view a map of the precise location of this problem, or to provide an update o
 
 <%- if MySociety::Config.getbool('SITE_VISIBLE', true) %> 
 
-[<%- if @problem.campaign %> PLEASE NOTE: Your replies to this problem report will be sent to <%= @problem.reporter_name %> and will be published online.<%- end %> This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. If there is a more appropriate email address for messages about this type of problem, please let us know by visiting <<%= raw @feedback_link %>>. This will help improve the service for people travelling. We also welcome any other feedback you may have. ]
+[<%- if @problem.campaign %> PLEASE NOTE: Your replies to this problem report will be sent to <%= @problem.reporter.name %> and will be published online.<%- end %> This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. If there is a more appropriate email address for messages about this type of problem, please let us know by visiting <<%= raw @feedback_link %>>. This will help improve the service for people travelling. We also welcome any other feedback you may have. ]
 
 <%- else %>
 
-[<%- if @problem.campaign %> PLEASE NOTE: Your replies to this problem report will be sent to <%= @problem.reporter_name %> and will be published online.<%- end %>  This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. If there is a more appropriate email address for messages about this type of problem, please let us know by  emailing <%=MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')%>. This will help improve the service for people travelling. We also welcome any other feedback you may have. ]
+[<%- if @problem.campaign %> PLEASE NOTE: Your replies to this problem report will be sent to <%= @problem.reporter.name %> and will be published online.<%- end %>  This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. If there is a more appropriate email address for messages about this type of problem, please let us know by  emailing <%=MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')%>. This will help improve the service for people travelling. We also welcome any other feedback you may have. ]
 
 <%- end %>
 

@@ -704,7 +704,6 @@ describe ProblemsController do
                                                          :destroy => true)
       @mock_problem = mock_model(Problem, :valid? => true,
                                           :save => true,
-                                          :save_reporter => true,
                                           :location => @stop,
                                           :reporter => @mock_user,
                                           :confirm! => true,
@@ -838,6 +837,12 @@ describe ProblemsController do
 
         before do
           @controller.stub!(:current_user).and_return(@mock_user)
+          @mock_problem.stub!(:reporter=)
+        end
+
+        it 'should set the user as the problem reporter' do
+          @mock_problem.should_receive(:reporter=).with(@mock_user)
+          make_request
         end
 
         it 'should try to save the problem if it is valid' do
@@ -1174,7 +1179,7 @@ describe ProblemsController do
                                      :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_route)
 
-    expected = ["Let's get your problem fixed. More than one company operates this route.", 
+    expected = ["Let's get your problem fixed. More than one company operates this route.",
                 "Write an email using the form below and we'll send your problem report",
                 "<strong>to the operator you select below</strong>."].join(' ')
     expect_advice(mock_problem, expected)

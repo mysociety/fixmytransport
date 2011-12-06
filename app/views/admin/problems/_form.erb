@@ -43,17 +43,11 @@
   <strong><%= raw f.label :status %></strong>
   <%= raw f.select :status_code, Problem.statuses, {:prompt => true, :selected => @problem.status_code } %>
 </div>
-
+<%- if @problem.reporter %>
 <div class='form-field'>
-  <%- if @problem.errors.on(:reporter_name) %>
-    <div class='error'>
-      <%= error_message_on @problem, :reporter_name %>
-    </div>
-  <%- end %>
-  <strong><%= raw label(:problem, :reporter_name) %></strong>
-  <%= raw f.text_field :reporter_name %>
+  <%= link_to(@problem.reporter.name, admin_url(admin_user_path(@problem.reporter)))%>
 </div>
-
+<%- end %>
 <div class='form-field'>
   <strong><%= raw label(:problem, :token) %></strong>
   <%= @problem.token %>
