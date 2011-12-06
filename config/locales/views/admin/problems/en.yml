@@ -1,5 +1,10 @@
 en:
   admin:
+    admin_actions: Admin actions
+    change_author: Admin
+    changed_field: Attribute
+    old_value: Changed from
+    new_value: Changed to
     problem_campaign: Campaign
     reporter: Reporter
     responsible_org: Organization

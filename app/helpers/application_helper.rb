@@ -678,5 +678,15 @@ module ApplicationHelper
     end
     flags.join(" ")
   end
+  
+  def change_hash(new_model, old_model)
+    change_hash = old_model.diff(new_model)
+    # replace status code with the friendlier status
+    if change_hash.has_key?(:status_code) and new_model.respond_to?(:status_code_to_symbol)
+      values = change_hash.delete(:status_code)
+      change_hash[:status] = values.map{ |status_code| new_model.status_code_to_symbol[status_code.to_i] }
+    end
+    return change_hash
+  end
 
 end

@@ -31,6 +31,69 @@ module SharedBehaviours
 
     end
 
+    shared_examples_for "an action that requires an admin user" do
+
+      describe 'when there is a current user' do
+
+        before do
+          @current_user = mock_model(User)
+          controller.stub(:current_user).and_return(@current_user)
+        end
+
+        describe 'and the current user is not an admin user' do
+
+          before do
+            @current_user.stub!(:suspended?).and_return(false)
+            @current_user.stub!(:is_admin?).and_return(false)
+          end
+
+          it 'should show the "no_admin" template' do
+            make_request(@default_params)
+            response.should render_template("admin/home/no_admin")
+          end
+
+        end
+
+        describe 'and the current user is suspended' do
+
+          before do
+            @current_user.stub!(:suspended?).and_return(true)
+            @user_session_mock = mock('User session')
+            controller.stub!(:current_user_session).and_return(@user_session_mock)
+            @user_session_mock.stub!(:destroy)
+          end
+
+          it 'should destroy the user session and redirect to the site root' do
+            @user_session_mock.should_receive(:destroy)
+            make_request
+            response.should redirect_to(root_url)
+          end
+
+          it 'should show a suspension error message' do
+            make_request
+            flash[:error].should == "Unable to authenticate &mdash; this account has been suspended."
+          end
+
+        end
+
+      end
+
+      describe 'when there is no current user' do
+
+        before do
+          controller.stub!(:current_user).and_return(nil)
+        end
+
+        it 'should render the login template' do
+          make_request(@default_params)
+          response.should render_template("admin/home/login")
+        end
+
+      end
+
+
+    end
+
     shared_examples_for "an action that requires the campaign initiator" do
 
       describe 'when there is a current user' do

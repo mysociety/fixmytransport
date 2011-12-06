@@ -31,6 +31,9 @@ class Problem < ActiveRecord::Base
   named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
 
   has_paper_trail
+  
+  # set attributes to include and exclude when performing model diffs
+  diff :exclude => [:updated_at]
 
   # Makes a random token, suitable for using in URLs e.g confirmation messages.
   def generate_confirmation_token
