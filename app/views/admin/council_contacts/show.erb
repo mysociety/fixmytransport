@@ -23,7 +23,7 @@
     <td><%= @council_contact.last_editor %></td>
     <td><%= @council_contact.notes   %></td>
   </tr>
-  <%- @council_contact.versions.each do |version| %>
+  <%- @council_contact.versions.reverse.each do |version| %>
     <%- if version.event == 'update' %>
       <%- contact = version.reify %>
       <tr class='<%= cycle('odd', 'even') %>'>
