@@ -1,7 +1,7 @@
 class Admin::StopAreasController < Admin::AdminController
   
   cache_sweeper :stop_area_sweeper
-  before_filter :require_can_admin_locations
+  before_filter :require_can_admin_locations, :except => :autocomplete_for_name
   
   def show 
     @stop_area = StopArea.find(params[:id])

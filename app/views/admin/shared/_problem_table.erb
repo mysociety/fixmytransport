@@ -23,7 +23,7 @@
       <td><%= problem.subject %></td>
       <td><%- if problem.campaign %><%= link_to(problem.campaign.title, admin_url(admin_campaign_path(problem.campaign.id)))%><%- end %></td>
       <td>
-        <%- if admin_location_url(problem.location) %>
+        <%- if admin_location_url(problem.location) && current_user.can_admin?(:locations) %>
           <%= link_to(problem.location.name, admin_location_url(problem.location)) %>
         <%- else %>
           <%= problem.location.name %>
@@ -36,12 +36,19 @@
               <%- else %>
               <%= problem.reporter.name %>
             <%- end %>
-          <%= link_to("(#{t('admin.admin')})", admin_url(admin_user_path(problem.reporter)))%>
+            <%- if current_user.can_admin?(:users) %>
+              <%= link_to("(#{t('admin.admin')})", admin_url(admin_user_path(problem.reporter)))%>
+            <%- end %>
           <%- end %>
           
       </td>
       <td><%- problem.responsible_organizations.each do |org| %>
-        <%= link_to(org.name, admin_organization_url(org))%>
+        <%- if current_user.can_admin?(:organizations) %>
+          <%= link_to(org.name, admin_organization_url(org))%>
+        <%- else %>
+          <%= org.name %>
+        <%- end %>
+        <br>
       <%- end %>
       </td>
       <td><%= problem.status %></td>

@@ -1,6 +1,6 @@
 class Admin::OperatorsController < Admin::AdminController
   
-  before_filter :require_can_admin_organizations
+  before_filter :require_can_admin_organizations, :except => :autocomplete_for_name
   
   def index
     conditions = []
