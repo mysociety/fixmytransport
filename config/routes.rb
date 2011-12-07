@@ -178,6 +178,9 @@ ActionController::Routing::Routes.draw do |map|
   # admin
   map.namespace :admin do |admin|
     admin.root :controller => 'home'
+    admin.login 'login', :controller => 'user_sessions', :action => 'new'
+    admin.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
+    admin.resources :user_sessions, :only => [:new, :create, :destroy]
     admin.resources :location_searches, :only => [:index, :show]
     admin.resources :routes, :collection => { :merge => [:get, :post], :compare => [:get, :post] }
     admin.resources :operators, :collection => { :merge => [:get, :post] , :assign_routes => [:get, :post]}

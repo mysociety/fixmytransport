@@ -1,0 +1,36 @@
+<h3><%= t('admin.login') %></h3>
+<%- form_for (@user_session ||= UserSession.new), :url => admin_url(admin_user_sessions_path), :html => {:id => 'login-form' } do |f|  %>
+  <%- if @user_session.errors.on_base %>
+    <div class='error error-base'>
+      <%= error_message_on @user_session, :base %>
+    </div>
+  <%- end %>
+
+	<div>
+	  <%- if @user_session.errors.on('email') %>
+      <div class='error error-email'>
+        <%= error_message_on @user_session, :email %>
+      </div>
+    <%- end %>
+		<label for="user_session_email"><%= t('shared.login_form.email') %></label>
+		<input name="user_session[email]" id="user_session_email" type="text" />
+	</div>
+	
+	<div>
+	  <%- if @user_session.errors.on('password') %>
+      <div class='error error-password'>
+        <%= error_message_on @user_session, :password %>
+      </div>
+    <%- end %>
+		<label for="user_session_password"><%= t('shared.login_form.password') %></label>
+		<input name="user_session[password]" id="user_session_password" type="password" />
+	</div>
+		
+	<div>
+		<button class="button" type="submit"><%= t('shared.login_form.sign_in') %></button>
+		<%- if !(controller.controller_name == 'user_sessions') %>
+		  <input type="hidden" name="redirect" value="<%= request.request_uri %>" />
+		<%- end %>
+	</div>	
+<%- end %>
+

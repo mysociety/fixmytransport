@@ -41,8 +41,7 @@ describe UserSessionsController do
       @user_session = mock_model(UserSession, :save => true, :destroy => true, :record => @mock_user)
       UserSession.stub!(:new).and_return(@user_session) 
       @default_params = {:format=>"html", :user_session => {:login => 'test@example.com', 
-                                                            :password => 'mypassword',
-                                                            :login_by_password => true}}
+                                                            :password => 'mypassword'}}
     end
     
     it 'should save the post-login action to the session' do 

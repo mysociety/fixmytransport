@@ -74,13 +74,5 @@ class UserSessionsController < ApplicationController
     redirect_back_or_default path
   end
   
-  private
-  
-  def save_redirect
-    if params[:redirect] and params[:redirect].starts_with?('/')
-      session[:return_to] = params[:redirect]
-    end
-  end
-  
 end
 

@@ -38,7 +38,12 @@ class Admin::AdminController < ApplicationController
   def require_admin_user
     unless current_user
       store_location
-      render :template => 'admin/home/login'
+      if controller_name == 'user_sessions'
+        redirect = nil
+      else
+        redirect = request.request_uri
+      end
+      redirect_to admin_url(admin_login_path(:redirect => redirect))
       return false
     end
     if current_user.suspended?

@@ -84,9 +84,9 @@ module SharedBehaviours
           controller.stub!(:current_user).and_return(nil)
         end
 
-        it 'should render the login template' do
+        it 'should redirect to the login url with a redirect param' do
           make_request(@default_params)
-          response.should render_template("admin/home/login")
+          response.should redirect_to(controller.admin_url(admin_login_path(:redirect => request.request_uri)))
         end
 
       end
