@@ -28,9 +28,7 @@
 		
 	<div>
 		<button class="button" type="submit"><%= t('shared.login_form.sign_in') %></button>
-		<%- if !(controller.controller_name == 'user_sessions') %>
-		  <input type="hidden" name="redirect" value="<%= request.request_uri %>" />
-		<%- end %>
+		  <input type="hidden" name="redirect" value="<%= params[:redirect] %>" />
 	</div>	
 <%- end %>
 
