@@ -1,7 +1,7 @@
 class Campaign < ActiveRecord::Base
-  
+
   include FixMyTransport::Status
-  
+
   belongs_to :initiator, :class_name => 'User'
   has_many :campaign_supporters
   has_many :supporters, :through => :campaign_supporters, :class_name => 'User', :conditions => ['campaign_supporters.confirmed_at is not null']
@@ -31,6 +31,10 @@ class Campaign < ActiveRecord::Base
 
   has_paper_trail
 
+  # set attributes to include and exclude when performing model diffs
+  diff :exclude => [:updated_at]
+
+  # pagination default
   @@per_page = 10
 
   has_status({ 0 => 'New',
@@ -112,7 +116,7 @@ class Campaign < ActiveRecord::Base
       return nil
     end
   end
-  
+
   def twitter_call_to_action
     I18n.translate('campaigns.show.twitter_call_to_action', :org => self.responsible_org_descriptor, :title => self.title)
   end
@@ -164,6 +168,12 @@ class Campaign < ActiveRecord::Base
     assignments.find(:all, :conditions => ['task_type_name = ?', 'write-to-other'])
   end
 
+  # Return a list of version models in cronological order representing changes made 
+  # in the admin interface to this campaign
+  def admin_actions
+    self.versions.find(:all, :conditions => ['admin_action = ?', true])
+  end
+
   # Encode the id to Base 26 and then use alphabetic rather than alphanumeric range
   def email_id
     self.id.to_s(base=26).tr('0-9a-p', 'a-z')
@@ -210,7 +220,7 @@ class Campaign < ActiveRecord::Base
     key = self.key_from_email(email)
     campaign = find(:first, :conditions => ['lower(key) = ?', key])
   end
-  
+
   # Guess which campaign an email address references using only the encoded ID
   def self.guess_by_campaign_email(email)
     key = self.key_from_email(email)

@@ -48,18 +48,22 @@
   </tr>
 
   <%- @problem.admin_actions.each do |version| %>
-    <tr class='<%= cycle('odd', 'even') %>'>
-      <td><%= version.created_at %></td>
-      <td><%= User.find(version.whodunnit).name %></td>
     <%- if version.item_type == 'Problem' %>
       <%- problem = version.reify %>
       <%- change_hash((problem.next_version or @problem), problem).each do |attribute, values| %>
+      <tr class='<%= cycle('odd', 'even') %>'>
+        <td><%= version.created_at %></td>
+        <td><%= User.find(version.whodunnit).name %></td>
         <td><%= t('admin.attribute_changed', :attribute => attribute.to_s.titleize) %></td>
         <td><%= values.first %></td>
         <td><%= values.last %></td>
+      </tr>
       <%- end %>
     <%- elsif version.item_type == 'Responsibility' %>
     <%- if version.event == 'create' %>
+    <tr class='<%= cycle('odd', 'even') %>'>
+      <td><%= version.created_at %></td>
+      <td><%= User.find(version.whodunnit).name %></td>
       <td><%= t("admin.responsibility_added") %></td>
       <td></td>
       <%- if responsibility = Responsibility.find(:first, :conditions => ['id = ?', version.item_id]) %>
@@ -69,12 +73,15 @@
       <%- end %>
     </tr>
     <%- elsif version.event == 'destroy' %>
+    <tr class='<%= cycle('odd', 'even') %>'>
+      <td><%= version.created_at %></td>
+      <td><%= User.find(version.whodunnit).name %></td>
       <td><%= t("admin.responsibility_removed") %></td>
       <td><%= version.reify.organization.name %></td>
       <td></td>
-    <%- end %>
-    <%- end %>
     </tr>
+    <%- end %>
+    <%- end %>
   <%- end %>
 
 </table>
