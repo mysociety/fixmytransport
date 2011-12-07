@@ -1,5 +1,7 @@
 class Admin::CampaignUpdatesController < Admin::AdminController
 
+  before_filter :require_can_admin_issues
+
   def show
     @campaign_update = CampaignUpdate.find(params[:id])
   end

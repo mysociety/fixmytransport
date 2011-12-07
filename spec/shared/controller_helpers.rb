@@ -94,6 +94,36 @@ module SharedBehaviours
 
     end
 
+    shared_examples_for "an action that requires a specific admin permission" do
+
+      before do
+        @current_user = mock_model(User, :suspended? => false,
+                                         :is_admin? => true)
+        @current_user.stub!(:can_admin?).with(@required_admin_permission).and_return(true)
+        controller.stub!(:current_user).and_return(@current_user)
+      end
+
+      describe "when the current user does not have the admin permission" do
+
+        before do
+          @current_user.stub!(:can_admin?).with(@required_admin_permission).and_return(false)
+        end
+
+        it 'should redirect to the admin front page' do
+          make_request
+          response.should redirect_to(controller.admin_url(admin_root_path))
+        end
+
+        it 'should show a permission error message' do
+          make_request
+          flash[:error].should == 'You have not been granted permission for that action.'
+        end
+
+      end
+
+    end
+
+
     shared_examples_for "an action that requires the campaign initiator" do
 
       describe 'when there is a current user' do

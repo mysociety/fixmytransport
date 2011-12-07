@@ -20,7 +20,8 @@ class User < ActiveRecord::Base
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
   validate :validate_real_name
   validates_uniqueness_of :email, :case_sensitive => false, :unless => :skip_email_uniqueness_validation
-  attr_protected :password, :password_confirmation, :is_expert, :is_admin, :is_suspended
+  attr_protected :password, :password_confirmation, :is_expert, :is_admin, :is_suspended,
+                 :can_admin_locations, :can_admin_users, :can_admin_issues, :can_admin_organizations
   has_many :assignments
   has_many :campaign_supporters, :foreign_key => :supporter_id
   has_many :campaigns, :through => :campaign_supporters
@@ -165,6 +166,11 @@ class User < ActiveRecord::Base
     !self.subscriptions.find(:first, :conditions => ['target_id = ? and target_type = ? and confirmed_at is not null', 
                                                       target.id, target.class.to_s]).nil?
   end
+  
+  def can_admin?(admin_right)
+    return false unless self.send("can_admin_#{admin_right}?") == true
+    return true
+  end
 
   def self.name_or_email_or_id_conditions(query)
     query_clauses = []
@@ -187,7 +193,6 @@ class User < ActiveRecord::Base
     end
     conditions = [query_clauses.join(" AND ")] + query_params
   end
-
 
   # class methods
 

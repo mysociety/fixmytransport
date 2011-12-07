@@ -135,6 +135,24 @@ describe User do
     end
 
   end
+  
+  describe 'when asked if can admin users' do 
+    
+    before do
+      @user = User.new
+    end
+    
+    it 'should return true if can_admin_users? returns true' do 
+      @user.stub!(:can_admin_users?).and_return(true)
+      @user.can_admin?(:users).should == true
+    end
+    
+    it 'should return false if can_admin_users? returns false' do 
+      @user.stub!(:can_admin_users?).and_return(false)
+      @user.can_admin?(:users).should == false
+    end
+    
+  end
 
   describe 'when handling an external auth token' do
 

@@ -34,7 +34,8 @@ Spec::Runner.configure do |config|
     # mock up an admin authorized user for admin controller specs
     if @controller.is_a?(Admin::AdminController)
       @user = mock_model(User, :is_admin? => true,
-                               :suspended? => false)
+                               :suspended? => false,
+                               :can_admin? => true)
       controller.stub!(:current_user).and_return(@user)
     end
   end

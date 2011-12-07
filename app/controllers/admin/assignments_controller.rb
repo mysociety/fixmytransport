@@ -1,5 +1,7 @@
 class Admin::AssignmentsController < Admin::AdminController
 
+  before_filter :require_can_admin_organizations
+
   def show
     @assignment = Assignment.find(params[:id])
     if @assignment.problem.responsible_operators.size == 1
@@ -16,7 +18,7 @@ class Admin::AssignmentsController < Admin::AdminController
     if params[:operator_id].blank?
       redirect_to admin_url(admin_assignment_path(@assignment.id))
       return false
-    else  
+    else
       begin
         @operator = Operator.find(params[:operator_id])
       rescue Exception => e
@@ -41,8 +43,8 @@ class Admin::AssignmentsController < Admin::AdminController
         else
           # no new email, no existing
           flash[:error] = I18n.translate("admin.assignment_updated_no_contact")
-        end  
-      else  
+        end
+      else
         @contact = nil
         if existing_contact
           if existing_contact.email.downcase != new_email
@@ -66,12 +68,12 @@ class Admin::AssignmentsController < Admin::AdminController
           end
           @operator.operator_contacts.build(contact_params)
         end
-      end          
-      begin 
-        ActiveRecord::Base.transaction do 
+      end
+      begin
+        ActiveRecord::Base.transaction do
           @operator.save!
           problem.save!
-          location.save! 
+          location.save!
           if @contact
             @contact.save!
           end
@@ -79,7 +81,7 @@ class Admin::AssignmentsController < Admin::AdminController
             complete_assignment(@assignment, problem)
           end
           @assignment.save!
-        end        
+        end
       rescue Exception => e
         flash[:error] = e.message
       end
@@ -88,7 +90,7 @@ class Admin::AssignmentsController < Admin::AdminController
   end
 
   private
-  
+
   def set_location_operator(location)
     if location.is_a?(Route)
       location.route_operators.build({:operator => @operator})
@@ -108,11 +110,11 @@ class Admin::AssignmentsController < Admin::AdminController
         existing_contact.email = new_email
         @contact = existing_contact
       elsif location_only
-        @contact = @operator.operator_contacts.build(:email => new_email, 
-                                                     :category => 'Other', 
+        @contact = @operator.operator_contacts.build(:email => new_email,
+                                                     :category => 'Other',
                                                      :location => location)
       elsif existing_contact.location
-        @contact = @operator.operator_contacts.build(:email => new_email, 
+        @contact = @operator.operator_contacts.build(:email => new_email,
                                                      :category => 'Other')
       else
         existing_contact.email = new_email

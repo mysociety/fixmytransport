@@ -4,6 +4,17 @@ describe Admin::StopsController do
 
   describe 'GET #index' do 
     
+    before do 
+      @default_params = {}
+      @required_admin_permission = :locations
+    end
+    
+    def make_request(params=@default_params)
+      get :index, params
+    end
+    
+    it_should_behave_like "an action that requires a specific admin permission"
+    
     describe 'when the app is in closed beta' do 
 
       before do 
@@ -11,7 +22,7 @@ describe Admin::StopsController do
       end
       
       it 'should not require http authentication' do 
-        get :index
+        make_request
         response.status.should == '200 OK'
       end
     
@@ -22,7 +33,7 @@ describe Admin::StopsController do
                                            :conditions => [], 
                                            :include => :locality,
                                            :order => 'lower(common_name)')
-      get :index
+      make_request
     end
     
     it 'should ask for stops with part of the common name or street matching the query param' do 
@@ -42,7 +53,7 @@ describe Admin::StopsController do
                                           "something%", "%something%"],
                                           :include => :locality,
                                           :order => 'lower(common_name)')
-      get :index, :query => 'Something'
+      make_request(:query => 'Something')
     end
     
     it 'should ask for stops with part of the common name or street or the id matching the query param if it is numeric' do
@@ -62,7 +73,7 @@ describe Admin::StopsController do
                                             "34%", "%34%", 34],
                                             :include => :locality,
                                             :order => 'lower(common_name)')
-      get :index, :query => '34'
+      make_request(:query => '34')
     end
     
     it 'should ask for stops with the codes for the transport modes passed' do 
@@ -71,7 +82,7 @@ describe Admin::StopsController do
                                           :conditions => "conditions",
                                           :include => :locality,
                                           :order => 'lower(common_name)')
-      get :index, :mode => '1'
+      make_request(:mode => '1')
     end
     
     
@@ -82,7 +93,7 @@ describe Admin::StopsController do
                                            :conditions => "conditions",
                                            :include => :locality,
                                           :order => 'lower(common_name)')
-      get :index, :mode => '1', :query => 'something'
+      make_request(:mode => '1', :query => 'something')
     end
     
     it 'should ask for routes by page' do 
@@ -90,7 +101,7 @@ describe Admin::StopsController do
                                            :conditions => [], 
                                            :include => :locality,
                                            :order => 'lower(common_name)')
-      get :index, :page => '3'
+      make_request(:page => '3')
     end
   
   end

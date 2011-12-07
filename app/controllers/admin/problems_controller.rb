@@ -1,6 +1,7 @@
 class Admin::ProblemsController < Admin::AdminController
 
   helper_method :sort_column, :sort_direction
+  before_filter :require_can_admin_issues
   
   def show 
     @problem = Problem.find(params[:id])

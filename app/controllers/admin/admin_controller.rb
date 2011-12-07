@@ -58,4 +58,29 @@ class Admin::AdminController < ApplicationController
      end
   end
 
+  def require_can_admin_users
+    return require_admin_right(:users)
+  end
+
+  def require_can_admin_locations
+    return require_admin_right(:locations)
+  end
+
+  def require_can_admin_organizations
+    return require_admin_right(:organizations)
+  end
+
+  def require_can_admin_issues
+    return require_admin_right(:issues)
+  end
+
+  def require_admin_right(admin_right)
+    unless current_user.can_admin?(admin_right) == true
+      flash[:error] = t('admin.no_permission')
+      redirect_to admin_url(admin_root_path)
+      return false
+    end
+    return true
+  end
+
 end

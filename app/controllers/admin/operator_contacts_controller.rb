@@ -1,15 +1,17 @@
 class Admin::OperatorContactsController < Admin::AdminController
-  
-  def show 
+
+  before_filter :require_can_admin_organizations
+
+  def show
     @operator_contact = OperatorContact.find(params[:id])
   end
-  
+
   def new
     @operator = Operator.find_by_id(params[:operator_id])
     @operator_contact = OperatorContact.new(:operator_id => params[:operator_id])
   end
-  
-  def create 
+
+  def create
     @operator_contact = OperatorContact.new(params[:operator_contact])
     # don't set location type without location id
     if @operator_contact.location_id.blank? && ! @operator_contact.location_type.blank?
@@ -23,7 +25,7 @@ class Admin::OperatorContactsController < Admin::AdminController
       render :new
     end
   end
-  
+
   def update
     @operator_contact = OperatorContact.find(params[:id])
     # don't set the stop_area_id unless it has a value
@@ -38,5 +40,5 @@ class Admin::OperatorContactsController < Admin::AdminController
       render :show
     end
   end
-  
+
 end

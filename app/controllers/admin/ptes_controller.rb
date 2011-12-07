@@ -1,14 +1,16 @@
 class Admin::PtesController < Admin::AdminController
-  
+
+  before_filter :require_can_admin_organizations
+
   def index
-    @ptes = PassengerTransportExecutive.paginate :page => params[:page], 
+    @ptes = PassengerTransportExecutive.paginate :page => params[:page],
                                                  :order => 'name ASC'
   end
 
   def show
     @pte = PassengerTransportExecutive.find(params[:id])
   end
-   
+
   def update
     @pte = PassengerTransportExecutive.find(params[:id])
     if @pte.update_attributes(params[:pte])
@@ -19,5 +21,5 @@ class Admin::PtesController < Admin::AdminController
       render :show
     end
   end
-  
+
 end
