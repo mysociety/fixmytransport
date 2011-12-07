@@ -13,6 +13,7 @@
     <%= yield :javascript %>
   </head>
   <body>
+    <%- if current_user && current_user.is_admin? && !current_user.suspended? %>
     <div id="admin-header">
       <h2><%= link_to_unless_current("#{t('admin.site_name')} #{t('admin.admin')}", admin_url(admin_root_path)) %></h2>
       <ul class='admin-nav-ugc'>
@@ -32,11 +33,11 @@
         <li><%= link_to t('admin.operators'), admin_url(admin_operators_path) %></li>
       </ul>
 
-        <%- if current_user %>
-          <div class="admin-login-info">
-            <%= t('admin.logged_in_as', :name => current_user.first_name) %> <%= link_to(t('admin.logout'), admin_url(admin_logout_path)) %>
-          </div>
-        <%- end %>
+        
+      <div class="admin-login-info">
+        <%= t('admin.logged_in_as', :name => current_user.first_name) %> <%= link_to(t('admin.logout'), admin_url(admin_logout_path)) %>
+      </div>
+    <%- end %>
 
     </div>
     <div id='main'>

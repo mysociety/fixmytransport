@@ -1,5 +1,5 @@
 <h3><%= t('admin.login') %></h3>
-<%- form_for (@user_session ||= UserSession.new), :url => admin_url(admin_user_sessions_path), :html => {:id => 'login-form' } do |f|  %>
+<%- form_for (@user_session ||= UserSession.new), :url => admin_url(admin_user_sessions_path), :html => {:id => 'admin-login-form' } do |f|  %>
   <%- if @user_session.errors.on_base %>
     <div class='error error-base'>
       <%= error_message_on @user_session, :base %>

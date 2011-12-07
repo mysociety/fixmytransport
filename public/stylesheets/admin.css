@@ -75,6 +75,10 @@ html, body {
   font-size: 0.8em;
 }
 
+#admin-login-form input {
+  margin: 0.5em;
+}
+
 .flash_notice {
   padding: 5px;
   margin: 5px;
