@@ -25,7 +25,7 @@ class UserSessionsController < ApplicationController
           render :action => :new
         end
       end
-      format.json do 
+      format.json do
         @json = {}
         if @user_session.save
           if @user_session.record.suspended?
@@ -55,7 +55,7 @@ class UserSessionsController < ApplicationController
     flash[:notice] = t('shared.login.logout_successful')
     redirect_back_or_default root_url
   end
-  
+
   # respond to an authentication token from an external source e.g. facebook
   def external
     access_token = params[:access_token]
@@ -70,9 +70,17 @@ class UserSessionsController < ApplicationController
       # send an email to site error address
       notify_about_exception(error)
       flash[:error] = t('shared.login.unexpected_external_auth_error', :source => source)
-    end      
+    end
     redirect_back_or_default path
   end
-  
+
+  private
+
+  def save_redirect
+    if params[:redirect] and params[:redirect].starts_with?('/')
+      session[:return_to] = params[:redirect]
+    end
+  end
+
 end
 

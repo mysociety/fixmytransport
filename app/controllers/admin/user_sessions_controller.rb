@@ -1,7 +1,7 @@
 class Admin::UserSessionsController < Admin::AdminController
   skip_before_filter :require_admin_user, :only => [:create, :new]
   before_filter :save_redirect, :only => [:create]
-  
+
   def new
     @user_session = UserSession.new
   end
@@ -33,5 +33,13 @@ class Admin::UserSessionsController < Admin::AdminController
     flash[:notice] = t('shared.login.logout_successful')
     redirect_back_or_default admin_url(admin_root_path)
   end
-  
+
+  private
+
+  def save_redirect
+    if params[:redirect] and params[:redirect].starts_with?('/')
+      session[:return_to] = admin_url(params[:redirect])
+    end
+  end
+
 end

@@ -41,7 +41,7 @@ class Admin::AdminController < ApplicationController
       if controller_name == 'user_sessions'
         redirect = nil
       else
-        redirect = admin_url(request.request_uri)
+        redirect = request.request_uri
       end
       redirect_to admin_url(admin_login_path(:redirect => redirect))
       return false

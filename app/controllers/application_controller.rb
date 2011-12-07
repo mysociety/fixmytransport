@@ -160,12 +160,6 @@ class ApplicationController < ActionController::Base
       session[:return_to] = request.request_uri
     end
   end
-
-  def save_redirect
-    if params[:redirect] and params[:redirect].starts_with?('/')
-      session[:return_to] = params[:redirect]
-    end
-  end
   
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)

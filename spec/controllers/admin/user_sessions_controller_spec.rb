@@ -104,9 +104,9 @@ describe Admin::UserSessionsController do
           flash[:notice].should == 'Sign in successful!'
         end
         
-        it 'should redirect to a relative path passed in the redirect param' do 
+        it 'should redirect to the admin url for a relative path passed in the redirect param' do 
           make_request(@default_params.update(:redirect => '/my_url'))
-          response.should redirect_to("/my_url")
+          response.should redirect_to("http://test.host/admin/my_url")
         end
         
       end
