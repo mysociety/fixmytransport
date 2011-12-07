@@ -10,13 +10,22 @@ class CampaignUpdate < ActiveRecord::Base
   named_scope :unsent, :conditions => ['sent_at is null']
   has_paper_trail
 
+  # set attributes to include and exclude when performing model diffs
+  diff :exclude => [:updated_at]
+
   def user_name
     self.user.name
   end
 
-  # Sendable updates - not sent 
+  # Return a list of version models in cronological order representing changes made
+  # in the admin interface to this campaign update
+  def admin_actions
+    self.versions.find(:all, :conditions => ['admin_action = ?', true])
+  end
+
+  # Sendable updates - not sent
   def self.sendable
     unsent.find(:all)
   end
-  
+
 end

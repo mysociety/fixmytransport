@@ -2,3 +2,28 @@
 <%- form_for [:admin, @comment], :url => admin_url(admin_comment_path(@comment.id)), :html => { :class => 'comment-form' } do |f|  %>
   <%= render :partial => "form", :locals => { :f => f } %>
 <%- end %>
+
+<h3><%= t('admin.admin_actions') %></h3>
+<table class='history index-list'>
+  <tr>
+    <th width='10%'><%= t('admin.updated_at') %></th>
+    <th width='10%'><%= t('admin.change_author') %></th>
+    <th width='15%'><%= t('admin.changed_field') %></th>
+    <th width='30%'><%= t('admin.old_value') %></th>
+    <th width='30%'><%= t('admin.new_value') %></th>
+  </tr>
+
+  <%- @comment.admin_actions.each do |version| %>
+      <%- comment = version.reify %>
+      <%- change_hash((comment.next_version or @comment), comment).each do |attribute, values| %>
+      <tr class='<%= cycle('odd', 'even') %>'>
+        <td><%= version.created_at %></td>
+        <td><%= User.find(version.whodunnit).name %></td>
+        <td><%= t('admin.attribute_changed', :attribute => attribute.to_s.titleize) %></td>
+        <td><%= values.first %></td>
+        <td><%= values.last %></td>
+      </tr>
+      <%- end %>
+  <%- end %>
+
+</table>

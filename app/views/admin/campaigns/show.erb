@@ -111,7 +111,9 @@
 <%- @campaign.campaign_updates.each do |campaign_update| %>
   <tr class='<%= cycle("odd", "even", :name => 'campaign_updates') %>'>
     <td>
-      <%= campaign_update.id %>
+      <td>
+        <%= link_to(campaign_update.id, admin_url(admin_campaign_update_path(campaign_update))) %>
+      </td>
     </td>
     <%- CampaignUpdate.content_columns.map { |c| c.name }.each do |column| %>
       <td><%= simple_format( campaign_update.send(column) ) %></td>
@@ -129,7 +131,7 @@
     <% end %>
   </tr>
 <%- @campaign.assignments.each do |assignment| %>
-  <tr class='<%= cycle("odd", "even", :name => 'campaign_updates') %>'>
+  <tr class='<%= cycle("odd", "even", :name => 'assigments') %>'>
     <td>
       <%= assignment.id %>
     </td>
