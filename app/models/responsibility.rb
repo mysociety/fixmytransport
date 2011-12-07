@@ -2,7 +2,9 @@ class Responsibility < ActiveRecord::Base
   belongs_to :problem
   validates_presence_of :organization_id, :message => I18n.translate('problems.new.choose_operator')
   validates_presence_of :organization_type
-  has_paper_trail
+  # when storing versions of this model, store the problem id as a separate attribute so we
+  # can retrieve versions that way
+  has_paper_trail :meta => { :problem_id => Proc.new{ |responsibility| responsibility.problem_id } }
   
   def organization
     case self.organization_type

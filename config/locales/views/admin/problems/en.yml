@@ -2,9 +2,12 @@ en:
   admin:
     admin_actions: Admin actions
     change_author: Admin
-    changed_field: Attribute
-    old_value: Changed from
-    new_value: Changed to
+    changed_field: Change
+    old_value: Before
+    new_value: After
+    responsibility_added: Responsibility added
+    responsibility_removed: Responsibility removed
+    attribute_changed: "%{attribute} changed"
     problem_campaign: Campaign
     reporter: Reporter
     responsible_org: Organization

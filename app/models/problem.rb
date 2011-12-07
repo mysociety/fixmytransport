@@ -1,7 +1,7 @@
 class Problem < ActiveRecord::Base
-  
+
   include FixMyTransport::Status
-  
+
   belongs_to :location, :polymorphic => true
   belongs_to :reporter, :class_name => 'User'
   belongs_to :transport_mode
@@ -21,7 +21,7 @@ class Problem < ActiveRecord::Base
                2 => 'Fixed',
                3 => 'Hidden' })
   accepts_nested_attributes_for :responsibilities, :allow_destroy => true
-  
+
   def self.visible_status_codes
     [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:fixed]]
   end
@@ -31,7 +31,7 @@ class Problem < ActiveRecord::Base
   named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
 
   has_paper_trail
-  
+
   # set attributes to include and exclude when performing model diffs
   diff :exclude => [:updated_at]
 
@@ -78,7 +78,7 @@ class Problem < ActiveRecord::Base
 
     end
   end
-  
+
   def update_assignments
     # if there are now responsible organizations, remove any untried assignment to find
     # out who's responsible
@@ -99,11 +99,11 @@ class Problem < ActiveRecord::Base
   def responsible_organizations
     self.responsibilities.map{ |responsibility| responsibility.organization }
   end
-  
+
   def responsible_operators
     self.responsible_organizations.select{ |org| org.is_a?(Operator) }
   end
-  
+
   def operator_names
     self.responsible_operators.map{ |operator| operator.name }.to_sentence
   end
@@ -121,7 +121,7 @@ class Problem < ActiveRecord::Base
                                             :type => organization.class.to_s,
                                             :name => organization.name } }
   end
-  
+
   def recipient_contact(recipient)
     if [Council, Operator, PassengerTransportExecutive].include?(recipient.class)
       return recipient.contact_for_category_and_location(category, location)
@@ -129,7 +129,7 @@ class Problem < ActiveRecord::Base
       raise "Unknown recipient type: #{recipient.class.to_s}"
     end
   end
-  
+
   def recipient_emails(recipient)
     # on a staging site, don't send live emails
     if MySociety::Config.getbool('STAGING_SITE', true)
@@ -183,7 +183,7 @@ class Problem < ActiveRecord::Base
                                      :location_type => self.location_type,
                                      :initiator => self.reporter,
                                      :problem => self,
-                                     :title => "#{I18n.translate("models.campaign.fix_this")} #{self.subject}", 
+                                     :title => "#{I18n.translate("models.campaign.fix_this")} #{self.subject}",
                                      :description => self.description })
     campaign.status = :new
     campaign.confirm
@@ -219,13 +219,24 @@ class Problem < ActiveRecord::Base
   def visible?
     [:confirmed, :fixed].include?(self.status)
   end
-  
+
   def sendable?
     (self.status == :confirmed && self.sent_at.nil? && !self.responsibilities.empty?)
   end
-  
+
   def unsendable?
     (self.status == :confirmed && self.sent_at.nil? && self.responsibilities.empty?)
+  end
+
+  # Return a list of version models in cronological order representing changes made 
+  # in the admin interface to this problem or associated responsibilities
+  def admin_actions
+    Version.find(:all, :conditions => ["admin_action = ?
+                                        AND ((item_type = 'Responsibility'
+                                        AND problem_id = ?) OR
+                                        (item_type = 'Problem'
+                                        AND item_id = ?))", true, id, id],
+                       :order => "id asc")
   end
 
   # class methods
@@ -297,7 +308,7 @@ class Problem < ActiveRecord::Base
                           :category => data[:category])
     data[:responsibilities].split(",").each do |responsibility_string|
       organization_id, organization_type = responsibility_string.split("|")
-      problem.responsibilities.build(:organization_id => organization_id, 
+      problem.responsibilities.build(:organization_id => organization_id,
                                      :organization_type => organization_type)
     end
     problem.status = :new
