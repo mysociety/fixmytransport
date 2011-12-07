@@ -20,8 +20,12 @@ describe Admin::UserSessionsController do
     before do 
       @default_params = { :user_session => {:login => 'test@example.com', 
                                             :password => 'mypassword'} }
-      @mock_user = mock_model(User, :suspended? => false)
-      @user_session = mock_model(UserSession, :save => true, :destroy => true, :record => @mock_user)
+      @mock_user = mock_model(User, :suspended? => false,
+                                    :is_admin? => true)
+      @user_session = mock_model(UserSession, :save => true, 
+                                              :destroy => true, 
+                                              :errors => mock('errors', :add  => nil),
+                                              :record => @mock_user)
       UserSession.stub!(:new).and_return(@user_session) 
     end
     
@@ -54,10 +58,34 @@ describe Admin::UserSessionsController do
       
     end
     
+
     describe 'if the session is valid' do 
       
       before do 
         @user_session.stub!(:save).and_return(true)
+      end
+
+      describe 'if the user does not have admin permissions' do 
+
+        before do 
+          @mock_user.stub!(:is_admin?).and_return(false)
+        end
+        
+        it 'should destroy the user session' do 
+          @user_session.should_receive(:destroy)
+          make_request
+        end
+
+        it 'should render the template "new"' do 
+          make_request
+          response.should render_template("new")
+        end
+
+        it 'should show the generic login failure message' do
+          @user_session.errors.should_receive(:add).with(:password, "Either your email address or password was not recognised. Please try again.")
+          make_request
+        end
+
       end
     
       describe 'if the user is suspended' do 

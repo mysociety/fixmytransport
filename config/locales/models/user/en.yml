@@ -12,6 +12,7 @@ en:
               not_real: "Please enter your full name. See our %{link}."
             password:
               not_confirmed: "Either your email address or password was not recognised. Please try again."
+              not_admin: "Either your email address or password was not recognised. Please try again."
   authlogic:
     error_messages:
       password_blank: "Please enter your password"

@@ -408,12 +408,19 @@ $(document).ready(function(){
 	  });
 
   function showFormErrors(form_selector, response) {
-    $(form_selector + " .error").html();
+    $(form_selector + " .error").html('');
     $(form_selector + " .error").hide();
     for (var key in response.errors){
       error_class = key.replace('.', '_')
-      $(form_selector + ' .error-' + error_class).html( response.errors[key] );
-      $(form_selector + ' .error-' + error_class).show();
+      var specific_error_element = $(form_selector + ' .error-' + error_class);
+      if (specific_error_element.length > 0){
+        specific_error_element.html( response.errors[key] );
+        specific_error_element.show();
+      }else{
+        var first_error_element = $(form_selector + " .error").first();
+        first_error_element.append( response.errors[key] );
+        first_error_element.show();
+      }
     }
   }
 
