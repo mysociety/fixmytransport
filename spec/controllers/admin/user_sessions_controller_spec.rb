@@ -27,7 +27,9 @@ describe Admin::UserSessionsController do
                                               :destroy => true,
                                               :errors => mock('errors', :add  => nil),
                                               :record => @mock_user,
-                                              :id= => nil)
+                                              :id= => nil,
+                                              :httponly= => nil,
+                                              :secure= => nil)
       UserSession.stub!(:new).and_return(@user_session)
       controller.stub!(:current_user).and_return(@mock_user)
     end
@@ -47,6 +49,18 @@ describe Admin::UserSessionsController do
       @user_session.should_receive(:id=).with(:admin)
       make_request
     end
+
+    it 'should set the session as secure (cookie setting)' do
+      @user_session.should_receive(:secure=).with(true)
+      make_request
+    end
+
+    it 'should set the session as httponly (cookie setting)' do
+      @user_session.should_receive(:httponly=).with(true)
+      make_request
+    end
+
+    it 'should set httponly on the session to create an http only'
 
     it 'should try to save the user session' do
       @user_session.should_receive(:save)

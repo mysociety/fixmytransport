@@ -11,6 +11,8 @@ class Admin::UserSessionsController < Admin::AdminController
     @user_session = UserSession.new(params[:user_session])
     # Set an ID on the session to distinguish it from a normal user session
     @user_session.id = :admin
+    @user_session.httponly = true
+    @user_session.secure = true
     if @user_session.save
       if !@user_session.record.is_admin?
         @user_session.destroy # prevents revealing non-admin accounts
