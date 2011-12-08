@@ -34,6 +34,12 @@ class Admin::AdminController < ApplicationController
     end
   end
 
+  # Admin sessions use a key to distinguish them from regular sessions
+  def current_user_session(refresh=false)
+    return @current_user_session if (defined?(@current_user_session) && ! refresh)
+    @current_user_session = UserSession.find(:admin)
+  end
+
   # Admin actions should require an admin user
   def require_admin_user
     unless current_user

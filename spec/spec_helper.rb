@@ -31,8 +31,9 @@ Spec::Runner.configure do |config|
     # have all controllers act as if in 'live' status by default
     @controller.stub!(:app_status).and_return('live')
     
-    # mock up an admin authorized user for admin controller specs
-    if @controller.is_a?(Admin::AdminController)
+    # mock up an admin authorized user for admin controller specs (except the user_sessions controller,
+    # which does it's own mocking)
+    if @controller.is_a?(Admin::AdminController) && !@controller.is_a?(Admin::UserSessionsController)
       @user = mock_model(User, :is_admin? => true,
                                :suspended? => false,
                                :can_admin? => true)
