@@ -37,7 +37,6 @@ class Admin::AdminController < ApplicationController
   # Admin actions should require an admin user
   def require_admin_user
     unless current_user
-      store_location
       if controller_name == 'user_sessions'
         redirect = nil
       else
