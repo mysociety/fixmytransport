@@ -1,10 +1,17 @@
 class Admin::AdminController < ApplicationController
   protect_from_forgery
-  layout "admin" 
+  layout "admin"
   skip_before_filter :require_beta_password
-  
+  before_filter :require_admin_user
+
   private
-  
+
+  # Record the fact that any version changes are due to actions taken in the admin interface, so they can
+  # be identified and displayed
+  def info_for_paper_trail
+    { :admin_action => true }
+  end
+
   # Add a notice to the flash on removal of an association of an operator with a location
   # giving a table of problems at the location that list the operator as responsible
   def add_responsibilities_notice(model_key, association_key, location_type, id_key, model)
@@ -21,10 +28,58 @@ class Admin::AdminController < ApplicationController
           end
         end
       end
-      flash[:notice] += render_to_string :partial => "admin/shared/responsibilities", 
+      flash[:notice] += render_to_string :partial => "admin/shared/responsibilities",
                                          :locals => { :problems => problems,
                                                       :model => model_key }
     end
   end
-  
+
+  # Admin actions should require an admin user
+  def require_admin_user
+    unless current_user
+      if controller_name == 'user_sessions'
+        redirect = nil
+      else
+        redirect = request.request_uri
+      end
+      redirect_to admin_url(admin_login_path(:redirect => redirect))
+      return false
+    end
+    if current_user.suspended?
+      flash[:error] = t('shared.suspended.forbidden')
+      current_user_session.destroy
+      redirect_to root_url
+      return false
+    end
+    if !current_user.is_admin?
+      render :template => 'admin/home/no_admin'
+      return false
+     end
+  end
+
+  def require_can_admin_users
+    return require_admin_right(:users)
+  end
+
+  def require_can_admin_locations
+    return require_admin_right(:locations)
+  end
+
+  def require_can_admin_organizations
+    return require_admin_right(:organizations)
+  end
+
+  def require_can_admin_issues
+    return require_admin_right(:issues)
+  end
+
+  def require_admin_right(admin_right)
+    unless current_user.can_admin?(admin_right) == true
+      flash[:error] = t('admin.no_permission')
+      redirect_to admin_url(admin_root_path)
+      return false
+    end
+    return true
+  end
+
 end

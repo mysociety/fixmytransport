@@ -3,6 +3,18 @@ require 'spec_helper'
 describe Admin::RoutesController do
 
   describe 'GET #index' do 
+
+    before do 
+      @required_admin_permission = :locations
+      @default_params = {}
+    end
+    
+    def make_request(params=@default_params)
+      get :index, params
+    end
+
+    it_should_behave_like "an action that requires a specific admin permission"
+    
   
     it 'should ask for all routes, ordered by number, paginated by default' do 
       Route.should_receive(:paginate).with(:page => nil, 
@@ -10,7 +22,7 @@ describe Admin::RoutesController do
                                            :conditions => [''], 
                                            :order => 'number asc', 
                                            :include => :region)
-      get :index
+      make_request
     end
     
     it 'should ask for routes with part of the name or the whole number or operator code matching the query param' do 
@@ -20,7 +32,7 @@ describe Admin::RoutesController do
                                                            '%%something%%', 'something'],
                                            :order => 'number asc', 
                                            :include => :region)
-      get :index, :query => 'Something'
+      make_request(:query => 'Something')
     end
     
     it 'should ask for routes with part of the name or the whole number or the id matching the query param if it is numeric' do
@@ -30,7 +42,7 @@ describe Admin::RoutesController do
                                                             '%%34%%', '34', 34],
                                             :order => 'number asc', 
                                             :include => :region)
-      get :index, :query => '34'
+      make_request(:query => '34')
     end
     
     it 'should ask for routes with the transport modes passed' do 
@@ -40,7 +52,7 @@ describe Admin::RoutesController do
                                                             '1'],
                                             :order => 'number asc', 
                                             :include => :region)
-      get :index, :mode => '1'
+      make_request(:mode => '1')
     end
     
     
@@ -52,7 +64,7 @@ describe Admin::RoutesController do
                                                            '1', '%%something%%', 'something'],
                                             :order => 'number asc',
                                             :include => :region)
-      get :index, :mode => '1', :query => 'something'
+      make_request(:mode => '1', :query => 'something')
     end
     
     it 'should ask for routes by page' do 
@@ -61,20 +73,31 @@ describe Admin::RoutesController do
                                            :conditions => [''], 
                                            :order => 'number asc',
                                            :include => :region)
-      get :index, :page => '3'
+      make_request(:page => '3')
     end
   
   end
   
   describe "GET #new" do 
-  
+    
+    before do
+      @required_admin_permission = :locations
+      @default_params = {}
+    end
+    
+    def make_request(params=@default_params)
+      get :new, params
+    end
+    
+    it_should_behave_like "an action that requires a specific admin permission"
+    
     it 'should create a new route' do 
       Route.should_receive(:new).and_return(mock_model(Route, :journey_patterns => mock('patterns', :build => nil)))
-      get :new
+      make_request
     end
     
     it 'should create an empty list of route operators' do 
-      get :new
+      make_request
       assigns[:route_operators].should == []
     end
     
@@ -82,13 +105,21 @@ describe Admin::RoutesController do
 
   describe "POST #create" do 
     
-    before do 
+    before do
+      @required_admin_permission = :locations
+      @default_params = {}
       TransportMode.stub!(:find).and_return(mock_model(TransportMode, :name => 'Train', 
                                                                       :route_type => 'TrainRoute'))
       @route = mock_model(Route, :id => 400, :save => true, :status= => nil)
       Route.stub!(:new).and_return(@route)
       TrainRoute.stub!(:new).and_return(@route)
     end
+    
+    def make_request(params=@default_params)
+      post :create, params
+    end
+    
+    it_should_behave_like "an action that requires a specific admin permission"
 
     describe 'if no data is posted' do 
     
@@ -122,13 +153,21 @@ describe Admin::RoutesController do
     describe 'when the route has no campaigns or problems' do 
       
       before do 
+        @required_admin_permission = :locations
+        @default_params = { :id => 33 }
         @route = mock_model(Route, :campaigns => [], :problems => [])
         Route.stub!(:find).and_return(@route)
       end
       
+      def make_request(params=@default_params)
+        delete :destroy, params
+      end
+            
+      it_should_behave_like "an action that requires a specific admin permission"
+      
       it 'should destroy the route' do 
         @route.should_receive(:destroy)
-        delete :destroy, :id => 33
+        make_request
       end
   
     end

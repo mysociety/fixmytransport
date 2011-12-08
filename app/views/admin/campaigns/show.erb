@@ -111,7 +111,9 @@
 <%- @campaign.campaign_updates.each do |campaign_update| %>
   <tr class='<%= cycle("odd", "even", :name => 'campaign_updates') %>'>
     <td>
-      <%= campaign_update.id %>
+      <td>
+        <%= link_to(campaign_update.id, admin_url(admin_campaign_update_path(campaign_update))) %>
+      </td>
     </td>
     <%- CampaignUpdate.content_columns.map { |c| c.name }.each do |column| %>
       <td><%= simple_format( campaign_update.send(column) ) %></td>
@@ -129,7 +131,7 @@
     <% end %>
   </tr>
 <%- @campaign.assignments.each do |assignment| %>
-  <tr class='<%= cycle("odd", "even", :name => 'campaign_updates') %>'>
+  <tr class='<%= cycle("odd", "even", :name => 'assigments') %>'>
     <td>
       <%= assignment.id %>
     </td>
@@ -147,3 +149,28 @@
 </table>
 
 <%= render :partial => 'admin/shared/comment', :locals => { :comments => @campaign.comments } %>
+
+<h3><%= t('admin.admin_actions') %></h3>
+<table class='history index-list'>
+  <tr>
+    <th width='10%'><%= t('admin.updated_at') %></th>
+    <th width='10%'><%= t('admin.change_author') %></th>
+    <th width='15%'><%= t('admin.changed_field') %></th>
+    <th width='30%'><%= t('admin.old_value') %></th>
+    <th width='30%'><%= t('admin.new_value') %></th>
+  </tr>
+
+  <%- @campaign.admin_actions.each do |version| %>
+      <%- campaign = version.reify %>
+      <%- change_hash((campaign.next_version or @campaign), campaign).each do |attribute, values| %>
+      <tr class='<%= cycle('odd', 'even') %>'>
+        <td><%= version.created_at %></td>
+        <td><%= User.find(version.whodunnit).name %></td>
+        <td><%= t('admin.attribute_changed', :attribute => attribute.to_s.titleize) %></td>
+        <td><%= values.first %></td>
+        <td><%= values.last %></td>
+      </tr>
+      <%- end %>
+  <%- end %>
+
+</table>

@@ -69,6 +69,16 @@ html, body {
   color: #fff;
 }
 
+#admin-header .admin-login-info {
+  margin: 0.1em 0.5em;
+  padding: 0 0.5em;
+  font-size: 0.8em;
+}
+
+#admin-login-form input {
+  margin: 0.5em;
+}
+
 .flash_notice {
   padding: 5px;
   margin: 5px;

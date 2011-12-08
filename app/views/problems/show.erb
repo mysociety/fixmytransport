@@ -26,7 +26,7 @@
 
 			<h5><%= t('problems.show.posted')%></h5>
 			<ul class="problem-details">
-				<li><%= t("problems.show.reported_by")%> <a href="<%=  profile_url(@problem.reporter) %>"><%= @problem.reporter_name %></a> <%= t("problems.show.reported_at")%> <%= @problem.confirmed_at.to_date.to_s(:short) %></li>
+				<li><%= t("problems.show.reported_by")%> <a href="<%=  profile_url(@problem.reporter) %>"><%= @problem.reporter.name %></a> <%= t("problems.show.reported_at")%> <%= @problem.confirmed_at.to_date.to_s(:short) %></li>
 				<%= raw problem_sending_history(@problem) %>
 			</ul>
 			<%- if current_user && current_user.is_admin? %>

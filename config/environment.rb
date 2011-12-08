@@ -46,6 +46,7 @@ Rails::Initializer.run do |config|
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
+  config.gem 'activerecord-diff', :version => '0.0.2'
   config.gem 'authlogic', :version => '2.1.6'
   config.gem 'bcrypt-ruby', :version => '2.1.4', :lib => 'bcrypt'
   config.gem "erubis", :version => '2.6.6'

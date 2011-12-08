@@ -30,9 +30,18 @@ Spec::Runner.configure do |config|
   config.before(:each, :type => :controller) do 
     # have all controllers act as if in 'live' status by default
     @controller.stub!(:app_status).and_return('live')
+    
+    # mock up an admin authorized user for admin controller specs
+    if @controller.is_a?(Admin::AdminController)
+      @user = mock_model(User, :is_admin? => true,
+                               :suspended? => false,
+                               :can_admin? => true)
+      controller.stub!(:current_user).and_return(@user)
+    end
   end
   
 end
+
 
 def default_fixtures
   [:transport_modes,

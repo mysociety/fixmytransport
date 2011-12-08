@@ -2,6 +2,7 @@ class Admin::RoutesController < Admin::AdminController
   
   cache_sweeper :route_sweeper
   helper_method :sort_column, :sort_direction
+  before_filter :require_can_admin_locations
 
   def show
     @route = Route.find(params[:id], :include => [ {:journey_patterns => 

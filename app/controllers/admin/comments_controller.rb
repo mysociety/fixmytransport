@@ -1,5 +1,7 @@
 class Admin::CommentsController < Admin::AdminController
 
+  before_filter :require_can_admin_issues
+
   def show
     @comment = Comment.find(params[:id])
   end

@@ -1,15 +1,17 @@
 class Admin::PteContactsController < Admin::AdminController
-  
-  def show 
+
+  before_filter :require_can_admin_organizations
+
+  def show
     @pte_contact = PassengerTransportExecutiveContact.find(params[:id])
   end
-  
+
   def new
     @pte = PassengerTransportExecutive.find_by_id(params[:pte_id])
     @pte_contact = PassengerTransportExecutiveContact.new(:passenger_transport_executive_id => params[:pte_id])
   end
-  
-  def create 
+
+  def create
     @pte_contact = PassengerTransportExecutiveContact.new(params[:pte_contact])
     if @pte_contact.save
       flash[:notice] = t('admin.pte_contact_created')
@@ -19,7 +21,7 @@ class Admin::PteContactsController < Admin::AdminController
       render :new
     end
   end
-  
+
   def update
     @pte_contact = PassengerTransportExecutiveContact.find(params[:id])
     if @pte_contact.update_attributes(params[:pte_contact])
@@ -30,5 +32,5 @@ class Admin::PteContactsController < Admin::AdminController
       render :show
     end
   end
-  
+
 end

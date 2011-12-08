@@ -1,6 +1,7 @@
 class Admin::IncomingMessagesController < Admin::AdminController
 
   before_filter :find_incoming
+  before_filter :require_can_admin_organizations
   
   def show
   end

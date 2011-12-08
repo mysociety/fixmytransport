@@ -1,6 +1,7 @@
 class Admin::CampaignsController < Admin::AdminController
  
   helper_method :sort_column, :sort_direction
+  before_filter :require_can_admin_issues
   
   def show
     @campaign = Campaign.find(params[:id])

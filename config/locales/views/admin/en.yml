@@ -1,6 +1,12 @@
 en:
   admin:
     admin: admin
+    login: Sign In
+    login_to_admin: "Please %{link} to administer the site."
+    logged_in_as: "Logged in as %{name}"
+    logout: (logout)
+    no_admin: "You have not been granted permission to administer this site. If you think you should be, please contact %{email}"
+    no_permission: "You have not been granted permission for that action."
     things_to_do: Things to do
     stats_all_time: Stats - all time
     stats_this_week: Stats - this week

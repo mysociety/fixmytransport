@@ -5,7 +5,7 @@
     <th width='10%'><%= t('admin.problem_campaign') %></th>
     <th width='10%'><%= t('admin.location') %></th>
     <th width='10%'><%= t('admin.transport_mode') %></th>
-    <th width='10%'><%= sortable('reporter_name', t('admin.reporter'), allow_sort) %></th>
+    <th width='10%'><%= sortable('users.name', t('admin.reporter'), allow_sort) %></th>
     <th width='10%'><%= t('admin.responsible_org') %></th>
     <th width='5%'><%= sortable('status_code', t('admin.status'), allow_sort) %></th>
     <th width='5%'><%= sortable('created_at', t('admin.created_at'), allow_sort) %></th>
@@ -23,21 +23,32 @@
       <td><%= problem.subject %></td>
       <td><%- if problem.campaign %><%= link_to(problem.campaign.title, admin_url(admin_campaign_path(problem.campaign.id)))%><%- end %></td>
       <td>
-        <%- if admin_location_url(problem.location) %>
+        <%- if admin_location_url(problem.location) && current_user.can_admin?(:locations) %>
           <%= link_to(problem.location.name, admin_location_url(problem.location)) %>
         <%- else %>
           <%= problem.location.name %>
         <%- end %>
       </td>
       <td><%= problem.transport_mode_text %></td>
-      <td><%- if problem.reporter && problem.reporter.login_count > 0 %>
-          <%=  link_to(problem.reporter_name, main_url(profile_path(problem.reporter)), :target => '_blank' )%>
-          <%- else %>
-           <%= problem.reporter_name %>
+      <td><%- if problem.reporter %>
+            <%- if problem.reporter.login_count > 0 %>
+              <%=  link_to(problem.reporter.name, main_url(profile_path(problem.reporter)), :target => '_blank' )%>
+              <%- else %>
+              <%= problem.reporter.name %>
+            <%- end %>
+            <%- if current_user.can_admin?(:users) %>
+              <%= link_to("(#{t('admin.admin')})", admin_url(admin_user_path(problem.reporter)))%>
+            <%- end %>
           <%- end %>
+          
       </td>
       <td><%- problem.responsible_organizations.each do |org| %>
-        <%= link_to(org.name, admin_organization_url(org))%>
+        <%- if current_user.can_admin?(:organizations) %>
+          <%= link_to(org.name, admin_organization_url(org))%>
+        <%- else %>
+          <%= org.name %>
+        <%- end %>
+        <br>
       <%- end %>
       </td>
       <td><%= problem.status %></td>

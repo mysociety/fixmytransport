@@ -665,7 +665,7 @@ module ApplicationHelper
   def role_flags(user)
     flags = []
     if user.is_expert? or user.is_admin?
-      flags << '<div class="user-flags">' 
+      flags << '<div class="user-flags">'
     end
     if user.is_expert?
       flags << "<div class=\"user-flag flag-expert\"><abbr title=\"#{t('shared.user_flags.expert_explanation')}\">#{t('shared.user_flags.expert')}</abbr></div>"
@@ -677,6 +677,20 @@ module ApplicationHelper
       flags << '</div>'
     end
     flags.join(" ")
+  end
+
+  # Return a cleaned-up hash of changed attributes for two models (or two versions of a model)
+  # Hash is of the form { attribute_name => [old_value, new_value] }
+  def change_hash(new_model, old_model)
+    change_hash = old_model.diff(new_model)
+    # replace status code with the friendlier status
+    if change_hash.has_key?(:status_code) and new_model.class.respond_to?(:status_code_to_symbol)
+      values = change_hash.delete(:status_code)
+      change_hash[:status] = values.map do |status_code|
+        new_model.class.status_code_to_symbol[status_code.to_i]
+      end
+    end
+    return change_hash
   end
 
 end

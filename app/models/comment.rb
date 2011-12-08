@@ -1,7 +1,7 @@
 class Comment < ActiveRecord::Base
-  
+
   include FixMyTransport::Status
-  
+
   belongs_to :user
   belongs_to :commented, :polymorphic => true
   validates_presence_of :text
@@ -12,29 +12,32 @@ class Comment < ActiveRecord::Base
   has_many :campaign_events, :as => :described
   attr_accessor :skip_name_validation
   named_scope :unsent, :conditions => ['sent_at is null']
-  
+
   has_paper_trail
-  has_status({ 0 => 'New', 
-               1 => 'Confirmed', 
+  has_status({ 0 => 'New',
+               1 => 'Confirmed',
                2 => 'Hidden' })
-               
+
   named_scope :visible, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at asc"
-  
+
+  # set attributes to include and exclude when performing model diffs
+  diff :exclude => [:updated_at]
+
   def visible?
     self.status_code == self.symbol_to_status_code[:confirmed]
   end
-  
+
   # Makes a random token, suitable for using in URLs e.g confirmation messages.
   def generate_confirmation_token
     self.token = MySociety::Util.generate_token
   end
-  
+
   def populate_user_name
     if self.user and ! self.user_name
       self.user_name = self.user.name
     end
   end
-  
+
   # create the user if it doesn't exist, but don't save it yet
   def user_attributes=(attributes)
     if !attributes[:id].blank?
@@ -43,11 +46,11 @@ class Comment < ActiveRecord::Base
       self.user = User.find_or_initialize_by_email(attributes[:email], :name => user_name)
     end
   end
-  
+
   def save_user
     user.save_if_new
   end
-  
+
   def confirm!
     return unless self.status == :new
     ActiveRecord::Base.transaction do
@@ -67,8 +70,14 @@ class Comment < ActiveRecord::Base
                                    :described => self,
                                    :campaign => commented)
       end
-      save!  
+      save!
     end
+  end
+
+  # Return a list of version models in cronological order representing changes made
+  # in the admin interface to this comment
+  def admin_actions
+    self.versions.find(:all, :conditions => ['admin_action = ?', true])
   end
 
   # class methods
@@ -92,5 +101,5 @@ class Comment < ActiveRecord::Base
     end
     comment
   end
-  
+
 end

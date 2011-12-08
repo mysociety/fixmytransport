@@ -26,7 +26,7 @@
       <td><%= link_to(campaign.problem.subject, admin_url(problem_path(campaign.problem)))%></td>
       <td><%= campaign.key %></td>
       <td>
-          <%- if admin_location_url(campaign.location) %>
+          <%- if admin_location_url(campaign.location) && current_user.can_admin?(:locations) %>
             <%= link_to(campaign.location.name, admin_location_url(campaign.location)) %>
           <%- else %>
             <%= campaign.location.name %>
@@ -38,10 +38,18 @@
           <%- else %>
             <%= campaign.initiator.name %>
           <%- end %>
+          <%- if current_user.can_admin?(:users) %>
+            <%= link_to("(#{t('admin.admin')})", admin_url(admin_user_path(campaign.initiator)))%>
+          <%- end %>
         </td>
       <td>
           <%- campaign.problem.responsible_organizations.each do |org| %>
-            <%= link_to(org.name, admin_organization_url(org))%>
+            <%- if current_user.can_admin?(:organizations) %>
+              <%= link_to(org.name, admin_organization_url(org))%>
+            <%- else %>
+              <%= org.name %>
+            <%- end %>
+            <br>
           <%- end %>
       </td>
       <td><%= campaign.status %></td>

@@ -74,14 +74,6 @@
         <%- end %>
 			
 			</li>
-    
-  		<input id="problem_reporter_name" name="problem[reporter_name]" type="hidden" value="<%= @problem.reporter_name %>"/>
-			<%- f.fields_for :reporter, @problem.reporter do |reporter_fields| %>
-        <%- if current_user %>
-            <%= raw reporter_fields.hidden_field :email, :value => current_user.email %>
-        <%- end %>
-      <%- end %>
-
 			<li>
 				<label for="problem_subject"><%= t('problems.new.subject')%></label>
 				<input id="problem_subject" type="text" name="problem[subject]" value="<%= @problem.subject %>"/>

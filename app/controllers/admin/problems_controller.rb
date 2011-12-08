@@ -1,6 +1,7 @@
 class Admin::ProblemsController < Admin::AdminController
 
   helper_method :sort_column, :sort_direction
+  before_filter :require_can_admin_issues
   
   def show 
     @problem = Problem.find(params[:id])
@@ -24,6 +25,7 @@ class Admin::ProblemsController < Admin::AdminController
     conditions = [query_clauses.join(" AND ")] + conditions
     @problems = Problem.paginate :page => params[:page], 
                                  :conditions => conditions, 
+                                 :include => :reporter,
                                  :order => "#{sort_column} #{sort_direction}"
   end
   
@@ -63,7 +65,7 @@ class Admin::ProblemsController < Admin::AdminController
   end
   
   def sort_column
-    columns = Problem.column_names 
+    columns = Problem.column_names + ["users.name"]
     columns.include?(params[:sort]) ? params[:sort] : "id"
   end
 
