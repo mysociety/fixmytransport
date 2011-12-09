@@ -6,7 +6,7 @@ Feedback from <%= raw @name %>:
 
 ---
 <%- if @uri %>
-URL: <%= CGI.unescape(@uri) %>
+URL: <%= raw CGI.unescape(@uri) %>
 <%- end %>
 
 <%- if @operator %>

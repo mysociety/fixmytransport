@@ -5,13 +5,19 @@ class ServicesController < ApplicationController
   before_filter :long_cache, :except => [:request_country]
 
   def in_area
+    lat = params[:lat].to_f
+    lon = params[:lon].to_f
+    if lat > 90.0 or lat < -90.0 or lon < -180 or lon > 180
+      render :json => {}
+      return
+    end
     map_height = (params[:height].to_i or MAP_HEIGHT)
     map_width = (params[:width].to_i or MAP_WIDTH)
     map_height = MAP_HEIGHT if ! ALL_HEIGHTS.include? map_height
     map_width = MAP_WIDTH if ! ALL_WIDTHS.include? map_width
     highlight = params[:highlight].blank? ? nil : params[:highlight].to_sym
-    map_data = Map.other_locations(params[:lat].to_f,
-                                   params[:lon].to_f,
+    map_data = Map.other_locations(lat,
+                                   lon,
                                    params[:zoom].to_i,
                                    map_height,
                                    map_width,
