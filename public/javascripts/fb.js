@@ -4,10 +4,10 @@ var fmtPopupParams =  'width=580,height=400,location=no,menubar=no,toolbar=no,sc
 var fbButtonState = 'idle'; // idle, busy or blocked (if it seems popup was denied)
 var fbCallBackUrl = '';
 
-function facebookLogin(response) { 
+function facebookLogin(response) {
   var rememberMe = $('#user_session_remember_me').is(':checked');
-  var authParams = { 'access_token' : response.session.access_token, 
-                      'token_expiry' : response.session.expires,
+  var authParams = { 'access_token' : response.authResponse.accessToken,
+                      'token_expiry' : response.authResponse.expiresIn,
                       'source' : 'facebook',
                       'remember_me' : rememberMe
                   };
@@ -27,7 +27,7 @@ function callFacebook(){
         var queryParams = ['client_id=' + fmt_facebook_app_id,
             'redirect_uri=' + redirectUri,
             'scope=email',
-            'response_type=token'];        
+            'response_type=token'];
         if ($(window).width() > 600) {
           queryParams.push("display=popup");
         } else {
