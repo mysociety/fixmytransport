@@ -777,10 +777,12 @@ window.fbAsyncInit = function() {
              status: false,
              cookie: false,
              xfbml: true,
+             oauth: true,
              channelUrl: window.location.protocol + "//" + window.location.host + '/channel.html' });
       // If someone's already logged in, don't want to show the login popup.
      FB.getLoginStatus(function(response) {
-       if (response.session && response.status && response.status == 'connected') {
+       if (response.authResponse) {
+
          $('.facebook-login').unbind('click');
          $('.facebook-login').click(function(){ facebookLogin(response) });
        }
