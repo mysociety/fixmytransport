@@ -242,7 +242,10 @@ class User < ActiveRecord::Base
           if user.suspended?
             raise I18n.translate('shared.suspended.forbidden')
           else
-            UserSession.create(user, remember_me=remember_me)
+            session = UserSession.new(user, remember_me=remember_me)
+            session.httponly = true
+            session.save
+            session
           end
         else
           raise "Error in external auth. Facebook data #{facebook_data.inspect} #{user.errors.full_messages.join(",")}"
