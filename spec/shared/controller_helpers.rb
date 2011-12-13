@@ -40,20 +40,6 @@ module SharedBehaviours
           controller.stub(:current_user).and_return(@current_user)
         end
 
-        describe 'and the current user is not an admin user' do
-
-          before do
-            @current_user.stub!(:suspended?).and_return(false)
-            @current_user.stub!(:is_admin?).and_return(false)
-          end
-
-          it 'should show the "no_admin" template' do
-            make_request(@default_params)
-            response.should render_template("admin/home/no_admin")
-          end
-
-        end
-
         describe 'and the current user is suspended' do
 
           before do

@@ -8,7 +8,7 @@
   </tr>
   <%- @users.each do |user| %>
     <tr class='<%= cycle("odd", "even") %>'>
-      <td><%= raw admin_star_html(user.is_admin) %></td>
+      <td><%= raw admin_star_html(user.is_admin?) %></td>
       <td><%= raw admin_star_html(user.is_expert, :expert) %></td>
       <td>
         <a href="<%= admin_url(admin_user_path(user)) %>">
@@ -25,7 +25,7 @@
         <%= user.email %>
       </td>
       <td>
-        <%= user.comment_count %>
+        <%= user.comments_count %>
       </td>
     </tr>
   <%- end %>

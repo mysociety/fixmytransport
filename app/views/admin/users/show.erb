@@ -4,7 +4,7 @@
 <%- end %>
 
 <h2>
-  <%= raw admin_star_html(@user.is_admin) %>
+  <%= raw admin_star_html(@user.is_admin?) %>
   <%= raw admin_star_html(@user.is_expert, :expert) %>
   <span class="admin-suspended-<%= @user.is_suspended %>">
     <%- if @user.name.blank? %>

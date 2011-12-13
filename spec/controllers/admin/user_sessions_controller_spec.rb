@@ -13,24 +13,24 @@ describe Admin::UserSessionsController do
       response.should render_template("new")
     end
 
-
   end
 
   describe 'POST #create' do
 
     before do
-      @default_params = { :user_session => {:login => 'test@example.com',
-                                            :password => 'mypassword'} }
+      @default_params = { :admin_user_session => {:login => 'test@example.com',
+                                                  :password => 'mypassword'} }
       @mock_user = mock_model(User, :suspended? => false,
                                     :is_admin? => true)
-      @user_session = mock_model(UserSession, :save => true,
+      @mock_admin_user = mock_model(AdminUser, :user => @mock_user)
+      @admin_user_session = mock_model(AdminUserSession, :save => true,
                                               :destroy => true,
                                               :errors => mock('errors', :add  => nil),
-                                              :record => @mock_user,
+                                              :record => @mock_admin_user,
                                               :id= => nil,
                                               :httponly= => nil,
                                               :secure= => nil)
-      UserSession.stub!(:new).and_return(@user_session)
+      AdminUserSession.stub!(:new).and_return(@admin_user_session)
       controller.stub!(:current_user).and_return(@mock_user)
     end
 
@@ -38,39 +38,36 @@ describe Admin::UserSessionsController do
       post :create, params
     end
 
-    it 'should set :login_by_password on the params passed to the user session for validation' do
-      UserSession.should_receive(:new).with("login" => 'test@example.com',
-                                            "password" => 'mypassword',
-                                            "login_by_password" => true)
+    it 'should create a new admin user session with the login credentials' do
+      AdminUserSession.should_receive(:new).with({'login' => 'test@example.com',
+                                                  'password' => 'mypassword'})
       make_request
     end
 
     it 'should set an :admin id on the session to distinguish it from a regular session' do
-      @user_session.should_receive(:id=).with(:admin)
+      @admin_user_session.should_receive(:id=).with(:admin)
       make_request
     end
 
     it 'should set the session as secure (cookie setting)' do
-      @user_session.should_receive(:secure=).with(true)
+      @admin_user_session.should_receive(:secure=).with(true)
       make_request
     end
 
     it 'should set the session as httponly (cookie setting)' do
-      @user_session.should_receive(:httponly=).with(true)
+      @admin_user_session.should_receive(:httponly=).with(true)
       make_request
     end
 
-    it 'should set httponly on the session to create an http only'
-
     it 'should try to save the user session' do
-      @user_session.should_receive(:save)
+      @admin_user_session.should_receive(:save)
       make_request
     end
 
     describe 'if the session is not valid' do
 
       before do
-        @user_session.stub!(:save).and_return(false)
+        @admin_user_session.stub!(:save).and_return(false)
       end
 
       it 'should render the "new" template' do
@@ -84,30 +81,7 @@ describe Admin::UserSessionsController do
     describe 'if the session is valid' do
 
       before do
-        @user_session.stub!(:save).and_return(true)
-      end
-
-      describe 'if the user does not have admin permissions' do
-
-        before do
-          @mock_user.stub!(:is_admin?).and_return(false)
-        end
-
-        it 'should destroy the user session' do
-          @user_session.should_receive(:destroy)
-          make_request
-        end
-
-        it 'should render the template "new"' do
-          make_request
-          response.should render_template("new")
-        end
-
-        it 'should show the generic login failure message' do
-          @user_session.errors.should_receive(:add).with(:password, "Either your email address or password was not recognised. Please try again.")
-          make_request
-        end
-
+        @admin_user_session.stub!(:save).and_return(true)
       end
 
       describe 'if the user is suspended' do
@@ -117,7 +91,7 @@ describe Admin::UserSessionsController do
         end
 
         it 'should destroy the user session' do
-          @user_session.should_receive(:destroy)
+          @admin_user_session.should_receive(:destroy)
           make_request
         end
 
@@ -177,7 +151,7 @@ describe Admin::UserSessionsController do
       # This should be true for all admin actions, but is tested only here. Other admin actions have
       # current_user stubbed out from spec/spec_helper.rb
       it 'should look for a session with an id of :admin' do
-        UserSession.should_receive(:find).with(:admin)
+        AdminUserSession.should_receive(:find).with(:admin)
         make_request
       end
 
@@ -187,7 +161,7 @@ describe Admin::UserSessionsController do
 
       before do
         @mock_user = mock_model(User, :suspended? => false, :is_admin? => true)
-        @user_session = mock_model(UserSession, :save => true, :destroy => true, :record => @mock_user)
+        @admin_user_session = mock_model(AdminUserSession, :save => true, :destroy => true, :record => @mock_user)
         controller.stub!(:current_user).and_return(nil)
       end
 
@@ -202,13 +176,13 @@ describe Admin::UserSessionsController do
 
       before do
         @mock_user = mock_model(User, :suspended? => false, :is_admin? => true)
-        @user_session = mock_model(UserSession, :save => true, :destroy => true, :record => @mock_user)
+        @admin_user_session = mock_model(AdminUserSession, :save => true, :destroy => true, :record => @mock_user)
         controller.stub!(:current_user).and_return(@mock_user)
-        controller.stub!(:current_user_session).and_return(@user_session)
+        controller.stub!(:current_user_session).and_return(@admin_user_session)
       end
 
       it 'should destroy the user session' do
-        @user_session.should_receive(:destroy)
+        @admin_user_session.should_receive(:destroy)
         make_request
       end
 

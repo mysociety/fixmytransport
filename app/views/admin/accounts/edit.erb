@@ -1,0 +1,34 @@
+<h3><%= t('admin.your_account') %></h3>
+
+<%- form_for(@admin_user, :url => admin_account_path, :html => {:method => :put, :class => 'edit_account'}) do |f| %>
+  <div class='fieldset'>
+
+    <%- if @admin_user.errors.on('base') %>
+       <div class='error'>
+         <%= error_message_on @admin_user, :base %>
+       </div>
+    <%- end %>
+    <div class='form-field'>
+      <%= f.label :password %>
+      <%- if @admin_user.errors.on('password') %>
+        <div class='error'>
+          <%= error_message_on @admin_user, :password %>
+        </div>
+      <%- end %>
+      <%= raw f.password_field :password %>
+    </div>
+
+    <div class='form-field'>
+      <%= f.label :password_confirmation  %>
+      <%- if @admin_user.errors.on('password_confirmation') %>
+        <div class='error'>
+          <%= error_message_on @admin_user, :password_confirmation %>
+        </div>
+      <%- end %>
+      <%= raw f.password_field :password_confirmation  %>
+    </div>
+
+	<button class="button" type="submit"><%= t('admin.update_account') %></button>
+  </div>
+
+<%- end %>

@@ -9,19 +9,16 @@ class Admin::UsersController < Admin::AdminController
     end
     @users = User.paginate :page => params[:page],
                            :conditions => conditions,
-      #                     :include => :comment_count,
                            :order => 'lower(name)'
 
   end
 
   # displays a flat table of users ordered by number of comments
   def comment_league
-    @users = User.find_by_sql("SELECT users.*, comment_count
-                               FROM users, (SELECT user_id, count(*) as comment_count
-                                            FROM comments
-                                            GROUP BY user_id) as comment_counts
-                               WHERE users.id = comment_counts.user_id
-                               ORDER by comment_count desc, users.is_admin desc, users.is_expert desc")
+    @users = User.find(:all, :include => :admin_user,
+                             :order => "comments_count desc, 
+                                        admin_users.id desc, 
+                                        users.is_expert desc")
   end
 
   def show
@@ -32,17 +29,10 @@ class Admin::UsersController < Admin::AdminController
     @user = User.find(params[:id])
     if @user.update_attributes(params[:user])
       msgs = []
-      protected_attrs = [:is_admin, :is_suspended, :is_expert,
+      protected_attrs = [:is_suspended, :is_expert,
                          :can_admin_locations, :can_admin_users, :can_admin_issues, :can_admin_organizations]
       protected_attrs.each do |attribute|
         @user.send("#{attribute}=".to_sym, params[:user][attribute] == '1'? true : false)
-      end
-      if @user.is_admin_changed?
-        if @user.is_admin
-          msgs << t('admin.user_now_administrator')
-        else
-          msgs << t('admin.user_now_not_admin')
-        end
       end
       if @user.is_suspended_changed?
         if @user.is_suspended

@@ -180,6 +180,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.root :controller => 'home'
     admin.login 'login', :controller => 'user_sessions', :action => 'new'
     admin.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
+    admin.resource :account, :only => [:edit, :update]
     admin.resources :user_sessions, :only => [:new, :create, :destroy]
     admin.resources :location_searches, :only => [:index, :show]
     admin.resources :routes, :collection => { :merge => [:get, :post], :compare => [:get, :post] }

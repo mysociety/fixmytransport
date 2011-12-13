@@ -104,6 +104,57 @@ describe User do
         end
       end
 
+      describe 'if a password is not required' do
+
+        before do
+          @admin_user = AdminUser.new
+          @user.admin_user = @admin_user
+          @user.stub!(:password_not_required).and_return(true)
+        end
+
+        it 'should not try to reset an admin password' do
+          @admin_user.should_not_receive(:reset_password!)
+          @user.save
+        end
+
+      end
+
+      describe 'if there is an associated admin user' do
+
+        before do
+          @admin_user = AdminUser.new
+          @admin_user.stub!(:reset_password!)
+          @user.admin_user = @admin_user
+        end
+
+        describe 'if the user tries to set their password to a different one from the admin password' do
+
+          before do
+            @admin_user.stub!(:valid_password?).with('password').and_return(false)
+          end
+
+          it 'should reset the admin password' do
+            @admin_user.should_not_receive(:reset_password!)
+            @user.save
+          end
+
+        end
+
+        describe 'if the user tries to set their password to the admin password' do
+
+          before do
+            @admin_user.stub!(:valid_password?).with('password').and_return(true)
+          end
+
+          it 'should reset the admin password' do
+            @admin_user.should_receive(:reset_password!)
+            @user.save
+          end
+
+        end
+
+      end
+
     end
 
     describe 'if this is not a new record but force_new_record_validation has been set' do
@@ -140,16 +191,29 @@ describe User do
 
     before do
       @user = User.new
+      @user.stub!(:is_admin?).and_return(true)
     end
 
-    it 'should return true if can_admin_users? returns true' do
-      @user.stub!(:can_admin_users?).and_return(true)
-      @user.can_admin?(:users).should == true
-    end
-
-    it 'should return false if can_admin_users? returns false' do
-      @user.stub!(:can_admin_users?).and_return(false)
+    it 'should return false is is_admin? returns false' do
+      @user.stub!(:is_admin?).and_return(false)
       @user.can_admin?(:users).should == false
+    end
+
+    describe 'if is_admin? returns true' do
+
+      before do
+        @user.stub!(:is_admin?).and_return(true)
+      end
+
+      it 'should return true if can_admin_users? returns true' do
+        @user.stub!(:can_admin_users?).and_return(true)
+        @user.can_admin?(:users).should == true
+      end
+
+      it 'should return false if can_admin_users? returns false' do
+        @user.stub!(:can_admin_users?).and_return(false)
+        @user.can_admin?(:users).should == false
+      end
     end
 
   end
