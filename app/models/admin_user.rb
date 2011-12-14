@@ -5,7 +5,9 @@ class AdminUser < ActiveRecord::Base
   belongs_to :user
   # Do not allow these attributes to be set by mass assignment
   attr_protected :password, :password_confirmation
-
+  # require a mix of upper and lower case and number or punctuation chars
+  validates_format_of :password, :with =>  /^.*(?=.*[a-z])(?=.*[A-Z])(?=.*[\d\W]).*$/,
+  :message => I18n.translate('admin.password_bad_format', :length => 8)
   acts_as_authentic do |c|
 
     # If an admin user changes their password, maintain their session (i.e. don't force them to log back in)
@@ -17,7 +19,7 @@ class AdminUser < ActiveRecord::Base
     c.merge_validates_confirmation_of_password_field_options({:message => I18n.translate('admin.password_match_error')})
     password_min_length = 8
     c.merge_validates_length_of_password_field_options({:minimum => password_min_length,
-                                                        :message => I18n.translate('admin.password_length_error',
+                                                        :message => I18n.translate('admin.password_bad_format',
                                                         :length => password_min_length)})
   end
 

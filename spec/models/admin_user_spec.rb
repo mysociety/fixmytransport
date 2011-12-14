@@ -30,6 +30,15 @@ describe AdminUser do
   
   describe 'when validating' do 
     
+    def expect_bad_format_error(password)
+      user = User.new
+      admin_user = AdminUser.new(:user => user)
+      admin_user.password = password
+      admin_user.password_confirmation = password
+      admin_user.save.should == false
+      admin_user.errors[:password].should == 'Please enter a password that is at least 8 characters with a mix of upper and lowercase letters and numbers or punctuation'
+    end
+    
     it 'should not allow the password set to be the same as the password of the associated user' do 
       user = User.new
       admin_user = AdminUser.new(:user => user)
@@ -38,6 +47,29 @@ describe AdminUser do
       admin_user.password_confirmation = 'sekrit'
       admin_user.save.should == false
       admin_user.errors[:base].should == "You can't make your admin password the same as your main password"
+    end
+    
+    it 'should not allow a lowercase only password' do 
+      expect_bad_format_error('oooooooo')
+    end
+    it 'should not allow a password of less than eight characters' do 
+      expect_bad_format_error('1sO')
+    end
+    
+    it 'should not allow an uppercase only password' do 
+      expect_bad_format_error('OOOOOOOO')
+    end
+    
+    it 'should not allow a numbers only password' do
+      expect_bad_format_error('12345678')
+    end
+    
+    it 'should allow a password with a mix of upper and lower case and numbers or punctuation' do 
+      user = User.new
+      admin_user = AdminUser.new(:user => user)
+      admin_user.password = '1rEsorD?'
+      admin_user.password_confirmation = '1rEsorD?'
+      admin_user.valid?.should == true
     end
     
   end
