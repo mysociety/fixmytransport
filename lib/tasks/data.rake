@@ -21,7 +21,7 @@ namespace :data do
       Comment.find_each(:conditions => ['commented_type in (?)', locations]) do |comment|
         praise_file.write([commented_url(comment.commented), 
                            comment.confirmed_at.to_s, 
-                           comment.text,
+                           "\"#{comment.text}\"",
                            comment.user_name].join("\t") + "\n")
       end
     end
