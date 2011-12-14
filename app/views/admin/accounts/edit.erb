@@ -1,6 +1,6 @@
 <h3><%= t('admin.your_account') %></h3>
 
-<%- form_for(@admin_user, :url => admin_account_path, :html => {:method => :put, :class => 'edit_account'}) do |f| %>
+<%- form_for(@admin_user, :url => admin_url(admin_account_path), :html => {:method => :put, :class => 'edit_account'}) do |f| %>
   <div class='fieldset'>
 
     <%- if @admin_user.errors.on('base') %>
