@@ -3,6 +3,29 @@ require "#{RAILS_ROOT}/app/helpers/application_helper"
 namespace :data do
 
   include DataLoader
+  
+  desc "Create a spreadsheet of praise reports" 
+  task :create_praise_spreadsheet => :environment do 
+    
+    include ActionController::UrlWriter
+    ActionController.default_url_options[:host] = MySociety::Config.get("DOMAIN", 'localhost:3000')
+    include ApplicationHelper
+    
+    check_for_dir
+    puts "Writing praise spreadsheet to #{ENV['DIR']}..."
+    File.open(File.join(ENV['DIR'], 'praise.tsv'), 'w') do |praise_file|
+      headers = ['URL', 'Date', 'Text', 'User']
+      praise_file.write(headers.join("\t") + "\n")
+      # Any comment attached to a location is praise
+      locations = ['Stop', 'StopArea', 'Route', 'SubRoute']
+      Comment.find_each(:conditions => ['commented_type in (?)', locations]) do |comment|
+        praise_file.write([commented_url(comment.commented), 
+                           comment.confirmed_at.to_s, 
+                           comment.text,
+                           comment.user_name].join("\t") + "\n")
+      end
+    end
+  end
 
   desc "Create a spreadsheet of organizations' contact information"
   task :create_organization_contact_spreadsheet => :environment do
