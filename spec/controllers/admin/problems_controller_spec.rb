@@ -58,14 +58,16 @@ describe Admin::ProblemsController do
     describe 'if the problem has a campaign' do
 
       before do
-        @problem.stub!(:campaign).and_return(mock_model(Campaign, :campaign_events => []))
+        @problem.stub!(:campaign).and_return(mock_model(Campaign))
+        @problem.stub!(:campaign_id).and_return(55)
         @controller.stub!(:user_for_edits).and_return('admin user')
       end
 
       it 'should add a problem_resent campaign event to the campaign' do
-        @problem.campaign.campaign_events.should_receive(:create!).with(:event_type => 'problem_report_resent',
-                                                                        :data => {:user => 'admin user',
-                                                                                  :sent_emails => [@sent_email.id]})
+        CampaignEvent.should_receive(:create!).with(:event_type => 'problem_report_resent',
+                                                    :campaign_id => @problem.campaign_id,
+                                                    :data => {:user => 'admin user',
+                                                    :sent_emails => [@sent_email.id]})
         make_request
       end
 
