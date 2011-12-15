@@ -31,8 +31,11 @@ class Admin::AssignmentsController < Admin::AdminController
       if !location.operators.include?(@operator)
         set_location_operator(location)
       end
-      problem.responsibilities.build( :organization_id => @operator.id,
-                                      :organization_type => 'Operator' )
+
+      if !problem.responsible_organizations.include?(@operator)
+        problem.responsibilities.build( :organization_id => @operator.id,
+                                        :organization_type => 'Operator' )
+      end
       location_only = @assignment.data ? @assignment.data[:location_only] : nil
       new_email = (@assignment.data && @assignment.data[:organization_email]) ? @assignment.data[:organization_email].strip : nil
       @assignment_complete = false
@@ -49,13 +52,14 @@ class Admin::AssignmentsController < Admin::AdminController
       else
         @contact = nil
         if existing_contact
-          if existing_contact.email.downcase != new_email
+          if existing_contact.email.downcase != new_email.downcase
             if ! params[:override_contact]
               flash.now[:error] =  I18n.translate('admin.assignment_need_to_choose_override', :existing => existing_contact.email )
               @need_override = true
               render :action => 'show'
               return
             else
+              # got response on whether to override
               update_contact(existing_contact, new_email, location_only)
             end
           else
@@ -69,6 +73,7 @@ class Admin::AssignmentsController < Admin::AdminController
             contact_params[:location_type] = location.class.to_s
           end
           @operator.operator_contacts.build(contact_params)
+          @assignment_complete = true
         end
       end
       begin

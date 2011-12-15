@@ -35,6 +35,7 @@ describe Admin::AssignmentsController do
                                         :save! => true)
       @mock_problem = mock_model(Problem, :location => @route,
                                           :responsibilities => mock('responsibilities', :build => nil),
+                                          :responsible_organizations => [],
                                           :save! => true,
                                           :emailable_organizations => [],
                                           :organization_info => {},
@@ -217,6 +218,11 @@ describe Admin::AssignmentsController do
 
               it 'should add a contact for the operator' do
                 @operator_contacts.should_receive(:build).with(:email => 'test@example.com', :category => "Other")
+                make_request(@default_params.merge({:operator_id => 66}))
+              end
+              
+              it 'should set the assigment as complete' do 
+                @mock_assignment.should_receive(:status=).with(:complete)
                 make_request(@default_params.merge({:operator_id => 66}))
               end
 
