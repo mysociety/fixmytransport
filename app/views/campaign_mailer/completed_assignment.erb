@@ -1,6 +1,6 @@
 Dear Kind, Beautiful Admins,
 
-My little robotic brain has just spotted that <%= @campaign.initiator.name %> has told us that <%= @assignment.data[:organization_name] %> is responsible for the <%= @campaign.location.description %>. 
+My little robotic brain has just spotted that <%= @campaign.initiator.name %> has told us that <%-if @assignment.data[:organization_name]%><%= @assignment.data[:organization_name] %> is responsible for the <%= @campaign.location.description %><%- else %><%= @assignment.data[:organization_email] %> is the email address for <%= org_names(@campaign.problem.responsible_organizations, connector='or', wrapper_start='', wrapper_end='') %><%- end %>. 
 
 If this seems right, then add the operator, and update the assignment. If it looks dodgy then please have a quick google.
 
