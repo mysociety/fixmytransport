@@ -74,6 +74,24 @@ describe Problem do
 
   end
 
+  describe 'when updating assignments' do 
+    
+    describe 'if the problem has no responsible organizations' do 
+      
+      before do
+        @problem = Problem.new
+        @problem.stub!(:responsible_organizations).and_return([])
+      end
+    
+      it 'should return true' do 
+        @problem.update_assignments().should == true
+      end
+    
+    end
+  
+  
+  end
+
   describe 'when asked for recipient emails' do
 
     before do

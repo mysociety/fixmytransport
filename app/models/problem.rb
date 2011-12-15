@@ -92,9 +92,10 @@ class Problem < ActiveRecord::Base
     # if there's an incomplete 'write-to-transport-organization' assignment, and
     # emailable organizations, complete it
     if !self.emailable_organizations.empty?
-      data = {:organizations => self.organization_info(:responsible_organizations) }
+      data = { :organizations => self.organization_info(:responsible_organizations) }
       Assignment.complete_problem_assignments(self, {'write-to-transport-organization' => data })
     end
+    return true
   end
 
   def responsible_organizations
