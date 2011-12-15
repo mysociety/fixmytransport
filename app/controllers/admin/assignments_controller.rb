@@ -28,7 +28,9 @@ class Admin::AssignmentsController < Admin::AdminController
       end
       problem = @assignment.problem
       location = problem.location
-      set_location_operator(location)
+      if !location.operators.include?(@operator)
+        set_location_operator(location)
+      end
       problem.responsibilities.build( :organization_id => @operator.id,
                                       :organization_type => 'Operator' )
       location_only = @assignment.data ? @assignment.data[:location_only] : nil
