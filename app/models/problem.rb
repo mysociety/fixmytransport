@@ -15,7 +15,7 @@ class Problem < ActiveRecord::Base
   validates_presence_of :description, :subject, :category, :if => :location
   validates_associated :reporter
   attr_accessible :subject, :description, :category,
-                  :location_id, :location_type, :responsibilites_attributes
+                  :location_id, :location_type, :responsibilities_attributes
   before_create :generate_confirmation_token, :add_coords
   has_status({ 0 => 'New',
                1 => 'Confirmed',
