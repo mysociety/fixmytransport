@@ -12,7 +12,7 @@ class Comment < ActiveRecord::Base
   has_many :campaign_events, :as => :described
   attr_accessor :skip_name_validation
   named_scope :unsent, :conditions => ['sent_at is null']
-
+  attr_accessible :text, :user, :mark_fixed, :mark_open
   has_paper_trail
   has_status({ 0 => 'New',
                1 => 'Confirmed',
@@ -97,7 +97,7 @@ class Comment < ActiveRecord::Base
       comment.confirm!
     end
     if token
-      comment.update_attributes(:token => token)
+      comment.update_attribute(:token, token)
     end
     comment
   end
