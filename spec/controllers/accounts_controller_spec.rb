@@ -75,7 +75,9 @@ describe AccountsController do
                                       :password= => true,
                                       :password_confirmation= => true,
                                       :save => true,
-                                      :update_attributes => true,
+                                      :bio= => true,
+                                      :location= => true,
+                                      :profile_photo= => true,
                                       :suspended? => false)
         controller.stub!(:current_user).and_return(@mock_user)
       end
@@ -243,9 +245,9 @@ describe AccountsController do
 
         end
 
-        describe 'if the post login action is to add a comment' do 
-          
-          before do 
+        describe 'if the post login action is to add a comment' do
+
+          before do
             @mock_comment = mock_model(Comment)
             @controller.stub!(:get_action_data).and_return({:action => :add_comment,
                                                             :commented_type => 'Problem',
@@ -254,28 +256,28 @@ describe AccountsController do
             Problem.stub!(:find).and_return(@mock_problem)
             Comment.stub!(:create_from_hash).and_return(@mock_comment)
           end
-        
-          it 'should set the action for the confirmation template to a comment confirmation message' do 
+
+          it 'should set the action for the confirmation template to a comment confirmation message' do
             make_request
             assigns[:action].should == 'your comment will not be added.'
           end
-        
-          it 'should create a comment from the post action data hash' do 
+
+          it 'should create a comment from the post action data hash' do
             Comment.should_receive(:create_from_hash).and_return(@mock_comment)
             make_request
           end
-        
-          it 'should create an action confirmation with the comment as the target' do 
-            ActionConfirmation.should_receive(:create!).with(:user => @mock_user, 
-                                                             :token => 'mytoken', 
+
+          it 'should create an action confirmation with the comment as the target' do
+            ActionConfirmation.should_receive(:create!).with(:user => @mock_user,
+                                                             :token => 'mytoken',
                                                              :target => @mock_comment)
             make_request
           end
-        
+
         end
-        
-        describe 'if the post login action is to join a campaign' do 
-        
+
+        describe 'if the post login action is to join a campaign' do
+
           before do
             @controller.stub!(:get_action_data).and_return({:action => :join_campaign})
             @mock_campaign = mock_model(Campaign)
@@ -283,26 +285,26 @@ describe AccountsController do
             @mock_supporter = mock_model(CampaignSupporter)
             @mock_campaign.stub!(:add_supporter).and_return(@mock_supporter)
           end
-          
-          it 'should set the action for the confirmation template to a support confirmation message' do 
+
+          it 'should set the action for the confirmation template to a support confirmation message' do
             make_request
             assigns[:action].should == 'you will not be added as a supporter.'
           end
-          
-          it 'should add the user as a supporter for the campaign' do 
+
+          it 'should add the user as a supporter for the campaign' do
             @mock_campaign.should_receive(:add_supporter).and_return(@mock_supporter)
             make_request
           end
-        
-          it 'should create an action confirmation with the campaign support as the target' do 
-            ActionConfirmation.should_receive(:create!).with(:user => @mock_user, 
-                                                             :token => 'mytoken', 
+
+          it 'should create an action confirmation with the campaign support as the target' do
+            ActionConfirmation.should_receive(:create!).with(:user => @mock_user,
+                                                             :token => 'mytoken',
                                                              :target => @mock_supporter)
             make_request
           end
-                    
+
         end
-        
+
         describe 'if the post login action is to create a problem' do
 
           before do
@@ -320,10 +322,10 @@ describe AccountsController do
             Problem.should_receive(:create_from_hash).and_return(@mock_problem)
             make_request
           end
-          
-          it 'should create an action confirmation with the problem as the target' do 
-            ActionConfirmation.should_receive(:create!).with(:user => @mock_user, 
-                                                             :token => 'mytoken', 
+
+          it 'should create an action confirmation with the problem as the target' do
+            ActionConfirmation.should_receive(:create!).with(:user => @mock_user,
+                                                             :token => 'mytoken',
                                                              :target => @mock_problem)
             make_request
           end
@@ -584,13 +586,13 @@ describe AccountsController do
             make_request
             flash[:notice].should == 'You have successfully confirmed your support for this issue.'
           end
-          
+
         end
 
         describe 'if the target is a problem' do
 
           before do
-            @mock_problem = mock_model(Problem, :status => :new, 
+            @mock_problem = mock_model(Problem, :status => :new,
                                                 :created_at => (Time.now - 2.days))
             @mock_action_confirmation.stub!(:target).and_return(@mock_problem)
           end
@@ -604,46 +606,46 @@ describe AccountsController do
             make_request
             flash[:notice].should == "You've successfully confirmed your account. <strong>Decide if you want other people's support and we'll send your problem report on its way.</strong>"
           end
-          
-          describe 'if the problem is not new' do 
-            
-            before do 
+
+          describe 'if the problem is not new' do
+
+            before do
               @mock_problem.stub!(:status).and_return(:confirmed)
             end
-            
+
             it 'should redirect to the problem conversion url' do
               make_request
               response.should redirect_to(convert_problem_url(@mock_problem))
             end
-            
+
             it 'should show a notice telling the user that they have confirmed the problem report' do
               make_request
               flash[:notice].should == "You've successfully confirmed your problem report."
             end
-          
+
           end
-          
-          describe 'if the problem is new and more than a month old' do 
-            
+
+          describe 'if the problem is new and more than a month old' do
+
             before do
               @mock_problem.stub!(:created_at).and_return(Time.now - (1.month + 1.day))
-            end          
-            
-            it 'should not log the user in' do 
+            end
+
+            it 'should not log the user in' do
               UserSession.should_not_receive(:login_by_confirmation).with(@mock_user)
               make_request
             end
-            
-            it 'should redirect to the front page' do 
+
+            it 'should redirect to the front page' do
               make_request
               response.should redirect_to(root_url)
             end
-            
-            it 'should display a message about token expiry' do 
+
+            it 'should display a message about token expiry' do
               make_request
               flash[:error].should == "Sorry, we can't validate that token, as the problem report was made too long ago."
             end
-            
+
           end
 
         end
@@ -652,7 +654,7 @@ describe AccountsController do
 
           before do
             @mock_problem = mock_model(Problem)
-            @mock_comment = mock_model(Comment, :confirm! => true, 
+            @mock_comment = mock_model(Comment, :confirm! => true,
                                                 :commented => @mock_problem,
                                                 :created_at => (Time.now - 1.day),
                                                 :status => :new)
@@ -673,28 +675,28 @@ describe AccountsController do
             make_request
             flash[:notice].should == 'You have successfully confirmed your comment.'
           end
-          
-          describe 'if the comment is unconfirmed and more than a month old' do 
-            
-            before do 
+
+          describe 'if the comment is unconfirmed and more than a month old' do
+
+            before do
               @mock_comment.stub!(:created_at).and_return(Time.now - (1.month + 1.day))
-            end          
-                      
-            it 'should not log the user in' do 
+            end
+
+            it 'should not log the user in' do
               UserSession.should_not_receive(:login_by_confirmation).with(@mock_user)
               make_request
             end
-            
-            it 'should redirect to the front page' do 
+
+            it 'should redirect to the front page' do
               make_request
               response.should redirect_to(root_url)
             end
-            
-            it 'should display a message about token expiry' do 
+
+            it 'should display a message about token expiry' do
               make_request
               flash[:error].should == "Sorry, we can't validate that token, as the comment was made too long ago."
             end
-            
+
           end
 
         end
