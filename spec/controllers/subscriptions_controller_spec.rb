@@ -59,8 +59,12 @@ describe SubscriptionsController do
 
   describe 'POST #subscribe' do
 
-    def make_request
-      post :subscribe, :target_id => 44, :target_type => 'Campaign'
+    before do
+      @default_params = { :target_id => 44, :target_type => 'Campaign' }
+    end
+
+    def make_request(params=@default_params)
+      post :subscribe, params
     end
 
     describe 'if there is no logged in user' do
@@ -88,6 +92,20 @@ describe SubscriptionsController do
       it 'should find the target' do
         Campaign.should_receive(:find).with('44').and_return(@campaign)
         make_request
+      end
+
+      describe 'if the target type is not a campaign or problem' do
+
+        it 'should show an error notice' do
+          make_request({ :target_id => 44, :target_type => 'User' })
+          flash[:error].should == "We're sorry, we couldn't find your subscription. Please use the feedback link to let us know what happened."
+        end
+
+        it 'should redirect to the frontpage' do
+          make_request({ :target_id => 44, :target_type => 'User' })
+          response.should redirect_to(root_url)
+        end
+
       end
 
       describe 'if no target can be found' do
