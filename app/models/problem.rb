@@ -14,7 +14,8 @@ class Problem < ActiveRecord::Base
   has_many :responsibilities
   validates_presence_of :description, :subject, :category, :if => :location
   validates_associated :reporter
-  attr_protected :confirmed_at
+  attr_accessible :subject, :description, :category,
+                  :location_id, :location_type, :responsibilites_attributes
   before_create :generate_confirmation_token, :add_coords
   has_status({ 0 => 'New',
                1 => 'Confirmed',
@@ -179,12 +180,13 @@ class Problem < ActiveRecord::Base
 
   def create_new_campaign
     return self.campaign if self.campaign
-    campaign = self.build_campaign({ :location_id => self.location_id,
-                                     :location_type => self.location_type,
-                                     :initiator => self.reporter,
-                                     :problem => self,
-                                     :title => "#{I18n.translate("models.campaign.fix_this")} #{self.subject}",
-                                     :description => self.description })
+    campaign = self.build_campaign()
+    campaign.initiator = self.reporter
+    campaign.problem = self
+    campaign.title = "#{I18n.translate("models.campaign.fix_this")} #{self.subject}"
+    campaign.description = self.description
+    campaign.location_id = self.location_id
+    campaign.location_type = self.location_type
     campaign.status = :new
     campaign.confirm
     self.save
@@ -228,7 +230,7 @@ class Problem < ActiveRecord::Base
     (self.status == :confirmed && self.sent_at.nil? && self.responsibilities.empty?)
   end
 
-  # Return a list of version models in cronological order representing changes made 
+  # Return a list of version models in cronological order representing changes made
   # in the admin interface to this problem or associated responsibilities
   def admin_actions
     Version.find(:all, :conditions => ["admin_action = ?
@@ -315,7 +317,7 @@ class Problem < ActiveRecord::Base
     problem.reporter = user
     problem.save!
     if token
-      problem.update_attributes(:token => token)
+      problem.update_attribute(:token, token)
     end
     return problem
   end

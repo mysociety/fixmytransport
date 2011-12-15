@@ -128,7 +128,8 @@ describe Problem do
 
     before do
       @stop = Stop.new
-      @problem = Problem.new(:location => @stop)
+      @problem = Problem.new()
+      @problem.location = @stop
       @problem.stub!(:category).and_return('Other')
     end
 
