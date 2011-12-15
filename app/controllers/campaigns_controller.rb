@@ -161,7 +161,6 @@ class CampaignsController < ApplicationController
       end
     else
       @campaign_update = @campaign.campaign_updates.build(:is_advice_request => params[:is_advice_request])
-      @campaign_update.user_id = current_user.id
     end
   end
 
