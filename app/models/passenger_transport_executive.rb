@@ -1,7 +1,5 @@
 class PassengerTransportExecutive < ActiveRecord::Base
   has_many :areas, :class_name => "PassengerTransportExecutiveArea"
-  has_many :sent_emails, :as => :recipient
-  has_many :outgoing_messages, :as => :recipient
   has_many :pte_contacts, :class_name => 'PassengerTransportExecutiveContact',  
                           :foreign_key => 'passenger_transport_executive_id',
                           :conditions => ['deleted = ?', false]
