@@ -1,0 +1,9 @@
+en:
+  admin:
+    your_account: Edit your admin account
+    account_updated: Your account has been updated.
+    password_match_error: "The password confirmation does not match the password"
+    password_length_error: "Please enter a password that is at least %{length} characters long"
+    update_account: "Update account"
+    password_same_as_main_error: "You can't make your admin password the same as your main password"
+    password_bad_format: "Please enter a password that is at least %{length} characters with a mix of upper and lowercase letters and numbers or punctuation"

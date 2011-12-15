@@ -20,12 +20,7 @@
   <%= raw f.text_field :email %>
 </div>
 
-<div class='form-field'>
-  <%= raw f.label :is_admin %>
-  <%= raw f.check_box :is_admin %>
-</div>
-
-
+<%- if @user.is_admin? %>
 <div class='form-field'>
   <%= raw f.label :can_admin_locations %>
   <%= raw f.check_box :can_admin_locations %>
@@ -45,6 +40,8 @@
   <%= raw f.label :can_admin_organizations %>
   <%= raw f.check_box :can_admin_organizations %>
 </div>
+
+<%- end %>
 
 <div class='form-field'>
   <%= raw f.label :is_expert %>

@@ -8,7 +8,10 @@ class UserSession < Authlogic::Session::Base
     if user && user.suspended?
       session = nil
     else
-      session = UserSession.create(user, remember_me=false)
+      session = UserSession.new(user, remember_me=false)
+      session.httponly = true
+      session.save
+      session
     end
   end
   

@@ -19,8 +19,10 @@ class User < ActiveRecord::Base
   validates_presence_of :name
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
   validate :validate_real_name
+  validate :password_not_admin_password
   validates_uniqueness_of :email, :case_sensitive => false, :unless => :skip_email_uniqueness_validation
-  attr_protected :password, :password_confirmation, :is_expert, :is_admin, :is_suspended,
+  # Do not allow these attributes to be set by mass assignment
+  attr_protected :password, :password_confirmation, :is_expert, :is_suspended,
                  :can_admin_locations, :can_admin_users, :can_admin_issues, :can_admin_organizations
   has_many :assignments
   has_many :campaign_supporters, :foreign_key => :supporter_id
@@ -30,6 +32,8 @@ class User < ActiveRecord::Base
   has_many :sent_emails, :as => :recipient
   has_many :access_tokens
   has_many :subscriptions
+  has_many :comments
+  has_one :admin_user
   before_validation :download_remote_profile_photo, :if => :profile_photo_url_provided?
 
   has_attached_file :profile_photo,
@@ -77,11 +81,29 @@ class User < ActiveRecord::Base
     end
     unregistered? or !access_tokens.empty?
   end
+  
+  # If someone with admin privileges tries to set their main password to their admin password, 
+  # reset their admin password
+  def password_not_admin_password
+    if password_not_required or !self.admin_user
+      return true
+    else
+      if !self.admin_user.valid_password?(self.password)
+        return true
+      else
+        # Reset the admin password - no longer secure
+        # N.B. if we raise a validation error here, the admin account password change
+        # gets rolled back along with the account change.
+        self.admin_user.reset_password!
+        return true
+      end
+    end
+  end
 
   def validate_real_name
     if force_new_record_validation == true || new_record? 
       if /\ba\s*n+on+((y|o)mo?u?s)?(ly)?\b/i.match(name) || ! /\S\s\S/.match(name) || name.size < 5
-        errors.add(:name, ActiveRecord::Error.new(self, :name, :not_real, :link => "<a href='/about#names' target='_blank'>policy on names</a>").to_s.html_safe)
+        self.errors.add(:name, ActiveRecord::Error.new(self, :name, :not_real, :link => "<a href='/about#names' target='_blank'>policy on names</a>").to_s.html_safe)
       end
     end
    end
@@ -167,7 +189,12 @@ class User < ActiveRecord::Base
                                                       target.id, target.class.to_s]).nil?
   end
   
+  def is_admin?
+    !admin_user.nil?
+  end
+  
   def can_admin?(admin_right)
+    return false unless self.is_admin?
     return false unless self.send("can_admin_#{admin_right}?") == true
     return true
   end
@@ -242,7 +269,10 @@ class User < ActiveRecord::Base
           if user.suspended?
             raise I18n.translate('shared.suspended.forbidden')
           else
-            UserSession.create(user, remember_me=remember_me)
+            session = UserSession.new(user, remember_me=remember_me)
+            session.httponly = true
+            session.save
+            session
           end
         else
           raise "Error in external auth. Facebook data #{facebook_data.inspect} #{user.errors.full_messages.join(",")}"

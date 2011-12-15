@@ -12,6 +12,12 @@ namespace :temp do
   puts "\ntotal (confirmed) problems: #{i}\n"
   end
 
+  desc 'Populate comment counter cache'
+  task :populate_comments_counter_cache => :environment do 
+    User.find_each do |user|
+      puts "#{user.id} #{user.comments.length}"
+      user.update_attribute(:comments_count, user.comments.length)
+    end
+  end
+  
 end
-
-

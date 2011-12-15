@@ -104,6 +104,57 @@ describe User do
         end
       end
 
+      describe 'if a password is not required' do
+
+        before do
+          @admin_user = AdminUser.new
+          @user.admin_user = @admin_user
+          @user.stub!(:password_not_required).and_return(true)
+        end
+
+        it 'should not try to reset an admin password' do
+          @admin_user.should_not_receive(:reset_password!)
+          @user.save
+        end
+
+      end
+
+      describe 'if there is an associated admin user' do
+
+        before do
+          @admin_user = AdminUser.new
+          @admin_user.stub!(:reset_password!)
+          @user.admin_user = @admin_user
+        end
+
+        describe 'if the user tries to set their password to a different one from the admin password' do
+
+          before do
+            @admin_user.stub!(:valid_password?).with('password').and_return(false)
+          end
+
+          it 'should reset the admin password' do
+            @admin_user.should_not_receive(:reset_password!)
+            @user.save
+          end
+
+        end
+
+        describe 'if the user tries to set their password to the admin password' do
+
+          before do
+            @admin_user.stub!(:valid_password?).with('password').and_return(true)
+          end
+
+          it 'should reset the admin password' do
+            @admin_user.should_receive(:reset_password!)
+            @user.save
+          end
+
+        end
+
+      end
+
     end
 
     describe 'if this is not a new record but force_new_record_validation has been set' do
@@ -135,23 +186,36 @@ describe User do
     end
 
   end
-  
-  describe 'when asked if can admin users' do 
-    
+
+  describe 'when asked if can admin users' do
+
     before do
       @user = User.new
+      @user.stub!(:is_admin?).and_return(true)
     end
-    
-    it 'should return true if can_admin_users? returns true' do 
-      @user.stub!(:can_admin_users?).and_return(true)
-      @user.can_admin?(:users).should == true
-    end
-    
-    it 'should return false if can_admin_users? returns false' do 
-      @user.stub!(:can_admin_users?).and_return(false)
+
+    it 'should return false is is_admin? returns false' do
+      @user.stub!(:is_admin?).and_return(false)
       @user.can_admin?(:users).should == false
     end
-    
+
+    describe 'if is_admin? returns true' do
+
+      before do
+        @user.stub!(:is_admin?).and_return(true)
+      end
+
+      it 'should return true if can_admin_users? returns true' do
+        @user.stub!(:can_admin_users?).and_return(true)
+        @user.can_admin?(:users).should == true
+      end
+
+      it 'should return false if can_admin_users? returns false' do
+        @user.stub!(:can_admin_users?).and_return(false)
+        @user.can_admin?(:users).should == false
+      end
+    end
+
   end
 
   describe 'when handling an external auth token' do
@@ -194,7 +258,9 @@ describe User do
                                                    'name' => 'Test Name',
                                                    'email' => 'test@example.com',
                                                    'picture' => 'http://profile.example.com/mypicture.jpg'})
-        UserSession.stub!(:create)
+        @mock_session = mock_model(UserSession, :httponly= => nil,
+                                                :save => nil)
+        UserSession.stub!(:new).and_return(@mock_session)
       end
 
       it 'should set the user as registered' do
@@ -206,43 +272,66 @@ describe User do
         AccessToken.should_receive(:find).with(:first, :conditions => ['key = ? and token_type = ?', 'myfbid', 'facebook'])
         User.handle_external_auth_token('mytoken', 'facebook', false)
       end
-      
+
       describe 'if the user is suspended' do
-      
+
         before do
           @mock_user.stub!(:suspended?).and_return(true)
         end
-        
+
         it 'should throw an exception' do
           lambda{ User.handle_external_auth_token('mytoken', 'facebook', false) }.should raise_exception()
         end
-        
+
       end
-      
+
+      describe 'if the user is not suspended' do
+
+        before do
+          @mock_user.stub!(:suspended?).and_return(false)
+        end
+
+        it 'should create a session' do
+          UserSession.should_receive(:new).and_return(@mock_session)
+          User.handle_external_auth_token('mytoken', 'facebook', false)
+        end
+
+        it 'should make the session http only (cookie setting)' do
+          @mock_session.should_receive(:httponly=).with(true)
+          User.handle_external_auth_token('mytoken', 'facebook', false)
+        end
+
+        it 'should save the session' do
+          @mock_session.should_receive(:save)
+          User.handle_external_auth_token('mytoken', 'facebook', false)
+        end
+
+      end
+
       describe 'when an access token does not exist' do
 
         before do
           AccessToken.stub!(:find).and_return(nil)
         end
 
-        describe "when the facebook data does not contain enough information and the user can't be saved" do 
-        
-          before do 
+        describe "when the facebook data does not contain enough information and the user can't be saved" do
+
+          before do
             User.stub!(:get_facebook_data).and_return({'id' => 'myfbid',
                                                        'name' => 'Test Name',
                                                        'email' => nil,
                                                        'picture' => 'http://profile.example.com/mypicture.jpg'})
             @mock_user.stub!(:save_without_session_maintenance).and_return(false)
           end
-        
-          it 'should raise an exception' do 
+
+          it 'should raise an exception' do
             lambda{ User.handle_external_auth_token('mytoken', 'facebook', false) }.should raise_exception()
           end
-          
+
         end
-        
-        
-        it 'should search for the user by email ignoring case' do 
+
+
+        it 'should search for the user by email ignoring case' do
           User.stub!(:get_facebook_data).and_return({'id' => 'myfbid',
                                                      'name' => 'Test Name',
                                                      'email' => 'Test@Example.com',

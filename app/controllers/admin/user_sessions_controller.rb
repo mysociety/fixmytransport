@@ -3,26 +3,21 @@ class Admin::UserSessionsController < Admin::AdminController
   before_filter :save_redirect, :only => [:create]
 
   def new
-    @user_session = UserSession.new
+    @admin_user_session = AdminUserSession.new
   end
 
   def create
-    params[:user_session][:login_by_password] = true
-    @user_session = UserSession.new(params[:user_session])
-    if @user_session.save
-      if !@user_session.record.is_admin?
-        @user_session.destroy # prevents revealing non-admin accounts
-        # create a new session instance to show the error message
-        # otherwise the form will try to submit by PUT not POST
-        @user_session = UserSession.new
-        @user_session.errors.add(:password, t('activerecord.errors.models.user.attributes.password.not_admin'))
-        render :action => :new
-        return false
-      elsif @user_session.record.suspended?
-        @user_session.destroy # prevents revealing suspended emails addresses
+    @admin_user_session = AdminUserSession.new(params[:admin_user_session])
+    # Set an ID on the session to distinguish it from a normal user session
+    @admin_user_session.id = :admin
+    @admin_user_session.httponly = true
+    @admin_user_session.secure = true
+    if @admin_user_session.save
+      if @admin_user_session.record.user.suspended?
+        @admin_user_session.destroy # prevents revealing suspended email addresses
         # remove the user_session instance so the form gets initialized with a fresh one
         # otherwise it'll try to submit by PUT not POST
-        @user_session = nil
+        @admin_user_session = nil
         flash[:error] = t('shared.suspended.forbidden')
         render :action => :new
         return false
