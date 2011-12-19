@@ -37,8 +37,7 @@ describe Problem do
       @mock_problem = mock_model(Problem, :responsibilities => mock('responsibilities', :build => nil),
                                           :status= => nil,
                                           :save! => true,
-                                          :reporter= => true,
-                                          :reporter_name= => true)
+                                          :reporter= => true)
     end
   
     it 'should create responsibilities from a comma and pipe delimited string keyed by "responsibilities"' do 
