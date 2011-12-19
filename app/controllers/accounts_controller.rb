@@ -4,18 +4,19 @@ class AccountsController < ApplicationController
   before_filter :load_user_using_action_confirmation_token, :only => [:confirm]
 
   def update
-    current_user.update_attributes(params[:user])
     user_email = params[:user][:email]
     if user_email
       user_email.strip!
     end
     current_user.email = user_email
-    current_user.password = params[:user][:password]
-    current_user.password_confirmation = params[:user][:password_confirmation]
+    current_user.location = params[:user][:location]
+    current_user.bio = params[:user][:bio]
     # if someone logged in by confirmation creates a password here, register their account
     # and set the flag showing that they've confirmed their password, also validate the password
     # as if new
     if params[:user][:password]
+      current_user.password = params[:user][:password]
+      current_user.password_confirmation = params[:user][:password_confirmation]
       current_user.force_password_validation = true
       current_user.registered = true
       current_user.confirmed_password = true
@@ -23,6 +24,7 @@ class AccountsController < ApplicationController
     
     # if the user is uploading a photo, make sure the the remote url field is set to nil
     if params[:user][:profile_photo]
+      current_user.profile_photo = params[:user][:profile_photo]
       current_user.profile_photo_remote_url = nil
     end
     if current_user.save

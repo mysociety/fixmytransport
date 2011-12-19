@@ -12,6 +12,7 @@ class OutgoingMessagesController < ApplicationController
   
   def create
     @outgoing_message = @campaign.outgoing_messages.build(params[:outgoing_message])
+    @outgoing_message.author = current_user
     if @outgoing_message.save
       if @outgoing_message.assignment and @outgoing_message.assignment.status != :complete
         @outgoing_message.assignment.complete!
@@ -27,9 +28,7 @@ class OutgoingMessagesController < ApplicationController
   def show
     @outgoing_message = OutgoingMessage.find(params[:id])
     if current_user && current_user == @outgoing_message.campaign.initiator
-      @campaign_update = CampaignUpdate.new(:outgoing_message => @outgoing_message, 
-                                            :campaign => @campaign, 
-                                            :user => current_user)
+      @campaign_update = CampaignUpdate.new(:outgoing_message_id => @outgoing_message.id)
     end
   end
   

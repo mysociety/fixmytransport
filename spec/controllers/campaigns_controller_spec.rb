@@ -284,11 +284,12 @@ describe CampaignsController do
 
     before do
       @campaign_user = mock_model(User, :name => "Campaign User")
+      @campaign_update = mock_model(CampaignUpdate)
       @mock_campaign = mock_model(Campaign, :visible? => true,
                                             :editable? => true,
                                             :initiator => @campaign_user,
                                             :status => :confirmed,
-                                            :campaign_updates => mock('update', :build => true))
+                                            :campaign_updates => mock('updates', :build => @campaign_update))
       Campaign.stub!(:find).and_return(@mock_campaign)
       @controller.stub!(:current_user).and_return(@campaign_user)
       @expected_wrong_user_message = "add an update"

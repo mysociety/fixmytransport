@@ -24,6 +24,7 @@ class Campaign < ActiveRecord::Base
   delegate :transport_mode_text, :to => :problem
   accepts_nested_attributes_for :campaign_photos, :allow_destroy => true
   after_create :generate_key
+  attr_accessible :title, :description, :campaign_photos_attributes
   has_friendly_id :title,
                   :use_slug => true,
                   :allow_nil => true,

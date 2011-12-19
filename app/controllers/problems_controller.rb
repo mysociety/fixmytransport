@@ -40,7 +40,8 @@ class ProblemsController < ApplicationController
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end
-    @problem = Problem.new(:location => location)
+    @problem = Problem.new
+    @problem.location = location
     map_params_from_location(@problem.location.points, find_other_locations=false)
     setup_problem_advice(@problem)
   end
@@ -110,8 +111,8 @@ class ProblemsController < ApplicationController
     @commentable = @problem
     map_params_from_location(@problem.location.points, find_other_locations=false)
     @new_comment = Comment.new(:commented => @problem,
-                               :user => current_user ? current_user : User.new,
-                               :user_name => current_user ? current_user.name : '')
+                               :user => current_user ? current_user : User.new)
+    
   end
 
   def convert

@@ -21,7 +21,13 @@ class SubscriptionsController < ApplicationController
   end
 
   def subscribe
+    allowed_types = ['Problem', 'Campaign']
     if current_user
+      if ! allowed_types.include?(params[:target_type])
+        flash[:error] = t('subscriptions.subscribe.could_not_find_subscription')
+        redirect_to(root_path)
+        return
+      end
       target = params[:target_type].constantize.find(params[:target_id])
       if !target
         flash[:error] = t('subscriptions.subscribe.could_not_find_subscription')

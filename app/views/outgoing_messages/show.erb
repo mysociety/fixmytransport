@@ -18,7 +18,6 @@
   	        <%- end %>
   	        <%= f.label :text, t('outgoing_messages.show.what_does_this_mean') %>
   	        <%= raw f.hidden_field :outgoing_message_id %>
-  	        <%= raw f.hidden_field :user_id %>
   	        <%= raw f.text_area :text, :cols => 40, :rows => 5 %>
   			    <button class="button" type="submit"><%= t('outgoing_messages.show.add_update') %></button>
   	      </div>

@@ -4,15 +4,14 @@ describe Comment do
   before(:each) do
     @valid_attributes = {
       :user_id => 1,
-      :commented_id => 1,
-      :commented_type => 'CampaignUpdate',
       :text => "value for text",
-      :user_name => 'A name'
+      :user => mock_model(User, :name => 'A name', :valid? => true)
     }
   end
 
   it "should create a new instance given valid attributes" do
-    Comment.create!(@valid_attributes)
+    comment = Comment.new(@valid_attributes)
+    comment.valid?.should == true
   end
 
   describe 'when adding a comment' do

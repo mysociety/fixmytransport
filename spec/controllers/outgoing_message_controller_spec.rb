@@ -12,6 +12,8 @@ describe OutgoingMessagesController do
                                                          :body= => true,
                                                          :send_message => true, 
                                                          :assignment => nil,
+                                                         :campaign= => nil,
+                                                         :author= => nil,
                                                          :incoming_message_or_recipient_or_assignment => true)
     @mock_campaign_event = mock_model(CampaignEvent)
     @outgoing_messages_mock = mock('outgoing message association', :build => @mock_outgoing_message)

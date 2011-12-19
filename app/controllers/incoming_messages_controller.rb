@@ -10,9 +10,7 @@ class IncomingMessagesController < ApplicationController
       return false
     end
     if current_user && current_user == @incoming_message.campaign.initiator
-      @campaign_update = CampaignUpdate.new(:incoming_message => @incoming_message, 
-                                            :campaign => @campaign, 
-                                            :user => current_user)
+      @campaign_update = CampaignUpdate.new(:incoming_message_id => @incoming_message.id)
     end
     @collapse_quotes = params[:unfold] ? false : true
   end

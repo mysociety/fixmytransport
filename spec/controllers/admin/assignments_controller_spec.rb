@@ -27,12 +27,15 @@ describe Admin::AssignmentsController do
       Operator.stub!(:find).with("66").and_return(@mock_operator)
       @route_operators = mock("route operators association", :build => true)
       @route = mock_model(Route, :route_operators => @route_operators,
+                                 :operators => [],
                                  :save! => true)
       @stop_area_operators = mock("stop area operators association", :build => true)
       @stop_area = mock_model(StopArea, :stop_area_operators => @stop_area_operators,
+                                        :operators => [],
                                         :save! => true)
       @mock_problem = mock_model(Problem, :location => @route,
                                           :responsibilities => mock('responsibilities', :build => nil),
+                                          :responsible_organizations => [],
                                           :save! => true,
                                           :emailable_organizations => [],
                                           :organization_info => {},
@@ -84,6 +87,15 @@ describe Admin::AssignmentsController do
 
         before do
           Operator.stub!(:find).with("66").and_return(@mock_operator)
+        end
+        
+        describe 'if the operator is already associated with the location' do 
+          
+          it 'should not try to add the operator for the location' do 
+            @route = mock_model(Route, :operators => [@mock_operator])
+            make_request(@default_params.merge({:operator_id => 66}))
+          end
+          
         end
 
         describe 'if the location is a route' do
@@ -206,6 +218,11 @@ describe Admin::AssignmentsController do
 
               it 'should add a contact for the operator' do
                 @operator_contacts.should_receive(:build).with(:email => 'test@example.com', :category => "Other")
+                make_request(@default_params.merge({:operator_id => 66}))
+              end
+              
+              it 'should set the assigment as complete' do 
+                @mock_assignment.should_receive(:status=).with(:complete)
                 make_request(@default_params.merge({:operator_id => 66}))
               end
 

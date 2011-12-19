@@ -8,6 +8,7 @@ class CampaignUpdate < ActiveRecord::Base
   has_many :campaign_events, :as => :described
   named_scope :general, :conditions => ['incoming_message_id is null and outgoing_message_id is null']
   named_scope :unsent, :conditions => ['sent_at is null']
+  attr_accessible :is_advice_request, :text, :incoming_message_id, :outgoing_message_id
   has_paper_trail
 
   # set attributes to include and exclude when performing model diffs
