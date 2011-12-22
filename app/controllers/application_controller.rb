@@ -175,8 +175,6 @@ class ApplicationController < ActionController::Base
   def user_for_edits
     if current_user
       return current_user
-    elsif request.env["REMOTE_USER"]
-      return request.env["REMOTE_USER"]
     else
       return "*unknown*";
     end
