@@ -4,9 +4,19 @@ en:
       information_wrong: Is this information wrong? 
       routes_header: "Routes"
       stations_header: "Stations"
+      problems_header: "Problems"
+      campaigns_header: "Campaigns"
       operates_routes:
         one: "%{operator} runs %{count} route:"
         other: "%{operator} runs %{count} routes:"
       is_responsible_for_stations:
         one: "%{operator} is responsible for %{count} station:"
         other: "%{operator} is responsible for %{count} stations:"
+      problems_concerning:
+        one: "%{count} problem concerning %{operator}:"
+        other: "%{count} problems concerning %{operator}:"
+      no_problems_found: "No problems found concerning %{operator}"
+      campaigns_concerning:
+        one: "%{count} campaigns concerning %{operator}:"
+        other: "%{count} campaigns concerning %{operator}:"
+      no_campaigns_found: "No campaigns found for %{operator}"

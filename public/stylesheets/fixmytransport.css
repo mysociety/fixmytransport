@@ -3255,6 +3255,11 @@ body.facebook-canvas .button {
         width: auto;
     }
 
+    #main_content #operator-tabs-problems p,
+    #main_content #operator-tabs-campaigns p {
+      color: #000;
+    }
+    
     /*===[Share by email]=== */
     #share-by-email textarea,
     #share-by-email button{

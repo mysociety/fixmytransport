@@ -15,6 +15,23 @@ class OperatorsController < ApplicationController
                                                             WHERE operator_id = #{@operator.id})"],
                                     :include => :slug,
                                     :order => 'name asc')
+    @problems = Problem.visible.find(:all, :conditions => ["campaign_id IS NULL AND id in (SELECT problem_id 
+                                                                     FROM responsibilities 
+                                                                     WHERE organization_type = 'Operator'
+                                                                      AND organization_id = #{@operator.id})"],
+                                    :order => 'description asc')  # actually: date?
+    @problem_count = @problems.size() # FIXME for now
+
+    @campaigns = Campaign.visible.find(:all, :conditions => ["id in (SELECT campaign_id FROM problems
+                                                                      WHERE problems.id in (
+                                                                        SELECT problem_id 
+                                                                        FROM responsibilities 
+                                                                        WHERE organization_type = 'Operator'
+                                                                        AND organization_id = #{@operator.id}
+                                                                      ))"] ,
+                                    :order => 'updated_at desc, title asc') 
+    @campaign_count = @campaigns.size() # FIXME for now
+    
     @route_count = Operator.connection.select_value("SELECT count(DISTINCT routes.id) AS count_routes_id 
                                                      FROM routes 
                                                      INNER JOIN route_operators 
