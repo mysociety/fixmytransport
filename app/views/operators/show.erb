@@ -57,14 +57,10 @@
 		<div id='operator-tabs-problems' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
 			 <h3><%= t('route_operators.show.problems_concerning', :operator => @operator.name, :count => @problem_count) %></h3>
 			    <%- if @problem_count != 0 %>
-    		     <ul class='route-links'>
-    		        <%- @problems.each do |problem| %>
-    		            <li>
-    		                <a href="<%= "/problems/#{problem.id}" %>"><%= problem.description %></a>
-    		            </li>
-    		        <%- end %>
-    	        </ul>
-           		 <%- else %>
+                    <ul class="issues-list widecol">
+                        <%= render :partial => "shared/issue", :collection => @problems, :locals => {:context => :issue_list } %>
+                    </ul> 
+           		<%- else %>
            		    <p class="operator-notice"> <%= t('route_operators.show.no_problems_found', :operator => @operator.name) %> </p>
     	      <%- end %>
 		</div>
@@ -72,13 +68,9 @@
 		<div id='operator-tabs-campaigns' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
 			 <h3><%= t('route_operators.show.campaigns_concerning', :operator => @operator.name, :count => @campaign_count) %></h3>
   			    <%- if @campaign_count != 0 %>
-      		     <ul class='route-links'>
-      		        <%- @campaigns.each do |campaign| %>
-      		            <li>
-      		                <a href="<%= campaign_url(campaign) %>"><%= campaign.description %></a>
-      		            </li>
-      		        <%- end %>
-      	        </ul>
+                    <ul class="issues-list widecol">
+                        <%= render :partial => "shared/issue", :collection => @campaigns, :locals => {:context => :issue_list } %>
+                    </ul> 
                  <%- else %>
                     <p class="operator-notice"> <%= t('route_operators.show.no_campaigns_found', :operator => @operator.name) %> </p>
       	       <%- end %>

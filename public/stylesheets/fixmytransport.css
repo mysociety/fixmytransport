@@ -2253,10 +2253,19 @@ body.facebook-canvas .button {
   padding-left: 36px;
 }
 
+/*===[ some specific fixes for operator'ds pages problems/campaigns issues ]===*/
 #main-content #operator-tabs .operator-notice {
   color: #333;
 }
-
+#main-content #operator-tabs ul.issues-list {
+  color: #333;
+}
+#main-content #operator-tabs ul.issues-list dl{
+  font-size: 0.8em;
+}
+#main-content #operator-tabs ul.issues-list a {
+  color: #048FC2;
+}
 
 
 /*===[ Narrow screens]===*/
