@@ -65,7 +65,7 @@
     		        <%- end %>
     	        </ul>
            		 <%- else %>
-           		    <p> <%= t('route_operators.show.no_problems_found', :operator => @operator.name) %> </p>
+           		    <p class="operator-notice"> <%= t('route_operators.show.no_problems_found', :operator => @operator.name) %> </p>
     	      <%- end %>
 		</div>
 
@@ -80,7 +80,7 @@
       		        <%- end %>
       	        </ul>
                  <%- else %>
-                    <p> <%= t('route_operators.show.no_campaigns_found', :operator => @operator.name) %> </p>
+                    <p class="operator-notice"> <%= t('route_operators.show.no_campaigns_found', :operator => @operator.name) %> </p>
       	       <%- end %>
 		</div>
 

@@ -2253,6 +2253,12 @@ body.facebook-canvas .button {
   padding-left: 36px;
 }
 
+#main-content #operator-tabs .operator-notice {
+  color: #333;
+}
+
+
+
 /*===[ Narrow screens]===*/
 @media screen and (max-width: 600px) {
 		    .mobile-only {
@@ -3253,11 +3259,6 @@ body.facebook-canvas .button {
     .has-tabs .operator-tabs-nav li a {
       padding-right: 33px;
         width: auto;
-    }
-
-    #main_content #operator-tabs-problems p,
-    #main_content #operator-tabs-campaigns p {
-      color: #000;
     }
     
     /*===[Share by email]=== */
