@@ -20,7 +20,6 @@ class OperatorsController < ApplicationController
                                                                      WHERE organization_type = 'Operator'
                                                                       AND organization_id = #{@operator.id})"],
                                     :order => 'updated_at desc, created_at desc, description asc')
-    @problem_count = @problems.size() # FIXME for now
 
     @campaigns = Campaign.visible.find(:all, :conditions => ["id in (SELECT campaign_id FROM problems
                                                                       WHERE problems.id in (
@@ -30,7 +29,9 @@ class OperatorsController < ApplicationController
                                                                         AND organization_id = #{@operator.id}
                                                                       ))"] ,
                                     :order => 'updated_at desc, created_at desc, title asc') 
-    @campaign_count = @campaigns.size() # FIXME for now
+
+    @problem_count = @problems.size()
+    @campaign_count = @campaigns.size()
     
     @route_count = Operator.connection.select_value("SELECT count(DISTINCT routes.id) AS count_routes_id 
                                                      FROM routes 
