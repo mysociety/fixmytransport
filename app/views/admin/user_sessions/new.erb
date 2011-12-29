@@ -8,6 +8,7 @@
     </div>
   <%- end %>
 
+  <div id="admin-secure-login">
 	<div>
 		<label for="admin_user_session_email"><%= t('shared.login_form.email') %></label>
 		<input name="admin_user_session[email]" id="admin_user_session_email" type="text" />
@@ -22,5 +23,6 @@
 		<button class="button" type="submit"><%= t('shared.login_form.sign_in') %></button>
 		  <input type="hidden" name="redirect" value="<%= params[:redirect] %>" />
 	</div>	
+  </div>
 <%- end %>
 
