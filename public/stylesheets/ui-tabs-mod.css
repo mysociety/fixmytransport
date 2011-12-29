@@ -273,7 +273,9 @@
 	
 	/*operator page*/
 	.has-tabs #tabs-main-nav li#route-tab,
-	.has-tabs #tabs-main-nav li#area-tab {
+	.has-tabs #tabs-main-nav li#area-tab,
+  .has-tabs #tabs-main-nav li#problem-tab,
+	.has-tabs #tabs-main-nav li#campaign-tab {
 		background: #AFB0B2; /* Old browsers */
 		background: -moz-linear-gradient(top, #AFB0B2 0%, #707173 100%); /* FF3.6+ */
 		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#AFB0B2), color-stop(100%,#707173)); /* Chrome,Safari4+ */
