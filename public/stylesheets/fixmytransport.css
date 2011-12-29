@@ -2266,7 +2266,11 @@ body.facebook-canvas .button {
 #main-content #operator-tabs ul.issues-list a {
   color: #048FC2;
 }
-
+/* in extremis: stop huge/broken photos breaking the list */
+#main-content #operator-tabs ul.issues-list img{
+  max-width: 200px;
+  max-height: 200px;
+}
 
 /*===[ Narrow screens]===*/
 @media screen and (max-width: 600px) {
