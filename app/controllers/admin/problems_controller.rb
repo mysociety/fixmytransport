@@ -40,7 +40,7 @@ class Admin::ProblemsController < Admin::AdminController
       # the quote method on models to be inserted into queries
       CampaignEvent.create!(:event_type => 'problem_report_resent',
                             :campaign_id => @problem.campaign_id,
-                            :data => { :user => user_for_edits,
+                            :data => { :user_id => user_for_edits.id,
                             :sent_emails => sent_emails.map{ |sent_email| sent_email.id } })
     end
     flash[:notice] = t('admin.problem_resent')

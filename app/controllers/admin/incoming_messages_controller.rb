@@ -17,7 +17,7 @@ class Admin::IncomingMessagesController < Admin::AdminController
       flash[:notice] = t('admin.incoming_message_destroyed')
       if campaign
         campaign.campaign_events.create!(:event_type => 'incoming_message_deleted',
-                                         :data => { :user => user_for_edits,
+                                         :data => { :user_id => user_for_edits.id,
                                                     :deleted_id => @incoming_message.id })
 
       
@@ -48,7 +48,7 @@ class Admin::IncomingMessagesController < Admin::AdminController
     if campaign
       campaign.campaign_events.create!(:event_type => 'incoming_message_redelivered', 
                                        :described => @incoming_message, 
-                                       :data => { :user => user_for_edits })
+                                       :data => { :user_id => user_for_edits.id })
     end
     flash[:notice] = t('admin.incoming_message_moved')
     redirect_to admin_url(admin_campaign_path(destination_campaign.id))
