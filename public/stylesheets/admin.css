@@ -324,7 +324,22 @@ ul.admin-simple-list li{
   padding-right:1em;
   
 }
+
+/* two columns for admins with luxury wide-screens */
 @media screen and (min-width: 800px) {
+  .admin-left-col-float {
+    width: 46%;
+    float:left;
+  }
+  .admin-secure-login {
+    width: 33%;
+    float:right;
+    margin-top: 0;     
+   }
+  .admin-right-col-float {
+    width: 46%;
+    float:right;
+  }
   .admin-left-col {
     width: 56%;
     margin: 0.5em 0.5em 0.5em 0;
