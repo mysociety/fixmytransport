@@ -40,7 +40,11 @@
       <%- end %>
         
       <div class="admin-login-info">
-        <%= raw t('admin.logged_in_as', :name => link_to(current_user.name, admin_url(edit_admin_account_path))) %> 
+        <% if current_user.can_admin?(:users) %>
+            <%= raw t('admin.logged_in_as', :name => link_to(current_user.name, admin_url(admin_user_path(current_user)))) %> 
+        <% else %>
+            <%= raw t('admin.logged_in_as', :name => link_to(current_user.name, admin_url(edit_admin_account_path))) %> 
+        <% end %>
         <%= link_to(t('admin.logout'), admin_url(admin_logout_path)) %>
       </div>
     <%- end %>

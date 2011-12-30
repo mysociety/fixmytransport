@@ -4,6 +4,7 @@ en:
     login: Sign In to FixMyTransport admin
     login_to_admin: "Please %{link} to administer the site."
     admin_password_must_differ: Your admin password must be different from your regular password.
+    change_admin_password: "Change your admin password"
     logged_in_as: "Logged in as %{name}"
     logout: (logout)
     no_admin: "You have not been granted permission to administer this site. If you think you should be, please contact %{email}"

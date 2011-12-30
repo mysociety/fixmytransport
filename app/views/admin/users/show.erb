@@ -14,9 +14,16 @@
     <%- end %>
   </span>
 </h2>
+
 <p style="display:inline; padding-left:1em;">
   <%= mail_to @user.email %>
 </p>  
+<% if @user.is_admin? %>
+    <p id="admin-secure-login">
+        <%= link_to(t('admin.change_admin_password'), admin_url(edit_admin_account_path)) %> 
+    </p>
+<% end %>
+
 <h3><%= t('admin.edit') %></h3>
 
 <%-form_for :user, @user, :url => admin_url(admin_user_path(@user)), :html => { :method => :put,  :class => 'user-form' } do |f| %>
