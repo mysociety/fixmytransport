@@ -278,7 +278,7 @@ td.route-terminuses {
   background-color: #DFEEF5;
   background-image:url(../images/admin-padlock.png);
   background-position: center left;
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
   margin-top: 1em;
 }
 #admin-secure-login label {
