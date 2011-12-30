@@ -297,3 +297,14 @@ td.route-terminuses {
   font-size: 80%;
   margin: 0.5em 0 0.5em 2em;
 }
+td.numeric {
+  text-align: right;
+  padding-right: 0.5em;
+}
+td.easy-read-link a {
+  text-decoration: none;
+  color: #000;
+}
+td.easy-read-link a:hover {
+  text-decoration: underline;
+}

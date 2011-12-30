@@ -2,6 +2,7 @@ en:
   admin:
     user_name: Name
     email_address: Email
+    profile_page: Profile page
     comment_count: Number of comments
     user_form_error: There was a problem.
     user_now_unsuspended: This user is now unsuspended, and is free to log in.

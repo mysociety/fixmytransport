@@ -5,22 +5,27 @@
   <tr>
     <th width='2%'></th>
     <th width='2%'></th>
-    <th width='10%'><%= t('admin.id') %></th>
-    <th width='34%'><%= t('admin.name') %></th>
+    <th width='6%'><%= t('admin.id') %></th>
+    <th width='38%'><%= t('admin.name') %></th>
     <th width='32%'><%= t('admin.email') %></th>
-    <th width='20%'></th>
+    <th width='20%'><%= t('admin.profile_page') %></th>
   </tr>
   <%-@users.each do |user| %>
     <tr class='<%= cycle("odd", "even") %>'>
       <td ><%= raw admin_star_html(user.is_admin?) %></td>
       <td ><%= raw admin_star_html(user.is_expert, :expert) %></td>
-      <td>
-        <%= link_to(user.id, main_url(profile_path(user)), :target => '_blank') %>
-        <%= link_to("(#{t('admin.admin')})", admin_url(admin_user_path(user)), :target => '_blank') %>
+      <td class="numeric">
+        <%= link_to(user.id, admin_url(admin_user_path(user))) %>
       </td>
-      <td><span class="admin-suspended-<%= user.is_suspended %>"><%= user.name %></span> </td>
+      <td class="easy-read-link">
+          <span class="admin-suspended-<%= user.is_suspended %>">
+              <% if ! user.name.blank? %>
+                <%= link_to(user.name, admin_url(admin_user_path(user))) %>
+              <%- end %>
+          </span>
+      </td>
       <td><%= user.email %></td>
-      <td><%= user.cached_slug %></td>
+      <td><%= link_to(user.cached_slug.blank? ? user.id: user.cached_slug, main_url(profile_path(user))) %></td>
     </tr>
   <%- end %>
 </table>
