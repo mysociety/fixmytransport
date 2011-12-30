@@ -1,9 +1,6 @@
 <h2><%= t('admin.users') %></h2>
 <%= render :partial => "admin/shared/search_form", :locals => { :skip_transport_mode => true }  %>
 <%= will_paginate @users, { :admin => true } %>
-<%= t('admin.select') %>
-<%= link_to(t('admin.all'), '', { :class => "index-select-all" }) %>
-<%= link_to(t('admin.none'), '', { :class => "index-select-none" }) %>
 <table class='users index-list'>
   <tr>
     <th width='2%'></th>
