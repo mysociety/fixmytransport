@@ -18,6 +18,9 @@
 		<label for="admin_user_session_password"><%= t('shared.login_form.password') %></label>
 		<input name="admin_user_session[password]" id="admin_user_session_password" type="password" />
 	</div>
+	<p>
+	    <%= t('admin.admin_password_must_differ') %>
+	</p>
 		
 	<div>
 		<button class="button" type="submit"><%= t('shared.login_form.sign_in') %></button>

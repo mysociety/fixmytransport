@@ -290,7 +290,10 @@ td.route-terminuses {
 #admin-secure-login input {
   padding: 0.2em;
 }
-
 #admin-secure-login button {
   margin: 1em 0 0.5em 8em;
+}
+#admin-secure-login p {
+  font-size: 80%;
+  margin: 0.5em 0 0.5em 2em;
 }

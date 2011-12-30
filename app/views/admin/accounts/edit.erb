@@ -8,27 +8,33 @@
          <%= error_message_on @admin_user, :base %>
        </div>
     <%- end %>
-    <div class='form-field'>
-      <%= f.label :password %>
-      <%- if @admin_user.errors.on('password') %>
-        <div class='error'>
-          <%= error_message_on @admin_user, :password %>
-        </div>
-      <%- end %>
-      <%= raw f.password_field :password %>
-    </div>
 
-    <div class='form-field'>
-      <%= f.label :password_confirmation  %>
-      <%- if @admin_user.errors.on('password_confirmation') %>
-        <div class='error'>
-          <%= error_message_on @admin_user, :password_confirmation %>
+    <div id="admin-secure-login">
+        <p>
+            <%= t('admin.admin_password_must_differ') %>
+        </p>
+        <div class='form-field'>
+            <%- if @admin_user.errors.on('password') %>
+              <div class='error'>
+                <%= error_message_on @admin_user, :password %>
+              </div>
+            <%- end %>
+          <%= f.label :password %>
+          <%= raw f.password_field :password %>
         </div>
-      <%- end %>
-      <%= raw f.password_field :password_confirmation  %>
-    </div>
 
-	<button class="button" type="submit"><%= t('admin.update_account') %></button>
+        <div class='form-field'>
+          <%- if @admin_user.errors.on('password_confirmation') %>
+            <div class='error'>
+              <%= error_message_on @admin_user, :password_confirmation %>
+            </div>
+          <%- end %>
+          <%= f.label :password_confirmation  %>
+          <%= raw f.password_field :password_confirmation  %>
+        </div>
+
+	    <button class="button" type="submit"><%= t('admin.update_account') %></button>
+	</div>
   </div>
 
 <%- end %>
