@@ -308,3 +308,30 @@ td.easy-read-link a {
 td.easy-read-link a:hover {
   text-decoration: underline;
 }
+ul.admin-simple-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+ul.admin-simple-list li{
+  background: #eee;
+  margin: 2px;
+  padding: 2px 8px;
+}
+/* link a live, not admin, page */
+.admin-offsite-link {
+  font-size: 0.8em;
+  padding-right:1em;
+  
+}
+@media screen and (min-width: 800px) {
+  .admin-left-col {
+    width: 56%;
+    margin: 0.5em 0.5em 0.5em 0;
+  }
+  .admin-right-col {
+    width: 40%;
+    float: right;
+    margin: 0.5em 0 0.5em 0.5em;
+  }
+}

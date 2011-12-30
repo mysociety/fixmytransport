@@ -31,7 +31,7 @@
 <%-end %>
 
 
-<table>
+<table class="admin-right-col">
   <tr>
     <td>
       registered
@@ -113,3 +113,41 @@
     </td>
   </tr>
 </table>
+
+<div class="admin-left-col">
+<h3><%= t('profiles.show.managing')%>: <%=  @user.initiated_campaigns.visible.count %></h3>
+<%- if @user.initiated_campaigns.visible.count > 0 %>
+  <ul class="admin-simple-list">
+    <%- @user.initiated_campaigns.visible.each do |campaign| %>
+      <li>
+        <%= link_to(t('admin.live'), campaign_url(campaign), {:class => 'admin-offsite-link', :target => '_blank'}) %>
+        <%= link_to(MySociety::Format.ucfirst(campaign.title), admin_url(problem_path(campaign.problem))) %>
+      </li>
+    <%- end %>
+  </ul>
+<%- end %>
+
+<h3><%= t('profiles.show.supporting')%>: <%= @user.campaigns.visible.count %></h3>
+<%- if @user.campaigns.visible.count > 0 %>
+  <ul class="admin-simple-list">
+    <%- @user.campaigns.visible.each do |campaign| %>
+      <li>
+        <%= link_to(t('admin.live'), campaign_url(campaign), {:class => 'admin-offsite-link', :target => '_blank'}) %>
+        <%= link_to(MySociety::Format.ucfirst(campaign.title), admin_url(problem_path(campaign.problem))) %>
+      </li>
+    <%- end %>
+  </ul>
+<%- end %>
+
+<h3><%= t('profiles.show.problems_reported')%>: <%= @user.problems.visible.count %> </h3>
+<%- if @user.problems.visible.count > 0 %>
+  <ul class="admin-simple-list">
+    <%- @user.problems.visible.each do |problem| %>
+      <li>
+        <%= link_to(t('admin.live'), problem_url(problem), {:class => 'admin-offsite-link', :target => '_blank'}) %>
+        <%= link_to(problem.subject, admin_url(problem_path(problem))) %>
+      </li>
+    <%- end %>
+  </ul>
+<%- end %>
+</div>
