@@ -1,4 +1,7 @@
 <h2><%= t('admin.operator_contacts_for', :operator => @operator_contact.name) %></h2>
+<p style="margin-top:0;">
+  <%= link_to @operator_contact.name, admin_operator_path(@operator_contact.operator) %>
+</p>
 <h3><%= t('admin.edit') %></h3>
 <%-form_for :operator_contact, @operator_contact, :url => admin_url(admin_operator_contact_path(@operator_contact)), :html => { :method => :put,  :class => 'operator-contact-form' } do |f| %>
   <%= render :partial => 'form', :locals => { :f => f } %>
