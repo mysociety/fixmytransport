@@ -42,7 +42,7 @@
 <%-form_for :operator, @operator, :url => admin_url(admin_operator_path(@operator)), :html => { :method => :put,  :class => 'operator-form' } do |f| %>
   <%= render :partial => 'form', :locals => { :f => f }   %>
   <p>
-    <%= link_to t('admin.external_search_operator'), external_search_link(@operator.name), :target => '_blank'  %>
+    <%= link_to t('admin.external_search_operator'), external_search_link(@operator.name), {:class => 'admin-offsite-link', :target => '_blank'}  %>
   </p>
   <%= render :partial => 'route_operators', :locals => { :f => f, :route_operators => @operator.route_operators, :title => t('admin.routes') } %>
   <%= render :partial => 'route_operators', :locals => { :f => f, :route_operators => @route_operators, :title => t('admin.routes_with_code') } %>

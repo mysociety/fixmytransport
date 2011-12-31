@@ -15,9 +15,14 @@
     <%-@operators.each do |operator| %>
       <tr class='<%= cycle("odd", "even") %>'>
         <td>
-          <%= operator.id %>
-          <%= link_to "(#{t('admin.admin')})", admin_url(admin_operator_path(operator)), {:target => "_blank"} %></td>
-        <td><%= operator.name %></td>
+          <%= link_to(t('admin.live'), operator_url(operator), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>
+          <%= link_to operator.id, admin_url(admin_operator_path(operator)) %>
+        </td>
+        <td class="easy-read-link">
+          <%- if ! operator.name.blank? %>
+            <%= link_to operator.name, admin_url(admin_operator_path(operator)) %>
+          <%- end %>
+        </td>        
         <td><%= operator.short_name %></td>
         <td><%= operator.code %></td>
         <td><%= operator.email %></td>

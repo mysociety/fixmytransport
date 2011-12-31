@@ -20,7 +20,11 @@
         <td class="numeric">
           <%= link_to operator.id, admin_url(admin_operator_path(operator)) %>
         </td>
-        <td class="easy-read-link"><%= link_to operator.name, admin_url(admin_operator_path(operator)) %></td>
+        <td class="easy-read-link">
+          <%- if ! operator.name.blank? %>
+            <%= link_to operator.name, admin_url(admin_operator_path(operator)) %>
+          <%- end %>
+        </td>
         <td><%= operator.reference_name %></td>
         <td><%-if operator.url %><%= link_to(operator.url, operator.url, {:class => 'admin-small-offsite-link', :target => '_blank'})%><%- end %></td>
         <td class="numeric"><%= operator.routes.count %></td>
