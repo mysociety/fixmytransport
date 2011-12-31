@@ -9,10 +9,10 @@
   <%= link_to(t('admin.none'), '', { :class => "index-select-none" }) %>
   <table class='routes index-list'>
     <tr>
-      <th width='14%' colspan="2"><%= sortable('id', t('admin.id')) %></th>
+      <th width='12%'><%= sortable('id', t('admin.id')) %></th>
       <th width='5%'><%= sortable('number', t('admin.admin_route_number')) %></th>
       <th width='14%'><%= sortable('name', t('admin.name')) %></th>
-      <th width='33%'><%= sortable('description', t('admin.description')) %></th>
+      <th width='35%'><%= sortable('description', t('admin.description')) %></th>
       <th width='23%'><%= t('admin.operators') %></th>
       <th width='10%'><%= sortable('regions.name', t('admin.region')) %></th>
       <th width='5%'><%= t('admin.select') %></th>
@@ -20,13 +20,15 @@
     <%-@routes.each do |route| %>
       <tr class='<%= cycle("odd", "even") %>'>
         <td>
-        <%= link_to(t('admin.live'), main_url(route_path(route.region, route)), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>  
-        </td>
-        <td>
+          <%= link_to(t('admin.live'), main_url(route_path(route.region, route)), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>  
           <%= link_to route.id, admin_url(admin_route_path(route.id)) %>
         <td class="easy-read-link"><%= link_to route.number, admin_url(admin_route_path(route.id))   %></td>
         <td><%= route.read_attribute(:name) %></td>
-        <td><%= route.description %></td>
+        <td class="easy-read-link">
+          <%- if !route.description.blank? %>
+            <%= link_to route.description, admin_url(admin_route_path(route.id)) %>
+          <%- end %>
+        </td>
         <td><%= raw route.operators.map{ |operator| link_to(operator.name, admin_url(admin_operator_path(operator))) }.join(" ") %></td>
         <td><%= route.region.name %></td>
         <td><%= raw check_box_tag "routes[]", route.id, false, { :class => "select-item" } %></td>

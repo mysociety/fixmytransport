@@ -17,9 +17,14 @@
   <%-@stop_areas.each do |stop_area| %>
     <tr class='<%= cycle("odd", "even") %>'>
       <td>
-        <%= link_to(stop_area.id, main_url(location_path(stop_area)), :target => '_blank') %>
-        <%= link_to("(#{t('admin.admin')})", admin_url(admin_stop_area_path(stop_area.id)), :target => '_blank') %></td>
-      <td><%= stop_area.name %></td>
+        <%= link_to(t('admin.live'), main_url(location_path(stop_area)), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>  
+        <%= link_to(stop_area.id, admin_url(admin_stop_area_path(stop_area.id))) %>
+      </td>
+      <td class="easy-read-link">
+        <%- if ! stop_area.name.blank? %>
+          <%= link_to stop_area.name, admin_url(admin_stop_area_path(stop_area.id)) %>
+        <%- end %>
+      </td>
       <td><%= stop_area.code %></td>
       <td><%= stop_area.area_type %></td>
       <td><%= raw check_box_tag "stop_areas[]", stop_area.id, false, { :class => "select-item" } %></td>

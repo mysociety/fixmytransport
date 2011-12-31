@@ -19,9 +19,13 @@
   <%-@stops.each do |stop| %>
     <tr class='<%= cycle("odd", "even") %>'>
       <td>
-        <%= link_to(stop.id, main_url(location_path(stop)), :target => '_blank') %>
-        <%= link_to("(#{t('admin.admin')})", admin_url(admin_stop_path(stop.id)), :target => '_blank') %></td>
-      <td><%= stop.name %></td>
+        <%= link_to(t('admin.live'), main_url(location_path(stop)), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>  
+        <%= link_to(stop.id, admin_url(admin_stop_path(stop.id))) %></td>
+      <td class="easy-read-link">
+        <%- if ! stop.name.blank? %>
+          <%= link_to stop.name, admin_url(admin_stop_path(stop.id)) %>
+        <%- end %>
+      </td>
       <td><%= stop.indicator %></td>
       <td><%= stop.street %></td>
       <td><%= stop.locality_name %></td>
