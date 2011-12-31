@@ -25,7 +25,13 @@
           </span>
       </td>
       <td><%= user.email %></td>
-      <td><%= link_to(user.cached_slug.blank? ? user.id: user.cached_slug, main_url(profile_path(user))) %></td>
+      <td>
+        <%- if user.login_count > 0 %>
+          <%= link_to(user.cached_slug.blank? ? user.id: user.cached_slug, main_url(profile_path(user)), {:class => 'admin-offsite-link', :target => '_blank'}) %>
+        <%- else %>
+          <%= user.cached_slug.blank? ? user.id: user.cached_slug %>
+        <%- end %>
+      </td>
     </tr>
   <%- end %>
 </table>
