@@ -4,10 +4,10 @@
     <th width='10%'><%= sortable('subject', t('admin.subject'), allow_sort) %></th>
     <th width='10%'><%= t('admin.problem_campaign') %></th>
     <th width='10%'><%= t('admin.location') %></th>
-    <th width='10%'><%= t('admin.transport_mode') %></th>
+    <th width='7%'><%= t('admin.transport_mode') %></th>
     <th width='10%'><%= sortable('users.name', t('admin.reporter'), allow_sort) %></th>
-    <th width='10%'><%= t('admin.responsible_org') %></th>
-    <th width='5%'><%= sortable('status_code', t('admin.status'), allow_sort) %></th>
+    <th width='11%'><%= t('admin.responsible_org') %></th>
+    <th width='7%'><%= sortable('status_code', t('admin.status'), allow_sort) %></th>
     <th width='5%'><%= sortable('created_at', t('admin.created_at'), allow_sort) %></th>
     <th width='5%'><%= sortable('updated_at', t('admin.updated_at'), allow_sort) %></th>
   </tr>
@@ -17,11 +17,23 @@
         <%- if problem.campaign %>
           <%= problem.id %>
         <%- else %>
-          <%= link_to(problem.id, main_url(problem_path(problem)), {:class => 'admin-offsite-link', :target => '_blank'}) %>
+          <%= link_to(t('admin.live'), main_url(problem_path(problem)), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>  
+          <%= link_to(problem.id, admin_url(admin_problem_path(problem.id))) %>
         <%- end %>
-        <%= link_to("(#{t('admin.admin')})", admin_url(admin_problem_path(problem.id))) %></td>
-      <td><%= problem.subject %></td>
-      <td><%- if problem.campaign %><%= link_to(problem.campaign.title, admin_url(admin_campaign_path(problem.campaign.id)))%><%- end %></td>
+      </td>
+      <td>
+        <%- if problem.campaign %>
+          <%= problem.subject %>
+        <%- else %>
+          <%= link_to(problem.subject.blank? ? '???' : problem.subject, admin_url(admin_problem_path(problem.id))) %>
+        <%- end %>
+      </td>
+      <td><%- if problem.campaign %>
+        <%= link_to(t('admin.live'), main_url(campaign_path(problem.campaign)), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>  
+        <br>
+        <%= link_to(problem.campaign.title.blank? ? "??? (#{problem.campaign.id}) " : problem.campaign.title, admin_url(admin_campaign_path(problem.campaign.id)))%>
+        <%- end %>
+      </td>
       <td>
         <%- if admin_location_url(problem.location) && current_user.can_admin?(:locations) %>
           <%= link_to(problem.location.name, admin_location_url(problem.location)) %>
@@ -32,21 +44,26 @@
       <td><%= problem.transport_mode_text %></td>
       <td><%- if problem.reporter %>
             <%- if problem.reporter.login_count > 0 %>
-              <%=  link_to(problem.reporter.name, main_url(profile_path(problem.reporter)), {:class => 'admin-offsite-link', :target => '_blank'} )%>
-              <%- else %>
-              <%= problem.reporter.name %>
+              <%= link_to(t('admin.live'), main_url(profile_path(problem.reporter)), {:class => 'admin-small-offsite-link', :target => '_blank'}) %><br>
             <%- end %>
             <%- if current_user.can_admin?(:users) %>
-              <%= link_to("(#{t('admin.admin')})", admin_url(admin_user_path(problem.reporter)))%>
+              <%= link_to(problem.reporter.name, admin_url(admin_user_path(problem.reporter)))%>
+            <%- else %>
+              <%= problem.reporter.name %>
             <%- end %>
           <%- end %>
           
       </td>
-      <td><%- problem.responsible_organizations.each do |org| %>
-        <%- if current_user.can_admin?(:organizations) %>
-          <%= link_to(org.name, admin_organization_url(org))%>
+      <td>
+        <%- if problem.responsible_organizations == :service_unavailable %>
+          FIXME
         <%- else %>
-          <%= org.name %>
+          <%- problem.responsible_organizations.each do |org| %>
+          <%- if current_user.can_admin?(:organizations) %>
+            <%= link_to(org.name, admin_organization_url(org))%>
+          <%- else %>
+            <%= org.name %>
+          <%- end %>
         <%- end %>
         <br>
       <%- end %>
