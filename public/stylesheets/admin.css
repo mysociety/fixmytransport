@@ -319,12 +319,15 @@ ul.admin-simple-list li{
   padding: 2px 8px;
 }
 /* link a live, not admin, page */
-.admin-offsite-link {
-  font-size: 0.8em;
-  padding-right:1em;
-  
+.admin-offsite-link,  .admin-small-offsite-link {
+  padding-right:12px;
+  background-image:url(../images/external-link.png);
+  background-position: right top;
+  background-repeat: no-repeat;
 }
-
+.admin-small-offsite-link {
+  font-size: 0.8em;  
+}
 /* two columns for admins with luxury wide-screens */
 @media screen and (min-width: 800px) {
   .admin-left-col-float {
