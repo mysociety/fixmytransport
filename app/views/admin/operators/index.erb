@@ -5,27 +5,25 @@
 <%= will_paginate @operators, {:admin => true} %>
 
 <form method='GET' action='<%= admin_url(merge_admin_operators_path) %>'>
-  <%= t('admin.select') %>
-  <%= link_to(t('admin.all'), '', { :class => "index-select-all" }) %>
-  <%= link_to(t('admin.none'), '', { :class => "index-select-none" }) %>
   <table class='operators index-list'>
     <tr>
-      <th width='14%'><%= t('admin.id') %></th>
-      <th width='34%'><%= t('admin.name') %></th>
-      <th width='34%'><%= t('admin.reference_name') %></th>
+      <th width='12%' colspan="2"><%= t('admin.id') %></th>
+      <th width='35%'><%= t('admin.name') %></th>
+      <th width='35%'><%= t('admin.reference_name') %></th>
       <th width='34%'><%= t('admin.url') %></th>
       <th width='6%'><%= t('admin.routes') %></th>
       <!--<th width='6%'><%= t('admin.select') %></th>-->
     </tr>
     <%-@operators.each do |operator| %>
       <tr class="<%= cycle('odd', 'even') %>">
-        <td>
-          <%= operator.id %>
-          <%= link_to "(#{t('admin.admin')})", admin_url(admin_operator_path(operator)) %></td>
-        <td><%= operator.name %></td>
+        <td><%= link_to(t('admin.live'), operator_url(operator), {:class => 'admin-small-offsite-link', :target => '_blank'}) %></td>
+        <td class="numeric">
+          <%= link_to operator.id, admin_url(admin_operator_path(operator)) %>
+        </td>
+        <td class="easy-read-link"><%= link_to operator.name, admin_url(admin_operator_path(operator)) %></td>
         <td><%= operator.reference_name %></td>
         <td><%-if operator.url %><%= link_to(operator.url, operator.url, :target => '_blank')%><%- end %></td>
-        <td><%= operator.routes.count %></td>
+        <td class="numeric"><%= operator.routes.count %></td>
         <!--<td><%= raw check_box_tag "operators[]", operator.id, false, { :class => "select-item" } %></td>-->
       </tr>
     <%- end %>
