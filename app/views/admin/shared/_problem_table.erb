@@ -17,9 +17,9 @@
         <%- if problem.campaign %>
           <%= problem.id %>
         <%- else %>
-          <%= link_to(problem.id, main_url(problem_path(problem)), :target => '_blank') %>
+          <%= link_to(problem.id, main_url(problem_path(problem)), {:class => 'admin-offsite-link', :target => '_blank'}) %>
         <%- end %>
-        <%= link_to("(#{t('admin.admin')})", admin_url(admin_problem_path(problem.id)), :target => '_blank') %></td>
+        <%= link_to("(#{t('admin.admin')})", admin_url(admin_problem_path(problem.id))) %></td>
       <td><%= problem.subject %></td>
       <td><%- if problem.campaign %><%= link_to(problem.campaign.title, admin_url(admin_campaign_path(problem.campaign.id)))%><%- end %></td>
       <td>
@@ -32,7 +32,7 @@
       <td><%= problem.transport_mode_text %></td>
       <td><%- if problem.reporter %>
             <%- if problem.reporter.login_count > 0 %>
-              <%=  link_to(problem.reporter.name, main_url(profile_path(problem.reporter)), :target => '_blank' )%>
+              <%=  link_to(problem.reporter.name, main_url(profile_path(problem.reporter)), {:class => 'admin-offsite-link', :target => '_blank'} )%>
               <%- else %>
               <%= problem.reporter.name %>
             <%- end %>

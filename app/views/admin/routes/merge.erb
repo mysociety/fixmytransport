@@ -13,9 +13,9 @@
     <%-@routes.each do |route| %>
       <tr class='<%= cycle("odd", "even") %>'>
         <td>
-          <%= link_to route.id, main_url(route_path(route.region, route)) %>
-          <%= link_to "(#{t('admin.admin')})", admin_url(admin_route_path(route.id)), {:target => "_blank"} %></td>
-        <td><%= route.number   %></td>
+          <%= link_to(t('admin.live'), main_url(route_path(route.region, route)), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>  
+          <%= link_to route.id, admin_url(admin_route_path(route.id)) %>
+        <td class="easy-read-link"><%= link_to route.number, admin_url(admin_route_path(route.id))   %></td>
         <td><%= route.read_attribute(:name) %></td>
         <td><%= route.name %></td>
         <td><%= raw route.operators.map{ |operator| link_to(operator.name, admin_url(admin_operator_path(operator))) }.join(" ") %></td>

@@ -26,8 +26,8 @@
   <%- if params[:show_journeys] || ((!@route.errors.empty?) && @route.journey_patterns.any?{ |journey_pattern| !journey_pattern.errors.empty? }) %>
   <div><%= render :partial => "route_segments", :locals => { :f => f } %></div>
   <%- end %>
-  <p><%= link_to t('admin.on_main_site'), main_url(route_path(@route.region, @route)), :target => '_blank' %></p>
-  <p><%= link_to t('admin.external_search_route'), external_search_link("#{@route.description}"), :target => '_blank' %></p>
+  <p><%= link_to t('admin.on_main_site'), main_url(route_path(@route.region, @route)), {:class => 'admin-offsite-link', :target => '_blank'} %></p>
+  <p><%= link_to t('admin.external_search_route'), external_search_link("#{@route.description}"), {:class => 'admin-offsite-link', :target => '_blank'} %></p>
   
   <%= render :partial => "route_operators", :locals => { :f => f, :route_operators => @route.route_operators, :title => t('admin.operators') } %>
   <%= render :partial => "route_operators", :locals => { :f => f, :route_operators => @route_operators, :title => t('admin.operator_code_matches') } %>
