@@ -297,7 +297,7 @@ td.route-terminuses {
   font-size: 80%;
   margin: 0.5em 0 0.5em 2em;
 }
-td.numeric {
+td.numeric, th.numeric {
   text-align: right;
   padding-right: 0.5em;
 }
@@ -328,6 +328,32 @@ ul.admin-simple-list li{
 .admin-small-offsite-link {
   font-size: 0.8em;  
 }
+
+.admin-stats table tr td {
+  padding: 0.333em;
+}
+.admin-stats table .stats-col {
+  width: 5em;
+}
+.admin-stats table .stats-time {
+  padding-right: 1em;
+}
+.admin-stats table .this-week-probs {
+  background-color: #eee;
+}
+.admin-stats table .this-week-camps {
+  background-color: #ccc;
+}
+.admin-stats table .all-time-probs {
+  background-color: #ddf;
+  font-weight: bold;
+}
+.admin-stats table .all-time-camps {
+  background-color: #bbe;
+  font-weight: bold;
+}
+
+
 /* two columns for admins with luxury wide-screens */
 @media screen and (min-width: 800px) {
   .admin-left-col-float {

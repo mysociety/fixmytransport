@@ -1,29 +1,57 @@
-<h2><%= t('admin.stats_all_time')%></h2>
 <div class="admin-stats">
-  <strong><%= t('admin.problems') %>:</strong>
-  <%- Problem.statuses.each do |status, code| %>
-    <%= status.to_s %>: <%= Problem.count(:conditions => ['status_code = ?', code]) %>
-  <%- end %>
+  <table>
+      <tr>
+          <th colspan="2"></th>
+          <%- Problem.statuses.each do |status, code| %>
+            <th class="numeric stats-col"><%= status.to_s %></th>
+          <%- end %>
+      </tr>
+      <tr class="this-week-probs">
+        <td rowspan="2" class="stats-time">
+          <%= t('admin.stats_this_week')%>
+        </td>
+        <td>
+          <%= t('admin.problems') %>:
+        </td>
+        <%- Problem.statuses.each do |status, code| %>
+          <td class="numeric">
+            <%= Problem.count(:conditions => ['status_code = ? and created_at >= ?', code, (Time.now - 7.days)]) %>
+          </td>
+        <%- end %>
+      </tr>
+      <tr class="this-week-camps">
+        <td>
+          <%= t('admin.campaigns') %>:
+        </td>
+        <%- Campaign.statuses.each do |status, code| %>
+          <td class="numeric">
+            <%= Campaign.count(:conditions => ['status_code = ? and created_at >= ?', code, (Time.now - 7.days)]) %>
+          </td>
+        <%- end %>
+      </tr>  
+      <tr class="all-time-probs">
+        <td rowspan="2" class="stats-time">
+          <%= t('admin.stats_all_time')%>
+        </td>
+        <td>
+          <%= t('admin.problems') %>:
+        </td>        
+        <%- Problem.statuses.each do |status, code| %>
+          <td class="numeric"><%= Problem.count(:conditions => ['status_code = ?', code]) %></td>
+        <%- end %>
+      </tr>
+      <tr class="all-time-camps">
+        <td>
+          <%= t('admin.campaigns') %>:
+        </td>
+        <%- Campaign.statuses.each do |status, code| %>
+          <td class="numeric"><%= Campaign.count(:conditions => ['status_code = ?', code]) %></td>
+        <%- end %>
+      </tr>
+  </table>  
+
 </div>
-<div class="admin-stats">
-  <strong><%= t('admin.campaigns') %>:</strong>
-  <%- Campaign.statuses.each do |status, code| %>
-    <%= status.to_s %>: <%= Campaign.count(:conditions => ['status_code = ?', code]) %>
-  <%- end %>
-</div>
-<h2><%= t('admin.stats_this_week')%></h2>
-<div class="admin-stats">
-  <strong><%= t('admin.problems') %>:</strong>
-  <%- Problem.statuses.each do |status, code| %>
-    <%= status.to_s %>: <%= Problem.count(:conditions => ['status_code = ? and created_at >= ?', code, (Time.now - 7.days)]) %>
-  <%- end %>
-</div>
-<div class="admin-stats">
-  <strong><%= t('admin.campaigns') %>:</strong>
-  <%- Campaign.statuses.each do |status, code| %>
-    <%= status.to_s %>: <%= Campaign.count(:conditions => ['status_code = ? and created_at >= ?', code, (Time.now - 7.days)]) %>
-  <%- end %>
-</div>
+
 <h2><%= t('admin.things_to_do') %></h2>
 
 <%- if current_user.can_admin?(:organizations) %>
