@@ -27,13 +27,15 @@
       <%- route_operators.each do |route_operator| %>
         <%- f.fields_for :route_operators, route_operator do |route_operator_fields|  %>
           <tr class='<%= cycle('odd', 'even') %>'>
-            <td><%= raw "#{link_to route_operator.route.name, main_url(location_path(route_operator.route)), :target => '_blank'} #{link_to("(#{t('admin.admin')})", admin_url(admin_route_path(route_operator.route.id)))}" %></td>
+            <td>
+              <%= raw "#{link_to t('admin.live'), main_url(location_path(route_operator.route)), {:class => 'admin-small-offsite-link', :target => '_blank'}} #{link_to(route_operator.route.name, admin_url(admin_route_path(route_operator.route.id)))}" %>
+            </td>
             <td><%= route_operator.route.region.name %></td>
             <td class='route-terminuses'>
               <%= route_operator.route.description %>
             </td>
             <td>
-              <%= link_to t('admin.external_search_route'), external_search_link("#{route_operator.route.description}"), :target => '_blank' %></td>
+              <%= link_to t('admin.external_search_route'), external_search_link("#{route_operator.route.description}"), {:class => 'admin-small-offsite-link', :target => '_blank'} %></td>
             <td>
               <%- if !route_operator.new_record? %>
                 <%= raw route_operator_fields.hidden_field :id %>
