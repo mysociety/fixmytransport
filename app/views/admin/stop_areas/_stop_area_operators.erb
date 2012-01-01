@@ -22,9 +22,9 @@
       <%- stop_area_operators.each do |stop_area_operator| %>
         <%- f.fields_for :stop_area_operators, stop_area_operator do |stop_area_operator_fields| %>
           <tr class='<%= cycle("odd", "even") %>'>
-            <td><%= link_to(stop_area_operator.operator.name, admin_url(admin_operator_path(stop_area_operator.operator_id)), :target => "_blank" ) %>
+            <td><%= link_to(stop_area_operator.operator.name, admin_url(admin_operator_path(stop_area_operator.operator_id))) %>
             <td><%= stop_area_operator.operator.short_name %>
-            <td><%= link_to t('admin.external_search_operator'), external_search_link("#{stop_area_operator.operator.name}"), :target => '_blank' %></td>
+            <td><%= link_to t('admin.external_search_operator'), external_search_link("#{stop_area_operator.operator.name}"), {:class => 'admin-small-offsite-link', :target => '_blank'} %></td>
             <td>
               <%- if stop_area_operator.id %>
                 <%= raw stop_area_operator_fields.hidden_field :id %>
