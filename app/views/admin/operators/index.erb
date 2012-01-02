@@ -26,7 +26,11 @@
           <%- end %>
         </td>
         <td><%= operator.reference_name %></td>
-        <td><%-if operator.url %><%= link_to(operator.url, operator.url, {:class => 'admin-small-offsite-link', :target => '_blank'})%><%- end %></td>
+        <td>
+          <%-if ! operator.url.blank? %>
+            <%= link_to(operator.url, operator.url, {:class => 'admin-small-offsite-link', :target => '_blank'})%>
+          <%- end %>
+        </td>
         <td class="numeric"><%= operator.routes.count %></td>
         <!--<td><%= raw check_box_tag "operators[]", operator.id, false, { :class => "select-item" } %></td>-->
       </tr>
