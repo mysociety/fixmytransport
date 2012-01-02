@@ -141,6 +141,7 @@ table td {
 h2 {
   display: inline-block;
   margin-top: 0.2em;
+  margin-bottom: 0.2em;
 }
 
 h2.route-header {
@@ -299,7 +300,9 @@ td.route-terminuses {
 }
 td.numeric, th.numeric {
   text-align: right;
-  padding-right: 0.5em;
+}
+td.numeric {
+  padding-right: 0.5em;  
 }
 td.easy-read-link a {
   text-decoration: none;
@@ -328,7 +331,9 @@ ul.admin-simple-list li{
 .admin-small-offsite-link {
   font-size: 0.8em;  
 }
-
+.admin-stats table  {
+  float:left;
+}
 .admin-stats table tr td {
   padding: 0.333em;
 }
@@ -352,7 +357,24 @@ ul.admin-simple-list li{
   background-color: #bbe;
   font-weight: bold;
 }
+.admin-stats table .this-week-users {
+  background-color: #f0eedd;
+}
+.admin-stats table .this-week-comments {
+  background-color: #d0ccbb;
+}
+.admin-stats table .all-time-users {
+  background-color: #dc9;
+  font-weight: bold;
+}
+.admin-stats table .all-time-comments {
+  background-color: #ca6;
+  font-weight: bold;
+}
 
+.index {
+  clear:both;
+}
 
 /* two columns for admins with luxury wide-screens */
 @media screen and (min-width: 800px) {
