@@ -109,6 +109,8 @@ describe Admin::StopsController do
 
   describe 'GET #autocomplete_for_name' do 
     
+    fixtures default_fixtures
+    
     it 'should return stops identified by name' do 
       get :autocomplete_for_name, { :term => 'tennis' }
       results = JSON.parse(response.body)
