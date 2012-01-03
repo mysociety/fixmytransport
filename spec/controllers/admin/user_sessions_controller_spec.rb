@@ -130,7 +130,7 @@ describe Admin::UserSessionsController do
 
         it 'should redirect to the admin url for a relative path passed in the redirect param' do
           make_request(@default_params.update(:redirect => '/my_url'))
-          response.should redirect_to("http://test.host/admin/my_url")
+          response.should redirect_to(controller.admin_url("/my_url"))
         end
 
       end
