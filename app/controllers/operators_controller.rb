@@ -5,6 +5,7 @@ class OperatorsController < ApplicationController
   
   def show
     @operator = Operator.find(params[:id])
+    @title = @operator.name
     @routes = Route.find(:all, :conditions => ["id in (SELECT route_id
                                                               FROM route_operators
                                                               WHERE operator_id = #{@operator.id})"],
@@ -15,7 +16,7 @@ class OperatorsController < ApplicationController
                                                             WHERE operator_id = #{@operator.id})"],
                                     :include => :slug,
                                     :order => 'name asc')
-    @problems = Problem.visible.find(:all, :conditions => ["campaign_id IS NULL AND id in (SELECT problem_id 
+    @problems = Problem.visible.find(:all, :conditions => ["id in (SELECT problem_id 
                                                                      FROM responsibilities 
                                                                      WHERE organization_type = 'Operator'
                                                                       AND organization_id = #{@operator.id})"],
