@@ -17,6 +17,6 @@ en:
         other: "%{count} problems concerning %{operator}:"
       no_problems_found: "No problems found concerning %{operator}"
       campaigns_concerning:
-        one: "%{count} campaigns concerning %{operator}:"
+        one: "%{count} campaign concerning %{operator}:"
         other: "%{count} campaigns concerning %{operator}:"
       no_campaigns_found: "No campaigns found for %{operator}"
