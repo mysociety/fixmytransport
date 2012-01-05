@@ -19,8 +19,8 @@ en:
         other: "%{count} issues concerning %{operator}"
       no_issues_found: "No issues found concerning %{operator}."
     issues:
-      title: "%{operator} Issues"
+      title: "%{operator} issues"
     routes:
-      title: "%{operator} Routes"
+      title: "%{operator} routes"
     stations:
-      title: "%{operator} Stations"
+      title: "%{operator} stations"
