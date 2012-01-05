@@ -62,11 +62,11 @@
 		<div id='operator-tabs-problems' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
 			 <h3><%= t('route_operators.show.issues_concerning', :operator => @operator.name, :count => @issue_count) %></h3>
 			    <%- if @issue_count != 0 %>
-			      <%= will_paginate @issues %>
+			      <%= will_paginate @issues, :param_name => 'issues-page' %>
               <ul class="issues-list">
                 <%= render :partial => "shared/issue", :collection => @issues, :locals => {:context => :issue_list } %>
               </ul>
-            <%= will_paginate @issues %>
+            <%= will_paginate @issues, :param_name => 'issues-page' %>
        		<%- else %>
        		    <p class="operator-notice"> <%= t('route_operators.show.no_issues_found', :operator => @operator.name) %> </p>
 	      <%- end %>

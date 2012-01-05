@@ -7,7 +7,7 @@ class OperatorsController < ApplicationController
     @operator = Operator.find(params[:id])
     @title = @operator.name
   
-    @issues = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
+    @issues = WillPaginate::Collection.create((params["issues-page"] or 1), 10) do |pager|
       issues = Problem.find_recent_issues(pager.per_page, {:offset => pager.offset, :single_operator => @operator})
       pager.replace(issues)
       if pager.total_entries
