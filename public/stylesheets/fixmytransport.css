@@ -2266,6 +2266,16 @@ body.facebook-canvas .button {
 #main-content #operator-tabs ul.issues-list a {
   color: #048FC2;
 }
+/*===[operator tabs override normal color settings, restore them]===*/
+#operator-tabs .pagination {
+  color: #333;
+  font-size: 0.9em; 
+}
+#operator-tabs .pagination a {
+  color: #048FC2;
+  text-decoration: none;
+}
+
 /* in extremis: stop huge/broken photos breaking the list */
 #main-content ul.issues-list img{
   max-width: 100px;
@@ -3273,7 +3283,7 @@ body.facebook-canvas .button {
       padding-right: 33px;
         width: auto;
     }
-    
+        
     /*===[Share by email]=== */
     #share-by-email textarea,
     #share-by-email button{

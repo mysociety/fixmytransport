@@ -6,6 +6,27 @@ class OperatorsController < ApplicationController
   def show
     @operator = Operator.find(params[:id])
     @title = @operator.name
+  
+    @issues = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
+      issues = Problem.find_recent_issues(pager.per_page, {:offset => pager.offset, :single_operator => @operator})
+      pager.replace(issues)
+      if pager.total_entries
+        @issue_count = pager.total_entries
+      else
+        @issue_count = Problem.visible.count(:conditions => ["id in (SELECT problem_id 
+                                                               FROM responsibilities 
+                                                               WHERE organization_type = 'Operator'
+                                                               AND organization_id = #{@operator.id})"])                                             
+        @issue_count += Campaign.visible.count(:conditions => ["id in (SELECT campaign_id FROM problems
+                                                                WHERE problems.id in (
+                                                                SELECT problem_id 
+                                                                FROM responsibilities 
+                                                                WHERE organization_type = 'Operator'
+                                                                AND organization_id = #{@operator.id}))"]) 
+        pager.total_entries = @issue_count
+      end
+    end    
+   
     @routes = Route.find(:all, :conditions => ["id in (SELECT route_id
                                                               FROM route_operators
                                                               WHERE operator_id = #{@operator.id})"],
@@ -16,24 +37,7 @@ class OperatorsController < ApplicationController
                                                             WHERE operator_id = #{@operator.id})"],
                                     :include => :slug,
                                     :order => 'name asc')
-    @problems = Problem.visible.find(:all, :conditions => ["id in (SELECT problem_id 
-                                                                     FROM responsibilities 
-                                                                     WHERE organization_type = 'Operator'
-                                                                      AND organization_id = #{@operator.id})"],
-                                    :order => 'updated_at desc, created_at desc, description asc')
-
-    @campaigns = Campaign.visible.find(:all, :conditions => ["id in (SELECT campaign_id FROM problems
-                                                                      WHERE problems.id in (
-                                                                        SELECT problem_id 
-                                                                        FROM responsibilities 
-                                                                        WHERE organization_type = 'Operator'
-                                                                        AND organization_id = #{@operator.id}
-                                                                      ))"] ,
-                                    :order => 'updated_at desc, created_at desc, title asc') 
-
-    @problem_count = @problems.size()
-    @campaign_count = @campaigns.size()
-    
+                                        
     @route_count = Operator.connection.select_value("SELECT count(DISTINCT routes.id) AS count_routes_id 
                                                      FROM routes 
                                                      INNER JOIN route_operators 
