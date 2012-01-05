@@ -1,0 +1,27 @@
+<div id="banner">
+  <a id="home" href="/">FixMyTransport</a>
+	<div class="container">
+		<h1 class="operator-name"><%= t('route_operators.stations.title', :operator => @operator.name) %></h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+	  <%= raw t('route_operators.show.is_responsible_for_stations', :operator => link_to(@operator.name, operator_url(@operator)), :count => @station_count) %>
+	</div>
+</div>
+<div id="main-content"class="container">
+  <div class="leftcol widecol">
+    <a id="operator-feedback-link" href="<%= feedback_url(:url => CGI.escape(request.request_uri), :operator_id => @operator.id) %>" rel="nofollow"><%= t('route_operators.show.information_wrong') %></a>
+		<%- if @station_count != 0 %>
+      <%= will_paginate @stations, :param_name => 'stations-page' %>
+        <ul class="route-links">
+			    <%- @stations.each do |station| %>
+		        <li>
+		          <a href="<%= "/stations/#{station.slug.scope}/#{station.slug.to_friendly_id}"%>"><%= station.name_with_inactive %></a>
+		        </li>
+		      <%- end %>
+        </ul>
+	    <%= will_paginate @stations, :param_name => 'stations-page' %>
+		<%- end %>
+  </div>
+</div>

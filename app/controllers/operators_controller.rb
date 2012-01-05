@@ -2,14 +2,36 @@ class OperatorsController < ApplicationController
   
   skip_before_filter :make_cachable
   before_filter :long_cache
+  before_filter :find_operator
   
-  def show
+  def show  
+    setup_paginated_issues
+    setup_paginated_routes
+    setup_paginated_stations
+  end
+
+  def issues 
+    setup_paginated_issues
+  end
+
+  def routes 
+    setup_paginated_routes
+  end
+
+  def stations 
+    setup_paginated_stations
+  end
+
+  private 
+
+  def find_operator
     @operator = Operator.find(params[:id])
-    @title = @operator.name
-  
-    issues_per_page = 10
-    links_per_page = 20
-    
+    @title = @operator.name    
+    @links_per_page = 20
+  end
+
+  def setup_paginated_issues
+    issues_per_page = 10  
     @issues = WillPaginate::Collection.create((params["issues-page"] or 1), issues_per_page) do |pager|
       issues = Problem.find_recent_issues(pager.per_page, {:offset => pager.offset, :single_operator => @operator})
       pager.replace(issues)
@@ -27,37 +49,18 @@ class OperatorsController < ApplicationController
                                                                 WHERE organization_type = 'Operator'
                                                                 AND organization_id = #{@operator.id}))"]) 
         pager.total_entries = @issue_count
-      end
-    end    
+      end    
+    end
+  end
     
-    @routes = WillPaginate::Collection.create((params["routes-page"] or 1), links_per_page) do |pager|
-      routes = Route.find(:all, :conditions => ["id in (SELECT route_id
-                                                                FROM route_operators
-                                                                WHERE operator_id = #{@operator.id})"],
-                                        :include => :slug,
-                                        :order => 'cached_description asc',
-                                        :limit => links_per_page,
-                                        :offset => pager.offset)   
-      pager.replace(routes)
-      if pager.total_entries
-        @route_count = pager.total_entries
-      else
-        @route_count = Operator.connection.select_value("SELECT count(DISTINCT routes.id) AS count_routes_id 
-                                                         FROM routes 
-                                                         INNER JOIN route_operators 
-                                                         ON routes.id = route_operators.route_id 
-                                                         WHERE (route_operators.operator_id = #{@operator.id})").to_i 
-         pager.total_entries = @route_count
-      end
-    end    
-
-    @stations = WillPaginate::Collection.create((params["stations-page"] or 1), links_per_page) do |pager|
+  def setup_paginated_stations
+    @stations = WillPaginate::Collection.create((params["stations-page"] or 1), @links_per_page) do |pager|
       stations = StopArea.find(:all, :conditions => ["id in (SELECT stop_area_id 
                                                               FROM stop_area_operators
                                                               WHERE operator_id = #{@operator.id})"],
                                       :include => :slug,
                                       :order => 'name asc',
-                                      :limit => links_per_page,
+                                      :limit => @links_per_page,
                                       :offset => pager.offset)   
       pager.replace(stations)
       if pager.total_entries
@@ -72,7 +75,29 @@ class OperatorsController < ApplicationController
          pager.total_entries = @station_count
       end
     end    
-
   end
-
+  
+  def setup_paginated_routes
+    @routes = WillPaginate::Collection.create((params["routes-page"] or 1), @links_per_page) do |pager|
+      routes = Route.find(:all, :conditions => ["id in (SELECT route_id
+                                                                FROM route_operators
+                                                                WHERE operator_id = #{@operator.id})"],
+                                        :include => :slug,
+                                        :order => 'cached_description asc',
+                                        :limit => @links_per_page,
+                                        :offset => pager.offset)   
+      pager.replace(routes)
+      if pager.total_entries
+        @route_count = pager.total_entries
+      else
+        @route_count = Operator.connection.select_value("SELECT count(DISTINCT routes.id) AS count_routes_id 
+                                                         FROM routes 
+                                                         INNER JOIN route_operators 
+                                                         ON routes.id = route_operators.route_id 
+                                                         WHERE (route_operators.operator_id = #{@operator.id})").to_i 
+         pager.total_entries = @route_count
+      end
+    end    
+  end
+  
 end

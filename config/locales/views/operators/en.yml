@@ -6,12 +6,21 @@ en:
       stations_header: "Stations"
       issues_header: "Issues"
       operates_routes:
-        one: "%{operator} runs %{count} route:"
-        other: "%{operator} runs %{count} routes:"
+        zero: "%{operator} does not run any routes"
+        one: "%{operator} runs %{count} route"
+        other: "%{operator} runs %{count} routes"
       is_responsible_for_stations:
-        one: "%{operator} is responsible for %{count} station:"
-        other: "%{operator} is responsible for %{count} stations:"
+        zero: "%{operator} is not responsible for any stations"
+        one: "%{operator} is responsible for %{count} station"
+        other: "%{operator} is responsible for %{count} stations"
       issues_concerning:
-        one: "%{count} issue concerning %{operator}:"
-        other: "%{count} issues concerning %{operator}:"
-      no_problems_found: "No issues found concerning %{operator}."
+        zero: "There are currently no issues concerning %{operator}"
+        one: "%{count} issue concerning %{operator}"
+        other: "%{count} issues concerning %{operator}"
+      no_issues_found: "No issues found concerning %{operator}."
+    issues:
+      title: "%{operator} Issues"
+    routes:
+      title: "%{operator} Routes"
+    stations:
+      title: "%{operator} Stations"
