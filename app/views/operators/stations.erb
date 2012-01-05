@@ -14,7 +14,7 @@
     <a id="operator-feedback-link" href="<%= feedback_url(:url => CGI.escape(request.request_uri), :operator_id => @operator.id) %>" rel="nofollow"><%= t('route_operators.show.information_wrong') %></a>
 		<%- if @station_count != 0 %>
       <%= will_paginate @stations, :param_name => 'stations-page' %>
-        <ul class="route-links">
+        <ul class="route-links route-links-large">
 			    <%- @stations.each do |station| %>
 		        <li>
 		          <a href="<%= "/stations/#{station.slug.scope}/#{station.slug.to_friendly_id}"%>"><%= station.name_with_inactive %></a>

@@ -1948,6 +1948,10 @@ ul.route-links {
 		    -webkit-border-radius: 20px;
 		}
 
+ul.route-links-large {
+  font-size: 1.1em;
+}
+
 /*===[Find Stop Page]===*/
 #find-stop-container {
   margin:100px auto 0 auto;
