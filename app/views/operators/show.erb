@@ -28,7 +28,6 @@
   </div>
 <%- end %>
 <div id="main-content" class="container operators has-tabs">
-<a id="operator-feedback-link" href="<%= feedback_url(:url => CGI.escape(request.request_uri), :operator_id => @operator.id) %>" rel="nofollow"><%= t('route_operators.show.information_wrong') %></a>
   <div id='operator-tabs' class='ui-tabs ui-widget ui-content ui-corner-all'>
     <ul id="tabs-main-nav" class='font-1 operator-tabs-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
       <li id="route-tab" class='ui-state-default ui-corner-top <%- if @current_tab == :routes %>ui-tabs-selected ui-state-active<%-end %>'>
@@ -78,4 +77,5 @@
       <%- end %>
     </div>    
   </div>
+  <a id="operator-feedback-link" href="<%= feedback_url(:url => CGI.escape(request.request_uri), :operator_id => @operator.id) %>" rel="nofollow"><%= t('route_operators.show.information_wrong') %></a>
 </div>
