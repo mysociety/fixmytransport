@@ -1904,8 +1904,8 @@ ul.route-links {
 ul#large-ul,
 ul.route-links {
 	width:700px;
-
 }
+
 	ol#large-ol li,
 	ul#large-ul li,
 	ul.route-links li {
@@ -3287,7 +3287,11 @@ body.facebook-canvas .button {
       padding-right: 33px;
         width: auto;
     }
-        
+    
+    ul.route-links {
+    	width:inherit;
+    }
+    
     /*===[Share by email]=== */
     #share-by-email textarea,
     #share-by-email button{
