@@ -5,14 +5,14 @@ class OperatorsController < ApplicationController
   before_filter :find_operator
   
   def show
-    @current_tab = :routes
-    setup_paginated_routes
     @title = @operator.name 
-    @banner_text = t('route_operators.show.operates_routes', 
+    @current_tab = :issues
+    setup_paginated_issues
+    @banner_text = t('route_operators.show.issues_concerning', 
                       :operator => "<a href='#{operator_url(@operator)}'>#{@operator.name}</a>", 
-                      :count => @route_count)
+                      :count => @issue_count)
     @station_count = find_station_count
-    @issue_count = find_issue_count
+    @route_count = find_route_count
   end
   
   # routes, issues and stations are all presented as tabs on the operator page
@@ -22,20 +22,20 @@ class OperatorsController < ApplicationController
 
   # "routes" differs from "show" only in the title
   def routes 
-    show
     @title = t('route_operators.routes.title', :operator => @operator.name) 
+    @current_tab = :routes
+    setup_paginated_routes
+    @banner_text = t('route_operators.show.operates_routes', 
+                      :operator => "<a href='#{operator_url(@operator)}'>#{@operator.name}</a>", 
+                      :count => @route_count)
+    @station_count = find_station_count
+    @issue_count = find_issue_count
     render :show
   end
 
   def issues
-    @current_tab = :issues
-    setup_paginated_issues
+    show
     @title = t('route_operators.issues.title', :operator => @operator.name) 
-    @banner_text = t('route_operators.show.issues_concerning', 
-                      :operator => "<a href='#{operator_url(@operator)}'>#{@operator.name}</a>", 
-                      :count => @issue_count)
-    @station_count = find_station_count
-    @route_count = find_route_count
     render :show
   end
 

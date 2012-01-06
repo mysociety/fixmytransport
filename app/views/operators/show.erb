@@ -30,14 +30,14 @@
 <div id="main-content" class="container operators has-tabs">
   <div id='operator-tabs' class='ui-tabs ui-widget ui-content ui-corner-all'>
     <ul id="tabs-main-nav" class='font-1 operator-tabs-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+      <li id="problem-tab" class='ui-state-default ui-corner-top <%- if @current_tab == :issues %>ui-tabs-selected ui-state-active<%-end %>'>
+        <a href="<%- if @current_tab == :issues %>#operator-tabs-current<%- else %><%= main_url(issues_operator_path(@operator)) %><%- end %>"><%= t('route_operators.show.issues_header')%><span class="num"><%= @issue_count %></span></a>
+      </li>
       <li id="route-tab" class='ui-state-default ui-corner-top <%- if @current_tab == :routes %>ui-tabs-selected ui-state-active<%-end %>'>
         <a href="<%- if @current_tab == :routes %>#operator-tabs-current<%- else %><%= main_url(routes_operator_path(@operator)) %><%- end %>"><%= t('route_operators.show.routes_header')%><span class="num"><%= @route_count %></span></a>
       </li>
       <li id="area-tab" class='ui-state-default ui-corner-top <%- if @current_tab == :stations %>ui-tabs-selected ui-state-active<%-end %>'>
         <a href="<%- if @current_tab == :stations %>#operator-tabs-current<%- else %><%= main_url(stations_operator_path(@operator)) %><%- end %>"><%= t('route_operators.show.stations_header')%><span class="num"><%= @station_count %></span></a>
-      </li>
-      <li id="problem-tab" class='ui-state-default ui-corner-top <%- if @current_tab == :issues %>ui-tabs-selected ui-state-active<%-end %>'>
-        <a href="<%- if @current_tab == :issues %>#operator-tabs-current<%- else %><%= main_url(issues_operator_path(@operator)) %><%- end %>"><%= t('route_operators.show.issues_header')%><span class="num"><%= @issue_count %></span></a>
       </li>
     </ul>
     <div id='operator-tabs-current' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
