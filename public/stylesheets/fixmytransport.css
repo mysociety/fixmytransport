@@ -2261,16 +2261,19 @@ body.facebook-canvas .button {
 #main-content #operator-tabs .operator-notice {
   color: #333;
 }
-#main-content #operator-tabs ul.issues-list {
-  color: #333;
+#main-content #operator-tabs ul.issues-list,
+#main-content #operator-tabs p {
+    color: #333;
 }
 #main-content #operator-tabs ul.issues-list dl{
   font-size: 0.8em;
 }
-#main-content #operator-tabs ul.issues-list a {
+#main-content #operator-tabs ul.issues-list a,
+#main-content #operator-tabs p a {
   color: #048FC2;
 }
 /*===[operator tabs override normal color settings, restore them]===*/
+
 #operator-tabs .pagination {
   color: #333;
   font-size: 0.9em; 

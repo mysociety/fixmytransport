@@ -16,16 +16,17 @@
 
 <div id="banner">
   <a id="home" href="/">FixMyTransport</a>
-	<div class="container">
-		<h1 class="operator-name"><%= @title %></h1>
-	</div>
+  <div class="container">
+    <h1 class="operator-name"><%= @title %></h1>
+  </div>
 </div>
-<div id="greybanner">
-	<div class="container">
-	  <%= raw @banner_text %>
-	</div>
-</div>
-
+<%- if @operator.transport_mode %>
+  <div id="greybanner">
+    <div class="container">
+      <%= @operator.name %> is a transport operator providing <%=  @operator.transport_mode.name.downcase %> services.
+    </div>
+  </div>
+<%- end %>
 <div id="main-content" class="container operators has-tabs">
 <a id="operator-feedback-link" href="<%= feedback_url(:url => CGI.escape(request.request_uri), :operator_id => @operator.id) %>" rel="nofollow"><%= t('route_operators.show.information_wrong') %></a>
   <div id='operator-tabs' class='ui-tabs ui-widget ui-content ui-corner-all'>
@@ -41,6 +42,9 @@
       </li>
     </ul>
     <div id='operator-tabs-current' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
+      <p>
+        <%= raw @banner_text %>
+      </p>
       <%- if @current_tab == :routes %>
         <%= will_paginate @routes %>
         <ul class="route-links">
@@ -64,7 +68,7 @@
       <%- elsif @current_tab == :issues %>
         <%- if @issue_count != 0 %>
           <%= will_paginate @issues %>
-          <ul class="issues-list">
+          <ul class="issues-list widecol">
             <%= render :partial => "shared/issue", :collection => @issues, :locals => {:context => :issue_list } %>
           </ul>
           <%= will_paginate @issues %>
