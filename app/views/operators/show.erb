@@ -23,7 +23,7 @@
 <%- if @operator.transport_mode %>
   <div id="greybanner">
     <div class="container">
-      <%= @operator.name %> is a transport operator providing <%=  @operator.transport_mode.name.downcase %> services.
+      <%= raw @transport_mode_and_link %>
     </div>
   </div>
 <%- end %>

@@ -5,6 +5,8 @@ en:
       routes_header: "Routes"
       stations_header: "Stations"
       issues_header: "Issues"
+      is_an_operator: "{%operator} is a transport operator."
+      is_an_operator_with_transport_mode: "%{operator} is a transport operator providing %{transport_mode} services."
       operates_routes:
         zero: "%{operator} does not run any routes."
         one: "%{operator} runs %{count} route."

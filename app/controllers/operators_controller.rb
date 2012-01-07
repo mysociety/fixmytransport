@@ -2,7 +2,7 @@ class OperatorsController < ApplicationController
   
   skip_before_filter :make_cachable
   before_filter :long_cache
-  before_filter :find_operator
+  before_filter :find_operator, :setup_shared_title
   
   def show
     @title = @operator.name 
@@ -20,7 +20,13 @@ class OperatorsController < ApplicationController
   # on the same page results in some ugly URLs (three page params) as well as making
   # AJAX calls on the pagination links. Simpler to implement it as separate pages.
 
-  # "routes" differs from "show" only in the title
+  # "issues" differs from "show" only in the title
+  def issues
+    show
+    @title = t('route_operators.issues.title', :operator => @operator.name) 
+    render :show
+  end
+
   def routes 
     @title = t('route_operators.routes.title', :operator => @operator.name) 
     @current_tab = :routes
@@ -30,12 +36,6 @@ class OperatorsController < ApplicationController
                       :count => @route_count)
     @station_count = find_station_count
     @issue_count = find_issue_count
-    render :show
-  end
-
-  def issues
-    show
-    @title = t('route_operators.issues.title', :operator => @operator.name) 
     render :show
   end
 
@@ -55,8 +55,19 @@ class OperatorsController < ApplicationController
 
   def find_operator
     @operator = Operator.find(params[:id])
-    @title = @operator.name    
+  end
+  
+  def setup_shared_title
     @links_per_page = 20
+    @title = @operator.name
+    linked_operator_name = self.action_name == 'show' ? @operator.name : "<a href='#{operator_path(@operator)}'>#{@operator.name}</a>"
+    if @operator.transport_mode
+      @transport_mode_and_link = t('route_operators.show.is_an_operator_with_transport_mode', 
+                                    :operator => linked_operator_name,
+                                    :transport_mode => @operator.transport_mode.name.downcase) 
+    elsif
+      @transport_mode_and_link = t('route_operators.show.is_an_operator', :operator => linked_operator_name) 
+    end
   end
 
   def find_issue_count
