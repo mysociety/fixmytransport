@@ -36,6 +36,7 @@ ActionController::Routing::Routes.draw do |map|
     campaign.resources :assignments, :only => [:new, :create, :update, :edit]
   end
 
+  # problems
   map.resources :problems, :except => [:destroy, :edit, :update],
                            :member => {:convert => [:get, :post],
                                        :add_comment => [:get, :post] },
@@ -47,6 +48,9 @@ ActionController::Routing::Routes.draw do |map|
                                             :find_ferry_route => :get,
                                             :find_other_route => :get,
                                             :existing => :get }
+
+  # questionnaires
+  map.questionnaire '/q/:email_token', :action => 'show', :controller => 'questionnaires'
 
   # issues index
   map.issues '/issues', :action => 'issues_index', :controller => 'problems'
@@ -140,7 +144,7 @@ ActionController::Routing::Routes.draw do |map|
                                          :action => 'request_country',
                                          :conditions => { :method => :get }
 
-  # service url for getting info for nearest stop from lon/lat (NB requires session)
+  # service url for getting info for nearest stop from lon/lat
   map.request_nearest_stop 'request_nearest_stop', :controller => 'problems',
                                            :action => 'request_nearest_stop',
                                            :conditions => { :method => :get }
