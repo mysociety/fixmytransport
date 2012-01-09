@@ -12,6 +12,7 @@ class Problem < ActiveRecord::Base
   has_many :comments, :as => :commented
   has_many :sent_emails
   has_many :responsibilities
+  has_many :questionnaires, :as => :subject
   validates_presence_of :description, :subject, :category, :if => :location
   validates_associated :reporter
   attr_accessible :subject, :description, :category,

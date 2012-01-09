@@ -33,6 +33,9 @@ class User < ActiveRecord::Base
   has_many :access_tokens
   has_many :subscriptions
   has_many :comments
+  has_many :questionnaires
+  
+  # a one-to-one association conferring admin credentials on the user
   has_one :admin_user
   before_validation :download_remote_profile_photo, :if => :profile_photo_url_provided?
 
