@@ -71,8 +71,6 @@
             <%= render :partial => "shared/issue", :collection => @issues, :locals => {:context => :issue_list } %>
           </ul>
           <%= will_paginate @issues %>
-        <%- else %>
-          <p class="operator-notice"> <%= t('route_operators.show.no_issues_found', :operator => @operator.name) %> </p>
         <%- end %>        
       <%- end %>
     </div>    

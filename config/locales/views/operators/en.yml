@@ -19,7 +19,6 @@ en:
         zero: "There are currently no issues concerning %{operator}."
         one: "%{count} issue concerning %{operator}."
         other: "%{count} issues concerning %{operator}."
-      no_issues_found: "No issues found concerning %{operator}."
     issues:
       title: "%{operator} issues"
     routes:
