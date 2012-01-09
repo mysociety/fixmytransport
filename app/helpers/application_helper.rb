@@ -291,6 +291,14 @@ module ApplicationHelper
     end
   end
 
+  def issue_url(issue)
+    if issue.is_a? Campaign
+      return campaign_url(issue)
+    else
+      return problem_url(issue)
+    end
+  end
+
   def location_path(location, attributes={})
     if location.is_a? Stop
       return stop_path(location.locality, location, attributes)
