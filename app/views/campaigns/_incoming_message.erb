@@ -9,10 +9,10 @@
 
 <div class="thread-details">
 	<div class="thread-copy">
-    <%= render :partial => 'incoming_message_body', :locals => {:collapse_quotes => @collapse_quotes, :message => message } %>
+    <%= render :partial => 'campaigns/incoming_message_body', :locals => {:collapse_quotes => @collapse_quotes, :message => message } %>
 	</div>
 	<div class="thread-alternative-copy" style="display:none;">
-	    <%= render :partial => 'incoming_message_body', :locals => {:collapse_quotes => !@collapse_quotes, :message => message } %>
+	    <%= render :partial => 'campaigns/incoming_message_body', :locals => {:collapse_quotes => !@collapse_quotes, :message => message } %>
 	</div>
 	<div class="thread-furniture"></div>
 </div>

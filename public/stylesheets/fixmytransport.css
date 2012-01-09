@@ -40,7 +40,7 @@ h1, h2, h3, h4, h5, h6, .font-1, #greybanner p {
 /* ===[ Layout ]=== */
 .container {
     width: 950px;
-	height:100%;
+	  height:100%;
     margin: auto;
     overflow: hidden;
 }
@@ -1269,11 +1269,15 @@ ul.campaign-meta li span{
 	color:#333;
  }
 
-.manager-tools {
+.manager-tools, .questionnaire {
 	border:4px solid #048FC2;
 	background:#F1F1F7;
 }
-	.manager-tools-inner {
+  .questionnaire {
+    margin-bottom: 1em;
+  }
+
+	.manager-tools-inner, .questionnaire-inner {
 		padding:10px;
 	}
 		.manager-tools-inner .actions,
@@ -1282,7 +1286,7 @@ ul.campaign-meta li span{
 			margin:0 0 2em 0;
 			border-bottom:2px solid #048FC2;
 		}
-	.manager-tools h2 {
+	.manager-tools h2, .questionnaire h2 {
 		display:block;
 		background:#048FC2;
 		color:#fff;
@@ -2045,6 +2049,36 @@ body.facebook-canvas .button {
 	text-transform:none;
 }
 
+/*===[ Questionnaire ]=== */
+
+#questionnaire-form fieldset {
+  padding: 0.2em;
+  border: 0;
+}
+
+#questionnaire-form button[type=submit] {
+  float: right;
+  padding: 4px 10px;
+}
+
+#questionnaire-form label {
+  margin-right: 1em;
+}
+
+#questionnaire-form textarea {
+  height: 150px;
+  width: 95%;
+  padding: 5px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  float:none;
+}
+
+#questionnaire-form .error {
+  float: none;
+  margin: 0 0 0.5em 0;
+}
 
 /*===[Assignment Page]===*/
 .edit_assignment .checkbox label {
@@ -2293,7 +2327,7 @@ body.facebook-canvas .button {
       .not-found-message {
         font-size: 1.2em;
       }
-      
+
 			.campaign-description {
 				width: 100%;
 			}
@@ -3058,9 +3092,13 @@ body.facebook-canvas .button {
         margin: 0 auto;
         padding: 0;
     }
+
+    .rightcol {
+       margin: 0 auto;
+    }
+
     #main-content.campaign-content .rightcol {
         display: table-caption;
-        margin: 0 auto;
         width: 96%;
     }
 
@@ -3179,8 +3217,8 @@ body.facebook-canvas .button {
     }
 
 
-    .manager-tools h2 {
-        padding: 0 0.2em;
+    .manager-tools h2, .questionnaire h2 {
+      width: auto;
     }
 
     .manager-tools .actions li {
@@ -3259,6 +3297,11 @@ body.facebook-canvas .button {
     #share-by-email textarea,
     #share-by-email button{
       width: 96%;
+    }
+
+    /*===[ Questionnaire ]=== */
+    #questionnaire-form fieldset {
+      margin-bottom: 0;
     }
 
     /*===[ geolocation can't sensibly be absolutely positioned on narrow screens]=== */

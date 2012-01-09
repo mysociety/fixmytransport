@@ -1,0 +1,59 @@
+<div class="questionnaire">
+	<h2 class="font-1"><%= t('questionnaires.show.questionnaire') %></h2>
+	<div class="questionnaire-inner">
+<p>
+  
+  <%- if subject.is_a?(Problem) %>
+    <%= t('questionnaires.show.instructions_problem') %>
+    <%- if subject.comments.visible.size > 0 %>
+      <%= t('questionnaires.show.look_at_updates') %>
+    <%- end %>
+    <%- if subject.status == :fixed %>
+      <%= t('questionnaires.show.marked_as_fixed') %>
+    <%- end %>
+  <%- else %>
+    <%= t('questionnaires.show.instructions_campaign') %>
+  <%- end %>
+  <%= t('questionnaires.show.is_fixed') %>
+</p>
+<%- form_tag(questionnaire_path, { :id => 'questionnaire-form' }) do %>
+  <fieldset>
+    <%- if @errors && @errors[:fixed] %>
+      <div class='error error-text'>
+        <%= @errors[:fixed] %>
+      </div>
+    <br/>
+    <%- end %>
+    <%= raw radio_button_tag :fixed, "yes", (params[:fixed] == 'yes') %>
+    <%= raw label_tag('fixed_yes', raw(t('questionnaires.show.fixed_yes'))) %>
+    <%= raw radio_button_tag :fixed, "no", (params[:fixed] == 'no') %>
+    <%= raw label_tag('fixed_no', raw(t('questionnaires.show.fixed_no'))) %>
+    <%= raw radio_button_tag :fixed, "unknown", (params[:fixed] == 'unknown') %>
+    <%= raw label_tag('fixed_unknown', raw(t('questionnaires.show.fixed_unknown'))) %>
+  </fieldset>
+  <%- if !current_user.answered_ever_reported? %>
+    <p>
+      <%= t('questionnaires.show.ever_reported')%>
+    </p>
+    <fieldset>
+      <%- if @errors && @errors[:ever_reported] %>
+        <div class='error error-text'>
+          <%= @errors[:ever_reported] %>
+        </div>
+      <br/>
+      <%- end %>
+      <%= raw radio_button_tag :ever_reported, "yes" %>
+      <%= raw label_tag('ever_reported_yes', raw(t('questionnaires.show.ever_reported_yes'))) %>
+      <%= raw radio_button_tag :ever_reported, "no" %>
+      <%= raw label_tag('ever_reported_no', raw(t('questionnaires.show.ever_reported_no'))) %>
+    </fieldset>
+  <%- end %>
+  <p>
+    <%= t('questionnaires.show.leave_an_update') %>
+  </p>
+  <%= raw text_area_tag "update", params[:update] %>
+  <button type="submit" id="questionnaire_submit" type="submit" value="Submit" name="commit" class="button"><%= t('questionnaires.show.submit')%></button>
+<%- end %>
+<div class="clear"></div>
+  </div>
+</div>
