@@ -51,6 +51,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # questionnaires
   map.questionnaire '/q/:email_token', :action => 'show', :controller => 'questionnaires'
+  
 
   # issues index
   map.issues '/issues', :action => 'issues_index', :controller => 'problems'
@@ -171,7 +172,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :profiles, :only => [:show]
 
   # static
-  map.about '/advice', :controller => 'static', :action => 'advice'
+  map.advice '/advice', :controller => 'static', :action => 'advice'
   map.about '/about', :controller => 'static', :action => 'about'
   map.feedback '/feedback', :controller => 'static',
                             :action => 'feedback',
