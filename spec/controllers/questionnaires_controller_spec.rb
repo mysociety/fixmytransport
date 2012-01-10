@@ -2,23 +2,7 @@ require 'spec_helper'
 
 describe QuestionnairesController do
 
-  describe 'GET #show' do
-    
-    def make_request
-      get :show, { :email_token => 'mytoken' }
-    end
-    
-    before do
-      @user = mock_model(User)
-      @stop = mock_model(Stop, :points => ['my points'])
-      @problem = mock_model(Problem, :location => @stop)
-      @questionnaire = mock_model(Questionnaire, :subject => @problem,
-                                                 :completed_at => nil,
-                                                 :user => @user)
-      Questionnaire.stub!(:find_by_token).and_return(@questionnaire)
-      controller.stub!(:map_params_from_location)
-      UserSession.stub!(:login_by_confirmation).and_return(mock_model(UserSession))
-    end
+  shared_examples_for "an action that requires a valid questionnaire" do 
     
     it 'should look for the questionnaire by token' do
       Questionnaire.should_receive(:find_by_token).with('mytoken')
@@ -54,6 +38,24 @@ describe QuestionnairesController do
         UserSession.should_receive(:login_by_confirmation)
         make_request
       end
+      
+      describe 'if the subject of the questionnaire is hidden' do 
+        
+        before do 
+          @problem.stub!(:visible?).and_return(false)
+        end
+        
+        it 'should show an error message' do 
+          make_request
+          flash[:error].should == 'Unable to access questionnaire: this issue has been removed.'
+        end
+        
+        it 'should redirect to the front page' do 
+          make_request
+          response.should redirect_to(root_url)
+        end
+        
+      end
             
       describe 'if login by confirmation does not return a session (indicating the user is suspended)' do      
         
@@ -74,13 +76,8 @@ describe QuestionnairesController do
       end
       
       describe 'if login by confirmation returns a session' do  
-
             
-        it "should render the 'show' template" do
-          make_request
-          response.should render_template('show')
-        end
-    
+
         describe 'if the questionnaire has been completed' do 
         
           before do
@@ -102,7 +99,336 @@ describe QuestionnairesController do
       end
     
     end
+  
+  end
+
+  describe 'GET #show' do
+    
+    def make_request
+      get :show, { :email_token => 'mytoken' }
+    end
+    
+    before do
+      @user = mock_model(User)
+      @stop = mock_model(Stop, :points => ['my points'])
+      @problem = mock_model(Problem, :location => @stop,
+                                     :visible? => true)
+      @questionnaire = mock_model(Questionnaire, :subject => @problem,
+                                                 :completed_at => nil,
+                                                 :user => @user)
+      Questionnaire.stub!(:find_by_token).and_return(@questionnaire)
+      controller.stub!(:map_params_from_location)
+      UserSession.stub!(:login_by_confirmation).and_return(mock_model(UserSession))
+    end
+    
+    it_should_behave_like "an action that requires a valid questionnaire"
+    
+    it "should render the 'show' template" do
+      make_request
+      response.should render_template('show')
+    end
     
   end
+  
+  describe 'POST #update' do 
+  
+    def make_request(params=@default_params)
+      post :update, params
+    end
+  
+    before do
+      @default_params = { :email_token => 'mytoken' }
+      @user = mock_model(User, :answered_ever_reported? => false,
+                               :update_attribute => nil)
+      @stop = mock_model(Stop, :points => ['my points'])
+      @comment = mock_model(Comment, :status= => nil,
+                                     :save => true, 
+                                     :confirm! => nil)
+      @problem = mock_model(Problem, :location => @stop, 
+                                     :status_code => 3,
+                                     :visible? => true, 
+                                     :status => :confirmed, 
+                                     :status= => nil,
+                                     :fixed_state => :fixed,
+                                     :comments => mock('comments', :build => @comment),
+                                     :updated_at= => nil,
+                                     :save! => nil)
+      @questionnaire = mock_model(Questionnaire, :subject => @problem,
+                                                 :completed_at => nil,
+                                                 :user => @user,
+                                                 :old_status_code= => nil,
+                                                 :new_status_code= => nil, 
+                                                 :ever_reported= => nil,
+                                                 :completed_at= => nil, 
+                                                 :save! => nil)
+      Questionnaire.stub!(:find_by_token).and_return(@questionnaire)
+      controller.stub!(:map_params_from_location)
+      UserSession.stub!(:login_by_confirmation).and_return(mock_model(UserSession))
+      controller.stub!(:current_user).and_return(@user)
+    end
+    
+    it_should_behave_like "an action that requires a valid questionnaire"
+    
+    describe 'if the "fixed" parameter is not supplied' do 
+
+      it 'should set an error message for the view' do 
+        make_request
+        assigns[:errors][:fixed].should == 'Please say whether the problem has been fixed.'
+      end
+      
+      it 'should render the "show" template' do 
+        make_request
+        response.should render_template('show')
+      end
+      
+      it 'should set up map params from the stop' do 
+        controller.should_receive(:map_params_from_location).with(@stop.points, find_other_locations=false)
+        make_request
+      end
+      
+    end
+    
+    describe 'if the user has never answered the "have you ever reported an issue" question 
+              and the "ever_reported" param is missing' do 
+      
+      it 'should set an error message for the view' do 
+        make_request
+        assigns[:errors][:ever_reported].should == 'Please say whether you have ever reported a transport problem before.'
+      end
+      
+      it 'should render the "show" template' do 
+        make_request
+        response.should render_template('show')
+      end
+      
+      it 'should set up map params from the stop' do 
+        controller.should_receive(:map_params_from_location).with(@stop.points, find_other_locations=false)
+        make_request
+      end
+      
+    end
+    
+    describe 'if the "fixed" param is "no" or "unknown" and the "another" param is not supplied' do 
+      
+      before do
+        @params = @default_params.merge(:fixed => 'no')
+      end
+      
+      it 'should set an error message for the view' do 
+        make_request(@params)
+        assigns[:errors][:another].should == "Please say whether you'd like to receive another questionnaire."
+      end
+      
+      it 'should render the show template' do 
+        make_request(@params)
+        response.should render_template('show')
+      end
+      
+      it 'should set up map params from the stop' do 
+        controller.should_receive(:map_params_from_location).with(@stop.points, find_other_locations=false)
+        make_request(@params)
+      end
+    
+    end
+    
+    describe 'if params are supplied' do
+      
+      before do 
+        @questionnaire.stub!(:ever_reported=)
+        @params = @default_params.merge(:ever_reported => 'yes', 
+                                        :fixed => 'no', 
+                                        :another => 'no')
+      end
+      
+      it 'should set the questionnaire "ever_reported" flag' do 
+        @questionnaire.should_receive(:ever_reported=).with(true)
+        make_request(@params)
+      end
+      
+      it 'should set the "old_status_code" on the questionnaire to the status of the questionnaire subject' do 
+        @questionnaire.should_receive(:old_status_code=).with(@problem.status_code)
+        make_request(@params)
+      end
+
+      it 'should set "completed_at" on the questionnaire' do 
+        @questionnaire.should_receive(:completed_at=)
+        make_request(@params)
+      end
+      
+      it 'should save the issue' do
+        @problem.should_receive(:save!)
+        make_request(@params)
+      end
+      
+      it 'should save the questionnaire' do 
+        @questionnaire.should_receive(:save!)
+        make_request(@params)
+      end
+
+    end
+    
+    describe 'if the "another" param is "yes"' do 
+      
+      before do 
+        @problem.stub!(:send_questionnaire=)
+        @params = @default_params.merge(:ever_reported => 'yes', 
+                                        :fixed => 'no', 
+                                        :another => 'yes')
+      end
+      
+      it 'should set the send_questionnaire flag on the questionnaire subject' do 
+        @problem.should_receive(:send_questionnaire=).with(true)
+        make_request(@params)
+      end
+      
+    end
+    
+    describe 'if the issue was fixed and the user has reported it as not fixed' do
+      
+      before do 
+        @problem.stub!(:status).and_return(:fixed)
+        @params = @default_params.merge(:ever_reported => 'yes', 
+                                        :fixed => 'no', 
+                                        :another => 'no')
+      end
+    
+      describe 'if there is no update' do 
+        
+        it 'should set an error message for the view' do 
+          make_request(@params)
+          assigns[:errors][:update].should == "Please provide an explanation as to why you're reopening this report."
+        end
+        
+        it 'should render the "show" template' do 
+          make_request(@params)
+          response.should render_template('show')
+        end
+      
+      end
+      
+      describe 'if there is an update' do 
+        
+        before do 
+          @params = @default_params.merge(:ever_reported => 'yes', 
+                                          :fixed => 'no', 
+                                          :update => 'test update',
+                                          :another => 'no')
+        end
+        
+        it 'should set the issue status to confirmed' do 
+          @problem.should_receive(:status=).with(:confirmed)
+          make_request(@params)
+        end
+        
+        it 'should add the update comment to the issue' do 
+          expected_data = { :text => 'test update', 
+                            :model => @problem, 
+                            :mark_open => true, 
+                            :mark_fixed => nil,
+                            :confirmed => true }
+          Comment.should_receive(:create_from_hash).with(expected_data, @user)
+          make_request(@params)
+        end
+        
+        
+        describe 'if the status has not changed' do 
+        
+          before do
+            @problem.stub!(:status).and_return(:confirmed)
+          end
+          
+          it 'should update the timestamp on the issue' do
+            @problem.should_receive(:updated_at=)
+            make_request(@params)
+          end
+          
+        end
+
+        
+        it 'should set the "new_status_code" on the questionnaire to confirmed' do 
+          @questionnaire.should_receive(:new_status_code=).with(3)
+          make_request(@params)
+        end
+        
+      end
+
+
+    end
+    
+    describe 'if the issue was confirmed and the user has reported it as fixed' do 
+    
+      before do 
+        @problem.stub!(:status).and_return(:confirmed)
+        @params = @default_params.merge(:ever_reported => 'yes', :fixed => 'yes')
+      end
+      
+      it 'should set the issue status to fixed' do 
+        @problem.should_receive(:status=).with(:fixed)
+        make_request(@params)
+      end
+
+      it 'should set the "new_status_code" on the questionnaire' do 
+        @questionnaire.should_receive(:new_status_code=).with(3)
+        make_request(@params)
+      end
+      
+      describe 'if there is an update' do 
+        
+        before do
+          @params = @default_params.merge(:ever_reported => 'yes', :fixed => 'yes', :update => 'test update')
+        end
+        
+        it 'should add the update comment to the issue' do 
+          expected_data = { :text => 'test update', 
+                            :model => @problem, 
+                            :mark_open => nil, 
+                            :mark_fixed => true,
+                            :confirmed => true }
+          Comment.should_receive(:create_from_hash).with(expected_data, @user)
+          make_request(@params)
+        end
+      
+      end
+      
+      describe 'if there is no update' do 
+      
+        it 'should add a comment to the issue saying that the user filled in a questionnaire' do 
+          expected_data = { :text => 'Questionnaire filled in by problem reporter.', 
+                            :model => @problem, 
+                            :mark_open => nil, 
+                            :mark_fixed => true,
+                            :confirmed => true }
+          Comment.should_receive(:create_from_hash).with(expected_data, @user)
+          make_request(@params)
+        end
+        
+      end
+      
+    end
+    
+    describe "if the issue was confirmed and the user has reported that they don't know if it's fixed" do 
+    
+      before do 
+        @problem.stub!(:status).and_return(:confirmed)
+        @params = @default_params.merge(:ever_reported => 'yes', 
+                                        :fixed => 'unknown', 
+                                        :update => 'test update',
+                                        :another => 'no')
+      end
+      
+      it 'should not change the status of the issue' do 
+        @problem.should_not_receive(:status=)
+        make_request(@params)
+      end
+      
+      it 'should set the "new_status_code" on the questionnaire to confirmed' do 
+        @questionnaire.should_receive(:new_status_code=).with(3)
+        make_request(@params)
+      end
+            
+    end
+
+  end
+  
   
 end

@@ -1,0 +1,14 @@
+<div id="main-content" class="container">
+  <h2><%= t('questionnaires.completed.thanks')%></h2>
+  <p>
+  <%- if params[:fixed] == 'unknown' %>
+    <%= t('questionnaires.completed.please_come_back') %>
+  <%- elsif @questionnaire.subject.status == :confirmed  %>
+    <%= t('questionnaires.completed.next_steps')%>
+  <%- else %>
+    <%= t('questionnaires.completed.success_thanks')%>
+  <%- end %>
+  </p>
+</div>
+
+

@@ -31,6 +31,7 @@
     <%= raw radio_button_tag :fixed, "unknown", (params[:fixed] == 'unknown') %>
     <%= raw label_tag('fixed_unknown', raw(t('questionnaires.show.fixed_unknown'))) %>
   </fieldset>
+  
   <%- if !current_user.answered_ever_reported? %>
     <p>
       <%= t('questionnaires.show.ever_reported')%>
@@ -42,15 +43,38 @@
         </div>
       <br/>
       <%- end %>
-      <%= raw radio_button_tag :ever_reported, "yes" %>
+      <%= raw radio_button_tag :ever_reported, "yes", (params[:ever_reported] == 'yes')%>
       <%= raw label_tag('ever_reported_yes', raw(t('questionnaires.show.ever_reported_yes'))) %>
-      <%= raw radio_button_tag :ever_reported, "no" %>
+      <%= raw radio_button_tag :ever_reported, "no", (params[:ever_reported] == 'no') %>
       <%= raw label_tag('ever_reported_no', raw(t('questionnaires.show.ever_reported_no'))) %>
     </fieldset>
   <%- end %>
+  <div id="another-questionnaire">
+  <p>
+    <%= t('questionnaires.show.another') %>
+  </p>
+  <fieldset>
+    <%- if @errors && @errors[:another] %>
+      <div class='error error-text'>
+        <%= @errors[:another] %>
+      </div>
+    <br/>
+    <%- end %>
+    <%= raw radio_button_tag :another, "yes", (params[:another] == 'yes')%>
+    <%= raw label_tag('another_yes', raw(t('questionnaires.show.another_yes'))) %>
+    <%= raw radio_button_tag :another, "no", (params[:another] == 'no') %>
+    <%= raw label_tag('another_no', raw(t('questionnaires.show.another_no'))) %>
+  </fieldset>
+  </div>
   <p>
     <%= t('questionnaires.show.leave_an_update') %>
   </p>
+  <%- if @errors && @errors[:update] %>
+    <div class='error error-text'>
+      <%= @errors[:update] %>
+    </div>
+    <br/>
+  <%- end %>
   <%= raw text_area_tag "update", params[:update] %>
   <button type="submit" id="questionnaire_submit" type="submit" value="Submit" name="commit" class="button"><%= t('questionnaires.show.submit')%></button>
 <%- end %>

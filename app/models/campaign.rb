@@ -48,6 +48,10 @@ class Campaign < ActiveRecord::Base
    [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:successful]]
   end
 
+  def fixed_state
+    :successful
+  end
+
   named_scope :visible, :conditions => ["status_code in (?)", Campaign.visible_status_codes]
 
   # instance methods
@@ -170,7 +174,7 @@ class Campaign < ActiveRecord::Base
     assignments.find(:all, :conditions => ['task_type_name = ?', 'write-to-other'])
   end
 
-  # Return a list of version models in cronological order representing changes made 
+  # Return a list of version models in cronological order representing changes made
   # in the admin interface to this campaign
   def admin_actions
     self.versions.find(:all, :conditions => ['admin_action = ?', true])

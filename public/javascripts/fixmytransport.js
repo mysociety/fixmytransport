@@ -112,6 +112,28 @@ $(document).ready(function(){
 		$(this).parent().removeClass('active');
 	});
 
+  /* Questionnaire
+     ================================================== */
+  if (!$('#fixed_no').is(':checked') && !$('#fixed_unknown').is(':checked')) {
+    $('#another-questionnaire').hide();
+  }
+
+  $('#fixed_no').click(function(){
+    if (!$('#another-questionnaire').is(":visible")){
+      $('#another-questionnaire').show('blind', '', 1000);
+    }
+  });
+  $('#fixed_unknown').click(function(){
+    if (!$('#another-questionnaire').is(":visible")){
+      $('#another-questionnaire').show('blind', '', 1000);
+    }
+  });
+  $('#fixed_yes').click(function(){
+    if ($('#another-questionnaire').is(":visible")){
+      $('#another-questionnaire').hide('blind', '', 1000);
+    }
+  });
+
 	/* Thread
 	   ================================================== */
 	function thread(li){
