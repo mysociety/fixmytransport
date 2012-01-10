@@ -15,12 +15,21 @@ class OperatorsController < ApplicationController
     @route_count = find_route_count
   end
   
-  # routes, issues and stations are all presented as tabs on the operator page
+  # Routes, issues and stations are all presented as tabs on the operator page
   # They're implemented as separate pages because managing three different paginations
-  # on the same page results in some ugly URLs (three page params) as well as making
+  # on the same http page results in some ugly URLs (three page params) as well as making
   # AJAX calls on the pagination links. Simpler to implement it as separate pages.
+  # Currently, "issues" differs from "show" only in the title.
 
-  # "issues" differs from "show" only in the title
+  # Note: we don't show tabs for routes or stations if there are none. 
+  #       The issues tab is always shown, even if there are none.
+  #       This is why the view's will_paginate has {:action => issues } on it, 
+  #       since it's possible for the repagination links to be going to a different 
+  #       action from the one that is actually showing the page.
+
+  # Also: routes returned are based on *responsible* operator, so if a problem was 
+  #       reported to another organisation (e.g., a PTE) then that route won't show here.
+  
   def issues
     show
     @title = t('route_operators.issues.title', :operator => @operator.name) 
@@ -31,23 +40,33 @@ class OperatorsController < ApplicationController
     @title = t('route_operators.routes.title', :operator => @operator.name) 
     @current_tab = :routes
     setup_paginated_routes
+    if @route_count == 0
+      @current_tab = :issues
+      setup_paginated_issues
+    else
+      @issue_count = find_issue_count
+    end
     @banner_text = t('route_operators.show.operates_routes', 
                       :operator => "<a href='#{operator_url(@operator)}'>#{@operator.name}</a>", 
                       :count => @route_count)
     @station_count = find_station_count
-    @issue_count = find_issue_count
     render :show
   end
 
   def stations 
+    @title = t('route_operators.stations.title', :operator => @operator.name) 
     @current_tab = :stations
     setup_paginated_stations
-    @title = t('route_operators.stations.title', :operator => @operator.name) 
+    if @station_count == 0
+      @current_tab = :issues
+      setup_paginated_issues
+    else
+      @issue_count = find_issue_count
+    end
     @banner_text = t('route_operators.show.is_responsible_for_stations', 
                       :operator => "<a href='#{operator_url(@operator)}'>#{@operator.name}</a>", 
                       :count => @station_count)
     @route_count = find_route_count
-    @issue_count = find_issue_count
     render :show
   end
 
