@@ -433,13 +433,18 @@ module ApplicationHelper
   end
 
   def comment_header(comment)
+    text = ''
     if comment.commented.is_a?(Campaign)
-      return t('campaigns.show.user_says', :name => h(comment.user.name))
+      text = t('campaigns.show.user_says', :name => h(comment.user.name))
     elsif comment.commented.is_a?(Problem)
-      return t('problems.show.user_says', :name => h(comment.user.name))
+      text = t('problems.show.user_says', :name => h(comment.user.name))
     else
-      return t('shared.location_content.user_says', :name => h(comment.user.name))
+      text = t('shared.location_content.user_says', :name => h(comment.user.name))
     end
+    if comment.mark_fixed?
+      text += " " + t('problems.show.marked_as_fixed')
+    end
+    text
   end
 
   def map_link_path(location, link_type)

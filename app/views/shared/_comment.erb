@@ -2,9 +2,6 @@
   <span class="num"><%= index %></span>
   <span class="title">
   <%= raw comment_header(comment) %>
-  <%- if comment.commented.is_a?(Problem) && comment.mark_fixed? %>
-    <%= t('problems.show.marked_as_fixed')%>
-  <%- end %>
   </span>
   <span class="close">close</span>
   <span class="date">
