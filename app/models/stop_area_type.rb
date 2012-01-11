@@ -66,7 +66,7 @@ class StopAreaType < ActiveRecord::Base
   end
 
   # returns :singular, :plural (and, if available, :short, which was handy for tab label)
-  def self.generic_name_for_station(code = :unknown)
+  def self.generic_name_for_type(code = :unknown)
     if StopAreaType.station_types.include?(code)
       return {
         :singular => I18n.translate('models.stop_area_type.station', :count => 1 ),

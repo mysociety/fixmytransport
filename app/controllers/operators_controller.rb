@@ -191,9 +191,9 @@ class OperatorsController < ApplicationController
                                                                 WHERE operator_id = #{@operator.id})"],
                                         :order => 'name asc') # order cautiously ensures same result as "stations" tab
       end
-      descriptions = StopAreaType.generic_name_for_station(sample_station.area_type)
+      descriptions = StopAreaType.generic_name_for_type(sample_station.area_type)
     else
-      descriptions = StopAreaType.generic_name_for_station(:pretty_unknown)
+      descriptions = StopAreaType.generic_name_for_type(:pretty_unknown)
     end
     if ! descriptions.has_key?(:short) # short word is needed to fit on the tab
       descriptions[:short] = descriptions[:plural]

@@ -543,7 +543,7 @@ class ApplicationController < ActionController::Base
     when Stop
      return 'stop'
     when StopArea
-     return StopAreaType.generic_name_for_station(commented.area_type)[:singular]
+     return StopAreaType.generic_name_for_type(commented.area_type)[:singular]
     when Route
      return 'route'
     when SubRoute
