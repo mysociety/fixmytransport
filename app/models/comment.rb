@@ -10,7 +10,7 @@ class Comment < ActiveRecord::Base
   before_create :generate_confirmation_token
   before_validation_on_create :populate_user_name
   has_many :campaign_events, :as => :described
-  attr_accessor :skip_name_validation
+  attr_accessor :skip_name_validation, :old_commented_status_code
   named_scope :unsent, :conditions => ['sent_at is null']
   attr_accessible :text, :user, :mark_fixed, :mark_open
   has_paper_trail
@@ -50,21 +50,31 @@ class Comment < ActiveRecord::Base
   def save_user
     user.save_if_new
   end
-
+  
+  def user_marks_as_fixed?
+    self.commented.is_a?(Problem) && self.user == self.commented.reporter && self.mark_fixed
+  end
+  
   def confirm!
     return unless self.status == :new
     ActiveRecord::Base.transaction do
       self.status = :confirmed
       self.confirmed_at = Time.now
       if self.commented.is_a? Problem
-        if mark_fixed
+        if self.mark_fixed
+          # store the old issue status so we can record it if
+          # the user fills in the 'reported before' questionnaire
+          self.old_commented_status_code = self.commented.status_code
           self.commented.status = :fixed
+          if self.user == self.commented.reporter
+            self.commented.send_questionnaire = false
+          end
         end
         if mark_open && self.user == commented.reporter
           self.commented.status = :confirmed
         end
-        commented.updated_at = Time.now
-        commented.save!
+        self.commented.updated_at = Time.now
+        self.commented.save!
       elsif commented.is_a? Campaign
         self.campaign_events.build(:event_type => 'comment_added',
                                    :described => self,

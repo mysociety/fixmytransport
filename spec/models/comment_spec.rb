@@ -69,9 +69,13 @@ describe Comment do
     describe 'if the thing being commented on is a problem' do
 
       before do
+        @user = mock_model(User)
         @mock_problem = mock_model(Problem, :updated_at= => true,
                                             :save! => true,
-                                            :status= => true)
+                                            :status= => true,
+                                            :status_code => 3,
+                                            :reporter => @user,
+                                            :send_questionnaire= => nil)
         @comment.stub!(:commented).and_return(@mock_problem)
       end
 
@@ -85,11 +89,37 @@ describe Comment do
         @comment.confirm!
       end
 
-      it 'should set the problem status as fixed if appropriate' do
-        @comment.mark_fixed = true
-        @mock_problem.should_receive(:status=).with(:fixed)
-        @comment.confirm!
+      describe 'if the comment is marking the problem as fixed' do
+
+        before do
+          @comment.mark_fixed = true
+        end
+
+        it 'should set the problem status as fixed' do
+          @mock_problem.should_receive(:status=).with(:fixed)
+          @comment.confirm!
+        end
+
+        describe 'if the user is the problem reporter' do
+
+          before do
+            @comment.stub!(:user).and_return(@user)
+          end
+
+          it 'should set the problem not to send a questionnaire' do
+            @mock_problem.should_receive(:send_questionnaire=).with(false)
+            @comment.confirm!
+          end
+
+          it 'should store the old status code of the problem' do 
+            @comment.should_receive(:old_commented_status_code=).with(3)
+            @comment.confirm!
+          end
+          
+        end
+        
       end
+
 
       it 'should save the comment' do
         @comment.should_receive(:save!)
