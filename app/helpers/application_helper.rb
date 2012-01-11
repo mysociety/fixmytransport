@@ -497,8 +497,6 @@ module ApplicationHelper
     case campaign.status
     when :confirmed
       'current'
-    when :successful
-      'fixed'
     else
       campaign.status.to_s
     end
@@ -549,8 +547,6 @@ module ApplicationHelper
     case problem.status
     when :confirmed
       'current'
-    when :successful
-      'fixed'
     else
       problem.status.to_s
     end

@@ -27,11 +27,7 @@ class Problem < ActiveRecord::Base
   def self.visible_status_codes
     [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:fixed]]
   end
-
-  def fixed_state
-    :fixed
-  end
-
+  
   named_scope :confirmed, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
   named_scope :visible, :conditions => ["status_code in (?) and campaign_id is null", Problem.visible_status_codes], :order => "confirmed_at desc"
   named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'

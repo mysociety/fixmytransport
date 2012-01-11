@@ -93,7 +93,7 @@ class CampaignsController < ApplicationController
 
   def complete
     old_status_code = @campaign.status_code
-    @campaign.status = :successful
+    @campaign.status = :fixed
     @campaign.send_questionnaire = false
     @campaign.save
     if current_user.answered_ever_reported?

@@ -382,7 +382,7 @@ describe CampaignsController do
     it_should_behave_like "an action that requires the campaign initiator"
 
     it 'should set the campaign status to complete and save it' do
-      @mock_campaign.should_receive(:status=).with(:successful)
+      @mock_campaign.should_receive(:status=).with(:fixed)
       @mock_campaign.should_receive(:save)
       make_request(@default_params)
     end

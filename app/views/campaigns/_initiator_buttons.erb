@@ -37,7 +37,7 @@
 						<%= t('campaigns.show.add_images') %>
 					</a>
 				</li>
-				<%- if @campaign.status != :successful %>
+				<%- if @campaign.status != :fixed %>
 				  <%- form_for @campaign, :url => complete_campaign_url(@campaign), :html => { :method => 'POST', :id => 'campaign-complete' } do |f| %>
 				<li>
 					<button class="button" type="submit" role="menuitem" >

@@ -53,9 +53,9 @@ class QuestionnairesController < ApplicationController
       if ['yes', 'no', 'unknown'].include?(params[:fixed])
         case params[:fixed]
         when 'yes'
-          if @questionnaire.subject.status != @questionnaire.subject.fixed_state
+          if @questionnaire.subject.status != :fixed
             mark_fixed = true
-            @questionnaire.subject.status = @questionnaire.subject.fixed_state
+            @questionnaire.subject.status = :fixed
           end
         when 'no'
           if @questionnaire.subject.status != :confirmed

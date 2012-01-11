@@ -19,7 +19,7 @@
 <%- content_for :tracking do %>'<%= raw url_for(params.merge(:joined => 1, :escape => false )) %>'<%- end %>
 <%- end %>
 <%= render :partial => 'campaigns/js_campaign_data' %>
-<%- if (supporter_initiator_view(@campaign)) || @campaign.status == :successful %>
+<%- if (supporter_initiator_view(@campaign)) || @campaign.status == :fixed %>
   <div id="banner" class="<%= 'supporter' %>">
     <a id="home" href="/">FixMyTransport</a>
   	<div class="container">
@@ -57,7 +57,7 @@
   			<%- end %>
       </div>
   		<%- end %>
-  		<%- if @campaign.status == :successful %>
+  		<%- if @campaign.status == :fixed %>
 			<span class="ribbon"><%= t('campaigns.show.campaign_fixed') %></span>
   		<%- end %>
   		</div>
@@ -204,7 +204,7 @@
 		<%- if show_comment_button %>
 	  	<a class="button comment comment-trigger right" href="<%= add_comment_campaign_url(@campaign) %>" data-title="<%= t('campaigns.show.campaign_comment_title') %>"><%= t('campaigns.show.campaign_comment') %></a>
 	  <%- end %>
-    <%- if !(supporter_initiator_view(@campaign) || @campaign.status == :successful) %>
+    <%- if !(supporter_initiator_view(@campaign) || @campaign.status == :fixed) %>
     <%= render :partial => 'campaigns/support_button', :locals => { :button_class => 'right support', :display_supporter => false, :display_initiator => false } %>
     <%- end %>
 	</div>

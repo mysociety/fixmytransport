@@ -149,7 +149,6 @@ describe QuestionnairesController do
                                      :visible? => true,
                                      :status => :confirmed,
                                      :status= => nil,
-                                     :fixed_state => :fixed,
                                      :comments => mock('comments', :build => @comment),
                                      :updated_at= => nil,
                                      :save! => nil)

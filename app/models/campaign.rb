@@ -41,15 +41,11 @@ class Campaign < ActiveRecord::Base
 
   has_status({ 0 => 'New',
                1 => 'Confirmed',
-               2 => 'Successful',
+               2 => 'Fixed',
                3 => 'Hidden' })
 
   def self.visible_status_codes
-   [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:successful]]
-  end
-
-  def fixed_state
-    :successful
+   [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:fixed]]
   end
 
   named_scope :visible, :conditions => ["status_code in (?)", Campaign.visible_status_codes]
@@ -63,11 +59,11 @@ class Campaign < ActiveRecord::Base
   end
 
   def visible?
-    [:confirmed, :successful].include?(self.status)
+    [:confirmed, :fixed].include?(self.status)
   end
 
   def editable?
-    [:new, :confirmed, :successful].include?(self.status)
+    [:new, :confirmed, :fixed].include?(self.status)
   end
 
   def supporter_count
