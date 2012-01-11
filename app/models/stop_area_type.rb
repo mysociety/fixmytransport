@@ -65,7 +65,7 @@ class StopAreaType < ActiveRecord::Base
     ['area_type in (?)', [codes]]
   end
 
-  # returns :singular, :plural, :short_singular
+  # returns :singular, :plural (and, if available, :short, which was handy for tab label)
   def self.generic_name_for_station(code = :unknown)
     if StopAreaType.station_types.include?(code)
       return {

@@ -543,15 +543,7 @@ class ApplicationController < ActionController::Base
     when Stop
      return 'stop'
     when StopArea
-     if StopAreaType.station_types.include?(commented.area_type)
-       return 'station'
-     elsif StopAreaType.bus_station_types.include?(commented.area_type)
-       return 'bus station'
-     elsif StopAreaType.ferry_terminal_types.include?(commented.area_type)
-       return 'ferry terminal'
-     else
-       return 'stop area'
-     end
+     return StopAreaType.generic_name_for_station(commented.area_type)[:singular]
     when Route
      return 'route'
     when SubRoute
