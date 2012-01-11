@@ -91,11 +91,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def responsible_org_descriptor
-    if problem.responsible_organizations.empty?
-      I18n.translate('campaigns.show.location_operator', :location => problem.location.description)
-    else
-      problem.responsible_organizations.map{ |org| org.name }.to_sentence
-    end
+    problem.responsible_org_descriptor
   end
 
   # Add a user as a supporter of a campaign

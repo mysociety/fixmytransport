@@ -110,6 +110,7 @@ en:
       on_the: "on the"
       at: "at"
       one_off_report: "one-off report"
+      location_operator: "the operator of the %{location}"
     suspended:
       forbidden: "Unable to authenticate &mdash; this account has been suspended."
     wrong_user:

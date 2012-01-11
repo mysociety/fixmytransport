@@ -67,7 +67,7 @@
   </fieldset>
   </div>
   <p>
-    <%= t('questionnaires.show.leave_an_update') %>
+    <%= t('questionnaires.show.leave_an_update', :org => subject.responsible_org_descriptor) %>
   </p>
   <%- if @errors && @errors[:update] %>
     <div class='error error-text'>

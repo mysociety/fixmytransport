@@ -110,6 +110,14 @@ class Problem < ActiveRecord::Base
   def responsible_operators
     self.responsible_organizations.select{ |org| org.is_a?(Operator) }
   end
+  
+  def responsible_org_descriptor
+    if self.responsible_organizations.empty?
+      I18n.translate('shared.problem.location_operator', :location => self.location.description)
+    else
+      self.responsible_organizations.map{ |org| org.name }.to_sentence
+    end
+  end
 
   def operator_names
     self.responsible_operators.map{ |operator| operator.name }.to_sentence

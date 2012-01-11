@@ -16,7 +16,7 @@ en:
       another: "Would you like to receive another questionnaire in four weeks, reminding you to check the status?"
       another_yes: "Yes"
       another_no: "No"
-      leave_an_update: "If you want to leave a public update, please enter it here (please note it will not be sent to the council). For example, what was your experience of getting the problem fixed?')"
+      leave_an_update: "If you want to leave a public update, please enter it here (please note it will not be sent to %{org}). For example, what was your experience of getting the problem fixed?')"
       submit: "Submit questionnaire"
       ever_reported: Have you ever reported a problem with public transport before?
       ever_reported_yes: "Yes"
