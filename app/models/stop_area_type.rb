@@ -65,16 +65,34 @@ class StopAreaType < ActiveRecord::Base
     ['area_type in (?)', [codes]]
   end
 
-  def self.generic_name_for_station(code, is_plural = false)
-    qty = is_plural ? 2 : 1
+  # returns :singular, :plural, :short_singular
+  def self.generic_name_for_station(code = :unknown)
     if StopAreaType.station_types.include?(code)
-      return I18n.translate('models.stop_area_type.station', :count => qty )
+      return {
+        :singular => I18n.translate('models.stop_area_type.station', :count => 1 ),
+        :plural => I18n.translate('models.stop_area_type.station', :count => 2 )
+      }
     elsif StopAreaType.bus_station_types.include?(code)
-      return I18n.translate('bus_station', :count => qty )
+      return {
+        :singular => I18n.translate('models.stop_area_type.bus_station', :count => 1 ),
+        :plural => I18n.translate('models.stop_area_type.bus_station', :count => 2 )
+      }
     elsif StopAreaType.ferry_terminal_types.include?(code)
-      return I18n.translate('ferry_terminal', :count => qty )
+      return {
+        :singular => I18n.translate('models.stop_area_type.ferry_terminal', :count => 1 ),
+        :plural => I18n.translate('models.stop_area_type.ferry_terminal', :count => 2 ),
+        :short => I18n.translate('models.stop_area_type.terminal', :count => 2 )
+      }
+    elsif code == :pretty_unknown
+      return {
+        :singular => I18n.translate('models.stop_area_type.pretty_stop_area', :count => 1 ),
+        :plural => I18n.translate('models.stop_area_type.pretty_stop_area', :count => 2 )
+      }
     else
-      return I18n.translate('stop_area', :count => qty )
+      return {
+        :singular => I18n.translate('models.stop_area_type.stop_area', :count => 1 ),
+        :plural => I18n.translate('models.stop_area_type.stop_area', :count => 2 )
+      }
     end
   end
   

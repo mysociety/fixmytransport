@@ -7,10 +7,15 @@ en:
       bus_station: 
         one: bus station
         other: bus stations
+      terminal:
+        one: terminal
+        other: terminals
       ferry_terminal:
         one: ferry terminal
         other: ferry terminals
-      stop_areas: 
+      stop_area: 
         one: stop area
         other: stop areas
-      stations_or_terminals: stations or terminals
+      pretty_stop_area:
+        one: station or terminal
+        other: stations or terminals

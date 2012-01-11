@@ -13,7 +13,7 @@ class OperatorsController < ApplicationController
                       :count => @issue_count)
     @station_count = find_station_count
     @route_count = find_route_count
-    setup_station_type_description
+    @station_type_descriptions = setup_station_type_descriptions
   end
   
   # Routes, issues and stations are all presented as tabs on the operator page
@@ -51,7 +51,7 @@ class OperatorsController < ApplicationController
                       :operator => "<a href='#{operator_url(@operator)}'>#{@operator.name}</a>", 
                       :count => @route_count)
     @station_count = find_station_count
-    setup_station_type_description
+    @station_type_descriptions = setup_station_type_descriptions
     render :show
   end
 
@@ -65,12 +65,13 @@ class OperatorsController < ApplicationController
       @issue_count = find_issue_count
     end
     @route_count = find_route_count
-    setup_station_type_description
+    @station_type_descriptions = setup_station_type_descriptions
+    # yes it's a wee bit horrible: plural handling outside the translation files
     @banner_text = t('route_operators.show.is_responsible_for_stations', 
                       :operator => "<a href='#{operator_url(@operator)}'>#{@operator.name}</a>", 
-                      :station_type => @station_count == 1 ? @station_type_description : @stations_type_description,
+                      :station_type => @station_count == 1 ? @station_type_descriptions[:singular] : @station_type_descriptions[:plural],
                       :count => @station_count)
-    @title = t('route_operators.stations.title', :operator => @operator.name, :station_type => @stations_type_description) 
+    @title = t('route_operators.stations.title', :operator => @operator.name, :station_type => @station_type_descriptions[:plural]) 
     render :show
   end
 
@@ -180,7 +181,7 @@ class OperatorsController < ApplicationController
   # call setup_station_type_description after everything else: we can avoid hitting the database again
   # if we've already got stations, or if we know there aren't any to find
   
-  def setup_station_type_description
+  def setup_station_type_descriptions
     if @station_count > 0
       if ! @stations.nil? && @stations.size > 0
         sample_station = @stations.first
@@ -190,13 +191,14 @@ class OperatorsController < ApplicationController
                                                                 WHERE operator_id = #{@operator.id})"],
                                         :order => 'name asc') # order cautiously ensures same result as "stations" tab
       end
-      @station_type_description = StopAreaType.generic_name_for_station(sample_station.area_type, :is_plural => false)
-      @stations_type_description = StopAreaType.generic_name_for_station(sample_station.area_type, :is_plural => true)
+      descriptions = StopAreaType.generic_name_for_station(sample_station.area_type)
     else
-      @station_type_description = t('models.stop_area_type.stations_or_terminals', :count => 1)
-      @stations_type_description = t('models.stop_area_type.stations_or_terminals', :count => 2)
+      descriptions = StopAreaType.generic_name_for_station(:pretty_unknown)
     end
-    
+    if ! descriptions.has_key?(:short) # short word is needed to fit on the tab
+      descriptions[:short] = descriptions[:plural]
+    end
+    return descriptions
   end
               
       
