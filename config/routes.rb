@@ -50,12 +50,17 @@ ActionController::Routing::Routes.draw do |map|
                                             :existing => :get }
 
   # questionnaires
+  map.questionnaire_fixed '/q/fixed', :action => 'creator_fixed',
+                                      :controller => 'questionnaires',
+                                      :conditions => { :method => [:get, :post] }
   map.questionnaire '/q/:email_token', :action => 'show',
                                        :controller => 'questionnaires',
                                        :conditions => { :method => :get }
   map.update_questionnaire '/q/:email_token', :action => 'update',
                                               :controller => 'questionnaires',
                                               :conditions => { :method => :post }
+
+
 
   # issues index
   map.issues '/issues', :action => 'issues_index', :controller => 'problems'

@@ -1,10 +1,11 @@
 class QuestionnairesController < ApplicationController
 
-  before_filter :require_valid_questionnaire
+  before_filter :require_valid_questionnaire, :only => [:show, :update]
+  before_filter :require_valid_issue, :only => [:creator_fixed]
 
   def show
     @errors = {}
-    setup_template_variables
+    setup_template_variables(@questionnaire.subject)
   end
 
   def update
@@ -23,7 +24,7 @@ class QuestionnairesController < ApplicationController
     end
 
     if ! @errors.empty?
-      setup_template_variables
+      setup_template_variables(@questionnaire.subject)
       render :action => 'show'
       return false
     end
@@ -41,7 +42,7 @@ class QuestionnairesController < ApplicationController
     @questionnaire.old_status_code = @questionnaire.subject.status_code
 
     # set the flag to send another if requested
-    if params[:another] == 'yes'
+    if params[:another] == 'yes' && ['no', 'unknown'].include?(params[:fixed])
       @questionnaire.subject.send_questionnaire = true
     end
 
@@ -89,7 +90,48 @@ class QuestionnairesController < ApplicationController
     return false
   end
 
+  # Ask the "have you ever reported an issue before" question when the user marks an issue
+  # as fixed (not in response to a questionnaire)
+  def creator_fixed
+    @errors = {}
+    if request.post?
+      if !['yes', 'no'].include?(params[:ever_reported])
+        setup_template_variables(@issue)
+        @errors[:ever_reported] = t('questionnaires.show.reported_blank')
+        render :action => 'creator_fixed'
+        return
+      end
+      ever_reported = (params[:ever_reported] == 'yes') ? true : false
+      @questionnaire = Questionnaire.create!(:subject => @issue,
+                                             :user => current_user,
+                                             :old_status_code => flash[:old_status_code],
+                                             :new_status_code => @issue.status_code,
+                                             :completed_at => Time.now,
+                                             :sent_at => Time.now,
+                                             :ever_reported => ever_reported)
+      render :template => 'questionnaires/completed'
+      return
+    end
+    setup_template_variables(@issue)
+  end
+
   private
+
+  def require_valid_issue
+    if params[:id].blank? || !['Campaign', 'Problem'].include?(params[:type])
+      flash[:error] = t('questionnaires.creator_fixed.issue_not_found')
+      redirect_to root_url
+      return
+    end
+    @issue = params[:type].constantize.find(params[:id])
+    # user not associated with issue
+    user_field = @issue.is_a?(Problem) ? :reporter : :initiator
+    if current_user.nil? || current_user != @issue.send(user_field)
+      flash[:error] = t('questionnaires.creator_fixed.issue_not_found')
+      redirect_to root_url
+      return
+    end
+  end
 
   # N.B. logs in the questionnaire user if valid questionnaire found
   def require_valid_questionnaire
@@ -122,14 +164,14 @@ class QuestionnairesController < ApplicationController
   end
 
   # set up the variables needed to display the questionnaire
-  def setup_template_variables
-    if @questionnaire.subject.is_a?(Problem)
-      @problem = @questionnaire.subject
-      map_params_from_location(@questionnaire.subject.location.points,
+  def setup_template_variables(issue)
+    if issue.is_a?(Problem)
+      @problem = issue
+      map_params_from_location(issue.location.points,
                                find_other_locations=false)
     else
-      @campaign = @questionnaire.subject
-      map_params_from_location(@questionnaire.subject.location.points,
+      @campaign = issue
+      map_params_from_location(issue.location.points,
                                find_other_locations=false,
                                height=CAMPAIGN_PAGE_MAP_HEIGHT,
                                width=CAMPAIGN_PAGE_MAP_WIDTH)

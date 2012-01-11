@@ -32,3 +32,8 @@ en:
       next_steps: We're sorry to hear that.
       success_thanks: "Thank you very much for filling in our questionnaire. We're glad to hear your problem has been fixed!"
       thanks: Thanks!
+    creator_fixed:
+      issue_not_found: "Sorry, we couldn't find your issue in the database."
+      thanks_title: Thanks!
+      instructions: "We're glad to hear that the problem has been fixed! Could we just ask if you have ever reported a problem with public transport before?"
+      submit: Submit

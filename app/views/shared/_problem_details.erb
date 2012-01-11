@@ -23,7 +23,7 @@
 	<div class="rightcol narrowcol">
 	  
 	  <%- if show_questionnaire %>
-	    <%= render :partial => 'shared/questionnaire', :locals => { :subject => @problem } %>
+	    <%= render :partial => "shared/#{show_questionnaire}", :locals => { :subject => @problem } %>
 	  <%- end %>
 	  
 		<h3>Initial problem</h3>

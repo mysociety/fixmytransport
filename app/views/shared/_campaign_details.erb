@@ -113,7 +113,7 @@
 	<div class="leftcol widecol">
 
       <%- if show_questionnaire %>
-          <%= render :partial => 'shared/questionnaire', :locals => {:subject => @campaign }%>
+          <%= render :partial => "shared/#{show_questionnaire}", :locals => {:subject => @campaign }%>
 		  <%- else %>
         <%- if initiator_view(@campaign) %>
           <%= render :partial => "campaigns/initiator_buttons" %>

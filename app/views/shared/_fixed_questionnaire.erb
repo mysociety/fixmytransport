@@ -1,0 +1,28 @@
+<div class="questionnaire">
+	<h2 class="font-1"><%= t('questionnaires.creator_fixed.thanks_title') %></h2>
+	<div class="questionnaire-inner">
+
+<%- form_tag(questionnaire_fixed_path, { :id => 'questionnaire-form' }) do %>
+  <%= raw hidden_field_tag :id, @issue.id %>
+  <%= raw hidden_field_tag :type, @issue.class.to_s %>
+  <p>
+  <%= t('questionnaires.creator_fixed.instructions') %>
+  </p>
+  <fieldset>
+    <%- if @errors && @errors[:ever_reported] %>
+      <div class='error error-text'>
+        <%= @errors[:ever_reported] %>
+      </div>
+    <br/>
+    <%- end %>
+    <%= raw radio_button_tag :ever_reported, "yes", (params[:ever_reported] == 'yes')%>
+    <%= raw label_tag('ever_reported_yes', raw(t('questionnaires.show.ever_reported_yes'))) %>
+    <%= raw radio_button_tag :ever_reported, "no", (params[:ever_reported] == 'no') %>
+    <%= raw label_tag('ever_reported_no', raw(t('questionnaires.show.ever_reported_no'))) %>
+  </fieldset>
+
+  <button type="submit" id="questionnaire_submit" type="submit" value="Submit" name="commit" class="button"><%= t('questionnaires.creator_fixed.submit')%></button>
+<%- end %>
+<div class="clear"></div>
+  </div>
+</div>
