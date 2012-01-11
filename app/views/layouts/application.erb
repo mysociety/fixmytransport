@@ -53,13 +53,27 @@
 					<li><a href="<%= about_url %>"><%= t('shared.header.about') %></a></li>
 					<li><a href="<%= feedback_url(:url => request.request_uri) %>"><%= t('shared.header.feedback') %></a></li>
 				</ul>
-				
+
         <a id="logo" href="<%= root_url %>">FixMyTransport</a>
 
 				<%- if current_user %>
-				<p id="member-info"><%= t('shared.header.hi')%> <a href="<%= profile_path(current_user) %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>"><%= t('shared.login.sign_out')%></a></p>
+				<p id="member-info">
+				  <%= t('shared.header.hi')%>
+				  <a href="<%= profile_path(current_user) %>">
+				    <%= current_user.name %></a>.
+				  <%- if @no_redirect_on_logout %>
+				    <a href="<%= logout_path() %>">
+				  <%- else %>
+				    <a href="<%= logout_path(:redirect => request.request_uri) %>">
+				  <%- end %>
+				    <%= t('shared.login.sign_out')%>
+				  </a>
+				</p>
 				<%- else %>
-				<p id="member-info"><a class="auth" href="<%= login_path(:redirect => request.request_uri) %>" rel="nofollow"><%= t('shared.login.sign_in')%></a></p>
+				<p id="member-info">
+				  <a class="auth" href="<%= login_path(:redirect => request.request_uri) %>" rel="nofollow">
+				  <%= t('shared.login.sign_in')%></a>
+				</p>
 				<%- end %>
 			</div>
 
@@ -86,7 +100,7 @@
 		<%= raw main_js_link %>
 		<!--[if lte IE 8]><%= raw javascript_include_tag((minify(['ie']) + ['jquery.ifixpng2.min']), :charset => 'utf-8') %><![endif]-->
 		<%= render :partial => 'shared/tracking' %>
-	  
-  
+
+
 	</body>
 </html>

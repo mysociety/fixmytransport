@@ -135,7 +135,11 @@ class ApplicationController < ActionController::Base
 
   # filter method for requiring that the campaign initiator be logged in
   def require_campaign_initiator(allow_expert=false)
-    return true if current_user && current_user == @campaign.initiator
+    if current_user && current_user == @campaign.initiator
+      # set a flag so that if the user logs out here, we don't try and bring them back
+      @no_redirect_on_logout = true
+      return true
+    end
     if allow_expert
       return true if current_user && current_user.is_expert?
     end
@@ -572,7 +576,7 @@ class ApplicationController < ActionController::Base
       return commented_url(comment.commented)
     end
   end
-  
+
   # wrapper for easier access to method from controller specs
   def commented_url(commented)
     @template.commented_url(commented)

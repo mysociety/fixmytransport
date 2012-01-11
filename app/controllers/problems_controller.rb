@@ -136,6 +136,8 @@ class ProblemsController < ApplicationController
       flash[:notice] = t('problems.convert.thanks')
       redirect_to problem_url(@problem) and return
     end
+    # set a flag so that if the user logs out here, we don't try and bring them back
+    @no_redirect_on_logout = true
   end
 
   def add_comment

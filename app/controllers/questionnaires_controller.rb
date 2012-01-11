@@ -131,6 +131,8 @@ class QuestionnairesController < ApplicationController
       redirect_to root_url
       return
     end
+    # set a flag that we don't want to redirect here on logout
+    @no_redirect_on_logout = true
   end
 
   # N.B. logs in the questionnaire user if valid questionnaire found
@@ -161,6 +163,8 @@ class QuestionnairesController < ApplicationController
     end
     # make sure the current user is set as we've just created or changed the user session
     current_user(refresh=true)
+    # set a flag that we don't want to redirect here on logout
+    @no_redirect_on_logout = true
   end
 
   # set up the variables needed to display the questionnaire
