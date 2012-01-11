@@ -1,0 +1,21 @@
+en:
+  models:
+    stop_area_type:
+      station:
+        one: station
+        other: stations      
+      bus_station: 
+        one: bus station
+        other: bus stations
+      terminal:
+        one: terminal
+        other: terminals
+      ferry_terminal:
+        one: ferry terminal
+        other: ferry terminals
+      stop_area: 
+        one: stop area
+        other: stop areas
+      pretty_stop_area:
+        one: station or terminal
+        other: stations or terminals

@@ -65,4 +65,35 @@ class StopAreaType < ActiveRecord::Base
     ['area_type in (?)', [codes]]
   end
 
+  # returns :singular, :plural (and, if available, :short, which was handy for tab label)
+  def self.generic_name_for_type(code = :unknown)
+    if StopAreaType.station_types.include?(code)
+      return {
+        :singular => I18n.translate('models.stop_area_type.station', :count => 1 ),
+        :plural => I18n.translate('models.stop_area_type.station', :count => 2 )
+      }
+    elsif StopAreaType.bus_station_types.include?(code)
+      return {
+        :singular => I18n.translate('models.stop_area_type.bus_station', :count => 1 ),
+        :plural => I18n.translate('models.stop_area_type.bus_station', :count => 2 )
+      }
+    elsif StopAreaType.ferry_terminal_types.include?(code)
+      return {
+        :singular => I18n.translate('models.stop_area_type.ferry_terminal', :count => 1 ),
+        :plural => I18n.translate('models.stop_area_type.ferry_terminal', :count => 2 ),
+        :short => I18n.translate('models.stop_area_type.terminal', :count => 2 )
+      }
+    elsif code == :pretty_unknown
+      return {
+        :singular => I18n.translate('models.stop_area_type.pretty_stop_area', :count => 1 ),
+        :plural => I18n.translate('models.stop_area_type.pretty_stop_area', :count => 2 )
+      }
+    else
+      return {
+        :singular => I18n.translate('models.stop_area_type.stop_area', :count => 1 ),
+        :plural => I18n.translate('models.stop_area_type.stop_area', :count => 2 )
+      }
+    end
+  end
+  
 end

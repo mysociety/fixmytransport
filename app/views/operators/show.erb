@@ -1,48 +1,87 @@
+<script type="text/javascript">
+  /* force tabs to load whole page: avoids complexity of restricting all repagination links to each tab */
+  $(function() {
+    $('#operator-tabs').tabs({
+        select: function(event, ui) {
+            var url = $.data(ui.tab, 'load.tabs');
+            if( url ) {
+                location.href = url;
+                return false;
+            }
+            return true;
+        }
+    });
+  })
+</script>
+
 <div id="banner">
   <a id="home" href="/">FixMyTransport</a>
-	<div class="container">
-		<h1 class="operator-name"><%= @operator.name %></h1>
-	</div>
+  <div class="container">
+    <h1 class="operator-name"><%= @title %></h1>
+  </div>
 </div>
+<%- if @operator.transport_mode %>
+  <div id="greybanner">
+    <div class="container">
+      <%= raw @transport_mode_and_link %>
+    </div>
+  </div>
+<%- end %>
+<div id="main-content" class="container operators has-tabs">  
+    </p>
+  <p>
+    <%= raw @banner_text %>
+  </p>
 
-<div id="main-content" class="container operators has-tabs">
-<a id="operator-feedback-link" href="<%= feedback_url(:url => CGI.escape(request.request_uri), :operator_id => @operator.id) %>" rel="nofollow"><%= t('route_operators.show.information_wrong') %></a>
-	<div id='operator-tabs' class='ui-tabs ui-widget ui-content ui-corner-all'>
-		<ul id="tabs-main-nav" class='font-1 operator-tabs-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
-			<%- if @route_count != 0  %>
-			<li id="route-tab" class='ui-state-default ui-corner-top ui-tabs-selected ui-state-active'>
-				<a href="#operator-tabs-routes"><%= t('route_operators.show.routes_header')%><span class="num"><%= @route_count %></span></a>
-			</li>
-			<%- end %>
-			<%- if @station_count != 0 %>
-	        <li id="area-tab" class='ui-state-default ui-corner-top'>
-	          <a href="#operator-tabs-areas"><%= t('route_operators.show.stations_header')%><span class="num"><%= @station_count %></span></a>
-	        </li>
-	<%- end %>
-	    </ul>
-		<div id='operator-tabs-routes' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
-			<%- if @route_count != 0  %>
-			  <h3><%= t('route_operators.show.operates_routes', :operator => @operator.name, :count => @route_count) %></h3>
-			  <ul class='route-links'>
-			   <%- @routes.each do |route| %>
-			      <li>
-			        <a href="<%= "/routes/#{route.slug.scope}/#{route.slug.to_friendly_id}"%>"><%= route.description_with_inactive %></a>
-			      </li>
-			   <%- end %>
-			  </ul>
-			<%- end %>
-		</div>
-		<div id='operator-tabs-areas' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
-			<%- if @station_count != 0 %>
-			  <h3><%= t('route_operators.show.is_responsible_for_stations', :operator => @operator.name, :count => @station_count) %></h3>
-			  <ul class='route-links'>
-			    <%- @stations.each do |station| %>
-			      <li>
-			        <a href="<%= "/stations/#{station.slug.scope}/#{station.slug.to_friendly_id}" %>"><%= station.name_with_inactive %></a>
-			      </li>
-			    <%- end %>
-			  </ul>
-			<%- end %>
-		</div>
-	</div>
+  <div id='operator-tabs' class='ui-tabs ui-widget ui-content ui-corner-all'>
+    <ul id="tabs-main-nav" class='font-1 operator-tabs-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+      <li id="problem-tab" class='ui-state-default ui-corner-top <%- if @current_tab == :issues %>ui-tabs-selected ui-state-active<%-end %>'>
+        <a href="<%- if @current_tab == :issues %>#operator-tabs-current<%- else %><%= main_url(issues_operator_path(@operator)) %><%- end %>"><%= t('route_operators.show.issues_header')%><span class="num"><%= @issue_count %></span></a>
+      </li>
+      <%- if @route_count > 0 %>
+        <li id="route-tab" class='ui-state-default ui-corner-top <%- if @current_tab == :routes %>ui-tabs-selected ui-state-active<%-end %>'>
+          <a href="<%- if @current_tab == :routes %>#operator-tabs-current<%- else %><%= main_url(routes_operator_path(@operator)) %><%- end %>"><%= t('route_operators.show.routes_header')%><span class="num"><%= @route_count %></span></a>
+        </li>
+      <%- end %>
+      <%- if @station_count > 0 %>
+        <li id="area-tab" class='ui-state-default ui-corner-top <%- if @current_tab == :stations %>ui-tabs-selected ui-state-active<%-end %>'>
+          <a href="<%- if @current_tab == :stations %>#operator-tabs-current<%- else %><%= main_url(stations_operator_path(@operator)) %><%- end %>"><%= @station_type_descriptions[:short].upcase %><span class="num"><%= @station_count %></span></a>
+        </li>
+      <%- end %>
+    </ul>
+    <div id='operator-tabs-current' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
+      <%- if @current_tab == :routes %>
+        <%= will_paginate @routes %>
+        <ul class="route-links">
+          <%- @routes.each do |route| %>
+            <li>
+              <a href="<%= "/routes/#{route.slug.scope}/#{route.slug.to_friendly_id}"%>"><%= route.description_with_inactive %></a>
+            </li>
+          <%- end %>
+        </ul>
+        <%= will_paginate @routes %>
+      <%- elsif @current_tab == :stations %>
+        <%= will_paginate @stations %>
+        <ul class="route-links route-links-large">
+          <%- @stations.each do |station| %>
+            <li>
+              <a href="<%= "/stations/#{station.slug.scope}/#{station.slug.to_friendly_id}"%>"><%= station.name_with_inactive %></a>
+            </li>
+          <%- end %>
+        </ul>
+        <%= will_paginate @stations %>
+      <%- elsif @current_tab == :issues %>
+        <%- if @issue_count != 0 %>
+          <%= will_paginate @issues, :params => { :action => :issues } %>
+          <ul class="issues-list widecol">
+            <%= render :partial => "shared/issue", :collection => @issues, :locals => {:context => :issue_list } %>
+          </ul>
+          <%= will_paginate @issues, :params => { :action => :issues } %>
+        <%- end %>
+      <%- end %>
+    </div>    
+  </div>
+  <%- if @current_tab == :routes || @current_tab == :stations %>
+    <a id="operator-feedback-link" href="<%= feedback_url(:url => CGI.escape(request.request_uri), :operator_id => @operator.id) %>" rel="nofollow"><%= t('route_operators.show.information_wrong') %></a>
+  <%- end %>
 </div>

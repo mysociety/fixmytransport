@@ -1904,8 +1904,8 @@ ul.route-links {
 ul#large-ul,
 ul.route-links {
 	width:700px;
-
 }
+
 	ol#large-ol li,
 	ul#large-ul li,
 	ul.route-links li {
@@ -1947,6 +1947,10 @@ ul.route-links {
 		    -moz-border-radius: 20px;
 		    -webkit-border-radius: 20px;
 		}
+
+ul.route-links-large {
+  font-size: 1.1em;
+}
 
 /*===[Find Stop Page]===*/
 #find-stop-container {
@@ -2251,6 +2255,38 @@ body.facebook-canvas .button {
 }
 .geolocate-done { /* spinner removed */
   padding-left: 36px;
+}
+
+/*===[ some specific fixes for operator'ds pages problems/campaigns issues ]===*/
+#main-content #operator-tabs .operator-notice {
+  color: #333;
+}
+#main-content #operator-tabs ul.issues-list,
+#main-content #operator-tabs p {
+    color: #333;
+}
+#main-content #operator-tabs ul.issues-list dl{
+  font-size: 0.8em;
+}
+#main-content #operator-tabs ul.issues-list a,
+#main-content #operator-tabs p a {
+  color: #048FC2;
+}
+/*===[operator tabs override normal color settings, restore them]===*/
+
+#operator-tabs .pagination {
+  color: #333;
+  font-size: 0.9em; 
+}
+#operator-tabs .pagination a {
+  color: #048FC2;
+  text-decoration: none;
+}
+
+/* in extremis: stop huge/broken photos breaking the list */
+#main-content ul.issues-list img{
+  max-width: 100px;
+  max-height: 100px;
 }
 
 /*===[ Narrow screens]===*/
@@ -3254,7 +3290,11 @@ body.facebook-canvas .button {
       padding-right: 33px;
         width: auto;
     }
-
+    
+    ul.route-links {
+    	width:inherit;
+    }
+    
     /*===[Share by email]=== */
     #share-by-email textarea,
     #share-by-email button{

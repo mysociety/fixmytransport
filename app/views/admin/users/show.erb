@@ -120,7 +120,7 @@
   <ul class="admin-simple-list">
     <%- @user.initiated_campaigns.visible.each do |campaign| %>
       <li>
-        <%= link_to(t('admin.live'), campaign_url(campaign), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>
+        <%= link_to(t('admin.live'), main_url(campaign_path(campaign)), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>
         <%= link_to(MySociety::Format.ucfirst(campaign.title), admin_url(problem_path(campaign.problem))) %>
       </li>
     <%- end %>
@@ -132,7 +132,7 @@
   <ul class="admin-simple-list">
     <%- @user.campaigns.visible.each do |campaign| %>
       <li>
-        <%= link_to(t('admin.live'), campaign_url(campaign), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>
+        <%= link_to(t('admin.live'), main_url(campaign_path(campaign)), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>
         <%= link_to(MySociety::Format.ucfirst(campaign.title), admin_url(problem_path(campaign.problem))) %>
       </li>
     <%- end %>
@@ -144,7 +144,7 @@
   <ul class="admin-simple-list">
     <%- @user.problems.visible.each do |problem| %>
       <li>
-        <%= link_to(t('admin.live'), problem_url(problem), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>
+        <%= link_to(t('admin.live'), main_url(problem_path(problem)), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>
         <%= link_to(problem.subject, admin_url(problem_path(problem))) %>
       </li>
     <%- end %>

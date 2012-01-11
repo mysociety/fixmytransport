@@ -4,7 +4,10 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'problems', :action => 'frontpage'
 
   # operator pages
-  map.resources :operators, :only => [:show]
+  map.resources :operators, :only => [:show],
+                            :member => { :issues => [:get],
+                                         :routes => [:get],
+                                         :stations => [:get]}
 
   # subscriptions
   map.confirm_unsubscribe '/u/:email_token', :action => 'confirm_unsubscribe',

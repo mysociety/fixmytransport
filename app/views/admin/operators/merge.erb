@@ -15,7 +15,7 @@
     <%-@operators.each do |operator| %>
       <tr class='<%= cycle("odd", "even") %>'>
         <td>
-          <%= link_to(t('admin.live'), operator_url(operator), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>
+          <%= link_to(t('admin.live'), main_url(operator_path(operator)), {:class => 'admin-small-offsite-link', :target => '_blank'}) %>
           <%= link_to operator.id, admin_url(admin_operator_path(operator)) %>
         </td>
         <td class="easy-read-link">

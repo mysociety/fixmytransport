@@ -380,6 +380,12 @@ class Problem < ActiveRecord::Base
         location_clause = " AND problems.location_id = #{location_id}
                             AND problems.location_type = #{location_class} "
       end
+    elsif options[:single_operator]
+      operator = options[:single_operator]
+      extra_tables = ", responsibilities"
+      location_clause = "AND problems.id = responsibilities.problem_id
+                         AND responsibilities.organization_type = 'Operator'
+                         AND responsibilities.organization_id = #{operator.id} "
     else
       extra_tables = ''
       location_clause = ""
