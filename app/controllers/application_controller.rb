@@ -84,12 +84,12 @@ class ApplicationController < ActionController::Base
     if current_user
       store_location
       respond_to do |format|
-        format.html do 
+        format.html do
           flash[:notice] = t('shared.login.must_be_logged_out')
           redirect_to root_url
           return false
         end
-        format.json do 
+        format.json do
           @json = {:errors => {}}
           @json[:errors][:base] = t('shared.login.modal_must_be_logged_out')
           @json[:success] = false
@@ -160,7 +160,7 @@ class ApplicationController < ActionController::Base
       session[:return_to] = request.request_uri
     end
   end
-  
+
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
@@ -212,6 +212,8 @@ class ApplicationController < ActionController::Base
     data = YAML::load(yaml_data)
   end
 
+  # Store data in the session about an incomplete action that the user
+  # will need to log in to complete
   def save_post_login_action_to_session
     if post_login_action_data = get_action_data(params)
       session[:next_action] = params[:next_action]
@@ -221,6 +223,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Move data about an incomplete action (that the user will need to log in to
+  # complete) from the session to the database. Store any model as unconfirmed,
+  # and link it to an action confirmation model. Should be called when a user initiates
+  # some login action that may be completed in another session as it has an email step
+  # e.g. account creation, password reset
   def save_post_login_action_to_database(user)
     if post_login_action_data = get_action_data(session)
       session.delete(:next_action)
@@ -239,7 +246,7 @@ class ApplicationController < ActionController::Base
         comment_data = { :text => post_login_action_data[:text],
                          :mark_fixed => post_login_action_data[:mark_fixed],
                          :mark_open => post_login_action_data[:mark_open],
-                         :model => commented, 
+                         :model => commented,
                          :confirmed => false,
                          :text_encoded => post_login_action_data[:text_encoded] }
         comment = Comment.create_from_hash(comment_data, user, token=user.perishable_token)
@@ -250,20 +257,22 @@ class ApplicationController < ActionController::Base
         confirmation_target = problem
         return_model = problem
       end
-      ActionConfirmation.create!(:user => user, 
+      ActionConfirmation.create!(:user => user,
                                  :token => user.perishable_token,
                                  :target => confirmation_target)
       return return_model
     else
-      # just add an action confirmation without target so the user can log in with 
+      # just add an action confirmation without target so the user can log in with
       # their current token
       ActionConfirmation.create!(:user => user,
                                  :token => user.perishable_token)
       return nil
     end
-    
+
   end
 
+  # Get a string from the session data about an incomplete action that can be
+  # used to tell the user why they should go and click on the link in their email
   def post_login_action_string
     if post_login_action_data = get_action_data(session)
       case post_login_action_data[:action]
@@ -279,6 +288,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Get a string from the session data about an incomplete action that can be
+  # used to tell the user we'll hold on to their content while they go and check
+  # their email
   def post_login_action_worry
     if post_login_action_data = get_action_data(session)
       case post_login_action_data[:action]
@@ -294,6 +306,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Unserialize the data from the session about an incomplete action
   def get_action_data(data_hash)
     if data_hash[:next_action]
       next_action_data = string_to_data(data_hash[:next_action])
@@ -304,6 +317,8 @@ class ApplicationController < ActionController::Base
     return nil
   end
 
+  # If a user started an action anonymously that requires being logged in, and then
+  # logged in, get their action information out of the session, and complete the action.
   def perform_post_login_action
     current_user(refresh=true)
     if post_login_action_data = get_action_data(session)
@@ -341,7 +356,11 @@ class ApplicationController < ActionController::Base
       session.delete(:next_action)
     end
   end
-  
+
+  # If a user started an action anonmyously that requires being logged-in and then logged in
+  # in a way that we assume they may complete in a separate session as they have an
+  # email confirmation step (e.g. account creation, password reset),
+  # complete their initial action.
   # a false return value indicates that a redirect has been performed
   def perform_saved_login_action
     case @action_confirmation.target
@@ -600,11 +619,11 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
+
   def recognized_devices
     ['android', 'iphone', 'ipad']
   end
-  
+
   # later, more thorough user-agent sniffing would be appropriate
   # or idealy just pick it up from, e.g., request.headers["X-device-class"], set by varnish
   # sets up @user_device and @is_mobile
@@ -623,7 +642,7 @@ class ApplicationController < ActionController::Base
       response.headers['Vary'] = 'User-Agent'
       @user_device = :default_device
       @is_mobile = false
-      user_agent =  request.env['HTTP_USER_AGENT'].downcase 
+      user_agent =  request.env['HTTP_USER_AGENT'].downcase
       mobile_devices.each do |keyword| # for now, just lazy search for keywords; later may be more complex
         if user_agent.index(keyword)
           @user_device = keyword
@@ -633,7 +652,7 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
+
   def load_user_using_action_confirmation_token
     @action_confirmation = ActionConfirmation.find_by_token(params[:email_token], :include => :user)
     if @action_confirmation
@@ -652,5 +671,5 @@ class ApplicationController < ActionController::Base
       redirect_to root_url
     end
   end
-  
+
 end
