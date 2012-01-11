@@ -174,6 +174,8 @@ describe LocationsController do
                                   :mark_fixed => nil,
                                   :mark_open => nil,
                                   :skip_name_validation= => true,
+                                  :user_marks_as_fixed? => false,
+                                  :needs_questionnaire? => false,
                                   :status= => true)
     instance.stub!(:comments).and_return(mock('comments', :build => comment))
     comment
@@ -184,11 +186,9 @@ describe LocationsController do
     before do
       @mock_user = mock_model(User)
       @mock_region = mock_model(Region)
-      @mock_route = mock_model(Route, :region => @mock_region)
-      Route.stub!(:find).and_return(@mock_route)
-      @mock_comment = make_mock_comment('Route', @mock_route)
+      @mock_model = mock_model(Route, :region => @mock_region)
+      Route.stub!(:find).and_return(@mock_model)
       @expected_notice = "Please sign in or create an account to add your comment to this route"
-      @expected_redirect = route_url(@mock_region, @mock_route)
     end
 
     def make_request params
@@ -212,11 +212,9 @@ describe LocationsController do
     before do
       @mock_user = mock_model(User)
       @mock_locality = mock_model(Locality)
-      @mock_stop = mock_model(Stop, :locality => @mock_locality)
-      Stop.stub!(:find).and_return(@mock_stop)
-      @mock_comment = make_mock_comment('Stop', @mock_stop)
+      @mock_model = mock_model(Stop, :locality => @mock_locality)
+      Stop.stub!(:find).and_return(@mock_model)
       @expected_notice = "Please sign in or create an account to add your comment to this stop"
-      @expected_redirect = stop_url(@mock_locality, @mock_stop)
     end
 
     def make_request params
@@ -239,11 +237,9 @@ describe LocationsController do
     before do
       @mock_user = mock_model(User)
       @mock_locality = mock_model(Locality)
-      @mock_stop_area = mock_model(StopArea, :locality => @mock_locality, :area_type => 'GRLS')
-      StopArea.stub!(:find).and_return(@mock_stop_area)
-      @mock_comment = make_mock_comment('StopArea', @mock_stop_area)
+      @mock_model = mock_model(StopArea, :locality => @mock_locality, :area_type => 'GRLS')
+      StopArea.stub!(:find).and_return(@mock_model)
       @expected_notice = "Please sign in or create an account to add your comment to this station"
-      @expected_redirect = station_url(@mock_locality, @mock_stop_area)
     end
 
     def make_request params
@@ -266,11 +262,9 @@ describe LocationsController do
 
     before do
       @mock_user = mock_model(User)
-      @mock_sub_route = mock_model(SubRoute)
-      SubRoute.stub!(:find).and_return(@mock_sub_route)
-      @mock_comment = make_mock_comment('SubRoute', @mock_sub_route)
+      @mock_model = mock_model(SubRoute)
+      SubRoute.stub!(:find).and_return(@mock_model)
       @expected_notice = "Please sign in or create an account to add your comment to this route"
-      @expected_redirect = sub_route_url(@mock_sub_route)
     end
 
     def make_request params

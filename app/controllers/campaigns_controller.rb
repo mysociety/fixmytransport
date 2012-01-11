@@ -13,7 +13,6 @@ class CampaignsController < ApplicationController
     @commentable = @campaign
     @next_action_join = data_to_string({ :action => :join_campaign,
                                          :id => @campaign.id,
-                                         :redirect => campaign_path(@campaign),
                                          :notice => t('campaigns.show.sign_in_to_join') })
     @title = @campaign.title
     @campaign.campaign_photos.build({})
@@ -51,7 +50,6 @@ class CampaignsController < ApplicationController
         # store the next action to the session
         join_data = { :action => :join_campaign,
                       :id => @campaign.id,
-                      :redirect => campaign_path(@campaign),
                       :notice => t('campaigns.show.sign_in_to_join') }
         session[:next_action] = data_to_string(join_data)
         respond_to do |format|

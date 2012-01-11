@@ -168,6 +168,25 @@ module SharedBehaviours
 
     shared_examples_for "an action that receives a POSTed comment" do
 
+      before do
+        @mock_comment = mock_model(Comment, :save => true,
+                                            :valid? => true,
+                                            :user= => true,
+                                            :commented_id => @mock_model.id,
+                                            :commented_type => @mock_model.class.to_s,
+                                            :commented => @mock_model,
+                                            :text => 'comment text',
+                                            :confirm! => true,
+                                            :mark_fixed => nil,
+                                            :mark_open => nil,
+                                            :skip_name_validation= => true,
+                                            :user_marks_as_fixed? => false,
+                                            :needs_questionnaire? => false,
+                                            :old_commented_status_code => 3,
+                                            :status= => true)
+        @mock_model.stub!(:comments).and_return(mock('comments', :build => @mock_comment))
+      end
+
       describe 'if there is no current user' do
 
         it 'should validate the comment  skipping user name validation' do
@@ -192,7 +211,6 @@ module SharedBehaviours
             text = ActiveSupport::Base64.encode64(@mock_comment.text)
             controller.should_receive(:data_to_string).with({ :notice => @expected_notice,
                                                               :action => :add_comment,
-                                                              :redirect => @expected_redirect,
                                                               :text_encoded => true,
                                                               :mark_fixed => @mock_comment.mark_fixed,
                                                               :mark_open => @mock_comment.mark_open,
@@ -278,14 +296,61 @@ module SharedBehaviours
 
           describe 'when handling an html request' do
 
-            it 'should redirect to the commented url' do
-              make_request(default_params)
-              response.should redirect_to @expected_redirect
+            describe 'if the comment should prompt a questionnaire (i.e. marks the problem as fixed
+                      when the user has not answered the question about whether they have ever reported
+                      a problem before' do
+
+              before do
+                @mock_comment.stub!(:needs_questionnaire?).and_return(true)
+              end
+
+              it 'should store the old status of the commented model in the session flash' do
+                make_request(default_params)
+                flash[:old_status_code].should == 3
+              end
+
+              it 'should redirect to the problem fixed questionnaire url' do
+                make_request(default_params)
+                response.should redirect_to questionnaire_fixed_url(:id => @mock_comment.commented.id,
+                                                                    :type => @mock_comment.commented.class.to_s)
+              end
+
+            end
+
+            describe 'if the comment should not prompt a questionnaire' do
+
+              it 'should redirect to the commented url' do
+                make_request(default_params)
+                response.should redirect_to controller.send(:commented_url, @mock_comment.commented)
+              end
+
             end
 
           end
 
           describe 'when handling a json request' do
+
+            describe 'if the comment should prompt a questionnaire (i.e. marks the problem as fixed
+                      when the user has not answered the question about whether they have ever reported
+                      a problem before' do
+
+              before do
+                @mock_comment.stub!(:needs_questionnaire?).and_return(true)
+              end
+
+              it 'should store the old status of the commented model in the session flash' do
+                make_request(default_params.update(:format => 'json'))
+                flash[:old_status_code].should == 3
+              end
+
+              it 'should return a redirect to the questionnaire in the json hash' do
+                make_request(default_params.update(:format => 'json'))
+                json_hash = JSON.parse(response.body)
+                json_hash['redirect'].should == questionnaire_fixed_url(:id => @mock_comment.commented.id,
+                                                                        :type => @mock_comment.commented.class.to_s)
+              end
+
+            end
 
             it 'should return a json hash containing success and comment html' do
               make_request(default_params.update(:format => 'json'))

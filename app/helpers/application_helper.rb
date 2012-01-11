@@ -421,7 +421,7 @@ module ApplicationHelper
     when Route, Stop, StopArea, SubRoute
       return location_url(commentable)
     else
-      raise "Unhandled commentable type in commentable_url: #{commentable.type}"
+      raise "Unhandled commentable type in commentable_url: #{commentable.class.to_s}"
     end
   end
 

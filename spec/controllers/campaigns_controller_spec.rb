@@ -335,26 +335,10 @@ describe CampaignsController do
 
     before do
       @mock_user = mock_model(User)
-      @mock_campaign = mock_model(Campaign, :visible? => true,
+      @mock_model = mock_model(Campaign, :visible? => true,
                                             :editable? => true)
-      Campaign.stub!(:find).and_return(@mock_campaign)
-      @mock_comment = mock_model(Comment, :save => true,
-                                          :valid? => true,
-                                          :user= => true,
-                                          :commented_id => 55,
-                                          :commented_type => 'Campaign',
-                                          :commented => @mock_campaign,
-                                          :text => 'comment text',
-                                          :confirm! => true,
-                                          :mark_fixed => nil, 
-                                          :mark_open => nil,
-                                          :skip_name_validation= => true,
-                                          :campaign_events => [],
-                                          :user_marks_as_fixed? => false,
-                                          :status= => true)
-      @mock_campaign.stub!(:comments).and_return(mock('comments', :build => @mock_comment))
+      Campaign.stub!(:find).and_return(@mock_model)
       @expected_notice = "Please sign in or create an account to add your comment to this issue"
-      @expected_redirect = campaign_url(@mock_campaign)
     end
 
     def make_request params

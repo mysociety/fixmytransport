@@ -327,31 +327,30 @@ class ApplicationController < ActionController::Base
       when :join_campaign
         campaign = Campaign.find(id)
         campaign.add_supporter(current_user, confirmed=true)
+        session[:return_to] = campaign_path(campaign)
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
         commented = commented_type.constantize.find(id)
-        comment_data = { :model => commented, 
+        comment_data = { :model => commented,
                          :text => post_login_action_data[:text],
                          :mark_fixed => post_login_action_data[:mark_fixed],
                          :mark_open => post_login_action_data[:mark_open],
                          :confirmed => true,
                          :text_encoded => post_login_action_data[:text_encoded] }
-        
-        Comment.create_from_hash(comment_data, current_user)
+        comment = Comment.create_from_hash(comment_data, current_user)
         flash[:notice] = t('shared.add_comment.thanks_for_comment')
+        next_url = get_comment_next_url(comment)
+        respond_to do |format|
+          format.html{ session[:return_to] = next_url }
+          format.json{ @json[:redirect] = next_url }
+        end
       when :create_problem
         problem = Problem.create_from_hash(post_login_action_data, current_user)
+        next_url = convert_problem_url(problem)
         respond_to do |format|
-          format.html do
-            session[:return_to] = convert_problem_url(problem)
-          end
-          format.json do
-            @json[:redirect] = convert_problem_url(problem)
-          end
+          format.html{ session[:return_to] = next_url }
+          format.json{ @json[:redirect] = next_url }
         end
-      end
-      if post_login_action_data[:redirect]
-        session[:return_to] = post_login_action_data[:redirect]
       end
       session.delete(:next_action)
     end
@@ -376,7 +375,7 @@ class ApplicationController < ActionController::Base
         return false
       else
         comment.confirm!
-        session[:return_to] = @template.commented_url(comment.commented)
+        session[:return_to] = get_comment_next_url(comment)
         if self.controller_name == "password_resets"
           flash[:notice] = t('password_resets.update.successfully_confirmed_comment')
         else
@@ -486,20 +485,26 @@ class ApplicationController < ActionController::Base
     if @comment.valid?
       @comment.save
       @comment.confirm!
+      next_url = get_comment_next_url(@comment)
       respond_to do |format|
         format.html do
           flash[:notice] = t('shared.add_comment.thanks_for_comment')
-          redirect_to @template.commented_url(@comment.commented)
+          redirect_to next_url
         end
         format.json do
-          index = params[:last_thread_index].to_i + 1
-          comment_html = render_to_string :partial => "shared/comment",
-                                          :locals => { :comment => @comment,
-                                                       :index => index }
-          @json = { :success => true,
-                    :html => "<li>#{comment_html}</li>",
-                    :mark_fixed => @comment.mark_fixed,
-                    :mark_open => @comment.mark_open }
+          if @comment.needs_questionnaire?
+             @json = { :success => true,
+                       :redirect => next_url }
+          else
+            index = params[:last_thread_index].to_i + 1
+            comment_html = render_to_string :partial => "shared/comment",
+                                            :locals => { :comment => @comment,
+                                                        :index => index }
+            @json = { :success => true,
+                      :html => "<li>#{comment_html}</li>",
+                      :mark_fixed => @comment.mark_fixed,
+                      :mark_open => @comment.mark_open }
+          end
           render :json => @json
         end
       end
@@ -522,7 +527,6 @@ class ApplicationController < ActionController::Base
                        :text_encoded => true,
                        :mark_fixed => @comment.mark_fixed,
                        :mark_open => @comment.mark_open,
-                       :redirect => @template.commented_url(@comment.commented),
                        :notice => t('shared.add_comment.sign_in_to_comment',
                                     :commented_type => commented_type_description(@comment.commented)) }
       session[:next_action] = data_to_string(comment_data)
@@ -555,6 +559,23 @@ class ApplicationController < ActionController::Base
         render :json => @json
       end
     end
+  end
+
+  def get_comment_next_url(comment)
+    if comment.needs_questionnaire?
+      # store the old status code of the commented issue for use in the
+      # questionnaire
+      flash[:old_status_code] = comment.old_commented_status_code
+      return questionnaire_fixed_url(:id => comment.commented.id,
+                                     :type => comment.commented.class.to_s)
+    else
+      return commented_url(comment.commented)
+    end
+  end
+  
+  # wrapper for easier access to method from controller specs
+  def commented_url(commented)
+    @template.commented_url(commented)
   end
 
   def commented_type_description(commented)

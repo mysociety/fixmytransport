@@ -903,23 +903,9 @@ describe ProblemsController do
 
     before do
       @mock_user = mock_model(User)
-      @mock_problem = mock_model(Problem, :visible? => true)
-      Problem.stub!(:find).and_return(@mock_problem)
-      @mock_comment = mock_model(Comment, :save => true,
-                                          :valid? => true,
-                                          :user= => true,
-                                          :commented_id => 55,
-                                          :commented_type => 'Problem',
-                                          :commented => @mock_problem,
-                                          :text => 'comment text',
-                                          :confirm! => true,
-                                          :skip_name_validation= => true,
-                                          :mark_fixed => true,
-                                          :mark_open => true,
-                                          :status= => true)
-      @mock_problem.stub!(:comments).and_return(mock('comments', :build => @mock_comment))
+      @mock_model = mock_model(Problem, :visible? => true)
+      Problem.stub!(:find).and_return(@mock_model)
       @expected_notice = "Please sign in or create an account to add your comment to this problem report"
-      @expected_redirect = problem_url(@mock_problem)
     end
 
     def make_request params

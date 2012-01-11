@@ -55,6 +55,10 @@ class Comment < ActiveRecord::Base
     self.commented.is_a?(Problem) && self.user == self.commented.reporter && self.mark_fixed
   end
   
+  def needs_questionnaire?
+    self.user_marks_as_fixed? && !self.user.answered_ever_reported?
+  end
+  
   def confirm!
     return unless self.status == :new
     ActiveRecord::Base.transaction do
