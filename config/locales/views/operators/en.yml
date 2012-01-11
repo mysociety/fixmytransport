@@ -12,9 +12,9 @@ en:
         one: "%{operator} runs %{count} route."
         other: "%{operator} runs %{count} routes."
       is_responsible_for_stations:
-        zero: "%{operator} is not responsible for any stations."
-        one: "%{operator} is responsible for %{count} station."
-        other: "%{operator} is responsible for %{count} stations."
+        zero: "%{operator} is not responsible for any %{station_type}."
+        one: "%{operator} is responsible for %{count} %{station_type}."
+        other: "%{operator} is responsible for %{count} %{station_type}."
       issues_concerning:
         zero: "There are currently no issues concerning %{operator}."
         one: "%{count} issue concerning %{operator}."
@@ -24,4 +24,4 @@ en:
     routes:
       title: "%{operator} routes"
     stations:
-      title: "%{operator} stations"
+      title: "%{operator} %{station_type}"

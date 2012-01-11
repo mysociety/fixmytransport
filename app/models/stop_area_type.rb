@@ -65,4 +65,17 @@ class StopAreaType < ActiveRecord::Base
     ['area_type in (?)', [codes]]
   end
 
+  def self.generic_name_for_station(code, is_plural = false)
+    qty = is_plural ? 2 : 1
+    if StopAreaType.station_types.include?(code)
+      return I18n.translate('models.stop_area_type.station', :count => qty )
+    elsif StopAreaType.bus_station_types.include?(code)
+      return I18n.translate('bus_station', :count => qty )
+    elsif StopAreaType.ferry_terminal_types.include?(code)
+      return I18n.translate('ferry_terminal', :count => qty )
+    else
+      return I18n.translate('stop_area', :count => qty )
+    end
+  end
+  
 end

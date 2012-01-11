@@ -13,6 +13,7 @@ class OperatorsController < ApplicationController
                       :count => @issue_count)
     @station_count = find_station_count
     @route_count = find_route_count
+    setup_station_type_description
   end
   
   # Routes, issues and stations are all presented as tabs on the operator page
@@ -50,11 +51,11 @@ class OperatorsController < ApplicationController
                       :operator => "<a href='#{operator_url(@operator)}'>#{@operator.name}</a>", 
                       :count => @route_count)
     @station_count = find_station_count
+    setup_station_type_description
     render :show
   end
 
   def stations 
-    @title = t('route_operators.stations.title', :operator => @operator.name) 
     @current_tab = :stations
     setup_paginated_stations
     if @station_count == 0
@@ -63,10 +64,13 @@ class OperatorsController < ApplicationController
     else
       @issue_count = find_issue_count
     end
+    @route_count = find_route_count
+    setup_station_type_description
     @banner_text = t('route_operators.show.is_responsible_for_stations', 
                       :operator => "<a href='#{operator_url(@operator)}'>#{@operator.name}</a>", 
+                      :station_type => @station_count == 1 ? @station_type_description : @stations_type_description,
                       :count => @station_count)
-    @route_count = find_route_count
+    @title = t('route_operators.stations.title', :operator => @operator.name, :station_type => @stations_type_description) 
     render :show
   end
 
@@ -142,7 +146,7 @@ class OperatorsController < ApplicationController
         @station_count = find_station_count
         pager.total_entries = @station_count
       end
-    end    
+    end 
   end
   
   def find_route_count
@@ -172,4 +176,28 @@ class OperatorsController < ApplicationController
     end    
   end
   
+  # determine whether this operator has stations, bus stations, or ferry terminals: 
+  # call setup_station_type_description after everything else: we can avoid hitting the database again
+  # if we've already got stations, or if we know there aren't any to find
+  
+  def setup_station_type_description
+    if @station_count > 0
+      if ! @stations.nil? && @stations.size > 0
+        sample_station = @stations.first
+      else
+        sample_station = StopArea.first(:conditions => ["id in (SELECT stop_area_id 
+                                                                FROM stop_area_operators
+                                                                WHERE operator_id = #{@operator.id})"],
+                                        :order => 'name asc') # order cautiously ensures same result as "stations" tab
+      end
+      @station_type_description = StopAreaType.generic_name_for_station(sample_station.area_type, :is_plural => false)
+      @stations_type_description = StopAreaType.generic_name_for_station(sample_station.area_type, :is_plural => true)
+    else
+      @station_type_description = t('models.stop_area_type.stations_or_terminals', :count => 1)
+      @stations_type_description = t('models.stop_area_type.stations_or_terminals', :count => 2)
+    end
+    
+  end
+              
+      
 end

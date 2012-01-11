@@ -27,8 +27,8 @@
     </div>
   </div>
 <%- end %>
-<div id="main-content" class="container operators has-tabs">
-  
+<div id="main-content" class="container operators has-tabs">  
+    </p>
   <p>
     <%= raw @banner_text %>
   </p>
@@ -45,7 +45,7 @@
       <%- end %>
       <%- if @station_count > 0 %>
         <li id="area-tab" class='ui-state-default ui-corner-top <%- if @current_tab == :stations %>ui-tabs-selected ui-state-active<%-end %>'>
-          <a href="<%- if @current_tab == :stations %>#operator-tabs-current<%- else %><%= main_url(stations_operator_path(@operator)) %><%- end %>"><%= t('route_operators.show.stations_header')%><span class="num"><%= @station_count %></span></a>
+          <a href="<%- if @current_tab == :stations %>#operator-tabs-current<%- else %><%= main_url(stations_operator_path(@operator)) %><%- end %>"><%= @stations_type_description.upcase %><span class="num"><%= @station_count %></span></a>
         </li>
       <%- end %>
     </ul>
