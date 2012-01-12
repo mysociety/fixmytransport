@@ -23,7 +23,8 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, :case_sensitive => false, :unless => :skip_email_uniqueness_validation
   # Do not allow these attributes to be set by mass assignment
   attr_protected :password, :password_confirmation, :is_expert, :is_suspended,
-                 :can_admin_locations, :can_admin_users, :can_admin_issues, :can_admin_organizations
+                 :can_admin_locations, :can_admin_users, :can_admin_issues, :can_admin_organizations,
+                 :is_hidden
   has_many :assignments
   has_many :campaign_supporters, :foreign_key => :supporter_id
   has_many :campaigns, :through => :campaign_supporters

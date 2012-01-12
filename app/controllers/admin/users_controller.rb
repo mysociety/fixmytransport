@@ -29,7 +29,7 @@ class Admin::UsersController < Admin::AdminController
     @user = User.find(params[:id])
     if @user.update_attributes(params[:user])
       msgs = []
-      protected_attrs = [:is_suspended, :is_expert,
+      protected_attrs = [:is_suspended, :is_expert, :is_hidden,
                          :can_admin_locations, :can_admin_users, :can_admin_issues, :can_admin_organizations]
       protected_attrs.each do |attribute|
         @user.send("#{attribute}=".to_sym, params[:user][attribute] == '1'? true : false)
