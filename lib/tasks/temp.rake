@@ -1,23 +1,27 @@
 namespace :temp do
   
-  desc 'dump out list of problems'
-  task :dump_out_problem_with_desc => :environment do 
-  
-    i = 0  
-    Problem.confirmed.find_each() do |p|
-      i = i+1
-      puts ">>>#{p.id}\t#{p.created_at}\t#{p.status}\t#{p.transport_mode_text}\t#{p.subject}\t#{p.location.name}\t#{p.description}\n"
-    end
+  desc 'Unset the send_questionnaire flag for campaigns and problems reported fixed by the user'
+  task :unset_send_questionnaire => :environment do 
+    # only initiator can mark campaign as fixed. 
+    Campaign.connection.execute("UPDATE campaigns 
+                                 SET send_questionnaire = 'f'
+                                 WHERE status_code = #{Campaign.symbol_to_status_code[:fixed]}")
 
-  puts "\ntotal (confirmed) problems: #{i}\n"
-  end
-
-  desc 'Populate comment counter cache'
-  task :populate_comments_counter_cache => :environment do 
-    User.find_each do |user|
-      puts "#{user.id} #{user.comments.length}"
-      user.update_attribute(:comments_count, user.comments.length)
-    end
+    # problems where the reporter has been the one marking them as fixed
+    Problem.connection.execute("UPDATE problems 
+                                SET send_questionnaire = 'f' 
+                                WHERE status_code = #{Problem.symbol_to_status_code[:fixed]}
+                                      AND ((SELECT max(id) 
+                                           FROM comments
+                                           WHERE commented_type = 'Problem'
+                                           AND commented_id = problems.id
+                                           AND mark_fixed = 't') = 
+                                           (SELECT max(id) 
+                                            FROM comments
+                                            WHERE commented_type = 'Problem'
+                                            AND commented_id = problems.id
+                                            AND mark_fixed = 't'
+                                            AND user_id = problems.reporter_id))")
   end
   
 end
