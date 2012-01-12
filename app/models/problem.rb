@@ -28,9 +28,16 @@ class Problem < ActiveRecord::Base
     [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:fixed]]
   end
   
-  named_scope :confirmed, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
-  named_scope :visible, :conditions => ["status_code in (?) and campaign_id is null", Problem.visible_status_codes], :order => "confirmed_at desc"
-  named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
+  named_scope :confirmed, :conditions => ["problems.status_code = ?",
+                                          self.symbol_to_status_code[:confirmed]],
+                          :order => "confirmed_at desc"
+  named_scope :visible, :conditions => ["problems.status_code in (?) and campaign_id is null",
+                                        Problem.visible_status_codes],
+                        :order => "confirmed_at desc"
+  named_scope :unsent, :conditions => ['problems.sent_at is null'],
+                       :order => 'confirmed_at desc'
+  named_scope :sent, :conditions => ['problems.sent_at is not null'],
+                     :order => 'confirmed_at desc'
 
   has_paper_trail
 
@@ -448,6 +455,21 @@ class Problem < ActiveRecord::Base
   def self.unsendable
     confirmed.unsent.find(:all, :include => :responsibilities,
                                 :conditions => ['responsibilities.id is null'])
+  end
+
+  def self.needing_questionnaire(weeks_ago)
+    time_weeks_ago = Time.now - weeks_ago.weeks
+    self.visible.sent.find(:all, :conditions => ["problems.sent_at < ?
+                                                  AND send_questionnaire = ?
+                                                  AND ((SELECT max(completed_at)
+                                                        FROM questionnaires
+                                                        WHERE subject_type = 'Problem'
+                                                        AND subject_id = problems.id) < ?
+                                                       OR (SELECT max(completed_at)
+                                                        FROM questionnaires
+                                                        WHERE subject_type = 'Problem'
+                                                        AND subject_id = problems.id) is NULL)",
+                                                  time_weeks_ago, true, time_weeks_ago])
   end
 
 end

@@ -231,4 +231,19 @@ class Campaign < ActiveRecord::Base
     MySociety::Config.get('INCOMING_EMAIL_DOMAIN', 'localhost')
   end
 
+  def self.needing_questionnaire(weeks_ago)
+    time_weeks_ago = Time.now - weeks_ago.weeks
+    self.visible.sent.find(:all, :conditions => ["problems.sent_at < ?
+                                                  AND campaigns.send_questionnaire = ?
+                                                  AND ((SELECT max(completed_at)
+                                                        FROM questionnaires
+                                                        WHERE subject_type = 'Campaign'
+                                                        AND subject_id = campaigns.id) < ?
+                                                       OR (SELECT max(completed_at)
+                                                        FROM questionnaires
+                                                        WHERE subject_type = 'Campaign'
+                                                        AND subject_id = campaigns.id) is NULL)",
+                                                  time_weeks_ago, true, time_weeks_ago],
+                                  :include => :problem)
+  end
 end
