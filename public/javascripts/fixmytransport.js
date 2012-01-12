@@ -34,7 +34,7 @@ $(document).ready(function(){
    frontpageScroller(5000, 2000);
   }
 
-  /* Route and operator lists
+  /* Route lists
      ================================================== */
 
      function tabifyRouteLists() {
@@ -61,13 +61,6 @@ $(document).ready(function(){
          }
      }
 
-     function tabifyOperatorLists() {
-         if ($('#operator-tabs').length > 0){
-           $("#operator-tabs").tabs();
-           tabshook();
-         }
-     }
-
      function tabshook(){
      	var activetab = 'childactive-'+$('#tabs-main-nav li.ui-state-active').attr('id');
      	$("#tabs-main-nav").removeClass (function (index, css) {
@@ -76,14 +69,9 @@ $(document).ready(function(){
      	$('#tabs-main-nav').addClass(activetab);
      }
      tabifyRouteLists();
-     tabifyOperatorLists();
      addSearchGuidance();
 
    	$('#tabs').bind('tabsshow', function(event, ui) {
-   		tabshook();
-   	});
-
-   	$('#operator-tabs').bind('tabsshow', function(event, ui) {
    		tabshook();
    	});
 

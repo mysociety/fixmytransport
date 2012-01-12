@@ -132,6 +132,7 @@
 .has-tabs #tabs-main-nav.childactive-area-tab {border-bottom:4px solid #0075a0;}
 .has-tabs #tabs-main-nav.childactive-problem-tab {border-bottom:4px solid #0075a0;}
 .has-tabs #tabs-main-nav.childactive-campaign-tab {border-bottom:4px solid #0075a0;}
+.has-tabs #operator-tabs #tabs-main-nav {border-bottom:4px solid #0075a0;}
 
 	.has-tabs #tabs-main-nav li {
 		margin-right:4px;
