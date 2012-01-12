@@ -32,7 +32,7 @@ class OperatorsController < ApplicationController
     @current_tab = :issues
     setup_paginated_issues
     @banner_text = t('route_operators.show.issues_concerning', 
-                      :operator => "<a href='#{operator_url(@operator)}'>#{@operator.name}</a>", 
+                      :operator => @operator.name, 
                       :count => @issue_count)
     @station_count = find_station_count
     @route_count = find_route_count
@@ -71,7 +71,7 @@ class OperatorsController < ApplicationController
       @issue_count = find_issue_count
     end
     @banner_text = t('route_operators.show.operates_routes', 
-                      :operator => "<a href='#{operator_url(@operator)}'>#{@operator.name}</a>", 
+                      :operator => @operator.name, 
                       :count => @route_count)
     @station_count = find_station_count
     @station_type_descriptions = setup_station_type_descriptions
@@ -91,7 +91,7 @@ class OperatorsController < ApplicationController
     @station_type_descriptions = setup_station_type_descriptions
     # yes it's a wee bit horrible: plural handling outside the translation files
     @banner_text = t('route_operators.show.is_responsible_for_stations', 
-                      :operator => "<a href='#{operator_url(@operator)}'>#{@operator.name}</a>", 
+                      :operator => @operator.name, 
                       :station_type => @station_count == 1 ? @station_type_descriptions[:singular] : @station_type_descriptions[:plural],
                       :count => @station_count)
     @title = t('route_operators.stations.title', :operator => @operator.name, :station_type => @station_type_descriptions[:plural]) 
