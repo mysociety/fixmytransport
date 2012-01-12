@@ -2,62 +2,79 @@ require 'spec_helper'
 
 describe ProfilesController do
 
-  describe 'GET #show' do 
-    
+  describe 'GET #show' do
+
     def make_request(params={:id => 55})
       get :show, params
-    end  
-    
-    describe 'if the user whose profile is requested is not registered' do 
+    end
 
-      before do 
+    describe 'if the user whose profile is requested is not registered' do
+
+      before do
         @user = mock_model(User, :registered? => false,
                                  :is_hidden? => false)
         User.should_receive(:find).with('55', :conditions => ['login_count > 0']).and_return(nil)
       end
-    
-      it 'should return "not found"' do 
+
+      it 'should return "not found"' do
         make_request
         response.status.should == '404 Not Found'
       end
-    
+
     end
-    
-    describe 'if the user whose profile is requested is registered' do 
-      
-      before do 
+
+    describe 'if the user whose profile is requested is registered' do
+
+      before do
         @user = mock_model(User, :registered? => true,
                                  :name => "Test User",
-                                 :is_hidden? => false)
+                                 :is_hidden? => false,
+                                 :friendly_id_status => mock('friendly', :best? => true))
         User.should_receive(:find).with('55', :conditions => ['login_count > 0']).and_return(@user)
       end
-      
-      it 'should render the "show" template' do 
+
+      it 'should render the "show" template' do
         make_request
       end
 
     end
-    
-    describe 'if the user whose profile is requested is hidden' do 
-    
-      before do 
+
+    describe 'if the user whose profile is requested is hidden' do
+
+      before do
         @user = mock_model(User, :is_hidden? => true,
                                  :login_count => 3)
         User.stub!(:find).and_return(@user)
       end
-      
-      it 'should return a 404' do 
+
+      it 'should return a 404' do
         make_request
         response.status.should == '404 Not Found'
       end
-      
+
     end
 
-    describe 'if the user whose profile is requested is suspended' do 
-      
+    describe 'if the request does not use the current slug for the user' do
+
+      before do
+        @user = mock_model(User, :is_hidden? => false,
+                                 :login_count => 3,
+                                 :friendly_id_status => mock('friendly', :best? => false))
+        User.stub!(:find).and_return(@user)
+      end
+
+      it 'should return a 404' do
+        make_request
+        response.status.should == '404 Not Found'
+      end
+
+    end
+
+    describe 'if the user whose profile is requested is suspended' do
+
       integrate_views
-      
-      before do 
+
+      before do
         @user = mock_model(User, :registered? => true,
                                  :suspended? => true,
                                  :is_hidden? => false,
@@ -68,20 +85,21 @@ describe ProfilesController do
                                  :name => "Test User",
                                  :profile_photo => mock('profile photo', :url => 'http://www.example.com'),
                                  :location => nil,
-                                 :bio => nil, 
+                                 :bio => nil,
                                  :initiated_campaigns => mock('initiated campaigns', :visible => []),
                                  :campaigns => mock('campaigns', :visible => []),
-                                 :problems => mock('problems', :visible => []))
+                                 :problems => mock('problems', :visible => []),
+                                 :friendly_id_status => mock('friendly', :best? => true))
         User.should_receive(:find).with('55', :conditions => ['login_count > 0']).and_return(@user)
       end
-      
-      it 'should display the suspended notice and the reason for suspension' do 
+
+      it 'should display the suspended notice and the reason for suspension' do
         make_request
         response.should have_tag("div.user-suspended")
       end
-          
+
     end
-        
+
   end
 
 end
