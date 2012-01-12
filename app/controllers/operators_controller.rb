@@ -2,7 +2,30 @@ class OperatorsController < ApplicationController
   
   skip_before_filter :make_cachable
   before_filter :long_cache
-  before_filter :find_operator, :setup_shared_title
+  before_filter :find_operator, :except => [:index]
+  before_filter :setup_shared_title, :except => [:index]
+  
+  def index
+    conditions = []
+    if params[:query]=~ /[[:alnum:]]{2}/ # at least a couple of alphanums perhaps? 
+      query = params[:query].downcase
+      conditions << "(lower(name) like ? OR lower(short_name) like ?)"
+      2.times{ conditions << "%%#{query}%%" }
+    end
+    @operators = WillPaginate::Collection.create((params[:page] or 1), 20) do |pager|
+      operators = Operator.find(:all, :conditions => conditions,
+                                      :order => 'lower(name) asc',
+                                      :limit => 20,
+                                      :offset => pager.offset)   
+      pager.replace(operators)
+      if pager.total_entries
+        @operator_count = pager.total_entries
+      else
+        @operator_count = Operator.count(:conditions => conditions)
+        pager.total_entries = @operator_count
+      end
+    end
+  end
   
   def show
     @title = @operator.name 

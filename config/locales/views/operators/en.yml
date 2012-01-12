@@ -1,5 +1,12 @@
 en:
   route_operators:
+    index:
+      title: Transport operators
+      total_operators:
+        zero: "Found no operators."
+        one: "Found %{count} operator."
+        other: "Found %{count} operators."
+        
     show:
       information_wrong: Is this information wrong? 
       routes_header: "Routes"

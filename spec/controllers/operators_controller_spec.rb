@@ -13,6 +13,19 @@ describe OperatorsController do
     Problem.stub!(:find_recent_issues).and_return([])
   end
 
+  describe 'GET #index' do
+
+    def make_request
+      get :index
+    end
+    
+    it 'should show a list of all operators' do
+      Operator.should_receive(:find).and_return([])
+      make_request
+    end
+
+  end
+  
   describe 'GET #issues' do
 
     def make_request(params={})

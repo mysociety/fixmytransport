@@ -2289,6 +2289,30 @@ body.facebook-canvas .button {
   max-height: 100px;
 }
 
+#main-content .small-search-form ul {
+  margin-bottom: 1em;
+}
+#main-content .small-search-form ul li {
+  padding: 0px;
+  list-style: none;
+  margin: 0;
+	overflow:visible;
+  width:300px;
+  display:inline;
+}
+#main-content .small-search-form input {
+	padding: 2px 4px;
+	font-size: 1.2em;
+	width: 240px;
+	border: 2px solid #048fc2;
+  border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+#main-content .small-search-form button.button {
+  margin: 1em;
+}
+
 /*===[ Narrow screens]===*/
 @media screen and (max-width: 600px) {
 		    .mobile-only {
@@ -3319,6 +3343,9 @@ body.facebook-canvas .button {
         width: 100%;
     }
 
+    #main-content .small-search-form input, #main-content .small-search-form button {
+      width: 99%;
+    }
 
 } /* end of media query */
 
