@@ -1,0 +1,40 @@
+<div id="banner">
+  <a id="home" href="/">FixMyTransport</a>
+  <div class="container">
+    <h1 class="operator-name"><%= t('route_operators.index.title')%></h1>
+  </div>
+</div>
+<div id="greybanner">
+  <div class="container">
+    <p>
+      <%= t('route_operators.index.total_operators', :count => @operator_count ) %>
+    </p>
+  </div>
+</div>
+<div id="main-content" class="container">
+
+<!--
+  <div class="container">
+    <%- form_tag operators_path, :id => 'operator_search_form', :class => "small-search-form", :method => 'GET' do  %>
+      <ul>
+        <li>
+          <div class="input-border"><%= raw text_field_tag 'query', params[:query] %></div>
+        </li>
+        <li>
+          <button class="button" type="submit">Search</button>
+        </li>
+      </ul>
+    <%- end %>
+  </div>
+-->
+
+  <%= will_paginate @operators %>
+  <ul class="route-links route-links-large">
+    <%- @operators.each do |operator| %>
+      <li>
+        <%= link_to(operator.name, main_url(operator_path(operator))) %>
+      </li>
+    <%- end %>
+  </ul>
+  <%= will_paginate @operators %>
+</div>
