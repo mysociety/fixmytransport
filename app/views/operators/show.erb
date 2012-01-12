@@ -47,7 +47,7 @@
         <%= will_paginate @routes %>
       <%- elsif @current_tab == :stations %>
         <%= will_paginate @stations %>
-        <ul class="route-links route-links-large">
+        <ul class="route-links">
           <%- @stations.each do |station| %>
             <li>
               <a href="<%= "/stations/#{station.slug.scope}/#{station.slug.to_friendly_id}"%>"><%= station.name_with_inactive %></a>
