@@ -231,20 +231,28 @@ class Campaign < ActiveRecord::Base
     MySociety::Config.get('INCOMING_EMAIL_DOMAIN', 'localhost')
   end
 
-  def self.needing_questionnaire(weeks_ago)
+  def self.needing_questionnaire(weeks_ago, user=nil)
     time_weeks_ago = Time.now - weeks_ago.weeks
-    self.visible.find(:all, :conditions => ["problems.sent_at is not null
-                                             AND problems.sent_at < ?
-                                             AND campaigns.send_questionnaire = ?
-                                             AND ((SELECT max(completed_at)
-                                                   FROM questionnaires
-                                                   WHERE subject_type = 'Campaign'
-                                                   AND subject_id = campaigns.id) < ?
-                                                   OR (SELECT max(completed_at)
-                                                   FROM questionnaires
-                                                   WHERE subject_type = 'Campaign'
-                                                   AND subject_id = campaigns.id) is NULL)",
-                                                  time_weeks_ago, true, time_weeks_ago],
-                                  :include => :problem)
+    params = [time_weeks_ago, true, time_weeks_ago]
+    if user
+      user_clause = " AND reporter_id = ?"
+      params << user
+    else
+      user_clause = ""
+    end
+    query = ["problems.sent_at is not null
+              AND problems.sent_at < ?
+              AND campaigns.send_questionnaire = ?
+              AND ((SELECT max(completed_at)
+                   FROM questionnaires
+                   WHERE subject_type = 'Campaign'
+                   AND subject_id = campaigns.id) < ?
+                   OR (SELECT max(completed_at)
+                   FROM questionnaires
+                   WHERE subject_type = 'Campaign'
+                   AND subject_id = campaigns.id) is NULL)
+                   #{user_clause}"]
+    self.visible.find(:all, :conditions => query + params,
+                            :include => :problem)
   end
 end

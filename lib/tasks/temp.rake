@@ -24,4 +24,20 @@ namespace :temp do
                                             AND user_id = problems.reporter_id))")
   end
   
+  task :send_test_questionnaires => :environment do 
+    email = ENV['EMAIL']
+    unless email
+      puts "Requires EMAIL param to identify user"
+      exit(0)
+    end
+    user = User.find_by_email(email)
+    weeks_ago = 4
+    campaign = Campaign.needing_questionnaire(weeks_ago, user).first
+    problem = Problem.needing_questionnaire(weeks_ago, user).first  
+    questionnaire = campaign.questionnaires.create!(:user => user, :sent_at => Time.now)
+    QuestionnaireMailer.deliver_questionnaire(campaign, questionnaire, user, campaign.title)
+    questionnaire = problem.questionnaires.create!(:user => user, :sent_at => Time.now)
+    QuestionnaireMailer.deliver_questionnaire(problem, questionnaire, user, problem.subject)
+  end
+  
 end
