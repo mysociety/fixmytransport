@@ -50,7 +50,8 @@ describe QuestionnaireMailer do
   describe "when creating a questionnaire" do
     
     before do 
-      @user = mock_model(User, :name => 'Test User')
+      @user = mock_model(User, :name => 'Test User',
+                               :name_and_email => 'test@example.com')
       @campaign = mock_model(Campaign, :description => 'test description',
                                        :confirmed_at => Time.now - 1.day)
       @questionnaire = mock_model(Questionnaire, :token => 'mytoken')
@@ -65,7 +66,8 @@ describe QuestionnaireMailer do
   describe 'when delivering a questionnaire' do
     
     before do 
-      @user = mock_model(User, :name => 'Test User')
+      @user = mock_model(User, :name => 'Test User',
+                               :name_and_email => 'test@example.com')
       @campaign = mock_model(Campaign, :description => 'test description',
                                        :confirmed_at => Time.now - 1.day)
       @questionnaire = mock_model(Questionnaire, :token => 'mytoken')

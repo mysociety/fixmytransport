@@ -4,7 +4,7 @@ class QuestionnaireMailer < ApplicationMailer
   cattr_accessor :dryrun
   
   def questionnaire(issue, questionnaire, user, title)
-    recipients user
+    recipients user.name_and_email
     from contact_from_name_and_email
     subject I18n.translate('mailers.questionnaire_subject', :title => title)
     body({ :recipient => user,
