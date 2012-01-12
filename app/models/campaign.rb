@@ -48,7 +48,7 @@ class Campaign < ActiveRecord::Base
    [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:fixed]]
   end
 
-  named_scope :visible, :conditions => ["status_code in (?)", Campaign.visible_status_codes]
+  named_scope :visible, :conditions => ["campaigns.status_code in (?)", Campaign.visible_status_codes]
 
   # instance methods
 
@@ -233,16 +233,17 @@ class Campaign < ActiveRecord::Base
 
   def self.needing_questionnaire(weeks_ago)
     time_weeks_ago = Time.now - weeks_ago.weeks
-    self.visible.sent.find(:all, :conditions => ["problems.sent_at < ?
-                                                  AND campaigns.send_questionnaire = ?
-                                                  AND ((SELECT max(completed_at)
-                                                        FROM questionnaires
-                                                        WHERE subject_type = 'Campaign'
-                                                        AND subject_id = campaigns.id) < ?
-                                                       OR (SELECT max(completed_at)
-                                                        FROM questionnaires
-                                                        WHERE subject_type = 'Campaign'
-                                                        AND subject_id = campaigns.id) is NULL)",
+    self.visible.find(:all, :conditions => ["problems.sent_at is not null
+                                             AND problems.sent_at < ?
+                                             AND campaigns.send_questionnaire = ?
+                                             AND ((SELECT max(completed_at)
+                                                   FROM questionnaires
+                                                   WHERE subject_type = 'Campaign'
+                                                   AND subject_id = campaigns.id) < ?
+                                                   OR (SELECT max(completed_at)
+                                                   FROM questionnaires
+                                                   WHERE subject_type = 'Campaign'
+                                                   AND subject_id = campaigns.id) is NULL)",
                                                   time_weeks_ago, true, time_weeks_ago],
                                   :include => :problem)
   end

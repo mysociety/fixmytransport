@@ -1,5 +1,12 @@
+<div id="banner">
+    <a id="home" href="/">FixMyTransport</a>
+	<div class="container">
+		<h1><%= t('questionnaires.completed.thanks')%></h1>
+	</div>
+</div>
+
+
 <div id="main-content" class="container">
-  <h2><%= t('questionnaires.completed.thanks')%></h2>
   <p>
   <%- if params[:fixed] == 'unknown' %>
     <%= t('questionnaires.completed.please_come_back') %>

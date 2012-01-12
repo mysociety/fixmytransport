@@ -28,13 +28,17 @@ class QuestionnaireMailer < ApplicationMailer
         title = issue.title
       end
       if !(user.suspended? || user.is_hidden?)
-        questionnaire = issue.questionnaires.create!(:user => user, :sent_at => Time.now)
         if self.dryrun
           STDERR.puts("Would send the following:")
+          questionnaire = issue.questionnaires.build(:user => user, 
+                                                     :sent_at => Time.now,
+                                                     :token => 'dryruntoken')
           mail = create_questionnaire(issue, questionnaire, user, title)
           STDERR.puts(mail)
         else
+          questionnaire = issue.questionnaires.create!(:user => user, :sent_at => Time.now)
           self.deliver_questionnaire(issue, questionnaire, user, title)
+          sleep(0.5)
         end
       end
       if !self.dryrun
