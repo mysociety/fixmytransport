@@ -23,9 +23,9 @@ en:
         one: "%{operator} is responsible for %{count} %{station_type}."
         other: "%{operator} is responsible for %{count} %{station_type}."
       issues_concerning:
-        zero: "There are currently no issues concerning %{operator}."
-        one: "%{count} issue concerning %{operator}."
-        other: "%{count} issues concerning %{operator}."
+        zero: "No issues have been reported to %{operator}."
+        one: "%{count} issue has been reported to %{operator}."
+        other: "%{count} issues have been reported to %{operator}."
     issues:
       title: "%{operator} issues"
     routes:
