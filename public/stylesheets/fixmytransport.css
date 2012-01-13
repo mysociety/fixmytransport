@@ -2279,6 +2279,9 @@ body.facebook-canvas .button {
   text-decoration: none;
 }
 
+.operator-search-query {
+  color: #888;
+}
 /* in extremis: stop huge/broken photos breaking the list */
 #main-content ul.issues-list img{
   max-width: 100px;

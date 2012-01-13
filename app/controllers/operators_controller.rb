@@ -6,24 +6,17 @@ class OperatorsController < ApplicationController
   before_filter :setup_shared_title, :except => [:index]
   
   def index
+    @operator_list_threshold = 20
     conditions = []
-    if params[:query]=~ /[[:alnum:]]{2}/ # at least a couple of alphanums perhaps? 
-      query = params[:query].downcase
+    if params[:query]=~ /[[:alnum:]]{1}/ # at least one alphanum... but maybe choke it? 
+      @search_query = params[:query].downcase
       conditions << "(lower(name) like ? OR lower(short_name) like ?)"
-      2.times{ conditions << "%%#{query}%%" }
+      2.times{ conditions << "%%#{@search_query}%%" }
     end
-    @operators = WillPaginate::Collection.create((params[:page] or 1), 20) do |pager|
-      operators = Operator.find(:all, :conditions => conditions,
-                                      :order => 'lower(name) asc',
-                                      :limit => 20,
-                                      :offset => pager.offset)   
-      pager.replace(operators)
-      if pager.total_entries
-        @operator_count = pager.total_entries
-      else
-        @operator_count = Operator.count(:conditions => conditions)
-        pager.total_entries = @operator_count
-      end
+    @operators = Operator.find(:all, :conditions => conditions) # no sort yet (may be large) 
+    @operator_count = @operators.size
+    if @operators.size > @operator_list_threshold
+      @operators_by_letter = by_letter(@operators, :upcase){|o| o.name }
     end
   end
   

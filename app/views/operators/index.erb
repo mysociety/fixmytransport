@@ -7,34 +7,60 @@
 <div id="greybanner">
   <div class="container">
     <p>
-      <%= t('route_operators.index.total_operators', :count => @operator_count ) %>
+      <%- if @search_query %>
+        <%= raw t('route_operators.index.total_operators_after_search', :count => @operator_count, :search_query => @search_query ) %>
+      <%- else %>
+        <%= t('route_operators.index.total_operators', :count => @operator_count ) %>
+      <%- end %>
     </p>
   </div>
 </div>
-<div id="main-content" class="container">
-
-<!--
-  <div class="container">
-    <%- form_tag operators_path, :id => 'operator_search_form', :class => "small-search-form", :method => 'GET' do  %>
-      <ul>
-        <li>
-          <div class="input-border"><%= raw text_field_tag 'query', params[:query] %></div>
-        </li>
-        <li>
-          <button class="button" type="submit">Search</button>
-        </li>
-      </ul>
-    <%- end %>
+<div id="main-content" class="container has-tabs">
+  <div id='tabs' class='ui-tabs ui-widget ui-content'>
+    <div class="container">
+      <%- form_tag operators_path, :id => 'operator_search_form', :class => "small-search-form", :method => 'GET' do  %>
+        <ul>
+          <li>
+            <div class="input-border"><%= raw text_field_tag 'query', params[:query] %></div>
+          </li>
+          <li>
+            <button class="button" type="submit">Search</button>
+          </li>
+        </ul>
+      <%- end %>
+    </div>
+    <div id='tabs-bus' class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
+      <%- if @operator_count > @operator_list_threshold %>
+        <ul class='font-1 tabs-sub-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+          <%- @operators_by_letter.keys.sort.each do |first| %>
+            <li class='ui-state-default ui-corner-all'>
+              <%= link_to(first, "#operator_starts_with_#{first}") %>
+            </li>
+          <%- end %>
+        </ul>
+        <hr>
+        <%- @operators_by_letter.keys.sort.each do |first| %>
+          <div class='region-bus-routes ui-tabs-panel ui-widget-content ui-corner-bottom' id='operator_starts_with_<%= first %>'>
+            <h4 class='first'><%= first %></h4>
+            <ul class="route-links">
+              <%- @operators_by_letter[first].sort{|o1, o2| o1.name.downcase <=> o2.name.downcase}.each do |operator| %>
+                <li>
+                  <%= link_to(operator.name, operator_url(operator))  %>
+                </li>
+              <%- end %>
+            </ul>
+          </div>
+        <%- end %>
+      <!-- Not many - show them all -->
+      <%- else  %>
+        <ul class="route-links route-links-large">
+          <%- @operators.sort{|o1, o2| o1.name.downcase <=> o2.name.downcase}.each do |operator| %>
+            <li>
+              <%= link_to(operator.name, main_url(operator_path(operator))) %>
+            </li>
+          <%- end %>
+        </ul>
+      <%- end %>
+    </div>
   </div>
--->
-
-  <%= will_paginate @operators %>
-  <ul class="route-links route-links-large">
-    <%- @operators.each do |operator| %>
-      <li>
-        <%= link_to(operator.name, main_url(operator_path(operator))) %>
-      </li>
-    <%- end %>
-  </ul>
-  <%= will_paginate @operators %>
 </div>

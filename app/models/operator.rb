@@ -15,6 +15,8 @@
 #
 
 class Operator < ActiveRecord::Base
+  extend ActiveSupport::Memoizable
+  
   has_many :route_operators, :dependent => :destroy
   has_many :routes, :through => :route_operators, :uniq => true, :order => 'routes.number asc'
   has_many :vosa_licenses
