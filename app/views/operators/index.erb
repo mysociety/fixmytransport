@@ -8,7 +8,7 @@
   <div class="container">
     <p>
       <%- if @search_query %>
-        <%= raw t('route_operators.index.total_operators_after_search', :count => @operator_count, :search_query => @search_query ) %>
+        <%= raw t('route_operators.index.total_operators_after_search', :count => @operator_count, :search_query => h(@search_query) ) %>
       <%- else %>
         <%= t('route_operators.index.total_operators', :count => @operator_count ) %>
       <%- end %>
