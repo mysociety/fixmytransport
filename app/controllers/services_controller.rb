@@ -7,6 +7,7 @@ class ServicesController < ApplicationController
   def in_area
     lat = params[:lat].to_f
     lon = params[:lon].to_f
+    # return empty data if outside GB
     if lat > BNG_MAX_LAT || lat < BNG_MIN_LAT || lon < BNG_MIN_LON || lon > BNG_MAX_LON
       render :json => { :locations => [],
                         :issue_content => render_to_string(:partial => "shared/issues_in_area") }
