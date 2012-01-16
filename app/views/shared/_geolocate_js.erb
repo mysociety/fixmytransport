@@ -2,9 +2,11 @@
   <%# note i:  currently i18n_javascript only being used for geolocation %>
   <%# note ii: i18n_javascript must be added to jQuery.readyList before anything calls it! %>
   <script type="text/javascript">
-  var geolocateOnload = <%=params[:geolocate] == '1' ? 'true' : 'false' %>;
+  var geolocateOnload = <%= @geolocate_on_load ? 'true' : 'false' %>;
   </script>
   <%= render "shared/i18n_javascript_js" %>
-  <%= raw javascript_include_tag(minify(['geo', 'fmt_geo'])) %>
+  <%- unless @geolocation_failed %>
+    <%= raw javascript_include_tag(minify(['geo', 'fmt_geo'])) %>
+  <%- end %>
 <%- end %>
 

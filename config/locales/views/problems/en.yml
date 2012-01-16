@@ -117,6 +117,7 @@ en:
       instructions: "Enter an area, town or postcode"
       where_is_it: "Where is it?"
       too_big: "Sorry, that's too big an area to show all the bus stops and stations for. Please choose something more specific."
+      geolocation_outside_area: "Sorry, your location appears to be outside Great Britain. Please enter a GB area, town or postcode"
     find_train_route:
       title: "Finding a train route"
       to_stop_not_found: "We didn't recognise the name of the stop you got off at."

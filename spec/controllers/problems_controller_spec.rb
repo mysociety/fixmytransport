@@ -375,6 +375,30 @@ describe ProblemsController do
         Stop.stub!(:find_nearest).and_return(@mock_stop)
       end
 
+      describe 'if the lon/lat is outside that used by the National Grid' do
+
+        before do
+          make_request({:lon => '0.01', :lat => '61.1'})
+        end
+
+        it 'should show an error' do
+          assigns[:error_message].should == "Sorry, your location appears to be outside Great Britain. Please enter a GB area, town or postcode"
+        end
+
+        it 'should render the "find_stop" template' do
+          response.should render_template('find_stop')
+        end
+
+        it 'should set a flag indicating that the page should not try to geolocate on load' do 
+          assigns[:geolocate_on_load].should == false
+        end
+        
+        it 'should set a flag indicating the geolocation has failed' do 
+          assigns[:geolocation_failed].should == true
+        end
+
+      end
+
       it 'should display the nearest stop and present it as the main location displayed' do
         @controller.should_receive(:map_params_from_location).with([@mock_stop],
                                                                     find_other_locations=true,

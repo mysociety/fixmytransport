@@ -350,6 +350,11 @@ class ProblemsController < ApplicationController
   end
 
   def browse
+    if params[:geolocate] == '1'
+      @geolocate_on_load = true
+    else
+      @geolocate_on_load = false
+    end
     @highlight = :has_content
     if params[:name]
       @title = t('problems.browse.title', :area => params[:name])
@@ -399,6 +404,17 @@ class ProblemsController < ApplicationController
 
   def find_area(options)
     if is_valid_lon_lat?(params[:lon], params[:lat])
+      lat = params[:lat].to_f
+      lon = params[:lon].to_f
+      if lat > BNG_MAX_LAT || lat < BNG_MIN_LAT || lon < BNG_MIN_LON || lon > BNG_MAX_LON
+        @error_message = t('problems.find_stop.geolocation_outside_area')
+        # don't try to geolocate on page load
+        @geolocate_on_load = false
+        # don't show geolocate button
+        @geolocation_failed = true
+        render options[:find_template]
+        return
+      end
       nearest_stop = find_nearest_stop(params[:lon], params[:lat], nil)
       if nearest_stop
         map_params_from_location([nearest_stop],
