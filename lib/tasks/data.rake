@@ -4,6 +4,65 @@ namespace :data do
 
   include DataLoader
   
+  desc 'Create a spreadsheet of problems'
+  task :create_problem_spreadsheet => :environment do 
+   
+    include ActionController::UrlWriter
+    ActionController.default_url_options[:host] = MySociety::Config.get("DOMAIN", 'localhost:3000')
+    include ApplicationHelper
+    
+    check_for_dir
+    puts "Writing problem spreadsheet to #{ENV['DIR']}..."
+    File.open(File.join(ENV['DIR'], 'problems.tsv'), 'w') do |problem_file|
+      headers = ['ID', 
+                 'Subject', 
+                 'Campaign', 
+                 'Problem URL',
+                 'Campaign URL',
+                 'Location',
+                 'Transport mode', 
+                 'Reporter', 
+                 'Organization', 
+                 'Status', 
+                 'Created', 
+                 'Updated',
+                 'Supporters',
+                 'Comments']
+      # add supporters, comments 
+      problem_file.write(headers.join("\t") + "\n")
+      Problem.find_each(:conditions => ['status_code in (?)', Problem.visible_status_codes]) do |problem|
+        if problem.campaign
+          problem_url = ''
+          campaign = problem.campaign
+          campaign_url = campaign_url(campaign)
+          supporters = campaign.supporters.count
+          comments = campaign.comments.visible.count
+        else
+          problem_url = problem_url(problem)
+          campaign_url = ''
+          supporters = ''
+          comments = problem.comments.visible.count
+        end
+        columns = [problem.id, 
+                   problem.subject, 
+                   problem.campaign ? 'Y' : 'N',
+                   problem_url,
+                   campaign_url, 
+                   problem.location.name,
+                   problem.transport_mode_text,
+                   problem.reporter.name,
+                   problem.responsible_organizations.map{ |org| org.name }.to_sentence,
+                   problem.status,
+                   problem.created_at.localtime.to_s(:short), 
+                   problem.updated_at.localtime.to_s(:short),
+                   supporters,
+                   comments]
+        problem_file.write(columns.join("\t") + "\n")
+      end
+    end
+  end
+  
+  
   desc "Create a spreadsheet of praise reports" 
   task :create_praise_spreadsheet => :environment do 
     
