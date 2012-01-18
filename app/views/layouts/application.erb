@@ -34,11 +34,11 @@
   </head>
 	<body <%-if @body_class %>class="<%= @body_class %>"<%- end %>>
     <%= yield :body_content %>
-		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
+    <%- if MySociety::Config.getbool('STAGING_SITE', true) %>
     <div class="staging-banner top-notice">
       <div class="container"><%= t('shared.header.development_site') %></div>
     </div>
-		<%- end %>
+    <%- end %>
     <%= yield :banner_content %>
 		<div id="wrapper">
 
@@ -79,7 +79,7 @@
 
 			<%= render :partial => "shared/login" %>
 
-			<%- [:notice, :error].each do |key| %>
+			<%- [:notice, :error, :large_notice].each do |key| %>
 					<%- unless flash[key].blank? %>
 					<div class="container">
 					<p class="<%= "flash #{key}" %>">
