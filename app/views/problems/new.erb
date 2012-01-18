@@ -24,55 +24,68 @@
     <%= raw f.hidden_field :location_type %>
 		<ul>
 			<li>
-				<label><%= t('problems.new.to')%></label>
+				<label><%= t('problems.new.to') %></label>
 
-				<%- if @problem.location.operators_responsible?  %>
-          <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
-            <%- if @problem.location.operators.size > 1 %>
-              <%- if responsibility_fields.object.errors.on('organization_id') %>
-                <div class='error error-responsibilities_organization_id'>
-                  <%= error_message_on responsibility_fields.object, :organization_id %>
-                </div>
-              <%- else %>
-                <div class='error error-responsibilities_organization_id' style="display: none;" role="alert">
-                </div>
-              <%- end %>
-              <%= raw responsibility_fields.collection_select("organization_id", @problem.location.operators, :id, :name, :include_blank => t('problems.new.select_operator')) %>
-              <%= responsibility_fields.hidden_field :organization_type,  :value => 'Operator' %>
-           
-            <%- elsif @problem.location.operators.size == 1 %>
-              <%= responsibility_fields.hidden_field :organization_type,  :value => 'Operator' %>
-              <%= responsibility_fields.hidden_field :organization_id,  :value => @problem.location.operators.first.id %>
-              <div class="static-value">
-                <%= @problem.location.operators.first.name %>
-              </div>
-            <%- else %>
-              <div class="static-value">
-                <%= t('problems.new.operator', :location => @problem.location.description)%>
-              </div>
+        <%- if @problem.reference %>
+          <%- @problem.reference.responsible_organizations.each do |organization| %>
+            <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
+              <%= responsibility_fields.hidden_field :organization_type,  :value => organization.class.to_s %>
+              <%= responsibility_fields.hidden_field :organization_id,  :value => organization.id %>
             <%- end %>
           <%- end %>
-        <%- elsif @problem.location.pte_responsible?  %>
-          <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
-            <%= responsibility_fields.hidden_field :organization_type,  :value => 'PassengerTransportExecutive' %>
-            <%= responsibility_fields.hidden_field :organization_id,  :value => @problem.location.passenger_transport_executive.id %>
-            <div class="static-value">
-              <%= @problem.location.passenger_transport_executive.name %>
-            </div>
-          <%- end %>
-        <%- elsif @problem.location.councils_responsible? %>
-          <%- @problem.location.councils.each do |council| %>
+          <%= f.hidden_field :reference_id, :value => @problem.reference.id %>
+          <div class="static-value">
+            <%= raw org_names(@problem.reference.responsible_organizations, t('problems.new.and')) %>
+          </div>
+
+        <%- else %>
+  				<%- if @problem.location.operators_responsible?  %>
             <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
-              <%= responsibility_fields.hidden_field :organization_type,  :value => 'Council' %>
-              <%= responsibility_fields.hidden_field :organization_id,  :value => council.id %>
+              <%- if @problem.location.operators.size > 1 %>
+                <%- if responsibility_fields.object.errors.on('organization_id') %>
+                  <div class='error error-responsibilities_organization_id'>
+                    <%= error_message_on responsibility_fields.object, :organization_id %>
+                  </div>
+                <%- else %>
+                  <div class='error error-responsibilities_organization_id' style="display: none;" role="alert">
+                  </div>
+                <%- end %>
+                <%= raw responsibility_fields.collection_select("organization_id", @problem.location.operators, :id, :name, :include_blank => t('problems.new.select_operator')) %>
+                <%= responsibility_fields.hidden_field :organization_type,  :value => 'Operator' %>
+
+              <%- elsif @problem.location.operators.size == 1 %>
+                <%= responsibility_fields.hidden_field :organization_type,  :value => 'Operator' %>
+                <%= responsibility_fields.hidden_field :organization_id,  :value => @problem.location.operators.first.id %>
+                <div class="static-value">
+                  <%= @problem.location.operators.first.name %>
+                </div>
+              <%- else %>
+                <div class="static-value">
+                  <%= t('problems.new.operator', :location => @problem.location.description)%>
+                </div>
+              <%- end %>
+            <%- end %>
+          <%- elsif @problem.location.pte_responsible?  %>
+            <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
+              <%= responsibility_fields.hidden_field :organization_type,  :value => 'PassengerTransportExecutive' %>
+              <%= responsibility_fields.hidden_field :organization_id,  :value => @problem.location.passenger_transport_executive.id %>
+              <div class="static-value">
+                <%= @problem.location.passenger_transport_executive.name %>
+              </div>
+            <%- end %>
+          <%- elsif @problem.location.councils_responsible? %>
+            <%- @problem.location.councils.each do |council| %>
+              <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
+                <%= responsibility_fields.hidden_field :organization_type,  :value => 'Council' %>
+                <%= responsibility_fields.hidden_field :organization_id,  :value => council.id %>
               <%- end %>
             <%- end %>
             <div class="static-value">
               <%= raw org_names(@problem.location.responsible_organizations, t('problems.new.or'))%>
             </div>
-            
-        <%- end %>
-			
+
+          <%- end %>
+			  <%- end %>
 			</li>
 			<li>
 				<label for="problem_subject"><%= t('problems.new.subject')%></label>
@@ -84,14 +97,14 @@
 				<%- else %>
 					<div class='error error-subject' style="display: none;" role="alert"></div>
 				<%- end %>
-				
+
 				<div class="tipbox">
 				  <a href="#" class="tip-close" tabindex="-1">Close</a>
 					<h5><%= t('problems.new.subject_help_header')%></h5>
 					<p><%= t('problems.new.subject_help')%></p>
 				</div>
 			</li>
-			
+
 			<%- if @problem.categories.size > 1 %>
         <li>
           <label for="problem_category"><%= t('problems.new.category')%></label>
@@ -109,8 +122,8 @@
       <%- else %>
         <%= raw f.hidden_field :category, :value => "Other" %>
       <%- end %>
-      
-      
+
+
 			<li>
 				<label for="problem_description"><%= t('problems.new.description')%></label>
 				<textarea id="problem_description" name="problem[description]" ><%= @problem.description %></textarea>

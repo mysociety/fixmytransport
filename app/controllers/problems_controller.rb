@@ -42,6 +42,12 @@ class ProblemsController < ApplicationController
     end
     @problem = Problem.new
     @problem.location = location
+    # Are the responsibilities for this problem to be based on an existing problem,
+    # rather than on the location?
+    if (!params[:reference_id].blank?) &&
+    reference_problem = get_reference_problem(params[:reference_id], location)
+      @problem.reference_id = reference_problem.id
+    end
     map_params_from_location(@problem.location.points, find_other_locations=false)
     setup_problem_advice(@problem)
   end
@@ -94,11 +100,10 @@ class ProblemsController < ApplicationController
 
   def create
     @problem = Problem.new(params[:problem])
-    @problem.responsibilities.each do |responsibility|
-      if responsibility.organization_id && !@problem.location.responsible_organizations.include?(responsibility.organization)
-        @problem.responsibilities.delete(responsibility)
-      end
+    if @problem.reference_id && !get_reference_problem(@problem.reference_id, @problem.location)
+      @problem.reference = nil
     end
+    delete_mismatched_responsibilities(@problem)
     @problem.status = :new
     if @problem.valid?
       if current_user
@@ -116,7 +121,7 @@ class ProblemsController < ApplicationController
     map_params_from_location(@problem.location.points, find_other_locations=false)
     @new_comment = Comment.new(:commented => @problem,
                                :user => current_user ? current_user : User.new)
-    
+
   end
 
   def convert
@@ -127,7 +132,7 @@ class ProblemsController < ApplicationController
         redirect_to problem_url(@problem) and return
       end
     end
-    if params[:convert] == 'yes'
+    if params[:convert] == 'yes' || @problem.reference
       # make sure we have a lock on the record for creating a campaign to prevent duplicates
       Problem.transaction do
         @problem = Problem.find(params[:id], :lock => true)
@@ -371,7 +376,7 @@ class ProblemsController < ApplicationController
   # return a truncated stop (don't need all the data)
   # note: params[:transport_mode] is a canonical string because it's also being used for translation: see fmt_geo.js
   def request_nearest_stop
-    if is_valid_lon_lat?(params[:lon], params[:lat]) 
+    if is_valid_lon_lat?(params[:lon], params[:lat])
       transport_mode = case params[:transport_mode]
         when 'ferry'
           'Ferry'
@@ -540,14 +545,23 @@ class ProblemsController < ApplicationController
 
   def setup_problem_advice(problem)
     advice_params = { :location_type => @template.readable_location_type(problem.location) }
-    responsible_orgs = problem.location.responsible_organizations
+    if problem.reference
+      responsible_orgs = problem.reference.responsible_organizations
+    else
+      responsible_orgs = problem.location.responsible_organizations
+    end
+
     emailable_orgs, unemailable_orgs = responsible_orgs.partition{ |org| org.emailable?(problem.location) }
 
     if responsible_orgs.size == 1
       advice_params[:organization] = @template.org_names(responsible_orgs, t('problems.new.or'))
       advice_params[:organization_unstrong] = @template.org_names(responsible_orgs, t('problems.new.or'), '', '')
     elsif responsible_orgs.size > 1
-      advice_params[:organizations] = @template.org_names(responsible_orgs, t('problems.new.or'))
+      if problem.reference
+        advice_params[:organizations] = @template.org_names(responsible_orgs, t('problems.new.and'))
+      else
+        advice_params[:organizations] = @template.org_names(responsible_orgs, t('problems.new.or'))
+      end
     end
     # don't know who is responsible for the location
     if responsible_orgs.size == 0
@@ -557,8 +571,11 @@ class ProblemsController < ApplicationController
       if responsible_orgs.size == 1
         advice = 'problems.new.problem_will_be_sent'
       else
+        # for problems made from a reference, it should go to all
+        if problem.reference
+          advice = 'problems.new.problem_will_be_sent_multiple'
         # for operators you get to choose which to email
-        if problem.location.operators_responsible?
+        elsif problem.location.operators_responsible? && !problem.reference
           advice = 'problems.new.problem_will_be_sent_multiple_operators'
         else
           # for councils, it goes to all or one depending on category
@@ -578,17 +595,21 @@ class ProblemsController < ApplicationController
       advice_params[:contactable] = @template.org_names(emailable_orgs, t('problems.new.or'))
       advice_params[:uncontactable] = @template.org_names(unemailable_orgs, t('problems.new.or'))
 
-      if problem.location.operators_responsible?
-        if unemailable_orgs.size > 2
-          advice_params[:uncontactable] = t('problems.new.one_of_the_uncontactable_companies')
-        end
-        if emailable_orgs.size > 2
-          advice_params[:contactable] = t('problems.new.one_of_the_contactable_companies')
-        end
-        advice = 'problems.new.no_details_for_some_operators'
+      if problem.reference
+        advice = 'problems.new.no_details_for_some_reference_organizations'
       else
-        advice_params[:councils] = @template.org_names(responsible_orgs, t('problems.new.or'))
-        advice = 'problems.new.no_details_for_some_councils'
+        if problem.location.operators_responsible?
+          if unemailable_orgs.size > 2
+            advice_params[:uncontactable] = t('problems.new.one_of_the_uncontactable_companies')
+          end
+          if emailable_orgs.size > 2
+            advice_params[:contactable] = t('problems.new.one_of_the_contactable_companies')
+          end
+          advice = 'problems.new.no_details_for_some_operators'
+        else
+          advice_params[:councils] = @template.org_names(responsible_orgs, t('problems.new.or'))
+          advice = 'problems.new.no_details_for_some_councils'
+        end
       end
     end
     @sending_advice = t(advice, advice_params)
@@ -658,4 +679,30 @@ class ProblemsController < ApplicationController
     end
   end
 
+  def delete_mismatched_responsibilities(problem)
+    if problem.reference
+      problem.responsibilities.each do |responsibility|
+        if responsibility.organization_id &&
+        !problem.reference.responsible_organizations.include?(responsibility.organization)
+          problem.responsibilities.delete(responsibility)
+        end
+      end
+    else
+      problem.responsibilities.each do |responsibility|
+        if responsibility.organization_id &&
+        !problem.location.responsible_organizations.include?(responsibility.organization)
+          problem.responsibilities.delete(responsibility)
+        end
+      end
+    end
+  end
+
+  def get_reference_problem(reference_id, location)
+    reference_problem = Problem.find(:first, :conditions => ['id = ?', reference_id])
+    if current_user && reference_problem &&
+      reference_problem.reporter == current_user && reference_problem.location == location
+      return reference_problem
+    end
+    return nil
+  end
 end

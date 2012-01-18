@@ -6,6 +6,7 @@ class Problem < ActiveRecord::Base
   belongs_to :reporter, :class_name => 'User'
   belongs_to :transport_mode
   belongs_to :campaign, :autosave => true
+  belongs_to :reference, :class_name => 'Problem'
   has_many :subscriptions, :as => :target
   has_many :subscribers, :through => :subscriptions, :source => :user
   has_many :assignments
@@ -15,8 +16,10 @@ class Problem < ActiveRecord::Base
   has_many :questionnaires, :as => :subject
   validates_presence_of :description, :subject, :category, :if => :location
   validates_associated :reporter
+
   attr_accessible :subject, :description, :category,
-                  :location_id, :location_type, :responsibilities_attributes
+                  :location_id, :location_type, :responsibilities_attributes,
+                  :reference_id
   before_create :generate_confirmation_token, :add_coords
   has_status({ 0 => 'New',
                1 => 'Confirmed',

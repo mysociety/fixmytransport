@@ -638,8 +638,8 @@ describe ProblemsController do
     describe 'when the location can be instantiated' do
 
       before do
-        @mock_stop = mock_model(Stop, :type => 'Stop', 
-                                      :lat => 51, 
+        @mock_stop = mock_model(Stop, :type => 'Stop',
+                                      :lat => 51,
                                       :lon => 0,
                                       :name => 'Test Stop',
                                       :transport_mode_names => ['Bus/Coach'])
@@ -663,21 +663,21 @@ describe ProblemsController do
         end
 
       end
-      
-      describe 'when there are related issues for the location' do 
-        
-        before do 
+
+      describe 'when there are related issues for the location' do
+
+        before do
           Problem.stub!(:find_recent_issues).and_return([mock_model(Campaign)])
         end
-      
-        it 'should render the "existing" template' do 
+
+        it 'should render the "existing" template' do
           make_request()
           response.should render_template("existing")
         end
-        
+
         describe 'if the "source" param is not set' do
 
-          it 'should show a large notice explaining that there are issues' do 
+          it 'should show a large notice explaining that there are issues' do
             make_request()
             expected_notice = ["Attention: you're not the first person to have",
                                "reported a problem at the Test Stop. If your",
@@ -686,26 +686,34 @@ describe ProblemsController do
           end
 
         end
-        
-        describe 'if the "source" param is "questionnaire"' do 
-          
-          it 'should not show any large notice' do 
+
+        describe 'if the "source" param is "questionnaire"' do
+
+          it 'should not show any large notice' do
             make_request(@default_params.merge(:source => 'questionnaire'))
             flash.now[:large_notice].should == nil
           end
 
         end
-      
+
       end
-      
+
     end
 
   end
 
   describe 'GET #new' do
 
-    def make_request
-      get :new, { :location_id => '55', :location_type => 'Route' }
+    before do
+      @default_params = { :location_id => '55', :location_type => 'Route' }
+      @route = mock_model(Route, :points => [],
+                                 :responsible_organizations => [])
+      @controller.stub!(:instantiate_location).and_return(@route)
+      @controller.stub!(:map_params_from_location)
+    end
+
+    def make_request(params=@default_params)
+      get :new, params
     end
 
     describe 'when no location can be instantiated from the params' do
@@ -717,6 +725,92 @@ describe ProblemsController do
       it 'should render a 404' do
         make_request
         response.status.should == '404 Not Found'
+      end
+
+    end
+
+    describe 'when a reference_id is passed' do
+
+      it 'should check to see if the problem with that id is owned by the current user' do
+        Problem.should_receive(:find).with(:first, :conditions => ['id = ?', '55'])
+        make_request(@default_params.merge(:reference_id => 55))
+      end
+
+      describe 'if the problem with that id is owned by the current user and associated with that location' do
+
+        before do
+          @user = mock_model(User)
+          @controller.stub!(:current_user).and_return(@user)
+          @reference_problem = mock_model(Problem, :reporter => @user,
+                                                   :id => 55,
+                                                   :location => @route,
+                                                   :responsible_organizations => [])
+          Problem.stub!(:find).and_return(@reference_problem)
+        end
+
+        it 'should set the reference id on the problem passed to the template' do
+          make_request(@default_params.merge(:reference_id => 55))
+          assigns[:problem].reference_id.should == 55
+        end
+
+      end
+
+      describe 'if there is no current user' do
+
+        before do
+          @controller.stub!(:current_user).and_return(nil)
+        end
+
+        it 'should not set the reference id on the problem passed to the template' do
+          make_request(@default_params.merge(:reference_id => 55))
+          assigns[:problem].reference_id.should == nil
+        end
+
+      end
+
+      describe 'if the problem with that id cannot be found' do
+
+        before do
+          Problem.stub!(:find).and_return(nil)
+        end
+
+        it 'should not set the reference id on the problem passed to the template' do
+          make_request(@default_params.merge(:reference_id => 55))
+          assigns[:problem].reference_id.should == nil
+        end
+
+      end
+
+      describe 'if the problem with that id is not associated with the location' do
+
+        before do
+          @user = mock_model(User)
+          @controller.stub!(:current_user).and_return(@user)
+          @reference_problem = mock_model(Problem, :reporter => @user,
+                                                   :id => 55,
+                                                   :location => mock_model(Stop),
+                                                   :responsible_organizations => [])
+          Problem.stub!(:find).and_return(@reference_problem)
+        end
+
+        it 'should not set the reference id on the problem passed to the template' do
+          make_request(@default_params.merge(:reference_id => 55))
+          assigns[:problem].reference_id.should == nil
+        end
+
+      end
+
+      describe 'if the problem with that id is not owned by the current user' do
+
+        before do
+          @problem.stub!(:reporter).and_return(mock_model(User))
+        end
+
+        it 'should not set the reference id on the problem passed to the template' do
+          make_request(@default_params.merge(:reference_id => 55))
+          assigns[:problem].reference_id.should == nil
+        end
+
       end
 
     end
@@ -755,6 +849,9 @@ describe ProblemsController do
                                           :location_type => 'Route',
                                           :category => "Other",
                                           :errors => [],
+                                          :reference_id => nil,
+                                          :reference => nil,
+                                          :reference= => nil,
                                           :responsibilities => [@responsibility_one, @responsibility_two],
                                           :create_assignments => true)
       Problem.stub!(:new).and_return(@mock_problem)
@@ -774,21 +871,84 @@ describe ProblemsController do
       make_request
     end
 
-    it 'should delete a responsibility for the problem for an organization that is passed as a param but not associated with the location' do
-      @mock_problem.stub!(:responsibilities).and_return([@responsibility_one,
-                                                         @responsibility_two,
-                                                         @extra_responsibility])
-      @mock_problem.responsibilities.should_receive(:delete).with(@extra_responsibility)
-      @mock_problem.responsibilities.should_not_receive(:delete).with(@responsibility_one)
-      @mock_problem.responsibilities.should_not_receive(:delete).with(@responsibility_two)
-      make_request
+    describe 'if a reference id is set on the problem' do
+
+      before do
+        @mock_problem.stub!(:reference_id).and_return(55)
+      end
+
+      it 'should try and get the reference' do
+        @controller.should_receive(:get_reference_problem)
+        make_request
+      end
+
+      describe 'if the reference is found' do
+
+        before do
+          @reference_problem = mock_model(Problem)
+          @controller.stub!(:get_reference_problem).and_return(@reference_problem)
+        end
+
+        it 'should not unset the reference id on the problem' do
+          @mock_problem.should_not_receive(:reference=)
+          make_request
+        end
+
+      end
+
+      describe 'if the reference is not found' do
+
+        before do
+          @reference_problem = mock_model(Problem)
+          @controller.stub!(:get_reference_problem).and_return(nil)
+        end
+
+        it 'should unset the reference id on the problem' do
+          @mock_problem.should_receive(:reference=).with(nil)
+          make_request
+        end
+
+      end
+
     end
 
-    it 'should set the status of the problem to :new' do
-      @mock_problem.should_receive(:status=).with(:new)
-      make_request
+    describe 'if the problem has a valid reference' do
+
+      before do
+        @reference_problem = mock_model(Problem, :responsible_organizations => [@council, @operator])
+        @mock_problem.stub!(:reference).and_return(@reference_problem)
+      end
+
+      it 'should delete a responsibility for the problem for an organization that
+          is passed as a paaram but not associated with the reference problem' do
+        @mock_problem.stub!(:responsibilities).and_return([@responsibility_one,
+                                                           @responsibility_two,
+                                                           @extra_responsibility])
+        @mock_problem.responsibilities.should_receive(:delete).with(@extra_responsibility)
+        @mock_problem.responsibilities.should_not_receive(:delete).with(@responsibility_one)
+        @mock_problem.responsibilities.should_not_receive(:delete).with(@responsibility_two)
+        make_request
+      end
     end
 
+    describe 'if the problem does not have a valid reference' do
+
+      it 'should delete a responsibility for the problem for an organization that is
+          passed as a param but not associated with the location' do
+        @mock_problem.stub!(:responsibilities).and_return([@responsibility_one,
+                                                           @responsibility_two,
+                                                           @extra_responsibility])
+        @mock_problem.responsibilities.should_receive(:delete).with(@extra_responsibility)
+        @mock_problem.responsibilities.should_not_receive(:delete).with(@responsibility_one)
+        @mock_problem.responsibilities.should_not_receive(:delete).with(@responsibility_two)
+        make_request
+      end
+
+      it 'should set the status of the problem to :new' do
+        @mock_problem.should_receive(:status=).with(:new)
+        make_request
+      end
+    end
 
     describe 'if the problem is not valid' do
 
@@ -963,7 +1123,7 @@ describe ProblemsController do
   end
 
 
-  describe '#GET convert' do
+  describe 'GET #convert' do
 
     def make_request(params=default_params)
       get :convert, params
@@ -980,7 +1140,8 @@ describe ProblemsController do
                                           :confirm! => true,
                                           :status => :new,
                                           :reporter => @mock_reporter,
-                                          :create_new_campaign => @mock_campaign)
+                                          :create_new_campaign => @mock_campaign,
+                                          :reference => nil )
       Problem.stub!(:find).and_return(@mock_problem)
 
     end
@@ -1025,12 +1186,12 @@ describe ProblemsController do
 
       end
 
-      it 'should show the "convert" template' do
-        make_request
-        response.should render_template("convert")
-      end
+      describe 'if the problem has a reference' do
 
-      describe 'if the "convert" param is "yes"' do
+        before do
+          @mock_reference = mock_model(Problem)
+          @mock_problem.stub!(:reference).and_return(@mock_reference)
+        end
 
         it 'should confirm the problem' do
           @mock_problem.should_receive(:confirm!)
@@ -1045,6 +1206,34 @@ describe ProblemsController do
         it 'should redirect to the campaign add details url' do
           make_request({:id => 22, :convert => 'yes'})
           response.should redirect_to(add_details_campaign_url(@mock_campaign))
+        end
+
+      end
+
+      describe 'if the problem does not have a reference' do
+
+        it 'should show the "convert" template' do
+          make_request
+          response.should render_template("convert")
+        end
+
+        describe 'if the "convert" param is "yes"' do
+
+          it 'should confirm the problem' do
+            @mock_problem.should_receive(:confirm!)
+            make_request({:id => 22, :convert => 'yes'})
+          end
+
+          it 'should create a campaign for the problem' do
+            @mock_problem.should_receive(:create_new_campaign)
+            make_request({:id => 22, :convert => 'yes'})
+          end
+
+          it 'should redirect to the campaign add details url' do
+            make_request({:id => 22, :convert => 'yes'})
+            response.should redirect_to(add_details_campaign_url(@mock_campaign))
+          end
+
         end
 
       end
@@ -1077,14 +1266,78 @@ describe ProblemsController do
       controller.send(:setup_problem_advice, mock_problem).should == advice
     end
 
+    it 'should generate advice text for a problem based on a reference problem with one
+        responsible organization' do
+      mock_pte = mock_model(PassengerTransportExecutive, :emailable? => true,
+                                                         :name => 'test PTE')
+      reference_problem = mock_model(Problem, :responsible_organizations => [mock_pte])
+      mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'])
+      mock_problem = mock_model(Problem, :reference => reference_problem,
+                                         :location => mock_stop)
+      expected = ["Let's get your problem fixed. Write an email using the form below,",
+                  "and we'll send it to <strong>test PTE</strong>."].join(" ")
+      expect_advice(mock_problem, expected)
+    end
+
+    it 'should generate advice text for a problem based on a reference problem with multiple
+        responsible organizations, some emailable' do
+      mock_operator_one = mock_model(Operator, :name => 'Test Operator One', :emailable? => true)
+      mock_operator_two = mock_model(Operator, :name => 'Test Operator Two', :emailable? => false)
+      mock_route = mock_model(Route, :transport_mode_names => ['Bus'])
+      reference_problem = mock_model(Problem, :responsible_organizations => [mock_operator_one,
+                                                                             mock_operator_two])
+      mock_problem = mock_model(Problem,
+                                         :location => mock_route,
+                                         :reference => reference_problem)
+      expected = ["We do not yet have all the contact details for this route. Your message will",
+                  "<strong>not</strong> be sent to <strong>Test Operator Two</strong> until an",
+                  "email address for them is found. Your message will be sent to <strong>Test",
+                  "Operator One</strong> straight away."].join(" ")
+      expect_advice(mock_problem, expected)
+    end
+
+    it 'should generate advice text for a problem based on a reference problem with multiple
+        responsible organizations, all contactable' do
+      mock_operator_one = mock_model(Operator, :name => 'Test Operator One', :emailable? => true)
+      mock_operator_two = mock_model(Operator, :name => 'Test Operator Two', :emailable? => true)
+      mock_route = mock_model(Route, :transport_mode_names => ['Bus'])
+      reference_problem = mock_model(Problem, :responsible_organizations => [mock_operator_one,
+                                                                               mock_operator_two])
+      mock_problem = mock_model(Problem, :location => mock_route,
+                                         :reference => reference_problem)
+      expected = ["Let's get your problem fixed. Write an email using the form below,",
+                  "and we'll send it to <strong>Test Operator One</strong> and <strong>Test",
+                  "Operator Two</strong>."].join(" ")
+      expect_advice(mock_problem, expected)
+    end
+
+    it 'should generate advice text for a problem based on a reference problem wth multiple
+        responsible organizations, none of them contactable' do
+      mock_operator_one = mock_model(Operator, :name => 'Test Operator One', :emailable? => false)
+      mock_operator_two = mock_model(Operator, :name => 'Test Operator Two', :emailable? => false)
+      mock_route = mock_model(Route, :transport_mode_names => ['Bus'])
+      reference_problem = mock_model(Problem, :responsible_organizations => [mock_operator_one,
+                                                                               mock_operator_two])
+      mock_problem = mock_model(Problem, :location => mock_route,
+                                         :reference => reference_problem)
+      expected = ["IMPORTANT: We do not yet have contact details for <strong>Test Operator",
+                  "One</strong> and <strong>Test Operator Two</strong>, and so your message",
+                  "will <strong>not be sent until an email address is found</strong>. However,",
+                  "if you write a message we will a) keep it ready to send when an email address",
+                  "is found and b) publish it online for others to see."].join(" ")
+      expect_advice(mock_problem, expected)
+    end
+
     it 'should generate advice text for a bus/coach stop covered by a PTE' do
       mock_pte = mock_model(PassengerTransportExecutive, :emailable? => true,
                                                          :name => 'test PTE')
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'],
                                    :responsible_organizations => [mock_pte],
                                    :status => 'ACT')
-      mock_problem = mock_model(Problem, :location => mock_stop)
-      expected = ["Let's get your problem fixed. Write an email using the form below, and we'll send it to <strong>test PTE</strong>."].join(' ')
+      mock_problem = mock_model(Problem, :location => mock_stop,
+                                         :reference => nil)
+      expected = ["Let's get your problem fixed. Write an email using the form below,",
+                  "and we'll send it to <strong>test PTE</strong>."].join(' ')
       expect_advice(mock_problem, expected)
     end
 
@@ -1096,7 +1349,8 @@ describe ProblemsController do
                                    :responsible_organizations => [mock_council_one, mock_council_two],
                                    :status => 'ACT')
 
-      mock_problem = mock_model(Problem, :location => mock_stop)
+      mock_problem = mock_model(Problem, :location => mock_stop,
+                                         :reference => nil)
 
       expected = ["IMPORTANT: We do not yet have contact details for <strong>Test Council",
                   "One</strong> or <strong>Test Council Two</strong>, and so your message",
@@ -1111,7 +1365,8 @@ describe ProblemsController do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'],
                                    :responsible_organizations => [mock_council],
                                    :status => 'ACT')
-      mock_problem = mock_model(Problem, :location => mock_stop)
+      mock_problem = mock_model(Problem, :location => mock_stop,
+                                         :reference => nil)
 
       expected = ["IMPORTANT: We do not yet have contact details for <strong>Test Council</strong>. Your message",
                   "will <strong>not be sent</strong> to Test Council. However, if you write a message",
@@ -1124,7 +1379,8 @@ describe ProblemsController do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'],
                                    :responsible_organizations => [mock_council],
                                    :status => 'ACT')
-      mock_problem = mock_model(Problem, :location => mock_stop)
+      mock_problem = mock_model(Problem, :location => mock_stop,
+                                         :reference => nil)
       expected = ["Let's get your problem fixed. Write an email using the form below, and we'll send it to <strong>Test Council</strong>."].join(' ')
       expect_advice(mock_problem, expected)
     end
@@ -1136,7 +1392,8 @@ describe ProblemsController do
                                    :operators_responsible? => false,
                                    :responsible_organizations => [mock_council_one, mock_council_two],
                                    :status => 'ACT')
-      mock_problem = mock_model(Problem, :location => mock_stop)
+      mock_problem = mock_model(Problem, :location => mock_stop,
+                                         :reference => nil)
       expected = ["Let's get your problem fixed. Write an email using the form below, and we'll send it",
                   "to <strong>Test Council One</strong> or <strong>Test Council",
                   "Two</strong>."].join(' ')
@@ -1151,7 +1408,8 @@ describe ProblemsController do
                                    :responsible_organizations => [mock_council_one, mock_council_two],
                                    :councils_responsible? => true,
                                    :status => 'ACT')
-      mock_problem = mock_model(Problem, :location => mock_stop)
+      mock_problem = mock_model(Problem, :location => mock_stop,
+                                         :reference => nil)
       expected = ["Let's get your problem fixed. Write an email using the form below, and we'll send it to",
                   "<strong>Test Council One</strong> or <strong>Test",
                   "Council Two</strong>."].join(' ')
@@ -1162,7 +1420,8 @@ describe ProblemsController do
       mock_stop = mock_model(Stop, :transport_mode_names => ['Bus', 'Coach'],
                                    :responsible_organizations => [],
                                    :status => 'ACT')
-      mock_problem = mock_model(Problem, :location => mock_stop)
+      mock_problem = mock_model(Problem, :location => mock_stop,
+                                         :reference => nil)
       expected = ["IMPORTANT: We do not yet know who is responsible for this stop. Your message",
                   "will not be sent to the responsible organization.",
                   "However, if you write a message we will a) keep it ready to send when",
@@ -1174,7 +1433,8 @@ describe ProblemsController do
       mock_sub_route = mock_model(SubRoute, :transport_mode_names => ['Train'],
                                             :responsible_organizations => [],
                                             :status => 'ACT')
-      mock_problem = mock_model(Problem, :location => mock_sub_route)
+      mock_problem = mock_model(Problem, :location => mock_sub_route,
+                                         :reference => nil)
 
       expected = ["IMPORTANT: We do not yet know who is responsible for this route. Your message",
                   "will not be sent to the responsible organization. However, if you write",
@@ -1187,7 +1447,8 @@ describe ProblemsController do
       mock_route = mock_model(Route, :transport_mode_names => ['Bus'],
                                      :responsible_organizations => [],
                                      :status => 'ACT')
-      mock_problem = mock_model(Problem, :location => mock_route)
+      mock_problem = mock_model(Problem, :location => mock_route,
+                                         :reference => nil)
 
       expected = ["IMPORTANT: We do not yet know who is responsible for this route. Your message",
                   "will not be sent to the responsible organization. However, if you",
@@ -1203,7 +1464,8 @@ describe ProblemsController do
                                      :operators_responsible? => true,
                                      :responsible_organizations => [mock_operator_one, mock_operator_two],
                                      :status => 'ACT')
-      mock_problem = mock_model(Problem, :location => mock_route)
+      mock_problem = mock_model(Problem, :location => mock_route,
+                                         :reference => nil)
 
     expected = ["Let's get your problem fixed. More than one company operates this route.",
                 "Write an email using the form below and we'll send your problem report",
@@ -1220,7 +1482,8 @@ describe ProblemsController do
                                      :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_route,
                                          :emailable_organizations => [mock_operator_one],
-                                         :unemailable_organizations => [mock_operator_two])
+                                         :unemailable_organizations => [mock_operator_two],
+                                         :reference => nil)
       expected = ["We do not yet have all the contact details for this route. If your message is for",
                   "<strong>Test Operator Two</strong>, it will <strong>not</strong>",
                   "be sent to them until an email address for them is found. If your problem relates to",
@@ -1232,7 +1495,8 @@ describe ProblemsController do
       mock_station = mock_model(Stop, :transport_mode_names => ['Train'],
                                       :responsible_organizations => [],
                                       :status => 'ACT')
-      mock_problem = mock_model(Problem, :location => mock_station)
+      mock_problem = mock_model(Problem, :location => mock_station,
+                                         :reference => nil)
 
       expected = ["IMPORTANT: We do not yet know who is responsible for this station. Your message will",
                   "not be sent to the responsible organization. However, if you write a message we will a)",

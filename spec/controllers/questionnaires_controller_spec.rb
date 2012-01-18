@@ -313,14 +313,16 @@ describe QuestionnairesController do
             @stop.campaigns.stub!(:visible).and_return([])
           end
 
-          it 'should add a large notice suggesting a campaign' do
+          it 'should add a large notice suggesting a campaign, linking to the new problem 
+              page, passing a reference_id param with the current problem id' do
             make_request(@params)
+            expected_url = "/problems/new?location_id=#{@stop.id}&location_type=Stop&reference_id=#{@problem.id}"
             expected_notice = ["We're sorry to hear that this problem hasn't been fixed. If it's",
                               "an ongoing issue, you could use FixMyTransport to get others involved by",
-                              "<a href=\"/problems/new?location_id=#{@stop.id}&location_type=Stop\">writing",
-                              "another message to Test Operator</a>, and then answering \"yes\" to",
-                              "the question \"Do you want others to support you?\" on the following",
-                              "page."].join(" ")
+                              "<a href=\"#{expected_url}\">writing",
+                              "another message to Test Operator</a>. We'll make a public page for gathering",
+                              "support and any replies you get will appear there. We'll also give you tools",
+                              "for spreading the word and getting expert advice."].join(" ")
             flash[:large_notice].should == expected_notice
           end
 

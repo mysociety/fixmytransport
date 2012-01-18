@@ -102,7 +102,8 @@ class QuestionnairesController < ApplicationController
                                      :location => @template.at_the_location(location))
           else
             new_problem_path = new_problem_path(:location_id => location.id,
-                                                :location_type => location.class.to_s)
+                                                :location_type => location.class.to_s,
+                                                :reference_id => @questionnaire.subject.id)
             flash[:large_notice] = t('questionnaires.completed.next_steps_problem',
                                      :url => new_problem_path,
                                      :orgs => @questionnaire.subject.responsible_org_descriptor())
