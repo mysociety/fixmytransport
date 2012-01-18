@@ -645,20 +645,4 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  # breaks a list of items into a hash keyed by first letter of their descriptor block
-  def by_letter(items, force_case=:none)
-    items_by_first = Hash.new { |hash, key| hash[key] = [] }
-    items.each do |item|
-      descriptor = yield item
-      first = descriptor[0].chr
-      case force_case
-        when :upcase
-          first.upcase!
-        when :downcase
-          first.downcase!
-      end
-      items_by_first[first] << item
-    end
-    items_by_first
-  end  
 end

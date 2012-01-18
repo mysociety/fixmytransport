@@ -16,7 +16,7 @@ class OperatorsController < ApplicationController
     @operators = Operator.find(:all, :conditions => conditions) # no sort yet (may be large) 
     @operator_count = @operators.size
     if @operators.size > @operator_list_threshold
-      @operators_by_letter = by_letter(@operators, :upcase){|o| o.name }
+      @operators_by_letter = MySociety::Util.by_letter(@operators, :upcase){|o| o.name }
     end
   end
   
