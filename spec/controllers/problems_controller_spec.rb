@@ -608,11 +608,12 @@ describe ProblemsController do
 
   describe 'GET #existing' do
 
-    def make_request
-      get :existing, { :location_id => '55', :location_type => 'Route' }
+    def make_request(params=@default_params)
+      get :existing, params
     end
 
     before do
+      @default_params = { :location_id => '55', :location_type => 'Route' }
       @controller.stub!(:instantiate_location)
     end
 
@@ -637,7 +638,11 @@ describe ProblemsController do
     describe 'when the location can be instantiated' do
 
       before do
-        @mock_stop = mock_model(Stop, :type => 'Stop', :lat => 51, :lon => 0)
+        @mock_stop = mock_model(Stop, :type => 'Stop', 
+                                      :lat => 51, 
+                                      :lon => 0,
+                                      :name => 'Test Stop',
+                                      :transport_mode_names => ['Bus/Coach'])
         @controller.stub!(:instantiate_location).and_return(@mock_stop)
       end
 
@@ -658,6 +663,41 @@ describe ProblemsController do
         end
 
       end
+      
+      describe 'when there are related issues for the location' do 
+        
+        before do 
+          Problem.stub!(:find_recent_issues).and_return([mock_model(Campaign)])
+        end
+      
+        it 'should render the "existing" template' do 
+          make_request()
+          response.should render_template("existing")
+        end
+        
+        describe 'if the "source" param is not set' do
+
+          it 'should show a large notice explaining that there are issues' do 
+            make_request()
+            expected_notice = ["Attention: you're not the first person to have",
+                               "reported a problem at the Test Stop. If your",
+                               "problem is listed then please add your support."].join(" ")
+            response.flash.now[:large_notice].should == expected_notice
+          end
+
+        end
+        
+        describe 'if the "source" param is "questionnaire"' do 
+          
+          it 'should not show any large notice' do 
+            make_request(@default_params.merge(:source => 'questionnaire'))
+            flash.now[:large_notice].should == nil
+          end
+
+        end
+      
+      end
+      
     end
 
   end

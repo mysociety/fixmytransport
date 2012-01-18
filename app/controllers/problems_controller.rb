@@ -64,6 +64,10 @@ class ProblemsController < ApplicationController
     end
     if @issues.empty?
       redirect_to new_problem_url(:location_id => @location.id, :location_type => @location.type)
+      return
+    end
+    if params[:source] != 'questionnaire'
+      flash.now[:large_notice] = t('problems.existing.intro', :location => @template.at_the_location(@location))
     end
     map_params_from_location([@location],
                              find_other_locations=false,

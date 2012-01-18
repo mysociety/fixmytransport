@@ -804,7 +804,8 @@ ul.user-list {
 #main-content .update_campaign,
 #main-content #new_outgoing_message,
 #main-content .password_reset_email,
-#main-content #reset_password {
+#main-content #reset_password,
+#main-content .newsletter_form {
 	width:500px;
 }
 #main-content #new_outgoing_message textarea,
@@ -820,14 +821,16 @@ ul.user-list {
 #main-content #new_outgoing_message input[type=text],
 #main-content .password_reset_email input[type=text],
 #main-content .update_campaign input[type=text],
-#main-content #reset_password input[type=password]{
+#main-content #reset_password input[type=password],
+#main-content .newsletter_form input[type=text] {
   width: 96%;
 	background: #f4f4f4;
 }
 
 
 #main-content #new_outgoing_message button,
-#main-content .password_reset_email button {
+#main-content .password_reset_email button,
+#main-content .newsletter_form button {
     float: right;
 }
 
