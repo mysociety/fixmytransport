@@ -16,7 +16,7 @@ class QuestionnaireMailer < ApplicationMailer
   
   def self.send_questionnaires(dryrun=false)
     self.dryrun = dryrun
-    weeks_ago = 4
+    weeks_ago = 6
     problems = Problem.needing_questionnaire(weeks_ago)
     campaigns = Campaign.needing_questionnaire(weeks_ago)
     (problems + campaigns).each do |issue|
