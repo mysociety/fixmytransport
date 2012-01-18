@@ -140,7 +140,10 @@ describe QuestionnairesController do
       @default_params = { :email_token => 'mytoken' }
       @user = mock_model(User, :answered_ever_reported? => false,
                                :update_attribute => nil)
-      @stop = mock_model(Stop, :points => ['my points'])
+      @stop = mock_model(Stop, :points => ['my points'],
+                               :campaigns => mock('campaigns', :visible => []),
+                               :name => 'Test Stop',
+                               :transport_mode_names => ['Bus/Coach'])
       @comment = mock_model(Comment, :status= => nil,
                                      :save => true,
                                      :confirm! => nil)
@@ -149,6 +152,7 @@ describe QuestionnairesController do
                                      :visible? => true,
                                      :status => :confirmed,
                                      :status= => nil,
+                                     :responsible_org_descriptor => 'Test Operator',
                                      :comments => mock('comments', :build => @comment),
                                      :updated_at= => nil,
                                      :save! => nil)
@@ -266,6 +270,150 @@ describe QuestionnairesController do
 
     end
 
+    describe 'if issue is a problem' do
+
+      before do
+        @problem.stub!(:send_questionnaire=)
+      end
+
+      describe 'if the "fixed param" is "no"' do
+
+        before do
+          @params = @default_params.merge(:ever_reported => 'yes',
+                                          :fixed => 'no',
+                                          :another => 'yes',
+                                          :update => 'test update')
+        end
+
+        describe 'if there are existing campaigns at the location' do
+
+          before do
+            @stop.campaigns.stub!(:visible).and_return([mock_model(Campaign)])
+          end
+
+          it 'should add a large notice suggesting the user looks for existing campaigns on their issue' do
+            make_request(@params)
+            expected_notice = ["We're sorry to hear that this problem hasn't been fixed. If it's an ongoing issue,",
+                                "you could look to see if anyone is",
+                                "<a href=\"/problems/existing?location_id=#{@stop.id}&location_type=Stop&source=questionnaire\">seeking",
+                                "support</a> for a similar issue at the Test Stop, and add your voice."].join(" ")
+            flash[:large_notice].should == expected_notice
+          end
+
+          it 'should redirect to the problem url' do
+            make_request(@params)
+            response.should redirect_to(problem_url(@problem))
+          end
+
+        end
+
+        describe 'if there are no existing campaigns at the location' do
+
+          before do
+            @stop.campaigns.stub!(:visible).and_return([])
+          end
+
+          it 'should add a large notice suggesting a campaign' do
+            make_request(@params)
+            expected_notice = ["We're sorry to hear that this problem hasn't been fixed. If it's",
+                              "an ongoing issue, you could use FixMyTransport to get others involved by",
+                              "<a href=\"/problems/new?location_id=#{@stop.id}&location_type=Stop\">writing",
+                              "another message to Test Operator</a>, and then answering \"yes\" to",
+                              "the question \"Do you want others to support you?\" on the following",
+                              "page."].join(" ")
+            flash[:large_notice].should == expected_notice
+          end
+
+          it 'should redirect to the problem url' do
+            make_request(@params)
+            response.should redirect_to(problem_url(@problem))
+          end
+
+        end
+
+      end
+
+      describe 'if the "fixed" param is "unknown"' do
+
+        before do
+          @params = @default_params.merge(:ever_reported => 'yes',
+                                          :fixed => 'unknown',
+                                          :another => 'yes',
+                                          :update => 'test update')
+        end
+
+        it 'should add a large notice asking the user to add an update if they get more information' do
+          make_request(@params)
+          flash[:large_notice].should == 'Thank you very much for filling in our questionnaire. Please do come and leave an update if you get more information about the status of your problem.'
+        end
+
+        it 'should redirect to the problem url' do
+          make_request(@params)
+          response.should redirect_to(problem_url(@problem))
+        end
+
+      end
+
+    end
+
+    describe 'if the issue is a campaign' do
+
+      before do
+        @campaign = mock_model(Campaign, :send_questionnaire= => nil,
+                                         :visible? => true,
+                                         :status => :confirmed,
+                                         :status_code => 1,
+                                         :updated_at= => nil,
+                                         :save! => nil,
+                                         :comments => mock('comments', :build => @comment))
+        @questionnaire.stub!(:subject).and_return(@campaign)
+
+      end
+
+      describe 'if the "fixed" param is "no"' do
+
+        before do
+          @params = @default_params.merge(:ever_reported => 'yes',
+                                          :fixed => 'no',
+                                          :another => 'yes',
+                                          :update => 'test update')
+        end
+
+        it 'should add a large notice suggesting asking for advice' do
+          make_request(@params)
+          flash[:large_notice].should == "We're sorry to hear that this problem hasn't been fixed. If you're stuck for what to do next, use the \"Ask an expert\" button to ask your supporters and our experts for advice."
+        end
+
+        it 'should redirect to the campaign url' do
+          make_request(@params)
+          response.should redirect_to(campaign_url(@campaign))
+        end
+
+      end
+
+      describe 'if the "fixed" param is "unknown"' do
+
+        before do
+          @params = @default_params.merge(:ever_reported => 'yes',
+                                          :fixed => 'unknown',
+                                          :another => 'yes',
+                                          :update => 'test update')
+        end
+
+        it 'should add a large notice asking the user to add an update if they get more information' do
+          make_request(@params)
+          flash[:large_notice].should == 'Thank you very much for filling in our questionnaire. Please do come and leave an update if you get more information about the status of your problem.'
+        end
+
+        it 'should redirect to the campaign url' do
+          make_request(@params)
+          response.should redirect_to(campaign_url(@campaign))
+        end
+      end
+
+    end
+
+
     describe 'if the "another" param is "yes"' do
 
       before do
@@ -286,12 +434,16 @@ describe QuestionnairesController do
 
       before do
         @problem.stub!(:status).and_return(:fixed)
-        @params = @default_params.merge(:ever_reported => 'yes',
-                                        :fixed => 'no',
-                                        :another => 'no')
       end
 
       describe 'if there is no update' do
+
+        before do
+          @problem.stub!(:status).and_return(:fixed)
+          @params = @default_params.merge(:ever_reported => 'yes',
+                                          :fixed => 'no',
+                                          :another => 'no')
+        end
 
         it 'should set an error message for the view' do
           make_request(@params)
@@ -371,6 +523,11 @@ describe QuestionnairesController do
         make_request(@params)
       end
 
+      it 'should render the "completed" template' do
+        make_request(@params)
+        response.should render_template('completed')
+      end
+
       describe 'if there is an update' do
 
         before do
@@ -426,6 +583,7 @@ describe QuestionnairesController do
       end
 
     end
+
 
   end
 
@@ -513,7 +671,8 @@ describe QuestionnairesController do
     before do
       @default_params = { :id => 55, :type => 'Problem' }
       @user = mock_model(User)
-      @stop = mock_model(Stop, :points => ['my points'])
+      @stop = mock_model(Stop, :points => ['my points'],
+                               :name => 'test stop')
       @problem = mock_model(Problem, :reporter => @user,
                                      :location => @stop,
                                      :status_code => 5)

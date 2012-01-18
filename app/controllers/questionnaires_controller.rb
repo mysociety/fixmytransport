@@ -86,8 +86,36 @@ class QuestionnairesController < ApplicationController
     end
 
     # show a thanks message
-    render :action => 'completed'
-    return false
+    if params[:fixed] == 'yes'
+      render :action => 'completed'
+      return false
+    else
+      if params[:fixed] == 'no'
+        if @questionnaire.subject.is_a?(Problem)
+          location = @questionnaire.subject.location
+          if location.campaigns.visible.count > 0
+            existing_problems_path = existing_problems_path(:location_id => location.id,
+                                                            :location_type => location.class.to_s,
+                                                            :source => 'questionnaire')
+            flash[:large_notice] = t('questionnaires.completed.next_steps_problem_existing_campaigns',
+                                     :url => existing_problems_path,
+                                     :location => @template.at_the_location(location))
+          else
+            new_problem_path = new_problem_path(:location_id => location.id,
+                                                :location_type => location.class.to_s)
+            flash[:large_notice] = t('questionnaires.completed.next_steps_problem',
+                                     :url => new_problem_path,
+                                     :orgs => @questionnaire.subject.responsible_org_descriptor())
+          end
+        else
+          flash[:large_notice] = t('questionnaires.completed.next_steps_campaign')
+        end
+      else
+        flash[:large_notice] = t('questionnaires.completed.please_come_back')
+      end
+      redirect_to(@template.issue_url(@questionnaire.subject))
+      return false
+    end
   end
 
   # Ask the "have you ever reported an issue before" question when the user marks an issue

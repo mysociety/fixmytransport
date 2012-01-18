@@ -29,7 +29,9 @@ en:
       please_answer_another: "Please say whether you'd like to receive another questionnaire."
     completed:
       please_come_back: Thank you very much for filling in our questionnaire. Please do come and leave an update if you get more information about the status of your problem.
-      next_steps: We're sorry to hear that.
+      next_steps_problem_existing_campaigns: "We're sorry to hear that this problem hasn't been fixed. If it's an ongoing issue, you could look to see if anyone is <a href=\"%{url}\">seeking support</a> for a similar issue %{location}, and add your voice."
+      next_steps_problem: "We're sorry to hear that this problem hasn't been fixed. If it's an ongoing issue, you could use FixMyTransport to get others involved by <a href=\"%{url}\">writing another message to %{orgs}</a>, and then answering \"yes\" to the question \"Do you want others to support you?\" on the following page."
+      next_steps_campaign: "We're sorry to hear that this problem hasn't been fixed. If you're stuck for what to do next, use the \"Ask an expert\" button to ask your supporters and our experts for advice."
       success_thanks: "Thank you very much for filling in our questionnaire. We're glad to hear your problem has been fixed!"
       thanks: Thanks!
     creator_fixed:
