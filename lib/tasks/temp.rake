@@ -21,7 +21,7 @@ namespace :temp do
   end
   
   task :find_custom_responsibilities => :environment do 
-    Problem.find_each do |problem|
+    Problem.visible.find_each do |problem|
       if problem.responsible_organizations.any?{ |org| !problem.location.responsible_organizations.include?(org) }
         puts problem.id 
       end
