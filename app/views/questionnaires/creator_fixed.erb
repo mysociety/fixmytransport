@@ -1,0 +1,6 @@
+<%- @title = t('questionnaires.creator_fixed.thanks_title') %>
+<%- if @issue.is_a?(Problem) %>
+  <%= render :partial => 'shared/problem_details', :locals => {:show_comment_button => false, :show_questionnaire => 'fixed_questionnaire' } %>
+<%- else %>
+  <%= render :partial => 'shared/campaign_details', :locals => {:show_questionnaire => 'fixed_questionnaire', :show_social => false, :show_comment_button => false, :show_initiator => false, :show_supporters => false, :show_admin_tools => false, :show_expert_tools => false } %>
+<%- end %>

@@ -291,6 +291,14 @@ module ApplicationHelper
     end
   end
 
+  def issue_url(issue)
+    if issue.is_a? Campaign
+      return campaign_url(issue)
+    else
+      return problem_url(issue)
+    end
+  end
+
   def location_path(location, attributes={})
     if location.is_a? Stop
       return stop_path(location.locality, location, attributes)
@@ -413,7 +421,7 @@ module ApplicationHelper
     when Route, Stop, StopArea, SubRoute
       return location_url(commentable)
     else
-      raise "Unhandled commentable type in commentable_url: #{commentable.type}"
+      raise "Unhandled commentable type in commentable_url: #{commentable.class.to_s}"
     end
   end
 
@@ -425,13 +433,18 @@ module ApplicationHelper
   end
 
   def comment_header(comment)
+    text = ''
     if comment.commented.is_a?(Campaign)
-      return t('campaigns.show.user_says', :name => h(comment.user.name))
+      text = t('campaigns.show.user_says', :name => h(comment.user.name))
     elsif comment.commented.is_a?(Problem)
-      return t('problems.show.user_says', :name => h(comment.user.name))
+      text = t('problems.show.user_says', :name => h(comment.user.name))
     else
-      return t('shared.location_content.user_says', :name => h(comment.user.name))
+      text = t('shared.location_content.user_says', :name => h(comment.user.name))
     end
+    if comment.mark_fixed?
+      text += " " + t('problems.show.marked_as_fixed')
+    end
+    text
   end
 
   def map_link_path(location, link_type)
@@ -484,8 +497,6 @@ module ApplicationHelper
     case campaign.status
     when :confirmed
       'current'
-    when :successful
-      'fixed'
     else
       campaign.status.to_s
     end
@@ -536,8 +547,6 @@ module ApplicationHelper
     case problem.status
     when :confirmed
       'current'
-    when :successful
-      'fixed'
     else
       problem.status.to_s
     end

@@ -17,6 +17,7 @@ class Campaign < ActiveRecord::Base
   has_many :campaign_photos
   has_many :subscriptions, :as => :target
   has_many :subscribers, :through => :subscriptions, :source => :user, :conditions => ['subscriptions.confirmed_at is not null']
+  has_many :questionnaires, :as => :subject
   validates_length_of :title, :maximum => 80, :on => :update, :allow_nil => true
   validates_presence_of :title, :description, :on => :update
   validates_associated :initiator, :on => :update
@@ -40,14 +41,14 @@ class Campaign < ActiveRecord::Base
 
   has_status({ 0 => 'New',
                1 => 'Confirmed',
-               2 => 'Successful',
+               2 => 'Fixed',
                3 => 'Hidden' })
 
   def self.visible_status_codes
-   [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:successful]]
+   [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:fixed]]
   end
 
-  named_scope :visible, :conditions => ["status_code in (?)", Campaign.visible_status_codes]
+  named_scope :visible, :conditions => ["campaigns.status_code in (?)", Campaign.visible_status_codes]
 
   # instance methods
 
@@ -58,11 +59,11 @@ class Campaign < ActiveRecord::Base
   end
 
   def visible?
-    [:confirmed, :successful].include?(self.status)
+    [:confirmed, :fixed].include?(self.status)
   end
 
   def editable?
-    [:new, :confirmed, :successful].include?(self.status)
+    [:new, :confirmed, :fixed].include?(self.status)
   end
 
   def supporter_count
@@ -86,11 +87,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def responsible_org_descriptor
-    if problem.responsible_organizations.empty?
-      I18n.translate('campaigns.show.location_operator', :location => problem.location.description)
-    else
-      problem.responsible_organizations.map{ |org| org.name }.to_sentence
-    end
+    problem.responsible_org_descriptor
   end
 
   # Add a user as a supporter of a campaign
@@ -169,7 +166,7 @@ class Campaign < ActiveRecord::Base
     assignments.find(:all, :conditions => ['task_type_name = ?', 'write-to-other'])
   end
 
-  # Return a list of version models in cronological order representing changes made 
+  # Return a list of version models in cronological order representing changes made
   # in the admin interface to this campaign
   def admin_actions
     self.versions.find(:all, :conditions => ['admin_action = ?', true])
@@ -234,4 +231,28 @@ class Campaign < ActiveRecord::Base
     MySociety::Config.get('INCOMING_EMAIL_DOMAIN', 'localhost')
   end
 
+  def self.needing_questionnaire(weeks_ago, user=nil)
+    time_weeks_ago = Time.now - weeks_ago.weeks
+    params = [time_weeks_ago, true, time_weeks_ago]
+    if user
+      user_clause = " AND reporter_id = ?"
+      params << user
+    else
+      user_clause = ""
+    end
+    query = ["problems.sent_at is not null
+              AND problems.sent_at < ?
+              AND campaigns.send_questionnaire = ?
+              AND ((SELECT max(completed_at)
+                   FROM questionnaires
+                   WHERE subject_type = 'Campaign'
+                   AND subject_id = campaigns.id) < ?
+                   OR (SELECT max(completed_at)
+                   FROM questionnaires
+                   WHERE subject_type = 'Campaign'
+                   AND subject_id = campaigns.id) is NULL)
+                   #{user_clause}"]
+    self.visible.find(:all, :conditions => query + params,
+                            :include => :problem)
+  end
 end

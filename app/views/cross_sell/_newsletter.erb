@@ -1,0 +1,18 @@
+<h2>mySociety newsletter</h2>
+
+<p>Interested in hearing more about FixMyTransport successes? Enter your email
+address below and we&rsquo;ll send you occasional emails about what mySociety
+and our users have been up to. mySociety respects your privacy, and we'll never sell or give away your private details. You can unsubscribe at any time.</p>
+
+<form method="post" action="https://secure.mysociety.org/admin/lists/mailman/subscribe/news" class="newsletter_form">
+<div class='form-field'>
+  <label for="name">Name:</label>
+  <input type="text" name="fullname" id="name" value="<%= user.name %>" size="30">
+</div>
+<div class='form-field'>
+  <br><label for="email">Email:</label>
+  <input type="text" name="email" id="email" value="<%= user.email %>" size="30">
+</div>
+<button class="button" type="submit">Add me to the list</button>
+</form>
+

@@ -1,0 +1,41 @@
+en:
+  questionnaires:
+    show:
+      questionnaire: "Questionnaire"
+      instructions_problem: "The details of your problem report are given below."
+      instructions_campaign: "The details and history of your problem are given below."
+      could_not_find_questionnaire: "We're sorry, but we could not find that questionnaire. If you are having issues, try copying and pasting the URL from your email into your browser. If that doesn't work, use the feedback link to get in touch."
+      questionnaire_completed: "You've already answered this questionnaire. If you have a question, please <a href='%{feedback_url}'>get in touch</a>, or <a href='%{issue_url}'>view your issue</a>."
+      forbidden: "Unable to access questionnaire: this account has been suspended."
+      look_at_updates: "Please have a look at the updates below the map."
+      marked_as_fixed: "An update has marked this problem as fixed."
+      is_fixed: "Has this problem been fixed?"
+      fixed_yes: "Yes"
+      fixed_no: "No"
+      fixed_unknown: "I don&rsquo;t know"
+      another: "Would you like to receive another questionnaire in four weeks, reminding you to check the status?"
+      another_yes: "Yes"
+      another_no: "No"
+      leave_an_update: "If you want to leave a public update, please enter it here (please note it will not be sent to %{org}). For example, what was your experience of getting the problem fixed?')"
+      submit: "Submit questionnaire"
+      ever_reported: Have you ever reported a problem with public transport before?
+      ever_reported_yes: "Yes"
+      ever_reported_no: "No"
+      fixed_blank: "Please say whether the problem has been fixed."
+      reported_blank: "Please say whether you have ever reported a transport problem before."
+      hidden: "Unable to access questionnaire: this issue has been removed."
+      please_explain: "Please provide an explanation as to why you're reopening this report."
+      user_completed_questionnaire: "Questionnaire filled in by problem reporter."
+      please_answer_another: "Please say whether you'd like to receive another questionnaire."
+    completed:
+      please_come_back: Thank you very much for filling in our questionnaire. Please do come and leave an update if you get more information about the status of your problem.
+      next_steps_problem_existing_campaigns: "We're sorry to hear that this problem hasn't been fixed. If it's an ongoing issue, you could look to see if anyone is <a href=\"%{url}\">seeking support</a> for a similar issue %{location}, and add your voice."
+      next_steps_problem: "We're sorry to hear that this problem hasn't been fixed. If it's an ongoing issue, you could use FixMyTransport to get others involved by <a href=\"%{url}\">writing another message to %{orgs}</a>. We'll make a public page for gathering support and any replies you get will appear there. We'll also give you tools for spreading the word and getting expert advice."
+      next_steps_campaign: "We're sorry to hear that this problem hasn't been fixed. If you're stuck for what to do next, use the \"Ask an expert\" button to ask your supporters and our experts for advice."
+      success_thanks: "Thank you very much for filling in our questionnaire. We're glad to hear your problem has been fixed!"
+      thanks: Thanks!
+    creator_fixed:
+      issue_not_found: "Sorry, we couldn't find your issue in the database."
+      thanks_title: Thanks!
+      instructions: "We're glad to hear that the problem has been fixed! Could we just ask if you have ever reported a problem with public transport before?"
+      submit: Submit

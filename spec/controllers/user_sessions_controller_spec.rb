@@ -87,12 +87,79 @@ describe UserSessionsController do
 
     end
 
-    it 'should set the session as httponly (cookie setting)' do 
+    it 'should set the session as httponly (cookie setting)' do
       @user_session.should_receive(:httponly=)
       make_request
     end
 
     describe 'if the user session is valid and the user has confirmed their password' do
+
+      describe 'and a post-login action of adding a comment to a problem is passed' do
+
+        before do
+          @mock_problem = mock_model(Problem)
+          Problem.stub!(:find).with(33).and_return(@mock_problem)
+          @mock_comment = mock_model(Comment, :needs_questionnaire? => false,
+                                              :commented => @mock_problem,
+                                              :old_commented_status_code => 3)
+          Comment.stub!(:create_from_hash).and_return(@mock_comment)
+          comment_data = { :action => :add_comment,
+                           :id => 33,
+                           :commented_type => 'Problem',
+                           :text => ActiveSupport::Base64.encode64('test text'),
+                           :text_encoded => true,
+                           :mark_fixed => true,
+                           :mark_open => nil }
+          @next_action_data = @controller.send(:data_to_string, comment_data)
+          @controller.stub!(:current_user).with(true).and_return(@mock_user)
+        end
+
+        it 'should create the comment' do
+          expected_comment_data = { :model => @mock_problem,
+                                    :text => ActiveSupport::Base64.encode64('test text'),
+                                    :mark_fixed => true,
+                                    :mark_open => nil,
+                                    :confirmed => true,
+                                    :text_encoded => true }
+          # anything should be the current user, but that needs to change during the request
+          # as the session is created, so don't worry about it here.
+          Comment.should_receive(:create_from_hash).with(expected_comment_data, anything())
+          make_request(@default_params.update(:next_action => @next_action_data))
+        end
+
+        describe 'if the comment needs a questionnaire' do
+
+          before do
+            @mock_comment.stub!(:needs_questionnaire?).and_return(true)
+          end
+
+          it 'should save the old status of the commented issue to the session flash' do
+            make_request(@default_params.update(:next_action => @next_action_data))
+            flash[:old_status_code].should == 3
+          end
+
+          it 'should redirect to the questionnaire for fixed issues, passing params indicating the issue' do
+            make_request(@default_params.update(:next_action => @next_action_data))
+            response.should redirect_to(questionnaire_fixed_url(:id => @mock_problem.id,
+                                                                :type => 'Problem'))
+          end
+
+        end
+
+        describe 'if the comment does not need a questionnaire' do
+
+          before do
+            @mock_comment.stub!(:needs_questionnaire?).and_return(false)
+          end
+
+          it 'should redirect to the url of the thing being commented on' do
+            make_request(@default_params.update(:next_action => @next_action_data))
+            response.should redirect_to(problem_url(@mock_problem))
+          end
+
+        end
+
+      end
 
       describe 'and a post-login action of joining a campaign is passed' do
 
@@ -100,8 +167,7 @@ describe UserSessionsController do
           @mock_campaign = mock_model(Campaign, :add_supporter => true)
           Campaign.should_receive(:find).with(33).and_return(@mock_campaign)
           @next_action_data = @controller.send(:data_to_string, { :action => :join_campaign,
-                                                                  :id => 33,
-                                                                  :redirect => '/another_url'})
+                                                                  :id => 33})
         end
 
         it 'should add the supporter to the campaign' do
@@ -109,9 +175,9 @@ describe UserSessionsController do
           make_request(@default_params.update(:next_action => @next_action_data))
         end
 
-        it 'should return to the redirect given' do
+        it 'should return to campaign url' do
           make_request(@default_params.update(:next_action => @next_action_data))
-          response.should redirect_to("/another_url")
+          response.should redirect_to(campaign_url(@mock_campaign))
         end
 
       end
@@ -137,9 +203,9 @@ describe UserSessionsController do
           flash[:error].should == 'Unable to authenticate &mdash; this account has been suspended.'
         end
 
-        it 'should disregard any redirects' do
+        it 'should redirect to the front page' do
           make_request(@default_params.update(:next_action => @next_action_data))
-          response.should_not redirect_to("/another_url")
+          response.should redirect_to(root_url)
         end
 
         describe 'if the request asks for json' do

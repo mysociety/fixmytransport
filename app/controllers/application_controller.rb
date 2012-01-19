@@ -84,12 +84,12 @@ class ApplicationController < ActionController::Base
     if current_user
       store_location
       respond_to do |format|
-        format.html do 
+        format.html do
           flash[:notice] = t('shared.login.must_be_logged_out')
           redirect_to root_url
           return false
         end
-        format.json do 
+        format.json do
           @json = {:errors => {}}
           @json[:errors][:base] = t('shared.login.modal_must_be_logged_out')
           @json[:success] = false
@@ -135,7 +135,11 @@ class ApplicationController < ActionController::Base
 
   # filter method for requiring that the campaign initiator be logged in
   def require_campaign_initiator(allow_expert=false)
-    return true if current_user && current_user == @campaign.initiator
+    if current_user && current_user == @campaign.initiator
+      # set a flag so that if the user logs out here, we don't try and bring them back
+      @no_redirect_on_logout = true
+      return true
+    end
     if allow_expert
       return true if current_user && current_user.is_expert?
     end
@@ -160,7 +164,7 @@ class ApplicationController < ActionController::Base
       session[:return_to] = request.request_uri
     end
   end
-  
+
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
@@ -212,6 +216,8 @@ class ApplicationController < ActionController::Base
     data = YAML::load(yaml_data)
   end
 
+  # Store data in the session about an incomplete action that the user
+  # will need to log in to complete
   def save_post_login_action_to_session
     if post_login_action_data = get_action_data(params)
       session[:next_action] = params[:next_action]
@@ -221,6 +227,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Move data about an incomplete action (that the user will need to log in to
+  # complete) from the session to the database. Store any model as unconfirmed,
+  # and link it to an action confirmation model. Should be called when a user initiates
+  # some login action that may be completed in another session as it has an email step
+  # e.g. account creation, password reset
   def save_post_login_action_to_database(user)
     if post_login_action_data = get_action_data(session)
       session.delete(:next_action)
@@ -239,7 +250,7 @@ class ApplicationController < ActionController::Base
         comment_data = { :text => post_login_action_data[:text],
                          :mark_fixed => post_login_action_data[:mark_fixed],
                          :mark_open => post_login_action_data[:mark_open],
-                         :model => commented, 
+                         :model => commented,
                          :confirmed => false,
                          :text_encoded => post_login_action_data[:text_encoded] }
         comment = Comment.create_from_hash(comment_data, user, token=user.perishable_token)
@@ -250,20 +261,22 @@ class ApplicationController < ActionController::Base
         confirmation_target = problem
         return_model = problem
       end
-      ActionConfirmation.create!(:user => user, 
+      ActionConfirmation.create!(:user => user,
                                  :token => user.perishable_token,
                                  :target => confirmation_target)
       return return_model
     else
-      # just add an action confirmation without target so the user can log in with 
+      # just add an action confirmation without target so the user can log in with
       # their current token
       ActionConfirmation.create!(:user => user,
                                  :token => user.perishable_token)
       return nil
     end
-    
+
   end
 
+  # Get a string from the session data about an incomplete action that can be
+  # used to tell the user why they should go and click on the link in their email
   def post_login_action_string
     if post_login_action_data = get_action_data(session)
       case post_login_action_data[:action]
@@ -279,6 +292,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Get a string from the session data about an incomplete action that can be
+  # used to tell the user we'll hold on to their content while they go and check
+  # their email
   def post_login_action_worry
     if post_login_action_data = get_action_data(session)
       case post_login_action_data[:action]
@@ -294,6 +310,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Unserialize the data from the session about an incomplete action
   def get_action_data(data_hash)
     if data_hash[:next_action]
       next_action_data = string_to_data(data_hash[:next_action])
@@ -304,6 +321,8 @@ class ApplicationController < ActionController::Base
     return nil
   end
 
+  # If a user started an action anonymously that requires being logged in, and then
+  # logged in, get their action information out of the session, and complete the action.
   def perform_post_login_action
     current_user(refresh=true)
     if post_login_action_data = get_action_data(session)
@@ -312,36 +331,39 @@ class ApplicationController < ActionController::Base
       when :join_campaign
         campaign = Campaign.find(id)
         campaign.add_supporter(current_user, confirmed=true)
+        session[:return_to] = campaign_path(campaign)
       when :add_comment
         commented_type = post_login_action_data[:commented_type]
         commented = commented_type.constantize.find(id)
-        comment_data = { :model => commented, 
+        comment_data = { :model => commented,
                          :text => post_login_action_data[:text],
                          :mark_fixed => post_login_action_data[:mark_fixed],
                          :mark_open => post_login_action_data[:mark_open],
                          :confirmed => true,
                          :text_encoded => post_login_action_data[:text_encoded] }
-        
-        Comment.create_from_hash(comment_data, current_user)
+        comment = Comment.create_from_hash(comment_data, current_user)
         flash[:notice] = t('shared.add_comment.thanks_for_comment')
+        next_url = get_comment_next_url(comment)
+        respond_to do |format|
+          format.html{ session[:return_to] = next_url }
+          format.json{ @json[:redirect] = next_url }
+        end
       when :create_problem
         problem = Problem.create_from_hash(post_login_action_data, current_user)
+        next_url = convert_problem_url(problem)
         respond_to do |format|
-          format.html do
-            session[:return_to] = convert_problem_url(problem)
-          end
-          format.json do
-            @json[:redirect] = convert_problem_url(problem)
-          end
+          format.html{ session[:return_to] = next_url }
+          format.json{ @json[:redirect] = next_url }
         end
-      end
-      if post_login_action_data[:redirect]
-        session[:return_to] = post_login_action_data[:redirect]
       end
       session.delete(:next_action)
     end
   end
-  
+
+  # If a user started an action anonmyously that requires being logged-in and then logged in
+  # in a way that we assume they may complete in a separate session as they have an
+  # email confirmation step (e.g. account creation, password reset),
+  # complete their initial action.
   # a false return value indicates that a redirect has been performed
   def perform_saved_login_action
     case @action_confirmation.target
@@ -357,7 +379,7 @@ class ApplicationController < ActionController::Base
         return false
       else
         comment.confirm!
-        session[:return_to] = @template.commented_url(comment.commented)
+        session[:return_to] = get_comment_next_url(comment)
         if self.controller_name == "password_resets"
           flash[:notice] = t('password_resets.update.successfully_confirmed_comment')
         else
@@ -467,20 +489,26 @@ class ApplicationController < ActionController::Base
     if @comment.valid?
       @comment.save
       @comment.confirm!
+      next_url = get_comment_next_url(@comment)
       respond_to do |format|
         format.html do
           flash[:notice] = t('shared.add_comment.thanks_for_comment')
-          redirect_to @template.commented_url(@comment.commented)
+          redirect_to next_url
         end
         format.json do
-          index = params[:last_thread_index].to_i + 1
-          comment_html = render_to_string :partial => "shared/comment",
-                                          :locals => { :comment => @comment,
-                                                       :index => index }
-          @json = { :success => true,
-                    :html => "<li>#{comment_html}</li>",
-                    :mark_fixed => @comment.mark_fixed,
-                    :mark_open => @comment.mark_open }
+          if @comment.needs_questionnaire?
+             @json = { :success => true,
+                       :redirect => next_url }
+          else
+            index = params[:last_thread_index].to_i + 1
+            comment_html = render_to_string :partial => "shared/comment",
+                                            :locals => { :comment => @comment,
+                                                        :index => index }
+            @json = { :success => true,
+                      :html => "<li>#{comment_html}</li>",
+                      :mark_fixed => @comment.mark_fixed,
+                      :mark_open => @comment.mark_open }
+          end
           render :json => @json
         end
       end
@@ -503,7 +531,6 @@ class ApplicationController < ActionController::Base
                        :text_encoded => true,
                        :mark_fixed => @comment.mark_fixed,
                        :mark_open => @comment.mark_open,
-                       :redirect => @template.commented_url(@comment.commented),
                        :notice => t('shared.add_comment.sign_in_to_comment',
                                     :commented_type => commented_type_description(@comment.commented)) }
       session[:next_action] = data_to_string(comment_data)
@@ -536,6 +563,23 @@ class ApplicationController < ActionController::Base
         render :json => @json
       end
     end
+  end
+
+  def get_comment_next_url(comment)
+    if comment.needs_questionnaire?
+      # store the old status code of the commented issue for use in the
+      # questionnaire
+      flash[:old_status_code] = comment.old_commented_status_code
+      return questionnaire_fixed_url(:id => comment.commented.id,
+                                     :type => comment.commented.class.to_s)
+    else
+      return commented_url(comment.commented)
+    end
+  end
+
+  # wrapper for easier access to method from controller specs
+  def commented_url(commented)
+    @template.commented_url(commented)
   end
 
   def commented_type_description(commented)
@@ -592,11 +636,11 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
+
   def recognized_devices
     ['android', 'iphone', 'ipad']
   end
-  
+
   # later, more thorough user-agent sniffing would be appropriate
   # or idealy just pick it up from, e.g., request.headers["X-device-class"], set by varnish
   # sets up @user_device and @is_mobile
@@ -615,7 +659,7 @@ class ApplicationController < ActionController::Base
       response.headers['Vary'] = 'User-Agent'
       @user_device = :default_device
       @is_mobile = false
-      user_agent =  request.env['HTTP_USER_AGENT'].downcase 
+      user_agent =  request.env['HTTP_USER_AGENT'].downcase
       mobile_devices.each do |keyword| # for now, just lazy search for keywords; later may be more complex
         if user_agent.index(keyword)
           @user_device = keyword
@@ -625,7 +669,7 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
+
   def load_user_using_action_confirmation_token
     @action_confirmation = ActionConfirmation.find_by_token(params[:email_token], :include => :user)
     if @action_confirmation
@@ -644,5 +688,5 @@ class ApplicationController < ActionController::Base
       redirect_to root_url
     end
   end
-  
+
 end

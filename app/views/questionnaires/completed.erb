@@ -1,0 +1,21 @@
+<div id="banner">
+    <a id="home" href="/">FixMyTransport</a>
+	<div class="container">
+		<h1><%= t('questionnaires.completed.thanks')%></h1>
+	</div>
+</div>
+
+<div id="greybanner">
+  <div class="container">
+    <p>	 <%= t('questionnaires.completed.success_thanks') %>
+    </p>
+  </div>
+</div>
+
+<div id="main-content" class="container">
+
+  <%= render :partial => 'cross_sell/newsletter', :locals => { :user => current_user } %>
+
+</div>
+
+

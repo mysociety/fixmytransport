@@ -39,6 +39,7 @@ ActionController::Routing::Routes.draw do |map|
     campaign.resources :assignments, :only => [:new, :create, :update, :edit]
   end
 
+  # problems
   map.resources :problems, :except => [:destroy, :edit, :update],
                            :member => {:convert => [:get, :post],
                                        :add_comment => [:get, :post] },
@@ -50,6 +51,19 @@ ActionController::Routing::Routes.draw do |map|
                                             :find_ferry_route => :get,
                                             :find_other_route => :get,
                                             :existing => :get }
+
+  # questionnaires
+  map.questionnaire_fixed '/q/fixed', :action => 'creator_fixed',
+                                      :controller => 'questionnaires',
+                                      :conditions => { :method => [:get, :post] }
+  map.questionnaire '/q/:email_token', :action => 'show',
+                                       :controller => 'questionnaires',
+                                       :conditions => { :method => :get }
+  map.update_questionnaire '/q/:email_token', :action => 'update',
+                                              :controller => 'questionnaires',
+                                              :conditions => { :method => :post }
+
+
 
   # issues index
   map.issues '/issues', :action => 'issues_index', :controller => 'problems'
@@ -143,7 +157,7 @@ ActionController::Routing::Routes.draw do |map|
                                          :action => 'request_country',
                                          :conditions => { :method => :get }
 
-  # service url for getting info for nearest stop from lon/lat (NB requires session)
+  # service url for getting info for nearest stop from lon/lat
   map.request_nearest_stop 'request_nearest_stop', :controller => 'problems',
                                            :action => 'request_nearest_stop',
                                            :conditions => { :method => :get }
@@ -170,7 +184,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :profiles, :only => [:show]
 
   # static
-  map.about '/advice', :controller => 'static', :action => 'advice'
+  map.advice '/advice', :controller => 'static', :action => 'advice'
   map.about '/about', :controller => 'static', :action => 'about'
   map.feedback '/feedback', :controller => 'static',
                             :action => 'feedback',

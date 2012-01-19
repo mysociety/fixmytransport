@@ -18,7 +18,7 @@ describe UserMailer do
 
       it 'should set the subject of the email to "Reset your password"' do
         @mailer = UserMailer.create_password_reset_instructions(@user, nil, nil)
-        @mailer.subject.should == '[FixMyTransport] Password reset instructions'
+        @mailer.subject.should == 'FixMyTransport - Password reset instructions'
       end
 
     end
@@ -33,7 +33,7 @@ describe UserMailer do
 
       it 'should set the subject of the email to "Confirm your problem"' do
         @mailer = UserMailer.create_password_reset_instructions(@user, @post_login_action_data, @mock_problem)
-        @mailer.subject.should == '[FixMyTransport] Confirm your problem'
+        @mailer.subject.should == 'FixMyTransport - Confirm your problem'
       end
 
       it 'should include the details of the problem in the body of the email' do
@@ -68,7 +68,7 @@ describe UserMailer do
 
       it 'should set the subject of the email to "Confirm your account"' do
         @mailer = UserMailer.create_new_account_confirmation(@user, nil, nil)
-        @mailer.subject.should == '[FixMyTransport] Confirm your account'
+        @mailer.subject.should == 'FixMyTransport - Confirm your account'
       end
 
     end
@@ -83,7 +83,7 @@ describe UserMailer do
 
       it 'should set the subject of the email to "Confirm your problem"' do
         @mailer = UserMailer.create_new_account_confirmation(@user, @post_login_action_data, @mock_problem)
-        @mailer.subject.should == '[FixMyTransport] Confirm your problem'
+        @mailer.subject.should == 'FixMyTransport - Confirm your problem'
       end
 
       it 'should include the details of the problem in the body of the email' do
@@ -103,7 +103,7 @@ describe UserMailer do
 
       it 'should set the subject of the email to "Confirm your comment"' do
         @mailer = UserMailer.create_new_account_confirmation(@user, @post_login_action_data, @mock_comment)
-        @mailer.subject.should == '[FixMyTransport] Confirm your comment'
+        @mailer.subject.should == 'FixMyTransport - Confirm your comment'
       end
 
       it 'should include the details of the comment in the body of the email' do
@@ -122,7 +122,7 @@ describe UserMailer do
 
       it 'should set the subject line of the email to "Confirm your update"' do
         @mailer = UserMailer.create_new_account_confirmation(@user, @post_login_action_data, @mock_comment)
-        @mailer.subject.should == '[FixMyTransport] Confirm your update'
+        @mailer.subject.should == 'FixMyTransport - Confirm your update'
       end
 
       it 'should include the details of the comment in the body of the email, referred to as an update' do

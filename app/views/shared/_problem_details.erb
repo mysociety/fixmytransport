@@ -1,0 +1,63 @@
+<%- content_for :javascript do %>
+<%= raw javascript_include_tag('jquery.text-overflow.js', :charset => 'utf-8') %>
+<%- end %>
+
+<div id="banner">
+    <a id="home" href="/">FixMyTransport</a>
+	<div class="container">
+		<%- if @problem.status == :fixed %>
+		  <div class="right">
+			  <span class="ribbon"><%= t('problems.show.fixed') %></span>
+  	  </div>
+  	<%- end %>
+		<h1><%= @problem.subject %></h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+		<h5><a href="<%= location_url(@problem.location) %>"><%= @problem.location.description %></a> </h5>
+		<%= raw problem_operator_links(@problem) %>
+	</div>
+</div>
+<div id="main-content" class="container">
+	<div class="rightcol narrowcol">
+	  
+	  <%- if show_questionnaire %>
+	    <%= render :partial => "shared/#{show_questionnaire}", :locals => { :subject => @problem } %>
+	  <%- end %>
+	  
+		<h3>Initial problem</h3>
+			<p><%= raw simple_format(sanitize(@problem.description)) %></p>
+
+			<h5><%= t('problems.show.posted')%></h5>
+			<ul class="problem-details">
+				<li><%= t("problems.show.reported_by")%> <a href="<%=  profile_url(@problem.reporter) %>"><%= @problem.reporter.name %></a> <%= t("problems.show.reported_at")%> <%= @problem.confirmed_at.to_date.to_s(:short) %></li>
+				<%= raw problem_sending_history(@problem) %>
+			</ul>
+			<%- if current_user && current_user.is_admin? %>
+        <a href="<%= admin_url(admin_problem_path(@problem.id)) %>" class="button"><%= t('problems.show.admin_problem') %></a>
+			<%- end %>
+	</div>
+	<div class="leftcol widecol">	
+	  <div id="medium-map">
+    <%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH } %>
+		</div>
+		<div class="clear">
+			<h5 class="left"><%= t('problems.show.comments')%></h5>
+			<%- if show_comment_button %>
+			  <a id="problem-comment-button" class="comment button right comment-trigger" href="<%= add_comment_problem_url(@problem) %>" data-title="<%= t('problems.show.comment_title') %>"><%= t('problems.show.comment')%></a>
+			<%- end %>
+		</div>
+
+		<ul id="campaign-thread">
+		  <%- @problem.comments.visible.each_with_index do |comment, index|  %>
+  		 <li class="open">
+  		  <%= render :partial => 'shared/comment', :locals => { :comment => comment,  :index => index+1 }%>
+		   </li>
+		<%- end %>
+		</ul>
+		
+	</div>
+
+
+</div>
