@@ -9,27 +9,33 @@ class OperatorsController < ApplicationController
   def index
     @operator_list_threshold = 20
     @operator_initial_chars = []
+    @operator_count = 0
+    operators = []
     conditions = []
     if params[:query]=~ /[[:alnum:]]{1}/ # at least one alphanum... but maybe choke it? 
       @search_query = params[:query].downcase
       conditions << "(lower(name) like ? OR lower(short_name) like ?)"
       2.times{ conditions << "%%#{@search_query}%%" }
+      operators_by_letter = MySociety::Util.by_letter(Operator.find(:all, :conditions => conditions), :upcase){|o| o.name }
+      operators_by_letter.each_value {|ops| @operator_count  += ops.size }
+    else
+      operators_by_letter = Operator.all_by_letter # memoized
+      @operator_count = Operator.count(:all)
     end
-    operators = Operator.find(:all, :conditions => conditions) # no sort yet (may be large) 
-    @operator_count = operators.size
-    if operators.size > @operator_list_threshold
-      operators_by_letter = MySociety::Util.by_letter(operators, :upcase){|o| o.name }
+    if @operator_count > @operator_list_threshold
       if ! (params[:initial_char].blank? || params[:initial_char].empty?)
         requested_initial = params[:initial_char][0].chr.upcase
         if operators_by_letter.has_key?(requested_initial)
           @initial_char = requested_initial
-        end
+        end # else maybe should redirect to letterless index
       end
       @operator_initial_chars = operators_by_letter.keys.sort
       if @initial_char.blank?
-        @initial_char = @operator_initial_chars.first
+        @initial_char = @operator_initial_chars.first # if no explicit initial letter (tab), display the first one
       end
       operators = operators_by_letter[@initial_char]
+    else
+      operators_by_letter.each_value {|ops| operators.concat(ops) }
     end
     operators = operators.sort!{|o1, o2| o1.name.downcase <=> o2.name.downcase}
     @operators = WillPaginate::Collection.create((params[:page] or 1), 20 ) do |pager|
