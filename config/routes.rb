@@ -4,11 +4,13 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'problems', :action => 'frontpage'
 
   # operator pages
+  map.operator_by_initial "/operators/:initial_char", :action => 'index',
+                                            :controller => 'operators',
+                                            :initial_char => /./
   map.resources :operators, :only => [:index, :show],
                             :member => { :issues => [:get],
                                          :routes => [:get],
-                                         :stations => [:get]}
-
+                                         :stations => [:get]}  
   # subscriptions
   map.confirm_unsubscribe '/u/:email_token', :action => 'confirm_unsubscribe',
                                             :controller => 'subscriptions'

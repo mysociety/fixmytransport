@@ -10,6 +10,7 @@ en:
         zero: "Searched for <span class='operator-search-query'>%{search_query}</span>, found no operators."
         one: "Searched for <span class='operator-search-query'>%{search_query}</span>, found %{count} operator."
         other: "Searched for <span class='operator-search-query'>%{search_query}</span>, found %{count} operators."
+      show_all_operators: 'Show all operators.'
     show:
       information_wrong: Is this information wrong? 
       routes_header: "Routes"

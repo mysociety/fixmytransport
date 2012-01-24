@@ -5,21 +5,41 @@ class OperatorsController < ApplicationController
   before_filter :find_operator, :except => [:index]
   before_filter :setup_shared_title, :except => [:index]
   
+  
   def index
     @operator_list_threshold = 20
+    @operator_initial_chars = []
     conditions = []
     if params[:query]=~ /[[:alnum:]]{1}/ # at least one alphanum... but maybe choke it? 
       @search_query = params[:query].downcase
       conditions << "(lower(name) like ? OR lower(short_name) like ?)"
       2.times{ conditions << "%%#{@search_query}%%" }
     end
-    @operators = Operator.find(:all, :conditions => conditions) # no sort yet (may be large) 
-    @operator_count = @operators.size
-    if @operators.size > @operator_list_threshold
-      @operators_by_letter = MySociety::Util.by_letter(@operators, :upcase){|o| o.name }
+    operators = Operator.find(:all, :conditions => conditions) # no sort yet (may be large) 
+    @operator_count = operators.size
+    if operators.size > @operator_list_threshold
+      operators_by_letter = MySociety::Util.by_letter(operators, :upcase){|o| o.name }
+      if ! (params[:initial_char].blank? || params[:initial_char].empty?)
+        requested_initial = params[:initial_char][0].chr.upcase
+        if operators_by_letter.has_key?(requested_initial)
+          @initial_char = requested_initial
+        end
+      end
+      @operator_initial_chars = operators_by_letter.keys.sort
+      if @initial_char.blank?
+        @initial_char = @operator_initial_chars.first
+      end
+      operators = operators_by_letter[@initial_char]
+    end
+    operators = operators.sort!{|o1, o2| o1.name.downcase <=> o2.name.downcase}
+    @operators = WillPaginate::Collection.create((params[:page] or 1), 20 ) do |pager|
+      pager.replace(operators[pager.offset, pager.per_page])      
+      if ! pager.total_entries
+        pager.total_entries = operators.size
+      end    
     end
   end
-  
+    
   def show
     @title = @operator.name 
     @current_tab = :issues

@@ -38,7 +38,7 @@ $(document).ready(function(){
      ================================================== */
 
      function tabifyRouteLists() {
-         if ($('#tabs').length > 0){
+         if ($('#tabs').length > 0 ){
            $("#tabs").tabs();
 
            if ($('#tabs-bus .tabs-sub-nav').length > 0){
