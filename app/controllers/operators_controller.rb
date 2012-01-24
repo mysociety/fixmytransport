@@ -13,7 +13,7 @@ class OperatorsController < ApplicationController
     operators = []
     conditions = []
     if params[:query]=~ /[[:alnum:]]{1}/ # at least one alphanum... but maybe choke it? 
-      @search_query = params[:query].downcase
+      @search_query = params[:query].downcase.gsub(/\s+/, " ").strip  # multiple spaces most likely to be in error 
       conditions << "(lower(name) like ? OR lower(short_name) like ?)"
       2.times{ conditions << "%%#{@search_query}%%" }
       operators_by_letter = MySociety::Util.by_letter(Operator.find(:all, :conditions => conditions), :upcase){|o| o.name }
