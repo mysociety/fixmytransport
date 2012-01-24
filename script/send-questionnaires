@@ -2,4 +2,4 @@
 
 LOC=`dirname $0`
 
-$LOC/runner 'QuestionnaireMailer.send_questionnaires(dryrun=false)'
+$LOC/runner 'QuestionnaireMailer.send_questionnaires(dryrun=false, max_questionnaires=50)'
