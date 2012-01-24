@@ -6,7 +6,9 @@
 </div>
 <div id="greybanner">
 	<div class="container">
-
+  <p>
+    <%= raw t('static.feedback.not_for_problems', :url => root_url) %>
+  </p>
   <p>
    <%- if @operator %>
    <%= raw t('static.feedback.operator_feedback', :operator => @operator.name) %>
