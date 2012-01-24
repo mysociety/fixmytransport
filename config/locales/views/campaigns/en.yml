@@ -59,6 +59,7 @@ en:
       user_says: "%{name} commented"
       request_advice: "Ask advice"
       managing: "Managing"
+      reply_to_this_message: Reply to this message by email
       following_experts_advice: " following %{expert}'s advice."
       advised: "advised"
       contact_passenger_transport_executive: "Passenger Transport Executive"

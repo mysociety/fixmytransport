@@ -1555,7 +1555,7 @@ ul#campaign-thread {
 		ul#campaign-thread li.open a.thread-item span.title {
       white-space: normal;
 		}
-		
+
 		ul#campaign-thread li.open a.thread-item:hover,
 		ul#campaign-thread li.open a.thread-item:focus {
 		    background: none;
@@ -1602,6 +1602,13 @@ ul#campaign-thread {
 					float:right;
 					margin:0 0 0 10px;
 				}
+
+			ul#campaign-thread li.open .thread-details a.button {
+				font-size: 0.9em;
+				line-height: 1;
+				padding: 5px;
+				margin: 0 10px 10px 10px;
+			}
 
 .manager-tools,
 .contrib-tools,
@@ -2314,7 +2321,7 @@ body.facebook-canvas .button {
 
 #operator-tabs .pagination {
   color: #333;
-  font-size: 0.9em; 
+  font-size: 0.9em;
 }
 #operator-tabs .pagination a {
   color: #048FC2;
@@ -2502,7 +2509,8 @@ body.facebook-canvas .button {
       .button, #login-form button, .fieldset button, .form-field button,
       .login-options a.button, #share-by-email a.button,
       #share-by-facebook a.button,
-      #main-content.campaign-content .button{
+      #main-content.campaign-content .button,
+      ul#campaign-thread li.open .thread-details a.button{
 				padding: 10px 0;
 				font-family: Arial, Helvetica, sans-serif;
 				font-size: 1.2em;
@@ -3356,11 +3364,11 @@ body.facebook-canvas .button {
       padding-right: 33px;
         width: auto;
     }
-    
+
     ul.route-links {
     	width:inherit;
     }
-    
+
     /*===[Share by email]=== */
     #share-by-email textarea,
     #share-by-email button{
