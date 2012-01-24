@@ -50,6 +50,14 @@ module FixMyTransport
           raise "Council lookup service unavailable"
         end
         
+        # check councils that we know have sole responsibility for the areas they cover
+        sole_responsibilities = SoleResponsibility.find(:all).map{ |sr| sr.council_id }
+        council_data.keys().each do |council_id|
+          if sole_responsibilities.include?(council_id.to_i)
+            council_data = { council_id => council_data[council_id] }
+            break
+          end
+        end
         # Make them objects
         councils = council_data.values.map{ |council_info| Council.from_hash(council_info) }
       end
