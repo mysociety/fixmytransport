@@ -40,7 +40,7 @@ h1, h2, h3, h4, h5, h6, .font-1, #greybanner p {
 /* ===[ Layout ]=== */
 .container {
     width: 950px;
-	height:100%;
+	  height:100%;
     margin: auto;
     overflow: hidden;
 }
@@ -804,7 +804,8 @@ ul.user-list {
 #main-content .update_campaign,
 #main-content #new_outgoing_message,
 #main-content .password_reset_email,
-#main-content #reset_password {
+#main-content #reset_password,
+#main-content .newsletter_form {
 	width:500px;
 }
 #main-content #new_outgoing_message textarea,
@@ -820,14 +821,16 @@ ul.user-list {
 #main-content #new_outgoing_message input[type=text],
 #main-content .password_reset_email input[type=text],
 #main-content .update_campaign input[type=text],
-#main-content #reset_password input[type=password]{
+#main-content #reset_password input[type=password],
+#main-content .newsletter_form input[type=text] {
   width: 96%;
 	background: #f4f4f4;
 }
 
 
 #main-content #new_outgoing_message button,
-#main-content .password_reset_email button {
+#main-content .password_reset_email button,
+#main-content .newsletter_form button {
     float: right;
 }
 
@@ -1269,11 +1272,15 @@ ul.campaign-meta li span{
 	color:#333;
  }
 
-.manager-tools {
+.manager-tools, .questionnaire {
 	border:4px solid #048FC2;
 	background:#F1F1F7;
 }
-	.manager-tools-inner {
+  .questionnaire {
+    margin-bottom: 1em;
+  }
+
+	.manager-tools-inner, .questionnaire-inner {
 		padding:10px;
 	}
 		.manager-tools-inner .actions,
@@ -1282,7 +1289,7 @@ ul.campaign-meta li span{
 			margin:0 0 2em 0;
 			border-bottom:2px solid #048FC2;
 		}
-	.manager-tools h2 {
+	.manager-tools h2, .questionnaire h2 {
 		display:block;
 		background:#048FC2;
 		color:#fff;
@@ -1502,9 +1509,9 @@ ul#campaign-thread {
 		}
 		ul#campaign-thread li a.thread-item span.title {
 			overflow: hidden;
-		    white-space: nowrap;
+      white-space: nowrap;
 			display:block;
-		    float: left;
+      float: left;
 			width:360px;
 			margin:10px 0;
 			line-height:1.5;
@@ -1512,7 +1519,7 @@ ul#campaign-thread {
 		}
 		ul#campaign-thread li a.thread-item span.date {
 			display: inline-block;
-		    float: right;
+		  float: right;
 			margin:10px 20px 10px 0;
 			font-size:0.9em;
 			font-style:italic;
@@ -1520,15 +1527,15 @@ ul#campaign-thread {
 		}
 		ul#campaign-thread li a.thread-item span.close {
 			display: inline-block;
-		    height: 12px;
-		    width: 18px;
-		    margin: 10px 10px 10px 0;
-		    overflow: hidden;
-		    float: right;
-		    text-indent: -999999em;
-		    background-image: url(../images/up-down.png);
-		    background-position: 0 -29px;
-		    background-repeat: no-repeat;
+	    height: 12px;
+	    width: 18px;
+	    margin: 10px 10px 10px 0;
+	    overflow: hidden;
+	    float: right;
+	    text-indent: -999999em;
+	    background-image: url(../images/up-down.png);
+	    background-position: 0 -29px;
+	    background-repeat: no-repeat;
 		}
 		ul#campaign-thread li a.thread-item.compact span.close {
 		    background:none;
@@ -1541,9 +1548,14 @@ ul#campaign-thread {
 	    color: #fff;
 	}
 		ul#campaign-thread li.open a.thread-item {
-		    background: none;
-		    color: #fff;
+	    background: none;
+	    color: #fff;
+      height: auto;
 		}
+		ul#campaign-thread li.open a.thread-item span.title {
+      white-space: normal;
+		}
+
 		ul#campaign-thread li.open a.thread-item:hover,
 		ul#campaign-thread li.open a.thread-item:focus {
 		    background: none;
@@ -1590,6 +1602,13 @@ ul#campaign-thread {
 					float:right;
 					margin:0 0 0 10px;
 				}
+
+			ul#campaign-thread li.open .thread-details a.button {
+				font-size: 0.9em;
+				line-height: 1;
+				padding: 5px;
+				margin: 0 10px 10px 10px;
+			}
 
 .manager-tools,
 .contrib-tools,
@@ -2045,6 +2064,36 @@ body.facebook-canvas .button {
 	text-transform:none;
 }
 
+/*===[ Questionnaire ]=== */
+
+#questionnaire-form fieldset {
+  padding: 0.2em;
+  border: 0;
+}
+
+#questionnaire-form button[type=submit] {
+  float: right;
+  padding: 4px 10px;
+}
+
+#questionnaire-form label {
+  margin-right: 1em;
+}
+
+#questionnaire-form textarea {
+  height: 150px;
+  width: 95%;
+  padding: 5px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  float:none;
+}
+
+#questionnaire-form .error {
+  float: none;
+  margin: 0 0 0.5em 0;
+}
 
 /*===[Assignment Page]===*/
 .edit_assignment .checkbox label {
@@ -2272,7 +2321,7 @@ body.facebook-canvas .button {
 
 #operator-tabs .pagination {
   color: #333;
-  font-size: 0.9em; 
+  font-size: 0.9em;
 }
 #operator-tabs .pagination a {
   color: #048FC2;
@@ -2352,7 +2401,7 @@ body.facebook-canvas .button {
       .not-found-message {
         font-size: 1.2em;
       }
-      
+
 			.campaign-description {
 				width: 100%;
 			}
@@ -2463,7 +2512,8 @@ body.facebook-canvas .button {
       .button, #login-form button, .fieldset button, .form-field button,
       .login-options a.button, #share-by-email a.button,
       #share-by-facebook a.button,
-      #main-content.campaign-content .button{
+      #main-content.campaign-content .button,
+      ul#campaign-thread li.open .thread-details a.button{
 				padding: 10px 0;
 				font-family: Arial, Helvetica, sans-serif;
 				font-size: 1.2em;
@@ -3117,9 +3167,13 @@ body.facebook-canvas .button {
         margin: 0 auto;
         padding: 0;
     }
+
+    .rightcol {
+       margin: 0 auto;
+    }
+
     #main-content.campaign-content .rightcol {
         display: table-caption;
-        margin: 0 auto;
         width: 96%;
     }
 
@@ -3238,8 +3292,8 @@ body.facebook-canvas .button {
     }
 
 
-    .manager-tools h2 {
-        padding: 0 0.2em;
+    .manager-tools h2, .questionnaire h2 {
+      width: auto;
     }
 
     .manager-tools .actions li {
@@ -3313,15 +3367,20 @@ body.facebook-canvas .button {
       padding-right: 33px;
         width: auto;
     }
-    
+
     ul.route-links {
     	width:inherit;
     }
-    
+
     /*===[Share by email]=== */
     #share-by-email textarea,
     #share-by-email button{
       width: 96%;
+    }
+
+    /*===[ Questionnaire ]=== */
+    #questionnaire-form fieldset {
+      margin-bottom: 0;
     }
 
     /*===[ geolocation can't sensibly be absolutely positioned on narrow screens]=== */

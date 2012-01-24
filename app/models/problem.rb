@@ -6,16 +6,20 @@ class Problem < ActiveRecord::Base
   belongs_to :reporter, :class_name => 'User'
   belongs_to :transport_mode
   belongs_to :campaign, :autosave => true
+  belongs_to :reference, :class_name => 'Problem'
   has_many :subscriptions, :as => :target
   has_many :subscribers, :through => :subscriptions, :source => :user
   has_many :assignments
   has_many :comments, :as => :commented
   has_many :sent_emails
   has_many :responsibilities
+  has_many :questionnaires, :as => :subject
   validates_presence_of :description, :subject, :category, :if => :location
   validates_associated :reporter
+
   attr_accessible :subject, :description, :category,
-                  :location_id, :location_type, :responsibilities_attributes
+                  :location_id, :location_type, :responsibilities_attributes,
+                  :reference_id
   before_create :generate_confirmation_token, :add_coords
   has_status({ 0 => 'New',
                1 => 'Confirmed',
@@ -26,10 +30,17 @@ class Problem < ActiveRecord::Base
   def self.visible_status_codes
     [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:fixed]]
   end
-
-  named_scope :confirmed, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at desc"
-  named_scope :visible, :conditions => ["status_code in (?) and campaign_id is null", Problem.visible_status_codes], :order => "confirmed_at desc"
-  named_scope :unsent, :conditions => ['sent_at is null'], :order => 'confirmed_at desc'
+  
+  named_scope :confirmed, :conditions => ["problems.status_code = ?",
+                                          self.symbol_to_status_code[:confirmed]],
+                          :order => "confirmed_at desc"
+  named_scope :visible, :conditions => ["problems.status_code in (?) and campaign_id is null",
+                                        Problem.visible_status_codes],
+                        :order => "confirmed_at desc"
+  named_scope :unsent, :conditions => ['problems.sent_at is null'],
+                       :order => 'confirmed_at desc'
+  named_scope :sent, :conditions => ['problems.sent_at is not null'],
+                     :order => 'confirmed_at desc'
 
   has_paper_trail
 
@@ -104,6 +115,14 @@ class Problem < ActiveRecord::Base
 
   def responsible_operators
     self.responsible_organizations.select{ |org| org.is_a?(Operator) }
+  end
+  
+  def responsible_org_descriptor
+    if self.responsible_organizations.empty?
+      I18n.translate('shared.problem.location_operator', :location => self.location.description)
+    else
+      self.responsible_organizations.map{ |org| org.name }.to_sentence
+    end
   end
 
   def operator_names
@@ -445,6 +464,29 @@ class Problem < ActiveRecord::Base
   def self.unsendable
     confirmed.unsent.find(:all, :include => :responsibilities,
                                 :conditions => ['responsibilities.id is null'])
+  end
+
+  def self.needing_questionnaire(weeks_ago, user=nil)
+    time_weeks_ago = Time.now - weeks_ago.weeks
+    params = [time_weeks_ago, true, time_weeks_ago]
+    if user
+      user_clause = " AND reporter_id = ?"
+      params << user
+    else
+      user_clause = ""
+    end
+    query = ["problems.sent_at < ?
+              AND send_questionnaire = ?
+              AND ((SELECT max(completed_at)
+                    FROM questionnaires
+                    WHERE subject_type = 'Problem'
+                    AND subject_id = problems.id) < ?
+                   OR (SELECT max(completed_at)
+                    FROM questionnaires
+                    WHERE subject_type = 'Problem'
+                    AND subject_id = problems.id) is NULL)
+                    #{user_clause}"]
+    self.visible.sent.find(:all, :conditions => query + params)
   end
 
 end

@@ -335,25 +335,10 @@ describe CampaignsController do
 
     before do
       @mock_user = mock_model(User)
-      @mock_campaign = mock_model(Campaign, :visible? => true,
+      @mock_model = mock_model(Campaign, :visible? => true,
                                             :editable? => true)
-      Campaign.stub!(:find).and_return(@mock_campaign)
-      @mock_comment = mock_model(Comment, :save => true,
-                                          :valid? => true,
-                                          :user= => true,
-                                          :commented_id => 55,
-                                          :commented_type => 'Campaign',
-                                          :commented => @mock_campaign,
-                                          :text => 'comment text',
-                                          :confirm! => true,
-                                          :mark_fixed => nil,
-                                          :mark_open => nil,
-                                          :skip_name_validation= => true,
-                                          :campaign_events => [],
-                                          :status= => true)
-      @mock_campaign.stub!(:comments).and_return(mock('comments', :build => @mock_comment))
+      Campaign.stub!(:find).and_return(@mock_model)
       @expected_notice = "Please sign in or create an account to add your comment to this issue"
-      @expected_redirect = campaign_url(@mock_campaign)
     end
 
     def make_request params
@@ -373,7 +358,9 @@ describe CampaignsController do
   describe 'POST #complete' do
 
     before do
-      @user = mock_model(User, :id => 55, :name => "Test User")
+      @user = mock_model(User, :id => 55, 
+                               :name => "Test User",
+                               :answered_ever_reported? => true)
       @default_params = { :id => 55 }
       @controller.stub!(:current_user).and_return(@user)
       @mock_campaign = mock_model(Campaign, :visible? => true,
@@ -381,7 +368,9 @@ describe CampaignsController do
                                             :status => :confirmed,
                                             :initiator => @user,
                                             :status= => true,
-                                            :save => true)
+                                            :save => true, 
+                                            :send_questionnaire= => nil,
+                                            :status_code => 3)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_access_message = :campaigns_complete_access_message
     end
@@ -393,14 +382,45 @@ describe CampaignsController do
     it_should_behave_like "an action that requires the campaign initiator"
 
     it 'should set the campaign status to complete and save it' do
-      @mock_campaign.should_receive(:status=).with(:successful)
+      @mock_campaign.should_receive(:status=).with(:fixed)
       @mock_campaign.should_receive(:save)
       make_request(@default_params)
     end
-
-    it 'should redirect to the campaign page' do
+    
+    it 'should set the "send_questionnaire" flag on the campaign to false' do 
+      @mock_campaign.should_receive(:send_questionnaire=).with(false)
+      @mock_campaign.should_receive(:save)
       make_request(@default_params)
-      response.should redirect_to(campaign_url(@mock_campaign))
+    end
+    
+    describe 'if the user has answered the "have you ever reported an issue before" question' do 
+
+      before do 
+        @user.stub!(:answered_ever_reported?).and_return(true)
+      end
+      
+      it 'should redirect to the campaign page' do
+        make_request(@default_params)
+        response.should redirect_to(campaign_url(@mock_campaign))
+      end
+      
+    end
+    
+    describe 'if the user has not answered the "have you ever reported an issue before" question' do 
+      
+      before do 
+        @user.stub!(:answered_ever_reported?).and_return(false)
+      end
+            
+      it 'should add the old status code to the session flash' do 
+        make_request(@default_params)
+        flash[:old_status_code].should == 3
+      end
+            
+      it 'should redirect to the questionnaire for fixed issues' do 
+        make_request(@default_params)
+        response.should redirect_to(questionnaire_fixed_url(:id => @mock_campaign.id, :type => 'Campaign'))
+      end
     end
 
   end

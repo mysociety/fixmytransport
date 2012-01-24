@@ -1,20 +1,20 @@
 <li class="open">
   <%- case event.event_type %>
   <%- when 'incoming_message_received' %>
-    <%= render :partial => 'incoming_message', :locals => { :message => event.described, :event => event, :index => index } %>
+    <%= render :partial => 'campaigns/incoming_message', :locals => { :message => event.described, :event => event, :index => index } %>
   <%- when 'outgoing_message_sent' %>
-    <%= render :partial => 'outgoing_message', :locals => { :message => event.described, :event => event, :index => index } %>
+    <%= render :partial => 'campaigns/outgoing_message', :locals => { :message => event.described, :event => event, :index => index } %>
   <%- when 'assignment_completed' %>
     <%= render :partial => "shared/complete_assignments/#{event.described.task_type}", :locals => { :assignment => event.described, :event => event, :index => index } %>
   <%- when 'assignment_given' %>
-    <%= render :partial => 'new_assignment', :locals => { :assignment => event.described, :event => event, :index => index } %>
+    <%= render :partial => 'campaigns/new_assignment', :locals => { :assignment => event.described, :event => event, :index => index } %>
   <%- when 'assignment_in_progress'%>
-    <%= render :partial => 'assignment_in_progress', :locals => { :assignment => event.described, :event => event, :index => index }%>
+    <%= render :partial => 'campaigns/assignment_in_progress', :locals => { :assignment => event.described, :event => event, :index => index }%>
   <%- when 'campaign_update_added' %>
-    <%= render :partial => 'campaign_update', :locals => { :update => event.described, :index => index } %>
+    <%= render :partial => 'campaigns/campaign_update', :locals => { :update => event.described, :index => index } %>
   <%- when 'comment_added' %>
     <%= render :partial => 'shared/comment', :locals => { :comment => event.described, :index => index } %>
   <%- when 'problem_report_resent' %>
-    <%= render :partial => 'problem_report_resent', :locals => { :event => event, :index => index } %>
+    <%= render :partial => 'campaigns/problem_report_resent', :locals => { :event => event, :index => index } %>
   <%- end %>
 </li>

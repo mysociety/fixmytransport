@@ -657,7 +657,9 @@ describe AccountsController do
             @mock_comment = mock_model(Comment, :confirm! => true,
                                                 :commented => @mock_problem,
                                                 :created_at => (Time.now - 1.day),
-                                                :status => :new)
+                                                :status => :new,
+                                                :user_marks_as_fixed? => false,
+                                                :needs_questionnaire? => false)
             @mock_action_confirmation.stub!(:target).and_return(@mock_comment)
           end
 
@@ -699,6 +701,24 @@ describe AccountsController do
 
           end
 
+          describe 'if the comment should prompt a questionnaire' do
+
+            before do
+              @mock_comment.stub!(:needs_questionnaire?).and_return(true)
+              @mock_comment.stub!(:old_commented_status_code).and_return(3)
+            end
+
+            it 'should redirect to the questionnaire url for fixed issue, passing params of thing being commented on' do
+              make_request
+              response.should redirect_to(questionnaire_fixed_url(:id => @mock_problem.id,
+                                                                  :type => 'Problem'))
+            end
+
+            it 'should set the old status code of the thing being commented on the session flash' do
+              make_request
+              flash[:old_status_code].should == 3
+            end
+          end
         end
 
       end

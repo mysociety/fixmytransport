@@ -13,7 +13,6 @@ class CampaignsController < ApplicationController
     @commentable = @campaign
     @next_action_join = data_to_string({ :action => :join_campaign,
                                          :id => @campaign.id,
-                                         :redirect => campaign_path(@campaign),
                                          :notice => t('campaigns.show.sign_in_to_join') })
     @title = @campaign.title
     @campaign.campaign_photos.build({})
@@ -51,7 +50,6 @@ class CampaignsController < ApplicationController
         # store the next action to the session
         join_data = { :action => :join_campaign,
                       :id => @campaign.id,
-                      :redirect => campaign_path(@campaign),
                       :notice => t('campaigns.show.sign_in_to_join') }
         session[:next_action] = data_to_string(join_data)
         respond_to do |format|
@@ -94,9 +92,16 @@ class CampaignsController < ApplicationController
   end
 
   def complete
-    @campaign.status = :successful
+    old_status_code = @campaign.status_code
+    @campaign.status = :fixed
+    @campaign.send_questionnaire = false
     @campaign.save
-    redirect_to campaign_url(@campaign)
+    if current_user.answered_ever_reported?
+      redirect_to campaign_url(@campaign)
+    else
+      flash[:old_status_code] = old_status_code
+      redirect_to questionnaire_fixed_url(:id => @campaign.id, :type => 'Campaign')
+    end
   end
 
   def add_details
@@ -148,7 +153,7 @@ class CampaignsController < ApplicationController
         end
       else
         respond_to do |format|
-          format.html do 
+          format.html do
             render :action => "add_update"
           end
           format.json do
@@ -181,7 +186,7 @@ class CampaignsController < ApplicationController
     end
     render :template => 'shared/add_comment'
   end
-  
+
   def facebook
     @body_class = "facebook-body"
   end

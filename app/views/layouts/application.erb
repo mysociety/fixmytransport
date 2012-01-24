@@ -34,12 +34,18 @@
   </head>
 	<body <%-if @body_class %>class="<%= @body_class %>"<%- end %>>
     <%= yield :body_content %>
-		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
+    <%- if MySociety::Config.getbool('STAGING_SITE', true) %>
     <div class="staging-banner top-notice">
       <div class="container"><%= t('shared.header.development_site') %></div>
     </div>
-		<%- end %>
+    <%- end %>
+    
     <%= yield :banner_content %>
+    
+    <div class="top-notice">
+    	<div class="container">Would you like to work with the team that built this site? <a href="http://mysocietyltd.theresumator.com/apply/">We're recruiting.</a></div>
+    </div>
+    
 		<div id="wrapper">
 
 			<div id="top" class="container" role="banner">
@@ -53,19 +59,33 @@
 					<li><a href="<%= about_url %>"><%= t('shared.header.about') %></a></li>
 					<li><a href="<%= feedback_url(:url => request.request_uri) %>"><%= t('shared.header.feedback') %></a></li>
 				</ul>
-				
+
         <a id="logo" href="<%= root_url %>">FixMyTransport</a>
 
 				<%- if current_user %>
-				<p id="member-info"><%= t('shared.header.hi')%> <a href="<%= profile_path(current_user) %>"><%= current_user.name %></a>. <a href="<%= logout_path(:redirect => request.request_uri) %>"><%= t('shared.login.sign_out')%></a></p>
+				<p id="member-info">
+				  <%= t('shared.header.hi')%>
+				  <a href="<%= profile_path(current_user) %>">
+				    <%= current_user.name %></a>.
+				  <%- if @no_redirect_on_logout %>
+				    <a href="<%= logout_path() %>">
+				  <%- else %>
+				    <a href="<%= logout_path(:redirect => request.request_uri) %>">
+				  <%- end %>
+				    <%= t('shared.login.sign_out')%>
+				  </a>
+				</p>
 				<%- else %>
-				<p id="member-info"><a class="auth" href="<%= login_path(:redirect => request.request_uri) %>" rel="nofollow"><%= t('shared.login.sign_in')%></a></p>
+				<p id="member-info">
+				  <a class="auth" href="<%= login_path(:redirect => request.request_uri) %>" rel="nofollow">
+				  <%= t('shared.login.sign_in')%></a>
+				</p>
 				<%- end %>
 			</div>
 
 			<%= render :partial => "shared/login" %>
 
-			<%- [:notice, :error].each do |key| %>
+			<%- [:notice, :error, :large_notice].each do |key| %>
 					<%- unless flash[key].blank? %>
 					<div class="container">
 					<p class="<%= "flash #{key}" %>">
@@ -86,7 +106,7 @@
 		<%= raw main_js_link %>
 		<!--[if lte IE 8]><%= raw javascript_include_tag((minify(['ie']) + ['jquery.ifixpng2.min']), :charset => 'utf-8') %><![endif]-->
 		<%= render :partial => 'shared/tracking' %>
-	  
-  
+
+
 	</body>
 </html>

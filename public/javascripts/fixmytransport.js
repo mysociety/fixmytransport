@@ -100,6 +100,28 @@ $(document).ready(function(){
 		$(this).parent().removeClass('active');
 	});
 
+  /* Questionnaire
+     ================================================== */
+  if (!$('#fixed_no').is(':checked') && !$('#fixed_unknown').is(':checked')) {
+    $('#another-questionnaire').hide();
+  }
+
+  $('#fixed_no').click(function(){
+    if (!$('#another-questionnaire').is(":visible")){
+      $('#another-questionnaire').show('blind', '', 1000);
+    }
+  });
+  $('#fixed_unknown').click(function(){
+    if (!$('#another-questionnaire').is(":visible")){
+      $('#another-questionnaire').show('blind', '', 1000);
+    }
+  });
+  $('#fixed_yes').click(function(){
+    if ($('#another-questionnaire').is(":visible")){
+      $('#another-questionnaire').hide('blind', '', 1000);
+    }
+  });
+
 	/* Thread
 	   ================================================== */
 	function thread(li){
@@ -549,6 +571,11 @@ $(document).ready(function(){
 	  options['error'] = function() { generalError(form_selector + ' .error-text'); }
 	  options['success'] = function(response) {
 	    if (response.success) {
+
+	      if (response.redirect) {
+          window.location = response.redirect;
+          return;
+        }
         // clear the comment field
         $(form_selector + " #comment_text").val("");
         $(form_selector + " #comment_mark_fixed").attr("checked", false);

@@ -117,6 +117,7 @@ en:
       instructions: "Enter an area, town or postcode"
       where_is_it: "Where is it?"
       too_big: "Sorry, that's too big an area to show all the bus stops and stations for. Please choose something more specific."
+      geolocation_outside_area: "Sorry, your location appears to be outside Great Britain. Please enter a GB area, town or postcode"
     find_train_route:
       title: "Finding a train route"
       to_stop_not_found: "We didn't recognise the name of the stop you got off at."
@@ -181,8 +182,10 @@ en:
       one_of_the_uncontactable_companies: "one of the companies we don't have an email address for"
       category: "Category"
       description_help_header: "Description"
+      no_details_for_some_reference_organizations: "We do not yet have all the contact details for this %{location_type}. Your message will <strong>not</strong> be sent to %{uncontactable} until an email address for them is found. Your message will be sent to %{contactable} straight away."
       no_details_for_some_councils: "Let's get your problem fixed. Write an email using the form below, and we'll send it to %{councils}."
       or: "or"
+      and: "and"
       header: "Send a message to the people responsible, and get things fixed"
       subject_help_header: "Subject"
       problem_will_be_sent_multiple_operators: "Let's get your problem fixed. More than one company operates this %{location_type}. Write an email using the form below and we'll send your problem report <strong>to the operator you select below</strong>."

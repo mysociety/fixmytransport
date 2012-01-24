@@ -31,15 +31,15 @@ describe Campaign do
       end
     end
 
-    it 'should be visible when confirmed or successful' do
-      [:confirmed, :successful].each do |status|
+    it 'should be visible when confirmed or fixed' do
+      [:confirmed, :fixed].each do |status|
         @campaign.status = status
         @campaign.visible?.should be_true
       end
     end
 
-    it 'should be editable when new, confirmed, or successful' do
-      [:new, :confirmed, :successful].each do |status|
+    it 'should be editable when new, confirmed, or fixed' do
+      [:new, :confirmed, :fixed].each do |status|
         @campaign.status = status
         @campaign.editable?.should be_true
       end
@@ -89,15 +89,15 @@ describe Campaign do
     describe 'if the status is hidden' do
 
       it 'should not change the status or confirmation time' do
-        expect_no_confirmation(:successful)
+        expect_no_confirmation(:hidden)
       end
 
     end
 
-    describe 'if the status is successful' do
+    describe 'if the status is fixed' do
 
       it 'should not change the status or confirmation time' do
-        expect_no_confirmation(:successful)
+        expect_no_confirmation(:fixed)
       end
 
     end

@@ -23,7 +23,8 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, :case_sensitive => false, :unless => :skip_email_uniqueness_validation
   # Do not allow these attributes to be set by mass assignment
   attr_protected :password, :password_confirmation, :is_expert, :is_suspended,
-                 :can_admin_locations, :can_admin_users, :can_admin_issues, :can_admin_organizations
+                 :can_admin_locations, :can_admin_users, :can_admin_issues, :can_admin_organizations,
+                 :is_hidden
   has_many :assignments
   has_many :campaign_supporters, :foreign_key => :supporter_id
   has_many :campaigns, :through => :campaign_supporters
@@ -33,6 +34,9 @@ class User < ActiveRecord::Base
   has_many :access_tokens
   has_many :subscriptions
   has_many :comments
+  has_many :questionnaires
+
+  # a one-to-one association conferring admin credentials on the user
   has_one :admin_user
   before_validation :download_remote_profile_photo, :if => :profile_photo_url_provided?
 
@@ -56,10 +60,10 @@ class User < ActiveRecord::Base
   named_scope :registered, :conditions => { :registered => true }
 
   acts_as_authentic do |c|
-    
+
     # don't reset perishable tokens automatically
     c.disable_perishable_token_maintenance = true
-    
+
     # moving from SHA512 to BCrypt - remove when done
     c.crypto_provider = Authlogic::CryptoProviders::BCrypt
     c.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha512
@@ -81,8 +85,8 @@ class User < ActiveRecord::Base
     end
     unregistered? or !access_tokens.empty?
   end
-  
-  # If someone with admin privileges tries to set their main password to their admin password, 
+
+  # If someone with admin privileges tries to set their main password to their admin password,
   # reset their admin password
   def password_not_admin_password
     if password_not_required or !self.admin_user
@@ -101,7 +105,7 @@ class User < ActiveRecord::Base
   end
 
   def validate_real_name
-    if force_new_record_validation == true || new_record? 
+    if force_new_record_validation == true || new_record?
       if /\ba\s*n+on+((y|o)mo?u?s)?(ly)?\b/i.match(name) || ! /\S\s\S/.match(name) || name.size < 5
         self.errors.add(:name, ActiveRecord::Error.new(self, :name, :not_real, :link => "<a href='/about#names' target='_blank'>policy on names</a>").to_s.html_safe)
       end
@@ -121,7 +125,7 @@ class User < ActiveRecord::Base
   def suspended?
     is_suspended
   end
-  
+
   def first_name
     name.split(' ').first
   end
@@ -163,6 +167,10 @@ class User < ActiveRecord::Base
     return false
   end
 
+  def answered_ever_reported?
+    self.questionnaires.find(:first, :conditions => ['ever_reported is not NULL']) != nil
+  end
+
   def download_remote_profile_photo
     self.profile_photo = do_download_remote_profile_photo
     self.profile_photo_remote_url = profile_photo_url
@@ -183,16 +191,16 @@ class User < ActiveRecord::Base
   def profile_photo_url_provided?
     !self.profile_photo_url.blank?
   end
-  
+
   def subscribed_to?(target)
-    !self.subscriptions.find(:first, :conditions => ['target_id = ? and target_type = ? and confirmed_at is not null', 
+    !self.subscriptions.find(:first, :conditions => ['target_id = ? and target_type = ? and confirmed_at is not null',
                                                       target.id, target.class.to_s]).nil?
   end
-  
+
   def is_admin?
     !admin_user.nil?
   end
-  
+
   def can_admin?(admin_right)
     return false unless self.is_admin?
     return false unless self.send("can_admin_#{admin_right}?") == true
@@ -205,10 +213,10 @@ class User < ActiveRecord::Base
     if ! query.blank?
       query = query.downcase
       query_clause = "(LOWER(name) LIKE ?
-                      OR LOWER(name) LIKE ? 
-                      OR LOWER(email) LIKE ? 
+                      OR LOWER(name) LIKE ?
+                      OR LOWER(email) LIKE ?
                       OR LOWER(email) LIKE ?"
-      query_params = [ "#{query}%", "%#{query}%", 
+      query_params = [ "#{query}%", "%#{query}%",
                        "#{query}%", "%#{query}%"]
       # numeric?
       if query.to_i.to_s == query
