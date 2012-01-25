@@ -54,6 +54,16 @@ describe Campaign do
 
   end
 
+  describe 'when generating a URL param' do 
+  
+    it 'should not create a param with a trailing dash' do 
+      # title trimmed to max chars allowed in slug will end in space
+      @campaign = Campaign.new(:title => 'aaaaa aaaaaa aaaaa aaaa aaa aaaaaaa aaa')
+      @campaign.send(:build_a_slug).should == 'aaaaa-aaaaaa-aaaaa-aaaa-aaa-aaaaaaa'
+    end
+     
+  end
+
   describe 'confirming' do
 
     def expect_no_confirmation(status)

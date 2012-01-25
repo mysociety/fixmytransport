@@ -29,7 +29,7 @@ class Campaign < ActiveRecord::Base
   has_friendly_id :title,
                   :use_slug => true,
                   :allow_nil => true,
-                  :max_length => 50
+                  :max_length => 36
 
   has_paper_trail
 
