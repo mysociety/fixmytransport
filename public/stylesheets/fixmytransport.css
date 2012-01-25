@@ -2328,6 +2328,9 @@ body.facebook-canvas .button {
   text-decoration: none;
 }
 
+.operator-search-query {
+  color: #888;
+}
 /* in extremis: stop huge/broken photos breaking the list */
 #main-content ul.issues-list img{
   max-width: 100px;
@@ -2342,13 +2345,13 @@ body.facebook-canvas .button {
   list-style: none;
   margin: 0;
 	overflow:visible;
-  width:300px;
+  width:200px;
   display:inline;
 }
 #main-content .small-search-form input {
 	padding: 2px 4px;
 	font-size: 1.2em;
-	width: 240px;
+	width: 180px;
 	border: 2px solid #048fc2;
   border-radius: 3px;
     -moz-border-radius: 3px;
@@ -3398,8 +3401,9 @@ body.facebook-canvas .button {
         width: 100%;
     }
 
-    #main-content .small-search-form input, #main-content .small-search-form button {
-      width: 99%;
+    #main-content .small-search-form ul li,  
+    #main-content .small-search-form buttons {
+      width: 90%;
     }
 
 } /* end of media query */

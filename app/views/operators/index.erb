@@ -7,34 +7,54 @@
 <div id="greybanner">
   <div class="container">
     <p>
-      <%= t('route_operators.index.total_operators', :count => @operator_count ) %>
+      <%- if ! @search_query.blank? %>
+        <%= raw t('route_operators.index.total_operators_after_search', :count => @operator_count, :search_query => h(@search_query) ) %>
+      <%- else %>
+        <%= t('route_operators.index.total_operators', :count => @operator_count ) %>
+      <%- end %>
     </p>
   </div>
 </div>
-<div id="main-content" class="container">
-
-<!--
-  <div class="container">
-    <%- form_tag operators_path, :id => 'operator_search_form', :class => "small-search-form", :method => 'GET' do  %>
-      <ul>
-        <li>
-          <div class="input-border"><%= raw text_field_tag 'query', params[:query] %></div>
-        </li>
-        <li>
-          <button class="button" type="submit">Search</button>
-        </li>
-      </ul>
-    <%- end %>
+<div id="main-content" class="container has-tabs">
+  <div id='operator-tabs' class='ui-tabs ui-widget ui-content do-not-tabify'>
+    <div class="container">
+      <%- form_tag operators_path, :id => 'operator_search_form', :class => "small-search-form", :method => 'GET' do  %>
+        <ul>
+          <li>
+            <div class="input-border"><%= raw text_field_tag 'query', params[:query] %></div>
+          </li>
+          <li>
+            <button class="button" type="submit">Search</button>
+          </li>
+          <%- if @search_query %>
+            <li>
+              <%= link_to t('route_operators.index.show_all_operators'), operators_url %>
+            </li>
+          <%- end %>
+        </ul>
+      <%- end %>
+    </div>
+    <div class='ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs ui-widget ui-corner-all'>
+      <%- if @search_query.blank? ||  @operator_count > @operator_list_threshold %>
+        <ul class='font-1 tabs-sub-nav ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all'>
+          <%- @operator_initial_chars.each do |first| %>
+            <li class='ui-state-default ui-corner-all <%- if first == @initial_char %>ui-tabs-selected ui-state-active<%- end %>'>
+              <%= link_to(first, operator_by_initial_url(:initial_char => first.downcase, :query => @search_query)) %>
+            </li>
+          <%- end %>
+        </ul>
+        <hr>
+        <%- if defined? @initial_char %>
+          <div class='region-bus-routes ui-tabs-panel ui-widget-content ui-corner-bottom' id='operator_starts_with_<%= @initial_char %>'>
+            <h4 class='first'><%= @initial_char %></h4>
+          	<%= render :partial => "operators" %>
+          </div>
+        <%- else %>
+          <p> No operators found FIXME </p>
+        <%- end %>
+      <%- else  %>  <!-- Not many - show them all -->
+        <%= render :partial => "operators" %>
+      <%- end %>
+    </div>
   </div>
--->
-
-  <%= will_paginate @operators %>
-  <ul class="route-links route-links-large">
-    <%- @operators.each do |operator| %>
-      <li>
-        <%= link_to(operator.name, main_url(operator_path(operator))) %>
-      </li>
-    <%- end %>
-  </ul>
-  <%= will_paginate @operators %>
 </div>

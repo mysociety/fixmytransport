@@ -15,6 +15,7 @@
 #
 
 class Operator < ActiveRecord::Base
+  
   has_many :route_operators, :dependent => :destroy
   has_many :routes, :through => :route_operators, :uniq => true, :order => 'routes.number asc'
   has_many :vosa_licenses
@@ -213,4 +214,15 @@ class Operator < ActiveRecord::Base
     return Problem.find(:all, :conditions => conditions, :include => :responsibilities)
   end
 
+  def self.all_by_letter
+    MySociety::Util.by_letter(Operator.find(:all), :upcase){|o| o.name }
+  end
+  
+  def self.all_letters
+    all_by_letter.keys.sort
+  end
+  
+  # slightly ugly syntax for class methods
+  class << self; extend ActiveSupport::Memoizable; self; end.memoize :all_by_letter, :all_letters
+    
 end

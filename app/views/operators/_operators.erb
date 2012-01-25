@@ -1,0 +1,9 @@
+<%= will_paginate @operators %>
+<ul class="route-links">
+  <%- @operators.each do |operator| %>
+    <li>
+      <%= link_to(operator.name, operator_url(operator))  %>
+    </li>
+  <%- end %>
+</ul>
+<%= will_paginate @operators %>
