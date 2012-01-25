@@ -23,7 +23,8 @@ describe OutgoingMessagesController do
                                           :initiator => @campaign_user,
                                           :status => :confirmed,
                                           :outgoing_messages => @outgoing_messages_mock, 
-                                          :campaign_events => @campaign_events_mock)
+                                          :campaign_events => @campaign_events_mock,
+                                          :friendly_id_status => mock('friendly', :best? => true))
     @controller.stub!(:current_user).and_return(@campaign_user)
     Campaign.stub!(:find).and_return(@mock_campaign)
     OutgoingMessage.stub!(:new).and_return(@mock_outgoing_message)
@@ -145,8 +146,10 @@ describe OutgoingMessagesController do
       @mock_outgoing_message = mock_model(OutgoingMessage)
       OutgoingMessage.stub!(:find).and_return(@mock_outgoing_message)
       @campaign = mock_model(Campaign, :visible? => true, 
-                                       :editable? => true)
+                                       :editable? => true,
+                                       :friendly_id_status => mock('friendly', :best? => true))
       @default_params = { :campaign_id => 55, :id => 33 }
+      Campaign.stub!(:find).and_return(@campaign)
     end
   
     def make_request(params=@default_params)
@@ -156,10 +159,6 @@ describe OutgoingMessagesController do
     it_should_behave_like "an action requiring a visible campaign"
     
     describe 'when there is a visible campaign' do
-      
-      before do 
-        Campaign.stub!(:find).and_return(@campaign)
-      end
     
       it 'should render the "show" template' do 
         make_request

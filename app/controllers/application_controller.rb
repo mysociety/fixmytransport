@@ -102,17 +102,21 @@ class ApplicationController < ActionController::Base
 
   # filter method for finding an editable campaign (not neccessarily visible)
   def find_editable_campaign
-    if self.class == CampaignsController
-      param = :id
-    else
-      param = :campaign_id
-    end
-    @campaign = Campaign.find(params[param])
+    @campaign = Campaign.find(params[campaign_param()])
     unless @campaign && @campaign.editable?
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
     end
     return true
+  end
+  
+  def campaign_param
+    if self.class == CampaignsController
+      param = :id
+    else
+      param = :campaign_id
+    end
+    return param
   end
 
   # filter method for finding a visible campaign
@@ -122,6 +126,10 @@ class ApplicationController < ActionController::Base
     unless @campaign.visible?
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
+    end
+    # if this isn't the latest slug, redirect to the latest
+    if request.get? && !@campaign.friendly_id_status.best?
+      redirect_to params.merge({campaign_param() => @campaign }), :status => :moved_permanently
     end
     return true
   end

@@ -48,13 +48,15 @@ describe AssignmentsController do
       @campaign = mock_model(Campaign, :visible? => true,
                                        :editable? => true,
                                        :initiator => @initiator,
-                                       :assignments => mock_assignments)
+                                       :assignments => mock_assignments,
+                                       :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@campaign)
       @expected_access_message = :assignments_new_access_message
+      @default_params = { :campaign_id => 44 }
     end
 
-    def make_request
-      get :new, :campaign_id => 44
+    def make_request(params=@default_params)
+      get :new, params
     end
 
     it_should_behave_like "an action requiring a visible campaign"
@@ -91,16 +93,17 @@ describe AssignmentsController do
       @assignment = mock_model(Assignment, :save => true, :user => @initiator)
       Assignment.stub!(:assignment_from_attributes).and_return(@assignment)
       CampaignMailer.stub!(:deliver_write_to_other_assignment)
+      @default_params = { :campaign_id => 44,
+                          :name => 'A name',
+                          :description => 'A description',
+                          :email => 'An email',
+                          :reason => 'A reason',
+                          :subject => 'subject',
+                          :draft_text => 'Some draft text' }
     end
 
-    def make_request
-      post :create, { :campaign_id => 44,
-                      :name => 'A name',
-                      :description => 'A description',
-                      :email => 'An email',
-                      :reason => 'A reason',
-                      :subject => 'subject',
-                      :draft_text => 'Some draft text' }
+    def make_request(params=@default_params)
+      post :create, params
     end
 
     it_should_behave_like "an action requiring a visible campaign"
@@ -188,7 +191,8 @@ describe AssignmentsController do
       @mock_campaign = mock_model(Campaign, :assignments => [@mock_assignment],
                                             :editable? => true,
                                             :visible? => true,
-                                            :initiator => @campaign_user)
+                                            :initiator => @campaign_user,
+                                            :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@mock_campaign)
       @mock_campaign.assignments.stub!(:find).and_return(@mock_assignment)
     end

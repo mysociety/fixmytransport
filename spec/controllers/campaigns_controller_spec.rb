@@ -21,11 +21,13 @@ describe CampaignsController do
     before do
       @default_params = {:id => 55}
       @mock_user = mock_model(User, :name => 'Test User')
-      @mock_campaign = mock_model(Campaign, :editable? => true,
-                                            :initiator => @mock_user,
-                                            :title= => nil,
-                                            :description= => nil)
-      Campaign.stub!(:find).and_return(@mock_campaign)
+      @campaign = mock_model(Campaign, :editable? => true,
+                                       :initiator => @mock_user,
+                                       :title= => nil,
+                                       :description= => nil,
+                                       :visible? => true,
+                                       :friendly_id_status => mock('friendly', :best? => true))
+      Campaign.stub!(:find).and_return(@campaign)
       @controller.stub!(:current_user).and_return(@mock_user)
     end
 
@@ -38,12 +40,12 @@ describe CampaignsController do
     describe 'if the campaign is visible' do
       
       before do 
-        @mock_campaign.stub!(:visible?).and_return(true)
+        @campaign.stub!(:visible?).and_return(true)
       end
 
       it 'should set the campaign title and description to nil' do 
-        @mock_campaign.should_receive(:title=).with(nil)
-        @mock_campaign.should_receive(:description=).with(nil)
+        @campaign.should_receive(:title=).with(nil)
+        @campaign.should_receive(:description=).with(nil)
         make_request()
       end
 
@@ -61,14 +63,15 @@ describe CampaignsController do
     before do
       @mock_user = mock_model(User, :name => "Test User")
       @default_params = {:id => 55, :campaign => {:title => 'title', :description => 'description'}}
-      @mock_campaign = mock_model(Campaign, :editable? => true,
-                                            :visible? => true,
-                                            :update_attributes => true,
-                                            :initiator => @mock_user,
-                                            :confirm => true,
-                                            :save! => true, 
-                                            :status => :confirmed)
-      Campaign.stub!(:find).and_return(@mock_campaign)
+      @campaign = mock_model(Campaign, :editable? => true,
+                                       :visible? => true,
+                                       :update_attributes => true,
+                                       :initiator => @mock_user,
+                                       :confirm => true,
+                                       :save! => true, 
+                                       :status => :confirmed,
+                                       :friendly_id_status => mock('friendly', :best? => true))
+      Campaign.stub!(:find).and_return(@campaign)
       @controller.stub!(:current_user).and_return(@mock_user)
     end
 
@@ -79,19 +82,19 @@ describe CampaignsController do
     it_should_behave_like "an action requiring a visible campaign"
     
     it 'should try to update the campaign attributes' do
-      @mock_campaign.should_receive(:update_attributes).with({'title' => 'title', 'description' => 'description'})
+      @campaign.should_receive(:update_attributes).with({'title' => 'title', 'description' => 'description'})
       make_request
     end
 
     describe 'if the attributes can be updated' do
 
       before do
-        @mock_campaign.stub!(:update_attributes).and_return(true)
+        @campaign.stub!(:update_attributes).and_return(true)
       end
 
       it 'should redirect to the campaign url, passing the first_time param' do
         make_request
-        response.should redirect_to campaign_url(@mock_campaign, :first_time => true)
+        response.should redirect_to campaign_url(@campaign, :first_time => true)
       end
 
     end
@@ -99,7 +102,7 @@ describe CampaignsController do
     describe 'if the attributes cannot be updated' do
 
       before do
-        @mock_campaign.stub!(:update_attributes).and_return(false)
+        @campaign.stub!(:update_attributes).and_return(false)
       end
 
       it 'should render the template "add_details"' do
@@ -121,12 +124,14 @@ describe CampaignsController do
                                        :editable? => true,
                                        :visible? => true,
                                        :campaign_photos => mock('campaign photos', :build => true),
-                                       :location => mock_model(Stop, :points => [mock("point", :lat => 51, :lon => 0)]))
+                                       :location => mock_model(Stop, :points => [mock("point", :lat => 51, :lon => 0)]),
+                                       :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@campaign)
+      @default_params = { :id => 8 }
     end
 
-    def make_request
-      get :show, :id => 8
+    def make_request(params=@default_params)
+      get :show, params
     end
 
     it 'should ask for the campaign by id' do
@@ -158,7 +163,8 @@ describe CampaignsController do
                                             :editable? => true,
                                             :visible? => true,
                                             :status => :confirmed,
-                                            :save => true)
+                                            :save => true,
+                                            :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@mock_campaign)
       @controller.stub!(:current_user).and_return(@campaign_user)
       @expected_wrong_user_message = "edit this campaign"
@@ -232,7 +238,8 @@ describe CampaignsController do
                                             :editable? => true,
                                             :visible? => true,
                                             :status => :confirmed,
-                                            :description => 'Campaign description')
+                                            :description => 'Campaign description',
+                                            :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_wrong_user_message = "confirm this problem"
       @expected_new_access_message = :campaigns_edit_access_message
@@ -265,7 +272,9 @@ describe CampaignsController do
   describe 'GET #join' do
 
     before do
-      @campaign = mock_model(Campaign, :visible? => true, :editable? => true)
+      @campaign = mock_model(Campaign, :visible? => true, 
+                                       :editable? => true,
+                                       :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@campaign)
     end
 
@@ -289,7 +298,8 @@ describe CampaignsController do
                                             :editable? => true,
                                             :initiator => @campaign_user,
                                             :status => :confirmed,
-                                            :campaign_updates => mock('updates', :build => @campaign_update))
+                                            :campaign_updates => mock('updates', :build => @campaign_update),
+                                            :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@mock_campaign)
       @controller.stub!(:current_user).and_return(@campaign_user)
       @expected_wrong_user_message = "add an update"
@@ -312,7 +322,9 @@ describe CampaignsController do
   describe 'GET #add_comment' do
 
     before do
-      @mock_campaign = mock_model(Campaign, :visible? => true, :editable? => true)
+      @mock_campaign = mock_model(Campaign, :visible? => true, 
+                                            :editable? => true,
+                                            :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@mock_campaign)
       @mock_user = mock_model(User)
       @controller.stub!(:current_user).and_return(@mock_user)
@@ -435,7 +447,8 @@ describe CampaignsController do
                                             :editable? => true,
                                             :status => :confirmed,
                                             :initiator => @user,
-                                            :campaign_photos => [])
+                                            :campaign_photos => [],
+                                            :friendly_id_status => mock('friendly', :best? => true))
       @mock_campaign.campaign_photos.stub!(:build).and_return(true)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_access_message = :campaigns_add_photos_access_message
