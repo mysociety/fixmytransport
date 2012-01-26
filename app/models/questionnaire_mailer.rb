@@ -41,8 +41,8 @@ class QuestionnaireMailer < ApplicationMailer
           self.deliver_questionnaire(issue, questionnaire, user, title)
           sleep(0.5)
         end
+        sent_questionnaires += 1
       end  
-      sent_questionnaires += 1
       if !self.dryrun
         issue.update_attribute('send_questionnaire', false)
       end
