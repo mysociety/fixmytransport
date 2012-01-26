@@ -42,10 +42,8 @@ class QuestionnaireMailer < ApplicationMailer
           sleep(0.5)
         end
         sent_questionnaires += 1
-      end
-      if !self.dryrun
-        issue.send_questionnaire = false
-        issue.save!
+
+        issue.update_attribute('send_questionnaire', false)
       end
       if max_questionnaires && sent_questionnaires == max_questionnaires
         return

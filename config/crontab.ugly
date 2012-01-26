@@ -33,4 +33,4 @@ MAILTO=louise@mysociety.org
 */12 * * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-problem-updates || echo "stalled?"
 
 # Every half hour - send questionnaires
-*/30 * * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-questionnaires || echo "stalled?"
+#*/30 * * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-questionnaires || echo "stalled?"
