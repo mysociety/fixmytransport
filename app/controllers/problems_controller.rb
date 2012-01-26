@@ -143,7 +143,7 @@ class ProblemsController < ApplicationController
     elsif params[:convert] == 'no'
       @problem.confirm!
       flash[:notice] = t('problems.convert.thanks')
-      redirect_to problem_url(@problem) and return
+      redirect_to problem_url(@problem, :first_time => true) and return
     end
     # set a flag so that if the user logs out here, we don't try and bring them back
     @no_redirect_on_logout = true

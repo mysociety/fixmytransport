@@ -1269,9 +1269,9 @@ describe ProblemsController do
           make_request({:id => 22, :convert => 'no'})
         end
 
-        it 'should redirect to the problem url' do
+        it 'should redirect to the problem url passing a "first_time" parameter' do
           make_request({:id => 22, :convert => 'no'})
-          response.should redirect_to(problem_url(@mock_problem))
+          response.should redirect_to(problem_url(@mock_problem, :first_time => true))
         end
 
       end
