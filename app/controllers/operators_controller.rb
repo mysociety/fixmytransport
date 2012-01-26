@@ -55,7 +55,7 @@ class OperatorsController < ApplicationController
                       :count => @issue_count)
     @station_count = find_station_count
     @route_count = find_route_count
-    @station_type_descriptions = setup_station_type_descriptions
+    @station_type_descriptions = setup_station_type_descriptions    
   end
   
   # Routes, issues and stations are all presented as tabs on the operator page
@@ -74,9 +74,19 @@ class OperatorsController < ApplicationController
   #       reported to another organisation (e.g., a PTE) then that route won't show here.
   
   def issues
-    show
-    @title = t('route_operators.issues.title', :operator => @operator.name) 
-    render :show
+    respond_to do |format|
+      format.html do
+        show
+        @title = t('route_operators.issues.title', :operator => @operator.name) # overwrite after show
+        render :show      
+      end
+      format.atom do
+        @title = t('route_operators.issues.feed_title', :operator => @operator.name)
+        @issues = Problem.find_recent_issues(false, {:single_operator => @operator})
+        render :template => 'shared/issues.atom.builder', :layout => false
+        return
+      end
+    end
   end
 
   def routes 
