@@ -1,2 +1,5 @@
 <%- @title = "#{@problem.subject}" %>
+<%- if params[:first_time] %>
+  <%- content_for :tracking do %>'<%= raw url_for(params.merge(:location_type => @problem.location_type, :escape => false )) %>'<%- end %>
+<%- end %>
 <%= render :partial => 'shared/problem_details', :locals => {:show_comment_button => true, :show_questionnaire => false } %>
