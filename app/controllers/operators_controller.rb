@@ -4,7 +4,7 @@ class OperatorsController < ApplicationController
   before_filter :long_cache
   before_filter :find_operator, :except => [:index]
   before_filter :setup_shared_title, :except => [:index]
-  
+  before_filter :setup_feed_title, :only => [:show, :issues]
   
   def index
     @operator_list_threshold = 20
@@ -252,6 +252,9 @@ class OperatorsController < ApplicationController
     end
     return descriptions
   end
-              
+      
+  def setup_feed_title
+    @feed_title = t('route_operators.issues.feed_title', :operator => @operator.name)
+  end        
       
 end

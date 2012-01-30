@@ -1,3 +1,8 @@
+<%- if @feed_title  %>
+  <%- content_for :feeds do %>
+    <%= auto_discovery_link_tag(:atom, {:action => "issues", :format => :atom}, {:title => @feed_title}) %>
+  <%- end %>
+<%- end %>
 <div id="banner">
   <a id="home" href="/">FixMyTransport</a>
   <div class="container">
