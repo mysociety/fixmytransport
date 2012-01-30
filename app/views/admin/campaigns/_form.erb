@@ -10,7 +10,7 @@
       <%= error_message_on @campaign, :title   %>
     </div>
   <%- end %>
-  <%= raw label(:campaign, :title) %>
+  <strong><%= raw label(:campaign, :title) %></strong>
   <%= raw f.text_field :title %>
 </div>
 
@@ -20,7 +20,7 @@
       <%= error_message_on @campaign, :description   %>
     </div>
   <%- end %>
-  <%= raw label(:campaign, :description) %>
+  <strong><%= raw label(:campaign, :description) %></strong>
   <%= raw f.text_area :description, :rows => 6 %>
 </div>
 
@@ -30,20 +30,20 @@
       <%= error_message_on @campaign, :status_code %>
     </div>
   <%- end %>
-  <%= raw f.label :status %>
+  <strong><%= raw f.label :status %></strong>
   <%= raw f.select :status_code, Campaign.statuses, {:prompt => true, :selected => @campaign.status_code } %>
 </div>
-<div>
-  <%= t('admin.campaign_problem_report') %>: <%= link_to(@campaign.problem.subject, admin_url(admin_problem_path(@campaign.problem))) %>
+<div class='form-field'>
+ <strong><%= t('admin.campaign_problem_report') %></strong> <%= link_to(@campaign.problem.subject, admin_url(admin_problem_path(@campaign.problem))) %>
 </div>
-<div>
-  <%= t('admin.campaign_key') %>: <%= @campaign.key %>
+<div class='form-field'>
+  <strong><%= t('admin.campaign_key') %></strong> <%= @campaign.key %>
 </div>
-<div>
-  <%= t('admin.created_at') %>: <%= @campaign.created_at %>
+<div class='form-field'>
+  <strong><%= t('admin.created_at') %></strong> <%= @campaign.created_at %>
 </div>
-<div> 
-  <%= t('admin.updated_at') %>: <%= @campaign.updated_at %>
+<div class='form-field'> 
+  <strong><%= t('admin.updated_at') %></strong> <%= @campaign.updated_at %>
 </div>
 <%= raw submit_tag t('admin.go') %>
 
