@@ -1691,6 +1691,16 @@ ul#campaign-thread {
 }
 
 /*===[Front Page]===*/
+.variant-main {
+  float: none; 
+  width: 100%;
+  margin: 0.5em 0 0 0;
+}
+
+.variant-banner {
+  margin-top: 2%;
+}
+
 #frontpage-top {
 	margin:1em auto 0 auto;
 }

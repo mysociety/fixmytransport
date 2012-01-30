@@ -9,7 +9,7 @@
 </div>
 <%- end %>
 <div id="frontpage-top" class="container">
-	<div class="leftcol widecol">
+	<div class="leftcol widecol<%- if @variant == 1 %> variant-main<%-end %>">
 		<ul id="frontpage-problem-scroller">
 			<li>
 				<h1><%= t('problems.frontpage.bad_train')%></h1>
@@ -38,7 +38,8 @@
 			</a>
 		</div>
 	</div>
-	<div id="what-it-does" class="rightcol narrowcol">
+	<%- if @variant == 0 %>
+	<div id="what-it-does" class="rightcol narrowcol" >
 		<h2><%= t('problems.frontpage.what_it_does') %></h2>
 		<ul id="secret-list">
 			<li class="secret-report"><%= t('problems.frontpage.reports_problems')%></li>
@@ -47,11 +48,13 @@
 			<li class="secret-track"><%= t('problems.frontpage.tracks_progress')%></li>
 			<li class="secret-done"><%= t('problems.frontpage.gets_things_done')%></li>
 		</ul>
-		<a href="#how-it-works" class="font-1 button"><%= t('problems.frontpage.how_does_it_work')%></a>
-
+    
+		  <a href="#how-it-works" class="font-1 button"><%= t('problems.frontpage.how_does_it_work')%></a>
 	</div>
+	<%- end %>
 </div>
 
+<%- if @variant == 0 %>
 <div id="frontpage-banner" class="blue">
 	<div class="container">
 		<div id="frontpage-banner-left">
@@ -81,6 +84,12 @@
 		</div>
 	</div>
 </div>
+<%- else %>
+<div id="frontpage-banner" class="blue variant-banner">
+	<div class="container">
+  </div>
+</div>
+<%- end %>
 <div id="how-it-works" class="container">
 	<div id="fg-head">
 		<div id="fg-head-inner">
@@ -120,3 +129,4 @@
 		</span>
 	</ol>
 </div>
+
