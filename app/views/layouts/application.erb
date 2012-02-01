@@ -23,6 +23,8 @@
 	<!--[if lte IE 7]><%= raw stylesheet_link_tag(minify(['ie67'])) %><![endif]-->
 
 	<!--[if lte IE 8]><%= raw stylesheet_link_tag(minify(['ie678'])) %><![endif]-->
+	
+	<!--[if gte IE 9]> <%= raw stylesheet_link_tag(minify(['ie9'])) %><![endif]-->
 
     <%= yield :stylesheets %>
     <%= raw library_js_link %>

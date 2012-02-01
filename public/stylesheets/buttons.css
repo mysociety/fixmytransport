@@ -157,6 +157,7 @@ a.button {
     font-family: inherit;
     font-style: inherit;
     font-weight: inherit;
+    min-width: 220px;
     padding: 30px 45px;
 }
 .button.support {
