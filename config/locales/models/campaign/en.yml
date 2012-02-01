@@ -12,3 +12,5 @@ en:
             title:
               too_long: "Please enter a headline that is at most %{count} characters long"
               blank: "Please enter a headline"
+              invalid: "Please enter a headline with some words in it"
+          

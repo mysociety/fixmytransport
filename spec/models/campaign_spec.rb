@@ -147,6 +147,24 @@ describe Campaign do
       @campaign.errors.on(:title).should == 'Please enter a headline'
     end
 
+    it 'should be invalid if the title is a single non-alphanumeric character' do 
+      @campaign.title = '.'
+      @campaign.valid? 
+      @campaign.errors.on(:title).should == 'Please enter a headline with some words in it'
+    end
+
+    it 'should be valid regarding title if the title is a single lowercase character' do 
+      @campaign.title = 'a'
+      @campaign.valid? 
+      @campaign.errors.on(:title).should == nil
+    end
+    
+    it 'should be valid regarding title if the title is a single uppercase character' do 
+      @campaign.title = 'A'
+      @campaign.valid? 
+      @campaign.errors.on(:title).should == nil
+    end
+
   end
 
   describe 'when finding a campaign by campaign email' do

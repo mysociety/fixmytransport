@@ -20,6 +20,9 @@ class Campaign < ActiveRecord::Base
   has_many :questionnaires, :as => :subject
   validates_length_of :title, :maximum => 80, :on => :update, :allow_nil => true
   validates_presence_of :title, :description, :on => :update
+  validates_format_of :title, :with => /^.*(?=.*[a-zA-Z]).*$/, 
+                              :on => :update, 
+                              :allow_nil => true
   validates_associated :initiator, :on => :update
   cattr_reader :per_page
   delegate :transport_mode_text, :to => :problem
