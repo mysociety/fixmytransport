@@ -1232,6 +1232,14 @@ ul.issues-list{margin: 0px; padding: 0px;}
   overflow: hidden;
 }
 
+.support-explanation {
+  color: #666666;
+  margin: 1em auto 0 auto;
+  font-size: 1em;
+  text-align: center;
+  display: block;
+  max-width: 250px;
+}
 .campaign-description {
 	display: block;
 	float: left;
@@ -3158,7 +3166,10 @@ body.facebook-canvas .button {
 		  margin: 0;
 		  width: 100%;
 		}
-
+    .support-explanation {
+      max-width: 100%;
+    }
+    
     #campaign-manager {
         display: none; /* can get this info by clicking on icon/name in Description */
     }

@@ -701,5 +701,21 @@ module ApplicationHelper
     end
     return change_hash
   end
+  
+  def test_start(name)
+    if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com'
+      "<script>utmx_section(\"#{name}\")</script>"
+    else
+      ""
+    end
+  end
+  
+  def test_end
+    if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com'
+      "</noscript>"
+    else
+      ""
+    end
+  end
 
 end

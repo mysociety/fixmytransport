@@ -2,7 +2,19 @@
   <%- if ! supporter_initiator_view(@campaign) %>
 
     <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST'  } do |f| %>
-        <button type="submit" class="button <%= raw button_class %> green"><%= t('campaigns.show.support_this')%></button>
+        <button type="submit" class="button <%= raw button_class %> green">
+          <%- if button_class == "support-big"%>
+            <%= raw test_start('Support button text') %>
+          <%- end %>
+          <%= t('campaigns.show.support_this')%>
+          <%- if button_class == "support-big"%>
+            <%= raw test_end() %>
+          <%- end %>
+        </button>
+        <%- if button_class == "support-big"%>
+          <%= raw test_start('Support button explanation') %>
+          <%= raw test_end() %>
+        <%- end %>
     <%- end %>
 
   <%- end %>
@@ -11,7 +23,19 @@
 
   <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST', :class => 'login-to-support' } do |f| %>
     <%= raw hidden_field_tag "next_action", @next_action_join %>
-    <button type="submit" class="button <%= raw button_class %> green">Support</button>
+    <button type="submit" class="button <%= raw button_class %> green">
+      <%- if button_class == "support-big"%>
+        <%= raw test_start('Support button text') %>
+      <%- end %>
+      <%= t('campaigns.show.support_this')%>
+      <%- if button_class == "support-big"%>
+        <%= raw test_end() %>
+      <%- end %>
+    </button>
+     <%- if button_class == "support-big"%>
+        <%= raw test_start('Support button explanation') %>
+        <%= raw test_end() %>
+     <%- end %>
   <%- end %>
 
 <%- end %>
