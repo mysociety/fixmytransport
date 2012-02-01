@@ -151,7 +151,6 @@ a.button {
 	background: linear-gradient(top, #d89700 0%,#ffb600 100%); /* W3C */
 }
 .support-big {
-    display: block;
     text-align: center;
     margin: 0 auto;
     font-size: 30px;

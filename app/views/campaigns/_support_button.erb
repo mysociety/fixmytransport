@@ -1,7 +1,7 @@
 <%- if current_user %>
   <%- if ! supporter_initiator_view(@campaign) %>
 
-    <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST'  } do |f| %>
+    <%- form_for @campaign, :url => join_campaign_url(@campaign), :html => { :method => 'POST', :class => 'logged-in-support'  } do |f| %>
         <button type="submit" class="button <%= raw button_class %> green">
           <%- if button_class == "support-big"%>
             <%= raw test_start('Support button text') %>
@@ -16,6 +16,7 @@
           <%= raw test_end() %>
         <%- end %>
     <%- end %>
+
 
   <%- end %>
 

@@ -1245,6 +1245,10 @@ ul.issues-list{margin: 0px; padding: 0px;}
 	float: left;
 	width: 550px;
 	}
+	
+.login-to-support, .logged-in-support {
+  text-align:center; /* fix chrome auto margin bug on button elements */
+}
 
 .campaign-description a.more-info{
 	float:right;
@@ -2452,6 +2456,7 @@ body.facebook-canvas .button {
 				font-size: 1.2em;
 				width: 94%;
 			}
+
 			#top-nav,
 			#mysociety-tab {
 				display: none;
