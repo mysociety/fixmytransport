@@ -16,6 +16,13 @@
 #
 
 class Region < ActiveRecord::Base
+
+  # Regions are part of the transport data that is versioned by data generations.
+  # This default scope hides any regions that belong to past or future data generations.
+  default_scope :conditions => [ 'generation_low <= ?
+                                  AND generation_high >= ?',
+                                  CURRENT_GENERATION, CURRENT_GENERATION ]
+
   extend ActiveSupport::Memoizable
 
   has_friendly_id :name, :use_slug => true
@@ -27,12 +34,14 @@ class Region < ActiveRecord::Base
   has_many :coach_routes, :order => 'number asc'
   has_many :tram_metro_routes
   has_many :ferry_routes
-  
+  # set attributes to include and exclude when performing model diffs
+  diff :exclude => [:created_at, :updated_at, :generation_low, :generation_high, :cached_slug]
+
   # instance methods
   def full_name
-    "#{name} region" 
+    "#{name} region"
   end
-  
+
   # class methods
   def self.find_all_by_full_name(name)
     name = name.downcase
@@ -80,5 +89,5 @@ class Region < ActiveRecord::Base
     end
     routes_by_first
   end
-    
+
 end

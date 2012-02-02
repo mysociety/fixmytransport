@@ -27,7 +27,6 @@ load "voting_area.rb"
 # and adds fallback gem call removed in https://github.com/rails/rails/commit/4c3725723f15fab0a424cb1318b82b460714b72f
 require File.join(File.dirname(__FILE__), '../lib/patches/old_rubygems_patch')
 
-
 Rails::Initializer.run do |config|
 
   # Load intial mySociety config
@@ -93,6 +92,9 @@ Rails::Initializer.run do |config|
   config.action_view.field_error_proc = Proc.new{ |html_tag, instance| html_tag }
 
 end
+
+# Patch the slugs model provided by friendly id so that it knows about data generations
+require File.join(File.dirname(__FILE__), '../lib/patches/friendly_id_slug')
 
 
 # Use an asset host setting so that the admin interface can always get css, images, js.

@@ -1,0 +1,1 @@
+CURRENT_GENERATION = MySociety::Config.get("CURRENT_GENERATION", "1") 

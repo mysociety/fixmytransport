@@ -99,3 +99,5 @@ GEOLOCATION_ENABLED: 0
 # command to run YUI asset compression
 YUI_COMPRESSOR_JAR: 'yui-compressor'
 
+# What transport data generation are we using?
+CURRENT_GENERATION: 1
