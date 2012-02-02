@@ -26,6 +26,10 @@
 #
 
 class Locality < ActiveRecord::Base
+  # This model is part of the transport data that is versioned by data generations.
+  # This means they have a default scope of models valid in the current data generation.
+  # See lib/fixmytransport/data_generations
+  exists_in_data_generation
   belongs_to :admin_area
   belongs_to :district
   has_dag_links :link_class_name => 'LocalityLink'

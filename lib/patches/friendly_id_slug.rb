@@ -3,8 +3,8 @@
 # data generation
 
 class Slug < ::ActiveRecord::Base
-  default_scope :conditions => [ 'generation_low <= ? 
-                                  AND generation_high >= ?', 
+  default_scope :conditions => [ "#{quoted_table_name}.generation_low <= ? 
+                                  AND #{quoted_table_name}.generation_high >= ?", 
                                   CURRENT_GENERATION, CURRENT_GENERATION ]
   before_create :set_generations
   

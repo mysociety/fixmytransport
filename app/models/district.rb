@@ -18,6 +18,10 @@
 class District < ActiveRecord::Base
   belongs_to :admin_area
   has_many :localities
+  # This model is part of the transport data that is versioned by data generations.
+  # This means they have a default scope of models valid in the current data generation.
+  # See lib/fixmytransport/data_generations
+  exists_in_data_generation
 
   # instance methods
   def full_name

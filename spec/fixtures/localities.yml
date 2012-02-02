@@ -41,6 +41,8 @@ victoria:
   short_name: ""
   coords: 0101000020346C000000000000502420410000000070DE0541
   easting: "528936"
+  generation_low: 1
+  generation_high: 1
 haywards_heath: 
   northing: "124110"
   source_locality_type: Pa
@@ -55,6 +57,8 @@ haywards_heath:
   short_name: ""
   coords: 0101000020346C000000000000E442204100000000E04CFE40
   easting: "532850"
+  generation_low: 1
+  generation_high: 1
 broadmead:  
   northing: "173518"
   source_locality_type: Add
@@ -69,6 +73,8 @@ broadmead:
   short_name: ""
   coords: 0101000020346C000000000000ACE8154100000000702E0541
   easting: "358955"
+  generation_low: 1
+  generation_high: 1
 shirehampton:  
   northing: "176911"
   source_locality_type: Lo
@@ -83,6 +89,8 @@ shirehampton:
   short_name: ""
   coords: 0101000020346C000000000000E88E15410000000078980541
   easting: "353210"
+  generation_low: 1
+  generation_high: 1
 clapham_junction:
   northing: "175500"
   source_locality_type: Lo
@@ -97,6 +105,8 @@ clapham_junction:
   short_name: ""
   coords: 0101000020346C0000000000005018204100000000606C0541
   easting: "527400"
+  generation_low: 1
+  generation_high: 1
 croydon:
   northing: "165340"
   source_locality_type: Add
@@ -111,6 +121,8 @@ croydon:
   short_name: ""
   coords: 0101000020346C000000000000C43F204100000000E02E0441
   easting: "532450"
+  generation_low: 1
+  generation_high: 1
 gatwick_airport:
   northing: "141324"
   source_locality_type: Add
@@ -125,6 +137,8 @@ gatwick_airport:
   short_name: ""
   coords: 0101000020346C000000000000FE2220410000000060400141
   easting: "528767"
+  generation_low: 1
+  generation_high: 1
 south_moor:
   northing: "551960"
   source_locality_type: Lo
@@ -139,6 +153,8 @@ south_moor:
   short_name: ""
   coords: 0101000020346C000000000000409219410000000030D82041
   easting: "418960"
+  generation_low: 1
+  generation_high: 1
 stanley:
   northing: "553023"
   source_locality_type: Lo
@@ -153,6 +169,8 @@ stanley:
   short_name: ""
   coords: 0101000020346C000000000000AC9C1941000000007EE02041
   easting: "419627"
+  generation_low: 1
+  generation_high: 1
 weybourne:
   northing: "149037"
   source_locality_type: Lo
@@ -167,6 +185,8 @@ weybourne:
   short_name: ""
   coords: 0101000020346C000000000000FC9C1D410000000068310241
   easting: "485183"
+  generation_low: 1
+  generation_high: 1
 north_town:
   northing: "150470"
   source_locality_type: Add
@@ -181,6 +201,8 @@ north_town:
   short_name: ""
   coords: 0101000020346C00000000000010C81D4100000000305E0241
   easting: "487940"
+  generation_low: 1
+  generation_high: 1
 catchgate:
   northing: "552130"
   source_locality_type: Lo
@@ -195,6 +217,8 @@ catchgate:
   short_name: ""
   coords: 0101000020346C000000000000E06A19410000000084D92041
   easting: "416440"
+  generation_low: 1
+  generation_high: 1
 annfield_plain: 
   northing: "551442"
   source_locality_type: Lo
@@ -209,6 +233,8 @@ annfield_plain:
   short_name: ""
   coords: 0101000020346C000000000000107219410000000024D42041
   easting: "416900"
+  generation_low: 1
+  generation_high: 1
 aldershot:
   northing: "150625"
   source_locality_type: Lo
@@ -223,6 +249,8 @@ aldershot:
   short_name: ""
   coords: 0101000020346C0000000000008CAF1D410000000008630241
   easting: "486371"
+  generation_low: 1
+  generation_high: 1
 bristol: 
   northing: "173086"
   source_locality_type: US
@@ -237,6 +265,8 @@ bristol:
   short_name: ""
   coords: 0101000020346C000000000000C0E3154100000000F0200541
   easting: "358640"
+  generation_low: 1
+  generation_high: 1
 london: 
   northing: "180514"
   source_locality_type: Add
@@ -251,6 +281,8 @@ london:
   short_name: ""
   coords: 0101000020346C0000000000001C2D20410000000010090641
   easting: "530062"
+  generation_low: 1
+  generation_high: 1
 avonmouth: 
   northing: "179239"
   source_locality_type: Lo
@@ -266,6 +298,8 @@ avonmouth:
   short_name: ""
   coords: 0101000020346C000000000000688015410000000038E10541
   easting: "352282"
+  generation_low: 1
+  generation_high: 1
 shirehampton: 
   northing: "176911"
   source_locality_type: Lo
@@ -281,6 +315,8 @@ shirehampton:
   short_name: ""
   coords: 0101000020346C000000000000E88E15410000000078980541
   easting: "353210"
+  generation_low: 1
+  generation_high: 1
 the_borough: 
   northing: "179690"
   source_locality_type: Lo
@@ -296,6 +332,8 @@ the_borough:
   short_name: ""
   coords: 0101000020346C000000000000883F20410000000050EF0541
   easting: "532420"
+  generation_low: 1
+  generation_high: 1
 kingswood: 
   northing: "254081"
   source_locality_type: Lo
@@ -312,3 +350,5 @@ kingswood:
   cached_slug: kingswood-hereford
   coords: 0101000020346C000000000000901A14410000000008040F41
   easting: "329380"
+  generation_low: 1
+  generation_high: 1

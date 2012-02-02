@@ -31,6 +31,8 @@ aldershot:
   modification_datetime: 2010-05-06 17:21:35
   revision_number: MyString
   modification: MyString
+  generation_low: 1
+  generation_high: 1
 london:
   code: "505"
   atco_code: "606"
@@ -41,3 +43,5 @@ london:
   modification_datetime: 2010-05-06 17:21:35
   revision_number: MyString
   modification: MyString
+  generation_low: 1
+  generation_high: 1

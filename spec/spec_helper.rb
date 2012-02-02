@@ -9,6 +9,7 @@ require 'spec/rails'
 #require 'webrat/integrations/rspec-rails'
 require 'spec/shared/transport_location_helpers'
 require 'spec/shared/controller_helpers'
+require 'spec/shared/data_generation_helper'
 require 'spec/initializers/actionmailer_smtp_format_patch_spec'
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
@@ -22,15 +23,15 @@ Spec::Runner.configure do |config|
   config.use_instantiated_fixtures  = false
   config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
 
-  config.before(:each) do 
+  config.before(:each) do
     # make sure we don't call the live API when running tests
     MySociety::MaPit.stub!(:call)
   end
-  
-  config.before(:each, :type => :controller) do 
+
+  config.before(:each, :type => :controller) do
     # have all controllers act as if in 'live' status by default
     @controller.stub!(:app_status).and_return('live')
-    
+
     # mock up an admin authorized user for admin controller specs (except the user_sessions controller,
     # which does it's own mocking)
     if @controller.is_a?(Admin::AdminController) && !@controller.is_a?(Admin::UserSessionsController)
@@ -40,9 +41,20 @@ Spec::Runner.configure do |config|
       controller.stub!(:current_user).and_return(@user)
     end
   end
-  
+
 end
 
+def fake_data_generation(generation)
+  # Ugly - faking the default scope on models to data generation 1
+  # but quite hard to stub the data_generation before all the models get
+  # initialized, which is what we would otherwise have to do
+  [Locality, AdminArea, District, Region].each do |model_type|
+    conditions = ["#{model_type.quoted_table_name}.generation_low <= ?
+                   AND #{model_type.quoted_table_name}.generation_high >= ?",
+                   generation, generation]
+    model_type.stub!(:scoped_methods).and_return([{ :find => { :conditions => conditions } }])
+  end
+end
 
 def default_fixtures
   [:transport_modes,
@@ -52,15 +64,15 @@ def default_fixtures
    :stop_area_types,
    :transport_mode_stop_types,
    :transport_mode_stop_area_types,
-   :stops, 
-   :stop_areas, 
+   :stops,
+   :stop_areas,
    :regions,
-   :routes, 
+   :routes,
    :route_sub_routes,
    :sub_routes,
    :journey_patterns,
-   :stop_area_memberships, 
-   :stop_area_links,  
+   :stop_area_memberships,
+   :stop_area_links,
    :route_segments,
    :operators,
    :route_operators,

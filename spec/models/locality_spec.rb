@@ -39,46 +39,51 @@ describe Locality do
       :revision_number => "value for revision_number",
       :modification => "value for modification"
     }
+    @model_type = Locality
   end
+
+  it_should_behave_like "a model that is exists in data generations"
+
+  it_should_behave_like "a model that is exists in data generations and has slugs"
 
   it "should create a new instance given valid attributes" do
     Locality.create!(@valid_attributes)
   end
-  
-  describe 'when finding by full name' do 
-    
-    it 'should query for the name ignoring case' do 
+
+  describe 'when finding by full name' do
+
+    it 'should query for the name ignoring case' do
       Locality.should_receive(:find).with(:all, :order => 'localities.name asc',
                                                 :conditions => ['LOWER(localities.name) = ?', 'london'],
                                                 :include => [:admin_area, :district]).and_return([mock('result')])
       Locality.find_all_by_full_name('London')
     end
-    
-    
-    describe 'when a name with and " and " is given and there are no results' do 
-      
-      before do 
+
+
+    describe 'when a name with and " and " is given and there are no results' do
+
+      before do
         Locality.stub!(:find).with(:all, :order => 'localities.name asc',
                                          :conditions => ['LOWER(localities.name) = ?', 'upwood and the raveleys'],
                                          :include => [:admin_area, :district]).and_return([])
       end
-      
-      
-      it 'should try a version with " & "' do 
+
+
+      it 'should try a version with " & "' do
         Locality.should_receive(:find).with(:all, :order => 'localities.name asc',
                                             :conditions => ['LOWER(localities.name) = ?', 'upwood & the raveleys'],
                                             :include => [:admin_area, :district]).and_return([])
         Locality.find_all_by_full_name('Upwood and the Raveleys')
       end
-    
+
     end
-    
-    describe 'when a name with a comma is given' do 
-    
-      it 'should search for a locality with name and qualifier' do 
+
+    describe 'when a name with a comma is given' do
+
+      it 'should search for a locality with name and qualifier' do
         expected_conditions = ["LOWER(localities.name) = ? AND (LOWER(qualifier_name) = ?
                          OR LOWER(districts.name) = ?
-                         OR LOWER(admin_areas.name) = ?)", 
+                         OR LOWER(admin_areas.name) = ?)",
                          'euston', 'london', 'london', 'london']
         Locality.should_receive(:find).with(:all, :conditions => expected_conditions,
                                                   :include => [:admin_area, :district],

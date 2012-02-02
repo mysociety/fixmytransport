@@ -77,6 +77,10 @@ describe StopArea do
 
     fixtures default_fixtures
 
+    before do
+      fake_data_generation(1)
+    end
+
     describe 'for stop areas whose stops all share a locality' do
 
       it 'should return the locality_name' do
@@ -301,10 +305,10 @@ describe StopArea do
     end
 
   end
-  
-  describe 'when searching for nearest stop areas' do        
-      
-    it 'ask for the nearest stop area of the relevant type' do 
+
+  describe 'when searching for nearest stop areas' do
+
+    it 'ask for the nearest stop area of the relevant type' do
       StopArea.stub(:find).and_return(mock_model(StopArea))
       expected_conditions = ["area_type in (?)", ["GTMU"]]
       expected_order = "ST_Distance(ST_Transform(ST_GeomFromText('POINT(0.084 51.497)', 4326),27700),coords) asc"
@@ -312,10 +316,10 @@ describe StopArea do
                                                     :order=> expected_order }).and_return([])
       stop_area_list = StopArea.find_nearest(0.084, 51.497, 'Tram/Metro')
     end
-    
+
     it 'shoud fail with invalid (lon,lat)' do
       expect { StopArea.find_nearest(0.01, 'foo') }.should raise_error
     end
-  
+
   end
 end

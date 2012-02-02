@@ -274,7 +274,7 @@ namespace :naptan do
 
     desc "Converts locality coords from OS OSGB36 6-digit eastings and northings to WGS-84 lat/lons and saves the result on the model"
     task :convert_localities => :environment do
-      convert_coords("Locality", "convert_localities")
+      convert_coords("Locality", "convert_localities", 'lat is null')
     end
   end
 

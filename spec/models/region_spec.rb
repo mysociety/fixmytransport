@@ -27,7 +27,12 @@ describe Region do
       :revision_number => "value for revision_number",
       :modification => "value for modification"
     }
+    @model_type = Region
   end
+
+  it_should_behave_like "a model that is exists in data generations"
+  
+  it_should_behave_like "a model that is exists in data generations and has slugs"
 
   it "should create a new instance given valid attributes" do
     Region.create!(@valid_attributes)

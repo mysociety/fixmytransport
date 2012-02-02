@@ -17,15 +17,13 @@
 
 class Region < ActiveRecord::Base
 
-  # Regions are part of the transport data that is versioned by data generations.
-  # This default scope hides any regions that belong to past or future data generations.
-  default_scope :conditions => [ 'generation_low <= ?
-                                  AND generation_high >= ?',
-                                  CURRENT_GENERATION, CURRENT_GENERATION ]
-
   extend ActiveSupport::Memoizable
 
   has_friendly_id :name, :use_slug => true
+  # This model is part of the transport data that is versioned by data generations.
+  # This means they have a default scope of models valid in the current data generation.
+  # See lib/fixmytransport/data_generations
+  exists_in_data_generation
   has_many :admin_areas
   has_many :localities, :through => :admin_areas
   has_many :routes
