@@ -116,7 +116,7 @@ class IncomingMessage < ActiveRecord::Base
     mask_organization_emails(text)
     campaign.valid_local_parts.each do |local_part|
       campaign_email_replacement = I18n.translate('campaigns.show.campaign_email_replacement', :title => campaign.title)
-      text.gsub!("#{local_part}@#{campaign.domain}", campaign_email_replacement)
+      text.gsub!(/#{local_part}@#{campaign.domain}/i, campaign_email_replacement)
     end
     app_email_replacement = I18n.translate('campaigns.show.app_email_replacement')
     text.gsub!(MySociety::Config.get("CONTACT_EMAIL", 'contact@localhost'), app_email_replacement)

@@ -66,6 +66,13 @@ describe IncomingMessage do
       @incoming_message.mask_special_emails(text).should == expected_text
     end
 
+    it 'should mask an upppercase or mixed case version of the campaign email address' do 
+      text = "it is to BOB@EXAMPLE.COM and Ken@Example.com"
+      expected_text = 'it is to [a test campaign email] and [a test campaign email]'
+      @incoming_message.mask_special_emails(text).should == expected_text
+      
+    end
+
   end
 
   describe 'when asked for a safe from address' do
