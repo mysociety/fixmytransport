@@ -14,6 +14,58 @@ describe FixMyTransport::Email do
     mail  
   end
 
+  describe 'when a mail is asked for a friendly from or sender name' do 
+    
+    it 'should return a friendly from if there is one' do 
+      @mail = example_mail('plain')
+      @mail.friendly_from_or_sender.should == 'Lovely Sender'
+    end
+    
+    it 'should not throw an error if there is no from' do 
+      @mail = example_mail('sender_not_from')
+      lambda{ @mail.friendly_from_or_sender }.should_not raise_error
+    end
+    
+    it 'should fallback to a sender name if there is no from' do 
+      @mail = example_mail('sender_not_from')
+      @mail.friendly_from_or_sender.should == 'Lovely Sender'
+    end
+    
+  end
+  
+  describe 'when a mail is asked for a friendly sender address' do 
+    
+    it 'should return the friendly part of the sender field if there is one' do 
+      @mail = example_mail('sender_not_from')
+      @mail.friendly_sender.should == 'Lovely Sender'
+    end
+  
+    it 'should return a default if there is no sender address' do 
+      @mail = example_mail('plain')
+      @mail.friendly_sender("default").should == "default"
+    end
+  
+  end
+  
+  describe 'when a mail is asked for a from or sender address' do 
+
+    it 'should not throw an error if there is no from field' do 
+      @mail = example_mail('sender_not_from')
+      lambda{ @mail.from_or_sender_address }.should_not raise_error
+    end
+    
+    it 'should return the first from address if there is one' do 
+      @mail = example_mail('plain')
+      @mail.from_or_sender_address.should == 'sender@example.com'
+    end
+    
+    it 'should fall through to the sender address if there is no from address' do
+      @mail = example_mail('sender_not_from')
+      @mail.from_or_sender_address.should == 'sender@example.com'
+    end
+    
+  end
+  
   describe 'when managing attachments' do 
     
     before do

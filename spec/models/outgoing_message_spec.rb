@@ -104,8 +104,11 @@ describe OutgoingMessage do
     describe 'if an incoming message id is included in the attributes' do
 
       before do
+        @mock_mail = mock('mail', :from_or_sender_address => 'sender@example.com')
         @mock_incoming_message = mock_model(IncomingMessage, :body_for_quoting => "hello",
-                                                             :subject => "Something interesting")
+                                                             :subject => "Something interesting",
+                                                             :safe_from => "Lovely Sender",
+                                                             :mail => @mock_mail)
         @attributes = { :incoming_message_id => 22 }
         @mock_campaign.incoming_messages.stub!(:find).and_return(@mock_incoming_message)
       end
@@ -128,6 +131,16 @@ describe OutgoingMessage do
       it 'should set the subject as a reference to the incoming message subject' do
         outgoing_message = OutgoingMessage.message_from_attributes(@mock_campaign, @mock_user, @attributes)
         outgoing_message.subject.should == "Re: Something interesting"
+      end
+
+      it 'should set the recipient name as the safe from attribute on the incoming message' do
+        outgoing_message = OutgoingMessage.message_from_attributes(@mock_campaign, @mock_user, @attributes)
+        outgoing_message.recipient_name.should == "Lovely Sender"
+      end
+
+      it 'should set the recipient email as the from or sender address on the mail associated with the incoming message' do
+        outgoing_message = OutgoingMessage.message_from_attributes(@mock_campaign, @mock_user, @attributes)
+        outgoing_message.recipient_email.should == "sender@example.com"
       end
 
     end

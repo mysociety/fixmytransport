@@ -1,4 +1,4 @@
-From: EMAIL_FROM
+From: Lovely Sender <sender@example.com>
 To: Campaign Person <campaign.person@my-campaign.example.com>
 Bcc: 
 Subject: Re: Problem Report: Cats on line

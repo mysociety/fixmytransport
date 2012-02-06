@@ -112,11 +112,11 @@ class CampaignMailer < ApplicationMailer
     campaigns = campaigns_matching_email(email)
     if campaigns.empty? 
       # no matching campaigns
-      IncomingMessage.create_from_tmail(email, raw_email, nil)
+      IncomingMessage.create_from_mail(email, raw_email, nil)
       CampaignMailer.deliver_unmatched_incoming_message()
     else
       campaigns.each do |campaign, recipient|
-        incoming_message = IncomingMessage.create_from_tmail(email, raw_email, campaign)
+        incoming_message = IncomingMessage.create_from_mail(email, raw_email, campaign)
         CampaignMailer.deliver_new_message(recipient, incoming_message, campaign)
       end
     end
@@ -125,7 +125,7 @@ class CampaignMailer < ApplicationMailer
   # class methods
   def self.receive(raw_email)
     logger.info "Received mail:\n #{raw_email}" unless logger.nil?
-    mail = TMail::Mail.parse(raw_email)
+    mail = FixMyTransport::Email::Mail.parse(raw_email)
     mail.base64_decode
     new.receive(mail, raw_email)
   end

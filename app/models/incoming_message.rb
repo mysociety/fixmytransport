@@ -142,7 +142,7 @@ class IncomingMessage < ActiveRecord::Base
     text = mask_organization_emails(self.from){ |organization, email, text| text.gsub(email, organization.name) }
     text = MySociety::Mask.mask_emails(text)
   end
-    
+  
   # Return date mail was sent
   def sent_at
     # Use date it arrived (created_at) if mail itself doesn't have Date: header
@@ -162,14 +162,11 @@ class IncomingMessage < ActiveRecord::Base
   end
   
   # class methods
-  def self.create_from_tmail(tmail, raw_email_data, campaign)
+  def self.create_from_mail(mail, raw_email_data, campaign)
     ActiveRecord::Base.transaction do
       raw_email = RawEmail.create!(:data => raw_email_data)
-      friendly_from = ''
-      if tmail.from
-        friendly_from = tmail.friendly_from
-      end
-      incoming_message = create!(:subject => tmail.subject, 
+      friendly_from = mail.friendly_from_or_sender('')
+      incoming_message = create!(:subject => mail.subject, 
                                  :campaign => campaign, 
                                  :raw_email => raw_email,
                                  :from => friendly_from)

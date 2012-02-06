@@ -12,7 +12,7 @@ describe CampaignMailer do
       @mock_campaign = mock_model(Campaign, :get_recipient => @mock_user,
                                             :title => "A Test Campaign")
       @mock_message = mock_model(IncomingMessage)
-      IncomingMessage.stub!(:create_from_tmail).and_return(@mock_message)
+      IncomingMessage.stub!(:create_from_mail).and_return(@mock_message)
     end
 
     describe 'if a campaign address can be found in the to: field' do
@@ -22,7 +22,7 @@ describe CampaignMailer do
       end
 
       it 'should create an incoming message for the campaign from the mail' do
-        IncomingMessage.should_receive(:create_from_tmail).with(anything, @raw_email, @mock_campaign).and_return(@mock_message)
+        IncomingMessage.should_receive(:create_from_mail).with(anything, @raw_email, @mock_campaign).and_return(@mock_message)
         CampaignMailer.receive(@raw_email)
       end
 
@@ -40,7 +40,7 @@ describe CampaignMailer do
       end
 
       it 'should create an incoming message with no associated campaign' do
-        IncomingMessage.should_receive(:create_from_tmail).with(anything, @raw_email, nil)
+        IncomingMessage.should_receive(:create_from_mail).with(anything, @raw_email, nil)
         CampaignMailer.receive(@raw_email)
       end
 
