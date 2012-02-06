@@ -486,7 +486,10 @@ $(document).ready(function(){
         // remove the advice flag
         $(form_selector + " #campaign_update_is_advice_request").remove();
         addCampaignItem(response.html);
-      } else {
+      } else if (response.requires_login) {
+          $(form_selector + " .error-text").html(response.message);
+          $(form_selector + ' .error-text').show();
+        } else {
         showFormErrors(form_selector, response);
       }
 	  }
@@ -517,6 +520,9 @@ $(document).ready(function(){
         // remove the hidden thread index field
         $(form_selector + " .last_thread_index").remove();
         addCampaignItem(response.html);
+      } else if (response.requires_login) {
+        $(form_selector + " .error-text").html(response.message);
+        $(form_selector + ' .error-text').show();
       } else {
         showFormErrors(form_selector, response);
       }

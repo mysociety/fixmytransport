@@ -37,6 +37,7 @@ describe OutgoingMessagesController do
       mock_campaign
       CouncilContact.stub!(:find).and_return(mock_model(CouncilContact))
       @expected_access_message = :outgoing_messages_new_access_message
+      @expected_wrong_user_message = "send messages about this problem"
     end
     
     def make_request params
@@ -71,6 +72,7 @@ describe OutgoingMessagesController do
       mock_campaign
       @default_params = { :campaign_id => 66 }
       @expected_access_message = :outgoing_messages_create_access_message
+      @expected_wrong_user_message = "send messages about this problem"
     end
     
     def make_request params

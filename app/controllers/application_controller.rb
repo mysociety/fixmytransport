@@ -157,14 +157,25 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_bad_user
-    store_location
-    if current_user
-      render :template => "shared/wrong_user"
-      return false
+    respond_to do |format|
+      format.html do
+        store_location
+        if current_user
+          render :template => "shared/wrong_user"
+          return false
+        end
+        flash[:notice] = t('shared.login.login_to', :user => @name, :requested_action => t(@access_message))
+        redirect_to login_url
+        return false
+      end
+      format.json do
+        @json = {}
+        @json[:success] = false
+        @json[:requires_login] = true
+        @json[:message] = t('shared.login.login_to', :user => @name, :requested_action => t(@access_message))
+        render :json => @json
+      end
     end
-    flash[:notice] = t('shared.login.login_to', :user => @name, :requested_action => t(@access_message))
-    redirect_to login_url
-    return false
   end
 
   def store_location

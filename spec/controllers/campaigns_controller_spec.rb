@@ -167,7 +167,7 @@ describe CampaignsController do
                                             :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@mock_campaign)
       @controller.stub!(:current_user).and_return(@campaign_user)
-      @expected_wrong_user_message = "edit this campaign"
+      @expected_wrong_user_message = "edit this problem page"
       @expected_new_access_message = :campaigns_edit_access_message
       @expected_access_message = :campaigns_update_access_message
       @default_params = { :id => 33, :campaign => { :description => 'Some stuff' }}
@@ -241,14 +241,15 @@ describe CampaignsController do
                                             :description => 'Campaign description',
                                             :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@mock_campaign)
-      @expected_wrong_user_message = "confirm this problem"
+      @expected_wrong_user_message = "edit this problem page"
       @expected_new_access_message = :campaigns_edit_access_message
       @expected_access_message = :campaigns_edit_access_message
       @controller.stub!(:current_user).and_return(@campaign_user)
+      @default_params = { :id => 33, :token => nil }
     end
 
-    def make_request(token=nil)
-      get :edit, { :id => 33, :token => token }
+    def make_request(params=@default_params)
+      get :edit, params
     end
 
     def do_default_behaviour
@@ -302,7 +303,7 @@ describe CampaignsController do
                                             :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@mock_campaign)
       @controller.stub!(:current_user).and_return(@campaign_user)
-      @expected_wrong_user_message = "add an update"
+      @expected_wrong_user_message = "ask for advice on this problem"
       @expected_access_message = :campaigns_add_update_access_message
       @default_params = { :id => 55, :update_id => '33' }
     end
@@ -385,6 +386,7 @@ describe CampaignsController do
                                             :status_code => 3)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_access_message = :campaigns_complete_access_message
+      @expected_wrong_user_message = 'mark this problem as fixed'
     end
 
     def make_request(params)
@@ -451,6 +453,7 @@ describe CampaignsController do
                                             :friendly_id_status => mock('friendly', :best? => true))
       @mock_campaign.campaign_photos.stub!(:build).and_return(true)
       Campaign.stub!(:find).and_return(@mock_campaign)
+      @expected_wrong_user_message = 'add photos to this problem page'
       @expected_access_message = :campaigns_add_photos_access_message
     end
 
@@ -484,6 +487,7 @@ describe CampaignsController do
                                             :initiator => @user)
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_access_message = :campaigns_add_photos_access_message
+      @expected_wrong_user_message = 'add photos to this problem page'
     end
 
     def make_request(params)
@@ -539,7 +543,7 @@ describe CampaignsController do
                                             :campaign_events => @mock_events,
                                             :initiator => @user)
       Campaign.stub!(:find).and_return(@mock_campaign)
-      @expected_wrong_user_message = 'Add an update'
+      @expected_wrong_user_message = 'ask for advice on this problem'
       @expected_access_message = :campaigns_add_update_access_message
       @default_params = { :id => 55, :update_id => '33' }
     end

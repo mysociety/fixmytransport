@@ -194,6 +194,7 @@ describe AssignmentsController do
                                             :initiator => @campaign_user,
                                             :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@mock_campaign)
+      @expected_wrong_user_message = "try this assignment"
       @mock_campaign.assignments.stub!(:find).and_return(@mock_assignment)
     end
 
@@ -246,6 +247,7 @@ describe AssignmentsController do
                                             :initiator => @mock_user,
                                             :campaign_events => [])
       Campaign.stub!(:find).and_return(@mock_campaign)
+      @expected_wrong_user_message = "try this assignment"
       @mock_campaign.assignments.stub!(:find).and_return(@mock_assignment)
     end
 

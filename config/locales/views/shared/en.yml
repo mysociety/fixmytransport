@@ -3,7 +3,8 @@ en:
     access:
       campaigns_share_access_message: "share this problem page"
       campaigns_complete_access_message: "mark this problem as fixed"
-      outgoing_messages_new_access_message: "write messages about this problem"
+      outgoing_messages_new_access_message: "send messages about this problem"
+      outgoing_messages_create_access_message: "send messages about this problem"
       assignments_create_access_message: "create an assignment to help resolve this problem"
       campaigns_add_comment_access_message: "add a comment"
       assignments_new_access_message: "create an assignment to help resolve this problem"
