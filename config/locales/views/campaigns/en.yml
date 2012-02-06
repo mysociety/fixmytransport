@@ -127,3 +127,5 @@ en:
       unsubscribe: Stop email updates
       subscribe: Get updates by email
       leave: Withdraw support
+      initiator_view: See page as problem reporter
+      showing_initiator_view: Showing page as the initial problem reporter would see it.

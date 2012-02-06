@@ -156,6 +156,11 @@
        <div>
          <a href="<%= admin_url(admin_campaign_path(@campaign.id)) %>" class="button"><%= t('campaigns.show.admin_campaign') %></a>
        </div>
+       <div>
+         <%- if params[:initiator_view] != '1' %>
+          <a href="<%= url_for(params.merge(:initiator_view => 1)) %>" class="button"><%= t('campaigns.show.initiator_view') %></a>
+        <%- end %>
+        </div>
      </div>
    </div>
    

@@ -20,7 +20,14 @@ class CampaignsController < ApplicationController
                             find_other_locations=false,
                             height=CAMPAIGN_PAGE_MAP_HEIGHT,
                             width=CAMPAIGN_PAGE_MAP_WIDTH)
-     @collapse_quotes = params[:unfold] ? false : true
+    @collapse_quotes = params[:unfold] ? false : true
+
+    if current_user &&
+       current_user.is_admin? &&
+       current_user.can_admin_issues? &&
+       params[:initiator_view] == '1'
+      flash.now[:large_notice] = t('campaigns.show.showing_initiator_view')
+    end
   end
 
   def index
