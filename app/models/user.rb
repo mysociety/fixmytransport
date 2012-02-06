@@ -254,6 +254,9 @@ class User < ActiveRecord::Base
         else
           name = facebook_data['name']
           email = facebook_data['email']
+          if email.blank?
+            raise "Error: no email in Facebook data: #{facebook_data.inspect}, access token: #{access_token}"
+          end
           user = User.find(:first, :conditions => ['lower(email) = ?', email.downcase])
           if not user
             user = User.new({:name => name, :email => email})
