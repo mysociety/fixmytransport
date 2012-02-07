@@ -105,8 +105,15 @@ ul#browse-issues-list li.problem .wrapper { width:388px; }
 	left:-15px;
 	position:relative;
 }
+* html #frontpage-top .leftcol .button-col {
+  width: 45%;
+}
 
 /*Hacks for IE6 and IE7*/
+
+#frontpage-top .leftcol .button-col {
+  display: inline;
+}
 
 .ui-dialog-title,
 #footer {

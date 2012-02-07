@@ -134,9 +134,10 @@ en:
       ambiguous_to_stop: "'%{station_name}' could mean more than one station - please pick the one you meant from the drop-down list."
     frontpage:
       bad_ferry: "Smelly ferry?"
-      station_or_bus_stop: "STATION or BUS STOP"
+      station_or_bus_stop: "STATION or<br> BUS STOP"
       stop_or_station: "STOP or STATION"
       journey_or_route: "JOURNEY or ROUTE"
+      journey_or_route_break: "JOURNEY or<br> ROUTE"
       stop_examples: "Examples: poor facilities or accessibility, missing timetables, dirt or litter."
       route_examples: "Examples: overcrowding, late buses or trains, fare and ticket problems."
       issues_near_you: "issues near you"

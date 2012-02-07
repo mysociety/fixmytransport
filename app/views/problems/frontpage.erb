@@ -70,20 +70,18 @@
     <p class="font-1"><%= raw t('problems.frontpage.report_problem') %></p>
 		
 		<div class="button-col">
-		  <%= raw test_start('Stop button text') %><%= link_to(t('problems.frontpage.stop_or_station'), find_stop_problems_url, :class => 'font-1 button green') %><%= raw test_end() %>
+		  <%= raw test_start('Stop button text') %><%= raw(link_to(raw(t('problems.frontpage.stop_or_station')), find_stop_problems_url, :class => 'font-1 button green')) %><%= raw test_end() %>
 		  
   		<div class="button-explanation">
   		  <%= raw test_start('Stop button explanation') %>
-  		  <%= t('problems.frontpage.stop_examples')%>
   		  <%= raw test_end() %>
   		</div>
   	</div>
     
     <div class="button-col">
-		  <%= raw link_to(t('problems.frontpage.journey_or_route'), find_route_problems_url, :class => 'font-1 button green') %>
+		  <%= raw(link_to(raw(t('problems.frontpage.journey_or_route')), find_route_problems_url, :class => 'font-1 button green')) %>
 			<div class="button-explanation">
 			  <%= raw test_start('Route button explanation') %>
-			  <%= t('problems.frontpage.route_examples')%>
   		  <%= raw test_end() %>
 			</div>
 		</div>
