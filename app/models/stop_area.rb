@@ -125,6 +125,7 @@ class StopArea < ActiveRecord::Base
     end
     stop_areas = find(:all, :conditions => [query] + params,
      	                      :include => :locality)
+    stop_areas = map_to_common_areas(stop_areas)
     stop_areas
   end
 
