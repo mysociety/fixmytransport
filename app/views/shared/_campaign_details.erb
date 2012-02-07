@@ -14,6 +14,24 @@
 
 <%- if params[:first_time] %>
   <%- content_for :tracking do %>'<%= raw url_for(params.merge(:location_type => @campaign.problem.location_type, :escape => false )) %>'<%- end %>
+  <%- content_for :experiment do %>
+    <%- if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com' %>
+
+    <!-- Google Website Optimizer Tracking Script -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['gwo._setAccount', 'UA-24232514-2']);
+      _gaq.push(['gwo._trackPageview', '/0791997899/goal']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    <!-- End of Google Website Optimizer Tracking Script -->
+
+    <%- end %>
+  <%- end %>
 <%- end %>
 <%- if current_user && current_user.new_supporter?(@campaign) %>
 <%- content_for :tracking do %>'<%= raw url_for(params.merge(:joined => 1, :escape => false )) %>'<%- end %>
@@ -36,7 +54,7 @@
     					<%= t('campaigns.show.leave') %>
     				</button>
     		<%- end %>
-    		
+
     		<%- if current_user.subscribed_to?(@campaign) %>
     			  <%- form_for @campaign, :url => unsubscribe_url, :html => { :method => 'POST', :id => 'campaign-unsubscribe' } do |f| %>
     			  <input type="hidden" name="target_id" value="<%= @campaign.id %>">
@@ -163,7 +181,7 @@
         </div>
      </div>
    </div>
-   
+
    <%- end %>
 
    <%- if current_user && current_user.is_expert? && show_expert_tools %>
