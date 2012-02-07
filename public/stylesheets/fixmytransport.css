@@ -1703,12 +1703,6 @@ ul#campaign-thread {
 }
 
 /*===[Front Page]===*/
-.variant-main {
-  float: none; 
-  width: 100%;
-  margin: 0.5em 0 0 0;
-}
-
 .variant-banner {
   margin-top: 2%;
 }
@@ -1738,14 +1732,23 @@ ul#campaign-thread {
 					color:#048fc2;
 					padding:5px 0;
 				}
+		#frontpage-top .button-explanation {
+		  margin: 0 0.7em 1em 0.7em;
+		}
 		#frontpage-top .leftcol p {
 			font-size:2.2em;
 			margin:0;
 		}
+		
+		#frontpage-top .leftcol .button-col {
+      display: inline-block;
+      max-width:45%;
+		}
+
 		#frontpage-top .leftcol .button {
-			font-size:1.6em;
+			font-size:1.5em;
 			padding:0.8em 1.1em;
-			margin:1em 0.7em;
+			margin:1em 0.7em 0.4em 0.7em;
 			text-transform:none;
 		}
 	#frontpage-top .rightcol {
@@ -2675,7 +2678,16 @@ body.facebook-canvas .button {
         padding: 0.8em 0;
         margin: 0.5em 0;
       }
+      
+      #frontpage-top .leftcol .button-col {
+        display: block;
+        max-width:none;
+  		}
 
+  		#frontpage-top .leftcol .button-explanation {
+  		  margin: 0;
+  		}
+  		
 			.twitter-text, .facebook-text {
 			  display: none;
 			}
