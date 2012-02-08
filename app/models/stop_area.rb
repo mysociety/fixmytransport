@@ -112,6 +112,17 @@ class StopArea < ActiveRecord::Base
   end
   memoize :area
 
+  # Is this 'station' stop area really part of a bigger station? 
+  def station_root
+    return nil unless StopAreaType.primary_types.include?(self.area_type)
+    ancestors.each do |ancestor|
+      if self.area_type == ancestor.area_type && ancestor.ancestors == []
+        return ancestor
+      end
+    end
+    return nil
+  end
+
   def self.find_in_bounding_box(coords, options={})
     query = "stop_areas.area_type in (?)
              AND status = 'ACT'
@@ -125,8 +136,7 @@ class StopArea < ActiveRecord::Base
     end
     stop_areas = find(:all, :conditions => [query] + params,
      	                      :include => :locality)
-    stop_areas = map_to_common_areas(stop_areas)
-    stop_areas
+    stop_areas.map{ |stop_area| stop_area.station_root ? stop_area.station_root : stop_area }
   end
 
   def self.find_parents(stop, station_type)

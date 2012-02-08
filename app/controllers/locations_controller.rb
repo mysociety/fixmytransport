@@ -25,10 +25,9 @@ class LocationsController < ApplicationController
     @stop_area = StopArea.full_find(params[:id], params[:scope])
     @commentable = @stop_area
     # Don't display a station part stop_area - redirect to its parent
-    @stop_area.ancestors.each do |ancestor|
-      if @stop_area.area_type == ancestor.area_type && ancestor.ancestors == []
-        redirect_to(@template.location_url(ancestor), :status => :moved_permanently) and return false
-      end
+    station_root = @stop_area.station_root()
+    if station_root
+      redirect_to(@template.location_url(station_root), :status => :moved_permanently) and return false
     end
     # redirect to a station/ferry terminal url if appropriate
     if params[:type] != :station && StopAreaType.station_types.include?(@stop_area.area_type)
