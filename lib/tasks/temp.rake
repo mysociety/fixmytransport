@@ -40,6 +40,9 @@ namespace :temp do
           issues.each do |issue|
             puts "#{issue.class.to_s} #{issue.id} #{stop_area.name} #{ancestor.name}"
             issue.update_attribute('location_id', ancestor.id)
+            if issue.is_a?(Campaign)
+              issue.problem.update_attribute('location_id', ancestor.id)
+            end
           end
         end
       end
