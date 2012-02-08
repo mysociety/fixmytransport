@@ -1,19 +1,19 @@
 namespace :temp do
-  
-  desc 'Update campaign slugs that end in a trailing hyphen' 
-  task :update_trailing_hyphen_slugs => :environment do 
-  
+
+  desc 'Update campaign slugs that end in a trailing hyphen'
+  task :update_trailing_hyphen_slugs => :environment do
+
     Campaign.visible.each do |campaign|
       if campaign.to_param.last == '-'
         campaign.save
       end
     end
-    
+
   end
-  
-  
+
+
   desc 'Transfer NXEA routes to Greater Anglia'
-  task :transfer_nxea_routes_to_greater_anglia => :environment do 
+  task :transfer_nxea_routes_to_greater_anglia => :environment do
     operator = Operator.find_by_name('National Express East Anglia')
     new_operator = Operator.find_by_name('Greater Anglia')
     raise "Couldn't find NXEA" unless operator
@@ -29,6 +29,21 @@ namespace :temp do
       puts stop_area_operator.id
       stop_area_operator.destroy
     end
-  end 
-  
+  end
+
+  desc 'Transfer issues from station part stop areas'
+  task :transfer_issues_from_station_part_stop_areas => :environment do
+    StopArea.find_each(:conditions => ['area_type in (?)', StopAreaType.primary_types]) do |stop_area|
+      stop_area.ancestors.each do |ancestor|
+        if stop_area.area_type == ancestor.area_type && ancestor.ancestors == []
+          issues = Problem.find_recent_issues(nil, { :location => stop_area })
+          issues.each do |issue|
+            puts "#{issue.class.to_s} #{issue.id} #{stop_area.name} #{ancestor.name}"
+            issue.update_attribute('location_id', ancestor.id)
+          end
+        end
+      end
+    end
+  end
+
 end
