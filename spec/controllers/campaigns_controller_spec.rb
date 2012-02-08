@@ -92,9 +92,9 @@ describe CampaignsController do
         @campaign.stub!(:update_attributes).and_return(true)
       end
 
-      it 'should redirect to the campaign url, passing the first_time param' do
+      it 'should redirect to the campaign url' do
         make_request
-        response.should redirect_to campaign_url(@campaign, :first_time => true)
+        response.should redirect_to campaign_url(@campaign)
       end
 
     end
@@ -143,6 +143,13 @@ describe CampaignsController do
       @campaign.stub!(:visible?).and_return(true)
       make_request
       response.status.should == '200 OK'
+    end
+    
+    it "should update a campaign that hasn't been seen by its initiator to record that it now has" do 
+      mock_user = mock_model(User, :is_admin? => false)
+      @controller.stub!(:current_user).and_return(mock_user)
+      mock_user.should_receive(:mark_seen).with(@campaign)
+      make_request
     end
 
     it_should_behave_like "an action requiring a visible campaign"

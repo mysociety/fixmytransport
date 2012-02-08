@@ -49,4 +49,15 @@ namespace :temp do
     end
   end
 
+  desc "Set user seen boolean flag on existing issues"
+  task :set_user_seen => :environment do
+    Campaign.connection.execute("UPDATE campaigns
+                                 SET initiator_seen = 't'
+                                 WHERE status_code in (#{Campaign.visible_status_codes.join(",")})")
+    Problem.connection.execute("UPDATE problems
+                                SET reporter_seen = 't'
+                                WHERE problems.status_code in (#{Problem.visible_status_codes.join(",")})
+                                AND campaign_id is null")
+  end
+
 end

@@ -7,7 +7,7 @@ class CampaignsController < ApplicationController
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
                                                        :complete, :add_photos, :add_details, :share]
   before_filter :require_campaign_initiator_or_expert, :only => [:edit, :update]
-  after_filter :update_campaign_supporter, :only => [:show]
+  after_filter :update_campaign_users, :only => [:show]
 
   def show
     @commentable = @campaign
@@ -114,7 +114,7 @@ class CampaignsController < ApplicationController
   def add_details
     if request.post?
       if (@campaign.update_attributes(params[:campaign]))
-        redirect_to campaign_url(@campaign, :first_time => true)
+        redirect_to campaign_url(@campaign)
       else
         render :action => "add_details"
       end
@@ -204,9 +204,9 @@ class CampaignsController < ApplicationController
     return require_campaign_initiator(allow_expert=true)
   end
 
-  # record that a user supporting a campaign has seen the campaign page.
-  def update_campaign_supporter
-    if current_user && current_user.new_supporter?(@campaign)
+  # record that a user supporting or initiating a campaign has seen the campaign page.
+  def update_campaign_users
+    if current_user
       current_user.mark_seen(@campaign)
     end
   end

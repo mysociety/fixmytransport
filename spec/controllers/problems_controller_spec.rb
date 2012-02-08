@@ -143,18 +143,30 @@ describe ProblemsController do
 
   describe 'GET #show' do
 
-    def make_request(params={})
+    before do
+      @mock_problem = mock_model(Problem, :location => mock_model(Stop, :points => []),
+                                         :to_i => 22)
+      @default_params = { :id => "22" }
+      @controller.stub!(:map_params_from_location)
+      @visible_problems = mock('visible problems')
+      Problem.should_receive(:visible).and_return(@visible_problems)
+      @visible_problems.stub!(:find).with('22').and_return(@mock_problem)
+    end
+    
+    def make_request(params=@default_params)
       get :show, params
     end
 
     it 'should look for a visible problem with the id passed' do
-      visible_problems = mock('visible problems')
-      mock_problem = mock_model(Problem, :location => mock_model(Stop, :points => []),
-                                         :to_i => 22)
-      @controller.stub!(:map_params_from_location)
-      Problem.should_receive(:visible).and_return(visible_problems)
-      visible_problems.should_receive(:find).with('22').and_return(mock_problem)
-      make_request(:id => "22")
+      @visible_problems.should_receive(:find).with('22').and_return(@mock_problem)
+      make_request()
+    end
+
+    it "should update a problem that hasn't been seen by its reporter to record that it now has" do 
+      mock_user = mock_model(User)
+      @controller.stub!(:current_user).and_return(mock_user)
+      mock_user.should_receive(:mark_seen).with(@mock_problem)
+      make_request()
     end
 
   end
@@ -1269,9 +1281,9 @@ describe ProblemsController do
           make_request({:id => 22, :convert => 'no'})
         end
 
-        it 'should redirect to the problem url passing a "first_time" parameter' do
+        it 'should redirect to the problem url' do
           make_request({:id => 22, :convert => 'no'})
-          response.should redirect_to(problem_url(@mock_problem, :first_time => true))
+          response.should redirect_to(problem_url(@mock_problem))
         end
 
       end

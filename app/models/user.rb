@@ -145,11 +145,20 @@ class User < ActiveRecord::Base
     return true
   end
 
-  def mark_seen(campaign)
-    if current_supporter = self.campaign_supporters.confirmed.detect{ |supporter| supporter.campaign == campaign }
-      if current_supporter.new_supporter?
-        current_supporter.new_supporter = false
-        current_supporter.save
+  def mark_seen(issue)
+    if issue.is_a?(Campaign)
+      if current_supporter = self.campaign_supporters.confirmed.detect{ |supporter| supporter.campaign == issue }
+        if current_supporter.new_supporter?
+          current_supporter.new_supporter = false
+          current_supporter.save
+        end
+      end
+      if new_initiator?(issue)
+        issue.update_attribute('initiator_seen', true)
+      end
+    elsif issue.is_a?(Problem)
+      if new_reporter?(issue)
+        issue.update_attribute('reporter_seen', true)
       end
     end
   end
@@ -165,6 +174,22 @@ class User < ActiveRecord::Base
       end
     end
     return false
+  end
+
+  def new_initiator?(campaign)
+    if campaign.initiator == self && campaign.initiator_seen? == false
+      return true
+    else
+      return false
+    end
+  end
+
+  def new_reporter?(problem)
+    if problem.reporter == self && problem.reporter_seen? == false
+      return true
+    else
+      return false
+    end
   end
 
   def answered_ever_reported?

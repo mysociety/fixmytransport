@@ -13,6 +13,7 @@ class ProblemsController < ApplicationController
   skip_before_filter :require_beta_password, :only => [:frontpage]
   skip_before_filter :make_cachable, :except => [:issues_index, :index, :show]
   before_filter :long_cache, :except => [:issues_index, :index, :create, :show]
+  after_filter :update_problem_users, :only => [:show]
 
   include FixMyTransport::GeoFunctions
 
@@ -85,7 +86,7 @@ class ProblemsController < ApplicationController
     setup_frontpage()
     @variant = 0
   end
-  
+
   def alternative_frontpage
     setup_frontpage()
     @variant = 1
@@ -137,7 +138,7 @@ class ProblemsController < ApplicationController
     elsif params[:convert] == 'no'
       @problem.confirm!
       flash[:notice] = t('problems.convert.thanks')
-      redirect_to problem_url(@problem, :first_time => true) and return
+      redirect_to problem_url(@problem) and return
     end
     # set a flag so that if the user logs out here, we don't try and bring them back
     @no_redirect_on_logout = true
@@ -395,7 +396,7 @@ class ProblemsController < ApplicationController
 
 
   private
-  
+
   def setup_frontpage()
     beta_username = MySociety::Config.get('BETA_USERNAME', 'username')
     beta_password = MySociety::Config.get('BETA_PASSWORD', 'password')
@@ -731,5 +732,12 @@ class ProblemsController < ApplicationController
       return reference_problem
     end
     return nil
+  end
+
+  # record that a user reporting the problem has seen the report page.
+  def update_problem_users
+    if current_user
+      current_user.mark_seen(@problem)
+    end
   end
 end

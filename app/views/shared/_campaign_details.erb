@@ -12,8 +12,8 @@
 <meta property="og:type" content="cause"/>
 <%- end %>
 
-<%- if params[:first_time] %>
-  <%- content_for :tracking do %>'<%= raw url_for(params.merge(:location_type => @campaign.problem.location_type, :escape => false )) %>'<%- end %>
+<%- if current_user && current_user.new_initiator?(@campaign) %>
+  <%- content_for :tracking do %>'<%= raw url_for(params.merge(:location_type => @campaign.problem.location_type, :escape => false, :first_time => 1 )) %>'<%- end %>
   <%- content_for :experiment do %>
     <%- if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com' %>
 
@@ -134,7 +134,7 @@
   	</div>
   </div>
 <%- end %>
-<%- if initiator_view(@campaign) && params[:first_time] == 'true' %>
+<%- if initiator_view(@campaign) && current_user.new_initiator?(@campaign) %>
   <div class="container-wide">
     <div class="supporter-notice">
       <h1><%= raw t('campaigns.show.campaign_initiator_first_time_header', :see => link_to(t('campaigns.show.see'), url_for(params.merge(:preview => 1)), :target => '_blank', :title => t('campaigns.show.preview_title')))%></h1>
