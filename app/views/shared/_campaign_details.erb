@@ -13,7 +13,7 @@
 <%- end %>
 
 <%- if current_user && current_user.new_initiator?(@campaign) %>
-  <%- content_for :tracking do %>'<%= raw url_for(params.merge(:location_type => @campaign.problem.location_type, :escape => false, :first_time => 1 )) %>'<%- end %>
+  <%- content_for :tracking do %>'<%= raw url_for(params.merge(:location_type => @campaign.problem.location_type, :escape => false, :first_time => true )) %>'<%- end %>
   <%- content_for :experiment do %>
     <%- if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com' %>
 
