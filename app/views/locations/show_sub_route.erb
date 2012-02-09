@@ -17,7 +17,6 @@
 </div>
 <div id="main-content" class="container">
 	<div class="leftcol widecol">
-		<h5><%= t('locations.show_sub_route.route_header') %></h5>
     <div id="medium-map">
       <%= render :partial => 'shared/map', :locals => { :locations => [@sub_route], :other_locations => @other_locations, :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH  } %>
  	  </div>
