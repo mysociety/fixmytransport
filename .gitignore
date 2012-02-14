@@ -50,6 +50,7 @@ public/stylesheets/map.min.css
 public/stylesheets/no-js.min.css
 public/stylesheets/ui-tabs-mod.min.css
 public/stylesheets/main.css
+public/stylesheets/ie9.min.css
 moo.txt
 rdoc
 vendor/gems/libxml-ruby-1.1.4/lib/*.so
