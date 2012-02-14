@@ -1,7 +1,6 @@
-<%- form_for(@campaign, :url => add_photos_campaign_path(@campaign), :html => {:method => :post, :multipart => true}) do |f| %>
+<%- form_for(@campaign, :url => add_photos_campaign_path(@campaign), :html => {:method => :post, :multipart => true, :id => 'photo-form'}) do |f| %>
   <div class="fieldset">
-  <%- @campaign.campaign_photos.select{ |campaign_photo| campaign_photo.new_record? }.each do |campaign_photo| %>
-  <%- f.fields_for :campaign_photos, campaign_photo do |photo_fields| %>
+  <%- f.fields_for :campaign_photos, (@campaign_photo || CampaignPhoto.new) do |photo_fields| %>
 	<div class='form-field'>
       <%- if photo_fields.object.errors.on('image_content_type') %>
         <div class='error'>
@@ -11,7 +10,6 @@
       <%= photo_fields.label :image, t("campaigns.show.photo") %>
       <%= raw photo_fields.file_field :image %>
     </div>
-  <%- end %>
   <%- end %>
 	<button class="button" type="submit"><%= t('campaigns.show.add_photos') %></button>
   </div>

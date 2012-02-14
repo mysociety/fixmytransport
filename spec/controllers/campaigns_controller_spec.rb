@@ -34,16 +34,16 @@ describe CampaignsController do
     def make_request(params=@default_params)
       get :add_details, params
     end
-    
+
     it_should_behave_like "an action requiring a visible campaign"
 
     describe 'if the campaign is visible' do
-      
-      before do 
+
+      before do
         @campaign.stub!(:visible?).and_return(true)
       end
 
-      it 'should set the campaign title and description to nil' do 
+      it 'should set the campaign title and description to nil' do
         @campaign.should_receive(:title=).with(nil)
         @campaign.should_receive(:description=).with(nil)
         make_request()
@@ -53,9 +53,9 @@ describe CampaignsController do
         make_request()
         response.should render_template("add_details")
       end
-    
+
     end
-   
+
   end
 
   describe 'POST #add_details' do
@@ -68,7 +68,7 @@ describe CampaignsController do
                                        :update_attributes => true,
                                        :initiator => @mock_user,
                                        :confirm => true,
-                                       :save! => true, 
+                                       :save! => true,
                                        :status => :confirmed,
                                        :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@campaign)
@@ -80,7 +80,7 @@ describe CampaignsController do
     end
 
     it_should_behave_like "an action requiring a visible campaign"
-    
+
     it 'should try to update the campaign attributes' do
       @campaign.should_receive(:update_attributes).with({'title' => 'title', 'description' => 'description'})
       make_request
@@ -144,8 +144,8 @@ describe CampaignsController do
       make_request
       response.status.should == '200 OK'
     end
-    
-    it "should update a campaign that hasn't been seen by its initiator to record that it now has" do 
+
+    it "should update a campaign that hasn't been seen by its initiator to record that it now has" do
       mock_user = mock_model(User, :is_admin? => false)
       @controller.stub!(:current_user).and_return(mock_user)
       mock_user.should_receive(:mark_seen).with(@campaign)
@@ -280,7 +280,7 @@ describe CampaignsController do
   describe 'GET #join' do
 
     before do
-      @campaign = mock_model(Campaign, :visible? => true, 
+      @campaign = mock_model(Campaign, :visible? => true,
                                        :editable? => true,
                                        :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@campaign)
@@ -330,7 +330,7 @@ describe CampaignsController do
   describe 'GET #add_comment' do
 
     before do
-      @mock_campaign = mock_model(Campaign, :visible? => true, 
+      @mock_campaign = mock_model(Campaign, :visible? => true,
                                             :editable? => true,
                                             :friendly_id_status => mock('friendly', :best? => true))
       Campaign.stub!(:find).and_return(@mock_campaign)
@@ -378,7 +378,7 @@ describe CampaignsController do
   describe 'POST #complete' do
 
     before do
-      @user = mock_model(User, :id => 55, 
+      @user = mock_model(User, :id => 55,
                                :name => "Test User",
                                :answered_ever_reported? => true)
       @default_params = { :id => 55 }
@@ -388,7 +388,7 @@ describe CampaignsController do
                                             :status => :confirmed,
                                             :initiator => @user,
                                             :status= => true,
-                                            :save => true, 
+                                            :save => true,
                                             :send_questionnaire= => nil,
                                             :status_code => 3)
       Campaign.stub!(:find).and_return(@mock_campaign)
@@ -407,38 +407,38 @@ describe CampaignsController do
       @mock_campaign.should_receive(:save)
       make_request(@default_params)
     end
-    
-    it 'should set the "send_questionnaire" flag on the campaign to false' do 
+
+    it 'should set the "send_questionnaire" flag on the campaign to false' do
       @mock_campaign.should_receive(:send_questionnaire=).with(false)
       @mock_campaign.should_receive(:save)
       make_request(@default_params)
     end
-    
-    describe 'if the user has answered the "have you ever reported an issue before" question' do 
 
-      before do 
+    describe 'if the user has answered the "have you ever reported an issue before" question' do
+
+      before do
         @user.stub!(:answered_ever_reported?).and_return(true)
       end
-      
+
       it 'should redirect to the campaign page' do
         make_request(@default_params)
         response.should redirect_to(campaign_url(@mock_campaign))
       end
-      
+
     end
-    
-    describe 'if the user has not answered the "have you ever reported an issue before" question' do 
-      
-      before do 
+
+    describe 'if the user has not answered the "have you ever reported an issue before" question' do
+
+      before do
         @user.stub!(:answered_ever_reported?).and_return(false)
       end
-            
-      it 'should add the old status code to the session flash' do 
+
+      it 'should add the old status code to the session flash' do
         make_request(@default_params)
         flash[:old_status_code].should == 3
       end
-            
-      it 'should redirect to the questionnaire for fixed issues' do 
+
+      it 'should redirect to the questionnaire for fixed issues' do
         make_request(@default_params)
         response.should redirect_to(questionnaire_fixed_url(:id => @mock_campaign.id, :type => 'Campaign'))
       end
@@ -475,11 +475,6 @@ describe CampaignsController do
       response.should render_template("add_photos")
     end
 
-    it 'should build a new campaign photo associated with the campaign' do
-      @mock_campaign.campaign_photos.should_receive(:build).with({})
-      make_request(@default_params)
-    end
-
   end
 
   describe 'POST #add_photos' do
@@ -488,10 +483,12 @@ describe CampaignsController do
       @user = mock_model(User, :id => 55, :name => "Test User")
       @default_params = { :id => 55 }
       @controller.stub!(:current_user).and_return(@user)
+      @campaign_photo = mock_model(CampaignPhoto, :new_record? => true)
       @mock_campaign = mock_model(Campaign, :visible? => true,
                                             :editable? => true,
                                             :status => :confirmed,
-                                            :initiator => @user)
+                                            :initiator => @user,
+                                            :campaign_photos => [@campaign_photo])
       Campaign.stub!(:find).and_return(@mock_campaign)
       @expected_access_message = :campaigns_add_photos_access_message
       @expected_wrong_user_message = 'add photos to this problem page'
@@ -525,6 +522,11 @@ describe CampaignsController do
       it 'should render the add_photos template' do
         make_request(@default_params)
         response.should render_template("add_photos")
+      end
+
+      it 'should assign the campaign photo to the template' do
+        make_request(@default_params)
+        assigns[:campaign_photo].should == @campaign_photo
       end
 
     end

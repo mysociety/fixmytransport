@@ -1094,7 +1094,8 @@ form#create-campaign {
 
 #reset_password .error,
 #new_outgoing_message .error,
-#login-form .error
+#login-form .error,
+#photo-form .error
  {
   float: none;
 }
