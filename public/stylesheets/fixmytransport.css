@@ -2900,10 +2900,6 @@ body.facebook-canvas .button {
         height: 10em;
       }
 
-      #problem-map #notice-container {
-        display: none;
-      }
-
       .form-1 ul li {
         width: 100%;
         margin: 0;
@@ -3030,9 +3026,6 @@ body.facebook-canvas .button {
         width: 98%;
       }
 
-      #medium-map #notice-container {
-        display: none;
-      }
 
       #main-content #comment-form, #main-content .new_campaign_update, #main-content .update_campaign {
         width: 100%;
@@ -3315,10 +3308,6 @@ body.facebook-canvas .button {
     form#campaign-leave.edit_campaign button {
       padding: 0.2em;
       font-size: 0.9em;
-    }
-
-    #main-content.campaign-content #notice-container {
-      display:none;
     }
 
     #main-content.campaign-content .contacts .button {
