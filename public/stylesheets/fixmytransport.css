@@ -2578,6 +2578,9 @@ body.facebook-canvas .button {
 			  margin: 0;
 			}
 
+      #map-zoom-notice {
+        right: 0;
+      }
 
 			/*===[Create account/Login]===*/
 
