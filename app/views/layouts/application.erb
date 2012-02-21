@@ -45,10 +45,6 @@
     
     <%= yield :banner_content %>
     
-    <div class="top-notice">
-    	<div class="container">Would you like to work with the team that built this site? <a href="http://mysocietyltd.theresumator.com/apply/">We're recruiting.</a></div>
-    </div>
-    
 		<div id="wrapper">
 
 			<div id="top" class="container" role="banner">
@@ -60,7 +56,7 @@
 				</ul>
 				<ul id="top-nav">
 					<li><a href="<%= about_url %>"><%= t('shared.header.about') %></a></li>
-					<li><a href="<%= feedback_url(:url => request.request_uri) %>"><%= t('shared.header.feedback') %></a></li>
+					<li><a href="<%= feedback_url(:url => request.request_uri) %>" rel="nofollow"><%= t('shared.header.feedback') %></a></li>
 				</ul>
 
         <a id="logo" href="<%= root_url %>">FixMyTransport</a>
