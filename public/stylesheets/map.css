@@ -43,6 +43,19 @@
   border: none;
 }
 
+#medium-map-variant {
+  width: 410px;
+  overflow: default;
+  padding: 5px 0;
+}
+
+#medium-map-variant #map {
+  width: 410px;
+  height: 350px;
+  margin: auto;
+  border: none;
+}
+
 #problem-map {
   width: 450px;
   overflow: default;
