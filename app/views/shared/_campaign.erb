@@ -5,8 +5,10 @@
 <%- end %>
 <div class="wrapper">
 	<h4><a href="<%= campaign_url(campaign) %>"><%= MySociety::Format.ucfirst(campaign.title) %></a></h4>
-  	
-  	<%- if context != :new_problem %>
+
+    <%- if [:new_problem, :location].include?(context) %>
+      <%= truncate(campaign.description, :length => 100) %>
+    <%- else %>
       <p>
         <%= raw link_to(campaign.location.description, location_url(campaign.location)) %>
       </p>
