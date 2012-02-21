@@ -101,14 +101,14 @@ describe ApplicationHelper do
   
   describe 'when returning the readable location type of a location' do 
   
-    it 'should return "stop" for a stop' do 
+    it 'should return "bus stop" for a stop' do 
       location = mock_model(Stop, :stop_type => 'BCS', :transport_mode_names => ['Bus', 'Coach', 'Tram/Metro'])
-      helper.readable_location_type(location).should == 'stop'
+      helper.readable_location_type(location).should == 'bus stop'
     end
     
-    it 'should return "stop" for a stop' do 
+    it 'should return "bus stop" for a stop' do 
       location = mock_model(Stop, :stop_type => 'BCT', :transport_mode_names => ['Bus', 'Coach', 'Tram/Metro'])      
-      helper.readable_location_type(location).should == 'stop'
+      helper.readable_location_type(location).should == 'bus stop'
     end
     
     it 'should return "route" for a route' do 

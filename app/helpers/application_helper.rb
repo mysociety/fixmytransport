@@ -253,7 +253,7 @@ module ApplicationHelper
         return 'terminal'
       end
       if transport_mode_names.include?('Bus')
-        return "stop"
+        return "bus stop"
       end
     end
     if location.is_a? TramMetroRoute
