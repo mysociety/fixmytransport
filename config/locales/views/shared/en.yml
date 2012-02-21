@@ -73,6 +73,10 @@ en:
       praise: "Praise"
       user_says: "%{name} added some praise"
       no_praise: None yet.
+      problems_here: "Problems reported %{on_or_at} this %{location}"
+      no_problems: "No reported problems."
+      on: "on"
+      at: "at"
     login:
       a_fixmytransport_boffin: "a FixMyTransport boffin"
       must_be_logged_out: "You must be logged out to access this page"
