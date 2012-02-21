@@ -1458,7 +1458,7 @@ describe ProblemsController do
                                    :status => 'ACT')
       mock_problem = mock_model(Problem, :location => mock_stop,
                                          :reference => nil)
-      expected = ["IMPORTANT: We do not yet know who is responsible for this stop. Your message",
+      expected = ["IMPORTANT: We do not yet know who is responsible for this bus stop. Your message",
                   "will not be sent to the responsible organization.",
                   "However, if you write a message we will a) keep it ready to send when",
                   "the organization is found and b) publish it online for others to see."].join(' ')
