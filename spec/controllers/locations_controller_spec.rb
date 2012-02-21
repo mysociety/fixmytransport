@@ -56,6 +56,8 @@ describe LocationsController do
         make_request
         response.status.should == '301 Moved Permanently'
       end
+      
+      
     end
 
     describe 'when request is directed at an asset server' do
@@ -122,6 +124,36 @@ describe LocationsController do
 
   end
 
+  describe 'GET #show_stop' do 
+    
+    before do
+      @controller.stub!(:map_params_from_location)
+      @default_params = { :id => 44, :scope => 66 }
+      @stop = mock_model(Stop, :full_name => "A Test Stop",
+                               :points => [])
+      Stop.stub!(:find).and_return(@stop)
+    end
+    
+    def make_request(params=@default_params)
+      get :show_stop, params
+    end
+  
+    it 'should render the "show_stop" template' do 
+      make_request
+      response.should render_template('locations/show_stop')
+    end
+  
+    describe 'if a "v" parameter of "1" is passed' do 
+    
+      it 'should render the "show_stop_variant" template' do 
+        make_request(@default_params.merge('v' => '1'))
+        response.should render_template('locations/show_stop_variant')
+      end
+      
+    end
+  
+  end
+  
   describe 'GET #add_comment_to_stop' do
 
     before do
@@ -130,7 +162,7 @@ describe LocationsController do
     end
 
     def make_request
-      get :add_comment_to_stop, {:id => 44, :scope => 66 }
+      get :add_comment_to_stop, { :id => 44, :scope => 66 }
     end
 
     it 'should look for the stop' do

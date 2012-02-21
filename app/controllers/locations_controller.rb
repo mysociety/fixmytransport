@@ -13,6 +13,8 @@ class LocationsController < ApplicationController
                                 find_other_locations=true,
                                 height=LOCATION_PAGE_MAP_HEIGHT,
                                 width=LOCATION_PAGE_MAP_WIDTH)
+        render_template_or_variant('show_stop')
+        return false
       end
       format.atom do
         campaign_feed(@stop)
@@ -47,6 +49,8 @@ class LocationsController < ApplicationController
                                  find_other_locations=true,
                                  height=LOCATION_PAGE_MAP_HEIGHT,
                                  width=LOCATION_PAGE_MAP_WIDTH)
+        render_template_or_variant('show_stop_area')
+        return false
       end
       format.atom do
         campaign_feed(@stop_area)
@@ -69,6 +73,8 @@ class LocationsController < ApplicationController
                                  find_other_locations=false,
                                  height=LOCATION_PAGE_MAP_HEIGHT,
                                  width=LOCATION_PAGE_MAP_WIDTH)
+        render_template_or_variant('show_route')
+        return false
       end
       format.atom do
         campaign_feed(@route)
@@ -89,6 +95,8 @@ class LocationsController < ApplicationController
                              find_other_locations=false,
                              height=LOCATION_PAGE_MAP_HEIGHT,
                              width=LOCATION_PAGE_MAP_WIDTH)
+    render_template_or_variant('show_sub_route')
+    return false
   end
 
   def show_route_region
@@ -127,6 +135,15 @@ class LocationsController < ApplicationController
   end
 
   private
+
+  def render_template_or_variant(template_name)
+    if params[:v] == '1'
+      @variant = true
+      render :action => "#{template_name}_variant"
+    else
+      render :action => template_name
+    end
+  end
 
   def campaign_feed(source)
     @campaigns = source.campaigns.visible
