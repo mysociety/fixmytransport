@@ -3022,11 +3022,11 @@ body.facebook-canvas .button {
 
      /* ===[ Problem page ]=== */
 
-      #medium-map {
+      #medium-map, #medium-map-variant {
         width: 100%;
       }
 
-      #medium-map #map{
+      #medium-map #map, #medium-map-variant #map{
         width: 100%;
         height: 300px;
       }
@@ -3092,7 +3092,7 @@ body.facebook-canvas .button {
       height: 300px;
     }
 
-    .mediumnarrowcol {
+    .mediumnarrowcol, .standardcol {
       width: 98%;
     }
 
