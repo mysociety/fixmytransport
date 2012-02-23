@@ -7,7 +7,7 @@
 </h3>
 
 <%- if !location.related_issues.empty? %>
-<ul class="issues-list">
+<ul class="issues-list" id="location-issues-list">
 	<%- location.related_issues.each do |issue| %>
      <%= render :partial => 'shared/issue', :locals => { :issue => issue, :context => :location } %>
   <%- end %>

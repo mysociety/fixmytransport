@@ -7,7 +7,8 @@
   background-color: expression(this.className == "grey" ? "#f4f4f4" : this.className == "yellow" ? "#FFFBD7" : "#048fc2");
 }
 
-* html .report {
+* html .report, 
+* html .report_variant {
     width: 200px;
 }
 
