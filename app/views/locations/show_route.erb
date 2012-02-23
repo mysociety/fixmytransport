@@ -9,11 +9,10 @@
 </div>
 <div id="greybanner">
 	<div class="container">
-			<p>
+	  	<p><%= @route.area %></p>
 			<%- if !@route.operators.empty?  %>
-			<%= raw t('locations.show_route.operated_by', :operators => operator_links(@route.operators)) %>
+			<p><%= raw t('locations.show_route.operated_by', :operators => operator_links(@route.operators)) %></p>
 			<%- end %>
-			<%= "#{@route.area}." %></p>
 			 <%- if @route.status == 'DEL' %>
           <div class='location-status'>
             <%= t('locations.show_route.route_marked_inactive') %>

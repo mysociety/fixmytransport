@@ -112,8 +112,12 @@ class Route < ActiveRecord::Base
         area = "In #{area_list.first}" if !area_list.empty?
       end
     end
-    if !area.blank? && lowercase
-      area[0] = area.first.downcase
+    if !area.blank?
+      if lowercase == true 
+        area[0] = area.first.downcase
+      else
+        area[0] = area.first.upcase
+      end
     end
     return area
   end

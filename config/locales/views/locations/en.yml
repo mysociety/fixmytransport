@@ -1,7 +1,7 @@
 en:
   locations:
     show_route:
-      operated_by: "operated by %{operators}"
+      operated_by: "Operated by %{operators}"
       report_a_problem: "Report a problem here"
       information_wrong: "Is this information wrong?"
       route_header: "Route"
@@ -47,6 +47,7 @@ en:
       route_inactive: "(inactive)"
       admin_stop_area: Admin page
       at_the: "at"
+      operated_by: "Operated by %{operators}"
     show_sub_route:
       information_wrong: "Is this information wrong?"
       say_something_nice: "Say something nice"

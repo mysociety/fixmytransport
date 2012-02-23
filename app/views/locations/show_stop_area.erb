@@ -23,16 +23,19 @@
 </div>
 <div id="greybanner">
 	<div class="container">
-      <%- if !@stop_area.operators.empty?  %>
-
-          <p class="route-operator">operated by <%= raw operator_links(@stop_area.operators) %></p>
-      <%- end %>
 
       <%- if !@stop_area.area.blank? %>
         <p><span class='locality'>
           <%= "In #{@stop_area.locality_name}" %>
         </span></p>
       <%- end %>
+      
+      <%- if !@stop_area.operators.empty?  %>
+
+          <p class="route-operator">
+           <%= raw t('locations.show_stop_area.operated_by', :operators => operator_links(@stop_area.operators))%></p>
+      <%- end %>
+
        <%- if @stop_area.status == 'DEL' %>
           <div class='location-status'>
             <%= t('locations.show_stop_area.stop_area_marked_inactive', :location => readable_location_type(@stop_area)) %>
