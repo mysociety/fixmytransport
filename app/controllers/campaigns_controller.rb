@@ -17,7 +17,6 @@ class CampaignsController < ApplicationController
                                          :id => @campaign.id,
                                          :notice => t('campaigns.show.sign_in_to_join') })
     @title = @campaign.title
-    @campaign.campaign_photos.build({})
     map_params_from_location(@campaign.location.points,
                             find_other_locations=false,
                             height=@map_height,
@@ -131,10 +130,9 @@ class CampaignsController < ApplicationController
       if @campaign.update_attributes(params[:campaign])
         redirect_to campaign_url(@campaign)
       else
+        @campaign_photo = @campaign.campaign_photos.detect{ |photo| photo.new_record? }
         render :action => 'add_photos'
       end
-    else
-      @campaign.campaign_photos.build({})
     end
   end
 

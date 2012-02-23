@@ -403,7 +403,7 @@ class User < ActiveRecord::Base
       facebook_queries.each_slice(facebook_batch_api_limit) do |fb_query_set|
         profile_picture_data = self.get_facebook_batch_api_data(http, fb_query_set, access_token, verbose)
         profile_picture_data.each do |picture_response|
-          self.set_profile_remote_photo(picture_response['body'], verbose)
+          self.set_profile_remote_photo(picture_response['body'], verbose) if picture_response
         end
       end
     end
