@@ -56,6 +56,8 @@ ul#browse-issues-list li.problem .wrapper { width:388px; }
 * html ul.issues-list .wrapper{ width: 470px; }
 * html ul.issues-list li.problem .wrapper { width: 468px; }
 
+ul#location-issues-list .wrapper{ width: 330px; }
+ul#location-issues-list li.problem .wrapper { width:328px; }
 
 /*remove all png images from IE6 only*/
 * html .icon,
