@@ -75,7 +75,7 @@
   <div class="rightcol standardcol">
     <div id="medium-map-variant">
       <h5><%= @stop_area.description %></h5>
-      <%- cache_unless_map_params(:action => 'show_stop_area', :action_suffix => 'map') do %>
+      <%- cache_unless_map_params(:action => 'show_stop_area', :action_suffix => 'map_variant') do %>
         <%= render :partial => 'shared/map', :locals => { :locations => @stop_area.points, :other_locations => @other_locations, :link_type => :location, :height => @map_height, :width => @map_width  } %>
       <%- end %>
     </div>

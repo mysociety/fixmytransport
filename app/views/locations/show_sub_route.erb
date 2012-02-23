@@ -44,14 +44,10 @@
     <div class="rightcol standardcol">
       <div id="medium-map-variant">
         <h5><%= @sub_route.description %></h5>
-        <%- cache_unless_map_params(:action => 'show_route', :action_suffix => 'map_variant') do %>
           <%= render :partial => 'shared/map', :locals => { :locations => [@sub_route], :other_locations => @other_locations, :link_type => :location, :height => @map_height, :width => @map_width  } %>
-        <%- end %>
       </div>
 	
-    	<%- cache(:action => 'show_route', :action_suffix => 'stop_list') do %>
   		<h5 class="left"><%= t('locations.show_sub_route.route_header') %></h5>
-
   		<ol id="large-ol">
   		  <%- @sub_route.terminuses.each_with_index do |stop_or_station, index| %>
           <li>
@@ -65,7 +61,6 @@
           </li>
         <%- end %>
   		</ol>
-    	<%- end %>
     </div>
     
 	<%- else %>
