@@ -239,10 +239,9 @@ module ApplicationHelper
   def readable_location_type(location)
     if location.is_a? Stop or location.is_a? StopArea
 
-      # some stops could be bus or tram/metro - call these stops
       if location.is_a?(StopArea)
         if location.area_type == 'GBCS'
-          return 'bus/coach station'
+          return 'bus station'
         end
       end
       transport_mode_names = location.transport_mode_names
@@ -272,6 +271,33 @@ module ApplicationHelper
       return location.name
     end
   end
+
+  # Construct an explanation string saying why you might want to report a problem 
+  # at this location
+  def location_explanation(location)
+    orgs = @template.org_names(location.responsible_organizations, t('problems.new.or'),
+                               wrapper_start="", wrapper_end="")
+    if !orgs.strip.blank?
+      orgs = " " + t('shared.location_content.to') + " " + orgs
+    end
+    explanation_params = {:orgs => orgs}
+    explanation_string = case location
+    when Stop
+      'shared.location_content.stop_explanation'
+    when StopArea
+      'shared.location_content.station_explanation'
+    when TrainRoute, SubRoute
+      'shared.location_content.train_route_explanation'
+    when TramMetroRoute
+      'shared.location_content.metro_route_explanation'
+    when FerryRoute
+      'shared.location_content.ferry_route_explanation'
+    else
+      'shared.location_content.bus_route_explanation'
+    end
+    t(explanation_string, :orgs => orgs, :location => readable_location_type(location))
+  end
+
 
   def org_names(orgs, connector, wrapper_start='<strong>', wrapper_end='</strong>')
     names = orgs.map{ |org| "#{wrapper_start}#{org.name}#{wrapper_end}" }
@@ -701,7 +727,7 @@ module ApplicationHelper
     end
     return change_hash
   end
-  
+
   def test_start(name)
     if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com'
       "<script>utmx_section(\"#{name}\")</script>"
@@ -709,7 +735,7 @@ module ApplicationHelper
       ""
     end
   end
-  
+
   def test_end
     if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com'
       "</noscript>"

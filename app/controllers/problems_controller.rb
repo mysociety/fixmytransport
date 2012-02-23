@@ -36,6 +36,8 @@ class ProblemsController < ApplicationController
   end
 
   def new
+    @map_height = PROBLEM_CREATION_MAP_HEIGHT
+    @map_width = PROBLEM_CREATION_MAP_WIDTH
     location = instantiate_location(params[:location_id], params[:location_type])
     if !location
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
@@ -49,11 +51,14 @@ class ProblemsController < ApplicationController
     reference_problem = get_reference_problem(params[:reference_id], location)
       @problem.reference_id = reference_problem.id
     end
-    map_params_from_location(@problem.location.points, find_other_locations=false)
+    map_params_from_location(@problem.location.points, find_other_locations=false, 
+                             height=@map_height, width=@map_width)
     setup_problem_advice(@problem)
   end
 
   def existing
+    @map_height = PROBLEM_CREATION_MAP_HEIGHT
+    @map_width = PROBLEM_CREATION_MAP_WIDTH
     @location = instantiate_location(params[:location_id], params[:location_type])
     if !@location
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
@@ -78,8 +83,8 @@ class ProblemsController < ApplicationController
     end
     map_params_from_location([@location],
                              find_other_locations=false,
-                             PROBLEM_CREATION_MAP_HEIGHT,
-                             PROBLEM_CREATION_MAP_WIDTH)
+                             @map_height,
+                             @map_width)
   end
 
   def frontpage
@@ -112,8 +117,10 @@ class ProblemsController < ApplicationController
   end
 
   def show
+    @map_height = LOCATION_PAGE_MAP_HEIGHT
+    @map_width = LOCATION_PAGE_MAP_WIDTH
     @commentable = @problem
-    map_params_from_location(@problem.location.points, find_other_locations=false)
+    map_params_from_location(@problem.location.points, find_other_locations=false, @map_height, @map_width)
     @new_comment = Comment.new(:commented => @problem,
                                :user => current_user ? current_user : User.new)
 
@@ -162,7 +169,9 @@ class ProblemsController < ApplicationController
     @title = t('problems.find_stop.title')
     options = { :find_template => :find_stop,
                 :browse_template => :choose_location,
-                :map_options => { :mode => :find } }
+                :map_options => { :mode => :find },
+                :map_height => LARGE_MAP_HEIGHT,
+                :map_width => LARGE_MAP_WIDTH }
     return find_area(options)
   end
 
@@ -171,6 +180,8 @@ class ProblemsController < ApplicationController
   end
 
   def find_bus_route
+    @map_height = MAP_HEIGHT
+    @map_width = MAP_WIDTH
     @title = t('problems.find_bus_route.title')
     if params[:show_all]
       @limit = nil
@@ -234,7 +245,7 @@ class ProblemsController < ApplicationController
           route.show_as_point = true
           @locations << route
         end
-        map_params_from_location(@locations, find_other_locations=false)
+        map_params_from_location(@locations, find_other_locations=false, @map_height, @map_width)
         render :choose_route
         return
       end
@@ -276,6 +287,8 @@ class ProblemsController < ApplicationController
   end
 
   def find_other_route
+    @map_height = MAP_HEIGHT
+    @map_width = MAP_WIDTH
     @title = t('problems.find_other_route.title')
     @error_messages = Hash.new{ |hash, key| hash[key] = [] }
     if params[:to]
@@ -305,7 +318,7 @@ class ProblemsController < ApplicationController
           redirect_to existing_problems_url(:location_id => location.id, :location_type => 'Route')
         else
           @locations = route_info[:routes]
-          map_params_from_location(@locations, find_other_locations=false)
+          map_params_from_location(@locations, find_other_locations=false, @map_height, @map_width)
           render :choose_route
           return
         end
@@ -315,6 +328,8 @@ class ProblemsController < ApplicationController
 
   # currently dupped from find_other_route
   def find_ferry_route
+    @map_height = MAP_HEIGHT
+    @map_width = MAP_WIDTH
     @title = t('problems.find_ferry_route.title')
     @error_messages = Hash.new{ |hash, key| hash[key] = [] }
     if params[:to]
@@ -344,7 +359,7 @@ class ProblemsController < ApplicationController
           redirect_to existing_problems_url(:location_id => location.id, :location_type => 'Route')
         else
           @locations = route_info[:routes]
-          map_params_from_location(@locations, find_other_locations=false)
+          map_params_from_location(@locations, find_other_locations=false, @map_height, @map_width)
           render :choose_route
           return
         end
@@ -369,7 +384,9 @@ class ProblemsController < ApplicationController
     end
     options = { :find_template => :browse,
                 :browse_template => :browse_area,
-                :map_options => { :mode => :browse } }
+                :map_options => { :mode => :browse },
+                :map_height => BROWSE_MAP_HEIGHT,
+                :map_width => BROWSE_MAP_WIDTH }
     return find_area(options)
   end
 
@@ -426,6 +443,8 @@ class ProblemsController < ApplicationController
   end
 
   def find_area(options)
+    @map_height = options[:map_height]
+    @map_width = options[:map_width]
     if is_valid_lon_lat?(params[:lon], params[:lat])
       lat = params[:lat].to_f
       lon = params[:lon].to_f
@@ -442,8 +461,8 @@ class ProblemsController < ApplicationController
       if nearest_stop
         map_params_from_location([nearest_stop],
                                  find_other_locations=true,
-                                 LARGE_MAP_HEIGHT,
-                                 LARGE_MAP_WIDTH,
+                                 @map_height,
+                                 @map_width,
                                  options[:map_options])
         @locations = [nearest_stop]
         render options[:browse_template]
@@ -485,8 +504,8 @@ class ProblemsController < ApplicationController
         else
           map_params_from_location(stop_info[:locations],
                                    find_other_locations=true,
-                                   LARGE_MAP_HEIGHT,
-                                   LARGE_MAP_WIDTH,
+                                   @map_height,
+                                   @map_width,
                                    options[:map_options])
           @locations = stop_info[:locations]
           render options[:browse_template]
@@ -510,7 +529,7 @@ class ProblemsController < ApplicationController
           @lat = postcode_info[:lat] unless @lat
           @lon = postcode_info[:lon] unless @lon
           @zoom = postcode_info[:zoom] unless @zoom
-          map_data = Map.other_locations(@lat, @lon, @zoom, LARGE_MAP_HEIGHT, LARGE_MAP_WIDTH, @highlight)
+          map_data = Map.other_locations(@lat, @lon, @zoom, @map_height, @map_width, @highlight)
           @other_locations = map_data[:locations]
           @issues_on_map = map_data[:issues]
           @nearest_issues = map_data[:nearest_issues]
@@ -538,8 +557,8 @@ class ProblemsController < ApplicationController
   def render_browse_template(locations, map_options, template)
     map_params_from_location(locations,
                              find_other_locations=true,
-                             LARGE_MAP_HEIGHT,
-                             LARGE_MAP_WIDTH,
+                             @map_height,
+                             @map_width,
                              map_options)
     @locations = []
     render template

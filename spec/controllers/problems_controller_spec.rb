@@ -312,7 +312,10 @@ describe ProblemsController do
       end
 
       it 'should set the map params from the routes' do
-        @controller.should_receive(:map_params_from_location).with([@mock_route, @mock_route], find_other_locations=false)
+        @controller.should_receive(:map_params_from_location).with([@mock_route, @mock_route], 
+                                                                   find_other_locations=false,
+                                                                   MAP_HEIGHT, 
+                                                                   MAP_WIDTH)
         make_request(:route_number => 'C10', :area => 'London')
       end
 
@@ -1562,8 +1565,8 @@ describe ProblemsController do
       it 'should display the area indicated by the stops but not present them as the main locations being displayed' do
         @controller.should_receive(:map_params_from_location).with([@mock_stop],
                                                                     find_other_locations=true,
-                                                                    LARGE_MAP_HEIGHT,
-                                                                    LARGE_MAP_WIDTH,
+                                                                    BROWSE_MAP_HEIGHT,
+                                                                    BROWSE_MAP_WIDTH,
                                                                     { :mode => :browse })
         make_request()
         assigns[:locations].should == []

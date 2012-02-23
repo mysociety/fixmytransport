@@ -74,6 +74,10 @@ h1, h2, h3, h4, h5, h6, .font-1, #greybanner p {
   width: 410px;
 }
 
+.standardcol {
+  width: 450px;
+}
+
 
 .leftcol-banner {
     float: left;
@@ -299,9 +303,7 @@ form#search {
 	#greybanner h2 {
 		font-size: 2em;
 	}
-	#banner h1 {
-		width:700px;
-	}
+	
 		#banner h1 a {
 			color:#fff;
 		}
@@ -1240,6 +1242,8 @@ ul.issues-list{margin: 0px; padding: 0px;}
   display: block;
   max-width: 250px;
 }
+
+
 .campaign-description {
 	display: block;
 	float: left;
@@ -2199,6 +2203,18 @@ body.facebook-canvas .button {
 /*===[ Stop, Station, Route Pages ]===*/
 .location-content-header{
   margin-top: 1em;
+}
+
+.report-explanation {
+  text-align:center; 
+  margin: 5px auto 2em auto;
+  background: #FFFBD7;
+  border: 2px solid #FFD45A;
+  padding: 20px;
+  font-weight: bold;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
 }
 
 /*===[ Advice ]===*/

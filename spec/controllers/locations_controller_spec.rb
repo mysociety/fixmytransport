@@ -145,9 +145,9 @@ describe LocationsController do
   
     describe 'if a "v" parameter of "1" is passed' do 
     
-      it 'should render the "show_stop_variant" template' do 
+      it 'should pass the variant flag to the view' do 
         make_request(@default_params.merge('v' => '1'))
-        response.should render_template('locations/show_stop_variant')
+        assigns[:variant].should == true
       end
       
     end

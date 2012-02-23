@@ -1,6 +1,6 @@
 <h3 class="location-content-header">
   <%- if @variant %>
-    <%= t('shared.location_content.problems_here', :on_or_at => (location.is_a?(Route) || location.is_a?(SubRoute) ? t('shared.location_content.on') : t('shared.location_content.at')), :location => readable_location_type(location))%>
+    <%= t('shared.location_content.problems_here', :on_or_at => (location.is_a?(Route) || location.is_a?(SubRoute) ? t('shared.location_content.on_it') : t('shared.location_content.at_it')), :location => readable_location_type(location))%>
   <%- else %>
     <%= t('shared.location_content.related_issues') %>
   <%- end %>

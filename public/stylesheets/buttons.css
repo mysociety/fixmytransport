@@ -322,7 +322,7 @@ a.button {
 	background:url(../images/transport-icons/white-ferry.png) center 50px no-repeat, linear-gradient(top, #669933 0%,#99cc33 100%); /* W3C */
 }
 
-/* Miscellenious buttons
+/* Miscellanious buttons
    ================================================== */
 .button.big {
 	border-radius: 10px;
@@ -332,9 +332,16 @@ a.button {
 	padding: 1em 0.5em;
 }
 .button.report {
-    width: 200px;
+  width: 200px;
 	margin: 0.5em auto;
 	display:block;
+}
+
+.button.report_variant {
+  width: 200px;
+	margin: 0 auto 20px auto;
+	display:block;
+	font-weight: normal;
 }
 .button.facebook,
 .button.twitter {

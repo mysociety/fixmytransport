@@ -10,6 +10,8 @@ class CampaignsController < ApplicationController
   after_filter :update_campaign_users, :only => [:show]
 
   def show
+    @map_height = CAMPAIGN_PAGE_MAP_HEIGHT
+    @map_width = CAMPAIGN_PAGE_MAP_WIDTH
     @commentable = @campaign
     @next_action_join = data_to_string({ :action => :join_campaign,
                                          :id => @campaign.id,
@@ -18,8 +20,8 @@ class CampaignsController < ApplicationController
     @campaign.campaign_photos.build({})
     map_params_from_location(@campaign.location.points,
                             find_other_locations=false,
-                            height=CAMPAIGN_PAGE_MAP_HEIGHT,
-                            width=CAMPAIGN_PAGE_MAP_WIDTH)
+                            height=@map_height,
+                            width=@map_width)
     @collapse_quotes = params[:unfold] ? false : true
 
     if current_user &&

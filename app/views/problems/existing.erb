@@ -8,7 +8,7 @@
 <div id="main-content" class="container">
   <div id="problem-map">
     <h5><%= @location.description %></h5>
-  			<%= render :partial => 'shared/map', :locals => { :locations => [@location], :other_locations => [], :link_type => :location, :height => PROBLEM_CREATION_MAP_HEIGHT, :width => PROBLEM_CREATION_MAP_WIDTH } %>
+  			<%= render :partial => 'shared/map', :locals => { :locations => [@location], :other_locations => [], :link_type => :location, :height => @map_height, :width => @map_width } %>
 		</div>
 
 	<div class="leftcol mediumwidecol">

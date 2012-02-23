@@ -25,7 +25,7 @@
 	<div class="container">
       <%- if !@stop_area.operators.empty?  %>
 
-          <h2 class="route-operator">operated by <%= raw operator_links(@stop_area.operators) %></h2>
+          <p class="route-operator">operated by <%= raw operator_links(@stop_area.operators) %></p>
       <%- end %>
 
       <%- if !@stop_area.area.blank? %>
@@ -44,31 +44,73 @@
 	</div>
 </div>
 <div id="main-content" class="container">
-	<div class="leftcol widecol">
-		<div id="medium-map">
-		   <%- cache_unless_map_params(:action => 'show_stop_area', :action_suffix => 'map') do %>
-       <%= render :partial => 'shared/map', :locals => { :locations => @stop_area.points, :other_locations => @other_locations, :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH  } %>
-        <%- end %>
- 	  </div>
 
-	  <%= render :partial => "shared/location_content",  :locals => { :location => @stop_area } %>
-	</div>
+	<%- if @variant %>
+  	<div class="leftcol standardcol">
+  	  <div class="report-explanation">
+      <a class="button big red report_variant" href="<%= new_problem_url(:location_id => @stop_area.id, :location_type => @stop_area.type)%>" rel="nofollow"><%= t('shared.location_content.report_a_problem_variant', :on_or_at => t('locations.show_stop_area.at_the'), :location => readable_location_type(@stop_area)) %></a>
+    	<%= raw location_explanation(@stop_area) %>
+    	</div>
+  	  <%= render :partial => "shared/location_content",  :locals => { :location => @stop_area } %>
 
-	<div class="rightcol narrowcol">
-		<a class="button big red report" href="<%= existing_problems_url(:location_id => @stop_area.id, :location_type => @stop_area.type, :to => params[:to], :from => params[:from])%>" rel="nofollow"><%= t('locations.show_stop_area.report_a_problem') %></a>
-		<a class="button big report comment-trigger" href="<%= add_comment_stop_area_url(@stop_area.locality, @stop_area) %>" data-title="<%= t('locations.show_stop_area.comment_title', :location => at_the_location(@stop_area)) %>" rel="nofollow"><%= t('locations.show_stop_area.say_something_nice') %></a>
-    <%- cache(:action => 'show_stop_area', :action_suffix => 'route_list') do %>
-		  <h5 class="left"><%= t('locations.show_stop_area.routes_header') %></h5>
-      <ol id="large-ol">
-        <%- @stop_area.routes.sort_by(&:short_name).each do |route| %>
-        <li><a href="<%= location_url(route)%>">
-         <%= route.short_name %>
-         <%- if route.status == 'DEL' %>
-   			<%= t('locations.show_stop_area.route_inactive') %>
-   		  <%- end %>
-        </a></li>
-        <%- end %>
-      </ol>
-	  <%- end %>
-	</div>
+  	</div>
+
+  <%- else %>
+    <div class="leftcol widecol">
+  		<div id="medium-map">
+  		   <%- cache_unless_map_params(:action => 'show_stop_area', :action_suffix => 'map') do %>
+         <%= render :partial => 'shared/map', :locals => { :locations => @stop_area.points, :other_locations => @other_locations, :link_type => :location, :height => @map_height, :width => @map_width  } %>
+          <%- end %>
+   	  </div>
+
+  	  <%= render :partial => "shared/location_content",  :locals => { :location => @stop_area } %>
+  	</div>
+  <%- end %>
+
+  <%- if @variant %>
+
+  <div class="rightcol standardcol">
+    <div id="medium-map-variant">
+      <h5><%= @stop_area.description %></h5>
+      <%- cache_unless_map_params(:action => 'show_stop_area', :action_suffix => 'map') do %>
+        <%= render :partial => 'shared/map', :locals => { :locations => @stop_area.points, :other_locations => @other_locations, :link_type => :location, :height => @map_height, :width => @map_width  } %>
+      <%- end %>
+    </div>
+
+      <%- cache(:action => 'show_stop_area', :action_suffix => 'route_list') do %>
+  		  <h5 class="left"><%= t('locations.show_stop_area.routes_header') %></h5>
+        <ol id="large-ol">
+          <%- @stop_area.routes.sort_by(&:short_name).each do |route| %>
+          <li><a href="<%= location_url(route)%>">
+           <%= route.short_name %>
+           <%- if route.status == 'DEL' %>
+     			<%= t('locations.show_stop_area.route_inactive') %>
+     		  <%- end %>
+          </a></li>
+          <%- end %>
+        </ol>
+  	  <%- end %>
+  	</div>
+
+  <%- else %>
+
+  	<div class="rightcol narrowcol">
+  		<a class="button big red report" href="<%= existing_problems_url(:location_id => @stop_area.id, :location_type => @stop_area.type)%>" rel="nofollow"><%= t('locations.show_stop_area.report_a_problem') %></a>
+  		<a class="button big report comment-trigger" href="<%= add_comment_stop_area_url(@stop_area.locality, @stop_area) %>" data-title="<%= t('locations.show_stop_area.comment_title', :location => at_the_location(@stop_area)) %>" rel="nofollow"><%= t('locations.show_stop_area.say_something_nice') %></a>
+      <%- cache(:action => 'show_stop_area', :action_suffix => 'route_list') do %>
+  		  <h5 class="left"><%= t('locations.show_stop_area.routes_header') %></h5>
+        <ol id="large-ol">
+          <%- @stop_area.routes.sort_by(&:short_name).each do |route| %>
+          <li><a href="<%= location_url(route)%>">
+           <%= route.short_name %>
+           <%- if route.status == 'DEL' %>
+     			<%= t('locations.show_stop_area.route_inactive') %>
+     		  <%- end %>
+          </a></li>
+          <%- end %>
+        </ol>
+  	  <%- end %>
+  	</div>
+
+  <%- end %>
 </div>

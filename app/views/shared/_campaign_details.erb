@@ -296,7 +296,7 @@
 			    <%= link_to(@campaign.location.description, location_url(@campaign.location)) %>
 			    <%= raw problem_operator_links(@campaign.problem) %>
 			  </h5>
-			  <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => CAMPAIGN_PAGE_MAP_HEIGHT, :width => CAMPAIGN_PAGE_MAP_WIDTH, :static => true } %>
+			  <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => @map_height, :width => @map_width, :static => true } %>
 			</div>
 		</div>
 		<%- end %>

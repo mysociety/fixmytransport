@@ -30,7 +30,10 @@ describe QuestionnairesController do
     describe 'if the questionnaire can be found' do
 
       it 'should set up map params from the questionnaire issue location' do
-        controller.should_receive(:map_params_from_location).with(@stop.points, find_other_locations=false)
+        controller.should_receive(:map_params_from_location).with(@stop.points,
+                                                                  find_other_locations=false,
+                                                                  LOCATION_PAGE_MAP_HEIGHT,
+                                                                  LOCATION_PAGE_MAP_WIDTH)
         make_request
       end
 
@@ -185,7 +188,10 @@ describe QuestionnairesController do
       end
 
       it 'should set up map params from the stop' do
-        controller.should_receive(:map_params_from_location).with(@stop.points, find_other_locations=false)
+        controller.should_receive(:map_params_from_location).with(@stop.points,
+                                                                  find_other_locations=false,
+                                                                  LOCATION_PAGE_MAP_HEIGHT,
+                                                                  LOCATION_PAGE_MAP_WIDTH)
         make_request
       end
 
@@ -205,7 +211,10 @@ describe QuestionnairesController do
       end
 
       it 'should set up map params from the stop' do
-        controller.should_receive(:map_params_from_location).with(@stop.points, find_other_locations=false)
+        controller.should_receive(:map_params_from_location).with(@stop.points,
+                                                                  find_other_locations=false,
+                                                                  LOCATION_PAGE_MAP_HEIGHT,
+                                                                  LOCATION_PAGE_MAP_WIDTH)
         make_request
       end
 
@@ -228,7 +237,10 @@ describe QuestionnairesController do
       end
 
       it 'should set up map params from the stop' do
-        controller.should_receive(:map_params_from_location).with(@stop.points, find_other_locations=false)
+        controller.should_receive(:map_params_from_location).with(@stop.points,
+                                                                  find_other_locations=false,
+                                                                  LOCATION_PAGE_MAP_HEIGHT,
+                                                                  LOCATION_PAGE_MAP_WIDTH)
         make_request(@params)
       end
 
@@ -313,7 +325,7 @@ describe QuestionnairesController do
             @stop.campaigns.stub!(:visible).and_return([])
           end
 
-          it 'should add a large notice suggesting a campaign, linking to the new problem 
+          it 'should add a large notice suggesting a campaign, linking to the new problem
               page, passing a reference_id param with the current problem id' do
             make_request(@params)
             expected_url = "/problems/new?location_id=#{@stop.id}&location_type=Stop&reference_id=#{@problem.id}"
@@ -661,7 +673,10 @@ describe QuestionnairesController do
       end
 
       it 'should set up map params from the issue location' do
-        controller.should_receive(:map_params_from_location).with(@stop.points, find_other_locations=false)
+        controller.should_receive(:map_params_from_location).with(@stop.points,
+                                                                  find_other_locations=false,
+                                                                  LOCATION_PAGE_MAP_HEIGHT,
+                                                                  LOCATION_PAGE_MAP_WIDTH)
         make_request()
       end
     end
@@ -701,7 +716,10 @@ describe QuestionnairesController do
 
 
       it 'should set up map params from the issue location' do
-        controller.should_receive(:map_params_from_location).with(@stop.points, find_other_locations=false)
+        controller.should_receive(:map_params_from_location).with(@stop.points,
+                                                                  find_other_locations=false,
+                                                                  LOCATION_PAGE_MAP_HEIGHT,
+                                                                  LOCATION_PAGE_MAP_WIDTH)
         make_request()
       end
 

@@ -9,11 +9,11 @@ class LocationsController < ApplicationController
     @title = @stop.full_name
     respond_to do |format|
       format.html do
+        check_for_variant
         map_params_from_location(@stop.points,
                                 find_other_locations=true,
-                                height=LOCATION_PAGE_MAP_HEIGHT,
-                                width=LOCATION_PAGE_MAP_WIDTH)
-        render_template_or_variant('show_stop')
+                                height=@map_height,
+                                width=@map_width)
         return false
       end
       format.atom do
@@ -45,12 +45,11 @@ class LocationsController < ApplicationController
     @title = @stop_area.name
     respond_to do |format|
       format.html do
+        check_for_variant
         map_params_from_location(@stop_area.points,
                                  find_other_locations=true,
-                                 height=LOCATION_PAGE_MAP_HEIGHT,
-                                 width=LOCATION_PAGE_MAP_WIDTH)
-        render_template_or_variant('show_stop_area')
-        return false
+                                 height=@map_height,
+                                 width=@map_width)
       end
       format.atom do
         campaign_feed(@stop_area)
@@ -69,12 +68,11 @@ class LocationsController < ApplicationController
     @title = @route.name
     respond_to do |format|
       format.html do
+        check_for_variant
         map_params_from_location(@route.points,
                                  find_other_locations=false,
-                                 height=LOCATION_PAGE_MAP_HEIGHT,
-                                 width=LOCATION_PAGE_MAP_WIDTH)
-        render_template_or_variant('show_route')
-        return false
+                                 height=@map_height,
+                                 width=@map_width)
       end
       format.atom do
         campaign_feed(@route)
@@ -91,12 +89,11 @@ class LocationsController < ApplicationController
       return false
     end
     @title = @sub_route.name
+    check_for_variant
     map_params_from_location(@sub_route.points,
                              find_other_locations=false,
-                             height=LOCATION_PAGE_MAP_HEIGHT,
-                             width=LOCATION_PAGE_MAP_WIDTH)
-    render_template_or_variant('show_sub_route')
-    return false
+                             height=@map_height,
+                             width=@map_width)
   end
 
   def show_route_region
@@ -136,12 +133,14 @@ class LocationsController < ApplicationController
 
   private
 
-  def render_template_or_variant(template_name)
+  def check_for_variant
     if params[:v] == '1'
       @variant = true
-      render :action => "#{template_name}_variant"
+      @map_height = PROBLEM_CREATION_MAP_HEIGHT
+      @map_width = PROBLEM_CREATION_MAP_WIDTH
     else
-      render :action => template_name
+      @map_height = LOCATION_PAGE_MAP_HEIGHT
+      @map_width = LOCATION_PAGE_MAP_WIDTH
     end
   end
 
