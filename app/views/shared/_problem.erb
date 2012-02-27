@@ -5,7 +5,7 @@
 <%- end %>
 <div class="wrapper">
 	<h4><a href="<%= problem_url(problem) %>"><%= problem.subject %></a></h4>
-	<%- if [:new_problem, :location].include?(context) %>
+	<%- if [:new_problem, :location].include?(context) && ! problem.location.is_a?(SubRoute) %>
 	  <%= truncate(problem.description, :length => 100) %>
 	<%- else %>
 	  <p>
