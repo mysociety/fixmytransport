@@ -15,7 +15,7 @@
     <th width='11%'><%= t('admin.responsible_org') %></th>
     <th width='7%'><%= sortable('status_code', t('admin.status')) %></th>
     <th width='5%'><%= sortable('created_at', t('admin.created_at')) %></th>
-    <th width='5%'><%= sortable('updated_at',t('admin.updated_at')) %></th>
+    <th width='5%'><%= sortable('updated_at', t('admin.updated_at')) %></th>
   </tr>
   <%-@campaigns.each do |campaign| %>
     <tr class='<%= cycle("odd", "even") %>'>
@@ -53,8 +53,8 @@
           <%- end %>
       </td>
       <td><%= campaign.status %></td>
-      <td><%= campaign.created_at.localtime.to_s(:short) %></td>
-      <td><%= campaign.updated_at.localtime.to_s(:short) %></td>
+      <td><%= campaign.created_at.localtime.to_s(:standard_with_date) %></td>
+      <td><%= campaign.updated_at.localtime.to_s(:standard_with_date) %></td>
     </tr>
   <%- end %>
 </table>
