@@ -18,7 +18,7 @@
       <script>
       function filter(v) {
       var b = utmx('variation_content', 'page-url');
-      var l = document.location.href;
+      var l = document.location.protocol + "//" + document.location.host + document.location.pathname + document.location.search;
       var i = l.indexOf("?");
       if (i > 0) {
         u = l + "&";
