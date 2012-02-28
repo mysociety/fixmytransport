@@ -6,7 +6,7 @@ class AddGenerationColumnsToLocalities < ActiveRecord::Migration
     remove_index :localities, :admin_area_id
     remove_index :localities, :cached_slug
     remove_index :localities, :district_id
-    remove_index :localities, "name_lower"    
+    remove_index :localities, :name => "index_localities_on_name_lower"
     remove_index :localities, :primary_metaphone
     remove_index :localities, :secondary_metaphone    
     add_index :localities, [:admin_area_id, :generation_low, :generation_high], 
