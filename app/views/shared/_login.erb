@@ -17,7 +17,7 @@
   	</div>
 	<%- end %>
 
-	<%- if controller.controller_name == 'campaigns' && controller.action_name == 'show' && current_user && current_user.supporter_or_initiator(@campaign) %>
+	<%- if controller.controller_name == 'campaigns' && controller.action_name == 'show' && supporter_initiator_view(@campaign) %>
     <div id="fb-share" class="pane">
       <%= render :partial => 'shared/facebook', :locals => { :width => "400" } %>
     </div>
@@ -27,7 +27,7 @@
           <%= render :partial => 'shared/email' %>
         </div>
 	    </div>
-	  <%- if current_user && current_user == @campaign.initiator %>
+	  <%- if initiator_view(@campaign) %>
 	    <div id="campaign-update" class="pane">
         <%= render :partial => 'campaigns/update_form' %>
       </div>

@@ -14,5 +14,8 @@
 	<div class="thread-alternative-copy" style="display:none;">
 	    <%= render :partial => 'campaigns/incoming_message_body', :locals => {:collapse_quotes => !@collapse_quotes, :message => message } %>
 	</div>
+	<%- if initiator_view(@campaign) %>
+  <%= raw link_to(t('campaigns.show.reply_to_this_message'), new_campaign_outgoing_message_path(message.campaign, :incoming_message_id => message), :class => 'button right') %>
+  <%- end %>
 	<div class="thread-furniture"></div>
 </div>

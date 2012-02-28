@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang='<%= I18n.locale %>' xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml">
   <head>
+    <%= yield :experiment %>
     <title>
       <%= "#{t('shared.header.site_name')}#{@title ? ':' : ''} #{@title}" %>
     </title>
@@ -22,6 +23,8 @@
 	<!--[if lte IE 7]><%= raw stylesheet_link_tag(minify(['ie67'])) %><![endif]-->
 
 	<!--[if lte IE 8]><%= raw stylesheet_link_tag(minify(['ie678'])) %><![endif]-->
+	
+	<!--[if gte IE 9]> <%= raw stylesheet_link_tag(minify(['ie9'])) %><![endif]-->
 
     <%= yield :stylesheets %>
     <%= raw library_js_link %>
@@ -39,7 +42,10 @@
       <div class="container"><%= t('shared.header.development_site') %></div>
     </div>
     <%- end %>
+    
     <%= yield :banner_content %>
+
+    
 		<div id="wrapper">
 
 			<div id="top" class="container" role="banner">
@@ -51,7 +57,7 @@
 				</ul>
 				<ul id="top-nav">
 					<li><a href="<%= about_url %>"><%= t('shared.header.about') %></a></li>
-					<li><a href="<%= feedback_url(:url => request.request_uri) %>"><%= t('shared.header.feedback') %></a></li>
+					<li><a href="<%= feedback_url(:url => request.request_uri) %>" rel="nofollow"><%= t('shared.header.feedback') %></a></li>
 				</ul>
 
         <a id="logo" href="<%= root_url %>">FixMyTransport</a>

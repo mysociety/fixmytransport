@@ -19,7 +19,7 @@ class StopAreaType < ActiveRecord::Base
   @@bus_station_types = ['GBCS']
   @@ferry_terminal_types = ['GFTD']
   @@primary_types = @@station_types + @@ferry_terminal_types + @@bus_station_types
-  @@atomic_types = @@station_types + @@ferry_terminal_types
+  @@atomic_types = @@station_types + @@ferry_terminal_types + @@bus_station_types
   cattr_accessor :station_types,
                  :ferry_terminal_types,
                  :bus_station_types,

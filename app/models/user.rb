@@ -145,11 +145,20 @@ class User < ActiveRecord::Base
     return true
   end
 
-  def mark_seen(campaign)
-    if current_supporter = self.campaign_supporters.confirmed.detect{ |supporter| supporter.campaign == campaign }
-      if current_supporter.new_supporter?
-        current_supporter.new_supporter = false
-        current_supporter.save
+  def mark_seen(issue)
+    if issue.is_a?(Campaign)
+      if current_supporter = self.campaign_supporters.confirmed.detect{ |supporter| supporter.campaign == issue }
+        if current_supporter.new_supporter?
+          current_supporter.new_supporter = false
+          current_supporter.save
+        end
+      end
+      if new_initiator?(issue)
+        issue.update_attribute('initiator_seen', true)
+      end
+    elsif issue.is_a?(Problem)
+      if new_reporter?(issue)
+        issue.update_attribute('reporter_seen', true)
       end
     end
   end
@@ -165,6 +174,22 @@ class User < ActiveRecord::Base
       end
     end
     return false
+  end
+
+  def new_initiator?(campaign)
+    if campaign.initiator == self && campaign.initiator_seen? == false
+      return true
+    else
+      return false
+    end
+  end
+
+  def new_reporter?(problem)
+    if problem.reporter == self && problem.reporter_seen? == false
+      return true
+    else
+      return false
+    end
   end
 
   def answered_ever_reported?
@@ -254,6 +279,9 @@ class User < ActiveRecord::Base
         else
           name = facebook_data['name']
           email = facebook_data['email']
+          if email.blank?
+            raise "Error: no email in Facebook data: #{facebook_data.inspect}, access token: #{access_token}"
+          end
           user = User.find(:first, :conditions => ['lower(email) = ?', email.downcase])
           if not user
             user = User.new({:name => name, :email => email})
@@ -375,7 +403,7 @@ class User < ActiveRecord::Base
       facebook_queries.each_slice(facebook_batch_api_limit) do |fb_query_set|
         profile_picture_data = self.get_facebook_batch_api_data(http, fb_query_set, access_token, verbose)
         profile_picture_data.each do |picture_response|
-          self.set_profile_remote_photo(picture_response['body'], verbose)
+          self.set_profile_remote_photo(picture_response['body'], verbose) if picture_response
         end
       end
     end

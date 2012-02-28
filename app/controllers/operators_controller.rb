@@ -5,28 +5,47 @@ class OperatorsController < ApplicationController
   before_filter :find_operator, :except => [:index]
   before_filter :setup_shared_title, :except => [:index]
   
+  
   def index
+    @operator_list_threshold = 20
+    @operator_initial_chars = []
+    @operator_count = 0
+    operators = []
     conditions = []
-    if params[:query]=~ /[[:alnum:]]{2}/ # at least a couple of alphanums perhaps? 
-      query = params[:query].downcase
+    if params[:query]=~ /[[:alnum:]]{1}/ # at least one alphanum... but maybe choke it? 
+      @search_query = params[:query].downcase.gsub(/\s+/, " ").strip  # multiple spaces most likely to be in error 
       conditions << "(lower(name) like ? OR lower(short_name) like ?)"
-      2.times{ conditions << "%%#{query}%%" }
+      2.times{ conditions << "%%#{@search_query}%%" }
+      operators_by_letter = MySociety::Util.by_letter(Operator.find(:all, :conditions => conditions), :upcase){|o| o.name }
+      operators_by_letter.each_value {|ops| @operator_count  += ops.size }
+    else
+      operators_by_letter = Operator.all_by_letter # memoized
+      @operator_count = Operator.count(:all)
     end
-    @operators = WillPaginate::Collection.create((params[:page] or 1), 20) do |pager|
-      operators = Operator.find(:all, :conditions => conditions,
-                                      :order => 'lower(name) asc',
-                                      :limit => 20,
-                                      :offset => pager.offset)   
-      pager.replace(operators)
-      if pager.total_entries
-        @operator_count = pager.total_entries
-      else
-        @operator_count = Operator.count(:conditions => conditions)
-        pager.total_entries = @operator_count
+    if @operator_count > @operator_list_threshold
+      if ! (params[:initial_char].blank? || params[:initial_char].empty?)
+        requested_initial = params[:initial_char][0].chr.upcase
+        if operators_by_letter.has_key?(requested_initial)
+          @initial_char = requested_initial
+        end # else maybe should redirect to letterless index
       end
+      @operator_initial_chars = operators_by_letter.keys.sort
+      if @initial_char.blank?
+        @initial_char = @operator_initial_chars.first # if no explicit initial letter (tab), display the first one
+      end
+      operators = operators_by_letter[@initial_char]
+    else
+      operators_by_letter.each_value {|ops| operators.concat(ops) }
+    end
+    operators = operators.sort!{|o1, o2| o1.name.downcase <=> o2.name.downcase}
+    @operators = WillPaginate::Collection.create((params[:page] or 1), 20 ) do |pager|
+      pager.replace(operators[pager.offset, pager.per_page])      
+      if ! pager.total_entries
+        pager.total_entries = operators.size
+      end    
     end
   end
-  
+    
   def show
     @title = @operator.name 
     @current_tab = :issues

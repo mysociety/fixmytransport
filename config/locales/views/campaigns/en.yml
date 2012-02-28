@@ -59,11 +59,12 @@ en:
       user_says: "%{name} commented"
       request_advice: "Ask advice"
       managing: "Managing"
+      reply_to_this_message: Reply to this message by email
       following_experts_advice: " following %{expert}'s advice."
       advised: "advised"
       contact_passenger_transport_executive: "Passenger Transport Executive"
       org_email_replacement: "[%{name} problem reporting email]"
-      initiator_call_to_action: "You're currently trying to %{title}"
+      initiator_call_to_action: "You're currently trying to persuade %{org} to %{title}"
       responsible_org_found: "%{user_name} found the company that runs this %{location}"
       twitter: "Twitter"
       you_are_no_longer_a_supporter: "You are no longer a supporter of this campaign."
@@ -75,7 +76,7 @@ en:
       manage_campaign: "Actions you can take to get your problem fixed"
       your_contacts: "Your contacts"
       view_all: "View more (%{number})"
-      short_call_to_action: "We're trying to %{title}"
+      short_call_to_action: "We're trying to persuade %{org} to %{title}"
       campaign_supporters: "Supporters (%{number})"
       facebook: "Facebook"
       add_contact: "Add missing email"
@@ -95,7 +96,8 @@ en:
       your_campaign: "Your problem page"
       app_email_replacement: "[FixMyTransport contact email]"
       recommended_actions: "Recommended actions"
-      support_this: "Support"
+      support_this: "Join"
+      support_explanation: "Show your support and get updates on progress."
       campaign_comment: "Comment"
       campaign_comment_title: "Leave a public comment (will be mailed to supporters)"
       supporting: "Supporting"
@@ -125,3 +127,5 @@ en:
       unsubscribe: Stop email updates
       subscribe: Get updates by email
       leave: Withdraw support
+      initiator_view: See page as problem reporter
+      showing_initiator_view: Showing page as the initial problem reporter would see it.

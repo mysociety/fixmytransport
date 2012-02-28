@@ -13,7 +13,7 @@ namespace :cached_assets do
   end
   
   def css_files
-    ['core', 'map', 'buttons', 'ui-tabs-mod', 'fixmytransport', 'ie67', 'ie678', 'no-js']
+    ['core', 'map', 'buttons', 'ui-tabs-mod', 'fixmytransport', 'ie67', 'ie678', 'ie9','no-js']
   end
   
   desc "Delete aggregate/cached files"

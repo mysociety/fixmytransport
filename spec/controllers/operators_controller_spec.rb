@@ -4,26 +4,77 @@ require 'digest'
 describe OperatorsController do
 
   before do
-    transport_mode = mock_model(TransportMode, :name => 'train')
-    TransportMode.stub!(:find).and_return(transport_mode)
+    @transport_mode = mock_model(TransportMode, :name => 'train')
+    TransportMode.stub!(:find).and_return(@transport_mode)
     @mock_operator = mock_model(Operator, 
       :name => 'Sodor & Mainland Railway',
-      :transport_mode => transport_mode, 
+      :transport_mode => @transport_mode, 
       :to_i => 11)
     Problem.stub!(:find_recent_issues).and_return([])
   end
 
   describe 'GET #index' do
 
-    def make_request
-      get :index
-    end
-    
-    it 'should show a list of all operators' do
-      Operator.should_receive(:find).and_return([])
-      make_request
+    before do
+      @mock_operator_z = mock_model(Operator, 
+        :name => 'Zebra Trains Ltd',
+        :transport_mode => @transport_mode, 
+        :to_i => 11)
+
+      Operator.stub!(:find).and_return([@mock_operator, @mock_operator_z])
+      Operator.stub!(:all_by_letter).and_return({@mock_operator.name[0].chr.upcase => Array.new(22, @mock_operator),
+                                                 @mock_operator_z.name[0].chr.upcase => [@mock_operator_z]})
+      Operator.stub!(:count).and_return(30)
     end
 
+    def make_request(params={})
+      get :index, params
+    end
+    
+    it 'should ask for a list of all operators' do
+      Operator.should_receive(:all_by_letter)
+      make_request
+      assigns[:operator_initial_chars].should == ['S', 'Z']
+    end
+
+    describe 'when sent with an initial letter' do
+      
+      describe 'if there are many results' do              
+        it 'should use the initial letter (tab) if there are any operators beginning with that letter' do
+          make_request(:initial_char => 'z')
+          assigns[:initial_char].should == 'Z'
+        end
+
+        it 'should switch the initial letter (tab) to the first one that matches if there are no operators beginning with that letter' do
+          make_request(:initial_char => 'x')
+          assigns[:initial_char].should == 'S'
+        end
+      end
+
+      describe 'if there are only a few results' do 
+
+        before do
+          Operator.stub!(:all_by_letter).and_return({@mock_operator.name[0].chr.upcase => [@mock_operator]})
+          Operator.stub!(:count).and_return(1)
+        end
+        
+        it 'should discard the initial letter (because all results are shown without being broken down by initial)' do
+          make_request(:initial_char => 'x')
+          assigns[:initial_char].should == nil
+        end
+      end
+      
+    end
+    
+    describe 'when searching' do
+          
+      it 'should search with conditions if a query param is supplied' do
+        Operator.should_receive(:find).with(:all, {:conditions=>["(lower(name) like ? OR lower(short_name) like ?)", "%%needle%%", "%%needle%%"]})
+        make_request(:query => 'NEEDLE')
+        assigns[:search_query].should == 'needle'
+      end
+    end
+    
   end
   
   describe 'GET #issues' do
@@ -46,7 +97,7 @@ describe OperatorsController do
       get :show, params
     end
 
-    it 'should default to showing a page of issues' do
+    it "should load operator's issues (because the default tab displayed on the operator's page is Issues)" do
       Operator.should_receive(:find).with('11').and_return(@mock_operator)
       Problem.should_receive(:find_recent_issues).with(10, {:offset => 0, :single_operator => @mock_operator})
       make_request(:id => "11")
@@ -70,7 +121,7 @@ describe OperatorsController do
         Operator.stub!(:find).and_return(@mock_operator)
       end    
     
-      it 'should display the station in a tab and not retrieve any issues' do
+      it 'should not retrieve any issues because the issues tab is not being displayed' do
         StopArea.should_receive(:find)
         Problem.should_not_receive(:find_recent_issues)
         make_request(:id => "11")
@@ -104,7 +155,7 @@ describe OperatorsController do
         StopArea.stub!(:find).and_return([])
       end    
     
-      it 'should retrieve issues instead, for the issues tab' do
+      it 'should retrieve issues instead, because the issues tab is displayed instead' do
         Operator.should_receive(:find).with('11').and_return(@mock_operator)
         StopArea.should_receive(:find)
         Problem.should_receive(:find_recent_issues)

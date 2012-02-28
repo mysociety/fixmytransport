@@ -3,7 +3,8 @@ en:
     access:
       campaigns_share_access_message: "share this problem page"
       campaigns_complete_access_message: "mark this problem as fixed"
-      outgoing_messages_new_access_message: "write messages about this problem"
+      outgoing_messages_new_access_message: "send messages about this problem"
+      outgoing_messages_create_access_message: "send messages about this problem"
       assignments_create_access_message: "create an assignment to help resolve this problem"
       campaigns_add_comment_access_message: "add a comment"
       assignments_new_access_message: "create an assignment to help resolve this problem"
@@ -72,6 +73,18 @@ en:
       praise: "Praise"
       user_says: "%{name} added some praise"
       no_praise: None yet.
+      problems_here: "Problems reported %{on_or_at} this %{location}"
+      no_problems: "No reported problems."
+      on_it: "on"
+      at_it: "at"
+      to: "to"
+      report_a_problem_variant: "Report a problem %{on_or_at} this %{location}"
+      bus_route_explanation: "Overcrowding? Late buses? Report a problem on this route%{orgs}"
+      ferry_route_explanation: "Overcrowding? Late ferries? Report a problem on this route%{orgs}"
+      train_route_explanation: "Late trains? Fare or ticket problems? Report a problem on this route%{orgs}"
+      metro_route_explanation: "Overcrowding? Fare or ticket problems? Report a problem on this route%{orgs}"
+      stop_explanation: "Broken glass? Missing timetable? Report a problem at this %{location}%{orgs}"
+      station_explanation: "Poor %{location} facilities? Access problems? Report a problem at this %{location}%{orgs}"
     login:
       a_fixmytransport_boffin: "a FixMyTransport boffin"
       must_be_logged_out: "You must be logged out to access this page"

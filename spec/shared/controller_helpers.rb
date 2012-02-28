@@ -113,7 +113,7 @@ module SharedBehaviours
     shared_examples_for "an action that requires the campaign initiator" do
 
       describe 'when there is a current user' do
-
+        
         describe 'and the current user is not the campaign initiator' do
 
           before do
@@ -121,22 +121,49 @@ module SharedBehaviours
             @mock_campaign = mock_model(Campaign, :initiator => @campaign_user,
                                                   :editable? => true,
                                                   :status => :confirmed,
-                                                  :visible? => true)
+                                                  :visible? => true,
+                                                  :friendly_id_status => mock('friendly', :best? => true))
             Campaign.stub!(:find).and_return(@mock_campaign)
             controller.stub!(:current_user).and_return(mock_model(User, :is_expert? => false))
           end
+          
+          describe 'when the request asks for html' do 
 
-          it 'should render the "wrong user template"' do
-            make_request @default_params
-            response.should render_template("shared/wrong_user")
+            it 'should render the "wrong user template"' do
+              make_request @default_params
+              response.should render_template("shared/wrong_user")
+            end
+
+            it 'should show an appropriate message' do
+              make_request @default_params
+              assigns[:access_message].should == "shared.access.#{@expected_access_message}"
+            end
+
           end
+        
+          describe 'when the request asks for json' do 
+            
+            it 'should return a json hash with the success key set to false' do 
+              make_request(@default_params.merge(:format => 'json'))
+              JSON.parse(response.body)['success'].should == false
+            end
 
-          it 'should show an appropriate message' do
-            make_request @default_params
-            assigns[:access_message].should == "shared.access.#{@expected_access_message}"
+            it 'should return a json hash with the requires_login key set to true' do 
+              make_request(@default_params.merge(:format => 'json'))
+              JSON.parse(response.body)['requires_login'].should == true
+            end
+            
+            it 'should return a json hash with the message key set to an appropriate message' do 
+              make_request(@default_params.merge(:format => 'json'))
+              JSON.parse(response.body)['message'].should == "Sign in as Campaign User to #{@expected_wrong_user_message}"
+            end
+
           end
-
+          
         end
+      
+
+        
       end
 
       describe 'when there is no current user' do
@@ -158,10 +185,23 @@ module SharedBehaviours
 
       it 'should return a 404 for a campaign that is not visible' do
         @invisible_campaign = mock_model(Campaign, :editable? => true,
-                                                   :visible? => false)
+                                                   :visible? => false,
+                                                   :friendly_id_status => mock('friendly', :best? => true))
         Campaign.stub!(:find).and_return(@invisible_campaign)
         make_request
         response.status.should == '404 Not Found'
+      end
+
+      it 'should redirect to a URL using the current slug for the campaign for a GET request' do
+        @campaign.stub!(:friendly_id_status).and_return(mock('friendly', :best? => false))
+        make_request
+        if request.get?
+          if controller.class == CampaignsController
+            response.should redirect_to(@default_params.merge(:id => @campaign.id))
+          else
+            response.should redirect_to(@default_params.merge(:campaign_id => @campaign.id))
+          end
+        end
       end
 
     end

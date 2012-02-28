@@ -6,15 +6,16 @@ describe IncomingMessagesController do
     
     before do 
       @campaign_user = mock_model(User)
-      @mock_campaign = mock_model(Campaign, :initiator => @campaign_user, 
-                                            :visible? => true, 
-                                            :editable? => true)
-      @mock_incoming_message = mock_model(IncomingMessage, :campaign => @mock_campaign,
+      @campaign = mock_model(Campaign, :initiator => @campaign_user, 
+                                       :visible? => true, 
+                                       :editable? => true,
+                                       :friendly_id_status => mock('friendly', :best? => true))
+      @mock_incoming_message = mock_model(IncomingMessage, :campaign => @campaign,
                                                            :mail => mock('mail'))
       FixMyTransport::Email.stub!(:get_display_attachments).and_return([])
       IncomingMessage.stub!(:find).and_return(@mock_incoming_message)
-      Campaign.stub!(:find).and_return(@mock_campaign)
-      @default_params = { :id => 55, :campaign_id => @mock_campaign.id }
+      Campaign.stub!(:find).and_return(@campaign)
+      @default_params = { :id => 55, :campaign_id => @campaign.id }
     end
     
     def make_request(params=@default_params)

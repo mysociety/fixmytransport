@@ -20,6 +20,9 @@ class Campaign < ActiveRecord::Base
   has_many :questionnaires, :as => :subject
   validates_length_of :title, :maximum => 80, :on => :update, :allow_nil => true
   validates_presence_of :title, :description, :on => :update
+  validates_format_of :title, :with => /^.*(?=.*[a-zA-Z]).*$/,
+                              :on => :update,
+                              :allow_nil => true
   validates_associated :initiator, :on => :update
   cattr_reader :per_page
   delegate :transport_mode_text, :to => :problem
@@ -29,7 +32,7 @@ class Campaign < ActiveRecord::Base
   has_friendly_id :title,
                   :use_slug => true,
                   :allow_nil => true,
-                  :max_length => 50
+                  :max_length => 36
 
   has_paper_trail
 
@@ -116,23 +119,28 @@ class Campaign < ActiveRecord::Base
   end
 
   def twitter_call_to_action
-    I18n.translate('campaigns.show.twitter_call_to_action', :org => self.responsible_org_descriptor, :title => self.title)
+    I18n.translate('campaigns.show.twitter_call_to_action', :org => self.responsible_org_descriptor,
+                                                            :title =>  MySociety::Format.lcfirst(self.title))
   end
 
   def call_to_action
-    I18n.translate('campaigns.show.call_to_action', :org => self.responsible_org_descriptor, :title => self.title)
+    I18n.translate('campaigns.show.call_to_action', :org => self.responsible_org_descriptor,
+                                                    :title =>  MySociety::Format.lcfirst(self.title))
   end
 
   def short_call_to_action
-    I18n.translate('campaigns.show.short_call_to_action', :title => self.title)
+    I18n.translate('campaigns.show.short_call_to_action', :org => self.responsible_org_descriptor,
+                                                          :title => MySociety::Format.lcfirst(self.title))
   end
 
   def short_initiator_call_to_action
-    I18n.translate('campaigns.show.initiator_call_to_action', :title => self.title)
+    I18n.translate('campaigns.show.initiator_call_to_action', :org => self.responsible_org_descriptor,
+                                                              :title => MySociety::Format.lcfirst(self.title))
   end
 
   def supporter_call_to_action
-    I18n.translate('campaigns.show.supporter_call_to_action', :org => self.responsible_org_descriptor, :title => self.title)
+    I18n.translate('campaigns.show.supporter_call_to_action', :org => self.responsible_org_descriptor,
+                                                              :title =>  MySociety::Format.lcfirst(self.title))
   end
 
   def remove_supporter(user)

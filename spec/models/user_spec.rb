@@ -187,6 +187,97 @@ describe User do
 
   end
 
+  describe 'when marking an issue as seen' do 
+    
+    describe 'when the issue is a campaign' do 
+      
+      describe 'when the user is a campaign supporter' do 
+        
+        before do
+          @user = User.new
+          @other_user = User.new
+          @mock_campaign = mock_model(Campaign, :initiator => @other_user)
+          @mock_supporter = mock_model(CampaignSupporter, :campaign => @mock_campaign,
+                                                          :supporter => @user)
+          @user.stub!(:campaign_supporters).and_return(mock('supporters', :confirmed => [@mock_supporter]))
+
+        end
+        
+        describe 'if the supporter is a new supporter' do 
+          
+          before do
+            @mock_supporter.stub!(:new_supporter?).and_return(true)
+          end
+          
+          it 'should mark the supporter as not a new supporter' do 
+            @mock_supporter.should_receive(:new_supporter=).with(false)
+            @mock_supporter.should_receive(:save)
+            @user.mark_seen(@mock_campaign)
+          end
+        end
+        
+      end
+      
+      describe 'when the user is the campaign initiator' do 
+        
+        before do
+          @user = User.new
+          @mock_campaign = mock_model(Campaign, :initiator => @user)
+        end
+        
+        describe 'if the campaign has not been seen by the initiator' do 
+        
+          before do
+            @mock_campaign.stub!(:initiator_seen?).and_return(false)
+          end
+          
+          it 'should mark the campaign as seen by the initiator' do 
+            @mock_campaign.should_receive(:update_attribute).with("initiator_seen", true)
+            @user.mark_seen(@mock_campaign)
+          end
+      
+        end
+        
+        describe 'if the campaign has been seen by the initiator' do 
+          
+          before do
+            @mock_campaign.stub!(:initiator_seen?).and_return(true)
+          end
+          
+          it 'should not mark the campaign as seen by the initiator' do 
+            @mock_campaign.should_not_receive(:update_attribute).with("initiator_seen", true)
+            @user.mark_seen(@mock_campaign)
+          end
+          
+        end
+        
+        
+      end
+      
+    end
+    
+    
+    describe 'when the user is the problem reporter' do 
+      
+      describe 'when the reporter has not seen the problem' do 
+      
+        before do 
+          @user = User.new
+          @mock_problem = mock_model(Problem, :reporter_seen? => false,
+                                              :reporter => @user)
+        end
+        
+        it 'should mark the reporter as having seen the problem' do 
+          @mock_problem.should_receive(:update_attribute).with('reporter_seen', true)
+          @user.mark_seen(@mock_problem)
+        end
+        
+      end
+      
+    end
+    
+  end
+  
   describe 'when asked if can admin users' do
 
     before do

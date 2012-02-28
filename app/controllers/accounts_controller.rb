@@ -48,69 +48,71 @@ class AccountsController < ApplicationController
     if user_name
       user_name.strip!
     end
-    @account_user = User.find_or_initialize_by_email(user_email)
-    already_registered = @account_user.registered?
-    # want to force validation as if a new record 
-    @account_user.ignore_blank_passwords = false
-    @account_user.force_new_record_validation = true
-    @account_user.registered = true
-    @account_user.name = user_name
-    @account_user.email = user_email
-    @account_user.password = params[:user][:password]
-    @account_user.password_confirmation = params[:user][:password_confirmation]
-    if @account_user.valid?
-      if @account_user.new_record?
-        new_account = true
-        # don't want to actually set them as registered until they confirm
-        @account_user.registered = false
-        @account_user.save_without_session_maintenance
+    ActiveRecord::Base.transaction do
+      @account_user = User.find_or_initialize_by_email(user_email)
+      already_registered = @account_user.registered?
+      # want to force validation as if a new record 
+      @account_user.ignore_blank_passwords = false
+      @account_user.force_new_record_validation = true
+      @account_user.registered = true
+      @account_user.name = user_name
+      @account_user.email = user_email
+      @account_user.password = params[:user][:password]
+      @account_user.password_confirmation = params[:user][:password_confirmation]
+      if @account_user.valid?
+        if @account_user.new_record?
+          new_account = true
+          # don't want to actually set them as registered until they confirm
+          @account_user.registered = false
+          @account_user.save_without_session_maintenance
+        else
+          new_account = false
+          # Refresh the user, discard all the changes
+          @account_user = User.find_or_initialize_by_email(user_email)
+        end
+        post_login_action_data = get_action_data(session)
+        if action_string = post_login_action_string
+          @action = action_string
+        else
+          @action = t('accounts.new.your_account_wont_be_created')
+        end
+        @worry = post_login_action_worry
+        @account_user.reset_perishable_token!
+        unconfirmed_model = save_post_login_action_to_database(@account_user)
+        send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model, new_account)
+        respond_to do |format|
+          format.html do
+            render :template => 'shared/confirmation_sent'
+          end
+          format.json do
+            @json = {}
+            @json[:success] = true
+            @json[:html] = render_to_string :template => 'shared/confirmation_sent', :layout => 'confirmation'
+            render :json => @json
+          end
+        end
       else
-        new_account = false
-        # Refresh the user, discard all the changes
-        @account_user = User.find_or_initialize_by_email(user_email)
-      end
-      post_login_action_data = get_action_data(session)
-      if action_string = post_login_action_string
-        @action = action_string
-      else
-        @action = t('accounts.new.your_account_wont_be_created')
-      end
-      @worry = post_login_action_worry
-      @account_user.reset_perishable_token!
-      unconfirmed_model = save_post_login_action_to_database(@account_user)
-      send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model, new_account)
-      respond_to do |format|
-        format.html do
-          render :template => 'shared/confirmation_sent'
+        # Could be an existing user - but until they enter valid details, we want to 
+        # treat them just the same as a new user - if we send an existing record back 
+        # to the form, the form will assume it's an account update, not creation. So
+        # create a new record and validate it (we know the email exists, so skip that validation)
+        if !@account_user.new_record? 
+          @account_user = @account_user.clone
+          @account_user.password = params[:user][:password]
+          @account_user.password_confirmation = params[:user][:password_confirmation]
+          @account_user.skip_email_uniqueness_validation = true
+          @account_user.valid?
         end
-        format.json do
-          @json = {}
-          @json[:success] = true
-          @json[:html] = render_to_string :template => 'shared/confirmation_sent', :layout => 'confirmation'
-          render :json => @json
-        end
-      end
-    else
-      # Could be an existing user - but until they enter valid details, we want to 
-      # treat them just the same as a new user - if we send an existing record back 
-      # to the form, the form will assume it's an account update, not creation. So
-      # create a new record and validate it (we know the email exists, so skip that validation)
-      if !@account_user.new_record? 
-        @account_user = @account_user.clone
-        @account_user.password = params[:user][:password]
-        @account_user.password_confirmation = params[:user][:password_confirmation]
-        @account_user.skip_email_uniqueness_validation = true
-        @account_user.valid?
-      end
-      respond_to do |format|
-        format.html do
-          render :action => :new  
-        end
-        format.json do
-          @json = {}
-          @json[:success] = false
-          add_json_errors(@account_user, @json)
-          render :json => @json
+        respond_to do |format|
+          format.html do
+            render :action => :new  
+          end
+          format.json do
+            @json = {}
+            @json[:success] = false
+            add_json_errors(@account_user, @json)
+            render :json => @json
+          end
         end
       end
     end

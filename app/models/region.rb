@@ -53,7 +53,7 @@ class Region < ActiveRecord::Base
   memoize :bus_route_letters
 
   def bus_routes_by_letter
-    by_letter(bus_routes){ |route| route.short_name }
+    MySociety::Util.by_letter(bus_routes){ |route| route.short_name }
   end
   memoize :bus_routes_by_letter
 
@@ -63,7 +63,7 @@ class Region < ActiveRecord::Base
   memoize :coach_route_letters
 
   def coach_routes_by_letter
-    by_letter(coach_routes){ |route| route.short_name }
+    MySociety::Util.by_letter(coach_routes){ |route| route.short_name }
   end
   memoize :coach_routes_by_letter
 
@@ -74,18 +74,8 @@ class Region < ActiveRecord::Base
 
   # train routes get indexed by their short name
   def train_routes_by_letter
-    by_letter(train_routes){ |route| route.short_name  }
+    MySociety::Util.by_letter(train_routes){ |route| route.short_name  }
   end
   memoize :train_routes_by_letter
-
-  def by_letter(routes)
-    routes_by_first = Hash.new { |hash, key| hash[key] = [] }
-    routes.each do |route|
-      descriptor = yield route
-      first = descriptor[0].chr
-      routes_by_first[first] << route
-    end
-    routes_by_first
-  end
 
 end

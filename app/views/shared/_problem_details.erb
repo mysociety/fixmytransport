@@ -40,7 +40,7 @@
 	</div>
 	<div class="leftcol widecol">	
 	  <div id="medium-map">
-    <%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => LOCATION_PAGE_MAP_HEIGHT, :width => LOCATION_PAGE_MAP_WIDTH } %>
+    <%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => @map_height, :width => @map_width } %>
 		</div>
 		<div class="clear">
 			<h5 class="left"><%= t('problems.show.comments')%></h5>

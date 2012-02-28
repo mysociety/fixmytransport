@@ -21,9 +21,23 @@
 				<h1><%= t('problems.frontpage.bad_ferry')%></h1>
 			</li>
 		</ul>
-		<p class="font-1"><%= raw t('problems.frontpage.report_problem') %></p>
-		<%= link_to(t('problems.frontpage.stop_or_station'), find_stop_problems_url, :class => 'font-1 button green') %>
-		<%= raw link_to(t('problems.frontpage.journey_or_route'), find_route_problems_url, :class => 'font-1 button green') %>
+    <p class="font-1"><%= raw t('problems.frontpage.report_problem') %></p>
+		
+		<div class="button-col">
+		 <%= raw(link_to(raw(t('problems.frontpage.stop_or_station')), find_stop_problems_url, :class => 'font-1 button green')) %>
+		  
+  		<div class="button-explanation">
+  		  <%= t('problems.frontpage.stop_examples') %>
+  		</div>
+  	</div>
+    
+    <div class="button-col">
+		  <%= raw(link_to(raw(t('problems.frontpage.journey_or_route')), find_route_problems_url, :class => 'font-1 button green')) %>
+			<div class="button-explanation">
+			  <%= t('problems.frontpage.route_examples') %>
+			</div>
+		</div>
+    
     <p class="font-1"><%= raw t('problems.frontpage.get_it_fixed')%></p>
     <p class="font-1"><%= raw t('problems.frontpage.see_issues', :link => raw( link_to(t('problems.frontpage.issues_near_you'), browse_issues_url(:geolocate => 1))))%></p>
 
@@ -38,7 +52,8 @@
 			</a>
 		</div>
 	</div>
-	<div id="what-it-does" class="rightcol narrowcol">
+
+	<div id="what-it-does" class="rightcol narrowcol" >
 		<h2><%= t('problems.frontpage.what_it_does') %></h2>
 		<ul id="secret-list">
 			<li class="secret-report"><%= t('problems.frontpage.reports_problems')%></li>
@@ -47,10 +62,12 @@
 			<li class="secret-track"><%= t('problems.frontpage.tracks_progress')%></li>
 			<li class="secret-done"><%= t('problems.frontpage.gets_things_done')%></li>
 		</ul>
-		<a href="#how-it-works" class="font-1 button"><%= t('problems.frontpage.how_does_it_work')%></a>
-
+    
+		  <a href="#how-it-works" class="font-1 button"><%= t('problems.frontpage.how_does_it_work')%></a>
 	</div>
+
 </div>
+
 
 <div id="frontpage-banner" class="blue">
 	<div class="container">
@@ -81,6 +98,7 @@
 		</div>
 	</div>
 </div>
+
 <div id="how-it-works" class="container">
 	<div id="fg-head">
 		<div id="fg-head-inner">
@@ -120,3 +138,4 @@
 		</span>
 	</ol>
 </div>
+

@@ -9,44 +9,75 @@ describe LocationsController do
     end
 
     it 'should redirect to a station url if the stop area is a train station' do
-      mock_stop_area = mock_model(StopArea, :area_type => 'GRLS', :locality => 'london')
+      mock_stop_area = mock_model(StopArea, :area_type => 'GRLS',
+                                            :locality => 'london',
+                                            :station_root => nil)
       StopArea.stub!(:full_find).and_return(mock_stop_area)
       make_request
       response.should redirect_to(station_url(mock_stop_area.locality, mock_stop_area))
     end
 
     it 'should redirect to a station url if the stop area is a metro station' do
-      mock_stop_area = mock_model(StopArea, :area_type => 'GTMU', :locality => 'london')
+      mock_stop_area = mock_model(StopArea, :area_type => 'GTMU',
+                                            :locality => 'london',
+                                            :station_root => nil)
       StopArea.stub!(:full_find).and_return(mock_stop_area)
       make_request
       response.should redirect_to(station_url(mock_stop_area.locality, mock_stop_area))
     end
 
     it 'should redirect to a ferry terminal url if the stop area is a ferry terminal' do
-      mock_stop_area = mock_model(StopArea, :area_type => 'GFTD', :locality => 'london')
+      mock_stop_area = mock_model(StopArea, :area_type => 'GFTD',
+                                            :locality => 'london',
+                                            :station_root => nil)
       StopArea.stub!(:full_find).and_return(mock_stop_area)
       make_request
       response.should redirect_to(ferry_terminal_url(mock_stop_area.locality, mock_stop_area))
     end
-    
-    describe 'when request is directed at an asset server' do 
-    
+
+    describe 'if there is an ancestor area of the same type' do 
+      
       before do 
-        MySociety::Config.stub!(:get)
-        MySociety::Config.stub!(:get).with("DOMAIN", 'assets.example.com').and_return("test.host")
-        @request.host = "assets.example.com"
-      end
+        @parent_stop_area = mock_model(StopArea, :area_type => 'GRLS',
+                                                :ancestors => [],
+                                                :locality => 'victoria')
+        @mock_stop_area = mock_model(StopArea, :area_type => 'GRLS',
+                                              :locality => 'victoria',
+                                              :station_root => @parent_stop_area)
+        StopArea.stub!(:full_find).and_return(@mock_stop_area)
+      end  
       
-      it 'should redirect to the main domain' do 
+      it 'should redirect to the ancestor area if there is one of the same type' do
         make_request
-        response.should redirect_to('http://test.host/stop-areas/london/euston')
+        response.should redirect_to(station_url(@parent_stop_area.locality, @parent_stop_area))
       end
-      
-      it 'should have a response code of 301 (moved permanently)' do 
+    
+      it 'should have a response code of 301 (moved permanently)' do
         make_request
         response.status.should == '301 Moved Permanently'
       end
       
+      
+    end
+
+    describe 'when request is directed at an asset server' do
+
+      before do
+        MySociety::Config.stub!(:get)
+        MySociety::Config.stub!(:get).with("DOMAIN", 'assets.example.com').and_return("test.host")
+        @request.host = "assets.example.com"
+      end
+
+      it 'should redirect to the main domain' do
+        make_request
+        response.should redirect_to('http://test.host/stop-areas/london/euston')
+      end
+
+      it 'should have a response code of 301 (moved permanently)' do
+        make_request
+        response.status.should == '301 Moved Permanently'
+      end
+
     end
 
   end
@@ -93,6 +124,36 @@ describe LocationsController do
 
   end
 
+  describe 'GET #show_stop' do 
+    
+    before do
+      @controller.stub!(:map_params_from_location)
+      @default_params = { :id => 44, :scope => 66 }
+      @stop = mock_model(Stop, :full_name => "A Test Stop",
+                               :points => [])
+      Stop.stub!(:find).and_return(@stop)
+    end
+    
+    def make_request(params=@default_params)
+      get :show_stop, params
+    end
+  
+    it 'should render the "show_stop" template' do 
+      make_request
+      response.should render_template('locations/show_stop')
+    end
+  
+    describe 'if a "v" parameter of "1" is passed' do 
+    
+      it 'should pass the variant flag to the view' do 
+        make_request(@default_params.merge('v' => '1'))
+        assigns[:variant].should == true
+      end
+      
+    end
+  
+  end
+  
   describe 'GET #add_comment_to_stop' do
 
     before do
@@ -101,7 +162,7 @@ describe LocationsController do
     end
 
     def make_request
-      get :add_comment_to_stop, {:id => 44, :scope => 66 }
+      get :add_comment_to_stop, { :id => 44, :scope => 66 }
     end
 
     it 'should look for the stop' do

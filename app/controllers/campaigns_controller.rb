@@ -7,20 +7,28 @@ class CampaignsController < ApplicationController
   before_filter :require_campaign_initiator, :only => [:add_update, :request_advice,
                                                        :complete, :add_photos, :add_details, :share]
   before_filter :require_campaign_initiator_or_expert, :only => [:edit, :update]
-  after_filter :update_campaign_supporter, :only => [:show]
+  after_filter :update_campaign_users, :only => [:show]
 
   def show
+    @map_height = CAMPAIGN_PAGE_MAP_HEIGHT
+    @map_width = CAMPAIGN_PAGE_MAP_WIDTH
     @commentable = @campaign
     @next_action_join = data_to_string({ :action => :join_campaign,
                                          :id => @campaign.id,
                                          :notice => t('campaigns.show.sign_in_to_join') })
     @title = @campaign.title
-    @campaign.campaign_photos.build({})
     map_params_from_location(@campaign.location.points,
                             find_other_locations=false,
-                            height=CAMPAIGN_PAGE_MAP_HEIGHT,
-                            width=CAMPAIGN_PAGE_MAP_WIDTH)
-     @collapse_quotes = params[:unfold] ? false : true
+                            height=@map_height,
+                            width=@map_width)
+    @collapse_quotes = params[:unfold] ? false : true
+
+    if current_user &&
+       current_user.is_admin? &&
+       current_user.can_admin_issues? &&
+       params[:initiator_view] == '1'
+      flash.now[:large_notice] = t('campaigns.show.showing_initiator_view')
+    end
   end
 
   def index
@@ -107,7 +115,7 @@ class CampaignsController < ApplicationController
   def add_details
     if request.post?
       if (@campaign.update_attributes(params[:campaign]))
-        redirect_to campaign_url(@campaign, :first_time => true)
+        redirect_to campaign_url(@campaign)
       else
         render :action => "add_details"
       end
@@ -122,10 +130,9 @@ class CampaignsController < ApplicationController
       if @campaign.update_attributes(params[:campaign])
         redirect_to campaign_url(@campaign)
       else
+        @campaign_photo = @campaign.campaign_photos.detect{ |photo| photo.new_record? }
         render :action => 'add_photos'
       end
-    else
-      @campaign.campaign_photos.build({})
     end
   end
 
@@ -197,9 +204,9 @@ class CampaignsController < ApplicationController
     return require_campaign_initiator(allow_expert=true)
   end
 
-  # record that a user supporting a campaign has seen the campaign page.
-  def update_campaign_supporter
-    if current_user && current_user.new_supporter?(@campaign)
+  # record that a user supporting or initiating a campaign has seen the campaign page.
+  def update_campaign_users
+    if current_user
       current_user.mark_seen(@campaign)
     end
   end

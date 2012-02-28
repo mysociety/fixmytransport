@@ -199,17 +199,19 @@ class QuestionnairesController < ApplicationController
   # set up the variables needed to display the questionnaire
   def setup_template_variables(issue)
     if issue.is_a?(Problem)
+      @map_height = LOCATION_PAGE_MAP_HEIGHT
+      @map_width = LOCATION_PAGE_MAP_WIDTH
       @problem = issue
-      map_params_from_location(issue.location.points,
-                               find_other_locations=false)
     else
+      @map_height = CAMPAIGN_PAGE_MAP_HEIGHT
+      @map_width = CAMPAIGN_PAGE_MAP_WIDTH
       @campaign = issue
-      map_params_from_location(issue.location.points,
-                               find_other_locations=false,
-                               height=CAMPAIGN_PAGE_MAP_HEIGHT,
-                               width=CAMPAIGN_PAGE_MAP_WIDTH)
       @collapse_quotes = params[:unfold] ? false : true
     end
+    map_params_from_location(issue.location.points,
+                             find_other_locations=false,
+                             height=@map_height,
+                             width=@map_width)
   end
 
 end

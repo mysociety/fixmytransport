@@ -12,8 +12,24 @@
 <meta property="og:type" content="cause"/>
 <%- end %>
 
-<%- if params[:first_time] %>
-  <%- content_for :tracking do %>'<%= raw url_for(params.merge(:location_type => @campaign.problem.location_type, :escape => false )) %>'<%- end %>
+<%- if current_user && current_user.new_initiator?(@campaign) %>
+  <%- content_for :tracking do %>'<%= raw url_for(params.merge(:location_type => @campaign.problem.location_type, :escape => false, :first_time => true )) %>'<%- end %>
+  <%- content_for :experiment do %>
+    <%- if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com' %>
+    <!-- Google Website Optimizer Tracking Script -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['gwo._setAccount', 'UA-24232514-2']);
+      _gaq.push(['gwo._trackPageview', '/1894524795/goal']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    <!-- End of Google Website Optimizer Tracking Script -->
+    <%- end %>
+  <%- end %>
 <%- end %>
 <%- if current_user && current_user.new_supporter?(@campaign) %>
 <%- content_for :tracking do %>'<%= raw url_for(params.merge(:joined => 1, :escape => false )) %>'<%- end %>
@@ -36,7 +52,7 @@
     					<%= t('campaigns.show.leave') %>
     				</button>
     		<%- end %>
-    		
+
     		<%- if current_user.subscribed_to?(@campaign) %>
     			  <%- form_for @campaign, :url => unsubscribe_url, :html => { :method => 'POST', :id => 'campaign-unsubscribe' } do |f| %>
     			  <input type="hidden" name="target_id" value="<%= @campaign.id %>">
@@ -75,13 +91,14 @@
 
 
   <%- if current_user && current_user.new_supporter?(@campaign) %>
+
   <div class="container-wide">
     <div class="supporter-notice">
 	      <h1><%= t('campaigns.show.campaign_supporter_first_time_header', :user => @campaign.initiator.first_name)%></h1>
 
 	  </div>
-	<div class="supporter-notice-arrow"></div>
-</div>
+	  <div class="supporter-notice-arrow"></div>
+  </div>
   <%- end %>
 <%- else %>
 <div id="banner" class="mobile-only">
@@ -100,7 +117,7 @@
   	</div>
   </div>
 <%- end %>
-<%- if initiator_view(@campaign) && params[:first_time] == 'true' %>
+<%- if initiator_view(@campaign) && current_user.new_initiator?(@campaign) %>
   <div class="container-wide">
     <div class="supporter-notice">
       <h1><%= raw t('campaigns.show.campaign_initiator_first_time_header', :see => link_to(t('campaigns.show.see'), url_for(params.merge(:preview => 1)), :target => '_blank', :title => t('campaigns.show.preview_title')))%></h1>
@@ -140,9 +157,14 @@
        <div>
          <a href="<%= admin_url(admin_campaign_path(@campaign.id)) %>" class="button"><%= t('campaigns.show.admin_campaign') %></a>
        </div>
+       <div>
+         <%- if params[:initiator_view] != '1' %>
+          <a href="<%= url_for(params.merge(:initiator_view => 1)) %>" class="button"><%= t('campaigns.show.initiator_view') %></a>
+        <%- end %>
+        </div>
      </div>
    </div>
-   
+
    <%- end %>
 
    <%- if current_user && current_user.is_expert? && show_expert_tools %>
@@ -247,7 +269,7 @@
 
 		<ul class="campaign-meta">
 			<li>started <span><%= @campaign.created_at.strftime("%e %B %Y") %></span></li>
-			<li>supporters <%=  @campaign.supporter_count %></li>
+			<li>supporters <%= @campaign.supporter_count %></li>
 		</ul>
 
 		<%- if @campaign.location %>
@@ -257,7 +279,7 @@
 			    <%= link_to(@campaign.location.description, location_url(@campaign.location)) %>
 			    <%= raw problem_operator_links(@campaign.problem) %>
 			  </h5>
-			  <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => CAMPAIGN_PAGE_MAP_HEIGHT, :width => CAMPAIGN_PAGE_MAP_WIDTH, :static => true } %>
+			  <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => @map_height, :width => @map_width, :static => true } %>
 			</div>
 		</div>
 		<%- end %>

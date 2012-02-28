@@ -1,0 +1,24 @@
+From sender@example.com Thu Feb 02 15:34:00 2012
+Return-path: <sender@example.com>
+Envelope-to: fixmytransport@dart.example.com
+Delivery-date: Thu, 02 Feb 2012 15:34:00 +0000
+X-Env-Sender: sender@example.com
+To: Campaign Person <campaign.person@my-campaign.example.com>
+Subject: My campaign
+Sender: Lovely Sender <sender@example.com>
+Date: Thu, 2 Feb 2012 15:33:50 +0000
+Content-Type: multipart/alternative; boundary="=_alternative 00557FD480257998_="
+
+This is a multipart message in MIME format.
+--=_alternative 00557FD480257998_=
+Content-Type: text/plain; charset="US-ASCII"
+
+Plain content
+
+--=_alternative 00557FD480257998_=
+Content-Type: text/html; charset="US-ASCII"
+
+HTML content
+
+--=_alternative 00557FD480257998_=--
+

@@ -1,7 +1,7 @@
 en:
   locations:
     show_route:
-      operated_by: "operated by %{operators}"
+      operated_by: "Operated by %{operators}"
       report_a_problem: "Report a problem here"
       information_wrong: "Is this information wrong?"
       route_header: "Route"
@@ -11,6 +11,8 @@ en:
       comment_title: "Had a good experience %{location}? Tell the world"
       stop_or_station_inactive: "(inactive)"
       admin_route: Admin page
+      on_the: "on"
+      route: "route"
     show_route_region:
       see_also_national_routes: "(see also %{national})"
       route_region: "Route Region"
@@ -34,6 +36,7 @@ en:
       comment_title: "Had a good experience %{location}? Tell the world"
       route_inactive: "(inactive)"
       admin_stop: Admin page
+      at_the: "at"
     show_stop_area:
       report_a_problem: "Report a problem here"
       location_header: "Location"
@@ -43,6 +46,8 @@ en:
       stop_area_marked_inactive: "This %{location} has been marked as inactive."
       route_inactive: "(inactive)"
       admin_stop_area: Admin page
+      at_the: "at"
+      operated_by: "Operated by %{operators}"
     show_sub_route:
       information_wrong: "Is this information wrong?"
       say_something_nice: "Say something nice"

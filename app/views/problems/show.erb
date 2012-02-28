@@ -1,2 +1,23 @@
 <%- @title = "#{@problem.subject}" %>
+<%- if current_user && current_user.new_reporter?(@problem) %>
+  <%- content_for :tracking do %>'<%= raw url_for(params.merge(:location_type => @problem.location_type, :escape => false, :first_time => true )) %>'<%- end %>
+  <%- content_for :experiment do %>
+    <%- if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com' %>
+    
+    <!-- Google Website Optimizer Tracking Script -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['gwo._setAccount', 'UA-24232514-2']);
+      _gaq.push(['gwo._trackPageview', '/1894524795/goal']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    <!-- End of Google Website Optimizer Tracking Script -->
+    
+    <%- end %>
+  <%- end %>
+<%- end %>
 <%= render :partial => 'shared/problem_details', :locals => {:show_comment_button => true, :show_questionnaire => false } %>

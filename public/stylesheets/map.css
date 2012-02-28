@@ -43,6 +43,19 @@
   border: none;
 }
 
+#medium-map-variant {
+  width: 450px;
+  overflow: default;
+  padding: 5px 0;
+}
+
+#medium-map-variant #map {
+  width: 450px;
+  height: 350px;
+  margin: auto;
+  border: none;
+}
+
 #problem-map {
   width: 450px;
   overflow: default;
@@ -91,15 +104,10 @@
   font-size: 1em;
 }
 
-#notice-container{
-  margin-top: 0.5em;
-  min-height: 3em;
-}
-
 #map-zoom-notice {
-  float: right;
-}
-
-#notice-clear {
-  clear: both;
+  margin-bottom: 0;
+  bottom: 7px;
+  right: 7px;
+  position: absolute;
+  z-index: 1500;
 }

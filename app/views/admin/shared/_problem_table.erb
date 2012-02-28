@@ -69,8 +69,8 @@
       <%- end %>
       </td>
       <td><%= problem.status %></td>
-      <td><%= problem.created_at.localtime.to_s(:short) %></td>
-      <td><%= problem.updated_at.localtime.to_s(:short) %></td>
+      <td><%= problem.created_at.localtime.to_s(:standard_with_date) %></td>
+      <td><%= problem.updated_at.localtime.to_s(:standard_with_date) %></td>
     </tr>
   <%- end %>
 </table>

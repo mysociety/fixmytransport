@@ -17,7 +17,7 @@
 	<div class="container">
 		<div id="problem-map">
 		    <h5><%= @problem.location.description %></h5>
-   			<%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => PROBLEM_CREATION_MAP_HEIGHT, :width => PROBLEM_CREATION_MAP_WIDTH } %>
+   			<%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => @map_height, :width => @map_width } %>
 		</div>
 	  <%- form_for @problem, :url => problems_url, :html => {:id => 'create-problem', :class => 'form-1'} do |f|  %>
     <%= raw f.hidden_field :location_id %>

@@ -14,7 +14,7 @@ describe QuestionnaireMailer do
       @questionnaire = mock_model(Questionnaire)
       @problem = mock_model(Problem, :questionnaires => mock('questionnaire', :create! => @questionnaire),
                                      :send_questionnaire= => nil,
-                                     :save! => nil,
+                                     :update_attribute => nil,
                                      :subject => 'my test subject')
       Problem.stub!(:needing_questionnaire).and_return([@problem])
       Campaign.stub!(:needing_questionnaire).and_return([])
@@ -41,7 +41,7 @@ describe QuestionnaireMailer do
       
     it 'should set the send_questionnaire flag on the problem to false' do
       @problem.stub!(:reporter).and_return(@user)
-      @problem.should_receive(:send_questionnaire=).with(false)
+      @problem.should_receive(:update_attribute).with('send_questionnaire', false)
       QuestionnaireMailer.send_questionnaires
     end
       

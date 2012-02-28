@@ -26,10 +26,10 @@
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-	
-	-webkit-box-shadow: 0px 0px 2px rgba(84, 84, 84, 0.75);
-	-moz-box-shadow: 0px 0px 2px rgba(84, 84, 84, 0.75);
-	box-shadow: 0px 0px 2px rgba(84, 84, 84, 0.75);
+	-webkit-box-shadow: 1px 2px 2px rgba(84, 84, 84, 0.75);
+  -moz-box-shadow: 1px 2px 2px rgba(84, 84, 84, 0.75);
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.75);
+  
 }
 .icon:hover,
 .button:hover,
@@ -151,13 +151,13 @@ a.button {
 	background: linear-gradient(top, #d89700 0%,#ffb600 100%); /* W3C */
 }
 .support-big {
-    display: block;
     text-align: center;
     margin: 0 auto;
     font-size: 30px;
     font-family: inherit;
     font-style: inherit;
     font-weight: inherit;
+    min-width: 220px;
     padding: 30px 45px;
 }
 .button.support {
@@ -322,7 +322,7 @@ a.button {
 	background:url(../images/transport-icons/white-ferry.png) center 50px no-repeat, linear-gradient(top, #669933 0%,#99cc33 100%); /* W3C */
 }
 
-/* Miscellenious buttons
+/* Miscellaneous buttons
    ================================================== */
 .button.big {
 	border-radius: 10px;
@@ -332,9 +332,16 @@ a.button {
 	padding: 1em 0.5em;
 }
 .button.report {
-    width: 200px;
+  width: 200px;
 	margin: 0.5em auto;
 	display:block;
+}
+
+.button.report_variant {
+  width: 200px;
+	margin: 0 auto 20px auto;
+	display:block;
+	font-weight: normal;
 }
 .button.facebook,
 .button.twitter {

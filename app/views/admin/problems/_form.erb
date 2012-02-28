@@ -35,16 +35,28 @@
 </div>
 
 <div class='form-field'>
-  <%- if @problem.errors.on(:status_code) %>
-    <div class='error'>
-      <%= error_message_on @problem, :status_code %>
-    </div>
-  <%- end %>
+  <%- if @problem.campaign %>
+  <strong><%= raw f.label :status %></strong>
+  <%= t('admin.problem_see_campaign') %>
+  <%- else %>
+    <%- if @problem.errors.on(:status_code) %>
+      <div class='error'>
+        <%= error_message_on @problem, :status_code %>
+      </div>
+    <%- end %>
   <strong><%= raw f.label :status %></strong>
   <%= raw f.select :status_code, Problem.statuses, {:prompt => true, :selected => @problem.status_code } %>
+  <%- end %>
 </div>
+<%- if @problem.campaign %>
+  <div class='form-field'>
+    <strong><%= raw f.label :campaign %></strong>
+    <%= link_to(@problem.campaign.title, admin_url(admin_campaign_path(@problem.campaign))) %>
+  </div>
+<%- end %>
 <%- if @problem.reporter %>
 <div class='form-field'>
+  <strong><%= raw f.label :reporter %></strong>
   <%= link_to(@problem.reporter.name, admin_url(admin_user_path(@problem.reporter)))%>
 </div>
 <%- end %>

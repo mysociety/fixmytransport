@@ -73,7 +73,7 @@ class OutgoingMessage < ActiveRecord::Base
     if recipient
       return recipient.email
     elsif incoming_message
-      return incoming_message.mail.from_addrs[0].address
+      return incoming_message.mail.from_or_sender_address
     elsif assignment
       return assignment.data[:email]
     end

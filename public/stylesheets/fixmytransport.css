@@ -74,6 +74,10 @@ h1, h2, h3, h4, h5, h6, .font-1, #greybanner p {
   width: 410px;
 }
 
+.standardcol {
+  width: 450px;
+}
+
 
 .leftcol-banner {
     float: left;
@@ -299,9 +303,7 @@ form#search {
 	#greybanner h2 {
 		font-size: 2em;
 	}
-	#banner h1 {
-		width:700px;
-	}
+	
 		#banner h1 a {
 			color:#fff;
 		}
@@ -1094,7 +1096,8 @@ form#create-campaign {
 
 #reset_password .error,
 #new_outgoing_message .error,
-#login-form .error
+#login-form .error,
+#photo-form .error
  {
   float: none;
 }
@@ -1232,11 +1235,25 @@ ul.issues-list{margin: 0px; padding: 0px;}
   overflow: hidden;
 }
 
+.support-explanation {
+  color: #666666;
+  margin: 1em auto 0 auto;
+  font-size: 1em;
+  text-align: center;
+  display: block;
+  max-width: 250px;
+}
+
+
 .campaign-description {
 	display: block;
 	float: left;
 	width: 550px;
 	}
+	
+.login-to-support, .logged-in-support {
+  text-align:center; /* fix chrome auto margin bug on button elements */
+}
 
 .campaign-description a.more-info{
 	float:right;
@@ -1555,7 +1572,7 @@ ul#campaign-thread {
 		ul#campaign-thread li.open a.thread-item span.title {
       white-space: normal;
 		}
-		
+
 		ul#campaign-thread li.open a.thread-item:hover,
 		ul#campaign-thread li.open a.thread-item:focus {
 		    background: none;
@@ -1602,6 +1619,13 @@ ul#campaign-thread {
 					float:right;
 					margin:0 0 0 10px;
 				}
+
+			ul#campaign-thread li.open .thread-details a.button {
+				font-size: 0.9em;
+				line-height: 1;
+				padding: 5px;
+				margin: 0 10px 10px 10px;
+			}
 
 .manager-tools,
 .contrib-tools,
@@ -1684,6 +1708,10 @@ ul#campaign-thread {
 }
 
 /*===[Front Page]===*/
+.variant-banner {
+  margin-top: 2%;
+}
+
 #frontpage-top {
 	margin:1em auto 0 auto;
 }
@@ -1709,14 +1737,23 @@ ul#campaign-thread {
 					color:#048fc2;
 					padding:5px 0;
 				}
+		#frontpage-top .button-explanation {
+		  margin: 0 0.7em 1em 0.7em;
+		}
 		#frontpage-top .leftcol p {
 			font-size:2.2em;
 			margin:0;
 		}
+		
+		#frontpage-top .leftcol .button-col {
+      display: inline-block;
+      max-width:45%;
+		}
+
 		#frontpage-top .leftcol .button {
-			font-size:1.6em;
+			font-size:1.5em;
 			padding:0.8em 1.1em;
-			margin:1em 0.7em;
+			margin:1em 0.7em 0.4em 0.7em;
 			text-transform:none;
 		}
 	#frontpage-top .rightcol {
@@ -2169,6 +2206,18 @@ body.facebook-canvas .button {
   margin-top: 1em;
 }
 
+.report-explanation {
+  text-align:center; 
+  margin: 5px auto 2em auto;
+  background: #FFFBD7;
+  border: 2px solid #FFD45A;
+  padding: 20px;
+  font-weight: bold;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
 /*===[ Advice ]===*/
 .advice h1{
  font-size: 2em;
@@ -2314,13 +2363,16 @@ body.facebook-canvas .button {
 
 #operator-tabs .pagination {
   color: #333;
-  font-size: 0.9em; 
+  font-size: 0.9em;
 }
 #operator-tabs .pagination a {
   color: #048FC2;
   text-decoration: none;
 }
 
+.operator-search-query {
+  color: #888;
+}
 /* in extremis: stop huge/broken photos breaking the list */
 #main-content ul.issues-list img{
   max-width: 100px;
@@ -2335,13 +2387,13 @@ body.facebook-canvas .button {
   list-style: none;
   margin: 0;
 	overflow:visible;
-  width:300px;
+  width:200px;
   display:inline;
 }
 #main-content .small-search-form input {
 	padding: 2px 4px;
 	font-size: 1.2em;
-	width: 240px;
+	width: 180px;
 	border: 2px solid #048fc2;
   border-radius: 3px;
     -moz-border-radius: 3px;
@@ -2424,6 +2476,7 @@ body.facebook-canvas .button {
 				font-size: 1.2em;
 				width: 94%;
 			}
+
 			#top-nav,
 			#mysociety-tab {
 				display: none;
@@ -2502,7 +2555,8 @@ body.facebook-canvas .button {
       .button, #login-form button, .fieldset button, .form-field button,
       .login-options a.button, #share-by-email a.button,
       #share-by-facebook a.button,
-      #main-content.campaign-content .button{
+      #main-content.campaign-content .button,
+      ul#campaign-thread li.open .thread-details a.button{
 				padding: 10px 0;
 				font-family: Arial, Helvetica, sans-serif;
 				font-size: 1.2em;
@@ -2541,6 +2595,9 @@ body.facebook-canvas .button {
 			  margin: 0;
 			}
 
+      #map-zoom-notice {
+        right: 0;
+      }
 
 			/*===[Create account/Login]===*/
 
@@ -2641,7 +2698,16 @@ body.facebook-canvas .button {
         padding: 0.8em 0;
         margin: 0.5em 0;
       }
+      
+      #frontpage-top .leftcol .button-col {
+        display: block;
+        max-width:none;
+  		}
 
+  		#frontpage-top .leftcol .button-explanation {
+  		  margin: 0;
+  		}
+  		
 			.twitter-text, .facebook-text {
 			  display: none;
 			}
@@ -2854,10 +2920,6 @@ body.facebook-canvas .button {
         height: 10em;
       }
 
-      #problem-map #notice-container {
-        display: none;
-      }
-
       .form-1 ul li {
         width: 100%;
         margin: 0;
@@ -2960,11 +3022,11 @@ body.facebook-canvas .button {
 
      /* ===[ Problem page ]=== */
 
-      #medium-map {
+      #medium-map, #medium-map-variant {
         width: 100%;
       }
 
-      #medium-map #map{
+      #medium-map #map, #medium-map-variant #map{
         width: 100%;
         height: 300px;
       }
@@ -2984,9 +3046,6 @@ body.facebook-canvas .button {
         width: 98%;
       }
 
-      #medium-map #notice-container {
-        display: none;
-      }
 
       #main-content #comment-form, #main-content .new_campaign_update, #main-content .update_campaign {
         width: 100%;
@@ -3033,7 +3092,7 @@ body.facebook-canvas .button {
       height: 300px;
     }
 
-    .mediumnarrowcol {
+    .mediumnarrowcol, .standardcol {
       width: 98%;
     }
 
@@ -3137,7 +3196,10 @@ body.facebook-canvas .button {
 		  margin: 0;
 		  width: 100%;
 		}
-
+    .support-explanation {
+      max-width: 100%;
+    }
+    
     #campaign-manager {
         display: none; /* can get this info by clicking on icon/name in Description */
     }
@@ -3268,10 +3330,6 @@ body.facebook-canvas .button {
       font-size: 0.9em;
     }
 
-    #main-content.campaign-content #notice-container {
-      display:none;
-    }
-
     #main-content.campaign-content .contacts .button {
         font-size: 0.9em;
         margin: 0.2em auto;
@@ -3356,11 +3414,11 @@ body.facebook-canvas .button {
       padding-right: 33px;
         width: auto;
     }
-    
+
     ul.route-links {
     	width:inherit;
     }
-    
+
     /*===[Share by email]=== */
     #share-by-email textarea,
     #share-by-email button{
@@ -3390,8 +3448,9 @@ body.facebook-canvas .button {
         width: 100%;
     }
 
-    #main-content .small-search-form input, #main-content .small-search-form button {
-      width: 99%;
+    #main-content .small-search-form ul li,  
+    #main-content .small-search-form buttons {
+      width: 90%;
     }
 
 } /* end of media query */

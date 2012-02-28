@@ -54,6 +54,16 @@ describe Campaign do
 
   end
 
+  describe 'when generating a URL param' do 
+  
+    it 'should not create a param with a trailing dash' do 
+      # title trimmed to max chars allowed in slug will end in space
+      @campaign = Campaign.new(:title => 'aaaaa aaaaaa aaaaa aaaa aaa aaaaaaa aaa')
+      @campaign.send(:build_a_slug).should == 'aaaaa-aaaaaa-aaaaa-aaaa-aaa-aaaaaaa'
+    end
+     
+  end
+
   describe 'confirming' do
 
     def expect_no_confirmation(status)
@@ -135,6 +145,24 @@ describe Campaign do
 
     it 'should be invalid if the title is nil' do
       @campaign.errors.on(:title).should == 'Please enter a headline'
+    end
+
+    it 'should be invalid if the title is a single non-alphanumeric character' do 
+      @campaign.title = '.'
+      @campaign.valid? 
+      @campaign.errors.on(:title).should == 'Please enter a headline with some words in it'
+    end
+
+    it 'should be valid regarding title if the title is a single lowercase character' do 
+      @campaign.title = 'a'
+      @campaign.valid? 
+      @campaign.errors.on(:title).should == nil
+    end
+    
+    it 'should be valid regarding title if the title is a single uppercase character' do 
+      @campaign.title = 'A'
+      @campaign.valid? 
+      @campaign.errors.on(:title).should == nil
     end
 
   end

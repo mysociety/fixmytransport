@@ -13,7 +13,7 @@
 	</div>
   <div class="rightcol mediumwidecol">
 	   <div id="browse-map">
-     			<%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => @other_locations, :link_type => :location, :highlight => :has_content, :height => BROWSE_MAP_HEIGHT, :width => BROWSE_MAP_WIDTH } %>
+     			<%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => @other_locations, :link_type => :location, :highlight => :has_content, :height => @map_height, :width => @map_width } %>
   		</div>	
 
 	</div>
