@@ -73,6 +73,35 @@ describe Problem do
 
   end
 
+  describe 'when asked for categories' do 
+    
+    before do 
+      @council = mock("council", :categories => ['Bus stops', 'Other'])
+      @operator = mock_model(Operator, :categories => ['Other', 'Bus shelters'])
+      @stop = mock_model(Stop, :responsible_organizations => [@operator])
+      @problem = Problem.new
+      @problem.location = @stop
+    end
+
+    describe 'a problem with a reference' do 
+      
+      it "should return a unique set of categories from its reference problem's responsible organisations" do
+        @problem.reference = mock_model(Problem, :responsible_organizations => [@operator, @council])
+        @problem.categories.should == ['Bus shelters', 'Bus stops', 'Other']
+      end
+      
+    end
+    
+    describe 'a problem with no reference' do 
+    
+      it "should return a unique set of categories from its location's responsible organisations" do 
+        @problem.categories.should == ['Bus shelters',  'Other']
+      end
+      
+    end
+    
+  end
+  
   describe 'when updating assignments' do 
     
     describe 'if the problem has no responsible organizations' do 

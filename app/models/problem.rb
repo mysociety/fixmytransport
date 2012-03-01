@@ -168,7 +168,12 @@ class Problem < ActiveRecord::Base
   end
 
   def categories
-    responsible_organizations.map{ |organization| organization.categories(self.location) }.flatten.uniq
+    if self.reference
+      orgs = self.reference.responsible_organizations
+    else
+      orgs = self.location.responsible_organizations
+    end
+    orgs.map{ |organization| organization.categories(self.location) }.flatten.uniq.sort
   end
 
   def recipients
