@@ -85,10 +85,6 @@ describe Route do
 
     fixtures default_fixtures
 
-    before do
-      fake_data_generation(1)
-    end
-
     describe 'when asked for only terminuses' do
 
       it 'should return a unique list of the names of the parent localities/localities of the terminuses' do
@@ -110,10 +106,6 @@ describe Route do
   describe 'when finding existing routes' do
 
     fixtures default_fixtures
-
-    before do
-      fake_data_generation(1)
-    end
 
     it 'should include routes with the same number and one stop in common with the new route, with the same operator in the same admin area' do
       route = Route.new(:number => '807',
@@ -196,7 +188,6 @@ describe Route do
       @terminus_segments = @existing_route.route_segments.select do |segment|
         segment.from_terminus? || segment.to_terminus?
       end
-      fake_data_generation(1)
     end
 
     it 'should include a route with a journey pattern with the same terminuses and the same operator' do

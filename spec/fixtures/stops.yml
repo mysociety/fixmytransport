@@ -65,6 +65,8 @@ victoria_station_one:
   indicator: ""
   locality: london
   coords: 0101000020346C0000000000000824204100000000C0D90541
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 victoria_station_two:
   status: act
   lat: "51.49526"
@@ -91,6 +93,8 @@ victoria_station_two:
   indicator: ""
   locality: victoria
   coords: 0101000020346C0000000000000A24204100000000C0D90541
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 bristol_16: 
   status: act
   lat: "51.45919"
@@ -119,6 +123,8 @@ bristol_16:
   indicator: Bay 16
   locality: broadmead
   coords: 0101000020346C00000000000070E8154100000000982E0541
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 dursley_road: 
   status: act
   lon: "-2.67666"
@@ -146,6 +152,8 @@ dursley_road:
   indicator: ""
   locality: shirehampton
   coords: 0101000020346C0000000000005C8D154100000000C0850541
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 clapham_junction: 
   status: act
   lon: "-0.17028"
@@ -173,6 +181,8 @@ clapham_junction:
   indicator: ""
   locality: clapham_junction
   coords: 0101000020346C000000000000C216204100000000606C0541
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 croydon_station: 
   status: act
   lon: "-0.09278"
@@ -200,6 +210,8 @@ croydon_station:
   indicator: ""
   locality: croydon
   coords: 0101000020346C000000000000D242204100000000503C0441
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 gatwick_airport_station: 
   status: act
   lon: "-0.16104"
@@ -227,6 +239,8 @@ gatwick_airport_station:
   indicator: ""
   locality: gatwick_airport
   coords: 0101000020346C0000000000007822204100000000A03F0141
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 haywards_heath_station_interchange: 
   status: act
   lon: "-0.10531"
@@ -254,6 +268,8 @@ haywards_heath_station_interchange:
   indicator: ""
   locality: haywards_heath
   coords: 0101000020346C0000000000004C44204100000000706AFE40
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 arch_ne: 
   status: act
   lon: "-1.70864"
@@ -281,6 +297,8 @@ arch_ne:
   indicator: north east bound
   locality: south_moor
   coords: 0101000020346C000000000000BC8F194100000000D4DB2041
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 arch_sw: 
   status: act
   lon: "-1.70914"
@@ -308,6 +326,8 @@ arch_sw:
   indicator: south west bound
   locality: south_moor
   coords: 0101000020346C0000000000003C8F19410000000096DB2041
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 bethany_terrace:
   status: act
   lon: "-1.74365"
@@ -335,6 +355,8 @@ bethany_terrace:
   indicator: south west bound
   locality: catchgate
   coords: 0101000020346C000000000000A46C19410000000094D92041
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 bus_station:
   status: act
   lon: "-1.69864"
@@ -362,6 +384,8 @@ bus_station:
   indicator: north bound
   locality: stanley
   coords: 0101000020346C000000000000BC991941000000005CDE2041
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 wybourne_lane:  
   status: act
   lon: "-0.78016"
@@ -389,6 +413,8 @@ wybourne_lane:
   easting: "485260"
   locality: weybourne
   coords: 0101000020346C000000000000309E1D4100000000F0340241
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 white_lion_n:
   status: act
   lon: "-0.74342"
@@ -416,6 +442,8 @@ white_lion_n:
   easting: "487814"
   locality: north_town
   coords: 0101000020346C00000000000018C61D4100000000F0490241
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 white_lion_s:
   status: act
   lon: "-0.74331"
@@ -443,6 +471,8 @@ white_lion_s:
   easting: "487822"
   locality: north_town
   coords: 0101000020346C00000000000038C61D4100000000E0490241
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 tennis_street: 
   status: act
   lon: "-0.09028"
@@ -471,6 +501,8 @@ tennis_street:
   indicator: Stop
   lat: "51.50098"
   easting: "532651"
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 tennis_court_inn: 
   status: act
   lon: "-2.48769"
@@ -498,6 +530,8 @@ tennis_court_inn:
   indicator: ""
   lat: "51.46067"
   easting: "366215"
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 borough_station: 
   status: act
   lon: "-0.09409"
@@ -525,6 +559,8 @@ borough_station:
   indicator: Stop D
   lat: "51.50085"
   easting: "532387"
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 staple_street:
   status: act
   lon: "-0.0876"
@@ -552,6 +588,8 @@ staple_street:
   indicator: Stop
   lat: "51.49997"
   easting: "532840"
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 victoria_stop_s: 
   status: act
   lon: "-0.14351"
@@ -581,6 +619,8 @@ victoria_stop_s:
   loaded: t
   lat: "51.49625"
   easting: "528970"
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 baker_st_station_plat:
   lon: "-0.15683"
   common_name: Baker Street Underground Station
@@ -613,6 +653,8 @@ baker_st_station_plat:
   coords: 0101000020346C000000000000C61C204100000000F8380641
   grid_type: U
   naptan_code: ""
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 finchley_road_station_plat:
   lon: "-0.18025"
   common_name: Finchley Road Underground Station
@@ -645,3 +687,5 @@ finchley_road_station_plat:
   coords: 0101000020346C0000000000008E0F204100000000388C0641
   grid_type: U
   naptan_code: ""
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>

@@ -76,11 +76,7 @@ describe StopArea do
   describe ' area ' do
 
     fixtures default_fixtures
-
-    before do
-      fake_data_generation(1)
-    end
-
+    
     describe 'for stop areas whose stops all share a locality' do
 
       it 'should return the locality_name' do

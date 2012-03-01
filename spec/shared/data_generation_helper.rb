@@ -1,32 +1,34 @@
+def create_model(generation_low, generation_high, model_type, default_attrs)
+  attrs = { :generation_low => generation_low, 
+            :generation_high => generation_high }.merge(default_attrs)
+  
+  instance = model_type.new(attrs)
+  # status should be protected if present, so needs to be assigned separately
+  if instance.respond_to?(:status=)
+    instance.status = default_attrs[:status]
+  end
+  instance.save!
+  return instance
+end
+
 module SharedBehaviours
 
   module DataGenerationHelper
 
     shared_examples_for "a model that is exists in data generations" do
       
-      def create_model(generation_low, generation_high)
-        @model_type.create!(:generation_low => generation_low, 
-                            :generation_high => generation_high,
-                            :name => 'data gen test model')
-      end
-      
-      
-      before do
-        fake_data_generation(2)
-      end
-      
       describe 'when finding a model in another generation' do 
 
         it 'should find a model in the generation' do 
-          old_instance = create_model(generation_low=1, generation_high=1)
-          @model_type.find_in_generation(1, old_instance.id).should == old_instance
+          old_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
+          @model_type.find_in_generation(PREVIOUS_GENERATION, old_instance.id).should == old_instance
           old_instance.destroy
         end
         
         it 'should not find a model in the current generation' do 
-          current_instance = create_model(generation_low=2, generation_high=2)
+          current_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
           expected_error = "Couldn't find #{@model_type} with ID=#{current_instance.id}"
-          lambda{ @model_type.find_in_generation(1, current_instance.id) }.should raise_error(expected_error)
+          lambda{ @model_type.find_in_generation(PREVIOUS_GENERATION, current_instance.id) }.should raise_error(expected_error)
           current_instance.destroy
         end
         
@@ -35,20 +37,20 @@ module SharedBehaviours
       describe 'when finding a model' do 
       
         it 'should find a model in the current generation' do 
-          current_instance = create_model(generation_low=2, generation_high=2)
+          current_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
           @model_type.find(current_instance.id).should == current_instance
           current_instance.destroy
         end
         
         it 'should not find a model in an older generation' do 
-          current_instance = create_model(generation_low=1, generation_high=1)
+          current_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
           expected_error = "Couldn't find #{@model_type} with ID=#{current_instance.id}"
           lambda{ @model_type.find(current_instance.id) }.should raise_error(expected_error)
           current_instance.destroy
         end
         
         it 'should find a model that spans the previous generation and the current generation' do 
-          spanning_instance = create_model(generation_low=1, generation_high=2)
+          spanning_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
           @model_type.find(spanning_instance.id).should == spanning_instance 
           spanning_instance.destroy
         end
@@ -59,41 +61,33 @@ module SharedBehaviours
     
     shared_examples_for "a model that is exists in data generations and has slugs" do
       
-      def create_model(generation_low, generation_high)
-        @model_type.create!(:generation_low => generation_low, 
-                            :generation_high => generation_high,
-                            :name => 'test model')
-      end
+
       
       describe 'when reordering slugs' do 
-        
-        before do
-          fake_data_generation(2)
-        end
         
         it 'should order slugs that are identical but in a different sequence from in the previous generation' do
           pending do 
             # create slugs in previous generation
-            @first_old_instance = create_model(generation_low=1, generation_high=1)
-            @second_old_instance = create_model(generation_low=1, generation_high=1)
-            @third_old_instance = create_model(generation_low=1, generation_high=1)
+            @first_old_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
+            @second_old_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
+            @third_old_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
             [@first_old_instance, @second_old_instance, @third_old_instance].each do |instance|
               slug = instance.slug
-              Slug.connection.execute("UPDATE slugs set generation_low = 1, generation_high = 1 
+              Slug.connection.execute("UPDATE slugs set generation_low = #{PREVIOUS_GENERATION}, generation_high = #{PREVIOUS_GENERATION}
                                        WHERE id = #{slug.id}")
             end
           
-            @second_new_instance = create_model(generation_low=2, generation_high=2)
+            @second_new_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
             @second_new_instance.previous_id = @second_old_instance.id
             @second_new_instance.save
             @second_new_instance.slug.sequence.should == 1
           
-            @first_new_instance = create_model(generation_low=2, generation_high=2)
+            @first_new_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
             @first_new_instance.previous_id = @first_old_instance.id
             @first_new_instance.save
             @first_new_instance.slug.sequence.should == 2
           
-            @third_new_instance = create_model(generation_low=2, generation_high=2)
+            @third_new_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
             @third_new_instance.previous_id = @third_old_instance.id
             @third_new_instance.save
             @third_new_instance.slug.sequence.should == 3

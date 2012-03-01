@@ -25,7 +25,7 @@ Spec::Runner.configure do |config|
 
   config.before(:each) do
     # make sure we don't call the live API when running tests
-    MySociety::MaPit.stub!(:call)
+    MySociety::MaPit.stub!(:call).and_return({})
   end
 
   config.before(:each, :type => :controller) do
@@ -42,18 +42,6 @@ Spec::Runner.configure do |config|
     end
   end
 
-end
-
-def fake_data_generation(generation)
-  # Ugly - faking the default scope on models to data generation 1
-  # but quite hard to stub the data_generation before all the models get
-  # initialized, which is what we would otherwise have to do
-  [Locality, AdminArea, District, Region].each do |model_type|
-    conditions = ["#{model_type.quoted_table_name}.generation_low <= ?
-                   AND #{model_type.quoted_table_name}.generation_high >= ?",
-                   generation, generation]
-    model_type.stub!(:scoped_methods).and_return([{ :find => { :conditions => conditions } }])
-  end
 end
 
 def default_fixtures

@@ -25,10 +25,6 @@ describe BusRoute do
   
     fixtures default_fixtures
     
-    before do
-      fake_data_generation(1)
-    end
-  
     it 'should include in the results returned a route with the same number, mode of transport, operator code and stop codes' do 
       atco_codes = ['13001288E', '13001612B', '13001612B']
       route = BusRoute.new(:number => '807', 
