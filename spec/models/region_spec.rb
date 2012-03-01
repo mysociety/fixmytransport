@@ -28,6 +28,7 @@ describe Region do
       :modification => "value for modification"
     }
     @model_type = Region
+    @default_attrs = { :name => 'A test region' }
   end
 
   it_should_behave_like "a model that is exists in data generations"

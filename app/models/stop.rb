@@ -43,6 +43,10 @@ class Stop < ActiveRecord::Base
   extend ActiveSupport::Memoizable
   include FixMyTransport::Locations
   
+  # This model is part of the transport data that is versioned by data generations.
+  # This means they have a default scope of models valid in the current data generation.
+  # See lib/fixmytransport/data_generations
+  exists_in_data_generation
   has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
   validates_presence_of :common_name
@@ -229,15 +233,13 @@ class Stop < ActiveRecord::Base
   end
 
   def self.find_by_name_and_coords(name, easting, northing, distance)
-    stops = find_by_sql(["SELECT   *, ABS(easting - ?) as easting_dist, ABS(northing - ?) as northing_dist
-                          FROM     stops
-                          WHERE    common_name = ?
-                          AND      ABS(easting - ?) < ?
-                          AND      ABS(northing - ?) < ?
-                          ORDER BY easting_dist asc, northing_dist asc
-                          LIMIT 1",
-                          easting, northing, name, easting, distance, northing, distance])
-    stops.empty? ? nil : stops.first
+    find(:first, :select => "*, ABS(easting - #{easting}) as easting_dist,
+                                ABS(northing - #{northing}) as northing_dist",
+                 :conditions => ["common_name = ?
+                                  AND ABS(easting - ?) < ?
+                                  AND ABS(northing - ?) < ?",
+                                  name, easting, distance, northing, distance],
+                 :order => "easting_dist asc, northing_dist asc")
   end
 
   def self.find_in_bounding_box(coords, options={})

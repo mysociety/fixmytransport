@@ -36,6 +36,7 @@ describe AdminArea do
       :modification => "value for modification"
     }
     @model_type = AdminArea
+    @default_attrs = {}
   end
 
   it "should create a new instance given valid attributes" do

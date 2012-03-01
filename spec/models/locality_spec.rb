@@ -40,6 +40,7 @@ describe Locality do
       :modification => "value for modification"
     }
     @model_type = Locality
+    @default_attrs = { :name => 'A test locality' }
   end
 
   it_should_behave_like "a model that is exists in data generations"

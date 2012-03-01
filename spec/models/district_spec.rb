@@ -29,6 +29,7 @@ describe District do
       :modification => "value for modification"
     }
     @model_type = District
+    @default_attrs = {}
   end
 
   it_should_behave_like "a model that is exists in data generations"
