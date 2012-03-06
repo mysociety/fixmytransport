@@ -24,7 +24,7 @@ class Parsers::NptgParser
                         :creation_datetime =>     (row["CreationDateTime"] or row['Date of Issue']),
                         :modification_datetime => row["ModificationDateTime"],
                         :revision_number =>       (row["RevisionNumber"] or row['Issue Version']),
-                        :modification =>          row["Modification"])
+                        :modification =>          row["Modification"].blank? ? nil : row["Modification"])
      end
   end
 
@@ -42,7 +42,7 @@ class Parsers::NptgParser
                           :creation_datetime =>     (row["CreationDateTime"] or row['Date of Issue']),
                           :modification_datetime => row["ModificationDateTime"],
                           :revision_number =>       (row["RevisionNumber"] or row['Issue Version']),
-                          :modification =>          row["Modification"])
+                          :modification =>          row["Modification"].blank? ? nil : row["Modification"])
     end
   end
 
@@ -57,7 +57,7 @@ class Parsers::NptgParser
                           :creation_datetime =>     (row["CreationDateTime"] or row['Date of Issue']),
                           :modification_datetime => row["ModificationDateTime"],
                           :revision_number =>       (row["RevisionNumber"] or row['Issue Version']),
-                          :modification =>          row["Modification"])
+                          :modification =>          row["Modification"].blank? ? nil : row["Modification"])
      end
   end
 
@@ -69,8 +69,8 @@ class Parsers::NptgParser
       coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
       yield Locality.new(:code                      => (row['NptgLocalityCode'] or row['National Gazetteer ID']),
                          :name                      => (row['LocalityName'] or row['Locality Name']),
-                         :short_name                => row['ShortName'],
-                         :qualifier_name            => row['QualifierName'],
+                         :short_name                => row['ShortName'].blank? ? nil : row['ShortName'],
+                         :qualifier_name            => row['QualifierName'].blank? ? nil : row['QualifierName'],
                          :admin_area                => admin_area,
                          :district                  => district,
                          :source_locality_type      => (row['SourceLocalityType'] or row['LocalityType']),
