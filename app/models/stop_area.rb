@@ -29,6 +29,10 @@ class StopArea < ActiveRecord::Base
   extend ActiveSupport::Memoizable
   include FixMyTransport::Locations
   
+  # This model is part of the transport data that is versioned by data generations.
+  # This means they have a default scope of models valid in the current data generation.
+  # See lib/fixmytransport/data_generations
+  exists_in_data_generation
   has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships
   has_dag_links :link_class_name => 'StopAreaLink'
