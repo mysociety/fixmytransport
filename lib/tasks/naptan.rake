@@ -244,6 +244,57 @@ namespace :naptan do
 
   end
 
+  namespace :update do
+
+    desc 'Updates stops from a CSV file specified as FILE=filename to generation id specified
+          as GENERATION=generation. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
+          set by VERBOSE=1'
+    task :stops => :environment do
+      field_hash = { :identity_fields => [:atco_code],
+                     :new_record_fields => [:common_name, :naptan_code, :plate_code,
+                                            :landmark, :street, :crossing, :indicator,
+                                            :bearing, :locality_id, :easting, :northing,
+                                            :lon, :lat, :stop_type, :bus_stop_type,
+                                            :easting, :northing, :status],
+                     :update_fields => [:short_common_name,
+                                        :town, :suburb, :locality_centre, :grid_type,
+                                        :administrative_area_code, :creation_datetime,
+                                        :modification_datetime, :modification, :revision_number],
+                     :deletion_field => :modification,
+                     :deletion_value => 'del' }
+      load_instances_in_generation(Stop, Parsers::NaptanParser, field_hash)
+    end
+
+    desc 'Updates stop areas from a CSV file specified as FILE=filename to generation id specified
+          as GENERATION=generation. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
+          set by VERBOSE=1'
+    task :stop_areas => :environment do
+      field_hash = { :identity_fields => [:code],
+                     :new_record_fields => [:name, :area_type, :easting, :northing, :lon, :lat, :status],
+                     :update_fields => [:grid_type, :administrative_area_code, :creation_datetime,
+                                        :modification_datetime, :modification, :revision_number],
+                     :deletion_field => :modification,
+                     :deletion_value => 'del' }
+      load_instances_in_generation(StopArea, Parsers::NaptanParser, field_hash) do |stop_area|
+        stop_area.status = 'ACT' if stop_area.status.nil?
+      end
+    end
+
+    desc 'Updates stop area memberships from a CSV file specified as FILE=filename to generation id specified
+          as GENERATION=generation. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
+          set by VERBOSE=1'
+    task :stop_area_memberships => :environment do
+      field_hash = { :identity_fields => [:stop_id, :stop_area_id],
+                     :new_record_fields => [],
+                     :update_fields => [:creation_datetime, :modification_datetime,
+                                        :modification, :revision_number],
+                     :deletion_field => :modification,
+                     :deletion_value => 'del' }
+      load_instances_in_generation(StopAreaMembership, Parsers::NaptanParser, field_hash)
+    end
+
+  end
+
   namespace :geo do
 
     desc "Adds 'coords' geometry values to Stops"
