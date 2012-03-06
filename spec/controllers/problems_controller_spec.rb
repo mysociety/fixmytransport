@@ -31,35 +31,6 @@ describe ProblemsController do
         request.stub!(:headers).and_return({ 'X-DEVICE-TYPE' => 'a test device' })
       end
 
-      it 'should set the vary header on the response to the device type header' do
-        pending do
-          make_request
-          response.headers['Vary'].should == 'X-DEVICE-TYPE'
-        end
-      end
-
-      it 'should pass the user device to the view' do
-        pending do
-          make_request
-          assigns[:user_device].should == 'a test device'
-        end
-      end
-
-      describe 'if the device is android' do
-
-        before do
-          request.stub!(:headers).and_return({ 'X-DEVICE-TYPE' => 'android' })
-        end
-
-        it 'should set the is_mobile variable for the view' do
-          pending do
-            make_request
-            assigns[:is_mobile].should == true
-          end
-        end
-
-      end
-
     end
 
     describe 'when the app is in closed beta' do
