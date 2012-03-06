@@ -13,7 +13,7 @@ namespace :db do
     # In 2010, the locality qualifier name was included in the name field - split it out
     Rake::Task['nptg:post_load:split_locality_qualifiers']
     
-    Rake::Task['naptan:geo:convert_localities'].execute
+    Rake::Task['nptg:geo:convert_localities'].execute
 
     # Load Stops, StopAreas, give StopAreas lat/lon
     ENV['DIR'] = MySociety::Config.get('NAPTAN_DIR', '')

@@ -40,7 +40,7 @@ namespace :update do
     Rake::Task['nptg:update:localities']
     ENV['MODEL'] = 'Locality'
     Rake::Task['update:normalize_slug_sequences']
-    Rake::Task['naptan:geo:convert_localities']
+    Rake::Task['nptg:geo:convert_localities']
       
     # Can just reuse the load code here - localities will be scoped by the current data generation
     Rake::Task['nptg:load:locality_hierarchy']

@@ -15,6 +15,13 @@ module FixMyTransport
       instance.send("#{y_attr}=".to_sym, y)
       return instance
     end
+    
+    def convert_coords(class_name, task_name, conditions = nil)
+      class_name.constantize.find_each(:conditions => conditions) do |instance|
+        instance = set_lon_lat(instance, class_name)
+        instance.save!
+      end
+    end
 
     def coords_from_result(result)
       x_y = result[0]

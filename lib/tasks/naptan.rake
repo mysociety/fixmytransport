@@ -255,13 +255,6 @@ namespace :naptan do
       end
     end
 
-    def convert_coords(class_name, task_name, conditions = nil)
-      class_name.constantize.find_each(:conditions => conditions) do |instance|
-        instance = set_lon_lat(instance, class_name)
-        instance.save!
-      end
-    end
-
     desc "Adds lat/lons for any stops without them by converting from OS OSGB36 6-digit eastings and northings"
     task :convert_stops => :environment do
       convert_coords("Stop", "convert_stops", 'lat is null')
@@ -272,10 +265,6 @@ namespace :naptan do
       convert_coords("StopArea", "convert_stop_areas")
     end
 
-    desc "Converts locality coords from OS OSGB36 6-digit eastings and northings to WGS-84 lat/lons and saves the result on the model"
-    task :convert_localities => :environment do
-      convert_coords("Locality", "convert_localities", 'lat is null')
-    end
   end
 
 end
