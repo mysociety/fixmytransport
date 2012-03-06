@@ -49,7 +49,7 @@ set it to #{expected_generation})"
   end
 
   def check_verbose
-    verbose = (ENV['VERBOSE']== 1) ? true : false
+    verbose = (ENV['VERBOSE']=='1') ? true : false
   end
 
   def check_dryrun
@@ -96,6 +96,115 @@ set it to #{expected_generation})"
         end
       end
     end
+  end
+
+  # Convert a list of fields to an attribute hash with values coming from an
+  # instance of a model. Basic handling of association fields so that a field
+  # "[association]_id" will have a value in the hash generated from instance.association.id 
+  # if instance.associationis not nil, and nil otherwise
+  def fields_to_attribute_hash(fields, instance)
+    fields = fields.collect do |field|
+      if field.to_s.ends_with?("_id")
+        if association = instance.send(field.to_s[0...-3])
+          [ field, association.id ]
+        else
+          [ field, nil ]
+        end
+      else
+        [ field, instance.send(field) ]
+      end
+    end
+    Hash[ *fields.flatten ]
+  end
+
+  # Generate a string from a model instance that gives model type, id and certain fields and values
+  def reference_string(model_type, instance, fields)
+    reference_string = "#{model_type} #{instance.id}"
+    reference_string += " ("
+    reference_string +=  fields.map{ |field| "#{field}=#{instance.send(field)}"}.join(", ")
+    reference_string += ")"
+  end
+
+  # Load a new model instance into a generation, checking for existing record in previous generation
+  # and updating that or creating a new record in the new generation as appropriate
+  # field_hash has the following keys:
+  # :identity_fields - Fields that determine the identity of the instance - i.e. if the values of these fields
+  # are the same, this is fundamentally the same thing
+  # :new_record_fields - Fields that are significant enough that they require a new record if changed
+  # e.g names, other fields used in slugs - we don't want any changes made to these fields to
+  # leak into the previous generation
+  # :update_fields - fields that should be updated if changed, but don't require a new record
+  def load_instances_in_generation(model_type, parser, field_hash, &block)
+    verbose = check_verbose()
+    dryrun = check_dryrun()
+    generation = ENV['GENERATION']
+    previous_generation = get_previous_generation()
+    identity_fields = field_hash[:identity_fields]
+    new_record_fields = field_hash[:new_record_fields]
+    update_fields = field_hash[:update_fields]
+    deletion_field = field_hash[:deletion_field]
+    deletion_value = field_hash[:deletion_value]
+    table_name = model_type.to_s.tableize
+    counts = { :deleted => 0,
+               :updated_existing_record => 0,
+               :updated_new_record => 0,
+               :new => 0 }
+    parse_for_update(table_name, parser) do |instance|
+
+
+      # do any model-specific instance level things
+      if block_given?
+        yield instance
+      end
+
+      instance.generation_low = generation
+      instance.generation_high = generation
+      # Can we find a record in the previous generation with few enough differences that we can update it
+      # in place?
+      change_in_place_fields = identity_fields + new_record_fields
+      # discard if actually deleted
+      if deletion_field && instance.send(deletion_field) == deletion_value
+        puts "Dropping deleted record #{reference_string(model_type, instance, change_in_place_fields)}" if verbose
+        counts[:deleted] += 1
+        next
+      end
+      search_conditions = fields_to_attribute_hash(change_in_place_fields, instance)
+      existing = model_type.find_in_generation(previous_generation, :first, :conditions => search_conditions)
+      # make a string we can use in output to identify the new instance by it's key attributes
+      if existing
+        puts "Updating and setting generation_high to #{generation} on #{reference_string(model_type, existing, change_in_place_fields)}" if verbose
+        # update all the update fields
+        update_fields.each do |field_name|
+          existing.send("#{field_name}=", instance.send(field_name))
+        end
+        existing.generation_high = generation
+        counts[:updated_existing_record] += 1
+        if ! dryrun
+          existing.save!
+        end
+      else
+        # Can we find this record at all in the previous generation?
+        search_conditions = fields_to_attribute_hash(identity_fields, instance)
+        existing = model_type.find_in_generation(previous_generation, :first, :conditions => search_conditions)
+        if existing
+          puts "New record in this generation for existing instance #{reference_string(model_type, existing, change_in_place_fields)}" if verbose
+          puts existing.diff(instance).inspect if verbose
+          # Associate the old generation record with the new generation record
+          instance.previous_id = existing.id
+          counts[:updated_new_record] += 1
+        else
+          puts "New instance #{reference_string(model_type, instance, change_in_place_fields)}" if verbose
+          counts[:new] += 1
+        end
+        if ! dryrun
+          instance.save
+        end
+      end
+    end
+    puts "Totally new #{table_name}: #{counts[:new]}"
+    puts "Updated #{table_name} (using existing record): #{counts[:updated_existing_record]}"
+    puts "Updated #{table_name} (new record): #{counts[:updated_new_record]}"
+    puts "Deleted #{table_name}: #{counts[:deleted]}"
   end
 
 end

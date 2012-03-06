@@ -79,6 +79,12 @@ namespace :nptg do
     end
 
   end
+  namespace :geo do
+    desc "Converts locality coords from OS OSGB36 6-digit eastings and northings to WGS-84 lat/lons and saves the result on the model"
+    task :convert_localities => :environment do
+      convert_coords("Locality", "convert_localities", 'lat is null')
+    end
+  end
 
   namespace :post_load do
 
@@ -97,99 +103,44 @@ namespace :nptg do
     end
 
   end
-  
+
   namespace :update do
 
     desc "Updates regions from a CSV file specified as FILE=filename to generation id specified
           as GENERATION=generation. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
           set by VERBOSE=1"
     task :regions => :environment do
-      verbose = check_verbose()
-      dryrun = check_dryrun()
-      previous_generation = get_previous_generation()
-      parse_for_update('regions', Parsers::NptgParser) do |region|
-        region.generation_low = ENV['GENERATION']
-        region.generation_high = ENV['GENERATION']
-        search_conditions = { :code => region.code,
-                              :name => region.name,
-                              :creation_datetime => region.creation_datetime,
-                              :modification_datetime => region.modification_datetime,
-                              :modification => region.modification }
-        existing_region = Region.find_in_generation(previous_generation, :first, :conditions => search_conditions)
-        if existing_region
-          puts "Setting generation_high to #{ENV['GENERATION']} on #{existing_region.name} #{existing_region.code}"
-          if ! dryrun
-            existing_region.update_attribute('generation_high', ENV['GENERATION'])
-          end
-        else
-          existing_region = Region.find_in_generation(previous_generation, :first, :conditions => ['code = ?
-                                                                                                    AND name = ?',
-                                                                                                    region.code, region.name])
-          if existing_region
-            puts "Updating attributes for #{existing_region.name} #{existing_region.code}"
-            puts existing_region.diff(region).inspect if verbose
-            region.previous_id = existing_region.id
-          else
-            puts "New region #{region.name} #{region.code}"
-          end
-          if ! dryrun
-            region.save
-          end
-        end
-      end
+      field_hash = { :identity_fields => [:code],
+                     :new_record_fields => [:name],
+                     :update_fields => [:creation_datetime,
+                                        :modification_datetime,
+                                        :revision_number,
+                                        :modification],
+                     :deletion_field => :modification,
+                     :deletion_value => 'del' }
+      load_instances_in_generation(Region, Parsers::NptgParser, field_hash)
     end
 
     desc "Updates admin areas from a CSV file specified as FILE=filename to generation id specified
           as GENERATION=generation. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
           set by VERBOSE=1"
     task :admin_areas => :environment do
-      verbose = check_verbose()
-      dryrun = check_dryrun()
-      previous_generation = get_previous_generation()
       country_map = { 'Eng' => 'England',
                       'Sco' => 'Scotland',
                       'Gre' => 'Great Britain',
                       'Wal' => 'Wales' }
-      parse_for_update('admin_areas', Parsers::NptgParser) do |admin_area|
-        admin_area.generation_low = ENV['GENERATION']
-        admin_area.generation_high = ENV['GENERATION']
-        search_conditions = { :code => admin_area.code,
-                              :atco_code => admin_area.atco_code,
-                              :name => admin_area.name,
-                              :country => country_map[admin_area.country],
-                              :region_id => admin_area.region_id,
-                              :creation_datetime => admin_area.creation_datetime,
-                              :modification_datetime => admin_area.modification_datetime,
-                              :modification => admin_area.modification,
-                              :revision_number => admin_area.revision_number }
-        existing_admin_area = AdminArea.find_in_generation(previous_generation,
-                                                           :first,
-                                                           :conditions => search_conditions)
-        if existing_admin_area
-          puts "Setting generation_high to #{ENV['GENERATION']} on #{existing_admin_area.name} #{existing_admin_area.code}"
-          if ! dryrun
-            existing_admin_area.update_attribute('generation_high', ENV['GENERATION'])
-          end
-        else
-          existing_admin_area = AdminArea.find_in_generation(previous_generation,
-                                                             :first,
-                                                             :conditions => ['code = ?
-                                                             AND name = ?
-                                                             AND atco_code = ?',
-                                                             admin_area.code,
-                                                             admin_area.name,
-                                                             admin_area.atco_code])
-          if existing_admin_area
-            puts "Updating attributes for #{existing_admin_area.name} #{existing_admin_area.code}"
-            puts existing_admin_area.diff(admin_area).inspect if verbose
-            admin_area.previous_id = existing_admin_area.id
-          else
-            puts "New admin area #{admin_area.name} #{admin_area.code}"
-          end
-          if ! dryrun
-            admin_area.save
-          end
-        end
+      field_hash = { :identity_fields => [:atco_code, :code],
+                     :new_record_fields => [:name, :region_id, :country],
+                     :update_fields => [:short_name,
+                                        :national,
+                                        :creation_datetime,
+                                        :modification_datetime,
+                                        :modification,
+                                        :revision_number],
+                     :deletion_field => :modification,
+                     :deletion_value => 'del' }
+      load_instances_in_generation(AdminArea, Parsers::NptgParser, field_hash) do |admin_area|
+        admin_area.country = country_map[admin_area.country]
       end
     end
 
@@ -197,101 +148,38 @@ namespace :nptg do
           as GENERATION=generation. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
           set by VERBOSE=1"
     task :districts => :environment do
-      verbose = check_verbose()
-      dryrun = check_dryrun()
-      previous_generation = get_previous_generation()
-      parse_for_update('districts', Parsers::NptgParser) do |district|
-        district.generation_low = ENV['GENERATION']
-        district.generation_high = ENV['GENERATION']
-        search_conditions = { :code => district.code,
-                              :name => district.name,
-                              :creation_datetime => district.creation_datetime,
-                              :modification_datetime => district.modification_datetime,
-                              :modification => district.modification,
-                              :revision_number => district.revision_number }
-        existing_district = District.find_in_generation(previous_generation,
-                                                        :first,
-                                                        :conditions => search_conditions)
-        if existing_district
-          puts "Setting generation_high to #{ENV['GENERATION']} on #{existing_district.name} #{existing_district.code}"
-          if ! dryrun
-            existing_district.update_attribute('generation_high', ENV['GENERATION'])
-          end
-        else
-          existing_district = District.find_in_generation(previous_generation,
-                                                          :first,
-                                                          :conditions => ['code = ?
-                                                             AND name = ?',
-                                                             district.code,
-                                                             district.name])
-          if existing_district
-            puts "Updating attributes for #{existing_district.name} #{existing_district.code}"
-            puts existing_district.diff(district).inspect if verbose
-            district.previous_id = existing_district.id
-          else
-            puts "New district #{district.name} #{district.code}"
-          end
-          if ! dryrun
-            district.save
-          end
-        end
-      end
+      field_hash = { :identity_fields => [:code],
+                     :new_record_fields => [:name, :admin_area_id],
+                     :update_fields => [:creation_datetime,
+                                        :modification_datetime,
+                                        :modification,
+                                        :revision_number],
+                     :deletion_field => :modification,
+                     :deletion_value => 'del' }
+      load_instances_in_generation(District, Parsers::NptgParser, field_hash)
     end
 
     desc "Updates localities from a CSV file specified as FILE=filename to generation id specified
           as GENERATION=generation. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
           set by VERBOSE=1"
     task :localities => :environment do
-      verbose = check_verbose()
-      dryrun = check_dryrun()
-      previous_generation = get_previous_generation()
-      parse_for_update('localities', Parsers::NptgParser) do |locality|
-        locality.generation_low = ENV['GENERATION']
-        locality.generation_high = ENV['GENERATION']
-        search_conditions = { :code                      => locality.code,
-                              :name                      => locality.name,
-                              :short_name                => locality.short_name,
-                              :qualifier_name            => locality.qualifier_name,
-                              :admin_area_id             => locality.admin_area.id,
-                              :district_id               => locality.district ? locality.district.id : nil,
-                              :source_locality_type      => locality.source_locality_type,
-                              :grid_type                 => locality.grid_type,
-                              :easting                   => locality.easting,
-                              :northing                  => locality.northing,
-                              :coords                    => locality.coords,
-                              :creation_datetime         => locality.creation_datetime,
-                              :modification_datetime     => locality.modification_datetime,
-                              :revision_number           => locality.revision_number,
-                              :modification              => locality.modification }
-        existing_locality = Locality.find_in_generation(previous_generation,
-                                                        :first,
-                                                        :conditions => search_conditions)
-        if existing_locality
-          puts "Setting generation_high to #{ENV['GENERATION']} on #{existing_locality.name} #{existing_locality.code}"
-          if ! dryrun
-            existing_locality.update_attribute('generation_high', ENV['GENERATION'])
-          end
-        else
-          existing_locality = Locality.find_in_generation(previous_generation,
-                                                          :first,
-                                                          :conditions => ['code = ?
-                                                             AND name = ?',
-                                                             locality.code,
-                                                             locality.name])
-          if existing_locality
-            # puts "Updating attributes for #{existing_locality.name} #{existing_locality.code}"
-            puts existing_locality.diff(locality).inspect if verbose
-            locality.previous_id = existing_locality.id
-          else
-            puts "New locality #{locality.name} #{locality.code}"
-          end
-          if ! dryrun
-            locality.save
-          end
-        end
-      end
+      field_hash = { :identity_fields => [:code],
+                     :new_record_fields => [:name,
+                                            :admin_area_id,
+                                            :district_id,
+                                            :qualifier_name,
+                                            :easting,
+                                            :northing],
+                     :update_fields => [:short_name,
+                                        :source_locality_type,
+                                        :grid_type,
+                                        :creation_datetime,
+                                        :modification_datetime,
+                                        :modification,
+                                        :revision_number],
+                     :deletion_field => :modification,
+                     :deletion_value => 'del' }
+      load_instances_in_generation(Locality, Parsers::NptgParser, field_hash)
     end
   end
-  
-
 end
