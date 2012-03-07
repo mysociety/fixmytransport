@@ -88,11 +88,6 @@ APP_STATUS: 'beta'
 BETA_USERNAME: 'username'
 BETA_PASSWORD: 'password'
 
-# x-header used for device class, if there's a cacheing system between FMT and the web inserting them
-# e.g., "X-Device-type"   
-# Leave blank if no such mechanism is set up. See application_controller.rb, get_device_from_user_agent
-DEVICE_TYPE_X_HEADER: ''
-
 # enable geolocation ("use my current location") features
 GEOLOCATION_ENABLED: 0
 
