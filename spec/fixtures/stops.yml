@@ -39,7 +39,7 @@
 #
 
 victoria_station_one:
-  status: act
+  status: ACT
   lat: "51.49526"
   lon: "-0.14455"
   northing: "179000"
@@ -68,7 +68,7 @@ victoria_station_one:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 victoria_station_two:
-  status: act
+  status: ACT
   lat: "51.49526"
   lon: "-0.14454"
   northing: "179000"
@@ -96,7 +96,7 @@ victoria_station_two:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 bristol_16: 
-  status: act
+  status: ACT
   lat: "51.45919"
   lon: "-2.59239"
   northing: "173523"
@@ -126,7 +126,7 @@ bristol_16:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 dursley_road: 
-  status: act
+  status: ACT
   lon: "-2.67666"
   lat: "51.48381"
   easting: "353111"
@@ -155,7 +155,7 @@ dursley_road:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 clapham_junction: 
-  status: act
+  status: ACT
   lon: "-0.17028"
   lat: "51.46419"
   easting: "527201"
@@ -184,7 +184,7 @@ clapham_junction:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 croydon_station: 
-  status: act
+  status: ACT
   lon: "-0.09278"
   northing: "165770"
   lat: "51.37545"
@@ -213,7 +213,7 @@ croydon_station:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 gatwick_airport_station: 
-  status: act
+  status: ACT
   lon: "-0.16104"
   northing: "141300"
   lat: "51.15649"
@@ -242,7 +242,7 @@ gatwick_airport_station:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 haywards_heath_station_interchange: 
-  status: act
+  status: ACT
   lon: "-0.10531"
   northing: "124583"
   lat: "51.00525"
@@ -271,7 +271,7 @@ haywards_heath_station_interchange:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 arch_ne: 
-  status: act
+  status: ACT
   lon: "-1.70864"
   lat: "54.86627"
   easting: "418799"
@@ -300,7 +300,7 @@ arch_ne:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 arch_sw: 
-  status: act
+  status: ACT
   lon: "-1.70914"
   northing: "552395"
   lat: "54.86599"
@@ -329,7 +329,7 @@ arch_sw:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 bethany_terrace:
-  status: act
+  status: ACT
   lon: "-1.74365"
   lat: "54.86376"
   easting: "416553"
@@ -358,7 +358,7 @@ bethany_terrace:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 bus_station:
-  status: act
+  status: ACT
   lon: "-1.69864"
   lat: "54.86916"
   easting: "419439"
@@ -387,7 +387,7 @@ bus_station:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 wybourne_lane:  
-  status: act
+  status: ACT
   lon: "-0.78016"
   northing: "149150"
   grid_type: U
@@ -416,7 +416,7 @@ wybourne_lane:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 white_lion_n:
-  status: act
+  status: ACT
   lon: "-0.74342"
   northing: "149822"
   grid_type: U
@@ -445,7 +445,7 @@ white_lion_n:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 white_lion_s:
-  status: act
+  status: ACT
   lon: "-0.74331"
   northing: "149820"
   grid_type: U
@@ -474,7 +474,7 @@ white_lion_s:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 tennis_street: 
-  status: act
+  status: ACT
   lon: "-0.09028"
   northing: "179733"
   locality: the_borough
@@ -504,7 +504,7 @@ tennis_street:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 tennis_court_inn: 
-  status: act
+  status: ACT
   lon: "-2.48769"
   northing: "173634"
   locality: kingswood
@@ -533,7 +533,7 @@ tennis_court_inn:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 borough_station: 
-  status: act
+  status: ACT
   lon: "-0.09409"
   northing: "179711"
   locality: the_borough
@@ -562,7 +562,7 @@ borough_station:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 staple_street:
-  status: act
+  status: ACT
   lon: "-0.0876"
   northing: "179625"
   locality: the_borough
@@ -591,7 +591,7 @@ staple_street:
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
 victoria_stop_s: 
-  status: act
+  status: ACT
   lon: "-0.14351"
   northing: "179112"
   locality: victoria
@@ -646,7 +646,7 @@ baker_st_station_plat:
   cached_slug: baker-street-underground-station--8
   modification: rev
   short_common_name: ""
-  status: act
+  status: ACT
   lat: "51.52286"
   northing: "182047"
   town: ""
@@ -680,7 +680,7 @@ finchley_road_station_plat:
   cached_slug: finchley-road-underground-station--5
   modification: rev
   short_common_name: ""
-  status: act
+  status: ACT
   lat: "51.54718"
   northing: "184711"
   town: ""
@@ -689,3 +689,32 @@ finchley_road_station_plat:
   naptan_code: ""
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+victoria_station_previous_generation:
+  status: ACT
+  lat: "51.49526"
+  lon: "-0.14455"
+  northing: "179000"
+  easting: "528900"
+  grid_type: U
+  naptan_code: ""
+  revision_number: "2"
+  landmark: ""
+  common_name: London Victoria Rail Station
+  administrative_area_code: "110"
+  bearing: ""
+  plate_code: ""
+  stop_type: RLY
+  locality_centre: t
+  suburb: ""
+  modification: rev
+  bus_stop_type: ""
+  crossing: ""
+  short_common_name: ""
+  atco_code: 9100VICTRIP
+  town: ""
+  street: "-"
+  indicator: ""
+  locality: london
+  coords: 0101000020346C0000000000000824204100000000C0D90541
+  generation_low: <%= PREVIOUS_GENERATION %>
+  generation_high: <%= PREVIOUS_GENERATION %>

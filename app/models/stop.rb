@@ -61,8 +61,8 @@ class Stop < ActiveRecord::Base
   has_many :stop_operators, :dependent => :destroy
   has_many :operators, :through => :stop_operators, :uniq => true
   validates_presence_of :locality_id, :lon, :lat, :if => :loaded?
-  validates_uniqueness_of :atco_code, :allow_blank => true
-  validates_uniqueness_of :other_code, :allow_blank => true
+  validate :atco_code_unique_in_generation
+  validate :other_code_unique_in_generation
   validates_inclusion_of :status, :in => self.statuses.keys
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
@@ -72,6 +72,30 @@ class Stop < ActiveRecord::Base
   before_save :cache_description
 
   # instance methods
+
+  # this is a custom validation as atco codes need only be unique within the data generation bounds
+  # set by the default scope. Allows blank values
+  def atco_code_unique_in_generation
+    self.field_unique_in_generation(:atco_code)
+  end
+
+  def other_code_unique_in_generation
+    self.field_unique_in_generation(:other_code)
+  end
+
+  def field_unique_in_generation(field)
+    value = self.send(field)
+    return if value.blank?
+    condition_string = "#{field} = ?"
+    params = [value]
+    if self.id
+      condition_string += " AND id != ?"
+      params << self.id
+    end
+    if existing = Stop.find(:first, :conditions => [condition_string] + params)
+      errors.add(field,  ActiveRecord::Error.new(self, field, :taken).to_s)
+    end
+  end
 
   def routes
     Route.find(:all, :conditions => ['id in (SELECT route_id
@@ -198,16 +222,16 @@ class Stop < ActiveRecord::Base
     if ! query.blank?
       query = query.downcase
       query_clause = "(LOWER(common_name) LIKE ?
-                      OR LOWER(common_name) LIKE ? 
-                      OR LOWER(street) LIKE ? 
+                      OR LOWER(common_name) LIKE ?
+                      OR LOWER(street) LIKE ?
                       OR LOWER(street) LIKE ?
                       OR LOWER(atco_code) LIKE ?
                       OR LOWER(atco_code) LIKE ?
                       OR LOWER(other_code) LIKE ?
                       OR LOWER(other_code) LIKE ?"
-      query_params = [ "#{query}%", "%#{query}%", 
-                       "#{query}%", "%#{query}%", 
-                       "#{query}%", "%#{query}%", 
+      query_params = [ "#{query}%", "%#{query}%",
+                       "#{query}%", "%#{query}%",
+                       "#{query}%", "%#{query}%",
                        "#{query}%", "%#{query}%" ]
       # numeric?
       if query.to_i.to_s == query
