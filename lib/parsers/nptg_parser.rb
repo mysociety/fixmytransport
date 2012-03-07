@@ -90,7 +90,15 @@ class Parsers::NptgParser
     FasterCSV.parse(csv_data, csv_options) do |row|
       ancestor = Locality.find_by_code((row['ParentNptgLocalityCode'] or row['Parent ID']))
       descendant = Locality.find_by_code((row['ChildNptgLocalityCode'] or row['Child ID']))
-      yield LocalityLink.build_edge(ancestor, descendant)
+      
+      if existing_link = LocalityLink.find_link(ancestor, descendant)
+        if ! LocalityLink.direct?(ancestor, descendant)
+          existing_link.make_direct()
+          yield existing_link
+        end
+      else
+        yield LocalityLink.build_edge(ancestor, descendant)
+      end
     end
   end
 
