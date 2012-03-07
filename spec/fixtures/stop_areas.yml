@@ -38,7 +38,9 @@ victoria_station_root:
   modification: rev
   locality: london
   lon: -0.14455 
-  lat: 51.49526
+  lat: 51.4952
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 victoria_station_leaf:
   status: act
   northing: "179000"
@@ -51,6 +53,8 @@ victoria_station_leaf:
   administrative_area_code: "110"
   modification: rev
   locality: london
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 south_moor_and_arch: 
   easting: "418799"
   status: act
@@ -62,6 +66,8 @@ south_moor_and_arch:
   code: 130G1612
   administrative_area_code: 078
   modification: rev
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 baker_st_station: 
   lon: "-0.157093118648171"
   name: Baker Street Underground Station
@@ -78,6 +84,8 @@ baker_st_station:
   northing: "182072"
   coords: 0101000020346C000000000000A01C204100000000C0390641
   grid_type: U
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 finchley_road_station:
   lon: "-0.179844589111084"
   name: Finchley Road Underground Station
@@ -94,6 +102,8 @@ finchley_road_station:
   northing: "184673"
   coords: 0101000020346C000000000000C80F204100000000088B0641
   grid_type: U
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 clapham_junction:
   lon: "-0.17029289004327"
   name: Clapham Junction Rail Station
@@ -111,6 +121,8 @@ clapham_junction:
   northing: "175500"
   coords: 0101000020346C000000000000C016204100000000606C0541
   grid_type: U
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 east_croydon_station:
   lon: "-0.0927791545283177"
   name: East Croydon Rail Station
@@ -127,6 +139,8 @@ east_croydon_station:
   northing: "165770"
   coords: 0101000020346C000000000000D242204100000000503C0441
   grid_type: U
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 gatwick_airport_station:
   lon: "-0.161041009511314"
   name: Gatwick Airport Rail Station
@@ -143,6 +157,8 @@ gatwick_airport_station:
   northing: "141300"
   coords: 0101000020346C0000000000007822204100000000A03F0141
   grid_type: U
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 haywards_heath_station:
   lon: "-0.10530812512724"
   name: Haywards Heath Rail Station
@@ -159,3 +175,5 @@ haywards_heath_station:
   northing: "124583"
   coords: 0101000020346C0000000000004C44204100000000706AFE40
   grid_type: U
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
