@@ -2,27 +2,27 @@ class Admin::StopsController < Admin::AdminController
 
   cache_sweeper :stop_sweeper
   before_filter :require_can_admin_locations, :except => :autocomplete_for_name
-  
-  def show 
+
+  def show
     @stop = Stop.find(params[:id])
   end
-  
+
   def index
     conditions = []
     if !params[:query].blank? or !params[:mode].blank?
       conditions = Stop.name_or_id_conditions(params[:query], params[:mode])
     end
-    @stops = Stop.paginate :page => params[:page], 
-                           :conditions => conditions, 
+    @stops = Stop.paginate :page => params[:page],
+                           :conditions => conditions,
                            :include => :locality,
                            :order => 'lower(common_name)'
   end
-  
+
   def new
     @stop = Stop.new(:loaded => true)
   end
-  
-  def create 
+
+  def create
     @stop = Stop.new(params[:stop])
     if @stop.save
       flash[:notice] = t('admin.stop_created')
@@ -31,7 +31,7 @@ class Admin::StopsController < Admin::AdminController
       render :new
     end
   end
-  
+
   def update
     @stop = Stop.find(params[:id])
     if @stop.update_attributes(params[:stop])
@@ -42,7 +42,7 @@ class Admin::StopsController < Admin::AdminController
       render :show
     end
   end
-  
+
   def destroy
     @stop = Stop.find(params[:id])
     if @stop.campaigns.size > 0 || @stop.problems.size > 0
@@ -57,13 +57,13 @@ class Admin::StopsController < Admin::AdminController
       redirect_to admin_url(admin_stops_path)
     end
   end
-  
+
   def autocomplete_for_name
     query = params[:term].downcase
     stops = Stop.find_by_name_or_id(query, params[:transport_mode_id], 20, show_all_metro=true)
-    stops = stops.map do |stop| 
-      { :id => stop.id, 
-        :name => @template.stop_name_for_admin(stop) } 
+    stops = stops.map do |stop|
+      { :id => stop.id,
+        :name => @template.stop_name_for_admin(stop) }
     end
     render :json => stops
   end
