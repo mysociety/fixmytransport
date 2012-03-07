@@ -122,7 +122,7 @@ class Parsers::NaptanParser
       locality = Locality.find_by_code((row['NptgLocalityCode'] or row['NatGazID']))
       yield Stop.new( :atco_code                  => (row['AtcoCode'] or row['ATCOCode']),
                       :naptan_code                => (row['NaptanCode'] or row['SMSNumber']),
-                      :plate_code                 => row['PlateCode'],
+                      :plate_code                 => clean_field(:plate_code, row['PlateCode']),
                       :common_name                => row['CommonName'],
                       :short_common_name          => row['ShortCommonName'],
                       :landmark                   => clean_field(:landmark, row['Landmark']),
@@ -155,6 +155,7 @@ class Parsers::NaptanParser
     null_value_indicators = { :landmark  => ['---', '*', 'Landmark not known', 'Unknown', 'N/A', '-', 'landmark','N', 'TBA', 'N/K', '-'],
                               :indicator => ['---'],
                               :crossing  => ['*', '--', 'No'],
+                              :plate_code => [''],
                               :street    =>  ['---', '-', 'N/A', 'No name', 'Street not known', 'Unclassified', 'N/K', 'Unknown', 'Unnamed Road', 'Unclassified Road'],
                             }
     if value && null_value_indicators[field].include?(value.strip)
