@@ -1,10 +1,18 @@
 class LocationsController < ApplicationController
-
   before_filter :process_map_params
   include ApplicationHelper
 
   def show_stop
-    @stop = Stop.full_find(params[:id], params[:scope])
+    begin
+      @stop = Stop.full_find(params[:id], params[:scope])
+    # handle params matching a stop in the previous generation with a redirect to the successor
+    # if there is one
+    rescue ActiveRecord::RecordNotFound => error
+      if @successor = Stop.find_successor(params[:id], :scope => params[:scope], :include => [:locality])
+        redirect_previous(@successor) and return
+      end
+      raise
+    end
     @commentable = @stop
     @title = @stop.full_name
     respond_to do |format|
@@ -24,7 +32,16 @@ class LocationsController < ApplicationController
   end
 
   def show_stop_area
-    @stop_area = StopArea.full_find(params[:id], params[:scope])
+    begin
+      @stop_area = StopArea.full_find(params[:id], params[:scope])
+    # handle params matching a stop area in the previous generation with a redirect to the successor
+    # if there is one
+    rescue ActiveRecord::RecordNotFound => error
+      if @successor = StopArea.find_successor(params[:id], :scope => params[:scope], :include => [:locality])
+        redirect_previous(@successor) and return
+      end
+      raise
+    end
     @commentable = @stop_area
     # Don't display a station part stop_area - redirect to its parent
     station_root = @stop_area.station_root()
@@ -142,6 +159,11 @@ class LocationsController < ApplicationController
       @map_height = LOCATION_PAGE_MAP_HEIGHT
       @map_width = LOCATION_PAGE_MAP_WIDTH
     end
+  end
+
+  def redirect_previous(previous)
+    new_params = { :id => previous.to_param, :scope => previous.locality.to_param }
+    redirect_to params.merge(new_params), :status => :moved_permanently
   end
 
   def campaign_feed(source)
