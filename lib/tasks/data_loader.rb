@@ -149,6 +149,7 @@ set it to #{expected_generation})"
                :updated_existing_record => 0,
                :updated_new_record => 0,
                :new => 0 }
+    diffs = {}
     parse_for_update(table_name, parser) do |instance|
 
 
@@ -188,7 +189,15 @@ set it to #{expected_generation})"
         existing = model_type.find_in_generation(previous_generation, :first, :conditions => search_conditions)
         if existing
           puts "New record in this generation for existing instance #{reference_string(model_type, existing, change_in_place_fields)}" if verbose
-          puts existing.diff(instance).inspect if verbose
+          diff_hash = existing.diff(instance)
+          diff_hash.each do |key, value|
+            if diffs[key].nil?
+              diffs[key] = 1
+            else 
+              diffs[key] +=1
+            end
+          end
+          puts diff_hash.inspect if verbose
           # Associate the old generation record with the new generation record
           instance.previous_id = existing.id
           counts[:updated_new_record] += 1
@@ -197,7 +206,7 @@ set it to #{expected_generation})"
           counts[:new] += 1
         end
         if ! dryrun
-          instance.save
+          instance.save!
         end
       end
     end
@@ -205,6 +214,10 @@ set it to #{expected_generation})"
     puts "Updated #{table_name} (using existing record): #{counts[:updated_existing_record]}"
     puts "Updated #{table_name} (new record): #{counts[:updated_new_record]}"
     puts "Deleted #{table_name}: #{counts[:deleted]}"
+    puts "New records were created for existing objects due to differences in the following fields:"
+    diffs.each do |key, value|
+      puts "#{key}: #{value} times"
+    end
   end
 
 end
