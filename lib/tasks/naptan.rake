@@ -262,7 +262,7 @@ namespace :naptan do
 
     desc "Converts stop area coords from OS OSGB36 6-digit eastings and northings to WGS-84 lat/lons and saves the result on the model"
     task :convert_stop_areas => :environment do
-      convert_coords("StopArea", "convert_stop_areas")
+      convert_coords("StopArea", "convert_stop_areas", 'lat is null')
     end
 
   end
