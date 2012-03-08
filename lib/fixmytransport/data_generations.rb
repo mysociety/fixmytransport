@@ -22,26 +22,40 @@ module FixMyTransport
         # Reorder any slugs that existed in the previous generation, but have been
         # given a different sequence by the arbitrary load order
         def normalize_slug_sequences(data_generation)
-          names = Slug.connection.execute("SELECT distinct slugs_new.name
+
+          # Look for any instances where the slug and scope are the same for a previous version of
+          # an object, and the version in this generation, but the sequences are different
+          results = Slug.connection.execute("SELECT distinct slugs_new.name, slugs_new.scope
                                            FROM slugs as slugs_old, slugs as slugs_new,
-                                                #{quoted_table_name} as sluggable_old,
-                                                #{quoted_table_name} as sluggable_new
+                                           #{quoted_table_name} as sluggable_old,
+                                           #{quoted_table_name} as sluggable_new
                                            WHERE slugs_old.sluggable_type = '#{self.to_s}'
                                            AND slugs_new.sluggable_type = '#{self.to_s}'
                                            AND slugs_old.sluggable_id = sluggable_old.id
+                                           AND slugs_new.sluggable_id = sluggable_new.id
                                            AND slugs_new.generation_low = #{data_generation}
                                            AND slugs_old.generation_low = #{data_generation-1}
-                                           AND slugs_new.sluggable_id = sluggable_new.id
+                                           AND (slugs_new.scope = slugs_old.scope
+                                           OR slugs_new.scope is null and slugs_old.scope is null)
                                            AND (sluggable_new.previous_id = sluggable_old.id
                                            OR  sluggable_new.id = sluggable_old.id)
                                            AND (slugs_old.sequence != slugs_new.sequence
                                                 AND slugs_old.name = slugs_new.name)")
-          names.each do |name|
-            instances = self.find(:all, :include => :slug, :conditions => ['slugs.name = ?', name])
+          results.each do |name,slug_scope|
+            condition_string = "slugs.name = ?"
+            params = [name]
+            if slug_scope
+              condition_string += " AND slugs.scope = ?"
+              params << slug_scope
+            end
+            instances = self.find(:all, :include => :slug, :conditions => [condition_string] + params)
             instances = instances.sort_by(&:slug_sequence_in_previous_generation)
+
             instances.each do |instance|
               instance.slug.destroy
               instance.slug = nil
+            end
+            instances.each do |instance|
               instance.save
             end
           end
@@ -82,25 +96,50 @@ module FixMyTransport
       # number for models with this slug in the previous generation
       def slug_sequence_in_previous_generation
         raise "This model does not use friendly_id slugs" unless self.class.uses_friendly_id?
-        if !previous_id
+        if self.previous()
+          # did this object previously have the same slug and scope? If so, return the sequence
+          # it used to have
+          condition_string = "sluggable_id = ? and sluggable_type = ?"
+          params = [self.previous.id, self.class.to_s]
+          if self.slug.scope
+            condition_string += " and scope = ?"
+            params << self.slug.scope
+          end
           previous_slug = Slug.find_in_generation(PREVIOUS_GENERATION,
                                                   :first,
-                                                  :conditions => ['name = ? and sluggable_type = ?',
-                                                  self.slug.name, self.class.to_s],
-                                                  :order => 'sequence desc')
-          if previous_slug
-            return previous_slug.sequence + 1
-          else
-            return 1
-          end
+                                                  :conditions => [condition_string] + params)
+
+          return previous_slug.sequence if previous_slug
         end
-        previous_slug = Slug.find_in_generation(PREVIOUS_GENERATION,
+        # If it didn't have the same slug and scope, return an integer one bigger than the
+        # maximum sequence that used to exist for the slug and scope, or 1 if this slug and
+        # scope didn't exist in the previous generation
+        condition_string = "name = ? and sluggable_type = ?"
+        params = [self.slug.name, self.class.to_s]
+        if self.slug.scope
+          condition_string += " and scope = ?"
+          params << self.slug.scope
+        end
+        max_previous_slug = Slug.find_in_generation(PREVIOUS_GENERATION,
                                                 :first,
-                                                :conditions => ['sluggable_id = ? and sluggable_type = ?',
-                                                previous_id, self.class.to_s])
-        return previous_slug.sequence
+                                                :conditions => [condition_string] + params,
+                                                :order => 'sequence desc')
+        if max_previous_slug
+          return max_previous_slug.sequence + 1
+        else
+          return 1
+        end
       end
 
+      def previous
+        if self.generation_low <= PREVIOUS_GENERATION
+          return self
+        end
+        if self.previous_id
+          return self.class.find_in_generation(PREVIOUS_GENERATION, previous_id)
+        end
+        return nil
+      end
 
     end
   end

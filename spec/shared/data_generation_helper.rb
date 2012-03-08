@@ -61,49 +61,65 @@ module SharedBehaviours
     
     shared_examples_for "a model that is exists in data generations and has slugs" do
       
-
-      
       describe 'when reordering slugs' do 
         
         it 'should order slugs that are identical but in a different sequence from in the previous generation' do
-          pending do 
             # create slugs in previous generation
-            @first_old_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
-            @second_old_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
-            @third_old_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
+            @first_old_instance = create_model(generation_low=PREVIOUS_GENERATION, 
+                                              generation_high=PREVIOUS_GENERATION, 
+                                              @model_type, 
+                                              @default_attrs)
+            @second_old_instance = create_model(generation_low=PREVIOUS_GENERATION, 
+                                                generation_high=PREVIOUS_GENERATION, 
+                                                @model_type, 
+                                                @default_attrs)
+            @third_old_instance = create_model(generation_low=PREVIOUS_GENERATION,
+                                               generation_high=PREVIOUS_GENERATION, 
+                                               @model_type, 
+                                               @default_attrs)
             [@first_old_instance, @second_old_instance, @third_old_instance].each do |instance|
               slug = instance.slug
               Slug.connection.execute("UPDATE slugs set generation_low = #{PREVIOUS_GENERATION}, generation_high = #{PREVIOUS_GENERATION}
                                        WHERE id = #{slug.id}")
+              slug = Slug.find_in_generation(PREVIOUS_GENERATION, slug.id)
             end
-          
-            @second_new_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
+
+            @second_new_instance = create_model(generation_low=CURRENT_GENERATION, 
+                                                generation_high=CURRENT_GENERATION, 
+                                                @model_type, 
+                                                @default_attrs)
             @second_new_instance.previous_id = @second_old_instance.id
             @second_new_instance.save
             @second_new_instance.slug.sequence.should == 1
           
-            @first_new_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
+            @first_new_instance = create_model(generation_low=CURRENT_GENERATION, 
+                                               generation_high=CURRENT_GENERATION, 
+                                               @model_type, 
+                                               @default_attrs)
             @first_new_instance.previous_id = @first_old_instance.id
             @first_new_instance.save
             @first_new_instance.slug.sequence.should == 2
           
-            @third_new_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
+            @third_new_instance = create_model(generation_low=CURRENT_GENERATION, 
+                                               generation_high=CURRENT_GENERATION, 
+                                               @model_type, 
+                                               @default_attrs)
             @third_new_instance.previous_id = @third_old_instance.id
             @third_new_instance.save
             @third_new_instance.slug.sequence.should == 3
           
-            @model_type.normalize_slug_sequences
+            @model_type.normalize_slug_sequences(CURRENT_GENERATION)
           
             @model_type.find(@second_new_instance.id).slug.sequence.should == 2
             @model_type.find(@first_new_instance.id).slug.sequence.should == 1
             @model_type.find(@third_new_instance.id).slug.sequence.should == 3
-
-          end
         end
         
         after do 
           [@first_old_instance, @second_old_instance, @third_old_instance,
            @first_new_instance, @second_new_instance, @third_new_instance].each do |instance|
+            instance.slug.destroy
+            instance.slug=nil
             instance.destroy
           end
         end
