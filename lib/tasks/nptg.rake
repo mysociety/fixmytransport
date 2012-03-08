@@ -43,11 +43,6 @@ namespace :nptg do
       parse('locality_hierarchy', Parsers::NptgParser)
     end
 
-    desc "Loads locality alternative name data from a CSV file specified as FILE=filename"
-    task :locality_alternative_names => :environment do
-      parse('locality_alternative_names', Parsers::NptgParser)
-    end
-
     desc "Updates districts with the admin areas given in the locality data"
     task :add_district_admin_areas => :environment do
       District.find_each(:conditions => ['admin_area_id is null']) do |district|

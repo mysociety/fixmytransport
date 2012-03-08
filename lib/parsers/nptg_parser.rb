@@ -102,17 +102,4 @@ class Parsers::NptgParser
     end
   end
 
-  def parse_locality_alternative_names filepath
-    csv_data = convert_encoding(filepath)
-    FasterCSV.parse(csv_data, csv_options) do |row|
-      locality = Locality.find_by_code((row['NptgLocalityCode'] or row['Primary ID']))
-      alternative_locality = Locality.find_by_code(row['Alternate ID'])
-      yield AlternativeName.new(:alternative_locality    => alternative_locality,
-                                :locality                => locality,
-                                :creation_datetime       => (row['CreationDateTime'] or row['Date of Issue']),
-                                :modification_datetime   => (row['ModificationDateTime'] or row['Date of Last Change']),
-                                :revision_number         => (row['RevisionNumber'] or row['Issue Version']) ,
-                                :modification            => row['Modification'])
-    end
-  end
 end
