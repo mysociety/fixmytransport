@@ -39,7 +39,14 @@ class Parsers::NaptanParser
     FasterCSV.parse(csv_data, csv_options) do |row|
       ancestor = StopArea.find_by_code((row['ParentStopAreaCode'] or row['ParentID']))
       descendant = StopArea.find_by_code((row['ChildStopAreaCode'] or row['ChildID']))
-      yield StopAreaLink.build_edge(ancestor, descendant)
+      if existing_link = StopAreaLink.find_link(ancestor, descendant)
+        if ! StopAreaLink.direct?(ancestor, descendant)
+          existing_link.make_direct()
+          yield existing_link
+        end
+      else
+        yield StopAreaLink.build_edge(ancestor, descendant)
+      end
     end
   end
 
