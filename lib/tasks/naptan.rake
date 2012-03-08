@@ -57,8 +57,10 @@ namespace :naptan do
       ENV['FILE'] = File.join(ENV['DIR'], 'GroupsInGroup.csv')
       Rake::Task['naptan:load:stop_area_hierarchy'].execute
     end
+  end
 
   namespace :post_load do
+  
     desc "Deletes stop areas with no stops"
     task :delete_unpopulated_stop_areas => :environment do
       count = 0
