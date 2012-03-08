@@ -100,7 +100,7 @@ set it to #{expected_generation})"
 
   # Convert a list of fields to an attribute hash with values coming from an
   # instance of a model. Basic handling of association fields so that a field
-  # "[association]_id" will have a value in the hash generated from instance.association.id 
+  # "[association]_id" will have a value in the hash generated from instance.association.id
   # if instance.associationis not nil, and nil otherwise
   def fields_to_attribute_hash(fields, instance)
     fields = fields.collect do |field|
@@ -152,7 +152,6 @@ set it to #{expected_generation})"
     diffs = {}
     parse_for_update(table_name, parser) do |instance|
 
-
       # do any model-specific instance level things
       if block_given?
         yield instance
@@ -182,6 +181,12 @@ set it to #{expected_generation})"
         counts[:updated_existing_record] += 1
         if ! dryrun
           existing.save!
+        else
+          if ! existing.valid?
+            puts "ERROR: Existing instance is invalid:"
+            puts existing.errors.full_messages.join("\n")
+            exit(1)
+          end
         end
       else
         # Can we find this record at all in the previous generation?
@@ -193,7 +198,7 @@ set it to #{expected_generation})"
           diff_hash.each do |key, value|
             if diffs[key].nil?
               diffs[key] = 1
-            else 
+            else
               diffs[key] +=1
             end
           end
@@ -207,6 +212,12 @@ set it to #{expected_generation})"
         end
         if ! dryrun
           instance.save!
+        else
+          if ! instance.valid?
+            puts "ERROR: New instance is invalid:"
+            puts instance.errors.full_messages.join("\n")
+            exit(1)
+          end
         end
       end
     end
@@ -214,9 +225,11 @@ set it to #{expected_generation})"
     puts "Updated #{table_name} (using existing record): #{counts[:updated_existing_record]}"
     puts "Updated #{table_name} (new record): #{counts[:updated_new_record]}"
     puts "Deleted #{table_name}: #{counts[:deleted]}"
-    puts "New records were created for existing objects due to differences in the following fields:"
-    diffs.each do |key, value|
-      puts "#{key}: #{value} times"
+    if ! diffs.empty?
+      puts "New records were created for existing objects due to differences in the following fields:"
+      diffs.each do |key, value|
+        puts "#{key}: #{value} times"
+      end
     end
   end
 
