@@ -22,7 +22,7 @@ describe Parsers::NocParser do
   
   end
   
-  describe 'when parsing an example CSV file of operator data' do 
+  describe 'when parsing an example CSV file of operator data for operator codes' do 
     
     before(:each) do 
       @parser = Parsers::NocParser.new
@@ -30,6 +30,51 @@ describe Parsers::NocParser do
       mock_em_region = mock_model(Region, :name => 'East Midlands')
       Region.stub!(:find_by_code).and_return(mock_em_region)
       Region.stub!(:find_by_code).with('WM').and_return(mock_wm_region)
+      @operator = mock_model(Operator)
+      Operator.stub!(:find_by_noc_code).and_return(@operator)
+      @operator_codes = []
+      @parser.parse_operator_codes(example_file("operators.tsv")) do |operator_code| 
+        @operator_codes << operator_code 
+      end
+    end
+    
+    it 'should create operator_code models for each populated region code field' do 
+      @operator_codes.first.region.name.should == 'West Midlands'
+      @operator_codes.first.code.should == 'AMG'
+      @operator_codes.first.operator.should == @operator
+    end
+    
+    it 'should create an operator_code model for the MDV field, if populated, for each of the MDV regions' do 
+      @operator_codes.second.region.name.should == 'East Midlands'
+      @operator_codes.second.code.should == 'AMF'
+      @operator_codes.second.operator.should == @operator
+    end
+    
+  end
+  
+  describe 'when parsing an example CSV file of operator data for vosa licenses' do 
+  
+    before(:each) do 
+      @parser = Parsers::NocParser.new
+      @operator = mock_model(Operator)
+      Operator.stub!(:find_by_noc_code).and_return(@operator)
+      @vosa_licenses = []
+      @parser.parse_vosa_licenses(example_file("operators.tsv")) do |vosa_license| 
+        @vosa_licenses << vosa_license 
+      end
+    end
+    
+    it 'should create vosa_license models for each populated VOSA license field' do
+      @vosa_licenses.size.should == 1 
+      @vosa_licenses.first.number.should == 'PD0001892'
+    end
+    
+  end
+  
+  describe 'when parsing an example CSV file of operator data for operators' do 
+    
+    before(:each) do 
+      @parser = Parsers::NocParser.new
       @mock_transport_mode = mock_model(TransportMode, :name => 'Train')
       Operator.stub!(:vehicle_mode_to_transport_mode).and_return(@mock_transport_mode)
       @operators = []
@@ -68,22 +113,6 @@ describe Parsers::NocParser do
       @operators.first.transport_mode.name.should == 'Train'
     end
     
-    it 'should create vosa_license models for each populated VOSA license field' do
-      @operators.first.vosa_licenses.size.should == 1 
-      @operators.first.vosa_licenses.first.number.should == 'PD0001892'
-    end
-    
-    it 'should create operator_code models for each populated region code field' do 
-      @operators.first.operator_codes.first.region.name.should == 'West Midlands'
-      @operators.first.operator_codes.first.code.should == 'AMG'
-    end
-    
-    it 'should create an operator_code model for the MDV field, if populated, for each of the MDV regions' do 
-      @operators.first.operator_codes.second.region.name.should == 'East Midlands'
-      @operators.first.operator_codes.second.code.should == 'AMF'
-    end
-    
-     
   end
 
 end

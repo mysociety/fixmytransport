@@ -19,9 +19,11 @@ namespace :db do
     ENV['DIR'] = MySociety::Config.get('NAPTAN_DIR', '')
     Rake::Task['naptan:load:all'].execute
 
-    # Load Operators, assign operators to stations
+    # Load operators, operator codes, vosa licenses
     ENV['FILE'] = File.join(MySociety::Config.get('NOC_DIR', ''), 'NOC_DB_18-02-2011.csv')
     Rake::Task['noc:load:operators'].execute
+    Rake::Task['noc:load:operator_codes'].execute
+    Rake::Task['noc:load:vosa_licenses'].execute
     
     # Needs council contacts file to be specified
     # Rake::Task['council:load:contacts'].execute

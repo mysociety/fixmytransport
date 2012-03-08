@@ -11,6 +11,9 @@ namespace :temp do
     Stop.connection.execute("update stops set generation_low = 1, generation_high = 1")
     StopArea.connection.execute("update stop_areas set generation_low = 1, generation_high = 1")
     StopAreaMembership.connection.execute("update stop_area_memberships set generation_low = 1, generation_high = 1")
+    Operator.connection.execute("update operators set generation_low = 1, generation_high = 1")
+    OperatorCode.connection.execute("update operator_codes set generation_low = 1, generation_high = 1")
+    VosaLicense.connection.execute("update vosa_licenses set generation_low = 1, generation_high = 1")
   end
   
   

@@ -19,12 +19,20 @@
 a_train_company:
   code: TRAIN
   name: A train company
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 another_train_company:
   code: TRAIN2
   name: Another train company
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 a_bus_company:
   code: BUS
   name: A bus company
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 another_bus_company: 
   code: BUS
   name: Another bus company
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>

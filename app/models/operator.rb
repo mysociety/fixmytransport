@@ -15,7 +15,12 @@
 #
 
 class Operator < ActiveRecord::Base
-  
+
+  # This model is part of the transport data that is versioned by data generations.
+  # This means they have a default scope of models valid in the current data generation.
+  # See lib/fixmytransport/data_generations
+  exists_in_data_generation
+
   has_many :route_operators, :dependent => :destroy
   has_many :routes, :through => :route_operators, :uniq => true, :order => 'routes.number asc'
   has_many :vosa_licenses
@@ -217,12 +222,12 @@ class Operator < ActiveRecord::Base
   def self.all_by_letter
     MySociety::Util.by_letter(Operator.find(:all), :upcase){|o| o.name }
   end
-  
+
   def self.all_letters
     all_by_letter.keys.sort
   end
-  
+
   # slightly ugly syntax for class methods
   class << self; extend ActiveSupport::Memoizable; self; end.memoize :all_by_letter, :all_letters
-    
+
 end
