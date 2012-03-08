@@ -49,7 +49,7 @@ namespace :db do
     Rake::Task['nptdr:post_load:merge_identical_routes_by_operator_and_description']
     Rake::Task['nptdr:post_load:merge_national_routes']
 
-    # Delete stop areas without stops, other references, double-metaphone
+    # Add other references, double-metaphone
     Rake::Task['naptan:post_load:add_stops_codes'].execute
     Rake::Task['naptan:post_load:mark_metro_stops'].execute
     Rake::Task['naptan:post_load:add_station_metaphones'].execute
