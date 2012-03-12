@@ -42,7 +42,7 @@
 class Stop < ActiveRecord::Base
   extend ActiveSupport::Memoizable
   include FixMyTransport::Locations
-  
+
   # This model is part of the transport data that is versioned by data generations.
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
@@ -70,6 +70,8 @@ class Stop < ActiveRecord::Base
   has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality
   has_paper_trail
   before_save :cache_description
+  # set attributes to include and exclude when performing model diffs
+  diff :include => [:locality_id]
 
   # instance methods
 

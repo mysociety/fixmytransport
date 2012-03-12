@@ -196,10 +196,12 @@ set it to #{expected_generation})"
           puts "New record in this generation for existing instance #{reference_string(model_type, existing, change_in_place_fields)}" if verbose
           diff_hash = existing.diff(instance)
           diff_hash.each do |key, value|
-            if diffs[key].nil?
-              diffs[key] = 1
-            else
-              diffs[key] +=1
+            if new_record_fields.include?(key)
+              if diffs[key].nil?
+                diffs[key] = 1
+              else
+                diffs[key] +=1
+              end
             end
           end
           puts diff_hash.inspect if verbose
