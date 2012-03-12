@@ -64,11 +64,24 @@ describe StopArea do
 
   end
 
-  describe 'when loaded' do
+  describe 'when setting metaphones' do
 
     before do
-      @stop_area = StopArea.new(@valid_attributes)
-      @stop_area.loaded = true
+      @stop_area = StopArea.new(:name => 'Paignton Rail Station')
+    end
+
+    it 'should set metaphone fields for an atomic stop area type (e.g. a station)' do
+      @stop_area.area_type = 'GRLS'
+      @stop_area.set_metaphones
+      @stop_area.primary_metaphone.should == 'PNTN'
+      @stop_area.secondary_metaphone.should == 'PKNT'
+    end
+
+    it 'should not set metaphone fields for a non-atomic stop area type (e.g. a pair of bus stops)' do
+      @stop_area.area_type = 'GPBS'
+      @stop_area.set_metaphones
+      @stop_area.primary_metaphone.should == nil
+      @stop_area.secondary_metaphone.should == nil
     end
 
   end
@@ -76,7 +89,7 @@ describe StopArea do
   describe ' area ' do
 
     fixtures default_fixtures
-    
+
     describe 'for stop areas whose stops all share a locality' do
 
       it 'should return the locality_name' do

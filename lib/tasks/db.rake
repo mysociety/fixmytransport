@@ -51,11 +51,9 @@ namespace :db do
     Rake::Task['nptdr:post_load:merge_identical_routes_by_operator_and_description']
     Rake::Task['nptdr:post_load:merge_national_routes']
 
-    # Add other references, double-metaphone
+    # Add other references
     Rake::Task['naptan:post_load:add_stops_codes'].execute
     Rake::Task['naptan:post_load:mark_metro_stops'].execute
-    Rake::Task['naptan:post_load:add_station_metaphones'].execute
-    Rake::Task['naptan:post_load:add_locality_metaphones'].execute
     # Needs station operators file to be specified
     # Rake::Task['noc:load:station_operators'].execute
     

@@ -51,7 +51,7 @@ class StopArea < ActiveRecord::Base
   validates_inclusion_of :status, :in => self.statuses.keys
 
   has_paper_trail
-  before_save :cache_description
+  before_save :cache_description, :set_metaphones
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
   is_location
@@ -125,6 +125,14 @@ class StopArea < ActiveRecord::Base
       end
     end
     return nil
+  end
+  
+  # Set metaphones used to find atomic types in the case of mis-spelt searches
+  def set_metaphones
+    if StopAreaType.atomic_types.include?(self.area_type) && (self.new_record? || self.name_changed?)
+      normalized_name = self.name.gsub(' & ', ' and ')
+      self.primary_metaphone, self.secondary_metaphone = Text::Metaphone.double_metaphone(normalized_name)
+    end
   end
 
   def self.find_in_bounding_box(coords, options={})

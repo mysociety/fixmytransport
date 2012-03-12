@@ -38,7 +38,7 @@ class Locality < ActiveRecord::Base
   has_many :route_localities
   has_many :routes, :through => :route_localities
   has_friendly_id :name_and_qualifier_name, :use_slug => true
-  
+  before_save :set_metaphones
   # instance methods
   
   def name_and_qualifier_name
@@ -56,16 +56,24 @@ class Locality < ActiveRecord::Base
     end
     text
   end
-  
+
   def full_name
     name_and_qualifier_name_with_comma
   end
   
+  # Set metaphones used to find localities in the case of mis-spelt searches
+  def set_metaphones
+    if self.new_record? || self.name_changed? 
+      normalized_name = self.name.gsub(' & ', ' and ')
+      self.primary_metaphone, self.secondary_metaphone = Text::Metaphone.double_metaphone(normalized_name)
+    end
+  end
+
   # class methods
-  
+
   def self.find_by_name_or_id(query, limit=nil)
     query_clauses = []
-    query_clause = "(LOWER(name) LIKE ? 
+    query_clause = "(LOWER(name) LIKE ?
                     OR LOWER(name) LIKE ?"
     query_params = [ "#{query}%", "%#{query}%" ]
     # numeric?
@@ -76,11 +84,11 @@ class Locality < ActiveRecord::Base
     query_clause += ")"
     query_clauses << query_clause
     conditions = [query_clauses.join(" AND ")] + query_params
-    find(:all, 
-         :conditions => conditions, 
+    find(:all,
+         :conditions => conditions,
          :limit => limit)
   end
-  
+
   def self.find_all_by_full_name(name)
     name, qualifier_name = self.get_name_and_qualifier(name)
     results = self._find_all_by_name_and_qualifier(name, qualifier_name)
@@ -97,7 +105,7 @@ class Locality < ActiveRecord::Base
     end
     return results
   end
-  
+
   def self._find_all_by_name_and_qualifier(name, qualifier_name)
     query_clause = "LOWER(localities.name) = ?"
     query_params = [ name ]
@@ -108,11 +116,11 @@ class Locality < ActiveRecord::Base
                          OR LOWER(admin_areas.name) = ?)"
       3.times{ query_params << qualifier_name }
     end
-    
+
     return find(:all, :conditions => [query_clause] + query_params,
                 :include => includes, :order => "localities.name asc")
   end
-  
+
   def self.get_name_and_qualifier(name)
     name = name.downcase
      name_parts = name.split(',', 2)
@@ -124,7 +132,7 @@ class Locality < ActiveRecord::Base
      end
      [name, qualifier_name]
   end
-  
+
   def self.find_areas_by_name(name, area_type)
     area_types = ['Locality', 'AdminArea', 'District', 'Region']
     areas = []
@@ -140,12 +148,12 @@ class Locality < ActiveRecord::Base
         areas.delete(area)
       end
     end
-    if areas.empty? 
+    if areas.empty?
       areas += self.find_by_double_metaphone(name)
     end
     areas
   end
-  
+
   def self.find_by_double_metaphone(name)
     name, qualifier_name = self.get_name_and_qualifier(name)
     primary_metaphone, secondary_metaphone = Text::Metaphone.double_metaphone(name)
@@ -159,19 +167,19 @@ class Locality < ActiveRecord::Base
     else
       localities = [area]
     end
-    descendents = find_by_sql(["SELECT localities.* 
+    descendents = find_by_sql(["SELECT localities.*
                                FROM localities INNER JOIN locality_links
-                               ON localities.id = locality_links.descendant_id 
+                               ON localities.id = locality_links.descendant_id
                                WHERE ((locality_links.ancestor_id in (?)))", localities])
     with_descendants = localities + descendents
   end
-  
+
   def self.find_by_coordinates(easting, northing, distance=1000)
     distance_clause = "ST_Distance(
-                       ST_GeomFromText('POINT(#{easting} #{northing})', #{BRITISH_NATIONAL_GRID}), 
+                       ST_GeomFromText('POINT(#{easting} #{northing})', #{BRITISH_NATIONAL_GRID}),
                        localities.coords)"
-    localities = find(:all, :conditions => ["#{distance_clause} < ?", distance], 
+    localities = find(:all, :conditions => ["#{distance_clause} < ?", distance],
                       :order => "#{distance_clause} asc")
   end
-  
+
 end

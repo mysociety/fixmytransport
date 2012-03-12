@@ -51,6 +51,17 @@ describe Locality do
     Locality.create!(@valid_attributes)
   end
 
+  describe 'when setting metaphones' do
+
+    it 'should set appropriate metaphones for an example name' do
+      locality = Locality.new(:name => 'Crowthorne')
+      locality.set_metaphones
+      locality.primary_metaphone.should == 'KR0R'
+      locality.secondary_metaphone.should == 'KRTR'
+    end
+
+  end
+
   describe 'when finding by full name' do
 
     it 'should query for the name ignoring case' do

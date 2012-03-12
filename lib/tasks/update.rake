@@ -72,10 +72,6 @@ namespace :update do
     # Some post-load cleanup on NaPTAN data - add locality to stop areas, and any stops missing locality
     Rake::Task['naptan:post_load:add_locality_to_stops'].execute
     Rake::Task['naptan:post_load:add_locality_to_stop_areas'].execute
-
-    # Add metaphones
-    Rake::Task['naptan:post_load:add_station_metaphones'].execute
-    Rake::Task['naptan:post_load:add_locality_metaphones'].execute
     
     # LOAD NOC DATA
     Rake::Task['noc:update:operators'].execute
