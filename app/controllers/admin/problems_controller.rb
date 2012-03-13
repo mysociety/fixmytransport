@@ -55,7 +55,9 @@ class Admin::ProblemsController < Admin::AdminController
         params[:problem][:responsibilities_attributes].delete(key)
       end
     end
-    @problem.status_code = params[:problem][:status_code]
+    if !params[:problem][:status_code].nil?
+      @problem.status_code = params[:problem][:status_code]
+    end
     success = false
     ActiveRecord::Base.transaction do
       success = (@problem.update_attributes(params[:problem]) && @problem.update_assignments)
