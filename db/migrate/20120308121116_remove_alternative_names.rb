@@ -5,12 +5,8 @@ class RemoveAlternativeNames < ActiveRecord::Migration
 
   def self.down
     create_table :alternative_names do |t|
-      t.text :name
+      t.integer :alternative_locality_id
       t.integer :locality_id
-      t.text :short_name
-      t.text :qualifier_name
-      t.text :qualifier_locality
-      t.text :qualifier_district
       t.datetime :creation_datetime
       t.datetime :modification_datetime
       t.string :revision_number
