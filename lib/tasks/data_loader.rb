@@ -134,11 +134,12 @@ set it to #{expected_generation})"
   # e.g names, other fields used in slugs - we don't want any changes made to these fields to
   # leak into the previous generation
   # :update_fields - fields that should be updated if changed, but don't require a new record
-  def load_instances_in_generation(model_type, parser, field_hash, &block)
+  def load_instances_in_generation(model_type, parser, &block)
     verbose = check_verbose()
     dryrun = check_dryrun()
     generation = ENV['GENERATION']
     previous_generation = get_previous_generation()
+    field_hash = model_type.data_generation_options_hash
     identity_fields = field_hash[:identity_fields]
     new_record_fields = field_hash[:new_record_fields]
     update_fields = field_hash[:update_fields]

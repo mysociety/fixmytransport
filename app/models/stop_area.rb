@@ -28,11 +28,20 @@
 class StopArea < ActiveRecord::Base
   extend ActiveSupport::Memoizable
   include FixMyTransport::Locations
-  
+  include FixMyTransport::StopsAndStopAreas
+
   # This model is part of the transport data that is versioned by data generations.
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
-  exists_in_data_generation
+  exists_in_data_generation( :identity_fields => [:code],
+                             :new_record_fields => [:name, :area_type, :easting, :northing, :lon, :lat, :status],
+                             :update_fields => [:grid_type, :administrative_area_code, :creation_datetime,
+                                                :modification_datetime, :modification, :revision_number],
+                             :deletion_field => :modification,
+                             :deletion_value => 'del',
+                             :auto_update_fields => [:generation_low, :generation_high,
+                                                     :cached_description, :cached_slug,
+                                                     :primary_metaphone, :secondary_metaphone])
   has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships
   has_dag_links :link_class_name => 'StopAreaLink'
@@ -49,13 +58,15 @@ class StopArea < ActiveRecord::Base
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   accepts_nested_attributes_for :stop_area_operators, :allow_destroy => true, :reject_if => :stop_area_operator_invalid
   validates_inclusion_of :status, :in => self.statuses.keys
+  # set attributes to include and exclude when performing model diffs
+  diff :include => [:locality_id]
 
-  has_paper_trail
+  has_paper_trail :meta => { :replayable  => Proc.new { |stop_area| stop_area.replayable } }
   before_save :cache_description, :set_metaphones
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
   is_location
-  
+
   def stop_area_operator_invalid(attributes)
     (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['operator_id'].blank?
   end
@@ -114,9 +125,10 @@ class StopArea < ActiveRecord::Base
     end
     return nil
   end
+
   memoize :area
 
-  # Is this 'station' stop area really part of a bigger station? 
+  # Is this 'station' stop area really part of a bigger station?
   def station_root
     return nil unless StopAreaType.primary_types.include?(self.area_type)
     ancestors.each do |ancestor|
@@ -126,7 +138,7 @@ class StopArea < ActiveRecord::Base
     end
     return nil
   end
-  
+
   # Set metaphones used to find atomic types in the case of mis-spelt searches
   def set_metaphones
     if StopAreaType.atomic_types.include?(self.area_type) && (self.new_record? || self.name_changed?)
@@ -178,7 +190,7 @@ class StopArea < ActiveRecord::Base
     query_params = []
     if ! query.blank?
       query = query.downcase
-      query_clause = "(LOWER(name) LIKE ? 
+      query_clause = "(LOWER(name) LIKE ?
                       OR LOWER(name) LIKE ?
                       OR LOWER(code) LIKE ?
                       OR LOWER(code) LIKE ?"
@@ -234,5 +246,5 @@ class StopArea < ActiveRecord::Base
       raise "invalid (lon, lat): (#{lon}, #{lat})"
     end
   end
-  
+
 end

@@ -19,7 +19,15 @@ class Operator < ActiveRecord::Base
   # This model is part of the transport data that is versioned by data generations.
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
-  exists_in_data_generation
+  exists_in_data_generation( :identity_fields => [:noc_code],
+                             :new_record_fields => [:name, :transport_mode_id],
+                             :update_fields => [:vosa_license_name,
+                                                :parent,
+                                                :ultimate_parent,
+                                                :vehicle_mode],
+                             :temporary_identity_fields => [:id],
+                             :auto_update_fields => [:generation_low, :generation_high,
+                                                     :cached_slug])
 
   has_many :route_operators, :dependent => :destroy
   has_many :routes, :through => :route_operators, :uniq => true, :order => 'routes.number asc'
@@ -32,7 +40,7 @@ class Operator < ActiveRecord::Base
   has_many :operator_contacts, :conditions => ['deleted = ?', false]
   has_many :responsibilities, :as => :organization
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
-  has_paper_trail
+  has_paper_trail :meta => { :replayable  => Proc.new { |operator| operator.replayable } }
   cattr_reader :per_page
   @@per_page = 20
   named_scope :with_email, :conditions => ["email is not null and email != ''"]

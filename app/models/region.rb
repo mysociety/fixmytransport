@@ -23,7 +23,14 @@ class Region < ActiveRecord::Base
   # This model is part of the transport data that is versioned by data generations.
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
-  exists_in_data_generation
+  exists_in_data_generation( :identity_fields => [:code],
+                             :new_record_fields => [:name],
+                             :update_fields => [:creation_datetime,
+                                                :modification_datetime,
+                                                :revision_number,
+                                                :modification],
+                             :deletion_field => :modification,
+                             :deletion_value => 'del' )
   has_many :admin_areas
   has_many :localities, :through => :admin_areas
   has_many :routes
@@ -32,8 +39,6 @@ class Region < ActiveRecord::Base
   has_many :coach_routes, :order => 'number asc'
   has_many :tram_metro_routes
   has_many :ferry_routes
-  # set attributes to include and exclude when performing model diffs
-  diff :exclude => [:created_at, :updated_at, :generation_low, :generation_high, :cached_slug]
 
   # instance methods
   def full_name

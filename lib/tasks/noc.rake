@@ -59,36 +59,21 @@ namespace :noc do
           as GENERATION=generation. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
           set by VERBOSE=1"
     task :operators => :environment do
-
-       field_hash = { :identity_fields => [:noc_code],
-                      :new_record_fields => [:name, :transport_mode_id],
-                      :update_fields => [:vosa_license_name,
-                                         :parent,
-                                         :ultimate_parent,
-                                         :vehicle_mode] }
-       load_instances_in_generation(Operator, Parsers::NocParser, field_hash)
+       load_instances_in_generation(Operator, Parsers::NocParser)
     end
 
     desc "Updates operator codes from a TSV file specified as FILE=filename to generation id specified
           as GENERATION=generation. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
           set by VERBOSE=1"
     task :operator_codes => :environment do
-
-      field_hash = { :identity_fields => [:region_id, :operator_id, :code],
-                     :new_record_fields => [],
-                     :update_fields => [] }
-      load_instances_in_generation(OperatorCode, Parsers::NocParser, field_hash)
+      load_instances_in_generation(OperatorCode, Parsers::NocParser)
     end
 
     desc "Updates vosa licenses from a TSV file specified as FILE=filename to generation id specified
           as GENERATION=generation. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
           set by VERBOSE=1"
     task :vosa_licenses => :environment do
-
-      field_hash = { :identity_fields => [:operator_id, :number],
-                     :new_record_fields => [],
-                     :update_fields => [] }
-      load_instances_in_generation(VosaLicense, Parsers::NocParser, field_hash)
+      load_instances_in_generation(VosaLicense, Parsers::NocParser)
     end
 
   end

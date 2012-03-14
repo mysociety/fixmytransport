@@ -42,11 +42,27 @@
 class Stop < ActiveRecord::Base
   extend ActiveSupport::Memoizable
   include FixMyTransport::Locations
+  include FixMyTransport::StopsAndStopAreas
 
   # This model is part of the transport data that is versioned by data generations.
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
-  exists_in_data_generation
+  exists_in_data_generation( :identity_fields => [:atco_code],
+                             :new_record_fields => [:common_name, :naptan_code, :plate_code,
+                                                    :landmark, :street, :crossing, :indicator,
+                                                    :bearing, :locality_id, :easting, :northing,
+                                                    :lon, :lat, :stop_type, :bus_stop_type,
+                                                    :easting, :northing, :status],
+                             :update_fields => [:short_common_name,
+                                                :town, :suburb, :locality_centre, :grid_type,
+                                                :administrative_area_code, :creation_datetime,
+                                                :modification_datetime, :modification, :revision_number],
+                             :deletion_field => :modification,
+                             :deletion_value => 'del',
+                             :temporary_identity_fields => [:other_code],
+                             :temp_to_perm => { :other_code => :atco_code },
+                             :auto_update_fields => [:generation_low, :generation_high,
+                                                     :cached_description, :cached_slug] )
   has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
   validates_presence_of :common_name
@@ -68,7 +84,7 @@ class Stop < ActiveRecord::Base
   is_stop_or_stop_area
   is_location
   has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality
-  has_paper_trail
+  has_paper_trail :meta => { :replayable  => Proc.new { |stop| stop.replayable } }
   before_save :cache_description
   # set attributes to include and exclude when performing model diffs
   diff :include => [:locality_id]

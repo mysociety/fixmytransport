@@ -11,12 +11,12 @@ module FixMyTransport
       
       def is_stop_or_stop_area()
         send :include, InstanceMethods
+        memoize :councils
       end
       
     end
 
     module InstanceMethods
-      extend ActiveSupport::Memoizable
       
       def responsible_organizations
         responsible = []
@@ -61,7 +61,6 @@ module FixMyTransport
         # Make them objects
         councils = council_data.values.map{ |council_info| Council.from_hash(council_info) }
       end
-      memoize :councils
 
       # is the location covered by a Public Transport Executive? 
       def passenger_transport_executive

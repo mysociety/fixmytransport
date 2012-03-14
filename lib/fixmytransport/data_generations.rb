@@ -9,7 +9,13 @@ module FixMyTransport
 
     module ClassMethods
 
-      def exists_in_data_generation()
+      def exists_in_data_generation(options={})
+        cattr_accessor :data_generation_options_hash
+        # Want this not to be inherited by instances
+        class << self
+          attr_accessor :replayable
+        end
+        self.data_generation_options_hash = options
         send :include, InstanceMethods
 
         self.class_eval do
@@ -90,6 +96,33 @@ module FixMyTransport
     end
 
     module InstanceMethods
+
+      def identity_hash
+        make_id_hash(self.class.data_generation_options_hash[:identity_fields])
+      end
+
+      def temporary_identity_hash
+        if !self.class.data_generation_options_hash[:temporary_identity_fields]
+          raise "No temporary identity fields have been defined for #{self.class.to_s}"
+        end
+        make_id_hash(self.class.data_generation_options_hash[:temporary_identity_fields])
+      end
+
+      def make_id_hash(field_list)
+        id_hash = {}
+        field_list.each do |identity_field|
+          id_hash[identity_field] = self.send(identity_field)
+        end
+        id_hash
+      end
+
+      def replayable
+        if (!self.class.replayable.nil?) && self.class.replayable == false
+          return false
+        else
+          return true
+        end
+      end
 
       # Get the sequence of the slug from the version of this model in the previous
       # data generation. If there was none, return one more than the highest sequence

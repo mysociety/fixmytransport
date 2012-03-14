@@ -44,9 +44,13 @@ describe Stop do
 
   before do
     @model_type = Stop
+    @valid_attributes = { :atco_code => 'a test atco_code',
+                          :other_code => 'a test other code' }
     @default_attrs = { :common_name => 'A test stop',
                        :status => 'ACT',
                        :stop_type => 'BCT' }
+    @expected_identity_hash = { :atco_code => 'a test atco_code' }
+    @expected_temporary_identity_hash = { :other_code => 'a test other code' }
   end
 
   it_should_behave_like "a model that exists in data generations"
@@ -215,6 +219,11 @@ describe Stop do
       council_types = ["DIS", "LBO", "MTD", "UTA", "LGD", "CTY", "COI"]
       MySociety::MaPit.should_receive(:call).with('point', '4326/200.2,100.1', :type => council_types)
       @stop.councils
+    end
+
+    it 'should memoize the value of the response' do
+      MySociety::VotingArea.should_receive(:va_council_parent_types).at_most(:once)
+      2.times { @stop.councils }
     end
 
     it 'should create an array of council models from the returned data' do

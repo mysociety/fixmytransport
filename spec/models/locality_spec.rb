@@ -41,6 +41,7 @@ describe Locality do
     }
     @model_type = Locality
     @default_attrs = { :name => 'A test locality' }
+    @expected_identity_hash = { :code => "value for code" }
   end
 
   it_should_behave_like "a model that exists in data generations"
@@ -48,7 +49,8 @@ describe Locality do
   it_should_behave_like "a model that exists in data generations and has slugs"
 
   it "should create a new instance given valid attributes" do
-    Locality.create!(@valid_attributes)
+    locality = Locality.new(@valid_attributes)
+    locality.valid?.should == true
   end
 
   describe 'when setting metaphones' do

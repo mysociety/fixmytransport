@@ -105,15 +105,7 @@ namespace :nptg do
           as GENERATION=generation. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
           set by VERBOSE=1"
     task :regions => :environment do
-      field_hash = { :identity_fields => [:code],
-                     :new_record_fields => [:name],
-                     :update_fields => [:creation_datetime,
-                                        :modification_datetime,
-                                        :revision_number,
-                                        :modification],
-                     :deletion_field => :modification,
-                     :deletion_value => 'del' }
-      load_instances_in_generation(Region, Parsers::NptgParser, field_hash)
+      load_instances_in_generation(Region, Parsers::NptgParser)
     end
 
     desc "Updates admin areas from a CSV file specified as FILE=filename to generation id specified
@@ -124,17 +116,7 @@ namespace :nptg do
                       'Sco' => 'Scotland',
                       'Gre' => 'Great Britain',
                       'Wal' => 'Wales' }
-      field_hash = { :identity_fields => [:atco_code, :code],
-                     :new_record_fields => [:name, :region_id, :country],
-                     :update_fields => [:short_name,
-                                        :national,
-                                        :creation_datetime,
-                                        :modification_datetime,
-                                        :modification,
-                                        :revision_number],
-                     :deletion_field => :modification,
-                     :deletion_value => 'del' }
-      load_instances_in_generation(AdminArea, Parsers::NptgParser, field_hash) do |admin_area|
+      load_instances_in_generation(AdminArea, Parsers::NptgParser) do |admin_area|
         admin_area.country = country_map[admin_area.country]
       end
     end
@@ -143,38 +125,14 @@ namespace :nptg do
           as GENERATION=generation. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
           set by VERBOSE=1"
     task :districts => :environment do
-      field_hash = { :identity_fields => [:code],
-                     :new_record_fields => [:name, :admin_area_id],
-                     :update_fields => [:creation_datetime,
-                                        :modification_datetime,
-                                        :modification,
-                                        :revision_number],
-                     :deletion_field => :modification,
-                     :deletion_value => 'del' }
-      load_instances_in_generation(District, Parsers::NptgParser, field_hash)
+      load_instances_in_generation(District, Parsers::NptgParser)
     end
 
     desc "Updates localities from a CSV file specified as FILE=filename to generation id specified
           as GENERATION=generation. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
           set by VERBOSE=1"
     task :localities => :environment do
-      field_hash = { :identity_fields => [:code],
-                     :new_record_fields => [:name,
-                                            :admin_area_id,
-                                            :district_id,
-                                            :qualifier_name,
-                                            :easting,
-                                            :northing],
-                     :update_fields => [:short_name,
-                                        :source_locality_type,
-                                        :grid_type,
-                                        :creation_datetime,
-                                        :modification_datetime,
-                                        :modification,
-                                        :revision_number],
-                     :deletion_field => :modification,
-                     :deletion_value => 'del' }
-      load_instances_in_generation(Locality, Parsers::NptgParser, field_hash)
+      load_instances_in_generation(Locality, Parsers::NptgParser)
     end
   end
 end

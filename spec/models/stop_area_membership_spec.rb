@@ -26,7 +26,12 @@ describe StopAreaMembership do
       :revision_number => 1,
       :modification => "value for modification"
     }
+    @default_attrs = {}
+    @expected_identity_hash = { :stop_id => 1, :stop_area_id => 1 }
+    @model_type = StopAreaMembership
   end
+
+  it_should_behave_like "a model that exists in data generations"
 
   it "should create a new instance given valid attributes" do
     membership = StopAreaMembership.new(@valid_attributes)

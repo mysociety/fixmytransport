@@ -18,7 +18,12 @@ class StopAreaMembership < ActiveRecord::Base
   # This model is part of the transport data that is versioned by data generations.
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
-  exists_in_data_generation
+  exists_in_data_generation( :identity_fields => [:stop_id, :stop_area_id],
+                             :new_record_fields => [],
+                             :update_fields => [:creation_datetime, :modification_datetime,
+                                                :modification, :revision_number],
+                             :deletion_field => :modification,
+                             :deletion_value => 'del' )
   belongs_to :stop_area
   belongs_to :stop
 end

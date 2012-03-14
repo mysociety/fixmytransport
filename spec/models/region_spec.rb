@@ -29,6 +29,7 @@ describe Region do
     }
     @model_type = Region
     @default_attrs = { :name => 'A test region' }
+    @expected_identity_hash = { :code => 'value for code' }
   end
 
   it_should_behave_like "a model that exists in data generations"
@@ -36,6 +37,7 @@ describe Region do
   it_should_behave_like "a model that exists in data generations and has slugs"
 
   it "should create a new instance given valid attributes" do
-    Region.create!(@valid_attributes)
+    region = Region.new(@valid_attributes)
+    region.valid?.should == true
   end
 end

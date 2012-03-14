@@ -37,6 +37,8 @@ describe AdminArea do
     }
     @model_type = AdminArea
     @default_attrs = {}
+    @expected_identity_hash = { :code => "value for code",
+                                :atco_code => 'value for atco_code' }
   end
 
   it "should create a new instance given valid attributes" do
