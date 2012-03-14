@@ -32,7 +32,7 @@ describe District do
     @default_attrs = {}
   end
 
-  it_should_behave_like "a model that is exists in data generations"
+  it_should_behave_like "a model that exists in data generations"
 
   it "should create a new instance given valid attributes" do
     District.create!(@valid_attributes)

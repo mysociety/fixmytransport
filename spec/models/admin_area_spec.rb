@@ -43,7 +43,7 @@ describe AdminArea do
     AdminArea.create!(@valid_attributes)
   end
 
-  it_should_behave_like "a model that is exists in data generations"
+  it_should_behave_like "a model that exists in data generations"
 
   describe 'find all by name' do
 
