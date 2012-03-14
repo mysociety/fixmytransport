@@ -16,10 +16,19 @@ module FixMyTransport
       return instance
     end
     
+    # convert national grid coords into lat/lons. Is not recorded as a replayable change
     def convert_coords(class_name, task_name, conditions = nil)
-      class_name.constantize.find_each(:conditions => conditions) do |instance|
+      model_class = class_name.constantize
+      if model_class.respond_to?(:replayable)
+        previous_replayable_value = model_class.replayable
+        model_class.replayable = false
+      end
+      model_class.find_each(:conditions => conditions) do |instance|
         instance = set_lon_lat(instance, class_name)
         instance.save!
+      end
+      if model_class.respond_to?(:replayable)
+        model_class.replayable = previous_replayable_value
       end
     end
 
