@@ -10,32 +10,32 @@ namespace :naptan do
 
     desc "Loads stop data from a CSV file specified as FILE=filename"
     task :stops => :environment do
-      parse('stops', Parsers::NaptanParser)
+      parse(Stop, Parsers::NaptanParser)
     end
 
     desc "Loads stop area data from a CSV file specified as FILE=filename"
     task :stop_areas => :environment do
-      parse('stop_areas', Parsers::NaptanParser)
+      parse(StopArea, Parsers::NaptanParser)
     end
 
     desc "Loads stop area membership data from a CSV file specified as FILE=filename"
     task :stop_area_memberships => :environment do
-      parse('stop_area_memberships', Parsers::NaptanParser)
+      parse(StopAreaMembership, Parsers::NaptanParser)
     end
 
     desc "Loads stop area hierarchy from a CSV file specified as FILE=filename"
     task :stop_area_hierarchy => :environment do
-      parse('stop_area_hierarchy', Parsers::NaptanParser)
+      parse(StopAreaHierarchy, Parsers::NaptanParser)
     end
 
     desc "Loads stop type data from a CSV file specified as FILE=filename"
     task :stop_types => :environment do
-      parse('stop_types', Parsers::NaptanParser)
+      parse(StopType, Parsers::NaptanParser)
     end
 
     desc "Loads stop area type data from a CSV file specified as FILE=filename"
     task :stop_area_types => :environment do
-      parse('stop_area_types', Parsers::NaptanParser)
+      parse(StopAreaType, Parsers::NaptanParser)
     end
 
     desc "Loads all data from CSV files in a directory specified as DIR=dirname"
@@ -144,7 +144,7 @@ namespace :naptan do
 
     desc 'Add TIPLOC and CRS codes to stops'
     task :add_stops_codes => :environment do
-      parse('rail_references', Parsers::NaptanParser)
+      parse(Stop, Parsers::NaptanParser, 'parse_rail_references')
     end
 
     desc 'Mark tram/metro stops - the BCT type is for bus, coach and metro and so metro searches always get swamped by bus stops'

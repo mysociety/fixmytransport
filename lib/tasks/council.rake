@@ -8,7 +8,7 @@ namespace :councils do
     
     desc "Loads council contacts from a CSV file specified as FILE=filename"
     task :contacts => :environment do 
-      parse('contacts', Parsers::FmsContactsParser)
+      parse(CouncilContact, Parsers::FmsContactsParser)
     end
    
   end

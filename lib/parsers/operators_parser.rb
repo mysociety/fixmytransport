@@ -7,7 +7,7 @@ class Parsers::OperatorsParser
   
   # Loads data from a file with tab-separated columns for CRS code, name, an unused field, and operator name
   # Loads name mappings from a file with tab-separated columns for alternative versions of names
-  def parse_station_operators(filepath, mapping_file="data/operators/operator_mappings.txt", stop_area_type='GRLS')
+  def parse_stop_area_operators(filepath, mapping_file="data/operators/operator_mappings.txt", stop_area_type='GRLS')
     operator_mappings = {}
     File.open(mapping_file).each_with_index do |line, index|
       next if index == 0

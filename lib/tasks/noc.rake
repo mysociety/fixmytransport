@@ -23,32 +23,32 @@ namespace :noc do
 
     desc "Loads operators from a CSV file specified as FILE=filename"
     task :operators => :environment do
-      parse('operators', Parsers::NocParser)
+      parse(Operator, Parsers::NocParser)
     end
 
     desc "Loads operator codes in different regions from a CSV file specified as FILE=filename"
     task :operator_codes => :environment do
-      parse('operator_codes', Parsers::NocParser)
+      parse(OperatorCode, Parsers::NocParser)
     end
 
     desc "Loads vosa licenses from a CSV file specified as FILE=filename"
     task :vosa_licenses => :environment do
-      parse('vosa_licenses', Parsers::NocParser)
+      parse(VosaLicense, Parsers::NocParser)
     end
 
     desc "Loads operator contact information from a CSV file specified as FILE=filename"
     task :operator_contacts => :environment do
-      parse('operator_contacts', Parsers::OperatorContactsParser)
+      parse(OperatorContact, Parsers::OperatorContactsParser)
     end
 
     desc "Loads stop area operator information from a CSV file specified as FILE=filename"
     task :station_operators => :environment do
-      parse('station_operators', Parsers::OperatorsParser)
+      parse(StopAreaOperator, Parsers::OperatorsParser)
     end
 
     desc 'Loads operator contact information from a Traveline format of CSV file specified as FILE=filename'
     task :traveline_operator_contacts => :environment do
-      parse('traveline_operator_contacts', Parsers::OperatorContactsParser)
+      parse(OperatorContact, Parsers::OperatorContactsParser, 'parse_traveline_operator_contacts')
     end
 
   end

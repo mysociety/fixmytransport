@@ -11,7 +11,7 @@ describe Parsers::FmsContactsParser do
     before(:all) do 
       @parser = Parsers::FmsContactsParser.new
       @contacts = []
-      @parser.parse_contacts(example_file("contacts.csv")){ |contact| @contacts << contact }
+      @parser.parse_council_contacts(example_file("contacts.csv")){ |contact| @contacts << contact }
     end
   
     it 'should extract the area id' do 

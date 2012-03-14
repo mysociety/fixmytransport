@@ -11,7 +11,7 @@ class Parsers::FmsContactsParser
       :encoding => 'N' }
   end
 
-  def parse_contacts filepath
+  def parse_council_contacts filepath
     csv_data = File.read(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
       next if row['deleted'] == 't'

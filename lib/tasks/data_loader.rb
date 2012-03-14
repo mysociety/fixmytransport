@@ -79,11 +79,21 @@ set it to #{expected_generation})"
     end
   end
 
-  def parse(model, parser_class, skip_invalid=true)
+  def parse(model_class, parser_class, parse_method_name=nil, skip_invalid=true)
     check_for_file
-    puts "Loading #{model} from #{ENV['FILE']}..."
+    table_name = model_class.to_s.tableize
+    puts "Loading #{table_name} from #{ENV['FILE']}..."
+
+    if model_class.respond_to?(:replayable)
+      previous_replayable_value = model_class.replayable
+      model_class.replayable = false
+    end
+
     parser = parser_class.new
-    parser.send("parse_#{model}".to_sym, ENV['FILE']) do |model|
+    if parse_method_name.nil?
+      parse_method_name = "parse_#{table_name}"
+    end
+    parser.send(parse_method_name.to_sym, ENV['FILE']) do |model|
       begin
         model.save!
       rescue ActiveRecord::RecordInvalid, FriendlyId::SlugGenerationError => validation_error
@@ -95,6 +105,10 @@ set it to #{expected_generation})"
           raise
         end
       end
+    end
+
+    if model_class.respond_to?(:replayable)
+      model_class.replayable = previous_replayable_value
     end
   end
 
@@ -134,6 +148,9 @@ set it to #{expected_generation})"
   # e.g names, other fields used in slugs - we don't want any changes made to these fields to
   # leak into the previous generation
   # :update_fields - fields that should be updated if changed, but don't require a new record
+  # Note that if the model is also versioned using papertrail to document local changes, changes
+  # made by this function will be recorded as non-replayable, as they are assumed to have been
+  # produced by loading data from the official source.
   def load_instances_in_generation(model_type, parser, &block)
     verbose = check_verbose()
     dryrun = check_dryrun()
@@ -151,6 +168,12 @@ set it to #{expected_generation})"
                :updated_new_record => 0,
                :new => 0 }
     diffs = {}
+
+    if model_class.respond_to?(:replayable)
+      previous_replayable_value = model_class.replayable
+      model_class.replayable = false
+    end
+
     parse_for_update(table_name, parser) do |instance|
 
       # do any model-specific instance level things
@@ -233,6 +256,9 @@ set it to #{expected_generation})"
       diffs.each do |key, value|
         puts "#{key}: #{value} times"
       end
+    end
+    if model_class.respond_to?(:replayable)
+      model_class.replayable = previous_replayable_value
     end
   end
 
