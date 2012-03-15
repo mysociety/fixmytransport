@@ -122,6 +122,20 @@ describe Stop do
 
   end
 
+  describe 'when the lon/lat attributes have been changed' do 
+    
+    it 'should update the coords and the easting/northing' do 
+      stop = Stop.new
+      stop.should_receive(:coords=)
+      stop.lat = 51.49526
+      stop.lon = -0.14455
+      stop.update_coords
+      stop.easting.should == 528901.0
+      stop.northing.should == 179000.0
+    end
+    
+  end
+
   describe 'when finding by ATCO code' do
 
     fixtures default_fixtures

@@ -29,6 +29,7 @@ class StopArea < ActiveRecord::Base
   extend ActiveSupport::Memoizable
   include FixMyTransport::Locations
   include FixMyTransport::StopsAndStopAreas
+  include FixMyTransport::GeoFunctions
 
   # This model is part of the transport data that is versioned by data generations.
   # This means they have a default scope of models valid in the current data generation.
@@ -62,7 +63,7 @@ class StopArea < ActiveRecord::Base
   diff :include => [:locality_id]
 
   has_paper_trail :meta => { :replayable  => Proc.new { |stop_area| stop_area.replayable } }
-  before_save :cache_description, :set_metaphones
+  before_save :cache_description, :set_metaphones, :update_coords
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
   is_location

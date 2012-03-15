@@ -1,7 +1,7 @@
 module FixMyTransport
-  
+
   module GeoFunctions
-        
+
   # set the coordinate attributes in a given system of a model instance that has coords.
     def set_coords(instance, class_name, coords_system, x_attr, y_attr)
       conn = ActiveRecord::Base.connection
@@ -15,7 +15,7 @@ module FixMyTransport
       instance.send("#{y_attr}=".to_sym, y)
       return instance
     end
-    
+
     # convert national grid coords into lat/lons. Is not recorded as a replayable change
     def convert_coords(class_name, task_name, conditions = nil)
       model_class = class_name.constantize
@@ -51,19 +51,35 @@ module FixMyTransport
       set_coords(instance, class_name, BRITISH_NATIONAL_GRID, :easting, :northing)
     end
 
+    def get_lon_lat(easting, northing)
+      conn = ActiveRecord::Base.connection
+      result = conn.execute("SELECT st_X(
+                                      st_transform(
+                                        ST_GeomFromText('POINT(#{easting} #{northing})', #{BRITISH_NATIONAL_GRID}),
+                                        #{WGS_84})) as x,
+                                    st_Y(
+                                      st_transform(
+                                        ST_GeomFromText('POINT(#{easting} #{northing})', #{BRITISH_NATIONAL_GRID}),
+                                        #{WGS_84})) as y
+                             FROM stops
+                             LIMIT 1")
+      lon, lat = coords_from_result(result)
+    end
+
     def get_easting_northing(lon, lat)
       conn = ActiveRecord::Base.connection
       result = conn.execute("SELECT st_X(
                                       st_transform(
-                                        ST_GeomFromText('POINT(#{lon} #{lat})', #{WGS_84}), 
-                                        #{BRITISH_NATIONAL_GRID})) as x, 
+                                        ST_GeomFromText('POINT(#{lon} #{lat})', #{WGS_84}),
+                                        #{BRITISH_NATIONAL_GRID})) as x,
                                     st_Y(
                                       st_transform(
-                                        ST_GeomFromText('POINT(#{lon} #{lat})', #{WGS_84}), 
+                                        ST_GeomFromText('POINT(#{lon} #{lat})', #{WGS_84}),
                                         #{BRITISH_NATIONAL_GRID})) as y
-                             FROM stops 
+                             FROM stops
                              LIMIT 1")
       easting, northing = coords_from_result(result)
+      [easting.to_f.round, northing.to_f.round]
     end
 
   end

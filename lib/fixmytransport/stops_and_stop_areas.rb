@@ -18,6 +18,15 @@ module FixMyTransport
 
     module InstanceMethods
       
+      def update_coords
+        if self.lat_changed? || self.lon_changed? && ! (self.easting_changed? || self.northing_changed?)
+          self.easting, self.northing = self.get_easting_northing(self.lon, self.lat)
+        end
+        if self.easting_changed? || self.northing_changed? 
+          self.coords = Point.from_x_y(self.easting, self.northing, BRITISH_NATIONAL_GRID)
+        end
+      end
+      
       def responsible_organizations
         responsible = []
         # train stations are run by operators
