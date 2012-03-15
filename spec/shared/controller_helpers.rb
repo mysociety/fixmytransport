@@ -2,6 +2,114 @@ module SharedBehaviours
 
   module ControllerHelpers
 
+    shared_examples_for "a show action that falls back to a previous generation and redirects" do
+
+      describe 'if the instance cannot be found' do
+
+        before do
+          # stub the model finding query
+          find_params = [@default_params[:id]]
+          if @scope_model
+            find_params << { :scope => @default_params[:scope], :include => [@scope_field] }
+          end
+
+          @model_type.stub!(:find).with(*find_params).and_raise(ActiveRecord::RecordNotFound)
+          if @scope_model
+            @previous_scope = mock_model(@scope_model)
+            @current_scope = mock_model(@scope_model)
+          end
+
+          # stub the previous generation query
+          @previous = mock_model(@model_type, :generation_high => PREVIOUS_GENERATION)
+          if @scope_model
+            @previous.stub!(@scope_field).and_return(@previous_scope)
+          end
+          @model_type.stub!(:find_in_generation).and_return(@previous)
+
+          # stub the successor query
+          @successor = mock_model(@model_type)
+          if @scope_model
+            @successor.stub!(@scope_field).and_return(@current_scope)
+          end
+          @model_type.stub!(:find).with(:first, :conditions => ['previous_id = ?', @previous.id]).and_return(@successor)
+        end
+
+        it 'should look for the instance in a previous generation' do
+          expected_args = [PREVIOUS_GENERATION, @default_params[:id]]
+          if @scope_model
+            expected_args << { :scope => @default_params[:scope],
+                               :include => [@scope_field] }
+          end
+          @model_type.should_receive(:find_in_generation).with(*expected_args)
+          make_request
+        end
+
+        describe 'if the instance can be found in a previous generation' do
+
+          it 'should look for the successor to the instance in this generation' do
+            @model_type.should_receive(:find).with(:first, :conditions => ['previous_id = ?', @previous.id]).and_return(@successor)
+            make_request
+          end
+
+          describe 'if the instance is valid in this generation' do
+
+            before do
+              @previous.stub!(:generation_high).and_return(CURRENT_GENERATION)
+            end
+            it 'should issue a permanent redirect to the current friendly id of the stop' do
+              make_request
+              expected_params = { :id => @previous }
+              if @scope_model
+                expected_params[:scope] = @previous_scope
+              end
+              response.should redirect_to(@default_params.merge(expected_params))
+            end
+
+          end
+
+          describe 'if the instance is not valid in this generation' do
+
+            describe 'if there is a successor' do
+
+              it 'should issue a permanent redirect to the successor' do
+                make_request
+                expected_params = { :id => @successor }
+                if @scope_model
+                  expected_params[:scope] = @current_scope
+                end
+                response.should redirect_to(@default_params.merge(expected_params))
+              end
+
+            end
+
+            describe 'if there is no successor' do
+
+              before do
+                @model_type.stub!(:find).with(:first, :conditions => ['previous_id = ?', @previous.id]).and_return(nil)
+              end
+
+              it 'should re-raise the error (returning a 404 in production)' do
+                lambda{ make_request }.should raise_error(ActiveRecord::RecordNotFound)
+              end
+            end
+          end
+        end
+
+        describe 'if the instance cannot be found in a previous generation' do
+
+          before do
+            @model_type.stub!(:find_in_generation).and_return(nil)
+          end
+
+          it 'should re-raise the error (returning a 404 in production)' do
+            lambda{ make_request }.should raise_error(ActiveRecord::RecordNotFound)
+          end
+
+        end
+
+      end
+
+    end
     shared_examples_for "add_comment when an invalid comment has been submitted" do
 
       describe 'when handling a request asking for HTML' do
@@ -113,7 +221,7 @@ module SharedBehaviours
     shared_examples_for "an action that requires the campaign initiator" do
 
       describe 'when there is a current user' do
-        
+
         describe 'and the current user is not the campaign initiator' do
 
           before do
@@ -126,8 +234,8 @@ module SharedBehaviours
             Campaign.stub!(:find).and_return(@mock_campaign)
             controller.stub!(:current_user).and_return(mock_model(User, :is_expert? => false))
           end
-          
-          describe 'when the request asks for html' do 
+
+          describe 'when the request asks for html' do
 
             it 'should render the "wrong user template"' do
               make_request @default_params
@@ -140,30 +248,30 @@ module SharedBehaviours
             end
 
           end
-        
-          describe 'when the request asks for json' do 
-            
-            it 'should return a json hash with the success key set to false' do 
+
+          describe 'when the request asks for json' do
+
+            it 'should return a json hash with the success key set to false' do
               make_request(@default_params.merge(:format => 'json'))
               JSON.parse(response.body)['success'].should == false
             end
 
-            it 'should return a json hash with the requires_login key set to true' do 
+            it 'should return a json hash with the requires_login key set to true' do
               make_request(@default_params.merge(:format => 'json'))
               JSON.parse(response.body)['requires_login'].should == true
             end
-            
-            it 'should return a json hash with the message key set to an appropriate message' do 
+
+            it 'should return a json hash with the message key set to an appropriate message' do
               make_request(@default_params.merge(:format => 'json'))
               JSON.parse(response.body)['message'].should == "Sign in as Campaign User to #{@expected_wrong_user_message}"
             end
 
           end
-          
-        end
-      
 
-        
+        end
+
+
+
       end
 
       describe 'when there is no current user' do

@@ -227,7 +227,7 @@ class StopArea < ActiveRecord::Base
   end
 
   def self.full_find(id, scope)
-    find(id, :scope => scope, :include => :locality)
+    find(id, :scope => scope, :include => [:locality])
   end
 
   def self.find_by_code(code)

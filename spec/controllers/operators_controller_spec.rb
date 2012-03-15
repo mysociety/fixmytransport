@@ -6,9 +6,9 @@ describe OperatorsController do
   before do
     @transport_mode = mock_model(TransportMode, :name => 'train')
     TransportMode.stub!(:find).and_return(@transport_mode)
-    @mock_operator = mock_model(Operator, 
+    @mock_operator = mock_model(Operator,
       :name => 'Sodor & Mainland Railway',
-      :transport_mode => @transport_mode, 
+      :transport_mode => @transport_mode,
       :to_i => 11)
     Problem.stub!(:find_recent_issues).and_return([])
   end
@@ -16,9 +16,9 @@ describe OperatorsController do
   describe 'GET #index' do
 
     before do
-      @mock_operator_z = mock_model(Operator, 
+      @mock_operator_z = mock_model(Operator,
         :name => 'Zebra Trains Ltd',
-        :transport_mode => @transport_mode, 
+        :transport_mode => @transport_mode,
         :to_i => 11)
 
       Operator.stub!(:find).and_return([@mock_operator, @mock_operator_z])
@@ -30,7 +30,7 @@ describe OperatorsController do
     def make_request(params={})
       get :index, params
     end
-    
+
     it 'should ask for a list of all operators' do
       Operator.should_receive(:all_by_letter)
       make_request
@@ -38,8 +38,8 @@ describe OperatorsController do
     end
 
     describe 'when sent with an initial letter' do
-      
-      describe 'if there are many results' do              
+
+      describe 'if there are many results' do
         it 'should use the initial letter (tab) if there are any operators beginning with that letter' do
           make_request(:initial_char => 'z')
           assigns[:initial_char].should == 'Z'
@@ -51,32 +51,32 @@ describe OperatorsController do
         end
       end
 
-      describe 'if there are only a few results' do 
+      describe 'if there are only a few results' do
 
         before do
           Operator.stub!(:all_by_letter).and_return({@mock_operator.name[0].chr.upcase => [@mock_operator]})
           Operator.stub!(:count).and_return(1)
         end
-        
+
         it 'should discard the initial letter (because all results are shown without being broken down by initial)' do
           make_request(:initial_char => 'x')
           assigns[:initial_char].should == nil
         end
       end
-      
+
     end
-    
+
     describe 'when searching' do
-          
+
       it 'should search with conditions if a query param is supplied' do
         Operator.should_receive(:find).with(:all, {:conditions=>["(lower(name) like ? OR lower(short_name) like ?)", "%%needle%%", "%%needle%%"]})
         make_request(:query => 'NEEDLE')
         assigns[:search_query].should == 'needle'
       end
     end
-    
+
   end
-  
+
   describe 'GET #issues' do
 
     def make_request(params={})
@@ -92,10 +92,18 @@ describe OperatorsController do
   end
 
   describe 'GET #show' do
-    
-    def make_request(params={})
+
+    before do
+      @model_type = Operator
+      @default_params = { :id => 'train-operator' }
+    end
+
+
+    def make_request(params=@default_params)
       get :show, params
     end
+
+    it_should_behave_like "a show action that falls back to a previous generation and redirects"
 
     it "should load operator's issues (because the default tab displayed on the operator's page is Issues)" do
       Operator.should_receive(:find).with('11').and_return(@mock_operator)
@@ -113,19 +121,19 @@ describe OperatorsController do
     def make_request(params={})
       get :stations, params
     end
-    
+
     describe 'for an operator with one stop area' do
 
       before do
         StopArea.stub!(:find).and_return([mock_model(StopArea, :name => "A station", :area_type => "GRLS")])
         Operator.stub!(:find).and_return(@mock_operator)
-      end    
-    
+      end
+
       it 'should not retrieve any issues because the issues tab is not being displayed' do
         StopArea.should_receive(:find)
         Problem.should_not_receive(:find_recent_issues)
         make_request(:id => "11")
-        assigns[:current_tab].should == :stations        
+        assigns[:current_tab].should == :stations
       end
 
       it 'should describe the stop areas as a station' do
@@ -135,26 +143,26 @@ describe OperatorsController do
       end
 
       describe 'if that stop area is for ferries' do
-        
+
         before do
           StopArea.stub!(:find).and_return([mock_model(StopArea, :name => "Some jetty", :area_type => "GFTD")])
         end
-        
+
         it 'should describe it as a ferry terminal' do
           make_request(:id => "11")
           assigns[:banner_text].should include "ferry terminal"
           assigns[:station_type_descriptions][:short].should == "terminals"
         end
       end
-      
+
     end
 
     describe 'for an operator with no stop areas' do
 
       before do
         StopArea.stub!(:find).and_return([])
-      end    
-    
+      end
+
       it 'should retrieve issues instead, because the issues tab is displayed instead' do
         Operator.should_receive(:find).with('11').and_return(@mock_operator)
         StopArea.should_receive(:find)
@@ -167,5 +175,5 @@ describe OperatorsController do
     end
 
   end
-  
+
 end
