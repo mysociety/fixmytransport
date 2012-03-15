@@ -177,3 +177,19 @@ haywards_heath_station:
   grid_type: U
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+victoria_station_old:
+  status: act
+  northing: "179000"
+  easting: "528900"
+  name: London Victoria Rail Station
+  grid_type: U
+  area_type: GRLS
+  revision_number: "2"
+  code: 910GVICTRIP
+  administrative_area_code: "110"
+  modification: rev
+  locality: london
+  lon: -0.14455 
+  lat: 51.4952
+  generation_low: <%= PREVIOUS_GENERATION %>
+  generation_high: <%= PREVIOUS_GENERATION %>

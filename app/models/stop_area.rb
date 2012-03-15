@@ -57,6 +57,7 @@ class StopArea < ActiveRecord::Base
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   accepts_nested_attributes_for :stop_area_operators, :allow_destroy => true, :reject_if => :stop_area_operator_invalid
   validates_inclusion_of :status, :in => self.statuses.keys
+  validate :code_unique_in_generation
   # set attributes to include and exclude when performing model diffs
   diff :include => [:locality_id]
 
@@ -65,6 +66,12 @@ class StopArea < ActiveRecord::Base
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
   is_location
+
+  # this is a custom validation as codes need only be unique within the data generation bounds
+  # set by the default scope. Allows blank values
+  def code_unique_in_generation
+    self.field_unique_in_generation(:code)
+  end
 
   def stop_area_operator_invalid(attributes)
     (attributes['_add'] != "1" and attributes['_destroy'] != "1") or attributes['operator_id'].blank?

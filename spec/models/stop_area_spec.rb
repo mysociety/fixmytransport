@@ -72,6 +72,31 @@ describe StopArea do
 
   end
 
+  describe 'when validating' do
+
+    fixtures default_fixtures
+
+    before do
+      @stop_area = StopArea.new(@valid_attributes)
+    end
+
+    it 'should be invalid if it has a code already used in this generation' do
+      @stop_area.code = stop_areas(:victoria_station_root).code
+      @stop_area.valid?.should == false
+    end
+
+    it 'should be valid if it has a code already used in a previous generation' do
+      code = '910GVICTRIP'
+      previous_stop_area = StopArea.find_in_generation(PREVIOUS_GENERATION,
+                                                       :first,
+                                                       :conditions => ['code = ?', code])
+      previous_stop_area.should_not == nil
+      @stop_area.code = previous_stop_area.code
+      @stop_area.valid?.should == true
+    end
+
+  end
+
   describe 'when setting metaphones' do
 
     before do
