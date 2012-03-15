@@ -172,6 +172,7 @@ set it to #{expected_generation})"
   end
 
   def find_instance_for_temporary_identity(model_class, identity_hash, verbose)
+    model_name = model_class.to_s.downcase
     # Can we map this to an object in this generation with a permanent id hash?
     if model_class.data_generation_options_hash.has_key?(:temp_to_perm)
       permanent_hash = temp_to_perm_search_hash(model_class, identity_hash)
