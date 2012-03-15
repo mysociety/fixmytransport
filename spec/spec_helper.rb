@@ -67,5 +67,6 @@ def default_fixtures
    :route_source_admin_areas,
    :route_localities,
    :admin_areas,
-   :route_source_admin_areas]
+   :route_source_admin_areas,
+   :operators]
 end

@@ -100,20 +100,6 @@ class Stop < ActiveRecord::Base
     self.field_unique_in_generation(:other_code)
   end
 
-  def field_unique_in_generation(field)
-    value = self.send(field)
-    return if value.blank?
-    condition_string = "#{field} = ?"
-    params = [value]
-    if self.id
-      condition_string += " AND id != ?"
-      params << self.id
-    end
-    if existing = Stop.find(:first, :conditions => [condition_string] + params)
-      errors.add(field,  ActiveRecord::Error.new(self, field, :taken).to_s)
-    end
-  end
-
   def routes
     Route.find(:all, :conditions => ['id in (SELECT route_id
                                              FROM route_segments

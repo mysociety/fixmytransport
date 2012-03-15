@@ -45,6 +45,32 @@ describe Operator do
     operator.name = nil
     operator.valid?.should be_false
   end
+  
+  describe 'when validating' do
+
+    fixtures default_fixtures
+
+    before do
+      @operator = Operator.new(@valid_attributes)
+    end
+
+    it 'should be invalid if it has a noc code already used in this generation' do
+      @operator.noc_code = operators(:a_train_company).noc_code
+      @operator.valid?.should == false
+    end
+
+    it 'should be valid if it has a noc code already used in a previous generation' do
+      noc_code = 'TRAI'
+      previous_operator = Operator.find_in_generation(PREVIOUS_GENERATION,
+                                                       :first,
+                                                       :conditions => ['noc_code = ?', noc_code])
+      previous_operator.should_not == nil
+      @operator.noc_code = previous_operator.noc_code
+      @operator.valid?.should == true
+    end
+
+  end
+  
 
   describe 'when asked for categories for a location' do
 

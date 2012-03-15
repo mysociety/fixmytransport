@@ -36,6 +36,7 @@ class Operator < ActiveRecord::Base
   has_many :stop_areas, :through => :stop_area_operators, :dependent => :destroy, :uniq => true
   belongs_to :transport_mode
   validates_presence_of :name
+  validate :noc_code_unique_in_generation
   has_many :operator_contacts, :conditions => ['deleted = ?', false]
   has_many :responsibilities, :as => :organization
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
@@ -46,6 +47,11 @@ class Operator < ActiveRecord::Base
   named_scope :without_email, :conditions => ["email is null or email = ''"]
   has_friendly_id :name, :use_slug => true
 
+  # this is a custom validation as noc codes need only be unique within the data generation bounds
+  # set by the default scope. Allows blank values
+  def noc_code_unique_in_generation
+    self.field_unique_in_generation(:noc_code)
+  end
 
   # we only accept new or delete existing associations
   def route_operator_invalid(attributes)

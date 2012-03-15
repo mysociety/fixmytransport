@@ -112,7 +112,7 @@ module FixMyTransport
         return { :identity_hash => identity_hash,
                  :identity_type => identity_type }
       end
-      
+
       def identity_hash
         make_id_hash(self.class.data_generation_options_hash[:identity_fields])
       end
@@ -139,6 +139,21 @@ module FixMyTransport
           return true
         end
       end
+
+      def field_unique_in_generation(field)
+        value = self.send(field)
+        return if value.blank?
+        condition_string = "#{field} = ?"
+        params = [value]
+        if self.id
+          condition_string += " AND id != ?"
+          params << self.id
+        end
+        if existing = self.class.find(:first, :conditions => [condition_string] + params)
+          errors.add(field,  ActiveRecord::Error.new(self, field, :taken).to_s)
+        end
+      end
+
 
       # Get the sequence of the slug from the version of this model in the previous
       # data generation. If there was none, return one more than the highest sequence
