@@ -7,8 +7,8 @@ namespace :update do
     puts "Creating a new data generation..."
 
     check_new_generation()
-    data_generation = DataGeneration.new(:name => 'Data Load' + Time.now.to_s,
-                                         :description => 'Test data load',
+    data_generation = DataGeneration.new(:name => 'Data Update',
+                                         :description => 'Update from official data sources',
                                          :id => CURRENT_GENERATION)
     if !dryrun
       data_generation.save!
@@ -72,17 +72,48 @@ namespace :update do
     # Some post-load cleanup on NaPTAN data - add locality to stop areas, and any stops missing locality
     Rake::Task['naptan:post_load:add_locality_to_stops'].execute
     Rake::Task['naptan:post_load:add_locality_to_stop_areas'].execute
-    
+
     # LOAD NOC DATA
     Rake::Task['noc:update:operators'].execute
     Rake::Task['noc:update:operator_codes'].execute
     Rake::Task['noc:update:vosa_licenses'].execute
-    
-    
+
+
     # Add some other data - Rail stop codes, metro stop flag
     Rake::Task['naptan:post_load:add_stops_codes'].execute
     Rake::Task['naptan:post_load:mark_metro_stops'].execute
 
+  end
+
+  desc 'Display a list of updates that have been made to instances of a model.
+        Default behaviour is to only show updates that have been marked as replayable.
+        Specify ALL=1 to see all updates. Specify model class as MODEL=ModelName'
+  task :show_updates => :environment do
+    check_for_model()
+    model = ENV['MODEL'].constantize
+    only_replayable = (ENV['ALL'] == "1") ? false : true
+    update_hash = get_updates(model, only_replayable=only_replayable, ENV['DATE'])
+    update_hash.each do |identity, changes|
+      identity_type = identity[:identity_type]
+      identity_hash = identity[:identity_hash]
+      changes.each do |details_hash|
+        id = details_hash[:id]
+        event = details_hash[:event]
+        date = details_hash[:date]
+        changes = details_hash[:changes]
+        puts "#{id} #{date} #{event} #{identity_hash.inspect} #{changes.inspect}"
+      end
+    end
+  end
+
+  desc 'Apply the replayable local updates for a model class that is versioned in data generations.
+        Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1'
+  task :replay_updates => :environment do
+    check_for_model()
+    dryrun = check_dryrun()
+    verbose = check_verbose()
+    model = ENV['MODEL'].constantize
+    replay_updates(model, dryrun, verbose)
   end
 
   desc 'Reorder any slugs that existed in the previous generation, but have been given a different

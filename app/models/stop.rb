@@ -61,8 +61,7 @@ class Stop < ActiveRecord::Base
                              :deletion_value => 'del',
                              :temporary_identity_fields => [:other_code],
                              :temp_to_perm => { :other_code => :atco_code },
-                             :auto_update_fields => [:generation_low, :generation_high,
-                                                     :cached_description, :cached_slug] )
+                             :auto_update_fields => [:cached_description, :cached_slug] )
   has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
   validates_presence_of :common_name

@@ -39,8 +39,7 @@ class StopArea < ActiveRecord::Base
                                                 :modification_datetime, :modification, :revision_number],
                              :deletion_field => :modification,
                              :deletion_value => 'del',
-                             :auto_update_fields => [:generation_low, :generation_high,
-                                                     :cached_description, :cached_slug,
+                             :auto_update_fields => [:cached_description, :cached_slug,
                                                      :primary_metaphone, :secondary_metaphone])
   has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships

@@ -14,6 +14,9 @@ namespace :temp do
     Operator.connection.execute("update operators set generation_low = 1, generation_high = 1")
     OperatorCode.connection.execute("update operator_codes set generation_low = 1, generation_high = 1")
     VosaLicense.connection.execute("update vosa_licenses set generation_low = 1, generation_high = 1")
+    
+    # Set replayable attribute on versions of models that have a paper trail and also belong to data generations
+    
   end
   
   
@@ -75,6 +78,48 @@ namespace :temp do
                                 SET reporter_seen = 't'
                                 WHERE problems.status_code in (#{Problem.visible_status_codes.join(",")})
                                 AND campaign_id is null")
+  end
+  
+  desc "Add replayable flag values to versions models in data generations. Indicates whether a change is 
+        replayable after a new generation of data is loaded"
+  task :add_replayable_to_versions => :environment do 
+    Version.connection.execute("UPDATE versions
+                                SET replayable = 'f'
+                                WHERE item_type = 'Stop'
+                                AND (date_trunc('day', created_at) = '2011-03-02'
+                                OR date_trunc('day', created_at) = '2011-03-03'
+                                OR date_trunc('hour', created_at) = '2011-03-23 19:00:00'
+                                OR (date_trunc('day', created_at) = '2011-03-03' 
+                                AND event = 'update')
+                                OR date_trunc('day', created_at) = '2011-06-08'
+                                OR (date_trunc('day', created_at) = '2011-04-07'
+                                    AND date_trunc('hour', created_at) >= '2011-04-07 17:00:00'
+                                    AND event = 'update')
+                                OR date_trunc('day', created_at) = '2011-06-21'
+                                OR date_trunc('day', created_at) = '2011-06-22')")
+    Version.connection.execute("UPDATE versions
+                                SET replayable = 't' 
+                                WHERE item_type = 'Stop' 
+                                AND replayable is null;")
+  
+    Version.connection.execute("UPDATE versions
+                                SET replayable = 'f'
+                                WHERE item_type = 'StopArea'
+                                AND (date_trunc('day', created_at) = '2011-03-28'
+                                OR date_trunc('day', created_at) = '2011-06-21'))")
+    Version.connection.execute("UPDATE versions
+                                SET replayable = 't' 
+                                WHERE item_type = 'StopArea' 
+                                AND replayable is null;")
+
+    Version.connection.execute("UPDATE versions
+                                SET replayable = 'f'
+                                WHERE item_type = 'Operator'
+                                AND (date_trunc('day', created_at) = '2011-03-03')")
+    Version.connection.execute("UPDATE versions
+                                SET replayable = 't' 
+                                WHERE item_type = 'Operator' 
+                                AND replayable is null;")
   end
 
 end

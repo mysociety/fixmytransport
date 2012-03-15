@@ -26,8 +26,7 @@ class Operator < ActiveRecord::Base
                                                 :ultimate_parent,
                                                 :vehicle_mode],
                              :temporary_identity_fields => [:id],
-                             :auto_update_fields => [:generation_low, :generation_high,
-                                                     :cached_slug])
+                             :auto_update_fields => [:cached_slug])
 
   has_many :route_operators, :dependent => :destroy
   has_many :routes, :through => :route_operators, :uniq => true, :order => 'routes.number asc'
