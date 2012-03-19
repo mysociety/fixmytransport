@@ -22,22 +22,22 @@
 			</li>
 		</ul>
     <p class="font-1"><%= raw t('problems.frontpage.report_problem') %></p>
-		
+
 		<div class="button-col">
 		 <%= raw(link_to(raw(t('problems.frontpage.stop_or_station')), find_stop_problems_url, :class => 'font-1 button green')) %>
-		  
+
   		<div class="button-explanation">
   		  <%= t('problems.frontpage.stop_examples') %>
   		</div>
   	</div>
-    
+
     <div class="button-col">
 		  <%= raw(link_to(raw(t('problems.frontpage.journey_or_route')), find_route_problems_url, :class => 'font-1 button green')) %>
 			<div class="button-explanation">
 			  <%= t('problems.frontpage.route_examples') %>
 			</div>
 		</div>
-    
+
     <p class="font-1"><%= raw t('problems.frontpage.get_it_fixed')%></p>
     <p class="font-1"><%= raw t('problems.frontpage.see_issues', :link => raw( link_to(t('problems.frontpage.issues_near_you'), browse_issues_url(:geolocate => 1))))%></p>
 
@@ -62,7 +62,7 @@
 			<li class="secret-track"><%= t('problems.frontpage.tracks_progress')%></li>
 			<li class="secret-done"><%= t('problems.frontpage.gets_things_done')%></li>
 		</ul>
-    
+
 		  <a href="#how-it-works" class="font-1 button"><%= t('problems.frontpage.how_does_it_work')%></a>
 	</div>
 
@@ -74,18 +74,36 @@
 		<div id="frontpage-banner-left">
 			<div class="dotted-white">&nbsp;</div>
 			<div class="left">
-				<h2 class="font-1">The first few months...</h2>
-				<p>
-				  Welcome to FixMyTransport, a site specially built for public transport users in Britain who want to make public transport better for us all. Since launch at the end of August 2011, we've sent over 1,000 of your transport problems to operators, also publishing them online so that others can comment and add their support. We've successfully campaigned for <a href="http://www.fixmytransport.com/campaigns/provide-adequate-seating-for-the-bus-stop-on-welli">seating at a bus stop in Horsehay</a>, helped get <a href="http://www.fixmytransport.com/campaigns/upgrade-trains-from-new-st-to-hereford">longer trains on the Birmingham to Hereford route</a>, and seen over 200 people add their name to the <a href="http://www.fixmytransport.com/campaigns/fix-the-dire-cycle-parking-shortage-at-cambridge-s">campaign for cycle parking at Cambridge station</a>.
+				<h2 class="font-1">Welcome to FixMyTransport</h2>
+        <p>
+        You can use this site to contact any transport operator in the UK - we'll
+        send your message direct to their Customer Services department. We put it
+        online, too. That way, others can read your problems, and offer support and
+        advice.
         </p>
         <p>
-          We've also uncovered major issues such as <a href="http://www.fixmytransport.com/campaigns/improve-disabled-access-to-mile-end-tube-station">accessibility to our transport facilities</a> for those with limited mobility, overcrowding on <a href="http://www.fixmytransport.com/campaigns/solve-overcrowding-on-the-new-bendy-buses-on-the-9">buses</a> and <a href="http://www.fixmytransport.com/campaigns/compensate-passengers-who-cannot-board-their-train">trains</a>, and the state of <a href="http://www.fixmytransport.com/problems/1502">station loos</a>. At the same time we've encouraged passengers to <a href="http://www.fixmytransport.com/stops/boxted-essex/hobbs-drive-opp">send a little praise</a> where it's due.
-          </p>
-          <p>
-          See below for how FixMyTransport works. And if you're reading this from the seat of a bus, train, coach or ferry? Go ahead and let the operators know how you feel about your journey.
-          </p>
+        And it works! Take a look at some of our recently fixed problems and find
+        out why our users are saying:
+        </p>
+        <ul>
+          <li><a href="http://www.fixmytransport.com/campaigns/change-train-times-from-london-bridg">Amazing - they've done it!</a></li>
+          <li><a href="http://www.fixmytransport.com/campaigns/treat-their-regular-customers-with-r">The conclusion of matters had a lot to do with my posting on your website after almost 2 months of inaction.</a></li>
+          <li><a href="http://www.fixmytransport.com/problems/1635">My bus service has really improved and I'm not the only one benefiting from this.</a></li>
+          <li><a href="http://www.fixmytransport.com/problems/1804">Thanks for your help in resolving this.</a></li>
+          <li><a href="http://www.fixmytransport.com/problems/748">Well done and thanks for your assistance.</a></li>
+          </ul>
+        <p>
+        FixMyTransport is completely independent - we don't have any affiliation
+        with any transport operators. See below for an explanation of how it all
+        works.
+        </p>
+        <p>
+              And if you've got a problem with your transport? Go ahead and let the
+              operators know.
+      	</p>
 			</div>
-			<a href="http://www.fixmytransport.com/campaigns/fix-the-dire-cycle-parking-shortage-at-cambridge-s"><%= image_tag("/images/cyclestreets18419.jpg", :class => 'right', :alt => '') %></a>
+			<a href="http://www.flickr.com/photos/amanky/123970168/"><%= image_tag("/images/scrabble.jpg", :class => 'right', :alt => '') %></a>
+			<p style="float: right">Image by Amancay Maahs</p>
 			<div class="dotted-white">&nbsp;</div>
 		</div>
 		<div id="frontpage-banner-right">
