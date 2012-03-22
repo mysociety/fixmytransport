@@ -1,5 +1,9 @@
 #FixMyTransport
 
+#Data Model
+
+See https://github.com/mysociety/fixmytransport/blob/master/data_model.md
+
 #Prerequisites
 
 Ruby 1.8.7
