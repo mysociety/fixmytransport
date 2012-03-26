@@ -67,6 +67,11 @@ The following commands need to be run at the command line following db creation 
 
 Also, SRID 27700 (British National Grid) is incorrect in some installs of PostGIS. After you’ve installed and got a PostGIS template, log in to it and make sure the proj4text column of SRID 27700 in the spatial_ref_sys table includes +datum=OSGB36.
 
+###Install additional packages
+
+If you're using a Debian-based system, you should make sure that the
+packages listed in `config/packages` are all installed.
+
 ###To load a new binary Postgres dump file:
 
 1. Create the file from an existing database with ```pg_dump -p [Postgres port number] --schema=public -Fc YOURDB > YOURDB.sql.dump```
