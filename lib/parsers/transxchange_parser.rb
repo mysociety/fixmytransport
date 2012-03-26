@@ -206,7 +206,7 @@ class Parsers::TransxchangeParser
       when 'RunTime'
         get_element_text('RunTime')
       else
-        raise "Unexpected element in JourneyPatternTimingLink: #{@reader.name}"
+        handle_unhandled(parent, @reader.name)
       end
     end
     @journey_pattern_section[:timing_links] << timing_link
@@ -225,7 +225,7 @@ class Parsers::TransxchangeParser
       when 'Activity'
         get_element_text('Activity')
       else
-        raise "Unexpected element in From: #{@reader.name}"
+        handle_unhandled(parent, @reader.name)
       end
     end
     return terminus_info
@@ -279,7 +279,7 @@ class Parsers::TransxchangeParser
       when 'JourneyPattern'
         handle_journey_pattern
       else
-        raise "Unexpected element in StandardService: #{@reader.name}"
+        handle_unhandled(parent, @reader.name)
       end
     end
     @route.journey_pattern_data = @journey_patterns
@@ -298,7 +298,7 @@ class Parsers::TransxchangeParser
       when 'JourneyPatternSectionRefs'
         journey_pattern[:section_refs] << get_element_text('JourneyPatternSectionRefs')
       else
-        raise "Unexpected element in JourneyPattern: #{@reader.name}"
+        handle_unhandled(parent, @reader.name)
       end
     end
     @journey_patterns[journey_pattern[:id]] = journey_pattern
@@ -370,4 +370,18 @@ class Parsers::TransxchangeParser
     end
   end
 
+  def handle_end_element
+    if ! @reader.name == 'TransXChange'
+      raise "Unexpected end element #{@reader.name}"
+    end
+  end
+
+  def handle_comment
+    puts "Comment: #{@reader.value}" if verbose
+  end
+
+  def handle_unhandled(parent, element)
+    @unexpected_elements[element] = 0 if @unexpected_elements[element].nil?
+    @unexpected_elements[element] += 1
+  end
 end
