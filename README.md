@@ -27,7 +27,7 @@ You will also want to install mySociety's common ruby libraries. Run:
 
 to fetch the contents of the submodule.
 
-Copy config/general.example to config/general
+Copy config/general.yml-example to config/general.yml
 
 ###Configure the database:
 
