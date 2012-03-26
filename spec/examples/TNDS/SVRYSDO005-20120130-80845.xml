@@ -1,0 +1,155 @@
+<?xml version='1.0'?>
+<!--
+Version Number (Major): 05
+Version Number (Minor):00
+File Originator:Any Bus Operator                
+Source Product:EMS 8.5.5 Patch 
+Production Time:102846
+
+-->
+<TransXChange
+xmlns='http://www.transxchange.org.uk/'
+xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+xsi:schemaLocation='http://www.transxchange.org.uk/ http://www.transxchange.org.uk/schema/2.1/TransXChange_general.xsd'
+xmlns:apd='http://www.govtalk.gov.uk/people/AddressAndPersonalDetails'
+xml:lang='en'
+CreationDateTime='2012-03-07T10:28:00-00:00'
+ModificationDateTime='2012-03-07T10:28:00-00:00'
+Modification='new'
+RevisionNumber='0'
+FileName='SVRYSDO005-20120130-80845.xml'
+SchemaVersion='2.1'
+RegistrationDocument='false'
+>
+<StopPoints>
+<AnnotatedStopPointRef>
+<StopPointRef>370055986</StopPointRef>
+<CommonName>Mount Pleasant</CommonName>
+</AnnotatedStopPointRef>
+<AnnotatedStopPointRef>
+<StopPointRef>370055370</StopPointRef>
+<CommonName>Wellington Crescent</CommonName>
+</AnnotatedStopPointRef>
+</StopPoints>
+<JourneyPatternSections>
+<JourneyPatternSection id='146188'
+>
+<JourneyPatternTimingLink
+id='7111569'
+>
+<From>
+<StopPointRef>370055986</StopPointRef>
+</From>
+<To>
+<StopPointRef>370055370</StopPointRef>
+</To>
+<Direction>inbound</Direction>
+<RunTime>PT0M</RunTime>
+</JourneyPatternTimingLink>
+</JourneyPatternSection>
+</JourneyPatternSections>
+<Operators>
+<Operator id='RLB'>
+<OperatorCode>RLB</OperatorCode>
+<OperatorShortName>Red Line Buses</OperatorShortName>
+<EnquiryTelephoneNumber>
+<TelNationalNumber>07525 070 527</TelNationalNumber>
+</EnquiryTelephoneNumber>
+<ContactTelephoneNumber>
+<TelNationalNumber>0772 555 6368</TelNationalNumber>
+</ContactTelephoneNumber>
+<OperatorAddresses>
+<CorrespondenceAddress>
+<apd:Line>Apartment 25</apd:Line>
+<apd:Line>Plaza Quarter One</apd:Line>
+<apd:Line>Fitzwilliam Street</apd:Line>
+<apd:Line>Barnsley</apd:Line>
+<apd:PostCode>S70 2RF</apd:PostCode>
+</CorrespondenceAddress>
+</OperatorAddresses>
+</Operator>
+</Operators>
+<Services>
+<Service>
+<ServiceCode>YSDO005</ServiceCode>
+<Lines>
+<Line id='0'>
+<LineName>5</LineName>
+</Line>
+</Lines>
+<OperatingPeriod>
+<StartDate>0001-01-01</StartDate>
+</OperatingPeriod>
+<RegisteredOperatorRef>RLB</RegisteredOperatorRef>
+<StopRequirements>
+<NoNewStopsRequired/>
+</StopRequirements>
+<Mode>bus</Mode>
+<Description>Barnsley - Worsbrough Bridge</Description>
+<StandardService>
+<Origin>Barnsley</Origin>
+<Destination>Worsbrough Bridge</Destination>
+<JourneyPattern id='146188'>
+<Direction>inbound</Direction>
+<JourneyPatternSectionRefs>146188</JourneyPatternSectionRefs>
+</JourneyPattern>
+</StandardService>
+</Service>
+</Services>
+<VehicleJourneys>
+<VehicleJourney>
+<DestinationDisplay> Worsbrough Bridge</DestinationDisplay>
+<OperatorRef>RLB</OperatorRef>
+<Direction>inbound</Direction>
+<Operational>
+<VehicleType>
+<VehicleTypeCode>0</VehicleTypeCode>
+<Description>Bus</Description>
+</VehicleType>
+</Operational>
+<OperatingProfile>
+<RegularDayType>
+<DaysOfWeek>
+<Monday/>
+<Tuesday/>
+<Wednesday/>
+<Thursday/>
+<Friday/>
+</DaysOfWeek>
+</RegularDayType>
+<SpecialDaysOperation>
+<DaysOfNonOperation>
+<DateRange>
+<StartDate>1900-01-01</StartDate>
+<EndDate>2012-01-29</EndDate>
+</DateRange>
+<DateRange>
+<StartDate>2099-01-02</StartDate>
+<EndDate>9999-01-01</EndDate>
+</DateRange>
+</DaysOfNonOperation>
+</SpecialDaysOperation>
+<BankHolidayOperation>
+<DaysOfOperation>
+<AllBankHolidays/>
+</DaysOfOperation>
+</BankHolidayOperation>
+</OperatingProfile>
+<VehicleJourneyCode>146188</VehicleJourneyCode>
+<ServiceRef>YSDO005</ServiceRef>
+<LineRef>0</LineRef>
+<JourneyPatternRef>146188</JourneyPatternRef>
+<DepartureTime>15:12:00</DepartureTime>
+<VehicleJourneyTimingLink>
+<JourneyPatternTimingLinkRef>7111569</JourneyPatternTimingLinkRef>
+<RunTime>PT300S</RunTime>
+<From>
+<Activity>pickUp</Activity>
+</From>
+<To>
+<Activity>setDown</Activity>
+</To>
+</VehicleJourneyTimingLink>
+</VehicleJourney>
+</VehicleJourneys>
+</TransXChange>

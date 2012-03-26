@@ -5,11 +5,16 @@ require 'test/unit'
 class Parsers::TransxchangeParser
 
   include Test::Unit::Assertions
-  attr_accessor :admin_area, :filename, :mode
+  attr_accessor :admin_area, :filename, :mode, :verbose, :skip_sections, :region_hash
 
   def initialize
+    @file_count = 0
+    @skip_sections = []
+    @region_hash = {}
   end
 
+
+  
   # Go through a directory and look for zip files in each directory. Get a stream from every
   # zip file found and pass it to parse_routes
   def parse_all_routes(dirname, transport_mode=nil, load_run=nil, &block)
@@ -21,6 +26,21 @@ class Parsers::TransxchangeParser
           parse_routes(txc_file.get_input_stream(), transport_mode, load_run, txc_file.to_s, &block)
         end
       end
+    end
+  end
+
+  def parse_index(filepath)
+    @region_hash = {}
+    tsv_data = File.read(filepath)
+    first = true
+    tsv_data.each do |row|
+      row.chomp!
+      if first
+        first = false
+        next
+      end
+      filename, region = row.split(" ", 2)
+      @region_hash[filename.strip] = region.strip
     end
   end
 
@@ -70,97 +90,39 @@ class Parsers::TransxchangeParser
       @filename = filename
       @reader = XML::Reader.io(input)
     end
-    data_from_filename
-    if !transport_mode.blank?
-      return unless @mode.name == transport_mode
-    end
-    if !load_run.blank?
-      return if LoadRunCompletion.find(:first, :conditions => { :admin_area_id => @admin_area,
-                                                                :transport_mode_id => @mode,
-                                                                :load_type => 'routes',
-                                                                :name => load_run } )
-    end
-    @routes = []
-    missing_stops = {}
 
-    data_from_filename()
+    puts "starting..." if verbose
+    @unexpected_elements = {}
     while @reader.read
       case @reader.node_type
         when XML::Reader::TYPE_ELEMENT
           handle_element
         when XML::Reader::TYPE_SIGNIFICANT_WHITESPACE
+        when XML::Reader::TYPE_COMMENT
+          handle_comment
         when XML::Reader::TYPE_END_ELEMENT
           handle_end_element
         else
           raise "Unhandled type: #{@reader.node_type} #{@reader.name}"
       end
     end
-    stop_options = {:includes => {:stop_area_memberships => :stop_area}}
 
-    @routes.each do |route|
-      puts route.number
-      route.region = @region
-      missing = []
-      route.route_source_admin_areas.build({:source_admin_area => @admin_area,
-                                            :operator_code => route.operator_code})
-      route_regions = []
-      route.journey_pattern_data.each do |journey_pattern_id, journey_pattern|
-        jp = route.journey_patterns.build(:destination => journey_pattern[:destination_display])
-        segment_order = 0
-        journey_pattern[:section_refs].each do |section_ref|
-          section = @journey_pattern_sections[section_ref]
-          section[:timing_links].each do |timing_link|
-            from_stop = Stop.find_by_code(timing_link[:from_info][:stop], stop_options)
-            to_stop = Stop.find_by_code(timing_link[:to_info][:stop], stop_options)
-
-            if !from_stop
-              missing << timing_link[:from_info][:stop]
-            end
-            if !to_stop
-              missing << timing_link[:to_info][:stop]
-            end
-            if (from_stop and to_stop)
-              route_segment = jp.route_segments.build(:from_stop => from_stop,
-                                                      :to_stop   => to_stop,
-                                                      :route => route,
-                                                      :segment_order => segment_order )
-              segment_order += 1
-              route_segment.set_stop_areas
-            end
-          end
-        end
-        jp.route_segments.first.from_terminus = true
-        jp.route_segments.last.to_terminus = true
-      end
-      next if route.journey_patterns.empty?
-      missing.each do |missing_stop_code|
-        missing_stops = self.mark_stop_code_missing(missing_stops, missing_stop_code, route)
-      end
-      operators = Operator.find_all_by_nptdr_code(@mode, route.operator_code, @region, route)
-      operators.each do |operator|
-        route.route_operators.build({ :operator => operator })
-      end
-      yield route
-    end
-    if load_run
-      LoadRunCompletion.create!(:transport_mode => @mode,
-                                :admin_area => @admin_area,
-                                :load_type => 'routes',
-                                :name => load_run)
-    end
-    return missing_stops
-  end
-
-  def handle_end_element
-    if ! @reader.name == 'TransXChange'
-      raise "Unexpected end element #{@reader.name}"
-    end
+    data = { :route_sections => @route_sections,
+             :routes => @routes,
+             :journey_pattern_sections => @journey_pattern_sections,
+             :operators => @operators,
+             :services => @services,
+             :vehicle_journeys => @vehicle_journeys,
+             :unexpected_elements => @unexpected_elements.inspect }
+    yield data
   end
 
   def handle_element
     ignored = [ 'TransXChange' ]
     handlers = { 'ServicedOrganisations'  => :handle_serviced_organisations,
                  'StopPoints'             => :handle_stop_points,
+                 'RouteSections'          => :handle_route_sections,
+                 'Routes'                 => :handle_routes,
                  'JourneyPatternSections' => :handle_journey_pattern_sections,
                  'Operators'              => :handle_operators,
                  'Services'               => :handle_services,
@@ -170,21 +132,134 @@ class Parsers::TransxchangeParser
       self.send(handlers[@reader.name])
     elsif ignored.include?(@reader.name)
     else
-      raise "Unhandled element #{@reader.name}"
+      handle_unhandled("root", @reader.name)
     end
   end
 
+  # ServicedOrganisations
+
   def handle_serviced_organisations
+    puts "handling serviced_organisations" if verbose
     until_element_end(@reader.name)
   end
+
+  # end ServicedOrganisations
+
+  # StopPoints
 
   def handle_stop_points
+    puts "handling stop points" if verbose
     until_element_end(@reader.name)
   end
 
+  # end StopPoints
+
+  # RouteSections
+
+  def handle_route_sections
+    puts "handling route sections" if verbose
+    if @skip_sections.include?(:route_sections)
+      until_element_end(@reader.name)
+    else
+      @route_sections = []
+      handle_multiple(@reader.name, 'RouteSection', :handle_route_section)
+    end
+  end
+
+  def handle_route_section
+    @route_section = {}
+    @route_section[:id] = get_attribute(@reader.name, 'id')
+    @route_section[:route_links] = []
+    handle_multiple(@reader.name, 'RouteLink', :handle_route_link)
+    @route_sections << @route_section
+  end
+
+  def handle_route_link
+    @route_link = {}
+    @route_link[:id] = get_attribute(@reader.name, 'id')
+    parent = @reader.name
+    until_element_end(@reader.name) do
+      case @reader.name
+      when 'From'
+        @route_link[:from_info] = handle_route_link_terminus
+      when 'To'
+        @route_link[:to_info] = handle_route_link_terminus
+      when 'Direction'
+        @route_link[:direction] = get_element_text('Direction')
+      when 'Distance'
+        @route_link[:distance] = get_element_text('Distance')
+      when 'Track'
+        handle_track
+      else
+        handle_unhandled(parent, @reader.name)
+      end
+    end
+    @route_section[:route_links] << @route_link
+  end
+
+  def handle_track
+    until_element_end(@reader.name)
+  end
+
+  def handle_route_link_terminus
+    terminus_info = {}
+    terminus_name = @reader.name
+    until_element_end(@reader.name) do
+      case @reader.name
+      when 'StopPointRef'
+        terminus_info[:stop] = get_element_text('StopPointRef').strip
+      else
+        handle_unhandled(terminus_name, @reader.name)
+      end
+    end
+    return terminus_info
+  end
+
+  # end RouteSections
+
+  # Routes
+
+  def handle_routes
+    puts "handling routes" if verbose
+    if @skip_sections.include?(:routes)
+      until_element_end(@reader.name)
+    else
+      @routes = []
+      handle_multiple(@reader.name, 'Route', :handle_route)
+    end
+  end
+
+  def handle_route
+    @route = {}
+    @route[:id] = get_attribute(@reader.name, 'id')
+    parent = @reader.name
+    until_element_end(@reader.name) do
+      case @reader.name
+      when 'PrivateCode'
+        @route[:private_code] = get_element_text('PrivateCode')
+      when 'Description'
+        @route[:description] = get_element_text('Description')
+      when 'RouteSectionRef'
+        @route[:route_section_ref] = get_element_text('RouteSectionRef')
+      else
+        handle_unhandled(parent, @reader.name)
+      end
+    end
+    @routes << @route
+  end
+
+  # end Routes
+
+  # JourneyPatternSections
+
   def handle_journey_pattern_sections
-    @journey_pattern_sections = {}
-    handle_multiple(@reader.name, 'JourneyPatternSection', :handle_journey_pattern_section)
+    puts "handling journey pattern sections" if verbose
+    if @skip_sections.include?(:journey_pattern_sections)
+      until_element_end(@reader.name)
+    else
+      @journey_pattern_sections = {}
+      handle_multiple(@reader.name, 'JourneyPatternSection', :handle_journey_pattern_section)
+    end
   end
 
   def handle_journey_pattern_section
@@ -197,14 +272,20 @@ class Parsers::TransxchangeParser
 
   def handle_timing_link
     timing_link = {}
+    timing_link[:id] = get_attribute(@reader.name, 'id')
+    parent = @reader.name
     until_element_end(@reader.name) do
       case @reader.name
       when 'From'
-        timing_link[:from_info] = handle_link_terminus
+        timing_link[:from_info] = handle_timing_link_terminus
       when 'To'
-        timing_link[:to_info] = handle_link_terminus
+        timing_link[:to_info] = handle_timing_link_terminus
       when 'RunTime'
-        get_element_text('RunTime')
+        timing_link[:runtime] = get_element_text('RunTime')
+      when 'RouteLinkRef'
+        timing_link[:route_link_ref] = get_element_text('RouteLinkRef')
+      when 'Direction'
+        timing_link[:direction] = get_element_text('Direction')
       else
         handle_unhandled(parent, @reader.name)
       end
@@ -212,18 +293,20 @@ class Parsers::TransxchangeParser
     @journey_pattern_section[:timing_links] << timing_link
   end
 
-  def handle_link_terminus
+  def handle_timing_link_terminus
     terminus_info = {}
+    parent = @reader.name
+    terminus_info[:sequence_number] = get_attribute(@reader.name, 'sequenceNumber', required=false)
     until_element_end(@reader.name) do
       case @reader.name
       when 'StopPointRef'
         terminus_info[:stop] = get_element_text('StopPointRef').strip
       when 'WaitTime'
-        get_element_text('WaitTime')
+        terminus_info[:wait_time] = get_element_text('WaitTime')
       when 'TimingStatus'
-        get_element_text('TimingStatus')
+        terminus_info[:timing_status] = get_element_text('TimingStatus')
       when 'Activity'
-        get_element_text('Activity')
+        terminus_info[:activity] = get_element_text('Activity')
       else
         handle_unhandled(parent, @reader.name)
       end
@@ -231,64 +314,204 @@ class Parsers::TransxchangeParser
     return terminus_info
   end
 
+  # end JourneyPatternSections
+
+  # Operators
+
   def handle_operators
-    until_element_end(@reader.name)
-  end
-
-  def handle_services
-    handle_multiple(@reader.name, 'Service', :handle_service)
-  end
-
-  def handle_service
-    route_type = @mode.route_type.constantize
-    @route = route_type.new(:transport_mode => @mode,
-                            :status => 'ACT')
-    until_element_end(@reader.name) do
-      case @reader.name
-      when 'ServiceCode'
-        @route.number = get_element_text('ServiceCode')
-      when 'Lines'
-        handle_lines
-      when 'OperatingPeriod'
-        handle_operating_period
-      when 'RegisteredOperatorRef'
-        @route.operator_code = get_element_text('RegisteredOperatorRef')
-      when 'StopRequirements'
-        handle_stop_requirements
-      when 'StandardService'
-        handle_standard_service
-      else
-        raise "Unexpected element in services #{@reader.name}"
-      end
+    puts "handling operators" if verbose
+    if @skip_sections.include?(:operators)
+      until_element_end(@reader.name)
+    else
+      @operators = {}
+      handle_multiple(@reader.name, 'Operator', :handle_operator)
     end
-    @routes << @route
   end
 
-  def handle_stop_requirements
-    until_element_end(@reader.name)
-  end
-
-  def handle_standard_service
-    @journey_patterns = {}
+  def handle_operator
+    operator_info = {}
+    operator_info[:id] = get_attribute(@reader.name, 'id')
+    parent = @reader.name
     until_element_end(@reader.name) do
       case @reader.name
-      when 'Origin'
-        get_element_text('Origin')
-      when 'Destination'
-        get_element_text('Destination')
-      when 'JourneyPattern'
-        handle_journey_pattern
+      when 'OperatorCode'
+        operator_info[:code] = get_element_text('OperatorCode')
+      when 'OperatorShortName'
+        operator_info[:short_name] = get_element_text('OperatorShortName')
+      when 'OperatorNameOnLicence'
+        operator_info[:name_on_license] = get_element_text('OperatorNameOnLicence')
+      when 'TradingName'
+        operator_info[:trading_name] = get_element_text('TradingName')
+      when 'EnquiryTelephoneNumber'
+        handle_telephone_number
+      when 'ContactTelephoneNumber'
+        handle_telephone_number
+      when 'OperatorAddresses'
+        until_element_end(@reader.name) do
+          case @reader.name
+          when 'CorrespondenceAddress'
+            handle_correspondence_address
+          else
+            handle_unhandled('OperatorAddress', @reader.name)
+          end
+        end
       else
         handle_unhandled(parent, @reader.name)
       end
     end
-    @route.journey_pattern_data = @journey_patterns
+    @operators[operator_info[:id]] = operator_info
+  end
+
+  def handle_correspondence_address
+    until_element_end(@reader.name)
+  end
+
+  def handle_telephone_number
+    until_element_end(@reader.name)
+  end
+
+  # end Operators
+
+  # Services
+  def handle_services
+    puts "handling services" if verbose
+    if @skip_sections.include?(:services)
+      until_element_end(@reader.name)
+    else
+      @services = []
+      handle_multiple(@reader.name, 'Service', :handle_service)
+      if @services.all?{ |service| service[:standard_service][:journey_patterns].empty? }
+        raise "No standard service has been defined"
+      end
+    end
+  end
+
+  def handle_service
+    @service = {:lines => [],
+                :operating_period => {},
+                :operating_profile => {:regular_day_type => {},
+                                       :bank_holiday_operation => {},
+                                       :special_days_operation => {}},
+                :standard_service => {:journey_patterns => {}}}
+    parent = @reader.name
+    until_element_end(@reader.name) do
+      case @reader.name
+      when 'ServiceCode'
+        @service[:service_code] = get_element_text('ServiceCode')
+      when 'PrivateCode'
+        @service[:private_code] = get_element_text('PrivateCode')
+      when 'Lines'
+        handle_multiple(@reader.name, 'Line', :handle_line)
+        if @service[:lines].size > 1 
+          raise "More than one line for a service"
+        end
+      when 'OperatingPeriod'
+        handle_operating_period
+      when 'OperatingProfile'
+        handle_operating_profile
+      when 'RegisteredOperatorRef'
+        @service[:registered_operator_ref] = get_element_text('RegisteredOperatorRef')
+      when 'AssociatedOperators'
+        handle_associated_operators
+      when 'StopRequirements'
+        handle_stop_requirements
+      when 'StandardService'
+        handle_standard_service
+      when 'Description'
+        @service[:description] = get_element_text('Description')
+      when 'Mode'
+        @service[:mode] = get_element_text('Mode')
+      when 'ToBeMarketedWith'
+        until_element_end(@reader.name)
+      else
+        handle_unhandled(parent, @reader.name)
+      end
+    end
+    @services << @service
+  end
+
+  def handle_associated_operators
+    @service[:associated_operators] = []
+    parent = @reader.name
+    until_element_end(@reader.name) do
+      case @reader.name
+      when 'OperatorRef'
+        @service[:associated_operators] << get_element_text('OperatorRef')
+      else
+        handle_unhandled(parent,@reader.name)
+      end
+    end
+  end
+
+  def handle_line
+    line_info = {}
+    parent = @reader.name
+    line_info[:id] = get_attribute(@reader.name, 'id')
+    until_element_end(@reader.name) do
+      case @reader.name
+      when 'LineName'
+        line_info[:name] = get_element_text('LineName')
+      else
+        handle_unhandled(parent, @reader.name)
+      end
+    end
+    @service[:lines] << line_info
+  end
+
+  def handle_operating_period
+    parent = @reader.name
+    until_element_end(@reader.name) do
+      case @reader.name
+      when 'StartDate'
+        @service[:operating_period][:start_date] = get_element_text('StartDate')
+      when 'EndDate'
+        @service[:operating_period][:end_date] = get_element_text('EndDate')
+      else
+        handle_unhandled(parent, @reader.name)
+      end
+    end
+  end
+
+  def handle_operating_profile
+    until_element_end(@reader.name)
+  end
+
+  def handle_stop_requirements
+    parent = @reader.name
+    until_element_end(@reader.name) do
+      case @reader.name
+      when 'NoNewStopsRequired'
+        @service[:stop_requirements] = :no_new_stops_required
+      else
+        handle_unhandled(parent, @reader.name)
+      end
+    end
+  end
+
+  def handle_standard_service
+    parent = @reader.name
+    until_element_end(@reader.name) do
+      case @reader.name
+      when 'Origin'
+        @service[:standard_service][:origin] = get_element_text('Origin')
+      when 'Destination'
+        @service[:standard_service][:destination] = get_element_text('Destination')
+      when 'JourneyPattern'
+        journey_pattern = handle_journey_pattern
+        @service[:standard_service][:journey_patterns][journey_pattern[:id]] = journey_pattern
+      when 'UseAllStopPoints'
+        @service[:standard_service][:use_all_stop_points] = get_element_text('UseAllStopPoints')
+      else
+        handle_unhandled(parent, @reader.name)
+      end
+    end
   end
 
   def handle_journey_pattern
     journey_pattern = {}
     journey_pattern[:id] = get_attribute(@reader.name, 'id')
     journey_pattern[:section_refs] = []
+    parent = @reader.name
     until_element_end(@reader.name) do
       case @reader.name
       when 'DestinationDisplay'
@@ -297,42 +520,95 @@ class Parsers::TransxchangeParser
         journey_pattern[:direction] = get_element_text('Direction')
       when 'JourneyPatternSectionRefs'
         journey_pattern[:section_refs] << get_element_text('JourneyPatternSectionRefs')
+      when 'RouteRef'
+        journey_pattern[:route_ref] = get_element_text('RouteRef')
+      when 'Operational'
+        handle_operational
       else
         handle_unhandled(parent, @reader.name)
       end
     end
-    @journey_patterns[journey_pattern[:id]] = journey_pattern
+    return journey_pattern
   end
 
-  def handle_operating_period
-    until_element_end(@reader.name)
-  end
+  # end Services
 
-  def handle_lines
-    @lines = []
-    handle_multiple(@reader.name, 'Line', :handle_line)
-  end
-
-  def handle_line
-    line_info = {}
-    line_info[:id] = get_attribute(@reader.name, 'id')
-    until_element_end(@reader.name) do
-      line_info[:name] = get_element_text('LineName')
-    end
-    @lines << line_info
-    raise "More than one line for route #{@route.inspect} #{@lines.inspect}" if @lines.size > 1
-  end
+  # VehicleJourneys
 
   def handle_vehicle_journeys
+    puts "handling vehicle journeys" if verbose
+    if @skip_sections.include?(:vehicle_journeys)
+      until_element_end(@reader.name)
+    else
+      @vehicle_journeys = []
+      parent = @reader.name
+      until_element_end(@reader.name) do
+        case @reader.name
+        when 'VehicleJourney'
+          handle_vehicle_journey
+        else
+          handle_unhandled(parent, @reader.name)
+        end
+      end
+    end
+  end
+
+  def handle_vehicle_journey
+    @vehicle_journey = {}
+    parent = @reader.name
+    until_element_end(@reader.name) do
+      case @reader.name
+      when 'PrivateCode'
+        @vehicle_journey[:private_code] =  get_element_text('PrivateCode')
+      when 'VehicleJourneyCode'
+        @vehicle_journey[:vehicle_journey_code] =  get_element_text('VehicleJourneyCode')
+      when 'ServiceRef'
+        @vehicle_journey[:service_ref] = get_element_text('ServiceRef')
+      when 'LineRef'
+        @vehicle_journey[:line_ref] = get_element_text('LineRef')
+      when 'JourneyPatternRef'
+        @vehicle_journey[:journey_pattern_ref] = get_element_text('JourneyPatternRef')
+      when 'Direction'
+        @vehicle_journey[:direction] = get_element_text('Direction')
+      when 'DepartureTime'
+        @vehicle_journey[:departure_time] = get_element_text('DepartureTime')
+      when 'DestinationDisplay'
+        @vehicle_journey[:destination_display] = get_element_text('DestinationDisplay')
+      when 'VehicleJourneyTimingLink'
+        handle_vehicle_journey_timing_link
+      when 'Operational'
+        handle_operational
+      when 'OperatingProfile'
+        handle_operating_profile
+      when 'OperatorRef'
+        @vehicle_journey[:operator_ref] = get_element_text('OperatorRef')
+      when 'StartDeadRun'
+        until_element_end(@reader.name)
+      when 'EndDeadRun'
+        until_element_end(@reader.name)
+      else
+        handle_unhandled(parent, @reader.name)
+      end
+    end
+    @vehicle_journeys << @vehicle_journey
+  end
+
+  def handle_vehicle_journey_timing_link
     until_element_end(@reader.name)
   end
+
+  def handle_operational
+    until_element_end(@reader.name)
+  end
+
+  # end VehicleJourneys
 
   def handle_multiple(element_name, inner_element, handler)
     until_element_end(element_name) do
-      if @reader.name == inner_element
+      if (inner_element.kind_of?(Array) && inner_element.include?(@reader.name)) || @reader.name == inner_element
         self.send(handler)
       else
-        raise "Unexpected element in #{element_name}: #{@reader.name}"
+        handle_unhandled(element_name, @reader.name)
       end
     end
   end
@@ -348,8 +624,8 @@ class Parsers::TransxchangeParser
     return text
   end
 
-  def get_attribute(element_name, attribute)
-    if ! @reader.has_attributes?
+  def get_attribute(element_name, attribute, required=true)
+    if ! @reader.has_attributes? && required
       raise "No attributes in #{element_name}"
     end
     return @reader[attribute]
@@ -357,6 +633,10 @@ class Parsers::TransxchangeParser
 
   # yield all the elements and text until this element closes, ignore element ends and whitespace
   def until_element_end(name)
+    return if @reader.empty_element?
+    if ! block_given?
+      puts "Skipping #{name} and all children" if verbose
+    end
     while !(@reader.node_type == XML::Reader::TYPE_END_ELEMENT && @reader.name == name)
       @reader.read
       case @reader.node_type
