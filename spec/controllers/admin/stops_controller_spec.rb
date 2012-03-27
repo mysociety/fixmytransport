@@ -114,8 +114,10 @@ describe Admin::StopsController do
     it 'should return stops identified by name' do 
       get :autocomplete_for_name, { :term => 'tennis' }
       results = JSON.parse(response.body)
-      results.first['name'].should match(/Tennis Street/)
-      results.second['name'].should match(/Tennis Court Inn/)
+      results.size.should == 2
+      [/Tennis Street/, /Tennis Court Inn/].each do |pattern|
+        results.any?{ |result| result['name'] =~ pattern }.should == true
+      end
     end
 
     it 'should return stops filtered by transport mode id' do 
