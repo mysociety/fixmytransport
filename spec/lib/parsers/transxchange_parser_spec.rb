@@ -17,6 +17,7 @@ describe Parsers::TransxchangeParser do
     before do 
       @parser = Parsers::TransxchangeParser.new
       @file = example_file("SVRYSDO005-20120130-80845.xml")
+      Operator.stub!(:find_all_by_nptdr_code).and_return([])
     end
     
     it 'should extract the number from a route' do 
@@ -30,7 +31,14 @@ describe Parsers::TransxchangeParser do
       routes = get_routes(@parser, [@file, nil, nil, nil, verbose=false, region_name='Yorkshire'])
       routes.first.region.should == mock_region
     end
-
+    
+    it "should look for the stops referenced in a timing pattern associated with a section of the route's 
+        journey pattern" do 
+      Stop.should_receive(:find_by_code).with('370055370', {:includes => {:stop_area_memberships => :stop_area}})
+      Stop.should_receive(:find_by_code).with('370055986', {:includes => {:stop_area_memberships => :stop_area}})
+      routes = get_routes(@parser, [@file, nil, nil, nil, verbose=false, region_name='Yorkshire'])
+    end
+  
   end
   
   describe 'when parsing an index file for a zip of route data files' do 
