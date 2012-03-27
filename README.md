@@ -27,7 +27,7 @@ You will also want to install mySociety's common ruby libraries. Run:
 
 to fetch the contents of the submodule.
 
-Copy config/general.yml-example to config/general.yml
+Copy `config/general.yml-example` to `config/general.yml`
 
 ###Configure the database:
 
@@ -76,3 +76,27 @@ packages listed in `config/packages` are all installed.
 
 1. Create the file from an existing database with ```pg_dump -p [Postgres port number] --schema=public -Fc YOURDB > YOURDB.sql.dump```
 2. ```rake db:load_from_binary FILE=YOURDB.sql.dump```
+
+###Running the tests
+
+If you want to run the RSpec tests continuously while developing, you
+can do this using ZenTest.  You can install ZenTest and support for
+Rails with:
+
+    gem install ZenTest autotest-rails
+
+Then you can run the following command in the fixmytransport directory:
+
+    RSPEC=true autotest
+
+If you see many gem-related deprecation warnings when running the
+tests, such as:
+
+    NOTE: Gem.source_index is deprecated, use Specification. It will be removed on or after 2011-11-01.
+    Gem.source_index called from /home/mark/fixmytransport/config/../vendor/rails/railties/lib/rails/gem_dependency.rb:21.
+
+... then your version of RubyGems is much more recent that the
+components of Rails in the `vendor` subdirectory.  One solution to
+this is to downgrade to an earlier version of RubyGems with:
+
+    gem update --system 1.6.2
