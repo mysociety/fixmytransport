@@ -29,7 +29,9 @@ describe StopAreaType do
     fixtures default_fixtures
   
     it 'should return conditions specifying a set of stop types for buses' do 
-      StopAreaType.conditions_for_transport_mode(1).should == ['area_type in (?)', [["GBCS", "GPBS", "GCLS"]]]
+      query_string, parameters = StopAreaType.conditions_for_transport_mode(1)
+      query_string.should == 'area_type in (?)'
+      parameters[0].to_set.should == ["GBCS", "GPBS", "GCLS"].to_set
     end
   
     it 'should return conditions specifying area type "GTMU" tram/metro stations (excluding the on-street area types)' do 
