@@ -27,7 +27,7 @@ You will also want to install mySociety's common ruby libraries. Run:
 
 to fetch the contents of the submodule.
 
-Copy config/general.example to config/general
+Copy config/general.yml-example to config/general.yml
 
 ###Configure the database:
 
@@ -66,6 +66,11 @@ The following commands need to be run at the command line following db creation 
     psql [yourdb] < /usr/local/pgsql/share/contrib/postgis-1.5/spatial_ref_sys.sql
 
 Also, SRID 27700 (British National Grid) is incorrect in some installs of PostGIS. After you’ve installed and got a PostGIS template, log in to it and make sure the proj4text column of SRID 27700 in the spatial_ref_sys table includes +datum=OSGB36.
+
+###Install additional packages
+
+If you're using a Debian-based system, you should make sure that the
+packages listed in `config/packages` are all installed.
 
 ###To load a new binary Postgres dump file:
 
