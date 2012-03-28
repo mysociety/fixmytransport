@@ -51,8 +51,12 @@ class Route < ActiveRecord::Base
   cattr_reader :per_page
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
-  attr_accessor :show_as_point, :journey_pattern_data
-  before_save :cache_route_coords, :generate_default_journey, :cache_area, :cache_description, :cache_short_name
+  attr_accessor :show_as_point
+  before_save [ :cache_route_coords,
+                :generate_default_journey,
+                :cache_area,
+                :cache_description,
+                :cache_short_name ]
   is_route_or_sub_route
   is_location
 
@@ -117,7 +121,7 @@ class Route < ActiveRecord::Base
       end
     end
     if !area.blank?
-      if lowercase == true 
+      if lowercase == true
         area[0] = area.first.downcase
       else
         area[0] = area.first.upcase
@@ -147,7 +151,7 @@ class Route < ActiveRecord::Base
     return self.cached_short_name if self.cached_short_name
     name(from_stop=nil, short=true)
   end
-  
+
   def short_name_with_inactive
     text = "#{short_name}"
     if self.status == 'DEL'
@@ -702,7 +706,7 @@ class Route < ActiveRecord::Base
     end
     duplicate.route_sources.each do |route_source|
       original.route_sources.build(:service_code => route_source.service_code,
-                                   :operator_code => route_source.operator_code, 
+                                   :operator_code => route_source.operator_code,
                                    :region => route_source.region,
                                    :line_number => route_source.line_number,
                                    :filename => route_source.filename)
