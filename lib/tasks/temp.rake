@@ -14,7 +14,7 @@ namespace :temp do
     Operator.connection.execute("update operators set generation_low = 1, generation_high = 1")
     OperatorCode.connection.execute("update operator_codes set generation_low = 1, generation_high = 1")
     VosaLicense.connection.execute("update vosa_licenses set generation_low = 1, generation_high = 1")
-    
+    Route.connection.execute("update routes set generation_low = 1, generation_high = 1")
     # Set replayable attribute on versions of models that have a paper trail and also belong to data generations
     
   end

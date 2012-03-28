@@ -18,9 +18,12 @@
 
 class Route < ActiveRecord::Base
   extend ActiveSupport::Memoizable
-
   include FixMyTransport::Locations
 
+  # This model is part of the transport data that is versioned by data generations.
+  # This means they have a default scope of models valid in the current data generation.
+  # See lib/fixmytransport/data_generations
+  exists_in_data_generation( :auto_update_fields => [:cached_description, :cached_slug] )
   has_many :route_sub_routes
   has_many :sub_routes, :through => :route_sub_routes
   has_many :route_operators, :dependent => :destroy, :uniq => true
