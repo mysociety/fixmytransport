@@ -41,6 +41,7 @@ class Route < ActiveRecord::Base
   belongs_to :region
   belongs_to :default_journey, :class_name => 'JourneyPattern'
   has_many :route_source_admin_areas, :dependent => :destroy
+  has_many :route_sources, :dependent => :destroy
   has_many :source_admin_areas, :through => :route_source_admin_areas, :class_name => 'AdminArea'
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   accepts_nested_attributes_for :journey_patterns, :allow_destroy => true, :reject_if => :journey_pattern_invalid
@@ -699,7 +700,13 @@ class Route < ActiveRecord::Base
                                                 :operator_code => route_source_admin_area.operator_code)
       end
     end
-
+    duplicate.route_sources.each do |route_source|
+      original.route_sources.build(:service_code => route_source.service_code,
+                                   :operator_code => route_source.operator_code, 
+                                   :region => route_source.region,
+                                   :line_number => route_source.line_number,
+                                   :filename => route_source.filename)
+    end
     duplicate.route_localities.each do |route_locality|
       if ! original.route_localities.detect{ |existing| existing.locality == route_locality.locality }
         original.route_localities.build(:locality => route_locality.locality)
