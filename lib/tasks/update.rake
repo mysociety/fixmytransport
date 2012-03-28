@@ -74,6 +74,7 @@ namespace :update do
     Rake::Task['naptan:post_load:add_locality_to_stop_areas'].execute
 
     # LOAD NOC DATA
+    ENV['FILE'] = File.join(MySociety::Config.get('NOC_DIR', ''), 'NOC_DB.csv')
     Rake::Task['noc:update:operators'].execute
     Rake::Task['noc:update:operator_codes'].execute
     Rake::Task['noc:update:vosa_licenses'].execute
