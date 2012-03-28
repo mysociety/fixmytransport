@@ -457,6 +457,7 @@ set it to #{expected_generation})"
                :new => 0 }
     diffs = {}
 
+    # Store any changes as not replayable - ie. not manual edits from our interface
     if model_class.respond_to?(:replayable)
       previous_replayable_value = model_class.replayable
       model_class.replayable = false
