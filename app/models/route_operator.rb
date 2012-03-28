@@ -11,6 +11,9 @@
 #
 
 class RouteOperator < ActiveRecord::Base
+  exists_in_data_generation( :identity_fields => [:route_id, :operator_id],
+                             :new_record_fields => [],
+                             :update_fields => [] )
   belongs_to :operator
   belongs_to :route
   has_paper_trail
