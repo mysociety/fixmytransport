@@ -25,18 +25,24 @@ victoria_to_haywards_heath:
   operator_code: TRAIN
   region: great_britain
   status: ACT
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 number_807_bus: 
   transport_mode_id: 1
   number: 807
   type: BusRoute
   operator_code: BUS
   status: ACT
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 aldershot_807_bus:
   number: "807"
   type: BusRoute
   transport_mode_id: "1"
   operator_code: BUS
   status: ACT
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 borough_C10: 
   name: 
   number: C10
@@ -44,6 +50,8 @@ borough_C10:
   transport_mode_id: "1"
   operator_code: LONDON_BUS
   status: ACT
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 metropolitan_line:
   name: Metropolitan Line
   number: MET0
@@ -51,6 +59,8 @@ metropolitan_line:
   transport_mode_id: 7
   operator_code: TUBE
   status: ACT
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 jubilee_line:
   name: Jubilee Line
   number: JUB0
@@ -58,3 +68,5 @@ jubilee_line:
   transport_mode_id: 7
   operator_code: TUBE
   status: ACT
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
