@@ -200,7 +200,8 @@ class Parsers::TransxchangeParser
           
           journey_pattern_id = journey_pattern.delete(:id)
           section_refs = journey_pattern.delete(:section_refs)
-          jp = route.journey_patterns.build()
+          jp = route.journey_patterns.build(:generation_low => CURRENT_GENERATION,
+                                            :generation_high => CURRENT_GENERATION)
           segment_order = 0
           section_refs.each do |section_ref|
             section = journey_pattern_sections[section_ref]
@@ -214,10 +215,12 @@ class Parsers::TransxchangeParser
                 missing << timing_link[:to_info][:stop]
               end
               if (from_stop and to_stop)
-                route_segment = jp.route_segments.build(:from_stop => from_stop,
-                                                        :to_stop   => to_stop,
-                                                        :route => route,
-                                                        :segment_order => segment_order )
+                route_segment = jp.route_segments.build( :from_stop => from_stop,
+                                                         :to_stop   => to_stop,
+                                                         :route => route,
+                                                         :segment_order => segment_order,
+                                                         :generation_low => CURRENT_GENERATION,
+                                                         :generation_high => CURRENT_GENERATION )
                 segment_order += 1
                 route_segment.set_stop_areas
               end
