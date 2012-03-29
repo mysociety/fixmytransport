@@ -24,6 +24,8 @@ one:
   to_stop_area: clapham_junction
   from_terminus: t
   to_terminus: f
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 two:
   route: victoria_to_haywards_heath
   journey_pattern: victoria_to_haywards_heath
@@ -33,6 +35,8 @@ two:
   to_stop_area: east_croydon_station
   from_terminus: f
   to_terminus: f
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 three:
   route: victoria_to_haywards_heath
   journey_pattern: victoria_to_haywards_heath
@@ -42,6 +46,8 @@ three:
   to_stop_area: gatwick_airport_station
   from_terminus: f
   to_terminus: f
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 four:
   route: victoria_to_haywards_heath  
   journey_pattern: victoria_to_haywards_heath
@@ -51,6 +57,8 @@ four:
   to_stop_area: haywards_heath_station
   from_terminus: f
   to_terminus: t
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 five: 
   route: number_807_bus
   journey_pattern: number_807_bus
@@ -58,6 +66,8 @@ five:
   to_stop: bethany_terrace
   from_terminus: f
   to_terminus: f
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 six: 
   route: number_807_bus
   journey_pattern: number_807_bus
@@ -65,6 +75,8 @@ six:
   to_stop: arch_ne
   from_terminus: f
   to_terminus: f
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 seven: 
   route: aldershot_807_bus
   journey_pattern: aldershot_807_bus
@@ -72,6 +84,8 @@ seven:
   to_stop: white_lion_s
   from_terminus: t
   to_terminus: f
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 eight:
   route: aldershot_807_bus
   journey_pattern: aldershot_807_bus
@@ -79,21 +93,29 @@ eight:
   to_stop: wybourne_lane
   from_terminus: f
   to_terminus: t
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 nine:
   route: borough_C10
   from_stop: tennis_street
   to_stop: borough_station  
   from_terminus: f
   to_terminus: f
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 ten: 
   route: borough_C10
   from_stop: staple_street
   to_stop: tennis_street
   from_terminus: f
   to_terminus: f     
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 eleven:
   route: jubilee_line
   from_stop: baker_st_station_plat
   to_stop: finchley_road_station_plat
   from_stop_area: baker_st_station
   to_stop_area: finchley_road_station 
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>

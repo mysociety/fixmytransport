@@ -1,9 +1,15 @@
 victoria_to_haywards_heath:
   route: victoria_to_haywards_heath
   destination: To Haywards Heath
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 number_807_bus:
   route: number_807_bus
   destination: Arch
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 aldershot_807_bus:
   route: aldershot_807_bus
   destination: Aldershot
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>

@@ -15,9 +15,15 @@
 one:
   operator: a_train_company
   route: victoria_to_haywards_heath
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 two:
   operator: a_bus_company
   route: number_807_bus
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 three: 
   operator: a_bus_company
   route: aldershot_807_bus
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
