@@ -11,6 +11,14 @@ describe Parsers::TransxchangeParser do
     parser.parse_routes(*params){ |route| routes << route }
     routes
   end
+  
+  before do
+    example_dir = File.join(RAILS_ROOT, 'spec', 'examples', 'TNDS')
+    @file_pattern = File.join(example_dir, "*.xml")
+    @example_file_path = File.join(example_dir, 'SVRYSDO005-20120130-80845.xml')
+    @filename_conditions = ['filename = ?', @example_file_path]
+    @index_file_path = File.join(example_dir, "index.txt")
+  end
 
   describe 'when parsing an example file of TNDS style route data' do
 
@@ -22,12 +30,12 @@ describe Parsers::TransxchangeParser do
     end
 
     it 'should extract the number from a route' do
-      routes = get_routes(@parser, [@file, nil, nil, nil, verbose=false, @mock_region])
+      routes = get_routes(@parser, [@file, nil, nil, @file, verbose=false, @mock_region])
       routes.first.number.should == '5'
     end
 
     it 'should set the region of a route' do
-      routes = get_routes(@parser, [@file, nil, nil, nil, verbose=false, @mock_region])
+      routes = get_routes(@parser, [@file, nil, nil, @file, verbose=false, @mock_region])
       routes.first.region.should == @mock_region
     end
 
@@ -35,7 +43,18 @@ describe Parsers::TransxchangeParser do
         journey pattern" do
       Stop.should_receive(:find_by_code).with('370055370', {:includes => {:stop_area_memberships => :stop_area}})
       Stop.should_receive(:find_by_code).with('370055986', {:includes => {:stop_area_memberships => :stop_area}})
-      routes = get_routes(@parser, [@file, nil, nil, nil, verbose=false, @mock_region])
+      routes = get_routes(@parser, [@file, nil, nil, @file, verbose=false, @mock_region])
+    end
+    
+    it 'should create a route source model for the route recording the filename, line number, region, service 
+        code and operator code' do 
+      routes = get_routes(@parser, [@file, nil, nil, @file, verbose=false, @mock_region])
+      routes.first.route_sources.size.should == 1
+      route_source = routes.first.route_sources.first
+      route_source.service_code.should == 'YSDO005'
+      route_source.operator_code.should == 'RLB'
+      route_source.line_number.should == 74
+      route_source.filename.should == @example_file_path
     end
 
 
@@ -50,11 +69,6 @@ describe Parsers::TransxchangeParser do
       Region.stub!(:find_by_name).and_return(nil)
       Region.stub!(:find_by_name).with('Yorkshire').and_return(@mock_region)
       @parser.stub!(:parse_routes)
-      example_dir = File.join(RAILS_ROOT, 'spec', 'examples', 'TNDS')
-      @file_pattern = File.join(example_dir, "*.xml")
-      @example_file_path = File.join(example_dir, 'SVRYSDO005-20120130-80845.xml')
-      @filename_conditions = ['filename = ?', @example_file_path]
-      @index_file_path = File.join(example_dir, "index.txt")
       RouteSource.stub!(:find).with(:all, :conditions => @filename_conditions).and_return([])
     end
 

@@ -8,6 +8,7 @@ class Parsers::TransxchangeParser
   attr_accessor :admin_area, :filename, :mode, :verbose, :skip_sections, :region_hash
 
   def initialize
+    XML.default_line_numbers=true
     @file_count = 0
     @skip_sections = []
     @region_hash = {}
@@ -572,7 +573,8 @@ class Parsers::TransxchangeParser
                 :operating_profile => {:regular_day_type => {},
                                        :bank_holiday_operation => {},
                                        :special_days_operation => {}},
-                :standard_service => {:journey_patterns => {}}}
+                :standard_service => {:journey_patterns => {}},
+                :file_line_number => @reader.node.line_num }
     parent = @reader.name
     until_element_end(@reader.name) do
       case @reader.name
