@@ -1,0 +1,13 @@
+en:
+  activerecord:
+    errors:
+      models:
+        passenger_transport_executive_contact:
+          attributes:
+            category:
+              blank: "Please enter a category"
+              taken: "You can only have one contact for each category in a particular PTE"
+            email:
+              invalid: "Please enter a valid email address"
+            cc_email:
+              invalid: "The CC email was invalid"
