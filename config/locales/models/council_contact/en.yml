@@ -6,5 +6,6 @@ en:
           attributes: 
             category:
               blank: "Please enter a category"
+              taken: "You can only have one contact for each category in a particular council"
             email:
               invalid: "Please enter a valid email address"
