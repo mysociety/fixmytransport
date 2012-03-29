@@ -115,12 +115,20 @@ class Parsers::TransxchangeParser
     outfile.close()
   end
 
-  def parse_all_routes(file_pattern, verbose)
+  def parse_all_tnds_routes(file_pattern, index_file_path, verbose, &block)
     filelist = Dir.glob(file_pattern)
-    puts "Got #{filelist.size} files"
+    puts "Got #{filelist.size} files" if verbose
+    self.parse_index(index_file_path)
+    bus_mode = TransportMode.find_by_name('Bus')
     filelist.sort_by { rand }.each do |filename|
-      puts filename if verbose
-      self.parse_routes(filename, nil, nil, nil, verbose)
+      sources = RouteSource.find(:all, :conditions => ['filename = ?', filename])
+      next if ! sources.empty?
+      region_name = self.region_hash[File.basename(filename)]
+      region = Region.find_by_name(region_name)
+      if ! region
+        raise "Could not find region for #{filename} in index"
+      end
+      self.parse_routes(filename, default_transport_mode=bus_mode, nil, filename, verbose, region, &block)
     end
   end
 
