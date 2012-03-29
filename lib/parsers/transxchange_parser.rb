@@ -164,6 +164,7 @@ class Parsers::TransxchangeParser
     stop_options = {:includes => {:stop_area_memberships => :stop_area}}
     missing = []
     missing_stops = {}
+    routes = {}
     parse_data(input, filename, verbose) do |data|
       journey_pattern_sections = data.delete(:journey_pattern_sections)
       operators_information = data.delete(:operators)
@@ -182,30 +183,50 @@ class Parsers::TransxchangeParser
         operating_period = service.delete(:operating_period)
         operating_profile = service.delete(:operating_profile)
         stop_requirements = service.delete(:stop_requirements)
+
         service_code = service.delete(:service_code)
-        
+        line_number = service.delete(:file_line_number)
         standard_service = service.delete(:standard_service)
         registered_operator_ref = service.delete(:registered_operator_ref)
         mode = service.delete(:mode)
-        transport_mode = Operator.vehicle_mode_to_transport_mode(mode)
+        if ! mode || mode.blank? || mode == 'air'
+          transport_mode = default_transport_mode
+        else
+          transport_mode = Operator.vehicle_mode_to_transport_mode(mode)
+        end
         if ! transport_mode
           raise "Could not map route mode #{mode} to a transport mode"
         end
-        
+
         # Not currently used
         standard_service_origin = standard_service.delete(:origin)
         standard_service_destination = standard_service.delete(:destination)
-          
+
         journey_patterns = standard_service.delete(:journey_patterns)
-        route = Route.new(:number => line[:name],
-                          :region => region, 
-                          :transport_mode => transport_mode)
-      
+        if ! routes[line[:name]]
+          route = Route.new(:number => line[:name],
+                            :region => region,
+                            :transport_mode => transport_mode,
+                            :generation_low => CURRENT_GENERATION,
+                            :generation_high => CURRENT_GENERATION)
+          routes[line[:name]] = route
+          route.status = 'ACT'
+        else
+          route = routes[line[:name]]
+        end
+        operator_information = operators_information[registered_operator_ref]
+        operator_code = operator_information[:code]
+
+        route.route_sources.build(:service_code => service_code,
+                                  :operator_code => operator_code,
+                                  :region => region,
+                                  :line_number => line_number,
+                                  :filename => filename)
         journey_patterns.each do |id, journey_pattern|
-          
+
           # not currently used
           direction = journey_pattern.delete(:direction)
-          
+
           journey_pattern_id = journey_pattern.delete(:id)
           section_refs = journey_pattern.delete(:section_refs)
           jp = route.journey_patterns.build(:generation_low => CURRENT_GENERATION,
@@ -244,15 +265,22 @@ class Parsers::TransxchangeParser
         missing.each do |missing_stop_code|
           missing_stops = self.mark_stop_code_missing(missing_stops, missing_stop_code, route)
         end
-        operator_information = operators[registered_operator_ref]
-        operator_code = operator_information[:code]
         operators = Operator.find_all_by_nptdr_code(transport_mode, operator_code, region, route)
         operators.each do |operator|
-          route.route_operators.build({ :operator => operator })
+          route.route_operators.build( :operator => operator,
+                                       :generation_low => CURRENT_GENERATION,
+                                       :generation_high => CURRENT_GENERATION )
         end
         # apply each element of the data hash - alert if there are unused elements
+
+      end
+      if routes.empty?
+        raise "No routes in this file"
+      end
+      routes.each do |line_id, route|
         yield route
       end
+
       if load_run
         LoadRunCompletion.create!(:transport_mode => transport_mode,
                                   :load_type => 'routes',
@@ -787,6 +815,7 @@ class Parsers::TransxchangeParser
 
   def handle_multiple(element_name, inner_element, handler)
     until_element_end(element_name) do
+
       if (inner_element.kind_of?(Array) && inner_element.include?(@reader.name)) || @reader.name == inner_element
         self.send(handler)
       else

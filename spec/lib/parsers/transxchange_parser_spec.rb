@@ -24,18 +24,19 @@ describe Parsers::TransxchangeParser do
 
     before do
       @parser = Parsers::TransxchangeParser.new
-      @file = example_file("SVRYSDO005-20120130-80845.xml")
+      @simple_file = example_file("SVRYSDO005-20120130-80845.xml")
+      @combined_file = example_file("ea_20-3_-1-y08.xml")
       Operator.stub!(:find_all_by_nptdr_code).and_return([])
       @mock_region = mock_model(Region)
     end
 
     it 'should extract the number from a route' do
-      routes = get_routes(@parser, [@file, nil, nil, @file, verbose=false, @mock_region])
+      routes = get_routes(@parser, [@simple_file, nil, nil, @simple_file, verbose=false, @mock_region])
       routes.first.number.should == '5'
     end
 
     it 'should set the region of a route' do
-      routes = get_routes(@parser, [@file, nil, nil, @file, verbose=false, @mock_region])
+      routes = get_routes(@parser, [@simple_file, nil, nil, @simple_file, verbose=false, @mock_region])
       routes.first.region.should == @mock_region
     end
 
@@ -43,12 +44,12 @@ describe Parsers::TransxchangeParser do
         journey pattern" do
       Stop.should_receive(:find_by_code).with('370055370', {:includes => {:stop_area_memberships => :stop_area}})
       Stop.should_receive(:find_by_code).with('370055986', {:includes => {:stop_area_memberships => :stop_area}})
-      routes = get_routes(@parser, [@file, nil, nil, @file, verbose=false, @mock_region])
+      routes = get_routes(@parser, [@simple_file, nil, nil, @simple_file, verbose=false, @mock_region])
     end
     
     it 'should create a route source model for the route recording the filename, line number, region, service 
         code and operator code' do 
-      routes = get_routes(@parser, [@file, nil, nil, @file, verbose=false, @mock_region])
+      routes = get_routes(@parser, [@simple_file, nil, nil, @simple_file, verbose=false, @mock_region])
       routes.first.route_sources.size.should == 1
       route_source = routes.first.route_sources.first
       route_source.service_code.should == 'YSDO005'
@@ -57,7 +58,17 @@ describe Parsers::TransxchangeParser do
       route_source.filename.should == @example_file_path
     end
 
-
+    it 'should merge as one route services with the same line name in the same file' do 
+      routes = get_routes(@parser, [@combined_file, nil, nil, @combined_file, verbose=false, @mock_region])
+      routes.size.should == 1
+      combined_route = routes.first
+      combined_route.number.should == "3"
+      combined_route.route_sources.size.should == 2
+      first_source = combined_route.route_sources.first
+      second_source = combined_route.route_sources.second
+      first_source.line_number.should == 2321
+      second_source.line_number.should == 2381
+    end
 
   end
 
@@ -68,13 +79,14 @@ describe Parsers::TransxchangeParser do
       @mock_region = mock_model(Region)
       Region.stub!(:find_by_name).and_return(nil)
       Region.stub!(:find_by_name).with('Yorkshire').and_return(@mock_region)
+      Region.stub!(:find_by_name).with('East Anglia').and_return(@mock_region)
       @parser.stub!(:parse_routes)
-      RouteSource.stub!(:find).with(:all, :conditions => @filename_conditions).and_return([])
+      RouteSource.stub!(:find).with(:all, :conditions => anything()).and_return([])
     end
 
     it 'should not try to parse a file for which there is already an entry in the route sources table' do
       mock_route_source = mock_model(RouteSource)
-      RouteSource.stub!(:find).with(:all, :conditions => @filename_conditions).and_return([mock_route_source])
+      RouteSource.stub!(:find).with(:all, :conditions => anything()).and_return([mock_route_source])
       @parser.should_not_receive(:parse_routes)
       @parser.parse_all_tnds_routes(@file_pattern, @index_file_path, verbose=false)
     end
@@ -86,7 +98,8 @@ describe Parsers::TransxchangeParser do
 
     it 'should look for and parse the index file' do
       @parser.should_receive(:parse_index)
-      @parser.stub!(:region_hash).and_return({ 'SVRYSDO005-20120130-80845.xml' => 'Yorkshire' })
+      @parser.stub!(:region_hash).and_return({ 'SVRYSDO005-20120130-80845.xml' => 'Yorkshire',
+                                               'ea_20-3_-1-y08.xml' => 'East Anglia' })
       @parser.parse_all_tnds_routes(@file_pattern, @index_file_path, verbose=false)
     end
 
@@ -94,6 +107,7 @@ describe Parsers::TransxchangeParser do
       region_hash = mock('region_hash')
       @parser.stub!(:region_hash).and_return(region_hash)
       region_hash.should_receive(:[]).with('SVRYSDO005-20120130-80845.xml').and_return('Yorkshire')
+      region_hash.should_receive(:[]).with('ea_20-3_-1-y08.xml').and_return('East Anglia')
       @parser.parse_all_tnds_routes(@file_pattern, @index_file_path, verbose=false)
     end
 
