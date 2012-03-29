@@ -165,11 +165,11 @@ class Parsers::TransxchangeParser
     missing_stops = {}
     parse_data(input, filename, verbose) do |data|
       journey_pattern_sections = data.delete(:journey_pattern_sections)
-      operators = data.delete(:operators)
-      data[:services].each do |service|
+      operators_information = data.delete(:operators)
+      services = data.delete(:services)
+      services.each do |service|
         if service[:standard_service][:journey_patterns].empty?
           puts "Skipping service #{service[:service_code]} - no standard service in this file" if verbose
-          data[:services].delete(service)
           next
         end
         lines = service.delete(:lines)
