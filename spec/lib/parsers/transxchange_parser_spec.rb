@@ -18,25 +18,24 @@ describe Parsers::TransxchangeParser do
       @parser = Parsers::TransxchangeParser.new
       @file = example_file("SVRYSDO005-20120130-80845.xml")
       Operator.stub!(:find_all_by_nptdr_code).and_return([])
+      @mock_region = mock_model(Region)
     end
     
     it 'should extract the number from a route' do 
-      routes = get_routes(@parser, [@file, nil, nil, nil, verbose=false, region_name='Yorkshire'])
+      routes = get_routes(@parser, [@file, nil, nil, nil, verbose=false, @mock_region])
       routes.first.number.should == '5'
     end
     
     it 'should set the region of a route' do 
-      mock_region = mock_model(Region)
-      Region.stub!(:find_by_name).with("Yorkshire").and_return(mock_region)
-      routes = get_routes(@parser, [@file, nil, nil, nil, verbose=false, region_name='Yorkshire'])
-      routes.first.region.should == mock_region
+      routes = get_routes(@parser, [@file, nil, nil, nil, verbose=false, @mock_region])
+      routes.first.region.should == @mock_region
     end
     
     it "should look for the stops referenced in a timing pattern associated with a section of the route's 
         journey pattern" do 
       Stop.should_receive(:find_by_code).with('370055370', {:includes => {:stop_area_memberships => :stop_area}})
       Stop.should_receive(:find_by_code).with('370055986', {:includes => {:stop_area_memberships => :stop_area}})
-      routes = get_routes(@parser, [@file, nil, nil, nil, verbose=false, region_name='Yorkshire'])
+      routes = get_routes(@parser, [@file, nil, nil, nil, verbose=false, @mock_region])
     end
   
   end

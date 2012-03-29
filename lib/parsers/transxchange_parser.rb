@@ -151,8 +151,7 @@ class Parsers::TransxchangeParser
     outfile.close()
   end
 
-  def parse_routes(input, default_transport_mode=nil, load_run=nil, filename=nil, verbose=true, region_name=nil)
-    region = Region.find_by_name(region_name)
+  def parse_routes(input, default_transport_mode=nil, load_run=nil, filename=nil, verbose=true, region=nil, &block)
     stop_options = {:includes => {:stop_area_memberships => :stop_area}}
     missing = []
     missing_stops = {}
