@@ -17,7 +17,7 @@ class Parsers::TransxchangeParser
 
   # Go through a directory and look for zip files in each directory. Get a stream from every
   # zip file found and pass it to parse_routes
-  def parse_all_routes(dirname, transport_mode=nil, load_run=nil, &block)
+  def parse_all_routes_in_zip(dirname, transport_mode=nil, load_run=nil, &block)
     Dir.glob(File.join(dirname, '*/')).each do |subdir|
       zips = Dir.glob(File.join(subdir, '*.zip'))
       zips.each do |zip|
