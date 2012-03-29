@@ -1,0 +1,13 @@
+en:
+  activerecord:
+    errors:
+      models:
+        operator_contact:
+          attributes:
+            category:
+              blank: "Please enter a category"
+              taken: "You can only have one contact for each category in a particular operator"
+            email:
+              invalid: "Please enter a valid email address"
+            cc_email:
+              invalid: "The CC email was invalid"
