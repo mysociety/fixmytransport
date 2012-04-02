@@ -9,8 +9,8 @@ class Slug < ::ActiveRecord::Base
   before_create :set_generations
   
   def set_generations
-    self.generation_low = CURRENT_GENERATION
-    self.generation_high = CURRENT_GENERATION
+    self.generation_low = CURRENT_GENERATION if self.generation_low.nil?
+    self.generation_high = CURRENT_GENERATION if self.generation_high.nil?
   end
   
 end

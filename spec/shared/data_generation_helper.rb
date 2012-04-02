@@ -112,7 +112,27 @@ module SharedBehaviours
         end
 
       end
-
+      
+      describe 'when setting generations' do 
+        
+        it 'should not change existing generation attribute values' do 
+          instance = @model_type.new
+          instance.generation_low = PREVIOUS_GENERATION
+          instance.generation_high = PREVIOUS_GENERATION
+          instance.should_not_receive(:generation_low=)
+          instance.should_not_receive(:generation_high=)
+          instance.set_generations
+        end
+        
+        it 'should set nil generation attributes to the current generation' do 
+          instance = @model_type.new
+          instance.should_receive(:generation_low=).with(CURRENT_GENERATION)
+          instance.should_receive(:generation_high=).with(CURRENT_GENERATION)
+          instance.set_generations
+        end
+        
+      end
+      
     end
 
     shared_examples_for "a model that exists in data generations and has slugs" do

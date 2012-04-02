@@ -695,9 +695,7 @@ class Route < ActiveRecord::Base
     raise "Can't merge routes with different statuses: #{duplicate.status} vs #{original.status}" if duplicate.status != original.status
     duplicate.route_operators.each do |route_operator|
       if ! original.route_operators.detect { |existing| existing.operator == route_operator.operator }
-        original.route_operators.build(:operator => route_operator.operator,
-                                       :generation_low => CURRENT_GENERATION,
-                                       :generation_high => CURRENT_GENERATION)
+        original.route_operators.build(:operator => route_operator.operator)
       end
     end
     duplicate.route_source_admin_areas.each do |route_source_admin_area|
@@ -733,18 +731,14 @@ class Route < ActiveRecord::Base
         end
       end
       if ! matched
-        new_journey_pattern = original.journey_patterns.build(:destination => journey_pattern.destination,
-                                                              :generation_low => CURRENT_GENERATION,
-                                                              :generation_high => CURRENT_GENERATION)
+        new_journey_pattern = original.journey_patterns.build(:destination => journey_pattern.destination)
         journey_pattern.route_segments.each do |route_segment|
           new_journey_pattern.route_segments.build(:from_stop => route_segment.from_stop,
                                                    :to_stop => route_segment.to_stop,
                                                    :from_terminus => route_segment.from_terminus,
                                                    :to_terminus => route_segment.to_terminus,
                                                    :segment_order => route_segment.segment_order,
-                                                   :route => original,
-                                                   :generation_low => CURRENT_GENERATION,
-                                                   :generation_high => CURRENT_GENERATION)
+                                                   :route => original)
         end
       end
 
