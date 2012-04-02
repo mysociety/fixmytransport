@@ -116,14 +116,17 @@ class Parsers::TransxchangeParser
     outfile.close()
   end
 
-  def parse_all_tnds_routes(file_pattern, index_file_path, verbose, &block)
+  def parse_all_tnds_routes(file_pattern, index_file_path, verbose, skip_loaded=true, &block)
     filelist = Dir.glob(file_pattern)
     puts "Got #{filelist.size} files" if verbose
     self.parse_index(index_file_path)
     bus_mode = TransportMode.find_by_name('Bus')
     filelist.sort_by { rand }.each do |filename|
-      sources = RouteSource.find(:all, :conditions => ['filename = ?', filename])
-      next if ! sources.empty?
+      puts filename if verbose
+      if skip_loaded
+        sources = RouteSource.find(:all, :conditions => ['filename = ?', filename])
+        next if ! sources.empty?
+      end
       region_name = self.region_hash[File.basename(filename)]
       region = Region.find_by_name(region_name)
       if ! region
