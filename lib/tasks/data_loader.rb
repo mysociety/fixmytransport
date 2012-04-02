@@ -242,9 +242,20 @@ set it to #{expected_generation})"
       # Try to find the object in the current generation
       existing = find_model_by_identity_hash(model_class, identity_hash, identity_type, verbose)
       if ! existing
-        puts "Can't find #{model_name} to update for #{identity_hash.inspect}" if verbose
-        next
+        puts "Can't find current #{model_name} to update for #{identity_hash.inspect}" if verbose
+        if changes.first[:event] == 'create'
+          # This was a locally created object, so find the model in the previous generation
+          puts "#{model_name} created locally. Looking in previous generation."
+          existing = model_class.find_in_generation(PREVIOUS_GENERATION,
+                                                    :first,
+                                                    :conditions => identity_hash)
+          if ! existing
+            puts ["Can't find locally created #{model_name} in previous generation to update",
+                  "for #{identity_hash.inspect}"].join(" ") if verbose
+          end
+        end
       end
+      next if ! existing
 
       # Chain together the changes over time for each attribute to produce a migration path
       # from the value it started at to the value it ended at
@@ -262,6 +273,7 @@ set it to #{expected_generation})"
             # we found already has those identifiers, or it has permanent identifiers,
             # so doesn't need them
             identity_hash.each { |key, value| changes.delete(key) }
+            migration_paths[:generation_high] = [PREVIOUS_GENERATION, CURRENT_GENERATION]
           end
           add_changes_to_migration(migration_paths, changes)
         when 'update'
