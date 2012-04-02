@@ -27,3 +27,14 @@ three:
   route: aldershot_807_bus
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+old:
+  operator: another_bus_company
+  route: aldershot_807_bus
+  generation_low: <%= PREVIOUS_GENERATION %>
+  generation_high: <%= PREVIOUS_GENERATION %>
+references_old:
+  operator: old_train_company
+  route: train_line_with_old_operator
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
+  

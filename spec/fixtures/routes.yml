@@ -70,3 +70,12 @@ jubilee_line:
   status: ACT
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+train_line_with_old_operator:
+  name: Train line
+  number: TRRR
+  type: TrainRoute
+  transport_mode_id: 6
+  operator_code: XXX
+  status: ACT
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
