@@ -18,7 +18,7 @@ namespace :tnds do
       parser = Parsers::TransxchangeParser.new
       file_glob = File.join(ENV['DIR'], "*.xml")
       index_file = File.join(ENV['DIR'], 'TravelineNationalDataSetFilesList.txt')
-      parser.parse_all_tnds_routes(file_glob, index_file, verbose) do |route|
+      parser.parse_all_tnds_routes(file_glob, index_file, verbose, skip_loaded=true) do |route|
         merged = false
         puts "route"
         route.route_sources.each do |route_source|

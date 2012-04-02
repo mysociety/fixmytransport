@@ -88,19 +88,19 @@ describe Parsers::TransxchangeParser do
       mock_route_source = mock_model(RouteSource)
       RouteSource.stub!(:find).with(:all, :conditions => anything()).and_return([mock_route_source])
       @parser.should_not_receive(:parse_routes)
-      @parser.parse_all_tnds_routes(@file_pattern, @index_file_path, verbose=false)
+      @parser.parse_all_tnds_routes(@file_pattern, @index_file_path, verbose=false, skip_loaded=true)
     end
 
     it 'should try to parse a file that does not have an entry in the route sources table' do
       @parser.should_receive(:parse_routes)
-      @parser.parse_all_tnds_routes(@file_pattern, @index_file_path, verbose=false)
+      @parser.parse_all_tnds_routes(@file_pattern, @index_file_path, verbose=false, skip_loaded=true)
     end
 
     it 'should look for and parse the index file' do
       @parser.should_receive(:parse_index)
       @parser.stub!(:region_hash).and_return({ 'SVRYSDO005-20120130-80845.xml' => 'Yorkshire',
                                                'ea_20-3_-1-y08.xml' => 'East Anglia' })
-      @parser.parse_all_tnds_routes(@file_pattern, @index_file_path, verbose=false)
+      @parser.parse_all_tnds_routes(@file_pattern, @index_file_path, verbose=false, skip_loaded=true)
     end
 
     it 'should look for the region of each file parsed in the index' do
@@ -108,7 +108,7 @@ describe Parsers::TransxchangeParser do
       @parser.stub!(:region_hash).and_return(region_hash)
       region_hash.should_receive(:[]).with('SVRYSDO005-20120130-80845.xml').and_return('Yorkshire')
       region_hash.should_receive(:[]).with('ea_20-3_-1-y08.xml').and_return('East Anglia')
-      @parser.parse_all_tnds_routes(@file_pattern, @index_file_path, verbose=false)
+      @parser.parse_all_tnds_routes(@file_pattern, @index_file_path, verbose=false, skip_loaded=true)
     end
 
   end
