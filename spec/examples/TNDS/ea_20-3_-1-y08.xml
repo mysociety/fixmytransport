@@ -1,0 +1,2561 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<TransXChange xsi:schemaLocation="http://www.transxchange.org.uk/ http://www.transxchange.org.uk/schema/2.1/TransXChange_general.xsd" CreationDateTime="2012-03-02T12:04:08.552Z" ModificationDateTime="2012-03-02T12:04:08.552Z" Modification="new" FileName="ea_20-3_-1-y08.xml" RevisionNumber="3" SchemaVersion="2.1" xml:lang="en" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.transxchange.org.uk/">
+	<StopPoints>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HHUNT046</StopPointRef>
+			<CommonName>Bus Station</CommonName>
+			<Indicator>Bay 1</Indicator>
+			<LocalityName>Huntingdon</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HGODM009</StopPointRef>
+			<CommonName>Park Lane</CommonName>
+			<Indicator>nr</Indicator>
+			<LocalityName>Godmanchester</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HGODM013</StopPointRef>
+			<CommonName>Church Place</CommonName>
+			<Indicator>nr</Indicator>
+			<LocalityName>Godmanchester</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HGODM018</StopPointRef>
+			<CommonName>Silver Street</CommonName>
+			<Indicator>opp</Indicator>
+			<LocalityName>Godmanchester</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HGODM012</StopPointRef>
+			<CommonName>London Road</CommonName>
+			<Indicator>o/s 23</Indicator>
+			<LocalityName>Godmanchester</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HGODM019</StopPointRef>
+			<CommonName>Sweetings Road</CommonName>
+			<Indicator>opp</Indicator>
+			<LocalityName>Godmanchester</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HGODM005</StopPointRef>
+			<CommonName>Crowhill</CommonName>
+			<Indicator>opp</Indicator>
+			<LocalityName>Godmanchester</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HGODM011</StopPointRef>
+			<CommonName>Wood Green Animal Shelter</CommonName>
+			<Indicator>nr</Indicator>
+			<LocalityName>Lattenbury Hill</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500SPAPA001</StopPointRef>
+			<CommonName>Main Road</CommonName>
+			<Indicator>nr</Indicator>
+			<LocalityName>Papworth St Agnes</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500SGRAV002</StopPointRef>
+			<CommonName>Manor Close</CommonName>
+			<Indicator>opp</Indicator>
+			<LocalityName>Graveley (Cambs)</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500SGRAV003</StopPointRef>
+			<CommonName>Fieldings Place</CommonName>
+			<Indicator>opp</Indicator>
+			<LocalityName>Graveley (Cambs)</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500SGRAV001</StopPointRef>
+			<CommonName>Church Lane</CommonName>
+			<Indicator>opp</Indicator>
+			<LocalityName>Graveley (Cambs)</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HYELL005</StopPointRef>
+			<CommonName>Graveley Road</CommonName>
+			<Indicator>nr</Indicator>
+			<LocalityName>Toseland</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HYELL003</StopPointRef>
+			<CommonName>Ashcroft</CommonName>
+			<Indicator>nr</Indicator>
+			<LocalityName>Yelling</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HYELL002</StopPointRef>
+			<CommonName>Friends Close</CommonName>
+			<Indicator>nr</Indicator>
+			<LocalityName>Yelling</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HHILT004</StopPointRef>
+			<CommonName>Scotts Crescent</CommonName>
+			<Indicator>nr</Indicator>
+			<LocalityName>Hilton (Cambs)</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500SPAPE006</StopPointRef>
+			<CommonName>Wood Lane</CommonName>
+			<Indicator>nr</Indicator>
+			<LocalityName>Papworth Everard</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500SPAPE003</StopPointRef>
+			<CommonName>Elm Way</CommonName>
+			<Indicator>opp</Indicator>
+			<LocalityName>Papworth Everard</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500SPAPE008</StopPointRef>
+			<CommonName>Elm Way</CommonName>
+			<Indicator>nr</Indicator>
+			<LocalityName>Papworth Everard</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500SPAPE005</StopPointRef>
+			<CommonName>Wood Lane</CommonName>
+			<Indicator>opp</Indicator>
+			<LocalityName>Papworth Everard</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HGODM010</StopPointRef>
+			<CommonName>Wood Green Animal Shelter</CommonName>
+			<Indicator>opp</Indicator>
+			<LocalityName>Lattenbury Hill</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HGODM016</StopPointRef>
+			<CommonName>Sweetings Road</CommonName>
+			<Indicator>nr</Indicator>
+			<LocalityName>Godmanchester</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HGODM023</StopPointRef>
+			<CommonName>London Road</CommonName>
+			<Indicator>o/s 14</Indicator>
+			<LocalityName>Godmanchester</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HGODM017</StopPointRef>
+			<CommonName>Silver Street</CommonName>
+			<Indicator>nr</Indicator>
+			<LocalityName>Godmanchester</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HGODM002</StopPointRef>
+			<CommonName>Church Place</CommonName>
+			<Indicator>opp</Indicator>
+			<LocalityName>Godmanchester</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+		<AnnotatedStopPointRef>
+			<StopPointRef>0500HGODM008</StopPointRef>
+			<CommonName>Park Lane</CommonName>
+			<Indicator>opp</Indicator>
+			<LocalityName>Godmanchester</LocalityName>
+			<LocalityQualifier>Cambridgeshire</LocalityQualifier>
+		</AnnotatedStopPointRef>
+	</StopPoints>
+	<RouteSections>
+		<RouteSection id="RS_20-3-_-y08-1-R-1">
+			<RouteLink id="RL_20-3-_-y08-1-R-1-1">
+				<From>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM009</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-1-2">
+				<From>
+					<StopPointRef>0500HGODM009</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM013</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-1-3">
+				<From>
+					<StopPointRef>0500HGODM013</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM018</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-1-4">
+				<From>
+					<StopPointRef>0500HGODM018</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM012</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-1-5">
+				<From>
+					<StopPointRef>0500HGODM012</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM019</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-1-6">
+				<From>
+					<StopPointRef>0500HGODM019</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM005</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-1-7">
+				<From>
+					<StopPointRef>0500HGODM005</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM011</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-1-8">
+				<From>
+					<StopPointRef>0500HGODM011</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HHILT004</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-1-9">
+				<From>
+					<StopPointRef>0500HHILT004</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-1-10">
+				<From>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+		</RouteSection>
+		<RouteSection id="RS_20-3-_-y08-1-R-2">
+			<RouteLink id="RL_20-3-_-y08-1-R-2-1">
+				<From>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM009</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-2">
+				<From>
+					<StopPointRef>0500HGODM009</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM013</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-3">
+				<From>
+					<StopPointRef>0500HGODM013</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM018</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-4">
+				<From>
+					<StopPointRef>0500HGODM018</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM012</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-5">
+				<From>
+					<StopPointRef>0500HGODM012</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM019</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-6">
+				<From>
+					<StopPointRef>0500HGODM019</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM005</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-7">
+				<From>
+					<StopPointRef>0500HGODM005</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM011</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-8">
+				<From>
+					<StopPointRef>0500HGODM011</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SPAPA001</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-9">
+				<From>
+					<StopPointRef>0500SPAPA001</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SGRAV002</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-10">
+				<From>
+					<StopPointRef>0500SGRAV002</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SGRAV003</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-11">
+				<From>
+					<StopPointRef>0500SGRAV003</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SGRAV001</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-12">
+				<From>
+					<StopPointRef>0500SGRAV001</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HYELL005</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-13">
+				<From>
+					<StopPointRef>0500HYELL005</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HYELL003</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-14">
+				<From>
+					<StopPointRef>0500HYELL003</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HYELL002</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-15">
+				<From>
+					<StopPointRef>0500HYELL002</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-16">
+				<From>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-R-2-17">
+				<From>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HHILT004</StopPointRef>
+				</To>
+				<Direction>inbound</Direction>
+			</RouteLink>
+		</RouteSection>
+		<RouteSection id="RS_20-3-_-y08-1-H-3">
+			<RouteLink id="RL_20-3-_-y08-1-H-3-1">
+				<From>
+					<StopPointRef>0500SPAPE008</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-3-2">
+				<From>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HHILT004</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-3-3">
+				<From>
+					<StopPointRef>0500HHILT004</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM010</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-3-4">
+				<From>
+					<StopPointRef>0500HGODM010</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM016</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-3-5">
+				<From>
+					<StopPointRef>0500HGODM016</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM023</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-3-6">
+				<From>
+					<StopPointRef>0500HGODM023</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM017</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-3-7">
+				<From>
+					<StopPointRef>0500HGODM017</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM002</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-3-8">
+				<From>
+					<StopPointRef>0500HGODM002</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM008</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-3-9">
+				<From>
+					<StopPointRef>0500HGODM008</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+		</RouteSection>
+		<RouteSection id="RS_20-3-_-y08-1-H-4">
+			<RouteLink id="RL_20-3-_-y08-1-H-4-1">
+				<From>
+					<StopPointRef>0500SPAPA001</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SGRAV002</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-2">
+				<From>
+					<StopPointRef>0500SGRAV002</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SGRAV003</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-3">
+				<From>
+					<StopPointRef>0500SGRAV003</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SGRAV001</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-4">
+				<From>
+					<StopPointRef>0500SGRAV001</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HYELL005</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-5">
+				<From>
+					<StopPointRef>0500HYELL005</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HYELL003</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-6">
+				<From>
+					<StopPointRef>0500HYELL003</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HYELL002</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-7">
+				<From>
+					<StopPointRef>0500HYELL002</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-8">
+				<From>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-9">
+				<From>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-10">
+				<From>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HHILT004</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-11">
+				<From>
+					<StopPointRef>0500HHILT004</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM010</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-12">
+				<From>
+					<StopPointRef>0500HGODM010</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM016</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-13">
+				<From>
+					<StopPointRef>0500HGODM016</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM023</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-14">
+				<From>
+					<StopPointRef>0500HGODM023</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM017</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-15">
+				<From>
+					<StopPointRef>0500HGODM017</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM002</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-16">
+				<From>
+					<StopPointRef>0500HGODM002</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM008</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-4-17">
+				<From>
+					<StopPointRef>0500HGODM008</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+		</RouteSection>
+		<RouteSection id="RS_20-3-_-y08-1-H-5">
+			<RouteLink id="RL_20-3-_-y08-1-H-5-1">
+				<From>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-5-2">
+				<From>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HHILT004</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-5-3">
+				<From>
+					<StopPointRef>0500HHILT004</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM010</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-5-4">
+				<From>
+					<StopPointRef>0500HGODM010</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM016</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-5-5">
+				<From>
+					<StopPointRef>0500HGODM016</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM023</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-5-6">
+				<From>
+					<StopPointRef>0500HGODM023</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM017</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-5-7">
+				<From>
+					<StopPointRef>0500HGODM017</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM002</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-5-8">
+				<From>
+					<StopPointRef>0500HGODM002</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HGODM008</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+			<RouteLink id="RL_20-3-_-y08-1-H-5-9">
+				<From>
+					<StopPointRef>0500HGODM008</StopPointRef>
+				</From>
+				<To>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+				</To>
+				<Direction>outbound</Direction>
+			</RouteLink>
+		</RouteSection>
+	</RouteSections>
+	<Routes>
+		<Route id="R_20-3-_-y08-1-R-1">
+			<PrivateCode>R_20-3-_-y08-1-R-1</PrivateCode>
+			<Description>Bus Station - Elm Way</Description>
+			<RouteSectionRef>RS_20-3-_-y08-1-R-1</RouteSectionRef>
+		</Route>
+		<Route id="R_20-3-_-y08-1-R-2">
+			<PrivateCode>R_20-3-_-y08-1-R-2</PrivateCode>
+			<Description>Bus Station - Scotts Crescent</Description>
+			<RouteSectionRef>RS_20-3-_-y08-1-R-2</RouteSectionRef>
+		</Route>
+		<Route id="R_20-3-_-y08-1-H-3">
+			<PrivateCode>R_20-3-_-y08-1-H-3</PrivateCode>
+			<Description>Elm Way - Bus Station</Description>
+			<RouteSectionRef>RS_20-3-_-y08-1-H-3</RouteSectionRef>
+		</Route>
+		<Route id="R_20-3-_-y08-1-H-4">
+			<PrivateCode>R_20-3-_-y08-1-H-4</PrivateCode>
+			<Description>Main Road - Bus Station</Description>
+			<RouteSectionRef>RS_20-3-_-y08-1-H-4</RouteSectionRef>
+		</Route>
+		<Route id="R_20-3-_-y08-1-H-5">
+			<PrivateCode>R_20-3-_-y08-1-H-5</PrivateCode>
+			<Description>Elm Way - Bus Station</Description>
+			<RouteSectionRef>RS_20-3-_-y08-1-H-5</RouteSectionRef>
+		</Route>
+	</Routes>
+	<JourneyPatternSections>
+		<JourneyPatternSection id="JPS_20-3-_-y08-1-3-1">
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-7-0-2">
+				<From SequenceNumber="1">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM009</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-7-0-3">
+				<From SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM009</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM013</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-7-0-4">
+				<From SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM013</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM018</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-7-0-5">
+				<From SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM018</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM012</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT29S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-7-0-6">
+				<From SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM012</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM019</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT9S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-7-0-7">
+				<From SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM019</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT22S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-7-0-8">
+				<From SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM011</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-7-0-9">
+				<From SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM011</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT3M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-7-0-10">
+				<From SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT7M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-7-0-11">
+				<From SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="11">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+		</JourneyPatternSection>
+		<JourneyPatternSection id="JPS_20-3-_-y08-1-4-2">
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-2">
+				<From SequenceNumber="1">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM009</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-3">
+				<From SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM009</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM013</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-4">
+				<From SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM013</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM018</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-5">
+				<From SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM018</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM012</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT29S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-6">
+				<From SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM012</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM019</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT9S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-7">
+				<From SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM019</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT22S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-8">
+				<From SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM011</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-9">
+				<From SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM011</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPA001</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT5M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-10">
+				<From SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPA001</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-11">
+				<From SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="11">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-12">
+				<From SequenceNumber="11">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="12">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV001</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT32S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-13">
+				<From SequenceNumber="12">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV001</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="13">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT3M28S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-14">
+				<From SequenceNumber="13">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="14">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-15">
+				<From SequenceNumber="14">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="15">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-16">
+				<From SequenceNumber="15">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="16">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-17">
+				<From SequenceNumber="16">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="17">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-8-0-18">
+				<From SequenceNumber="17">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="18">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT5M</RunTime>
+			</JourneyPatternTimingLink>
+		</JourneyPatternSection>
+		<JourneyPatternSection id="JPS_20-3-_-y08-1-6-2">
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-2">
+				<From SequenceNumber="1">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM009</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-3">
+				<From SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM009</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM013</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-4">
+				<From SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM013</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM018</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-5">
+				<From SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM018</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM012</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT29S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-6">
+				<From SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM012</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM019</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT9S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-7">
+				<From SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM019</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT22S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-8">
+				<From SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM011</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-9">
+				<From SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM011</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPA001</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT5M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-10">
+				<From SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPA001</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-11">
+				<From SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="11">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-12">
+				<From SequenceNumber="11">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="12">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV001</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT32S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-13">
+				<From SequenceNumber="12">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV001</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="13">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT3M28S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-14">
+				<From SequenceNumber="13">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="14">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-15">
+				<From SequenceNumber="14">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="15">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT3M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-16">
+				<From SequenceNumber="15">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="16">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT7M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-17">
+				<From SequenceNumber="16">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="17">
+					<Activity>setDown</Activity>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-9-0-18">
+				<From SequenceNumber="17">
+					<Activity>setDown</Activity>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="18">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT5M</RunTime>
+			</JourneyPatternTimingLink>
+		</JourneyPatternSection>
+		<JourneyPatternSection id="JPS_20-3-_-y08-1-7-4">
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-2">
+				<From SequenceNumber="1">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPA001</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-3">
+				<From SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-4">
+				<From SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV001</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT32S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-5">
+				<From SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV001</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT3M28S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-6">
+				<From SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-7">
+				<From SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-8">
+				<From SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT6M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-9">
+				<From SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-10">
+				<From SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT36S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-11">
+				<From SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="11">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M24S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-12">
+				<From SequenceNumber="11">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="12">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM010</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT10M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-13">
+				<From SequenceNumber="12">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM010</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="13">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM016</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-14">
+				<From SequenceNumber="13">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM016</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="14">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM023</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT21S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-15">
+				<From SequenceNumber="14">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM023</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="15">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM017</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT39S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-16">
+				<From SequenceNumber="15">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM017</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="16">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-17">
+				<From SequenceNumber="16">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="17">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM008</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-10-0-18">
+				<From SequenceNumber="17">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM008</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="18">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT3M</RunTime>
+			</JourneyPatternTimingLink>
+		</JourneyPatternSection>
+		<JourneyPatternSection id="JPS_20-3-_-y08-1-8-5">
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-11-0-2">
+				<From SequenceNumber="1">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT36S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-11-0-3">
+				<From SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M24S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-11-0-4">
+				<From SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM010</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT5M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-11-0-5">
+				<From SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM010</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM016</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-11-0-6">
+				<From SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM016</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM023</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT21S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-11-0-7">
+				<From SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM023</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM017</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT39S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-11-0-8">
+				<From SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM017</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-11-0-9">
+				<From SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM008</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-11-0-10">
+				<From SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM008</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT3M</RunTime>
+			</JourneyPatternTimingLink>
+		</JourneyPatternSection>
+		<JourneyPatternSection id="JPS_20-3-_-y08-1-9-4">
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-2">
+				<From SequenceNumber="1">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPA001</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-3">
+				<From SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-4">
+				<From SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV001</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT8S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-5">
+				<From SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SGRAV001</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT52S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-6">
+				<From SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-7">
+				<From SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-8">
+				<From SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HYELL002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT5M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-9">
+				<From SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-10">
+				<From SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT36S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-11">
+				<From SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="11">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M24S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-12">
+				<From SequenceNumber="11">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="12">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM010</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-13">
+				<From SequenceNumber="12">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM010</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="13">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM016</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-14">
+				<From SequenceNumber="13">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM016</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="14">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM023</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT21S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-15">
+				<From SequenceNumber="14">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM023</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="15">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM017</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT39S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-16">
+				<From SequenceNumber="15">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM017</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="16">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-17">
+				<From SequenceNumber="16">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="17">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM008</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T2-12-0-18">
+				<From SequenceNumber="17">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM008</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="18">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT3M</RunTime>
+			</JourneyPatternTimingLink>
+		</JourneyPatternSection>
+		<JourneyPatternSection id="JPS_20-3-_-y08-1-1-1">
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-1-0-2">
+				<From SequenceNumber="1">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM009</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-1-0-3">
+				<From SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM009</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM013</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-1-0-4">
+				<From SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM013</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM018</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-1-0-5">
+				<From SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM018</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM012</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT29S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-1-0-6">
+				<From SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM012</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM019</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT9S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-1-0-7">
+				<From SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM019</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT22S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-1-0-8">
+				<From SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM011</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-1-0-9">
+				<From SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM011</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT3M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-1-0-10">
+				<From SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-1-0-11">
+				<From SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="11">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+		</JourneyPatternSection>
+		<JourneyPatternSection id="JPS_20-3-_-y08-1-2-1">
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-4-0-2">
+				<From SequenceNumber="1">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM009</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-4-0-3">
+				<From SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM009</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM013</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-4-0-4">
+				<From SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM013</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM018</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT2M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-4-0-5">
+				<From SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM018</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM012</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT29S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-4-0-6">
+				<From SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM012</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM019</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT9S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-4-0-7">
+				<From SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM019</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT22S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-4-0-8">
+				<From SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM005</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM011</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-4-0-9">
+				<From SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM011</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT5M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-4-0-10">
+				<From SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-4-0-11">
+				<From SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE006</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="11">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE003</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+		</JourneyPatternSection>
+		<JourneyPatternSection id="JPS_20-3-_-y08-1-5-3">
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-5-0-2">
+				<From SequenceNumber="1">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE008</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT40S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-5-0-3">
+				<From SequenceNumber="2">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500SPAPE005</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M20S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-5-0-4">
+				<From SequenceNumber="3">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHILT004</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM010</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT5M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-5-0-5">
+				<From SequenceNumber="4">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM010</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM016</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT4M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-5-0-6">
+				<From SequenceNumber="5">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM016</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM023</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</To>
+				<RunTime>PT21S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-5-0-7">
+				<From SequenceNumber="6">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM023</StopPointRef>
+					<TimingStatus>OTH</TimingStatus>
+				</From>
+				<To SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM017</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT39S</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-5-0-8">
+				<From SequenceNumber="7">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM017</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-5-0-9">
+				<From SequenceNumber="8">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM002</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM008</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT1M</RunTime>
+			</JourneyPatternTimingLink>
+			<JourneyPatternTimingLink id="JPL_20-3-_-y08-1-T0-5-0-10">
+				<From SequenceNumber="9">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HGODM008</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</From>
+				<To SequenceNumber="10">
+					<Activity>pickUpAndSetDown</Activity>
+					<StopPointRef>0500HHUNT046</StopPointRef>
+					<TimingStatus>PTP</TimingStatus>
+				</To>
+				<RunTime>PT3M</RunTime>
+			</JourneyPatternTimingLink>
+		</JourneyPatternSection>
+	</JourneyPatternSections>
+	<Operators>
+		<Operator id="OId_027WP">
+			<OperatorCode>027WP</OperatorCode>
+			<OperatorShortName>Whippet Coaches</OperatorShortName>
+			<OperatorNameOnLicence>Whippet Coaches</OperatorNameOnLicence>
+			<TradingName>Whippet Coaches</TradingName>
+		</Operator>
+	</Operators>
+	<Services>
+		<Service>
+			<ServiceCode>20-3-_-y08-1-T2</ServiceCode>
+			<PrivateCode>20-3-_-y08-1</PrivateCode>
+			<Lines>
+				<Line id="LId_20-3-_-y08-1-T2">
+					<LineName>3</LineName>
+				</Line>
+			</Lines>
+			<OperatingPeriod>
+				<StartDate>2012-03-03</StartDate>
+				<EndDate>2012-08-25</EndDate>
+			</OperatingPeriod>
+			<OperatingProfile>
+				<RegularDayType>
+					<DaysOfWeek>
+						<Saturday />
+					</DaysOfWeek>
+				</RegularDayType>
+			</OperatingProfile>
+			<RegisteredOperatorRef>OId_027WP</RegisteredOperatorRef>
+			<StopRequirements>
+				<NoNewStopsRequired />
+			</StopRequirements>
+			<Mode>coach</Mode>
+			<Description>Papworth Everard  - Graveley - Godmanchester - Huntingdon</Description>
+			<StandardService>
+				<Origin>Main Road</Origin>
+				<Destination>Bus Station</Destination>
+				<JourneyPattern id="JP_20-3-_-y08-1-3-R-1-T2">
+					<Direction>inbound</Direction>
+					<RouteRef>R_20-3-_-y08-1-R-1</RouteRef>
+					<JourneyPatternSectionRefs>JPS_20-3-_-y08-1-3-1</JourneyPatternSectionRefs>
+				</JourneyPattern>
+				<JourneyPattern id="JP_20-3-_-y08-1-4-R-2-T2">
+					<Direction>inbound</Direction>
+					<RouteRef>R_20-3-_-y08-1-R-2</RouteRef>
+					<JourneyPatternSectionRefs>JPS_20-3-_-y08-1-4-2</JourneyPatternSectionRefs>
+				</JourneyPattern>
+				<JourneyPattern id="JP_20-3-_-y08-1-6-R-2-T2">
+					<Direction>inbound</Direction>
+					<RouteRef>R_20-3-_-y08-1-R-2</RouteRef>
+					<JourneyPatternSectionRefs>JPS_20-3-_-y08-1-6-2</JourneyPatternSectionRefs>
+				</JourneyPattern>
+				<JourneyPattern id="JP_20-3-_-y08-1-7-H-4-T2">
+					<Direction>outbound</Direction>
+					<RouteRef>R_20-3-_-y08-1-H-4</RouteRef>
+					<JourneyPatternSectionRefs>JPS_20-3-_-y08-1-7-4</JourneyPatternSectionRefs>
+				</JourneyPattern>
+				<JourneyPattern id="JP_20-3-_-y08-1-8-H-5-T2">
+					<Direction>outbound</Direction>
+					<RouteRef>R_20-3-_-y08-1-H-5</RouteRef>
+					<JourneyPatternSectionRefs>JPS_20-3-_-y08-1-8-5</JourneyPatternSectionRefs>
+				</JourneyPattern>
+				<JourneyPattern id="JP_20-3-_-y08-1-9-H-4-T2">
+					<Direction>outbound</Direction>
+					<RouteRef>R_20-3-_-y08-1-H-4</RouteRef>
+					<JourneyPatternSectionRefs>JPS_20-3-_-y08-1-9-4</JourneyPatternSectionRefs>
+				</JourneyPattern>
+			</StandardService>
+		</Service>
+		<Service>
+			<ServiceCode>20-3-_-y08-1-T0</ServiceCode>
+			<PrivateCode>20-3-_-y08-1</PrivateCode>
+			<Lines>
+				<Line id="LId_20-3-_-y08-1-T0">
+					<LineName>3</LineName>
+				</Line>
+			</Lines>
+			<OperatingPeriod>
+				<StartDate>2012-02-28</StartDate>
+				<EndDate>2012-08-24</EndDate>
+			</OperatingPeriod>
+			<OperatingProfile>
+				<RegularDayType>
+					<DaysOfWeek>
+						<MondayToFriday />
+					</DaysOfWeek>
+				</RegularDayType>
+				<SpecialDaysOperation>
+					<DaysOfNonOperation>
+						<DateRange>
+							<StartDate>2012-04-06</StartDate>
+							<EndDate>2012-04-06</EndDate>
+						</DateRange>
+						<DateRange>
+							<StartDate>2012-04-09</StartDate>
+							<EndDate>2012-04-09</EndDate>
+						</DateRange>
+						<DateRange>
+							<StartDate>2012-05-07</StartDate>
+							<EndDate>2012-05-07</EndDate>
+						</DateRange>
+						<DateRange>
+							<StartDate>2012-06-04</StartDate>
+							<EndDate>2012-06-05</EndDate>
+						</DateRange>
+					</DaysOfNonOperation>
+				</SpecialDaysOperation>
+			</OperatingProfile>
+			<RegisteredOperatorRef>OId_027WP</RegisteredOperatorRef>
+			<StopRequirements>
+				<NoNewStopsRequired />
+			</StopRequirements>
+			<Mode>coach</Mode>
+			<Description>Papworth Everard  - Graveley - Godmanchester - Huntingdon</Description>
+			<StandardService>
+				<Origin>Main Road</Origin>
+				<Destination>Bus Station</Destination>
+				<JourneyPattern id="JP_20-3-_-y08-1-1-R-1-T0">
+					<Direction>inbound</Direction>
+					<RouteRef>R_20-3-_-y08-1-R-1</RouteRef>
+					<JourneyPatternSectionRefs>JPS_20-3-_-y08-1-1-1</JourneyPatternSectionRefs>
+				</JourneyPattern>
+				<JourneyPattern id="JP_20-3-_-y08-1-2-R-1-T0">
+					<Direction>inbound</Direction>
+					<RouteRef>R_20-3-_-y08-1-R-1</RouteRef>
+					<JourneyPatternSectionRefs>JPS_20-3-_-y08-1-2-1</JourneyPatternSectionRefs>
+				</JourneyPattern>
+				<JourneyPattern id="JP_20-3-_-y08-1-5-H-3-T0">
+					<Direction>outbound</Direction>
+					<RouteRef>R_20-3-_-y08-1-H-3</RouteRef>
+					<JourneyPatternSectionRefs>JPS_20-3-_-y08-1-5-3</JourneyPatternSectionRefs>
+				</JourneyPattern>
+			</StandardService>
+		</Service>
+	</Services>
+	<VehicleJourneys>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-7-T2</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-7-T2</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T2</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T2</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-3-R-1-T2</JourneyPatternRef>
+			<DepartureTime>10:05:00</DepartureTime>
+		</VehicleJourney>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-8-T2</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-8-T2</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T2</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T2</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-4-R-2-T2</JourneyPatternRef>
+			<DepartureTime>12:05:00</DepartureTime>
+		</VehicleJourney>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-9-T2</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-9-T2</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T2</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T2</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-6-R-2-T2</JourneyPatternRef>
+			<DepartureTime>16:15:00</DepartureTime>
+		</VehicleJourney>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-10-T2</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-10-T2</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T2</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T2</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-7-H-4-T2</JourneyPatternRef>
+			<DepartureTime>09:00:00</DepartureTime>
+		</VehicleJourney>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-11-T2</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-11-T2</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T2</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T2</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-8-H-5-T2</JourneyPatternRef>
+			<DepartureTime>11:35:00</DepartureTime>
+		</VehicleJourney>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-12-T2</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-12-T2</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T2</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T2</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-9-H-4-T2</JourneyPatternRef>
+			<DepartureTime>12:15:00</DepartureTime>
+		</VehicleJourney>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-13-T2</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-13-T2</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T2</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T2</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-8-H-5-T2</JourneyPatternRef>
+			<DepartureTime>15:35:00</DepartureTime>
+		</VehicleJourney>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-14-T2</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-14-T2</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T2</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T2</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-3-R-1-T2</JourneyPatternRef>
+			<DepartureTime>14:05:00</DepartureTime>
+		</VehicleJourney>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-1-T0</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-1-T0</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T0</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T0</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-1-R-1-T0</JourneyPatternRef>
+			<DepartureTime>11:05:00</DepartureTime>
+		</VehicleJourney>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-2-T0</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-2-T0</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T0</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T0</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-1-R-1-T0</JourneyPatternRef>
+			<DepartureTime>12:30:00</DepartureTime>
+		</VehicleJourney>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-3-T0</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-3-T0</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T0</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T0</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-1-R-1-T0</JourneyPatternRef>
+			<DepartureTime>14:30:00</DepartureTime>
+		</VehicleJourney>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-4-T0</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-4-T0</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T0</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T0</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-2-R-1-T0</JourneyPatternRef>
+			<DepartureTime>17:05:00</DepartureTime>
+		</VehicleJourney>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-5-T0</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-5-T0</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T0</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T0</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-5-H-3-T0</JourneyPatternRef>
+			<DepartureTime>13:10:00</DepartureTime>
+		</VehicleJourney>
+		<VehicleJourney>
+			<PrivateCode>VJ_20-3-_-y08-1-6-T0</PrivateCode>
+			<VehicleJourneyCode>VJ_20-3-_-y08-1-6-T0</VehicleJourneyCode>
+			<ServiceRef>20-3-_-y08-1-T0</ServiceRef>
+			<LineRef>LId_20-3-_-y08-1-T0</LineRef>
+			<JourneyPatternRef>JP_20-3-_-y08-1-5-H-3-T0</JourneyPatternRef>
+			<DepartureTime>10:30:00</DepartureTime>
+		</VehicleJourney>
+	</VehicleJourneys>
+</TransXChange>
