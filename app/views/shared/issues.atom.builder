@@ -4,7 +4,7 @@ atom_feed do |feed|
   @issues.each do |issue|
     if issue.is_a?(Campaign)
       feed.entry(issue) do |entry|
-        entry.title(h(issue.title))
+        entry.title(issue.title)
         entry.content(strip_tags(issue.description))
         entry.author do |author|
           author.name(issue.initiator.name)
@@ -12,7 +12,7 @@ atom_feed do |feed|
       end
     elsif issue.is_a?(Problem)
       feed.entry(issue) do |entry|
-        entry.title(h(issue.subject))
+        entry.title(issue.subject)
         entry.content(strip_tags(issue.description))
         entry.author do |author|
           author.name(issue.reporter.name)
