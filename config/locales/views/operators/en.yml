@@ -32,6 +32,7 @@ en:
         other: "%{count} issues have been reported to %{operator}."
     issues:
       title: "%{operator} issues"
+      feed_title: "Issues for %{operator} on FixMyTransport"
     routes:
       title: "%{operator} routes"
     stations:

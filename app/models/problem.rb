@@ -494,4 +494,8 @@ class Problem < ActiveRecord::Base
     self.visible.sent.find(:all, :conditions => query + params)
   end
 
+  def feed_title_suffix
+    :fixed == status ? " [FIXED]" : ""
+  end
+
 end

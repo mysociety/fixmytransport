@@ -263,4 +263,9 @@ class Campaign < ActiveRecord::Base
     self.visible.find(:all, :conditions => query + params,
                             :include => :problem)
   end
+
+  def feed_title_suffix
+    :fixed == status ? " [FIXED]" : ""
+  end
+
 end

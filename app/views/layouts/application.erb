@@ -34,6 +34,9 @@
 	<noscript>
 		<%= raw stylesheet_link_tag(minify(['no-js'])) %>
 	</noscript>
+    <%- if @issues_feed_title %>
+        <%= auto_discovery_link_tag :atom, { :action => 'issues', :format => 'atom' }, { :title => @issues_feed_title } %>
+    <%- end %>
   </head>
 	<body <%-if @body_class %>class="<%= @body_class %>"<%- end %>>
     <%= yield :body_content %>
