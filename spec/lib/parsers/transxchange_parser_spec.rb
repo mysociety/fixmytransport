@@ -11,7 +11,7 @@ describe Parsers::TransxchangeParser do
     parser.parse_routes(*params){ |route| routes << route }
     routes
   end
-  
+
   before do
     example_dir = File.join(RAILS_ROOT, 'spec', 'examples', 'TNDS')
     @file_pattern = File.join(example_dir, "*.xml")
@@ -26,8 +26,9 @@ describe Parsers::TransxchangeParser do
       @parser = Parsers::TransxchangeParser.new
       @simple_file = example_file("SVRYSDO005-20120130-80845.xml")
       @combined_file = example_file("ea_20-3_-1-y08.xml")
-      Operator.stub!(:find_all_by_nptdr_code).and_return([])
-      @mock_region = mock_model(Region)
+      mock_operator = mock_model(Operator)
+      Operator.stub!(:find_all_by_nptdr_code).and_return([mock_operator])
+      @mock_region = mock_model(Region, :name => 'Yorkshire')
     end
 
     it 'should extract the number from a route' do
@@ -46,9 +47,9 @@ describe Parsers::TransxchangeParser do
       Stop.should_receive(:find_by_code).with('370055986', {:includes => {:stop_area_memberships => :stop_area}})
       routes = get_routes(@parser, [@simple_file, nil, nil, @simple_file, verbose=false, @mock_region])
     end
-    
-    it 'should create a route source model for the route recording the filename, line number, region, service 
-        code and operator code' do 
+
+    it 'should create a route source model for the route recording the filename, line number, region, service
+        code and operator code' do
       routes = get_routes(@parser, [@simple_file, nil, nil, @simple_file, verbose=false, @mock_region])
       routes.first.route_sources.size.should == 1
       route_source = routes.first.route_sources.first
@@ -58,7 +59,7 @@ describe Parsers::TransxchangeParser do
       route_source.filename.should == @example_file_path
     end
 
-    it 'should merge as one route services with the same line name in the same file' do 
+    it 'should merge as one route services with the same line name in the same file' do
       routes = get_routes(@parser, [@combined_file, nil, nil, @combined_file, verbose=false, @mock_region])
       routes.size.should == 1
       combined_route = routes.first
@@ -68,6 +69,31 @@ describe Parsers::TransxchangeParser do
       second_source = combined_route.route_sources.second
       first_source.line_number.should == 2321
       second_source.line_number.should == 2381
+    end
+
+    it 'should create an operator for the route based on the operator code' do
+      mock_operator = mock_model(Operator)
+      expected_arguments = [anything(), '027WP', @mock_region, anything()]
+      Operator.stub!(:find_all_by_nptdr_code).with(*expected_arguments).and_return([mock_operator])
+      routes = get_routes(@parser, [@combined_file, nil, nil, @combined_file, verbose=false, @mock_region])
+      combined_route = routes.first
+      combined_route.route_operators.size.should == 1
+      combined_route.route_operators.first.operator.should == mock_operator
+    end
+
+    describe 'if a unique operator cannot be found using the operator code' do
+
+      before do
+        Operator.stub!(:find_all_by_nptdr_code).and_return([])
+        @mock_operator = mock_model(Operator)
+      end
+
+      it 'should look for the operator using the short name' do
+        expected_conditions = [:all, { :conditions => ['lower(name) = ?', 'whippet coaches'] }] 
+        Operator.should_receive(:find).with(*expected_conditions).exactly(2).times.and_return([@mock_operator])
+        routes = get_routes(@parser, [@combined_file, nil, nil, @combined_file, verbose=false, @mock_region])
+      end
+
     end
 
   end

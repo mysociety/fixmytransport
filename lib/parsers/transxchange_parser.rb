@@ -219,7 +219,7 @@ class Parsers::TransxchangeParser
         end
         operator_information = operators_information[registered_operator_ref]
         operator_code = operator_information[:code]
-
+        puts operator_information
         route.route_sources.build(:service_code => service_code,
                                   :operator_code => operator_code,
                                   :region => region,
@@ -269,10 +269,21 @@ class Parsers::TransxchangeParser
           missing_stops = self.mark_stop_code_missing(missing_stops, missing_stop_code, route)
         end
         operators = Operator.find_all_by_nptdr_code(transport_mode, operator_code, region, route)
+        # no matches or ambiguious
+        puts "found #{operators.size} operators by operator code" if verbose
+        if operators.empty? || operators.size > 1
+          if operator_information[:short_name]
+            lower_name = operator_information[:short_name].downcase
+            operators = Operator.find(:all, :conditions => ['lower(name) = ?', lower_name])
+          end
+        end
+        if operators.empty? || operators.size > 1
+          raise "Can't find operator with info: #{operator_information.inspect} #{route.number} #{region.name}"
+        end
         operators.each do |operator|
-          route.route_operators.build( :operator => operator,
-                                       :generation_low => CURRENT_GENERATION,
-                                       :generation_high => CURRENT_GENERATION )
+          if ! route.route_operators.any?{ |route_operator| route_operator.operator == operator }
+            route.route_operators.build( :operator => operator )
+          end
         end
         # apply each element of the data hash - alert if there are unused elements
 
