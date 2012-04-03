@@ -13,7 +13,7 @@ class LocationsController < ApplicationController
         @map_width = PROBLEM_CREATION_MAP_HEIGHT
         map_params_from_location(@stop.points,
                                 find_other_locations=true,
-                                height=@map_width,
+                                height=@map_height,
                                 width=@map_width)
         return false
       end
