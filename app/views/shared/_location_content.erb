@@ -1,58 +1,5 @@
-<%- content_for :experiment do %>
-  <%- if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com' %>
-  
-    <%- if !@variant %>
-      <!-- Google Website Optimizer Control Script -->
-      <script>
-      function utmx_section(){}function utmx(){}
-      (function(){var k='1894524795',d=document,l=d.location,c=d.cookie;function f(n){
-      if(c){var i=c.indexOf(n+'=');if(i>-1){var j=c.indexOf(';',i);return escape(c.substring(i+n.
-      length+1,j<0?c.length:j))}}}var x=f('__utmx'),xx=f('__utmxx'),h=l.hash;
-      d.write('<sc'+'ript src="'+
-      'http'+(l.protocol=='https:'?'s://ssl':'://www')+'.google-analytics.com'
-      +'/siteopt.js?v=1&utmxkey='+k+'&utmx='+(x?x:'')+'&utmxx='+(xx?xx:'')+'&utmxtime='
-      +new Date().valueOf()+(h?'&utmxhash='+escape(h.substr(1)):'')+
-      '" type="text/javascript" charset="utf-8"></sc'+'ript>')})();
-      </script>
-      <!-- End of Google Website Optimizer Control Script -->
-      <script>
-      function filter(v) {
-      var b = utmx('variation_content', 'page-url');
-      var l = document.location.protocol + "//" + document.location.host + document.location.pathname + document.location.search;
-      var i = l.indexOf("?");
-      if (i > 0) {
-        u = l + "&";
-      } else {
-        u = l + "?";
-      }
-      u = u + "v=1";
-      return u;
-      }
-      utmx('url', 'page-url', 0, filter);
-      </script>
-      <!-- utmx section name="page-url" -->
-    <%- end %>
-    <!-- Google Website Optimizer Tracking Script -->
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['gwo._setAccount', 'UA-24232514-2']);
-      _gaq.push(['gwo._trackPageview', '/1894524795/test']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
-    <!-- End of Google Website Optimizer Tracking Script -->
-  <%- end %>
-<%- end %>
-
 <h3 class="location-content-header">
-  <%- if @variant %>
-    <%= t('shared.location_content.problems_here', :on_or_at => (location.is_a?(Route) || location.is_a?(SubRoute) ? t('shared.location_content.on_it') : t('shared.location_content.at_it')), :location => readable_location_type(location))%>
-  <%- else %>
-    <%= t('shared.location_content.related_issues') %>
-  <%- end %>
+  <%= t('shared.location_content.problems_here', :on_or_at => (location.is_a?(Route) || location.is_a?(SubRoute) ? t('shared.location_content.on_it') : t('shared.location_content.at_it')), :location => readable_location_type(location))%>
 </h3>
 
 <%- if !location.related_issues.empty? %>
@@ -62,23 +9,5 @@
   <%- end %>
 </ul>
 <%- else %>
-  <%- if @variant %>
-    <%= t('shared.location_content.no_problems')%>
-  <%- else %>
-    <%= t('shared.location_content.no_issues')%>
-  <%- end %>
-<%- end %>
-
-<%- unless @variant %>
-  <h3 class="location-content-header"><%= t('shared.location_content.praise') %></h3>
-  <%- if location.comments.visible.empty? %>
-  <span class="no-comments-text"><%= t('shared.location_content.no_praise')%></span>
-  <%- end %>
-  <ul id="campaign-thread">
-    <%- location.comments.visible.each_with_index do |comment, index|  %>
-          <li class="open">
-           <%= render :partial => 'shared/comment', :locals => { :comment => comment,  :index => index+1 }%>
-     </li>
-    <%- end %>
-  </ul>
+  <%= t('shared.location_content.no_problems')%>
 <%- end %>
