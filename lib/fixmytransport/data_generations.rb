@@ -3,13 +3,50 @@ module FixMyTransport
 
   module DataGenerations
 
+    @@data_generation_models = []
+    mattr_accessor :data_generation_models
+
+
     def self.included(base)
       base.send :extend, ClassMethods
+    end
+
+    # TODO: Find a better way to preload all models controlled by data generations
+    def self.preload_all_models
+      Dir[ File.join(RAILS_ROOT,'app','models','*.rb') ].map { |file| require_dependency file }
+    end
+
+    # Will set the scope to the generation passed on each model in the
+    # models_to_set_generation_on parameter, and then yield the block
+    def self.set_generation(models_to_set_generation_on, generation, &block)
+      if models_to_set_generation_on.empty?
+        yield
+      else
+        current_model = models_to_set_generation_on.pop
+        current_model.in_generation(generation) do
+          self.set_generation(models_to_set_generation_on, generation, &block)
+        end
+      end
+    end
+
+    # Set the scope to the generation passed for all models controlled by data generations
+    def self.in_generation(generation, &block)
+      # Make sure all models are loaded - as Rails uses lazy loading, some might only
+      # be loaded in the context of the block passed - and we need to set the scope on them first
+      self.preload_all_models
+      # make a copy of the list of models that exist in data generations
+      models_to_set_generation_on = Array.new(self.data_generation_models)
+      # call the recursive function to set the generation scope on each of them
+      self.set_generation(models_to_set_generation_on, generation, &block)
     end
 
     module ClassMethods
 
       def exists_in_data_generation(options={})
+
+        # Record that this model is scoped by data generations
+        FixMyTransport::DataGenerations.data_generation_models << self
+
         cattr_accessor :data_generation_options_hash
         # Want this not to be inherited by instances
         class << self
@@ -20,8 +57,8 @@ module FixMyTransport
 
         self.class_eval do
            # This default scope hides any models that belong to past or future data generations.
-           default_scope :conditions => [ "#{quoted_table_name}.generation_low <= ?
-                                           AND #{quoted_table_name}.generation_high >= ?",
+           default_scope :conditions => [ ["#{quoted_table_name}.generation_low <= ?",
+                                           "AND #{quoted_table_name}.generation_high >= ?"].join(" "),
                                            CURRENT_GENERATION, CURRENT_GENERATION ]
            # This callback sets the data generations columns to the current generation
            # if not value has been set on them
@@ -81,9 +118,9 @@ module FixMyTransport
       # Perform a block of code in the context of the data generation passed
       def in_generation(generation_id, &block)
         self.with_exclusive_scope do
-          self.with_scope(:find => {:conditions => [ "#{quoted_table_name}.generation_low <= ?
-                                                      AND #{quoted_table_name}.generation_high >= ?",
-                                                      generation_id, generation_id ]}) do
+          condition_string = ["#{quoted_table_name}.generation_low <= ?",
+                              "AND #{quoted_table_name}.generation_high >= ?"].join(" ")
+          self.with_scope(:find => {:conditions => [ condition_string, generation_id, generation_id ]}) do
              yield
           end
         end

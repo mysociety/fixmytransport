@@ -17,6 +17,28 @@ module SharedBehaviours
 
     shared_examples_for "a model that exists in data generations" do
 
+      describe 'when the data generation is set for all models controlled by data generations' do
+
+        it 'should have the scope for the generation set in the call' do
+          FixMyTransport::DataGenerations.in_generation(PREVIOUS_GENERATION) do
+            condition_string = ["#{@model_type.quoted_table_name}.generation_low <= ?",
+                                "AND #{@model_type.quoted_table_name}.generation_high >= ?"].join(" ")
+            expected_scope = {:conditions => [ condition_string, PREVIOUS_GENERATION, PREVIOUS_GENERATION ]}
+            @model_type.send(:scope, :find).should == expected_scope
+          end
+        end
+
+        it 'should have the default scope after the call' do
+          condition_string = ["#{@model_type.quoted_table_name}.generation_low <= ?",
+                              "AND #{@model_type.quoted_table_name}.generation_high >= ?"].join(" ")
+          expected_scope = {:conditions => [ condition_string , CURRENT_GENERATION, CURRENT_GENERATION ]}
+          FixMyTransport::DataGenerations.in_generation(PREVIOUS_GENERATION) do
+          end
+          @model_type.send(:scope, :find).should == expected_scope
+        end
+
+      end
+
       describe 'when the class is set to replayable' do
 
         before do
