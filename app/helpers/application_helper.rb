@@ -63,7 +63,7 @@ module ApplicationHelper
   # then regenerate the content and don't cache. Otherwise, save new content to cache, and allow existing
   # cache to be used.
   def cache_unless_map_params(cache_options)
-    if params[:lat] or params[:lon] or params[:zoom]
+    if params[:lat] or params[:lon] or params[:xizoom]
       yield
     else
       cache(cache_options) do

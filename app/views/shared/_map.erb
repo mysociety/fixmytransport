@@ -50,19 +50,19 @@ Zoom in to see all stops and stations in the area.
       </div>
 
       <div id="zoom_in" class="map-control static-map-element" style="left: 13px; top: 63px; width: 18px; height: 18px; position: absolute;">
-        <a rel="nofollow" href="<%= url_for(params.merge(:zoom => Map.zoom_in(@zoom))) %>">
+        <a rel="nofollow" href="<%= url_for(params.merge(:xizoom => Map.zoom_in(@zoom))) %>">
           <%= image_tag("/javascripts/img/zoom-plus-mini.png", :style => "width: 18px; height: 18px; position: relative;", :alt => 'zoom in') %>
         </a>
       </div>
 
       <div id="zoom_world" class="map-control static-map-element" style="left: 13px; top: 81px; width: 18px; height: 18px; position: absolute;">
-        <a rel="nofollow" href="<%= url_for(params.merge(:zoom => nil, :lat => nil, :lon => nil)) %>">
+        <a rel="nofollow" href="<%= url_for(params.merge(:xizoom => nil, :lat => nil, :lon => nil)) %>">
           <%= image_tag("/javascripts/img/zoom-world-mini.png", :style => "width: 18px; height: 18px; position: relative;", :alt => 'reset map') %>
         </a>
       </div>
 
       <div id="zoom_out" class="map-control static-map-element" style="left: 13px; top: 99px; width: 18px; height: 18px; position: absolute; ">
-        <a rel="nofollow" href="<%= url_for(params.merge(:zoom => Map.zoom_out(@zoom))) %>">
+        <a rel="nofollow" href="<%= url_for(params.merge(:xizoom => Map.zoom_out(@zoom))) %>">
           <%= image_tag("/javascripts/img/zoom-minus-mini.png", :style => "width: 18px; height: 18px; position: relative;", :alt => 'zoom out') %>
         </a>
       </div>

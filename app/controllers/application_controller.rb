@@ -457,7 +457,7 @@ class ApplicationController < ActionController::Base
   end
 
   def process_map_params
-    @zoom = params[:zoom].to_i if params[:zoom] && (MIN_ZOOM_LEVEL <= params[:zoom].to_i && params[:zoom].to_i <= MAX_VISIBLE_ZOOM)
+    @zoom = params[:xizoom].to_i if params[:xizoom] && (MIN_ZOOM_LEVEL <= params[:xizoom].to_i && params[:xizoom].to_i <= MAX_VISIBLE_ZOOM)
     @lon = params[:lon].to_f if params[:lon]
     @lat = params[:lat].to_f if params[:lat]
   end
