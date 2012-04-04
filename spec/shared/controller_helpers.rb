@@ -8,97 +8,31 @@ module SharedBehaviours
 
         before do
           # stub the model finding query
-          find_params = [@default_params[:id]]
+          @find_params = [@default_params[:id]]
           if @scope_model
-            find_params << { :scope => @default_params[:scope], :include => [@scope_field] }
+            @find_params << { :scope => @default_params[:scope], :include => [@scope_field] }
           end
 
-          @model_type.stub!(:find).with(*find_params).and_raise(ActiveRecord::RecordNotFound)
-          if @scope_model
-            @previous_scope = mock_model(@scope_model)
-            @current_scope = mock_model(@scope_model)
-          end
-
-          # stub the previous generation query
-          @previous = mock_model(@model_type, :generation_high => PREVIOUS_GENERATION)
-          if @scope_model
-            @previous.stub!(@scope_field).and_return(@previous_scope)
-          end
-          @model_type.stub!(:find_in_generation).and_return(@previous)
-
+          @model_type.stub!(:find).with(*@find_params).and_raise(ActiveRecord::RecordNotFound)
           # stub the successor query
           @successor = mock_model(@model_type)
+
           if @scope_model
+            @current_scope = mock_model(@scope_model)
             @successor.stub!(@scope_field).and_return(@current_scope)
           end
-          @model_type.stub!(:find).with(:first, :conditions => ['previous_id = ?', @previous.id]).and_return(@successor)
+          @model_type.stub!(:find_successor).with(*@find_params).and_return(@successor)
         end
 
-        it 'should look for the instance in a previous generation' do
-          expected_args = [PREVIOUS_GENERATION, @default_params[:id]]
-          if @scope_model
-            expected_args << { :scope => @default_params[:scope],
-                               :include => [@scope_field] }
-          end
-          @model_type.should_receive(:find_in_generation).with(*expected_args)
+        it "should look for the instance's successor" do
+          @model_type.should_receive(:find_successor).with(*@find_params).and_return(@successor)
           make_request
         end
 
-        describe 'if the instance can be found in a previous generation' do
-
-          it 'should look for the successor to the instance in this generation' do
-            @model_type.should_receive(:find).with(:first, :conditions => ['previous_id = ?', @previous.id]).and_return(@successor)
-            make_request
-          end
-
-          describe 'if the instance is valid in this generation' do
-
-            before do
-              @previous.stub!(:generation_high).and_return(CURRENT_GENERATION)
-            end
-            it 'should issue a permanent redirect to the current friendly id of the stop' do
-              make_request
-              expected_params = { :id => @previous }
-              if @scope_model
-                expected_params[:scope] = @previous_scope
-              end
-              response.should redirect_to(@default_params.merge(expected_params))
-            end
-
-          end
-
-          describe 'if the instance is not valid in this generation' do
-
-            describe 'if there is a successor' do
-
-              it 'should issue a permanent redirect to the successor' do
-                make_request
-                expected_params = { :id => @successor }
-                if @scope_model
-                  expected_params[:scope] = @current_scope
-                end
-                response.should redirect_to(@default_params.merge(expected_params))
-              end
-
-            end
-
-            describe 'if there is no successor' do
-
-              before do
-                @model_type.stub!(:find).with(:first, :conditions => ['previous_id = ?', @previous.id]).and_return(nil)
-              end
-
-              it 'should re-raise the error (returning a 404 in production)' do
-                lambda{ make_request }.should raise_error(ActiveRecord::RecordNotFound)
-              end
-            end
-          end
-        end
-
-        describe 'if the instance cannot be found in a previous generation' do
+        describe 'if the successor cannot be found' do
 
           before do
-            @model_type.stub!(:find_in_generation).and_return(nil)
+            @model_type.stub!(:find_successor).and_return(nil)
           end
 
           it 'should re-raise the error (returning a 404 in production)' do

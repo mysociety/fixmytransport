@@ -246,9 +246,9 @@ set it to #{expected_generation})"
         if changes.first[:event] == 'create'
           # This was a locally created object, so find the model in the previous generation
           puts "#{model_name} created locally. Looking in previous generation."
-          existing = model_class.find_in_generation(PREVIOUS_GENERATION,
-                                                    :first,
-                                                    :conditions => identity_hash)
+          model_class.in_generation(PREVIOUS_GENERATION) do
+            existing = find(:first, :conditions => identity_hash)
+          end
           if ! existing
             puts ["Can't find locally created #{model_name} in previous generation to update",
                   "for #{identity_hash.inspect}"].join(" ") if verbose
@@ -494,7 +494,10 @@ set it to #{expected_generation})"
         next
       end
       search_conditions = fields_to_attribute_hash(change_in_place_fields, instance)
-      existing = model_class.find_in_generation(previous_generation, :first, :conditions => search_conditions)
+      existing = nil
+      model_class.in_generation(previous_generation) do
+        existing = find(:first, :conditions => search_conditions)
+      end
       # make a string we can use in output to identify the new instance by it's key attributes
       if existing
         puts "Updating and setting generation_high to #{generation} on #{reference_string(model_class, existing, change_in_place_fields)}" if verbose
@@ -516,7 +519,9 @@ set it to #{expected_generation})"
       else
         # Can we find this record at all in the previous generation?
         search_conditions = fields_to_attribute_hash(identity_fields, instance)
-        existing = model_class.find_in_generation(previous_generation, :first, :conditions => search_conditions)
+        model_class.in_generation(previous_generation) do
+          existing = find(:first, :conditions => search_conditions)
+        end
         if existing
           puts "New record in this generation for existing instance #{reference_string(model_class, existing, change_in_place_fields)}" if verbose
           diff_hash = existing.diff(instance)

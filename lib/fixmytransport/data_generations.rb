@@ -23,7 +23,7 @@ module FixMyTransport
            default_scope :conditions => [ "#{quoted_table_name}.generation_low <= ?
                                            AND #{quoted_table_name}.generation_high >= ?",
                                            CURRENT_GENERATION, CURRENT_GENERATION ]
-           # This callback sets the data generations columns to the current generation 
+           # This callback sets the data generations columns to the current generation
            # if not value has been set on them
            before_create :set_generations
 
@@ -78,13 +78,13 @@ module FixMyTransport
 
       end
 
-      # Set the scope of a find call to a specific generation
-      def find_in_generation(generation_id, *params)
+      # Perform a block of code in the context of the data generation passed
+      def in_generation(generation_id, &block)
         self.with_exclusive_scope do
           self.with_scope(:find => {:conditions => [ "#{quoted_table_name}.generation_low <= ?
                                                       AND #{quoted_table_name}.generation_high >= ?",
                                                       generation_id, generation_id ]}) do
-             find(*params)
+             yield
           end
         end
       end
@@ -93,7 +93,10 @@ module FixMyTransport
       # return that instance (if it is valid in the current generation), or its successor, if
       # it has one
       def find_successor(*find_params)
-        previous = self.find_in_generation(PREVIOUS_GENERATION, *find_params)
+        previous = nil
+        self.in_generation(PREVIOUS_GENERATION) do
+          previous = self.find(*find_params)
+        end
         if previous
           return previous if previous.generation_high >= CURRENT_GENERATION
           successor = self.find(:first, :conditions => ['previous_id = ?', previous.id])
@@ -178,10 +181,10 @@ module FixMyTransport
             condition_string += " and scope = ?"
             params << self.slug.scope
           end
-          previous_slug = Slug.find_in_generation(PREVIOUS_GENERATION,
-                                                  :first,
-                                                  :conditions => [condition_string] + params)
-
+          previous_slug = nil
+          Slug.in_generation(PREVIOUS_GENERATION) do
+            previous_slug = Slug.find(:first, :conditions => [condition_string] + params)
+          end
           return previous_slug.sequence if previous_slug
         end
         # If it didn't have the same slug and scope, return an integer one bigger than the
@@ -193,10 +196,11 @@ module FixMyTransport
           condition_string += " and scope = ?"
           params << self.slug.scope
         end
-        max_previous_slug = Slug.find_in_generation(PREVIOUS_GENERATION,
-                                                :first,
-                                                :conditions => [condition_string] + params,
+        max_previous_slug = nil
+        Slug.in_generation(PREVIOUS_GENERATION) do
+          max_previous_slug = Slug.find(:first, :conditions => [condition_string] + params,
                                                 :order => 'sequence desc')
+        end
         if max_previous_slug
           return max_previous_slug.sequence + 1
         else
@@ -209,7 +213,9 @@ module FixMyTransport
           return self
         end
         if self.previous_id
-          return self.class.find_in_generation(PREVIOUS_GENERATION, previous_id)
+          self.class.in_generation(PREVIOUS_GENERATION) do
+            return self.class.find(previous_id)
+          end
         end
         return nil
       end
