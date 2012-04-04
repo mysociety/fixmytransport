@@ -83,11 +83,13 @@ class Route < ActiveRecord::Base
   def stop_codes
     stops.map{ |stop| stop.atco_code or stop.other_code }.uniq
   end
+  memoize :stop_codes
 
   def stop_area_codes
     stop_areas = stops.map{ |stop| stop.stop_areas }.flatten
     stop_areas.map{ |stop_area| stop_area.code }.uniq
   end
+  memoize :stop_area_codes
 
   def transport_mode_name
     transport_mode.name
@@ -415,13 +417,20 @@ class Route < ActiveRecord::Base
   # Return routes with this number and transport mode that have a stop or stop area in common with
   # the route given
   def self.find_all_by_number_and_common_stop(new_route, options={})
+    # If this is the first call to these methods on the new_route model (they are memoized), note 
+    # that is will be executed in the current scope of the models concerned. i.e. whatever the data 
+    # generation conditions for the current scope on the models are, will be applied.
     stop_codes = new_route.stop_codes
+    stop_area_codes = new_route.stop_area_codes
     # do we think we know the operator for this route? If so, return any route with the same operator that
     # meets our other criteria. If we don't know the operator, or we pass the :use_operator_codes option
     # only return routes with the same operator code (optionally only from the same admin area)
     if ! options[:skip_operator_comparison]
-
-      if new_route.route_operators.size == 1 && !options[:use_operator_codes]
+      # Using length, not size on the route passed in to this method. Size requeries the database,
+      # length just looks at the length of the loaded association. When using changing scopes,
+      # as in the data_generations code, size will apply the current scope in database queries
+      # so may produce unexpected results.
+      if new_route.route_operators.length == 1 && !options[:use_operator_codes]
         operator_clause = "AND route_operators.operator_id = ? "
         operator_params = [new_route.route_operators.first.operator_id]
       else
@@ -461,7 +470,7 @@ class Route < ActiveRecord::Base
       id_clause = " AND routes.id != ?"
       id_params = [new_route.id]
     end
-    stop_area_codes = new_route.stop_area_codes
+
     condition_string = "number = ? AND transport_mode_id = ? #{operator_clause} #{id_clause}"
     conditions = [condition_string, new_route.number, new_route.transport_mode.id]
     conditions += operator_params
