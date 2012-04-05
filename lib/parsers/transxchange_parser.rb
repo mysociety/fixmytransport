@@ -495,7 +495,7 @@ class Parsers::TransxchangeParser
 
   def handle_timing_link
     timing_link = {}
-    timing_link[:id] = get_attribute(@reader.name, 'id')
+    timing_link[:id] = get_attribute(@reader.name, 'id', required=false)
     parent = @reader.name
     until_element_end(@reader.name) do
       case @reader.name
