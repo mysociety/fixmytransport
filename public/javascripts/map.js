@@ -30,68 +30,113 @@ function markerClick(evt) {
   OpenLayers.Event.stop(evt);
 }
 
-function area_init() {
-  // Vector layers must be added onload for IE
-  if ($.browser.msie) {
-      $(window).load(createAreaMap);
-  } else {
-      createAreaMap();
+function jsPath(filename) {
+    var r = new RegExp("(^|(.*?\\/))("+filename+"\.js)(\\?|$)"),
+        s = document.getElementsByTagName('script'),
+        src, m, l = "";
+    for(var i=0, len=s.length; i<len; i++) {
+        src = s[i].getAttribute('src');
+        if(src) {
+            var m = src.match(r);
+            if(m) {
+                l = m[1];
+                break;
+            }
+        }
+    }
+    return l;
+}
+
+function createMap(map_element) {
+  // handle both cached and uncached js files in calculating image path
+  var javascriptPath = jsPath('OpenLayers');
+  if (javascriptPath == ''){
+    javascriptPath = jsPath('libraries')
+  }
+  if (javascriptPath == ''){
+    javascriptPath = jsPath('admin_libraries')
+  }
+  OpenLayers.ImgPath = javascriptPath + 'img/';
+  var options = {
+        'projection': new OpenLayers.Projection("EPSG:900913"),
+        'units': "m",
+        'numZoomLevels': 18,
+        'maxResolution': 156543.0339,
+        'theme': null,
+        'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
+                                          20037508.34, 20037508.34)
+      };
+  $('.static-map-element').hide();
+  map = new OpenLayers.Map(map_element, options);
+  var layer = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true,
+                                                           'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
+                                                                                            20037508.34, 20037508.34)});
+  map.addLayer(layer);
+}
+
+function pointCoords(lon, lat) {
+  return new OpenLayers.Geometry.Point(lon, lat).transform(proj, map.getProjectionObject());
+}
+
+function addMarker(current, bounds, layer, other, highlightedLayer){
+  stopCoords = pointCoords(current.lon, current.lat);
+
+  if (stopsById[current.id] == undefined) {
+    bounds.extend(stopCoords);
+    var marker = new OpenLayers.Feature.Vector(stopCoords, {
+      url: current.url,
+      name: current.description,
+      id: current.id,
+      highlight: current.highlight
+    },
+    {externalGraphic: current.icon + ".png",
+        graphicTitle: current.description,
+        graphicWidth: current.width,
+        graphicHeight: current.height,
+        graphicOpacity: 1,
+        graphicXOffset: -( current.width/2),
+        graphicYOffset: -current.height,
+        cursor: 'pointer'
+    });    
+
+    stopsById[current.id] = marker;
+    if (current.highlight == true && other == true) {
+      highlightedLayer.addFeatures( marker );
+    }else{
+      layer.addFeatures( marker );
+    }
+  }
+
+}
+
+function addMarkerList(list, layer, others, highlightedLayer) {
+  for (var i=0; i < list.length; i++){
+    var item = list[i];
+    // an element in the list may be an individual marker or an array
+    // of markers representing a route
+    if (item instanceof Array){
+      for (var j=0; j < item.length; j++){
+        addMarker(item[j], bounds, layer, others, highlightedLayer);
+      }
+    }else{
+      addMarker(item, bounds, layer, others, highlightedLayer);
+    }
   }
 }
 
-function createAreaMap(){
-  createMap('map');
-  bounds = new OpenLayers.Bounds();
-  
-  // layers for markers that are the current focus (markers), other markers in the area
-  // (otherMarkers) and other markers that are significant (highlightedMarkers)
-  // - e.g. locations with problem reports, rather than without when browsing 
-  // an area.
-  markers = new OpenLayers.Layer.Vector( "Markers" );
-  otherMarkers = new OpenLayers.Layer.Vector( "Other Markers" );
-  highlightedMarkers = new OpenLayers.Layer.Vector( "Highlighted Markers" );
-  map.addLayer(otherMarkers);
-  map.addLayer(highlightedMarkers);
-  map.addLayer(markers);  
-
-  // All markers should handle to a click event
-  markers.events.register( 'featureselected', markers, markerClick );
-  otherMarkers.events.register( 'featureselected', otherMarkers, markerClick );
-  highlightedMarkers.events.register( 'featureselected', highlightedMarkers, markerClick );
-  var select = new OpenLayers.Control.SelectFeature( [markers, otherMarkers, highlightedMarkers] );
-  map.addControl( select );
-  select.activate();
-  
-  // Load the main markers, and the background markers (in either the highlighted or other layer)
-  addMarkerList(areaStops, markers, false, null);
-  addMarkerList(otherAreaStops, otherMarkers, true, highlightedMarkers);
-
-  centerCoords =  new OpenLayers.LonLat(lon, lat);
-  centerCoords.transform(proj, map.getProjectionObject());
-  map.setCenter(centerCoords, zoom);
-
-  if (findOtherLocations == true) {
-    map.events.register('moveend', map, updateLocations);
+function loadNewMarkers(markerData) {
+  newMarkers = markerData['locations'];
+  // load new background markers
+  addMarkerList(newMarkers, otherMarkers, true, highlightedMarkers);
+  // update any associated list of issues
+  newContent = markerData['issue_content'];
+  if ($('#issues-in-area').length > 0){
+    $('#issues-in-area').html(newContent);
   }
+}
 
-  // if we're constrained to less than the expected map dimensions, try
-  // to make sure the markers are all shown
-  if (($('#map').width() < mapWidth || $('#map').height() < mapHeight) && (areaStops.length > 0)) {
-    map.zoomToExtent(bounds, false);
-  }
-    
-  // Enforce some zoom constraints
-  map.events.register("zoomend", map, function() {
-      // World zoom resets map
-      if (map.getZoom() == 0) {
-        map.setCenter(centerCoords, zoom);
-        return;
-      }
-      if (map.getZoom() < minZoom) map.zoomTo(minZoom);
-      if (map.getZoom() > maxZoom) map.zoomTo(maxZoom);
-  });
-
-  
+function markerFail(){
+// do nothing
 }
 
 function getQueryStringParametersMap() {
@@ -164,70 +209,97 @@ function updateLocations(eevent) {
 
 }
 
-function loadNewMarkers(markerData) {
-  newMarkers = markerData['locations'];
-  // load new background markers
-  addMarkerList(newMarkers, otherMarkers, true, highlightedMarkers);
-  // update any associated list of issues
-  newContent = markerData['issue_content'];
-  if ($('#issues-in-area').length > 0){
-    $('#issues-in-area').html(newContent);
+function createAreaMap(){
+  createMap('map');
+  bounds = new OpenLayers.Bounds();
+  
+  // layers for markers that are the current focus (markers), other markers in the area
+  // (otherMarkers) and other markers that are significant (highlightedMarkers)
+  // - e.g. locations with problem reports, rather than without when browsing 
+  // an area.
+  markers = new OpenLayers.Layer.Vector( "Markers" );
+  otherMarkers = new OpenLayers.Layer.Vector( "Other Markers" );
+  highlightedMarkers = new OpenLayers.Layer.Vector( "Highlighted Markers" );
+  map.addLayer(otherMarkers);
+  map.addLayer(highlightedMarkers);
+  map.addLayer(markers);  
+
+  // All markers should handle to a click event
+  markers.events.register( 'featureselected', markers, markerClick );
+  otherMarkers.events.register( 'featureselected', otherMarkers, markerClick );
+  highlightedMarkers.events.register( 'featureselected', highlightedMarkers, markerClick );
+  var select = new OpenLayers.Control.SelectFeature( [markers, otherMarkers, highlightedMarkers] );
+  map.addControl( select );
+  select.activate();
+  
+  // Load the main markers, and the background markers (in either the highlighted or other layer)
+  addMarkerList(areaStops, markers, false, null);
+  addMarkerList(otherAreaStops, otherMarkers, true, highlightedMarkers);
+
+  centerCoords =  new OpenLayers.LonLat(lon, lat);
+  centerCoords.transform(proj, map.getProjectionObject());
+  map.setCenter(centerCoords, zoom);
+
+  if (findOtherLocations == true) {
+    map.events.register('moveend', map, updateLocations);
   }
-}
 
-function markerFail(){
-// do nothing
-}
-
-function addMarkerList(list, layer, others, highlightedLayer) {
-  for (var i=0; i < list.length; i++){
-    var item = list[i];
-    // an element in the list may be an individual marker or an array
-    // of markers representing a route
-    if (item instanceof Array){
-      for (var j=0; j < item.length; j++){
-        addMarker(item[j], bounds, layer, others, highlightedLayer);
+  // if we're constrained to less than the expected map dimensions, try
+  // to make sure the markers are all shown
+  if (($('#map').width() < mapWidth || $('#map').height() < mapHeight) && (areaStops.length > 0)) {
+    map.zoomToExtent(bounds, false);
+  }
+    
+  // Enforce some zoom constraints
+  map.events.register("zoomend", map, function() {
+      // World zoom resets map
+      if (map.getZoom() == 0) {
+        map.setCenter(centerCoords, zoom);
+        return;
       }
-    }else{
-      addMarker(item, bounds, layer, others, highlightedLayer);
-    }
+      if (map.getZoom() < minZoom) map.zoomTo(minZoom);
+      if (map.getZoom() > maxZoom) map.zoomTo(maxZoom);
+  });
+
+  
+}
+
+function area_init() {
+  // Vector layers must be added onload for IE
+  if ($.browser.msie) {
+      $(window).load(createAreaMap);
+  } else {
+      createAreaMap();
   }
 }
 
+function segmentSelected(event) {
+  segment = event.feature;
+  segment.style = segmentSelectedStyle;
+  this.drawFeature(segment);
+  var row = $("#route_segment_" + segment.segment_id);
+  row.toggleClass("selected");
+  row.find(".check-route-segment").attr('checked', 'true');
+}
 
-function addMarker(current, bounds, layer, other, highlightedLayer){
-  stopCoords = pointCoords(current.lon, current.lat);
-
-  if (stopsById[current.id] == undefined) {
-    bounds.extend(stopCoords);
-    var marker = new OpenLayers.Feature.Vector(stopCoords, {
-      url: current.url,
-      name: current.description,
-      id: current.id,
-      highlight: current.highlight
-    },
-    {externalGraphic: current.icon + ".png",
-        graphicTitle: current.description,
-        graphicWidth: current.width,
-        graphicHeight: current.height,
-        graphicOpacity: 1,
-        graphicXOffset: -( current.width/2),
-        graphicYOffset: -current.height,
-        cursor: 'pointer'
-    });    
-
-    stopsById[current.id] = marker;
-    if (current.highlight == true && other == true) {
-      highlightedLayer.addFeatures( marker );
-    }else{
-      layer.addFeatures( marker );
-    }
-  }
+function segmentUnselected(event) {
+  segment = event.feature;
+  segment.style = segmentStyle;
+  this.drawFeature(segment);
+  $("#route_segment_" + segment.segment_id).toggleClass("selected");
 
 }
 
-function pointCoords(lon, lat) {
-  return new OpenLayers.Geometry.Point(lon, lat).transform(proj, map.getProjectionObject());
+function addSelectedHandler(vectorLayer) {
+  vectorLayer.events.on({
+      'featureselected': segmentSelected,
+      'featureunselected': segmentUnselected
+  });
+  selectControl = new OpenLayers.Control.SelectFeature(vectorLayer, {multiple: false,
+                                                                     toggleKey: "ctrlKey",
+                                                                     multipleKey: "shiftKey"});
+  map.addControl(selectControl);
+  selectControl.activate();
 }
 
 function route_init(map_element, routeSegments) {
@@ -256,82 +328,6 @@ function route_init(map_element, routeSegments) {
    map.zoomToExtent(bounds, false);
 
 }
-
-function addSelectedHandler(vectorLayer) {
-  vectorLayer.events.on({
-      'featureselected': segmentSelected,
-      'featureunselected': segmentUnselected
-  });
-  selectControl = new OpenLayers.Control.SelectFeature(vectorLayer, {multiple: false,
-                                                                     toggleKey: "ctrlKey",
-                                                                     multipleKey: "shiftKey"});
-  map.addControl(selectControl);
-  selectControl.activate();
-}
-
-function segmentSelected(event) {
-  segment = event.feature;
-  segment.style = segmentSelectedStyle;
-  this.drawFeature(segment);
-  var row = $("#route_segment_" + segment.segment_id);
-  row.toggleClass("selected");
-  row.find(".check-route-segment").attr('checked', 'true');
-}
-
-function segmentUnselected(event) {
-  segment = event.feature;
-  segment.style = segmentStyle;
-  this.drawFeature(segment);
-  $("#route_segment_" + segment.segment_id).toggleClass("selected");
-
-}
-
-function jsPath(filename) {
-    var r = new RegExp("(^|(.*?\\/))("+filename+"\.js)(\\?|$)"),
-        s = document.getElementsByTagName('script'),
-        src, m, l = "";
-    for(var i=0, len=s.length; i<len; i++) {
-        src = s[i].getAttribute('src');
-        if(src) {
-            var m = src.match(r);
-            if(m) {
-                l = m[1];
-                break;
-            }
-        }
-    }
-    return l;
-}
-
-function createMap(map_element) {
-  // handle both cached and uncached js files in calculating image path
-  var javascriptPath = jsPath('OpenLayers');
-  if (javascriptPath == ''){
-    javascriptPath = jsPath('libraries')
-  }
-  if (javascriptPath == ''){
-    javascriptPath = jsPath('admin_libraries')
-  }
-  OpenLayers.ImgPath = javascriptPath + 'img/';
-  var options = {
-        'projection': new OpenLayers.Projection("EPSG:900913"),
-        'units': "m",
-        'numZoomLevels': 18,
-        'maxResolution': 156543.0339,
-        'theme': null,
-        'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
-                                          20037508.34, 20037508.34)
-      };
-  $('.static-map-element').hide();
-  map = new OpenLayers.Map(map_element, options);
-  var layer = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true,
-                                                           'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
-                                                                                            20037508.34, 20037508.34)});
-  map.addLayer(layer);
-}
-
-
-
 
 
 
