@@ -40,12 +40,16 @@ BUGS_EMAIL: 'bugs@localhost'
 GOOGLE_MAPS_API_KEY: 'Your Google Maps API key'
 GOOGLE_SITE_VERIFICATION_CODE: 'Your Google Webmaster Tools code'
 
-# Facebook: 
+# Facebook:
 # APP_ID is typically a 16-digit code registered for this app by your "owner" Facebook account.
 # If you leave it blank, facebook stuff (connect/login)  won't be displayed.
 FACEBOOK_APP_ID: ''
 FACEBOOK_APP_SECRET: ''
 FACEBOOK_GRAPH_API_URL: ''
+
+# Set the mail sending method to :test, and don't raise errors on delivery
+# failure
+NO_MAIL: 1
 
 # Where are the SSL trusted server certificates?
 SSL_CA_PATH: ''

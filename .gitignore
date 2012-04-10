@@ -65,3 +65,4 @@ vendor/gems/libxml-ruby-1.1.4/ext/libxml/extconf.h
 vendor/gems/libxml-ruby-1.1.4/ext/libxml/*.log
 vendor/gems/libxml-ruby-1.1.4/**/**/*.bundle
 vendor/gems/libxml-ruby-1.1.4/**/*.bundle
+*~

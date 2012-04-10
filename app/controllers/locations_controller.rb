@@ -17,7 +17,8 @@ class LocationsController < ApplicationController
     @title = @stop.full_name
     respond_to do |format|
       format.html do
-        check_for_variant
+        @map_height = PROBLEM_CREATION_MAP_HEIGHT
+        @map_width = PROBLEM_CREATION_MAP_HEIGHT
         map_params_from_location(@stop.points,
                                 find_other_locations=true,
                                 height=@map_height,
@@ -62,7 +63,8 @@ class LocationsController < ApplicationController
     @title = @stop_area.name
     respond_to do |format|
       format.html do
-        check_for_variant
+        @map_height = PROBLEM_CREATION_MAP_HEIGHT
+        @map_width = PROBLEM_CREATION_MAP_WIDTH
         map_params_from_location(@stop_area.points,
                                  find_other_locations=true,
                                  height=@map_height,
@@ -85,7 +87,8 @@ class LocationsController < ApplicationController
     @title = @route.name
     respond_to do |format|
       format.html do
-        check_for_variant
+        @map_height = PROBLEM_CREATION_MAP_HEIGHT
+        @map_width = PROBLEM_CREATION_MAP_WIDTH
         map_params_from_location(@route.points,
                                  find_other_locations=false,
                                  height=@map_height,
@@ -106,7 +109,8 @@ class LocationsController < ApplicationController
       return false
     end
     @title = @sub_route.name
-    check_for_variant
+    @map_height = PROBLEM_CREATION_MAP_HEIGHT
+    @map_width = PROBLEM_CREATION_MAP_WIDTH
     map_params_from_location(@sub_route.points,
                              find_other_locations=false,
                              height=@map_height,
@@ -149,17 +153,6 @@ class LocationsController < ApplicationController
   end
 
   private
-
-  def check_for_variant
-    if params[:v] == '1'
-      @variant = true
-      @map_height = PROBLEM_CREATION_MAP_HEIGHT
-      @map_width = PROBLEM_CREATION_MAP_WIDTH
-    else
-      @map_height = LOCATION_PAGE_MAP_HEIGHT
-      @map_width = LOCATION_PAGE_MAP_WIDTH
-    end
-  end
 
   def redirect_previous(previous)
     new_params = { :id => previous.to_param, :scope => previous.locality.to_param }

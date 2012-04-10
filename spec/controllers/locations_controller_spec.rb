@@ -158,17 +158,6 @@ describe LocationsController do
       make_request
       response.should render_template('locations/show_stop')
     end
-
-    describe 'if a "v" parameter of "1" is passed' do
-
-      it 'should pass the variant flag to the view' do
-        Stop.stub!(:full_find).and_return(@stop)
-        make_request(@default_params.merge('v' => '1'))
-        assigns[:variant].should == true
-      end
-
-    end
-
   end
 
   describe 'GET #add_comment_to_stop' do

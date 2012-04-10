@@ -19,6 +19,24 @@ describe Admin::ProblemsController do
 
 
   end
+  
+  describe 'POST #update' do
+  
+    before do
+      @problem = mock_model(Problem, :update_attributes => nil)
+      Problem.stub!(:find).and_return(@problem)
+    end
+    
+    def make_request
+      post :update, { :id => 55, :problem => {:responsibilities_attributes => {}}}
+    end
+    
+    it 'should not update the problem with a nil status code' do 
+      @problem.should_not_receive(:status_code=).with(nil)
+      make_request
+    end
+  
+  end
 
   describe 'POST #resend' do
 

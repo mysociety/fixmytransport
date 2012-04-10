@@ -257,7 +257,8 @@ class Stop < ActiveRecord::Base
   def self.find_by_name_or_id(query, transport_mode_id, limit, show_all_metro=false)
     find(:all,
          :conditions => name_or_id_conditions(query, transport_mode_id, show_all_metro),
-         :limit => limit)
+         :limit => limit,
+         :order => 'common_name asc')
   end
 
   def self.find_by_name_and_coords(name, easting, northing, distance)

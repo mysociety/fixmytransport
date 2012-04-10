@@ -10,80 +10,43 @@
 <div id="greybanner">
 	<div class="container">
 		
-			<%- if !@sub_route.route_operators.empty?  %>
-          <p class="route-operator"><%= raw t('locations.show_route.operated_by', :operators => operator_links(@sub_route.operators)) %></p>
-      <%- end %>
-	</div>
+		<%- if !@sub_route.route_operators.empty?  %>
+        <p class="route-operator"><%= raw t('locations.show_route.operated_by', :operators => operator_links(@sub_route.operators)) %></p>
+    <%- end %>
+</div>
 </div>
 <div id="main-content" class="container">
-  <%- if @variant %>
 
-  	<div class="leftcol standardcol">
-  	  <div class="report-explanation">
-      <a class="button big red report_variant" href="<%= new_problem_url(:location_id => @sub_route.id, :location_type => 'SubRoute')%>" rel="nofollow"><%= t('shared.location_content.report_a_problem_variant', :on_or_at => t('locations.show_route.on_the'), :location => t('locations.show_route.route')) %></a>  
-    
-    	<%= raw location_explanation(@sub_route) %>
-    	</div>
-  	  <%= render :partial => "shared/location_content",  :locals => { :location => @sub_route } %>
-	
+	<div class="leftcol standardcol">
+	  <div class="report-explanation">
+    <a class="button big red report_variant" href="<%= new_problem_url(:location_id => @sub_route.id, :location_type => 'SubRoute')%>" rel="nofollow"><%= t('shared.location_content.report_a_problem_variant', :on_or_at => t('locations.show_route.on_the'), :location => t('locations.show_route.route')) %></a>  
+  
+  	<%= raw location_explanation(@sub_route) %>
   	</div>
+	  <%= render :partial => "shared/location_content",  :locals => { :location => @sub_route } %>
+
+	</div>
   	
-  <%- else %>
-  	<div class="leftcol widecol">
-      <div id="medium-map">
-        <%= render :partial => 'shared/map', :locals => { :locations => [@sub_route], :other_locations => @other_locations, :link_type => :location, :height => @map_height, :width => @map_width } %>
-   	  </div>
-
-   		<a href="<%= feedback_url(:url => CGI.escape(request.request_uri), :location_id => @sub_route.id, :location_type => 'SubRoute') %>" rel="nofollow"><%= t('locations.show_sub_route.information_wrong') %></a>
-  	  <%= render :partial => "shared/location_content",  :locals => { :location => @sub_route } %>
-  	</div>
-  <%- end %>
-
-	<%- if @variant %>
-
-    <div class="rightcol standardcol">
-      <div id="medium-map-variant">
-        <h5><%= @sub_route.description %></h5>
-          <%= render :partial => 'shared/map', :locals => { :locations => [@sub_route], :other_locations => @other_locations, :link_type => :location, :height => @map_height, :width => @map_width  } %>
-      </div>
-	
-  		<h5 class="left"><%= t('locations.show_sub_route.route_header') %></h5>
-  		<ol id="large-ol">
-  		  <%- @sub_route.terminuses.each_with_index do |stop_or_station, index| %>
-          <li>
-            <a href="<%= location_url(stop_or_station) %>">
-              <span class="num"><%= index+1 %></span>
-              <%= stop_or_station.is_a?(Stop) ? stop_or_station.name_with_long_indicator : stop_or_station.name %>
-              <%- if stop_or_station.status == 'DEL' %>
-    			      <%= t('locations.show_sub_route.stop_or_station_inactive')%>
-    			    <%- end %>
-            </a>
-          </li>
-        <%- end %>
-  		</ol>
+  <div class="rightcol standardcol">
+    <div id="medium-map-variant">
+      <h5><%= @sub_route.description %></h5>
+        <%= render :partial => 'shared/map', :locals => { :locations => [@sub_route], :other_locations => @other_locations, :link_type => :location, :height => @map_height, :width => @map_width  } %>
     </div>
-    
-	<%- else %>
 
-  	<div class="rightcol narrowcol">
-  		<a class="button big red report" href="<%= existing_problems_url(:location_id => @sub_route.id, :location_type => @sub_route.type)%>" rel="nofollow"><%= t('locations.show_sub_route.report_a_problem')%></a>
-  		<a class="button big report comment-trigger" href="<%= add_comment_sub_route_url(@route) %>" data-title="<%= t('locations.show_sub_route.comment_title', :location => at_the_location(@sub_route)) %>" rel="nofollow"><%= t('locations.show_sub_route.say_something_nice') %></a>
-  		<h5 class="left"><%= t('locations.show_sub_route.route_header') %></h5>
+		<h5 class="left"><%= t('locations.show_sub_route.route_header') %></h5>
+		<ol id="large-ol">
+		  <%- @sub_route.terminuses.each_with_index do |stop_or_station, index| %>
+        <li>
+          <a href="<%= location_url(stop_or_station) %>">
+            <span class="num"><%= index+1 %></span>
+            <%= stop_or_station.is_a?(Stop) ? stop_or_station.name_with_long_indicator : stop_or_station.name %>
+            <%- if stop_or_station.status == 'DEL' %>
+  			      <%= t('locations.show_sub_route.stop_or_station_inactive')%>
+  			    <%- end %>
+          </a>
+        </li>
+      <%- end %>
+		</ol>
+  </div>
 
-  		<ol id="large-ol">
-  		  <%- @sub_route.terminuses.each_with_index do |stop_or_station, index| %>
-          <li>
-            <a href="<%= location_url(stop_or_station) %>">
-              <span class="num"><%= index+1 %></span>
-              <%= stop_or_station.is_a?(Stop) ? stop_or_station.name_with_long_indicator : stop_or_station.name %>
-              <%- if stop_or_station.status == 'DEL' %>
-    			      <%= t('locations.show_sub_route.stop_or_station_inactive')%>
-    			    <%- end %>
-            </a>
-          </li>
-        <%- end %>
-  		</ol>
-			
-  	</div>
-	<%- end %>
 </div>

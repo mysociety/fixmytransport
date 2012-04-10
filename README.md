@@ -1,5 +1,9 @@
 #FixMyTransport
 
+#Data Model
+
+See https://github.com/mysociety/fixmytransport/blob/master/data_model.md
+
 #Prerequisites
 
 Ruby 1.8.7
@@ -23,7 +27,7 @@ You will also want to install mySociety's common ruby libraries. Run:
 
 to fetch the contents of the submodule.
 
-Copy config/general.example to config/general
+Copy `config/general.yml-example` to `config/general.yml`
 
 ###Configure the database:
 
@@ -63,7 +67,36 @@ The following commands need to be run at the command line following db creation 
 
 Also, SRID 27700 (British National Grid) is incorrect in some installs of PostGIS. After you’ve installed and got a PostGIS template, log in to it and make sure the proj4text column of SRID 27700 in the spatial_ref_sys table includes +datum=OSGB36.
 
+###Install additional packages
+
+If you're using a Debian-based system, you should make sure that the
+packages listed in `config/packages` are all installed.
+
 ###To load a new binary Postgres dump file:
 
 1. Create the file from an existing database with ```pg_dump -p [Postgres port number] --schema=public -Fc YOURDB > YOURDB.sql.dump```
 2. ```rake db:load_from_binary FILE=YOURDB.sql.dump```
+
+###Running the tests
+
+If you want to run the RSpec tests continuously while developing, you
+can do this using ZenTest.  You can install ZenTest and support for
+Rails with:
+
+    gem install ZenTest autotest-rails
+
+Then you can run the following command in the fixmytransport directory:
+
+    RSPEC=true autotest
+
+If you see many gem-related deprecation warnings when running the
+tests, such as:
+
+    NOTE: Gem.source_index is deprecated, use Specification. It will be removed on or after 2011-11-01.
+    Gem.source_index called from /home/mark/fixmytransport/config/../vendor/rails/railties/lib/rails/gem_dependency.rb:21.
+
+... then your version of RubyGems is much more recent that the
+components of Rails in the `vendor` subdirectory.  One solution to
+this is to downgrade to an earlier version of RubyGems with:
+
+    gem update --system 1.6.2

@@ -7,10 +7,20 @@ describe PassengerTransportExecutive do
     }
   end
 
+  after(:each) do
+    PassengerTransportExecutive.delete_all :name => @valid_attributes[:name]
+  end
+
   it "should create a new instance given valid attributes" do
     PassengerTransportExecutive.create!(@valid_attributes)
   end
-  
+
+  it "should be the only one with that name" do
+    PassengerTransportExecutive.create! @valid_attributes
+    new_pte = PassengerTransportExecutive.new @valid_attributes
+    new_pte.should_not be_valid
+  end
+
   describe 'when asked if it is emailable' do 
     
     before do 

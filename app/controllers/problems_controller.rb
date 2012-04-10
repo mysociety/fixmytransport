@@ -88,14 +88,20 @@ class ProblemsController < ApplicationController
   end
 
   def frontpage
-    setup_frontpage()
-    @variant = 0
-  end
-
-  def alternative_frontpage
-    setup_frontpage()
-    @variant = 1
-    render :action => 'frontpage'
+    beta_username = MySociety::Config.get('BETA_USERNAME', 'username')
+     beta_password = MySociety::Config.get('BETA_PASSWORD', 'password')
+     if app_status == 'closed_beta'
+       if !params[:beta]
+         unless authenticate_with_http_basic{ |username, password| username == beta_username && Digest::MD5.hexdigest(password) == beta_password }
+           render :template => 'problems/beta', :layout => 'beta'
+           return
+         end
+       end
+       authenticate_or_request_with_http_basic('Closed Beta') do |username, password|
+         username == beta_username && Digest::MD5.hexdigest(password) == beta_password
+       end
+     end
+     @title = t('problems.frontpage.title')
   end
 
   def create
@@ -411,25 +417,7 @@ class ProblemsController < ApplicationController
     end
   end
 
-
   private
-
-  def setup_frontpage()
-    beta_username = MySociety::Config.get('BETA_USERNAME', 'username')
-    beta_password = MySociety::Config.get('BETA_PASSWORD', 'password')
-    if app_status == 'closed_beta'
-      if !params[:beta]
-        unless authenticate_with_http_basic{ |username, password| username == beta_username && Digest::MD5.hexdigest(password) == beta_password }
-          render :template => 'problems/beta', :layout => 'beta'
-          return
-        end
-      end
-      authenticate_or_request_with_http_basic('Closed Beta') do |username, password|
-        username == beta_username && Digest::MD5.hexdigest(password) == beta_password
-      end
-    end
-    @title = t('problems.frontpage.title')
-  end
 
   def find_nearest_stop(lon, lat, transport_mode_name)
     location_search = LocationSearch.new_search!(session_id, :name => "geolocate:#{lon},#{lat}",
