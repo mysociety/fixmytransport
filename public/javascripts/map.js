@@ -87,7 +87,12 @@ var area_init, route_init;
       'maxResolution': 156543.0339,
       'theme': null,
       'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
-                                         20037508.34, 20037508.34)
+                                         20037508.34, 20037508.34),
+      'controls': [
+        new OpenLayers.Control.Navigation(),
+        new OpenLayers.Control.PanZoom(),
+        new OpenLayers.Control.Attribution()
+      ]
     };
     $('.static-map-element').hide();
     map = new OpenLayers.Map(map_element, options);
