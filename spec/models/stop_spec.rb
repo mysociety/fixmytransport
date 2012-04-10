@@ -174,14 +174,20 @@ describe Stop do
       MySociety::MaPit.stub!(:call).and_return({ "33" =>
                                                  { "id" =>  "33",
                                                    "name" => "A test area" },
-                                                 "55" => 
+                                                 "55" =>
                                                  { "id" => "55",
                                                    "name" => "Another test area"} })
+      @council_types = ["DIS", "LBO", "MTD", "UTA", "LGD", "CTY", "COI"]
     end
 
     it 'should send a request to MaPit' do
-      council_types = ["DIS", "LBO", "MTD", "UTA", "LGD", "CTY", "COI"]
-      MySociety::MaPit.should_receive(:call).with('point', '4326/200.2,100.1', :type => council_types)
+      MySociety::MaPit.should_receive(:call).with('point', '4326/200.200000,100.100000', :type => @council_types)
+      @stop.councils
+    end
+
+    it 'should format a very small float lat or lon value to non-scientific format' do
+      @stop.lat = 0.000004
+      MySociety::MaPit.should_receive(:call).with('point', '4326/200.200000,0.000004', :type => @council_types)
       @stop.councils
     end
 
@@ -207,30 +213,30 @@ describe Stop do
     end
 
     describe 'if a council returned has sole responsibility for transport' do
-      
+
       before do
-        MySociety::MaPit.stub!(:call).and_return({'2233' => { "country_name"=>"England", 
-                                                              "name"=>"Norfolk County Council", 
-                                                              "id"=>2233, 
-                                                              "type"=>"CTY", 
+        MySociety::MaPit.stub!(:call).and_return({'2233' => { "country_name"=>"England",
+                                                              "name"=>"Norfolk County Council",
+                                                              "id"=>2233,
+                                                              "type"=>"CTY",
                                                               "type_name"=>"County council" },
-                                                  '2388' => { "country_name"=>"England", 
-                                                              "name"=>"South Norfolk District Council", 
-                                                              "country"=>"E", 
-                                                              "id"=>2388, 
-                                                              "type"=>"DIS", 
+                                                  '2388' => { "country_name"=>"England",
+                                                              "name"=>"South Norfolk District Council",
+                                                              "country"=>"E",
+                                                              "id"=>2388,
+                                                              "type"=>"DIS",
                                                               "type_name"=>"District council" }})
         sr = mock_model(SoleResponsibility, :council_id => 2233)
         SoleResponsibility.stub!(:find).with(:all).and_return([sr])
       end
-      
-      it 'should only return that council' do 
+
+      it 'should only return that council' do
         @stop.councils.size.should == 1
         @stop.councils.first.name.should == 'Norfolk County Council'
       end
-      
+
     end
-    
+
   end
 
   describe 'when asked for responsible organizations' do
