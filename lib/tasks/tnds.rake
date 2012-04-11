@@ -5,20 +5,26 @@ namespace :tnds do
   namespace :load do
 
     desc 'Loads routes from a set of TransXchange files in a directory passed as DIR=dir.
-          Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1'
+          Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1.
+          Specify FIND_REGION_BY=directory if regions need to be inferred from directories.'
     task :routes => :environment do
       check_for_dir
       verbose = check_verbose
       dryrun = check_dryrun
       puts "Loading routes from #{ENV['DIR']}..."
+      if ENV['FIND_REGION_BY'] == 'directory'
+        regions_as = :directories
+      else
+        regions_as = :index
+      end
       Route.paper_trail_off
       RouteSegment.paper_trail_off
       RouteOperator.paper_trail_off
       JourneyPattern.paper_trail_off
       parser = Parsers::TransxchangeParser.new
-      file_glob = File.join(ENV['DIR'], "*.xml")
+      file_glob = File.join(ENV['DIR'], "**/*.xml")
       index_file = File.join(ENV['DIR'], 'TravelineNationalDataSetFilesList.txt')
-      parser.parse_all_tnds_routes(file_glob, index_file, verbose, skip_loaded=false) do |route|
+      parser.parse_all_tnds_routes(file_glob, index_file, verbose, skip_loaded=false, regions_as) do |route|
         merged = false
         puts "Parsed route #{route.number}" if verbose
         route.route_sources.each do |route_source|

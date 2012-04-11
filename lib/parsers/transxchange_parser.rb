@@ -116,10 +116,37 @@ class Parsers::TransxchangeParser
     outfile.close()
   end
 
-  def parse_all_tnds_routes(file_pattern, index_file_path, verbose, skip_loaded=true, &block)
+  def parse_region_directories(file_pattern, verbose)
+    parent_directories = Dir.glob(File.dirname(file_pattern))
+    parent_directories.each do |parent_directory|
+      folder_name = parent_directory.split(File::SEPARATOR).last
+      region_part = folder_name.split("_").first
+      puts "Indexing directory #{region_part}" if verbose
+      region = Region.find(:first, :conditions => ['name = ?', region_part])
+      if region.nil?
+        region = Region.find(:first, :conditions => ['code = ?', region_part])
+      end
+      if region.nil?
+        raise "Couldn't find region using folder name #{folder_name}"
+      end
+      xml_files = Dir.glob(File.join(parent_directory, "*.xml"))
+      xml_files.each do |file_path|
+        filename = File.basename(file_path)
+        @region_hash[filename.strip] = region.name
+      end
+    end
+  end
+
+  def parse_all_tnds_routes(file_pattern, index_file_path, verbose, skip_loaded=true, regions_as=:index, &block)
     filelist = Dir.glob(file_pattern)
     puts "Got #{filelist.size} files" if verbose
-    self.parse_index(index_file_path)
+    if regions_as == :index
+      self.parse_index(index_file_path)
+    elsif regions_as == :directories
+      self.parse_region_directories(file_pattern, verbose)
+    else
+      raise "Unknown setting for parsing regions: #{regions_as}"
+    end
     bus_mode = TransportMode.find_by_name('Bus')
     filelist.sort_by { rand }.each do |filename|
       puts filename if verbose
@@ -219,7 +246,6 @@ class Parsers::TransxchangeParser
         end
         operator_information = operators_information[registered_operator_ref]
         operator_code = operator_information[:code]
-        puts operator_information
         route.route_sources.build(:service_code => service_code,
                                   :operator_code => operator_code,
                                   :region => region,
