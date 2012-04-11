@@ -1,0 +1,7 @@
+<li class="tiny-issue">
+<%- if issue.is_a?(Campaign) %>
+  <a href="<%= campaign_url issue %>"><%= MySociety::Format.ucfirst(issue.title) %></a>
+<%- else %>
+  <a href="<%= problem_url issue %>"><%= MySociety::Format.ucfirst(issue.subject) %></a>
+<%- end %>
+</li>

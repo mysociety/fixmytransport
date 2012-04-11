@@ -34,5 +34,14 @@ class StaticController < ApplicationController
     # NB max width for canvas should be 760px
     # process incoming request_ids here (if any): test code for this has been deleted
   end
-  
+
+  def show_guide
+    @guide = Guide.find(params[:guide])
+    @title = @guide.title
+    @all_guides = Guide.find(:all)
+    # FIXME: get some real example issues, but for the moment, just
+    # show the 3 most recent:
+    @example_issues = Problem.find_recent_issues(5)
+  end
+
 end
