@@ -430,9 +430,15 @@ class Route < ActiveRecord::Base
       # length just looks at the length of the loaded association. When using changing scopes,
       # as in the data_generations code, size will apply the current scope in database queries
       # so may produce unexpected results.
-      if new_route.route_operators.length == 1 && !options[:use_operator_codes]
-        operator_clause = "AND route_operators.operator_id = ? "
-        operator_params = [new_route.route_operators.first.operator_id]
+      if new_route.route_operators.length >= 1 && !options[:use_operator_codes]
+        operator_clause = "AND ("
+        operator_conditions = []
+        operator_params = []
+        new_route.route_operators.each do |route_operator|
+          operator_conditions << " route_operators.operator_id = ? "
+          operator_params << new_route.route_operators.first.operator_id
+        end
+        operator_clause = "AND (#{operator_conditions.join(" OR ")})"
       else
         source_admin_area = new_route.route_source_admin_areas.first
         operator_clauses = []

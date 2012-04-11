@@ -107,76 +107,76 @@ describe Route do
 
     fixtures default_fixtures
 
-    it 'should include routes with the same number and one stop in common with the new route, with the same operator in the same admin area' do
-      route = Route.new(:number => '807',
-                        :transport_mode => transport_modes(:bus))
-      route.route_source_admin_areas.build({:operator_code => 'BUS',
-                                            :source_admin_area => admin_areas(:london)})
-      new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
-      jp = route.journey_patterns.build(:destination => 'test dest')
-      jp.route_segments.build(:from_stop => stops(:arch_ne),
-                              :to_stop => new_stop,
-                              :from_terminus => true)
-      Route.find_existing_routes(route).should include(routes(:number_807_bus))
+    describe 'when looking for bus routes' do 
+      
+      before do
+        @route = Route.new(:number => '807',
+                          :transport_mode => transport_modes(:bus))
+        @new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
+        jp = @route.journey_patterns.build(:destination => 'test dest')
+        jp.route_segments.build(:from_stop => stops(:arch_ne),
+                                :to_stop => @new_stop,
+                                :from_terminus => true)
+      end
+    
+      it 'should include routes with the same number and one stop in common with the new route, with the same operator in the same admin area' do
+        @route.route_source_admin_areas.build({:operator_code => 'BUS',
+                                              :source_admin_area => admin_areas(:london)})
+        Route.find_existing_routes(@route).should include(routes(:number_807_bus))
+      end
+
+  
+
+      it 'should include routes with the same number and one stop in common with the new route, with the same route operator' do
+        @route.route_operators.build({:operator => operators(:a_bus_company)})
+        Route.find_existing_routes(@route).should include(routes(:number_807_bus))
+      end
+  
+      it "should include routes with the same number and one stop in common with the new route, with one of the new route's operators" do 
+        @route.route_operators.build({:operator => operators(:a_bus_company)})
+        @route.route_operators.build({:operator => operators(:another_bus_company)})
+        Route.find_existing_routes(@route).should include(routes(:number_807_bus))
+      end
+      
+      it 'should include routes with the same number, one stop area in common with the new route and the same operator code with no admin area' do
+        route_source_admin_area = routes(:number_807_bus).route_source_admin_areas.first
+        route_source_admin_area.source_admin_area_id = nil
+        route_source_admin_area.save!
+        @route.route_source_admin_areas.build({:operator_code => 'BUS',
+                                               :source_admin_area => nil})
+        Route.find_existing_routes(@route).should include(routes(:number_807_bus))
+      end
+
+      it 'should include routes with the same number, no stops in common, but one stop area in common with the new route and the same operator code from the same admin area' do
+        route = Route.new(:number => '807',
+                          :transport_mode => transport_modes(:bus))
+        route.route_source_admin_areas.build({:operator_code => 'BUS',
+                                              :source_admin_area => admin_areas(:london)})
+        new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
+        jp = route.journey_patterns.build(:destination => 'test dest')
+        jp.route_segments.build(:from_stop => stops(:arch_sw),
+                                :to_stop => new_stop,
+                                :from_terminus => true,
+                                :to_terminus => false)
+        Route.find_existing_routes(route).should include(routes(:number_807_bus))
+      end
+
+      it 'should not include routes with the same number, no stops in common, but one stop area in common with the new route and a different operator from the same admin area' do
+        route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
+        route.route_source_admin_areas.build({:operator_code => 'ABUS',
+                                              :source_admin_area => admin_areas(:london)})
+        route.route_operators.build(:operator => operators(:another_bus_company))
+        new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
+        route.route_segments.build(:from_stop => stops(:arch_sw),
+                                   :to_stop => new_stop,
+                                   :from_terminus => true,
+                                   :to_terminus => false)
+        Route.find_existing_routes(route).should_not include(routes(:number_807_bus))
+      end
     end
 
-    it 'should include routes with the same number and one stop in common with the new route, with the same route operator' do
-      route = Route.new(:number => '807',
-                        :transport_mode => transport_modes(:bus))
-      route.route_operators.build({:operator => operators(:a_bus_company)})
-      new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
-      jp = route.journey_patterns.build(:destination => 'test dest')
-      jp.route_segments.build(:from_stop => stops(:arch_ne),
-                              :to_stop => new_stop,
-                              :from_terminus => true)
-      Route.find_existing_routes(route).should include(routes(:number_807_bus))
-    end
-
-    it 'should include routes with the same number, no stops in common, but one stop area in common with the new route and the same operator code from the same admin area' do
-      route = Route.new(:number => '807',
-                        :transport_mode => transport_modes(:bus))
-      route.route_source_admin_areas.build({:operator_code => 'BUS',
-                                            :source_admin_area => admin_areas(:london)})
-      new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
-      jp = route.journey_patterns.build(:destination => 'test dest')
-      jp.route_segments.build(:from_stop => stops(:arch_sw),
-                              :to_stop => new_stop,
-                              :from_terminus => true,
-                              :to_terminus => false)
-      Route.find_existing_routes(route).should include(routes(:number_807_bus))
-    end
-
-    it 'should include routes with the same number, one stop area in common with the new route and the same operator code with no admin area' do
-      route_source_admin_area = routes(:number_807_bus).route_source_admin_areas.first
-      route_source_admin_area.source_admin_area_id = nil
-      route_source_admin_area.save!
-      route = Route.new(:number => '807',
-                        :transport_mode => transport_modes(:bus))
-      route.route_source_admin_areas.build({:operator_code => 'BUS',
-                                            :source_admin_area => nil})
-      new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
-      jp = route.journey_patterns.build(:destination => 'test dest')
-      jp.route_segments.build(:from_stop => stops(:arch_sw),
-                              :to_stop => new_stop,
-                              :from_terminus => true,
-                              :to_terminus => false)
-      Route.find_existing_routes(route).should include(routes(:number_807_bus))
-    end
-
-    it 'should not include routes with the same number, no stops in common, but one stop area in common with the new route and a different operator from the same admin area' do
-      route = Route.new(:number => '807', :transport_mode => transport_modes(:bus))
-      route.route_source_admin_areas.build({:operator_code => 'ABUS',
-                                            :source_admin_area => admin_areas(:london)})
-      route.route_operators.build(:operator => operators(:another_bus_company))
-      new_stop = mock_model(Stop, :atco_code => 'xxxx', :stop_areas => [])
-      route.route_segments.build(:from_stop => stops(:arch_sw),
-                                 :to_stop => new_stop,
-                                 :from_terminus => true,
-                                 :to_terminus => false)
-      Route.find_existing_routes(route).should_not include(routes(:number_807_bus))
-    end
   end
-
+  
   describe 'when finding existing train routes' do
 
     fixtures default_fixtures
