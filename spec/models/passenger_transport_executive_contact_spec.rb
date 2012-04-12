@@ -36,4 +36,22 @@ describe PassengerTransportExecutiveContact do
     new_ptec.should be_valid
   end
 
+  it 'should allow other contacts for this PTE in this category if the existing contacts are deleted' do 
+    existing_ptec = PassengerTransportExecutiveContact.create! @valid_attributes.merge(:deleted => true)
+    duplicate_ptec = PassengerTransportExecutiveContact.new @valid_attributes
+    duplicate_ptec.should be_valid
+  end
+  
+  it 'should allow other contacts for this PTE in this category if both contacts are deleted' do 
+    existing_ptec = PassengerTransportExecutiveContact.create! @valid_attributes.merge(:deleted => true)
+    duplicate_ptec = PassengerTransportExecutiveContact.new @valid_attributes.merge(:deleted => true)
+    duplicate_ptec.should be_valid
+  end
+  
+  it 'should allow other contacts for this PTE in this category if the new contact is deleted' do 
+    existing_ptec = PassengerTransportExecutiveContact.create! @valid_attributes
+    duplicate_ptec = PassengerTransportExecutiveContact.new @valid_attributes.merge(:deleted => true)
+    duplicate_ptec.should be_valid
+  end
+
 end

@@ -20,7 +20,7 @@ describe CouncilContact do
     council_contact.should be_valid
   end
 
-  it "should only allow one email address for a particular operator and category" do
+  it "should only allow one email address for a particular area and category" do
     existing_council_contact = CouncilContact.create! @valid_attributes
     new_council_contact = CouncilContact.new @valid_attributes
     new_council_contact.should_not be_valid
@@ -31,6 +31,24 @@ describe CouncilContact do
     similar_attributes = @valid_attributes.clone
     similar_attributes[:category] = "other"
     new_council_contact = CouncilContact.new similar_attributes
+    new_council_contact.should be_valid
+  end
+  
+  it 'should allow another address for the same area and category if the existing address is deleted' do 
+    existing_council_contact = CouncilContact.create! @valid_attributes.merge(:deleted => true)
+    new_council_contact = CouncilContact.new @valid_attributes
+    new_council_contact.should be_valid
+  end
+
+  it 'should allow another address for the same area and category if the new address is deleted' do 
+    existing_council_contact = CouncilContact.create! @valid_attributes
+    new_council_contact = CouncilContact.new @valid_attributes.merge(:deleted => true)
+    new_council_contact.should be_valid
+  end
+  
+  it 'should allow another address for the same area and category if both addresses are deleted' do 
+    existing_council_contact = CouncilContact.create! @valid_attributes.merge(:deleted => true)
+    new_council_contact = CouncilContact.new @valid_attributes.merge(:deleted => true)
     new_council_contact.should be_valid
   end
 

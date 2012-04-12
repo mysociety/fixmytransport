@@ -34,5 +34,23 @@ describe OperatorContact do
     new_operator_contact = OperatorContact.new similar_attributes
     new_operator_contact.should be_valid
   end
+  
+  it 'should allow another address for the same operator and category if the existing address is deleted' do 
+    existing_operator_contact = OperatorContact.create! @valid_attributes.merge(:deleted => true)
+    new_operator_contact = OperatorContact.new @valid_attributes
+    new_operator_contact.should be_valid
+  end
+
+  it 'should allow another address for the same operator and category if the new address is deleted' do 
+    existing_operator_contact = OperatorContact.create! @valid_attributes
+    new_operator_contact = OperatorContact.new @valid_attributes.merge(:deleted => true)
+    new_operator_contact.should be_valid
+  end
+  
+  it 'should allow another address for the same operator and category if both addresses are deleted' do 
+    existing_operator_contact = OperatorContact.create! @valid_attributes.merge(:deleted => true)
+    new_operator_contact = OperatorContact.new @valid_attributes.merge(:deleted => true)
+    new_operator_contact.should be_valid
+  end
 
 end

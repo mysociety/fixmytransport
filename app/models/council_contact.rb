@@ -3,7 +3,8 @@ class CouncilContact < ActiveRecord::Base
   has_many :outgoing_messages, :as => :recipient
   validates_presence_of :category
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
-  validates_uniqueness_of :category, :scope => [:area_id]
+  validates_uniqueness_of :category, :scope => [:area_id, :deleted], 
+                                     :if => Proc.new{ |contact| ! contact.deleted? }
 
   has_paper_trail
 
