@@ -81,21 +81,6 @@ describe Parsers::TransxchangeParser do
       combined_route.route_operators.first.operator.should == mock_operator
     end
 
-    describe 'if a unique operator cannot be found using the operator code' do
-
-      before do
-        Operator.stub!(:find_all_by_nptdr_code).and_return([])
-        @mock_operator = mock_model(Operator)
-      end
-
-      it 'should look for the operator using the short name' do
-        expected_conditions = [:all, { :conditions => ['lower(name) = ?', 'whippet coaches'] }] 
-        Operator.should_receive(:find).with(*expected_conditions).exactly(2).times.and_return([@mock_operator])
-        routes = get_routes(@parser, [@combined_file, nil, nil, @combined_file, verbose=false, @mock_region])
-      end
-
-    end
-
   end
 
   describe 'when parsing an example directory of TNDS TransXChange XML files' do

@@ -51,7 +51,7 @@ class Route < ActiveRecord::Base
   cattr_reader :per_page
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail
-  attr_accessor :show_as_point
+  attr_accessor :show_as_point, :operator_info
   before_save [ :cache_route_coords,
                 :generate_default_journey,
                 :cache_area,
