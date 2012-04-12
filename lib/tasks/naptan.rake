@@ -136,8 +136,10 @@ namespace :naptan do
     desc 'Add locality_id to any stop missing it'
     task :add_locality_to_stops => :environment do
       Stop.paper_trail_off
+      extra_conditions = "locality_id is not null"
       Stop.find_each(:conditions => ['locality_id is NULL']) do |stop|
-        nearest_stop = Stop.find_nearest(stop.easting, stop.northing, exclude_id=stop.id)
+        nearest_stop = Stop.find_nearest(stop.easting, stop.northing, exclude_id=stop.id, extra_conditions)
+        puts stop.inspect
         stop.locality = nearest_stop.locality
         stop.save!
       end
