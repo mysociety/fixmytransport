@@ -294,9 +294,16 @@ class Parsers::TransxchangeParser
         missing.each do |missing_stop_code|
           missing_stops = self.mark_stop_code_missing(missing_stops, missing_stop_code, route)
         end
+        route.operator_info = operator_information
         operators = Operator.find_all_by_nptdr_code(transport_mode, operator_code, region, route)
         # no matches or ambiguious
         puts "found #{operators.size} operators by operator code" if verbose
+        if operators.empty? || operators.size > 1
+          if operator_information[:trading_name]
+            lower_name = operator_information[:trading_name].downcase
+            operators = Operator.find(:all, :conditions => ['lower(name) = ?', lower_name])
+          end
+        end
         if operators.empty? || operators.size > 1
           if operator_information[:short_name]
             lower_name = operator_information[:short_name].downcase
@@ -304,7 +311,7 @@ class Parsers::TransxchangeParser
           end
         end
         if operators.empty? || operators.size > 1
-          raise "Can't find operator with info: #{operator_information.inspect} #{route.number} #{region.name}"
+          puts "Can't find operator with info: #{operator_information.inspect} #{route.number} #{region.name}"
         end
         operators.each do |operator|
           if ! route.route_operators.any?{ |route_operator| route_operator.operator == operator }
