@@ -6,7 +6,8 @@ class OperatorContact < ActiveRecord::Base
   belongs_to :location, :polymorphic => true
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
   validates_format_of :cc_email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$"), :allow_blank => true
-  validates_uniqueness_of :category, :scope => [:operator_id]
+  validates_uniqueness_of :category, :scope => [:operator_id, :deleted],
+                                     :if => Proc.new{ |contact| ! contact.deleted? }
   has_paper_trail
   
   def name

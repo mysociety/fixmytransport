@@ -228,11 +228,17 @@ describe Stop do
                                                  "55" =>
                                                  { "id" => "55",
                                                    "name" => "Another test area"} })
+      @council_types = ["DIS", "LBO", "MTD", "UTA", "LGD", "CTY", "COI"]
     end
 
     it 'should send a request to MaPit' do
-      council_types = ["DIS", "LBO", "MTD", "UTA", "LGD", "CTY", "COI"]
-      MySociety::MaPit.should_receive(:call).with('point', '4326/200.2,100.1', :type => council_types)
+      MySociety::MaPit.should_receive(:call).with('point', '4326/200.200000,100.100000', :type => @council_types)
+      @stop.councils
+    end
+
+    it 'should format a very small float lat or lon value to non-scientific format' do
+      @stop.lat = 0.000004
+      MySociety::MaPit.should_receive(:call).with('point', '4326/200.200000,0.000004', :type => @council_types)
       @stop.councils
     end
 
