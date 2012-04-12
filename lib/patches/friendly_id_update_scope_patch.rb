@@ -12,7 +12,6 @@ module FriendlyId
         self.class.transaction do
           slug.scope = send(friendly_id_config.scope).to_param
           similar = Slug.similar_to(slug)
-          puts similar.inspect
           if !similar.empty?
             # This is the changed line - last in the array, not first
             slug.sequence = similar.last.sequence.succ
