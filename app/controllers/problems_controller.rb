@@ -52,7 +52,7 @@ class ProblemsController < ApplicationController
     reference_problem = get_reference_problem(params[:reference_id], location)
       @problem.reference_id = reference_problem.id
     end
-    map_params_from_location(@problem.location.points, find_other_locations=false, 
+    map_params_from_location(@problem.location.points, find_other_locations=false,
                              height=@map_height, width=@map_width)
     setup_problem_advice(@problem)
   end
@@ -468,7 +468,13 @@ class ProblemsController < ApplicationController
                                    @map_height,
                                    @map_width,
                                    options[:map_options])
-          @locations = [nearest_stop]
+          # When finding a location we want to highlight what we found, when
+          # browsing, just use it to centre the map
+          if options[:map_options][:mode] == :browse
+            @locations = []
+          else
+            @locations = [nearest_stop]
+          end
           to_render = options[:browse_template]
         else # no nearest stop suggests empty database
           location_search.fail
