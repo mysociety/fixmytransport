@@ -2305,7 +2305,7 @@ body.facebook-canvas .button {
   padding-bottom: 0.5em;
 }
 
-/* Make sure the RSS Links still look clickable */
+/* Make sure the Atom links still look clickable (i.e. blue) */
 #in-page-atom-link a {
   color: #048FC2
 }
