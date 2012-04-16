@@ -13,6 +13,7 @@ en:
       admin_route: Admin page
       on_the: "on"
       route: "route"
+      feed_link_text: "Get updates on issues for this route"
     show_route_region:
       see_also_national_routes: "(see also %{national})"
       route_region: "Route Region"
@@ -37,6 +38,7 @@ en:
       route_inactive: "(inactive)"
       admin_stop: Admin page
       at_the: "at"
+      feed_link_text: "Get updates on issues at this stop"
     show_stop_area:
       report_a_problem: "Report a problem here"
       location_header: "Location"
@@ -48,6 +50,7 @@ en:
       admin_stop_area: Admin page
       at_the: "at"
       operated_by: "Operated by %{operators}"
+      feed_link_text: "Get updates on issues here"
     show_sub_route:
       information_wrong: "Is this information wrong?"
       say_something_nice: "Say something nice"
@@ -56,3 +59,4 @@ en:
       route_header: "Route"
       stops_header: "Stops"
       stop_or_station_inactive: "(inactive)"
+      feed_link_text: "Get updates on issues on this route"
