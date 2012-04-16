@@ -16,6 +16,7 @@ en:
       routes_header: "Routes"
       stations_header: "Stations"
       issues_header: "Issues"
+      feed_link_text: "Get updates on issues for this operator"
       is_an_operator: "{%operator} is a transport operator."
       is_an_operator_with_transport_mode: "%{operator} is a transport operator providing %{transport_mode} services."
       operates_routes:
@@ -32,6 +33,7 @@ en:
         other: "%{count} issues have been reported to %{operator}."
     issues:
       title: "%{operator} issues"
+      feed_title: "Issues for %{operator} on FixMyTransport"
     routes:
       title: "%{operator} routes"
     stations:
