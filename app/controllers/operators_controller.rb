@@ -49,6 +49,7 @@ class OperatorsController < ApplicationController
   def setup_issues_feed
     @issues_feed_params = params.clone
     @issues_feed_params[:format] = 'atom'
+    @issues_feed_params[:action] = 'issues'
   end
 
   def show
