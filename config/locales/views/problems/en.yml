@@ -8,6 +8,8 @@ en:
       title: "Issues in '%{area}'"
       no_other_issues: No issues have been reported yet.
       title_no_name: "Browsing issues"
+      feed_title: "Issues around longitude %{longitude} and latitude %{latitude} on FixMyTransport"
+      feed_link_text: "Get updates on issues in this area"
     choose_area:
       choose_area: "Choose area"
       multiple_localities: "We found more than one place matching \"%{name}\". Please select one, or try a different search if yours is not here:"

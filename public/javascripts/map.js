@@ -169,6 +169,14 @@ var area_init, route_init;
     // do nothing
   }
 
+  function replaceAtomLink(data, textStatus, jqXHR) {
+    $('#in-page-atom-link').replaceWith(data);
+  }
+
+  function replaceAtomLinkFailure(jqXHR, textStatus, errorThrown) {
+    // ignore errors here; there's nothing much that can be done
+  }
+
   function getQueryStringParametersMap() {
     // Based on: http://stackoverflow.com/a/3855394/223092
     var result = {}, i, value, parts;
@@ -190,7 +198,7 @@ var area_init, route_init;
 
   function updateLocations(eevent) {
     var currentZoom = map.getZoom(), newLat, newLon, newPath, url;
-    var parameters, key, center;
+    var parameters, key, center, mapViewParameters;
     var positionKeys = {'lon': true,
                         'lat': true,
                         'zoom': true};
@@ -213,7 +221,8 @@ var area_init, route_init;
       center = center.transform(map.getProjectionObject(), proj);
       newLat = Math.round(center.lat*1000)/1000;
       newLon = Math.round(center.lon*1000)/1000;
-      url = "/locations/" + map.getZoom() + "/" + newLat + "/" + newLon + "/" + linkType;
+      mapViewParameters = map.getZoom() + "/" + newLat + "/" + newLon;
+      url = "/locations/" + mapViewParameters + "/" + linkType;
       parameters = "?height=" + $('#map').height() + "&width=" + $('#map').width();
       parameters = parameters + "&highlight=" + highlight;
       $.ajax({
@@ -221,6 +230,11 @@ var area_init, route_init;
         dataType: 'json',
         success: loadNewMarkers,
         failure: markerFail});
+      $.ajax({
+        url: "/issues/browse/atom_link/" + mapViewParameters,
+        dataType: 'html',
+        success: replaceAtomLink,
+        failure: replaceAtomLinkFailure});
       // If we're able to replace the URL with history.replaceState,
       // update it to give a permalink to the new map position:
       if (history.replaceState) {
