@@ -26,7 +26,6 @@
 #
 
 class StopArea < ActiveRecord::Base
-  extend ActiveSupport::Memoizable
   include FixMyTransport::Locations
   include FixMyTransport::StopsAndStopAreas
   include FixMyTransport::GeoFunctions
@@ -126,14 +125,17 @@ class StopArea < ActiveRecord::Base
   end
 
   def area
+    @area = get_area unless defined? @area
+    return @area
+  end
+
+  def get_area
     areas = stops.map{ |stop| stop.area }.uniq
     if areas.size == 1
       return areas.first
     end
     return nil
   end
-
-  memoize :area
 
   # Is this 'station' stop area really part of a bigger station?
   def station_root

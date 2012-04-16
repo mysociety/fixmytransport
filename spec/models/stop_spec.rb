@@ -284,6 +284,7 @@ describe Stop do
                                                               "type_name"=>"District council" }})
         sr = mock_model(SoleResponsibility, :council_id => 2233)
         SoleResponsibility.stub!(:find).with(:all).and_return([sr])
+        @stop = Stop.new(:lat => 100.1, :lon => 200.2)
       end
 
       it 'should only return that council' do

@@ -40,7 +40,6 @@
 
 
 class Stop < ActiveRecord::Base
-  extend ActiveSupport::Memoizable
   include FixMyTransport::Locations
   include FixMyTransport::StopsAndStopAreas
   include FixMyTransport::GeoFunctions

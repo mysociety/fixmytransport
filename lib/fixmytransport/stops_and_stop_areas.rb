@@ -11,22 +11,21 @@ module FixMyTransport
 
       def is_stop_or_stop_area()
         send :include, InstanceMethods
-        memoize :councils
       end
 
     end
 
     module InstanceMethods
-      
+
       def update_coords
         if self.lat_changed? || self.lon_changed? && ! (self.easting_changed? || self.northing_changed?)
           self.easting, self.northing = self.get_easting_northing(self.lon, self.lat)
         end
-        if self.easting_changed? || self.northing_changed? 
+        if self.easting_changed? || self.northing_changed?
           self.coords = Point.from_x_y(self.easting, self.northing, BRITISH_NATIONAL_GRID)
         end
       end
-      
+
       def responsible_organizations
         responsible = []
         # train stations are run by operators
@@ -50,6 +49,11 @@ module FixMyTransport
 
       # Return a list of council objects representing the councils responsible for this location
       def councils
+        @councils = get_councils unless defined? @councils
+        return @councils
+      end
+
+      def get_councils
         council_parent_types = MySociety::VotingArea.va_council_parent_types
         # Get the council(s) covering this point
         formatted_lon = "%6.6f" % [lon]
