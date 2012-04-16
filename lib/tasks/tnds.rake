@@ -96,7 +96,7 @@ namespace :tnds do
           if !operator_info[:license_name].blank?
             operator.vosa_license_name = operator_info[:license_name]
           end
-          puts operator.inspect
+          puts "#{operator.short_name} #{operator.name} #{operator.vosa_license_name}"
           new_operators += 1
         end
         region_data.each do |region_name, operator_codes|
