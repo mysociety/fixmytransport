@@ -4,7 +4,7 @@ class OperatorsController < ApplicationController
   before_filter :long_cache
   before_filter :find_operator, :except => [:index]
   before_filter :setup_shared_title, :except => [:index]
-  before_filter :setup_issues_feed, :only => [:show, :issues, :routes]
+  before_filter :setup_issues_feed, :only => [:show, :issues]
   
   def index
     @operator_list_threshold = 20
