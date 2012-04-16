@@ -1,0 +1,5 @@
+<%- if @issues_feed_params %>
+  <div class="atom-link" id="in-page-atom-link">
+    <%= link_to image_tag("feed.png", :class => 'inline-icon') + " " + feed_link_text, @issues_feed_params %>
+  </div>
+<%- end %>
