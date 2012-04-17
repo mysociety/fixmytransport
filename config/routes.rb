@@ -202,6 +202,9 @@ ActionController::Routing::Routes.draw do |map|
   map.facebook '/facebook', :controller => 'static', :action => 'facebook'
   map.howto '/howto', :controller => 'static', :action => 'howto'
 
+  map.guide_index '/guides', :controller => 'static', :action => 'guide_index'
+  map.guides '/guides/:guide', :controller => 'static', :action => 'show_guide'
+
   # admin
   map.namespace :admin do |admin|
     admin.root :controller => 'home'

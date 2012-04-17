@@ -140,6 +140,7 @@ en:
       stop_or_station: "STOP or STATION"
       journey_or_route: "JOURNEY or ROUTE"
       journey_or_route_break: "JOURNEY or<br> ROUTE"
+      report_a_problem: "REPORT A PROBLEM"
       stop_examples: "Examples: poor facilities or accessibility, missing timetables, dirt or litter."
       route_examples: "Examples: overcrowding, late buses or trains, fare and ticket problems."
       issues_near_you: "issues near you"

@@ -18,6 +18,7 @@ class Campaign < ActiveRecord::Base
   has_many :subscriptions, :as => :target
   has_many :subscribers, :through => :subscriptions, :source => :user, :conditions => ['subscriptions.confirmed_at is not null']
   has_many :questionnaires, :as => :subject
+  has_and_belongs_to_many :guides
   validates_length_of :title, :maximum => 80, :on => :update, :allow_nil => true
   validates_presence_of :title, :description, :on => :update
   validates_format_of :title, :with => /^.*(?=.*[a-zA-Z]).*$/,
@@ -59,6 +60,14 @@ class Campaign < ActiveRecord::Base
     return unless self.status == :new
     self.status = :confirmed
     self.confirmed_at = Time.now
+  end
+
+  def fixed?
+    self.status == :fixed
+  end
+
+  def confirmed_and_visible?
+    self.status == :confirmed
   end
 
   def visible?
