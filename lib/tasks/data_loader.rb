@@ -486,6 +486,7 @@ set it to #{expected_generation})"
         yield instance
       end
 
+      
       instance.generation_low = generation
       instance.generation_high = generation
       # Can we find a record in the previous generation with few enough differences that we can update it
@@ -529,6 +530,7 @@ set it to #{expected_generation})"
         if existing
           puts "New record in this generation for existing instance #{reference_string(model_class, existing, change_in_place_fields)}" if verbose
           diff_hash = existing.diff(instance)
+          significant_diff_hash = {}
           diff_hash.each do |key, value|
             if new_record_fields.include?(key)
               if diffs[key].nil?
@@ -536,9 +538,10 @@ set it to #{expected_generation})"
               else
                 diffs[key] +=1
               end
+              significant_diff_hash[key] = value
             end
           end
-          puts diff_hash.inspect if verbose
+          puts significant_diff_hash.inspect if verbose
           # Associate the old generation record with the new generation record
           instance.previous_id = existing.id
           counts[:updated_new_record] += 1
