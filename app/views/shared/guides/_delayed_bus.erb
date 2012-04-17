@@ -1,0 +1,75 @@
+<section class="guide-intro">
+
+  <p>We’ve all wasted precious hours of our time standing at bus
+  stops, waiting for a bus that never seems to come - and when
+  bus delays are a daily occurrence, it really becomes
+  frustrating.</p>
+
+  <p>Just as bad, perhaps, are those buses that come early - you
+  arrive at the bus stop right on time, only to see them
+  disappear into the distance. If you have a problem with buses
+  that are late, early, or never arrive at all, you’ve come to
+  the right website.</p>
+
+  <p>We are FixMyTransport, an independent site which helps
+  people get their voice heard by transport operators. We will
+  help you take control of your local bus services.</p>
+
+</section>
+
+<section class="guide-action">
+  <h2>What can you do about it?</h2>
+
+  <p><%= raw(link_to(raw(t('problems.frontpage.report_a_problem')), "/", :class => 'report-problem-button')) %></p>
+
+  <p>Or have a look at some of the <a href="#unsolved">unresolved
+  late bus problems</a> that have been reported and add
+  your support.</p>
+
+</section>
+
+<section class="guide-process">
+
+  <h2>How does FixMyTransport get things changed?</h2>
+
+  <p>It’s simple. FixMyTransport contains details of every bus
+  route in Britain. You just input the number and location of
+  the route that isn’t working for you at the moment.</p>
+
+  <p>Write a message to the transport operator, and we’ll send
+  it off. At the same time, we put a copy on this website, so
+  that others can add their support and advice. If you’re nifty
+  with Facebook and Twitter, you can spread the word really
+  quickly - the more names there are supporting your campaign,
+  the more the operator will have to listen to your
+  complaint. This is also a great time to share the web address
+  with fellow passengers - perhaps while you’re waiting at the
+  bus stop!</p>
+
+  <p>The operator’s reply is published on the page too, for all
+  to see. And if it doesn’t solve your problem? FixMyTransport
+  has a team of experts, ready to tell you who to write to next
+  - could be the Public Transport Executive, your local
+  councillor, or even the local press.</p>
+
+  <p>FixMyTransport gets things changed - have a look at our
+  sidebar (right) to see examples of public transport issues
+  that we’ve already solved.</p>
+
+</section>
+
+<aside class="guide-report">
+  <h2>Ready to get your bus running on time?</h2>
+
+  <p>Start here.</p>
+
+  <p><%= raw(link_to(raw(t('problems.frontpage.report_a_problem')), "/", :class => 'report-problem-button')) %></p>
+</aside>
+
+<%= render :partial => "shared/guides_example_issues",
+           :locals => { :solved_issues => true,
+                        :description => "late bus problems" } %>
+
+<%= render :partial => "shared/guides_example_issues",
+           :locals => { :solved_issues => false,
+                        :description => "late bus problems" } %>
