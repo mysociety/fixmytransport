@@ -1,0 +1,82 @@
+<section class="guide-intro">
+
+  <p>We expect a certain level of courtesy from our public
+  transport staff. We understand their jobs are demanding, and
+  that they may work long hours - but there is no excuse for
+  rudeness.</p>
+
+  <p>If you’ve experienced impolite behaviour from a bus driver,
+  railway worker, ticket collector or any other public transport
+  employee, you can report it right here on
+  FixMyTransport. We’ll make sure the issue is properly
+  addressed.</p>
+
+  <p>We are an independent website and we make it easy to
+  contact any transport provider in Britain.</p>
+
+</section>
+
+<section class="guide-action">
+
+  <h2>What can you do about it?</h2>
+
+  <p><%= raw(link_to(raw(t('problems.frontpage.report_a_problem')), "/", :class => 'report-problem-button')) %></p>
+
+  <p>Or have a look at some of the <a href="#unsolved">unresolved
+  employee rudeness problems</a> that have been reported and add
+  your support.</p>
+
+</section>
+
+<section class="guide-process">
+
+  <h2>What sort of problems can I report?</h2>
+
+  <p>You can use FixMyTransport to report any issue with public
+  transport staff. Common issues include:</p>
+
+  <ul>
+    <li><p>Bus drivers failing to stop</p></li>
+    <li><p>Bad or abusive language from transport staff</p></li>
+    <li><p>Failure to attend to a passenger’s special needs</p></li>
+    <li><p>Unhelpful behaviour</p></li>
+    <li><p>Failure to adhere to the operator’s code of conduct</p></li>
+  </ul>
+
+</section>
+
+<section class="guide-process">
+
+  <h2>How does FixMyTransport work?</h2>
+
+  <p>You identify the route, stop or station where the staff
+  were rude to you.</p>
+
+  <p>You write your message, and we’ll send it off. At the same
+  time, we put a copy on this website, so that others can see
+  it. They can add their support and comments too. If you’re
+  nifty with Facebook and Twitter, you can spread the word. We
+  find that putting the whole thing in public tends to mean that
+  problems get fixed - fast.</p>
+
+  <p>And if not? FixMyTransport has a team of experts, ready to
+  tell you who to write to next - could be a passenger watchdog,
+  or even the local press.</p>
+
+  <p>FixMyTransport gets things changed - have a look at our
+  sidebar (right) to see examples of issues that we’ve already
+  solved.</p>
+
+</section>
+
+<aside class="guide-report">
+  <p><%= raw(link_to(raw(t('problems.frontpage.report_a_problem')), "/", :class => 'report-problem-button')) %></p>
+</aside>
+
+<%= render :partial => "shared/guides_example_issues",
+           :locals => { :solved_issues => true,
+                        :description => "employee rudeness problems" } %>
+
+<%= render :partial => "shared/guides_example_issues",
+           :locals => { :solved_issues => false,
+                        :description => "employee rudeness problems" } %>

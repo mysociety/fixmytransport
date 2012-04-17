@@ -14,6 +14,7 @@ class Problem < ActiveRecord::Base
   has_many :sent_emails
   has_many :responsibilities
   has_many :questionnaires, :as => :subject
+  has_and_belongs_to_many :guides
   validates_presence_of :description, :subject, :category, :if => :location
   validates_associated :reporter
 
@@ -241,6 +242,14 @@ class Problem < ActiveRecord::Base
 
   def transport_mode_text
     location.transport_modes.map{ |transport_mode| transport_mode.name }.join(", ")
+  end
+
+  def fixed?
+    self.status == :fixed
+  end
+
+  def confirmed_and_visible?
+    self.status == :confirmed
   end
 
   def visible?
@@ -492,6 +501,10 @@ class Problem < ActiveRecord::Base
                     AND subject_id = problems.id) is NULL)
                     #{user_clause}"]
     self.visible.sent.find(:all, :conditions => query + params)
+  end
+
+  def feed_title_suffix
+    :fixed == status ? " [FIXED]" : ""
   end
 
 end

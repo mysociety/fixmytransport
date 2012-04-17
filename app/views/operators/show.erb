@@ -56,6 +56,7 @@
         </ul>
         <%= will_paginate @stations %>
       <%- elsif @current_tab == :issues %>
+        <%= render :partial => 'shared/atom_link', :locals => { :feed_link_text => t('route_operators.show.feed_link_text', :operator => @operator.name) } %>
         <%- if @issue_count != 0 %>
           <%= will_paginate @issues, :params => { :action => :issues } %>
           <ul class="issues-list widecol">

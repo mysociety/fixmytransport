@@ -1,0 +1,48 @@
+<% if @example_issues.empty? %>
+
+  <!-- No example issues to disply -->
+
+<% else %>
+
+  <%- if solved_issues %>
+
+<section class="guide-solved_problems" id="solved">
+
+  <h2 id="solved">It worked for them&hellip;</h2>
+
+    <div class="guide-desc">
+      <p>FixMyTransport gets things changed - have a look at examples of <%= @description %> that we’ve already helped to solve.</p>
+    </div>
+
+    <ul class="issues-list">
+      <%= render :partial => "shared/issue",
+                 :collection => @example_issues.select { |i| i.fixed? },
+                 :as => :issue,
+                 :locals => { :context => :browse_issues } %>
+    </ul>
+
+</section>
+
+  <% else %>
+
+    <section class="guide-solved_problems">
+
+      <h2 id="unsolved">Can you help with these?</h2>
+
+      <div class="guide-desc">
+         <p>The following <%= @description %> are still unsolved -
+         can you help with these?</p>
+      </div>
+
+      <ul class="issues-list">
+        <%= render :partial => "shared/issue",
+                   :collection => @example_issues.select { |i| i.confirmed_and_visible? },
+                   :as => :issue,
+                   :locals => { :context => :browse_issues } %>
+      </ul>
+
+    </section>
+
+  <% end %>
+
+<% end %>

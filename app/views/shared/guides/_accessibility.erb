@@ -1,0 +1,74 @@
+<section class="guide-intro">
+
+  <p>Public transport is for everyone - but if you’re in a
+  wheelchair or have limited mobility, you may not agree.</p>
+
+  <p>Have you ever met <a href="#">bus drivers who won’t put
+  their ramp down for your wheelchair</a>? Perhaps you’ve
+  been <a href="#">left without assistance at a railway
+  station</a>. Or quite possibly, you can’t get to that station
+  to start with, because it’s <a href="#">only accessible via
+  several flights of stairs</a>.</p>
+
+  <p>We are <strong>FixMyTransport</strong>, an independent
+  website which helps people get their voice heard by transport
+  operators. If you want to make your public transport more
+  accessible, you’ve come to the right place.</p>
+
+</section>
+
+<section class="guide-action">
+  <h2>What can you do about it?</h2>
+
+  <p><%= raw(link_to(raw(t('problems.frontpage.report_a_problem')), "/", :class => 'report-problem-button')) %></p>
+
+  <p>Or have a look at some of the <a href="#unsolved">unresolved
+  accessibility problems</a> that have been reported and add
+  your support.</p>
+
+</section>
+
+<section class="guide-process">
+
+  <h2>How does it work?</h2>
+
+  <p>It’s simple – first press the big green button to get
+  started, then:</p>
+
+  <ol>
+
+    <li><p><strong>You identify the route, station or stop that
+    isn’t working for you at the moment.</strong> It might be a
+    station with no lift, a bus route that needs visual or
+    audible stop cues, or a train with no wheelchair
+    space.</p></li>
+
+    <li><p><strong>You write your message to the transport
+    operator</strong>, and we’ll send it off. At the same time,
+    we put a copy on this website, so that others can add their
+    support and advice. if you’re nifty with Facebook and
+    Twitter, you can spread the word.</p></li>
+
+    <li><p><strong>The operator’s reply is published on the page
+    too</strong>, for all to see. And if it doesn’t solve your
+    problem? FixMyTransport has a team of experts, ready to tell
+    you who to write to next - could be your local transport
+    group, your local councillor, or even the local
+    press.</p></li>
+
+  </ol>
+
+</section>
+
+<aside class="guide-report">
+  <p><%= raw(link_to(raw(t('problems.frontpage.report_a_problem')), "/", :class => 'report-problem-button')) %></p>
+</aside>
+
+<%= render :partial => "shared/guides_example_issues",
+           :locals => { :solved_issues => true,
+                        :description => "public transport accessibility problems" } %>
+
+
+<%= render :partial => "shared/guides_example_issues",
+           :locals => { :solved_issues => false,
+                        :description => "public transport accessibility problems" } %>

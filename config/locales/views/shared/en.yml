@@ -68,6 +68,7 @@ en:
       site_name: "FixMyTransport"
       feedback: "Feedback"
       blog: "Blog"
+      guides: "Guides"
     location_content:
       no_issues: "No reported issues."
       related_issues: "Related Issues"

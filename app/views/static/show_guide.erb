@@ -1,0 +1,29 @@
+<article id="guide-accessibility" class="guide">
+
+  <header>
+	<p>The FixMyTransport Guide to</p>
+	<h1><%= @guide.title %></h1>
+
+	<nav class="toc">
+
+	</nav>
+  </header>
+
+  <%= render "shared/guides/#{@guide.partial_name}" %>
+
+  <footer>
+	<div class="guide-other-guides">
+	  <h2>Not quite what you were look for? Read one of our other guides:</h2>
+	  <ul>
+        <% @all_guides.each do |g| %>
+          <% if g.id == @guide.id %>
+            <li class="selected-guide"><%= g.title %></li>
+          <% else %>
+            <li class="deselected-guide"><%= link_to g.title, :controller => "static", :action => "show_guide", :guide => g.friendly_id %></li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  </footer>
+
+</article>

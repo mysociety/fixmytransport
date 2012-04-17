@@ -1,0 +1,92 @@
+<section class="guide-intro">
+
+  <p>If you’ve noticed something wrong with a bus stop, you
+  might not know who to report it to.</p>
+
+  <p>Responsibility for bus shelter and bus stop maintenance
+  varies from region to region: in some places it falls to the
+  town council. In others, it’s the county council. Some
+  councils contract the work out to private firms, and in other
+  places the bus stops are the responsibility of the bus
+  companies.</p>
+
+  <p>The great thing about FixMyTransport is, you don’t need to
+  know who’s responsible. So long as you can locate your bus
+  stop on the map, we’ll send your report off to the right
+  contact.</p>
+
+  <p>We are an independent website and we make it easy to
+  contact any council or transport provider in Britain.</p>
+
+</section>
+
+<section class="guide-action">
+  <h2>What can you do about it?</h2>
+
+  <p><%= raw(link_to(raw(t('problems.frontpage.report_a_problem')), "/", :class => 'report-problem-button')) %></p>
+
+  <p>Or have a look at some of the <a href="#unsolved">unresolved broken
+  bus stop problems</a> that have been reported and add your
+  support.</p>
+
+</section>
+
+<section class="guide-process">
+
+  <h2>What sort of problems can I report?</h2>
+
+
+  <p>You can use FixMyTransport to report any bus stop or bus
+  shelter problem. Common issues include:</p>
+
+  <ul>
+    <li><p>Missing or out-of-date timetables</p></li>
+    <li><p>Graffiti</p></li>
+    <li><p>Broken or missing seats</p></li>
+    <li><p>Poor placement of the bus stop</p></li>
+    <li><p>Broken countdown displays</p></li>
+    <li><p>Vandalised bus shelters</p></li>
+  </ul>
+
+</section>
+
+<section class="guide-process">
+
+  <h2>How does FixMyTransport get things fixed?</h2>
+
+  <p>It’s simple. You identify the bus stop where you’ve noticed
+  a problem.</p>
+
+  <p>You write your message, and we’ll send it off. At the same
+  time, we put a copy on this website, so that others can see
+  it. We find that putting the whole thing in public tends to
+  mean that problems get fixed - fast.</p>
+
+  <p>And if not? FixMyTransport has a team of experts, ready to
+  tell you who to write to next - could be your local
+  councillor, or even the local press.</p>
+
+  <p>FixMyTransport gets things changed - have a look at our
+  sidebar (right) to see examples of bus stop issues that we’ve
+  already solved.</p>
+
+</section>
+
+
+<aside class="guide-report">
+  <h2>Ready to get your bus stop fixed?</h2>
+
+  <p>Start here.</p>
+
+  <p><%= raw(link_to(raw(t('problems.frontpage.report_a_problem')), "/", :class => 'report-problem-button')) %></p>
+</aside>
+
+
+<%= render :partial => "shared/guides_example_issues",
+           :locals => { :solved_issues => true,
+                        :description => "broken bus stop problems" } %>
+
+
+<%= render :partial => "shared/guides_example_issues",
+           :locals => { :solved_issues => false,
+                        :description => "broken bus stop problems" } %>

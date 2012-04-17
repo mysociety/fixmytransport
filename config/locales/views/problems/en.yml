@@ -8,6 +8,8 @@ en:
       title: "Issues in '%{area}'"
       no_other_issues: No issues have been reported yet.
       title_no_name: "Browsing issues"
+      feed_title: "Issues around longitude %{longitude} and latitude %{latitude} on FixMyTransport"
+      feed_link_text: "Get updates on issues on and around this map"
     choose_area:
       choose_area: "Choose area"
       multiple_localities: "We found more than one place matching \"%{name}\". Please select one, or try a different search if yours is not here:"
@@ -138,6 +140,7 @@ en:
       stop_or_station: "STOP or STATION"
       journey_or_route: "JOURNEY or ROUTE"
       journey_or_route_break: "JOURNEY or<br> ROUTE"
+      report_a_problem: "REPORT A PROBLEM"
       stop_examples: "Examples: poor facilities or accessibility, missing timetables, dirt or litter."
       route_examples: "Examples: overcrowding, late buses or trains, fare and ticket problems."
       issues_near_you: "issues near you"
@@ -175,6 +178,7 @@ en:
       find_out_more: Find out more
       coming_soon: "FixMyTransport is coming soon...currently in closed beta testing."
       browse_issues: Map of issues
+      guides: Guides and How-Tos
     issues_index:
       title: "Recent issues"
     list:

@@ -72,6 +72,13 @@ ActionController::Routing::Routes.draw do |map|
   map.issues '/issues', :action => 'issues_index', :controller => 'problems'
   map.browse_issues '/issues/browse', :action => 'browse', :controller => 'problems'
 
+  map.browse_issues_atom_link '/issues/browse/atom_link/:zoom/:lat/:lon', :action => 'atom_link',
+                                                                          :controller => 'problems',
+                                                                          :conditions => { :method => :get },
+                                                                          :requirements => { :zoom => /\d\d?/,
+                                                                                             :lon => /[-+]?[0-9]*\.?[0-9]+/,
+                                                                                             :lat => /[-+]?[0-9]*\.?[0-9]+/ }
+
   # stops
   map.add_comment_stop "/stops/:scope/:id/add_comment", :controller => "locations",
                                                         :action => 'add_comment_to_stop',
@@ -194,6 +201,9 @@ ActionController::Routing::Routes.draw do |map|
                             :conditions => { :method => [:get, :post] }
   map.facebook '/facebook', :controller => 'static', :action => 'facebook'
   map.howto '/howto', :controller => 'static', :action => 'howto'
+
+  map.guide_index '/guides', :controller => 'static', :action => 'guide_index'
+  map.guides '/guides/:guide', :controller => 'static', :action => 'show_guide'
 
   # admin
   map.namespace :admin do |admin|
