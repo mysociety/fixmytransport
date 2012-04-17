@@ -497,18 +497,22 @@ class ProblemsController < ApplicationController
             @name = params[:name]
             to_render = :choose_locality
           else
-            return render_browse_template(stop_info[:localities], options[:map_options], options[:browse_template])
+            setup_browse_template(stop_info[:localities], options[:map_options])
+            to_render = options[:browse_template]
           end
           # got back district
         elsif stop_info[:district]
-          return render_browse_template([stop_info[:district]], options[:map_options], options[:browse_template])
+          setup_browse_template([stop_info[:district]], options[:map_options])
+          to_render = options[:browse_template]
           # got back admin area
         elsif stop_info[:admin_area]
-          return render_browse_template([stop_info[:admin_area]], options[:map_options], options[:browse_template])
+          setup_browse_template([stop_info[:admin_area]], options[:map_options])
+          to_render = options[:browse_template]
           # got back stops/stations
         elsif stop_info[:locations]
           if options[:map_options][:mode] == :browse
-            return render_browse_template(stop_info[:locations], options[:map_options], options[:browse_template])
+            setup_browse_template(stop_info[:locations], options[:map_options])
+            to_render = options[:browse_template]
           else
             map_params_from_location(stop_info[:locations],
                                      find_other_locations=true,
@@ -572,15 +576,13 @@ class ProblemsController < ApplicationController
     return !(lon.blank? or lat.blank?) && MySociety::Validate.is_valid_lon_lat(lon, lat)
   end
 
-  def render_browse_template(locations, map_options, template)
+  def setup_browse_template(locations, map_options)
     map_params_from_location(locations,
                              find_other_locations=true,
                              @map_height,
                              @map_width,
                              map_options)
     @locations = []
-    render template
-    return
   end
 
   def find_visible_problem
