@@ -46,7 +46,7 @@ module ApplicationHelper
 
   def main_style_link
     minified_css_files = ['/javascripts/theme/default/style.tidy.css']
-    css_files = ['core', 'map', 'buttons', 'ui-tabs-mod', 'fixmytransport' ]
+    css_files = ['core', 'map', 'buttons', 'ui-tabs-mod', 'fixmytransport', 'guides' ]
     files = minified_css_files + minify(css_files)
     stylesheet_link_tag(files, :cache => 'main')
   end
