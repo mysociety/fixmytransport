@@ -1,8 +1,28 @@
 namespace :update do
 
-  desc 'Load a new generation of transport data. Will run in dryrun mode unless DRYRUN=0 is specified'
+  desc 'Load a new generation of transport data. Will run in dryrun mode unless DRYRUN=0 is specified.
+        Sepcify verbose output with VERBOSE=1.'
   task :all => :environment do
 
+    Rake::Task['update:create_data_generation']
+
+    # LOAD NPTG DATA
+    Rake::Task['update:nptg']
+
+    # LOAD NAPTAN DATA
+    Rake::Task['update:naptan']
+
+    # LOAD NOC DATA
+    Rake::Task['update:noc']
+
+    # LOAD TNDS DATA
+
+    # Rake::Task['naptan:post_load:mark_metro_stops'].execute
+
+  end
+
+  desc "Create a new data generation."
+  task :create_data_generation => :environment do
     dryrun = check_dryrun()
     puts "Creating a new data generation..."
 
@@ -28,9 +48,11 @@ namespace :update do
                     WHERE sluggable_type
                     NOT in (#{data_generation_models})")
     end
+  end
 
-    # LOAD NPTG DATA
-
+  desc "Update NPTG data to the current data generation. Runs in dryrun mode unless DRYRUN=0
+        is specified. Verbose flag set by VERBOSE=1."
+  task :nptg => :environment do
     ENV['GENERATION'] = CURRENT_GENERATION
     ENV['FILE'] = File.join(MySociety::Config.get('NPTG_DIR', ''), 'Regions.csv')
     Rake::Task['nptg:update:regions']
@@ -40,20 +62,20 @@ namespace :update do
     Rake::Task['nptg:update:districts']
     ENV['FILE'] = File.join(MySociety::Config.get('NPTG_DIR', ''), 'Localities.csv')
     Rake::Task['nptg:update:localities']
-
     ENV['MODEL'] = 'Locality'
     # N.B. Run this before loading stops or stop areas so that the scoping of those slugs doesn't
     # get out of sync with the rejigged locality slugs
     Rake::Task['update:normalize_slug_sequences']
-
     Rake::Task['nptg:geo:convert_localities']
 
     # Can just reuse the load code here - localities will be scoped by the current data generation
     ENV['FILE'] = File.join(MySociety::Config.get('NPTG_DIR', ''), 'LocalityHierarchy.csv')
     Rake::Task['nptg:load:locality_hierarchy']
+  end
 
-    # LOAD NAPTAN DATA
-
+  desc 'Update NaPTAN data to the current data generation. Runs in dryrun mode unless DRYRUN=0
+        is specified. Verbose flag set by VERBOSE=1'
+  task :naptan => :environment do
     ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'Stops.csv')
     Rake::Task['naptan:update:stops']
     Rake::Task['naptan:geo:convert_stops']
@@ -73,18 +95,22 @@ namespace :update do
     Rake::Task['naptan:post_load:add_locality_to_stops'].execute
     Rake::Task['naptan:post_load:add_locality_to_stop_areas'].execute
 
-    # LOAD NOC DATA
+    # Add some other data - Rail stop codes
+    ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'RailReferences.csv')
+    Rake::Task['naptan:post_load:add_stops_codes'].execute
+
+  end
+
+  desc 'Update NOC data to the current data generation. Runs in dryrun mode unless DRYRUN=0
+        is specified. Verbose flag set by VERBOSE=1'
+  task :noc => :environment do
     ENV['FILE'] = File.join(MySociety::Config.get('NOC_DIR', ''), 'NOC_DB.csv')
     Rake::Task['noc:update:operators'].execute
     Rake::Task['noc:update:operator_codes'].execute
     Rake::Task['noc:update:vosa_licenses'].execute
 
-
-    # Add some other data - Rail stop codes, metro stop flag
-    Rake::Task['naptan:post_load:add_stops_codes'].execute
-    Rake::Task['naptan:post_load:mark_metro_stops'].execute
-
   end
+
 
   desc 'Display a list of updates that have been made to instances of a model.
         Default behaviour is to only show updates that have been marked as replayable.
