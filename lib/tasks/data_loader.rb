@@ -81,6 +81,7 @@ set it to #{expected_generation})"
 
   def parse(model_class, parser_class, parse_method_name=nil, skip_invalid=true)
     check_for_file
+    dryrun = check_dryrun()
     table_name = model_class.to_s.tableize
     puts "Loading #{table_name} from #{ENV['FILE']}..."
 
@@ -95,7 +96,9 @@ set it to #{expected_generation})"
     end
     parser.send(parse_method_name.to_sym, ENV['FILE']) do |model|
       begin
-        model.save!
+        if ! dryrun
+          model.save!
+        end
       rescue ActiveRecord::RecordInvalid, FriendlyId::SlugGenerationError => validation_error
         if skip_invalid
           puts validation_error

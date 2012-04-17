@@ -8,37 +8,44 @@ namespace :naptan do
     include DataLoader
     include FixMyTransport::GeoFunctions
 
-    desc "Loads stop data from a CSV file specified as FILE=filename"
+    desc "Loads stop data from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :stops => :environment do
       parse(Stop, Parsers::NaptanParser)
     end
 
-    desc "Loads stop area data from a CSV file specified as FILE=filename"
+    desc "Loads stop area data from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :stop_areas => :environment do
       parse(StopArea, Parsers::NaptanParser)
     end
 
-    desc "Loads stop area membership data from a CSV file specified as FILE=filename"
+    desc "Loads stop area membership data from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :stop_area_memberships => :environment do
       parse(StopAreaMembership, Parsers::NaptanParser)
     end
 
-    desc "Loads stop area hierarchy from a CSV file specified as FILE=filename"
+    desc "Loads stop area hierarchy from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :stop_area_hierarchy => :environment do
       parse(StopAreaHierarchy, Parsers::NaptanParser)
     end
 
-    desc "Loads stop type data from a CSV file specified as FILE=filename"
+    desc "Loads stop type data from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :stop_types => :environment do
       parse(StopType, Parsers::NaptanParser)
     end
 
-    desc "Loads stop area type data from a CSV file specified as FILE=filename"
+    desc "Loads stop area type data from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :stop_area_types => :environment do
       parse(StopAreaType, Parsers::NaptanParser)
     end
 
-    desc "Loads all data from CSV files in a directory specified as DIR=dirname"
+    desc "Loads all data from CSV files in a directory specified as DIR=dirname.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :all => :environment do
       unless ENV['DIR']
         usage_message "usage: rake naptan:load:all DIR=dirname"

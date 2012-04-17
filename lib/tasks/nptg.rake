@@ -18,27 +18,32 @@ namespace :nptg do
 
   namespace :load do
 
-    desc "Loads regions from a CSV file specified as FILE=filename"
+    desc "Loads regions from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :regions => :environment do
       parse('regions', Parsers::NptgParser)
     end
 
-    desc "Loads admin area data from a CSV file specified as FILE=filename"
+    desc "Loads admin area data from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :admin_areas => :environment do
       parse('admin_areas', Parsers::NptgParser)
     end
 
-    desc "Loads district from a CSV file specified as FILE=filename"
+    desc "Loads district from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :districts => :environment do
       parse('districts', Parsers::NptgParser)
     end
 
-    desc "Loads locality data from a CSV file specified as FILE=filename"
+    desc "Loads locality data from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :localities => :environment do
       parse('localities', Parsers::NptgParser)
     end
 
-    desc "Loads locality hierarchy data from a CSV file specified as FILE=filename"
+    desc "Loads locality hierarchy data from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :locality_hierarchy => :environment do
       parse('locality_hierarchy', Parsers::NptgParser)
     end

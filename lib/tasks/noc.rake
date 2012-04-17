@@ -21,32 +21,38 @@ namespace :noc do
 
   namespace :load do
 
-    desc "Loads operators from a CSV file specified as FILE=filename"
+    desc "Loads operators from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :operators => :environment do
       parse(Operator, Parsers::NocParser)
     end
 
-    desc "Loads operator codes in different regions from a CSV file specified as FILE=filename"
+    desc "Loads operator codes in different regions from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :operator_codes => :environment do
       parse(OperatorCode, Parsers::NocParser)
     end
 
-    desc "Loads vosa licenses from a CSV file specified as FILE=filename"
+    desc "Loads vosa licenses from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :vosa_licenses => :environment do
       parse(VosaLicense, Parsers::NocParser)
     end
 
-    desc "Loads operator contact information from a CSV file specified as FILE=filename"
+    desc "Loads operator contact information from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :operator_contacts => :environment do
       parse(OperatorContact, Parsers::OperatorContactsParser)
     end
 
-    desc "Loads stop area operator information from a CSV file specified as FILE=filename"
+    desc "Loads stop area operator information from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
     task :station_operators => :environment do
       parse(StopAreaOperator, Parsers::OperatorsParser)
     end
 
-    desc 'Loads operator contact information from a Traveline format of CSV file specified as FILE=filename'
+    desc 'Loads operator contact information from a Traveline format of CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified.'
     task :traveline_operator_contacts => :environment do
       parse(OperatorContact, Parsers::OperatorContactsParser, 'parse_traveline_operator_contacts')
     end
