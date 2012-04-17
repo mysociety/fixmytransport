@@ -6,9 +6,9 @@ namespace :update do
 
     Rake::Task['update:create_data_generation'].execute
 
-    # LOAD NPTG DATA
+    # Load NPTG data
     Rake::Task['update:nptg'].execute
-
+    
     # LOAD NAPTAN DATA
     Rake::Task['update:naptan'].execute
 
@@ -18,7 +18,7 @@ namespace :update do
     # LOAD TNDS DATA
 
     # Rake::Task['naptan:post_load:mark_metro_stops'].execute
-
+   
   end
 
   desc "Create a new data generation."
@@ -83,15 +83,15 @@ namespace :update do
     Rake::Task['naptan:update:stops'].execute
     Rake::Task['naptan:geo:convert_stops'].execute
 
-    ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'Groups.csv')
+    ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'StopAreas.csv')
     Rake::Task['naptan:update:stop_areas'].execute
     Rake::Task['naptan:geo:convert_stop_areas'].execute
 
-    ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'StopsInGroup.csv')
+    ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'StopsInArea.csv')
     Rake::Task['naptan:update:stop_area_memberships'].execute
 
     # Can just reuse the load code here - stop areas will be scoped by the current data generation
-    ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'GroupsInGroup.csv')
+    ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'AreaHierarchy.csv')
     Rake::Task['naptan:load:stop_area_hierarchy'].execute
 
     # Some post-load cleanup on NaPTAN data - add locality to stop areas, and any stops missing locality
@@ -112,6 +112,7 @@ namespace :update do
     Rake::Task['noc:update:operators'].execute
     Rake::Task['noc:update:operator_codes'].execute
     Rake::Task['noc:update:vosa_licenses'].execute
+    Rake::Task['noc:update:operator_contacts'].execute
 
   end
 
