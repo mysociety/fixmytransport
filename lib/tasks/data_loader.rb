@@ -250,7 +250,7 @@ set it to #{expected_generation})"
           # This was a locally created object, so find the model in the previous generation
           puts "#{model_name} created locally. Looking in previous generation."
           model_class.in_generation(PREVIOUS_GENERATION) do
-            existing = find(:first, :conditions => identity_hash)
+            existing = model_class.find(:first, :conditions => identity_hash)
           end
           if ! existing
             puts ["Can't find locally created #{model_name} in previous generation to update",
@@ -459,6 +459,8 @@ set it to #{expected_generation})"
     dryrun = check_dryrun()
     generation = ENV['GENERATION']
     previous_generation = get_previous_generation()
+    puts "Loading #{model_class}" if verbose
+
     field_hash = model_class.data_generation_options_hash
     identity_fields = field_hash[:identity_fields]
     new_record_fields = field_hash[:new_record_fields]
@@ -479,7 +481,6 @@ set it to #{expected_generation})"
     end
 
     parse_for_update(table_name, parser) do |instance|
-
       # do any model-specific instance level things
       if block_given?
         yield instance
@@ -499,7 +500,7 @@ set it to #{expected_generation})"
       search_conditions = fields_to_attribute_hash(change_in_place_fields, instance)
       existing = nil
       model_class.in_generation(previous_generation) do
-        existing = find(:first, :conditions => search_conditions)
+        existing = model_class.find(:first, :conditions => search_conditions)
       end
       # make a string we can use in output to identify the new instance by it's key attributes
       if existing
@@ -523,7 +524,7 @@ set it to #{expected_generation})"
         # Can we find this record at all in the previous generation?
         search_conditions = fields_to_attribute_hash(identity_fields, instance)
         model_class.in_generation(previous_generation) do
-          existing = find(:first, :conditions => search_conditions)
+          existing = model_class.find(:first, :conditions => search_conditions)
         end
         if existing
           puts "New record in this generation for existing instance #{reference_string(model_class, existing, change_in_place_fields)}" if verbose
