@@ -18,8 +18,6 @@ namespace :temp do
     RouteOperator.connection.execute("update route_operators set generation_low = 1, generation_high = 1")
     JourneyPattern.connection.execute("update journey_patterns set generation_low = 1, generation_high = 1")
     RouteSegment.connection.execute("update route_segments set generation_low = 1, generation_high = 1")
-    # Set replayable attribute on versions of models that have a paper trail and also belong to data generations
-    
   end
   
   
@@ -109,7 +107,7 @@ namespace :temp do
                                 SET replayable = 'f'
                                 WHERE item_type = 'StopArea'
                                 AND (date_trunc('day', created_at) = '2011-03-28'
-                                OR date_trunc('day', created_at) = '2011-06-21'))")
+                                OR date_trunc('day', created_at) = '2011-06-21')")
     Version.connection.execute("UPDATE versions
                                 SET replayable = 't' 
                                 WHERE item_type = 'StopArea' 
