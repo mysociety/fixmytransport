@@ -2,7 +2,7 @@ require File.dirname(__FILE__) +  '/data_loader'
 
 namespace :tnds do
 
-  def operators_from_info(short_name, license_name, trading_name)
+  def operators_from_info(short_name, license_name, trading_name, verbose)
     query_conditions = [ 'lower(name) = ?', 'lower(name) like ?', 'lower(short_name) = ?']
     params = [ short_name.downcase, "#{short_name}%".downcase, short_name.downcase ]
     if license_name
@@ -16,6 +16,27 @@ namespace :tnds do
     query = query_conditions.join(" OR ")
     conditions =  [query] + params
     operators = Operator.find(:all, :conditions => conditions)
+    puts "Loose query found #{operators.size} #{operators.inspect}" if verbose
+    # if loose query is ambiguous, try without short name
+    query_conditions = []
+    params = []
+    if (operators.size > 1) && (license_name || trading_name)
+      puts "Trying stricter" if verbose
+      if license_name
+        query_conditions << 'lower(vosa_license_name) = ?'
+        params << license_name.downcase
+      end
+      if trading_name
+        query_conditions << 'lower(name) = ?'
+        params << trading_name.downcase
+      end
+
+      query = query_conditions.join(" OR ")
+      conditions =  [query] + params
+      operators = Operator.find(:all, :conditions => conditions)
+      puts "Strict query found #{operators.size} operators" if verbose
+    end
+    operators
   end
 
   namespace :preload do
@@ -35,10 +56,54 @@ namespace :tnds do
       dryrun = check_dryrun
       tsv_data = File.read(ENV['FILE'])
       new_data = {}
-
+      outfile = File.open("data/operators/missing_#{Time.now.to_date.to_s(:db)}_with_fixes.tsv", 'w')
+      headers = ['Short name',
+                 'Trading name',
+                 'Name on license',
+                 'Code',
+                 'Problem',
+                 'Region',
+                 'File',
+                 'Suggested NOC match',
+                 'Suggested NOC match name',
+                 'Suggested NOC action']
+      outfile.write(headers.join("\t")+"\n")
       manual_matches = { 'First in Greater Manchester' => 'First Manchester',
                          'Grovesnor Coaches' => 'Grosvenor Coaches',
-                         'TC Minicoaches' => 'T C Minicoaches'}
+                         'TC Minicoaches' => 'T C Minicoaches',
+                         'Fletchers Coaches' => "Fletcher's Coaches",
+                         'Select Bus & Coach Servi' => 'Select Bus & Coach',
+                         'Landmark Coaches' => 'Landmark  Coaches',
+                         'Romney Hythe and Dymchu' => 'Romney Hythe & Dymchurch Light Railway',
+                         'Sovereign Coaches' => 'Sovereign',
+                         'TM Travel' => 'T M Travel Ltd',
+                         'First in London' => 'First (in the London area)',
+                         'First in Berkshire & Th' => 'First (in the Thames Valley)',
+                         'First in Calderdale & H' => 'First Huddersfield',
+                         'First in Essex' => 'First (in the Essex area)',
+                         'First in Greater Manche' => 'First Manchester',
+                         'First in Suffolk & Norf' => 'First Eastern Counties',
+                         'Yourbus' => 'Your Bus',
+                         'Andybus &amp; Coach' => 'Andybus & Coach Ltd',
+                         'AJ & NM Carr' => 'A J & N M Carr',
+                         'AP Travel' => 'AP Travel Ltd',
+                         'Ad&apos;Rains Psv' => "AD'RAINS PSV",
+                         'Anitas Coaches' => "Anita's Coaches",
+                         'B&NES' => 'Bath & North East Somerset Council',
+                         'Bath Bus Company' => 'Bath Bus Co Ltd',
+                         'Briggs Coach Hire' => 'Briggs Coaches',
+                         'Centrebus (Beds Herts &' => 'Centrebus (Beds & Herts area)',
+                         'Eagles Coaches' => 'Eagle Coaches',
+                         'First in Bristol, Bath & the West' => 'First in Bristol',
+                         'Green Line (operated by Arriva the Shires)' => 'Green Line (operated by Arriva the Shires & Essex)',
+                         'Green Line (operated by First in Berkshire)' => 'Green Line (operated by First - Thames Valley)',
+                         'H.C.Chambers & Son' => 'H C Chambers & Son',
+                         'Holloways Coaches' => 'Holloway Coaches',
+                         'Kimes Coaches' => 'Kimes',
+                         'P&O Ferries' => 'P & O Ferries',
+                         'RH Transport' => 'R H Transport',
+                         "Safford's Coaches" => 'Safford Coaches',
+                         }
       FasterCSV.parse(tsv_data, tsv_options) do |row|
         region = row['Region']
         operator_code = row['Code']
@@ -46,44 +111,66 @@ namespace :tnds do
         trading_name = row['Trading name']
         license_name = row['Name on license']
         problem = row['Problem']
+        file = row['File']
 
         raise "No short name in line #{row.inspect}" if short_name.blank?
-        if problem == "ambiguous"
-          next
-        end
+        short_name.strip!
+        trading_name.strip! if trading_name
+        license_name.strip! if license_name
 
         operator_info = { :short_name => short_name,
                           :trading_name => trading_name,
                           :license_name => license_name }
-
-        operators = operators_from_info(short_name, license_name, trading_name)
-        if operators.empty?
-          if manual_name = manual_matches[short_name]
-            operators = Operator.find(:all, :conditions => ['lower(name) = ?', manual_name.downcase])
-          end
-          if operators.empty?
-            short_name_canonical = short_name.gsub('First in', 'First')
-            if short_name_canonical != short_name
-              operators = operators_from_info(short_name_canonical, license_name, trading_name)
-            end
-          end
-        end
-        if operators.size == 1
-          # puts "Found operator #{operators.first.name} for #{short_name}"
-          operator_info[:match] = operators.first
-        end
-
         if !new_data[operator_info]
+          puts "Looking for #{short_name} #{trading_name} #{license_name}" if verbose
+          if manual_name = (manual_matches[short_name] || manual_matches[trading_name])
+            operators = Operator.find(:all, :conditions => ['lower(name) = ?', manual_name.downcase])
+          else
+            operators = operators_from_info(short_name, license_name, trading_name, verbose)
+            if operators.empty?
+              short_name_canonical = short_name.gsub('First in', 'First')
+              short_name_canonical = short_name_canonical.gsub('.', '')
+              short_name_canonical = short_name_canonical.gsub('Stagecoach', 'Stagecoach in')
+              short_name_canonical = short_name_canonical.gsub('&amp;', '&')
+              if short_name_canonical != short_name
+                operators = Operator.find(:all, :conditions => ['lower(name) = ?', short_name_canonical.downcase])
+              end
+             end
+          end
+          if operators.size == 1
+            # puts "Found operator #{operators.first.name} for #{short_name}"
+            operator_info[:match] = operators.first
+          end
+
+
           new_data[operator_info] = {}
         end
         if !new_data[operator_info][region]
           new_data[operator_info][region] = []
         end
         new_data[operator_info][region] << operator_code unless new_data[operator_info][region].include?(operator_code)
+        matched_code = operator_info[:match].nil? ? '' : operator_info[:match].noc_code
+        matched_name = operator_info[:match].nil? ? '' : operator_info[:match].name
+        if matched_code.blank?
+          suggested_noc_action = 'New NOC record needed'
+        else
+          suggested_noc_action = "Add code in region for NOC match"
+        end
+        outfile.write([short_name,
+                       trading_name,
+                       license_name,
+                       operator_code,
+                       problem,
+                       region,
+                       file,
+                       matched_code,
+                       matched_name,
+                       suggested_noc_action].join("\t")+"\n")
       end
-
+      outfile.close()
       existing_operators = 0
       new_operators = 0
+      new_operator_names = []
       new_data.each do |operator_info, region_data|
         if operator_info[:match]
           existing_operators += 1
@@ -96,7 +183,7 @@ namespace :tnds do
           if !operator_info[:license_name].blank?
             operator.vosa_license_name = operator_info[:license_name]
           end
-          puts "#{operator.short_name} #{operator.name} #{operator.vosa_license_name}"
+          new_operator_names << "#{operator.short_name} #{operator.name} #{operator.vosa_license_name}"
           new_operators += 1
         end
         region_data.each do |region_name, operator_codes|
@@ -113,6 +200,10 @@ namespace :tnds do
       end
       puts "New operators: #{new_operators}"
       puts "Existing operators: #{existing_operators}"
+      new_operator_names.sort!
+      new_operator_names.each do |new_name|
+        puts new_name if verbose
+      end
     end
 
     desc 'Produce a list of unmatched operator information from a set of TransXchange
