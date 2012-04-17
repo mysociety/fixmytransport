@@ -29,13 +29,17 @@ module FixMyTransport
       end
     end
 
-    # Set the scope to the generation passed for all models controlled by data generations
-    def self.in_generation(generation, &block)
+    def self.models_existing_in_data_generations
       # Make sure all models are loaded - as Rails uses lazy loading, some might only
       # be loaded in the context of the block passed - and we need to set the scope on them first
       self.preload_all_models
+      self.data_generation_models
+    end
+
+    # Set the scope to the generation passed for all models controlled by data generations
+    def self.in_generation(generation, &block)
       # make a copy of the list of models that exist in data generations
-      models_to_set_generation_on = Array.new(self.data_generation_models)
+      models_to_set_generation_on = Array.new(self.models_existing_in_data_generations)
       # call the recursive function to set the generation scope on each of them
       self.set_generation(models_to_set_generation_on, generation, &block)
     end
@@ -115,6 +119,13 @@ module FixMyTransport
 
       end
 
+      # Perform a block of code ignoring data generations
+      def any_generation(&block)
+        self.with_exclusive_scope do
+          yield
+        end
+      end
+
       # Perform a block of code in the context of the data generation passed
       def in_generation(generation_id, &block)
         self.with_exclusive_scope do
@@ -189,7 +200,10 @@ module FixMyTransport
         end
       end
 
-      def field_unique_in_generation(field)
+      # Validation method checking that a field is unique within a given data generation.
+      # Supplying a :scope option constrains the check to include only objects whose values
+      # for the scope option fields in the database are the same as the current object's
+      def field_unique_in_generation(field, options={})
         value = self.send(field)
         return if value.blank?
         condition_string = "#{field} = ?"
@@ -197,6 +211,20 @@ module FixMyTransport
         if self.id
           condition_string += " AND id != ?"
           params << self.id
+        end
+        if !options[:scope].nil?
+          if !options[:scope].is_a?(Array)
+            options[:scope] = [ options[:scope] ]
+          end
+          options[:scope].each do |scope_element|
+            scope_value = self.send(scope_element)
+            if scope_value.nil?
+              condition_string += " AND #{scope_element} IS NULL"
+            else
+              condition_string += " AND #{scope_element} = ?"
+              params << scope_value
+            end
+          end
         end
         if existing = self.class.find(:first, :conditions => [condition_string] + params)
           errors.add(field,  ActiveRecord::Error.new(self, field, :taken).to_s)

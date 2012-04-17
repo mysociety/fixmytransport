@@ -27,6 +27,14 @@ describe OperatorContact do
     duplicate_operator_contact.should_not be_valid
   end
 
+  it 'should allow other contacts for this operator in this category in previous generations' do
+    generation_attributes = { :generation_low => PREVIOUS_GENERATION,
+                              :generation_high => PREVIOUS_GENERATION }
+    existing_operator_contact = OperatorContact.create! @valid_attributes.merge(generation_attributes)
+    duplicate_operator_contact = OperatorContact.new @valid_attributes
+    duplicate_operator_contact.should be_valid
+  end
+
   it "should allow other contacts for this operator in different categories" do
     existing_operator_contact = OperatorContact.create! @valid_attributes
     similar_attributes = @valid_attributes.clone
@@ -51,6 +59,26 @@ describe OperatorContact do
     existing_operator_contact = OperatorContact.create! @valid_attributes.merge(:deleted => true)
     new_operator_contact = OperatorContact.new @valid_attributes.merge(:deleted => true)
     new_operator_contact.should be_valid
+  end
+
+  it 'should allow other contacts for this operator in this category with different locations' do
+    location_attributes = { :location_id => 55, :location_type => 'StopArea' }
+    existing_operator_contact = OperatorContact.create! @valid_attributes.merge(location_attributes)
+    duplicate_operator_contact = OperatorContact.new @valid_attributes
+    duplicate_operator_contact.should be_valid
+  end
+
+  it 'should allow other contacts for this operator in this category that have been deleted' do
+    existing_operator_contact = OperatorContact.create! @valid_attributes
+    duplicate_operator_contact = OperatorContact.new @valid_attributes.merge(:deleted => 't')
+    duplicate_operator_contact.should be_valid
+  end
+
+  it 'should allow other contacts for this operator in this category if the existing contacts have
+      been deleted' do
+    existing_operator_contact = OperatorContact.create! @valid_attributes.merge(:deleted => 't')
+    duplicate_operator_contact = OperatorContact.new @valid_attributes
+    duplicate_operator_contact.should be_valid
   end
 
 end
