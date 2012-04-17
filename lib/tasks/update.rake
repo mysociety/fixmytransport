@@ -4,16 +4,16 @@ namespace :update do
         Sepcify verbose output with VERBOSE=1.'
   task :all => :environment do
 
-    Rake::Task['update:create_data_generation']
+    Rake::Task['update:create_data_generation'].execute
 
     # LOAD NPTG DATA
-    Rake::Task['update:nptg']
+    Rake::Task['update:nptg'].execute
 
     # LOAD NAPTAN DATA
-    Rake::Task['update:naptan']
+    Rake::Task['update:naptan'].execute
 
     # LOAD NOC DATA
-    Rake::Task['update:noc']
+    Rake::Task['update:noc'].execute
 
     # LOAD TNDS DATA
 
@@ -53,43 +53,46 @@ namespace :update do
   desc "Update NPTG data to the current data generation. Runs in dryrun mode unless DRYRUN=0
         is specified. Verbose flag set by VERBOSE=1."
   task :nptg => :environment do
-    ENV['GENERATION'] = CURRENT_GENERATION
+    ENV['GENERATION'] = CURRENT_GENERATION.to_s
     ENV['FILE'] = File.join(MySociety::Config.get('NPTG_DIR', ''), 'Regions.csv')
-    Rake::Task['nptg:update:regions']
+    puts "calling regions"
+    Rake::Task['nptg:update:regions'].execute
+    puts "called regions"
     ENV['FILE'] = File.join(MySociety::Config.get('NPTG_DIR', ''), 'AdminAreas.csv')
-    Rake::Task['nptg:update:admin_areas']
+    Rake::Task['nptg:update:admin_areas'].execute
     ENV['FILE'] = File.join(MySociety::Config.get('NPTG_DIR', ''), 'Districts.csv')
-    Rake::Task['nptg:update:districts']
+    Rake::Task['nptg:update:districts'].execute
     ENV['FILE'] = File.join(MySociety::Config.get('NPTG_DIR', ''), 'Localities.csv')
-    Rake::Task['nptg:update:localities']
+    Rake::Task['nptg:update:localities'].execute
     ENV['MODEL'] = 'Locality'
     # N.B. Run this before loading stops or stop areas so that the scoping of those slugs doesn't
     # get out of sync with the rejigged locality slugs
-    Rake::Task['update:normalize_slug_sequences']
-    Rake::Task['nptg:geo:convert_localities']
+    Rake::Task['update:normalize_slug_sequences'].execute
+    Rake::Task['nptg:geo:convert_localities'].execute
 
     # Can just reuse the load code here - localities will be scoped by the current data generation
     ENV['FILE'] = File.join(MySociety::Config.get('NPTG_DIR', ''), 'LocalityHierarchy.csv')
-    Rake::Task['nptg:load:locality_hierarchy']
+    Rake::Task['nptg:load:locality_hierarchy'].execute
   end
 
   desc 'Update NaPTAN data to the current data generation. Runs in dryrun mode unless DRYRUN=0
         is specified. Verbose flag set by VERBOSE=1'
   task :naptan => :environment do
+    ENV['GENERATION'] = CURRENT_GENERATION.to_s
     ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'Stops.csv')
-    Rake::Task['naptan:update:stops']
-    Rake::Task['naptan:geo:convert_stops']
+    Rake::Task['naptan:update:stops'].execute
+    Rake::Task['naptan:geo:convert_stops'].execute
 
     ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'Groups.csv')
-    Rake::Task['naptan:update:stop_areas']
-    Rake::Task['naptan:geo:convert_stop_areas']
+    Rake::Task['naptan:update:stop_areas'].execute
+    Rake::Task['naptan:geo:convert_stop_areas'].execute
 
     ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'StopsInGroup.csv')
-    Rake::Task['naptan:update:stop_area_memberships']
+    Rake::Task['naptan:update:stop_area_memberships'].execute
 
     # Can just reuse the load code here - stop areas will be scoped by the current data generation
     ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'GroupsInGroup.csv')
-    Rake::Task['naptan:load:stop_area_hierarchy']
+    Rake::Task['naptan:load:stop_area_hierarchy'].execute
 
     # Some post-load cleanup on NaPTAN data - add locality to stop areas, and any stops missing locality
     Rake::Task['naptan:post_load:add_locality_to_stops'].execute
@@ -104,6 +107,7 @@ namespace :update do
   desc 'Update NOC data to the current data generation. Runs in dryrun mode unless DRYRUN=0
         is specified. Verbose flag set by VERBOSE=1'
   task :noc => :environment do
+    ENV['GENERATION'] = CURRENT_GENERATION.to_s
     ENV['FILE'] = File.join(MySociety::Config.get('NOC_DIR', ''), 'NOC_DB.csv')
     Rake::Task['noc:update:operators'].execute
     Rake::Task['noc:update:operator_codes'].execute
