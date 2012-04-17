@@ -75,7 +75,7 @@ describe Parsers::NptgParser do
       @child_locality = mock_model(Locality)
       Locality.stub!(:find_by_code).and_return(@parent_locality)
       Locality.stub!(:find_by_code).with('E0034965').and_return(@child_locality)
-      @parser.parse_locality_hierarchy(example_file("LocalityHierarchy.csv")){ |locality_link| @locality_links << locality_link }
+      @parser.parse_locality_hierarchies(example_file("LocalityHierarchy.csv")){ |locality_link| @locality_links << locality_link }
     end
     
     it 'should extract the localities and turn them into a locality link' do 

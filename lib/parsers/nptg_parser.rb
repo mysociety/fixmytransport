@@ -85,7 +85,7 @@ class Parsers::NptgParser
     end
   end
 
-  def parse_locality_hierarchy filepath
+  def parse_locality_hierarchies filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
       ancestor = Locality.find_by_code((row['ParentNptgLocalityCode'] or row['Parent ID']))
