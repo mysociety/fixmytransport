@@ -98,18 +98,43 @@ module SharedBehaviours
       describe 'when finding a model in another generation' do
 
         it 'should find a model in the generation' do
-          old_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
-          @model_type.in_generation(PREVIOUS_GENERATION){ @model_type.find(old_instance.id) }.should == old_instance
-          old_instance.destroy
+          @old_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
+          @model_type.in_generation(PREVIOUS_GENERATION){ @model_type.find(@old_instance.id) }.should == @old_instance
+          @old_instance.destroy
         end
 
         it 'should not find a model in the current generation' do
-          current_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
-          expected_error = "Couldn't find #{@model_type} with ID=#{current_instance.id}"
-          lambda{ @model_type.in_generation(PREVIOUS_GENERATION){ @model_type.find(current_instance.id) } }.should raise_error(expected_error)
-          current_instance.destroy
+          @current_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
+          expected_error = "Couldn't find #{@model_type} with ID=#{@current_instance.id}"
+          lambda{ @model_type.in_generation(PREVIOUS_GENERATION){ @model_type.find(@current_instance.id) } }.should raise_error(expected_error)
+          @current_instance.destroy
         end
-
+        
+        after do 
+          @old_instance.destroy if @old_instance
+          @current_instance.destroy if @current_instance
+        end
+      end
+      
+      describe 'when finding a model in any generation' do 
+      
+        it 'should find a model in a previous generation' do 
+          @old_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
+          @model_type.any_generation{ @model_type.find(@old_instance.id) }.should == @old_instance
+          old_instance.destroy
+        end
+        
+        it 'should find a model in the current generation' do 
+          @current_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
+          @model_type.any_generation(){ @model_type.find(@current_instance.id) }.should == @current_instance
+          @current_instance.destroy
+        end
+        
+        after do 
+          @old_instance.destroy if @old_instance
+          @current_instance.destroy if @current_instance
+        end
+        
       end
 
       describe "when finding the successor to a set of find parameters" do
