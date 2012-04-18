@@ -120,7 +120,7 @@ module FixMyTransport
       end
 
       # Perform a block of code ignoring data generations
-      def any_generation(&block)
+      def in_any_generation(&block)
         self.with_exclusive_scope do
           yield
         end
@@ -283,6 +283,14 @@ module FixMyTransport
           end
         end
         return nil
+      end
+      
+      def in_current_data_generation?
+        if self.generation_high >= CURRENT_GENERATION
+          return true
+        else
+          return false
+        end
       end
 
     end

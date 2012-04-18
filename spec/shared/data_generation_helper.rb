@@ -120,13 +120,13 @@ module SharedBehaviours
 
         it 'should find a model in a previous generation' do
           @old_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
-          @model_type.any_generation{ @model_type.find(@old_instance.id) }.should == @old_instance
-          old_instance.destroy
+          @model_type.in_any_generation{ @model_type.find(@old_instance.id) }.should == @old_instance
+          @old_instance.destroy
         end
 
         it 'should find a model in the current generation' do
           @current_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
-          @model_type.any_generation(){ @model_type.find(@current_instance.id) }.should == @current_instance
+          @model_type.in_any_generation(){ @model_type.find(@current_instance.id) }.should == @current_instance
           @current_instance.destroy
         end
 
