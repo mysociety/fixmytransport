@@ -465,7 +465,7 @@ $(document).ready(function(){
     		// record a hit on the login box in analytics
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-24232514-1']);
-        _gaq.push (['_gat._anonymizeIp']);
+        _gaq.push(['_gat._anonymizeIp']);
         _gaq.push(['_trackPageview', location.pathname + '/login']);
   	  };
   	  $(form_selector).ajaxForm(options);
@@ -561,7 +561,7 @@ $(document).ready(function(){
             // record a hit on the login box in analytics
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-24232514-1']);
-            _gaq.push (['_gat._anonymizeIp']);
+            _gaq.push(['_gat._anonymizeIp']);
             _gaq.push(['_trackPageview', location.pathname + window.location.search + '/login']);
 
           } else {
