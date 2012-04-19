@@ -35,7 +35,7 @@ en:
       your_problem_will_not_be_created: "your problem will not be sent."
       you_will_not_be_a_supporter: "you will not be added as a supporter."
       dont_worry: "(Don't worry &mdash; %{worry})"
-      well_hold_on_to_your_problem: "We'll hold on to your problem while you do that" 
+      well_hold_on_to_your_problem: "We'll hold on to your problem while you do that"
       well_hold_on_to_your_comment: "We'll hold on to your comment while you do that"
       check_your_junkmail_filters: "If you use web-based email or have 'junk mail' filters, you may wish to check your bulk/spam mail folders: sometimes, our messages end up there."
       password_reset_please_be_patient: "The password reset email <strong>may</strong> take a few minutes to arrive &mdash; <em>please</em> be patient."
@@ -58,6 +58,7 @@ en:
       small_donors: "small donors"
       dedicated_to: "Dedicated to %{link}."
       logged_in_as: Logged in as
+      privacy_and_cookies: Privacy and cookies
     header:
       hi: "Hi"
       site_tagline: "Euston, we have a problem."
@@ -147,13 +148,13 @@ en:
       loading_ferry: "Loading ferry stop..."
       loading_other: "Loading tram/metro/tube stop..."
       loading_done: "done"
-    user_flags: 
+    user_flags:
       admin: admin
       expert: anorak
       admin_explanation: FixMyTransport administrator
-      expert_explanation: FixMyTransport expert    
-      
-      
-      
-      
-      
+      expert_explanation: FixMyTransport expert
+
+
+
+
+

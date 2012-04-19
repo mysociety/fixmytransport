@@ -3,6 +3,7 @@
 
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-24232514-1']);
+      _gaq.push (['_gat._anonymizeIp']);
       <% if content_for?(:tracking) %>
       _gaq.push(['_trackPageview', <%= yield(:tracking) %>]);
       <%- else %>

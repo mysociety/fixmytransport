@@ -10,6 +10,8 @@ en:
       please_give_feedback: "We'd love to hear what you think of this site. Please fill in the form, or send an email to %{email}. If something's gone wrong or you think we have incorrect information, please give as much detail as possible to help us sort it out."
       operator_feedback: "You are letting us know there's an issue with our information about %{operator}. Please give us as much detail as you can to help us sort it out."
       location_feedback: "You are letting us know there's an issue with our information about the %{location}. Please give us as much detail as you can to help us sort it out."
-      not_for_problems: "Please do not report transport problems through this form; messages go to the team behind FixMyTransport, not a council or transport operator. To report a problem, please go to the <a href=\"%{url}\">front page</a> and follow the instructions." 
+      not_for_problems: "Please do not report transport problems through this form; messages go to the team behind FixMyTransport, not a council or transport operator. To report a problem, please go to the <a href=\"%{url}\">front page</a> and follow the instructions."
     facebook:
-      visit_the_site: "Go to FixMyTransport"  
+      visit_the_site: "Go to FixMyTransport"
+    privacy:
+      privacy_and_cookies: "Privacy and cookies"

@@ -1,5 +1,5 @@
 class StaticController < ApplicationController
-  
+
   def feedback
     @title = t('static.feedback.title')
     @email = MySociety::Config.get('CONTACT_EMAIL', 'contact@localhost')
@@ -12,8 +12,8 @@ class StaticController < ApplicationController
     end
     @feedback = Feedback.new
     if request.post?
-      @feedback = Feedback.new(params[:feedback]) 
-      if @feedback.valid? 
+      @feedback = Feedback.new(params[:feedback])
+      if @feedback.valid?
         ProblemMailer.deliver_feedback(params[:feedback], @location, @operator)
         flash[:notice] = t('static.feedback.feedback_thanks')
         redirect_to(root_url)
@@ -26,7 +26,11 @@ class StaticController < ApplicationController
   def about
     @title = t("static.about.about_this_site")
   end
-  
+
+  def privacy
+    @title = t('static.privacy.privacy_and_cookies')
+  end
+
   # probably won't end up living in the static_controller, but for now it's a home
   def facebook
     @body_class = "facebook-canvas"

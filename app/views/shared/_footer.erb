@@ -13,6 +13,8 @@
   				<%- end %>
     		</ul>
     	</div>
+		  <p><%= link_to(t('shared.footer.privacy_and_cookies'), privacy_path) %>
+  		</p>
 		<p><%= raw t('shared.footer.built_by', :mysociety_link => link_to('mySociety', 'http://mysociety.org'), :indigo_link => link_to('Indigo Trust', 'http://indigotrust.wordpress.com/'), :donor_link => link_to(t('shared.footer.small_donors'), 'http://mysociety.org/donate'), :esmee_link => link_to('Esmée Fairbairn Foundation', 'http://www.esmeefairbairn.org.uk'), :omidyar_link => link_to("Omidyar Network", 'http://www.omidyar.com/')) %></p>
 		<p><%= raw t('shared.footer.dedicated_to', :link => link_to('Angie Martin', 'http://www.mysociety.org/2009/07/20/rip-angie-ahl-1974-2009/')) %>
 		</p>

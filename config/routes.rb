@@ -196,6 +196,7 @@ ActionController::Routing::Routes.draw do |map|
   # static
   map.advice '/advice', :controller => 'static', :action => 'advice'
   map.about '/about', :controller => 'static', :action => 'about'
+  map.privacy '/privacy', :controller => 'static', :action => 'privacy'
   map.feedback '/feedback', :controller => 'static',
                             :action => 'feedback',
                             :conditions => { :method => [:get, :post] }

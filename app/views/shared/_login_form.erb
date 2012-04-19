@@ -3,7 +3,7 @@
   <h3><%= title %></h3>
   <%- end %>
 <%- form_for (@user_session ||= UserSession.new), :url => user_sessions_path, :html => {:id => 'login-form' } do |f|  %>
-  
+
   <%- if !@user_session.errors.empty? %>
     <div class='error'>
       <%= error_message_on @user_session, :base %>
@@ -23,17 +23,17 @@
 		<label for="user_session_password"><%= t('shared.login_form.password') %></label>
 		<input name="user_session[password]" id="user_session_password" type="password" />
 		<a href="<%= new_password_reset_path %>" id="forgot-password"><%= t('shared.login_form.forgot') %></a>
-	</li>	
+	</li>
 	<li>
 		<button class="button" type="submit"><%= t('shared.login_form.sign_in') %></button>
-		<label for="user_session_remember_me"><%= t('shared.login_form.keep_signed_in') %></label><input type="checkbox" class="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1" />    
+		<label for="user_session_remember_me"><%= t('shared.login_form.keep_signed_in') %></label><input type="checkbox" class="checkbox" id="user_session_remember_me" name="user_session[remember_me]" value="1" />
 		<%- if !(controller.controller_name == 'user_sessions') %>
 		  <input type="hidden" name="redirect" value="<%= request.request_uri %>" />
 		<%- end %>
-		<a href="/about#privacy" target="_blank" title="Privacy policy (opens in new window)">Privacy policy</a>
+
 	</li>
-	<li>Read our <a href="http://www.mysociety.org/privacy-online/" target="_blank" title="Guide to privacy online (opens in new window)">guide to privacy online</a></li>
-	
+	<li><a href="/privacy" target="_blank" title="Privacy policy (opens in new window)">Privacy policy</a></li>
+
 </ul>
 <%- end %>
 
