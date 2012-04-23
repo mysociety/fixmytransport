@@ -162,10 +162,10 @@ class Parsers::NaptanParser
 
   def clean_field(field, value)
     null_value_indicators = { :landmark  => ['---', '*', 'Landmark not known', 'Unknown', 'N/A', '-', 'landmark','N', 'TBA', 'N/K', '-'],
-                              :indicator => ['---'],
-                              :crossing  => ['*', '--', 'No'],
+                              :indicator => ['---',''],
+                              :crossing  => ['*', '--', 'No', ''],
                               :plate_code => [''],
-                              :street    =>  ['---', '-', 'N/A', 'No name', 'Street not known', 'Unclassified', 'N/K', 'Unknown', 'Unnamed Road', 'Unclassified Road'],
+                              :street    =>  ['---', '-', 'N/A', 'No name', 'Street not known', 'Unclassified', 'N/K', 'Unknown', 'Unnamed Road', 'Unclassified Road',''],
                             }
     if value && null_value_indicators[field].include?(value.strip)
       return nil
