@@ -113,7 +113,6 @@ namespace :update do
     Rake::Task['noc:update:operator_codes'].execute
     Rake::Task['noc:update:vosa_licenses'].execute
     Rake::Task['noc:update:operator_contacts'].execute
-
   end
 
 
