@@ -22,7 +22,9 @@ class Parsers::NaptanParser
   def parse_rail_references filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      stop = Stop.find_by_atco_code((row['AtcoCode'] or row["NaPTAN"]))
+      atco_code = (row['AtcoCode'] or row["NaPTAN"])
+      raise "No ATCO code in row #{row.inspect}" if atco_code.blank?
+      stop = Stop.find_by_atco_code(atco_code)
       if ! stop
         puts "*** Missing #{row['AtcoCode']} ***"
         next
