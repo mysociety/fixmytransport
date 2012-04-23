@@ -310,14 +310,19 @@ class Stop < ActiveRecord::Base
      return nil
   end
 
-  # find the nearest stop to a set of National Grid coordinates
-  def self.find_nearest(easting, northing, exclude_id = nil, extra_conditions=[])
+  # find the nearest stop to a set of National Grid coordinates. Accepts a model id to 
+  # exclude from results, and an extra condition string to constrain the search
+  def self.find_nearest(easting, northing, exclude_id = nil, extra_conditions=nil)
     conditions = nil
     if exclude_id
       conditions = ["id != ?", exclude_id]
     end
     if extra_conditions
-      conditions[0] = conditions[0] + " AND #{extra_conditions}"
+      if conditions
+        conditions[0] = conditions[0] + " AND #{extra_conditions}"
+      else
+        conditions = [extra_conditions]
+      end
     end
     stops = find(:first, :order => "ST_Distance(
                        ST_GeomFromText('POINT(#{easting} #{northing})', #{BRITISH_NATIONAL_GRID}),

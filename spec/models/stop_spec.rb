@@ -366,6 +366,33 @@ describe Stop do
 
   end
 
+  describe 'when finding the nearest stop to a set of National Grid coordinates' do
+    
+    before do 
+      @easting = 444
+      @northing = 333
+    end 
+  
+    it 'should exclude an id passed in the exclude_id parameter from the search conditions' do
+      Stop.should_receive(:find).with(:first, :order => anything(),
+                                              :conditions => ["id != ?", 55]) 
+      Stop.find_nearest(@easting, @northing, exclude_id=55)
+    end
+    
+    it 'should include any extra conditions passed in the search conditions' do 
+      Stop.should_receive(:find).with(:first, :order => anything(), 
+                                              :conditions => ['lat is not null'])
+      Stop.find_nearest(@easting, @northing, exclude_id=nil, extra_conditions="lat is not null")
+    end
+  
+    it 'should combine exclude_id and extra conditions if both are passed' do 
+      Stop.should_receive(:find).with(:first, :order => anything(),
+                                              :conditions => ['id != ? AND lat is not null', 55])
+      Stop.find_nearest(@easting, @northing, exclude_id=55, extra_conditions="lat is not null")
+    end
+  
+  end
+  
   describe 'when asked for a PTE' do
 
     it 'should return one if there is one that covers one of the relevant councils' do
