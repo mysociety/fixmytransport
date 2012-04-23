@@ -118,7 +118,7 @@ class Parsers::NaptanParser
                           :modification_datetime     => (row['ModificationDateTime'] or row['LastChanged']),
                           :revision_number           => row['RevisionNumber'],
                           :modification              => row['Modification'],
-                          :status                    => row['Status'])
+                          :status                    => row['Status'].upcase)
     end
   end
 
@@ -154,7 +154,7 @@ class Parsers::NaptanParser
                       :modification_datetime      => (row['ModificationDateTime'] or row['LastChanged']),
                       :revision_number            => row['RevisionNumber'],
                       :modification               => row['Modification'],
-                      :status                     => (row['Status'] or row['RecordStatus']))
+                      :status                     => (row['Status'] or row['RecordStatus']).upcase)
     end
   end
 

@@ -25,8 +25,8 @@ describe Parsers::NaptanParser do
     end
     
     it 'should extract the statuses' do 
-      @stop_areas.first.status.should == 'act'
-      @stop_areas.second.status.should == 'del'
+      @stop_areas.first.status.should == 'ACT'
+      @stop_areas.second.status.should == 'DEL'
     end
     
   end
@@ -44,9 +44,9 @@ describe Parsers::NaptanParser do
       @stops.second.atco_code.should == '01000053204'
     end
     
-    it 'should extract the statuses' do 
-      @stops.first.status.should == 'act'
-      @stops.second.status.should == 'act'
+    it 'should extract the statuses and return them in upper case' do 
+      @stops.first.status.should == 'ACT'
+      @stops.second.status.should == 'ACT'
     end
     
     it 'should extract and clean the street' do 
