@@ -29,7 +29,7 @@ namespace :naptan do
     desc "Loads stop area hierarchy from a CSV file specified as FILE=filename.
           Runs in dryrun mode unless DRYRUN=0 is specified."
     task :stop_area_hierarchy => :environment do
-      parse(StopAreaHierarchy, Parsers::NaptanParser)
+      parse(StopAreaLink, Parsers::NaptanParser)
     end
 
     desc "Loads stop type data from a CSV file specified as FILE=filename.
