@@ -351,7 +351,7 @@ describe StopArea do
 
   describe 'when searching for nearest stop areas' do
 
-    it 'ask for the nearest stop area of the relevant type' do
+    it 'should ask for the nearest stop area of the relevant type' do
       StopArea.stub(:find).and_return(mock_model(StopArea))
       expected_conditions = ["area_type in (?)", ["GTMU"]]
       expected_order = "ST_Distance(ST_Transform(ST_GeomFromText('POINT(0.084 51.497)', 4326),27700),coords) asc"
@@ -360,7 +360,7 @@ describe StopArea do
       stop_area_list = StopArea.find_nearest(0.084, 51.497, 'Tram/Metro')
     end
 
-    it 'shoud fail with invalid (lon,lat)' do
+    it 'should fail with invalid (lon,lat)' do
       expect { StopArea.find_nearest(0.01, 'foo') }.should raise_error
     end
 
