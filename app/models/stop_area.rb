@@ -34,13 +34,14 @@ class StopArea < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
   exists_in_data_generation( :identity_fields => [:code],
-                             :new_record_fields => [:name, :area_type, :easting, :northing, :lon, :lat, :status],
+                             :new_record_fields => [:name, :area_type, :easting, :northing, :status],
                              :update_fields => [:grid_type, :administrative_area_code, :creation_datetime,
                                                 :modification_datetime, :modification, :revision_number],
                              :deletion_field => :modification,
                              :deletion_value => 'del',
                              :auto_update_fields => [:cached_description, :cached_slug,
-                                                     :primary_metaphone, :secondary_metaphone])
+                                                     :primary_metaphone, :secondary_metaphone,
+                                                     :lat, :lon])
   has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships
   has_dag_links :link_class_name => 'StopAreaLink'
