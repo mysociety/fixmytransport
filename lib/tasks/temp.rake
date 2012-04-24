@@ -122,6 +122,17 @@ namespace :temp do
                                 SET replayable = 't' 
                                 WHERE item_type = 'Operator' 
                                 AND replayable is null;")
+  
+    Version.connection.execute("UPDATE versions
+                                SET replayable = 'f'
+                                WHERE item_type = 'Route'
+                                AND ((date_trunc('hour', created_at) <= '2011-04-05 18:00:00')
+                                OR (date_trunc('day', created_at) = '2011-04-05'
+                                    AND date_trunc('hour', created_at) >= '2011-04-05 17:05:00'))")
+    Version.connection.execute("UPDATE versions
+                                SET replayable = 't'
+                                WHERE item_type = 'Route'
+                                AND replayable is null")
   end
 
 end
