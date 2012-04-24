@@ -341,6 +341,7 @@ set it to #{expected_generation})"
   # :date - datetime the change was made on
   # :event - create|update|destroy
   # :changes - the significant changes in the form { attribute => [old_value, new_value] }
+  # The options param passed should be the data_generation_options_hash of the model class
   def get_changes(version, model_class, only_replayable, options, verbose)
     info_hash = {}
     model_name = model_class.to_s.downcase
