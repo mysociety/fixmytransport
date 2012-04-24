@@ -433,7 +433,8 @@ set it to #{expected_generation})"
       params << date
     end
     if only_replayable
-      condition_string += " AND replayable ='t'"
+      condition_string += " AND replayable = ?"
+      params << true
     end
     conditions = [condition_string] + params
     # get the list of changes for this model, assemble the hash structure, only adding
