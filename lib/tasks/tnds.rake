@@ -194,6 +194,12 @@ namespace :tnds do
             # puts "#{region_name} #{operator_code}"
           end
         end
+        if !operator.valid?
+          puts "ERROR: Operator is invalid:"
+          puts operator.inspect
+          puts operator.errors.full_messages.join("\n")
+          exit(1)
+        end
         if !dryrun
           operator.save!
         end
