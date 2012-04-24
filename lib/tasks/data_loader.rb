@@ -143,13 +143,18 @@ set it to #{expected_generation})"
   end
 
   # Apply a set of changes extracted from replayable updates to a model instance
-  def apply_changes(model_name, instance, changes, dryrun, verbose)
+  def apply_changes(model_name, instance, changes, dryrun, verbose, change_list)
     changes.each do |attribute, values|
       from_value, to_value = values
       current_value = instance.send(attribute)
       if from_value == current_value
-        puts "#{model_name} (#{instance.id}) updating #{attribute} from #{from_value} to #{to_value}"
+        puts "#{model_name} (#{instance.id}) updating #{attribute} from #{from_value} to #{to_value}" if verbose
         instance.send("#{attribute}=", to_value)
+        change_list << { :event => :update,
+                         :model => instance,
+                         :attribute => attribute,
+                         :from_value => from_value,
+                         :to_value => to_value }
       elsif to_value == current_value
         puts ["Discarding change of #{attribute} from #{from_value} -> #{to_value} as obsolete",
               "(currently #{current_value})"].join(" ") if verbose
@@ -161,6 +166,7 @@ set it to #{expected_generation})"
         instance.save!
       end
     end
+    return change_list
   end
 
   # Create a search hash that will find a model with permanent identity fields whose
@@ -223,6 +229,7 @@ set it to #{expected_generation})"
   # Replay the significant updates that have been made locally to instances of a model class
   # versioned with papertrail.
   def replay_updates(model_class, dryrun=true, verbose=false)
+    change_list = []
     if ! model_class.respond_to?(:replayable)
       puts "This model is not versioned in data generations. Updates cannot be replayed."
       exit(0)
@@ -235,7 +242,7 @@ set it to #{expected_generation})"
     # attribute on models should be false
     previous_replayable_value = model_class.replayable
     model_class.replayable = false
-    update_hash = get_updates(model_class, only_replayable=true)
+    update_hash = get_updates(model_class, only_replayable=true, date=nil, verbose=verbose)
     model_name = model_class.to_s.downcase
     update_hash.each do |identity, changes|
       identity_type = identity[:identity_type]
@@ -248,7 +255,7 @@ set it to #{expected_generation})"
         puts "Can't find current #{model_name} to update for #{identity_hash.inspect}" if verbose
         if changes.first[:event] == 'create'
           # This was a locally created object, so find the model in the previous generation
-          puts "#{model_name} created locally. Looking in previous generation."
+          puts "#{model_name} created locally. Looking in previous generation." if verbose
           model_class.in_generation(PREVIOUS_GENERATION) do
             existing = model_class.find(:first, :conditions => identity_hash)
           end
@@ -283,6 +290,7 @@ set it to #{expected_generation})"
           add_changes_to_migration(migration_paths, changes)
         when 'destroy'
           puts "Destroying #{model_name} #{existing.id}"
+          change_list <<  { :event => :destroy, :model => existing }
           if ! dryrun
             existing.destroy
           end
@@ -301,9 +309,10 @@ set it to #{expected_generation})"
           migration_paths.delete(attribute)
         end
       end
-      apply_changes(model_name, existing, migration_paths, dryrun, verbose)
+      change_list = apply_changes(model_name, existing, migration_paths, dryrun, verbose, change_list)
     end
     model_class.replayable = previous_replayable_value
+    return change_list
   end
 
   # Update a hash, removing keys, and values specified
@@ -332,7 +341,7 @@ set it to #{expected_generation})"
   # :date - datetime the change was made on
   # :event - create|update|destroy
   # :changes - the significant changes in the form { attribute => [old_value, new_value] }
-  def get_changes(version, model_class, only_replayable, options)
+  def get_changes(version, model_class, only_replayable, options, verbose)
     info_hash = {}
     model_name = model_class.to_s.downcase
     table_name = model_class.to_s.tableize
@@ -363,7 +372,7 @@ set it to #{expected_generation})"
             version_model = model_class.find(version.item_id)
           rescue ActiveRecord::RecordNotFound => e
             puts ["New #{model_name} with id #{version.item_id} created in version #{version.id}",
-                  "but no further history or current #{model_name} exists"].join(" ")
+                  "but no further history or current #{model_name} exists"].join(" ") if verbose
             return nil
           end
         end
@@ -381,7 +390,7 @@ set it to #{expected_generation})"
             next_version = model_class.find(version.item_id)
           rescue ActiveRecord::RecordNotFound => e
             puts ["#{model_name} with id #{version.item_id} updated in version #{version.id}",
-                  "but no further history or current #{model_name} exists"].join(" ")
+                  "but no further history or current #{model_name} exists"].join(" ") if verbose
             return nil
           end
         end
@@ -392,6 +401,7 @@ set it to #{expected_generation})"
       when 'destroy'
         version_model = version.reify()
         info_hash[:identity] =  version_model.get_identity_hash()
+        details_hash.update( :changes => {} )
         info_hash[:details] = details_hash
       else
         raise "Unknown version event for version id #{version.id}: #{version.event}"
@@ -412,7 +422,7 @@ set it to #{expected_generation})"
   # :date - datetime the change was made on
   # :event - create|update|destroy
   # :changes - the significant changes in the form { :attribute => [old_value, new_value] }
-  def get_updates(model_class, only_replayable=true,date=nil)
+  def get_updates(model_class, only_replayable=true,date=nil, verbose=false)
     update_hash = {}
     options = model_class.data_generation_options_hash
     condition_string = "item_type = ? "
@@ -424,13 +434,13 @@ set it to #{expected_generation})"
     if only_replayable
       condition_string += " AND replayable ='t'"
     end
-
+    conditions = [condition_string] + params
     # get the list of changes for this model, assemble the hash structure, only adding
     # versions where some significant value has changed.
-    updates = Version.find(:all, :conditions => [condition_string] + params,
+    updates = Version.find(:all, :conditions => conditions,
                                  :order => 'created_at asc')
     updates.each do |version|
-      info_hash = get_changes(version, model_class, only_replayable, options)
+      info_hash = get_changes(version, model_class, only_replayable, options, verbose)
       if info_hash && !info_hash[:details][:changes].empty?
         if update_hash[info_hash[:identity]].nil?
           update_hash[info_hash[:identity]] = []
@@ -486,7 +496,7 @@ set it to #{expected_generation})"
         yield instance
       end
 
-      
+
       instance.generation_low = generation
       instance.generation_high = generation
       # Can we find a record in the previous generation with few enough differences that we can update it
