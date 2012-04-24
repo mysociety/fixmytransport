@@ -24,9 +24,9 @@ class Route < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
   exists_in_data_generation( :temporary_identity_fields => [:id],
-                             :auto_update_fields => [:cached_description, 
-                                                     :cached_slug, 
-                                                     :lat, 
+                             :auto_update_fields => [:cached_description,
+                                                     :cached_slug,
+                                                     :lat,
                                                      :lon,
                                                      :cached_area,
                                                      :cached_short_name,
@@ -100,7 +100,7 @@ class Route < ActiveRecord::Base
 
   def transport_mode_name
     transport_mode.name if transport_mode
-    nil 
+    nil
   end
 
   def cache_area
@@ -425,8 +425,8 @@ class Route < ActiveRecord::Base
   # Return routes with this number and transport mode that have a stop or stop area in common with
   # the route given
   def self.find_all_by_number_and_common_stop(new_route, options={})
-    # If this is the first call to these methods on the new_route model (they are memoized), note 
-    # that is will be executed in the current scope of the models concerned. i.e. whatever the data 
+    # If this is the first call to these methods on the new_route model (they are memoized), note
+    # that is will be executed in the current scope of the models concerned. i.e. whatever the data
     # generation conditions for the current scope on the models are, will be applied.
     stop_codes = new_route.stop_codes
     stop_area_codes = new_route.stop_area_codes
