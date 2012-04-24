@@ -23,7 +23,14 @@ class Route < ActiveRecord::Base
   # This model is part of the transport data that is versioned by data generations.
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
-  exists_in_data_generation( :auto_update_fields => [:cached_description, :cached_slug] )
+  exists_in_data_generation( :temporary_identity_fields => [:id],
+                             :auto_update_fields => [:cached_description, 
+                                                     :cached_slug, 
+                                                     :lat, 
+                                                     :lon,
+                                                     :cached_area,
+                                                     :cached_short_name,
+                                                     :coords] )
   has_many :route_sub_routes
   has_many :sub_routes, :through => :route_sub_routes
   has_many :route_operators, :dependent => :destroy, :uniq => true
@@ -92,7 +99,8 @@ class Route < ActiveRecord::Base
   memoize :stop_area_codes
 
   def transport_mode_name
-    transport_mode.name
+    transport_mode.name if transport_mode
+    nil 
   end
 
   def cache_area
