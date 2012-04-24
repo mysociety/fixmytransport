@@ -138,12 +138,14 @@ namespace :update do
 
   desc 'Display a list of updates that have been made to instances of a model.
         Default behaviour is to only show updates that have been marked as replayable.
-        Specify ALL=1 to see all updates. Specify model class as MODEL=ModelName'
+        Specify ALL=1 to see all updates. Specify model class as MODEL=ModelName.
+        Specify a particular day as DATE=2012-04-23. Verbose flag set by VERBOSE=1'
   task :show_updates => :environment do
     check_for_model()
+    verbose = check_verbose()
     model = ENV['MODEL'].constantize
     only_replayable = (ENV['ALL'] == "1") ? false : true
-    update_hash = get_updates(model, only_replayable=only_replayable, ENV['DATE'])
+    update_hash = get_updates(model, only_replayable=only_replayable, ENV['DATE'], verbose)
     update_hash.each do |identity, changes|
       identity_type = identity[:identity_type]
       identity_hash = identity[:identity_hash]
