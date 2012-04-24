@@ -8,7 +8,7 @@ namespace :update do
 
     # Load NPTG data
     Rake::Task['update:nptg'].execute
-    
+
     # LOAD NAPTAN DATA
     Rake::Task['update:naptan'].execute
 
@@ -28,7 +28,7 @@ namespace :update do
     # LOAD TNDS DATA
     Rake::Task['update:tnds']
     # Rake::Task['naptan:post_load:mark_metro_stops'].execute
-   
+
   end
 
   desc "Create a new data generation."
@@ -92,7 +92,7 @@ namespace :update do
     ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'Stops.csv')
     Rake::Task['naptan:update:stops'].execute
     Rake::Task['naptan:geo:convert_stops'].execute
-    
+
     ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'StopAreas.csv')
     Rake::Task['naptan:update:stop_areas'].execute
     Rake::Task['naptan:geo:convert_stop_areas'].execute
@@ -127,9 +127,9 @@ namespace :update do
 
   desc 'Update TNDS data to the current generation. Runs in dryrun mode unless DRYRUN=0
         is specified. Verbose flag set by VERBOSE=1'
-  task :tnds => :environment do 
+  task :tnds => :environment do
     ENV['DIR'] = MySociety::Config.get('TNDS_DIR', '')
-    # Iterate through the routes to be loaded, produce file of operators that can't 
+    # Iterate through the routes to be loaded, produce file of operators that can't
     # be matched by operator code
     Rake::Task['tnds:preload:list_unmatched_operators'].execute
     Rake::Task['tnds:preload:load_unmatched_operators'].execute
@@ -157,6 +157,63 @@ namespace :update do
         puts "#{id} #{date} #{event} #{identity_hash.inspect} #{changes.inspect}"
       end
     end
+  end
+
+  desc 'Generates an update file suitable for sending back to the source data provider from
+        the changes that have been made locally to a particular model. Verbose flag set by VERBOSE=1.'
+  task :create_update_file => :environment do
+    check_for_model()
+    verbose = check_verbose()
+    model = ENV['MODEL'].constantize
+    change_list = replay_updates(model, dryrun=true, verbose=verbose)
+    outfile = File.open("data/#{model}_changes_#{Date.today.to_s(:db)}.tsv", 'w')
+    headers = ['Change type']
+    identity_fields = model.data_generation_options_hash[:identity_fields]
+    significant_fields = model.data_generation_options_hash[:new_record_fields] +
+                          model.data_generation_options_hash[:update_fields]
+    identity_fields.each do |identity_field|
+      headers << identity_field
+    end
+    headers += ["Attribute", "Old value", "New value", "Data"]
+    outfile.write(headers.join("\t")+"\n")
+    change_list.each do |change_info|
+      change_event = change_info[:event]
+      instance = change_info[:model]
+      if change_event == :update
+        attribute = change_info[:attribute]
+        from_value = change_info[:from_value]
+        to_value = change_info[:to_value]
+        if attribute == :generation_high
+          data_row = ["New"]
+          identity_fields.each do |identity_field|
+            data_row << ''
+          end
+          data_row += ['', '', '']
+          new_instance_info = {}
+          significant_fields.each do |field|
+            value = instance.send(field)
+            if value
+              new_instance_info[field] = value
+            end
+          end
+          data_row << new_instance_info.inspect
+        elsif attribute == :coords
+        elsif significant_fields.include?(attribute)
+          data_row = ["Update"]
+          identity_fields.each do |identity_field|
+            data_row << instance.send(identity_field)
+          end
+          data_row += [attribute, from_value, to_value]
+        end
+      elsif change_event == :destroy
+        data_row = ["Destroy"]
+        identity_fields.each do |identity_field|
+          data_row << instance.send(identity_field)
+        end
+      end
+      outfile.write(data_row.join("\t")+"\n") if data_row
+    end
+    outfile.close
   end
 
   desc 'Apply the replayable local updates for a model class that is versioned in data generations.
