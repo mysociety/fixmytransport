@@ -41,7 +41,7 @@ namespace :tnds do
 
   namespace :preload do
 
-    desc 'Loads data from a file produced by tnds:preload:unmatched_operators and loads missing
+    desc 'Loads data from a file produced by tnds:preload:list_unmatched_operators and loads missing
           operator codes and operators into the database. Accepts a file as FILE=file.
           Verbose flag set by VERBOSE=1. Runs in dryrun mode unless DRYRUN=0 is specified'
     task :load_unmatched_operators => :environment do
@@ -211,7 +211,7 @@ namespace :tnds do
           To re-load routes from files that have already been loaded in this data generation,
           supply SKIP_LOADED=0. Otherwise these files will be ignored.
           Specify FIND_REGION_BY=directory if regions need to be inferred from directories.'
-    task :unmatched_operators => :environment do
+    task :list_unmatched_operators => :environment do
       check_for_dir
       verbose = check_verbose
       skip_loaded = true
