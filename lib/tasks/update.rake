@@ -12,11 +12,21 @@ namespace :update do
     # LOAD NAPTAN DATA
     Rake::Task['update:naptan'].execute
 
+    # Replay updates to stops, stop areas
+    ENV['MODEL'] = 'Stop'
+    Rake::Task['update:replay_updates']
+
+    ENV['MODEL'] = 'StopArea'
+    Rake::Task['update:replay_updates']
+
     # LOAD NOC DATA
     Rake::Task['update:noc'].execute
 
-    # LOAD TNDS DATA
+    ENV['MODEL'] = 'Operator'
+    Rake::Task['update:replay_updates']
 
+    # LOAD TNDS DATA
+    Rake::Task['update:tnds']
     # Rake::Task['naptan:post_load:mark_metro_stops'].execute
    
   end
@@ -82,7 +92,7 @@ namespace :update do
     ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'Stops.csv')
     Rake::Task['naptan:update:stops'].execute
     Rake::Task['naptan:geo:convert_stops'].execute
-
+    
     ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'StopAreas.csv')
     Rake::Task['naptan:update:stop_areas'].execute
     Rake::Task['naptan:geo:convert_stop_areas'].execute
@@ -115,6 +125,16 @@ namespace :update do
     Rake::Task['noc:update:operator_contacts'].execute
   end
 
+  desc 'Update TNDS data to the current generation. Runs in dryrun mode unless DRYRUN=0
+        is specified. Verbose flag set by VERBOSE=1'
+  task :tnds => :environment do 
+    ENV['DIR'] = MySociety::Config.get('TNDS_DIR', '')
+    # Iterate through the routes to be loaded, produce file of operators that can't 
+    # be matched by operator code
+    Rake::Task['tnds:preload:list_unmatched_operators'].execute
+    Rake::Task['tnds:preload:load_unmatched_operators'].execute
+    Rake::Task['tnds:load:routes'].execute
+  end
 
   desc 'Display a list of updates that have been made to instances of a model.
         Default behaviour is to only show updates that have been marked as replayable.
@@ -147,9 +167,10 @@ namespace :update do
     replay_updates(model, dryrun, verbose)
   end
 
-  desc 'Mark as unreplayable local updates marked as replayable for a model class that refer to an
-        instance that does not exist and is not referred to by subsequent versions. Runs in dryrun
-        mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1'
+  desc "Mark as unreplayable local updates marked as replayable for a model class that refer to an
+        instance that does not exist and is not referred to by subsequent versions or don't contain
+        changes to any significant fields. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose
+        flag set by VERBOSE=1"
   task :mark_unreplayable => :environment do
     check_for_model()
     dryrun = check_dryrun()
