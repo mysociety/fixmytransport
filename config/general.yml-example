@@ -66,7 +66,7 @@ NAPTAN_DIR: '/my/naptan/dir'
 NPTDR_DIR: '/my/nptdr/dir'
 NPTG_DIR: '/my/nptg/dir'
 NOC_DIR: '/my/noc/dir'
-NPTDR_DERIVED_DIR: '/my/nptdr-derived/dir'
+TNDS_DIR: '/my/tnds/dir'
 
 # Incoming email
 
