@@ -147,6 +147,17 @@ namespace :update do
     replay_updates(model, dryrun, verbose)
   end
 
+  desc 'Mark as unreplayable local updates marked as replayable for a model class that refer to an
+        instance that does not exist and is not referred to by subsequent versions. Runs in dryrun
+        mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1'
+  task :mark_unreplayable => :environment do
+    check_for_model()
+    dryrun = check_dryrun()
+    verbose = check_verbose()
+    model = ENV['MODEL'].constantize
+    mark_unreplayable(model, dryrun, verbose)
+  end
+
   desc 'Reorder any slugs that existed in the previous generation, but have been given a different
         sequence by the arbitrary load order'
   task :normalize_slug_sequences => :environment do

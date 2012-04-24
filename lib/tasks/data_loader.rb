@@ -452,6 +452,32 @@ set it to #{expected_generation})"
     return update_hash
   end
 
+  # Mark as unreplayable local updates marked as replayable for a model class that refer to an
+  # instance that does not exist and is not referred to by subsequent versions or don't contain
+  # changes to any significant fields.
+  def mark_unreplayable(model_class, dryrun, verbose)
+
+    options = model_class.data_generation_options_hash
+    condition_string = "item_type = ? AND replayable = ?"
+    params = [model_class.to_s, true]
+    conditions = [condition_string] + params
+
+    # get the list of changes for this model, assemble the hash structure, only adding
+    # versions where some significant value has changed.
+    updates = Version.find(:all, :conditions => conditions,
+                                  :order => 'created_at asc')
+    updates.each do |version|
+      info_hash = get_changes(version, model_class, only_replayable='t', options, verbose)
+      if info_hash.nil? || (info_hash[:details][:changes].empty? && !(info_hash[:details][:event] == 'destroy'))
+        puts "Marking #{version.id} #{version.inspect} as unreplayable" if verbose
+        version.replayable = false
+        if ! dryrun
+          version.save
+        end
+      end
+    end
+  end
+
 
   # Load a new model instance into a generation, checking for existing record in previous generation
   # and updating that or creating a new record in the new generation as appropriate
