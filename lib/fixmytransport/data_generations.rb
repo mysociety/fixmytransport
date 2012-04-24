@@ -174,7 +174,11 @@ module FixMyTransport
       end
 
       def identity_hash
-        make_id_hash(self.class.data_generation_options_hash[:identity_fields])
+        if !self.class.data_generation_options_hash[:identity_fields]
+          return {}
+        else
+          make_id_hash(self.class.data_generation_options_hash[:identity_fields])
+        end
       end
 
       def temporary_identity_hash

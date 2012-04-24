@@ -27,7 +27,19 @@ describe Route do
       :region_id => 1,
       :status => 'ACT'
     }
+    @default_attrs = { :name => 'A test route',
+                       :status => 'ACT',
+                       :number => 'ZZ9',
+                       :transport_mode_id => 1 }
+    @model_type = Route
+    @expected_identity_hash = {}
+    @expected_temporary_identity_hash = { :id => nil }
   end
+
+  it_should_behave_like "a model that exists in data generations"
+
+  it_should_behave_like "a model that exists in data generations and has slugs"
+
 
   it "should create a new instance given valid attributes" do
     route = Route.new(@valid_attributes)
@@ -107,8 +119,8 @@ describe Route do
 
     fixtures default_fixtures
 
-    describe 'when looking for bus routes' do 
-      
+    describe 'when looking for bus routes' do
+
       before do
         @route = Route.new(:number => '807',
                           :transport_mode => transport_modes(:bus))
@@ -118,26 +130,26 @@ describe Route do
                                 :to_stop => @new_stop,
                                 :from_terminus => true)
       end
-    
+
       it 'should include routes with the same number and one stop in common with the new route, with the same operator in the same admin area' do
         @route.route_source_admin_areas.build({:operator_code => 'BUS',
                                               :source_admin_area => admin_areas(:london)})
         Route.find_existing_routes(@route).should include(routes(:number_807_bus))
       end
 
-  
+
 
       it 'should include routes with the same number and one stop in common with the new route, with the same route operator' do
         @route.route_operators.build({:operator => operators(:a_bus_company)})
         Route.find_existing_routes(@route).should include(routes(:number_807_bus))
       end
-  
-      it "should include routes with the same number and one stop in common with the new route, with one of the new route's operators" do 
+
+      it "should include routes with the same number and one stop in common with the new route, with one of the new route's operators" do
         @route.route_operators.build({:operator => operators(:a_bus_company)})
         @route.route_operators.build({:operator => operators(:another_bus_company)})
         Route.find_existing_routes(@route).should include(routes(:number_807_bus))
       end
-      
+
       it 'should include routes with the same number, one stop area in common with the new route and the same operator code with no admin area' do
         route_source_admin_area = routes(:number_807_bus).route_source_admin_areas.first
         route_source_admin_area.source_admin_area_id = nil
@@ -176,7 +188,7 @@ describe Route do
     end
 
   end
-  
+
   describe 'when finding existing train routes' do
 
     fixtures default_fixtures
