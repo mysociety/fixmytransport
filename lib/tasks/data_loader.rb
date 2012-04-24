@@ -443,7 +443,7 @@ set it to #{expected_generation})"
                                  :order => 'created_at asc')
     updates.each do |version|
       info_hash = get_changes(version, model_class, only_replayable, options, verbose)
-      if info_hash && !info_hash[:details][:changes].empty?
+      if info_hash && (info_hash[:details][:event] == 'destroy' || !info_hash[:details][:changes].empty?)
         if update_hash[info_hash[:identity]].nil?
           update_hash[info_hash[:identity]] = []
         end
