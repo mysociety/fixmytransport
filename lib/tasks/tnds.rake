@@ -179,6 +179,8 @@ namespace :tnds do
           operator = Operator.new( :short_name => operator_info[:short_name])
           if !operator_info[:trading_name].blank?
             operator.name = operator_info[:trading_name]
+          else
+            operator.name = operator_info[:short_name]
           end
           if !operator_info[:license_name].blank?
             operator.vosa_license_name = operator_info[:license_name]
