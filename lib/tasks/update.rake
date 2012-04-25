@@ -1,3 +1,6 @@
+require 'fixmytransport/replayable_changes'
+include FixMyTransport::ReplayableChanges
+
 namespace :update do
 
   desc 'Load a new generation of transport data. Will run in dryrun mode unless DRYRUN=0 is specified.
