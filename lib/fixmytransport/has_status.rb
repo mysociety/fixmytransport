@@ -1,23 +1,25 @@
-# Map a numeric status_code attribute to status descriptions. Allow status to be accessed as a symbol. Example:
-#
-# class Task < ActiveRecord::Base
-#   has_status({ 0 => 'New', 
-#                1 => 'Pending', 
-#                2 => 'Done'})
-# end
-#
-# task = Task.new
-# task.status = :new
-#
 module FixMyTransport
+
+  # Functions for handling models that have status attributes.
+  # Map a numeric status_code attribute to status descriptions and allow status to be accessed as a symbol.
+  # Example:
+  #
+  # class Task < ActiveRecord::Base
+  #   has_status({ 0 => 'New',
+  #                1 => 'Pending',
+  #                2 => 'Done'})
+  # end
+  #
+  # task = Task.new
+  # task.status = :new
   module Status
-  
+
     def self.included(base)
       base.send :extend, ClassMethods
     end
 
     module ClassMethods
-  
+
       def has_status(status_codes)
         cattr_accessor :status_codes, :symbol_to_status_code, :status_code_to_symbol
         unless accessible_attributes.present?
@@ -31,13 +33,13 @@ module FixMyTransport
         self.status_code_to_symbol = self.symbol_to_status_code.invert
         send :include, InstanceMethods
       end
-      
+
       def statuses
-        self.status_code_to_symbol.to_a.sort.map do |status_code, symbol| 
+        self.status_code_to_symbol.to_a.sort.map do |status_code, symbol|
           [symbol.to_s.humanize, status_code]
         end
       end
-      
+
     end
 
     module InstanceMethods
@@ -48,7 +50,7 @@ module FixMyTransport
 
       def status=(symbol)
         code = self.symbol_to_status_code[symbol]
-        if code.nil? 
+        if code.nil?
           raise "Unknown status for #{self.class} #{symbol}"
         end
         self.status_code = code
@@ -57,7 +59,7 @@ module FixMyTransport
       def status_description
         status_codes[status_code]
       end
-    
+
     end
   end
 end

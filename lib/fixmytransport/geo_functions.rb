@@ -1,5 +1,6 @@
 module FixMyTransport
 
+  # Functions for handling coordinate conversion
   module GeoFunctions
 
   # set the coordinate attributes in a given system of a model instance that has coords.

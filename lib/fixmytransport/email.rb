@@ -1,8 +1,3 @@
-# email.rb - email handling functions
-#
-# Copyright (c) 2010 UK Citizens Online Democracy. All rights reserved.
-# Email: louise@mysociety.org; WWW: http://www.mysociety.org/
-#
 
 $:.push(File.join(File.dirname(__FILE__), '../ruby-msg/lib'))
 $:.push(File.join(File.dirname(__FILE__), '../ruby-ole/lib'))
@@ -11,6 +6,11 @@ require 'mapi/convert'
 
 module FixMyTransport
 
+  # email.rb - email handling functions
+  #
+  # Copyright (c) 2010 UK Citizens Online Democracy. All rights reserved.
+  # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
+  #
   module Email
 
     @file_extension_to_mime_type = {

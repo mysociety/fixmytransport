@@ -1,4 +1,3 @@
-
 module FixMyTransport
 
   # Functions for extracting, viewing and replaying local data edits.

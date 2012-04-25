@@ -1,5 +1,5 @@
 module FixMyTransport
-  
+
   class StripEmptySessions
     ENV_SESSION_KEY = "rack.session".freeze
     HTTP_SET_COOKIE = "Set-Cookie".freeze

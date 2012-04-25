@@ -1,6 +1,9 @@
-# Functions for transport models that belong to data generations
+
 module FixMyTransport
 
+  # Functions for transport models that are loaded regularly from external data sources - these models
+  # are versioned using the concept of a 'data generation' - a set of data loaded at one time that
+  # is internally consistent, and supercedes previous data generations.
   module DataGenerations
 
     @@data_generation_models = []
@@ -288,7 +291,7 @@ module FixMyTransport
         end
         return nil
       end
-      
+
       def in_current_data_generation?
         if self.generation_high >= CURRENT_GENERATION
           return true

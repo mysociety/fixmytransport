@@ -1,6 +1,6 @@
-# functions for all locations
 module FixMyTransport
 
+  # Common functions for all transport locations - stops, stop areas and routes
   module Locations
 
     attr_accessor :highlighted

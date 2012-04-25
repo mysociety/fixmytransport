@@ -1,6 +1,6 @@
-# Functions for stops and stop areas, both of which can be identified by a lat/lon
 module FixMyTransport
 
+  # Functions for stops and stop areas, both of which can be identified by a lat/lon
   module StopsAndStopAreas
 
     def self.included(base)
