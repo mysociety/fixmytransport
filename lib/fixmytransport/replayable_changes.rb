@@ -1,5 +1,9 @@
 # Functions for extracting, viewing and replaying local data edits.
-# Relies on version data supplied by paper_trail gem.
+# Relies on version data supplied by paper_trail gem. Replayable changes are a mechanism to handle
+# data that is loaded regularly from an external source which may contain errors. A replayable change
+# is a locally made change to an instance of a model that comes from some external data source. If the
+# data for that instance is subsequently updated from the external source, we can replay or reapply our
+# own changes to the updated data if they are still relevant.
 module FixMyTransport
 
   module ReplayableChanges
