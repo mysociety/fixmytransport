@@ -41,7 +41,7 @@ class StopArea < ActiveRecord::Base
                              :deletion_value => 'del',
                              :auto_update_fields => [:cached_description, :cached_slug,
                                                      :primary_metaphone, :secondary_metaphone,
-                                                     :lat, :lon])
+                                                     :lat, :lon, :coords])
   has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships
   has_dag_links :link_class_name => 'StopAreaLink'
@@ -169,7 +169,7 @@ class StopArea < ActiveRecord::Base
       params << options[:exclude_ids]
     end
     stop_areas = find(:all, :conditions => [query] + params,
-     	                      :include => :locality)
+                            :include => :locality)
     stop_areas.map{ |stop_area| stop_area.station_root ? stop_area.station_root : stop_area }
   end
 

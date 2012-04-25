@@ -61,7 +61,8 @@ class Stop < ActiveRecord::Base
                              :deletion_value => 'del',
                              :temporary_identity_fields => [:other_code],
                              :temp_to_perm => { :other_code => :atco_code },
-                             :auto_update_fields => [:cached_description, :cached_slug, :metro_stop] )
+                             :auto_update_fields => [:cached_description, :cached_slug, :metro_stop,
+                                                     :coords] )
   has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
   validates_presence_of :common_name
@@ -310,7 +311,7 @@ class Stop < ActiveRecord::Base
      return nil
   end
 
-  # find the nearest stop to a set of National Grid coordinates. Accepts a model id to 
+  # find the nearest stop to a set of National Grid coordinates. Accepts a model id to
   # exclude from results, and an extra condition string to constrain the search
   def self.find_nearest(easting, northing, exclude_id = nil, extra_conditions=nil)
     conditions = nil
