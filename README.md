@@ -4,6 +4,10 @@
 
 See https://github.com/mysociety/fixmytransport/blob/master/data_model.md
 
+#Code documentation
+
+Generate HTML code documentation in the doc directory by running rake doc:app
+
 #Prerequisites
 
 Ruby 1.8.7
@@ -62,7 +66,7 @@ permissions on this database.
 The following commands need to be run at the command line following db creation for each of fixmytransport_development and fixmytransport_test:
 
     createlang  plpgsql [database name]
-    psql [yourdb] < /usr/local/pgsql/share/contrib/postgis-1.5/postgis.sql
+    psql [yourdb] < /usr/local/pgsql/share/contrib/postgis-1.5/postgis.sql  
     psql [yourdb] < /usr/local/pgsql/share/contrib/postgis-1.5/spatial_ref_sys.sql
 
 Also, SRID 27700 (British National Grid) is incorrect in some installs of PostGIS. After you’ve installed and got a PostGIS template, log in to it and make sure the proj4text column of SRID 27700 in the spatial_ref_sys table includes +datum=OSGB36.
