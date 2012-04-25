@@ -4,14 +4,14 @@ module FixMyTransport
   # Map a numeric status_code attribute to status descriptions and allow status to be accessed as a symbol.
   # Example:
   #
-  # class Task < ActiveRecord::Base
-  #   has_status({ 0 => 'New',
-  #                1 => 'Pending',
-  #                2 => 'Done'})
-  # end
+  #   class Task < ActiveRecord::Base
+  #     has_status({ 0 => 'New',
+  #                  1 => 'Pending',
+  #                  2 => 'Done'})
+  #   end
   #
-  # task = Task.new
-  # task.status = :new
+  #   task = Task.new
+  #   task.status = :new
   module Status
 
     def self.included(base)
