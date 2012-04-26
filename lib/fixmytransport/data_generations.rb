@@ -63,18 +63,18 @@ module FixMyTransport
         send :include, InstanceMethods
 
         self.class_eval do
-           # This default scope hides any models that belong to past or future data generations.
-           default_scope :conditions => [ ["#{quoted_table_name}.generation_low <= ?",
-                                           "AND #{quoted_table_name}.generation_high >= ?"].join(" "),
-                                           CURRENT_GENERATION, CURRENT_GENERATION ]
-           # This callback sets the data generations columns to the current generation
-           # if not value has been set on them
-           before_create :set_generations
+          # This default scope hides any models that belong to past or future data generations.
+          default_scope :conditions => [ ["#{quoted_table_name}.generation_low <= ?",
+                                          "AND #{quoted_table_name}.generation_high >= ?"].join(" "),
+                                         CURRENT_GENERATION, CURRENT_GENERATION ]
+          # This callback sets the data generations columns to the current generation
+          # if not value has been set on them
+          before_create :set_generations
 
-           def set_generations
-             self.generation_low = CURRENT_GENERATION if self.generation_low.nil?
-             self.generation_high = CURRENT_GENERATION if self.generation_high.nil?
-           end
+          def set_generations
+            self.generation_low = CURRENT_GENERATION if self.generation_low.nil?
+            self.generation_high = CURRENT_GENERATION if self.generation_high.nil?
+          end
 
         end
 
