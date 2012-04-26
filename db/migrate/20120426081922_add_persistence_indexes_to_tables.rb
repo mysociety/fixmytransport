@@ -52,7 +52,6 @@ class AddPersistenceIndexesToTables < ActiveRecord::Migration
     remove_index :stop_areas, [:persistent_id, :generation_low, :generation_high]
     remove_index :stop_areas, :previous_id
     remove_index :stop_area_memberships, [:persistent_id, :generation_low, :generation_high]
-    remove_index :stop_area_memberships, :previous_id
     remove_index :vosa_licenses, [:persistent_id, :generation_low, :generation_high]
     remove_index :vosa_licenses, :previous_id
   end
