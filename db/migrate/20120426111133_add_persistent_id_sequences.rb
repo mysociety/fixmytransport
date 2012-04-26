@@ -32,7 +32,7 @@ class AddPersistentIdSequences < ActiveRecord::Migration
       table_name = model_class.to_s.tableize
       model_class.connection.execute("ALTER TABLE #{table_name}
                                       ALTER COLUMN persistent_id
-                                      SET DEFAULT NULL')")
+                                      SET DEFAULT NULL")
       model_class.connection.execute("DROP SEQUENCE #{table_name}_persistent_id_seq")
     end
   end
