@@ -244,6 +244,7 @@ set it to #{expected_generation})"
           puts significant_diff_hash.inspect if verbose
           # Associate the old generation record with the new generation record
           instance.previous_id = existing.id
+          instance.persistent_id = existing.persistent_id
           counts[:updated_new_record] += 1
         else
           puts "New instance #{reference_string(model_class, instance, change_in_place_fields)}" if verbose
