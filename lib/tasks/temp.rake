@@ -1,7 +1,7 @@
 namespace :temp do
-  
+
   desc 'Set the data generation on existing tables'
-  task :set_data_generation => :environment do 
+  task :set_data_generation => :environment do
     DataGeneration.create!(:name => "Initial data load", :description => 'Data load from NPTG, NaPTAN, NOC, NPTDR on site creation')
     Region.connection.execute("update regions set generation_low = 1, generation_high = 1")
     AdminArea.connection.execute("update admin_areas set generation_low = 1, generation_high = 1")
@@ -18,10 +18,9 @@ namespace :temp do
     RouteOperator.connection.execute("update route_operators set generation_low = 1, generation_high = 1")
     JourneyPattern.connection.execute("update journey_patterns set generation_low = 1, generation_high = 1")
     RouteSegment.connection.execute("update route_segments set generation_low = 1, generation_high = 1")
-    OperatorContact.connection.execute("update operator_contacts set generation_low = 1, generation_high = 1")
 
   end
-  
+
   desc 'Update campaign slugs that end in a trailing hyphen'
   task :update_trailing_hyphen_slugs => :environment do
 
@@ -81,17 +80,17 @@ namespace :temp do
                                 WHERE problems.status_code in (#{Problem.visible_status_codes.join(",")})
                                 AND campaign_id is null")
   end
-  
-  desc "Add replayable flag values to versions models in data generations. Indicates whether a change is 
+
+  desc "Add replayable flag values to versions models in data generations. Indicates whether a change is
         replayable after a new generation of data is loaded"
-  task :add_replayable_to_versions => :environment do 
+  task :add_replayable_to_versions => :environment do
     Version.connection.execute("UPDATE versions
                                 SET replayable = 'f'
                                 WHERE item_type = 'Stop'
                                 AND (date_trunc('day', created_at) = '2011-03-02'
                                 OR date_trunc('day', created_at) = '2011-03-03'
                                 OR date_trunc('hour', created_at) = '2011-03-23 19:00:00'
-                                OR (date_trunc('day', created_at) = '2011-03-03' 
+                                OR (date_trunc('day', created_at) = '2011-03-03'
                                 AND event = 'update')
                                 OR date_trunc('day', created_at) = '2011-06-08'
                                 OR (date_trunc('day', created_at) = '2011-04-07'
@@ -100,18 +99,18 @@ namespace :temp do
                                 OR date_trunc('day', created_at) = '2011-06-21'
                                 OR date_trunc('day', created_at) = '2011-06-22')")
     Version.connection.execute("UPDATE versions
-                                SET replayable = 't' 
-                                WHERE item_type = 'Stop' 
+                                SET replayable = 't'
+                                WHERE item_type = 'Stop'
                                 AND replayable is null;")
-  
+
     Version.connection.execute("UPDATE versions
                                 SET replayable = 'f'
                                 WHERE item_type = 'StopArea'
                                 AND (date_trunc('day', created_at) = '2011-03-28'
                                 OR date_trunc('day', created_at) = '2011-06-21')")
     Version.connection.execute("UPDATE versions
-                                SET replayable = 't' 
-                                WHERE item_type = 'StopArea' 
+                                SET replayable = 't'
+                                WHERE item_type = 'StopArea'
                                 AND replayable is null;")
 
     Version.connection.execute("UPDATE versions
@@ -119,10 +118,10 @@ namespace :temp do
                                 WHERE item_type = 'Operator'
                                 AND (date_trunc('day', created_at) = '2011-03-03')")
     Version.connection.execute("UPDATE versions
-                                SET replayable = 't' 
-                                WHERE item_type = 'Operator' 
+                                SET replayable = 't'
+                                WHERE item_type = 'Operator'
                                 AND replayable is null;")
-  
+
     Version.connection.execute("UPDATE versions
                                 SET replayable = 'f'
                                 WHERE item_type = 'Route'
@@ -133,6 +132,61 @@ namespace :temp do
                                 SET replayable = 't'
                                 WHERE item_type = 'Route'
                                 AND replayable is null")
+  end
+
+  desc 'Populate the persistent_id column for models in data generations'
+  task :populate_persistent_id => :environment do
+    FixMyTransport::DataGenerations.models_existing_in_data_generations.each do |model_class|
+      puts model_class
+      table_name = model_class.to_s.tableize
+      next if [Route, JourneyPattern, RouteSegment, RouteOperator, OperatorContact].include?(model_class)
+      model_class.connection.execute("CREATE SEQUENCE #{table_name}_persistent_id_seq")
+      model_class.connection.execute("ALTER TABLE #{table_name}
+                                      ALTER COLUMN persistent_id
+                                      SET DEFAULT NEXTVAL('#{table_name}_persistent_id_seq')")
+      model_class.connection.execute("UPDATE #{table_name}
+                                      SET persistent_id = NEXTVAL('#{table_name}_persistent_id_seq')
+                                      WHERE previous_id IS NULL")
+      model_class.connection.execute("UPDATE #{table_name}
+                                      SET persistent_id = (SELECT persistent_id from #{table_name}
+                                                           WHERE id = previous_id)
+                                      WHERE previous_is IS NOT NULL")
+    end
+  end
+
+  desc 'Populate operator_contacts operator_persistent_id field'
+  task :populate_operator_contacts_operator_persistent_id => :environment do
+    OperatorContact.find_each(:conditions => ['operator_persistent_id is null']) do |contact|
+      operator = nil
+      Operator.in_any_generation do
+        operator = Operator.find(:first, :conditions => ['id = ?', contact.operator_id])
+      end
+      if ! operator
+        puts "No operator with id #{contact.operator_id}"
+        next
+      end
+      contact.operator_persistent_id = operator.persistent_id
+      puts "Setting operator_persistent_id to #{contact.operator_persistent_id} for #{contact.id}, operator #{operator.id}"
+      contact.save!
+    end
+  end
+
+  desc 'Populate campaign location_persistent_id field'
+  task :populate_campaign_persistent_id => :environment do
+    Campaign.find_each(:conditions => ['location_persistent_id is null']) do |campaign|
+      location = nil
+      location_type = campaign.location_type.constantize
+      location_type.in_any_generation do
+        location = location_type.find(:first, :conditions => ['id = ?', campaign.location_id])
+      end
+      if ! location
+        puts "No location with id #{campaign.location_id}"
+        next
+      end
+      campaign.location_persistent_id = location.persistent_id
+      puts "Setting location_persistent_id to #{campaign.location_persistent_id} for #{campaign.id}, #{location_type} #{location.id}"
+      campaign.save!
+    end
   end
 
 end

@@ -1,29 +1,21 @@
 class OperatorContact < ActiveRecord::Base
-  belongs_to :operator
+  # This association uses custom keys as the object associated is scoped by data generations - a
+  # persistent id may be held by a different model instance in each generation
+  belongs_to :operator, :foreign_key => :operator_persistent_id,
+                        :primary_key => :persistent_id
   has_many :sent_emails, :as => :recipient
   has_many :outgoing_messages, :as => :recipient
   validates_presence_of :category
   belongs_to :location, :polymorphic => true
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
   validates_format_of :cc_email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$"), :allow_blank => true
-  validate :category_unique_in_generation
+  validates_uniqueness_of :category, :scope => [:operator_persistent_id,
+                                                :deleted,
+                                                :location_id,
+                                                :location_type],
+                                       :if => Proc.new{ |contact| ! contact.deleted? }
   has_paper_trail
 
-  # This model is part of the transport data that is versioned by data generations.
-  # This means they have a default scope of models valid in the current data generation.
-  # See lib/fixmytransport/data_generation
-  exists_in_data_generation()
-
-  # this is a custom validation as categories need only be unique within the data generation bounds
-  # set by the default scope. Allows blank values
-  def category_unique_in_generation
-    if !self.deleted
-      self.field_unique_in_generation :category, :scope => [:operator_id,
-                                                            :location_id,
-                                                            :location_type,
-                                                            :deleted]
-    end
-  end
 
   def name
     operator.name
@@ -42,6 +34,15 @@ class OperatorContact < ActiveRecord::Base
 
   def stop_area_id()
     self.location_id
+  end
+
+  def self.contacts_missing_operators
+    self.find(:all, :conditions => ['operator_persistent_id NOT IN (SELECT persistent_id
+                                                                    FROM operators
+                                                                    WHERE generation_low <= ?
+                                                                    AND generation_high >= ?)',
+                                                                    CURRENT_GENERATION,
+                                                                    CURRENT_GENERATION])
   end
 
 end

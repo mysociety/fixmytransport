@@ -37,7 +37,9 @@ class Operator < ActiveRecord::Base
   belongs_to :transport_mode
   validates_presence_of :name
   validate :noc_code_unique_in_generation
-  has_many :operator_contacts, :conditions => ['deleted = ?', false]
+  has_many :operator_contacts, :conditions => ['deleted = ?', false],
+                               :foreign_key => :operator_persistent_id,
+                               :primary_key => :persistent_id
   has_many :responsibilities, :as => :organization
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   has_paper_trail :meta => { :replayable  => Proc.new { |operator| operator.replayable } }
@@ -124,7 +126,7 @@ class Operator < ActiveRecord::Base
   end
 
   def self.count_without_contacts
-    count(:conditions => ['id not in (select operator_id from operator_contacts where deleted = ?)', false])
+    count(:conditions => ['persistent_id not in (select operator_persistent_id from operator_contacts where deleted = ?)', false])
   end
 
   def self.find_all_by_nptdr_code(transport_mode, code, region, route)

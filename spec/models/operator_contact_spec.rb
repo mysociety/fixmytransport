@@ -27,14 +27,6 @@ describe OperatorContact do
     duplicate_operator_contact.should_not be_valid
   end
 
-  it 'should allow other contacts for this operator in this category in previous generations' do
-    generation_attributes = { :generation_low => PREVIOUS_GENERATION,
-                              :generation_high => PREVIOUS_GENERATION }
-    existing_operator_contact = OperatorContact.create! @valid_attributes.merge(generation_attributes)
-    duplicate_operator_contact = OperatorContact.new @valid_attributes
-    duplicate_operator_contact.should be_valid
-  end
-
   it "should allow other contacts for this operator in different categories" do
     existing_operator_contact = OperatorContact.create! @valid_attributes
     similar_attributes = @valid_attributes.clone
@@ -42,20 +34,20 @@ describe OperatorContact do
     new_operator_contact = OperatorContact.new similar_attributes
     new_operator_contact.should be_valid
   end
-  
-  it 'should allow another address for the same operator and category if the existing address is deleted' do 
+
+  it 'should allow another address for the same operator and category if the existing address is deleted' do
     existing_operator_contact = OperatorContact.create! @valid_attributes.merge(:deleted => true)
     new_operator_contact = OperatorContact.new @valid_attributes
     new_operator_contact.should be_valid
   end
 
-  it 'should allow another address for the same operator and category if the new address is deleted' do 
+  it 'should allow another address for the same operator and category if the new address is deleted' do
     existing_operator_contact = OperatorContact.create! @valid_attributes
     new_operator_contact = OperatorContact.new @valid_attributes.merge(:deleted => true)
     new_operator_contact.should be_valid
   end
-  
-  it 'should allow another address for the same operator and category if both addresses are deleted' do 
+
+  it 'should allow another address for the same operator and category if both addresses are deleted' do
     existing_operator_contact = OperatorContact.create! @valid_attributes.merge(:deleted => true)
     new_operator_contact = OperatorContact.new @valid_attributes.merge(:deleted => true)
     new_operator_contact.should be_valid
