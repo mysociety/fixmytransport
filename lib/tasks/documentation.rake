@@ -1,5 +1,5 @@
 
-if task_defined?('doc:app')
+if Rake::Task.task_defined?('doc:app')
   Rake::Task["doc:app"].clear
   Rake::Task["doc/app"].clear
   Rake::Task["doc/app/index.html"].clear
