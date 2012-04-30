@@ -24,8 +24,8 @@ ASSET_HOST: '127.0.0.1:3000'
 
 # Add a timestamped directory into asset paths as well as a querystring (requires webserver rewrite rule)
 USE_VERSIONED_ASSET_PATHS: 0
-# mobile domain 
-MOBILE_DOMAIN: '' 
+# mobile domain
+MOBILE_DOMAIN: ''
 
 
 # Address that email comes from
@@ -72,10 +72,10 @@ NPTDR_DERIVED_DIR: '/my/nptdr-derived/dir'
 
 # e.g. 'fixmytransport.com'
 INCOMING_EMAIL_DOMAIN: 'localhost'
-# e.g. fmt- 
-INCOMING_EMAIL_PREFIX: '' 
+# e.g. fmt-
+INCOMING_EMAIL_PREFIX: ''
 
-# Is the site currently visible? 
+# Is the site currently visible?
 SITE_VISIBLE: 1
 
 # Where to store fragments of cached HTML
@@ -91,11 +91,6 @@ PAPERCLIP_URL_BASE: '/system/paperclip'
 APP_STATUS: 'beta'
 BETA_USERNAME: 'username'
 BETA_PASSWORD: 'password'
-
-# x-header used for device class, if there's a cacheing system between FMT and the web inserting them
-# e.g., "X-Device-type"   
-# Leave blank if no such mechanism is set up. See application_controller.rb, get_device_from_user_agent
-DEVICE_TYPE_X_HEADER: ''
 
 # enable geolocation ("use my current location") features
 GEOLOCATION_ENABLED: 0
