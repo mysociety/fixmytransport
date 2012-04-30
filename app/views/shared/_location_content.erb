@@ -2,6 +2,8 @@
   <%= t('shared.location_content.problems_here', :on_or_at => (location.is_a?(Route) || location.is_a?(SubRoute) ? t('shared.location_content.on_it') : t('shared.location_content.at_it')), :location => readable_location_type(location))%>
 </h3>
 
+<%= render :partial => 'shared/atom_link', :locals => { :feed_link_text => @feed_link_text }%>
+
 <%- if !location.related_issues.empty? %>
 <ul class="issues-list" id="location-issues-list">
 	<%- location.related_issues.each do |issue| %>

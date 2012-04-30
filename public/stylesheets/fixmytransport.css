@@ -2295,6 +2295,21 @@ body.facebook-canvas .button {
   overflow: hidden;
 }
 
+/*===[ Atom / RSS Links ]===*/
+.inline-icon {
+  vertical-align: middle
+}
+
+.atom-link {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+/* Make sure the Atom links still look clickable (i.e. blue) */
+#in-page-atom-link a {
+  color: #048FC2
+}
+
 /*===[ Operator ]===*/
 #operator-feedback-link {
   display: block;

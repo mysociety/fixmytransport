@@ -1,0 +1,79 @@
+<section class="guide-intro">
+
+  <p>When bus routes are discontinued, it can have a devastating
+  effect on those who rely on them. If you live in a rural area,
+  don’t drive, or simply rely on the bus to take you where you
+  need to go, you may feel that a lifeline has been taken away
+  from you - and often with no consultation.</p>
+
+  <p>You don’t have to lie back and give in, though. There are
+  several ways in which you can make your voice heard - and get
+  your bus service back.</p>
+
+  <p>FixMyTransport is an independent website which allows you
+  to contact any bus company or council in Britain, and tell
+  them how their cuts have affected you. We don’t leave it
+  there. We give you the tools to gather support and really put
+  pressure on the operators to bring back the bus service you
+  need.</p>
+
+</section>
+
+<section class="guide-action">
+
+  <h2>What can you do about it?</h2>
+
+  <p><%= raw(link_to(raw(t('problems.frontpage.report_a_problem')), "/", :class => 'report-problem-button')) %></p>
+
+  <p>Or have a look at some of the <a href="#unsolved">unresolved
+  cancelled bus service problems</a> that have been reported and add
+  your support.</p>
+
+</section>
+
+<section class="guide-process">
+
+  <h2>How does FixMyTransport get things fixed?</h2>
+
+  <p>It’s simple. You identify the route you want to get
+  reinstated.</p>
+
+  <p>You write your message and we’ll send it off to the
+  previous operator of that route, or the council if they
+  subsidised it.</p>
+
+  <p>At the same time, we put a copy on this website, so that
+  others can add their support and advice. If you’re nifty with
+  Facebook and Twitter, you can spread the word really quickly -
+  the more names there are supporting your campaign, the more
+  the operator will have to listen to your request. Make sure
+  you tell your friends and neighbours, and anyone else affected
+  by the discontinued route.</p>
+
+  <p>When the operator or council replies, we publish their
+  response on the page too, for all to see. And if it’s a no?
+  FixMyTransport has a team of experts, ready to tell you who to
+  write to next - could be your local transport group, your
+  local councillor, or even the local press.</p>
+
+  <p>FixMyTransport gets things changed - have a look at our
+  sidebar (right) to see examples of public transport issues
+  that we’ve already solved.</p>
+
+</section>
+
+<aside class="guide-report">
+  <h2>Ready to get your bus route reinstated?</h2>
+
+  <p>Start here.</p>
+
+  <p><%= raw(link_to(raw(t('problems.frontpage.report_a_problem')), "/", :class => 'report-problem-button')) %></p>
+</aside>
+
+<%= render :partial => "shared/guides_example_issues",
+           :locals => { :solved_issues => true,
+                        :description => "cancelled bus service problems" } %>
+
+<%= render :partial => "shared/guides_example_issues",
+           :locals => { :solved_issues => false,
+                        :description => "cancelled bus service problems" } %>

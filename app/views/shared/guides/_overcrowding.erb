@@ -1,0 +1,91 @@
+<section class="guide-intro">
+
+  <p>Overcrowding on trains is a huge problem across Britain -
+  and it’s not just on peak services or London routes. While the
+  younger and fitter amongst us may not mind having to stand
+  once in a while, overcrowding is a serious problem for the
+  elderly, infirm, pregnant or claustrophobic - and even the
+  best of us gets frustrated when it’s a daily occurrence.</p>
+
+  <p>Why does overcrowding occur on our train routes? In a
+  nutshell, there simply are not enough carriages available to
+  our train operators. The existing rolling stock is ageing, and
+  the franchise system does not incentivise new investment.</p>
+
+  <p>We are FixMyTransport, an independent site which helps
+  people get their voice heard by transport operators. We will
+  help you campaign for longer, less crowded trains.</p>
+
+</section>
+
+<section class="guide-action">
+  <h2>What can you do about it?</h2>
+
+  <p><%= raw(link_to(raw(t('problems.frontpage.report_a_problem')), "/", :class => 'report-problem-button')) %></p>
+
+  <p>Or have a look at some of the <a href="#unsolved">unresolved
+  overcrowding problems</a> that have been reported and add
+  your support.</p>
+
+</section>
+
+<section class="guide-process">
+
+  <h2>How does FixMyTransport get things changed?</h2>
+
+  <p>Given the background to the problem of overcrowding, it may
+  seem futile to contact the train companies to lodge a
+  complaint. But FixMyTransport gives you the extra leverage
+  that you need to make a difference.</p>
+
+  <p>Here’s how it works. FixMyTransport contains details of
+  every train route in Britain. You just find the overcrowded
+  route you want to complain about.</p>
+
+  <p>Write a message to the transport operator, and we’ll send
+  it off. At the same time, we put a copy on this website, so
+  that others can add their support and advice. If you’re nifty
+  with Facebook and Twitter, you can spread the word really
+  quickly - the more names there are supporting your campaign,
+  the more the operator will have to listen to your
+  complaint. This is also a great time to share the web address
+  with fellow passengers - perhaps while you’re standing
+  shoulder to shoulder in the carriage!</p>
+
+  <p>The operator’s reply is published on the page too, for all
+  to see. And if it simply brushes you off with a few excuses?
+  Well, that’s where it starts to get interesting.</p>
+
+  <p>FixMyTransport has a team of experts, ready to tell you who
+  to write to next - with problems like overcrowding, your issue
+  needs to go to the very top. We’ll get your message to the
+  relevant Public Transport Executive, the Department for
+  Transport, and your local MP, all of whom can lobby at the
+  very highest level - and all of whom are duty bound to ensure
+  that you, the passenger, are receiving adequate public
+  transport.</p>
+
+  <p>FixMyTransport gets things changed - have a look at our
+  sidebar (right) to see examples of public transport issues
+  that we’ve already solved.</p>
+
+</section>
+
+<aside class="guide-report">
+
+  <h2>Ready to do something about the overcrowding on your train?</h2>
+
+  <p>Start here:</p>
+
+  <p><%= raw(link_to(raw(t('problems.frontpage.report_a_problem')), "/", :class => 'report-problem-button')) %></p>
+
+</aside>
+
+<%= render :partial => "shared/guides_example_issues",
+           :locals => { :solved_issues => true,
+                        :description => "overcrowding problems" } %>
+
+
+<%= render :partial => "shared/guides_example_issues",
+           :locals => { :solved_issues => false,
+                        :description => "overcrowding problems" } %>

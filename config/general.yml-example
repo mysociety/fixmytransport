@@ -24,8 +24,8 @@ ASSET_HOST: '127.0.0.1:3000'
 
 # Add a timestamped directory into asset paths as well as a querystring (requires webserver rewrite rule)
 USE_VERSIONED_ASSET_PATHS: 0
-# mobile domain 
-MOBILE_DOMAIN: '' 
+# mobile domain
+MOBILE_DOMAIN: ''
 
 
 # Address that email comes from
@@ -72,10 +72,10 @@ TNDS_DIR: '/my/tnds/dir'
 
 # e.g. 'fixmytransport.com'
 INCOMING_EMAIL_DOMAIN: 'localhost'
-# e.g. fmt- 
-INCOMING_EMAIL_PREFIX: '' 
+# e.g. fmt-
+INCOMING_EMAIL_PREFIX: ''
 
-# Is the site currently visible? 
+# Is the site currently visible?
 SITE_VISIBLE: 1
 
 # Where to store fragments of cached HTML

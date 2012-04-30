@@ -463,6 +463,9 @@ $(document).ready(function(){
     		$("#login-box").dialog("open");
 
     		// record a hit on the login box in analytics
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24232514-1']);
+        _gaq.push(['_gat._anonymizeIp']);
         _gaq.push(['_trackPageview', location.pathname + '/login']);
   	  };
   	  $(form_selector).ajaxForm(options);
@@ -556,7 +559,10 @@ $(document).ready(function(){
             $("#login-box").dialog("open");
 
             // record a hit on the login box in analytics
-            _gaq.push(['_trackPageview', location.pathname + '/login']);
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-24232514-1']);
+            _gaq.push(['_gat._anonymizeIp']);
+            _gaq.push(['_trackPageview', location.pathname + window.location.search + '/login']);
 
           } else {
             window.location = response.redirect;

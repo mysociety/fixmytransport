@@ -81,4 +81,5 @@ rake db:migrate #--trace
 # redeploy any cached assets
 rake cached_assets:minify
 rake cached_assets:regenerate
-
+# reload the guides, in case they have changed
+rake guides:add_static_guides

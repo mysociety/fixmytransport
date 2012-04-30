@@ -4,6 +4,7 @@ class OperatorsController < ApplicationController
   before_filter :long_cache
   before_filter :find_operator, :except => [:index]
   before_filter :setup_shared_title, :except => [:index]
+  before_filter :setup_issues_feed, :only => [:show, :issues]
 
 
   def index
@@ -46,6 +47,12 @@ class OperatorsController < ApplicationController
     end
   end
 
+  def setup_issues_feed
+    @issues_feed_params = params.clone
+    @issues_feed_params[:format] = 'atom'
+    @issues_feed_params[:action] = 'issues'
+  end
+
   def show
     @current_tab = :issues
     setup_paginated_issues
@@ -73,9 +80,18 @@ class OperatorsController < ApplicationController
   #       reported to another organisation (e.g., a PTE) then that route won't show here.
 
   def issues
-    show
-    @title = t('route_operators.issues.title', :operator => @operator.name)
-    render :show
+    respond_to do |format|
+      format.html do
+        show
+        @title = t('route_operators.issues.title', :operator => @operator.name)
+        render :show
+      end
+      format.atom do
+        @title = t('route_operators.issues.feed_title', :operator => @operator.name)
+        @issues = Problem.find_recent_issues false, :single_operator => @operator
+        render :template => 'shared/issues.atom.builder', :layout => false
+      end
+    end
   end
 
   def routes

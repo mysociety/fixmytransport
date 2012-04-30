@@ -1,0 +1,19 @@
+<article class="guide">
+  <header>
+     <h1>Fixing Public Transport Problems</h1>
+  </header>
+
+  <section>
+    <p>These are a series of "how-to" style guides to help you
+    to get common public transport problems fixed.</p>
+  </section>
+
+  <section class="guide-index">
+    <ul class="guide-index-list">
+      <%- @guides.each do |g| -%>
+        <li class="deselected-guide"><%= link_to g.title, :controller => "static", :action => "show_guide", :guide => g.friendly_id %></li>
+      <%- end -%>
+    </ul>
+  </section>
+
+</article>

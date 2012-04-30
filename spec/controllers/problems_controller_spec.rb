@@ -123,7 +123,7 @@ describe ProblemsController do
       Problem.should_receive(:visible).and_return(@visible_problems)
       @visible_problems.stub!(:find).with('22').and_return(@mock_problem)
     end
-    
+
     def make_request(params=@default_params)
       get :show, params
     end
@@ -133,7 +133,7 @@ describe ProblemsController do
       make_request()
     end
 
-    it "should update a problem that hasn't been seen by its reporter to record that it now has" do 
+    it "should update a problem that hasn't been seen by its reporter to record that it now has" do
       mock_user = mock_model(User)
       @controller.stub!(:current_user).and_return(mock_user)
       mock_user.should_receive(:mark_seen).with(@mock_problem)
@@ -283,9 +283,9 @@ describe ProblemsController do
       end
 
       it 'should set the map params from the routes' do
-        @controller.should_receive(:map_params_from_location).with([@mock_route, @mock_route], 
+        @controller.should_receive(:map_params_from_location).with([@mock_route, @mock_route],
                                                                    find_other_locations=false,
-                                                                   MAP_HEIGHT, 
+                                                                   MAP_HEIGHT,
                                                                    MAP_WIDTH)
         make_request(:route_number => 'C10', :area => 'London')
       end
@@ -375,11 +375,11 @@ describe ProblemsController do
           response.should render_template('find_stop')
         end
 
-        it 'should set a flag indicating that the page should not try to geolocate on load' do 
+        it 'should set a flag indicating that the page should not try to geolocate on load' do
           assigns[:geolocate_on_load].should == false
         end
-        
-        it 'should set a flag indicating the geolocation has failed' do 
+
+        it 'should set a flag indicating the geolocation has failed' do
           assigns[:geolocation_failed].should == true
         end
 
@@ -1540,6 +1540,37 @@ describe ProblemsController do
                                                                     BROWSE_MAP_WIDTH,
                                                                     { :mode => :browse })
         make_request()
+        assigns[:locations].should == []
+      end
+
+    end
+
+    describe 'when supplied with a lat and lon' do
+
+      before do
+        @mock_stop = mock_model(Stop, :locality => @mock_locality,
+                                      :name =>"London Euston rail station",
+                                      :lat => 0.01,
+                                      :lon => 51.1)
+        Stop.stub!(:find_nearest).and_return(@mock_stop)
+      end
+
+      it 'should render the browse template' do
+        make_request({:lon => '0.01', :lat => '51.1'})
+        response.should render_template('problems/browse_area')
+      end
+
+      it 'should centre the map on the nearest stop' do
+        @controller.should_receive(:map_params_from_location).with([@mock_stop],
+                                                                    find_other_locations=true,
+                                                                    BROWSE_MAP_HEIGHT,
+                                                                    BROWSE_MAP_WIDTH,
+                                                                    { :mode => :browse })
+        make_request({:lon => '0.01', :lat => '51.1'})
+      end
+
+      it 'should not present the nearest stop as the location being displayed' do
+        make_request({:lon => '0.01', :lat => '51.1'})
         assigns[:locations].should == []
       end
 

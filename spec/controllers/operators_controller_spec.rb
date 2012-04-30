@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'digest'
+require 'nokogiri'
 
 describe OperatorsController do
 
@@ -172,6 +173,37 @@ describe OperatorsController do
         assigns[:banner_text].should include "is not responsible for any stations or terminals"
       end
 
+    end
+
+  end
+
+end
+  # FIXME: integrate_views is here to force views to be rendered,
+  # solely so that we can check that valid XML is generated when the
+  # Atom feed is requested.  Really this should be done in functional
+  # test, but currently the project is lacking those.
+
+  integrate_views
+
+  describe 'GET #issues [atom]' do
+
+    def make_request(params={})
+      get :issues, params
+    end
+
+    it 'should ask for all issues' do
+      Operator.should_receive(:find).with('11').and_return(@mock_operator)
+      Problem.should_receive(:find_recent_issues).with(false, {:single_operator => @mock_operator})
+      make_request(:id => "11", :format => "atom")
+      assigns[:issues].length.should == 0
+    end
+
+    it 'should return valid XML' do
+      Operator.should_receive(:find).with('11').and_return(@mock_operator)
+      make_request(:id => "11", :format => "atom")
+      Nokogiri::XML(response.body) { |config|
+        config.options = Nokogiri::XML::ParseOptions::STRICT
+      }
     end
 
   end

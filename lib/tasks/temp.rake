@@ -220,4 +220,73 @@ namespace :temp do
     end
   end
 
+  desc 'Add example problems to each guide'
+  task :add_guide_examples => :environment do
+    { "accessibility" =>
+      ["make-all-buses-wheelchair-accessible",
+       "make-wheelchair-users-lives-easier",
+       "make-this-bus-stop-more-accessible-f",
+       "make-preston-park-train-station-acce",
+       "improve-disabled-access-to-mile-end"],
+
+      "bus_stop_fixed" =>
+      ["fix-the-rubbish-bus-shelter-on-skirsa-st-cadder-gl",
+       "add-a-bus-stop-on-woodhouse-lane-in",
+       "help-me-get-the-bus-stop-replaced-on-manchester-ro",
+       "replace-my-bus-shelter-that-was-destroyed-by-a-car",
+       "erect-a-bus-shelter-at-the-bottom-en",
+       "put-up-a-bus-shelter-at-harold-wood",
+       "fix-hillside-road-bus-stop-opposite",
+       "make-this-bus-stop-more-accessible-f"],
+
+      "rude_staff" =>
+      ["please-help-me-persuade-tfl-to-preve",
+       "stop-rude-and-dangerous-drivers",
+       "have-friendlier-and-fewer-ticket-che",
+       "fix-this-rude-bus-driver--6",
+       "improve-their-customer-service"],
+
+      "discontinued_bus" =>
+      ["give-people-living-in-claverham-and",
+       "improve-termination-stop-locations-f",
+       "reinstate-the-twice-an-hour-number-3",
+       "restore-369-links",
+       "reinstate-the-full-73-bus-route-to-s",
+       "reinstate-rheola-and-pentreclwydau-t",
+       "bring-back-the-17a-bus-to-derby-road"],
+
+      "delayed_bus" =>
+      ["persuade-national-express-to-add-mor",
+       "give-people-living-in-claverham-and",
+       "provide-adequate-seating-for-the-bus-stop-on-welli",
+       "make-the-bus-come-on-time",
+       "fix-this-636-bus-lateearlyfull--2",
+       "fix-this-late--6",
+       "first-morning-350-scunthorpe-to-hull"],
+
+      "overcrowding" =>
+      ["add-extra-carriages-onto-the-last-tr",
+       "fix-the-overcrowding-on-the-severn-b",
+       "make-commuter-trains-three-carriages",
+       "put-more-carriages-on-the-barnstaple"]
+
+    }.each do |partial_name, slugs|
+      g = Guide.find_by_partial_name partial_name
+      slugs.each do |slug|
+        campaign = Campaign.find_by_cached_slug(slug)
+        if campaign
+          if g.campaigns.include? campaign
+            puts "The campaign #{slug} was already there - not adding..."
+          else
+            puts "It wasn't there already - adding #{slug}..."
+            g.campaigns << campaign
+            g.save
+          end
+        else
+          puts "Ignoring missing campaign: #{slug}"
+        end
+      end
+    end
+  end
+
 end
