@@ -1,6 +1,9 @@
-Rake::Task["doc:app"].clear
-Rake::Task["doc/app"].clear
-Rake::Task["doc/app/index.html"].clear
+
+if task_defined?('doc:app')
+  Rake::Task["doc:app"].clear
+  Rake::Task["doc/app"].clear
+  Rake::Task["doc/app/index.html"].clear
+end
 
 namespace :doc do
     Rake::RDocTask.new('app') do |rdoc|
