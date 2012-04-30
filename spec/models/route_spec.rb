@@ -266,7 +266,8 @@ describe Route do
 
     it 'should raise an exception if a route to be merged has campaigns associated with it' do
       Route.stub!(:find_existing).and_return([routes(:victoria_to_haywards_heath)])
-      route = Route.new(:campaigns => [mock_model(Campaign)], :transport_mode_id => 5, :number => '43')
+      route = Route.new(:transport_mode_id => 5, :number => '43')
+      route.stub!(:campaigns).and_return([mock_model(Campaign)])
       lambda{ Route.add!(route) }.should raise_error(/Can't merge route with campaigns/)
     end
 

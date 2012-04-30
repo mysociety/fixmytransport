@@ -181,7 +181,7 @@ class LocationsController < ApplicationController
   end
 
   def campaign_feed(source)
-    @issues = source.related_issues
+    @campaigns = source.related_issues
     render :template => 'shared/issues.atom.builder', :layout => false
   end
 

@@ -177,7 +177,6 @@ describe OperatorsController do
 
   end
 
-end
   # FIXME: integrate_views is here to force views to be rendered,
   # solely so that we can check that valid XML is generated when the
   # Atom feed is requested.  Really this should be done in functional

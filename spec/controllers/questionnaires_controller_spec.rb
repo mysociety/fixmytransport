@@ -144,7 +144,7 @@ describe QuestionnairesController do
       @user = mock_model(User, :answered_ever_reported? => false,
                                :update_attribute => nil)
       @stop = mock_model(Stop, :points => ['my points'],
-                               :campaigns => mock('campaigns', :visible => []),
+                               :visible_campaigns => [],
                                :name => 'Test Stop',
                                :transport_mode_names => ['Bus/Coach'])
       @comment = mock_model(Comment, :status= => nil,
@@ -300,7 +300,7 @@ describe QuestionnairesController do
         describe 'if there are existing campaigns at the location' do
 
           before do
-            @stop.campaigns.stub!(:visible).and_return([mock_model(Campaign)])
+            @stop.stub!(:visible_campaigns).and_return([mock_model(Campaign)])
           end
 
           it 'should add a large notice suggesting the user looks for existing campaigns on their issue' do
@@ -322,7 +322,7 @@ describe QuestionnairesController do
         describe 'if there are no existing campaigns at the location' do
 
           before do
-            @stop.campaigns.stub!(:visible).and_return([])
+            @stop.stub!(:visible_campaigns).and_return([])
           end
 
           it 'should add a large notice suggesting a campaign, linking to the new problem

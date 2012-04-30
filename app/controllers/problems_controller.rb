@@ -72,7 +72,7 @@ class ProblemsController < ApplicationController
 
       unless pager.total_entries
         # the pager didn't manage to guess the total count, do it manually
-        pager.total_entries = @location.campaigns.visible.count + @location.problems.visible.count
+        pager.total_entries = @location.visible_campaigns.size + @location.problems.visible.count
       end
     end
     if @issues.empty?

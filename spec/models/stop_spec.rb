@@ -123,9 +123,30 @@ describe Stop do
 
   end
 
-  describe 'when the lon/lat attributes have been changed' do 
-    
-    it 'should update the coords and the easting/northing' do 
+  describe 'when asked for campaigns' do
+
+    fixtures default_fixtures
+
+    it 'should return all campaigns linked to the location by persistent id' do
+      stops(:white_lion_n).campaigns.should == [campaigns(:white_lion_campaign),
+                                                campaigns(:hidden_white_lion_campaign)]
+    end
+
+  end
+
+  describe 'when asked for visible campaigns' do
+
+    fixtures default_fixtures
+
+    it 'should only return visible campaigns linked to the location by persistent id' do
+      stops(:white_lion_n).visible_campaigns.should == [campaigns(:white_lion_campaign)]
+    end
+
+  end
+
+  describe 'when the lon/lat attributes have been changed' do
+
+    it 'should update the coords and the easting/northing' do
       stop = Stop.new
       stop.should_receive(:coords=)
       stop.lat = 51.49526
@@ -134,7 +155,7 @@ describe Stop do
       stop.easting.should == 528901.0
       stop.northing.should == 179000.0
     end
-    
+
   end
 
   describe 'when finding by ATCO code' do
@@ -367,32 +388,32 @@ describe Stop do
   end
 
   describe 'when finding the nearest stop to a set of National Grid coordinates' do
-    
-    before do 
+
+    before do
       @easting = 444
       @northing = 333
-    end 
-  
+    end
+
     it 'should exclude an id passed in the exclude_id parameter from the search conditions' do
       Stop.should_receive(:find).with(:first, :order => anything(),
-                                              :conditions => ["id != ?", 55]) 
+                                              :conditions => ["id != ?", 55])
       Stop.find_nearest(@easting, @northing, exclude_id=55)
     end
-    
-    it 'should include any extra conditions passed in the search conditions' do 
-      Stop.should_receive(:find).with(:first, :order => anything(), 
+
+    it 'should include any extra conditions passed in the search conditions' do
+      Stop.should_receive(:find).with(:first, :order => anything(),
                                               :conditions => ['lat is not null'])
       Stop.find_nearest(@easting, @northing, exclude_id=nil, extra_conditions="lat is not null")
     end
-  
-    it 'should combine exclude_id and extra conditions if both are passed' do 
+
+    it 'should combine exclude_id and extra conditions if both are passed' do
       Stop.should_receive(:find).with(:first, :order => anything(),
                                               :conditions => ['id != ? AND lat is not null', 55])
       Stop.find_nearest(@easting, @northing, exclude_id=55, extra_conditions="lat is not null")
     end
-  
+
   end
-  
+
   describe 'when asked for a PTE' do
 
     it 'should return one if there is one that covers one of the relevant councils' do

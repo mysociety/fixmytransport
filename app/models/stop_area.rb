@@ -45,7 +45,6 @@ class StopArea < ActiveRecord::Base
   has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships
   has_dag_links :link_class_name => 'StopAreaLink'
-  has_many :campaigns, :as => :location, :order => 'created_at desc'
   has_many :problems, :as => :location, :order => 'created_at desc'
   belongs_to :locality
   has_many :stop_area_operators, :dependent => :destroy

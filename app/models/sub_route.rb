@@ -1,7 +1,7 @@
 class SubRoute < ActiveRecord::Base
-  
+
   include FixMyTransport::Locations
-  
+
   has_many :route_sub_routes
   has_many :routes, :through => :route_sub_routes
   belongs_to :from_station, :class_name => 'StopArea',
@@ -11,7 +11,6 @@ class SubRoute < ActiveRecord::Base
                           :primary_key => :persistent_id,
                           :foreign_key => :to_station_persistent_id
   belongs_to :transport_mode
-  has_many :campaigns, :as => :location, :order => 'created_at desc'
   has_many :problems, :as => :location, :order => 'created_at desc'
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   before_create :set_lat_lon_and_coords
@@ -80,7 +79,7 @@ class SubRoute < ActiveRecord::Base
       self.route_sub_routes.create!(:route => route)
     end
   end
-  
+
   # store a rough center point as coords and lat/lon
   def set_lat_lon_and_coords
     lons = [from_station.lon, to_station.lon]
@@ -97,7 +96,7 @@ class SubRoute < ActiveRecord::Base
                                           AND transport_mode_id = ?',
                           from_station, to_station, transport_mode])
     return exists if exists
-    
+
     sub_route = new({:from_station => from_station,
                      :to_station => to_station,
                      :transport_mode => transport_mode})

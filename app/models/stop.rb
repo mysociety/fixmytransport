@@ -66,7 +66,6 @@ class Stop < ActiveRecord::Base
   has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
   validates_presence_of :common_name
-  has_many :campaigns, :as => :location, :order => 'created_at desc'
   has_many :problems, :as => :location, :order => 'created_at desc'
   has_many :route_segments_as_from_stop, :foreign_key => 'from_stop_id', :class_name => 'RouteSegment'
   has_many :route_segments_as_to_stop, :foreign_key => 'to_stop_id', :class_name => 'RouteSegment'

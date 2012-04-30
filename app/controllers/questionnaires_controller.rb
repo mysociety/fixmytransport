@@ -93,7 +93,7 @@ class QuestionnairesController < ApplicationController
       if params[:fixed] == 'no'
         if @questionnaire.subject.is_a?(Problem)
           location = @questionnaire.subject.location
-          if location.campaigns.visible.count > 0
+          if location.visible_campaigns.size > 0
             existing_problems_path = existing_problems_path(:location_id => location.id,
                                                             :location_type => location.class.to_s,
                                                             :source => 'questionnaire')

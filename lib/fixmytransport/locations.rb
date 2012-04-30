@@ -26,6 +26,26 @@ module FixMyTransport
 
   module InstanceMethods
 
+    def campaigns
+      @campaigns = get_campaigns() unless defined? @campaigns
+    end
+
+    def visible_campaigns
+      @visible_campaigns = get_campaigns(only_visible=true) unless defined? @visible_campaigns
+    end
+
+    def get_campaigns(only_visible=false)
+      conditions = [ "location_type = 'Stop'
+                     AND location_persistent_id = ?", self.persistent_id ]
+      if only_visible
+        Campaign.visible.find(:all, :conditions => conditions,
+                                    :order => 'created_at desc')
+      else
+        Campaign.find(:all, :conditions => conditions,
+                            :order => 'created_at desc')
+      end
+    end
+
     # can include issues at related locations
     def related_issues
       issues = Problem.find_recent_issues(nil, { :location => self })
