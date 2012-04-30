@@ -4,8 +4,10 @@ class AddDataGenerationColumnsToStopAreaMemberships < ActiveRecord::Migration
     add_column :stop_area_memberships, :generation_high, :integer
     remove_index :stop_area_memberships, :stop_area_id
     remove_index :stop_area_memberships, :stop_id
-    add_index :stop_area_memberships, [:stop_area_id, :generation_high, :generation_low]
-    add_index :stop_area_memberships, [:stop_id, :generation_high, :generation_low]
+    add_index :stop_area_memberships, [:stop_area_id, :generation_high, :generation_low],
+              :name => 'index_sam_on_stop_area_id_and_gens'
+    add_index :stop_area_memberships, [:stop_id, :generation_high, :generation_low],
+              :name => 'index_sam_on_stop_id_and_gens'
   end
 
   def self.down

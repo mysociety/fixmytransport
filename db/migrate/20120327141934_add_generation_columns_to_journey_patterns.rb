@@ -3,7 +3,8 @@ class AddGenerationColumnsToJourneyPatterns < ActiveRecord::Migration
     add_column :journey_patterns, :generation_low, :integer
     add_column :journey_patterns, :generation_high, :integer
     add_column :journey_patterns, :previous_id, :integer
-    add_index :journey_patterns, [:route_id, :generation_low, :generation_high]
+    add_index :journey_patterns, [:route_id, :generation_low, :generation_high],
+              :name => 'index_journey_patterns_on_route_id_and_gens'
   end
 
   def self.down

@@ -16,11 +16,14 @@ class AddDataGenerationColumnsToStopAreas < ActiveRecord::Migration
 
     execute("CREATE INDEX index_stop_areas_on_code_lower_and_gens
             ON stop_areas (lower(code), generation_low, generation_high);")
-    add_index :stop_areas, [:locality_id, :generation_low, :generation_high]
+    add_index :stop_areas, [:locality_id, :generation_low, :generation_high],
+              :name => 'index_stop_areas_on_locality_id_and_gens'
     execute("CREATE INDEX index_stop_areas_on_name_lower_and_gens
             ON stop_areas (lower(name), generation_low, generation_high);")
-    add_index :stop_areas, [:primary_metaphone, :generation_low, :generation_high]
-    add_index :stop_areas, [:secondary_metaphone, :generation_low, :generation_high]
+    add_index :stop_areas, [:primary_metaphone, :generation_low, :generation_high],
+              :name => 'index_stop_areas_on_primary_metaphone_and_gens'
+    add_index :stop_areas, [:secondary_metaphone, :generation_low, :generation_high],
+              :name => 'index_stop_areas_on_secondary_metaphone_and_gens'
   end
 
   def self.down

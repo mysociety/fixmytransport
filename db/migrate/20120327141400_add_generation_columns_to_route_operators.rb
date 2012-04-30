@@ -7,8 +7,10 @@ class AddGenerationColumnsToRouteOperators < ActiveRecord::Migration
     remove_index :route_operators, :operator_id
     remove_index :route_operators, :route_id
 
-    add_index :route_operators, [:operator_id, :generation_low, :generation_high]
-    add_index :route_operators, [:route_id, :generation_low, :generation_high]
+    add_index :route_operators, [:operator_id, :generation_low, :generation_high],
+              :name => 'index_ro_on_operator_id_and_gens'
+    add_index :route_operators, [:route_id, :generation_low, :generation_high],
+              :name => 'index_ro_on_route_id_and_gens'
 
   end
 
