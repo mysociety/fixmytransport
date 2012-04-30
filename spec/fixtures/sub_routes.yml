@@ -1,3 +1,4 @@
-victoria_to_haywards_heath: 
+victoria_to_haywards_heath:
   from_station: victoria
   to_station: haywards_heath
+  persistent_id: 1
