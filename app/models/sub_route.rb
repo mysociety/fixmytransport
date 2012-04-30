@@ -4,8 +4,12 @@ class SubRoute < ActiveRecord::Base
   
   has_many :route_sub_routes
   has_many :routes, :through => :route_sub_routes
-  belongs_to :from_station, :class_name => 'StopArea'
-  belongs_to :to_station, :class_name => 'StopArea'
+  belongs_to :from_station, :class_name => 'StopArea',
+                            :primary_key => :persistent_id,
+                            :foreign_key => :from_station_persistent_id
+  belongs_to :to_station, :class_name => 'StopArea',
+                          :primary_key => :persistent_id,
+                          :foreign_key => :to_station_persistent_id
   belongs_to :transport_mode
   has_many :campaigns, :as => :location, :order => 'created_at desc'
   has_many :problems, :as => :location, :order => 'created_at desc'
