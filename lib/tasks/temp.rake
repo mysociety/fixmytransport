@@ -139,11 +139,7 @@ namespace :temp do
     FixMyTransport::DataGenerations.models_existing_in_data_generations.each do |model_class|
       puts model_class
       table_name = model_class.to_s.tableize
-      next if [Route, JourneyPattern, RouteSegment, RouteOperator, OperatorContact].include?(model_class)
-      model_class.connection.execute("CREATE SEQUENCE #{table_name}_persistent_id_seq")
-      model_class.connection.execute("ALTER TABLE #{table_name}
-                                      ALTER COLUMN persistent_id
-                                      SET DEFAULT NEXTVAL('#{table_name}_persistent_id_seq')")
+      next if [JourneyPattern, RouteSegment].include?(model_class)
       model_class.connection.execute("UPDATE #{table_name}
                                       SET persistent_id = NEXTVAL('#{table_name}_persistent_id_seq')
                                       WHERE previous_id IS NULL")
