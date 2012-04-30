@@ -257,6 +257,53 @@ module SharedBehaviours
 
       end
 
+      describe 'when saving' do
+
+        it 'should set a persistent id if one is not set' do
+          @current_generation_instance = create_model(CURRENT_GENERATION,
+                                                      CURRENT_GENERATION,
+                                                      @model_type,
+                                                      @default_attrs)
+          @current_generation_instance.persistent_id.should_not be_nil
+        end
+
+        after do
+          @current_generation_instance.destroy if @current_generation_instance
+        end
+
+      end
+
+      describe 'when validating' do
+
+        it "should not be valid if its persistent id exists in the current data generation" do
+          @current_generation_instance = create_model(CURRENT_GENERATION,
+                                                      CURRENT_GENERATION,
+                                                      @model_type,
+                                                      @default_attrs)
+          instance = @model_type.new(@default_attrs)
+          instance.persistent_id = @current_generation_instance.persistent_id
+          instance.valid?.should == false
+          instance.errors.full_messages.should == ['Persistent ID already exists in data generation']
+        end
+
+        it 'should be valid if its persistent id exists in a previous data generation' do
+          @previous_generation_instance = create_model(PREVIOUS_GENERATION,
+                                                      PREVIOUS_GENERATION,
+                                                      @model_type,
+                                                      @default_attrs)
+          instance = @model_type.new(@default_attrs)
+          instance.persistent_id = @previous_generation_instance.persistent_id
+          instance.valid?
+          instance.valid?.should == true
+        end
+
+        after do
+          @current_generation_instance.destroy if @current_generation_instance
+          @previous_generation_instance.destroy if @previous_generation_instance
+        end
+
+      end
+
     end
 
     shared_examples_for "a model that exists in data generations and has slugs" do
