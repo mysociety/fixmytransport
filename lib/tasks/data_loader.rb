@@ -29,6 +29,7 @@ module DataLoader
     unless (ENV['GENERATION'] && ENV['GENERATION'].to_i > 0)
       usage_message "usage: This task requires GENERATION=generation"
     end
+    return ENV['GENERATION'].to_i
   end
 
   def check_new_generation

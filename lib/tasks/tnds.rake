@@ -370,6 +370,35 @@ namespace :tnds do
       end
     end
 
+    desc 'Deletes all route associated data for a particular generation, defined as
+          GENERATION=generation.'
+    task :clear_routes => :environment do
+      generation = check_for_generation()
+      RouteSource.connection.execute("DELETE FROM route_sources
+                                      WHERE route_id in
+                                      (SELECT id
+                                       FROM routes
+                                       WHERE generation_low = #{generation})")
+      RouteLocality.connection.execute("DELETE FROM route_localities
+                                        WHERE route_id in
+                                        (SELECT id
+                                         FROM routes
+                                         WHERE generation_low = #{generation})")
+      Route.connection.execute("DELETE FROM routes
+                                WHERE generation_low = #{generation}")
+      RouteSegment.connection.execute("DELETE FROM route_segments
+                                       WHERE generation_low = #{generation}")
+
+      RouteOperator.connection.execute("DELETE FROM route_operators
+                                        WHERE generation_low = #{generation}")
+      JourneyPattern.connection.execute("DELETE FROM journey_patterns
+                                         WHERE generation_low = #{generation}")
+      Route.connection.execute("DELETE FROM slugs where sluggable_type = 'Route'
+                                AND generation_low = #{generation}")
+
+    end
+
+
   end
 
 end
