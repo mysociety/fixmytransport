@@ -1,11 +1,8 @@
 en:
-  models:
-    stop_area:
-      inactive: inactive
   activerecord:
     errors:
       models:
-        stop_area:
+        stop_area_membership:
           attributes:
             persistent_id:
               taken: ID already exists in data generation

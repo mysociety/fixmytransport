@@ -67,13 +67,23 @@ module FixMyTransport
           default_scope :conditions => [ ["#{quoted_table_name}.generation_low <= ?",
                                           "AND #{quoted_table_name}.generation_high >= ?"].join(" "),
                                          CURRENT_GENERATION, CURRENT_GENERATION ]
-          # This callback sets the data generations columns to the current generation
-          # if not value has been set on them
+          # These callbacks set the data generation and persistent columns to the current generation
+          # and a new persistent_id if no value has been set on them
+          before_validation :set_persistent_id
           before_create :set_generations
+          validate :persistent_id_unique_in_generation
 
           def set_generations
             self.generation_low = CURRENT_GENERATION if self.generation_low.nil?
             self.generation_high = CURRENT_GENERATION if self.generation_high.nil?
+          end
+
+          def set_persistent_id
+            self.persistent_id = self.class.count_by_sql("SELECT NEXTVAL('#{self.class.table_name}_persistent_id_seq')") if self.persistent_id.nil?
+          end
+
+          def persistent_id_unique_in_generation
+            self.field_unique_in_generation(:persistent_id)
           end
 
         end

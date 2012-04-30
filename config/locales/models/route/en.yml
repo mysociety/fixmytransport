@@ -6,11 +6,12 @@ en:
     errors:
       models:
         route:
-          attributes: 
+          attributes:
             number:
               blank: Please enter the route number
             region_id:
               blank: Please enter the region
-            transport_mode_id: 
+            transport_mode_id:
               blank: Please enter the mode of transport
-  
+            persistent_id:
+              taken: ID already exists in data generation

@@ -3,10 +3,10 @@ en:
     errors:
       models:
         operator:
-          attributes: 
+          attributes:
             name:
               blank: "Please enter the operator name"
             email:
               invalid: "Please check the format of the email address"
-  
-            
+            persistent_id:
+              taken: "ID already exists in data generation"

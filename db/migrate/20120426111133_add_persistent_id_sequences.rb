@@ -21,18 +21,12 @@ class AddPersistentIdSequences < ActiveRecord::Migration
     data_generation_models.each do |model_class|
       table_name = model_class.to_s.tableize
       model_class.connection.execute("CREATE SEQUENCE #{table_name}_persistent_id_seq")
-      model_class.connection.execute("ALTER TABLE #{table_name}
-                                      ALTER COLUMN persistent_id
-                                      SET DEFAULT NEXTVAL('#{table_name}_persistent_id_seq')")
     end
   end
 
   def self.down
     data_generation_models.each do |model_class|
       table_name = model_class.to_s.tableize
-      model_class.connection.execute("ALTER TABLE #{table_name}
-                                      ALTER COLUMN persistent_id
-                                      SET DEFAULT NULL")
       model_class.connection.execute("DROP SEQUENCE #{table_name}_persistent_id_seq")
     end
   end
