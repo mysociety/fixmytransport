@@ -399,6 +399,20 @@ namespace :tnds do
     end
 
 
+    desc 'Promote train routes (which are not included in TNDS) to the current generation.
+          Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1'
+    task :train_routes => :environment do
+      verbose = check_verbose
+      dryrun = check_dryrun
+      Route.in_any_generation do
+        Route.find_each(:conditions => ["transport_mode_id = ?", TransportMode.find_by_name('Train')]) do |route|
+          puts "Updating #{route.name} to #{CURRENT_GENERATION}" if verbose
+          if !dryrun
+            route.update_attribute('generation_high', CURRENT_GENERATION)
+          end
+        end
+      end
+    end
   end
 
 end
