@@ -79,13 +79,17 @@ module FixMyTransport
           end
 
           def set_persistent_id
-            self.persistent_id = self.class.count_by_sql("SELECT NEXTVAL('#{self.class.table_name}_persistent_id_seq')") if self.persistent_id.nil?
+            self.persistent_id = self.class.next_persistent_id if self.persistent_id.nil?
           end
 
           def persistent_id_unique_in_generation
             self.field_unique_in_generation(:persistent_id)
           end
 
+        end
+
+        def next_persistent_id
+          count_by_sql("SELECT NEXTVAL('#{table_name}_persistent_id_seq')")
         end
 
         # Reorder any slugs that existed in the previous generation, but have been

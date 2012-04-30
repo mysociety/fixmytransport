@@ -37,10 +37,11 @@ victoria_station_root:
   administrative_area_code: "110"
   modification: rev
   locality: london
-  lon: -0.14455 
+  lon: -0.14455
   lat: 51.4952
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= StopArea.next_persistent_id %>
 victoria_station_leaf:
   status: act
   northing: "179000"
@@ -55,7 +56,8 @@ victoria_station_leaf:
   locality: london
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-south_moor_and_arch: 
+  persistent_id: <%= StopArea.next_persistent_id %>
+south_moor_and_arch:
   easting: "418799"
   status: act
   northing: "552426"
@@ -68,7 +70,8 @@ south_moor_and_arch:
   modification: rev
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-baker_st_station: 
+  persistent_id: <%= StopArea.next_persistent_id %>
+baker_st_station:
   lon: "-0.157093118648171"
   name: Baker Street Underground Station
   locality_id: "19233"
@@ -86,6 +89,7 @@ baker_st_station:
   grid_type: U
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= StopArea.next_persistent_id %>
 finchley_road_station:
   lon: "-0.179844589111084"
   name: Finchley Road Underground Station
@@ -104,6 +108,7 @@ finchley_road_station:
   grid_type: U
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= StopArea.next_persistent_id %>
 clapham_junction:
   lon: "-0.17029289004327"
   name: Clapham Junction Rail Station
@@ -123,6 +128,7 @@ clapham_junction:
   grid_type: U
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= StopArea.next_persistent_id %>
 east_croydon_station:
   lon: "-0.0927791545283177"
   name: East Croydon Rail Station
@@ -141,6 +147,7 @@ east_croydon_station:
   grid_type: U
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= StopArea.next_persistent_id %>
 gatwick_airport_station:
   lon: "-0.161041009511314"
   name: Gatwick Airport Rail Station
@@ -159,6 +166,7 @@ gatwick_airport_station:
   grid_type: U
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= StopArea.next_persistent_id %>
 haywards_heath_station:
   lon: "-0.10530812512724"
   name: Haywards Heath Rail Station
@@ -177,6 +185,7 @@ haywards_heath_station:
   grid_type: U
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= StopArea.next_persistent_id %>
 victoria_station_old:
   status: act
   northing: "179000"
@@ -189,7 +198,8 @@ victoria_station_old:
   administrative_area_code: "110"
   modification: rev
   locality: london
-  lon: -0.14455 
+  lon: -0.14455
   lat: 51.4952
   generation_low: <%= PREVIOUS_GENERATION %>
   generation_high: <%= PREVIOUS_GENERATION %>
+  persistent_id: <%= StopArea.next_persistent_id %>

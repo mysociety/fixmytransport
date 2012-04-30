@@ -5,7 +5,6 @@ class Campaign < ActiveRecord::Base
   belongs_to :initiator, :class_name => 'User'
   has_many :campaign_supporters
   has_many :supporters, :through => :campaign_supporters, :class_name => 'User', :conditions => ['campaign_supporters.confirmed_at is not null']
-  belongs_to :location, :polymorphic => true
   belongs_to :transport_mode
   has_many :assignments
   has_one :problem
@@ -55,6 +54,15 @@ class Campaign < ActiveRecord::Base
   named_scope :visible, :conditions => ["campaigns.status_code in (?)", Campaign.visible_status_codes]
 
   # instance methods
+
+  def location=(new_location)
+    self.location_type = new_location.class.base_class.name.to_s
+    self.location_persistent_id = new_location.persistent_id
+  end
+
+  def location
+    self.location_type.constantize.find_by_persistent_id(self.location_persistent_id)
+  end
 
   def confirm
     return unless self.status == :new

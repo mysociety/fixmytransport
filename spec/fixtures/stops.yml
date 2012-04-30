@@ -67,7 +67,7 @@ victoria_station_one:
   coords: 0101000020346C0000000000000824204100000000C0D90541
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 1
+  persistent_id: <%= Stop.next_persistent_id %>
 victoria_station_two:
   status: ACT
   lat: "51.49526"
@@ -96,7 +96,7 @@ victoria_station_two:
   coords: 0101000020346C0000000000000A24204100000000C0D90541
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 2
+  persistent_id: <%= Stop.next_persistent_id %>
 bristol_16:
   status: ACT
   lat: "51.45919"
@@ -127,7 +127,7 @@ bristol_16:
   coords: 0101000020346C00000000000070E8154100000000982E0541
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 3
+  persistent_id: <%= Stop.next_persistent_id %>
 dursley_road:
   status: ACT
   lon: "-2.67666"
@@ -157,7 +157,7 @@ dursley_road:
   coords: 0101000020346C0000000000005C8D154100000000C0850541
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 4
+  persistent_id: <%= Stop.next_persistent_id %>
 clapham_junction:
   status: ACT
   lon: "-0.17028"
@@ -187,7 +187,7 @@ clapham_junction:
   coords: 0101000020346C000000000000C216204100000000606C0541
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 5
+  persistent_id: <%= Stop.next_persistent_id %>
 croydon_station:
   status: ACT
   lon: "-0.09278"
@@ -217,7 +217,7 @@ croydon_station:
   coords: 0101000020346C000000000000D242204100000000503C0441
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 6
+  persistent_id: <%= Stop.next_persistent_id %>
 gatwick_airport_station:
   status: ACT
   lon: "-0.16104"
@@ -247,7 +247,7 @@ gatwick_airport_station:
   coords: 0101000020346C0000000000007822204100000000A03F0141
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 7
+  persistent_id: <%= Stop.next_persistent_id %>
 haywards_heath_station_interchange:
   status: ACT
   lon: "-0.10531"
@@ -277,7 +277,7 @@ haywards_heath_station_interchange:
   coords: 0101000020346C0000000000004C44204100000000706AFE40
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 8
+  persistent_id: <%= Stop.next_persistent_id %>
 arch_ne:
   status: ACT
   lon: "-1.70864"
@@ -307,7 +307,7 @@ arch_ne:
   coords: 0101000020346C000000000000BC8F194100000000D4DB2041
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 9
+  persistent_id: <%= Stop.next_persistent_id %>
 arch_sw:
   status: ACT
   lon: "-1.70914"
@@ -337,7 +337,7 @@ arch_sw:
   coords: 0101000020346C0000000000003C8F19410000000096DB2041
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 10
+  persistent_id: <%= Stop.next_persistent_id %>
 bethany_terrace:
   status: ACT
   lon: "-1.74365"
@@ -367,7 +367,7 @@ bethany_terrace:
   coords: 0101000020346C000000000000A46C19410000000094D92041
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 11
+  persistent_id: <%= Stop.next_persistent_id %>
 bus_station:
   status: ACT
   lon: "-1.69864"
@@ -397,7 +397,7 @@ bus_station:
   coords: 0101000020346C000000000000BC991941000000005CDE2041
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 12
+  persistent_id: <%= Stop.next_persistent_id %>
 wybourne_lane:
   status: ACT
   lon: "-0.78016"
@@ -427,7 +427,7 @@ wybourne_lane:
   coords: 0101000020346C000000000000309E1D4100000000F0340241
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 13
+  persistent_id: <%= Stop.next_persistent_id %>
 white_lion_n:
   status: ACT
   lon: "-0.74342"
@@ -457,7 +457,7 @@ white_lion_n:
   coords: 0101000020346C00000000000018C61D4100000000F0490241
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 14
+  persistent_id: <%= Stop.next_persistent_id %>
 white_lion_s:
   status: ACT
   lon: "-0.74331"
@@ -487,7 +487,7 @@ white_lion_s:
   coords: 0101000020346C00000000000038C61D4100000000E0490241
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 15
+  persistent_id: <%= Stop.next_persistent_id %>
 tennis_street:
   status: ACT
   lon: "-0.09028"
@@ -518,7 +518,7 @@ tennis_street:
   easting: "532651"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 16
+  persistent_id: <%= Stop.next_persistent_id %>
 tennis_court_inn:
   status: ACT
   lon: "-2.48769"
@@ -548,7 +548,7 @@ tennis_court_inn:
   easting: "366215"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 17
+  persistent_id: <%= Stop.next_persistent_id %>
 borough_station:
   status: ACT
   lon: "-0.09409"
@@ -578,7 +578,7 @@ borough_station:
   easting: "532387"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 18
+  persistent_id: <%= Stop.next_persistent_id %>
 staple_street:
   status: ACT
   lon: "-0.0876"
@@ -608,7 +608,7 @@ staple_street:
   easting: "532840"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 19
+  persistent_id: <%= Stop.next_persistent_id %>
 victoria_stop_s:
   status: ACT
   lon: "-0.14351"
@@ -640,7 +640,7 @@ victoria_stop_s:
   easting: "528970"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 20
+  persistent_id: <%= Stop.next_persistent_id %>
 baker_st_station_plat:
   lon: "-0.15683"
   common_name: Baker Street Underground Station
@@ -675,7 +675,7 @@ baker_st_station_plat:
   naptan_code: ""
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 21
+  persistent_id: <%= Stop.next_persistent_id %>
 finchley_road_station_plat:
   lon: "-0.18025"
   common_name: Finchley Road Underground Station
@@ -710,7 +710,7 @@ finchley_road_station_plat:
   naptan_code: ""
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: 22
+  persistent_id: <%= Stop.next_persistent_id %>
 victoria_station_previous_generation:
   status: ACT
   lat: "51.49526"
@@ -740,4 +740,4 @@ victoria_station_previous_generation:
   coords: 0101000020346C0000000000000824204100000000C0D90541
   generation_low: <%= PREVIOUS_GENERATION %>
   generation_high: <%= PREVIOUS_GENERATION %>
-  persistent_id: 23
+  persistent_id: <%= Stop.next_persistent_id %>

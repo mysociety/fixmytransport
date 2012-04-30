@@ -128,8 +128,16 @@ describe Stop do
     fixtures default_fixtures
 
     it 'should return all campaigns linked to the location by persistent id' do
-      stops(:white_lion_n).campaigns.should == [campaigns(:white_lion_campaign),
-                                                campaigns(:hidden_white_lion_campaign)]
+      @campaign = Campaign.new(:title => 'A test title')
+      @campaign.status = :confirmed
+      @campaign.location = stops(:white_lion_n)
+      @campaign.save!
+
+      stops(:white_lion_n).campaigns.should == [@campaign]
+    end
+
+    after do
+      @campaign.destroy
     end
 
   end
@@ -139,7 +147,15 @@ describe Stop do
     fixtures default_fixtures
 
     it 'should only return visible campaigns linked to the location by persistent id' do
-      stops(:white_lion_n).visible_campaigns.should == [campaigns(:white_lion_campaign)]
+      @campaign = Campaign.new(:title => 'A test title')
+      @campaign.status = :hidden
+      @campaign.location = stops(:white_lion_n)
+      @campaign.save!
+      stops(:white_lion_n).visible_campaigns.should == []
+    end
+
+    after do
+      @campaign.destroy
     end
 
   end
