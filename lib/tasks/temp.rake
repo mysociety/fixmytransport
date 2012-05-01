@@ -202,6 +202,24 @@ namespace :temp do
     end
   end
 
+  desc 'Populate operator_contacts location_persistent_id field'
+  task :populate_operator_contacts_location_persistent_id => :environment do
+    OperatorContact.find_each(:conditions => ['location_persistent_id is null and location_type is not null']) do |contact|
+      location = nil
+      location_type = contact.location_type.constantize
+      location_type.in_any_generation do
+        location = location_type.find(:first, :conditions => ['id = ?', contact.location_id])
+      end
+      if ! location
+        puts "No #{location_type} with id #{contact.location_id}"
+        next
+      end
+      contact.location_persistent_id = location.persistent_id
+      puts "Setting location_persistent_id to #{contact.location_persistent_id} for #{contact.id}, location #{location.id}"
+      contact.save!
+    end
+  end
+
   desc 'Populate campaign location_persistent_id field'
   task :populate_campaign_persistent_id => :environment do
     Campaign.find_each(:conditions => ['location_persistent_id is null']) do |campaign|
