@@ -32,8 +32,8 @@ class AddGenerationColumnToSlugs < ActiveRecord::Migration
     remove_index :slugs, "sluggable_id_and_generations"
     add_index :slugs, :sluggable_id, :name => 'index_slugs_on_sluggable_id'
     remove_index :slugs, "n_s_s_s_and_g"
-     add_index :slugs, [:name, 
-                        :sluggable_type, 
+     add_index :slugs, [:name,
+                        :sluggable_type,
                         :sequence, :scope], :name => "index_slugs_on_n_s_s_and_s"
     remove_index :slugs, "s_s_and_g"
     add_index :slugs, [:sluggable_id,

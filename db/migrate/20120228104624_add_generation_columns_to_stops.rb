@@ -44,13 +44,13 @@ class AddGenerationColumnsToStops < ActiveRecord::Migration
     remove_index :stops, :name => 'index_stops_on_crs_code_and_gens'
     remove_index :stops, :name => 'index_stops_on_locality_id_stop_type_and_gens'
     remove_index :stops, :name => 'index_stops_on_locality_id_and_gens'
-    remove_index :stops, :name => 'index_stops_on_metro_stop_and_gens'  
+    remove_index :stops, :name => 'index_stops_on_metro_stop_and_gens'
     remove_index :stops, :name => 'index_stops_on_naptan_code_and_gens'
     remove_index :stops, :name => 'index_stops_on_other_code_lower_and_gens'
     remove_index :stops, :name => 'index_stops_on_stop_type_and_gens'
-    remove_index :stops, :name => 'index_stops_on_street_lower_and_gens'  
-    
-    
+    remove_index :stops, :name => 'index_stops_on_street_lower_and_gens'
+
+
     execute "CREATE INDEX index_stops_on_atco_code_lower ON stops ((lower(atco_code)));"
     add_index :stops, :cached_slug
     execute "CREATE INDEX index_stops_on_common_name_lower ON stops ((lower(common_name)));"

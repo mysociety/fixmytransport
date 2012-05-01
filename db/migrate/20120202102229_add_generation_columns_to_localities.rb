@@ -37,7 +37,7 @@ class AddGenerationColumnsToLocalities < ActiveRecord::Migration
     add_index :localities, :admin_area_id
     add_index :localities, :cached_slug
     add_index :localities, :primary_metaphone
-    add_index :localities, :secondary_metaphone    
+    add_index :localities, :secondary_metaphone
     execute "CREATE INDEX index_localities_on_name_lower ON localities ((lower(name)));"
   end
 end
