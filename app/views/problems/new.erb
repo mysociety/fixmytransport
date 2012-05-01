@@ -1,30 +1,30 @@
 <%- @title = t('problems.new.reporting_a_problem', :location => @problem.location.name) %>
 <div id="banner">
   <a id="home" href="/">FixMyTransport</a>
-	<div class="container">
-		<h1><%= t('problems.new.header')%></h1>
-	</div>
+  <div class="container">
+    <h1><%= t('problems.new.header')%></h1>
+  </div>
 </div>
 <div id="greybanner">
-	<div class="container">
-		<p><%= raw @sending_advice %> <strong><%= t('problems.new.your_message_will_be_public')%></strong></p>
-		<%- if @problem.location.respond_to?(:status) && @problem.location.status == 'DEL' %>
-		<p><%= t('problems.new.location_inactive', :location_type => readable_location_type(@problem.location)) %></p>
-		<%- end %>
-	</div>
+  <div class="container">
+    <p><%= raw @sending_advice %> <strong><%= t('problems.new.your_message_will_be_public')%></strong></p>
+    <%- if @problem.location.respond_to?(:status) && @problem.location.status == 'DEL' %>
+    <p><%= t('problems.new.location_inactive', :location_type => readable_location_type(@problem.location)) %></p>
+    <%- end %>
+  </div>
 </div>
 <div id="main-content" class="container">
-	<div class="container">
-		<div id="problem-map">
-		    <h5><%= @problem.location.description %></h5>
-   			<%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => @map_height, :width => @map_width } %>
-		</div>
-	  <%- form_for @problem, :url => problems_url, :html => {:id => 'create-problem', :class => 'form-1'} do |f|  %>
-    <%= raw f.hidden_field :location_id %>
+  <div class="container">
+    <div id="problem-map">
+        <h5><%= @problem.location.description %></h5>
+        <%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => @map_height, :width => @map_width } %>
+    </div>
+    <%- form_for @problem, :url => problems_url, :html => {:id => 'create-problem', :class => 'form-1'} do |f|  %>
+    <%= raw f.hidden_field :location_persistent_id %>
     <%= raw f.hidden_field :location_type %>
-		<ul>
-			<li>
-				<label><%= t('problems.new.to') %></label>
+    <ul>
+      <li>
+        <label><%= t('problems.new.to') %></label>
 
         <%- if @problem.reference %>
           <%- @problem.reference.responsible_organizations.each do |organization| %>
@@ -39,7 +39,7 @@
           </div>
 
         <%- else %>
-  				<%- if @problem.location.operators_responsible?  %>
+          <%- if @problem.location.operators_responsible?  %>
             <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
               <%- if @problem.location.operators.size > 1 %>
                 <%- if responsibility_fields.object.errors.on('organization_id') %>
@@ -85,27 +85,27 @@
             </div>
 
           <%- end %>
-			  <%- end %>
-			</li>
-			<li>
-				<label for="problem_subject"><%= t('problems.new.subject')%></label>
-				<input id="problem_subject" type="text" name="problem[subject]" value="<%= @problem.subject %>"/>
-				<%- if @problem.errors.on('subject') %>
-					<div class='error error-subject'>
-					<%= error_message_on @problem, 'subject' %>
-					</div>
-				<%- else %>
-					<div class='error error-subject' style="display: none;" role="alert"></div>
-				<%- end %>
+        <%- end %>
+      </li>
+      <li>
+        <label for="problem_subject"><%= t('problems.new.subject')%></label>
+        <input id="problem_subject" type="text" name="problem[subject]" value="<%= @problem.subject %>"/>
+        <%- if @problem.errors.on('subject') %>
+          <div class='error error-subject'>
+          <%= error_message_on @problem, 'subject' %>
+          </div>
+        <%- else %>
+          <div class='error error-subject' style="display: none;" role="alert"></div>
+        <%- end %>
 
-				<div class="tipbox">
-				  <a href="#" class="tip-close" tabindex="-1">Close</a>
-					<h5><%= t('problems.new.subject_help_header')%></h5>
-					<p><%= t('problems.new.subject_help')%></p>
-				</div>
-			</li>
+        <div class="tipbox">
+          <a href="#" class="tip-close" tabindex="-1">Close</a>
+          <h5><%= t('problems.new.subject_help_header')%></h5>
+          <p><%= t('problems.new.subject_help')%></p>
+        </div>
+      </li>
 
-			<%- if @problem.categories.size > 1 %>
+      <%- if @problem.categories.size > 1 %>
         <li>
           <label for="problem_category"><%= t('problems.new.category')%></label>
           <%= raw f.select("category", @problem.categories, { :include_blank => t('problems.new.pick_a_category') }) %>
@@ -124,28 +124,28 @@
       <%- end %>
 
 
-			<li>
-				<label for="problem_description"><%= t('problems.new.description')%></label>
-				<textarea id="problem_description" name="problem[description]" ><%= @problem.description %></textarea>
-					  <%- if @problem.errors.on('description') %>
-		          <div class='error'>
-		            <%= error_message_on @problem, 'description' %>
-		          </div>
-		        <%- else %>
-		         <div class='error error-description' style="display: none;" role="alert"></div>
-		        <%- end %>
+      <li>
+        <label for="problem_description"><%= t('problems.new.description')%></label>
+        <textarea id="problem_description" name="problem[description]" ><%= @problem.description %></textarea>
+            <%- if @problem.errors.on('description') %>
+              <div class='error'>
+                <%= error_message_on @problem, 'description' %>
+              </div>
+            <%- else %>
+             <div class='error error-description' style="display: none;" role="alert"></div>
+            <%- end %>
 
-				<div class="tipbox">
-				  <a href="#" class="tip-close" tabindex="-1">Close</a>
-					<h5><%= t('problems.new.description_help_header')%></h5>
-					<p><%= t('problems.new.description_help')%></p>
-				</div>
-			</li>
-			<li>
-				<button type="submit" class="button" value="clicked">Submit</button>
-			</li>
-		</ul>
+        <div class="tipbox">
+          <a href="#" class="tip-close" tabindex="-1">Close</a>
+          <h5><%= t('problems.new.description_help_header')%></h5>
+          <p><%= t('problems.new.description_help')%></p>
+        </div>
+      </li>
+      <li>
+        <button type="submit" class="button" value="clicked">Submit</button>
+      </li>
+    </ul>
 
-		<%- end %>
-	</div>
+    <%- end %>
+  </div>
 </div>

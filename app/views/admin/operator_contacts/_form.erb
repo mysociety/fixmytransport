@@ -3,7 +3,7 @@
     <%= t('admin.operator_contact_form_error') %>
   </div>
 <%- end %>
-<%= raw f.hidden_field :operator_id %>
+<%= raw f.hidden_field :operator_persistent_id %>
 <div class='form-field'>
   <%- if @operator_contact.errors.on(:category) %>
     <div class='error'>
@@ -41,7 +41,7 @@
 <%- if !@operator_contact.operator.stop_areas.empty? %>
   <div class='form-field'>
     <%= raw f.label :location %>
-    <%= raw f.collection_select(:stop_area_id, @operator_contact.operator.stop_areas.sort_by(&:name), :id, :name, :prompt => true) %>
+    <%= raw f.collection_select(:stop_area_persistent_id, @operator_contact.operator.stop_areas.sort_by(&:name), :persistent_id, :name, :prompt => true) %>
   </div>
 <%- end %>
 

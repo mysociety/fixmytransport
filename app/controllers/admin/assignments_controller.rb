@@ -69,8 +69,7 @@ class Admin::AssignmentsController < Admin::AdminController
         else
           contact_params = {:email => new_email, :category => 'Other'}
           if location_only
-            contact_params[:location_id] = location.id
-            contact_params[:location_type] = location.class.to_s
+            contact_params[:location] = location
           end
           @operator.operator_contacts.build(contact_params)
           @assignment_complete = true

@@ -6,12 +6,12 @@ class OperatorContact < ActiveRecord::Base
   has_many :sent_emails, :as => :recipient
   has_many :outgoing_messages, :as => :recipient
   validates_presence_of :category
-  belongs_to :location, :polymorphic => true
+  # belongs_to :location, :polymorphic => true
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
   validates_format_of :cc_email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$"), :allow_blank => true
   validates_uniqueness_of :category, :scope => [:operator_persistent_id,
                                                 :deleted,
-                                                :location_id,
+                                                :location_persistent_id,
                                                 :location_type],
                                        :if => Proc.new{ |contact| ! contact.deleted? }
   has_paper_trail
@@ -26,14 +26,30 @@ class OperatorContact < ActiveRecord::Base
     return versions.last.whodunnit
   end
 
+  def location=(new_location)
+    self.location_type = new_location.class.base_class.name.to_s
+    self.location_persistent_id = new_location.persistent_id
+    @location = new_location
+  end
+
+  def location
+    if @location
+      return @location
+    end
+    if self.location_type
+      return self.location_type.constantize.find_by_persistent_id(self.location_persistent_id)
+    end
+    return nil
+  end
+
   # at the moment operator contacts can only relate to stations
-  def stop_area_id=(location_id)
-    self.location_id = location_id
+  def stop_area_persistent_id=(location_persistent_id)
+    self.location_persistent_id = location_persistent_id
     self.location_type = 'StopArea'
   end
 
-  def stop_area_id()
-    self.location_id
+  def stop_area_persistent_id()
+    self.location_persistent_id
   end
 
   def self.contacts_missing_operators
