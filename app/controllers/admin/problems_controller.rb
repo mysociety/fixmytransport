@@ -55,11 +55,18 @@ class Admin::ProblemsController < Admin::AdminController
         params[:problem][:responsibilities_attributes].delete(key)
       end
     end
-    if !params[:problem][:status_code].nil?
-      @problem.status_code = params[:problem][:status_code]
-    end
+    previous_status = @problem.status
     success = false
     ActiveRecord::Base.transaction do
+      if !params[:problem][:status_code].nil?
+        new_status_code = params[:problem][:status_code].to_i
+        # Various other things need to happen when a problem gets confirmed, so call the confirm! method
+        if previous_status == :new && Problem.status_code_to_symbol[new_status_code] == :confirmed
+          @problem.confirm!
+        else
+          @problem.status_code = params[:problem][:status_code]
+        end
+      end
       success = (@problem.update_attributes(params[:problem]) && @problem.update_assignments)
     end
     if success

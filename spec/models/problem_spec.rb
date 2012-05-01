@@ -18,9 +18,9 @@ describe Problem do
 
   end
 
-  describe 'when creating a problem from a hash' do 
-    
-    
+  describe 'when creating a problem from a hash' do
+
+
     before do
       @problem_data = { :subject => 'test subject',
                         :description => 'test description',
@@ -39,18 +39,18 @@ describe Problem do
                                           :save! => true,
                                           :reporter= => true)
     end
-  
-    it 'should create responsibilities from a comma and pipe delimited string keyed by "responsibilities"' do 
+
+    it 'should create responsibilities from a comma and pipe delimited string keyed by "responsibilities"' do
       Problem.stub!(:new).and_return(@mock_problem)
       @mock_problem.responsibilities.should_receive(:build).with(:organization_id => "22",
                                                                 :organization_type => 'Council')
-      @mock_problem.responsibilities.should_receive(:build).with(:organization_id => "55", 
+      @mock_problem.responsibilities.should_receive(:build).with(:organization_id => "55",
                                                                 :organization_type => 'Council')
-      problem_hash = { :subject => 'A Test Subject', 
-                       :description => 'A Test Description', 
-                       :location_id => 55, 
-                       :location_type => 'Route', 
-                       :category => 'Other', 
+      problem_hash = { :subject => 'A Test Subject',
+                       :description => 'A Test Description',
+                       :location_id => 55,
+                       :location_type => 'Route',
+                       :category => 'Other',
                        :responsibilities => '22|Council,55|Council' }
       p = Problem.create_from_hash(problem_hash, @user)
     end
@@ -73,9 +73,9 @@ describe Problem do
 
   end
 
-  describe 'when asked for categories' do 
-    
-    before do 
+  describe 'when asked for categories' do
+
+    before do
       @council = mock("council", :categories => ['Bus stops', 'Other'])
       @operator = mock_model(Operator, :categories => ['Other', 'Bus shelters'])
       @stop = mock_model(Stop, :responsible_organizations => [@operator])
@@ -83,41 +83,41 @@ describe Problem do
       @problem.location = @stop
     end
 
-    describe 'a problem with a reference' do 
-      
+    describe 'a problem with a reference' do
+
       it "should return a unique set of categories from its reference problem's responsible organisations" do
         @problem.reference = mock_model(Problem, :responsible_organizations => [@operator, @council])
         @problem.categories.should == ['Bus shelters', 'Bus stops', 'Other']
       end
-      
+
     end
-    
-    describe 'a problem with no reference' do 
-    
-      it "should return a unique set of categories from its location's responsible organisations" do 
+
+    describe 'a problem with no reference' do
+
+      it "should return a unique set of categories from its location's responsible organisations" do
         @problem.categories.should == ['Bus shelters',  'Other']
       end
-      
+
     end
-    
+
   end
-  
-  describe 'when updating assignments' do 
-    
-    describe 'if the problem has no responsible organizations' do 
-      
+
+  describe 'when updating assignments' do
+
+    describe 'if the problem has no responsible organizations' do
+
       before do
         @problem = Problem.new
         @problem.stub!(:responsible_organizations).and_return([])
       end
-    
-      it 'should return true' do 
+
+      it 'should return true' do
         @problem.update_assignments().should == true
       end
-    
+
     end
-  
-  
+
+
   end
 
   describe 'when asked for recipient emails' do
@@ -215,7 +215,7 @@ describe Problem do
       @problem = Problem.new
       @problem.status = :new
       @confirmation_time = Time.now - 5.days
-      @problem.confirmed_at = @confirmation_time
+      @problem.confirmed_at = nil
       @problem.stub!(:save!).and_return(true)
       @problem.stub!(:organization_info).and_return([])
       @problem.stub!(:emailable_organizations).and_return([])
@@ -233,7 +233,7 @@ describe Problem do
       it 'should not change the status or set the confirmed time' do
         @problem.confirm!
         @problem.status.should == :hidden
-        @problem.confirmed_at.should == @confirmation_time
+        @problem.confirmed_at.should == nil
       end
 
     end
@@ -243,7 +243,19 @@ describe Problem do
       it 'should set the status to confirmed and set the confirmed time on the problem' do
         @problem.confirm!
         @problem.status.should == :confirmed
+
+      end
+
+      it 'should set the confirmed time on the problem if the confirmed time is not set' do
+        @problem.confirmed_at = nil
+        @problem.confirm!
         @problem.confirmed_at.should > @confirmation_time
+      end
+
+      it 'should not set the confirmed time on the problem if the confirmed time is set' do
+        @problem.confirmed_at = @confirmation_time
+        @problem.confirm!
+        @problem.confirmed_at.should == @confirmation_time
       end
 
       it 'should create assignments associated with the problem' do

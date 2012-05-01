@@ -31,7 +31,7 @@ class Problem < ActiveRecord::Base
   def self.visible_status_codes
     [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:fixed]]
   end
-  
+
   named_scope :confirmed, :conditions => ["problems.status_code = ?",
                                           self.symbol_to_status_code[:confirmed]],
                           :order => "confirmed_at desc"
@@ -117,7 +117,7 @@ class Problem < ActiveRecord::Base
   def responsible_operators
     self.responsible_organizations.select{ |org| org.is_a?(Operator) }
   end
-  
+
   def responsible_org_descriptor
     if self.responsible_organizations.empty?
       I18n.translate('shared.problem.location_operator', :location => self.location.description)
@@ -199,7 +199,7 @@ class Problem < ActiveRecord::Base
     end
     # save new values without validation - don't want to validate any associated campaign yet
     self.update_attribute('status', :confirmed)
-    self.update_attribute('confirmed_at', Time.now)
+    self.update_attribute('confirmed_at', Time.now) unless self.confirmed_at
     # create a subscription for the problem reporter
     Subscription.create!(:user => self.reporter, :target => self, :confirmed_at => Time.now)
   end
