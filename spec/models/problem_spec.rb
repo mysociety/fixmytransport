@@ -221,7 +221,9 @@ describe Problem do
       @problem.stub!(:emailable_organizations).and_return([])
       @problem.stub!(:create_assignments)
       @problem.stub!(:add_coords)
+      @problem.stub!(:id).and_return(33)
       Assignment.stub!(:complete_problem_assignments)
+      Subscription.stub!(:find_for_user_and_target)
     end
 
     describe 'when the status is not new' do
@@ -269,14 +271,40 @@ describe Problem do
         @problem.confirm!
       end
 
-      it 'should create a confirmed subscription for the problem reporter' do
-        time_now = Time.now
-        Time.stub!(:now).and_return(time_now)
-
-        Subscription.should_receive(:create!).with(:user => @problem.reporter,
-                                                   :target => @problem,
-                                                   :confirmed_at => time_now)
+      it 'should check to see if the user is already subscribed to the problem' do
+        Subscription.should_receive(:find_for_user_and_target).with(@problem.reporter, @problem.id, 'Problem')
         @problem.confirm!
+      end
+
+      describe 'if there is no subscription for the problem reporter to the problem' do
+
+        before do
+          Subscription.stub!(:find_for_user_and_target).with(@problem.reporter, @problem.id, 'Problem').and_return(nil)
+        end
+
+        it 'should create a confirmed subscription for the problem reporter' do
+          time_now = Time.now
+          Time.stub!(:now).and_return(time_now)
+          Subscription.should_receive(:create!).with(:user => @problem.reporter,
+                                                     :target => @problem,
+                                                     :confirmed_at => time_now)
+          @problem.confirm!
+        end
+
+      end
+
+      describe 'if there is a subscription for the problem reporter to the problem' do
+
+        before do
+          subscription = mock_model(Subscription)
+          Subscription.stub!(:find_for_user_and_target).with(@problem.reporter, @problem.id, 'Problem').and_return(subscription)
+        end
+
+        it 'should not create a new subscription' do
+          Subscription.should_not_receive(:create!)
+          @problem.confirm!
+        end
+
       end
 
       describe 'if the problem has emailable organizations' do
