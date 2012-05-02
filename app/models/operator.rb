@@ -62,22 +62,22 @@ class Operator < ActiveRecord::Base
 
   def emailable?(location)
     general_contacts = self.operator_contacts.find(:all, :conditions => ["category = 'Other'
-                                                                          AND (location_id is null
-                                                                          OR (location_id = ?
+                                                                          AND (location_persistent_id is null
+                                                                          OR (location_persistent_id = ?
                                                                           AND location_type = ?))",
-                                                                          location.id, location.class.to_s])
+                                                                          location.persistent_id, location.class.to_s])
     return false if general_contacts.empty?
     return true
   end
 
   def contacts_for_location(location)
-    self.operator_contacts.find(:all, :conditions => ['location_id = ?
+    self.operator_contacts.find(:all, :conditions => ['location_persistent_id = ?
                                                        AND location_type = ?',
-                                                       location.id, location.class.to_s])
+                                                       location.persistent_id, location.class.to_s])
   end
 
   def general_contacts
-    self.operator_contacts.find(:all, :conditions => ["location_id is null
+    self.operator_contacts.find(:all, :conditions => ["location_persistent_id is null
                                                        AND (location_type is null
                                                        OR location_type = '')"])
   end
@@ -225,12 +225,12 @@ class Operator < ActiveRecord::Base
     end
   end
 
-  def self.problems_at_location(location_type, location_id, operator_id)
+  def self.problems_at_location(location_type, location_persistent_id, operator_id)
     conditions = ["problems.location_type = ?
-                   AND problems.location_id = ?
+                   AND problems.location_persistent_id = ?
                    AND responsibilities.organization_id = ?
                    AND responsibilities.organization_type = 'Operator'",
-                  location_type, location_id, operator_id]
+                  location_type, location_persistent_id, operator_id]
     return Problem.find(:all, :conditions => conditions, :include => :responsibilities)
   end
 

@@ -45,7 +45,7 @@ describe Operator do
     operator.name = nil
     operator.valid?.should be_false
   end
-  
+
   describe 'when validating' do
 
     fixtures default_fixtures
@@ -71,7 +71,7 @@ describe Operator do
     end
 
   end
-  
+
 
   describe 'when asked for categories for a location' do
 
@@ -163,7 +163,7 @@ describe Operator do
   end
 
   it 'should respond to emailable? correctly' do
-    mock_station = mock_model(StopArea, :type => 'GRLS')
+    mock_station = mock_model(StopArea, :type => 'GRLS', :persistent_id => 55)
     mock_operator_contact = mock_model(OperatorContact)
     operator = Operator.new
     operator.operator_contacts.stub!(:find).and_return([mock_operator_contact])
