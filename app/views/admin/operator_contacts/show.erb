@@ -25,7 +25,7 @@
     <td><%= @operator_contact.confirmed %></td>
     <td><%= @operator_contact.deleted %></td>
     <td><%= @operator_contact.last_editor %></td>
-    <%- if @operator_contact.location_id %>
+    <%- if @operator_contact.location_persistent_id %>
       <td><%= @operator_contact.location.name %>
       </td>
     <%- else %>
