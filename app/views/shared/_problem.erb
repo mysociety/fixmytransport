@@ -4,28 +4,27 @@
   </a>
 <%- end %>
 <div class="wrapper">
-	<h4><a href="<%= problem_url(problem) %>"><%= problem.subject %></a></h4>
-	<%- if [:new_problem, :location].include?(context) && ! problem.location.is_a?(SubRoute) %>
-	  <%= truncate(problem.description, :length => 100) %>
-	<%- else %>
-	  <p>
-	    <%= raw link_to(problem.location.description, location_url(problem.location)) %>
-	  </p>
-	<%- end %>
-	<%- if context != :browse_issues %>
-	  <%- if problem.reporter %>
-	    <p><%= t('shared.problem.by')%>
-	      <a href="<%= profile_url(problem.reporter) %>"><%= problem.reporter.name %>
-	      </a>
-	    </p>
-	  <%- end %>
-	<%- end %>
-	<dl class="details">
-		<dt><%= t('shared.problem.added') %></dt>
-		<dd><%= problem.confirmed_at.localtime.to_s(:short) %></dd>
-	</dl>
-  	<dl class="status-item">
-  			<dt>Status:</dt>
-  			<dd class="status stat-<%= problem_display_status(problem) %>"><%= problem_display_status(problem).titleize %></dd>
-  	</dl>
+  <h4><a href="<%= problem_url(problem) %>"><%= problem.subject %></a></h4>
+  <%- if [:new_problem, :location].include?(context) && ! problem.location.is_a?(SubRoute) %>
+    <%= truncate(problem.description, :length => 100) %>
+  <%- else %>
+      <%= raw link_to(problem.location.description, location_url(problem.location)) %>
+    </p>
+  <%- end %>
+  <%- if context != :browse_issues %>
+    <%- if problem.reporter %>
+      <p><%= t('shared.problem.by')%>
+        <a href="<%= profile_url(problem.reporter) %>"><%= problem.reporter.name %>
+        </a>
+      </p>
+    <%- end %>
+  <%- end %>
+  <dl class="details">
+    <dt><%= t('shared.problem.added') %></dt>
+    <dd><%= problem.confirmed_at.localtime.to_s(:short) %></dd>
+  </dl>
+    <dl class="status-item">
+        <dt>Status:</dt>
+        <dd class="status stat-<%= problem_display_status(problem) %>"><%= problem_display_status(problem).titleize %></dd>
+    </dl>
 </div>

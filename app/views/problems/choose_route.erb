@@ -1,36 +1,36 @@
 <div id="banner">
     <a id="home" href="/">FixMyTransport</a>
-	<div class="container">
-		<h1><%= t('problems.choose_route.header')%></h1>
-	</div>
+  <div class="container">
+    <h1><%= t('problems.choose_route.header')%></h1>
+  </div>
 </div>
 <div id="greybanner">
-	<div class="container">
-		<p><%= t('problems.choose_route.multiple_routes_intro', :num_locations => MAX_LOCATION_RESULTS) %></p>
-	</div>
+  <div class="container">
+    <p><%= t('problems.choose_route.multiple_routes_intro', :num_locations => MAX_LOCATION_RESULTS) %></p>
+  </div>
 </div>
 <div id="main-content" class="container">
-	<div id='map-col'>
-	  <%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => [], :link_type => :problem, :height => @map_height, :width => @map_width  } %>
-	</div>
+  <div id='map-col'>
+    <%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => [], :link_type => :problem, :height => @map_height, :width => @map_width  } %>
+  </div>
 
-	<%- if @error_message %>
-	  <div class='location-error'>
-	    <%= @error_message %>
-	  </div>
-	<%- end %>
+  <%- if @error_message %>
+    <div class='location-error'>
+      <%= @error_message %>
+    </div>
+  <%- end %>
 
-	<ul class='location-list'>
-	  <%- @locations.each do |location| %>
-	    <li>
-	      <%= link_to "#{location.description_with_operators}", existing_problems_url(:location_id => location.id, :location_type => location.type) %>
-	    </li>
-	  <%- end %>
-	</ul>
+  <ul class='location-list'>
+    <%- @locations.each do |location| %>
+      <li>
+        <%= link_to "#{location.description_with_operators}", existing_problems_url(:location_id => location.id, :location_type => location.class.to_s) %>
+      </li>
+    <%- end %>
+  </ul>
 
-	<%- if @limit and @locations.size == @limit %>
-	  <%= link_to(t('problems.choose_route.show_all'), url_for(params.merge(:show_all => 1))) %>
-	<%- end %>
+  <%- if @limit and @locations.size == @limit %>
+    <%= link_to(t('problems.choose_route.show_all'), url_for(params.merge(:show_all => 1))) %>
+  <%- end %>
   <div class="wrong-info-link">
     <a href="<%= feedback_url(:url => CGI.escape(request.request_uri)) %>" rel="nofollow"><%= t('problems.choose_route.information_wrong') %></a>
   </div>
