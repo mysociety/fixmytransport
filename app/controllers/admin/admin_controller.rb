@@ -22,9 +22,9 @@ class Admin::AdminController < ApplicationController
         if data_hash[:_destroy] == "1"
           # are we removing from the operator end of the association, or the location end?
           if id_key == :operator_id
-            problems += Operator.problems_at_location(location_type, model.id, data_hash[id_key].to_i)
+            problems += Operator.problems_at_location(location_type, model.persistent_id, data_hash[id_key].to_i)
           else
-            problems += Operator.problems_at_location(location_type, data_hash[id_key].to_i, model.id)
+            problems += Operator.problems_at_location(location_type, data_hash[id_key].to_i, model.persistent_id)
           end
         end
       end
