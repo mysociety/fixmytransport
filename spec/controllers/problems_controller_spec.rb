@@ -717,7 +717,8 @@ describe ProblemsController do
     before do
       @default_params = { :location_id => '55', :location_type => 'Route' }
       @route = mock_model(Route, :points => [],
-                                 :responsible_organizations => [])
+                                 :responsible_organizations => [],
+                                 :persistent_id => 45)
       @controller.stub!(:instantiate_location).and_return(@route)
       @controller.stub!(:map_params_from_location)
     end
@@ -855,7 +856,7 @@ describe ProblemsController do
                                           :status= => true,
                                           :subject => 'A Test Subject',
                                           :description => 'A Test Description',
-                                          :location_id => 55,
+                                          :location_persistent_id => 55,
                                           :location_type => 'Route',
                                           :category => "Other",
                                           :errors => [],
@@ -997,7 +998,7 @@ describe ProblemsController do
       describe 'if there is no logged in user' do
 
         it 'should save the problem data to the session with the description encoded' do
-          @controller.should_receive(:data_to_string).with({:location_id => 55,
+          @controller.should_receive(:data_to_string).with({:location_persistent_id => 55,
                                                             :subject => "A Test Subject",
                                                             :responsibilities => "33|Council,44|Operator",
                                                             :location_type => "Route",

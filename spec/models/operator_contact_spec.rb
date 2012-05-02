@@ -4,7 +4,7 @@ describe OperatorContact do
   before(:each) do
     @valid_attributes = {
       :operator_id => 1,
-      :location_id => 1,
+      :location_persistent_id => 1,
       :location_type => "value for location_type",
       :category => "value for category",
       :email => "test@example.com",
@@ -54,7 +54,7 @@ describe OperatorContact do
   end
 
   it 'should allow other contacts for this operator in this category with different locations' do
-    location_attributes = { :location_id => 55, :location_type => 'StopArea' }
+    location_attributes = { :location_persistent_id => 55, :location_type => 'StopArea' }
     existing_operator_contact = OperatorContact.create! @valid_attributes.merge(location_attributes)
     duplicate_operator_contact = OperatorContact.new @valid_attributes
     duplicate_operator_contact.should be_valid
