@@ -14,6 +14,7 @@ describe ProblemMailer do
                                   :bearing => nil,
                                   :easting => 444.44,
                                   :northing => 555.55,
+                                  :persistent_id => 66,
                                   :transport_mode_names => ['Bus', 'Tram/Metro'])
   end
 
@@ -25,7 +26,7 @@ describe ProblemMailer do
                                             :name => 'Test Operator')
       @mock_user = mock_model(User, :email => 'user@example.com')
       @mock_problem = mock_model(Problem, :operator => @mock_operator,
-                                          :recipient_contact => @mock_contact, 
+                                          :recipient_contact => @mock_contact,
                                           :recipient_emails => { :email => @mock_contact.email },
                                           :reporter => @mock_user,
                                           :reporter_phone => '123',
@@ -95,7 +96,7 @@ describe ProblemMailer do
 
     it 'should not send an email to the person who created the comment' do
       @mock_problem.stub!(:subscriptions).and_return([])
-      @mock_problem.subscriptions.stub!(:confirmed).and_return([mock_model(Subscription, :user => @mock_commenter)])      
+      @mock_problem.subscriptions.stub!(:confirmed).and_return([mock_model(Subscription, :user => @mock_commenter)])
       ProblemMailer.should_not_receive(:deliver_comment)
       ProblemMailer.send_comment(@mock_comment, @mock_problem)
     end
@@ -137,7 +138,7 @@ describe ProblemMailer do
                           :category => 'Other',
                           :location => @mock_stop,
                           :location_type => 'Stop',
-                          :location_id => @mock_stop.id,
+                          :location_persistent_id => @mock_stop.persistent_id,
                           :time => nil,
                           :date => nil,
                           :campaign => nil)
@@ -166,25 +167,25 @@ describe ProblemMailer do
       @pte_contact = mock_model(PassengerTransportExecutiveContact, :email => 'pte@example.com')
       @pte_without_mail = mock_model(PassengerTransportExecutive, :name => 'Unemailable PTE')
 
-      @mock_problem_email_operator = make_mock_problem([@operator_with_mail], 
-                                                       [], 
-                                                       @operator_contact, 
+      @mock_problem_email_operator = make_mock_problem([@operator_with_mail],
+                                                       [],
+                                                       @operator_contact,
                                                        { :email => @operator_contact.email })
-      @mock_problem_no_email_operator = make_mock_problem([], 
-                                                          [@operator_without_mail], 
-                                                          nil, 
+      @mock_problem_no_email_operator = make_mock_problem([],
+                                                          [@operator_without_mail],
+                                                          nil,
                                                           nil)
-      @mock_problem_email_pte =  make_mock_problem([@pte_with_mail], 
-                                                   [], 
-                                                   @pte_contact, 
+      @mock_problem_email_pte =  make_mock_problem([@pte_with_mail],
+                                                   [],
+                                                   @pte_contact,
                                                    { :email => @pte_contact.email })
-      @mock_problem_no_email_pte = make_mock_problem([], 
-                                                     [@pte_without_mail], 
+      @mock_problem_no_email_pte = make_mock_problem([],
+                                                     [@pte_without_mail],
                                                      nil,
                                                      nil)
-      @mock_problem_some_council_mails = make_mock_problem([@emailable_council], 
-                                                           [@unemailable_council], 
-                                                           @council_contact, 
+      @mock_problem_some_council_mails = make_mock_problem([@emailable_council],
+                                                           [@unemailable_council],
+                                                           @council_contact,
                                                            { :email => @council_contact.email })
       @mock_problem_no_orgs = make_mock_problem([],[], nil, nil)
 
@@ -201,7 +202,7 @@ describe ProblemMailer do
                                            @mock_problem_some_council_mails])
 
       Problem.stub!(:unsendable).and_return([@mock_problem_no_orgs])
-      Stop.stub!(:find).with(@mock_stop.id).and_return(@mock_stop)
+      Stop.stub!(:find_by_persistent_id).with(@mock_stop.persistent_id).and_return(@mock_stop)
       ProblemMailer.stub!(:deliver_report)
       SentEmail.stub!(:create!)
       STDERR.stub!(:puts)

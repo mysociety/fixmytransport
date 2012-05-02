@@ -57,13 +57,13 @@ class ProblemMailer < ApplicationMailer
                   :unsubscribe_link => main_url(confirm_unsubscribe_path(:email_token => subscription.token)) }
     body(body_hash)
   end
-  
+
   def one_off_followup_for_new_campaigns(recipient, problem)
     recipients recipient.name_and_email
     from contact_from_name_and_email
     subject I18n.translate('mailers.one_off_followup_subject')
-    body_hash = { :problem => problem, 
-                  :recipient => recipient, 
+    body_hash = { :problem => problem,
+                  :recipient => recipient,
                   :organization => problem.emailable_organizations.map{|org| org.name}.to_sentence }
     body(body_hash)
   end
@@ -115,7 +115,7 @@ class ProblemMailer < ApplicationMailer
     end
 
     if verbose
-      
+
       if missing_emails[:operator].size > 0
         STDERR.puts "Operator emails that need to be found:"
         missing_emails[:operator].each{ |operator_id, operator| STDERR.puts operator.name }
@@ -135,7 +135,7 @@ class ProblemMailer < ApplicationMailer
       if unsendable_problems.size > 0
         STDERR.puts "Organisations need to be found for the following problem locations:"
         unsendable_problems.each do |problem|
-          location = problem.location_type.constantize.find(problem.location_id)
+          location = problem.location_type.constantize.find_by_persistent_id(problem.location_persistent_id)
           STDERR.puts "Problem #{problem.id}: #{location.class} '#{location.name}' (id #{location.id})"
         end
       end
