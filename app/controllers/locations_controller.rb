@@ -36,7 +36,7 @@ class LocationsController < ApplicationController
         return false
       end
       format.atom do
-        campaign_feed(@stop)
+        issue_feed(@stop)
         return
       end
     end
@@ -82,7 +82,7 @@ class LocationsController < ApplicationController
                                  width=@map_width)
       end
       format.atom do
-        campaign_feed(@stop_area)
+        issue_feed(@stop_area)
         return
       end
     end
@@ -107,7 +107,7 @@ class LocationsController < ApplicationController
                                  width=@map_width)
       end
       format.atom do
-        campaign_feed(@route)
+        issue_feed(@route)
         return
       end
     end
@@ -132,7 +132,7 @@ class LocationsController < ApplicationController
                                  width=@map_width)
       end
        format.atom do
-         campaign_feed(@sub_route)
+         issue_feed(@sub_route)
          return
        end
     end
@@ -180,8 +180,8 @@ class LocationsController < ApplicationController
     redirect_to params.merge(new_params), :status => :moved_permanently
   end
 
-  def campaign_feed(source)
-    @campaigns = source.related_issues
+  def issue_feed(source)
+    @issues = source.related_issues
     render :template => 'shared/issues.atom.builder', :layout => false
   end
 
