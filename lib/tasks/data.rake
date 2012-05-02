@@ -57,7 +57,7 @@ namespace :data do
                    problem.transport_mode_text,
                    problem.reporter.name,
                    problem.responsible_organizations.map{ |org| org.name }.to_sentence,
-                   problem.status,
+                   issue.status,
                    problem.created_at.localtime.to_s(:short),
                    problem.updated_at.localtime.to_s(:short),
                    supporters,
