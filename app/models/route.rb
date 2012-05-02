@@ -40,7 +40,6 @@ class Route < ActiveRecord::Base
   has_many :from_stops, :through => :route_segments, :class_name => 'Stop'
   has_many :to_stops, :through => :route_segments, :class_name => 'Stop'
   belongs_to :transport_mode
-  has_many :problems, :as => :location, :order => 'created_at desc'
   has_many :route_localities, :dependent => :destroy
   has_many :localities, :through => :route_localities
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'

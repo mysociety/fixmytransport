@@ -128,7 +128,7 @@ describe Stop do
     fixtures default_fixtures
 
     it 'should return all campaigns linked to the location by persistent id' do
-      @campaign = Campaign.new(:title => 'A test title')
+      @campaign = Campaign.new(:title => 'A test title', :description => 'A test description')
       @campaign.status = :confirmed
       @campaign.location = stops(:white_lion_n)
       @campaign.save!
@@ -147,15 +147,56 @@ describe Stop do
     fixtures default_fixtures
 
     it 'should only return visible campaigns linked to the location by persistent id' do
-      @campaign = Campaign.new(:title => 'A test title')
+      @campaign = Campaign.new(:title => 'A test title', :description => 'A test description')
       @campaign.status = :hidden
       @campaign.location = stops(:white_lion_n)
       @campaign.save!
-      stops(:white_lion_n).visible_campaigns.should == []
+      Stop.find(stops(:white_lion_n).id).visible_campaigns.should == []
+      @campaign.status = :confirmed
+      @campaign.save!
+      Stop.find(stops(:white_lion_n).id).visible_campaigns.should == [@campaign]
     end
 
     after do
       @campaign.destroy
+    end
+
+  end
+
+  describe 'when asked for problems' do
+
+    fixtures default_fixtures
+
+    it 'should return all problems linked to the location by persistent id' do
+      @problem = Problem.new(:subject => 'A test subject',
+                             :category => 'Other',
+                             :description => 'A test description')
+      @problem.status = :confirmed
+      @problem.location = stops(:white_lion_n)
+      @problem.save!
+      stops(:white_lion_n).problems.should == [@problem]
+    end
+
+    after do
+      @problem.destroy
+    end
+  end
+
+  describe 'when asked for visible problems' do
+
+    fixtures default_fixtures
+
+    it 'should only return visible problems linked to the location by persistent id' do
+      @problem = Problem.new(:subject => 'A test subject',
+                             :category => 'Other',
+                             :description => 'A test description')
+      @problem.status = :hidden
+      @problem.location = stops(:white_lion_n)
+      @problem.save!
+      Stop.find(stops(:white_lion_n).id).visible_problems.should == []
+      @problem.status = :confirmed
+      @problem.save!
+      Stop.find(stops(:white_lion_n).id).visible_problems.should == [@problem]
     end
 
   end

@@ -28,21 +28,48 @@ module FixMyTransport
 
     def campaigns
       @campaigns = get_campaigns() unless defined? @campaigns
+      @campaigns
     end
 
     def visible_campaigns
       @visible_campaigns = get_campaigns(only_visible=true) unless defined? @visible_campaigns
+      @visible_campaigns
     end
 
     def get_campaigns(only_visible=false)
-      conditions = [ "location_type = 'Stop'
-                     AND location_persistent_id = ?", self.persistent_id ]
+      conditions = [ "location_type = '#{self.class.base_class.name.to_s}'
+                      AND location_persistent_id = ?", self.persistent_id ]
       if only_visible
+        puts "looking for only visible"
         Campaign.visible.find(:all, :conditions => conditions,
                                     :order => 'created_at desc')
       else
         Campaign.find(:all, :conditions => conditions,
                             :order => 'created_at desc')
+      end
+    end
+
+    def problems
+      @problems = get_problems() unless defined? @problems
+      @problems
+    end
+
+    def visible_problems
+      @visible_problems = get_problems(only_visible=true) unless defined? @visible_problems
+      @visible_problems
+    end
+
+    # Note use of scope to constrain search to visible problems - the scope includes
+    # a clause excluding problems with campaigns.
+    def get_problems(only_visible=false)
+      conditions = ["location_type = '#{self.class.base_class.name.to_s}'
+                     AND location_persistent_id = ?", self.persistent_id ]
+      if only_visible
+        Problem.visible.find(:all, :conditions => conditions,
+                                   :order => 'created_at desc')
+      else
+        Problem.find(:all, :conditions => conditions,
+                                   :order => 'created_at desc')
       end
     end
 

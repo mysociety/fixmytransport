@@ -11,7 +11,6 @@ class SubRoute < ActiveRecord::Base
                           :primary_key => :persistent_id,
                           :foreign_key => :to_station_persistent_id
   belongs_to :transport_mode
-  has_many :problems, :as => :location, :order => 'created_at desc'
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   before_create :set_lat_lon_and_coords
   has_friendly_id :name, :use_slug => true
