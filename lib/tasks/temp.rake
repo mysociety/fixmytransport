@@ -238,6 +238,24 @@ namespace :temp do
     end
   end
 
+  desc 'Populate problem location_persistent_id field'
+  task :populate_problem_persistent_id => :environment do
+    Problem.find_each(:conditions => ['location_persistent_id is null']) do |problem|
+      location = nil
+      location_type = problem.location_type.constantize
+      location_type.in_any_generation do
+        location = location_type.find(:first, :conditions => ['id = ?', problem.location_id])
+      end
+      if ! location
+        puts "No location with id #{problem.location_id}"
+        next
+      end
+      problem.location_persistent_id = location.persistent_id
+      puts "Setting location_persistent_id to #{problem.location_persistent_id} for #{problem.id}, #{location_type} #{location.id}"
+      problem.save!
+    end
+  end
+
   desc 'Add example problems to each guide'
   task :add_guide_examples => :environment do
     { "accessibility" =>
