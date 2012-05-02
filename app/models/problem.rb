@@ -2,7 +2,6 @@ class Problem < ActiveRecord::Base
 
   include FixMyTransport::Status
 
-  belongs_to :location, :polymorphic => true
   belongs_to :reporter, :class_name => 'User'
   belongs_to :transport_mode
   belongs_to :campaign, :autosave => true
@@ -19,7 +18,7 @@ class Problem < ActiveRecord::Base
   validates_associated :reporter
 
   attr_accessible :subject, :description, :category,
-                  :location_id, :location_type, :responsibilities_attributes,
+                  :location_persistent_id, :location_type, :responsibilities_attributes,
                   :reference_id
   before_create :generate_confirmation_token, :add_coords
   has_status({ 0 => 'New',
@@ -31,7 +30,7 @@ class Problem < ActiveRecord::Base
   def self.visible_status_codes
     [self.symbol_to_status_code[:confirmed], self.symbol_to_status_code[:fixed]]
   end
-  
+
   named_scope :confirmed, :conditions => ["problems.status_code = ?",
                                           self.symbol_to_status_code[:confirmed]],
                           :order => "confirmed_at desc"
@@ -47,6 +46,22 @@ class Problem < ActiveRecord::Base
 
   # set attributes to include and exclude when performing model diffs
   diff :exclude => [:updated_at]
+
+  def location=(new_location)
+    self.location_type = new_location.class.base_class.name.to_s
+    self.location_persistent_id = new_location.persistent_id
+    @location = new_location
+  end
+
+  def location
+    if @location
+      return @location
+    end
+    if self.location_type
+      return self.location_type.constantize.find_by_persistent_id(self.location_persistent_id)
+    end
+    return nil
+  end
 
   # Makes a random token, suitable for using in URLs e.g confirmation messages.
   def generate_confirmation_token
@@ -117,7 +132,7 @@ class Problem < ActiveRecord::Base
   def responsible_operators
     self.responsible_organizations.select{ |org| org.is_a?(Operator) }
   end
-  
+
   def responsible_org_descriptor
     if self.responsible_organizations.empty?
       I18n.translate('shared.problem.location_operator', :location => self.location.description)
@@ -211,7 +226,7 @@ class Problem < ActiveRecord::Base
     campaign.problem = self
     campaign.title = "#{I18n.translate("models.campaign.fix_this")} #{self.subject}"
     campaign.description = self.description
-    campaign.location_id = self.location_id
+    campaign.location_persistent_id = self.location_persistent_id
     campaign.location_type = self.location_type
     campaign.status = :new
     campaign.confirm
@@ -339,9 +354,9 @@ class Problem < ActiveRecord::Base
     end
     problem = Problem.new(:subject => data[:subject],
                           :description => description,
-                          :location_id => data[:location_id],
-                          :location_type => data[:location_type],
                           :category => data[:category])
+    location = data[:location_type].constantize.find_by_persistent_id(data[:location_persistent_id])
+    problem.location = location
     data[:responsibilities].split(",").each do |responsibility_string|
       organization_id, organization_type = responsibility_string.split("|")
       problem.responsibilities.build(:organization_id => organization_id,
@@ -385,32 +400,27 @@ class Problem < ActiveRecord::Base
 
     if options[:location]
       location = options[:location]
-      location_id = conn.quote(location.id)
+      location_persistent_id = conn.quote(location.persistent_id)
       # make sure we have 'Route' for routes, not one of it's subclasses
-      if location.class.superclass == ActiveRecord::Base
-        location_class = location.class.to_s
-      else
-        location_class = location.class.superclass.to_s
-      end
-      location_class = conn.quote(location_class)
+      location_class = conn.quote(location.class.base_class.name.to_s)
       if location_class == "'Route'" && !location.sub_routes.empty?
         # for a train route, we want to include problems on sub-routes of this route
         # that were reported to a matching operator
         operator_ids = location.operator_ids.map{ |id| conn.quote(id) }.join(',')
         extra_tables = ", responsibilities"
-        location_clause = "AND ((problems.location_id = #{location_id}
+        location_clause = "AND ((problems.location_persistent_id = #{location_persistent_id}
                             AND problems.location_type = #{location_class})
                             OR
-                            (problems.location_id in (SELECT sub_route_id
+                            (problems.location_persistent_id in (SELECT sub_route_id
                                              FROM route_sub_routes
-                                             WHERE route_id = #{location_id})
+                                             WHERE route_id = #{location_persistent_id})
                              AND problems.location_type = 'SubRoute'
                              AND problems.id = responsibilities.problem_id
                              AND responsibilities.organization_type = 'Operator'
                              AND responsibilities.organization_id in (#{operator_ids}))) "
       else
         extra_tables = ''
-        location_clause = " AND problems.location_id = #{location_id}
+        location_clause = " AND problems.location_persistent_id = #{location_persistent_id}
                             AND problems.location_type = #{location_class} "
       end
     elsif options[:single_operator]
@@ -460,9 +470,9 @@ class Problem < ActiveRecord::Base
     issues = []
     # pull all the models with the associations we need for displaying them
     problems = Problem.find(:all, :conditions => ['id in (?)', problem_ids.keys],
-                                  :include => [:location, :reporter])
+                                  :include => [:reporter])
     campaigns = Campaign.find(:all, :conditions => ['id in (?)', campaign_ids.keys],
-                                    :include => [:location, :initiator])
+                                    :include => [:initiator])
     # map the models back into the a combined array in the right order
     problems.each{ |problem| issues[problem_ids[problem.id]] = problem }
     campaigns.each{ |campaign| issues[campaign_ids[campaign.id]] = campaign }

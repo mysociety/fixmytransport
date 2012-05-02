@@ -72,11 +72,11 @@ class ProblemsController < ApplicationController
 
       unless pager.total_entries
         # the pager didn't manage to guess the total count, do it manually
-        pager.total_entries = @location.visible_campaigns.size + @location.problems.visible.count
+        pager.total_entries = @location.visible_campaigns.size + @location.visible_problems.size
       end
     end
     if @issues.empty?
-      redirect_to new_problem_url(:location_id => @location.id, :location_type => @location.type)
+      redirect_to new_problem_url(:location_id => @location.id, :location_type => @location.class.to_s)
       return
     end
     if params[:source] != 'questionnaire'
@@ -708,7 +708,7 @@ class ProblemsController < ApplicationController
                      :subject => @problem.subject,
                      :description => ActiveSupport::Base64.encode64(@problem.description),
                      :text_encoded => true,
-                     :location_id => @problem.location_id,
+                     :location_persistent_id => @problem.location_persistent_id,
                      :location_type => @problem.location_type,
                      :category => @problem.category,
                      :responsibilities => responsibilities,
