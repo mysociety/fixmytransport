@@ -58,10 +58,10 @@ class Route < ActiveRecord::Base
   has_paper_trail
   attr_accessor :show_as_point, :operator_info
   before_save [ :cache_route_coords,
-                :generate_default_journey,
                 :cache_area,
                 :cache_description,
                 :cache_short_name ]
+  after_save :generate_default_journey
   is_route_or_sub_route
   is_location
 
@@ -405,13 +405,14 @@ class Route < ActiveRecord::Base
 
   def generate_default_journey
     self.default_journey = JourneyPattern.find(:first, :conditions => ["id =
-                                                      (SELECT journey_pattern_id from
-                                                        (SELECT journey_pattern_id, count(*) as cnt
-                                                        FROM route_segments
-                                                        WHERE route_id = ?
-                                                        GROUP BY journey_pattern_id
-                                                        ORDER BY cnt desc limit 1)
-                                                      as tmp)", self.id])
+                                                    (SELECT journey_pattern_id from
+                                                      (SELECT journey_pattern_id, count(*) as cnt
+                                                      FROM route_segments
+                                                      WHERE route_id = ?
+                                                      GROUP BY journey_pattern_id
+                                                      ORDER BY cnt desc limit 1)
+                                                    as tmp)", self.id])
+    self.send(:update_without_callbacks)
   end
 
   # class methods
