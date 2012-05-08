@@ -234,11 +234,13 @@ class Parsers::TransxchangeParser
 
         journey_patterns = standard_service.delete(:journey_patterns)
         if ! routes[line[:name]]
-          route = Route.new(:number => line[:name],
-                            :region => region,
-                            :transport_mode => transport_mode,
-                            :generation_low => CURRENT_GENERATION,
-                            :generation_high => CURRENT_GENERATION)
+
+          route_type = transport_mode.route_type.constantize
+          route = route_type.new(:number => line[:name],
+                                 :region => region,
+                                 :transport_mode => transport_mode,
+                                 :generation_low => CURRENT_GENERATION,
+                                 :generation_high => CURRENT_GENERATION)
           routes[line[:name]] = route
           route.status = 'ACT'
         else
