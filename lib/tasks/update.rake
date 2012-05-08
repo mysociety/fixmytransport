@@ -138,7 +138,7 @@ namespace :update do
     Rake::Task['tnds:preload:load_unmatched_operators'].execute
     Rake::Task['tnds:load:routes'].execute
     Rake::Task['tnds:update:train_routes'].execute
-
+    Rake::Task['tnds:update:find_previous_routes'].execute
   end
 
   desc 'Display a list of updates that have been made to instances of a model.

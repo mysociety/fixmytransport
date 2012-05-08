@@ -324,21 +324,40 @@ namespace :tnds do
   def find_previous_for_route(route, verbose, dryrun)
     operators = route.operators.map{ |operator| operator.name }.join(", ")
     puts "Route id: #{route.id}, number: #{route.number}, operators: #{operators}" if verbose
-    # Call these functions on the route to make sure stops and stop areas are queried
+    # Call these functions on the route to make sure stops, stop areas and route operators are queried
     # before we enter the find_all_by_number_and_common_stop method, which is scoped to
     # the previous data generation
     route.stop_area_codes
     route.stop_codes
-
+    route.route_operators(force_reload=true)
     previous = nil
     FixMyTransport::DataGenerations.in_generation(PREVIOUS_GENERATION) do
       previous = Route.find_existing_routes(route)
+      puts "Found #{previous.size} routes" if verbose
+      if previous.size == 0
+        previous = Route.find_existing_routes(route, { :skip_operator_comparison => true,
+                                                       :require_match_fraction => 0.8 })
+        puts "Found #{previous.size} routes, on complete stop match without operators" if verbose
+      end
     end
-    puts "Found #{previous.size} routes" if verbose
+
+
+    if previous.size > 1
+      # discard any of the routes that have other operators
+      previous = previous.delete_if do |previous_route|
+        other_operators = previous_route.operators.any?{ |operator| ! route.operators.include?(operator) }
+        if other_operators
+          puts "Rejecting #{previous_route.id} as it has other operators" if verbose
+        end
+        other_operators
+      end
+    end
     if previous.size > 1
       route_ids = previous.map{ |previous_route| previous_route.id }.join(", ")
-      raise "Matched more than one previous route! #{route_ids}"
+      puts "Matched more than one previous route! #{route_ids}"
+      return
     end
+
     previous.each do |previous_route|
       puts "Matched to route id: #{previous_route.id}, number #{previous_route.number}" if verbose
       route.previous_id = previous.first.id
@@ -361,10 +380,12 @@ namespace :tnds do
         route = Route.find(ENV['ROUTE_ID'])
         find_previous_for_route(route, verbose, dryrun)
       else
-        conditions = { :conditions => ['routes.previous_id IS NULL
-                                       AND route_operators.id IS NOT NULL'],
+        train_mode = TransportMode.find_by_name('Train')
+        conditions = { :conditions => ['routes.previous_id IS NULL and transport_mode_id != ?
+                                        AND route_operators.id IS NOT NULL', train_mode],
                        :include => :route_operators }
         Route.find_each(conditions) do |route|
+          puts "Looking for #{route.number}" if verbose
           find_previous_for_route(route, verbose, dryrun)
         end
       end

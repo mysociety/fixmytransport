@@ -438,14 +438,15 @@ class Route < ActiveRecord::Base
       # as in the data_generations code, size will apply the current scope in database queries
       # so may produce unexpected results.
       if new_route.route_operators.length >= 1 && !options[:use_operator_codes]
-        operator_clause = "AND ("
-        operator_conditions = []
-        operator_params = []
-        new_route.route_operators.each do |route_operator|
-          operator_conditions << " route_operators.operator_id = ? "
-          operator_params << new_route.route_operators.first.operator_id
+        # Use persistent ids to generate operators as the passed-in route may belong
+        # to a different generation
+        operators = []
+        operator_ids = new_route.route_operators.map{ |route_operator| route_operator.operator_id }
+        Operator.in_any_generation do
+          operators = Operator.find(:all, :conditions => ['id in (?)', operator_ids])
         end
-        operator_clause = "AND (#{operator_conditions.join(" OR ")})"
+        operator_clause = "AND operators.persistent_id in (?)"
+        operator_params = [ operators.map{ |operator| operator.persistent_id } ]
       else
         source_admin_area = new_route.route_source_admin_areas.first
         operator_clauses = []
@@ -484,23 +485,26 @@ class Route < ActiveRecord::Base
       id_params = [new_route.id]
     end
 
-    condition_string = "number = ? AND transport_mode_id = ? #{operator_clause} #{id_clause}"
-    conditions = [condition_string, new_route.number, new_route.transport_mode.id]
+    condition_string = "(routes.number = ? OR routes.name = ?)
+                        AND routes.transport_mode_id = ? #{operator_clause} #{id_clause}"
+    conditions = [condition_string, new_route.number, new_route.number, new_route.transport_mode.id]
     conditions += operator_params
     conditions += id_params
     routes = Route.find(:all, :conditions => conditions,
                         :include => [ {:journey_patterns => {:route_segments => [:from_stop, :to_stop] }},
-                                       :route_operators,
+                                       { :route_operators => :operator },
                                        :route_source_admin_areas ])
     routes_with_same_stops = []
 
     routes.each do |route|
       route_stop_codes = route.stop_codes
       stop_codes_in_both = (stop_codes & route_stop_codes)
+
       if stop_codes_in_both.size > 0
-        if options[:require_total_match]
+        if options[:require_match_fraction]
           fraction_matching = (stop_codes_in_both.size.to_f / stop_codes.size.to_f)
-          if fraction_matching == 1.0
+          puts "Match between #{route.id} and #{new_route.id} - required match #{options[:require_match_fraction]}, fraction_matching = #{fraction_matching}"
+          if fraction_matching >= options[:require_match_fraction]
             routes_with_same_stops << route
             next
           end
@@ -508,9 +512,10 @@ class Route < ActiveRecord::Base
           routes_with_same_stops << route
           next
         end
-
       end
-      if !options[:require_total_match]
+      # If we haven't required a match fraction, include anything that goes through the same
+      # stop areas
+      if !options[:require_match_fraction]
         route_stop_area_codes = route.stop_area_codes
         stop_area_codes_in_both = (stop_area_codes & route_stop_area_codes)
         if stop_area_codes_in_both.size > 0
@@ -595,8 +600,8 @@ class Route < ActiveRecord::Base
     Route.find(routes.map{ |route| route.id })
   end
 
-  def self.find_existing_routes(new_route)
-    find_all_by_number_and_common_stop(new_route)
+  def self.find_existing_routes(new_route, options={})
+    find_all_by_number_and_common_stop(new_route, options)
   end
 
   def self.find_without_operators(options={})
@@ -646,7 +651,10 @@ class Route < ActiveRecord::Base
 
   def self.count_without_contacts
     count(:conditions => ['route_operators.operator_id not in
-                          (select operator_id from operator_contacts where deleted = ?)', false],
+                          (SELECT distinct operators.id
+                           FROM operators, operator_contacts
+                           WHERE operators.persistent_id = operator_contacts.operator_persistent_id
+                           AND operator_contacts.deleted = ?)', false],
           :include => :route_operators)
   end
 
