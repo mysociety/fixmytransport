@@ -6,7 +6,6 @@ class OperatorContact < ActiveRecord::Base
   has_many :sent_emails, :as => :recipient
   has_many :outgoing_messages, :as => :recipient
   validates_presence_of :category
-  # belongs_to :location, :polymorphic => true
   validates_format_of :email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
   validates_format_of :cc_email, :with => Regexp.new("^#{MySociety::Validate.email_match_regexp}\$"), :allow_blank => true
   validates_uniqueness_of :category, :scope => [:operator_persistent_id,
