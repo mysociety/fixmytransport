@@ -40,7 +40,6 @@ module FixMyTransport
       conditions = [ "location_type = '#{self.class.base_class.name.to_s}'
                       AND location_persistent_id = ?", self.persistent_id ]
       if only_visible
-        puts "looking for only visible"
         Campaign.visible.find(:all, :conditions => conditions,
                                     :order => 'created_at desc')
       else
