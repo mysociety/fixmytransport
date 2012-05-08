@@ -68,6 +68,6 @@
     </div>
   </div>
   <%- if @current_tab == :routes || @current_tab == :stations %>
-    <a id="operator-feedback-link" href="<%= feedback_url(:url => CGI.escape(request.request_uri), :operator_id => @operator.id) %>" rel="nofollow"><%= t('route_operators.show.information_wrong') %></a>
+    <a id="operator-feedback-link" href="<%= feedback_url(:url => CGI.escape(request.request_uri), :operator_id => @operator.persistent_id) %>" rel="nofollow"><%= t('route_operators.show.information_wrong') %></a>
   <%- end %>
 </div>

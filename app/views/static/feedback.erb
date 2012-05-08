@@ -1,11 +1,11 @@
 <div id="banner">
     <a id="home" href="/">FixMyTransport</a>
-	<div class="container">
-		<h1><%= @title %></h1>
-	</div>
+  <div class="container">
+    <h1><%= @title %></h1>
+  </div>
 </div>
 <div id="greybanner">
-	<div class="container">
+  <div class="container">
   <p>
     <%= raw t('static.feedback.not_for_problems', :url => root_url) %>
   </p>
@@ -15,83 +15,83 @@
    <%- elsif @location %>
    <%= raw t('static.feedback.location_feedback', :location => name_in_sentence(@location)) %>
    <%- else %>
-  	<%= raw t('static.feedback.please_give_feedback', :email => mail_to(@email)) %>
-  	<%- end %>
-	</p>
-	</div>
+    <%= raw t('static.feedback.please_give_feedback', :email => mail_to(@email)) %>
+    <%- end %>
+  </p>
+  </div>
 </div>
 
 <div id="main-content" class="container">
- 
-	<div class='feedback-form'>
-	  <%- form_for(@feedback, :url => feedback_path) do |form|  %>
-	    <div class='fieldset'>
+
+  <div class='feedback-form'>
+    <%- form_for(@feedback, :url => feedback_path) do |form|  %>
+      <div class='fieldset'>
 
         <%- if current_user %>
             <%= form.hidden_field :name, :value => current_user.name %>
             <%= form.hidden_field :email, :value => current_user.email %>
         <%- else %>
-	        <div class='form-field'>
-  	        <%= form.label :name  %>
-  	        <%= raw form.text_field :name %>
-  	        <%- if @feedback.errors.on(:name) %>
-  	          <div class='error'>
-  	            <%= error_message_on @feedback, :name %>
-  	          </div>
-  	        <%- end %>
+          <div class='form-field'>
+            <%= form.label :name  %>
+            <%= raw form.text_field :name %>
+            <%- if @feedback.errors.on(:name) %>
+              <div class='error'>
+                <%= error_message_on @feedback, :name %>
+              </div>
+            <%- end %>
 
-  	      </div>
+          </div>
 
 
-  	      <div class='form-field'>
-  	        <%= form.label :email  %>
-  	        <%= raw form.text_field :email  %>
-  	        <%- if @feedback.errors.on(:email) %>
-  	          <div class='error'>
-  	            <%= error_message_on @feedback, :email %>
-  	          </div>
-  	        <%- end %>
+          <div class='form-field'>
+            <%= form.label :email  %>
+            <%= raw form.text_field :email  %>
+            <%- if @feedback.errors.on(:email) %>
+              <div class='error'>
+                <%= error_message_on @feedback, :email %>
+              </div>
+            <%- end %>
 
-  	      </div>
+          </div>
 
         <%- end %>
 
 
-	      <div class='form-field'>
-	        <%= form.label :subject %>
-	        <%= raw form.text_field :subject  %>
-	        <%- if @feedback.errors.on(:subject) %>
-	          <div class='error'>
-	            <%= error_message_on @feedback, :subject %>
-	          </div>
-	        <%- end %>
-	      </div>
+        <div class='form-field'>
+          <%= form.label :subject %>
+          <%= raw form.text_field :subject  %>
+          <%- if @feedback.errors.on(:subject) %>
+            <div class='error'>
+              <%= error_message_on @feedback, :subject %>
+            </div>
+          <%- end %>
+        </div>
 
-	      <%- if params[:url] %>
-	        <%= raw hidden_field_tag 'feedback[feedback_on_uri]', params[:url] %>
-	      <%- end %>
-	      <%- if @operator %>
-	        <%= raw hidden_field_tag 'operator_id', @operator.id %>
-	      <%- end %>
-	      <%- if @location %>
-	        <%= raw hidden_field_tag 'location_id', @location.id %>
-	        <%= raw hidden_field_tag 'location_type', @location.class.to_s %>
-	      <%- end %>
-	      
-	      <div class='form-field'>
-	        <%= form.label :message %>
-	        <%= raw form.text_area :message, {:rows => 8, :cols => 50} %>
-	        <%- if @feedback.errors.on(:message) %>
-	          <div class='error'>
-	            <%= error_message_on @feedback, :message %>
-	          </div>
-	        <%- end %>
+        <%- if params[:url] %>
+          <%= raw hidden_field_tag 'feedback[feedback_on_uri]', params[:url] %>
+        <%- end %>
+        <%- if @operator %>
+          <%= raw hidden_field_tag 'operator_id', @operator.persistent_id %>
+        <%- end %>
+        <%- if @location %>
+          <%= raw hidden_field_tag 'location_id', @location.persistent_id %>
+          <%= raw hidden_field_tag 'location_type', @location.class.to_s %>
+        <%- end %>
 
-	      </div>
+        <div class='form-field'>
+          <%= form.label :message %>
+          <%= raw form.text_area :message, {:rows => 8, :cols => 50} %>
+          <%- if @feedback.errors.on(:message) %>
+            <div class='error'>
+              <%= error_message_on @feedback, :message %>
+            </div>
+          <%- end %>
 
-		  <button class="button" type="submit"><%= t('static.feedback.send') %></button>
+        </div>
 
-	    </div>
-	  <%- end %>
-	</div>
+      <button class="button" type="submit"><%= t('static.feedback.send') %></button>
+
+      </div>
+    <%- end %>
+  </div>
 </div>

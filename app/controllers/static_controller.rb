@@ -8,7 +8,7 @@ class StaticController < ApplicationController
       @location = instantiate_location(params[:location_id], params[:location_type])
     end
     if params[:operator_id]
-      @operator = Operator.find(:first, :conditions => ['id = ?', params[:operator_id]])
+      @operator = Operator.find(:first, :conditions => ['persistent_id = ?', params[:operator_id]])
     end
     @feedback = Feedback.new
     if request.post?
