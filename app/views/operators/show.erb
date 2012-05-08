@@ -13,7 +13,7 @@
     </div>
   </div>
 <%- end %>
-<div id="main-content" class="container operators has-tabs">  
+<div id="main-content" class="container operators has-tabs">
   <p>
     <%= raw @banner_text %>
   </p>
@@ -40,7 +40,7 @@
         <ul class="route-links">
           <%- @routes.each do |route| %>
             <li>
-              <a href="<%= "/routes/#{route.slug.scope}/#{route.slug.to_friendly_id}"%>"><%= route.description_with_inactive %></a>
+              <a href="<%= location_url(route) %>"><%= route.description_with_inactive %></a>
             </li>
           <%- end %>
         </ul>
@@ -50,7 +50,7 @@
         <ul class="route-links">
           <%- @stations.each do |station| %>
             <li>
-              <a href="<%= "/stations/#{station.slug.scope}/#{station.slug.to_friendly_id}"%>"><%= station.name_with_inactive %></a>
+              <a href="<%= location_url(station) %>"><%= station.name_with_inactive %></a>
             </li>
           <%- end %>
         </ul>
@@ -65,7 +65,7 @@
           <%= will_paginate @issues, :params => { :action => :issues } %>
         <%- end %>
       <%- end %>
-    </div>    
+    </div>
   </div>
   <%- if @current_tab == :routes || @current_tab == :stations %>
     <a id="operator-feedback-link" href="<%= feedback_url(:url => CGI.escape(request.request_uri), :operator_id => @operator.id) %>" rel="nofollow"><%= t('route_operators.show.information_wrong') %></a>

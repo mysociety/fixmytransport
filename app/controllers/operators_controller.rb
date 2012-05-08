@@ -192,11 +192,9 @@ class OperatorsController < ApplicationController
 
   def setup_paginated_stations
     @stations = WillPaginate::Collection.create((params[:page] or 1), @links_per_page) do |pager|
-      stations = StopArea.find(:all, :conditions => ["id in (SELECT stop_area_id
-                                                              FROM stop_area_operators
-                                                              WHERE operator_id = #{@operator.id})"],
-                                      :include => :slug,
-                                      :order => 'name asc',
+      stations = StopArea.find(:all, :conditions => ["stop_area_operators.operator_id = ?", @operator.id],
+                                      :include => [:stop_area_operators],
+                                      :order => 'stop_areas.name asc',
                                       :limit => @links_per_page,
                                       :offset => pager.offset)
       pager.replace(stations)
@@ -215,10 +213,8 @@ class OperatorsController < ApplicationController
 
   def setup_paginated_routes
     @routes = WillPaginate::Collection.create((params[:page] or 1), @links_per_page) do |pager|
-      routes = Route.find(:all, :conditions => ["id in (SELECT route_id
-                                                                FROM route_operators
-                                                                WHERE operator_id = #{@operator.id})"],
-                                        :include => :slug,
+      routes = Route.find(:all, :conditions => ["route_operators.operator_id = ?", @operator.id],
+                                        :include => [:route_operators],
                                         :order => 'cached_description asc',
                                         :limit => @links_per_page,
                                         :offset => pager.offset)
@@ -241,9 +237,8 @@ class OperatorsController < ApplicationController
       if ! @stations.nil? && @stations.size > 0
         sample_station = @stations.first
       else
-        sample_station = StopArea.first(:conditions => ["id in (SELECT stop_area_id
-                                                                FROM stop_area_operators
-                                                                WHERE operator_id = #{@operator.id})"],
+        sample_station = StopArea.first(:conditions => ["stop_area_operators.operator_id = ?", @operator.id],
+                                        :include => [:stop_area_operators],
                                         :order => 'name asc') # order cautiously ensures same result as "stations" tab
       end
       descriptions = StopAreaType.generic_name_for_type(sample_station.area_type)
