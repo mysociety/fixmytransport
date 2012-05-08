@@ -733,8 +733,11 @@ class ProblemsController < ApplicationController
   def render_or_return_invalid_problem
     respond_to do |format|
       format.html do
+        @map_height = PROBLEM_CREATION_MAP_HEIGHT
+        @map_width = PROBLEM_CREATION_MAP_WIDTH
         setup_problem_advice(@problem)
-        map_params_from_location(@problem.location.points, find_other_locations=false)
+        map_params_from_location(@problem.location.points, find_other_locations=false,
+                                 height=@map_height, width=@map_width)
         render :new
       end
       format.json do
