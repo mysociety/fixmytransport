@@ -398,20 +398,88 @@ namespace :tnds do
 
     end
 
+    def clone_in_new_generation(old_instance)
+      new_instance = old_instance.clone
+      new_instance.generation_high = CURRENT_GENERATION
+      new_instance.generation_low = CURRENT_GENERATION
+      new_instance.previous_id = old_instance.id
+      return new_instance
+    end
+
+    def find_successor(old_instance, model_class, relationship)
+      old_identifier = old_instance.send(relationship)
+      new_related_instance = model_class.find_successor(old_identifier)
+      raise "Can't find successor to #{model_class} #{old_identifier}" unless new_related_instance
+      return new_related_instance
+    end
 
     desc 'Promote train routes (which are not included in TNDS) to the current generation.
           Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1'
     task :train_routes => :environment do
       verbose = check_verbose
       dryrun = check_dryrun
-      Route.in_any_generation do
-        Route.find_each(:conditions => ["transport_mode_id = ?", TransportMode.find_by_name('Train')]) do |route|
-          puts "Updating #{route.name} to #{CURRENT_GENERATION}" if verbose
+      Route.paper_trail_off
+      RouteSegment.paper_trail_off
+      RouteOperator.paper_trail_off
+      JourneyPattern.paper_trail_off
+
+      Route.in_generation(PREVIOUS_GENERATION) do
+        train_mode = TransportMode.find_by_name('Train')
+        Route.find_each(:conditions => ["transport_mode_id = ? AND id >=  28456", train_mode]) do |route|
+
+          puts "Updating #{route.name} #{route.id} to generation #{CURRENT_GENERATION}" if verbose
+          new_gen_route = clone_in_new_generation(route)
+          new_gen_route.region = find_successor(route, Region, :region_id)
+          journey_patterns = []
+          JourneyPattern.in_any_generation do
+            journey_patterns = route.journey_patterns(force_reload=true)
+          end
+          journey_patterns.each do |journey_pattern|
+            new_attributes = clone_in_new_generation(journey_pattern).attributes
+            new_gen_journey_pattern = new_gen_route.journey_patterns.build(new_attributes)
+            new_gen_journey_pattern.route = new_gen_route
+            route_segments = []
+            RouteSegment.in_any_generation do
+              route_segments = journey_pattern.route_segments(force_reload=true)
+            end
+            route_segments.each do |route_segment|
+              new_attributes = clone_in_new_generation(route_segment).attributes
+              new_gen_route_segment = new_gen_journey_pattern.route_segments.build(new_attributes)
+              new_gen_route_segment.route = new_gen_route
+              new_gen_route_segment.from_stop = find_successor(route_segment, Stop, :from_stop_id)
+              new_gen_route_segment.to_stop = find_successor(route_segment, Stop, :to_stop_id)
+              if route_segment.from_stop_area_id
+                new_gen_route_segment.from_stop_area = find_successor(route_segment, StopArea, :from_stop_area_id)
+              end
+              if route_segment.to_stop_area_id
+                new_gen_route_segment.to_stop_area = find_successor(route_segment, StopArea, :to_stop_area_id)
+              end
+            end
+          end
+          route_operators = []
+          RouteOperator.in_any_generation do
+            route_operators = route.route_operators(force_reload=true)
+          end
+          route_operators.each do |route_operator|
+            new_attributes = clone_in_new_generation(route_operator).attributes
+            new_route_operator = new_gen_route.route_operators.build(new_attributes)
+            new_route_operator.operator = find_successor(route_operator, Operator, :operator_id)
+          end
+          if !new_gen_route.valid?
+            puts "ERROR: Route is invalid:"
+            puts new_gen_route.inspect
+            puts new_gen_route.errors.full_messages.join("\n")
+            exit(1)
+          end
           if !dryrun
-            route.update_attribute('generation_high', CURRENT_GENERATION)
+            new_gen_route.save!
           end
         end
       end
+      Route.paper_trail_on
+      RouteSegment.paper_trail_on
+      RouteOperator.paper_trail_on
+      JourneyPattern.paper_trail_on
     end
   end
 
