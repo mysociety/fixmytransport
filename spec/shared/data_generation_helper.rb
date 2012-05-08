@@ -157,7 +157,8 @@ module SharedBehaviours
 
           before do
             @previous = mock_model(@model_type, :generation_high => PREVIOUS_GENERATION,
-                                                :generation_low => PREVIOUS_GENERATION)
+                                                :generation_low => PREVIOUS_GENERATION,
+                                                :identity_hash => { :id => 55 } )
             # this stubbed call is called in the scope of the previous generation
             @model_type.stub(:find).with(*@find_params).and_return(@previous)
           end
@@ -205,8 +206,26 @@ module SharedBehaviours
                 @model_type.stub!(:find).with(:first, @previous_conditions).and_return(nil)
               end
 
-              it 'should return nil' do
-                @model_type.find_successor(*@find_params).should == nil
+              describe 'if there is a manual mapping to another object' do
+
+                before do
+                  @model_type.stub!(:manual_remaps).and_return({{:id => 55} => {:id => 99}})
+                  @mapped_successor = mock_model(@model_type)
+                  @model_type.stub!(:find).with(:first, :conditions => {:id => 99}).and_return(@mapped_successor)
+                end
+
+                it 'should return the manually mapped object' do
+                  @model_type.find_successor(*@find_params).should == @mapped_successor
+                end
+
+              end
+
+              describe 'if there is no manual mapping to another object' do
+
+                it 'should return nil' do
+                  @model_type.find_successor(*@find_params).should == nil
+                end
+
               end
             end
           end

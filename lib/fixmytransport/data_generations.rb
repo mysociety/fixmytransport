@@ -154,6 +154,25 @@ module FixMyTransport
         end
       end
 
+      def manual_remaps
+        @manual_mapping_hash = get_manual_remaps unless defined? @manual_mapping_hash
+        @manual_mapping_hash
+      end
+
+      def get_manual_remaps
+        mappings = DataGenerationMapping.find(:all, :conditions => ['old_generation_id = ?
+                                                                     AND new_generation_id = ?
+                                                                     AND model_name = ?',
+                                                                     PREVIOUS_GENERATION,
+                                                                     CURRENT_GENERATION,
+                                                                     self.to_s])
+        mapping_hash = {}
+        mappings.each do |mapping|
+          mapping_hash[mapping.old_model_hash] = mapping.new_model_hash
+        end
+        mapping_hash
+      end
+
       # If the find_params passed would have matched an instance in the previous generation
       # return that instance (if it is valid in the current generation), or its successor, if
       # it has one
@@ -166,6 +185,9 @@ module FixMyTransport
           return previous if previous.generation_high >= CURRENT_GENERATION
           successor = self.find(:first, :conditions => ['previous_id = ?', previous.id])
           return successor if successor
+          if remap_identity_hash = manual_remaps[previous.identity_hash]
+            return self.find(:first, :conditions => remap_identity_hash)
+          end
         end
         return nil
       end
