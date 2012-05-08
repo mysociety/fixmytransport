@@ -272,7 +272,7 @@ module ApplicationHelper
     end
   end
 
-  # Construct an explanation string saying why you might want to report a problem 
+  # Construct an explanation string saying why you might want to report a problem
   # at this location
   def location_explanation(location)
     orgs = @template.org_names(location.responsible_organizations, t('problems.new.or'),
@@ -477,7 +477,9 @@ module ApplicationHelper
     if link_type == :location
       return location_path(location, :escape => false)
     elsif link_type == :problem
-      return existing_problems_path({:location_id => location.id, :location_type => location.class, :escape => false})
+      return existing_problems_path({ :location_id => location.persistent_id,
+                                      :location_type => location.class,
+                                      :escape => false })
     else
       raise "Unknown link_type in map_link_url: #{link_type}"
     end
@@ -671,15 +673,15 @@ module ApplicationHelper
   def problem_sending_history(problem)
     history = ''
     dates_hash = Hash.new{ |hash, key| hash[key] = [] }
-	  problem.reports_sent.each do |sent_email|
-	    dates_hash[sent_email.created_at.to_date] << sent_email.recipient.name
-	  end
-	  dates_hash.to_a.sort.each do |date, recipients|
-	    history_text = t('problems.show.sent_time', :date => date.to_s(:short),
-	                                                :recipient => recipients.uniq.to_sentence)
-	    history += "<li>#{history_text}</li>"
-	  end
-		history
+    problem.reports_sent.each do |sent_email|
+      dates_hash[sent_email.created_at.to_date] << sent_email.recipient.name
+    end
+    dates_hash.to_a.sort.each do |date, recipients|
+      history_text = t('problems.show.sent_time', :date => date.to_s(:short),
+                                                  :recipient => recipients.uniq.to_sentence)
+      history += "<li>#{history_text}</li>"
+    end
+    history
   end
 
   # Operator links for the campaign and problem pages - if the problem was on a sub route,
@@ -691,9 +693,9 @@ module ApplicationHelper
     if location.is_a?(SubRoute) && location.route_operators.empty? && problem.responsible_operators.size == 1
       return t('shared.operator_links.operated_by', :operators => operator_links(problem.responsible_operators))
     elsif location.respond_to?(:operators) && !location.operators.empty? && location.operators.size <= 2
-	    return t('shared.operator_links.operated_by', :operators => operator_links(location.operators))
-	  else
-	    return nil
+      return t('shared.operator_links.operated_by', :operators => operator_links(location.operators))
+    else
+      return nil
     end
   end
 

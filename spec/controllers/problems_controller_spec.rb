@@ -170,7 +170,7 @@ describe ProblemsController do
     describe 'when the "to" and "from" params are supplied' do
 
       before do
-        @sub_route = mock_model(SubRoute, :type => SubRoute)
+        @sub_route = mock_model(SubRoute, :type => SubRoute, :persistent_id => 55)
         SubRoute.stub!(:make_sub_route).and_return(@sub_route)
       end
 
@@ -201,7 +201,8 @@ describe ProblemsController do
 
         it 'should redirect to the existing problem URL, passing the sub-route ID and type' do
           make_request({:to => "london euston", :from => 'birmingham new street'})
-          response.should redirect_to(existing_problems_url(:location_id => @sub_route.id, :location_type => 'SubRoute'))
+          response.should redirect_to(existing_problems_url(:location_id => @sub_route.persistent_id,
+                                                            :location_type => 'SubRoute'))
         end
 
       end
@@ -652,6 +653,7 @@ describe ProblemsController do
                                       :lat => 51,
                                       :lon => 0,
                                       :name => 'Test Stop',
+                                      :persistent_id => 55,
                                       :transport_mode_names => ['Bus/Coach'])
         @controller.stub!(:instantiate_location).and_return(@mock_stop)
       end
@@ -669,7 +671,8 @@ describe ProblemsController do
 
         it 'should redirect to the new problem url' do
           make_request
-          response.should redirect_to(new_problem_url(:location_id => @mock_stop.id, :location_type => 'Stop'))
+          response.should redirect_to(new_problem_url(:location_id => @mock_stop.persistent_id,
+                                                      :location_type => 'Stop'))
         end
 
       end
@@ -833,18 +836,21 @@ describe ProblemsController do
     before do
       @council = mock('council', :id => 33, :name => 'A test council')
       @other_council = mock('another council', :id => 55, :name => 'Another council')
-      @operator = mock_model(Operator, :id => 44)
+      @operator = mock_model(Operator, :id => 44, :persistent_id => 66)
       @stop = mock_model(Stop, :points => [mock_model(Stop, :lat => 50, :lon => 0)],
                                :responsible_organizations => [@operator, @council])
       @mock_user = mock_model(User)
       @responsibility_one = mock_model(Responsibility, :organization => @council,
                                                        :organization_id => @council.id,
+                                                       :organization_persistent_id => nil,
                                                        :organization_type => 'Council')
       @responsibility_two = mock_model(Responsibility, :organization => @operator,
-                                                       :organization_id => @operator.id,
+                                                       :organization_persistent_id => @operator.id,
+                                                       :organization_id => @operator.persistent_id,
                                                        :organization_type => 'Operator')
       @extra_responsibility = mock_model(Responsibility, :organization => @other_council,
                                                          :organization_id => @other_council.id,
+                                                         :organization_persistent_id => nil,
                                                          :organization_type => 'Council',
                                                          :destroy => true)
       @mock_problem = mock_model(Problem, :valid? => true,
@@ -998,14 +1004,16 @@ describe ProblemsController do
       describe 'if there is no logged in user' do
 
         it 'should save the problem data to the session with the description encoded' do
-          @controller.should_receive(:data_to_string).with({:location_persistent_id => 55,
-                                                            :subject => "A Test Subject",
-                                                            :responsibilities => "33|Council,44|Operator",
-                                                            :location_type => "Route",
-                                                            :description => "QSBUZXN0IERlc2NyaXB0aW9u\n",
-                                                            :action => :create_problem,
-                                                            :text_encoded => true,
-                                                            :notice => "Please create an account to finish reporting your problem.", :category=>"Other"})
+          expected_params = { :location_persistent_id => 55,
+                              :subject => "A Test Subject",
+                              :responsibilities => "33|Council|organization_id,44|Operator|organization_persistent_id",
+                              :location_type => "Route",
+                              :description => "QSBUZXN0IERlc2NyaXB0aW9u\n",
+                              :action => :create_problem,
+                              :text_encoded => true,
+                              :notice => "Please create an account to finish reporting your problem.",
+                              :category=>"Other" }
+          @controller.should_receive(:data_to_string).with(expected_params)
           make_request()
         end
 

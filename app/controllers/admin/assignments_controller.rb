@@ -33,7 +33,7 @@ class Admin::AssignmentsController < Admin::AdminController
       end
 
       if !problem.responsible_organizations.include?(@operator)
-        problem.responsibilities.build( :organization_id => @operator.id,
+        problem.responsibilities.build( :organization_persistent_id => @operator.persistent_id,
                                         :organization_type => 'Operator' )
       end
       location_only = @assignment.data ? @assignment.data[:location_only] : nil

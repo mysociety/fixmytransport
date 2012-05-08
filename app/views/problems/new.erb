@@ -30,7 +30,11 @@
           <%- @problem.reference.responsible_organizations.each do |organization| %>
             <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
               <%= responsibility_fields.hidden_field :organization_type,  :value => organization.class.to_s %>
-              <%= responsibility_fields.hidden_field :organization_id,  :value => organization.id %>
+              <%- if organization.class.to_s == 'Operator'%>
+                <%= responsibility_fields.hidden_field :organization_persistent_id,  :value => organization.id %>
+              <%- else %>
+                <%= responsibility_fields.hidden_field :organization_id,  :value => organization.id %>
+              <%- end %>
             <%- end %>
           <%- end %>
           <%= f.hidden_field :reference_id, :value => @problem.reference.id %>
@@ -42,20 +46,20 @@
           <%- if @problem.location.operators_responsible?  %>
             <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
               <%- if @problem.location.operators.size > 1 %>
-                <%- if responsibility_fields.object.errors.on('organization_id') %>
-                  <div class='error error-responsibilities_organization_id'>
-                    <%= error_message_on responsibility_fields.object, :organization_id %>
+                <%- if responsibility_fields.object.errors.on('organization_persistent_id') %>
+                  <div class='error error-responsibilities_organization_persistent_id'>
+                    <%= error_message_on responsibility_fields.object, :organization_persistent_id %>
                   </div>
                 <%- else %>
-                  <div class='error error-responsibilities_organization_id' style="display: none;" role="alert">
+                  <div class='error error-responsibilities_organization_persistent_id' style="display: none;" role="alert">
                   </div>
                 <%- end %>
-                <%= raw responsibility_fields.collection_select("organization_id", @problem.location.operators, :id, :name, :include_blank => t('problems.new.select_operator')) %>
+                <%= raw responsibility_fields.collection_select("organization_persistent_id", @problem.location.operators, :perssistent_id, :name, :include_blank => t('problems.new.select_operator')) %>
                 <%= responsibility_fields.hidden_field :organization_type,  :value => 'Operator' %>
 
               <%- elsif @problem.location.operators.size == 1 %>
                 <%= responsibility_fields.hidden_field :organization_type,  :value => 'Operator' %>
-                <%= responsibility_fields.hidden_field :organization_id,  :value => @problem.location.operators.first.id %>
+                <%= responsibility_fields.hidden_field :organization_persistent_id,  :value => @problem.location.operators.first.persistent_id %>
                 <div class="static-value">
                   <%= @problem.location.operators.first.name %>
                 </div>

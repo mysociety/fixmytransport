@@ -23,7 +23,7 @@
   <ul class='location-list'>
     <%- @locations.each do |location| %>
       <li>
-        <%= link_to "#{location.description_with_operators}", existing_problems_url(:location_id => location.id, :location_type => location.class.to_s) %>
+        <%= link_to "#{location.description_with_operators}", existing_problems_url(:location_id => location.persistent_id, :location_type => location.class.to_s) %>
       </li>
     <%- end %>
   </ul>

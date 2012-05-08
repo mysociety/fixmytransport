@@ -56,6 +56,37 @@ describe Problem do
       p = Problem.create_from_hash(problem_hash, @user)
     end
 
+    it 'should create responsibilities with persistent ids for operators using a string without an id field specified' do
+      Problem.stub!(:new).and_return(@mock_problem)
+      Operator.stub!(:find).with(1).and_return(mock_model(Operator, :persistent_id => 22))
+      @mock_problem.responsibilities.should_receive(:build).with(:organization_persistent_id => 22,
+                                                                 :organization_type => 'Operator')
+      @mock_problem.responsibilities.should_receive(:build).with(:organization_id => "2",
+                                                                 :organization_type => 'Council')
+      problem_hash = { :subject => 'A Test Subject',
+                       :description => 'A Test Description',
+                       :location_persistent_id => 55,
+                       :location_type => 'Route',
+                       :category => 'Other',
+                       :responsibilities => '1|Operator,2|Council' }
+      p = Problem.create_from_hash(problem_hash, @user)
+    end
+
+    it 'should create responsibilities with persistent_ids for operators using a string with an id field specified' do
+      Problem.stub!(:new).and_return(@mock_problem)
+      @mock_problem.responsibilities.should_receive(:build).with(:organization_persistent_id => '1',
+                                                                 :organization_type => 'Operator')
+      @mock_problem.responsibilities.should_receive(:build).with(:organization_id => '22',
+                                                                 :organization_type => 'Council')
+      problem_hash = { :subject => 'A Test Subject',
+                       :description => 'A Test Description',
+                       :location_persistent_id => 55,
+                       :location_type => 'Route',
+                       :category => 'Other',
+                       :responsibilities => '1|Operator|organization_persistent_id,22|Council|organization_id' }
+      p = Problem.create_from_hash(problem_hash, @user)
+    end
+
     it 'should build a problem with the params passed' do
       Problem.should_receive(:new).with(@expected_params).and_return(@mock_problem)
       Problem.create_from_hash(@problem_data, @user)

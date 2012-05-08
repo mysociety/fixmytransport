@@ -51,7 +51,7 @@ class Admin::ProblemsController < Admin::AdminController
     @problem = Problem.find(params[:id])
     # filter params for responsibilities without organization ids - from the blank form fields
     params[:problem][:responsibilities_attributes].each do |key, value_hash|
-      if value_hash[:id].blank? && value_hash[:organization_id].blank?
+      if value_hash[:id].blank? && value_hash[:organization_id].blank? && value_hash[:organization_persistent_id].blank?
         params[:problem][:responsibilities_attributes].delete(key)
       end
     end

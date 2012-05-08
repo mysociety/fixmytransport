@@ -225,12 +225,14 @@ class Operator < ActiveRecord::Base
     end
   end
 
-  def self.problems_at_location(location_type, location_persistent_id, operator_id)
+  def self.problems_at_location(location_type, location_id, operator_id)
+    location = location_type.constantize.find(location_id)
+    operator = Operator.find(operator_id)
     conditions = ["problems.location_type = ?
                    AND problems.location_persistent_id = ?
-                   AND responsibilities.organization_id = ?
+                   AND responsibilities.organization_persistent_id = ?
                    AND responsibilities.organization_type = 'Operator'",
-                  location_type, location_persistent_id, operator_id]
+                  location_type, location.persistent_id, operator.persistent_id]
     return Problem.find(:all, :conditions => conditions, :include => :responsibilities)
   end
 

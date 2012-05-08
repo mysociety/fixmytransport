@@ -23,6 +23,7 @@ describe Admin::AssignmentsController do
       @operator_contacts = mock("operator contacts association", :build => true)
       @mock_operator = mock_model(Operator, :contact_for_category_and_location => nil,
                                             :operator_contacts => @operator_contacts,
+                                            :persistent_id => 77,
                                             :save! => true)
       Operator.stub!(:find).with("66").and_return(@mock_operator)
       @route_operators = mock("route operators association", :build => true)
@@ -88,14 +89,14 @@ describe Admin::AssignmentsController do
         before do
           Operator.stub!(:find).with("66").and_return(@mock_operator)
         end
-        
-        describe 'if the operator is already associated with the location' do 
-          
-          it 'should not try to add the operator for the location' do 
+
+        describe 'if the operator is already associated with the location' do
+
+          it 'should not try to add the operator for the location' do
             @route = mock_model(Route, :operators => [@mock_operator])
             make_request(@default_params.merge({:operator_id => 66}))
           end
-          
+
         end
 
         describe 'if the location is a route' do
@@ -120,12 +121,12 @@ describe Admin::AssignmentsController do
 
         end
 
-        it 'should add a responsibility for the operator to the problem' do
-          @mock_problem.responsibilities.should_receive(:build).with({ :organization_id => @mock_operator.id,
-                                                                       :organization_type => 'Operator' })
+        it 'should add a responsibility for the operator to the problem using the persistent id' do
+          expected_params = { :organization_persistent_id => @mock_operator.persistent_id,
+                              :organization_type => 'Operator' }
+          @mock_problem.responsibilities.should_receive(:build).with(expected_params)
           make_request(@default_params.merge({:operator_id => 66}))
         end
-
 
         it 'should save the assignment, location and problem' do
           @mock_assignment.should_receive(:save!)
@@ -133,7 +134,6 @@ describe Admin::AssignmentsController do
           @mock_problem.should_receive(:save!)
           make_request(@default_params.merge({:operator_id => 66}))
         end
-
 
         describe 'if there is an error saving the models' do
 
@@ -220,8 +220,8 @@ describe Admin::AssignmentsController do
                 @operator_contacts.should_receive(:build).with(:email => 'test@example.com', :category => "Other")
                 make_request(@default_params.merge({:operator_id => 66}))
               end
-              
-              it 'should set the assigment as complete' do 
+
+              it 'should set the assigment as complete' do
                 @mock_assignment.should_receive(:status=).with(:complete)
                 make_request(@default_params.merge({:operator_id => 66}))
               end

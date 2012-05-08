@@ -146,6 +146,7 @@ describe QuestionnairesController do
       @stop = mock_model(Stop, :points => ['my points'],
                                :visible_campaigns => [],
                                :name => 'Test Stop',
+                               :persistent_id => 55,
                                :transport_mode_names => ['Bus/Coach'])
       @comment = mock_model(Comment, :status= => nil,
                                      :save => true,
@@ -307,7 +308,7 @@ describe QuestionnairesController do
             make_request(@params)
             expected_notice = ["We're sorry to hear that this problem hasn't been fixed. If it's an ongoing issue,",
                                 "you could look to see if anyone is",
-                                "<a href=\"/problems/existing?location_id=#{@stop.id}&location_type=Stop&source=questionnaire\">seeking",
+                                "<a href=\"/problems/existing?location_id=#{@stop.persistent_id}&location_type=Stop&source=questionnaire\">seeking",
                                 "support</a> for a similar issue at the Test Stop, and add your voice."].join(" ")
             flash[:large_notice].should == expected_notice
           end
@@ -328,7 +329,7 @@ describe QuestionnairesController do
           it 'should add a large notice suggesting a campaign, linking to the new problem
               page, passing a reference_id param with the current problem id' do
             make_request(@params)
-            expected_url = "/problems/new?location_id=#{@stop.id}&location_type=Stop&reference_id=#{@problem.id}"
+            expected_url = "/problems/new?location_id=#{@stop.persistent_id}&location_type=Stop&reference_id=#{@problem.id}"
             expected_notice = ["We're sorry to hear that this problem hasn't been fixed. If it's",
                               "an ongoing issue, you could use FixMyTransport to get others involved by",
                               "<a href=\"#{expected_url}\">writing",

@@ -10,7 +10,9 @@ describe OperatorsController do
     @mock_operator = mock_model(Operator,
       :name => 'Sodor & Mainland Railway',
       :transport_mode => @transport_mode,
-      :to_i => 11)
+      :to_i => 11,
+      :stop_areas => [],
+      :routes => [])
     Problem.stub!(:find_recent_issues).and_return([])
   end
 
@@ -146,6 +148,7 @@ describe OperatorsController do
       describe 'if that stop area is for ferries' do
 
         before do
+
           StopArea.stub!(:find).and_return([mock_model(StopArea, :name => "Some jetty", :area_type => "GFTD")])
         end
 

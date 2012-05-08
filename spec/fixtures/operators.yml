@@ -21,23 +21,28 @@ a_train_company:
   name: A train company
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= Operator.next_persistent_id %>
 another_train_company:
   noc_code: TRAIN2
   name: Another train company
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= Operator.next_persistent_id %>
 a_bus_company:
   noc_code: BUS
   name: A bus company
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-another_bus_company: 
+  persistent_id: <%= Operator.next_persistent_id %>
+another_bus_company:
   noc_code: BUS
   name: Another bus company
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= Operator.next_persistent_id %>
 old_train_company:
   noc_code: TRAI
   name: A train company
   generation_low: <%= PREVIOUS_GENERATION %>
   generation_high: <%= PREVIOUS_GENERATION %>
+  persistent_id: <%= Operator.next_persistent_id %>

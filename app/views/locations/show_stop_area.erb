@@ -17,19 +17,19 @@
 
 <div id="banner">
   <a id="home" href="/">FixMyTransport</a>
-	<div class="container">
-		<h1><%= "#{@stop_area.full_name}" %></h1>
-	</div>
+  <div class="container">
+    <h1><%= "#{@stop_area.full_name}" %></h1>
+  </div>
 </div>
 <div id="greybanner">
-	<div class="container">
+  <div class="container">
 
       <%- if !@stop_area.area.blank? %>
         <p><span class='locality'>
           <%= "In #{@stop_area.locality_name}" %>
         </span></p>
       <%- end %>
-      
+
       <%- if !@stop_area.operators.empty?  %>
 
           <p class="route-operator">
@@ -42,20 +42,20 @@
           </div>
         <%- end %>
         <%- if current_user && current_user.is_admin? %>
-     		<a href="<%= admin_url(admin_stop_area_path(@stop_area.id)) %>" class="button"><%= t('locations.show_stop_area.admin_stop_area') %></a>
-     		<%- end %>
-	</div>
+        <a href="<%= admin_url(admin_stop_area_path(@stop_area.id)) %>" class="button"><%= t('locations.show_stop_area.admin_stop_area') %></a>
+        <%- end %>
+  </div>
 </div>
 <div id="main-content" class="container">
 
-  	<div class="leftcol standardcol">
-  	  <div class="report-explanation">
-      <a class="button big red report_variant" href="<%= new_problem_url(:location_id => @stop_area.id, :location_type => @stop_area.type)%>" rel="nofollow"><%= t('shared.location_content.report_a_problem_variant', :on_or_at => t('locations.show_stop_area.at_the'), :location => readable_location_type(@stop_area)) %></a>
-    	<%= raw location_explanation(@stop_area) %>
-    	</div>
-  	  <%= render :partial => "shared/location_content",  :locals => { :location => @stop_area } %>
+    <div class="leftcol standardcol">
+      <div class="report-explanation">
+      <a class="button big red report_variant" href="<%= new_problem_url(:location_id => @stop_area.persistent_id, :location_type => @stop_area.type)%>" rel="nofollow"><%= t('shared.location_content.report_a_problem_variant', :on_or_at => t('locations.show_stop_area.at_the'), :location => readable_location_type(@stop_area)) %></a>
+      <%= raw location_explanation(@stop_area) %>
+      </div>
+      <%= render :partial => "shared/location_content",  :locals => { :location => @stop_area } %>
 
-  	</div>
+    </div>
 
 
   <div class="rightcol standardcol">
@@ -67,18 +67,18 @@
     </div>
 
     <%- cache(:action => 'show_stop_area', :action_suffix => 'route_list') do %>
-		  <h5 class="left"><%= t('locations.show_stop_area.routes_header') %></h5>
+      <h5 class="left"><%= t('locations.show_stop_area.routes_header') %></h5>
       <ol id="large-ol">
         <%- @stop_area.routes.sort_by(&:short_name).each do |route| %>
         <li><a href="<%= location_url(route)%>">
          <%= route.short_name %>
          <%- if route.status == 'DEL' %>
-   			<%= t('locations.show_stop_area.route_inactive') %>
-   		  <%- end %>
+        <%= t('locations.show_stop_area.route_inactive') %>
+        <%- end %>
         </a></li>
         <%- end %>
       </ol>
-	  <%- end %>
-	</div>
+    <%- end %>
+  </div>
 
 </div>

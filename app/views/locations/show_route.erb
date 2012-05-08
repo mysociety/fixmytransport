@@ -3,38 +3,38 @@
 <%- end %>
 <div id="banner">
   <a id="home" href="/">FixMyTransport</a>
-	<div class="container">
-		<h1 class="route-name"><%= @route.name %></h1>
-	</div>
+  <div class="container">
+    <h1 class="route-name"><%= @route.name %></h1>
+  </div>
 </div>
 <div id="greybanner">
-	<div class="container">
-	  	<p><%= @route.area %></p>
-			<%- if !@route.operators.empty?  %>
-			<p><%= raw t('locations.show_route.operated_by', :operators => operator_links(@route.operators)) %></p>
-			<%- end %>
-			 <%- if @route.status == 'DEL' %>
+  <div class="container">
+      <p><%= @route.area %></p>
+      <%- if !@route.operators.empty?  %>
+      <p><%= raw t('locations.show_route.operated_by', :operators => operator_links(@route.operators)) %></p>
+      <%- end %>
+       <%- if @route.status == 'DEL' %>
           <div class='location-status'>
             <%= t('locations.show_route.route_marked_inactive') %>
           </div>
        <%- end %>
        <%- if current_user && current_user.is_admin? %>
-   		<a href="<%= admin_url(admin_route_path(@route.id)) %>" class="button"><%= t('locations.show_route.admin_route') %></a>
-   		<%- end %>
-	</div>
+      <a href="<%= admin_url(admin_route_path(@route.id)) %>" class="button"><%= t('locations.show_route.admin_route') %></a>
+      <%- end %>
+  </div>
 </div>
 <div id="main-content" class="container">
- 
-	<div class="leftcol standardcol">
-	  <div class="report-explanation">
-    <a class="button big red report_variant" href="<%= new_problem_url(:location_id => @route.id, :location_type => @route.type)%>" rel="nofollow"><%= t('shared.location_content.report_a_problem_variant', :on_or_at => t('locations.show_route.on_the'), :location => t('locations.show_route.route')) %></a>  
-  
-  	<%= raw location_explanation(@route) %>
-  	</div>
-	  <%= render :partial => "shared/location_content",  :locals => { :location => @route } %>
 
-	</div>
-	
+  <div class="leftcol standardcol">
+    <div class="report-explanation">
+    <a class="button big red report_variant" href="<%= new_problem_url(:location_id => @route.persistent_id, :location_type => @route.type)%>" rel="nofollow"><%= t('shared.location_content.report_a_problem_variant', :on_or_at => t('locations.show_route.on_the'), :location => t('locations.show_route.route')) %></a>
+
+    <%= raw location_explanation(@route) %>
+    </div>
+    <%= render :partial => "shared/location_content",  :locals => { :location => @route } %>
+
+  </div>
+
   <div class="rightcol standardcol">
     <div id="medium-map-variant">
       <h5><%= @route.description %></h5>
@@ -43,21 +43,21 @@
       <%- end %>
     </div>
 
-  	<%- cache(:action => 'show_route', :action_suffix => 'stop_list') do %>
-  	<h5 class="left"><%= t('locations.show_route.stops_header') %></h5>
-  		<ol id="large-ol">
-  			<%- @route.default_journey_locations.each_with_index do |stop_or_station, index| %>
-  			<li><a href="<%= location_url(stop_or_station) %>">
-  			    <span class="num"><%= index+1 %></span>
-  			    <%= stop_or_station.is_a?(Stop) ? stop_or_station.name_with_long_indicator : stop_or_station.name %>
-  			    <%- if stop_or_station.status == 'DEL' %>
-  			      <%= t('locations.show_route.stop_or_station_inactive')%>
-  			    <%- end %>
-  			  </a>
-  			</li>
-  			<%- end %>
-  		</ol>
-  	<%- end %>
+    <%- cache(:action => 'show_route', :action_suffix => 'stop_list') do %>
+    <h5 class="left"><%= t('locations.show_route.stops_header') %></h5>
+      <ol id="large-ol">
+        <%- @route.default_journey_locations.each_with_index do |stop_or_station, index| %>
+        <li><a href="<%= location_url(stop_or_station) %>">
+            <span class="num"><%= index+1 %></span>
+            <%= stop_or_station.is_a?(Stop) ? stop_or_station.name_with_long_indicator : stop_or_station.name %>
+            <%- if stop_or_station.status == 'DEL' %>
+              <%= t('locations.show_route.stop_or_station_inactive')%>
+            <%- end %>
+          </a>
+        </li>
+        <%- end %>
+      </ol>
+    <%- end %>
   </div>
-    
+
 </div>

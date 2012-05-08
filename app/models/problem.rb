@@ -358,8 +358,23 @@ class Problem < ActiveRecord::Base
     location = data[:location_type].constantize.find_by_persistent_id(data[:location_persistent_id])
     problem.location = location
     data[:responsibilities].split(",").each do |responsibility_string|
-      organization_id, organization_type = responsibility_string.split("|")
-      problem.responsibilities.build(:organization_id => organization_id,
+      organization_id, organization_type, id_field = responsibility_string.split("|")
+      # TODO: the first clause of this 'if' clause handles legacy data - remove once there are no
+      # more old format responsibilities stored in the session
+      if ! id_field
+        id_field = :organization_id
+      else
+        id_field = id_field.to_sym
+      end
+
+      # TODO: this 'if' clause handles legacy data - remove once there are no more old format
+      # responsibilities stored in the session
+      if id_field == :organization_id && organization_type == 'Operator'
+        operator = Operator.find(organization_id.to_i)
+        id_field = :organization_persistent_id
+        organization_id = operator.persistent_id
+      end
+      problem.responsibilities.build(id_field => organization_id,
                                      :organization_type => organization_type)
     end
     problem.status = :new
@@ -406,7 +421,7 @@ class Problem < ActiveRecord::Base
       if location_class == "'Route'" && !location.sub_routes.empty?
         # for a train route, we want to include problems on sub-routes of this route
         # that were reported to a matching operator
-        operator_ids = location.operator_ids.map{ |id| conn.quote(id) }.join(',')
+        operator_persistent_ids = location.operators.map{ |operator| conn.quote(operator.persistent_id) }.join(',')
         extra_tables = ", responsibilities"
         location_clause = "AND ((problems.location_persistent_id = #{location_persistent_id}
                             AND problems.location_type = #{location_class})
@@ -417,7 +432,7 @@ class Problem < ActiveRecord::Base
                              AND problems.location_type = 'SubRoute'
                              AND problems.id = responsibilities.problem_id
                              AND responsibilities.organization_type = 'Operator'
-                             AND responsibilities.organization_id in (#{operator_ids}))) "
+                             AND responsibilities.organization_persistent_id in (#{operator_persistent_ids}))) "
       else
         extra_tables = ''
         location_clause = " AND problems.location_persistent_id = #{location_persistent_id}
@@ -428,7 +443,7 @@ class Problem < ActiveRecord::Base
       extra_tables = ", responsibilities"
       location_clause = "AND problems.id = responsibilities.problem_id
                          AND responsibilities.organization_type = 'Operator'
-                         AND responsibilities.organization_id = #{operator.id} "
+                         AND responsibilities.organization_persistent_id = #{operator.persistent_id} "
     else
       extra_tables = ''
       location_clause = ""

@@ -94,14 +94,14 @@ class QuestionnairesController < ApplicationController
         if @questionnaire.subject.is_a?(Problem)
           location = @questionnaire.subject.location
           if location.visible_campaigns.size > 0
-            existing_problems_path = existing_problems_path(:location_id => location.id,
+            existing_problems_path = existing_problems_path(:location_id => location.persistent_id,
                                                             :location_type => location.class.to_s,
                                                             :source => 'questionnaire')
             flash[:large_notice] = t('questionnaires.completed.next_steps_problem_existing_campaigns',
                                      :url => existing_problems_path,
                                      :location => @template.at_the_location(location))
           else
-            new_problem_path = new_problem_path(:location_id => location.id,
+            new_problem_path = new_problem_path(:location_id => location.persistent_id,
                                                 :location_type => location.class.to_s,
                                                 :reference_id => @questionnaire.subject.id)
             flash[:large_notice] = t('questionnaires.completed.next_steps_problem',

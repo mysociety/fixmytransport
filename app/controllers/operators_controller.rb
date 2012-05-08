@@ -162,13 +162,13 @@ class OperatorsController < ApplicationController
     problem_count = Problem.visible.count(:conditions => ["id in (SELECT problem_id
                                                            FROM responsibilities
                                                            WHERE organization_type = 'Operator'
-                                                           AND organization_id = #{@operator.id})"])
+                                                           AND organization_persistent_id = #{@operator.id})"])
     campaign_count = Campaign.visible.count(:conditions => ["id in (SELECT campaign_id FROM problems
                                                             WHERE problems.id in (
                                                             SELECT problem_id
                                                             FROM responsibilities
                                                             WHERE organization_type = 'Operator'
-                                                            AND organization_id = #{@operator.id}))"])
+                                                            AND organization_persistent_id = #{@operator.id}))"])
     return problem_count + campaign_count
   end
 
@@ -187,12 +187,7 @@ class OperatorsController < ApplicationController
   end
 
   def find_station_count
-    return Operator.connection.select_value("SELECT count(DISTINCT stop_areas.id)
-                                                         AS count_stop_areas_id
-                                                         FROM stop_areas
-                                                         INNER JOIN stop_area_operators
-                                                         ON stop_areas.id = stop_area_operators.stop_area_id
-                                                         WHERE (stop_area_operators.operator_id = #{@operator.id})").to_i
+    @operator.stop_areas.count
   end
 
   def setup_paginated_stations
@@ -215,11 +210,7 @@ class OperatorsController < ApplicationController
   end
 
   def find_route_count
-    return Operator.connection.select_value("SELECT count(DISTINCT routes.id) AS count_routes_id
-                                                     FROM routes
-                                                     INNER JOIN route_operators
-                                                     ON routes.id = route_operators.route_id
-                                                     WHERE (route_operators.operator_id = #{@operator.id})").to_i
+    @operator.routes.count
   end
 
   def setup_paginated_routes

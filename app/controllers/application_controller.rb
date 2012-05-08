@@ -109,7 +109,7 @@ class ApplicationController < ActionController::Base
     end
     return true
   end
-  
+
   def campaign_param
     if self.class == CampaignsController
       param = :id
@@ -450,7 +450,7 @@ class ApplicationController < ActionController::Base
                      'SubRoute',
                      'CoachRoute']
     if allowed_types.include?(location_type)
-      return location_type.constantize.find(:first, :conditions => ['id = ?', location_id])
+      return location_type.constantize.find(:first, :conditions => ['persistent_id = ?', location_id])
     else
       return nil
     end

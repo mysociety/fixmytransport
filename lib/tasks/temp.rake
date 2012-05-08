@@ -256,6 +256,25 @@ namespace :temp do
     end
   end
 
+  desc 'Populate responsibilities organization_persistent_id field'
+  task :populate_responsibility_organization_persistent_id => :environment do
+    Responsibility.find_each(:conditions => ['organization_persistent_id is null']) do |responsibility|
+      operator = nil
+      if responsibility.organization_type == 'Operator'
+        Operator.in_any_generation do
+          operator = Operator.find(:first, :conditions => ['id = ?', responsibility.organization_id])
+        end
+        if ! operator
+          puts "No operator with id #{responsibility.organization_id}"
+          next
+        end
+        responsibility.organization_persistent_id = operator.persistent_id
+        puts "Setting organization_persistent_id to #{responsibility.organization_persistent_id} for #{responsibility.id}, operator #{operator.id}"
+      end
+
+    end
+  end
+
   desc 'Add example problems to each guide'
   task :add_guide_examples => :environment do
     { "accessibility" =>

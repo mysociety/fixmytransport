@@ -1,6 +1,7 @@
 <%- if !@problem.errors.empty? %>
   <div class='form-error'>
     <%= t('admin.problem_form_error') %>
+    <%= @problem.errors.full_messages %>
   </div>
 <%- end %>
 
@@ -97,11 +98,11 @@
     <%= raw responsibility_fields.hidden_field :organization_type, :value => 'Operator', :class => 'organization-type' %><%= t('admin.operator').titleize %>
   </td>
   <td>
-    <%= raw hidden_field_tag :operator_name_autocomplete_url, admin_url("/admin/autocomplete_for_operator_name") %>
+    <%= raw hidden_field_tag :operator_name_autocomplete_url, admin_url("/admin/autocomplete_for_operator_name?id_param=persistent_id") %>
 
-    
+
     <%= raw text_field_tag :organization_name, '', { :class => 'organization_name_auto', :size => 30 } %>
-    <%= raw responsibility_fields.text_field :organization_id, { :class => 'organization-id' } %>
+    <%= raw responsibility_fields.text_field :organization_persistent_id, { :class => 'organization-persistent-id' } %>
   </td>
   <td>
   </td>
@@ -119,7 +120,7 @@
   <td>
   </td>
   </tr>
-<%- end %>  
+<%- end %>
 <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
   <tr>
   <td>
