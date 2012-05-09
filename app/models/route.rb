@@ -45,8 +45,10 @@ class Route < ActiveRecord::Base
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   belongs_to :region
   belongs_to :default_journey, :class_name => 'JourneyPattern'
-  has_many :route_source_admin_areas, :dependent => :destroy
+  # Routes loaded from TNDS have route_source records
   has_many :route_sources, :dependent => :destroy
+  # Routes loaded from NPTDR have route_source_admin_area records
+  has_many :route_source_admin_areas, :dependent => :destroy
   has_many :source_admin_areas, :through => :route_source_admin_areas, :class_name => 'AdminArea'
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   accepts_nested_attributes_for :journey_patterns, :allow_destroy => true, :reject_if => :journey_pattern_invalid
