@@ -134,6 +134,51 @@ namespace :temp do
                                 AND replayable is null")
   end
 
+  desc 'Backload Version records for the StopAreaOperator model'
+  task :backload_stop_area_operator_versions => :environment do
+    #MONKEY PATCH
+    module PaperTrail
+      module Model
+        module InstanceMethods
+          def create_initial_pt_version
+            record_create if versions.blank?
+            puts "created #{self.class} #{self.id}"
+          end
+
+        end
+      end
+    end
+
+    FixMyTransport::DataGenerations.in_generation(1) do
+      file = check_for_file
+      parser = Parsers::OperatorsParser.new
+      deletions = 0
+      parser.parse_stop_area_operators(file) do |stop_area_operator|
+        stop_area_operator.generation_low = 1
+        stop_area_operator.generation_high = 1
+        existing = StopAreaOperator.find(:first, :conditions => ['stop_area_id = ?
+                                                                  AND operator_id = ?',
+                                                                  stop_area_operator.stop_area_id,
+                                                                  stop_area_operator.operator_id])
+        if !existing
+          puts "Deleted record #{stop_area_operator.stop_area.name} #{stop_area_operator.operator.name}"
+          StopAreaOperator.paper_trail_off
+          stop_area_operator.save
+          StopAreaOperator.paper_trail_on
+          stop_area_operator.destroy
+          deletions += 1
+        end
+      end
+      puts "Found #{deletions} deletions"
+      stop_area_operators = StopAreaOperator.find(:all, :conditions => ["date_trunc('day',created_at) > '2011-03-28 00:00:00'"])
+      stop_area_operators.each do |stop_area_operator|
+        puts "#{stop_area_operator.id}"
+        stop_area_operator.create_initial_pt_version
+      end
+    end
+  end
+
+
   desc 'Populate the persistent_id column for models in data generations'
   task :populate_persistent_id => :environment do
     FixMyTransport::DataGenerations.models_existing_in_data_generations.each do |model_class|

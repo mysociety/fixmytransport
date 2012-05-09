@@ -1,9 +1,9 @@
-From Name	To Name
+From Name To Name
 ScotRail	First Scotrail
 London Underground	London Underground (TfL)
-Chiltern Railways	Chiltern Railway Co. 
-East Coast	National Express East Coast 
+Chiltern Railways	Chiltern Railway Co.
+East Coast	National Express East Coast
 Island Line	Island Line (South West Trains)
 Island Line Trains	Island Line (South West Trains)
-London Overground	London Overground (TfL)
+London Overground	LOROL London Overground (TfL)
 First Great Western	First Great Western Railway

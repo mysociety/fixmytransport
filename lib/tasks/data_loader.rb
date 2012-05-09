@@ -11,18 +11,21 @@ module DataLoader
     unless ENV['FILE']
       usage_message "usage: This task requires FILE=filename"
     end
+    return ENV['FILE']
   end
 
   def check_for_dir
     unless ENV['DIR']
       usage_message "usage: This task requires DIR=dirname"
     end
+    return ENV['DIR']
   end
 
   def check_for_model
     unless ENV['MODEL']
       usage_message "usage: This task requires MODEL=model_name"
     end
+    return ENV['MODEL']
   end
 
   def check_for_generation
