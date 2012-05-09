@@ -127,7 +127,8 @@ namespace :temp do
       model_class.connection.execute("SELECT SETVAL('#{table_name}_persistent_id_seq', (SELECT MAX(id) FROM #{table_name}) + 1);")
       model_class.connection.execute("UPDATE #{table_name}
                                       SET persistent_id = NEXTVAL('#{table_name}_persistent_id_seq')
-                                      WHERE previous_id IS NULL")
+                                      WHERE previous_id IS NULL
+                                      AND generation_low != 1")
       model_class.connection.execute("UPDATE #{table_name}
                                       SET persistent_id = (SELECT persistent_id from #{table_name} as prev
                                                            WHERE prev.id = #{table_name}.previous_id)
