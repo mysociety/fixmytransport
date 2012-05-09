@@ -1,0 +1,37 @@
+aldershot_bus:
+  operator_code: "BUS"
+  region: south_east
+  route: aldershot_807_bus
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
+london_bus:
+  operator_code: "BUS"
+  region: london
+  route: number_807_bus
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
+victoria_to_haywards_heath:
+  operator_code: "TRAIN"
+  region: london
+  route: victoria_to_haywards_heath
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
+borough_C10:
+  operator_code: "LONDON_BUS"
+  region: london
+  route: borough_C10
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
+metropolitan_line:
+  operator_code: "TUBE"
+  region: london
+  route: metropolitan_line
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
+jubilee_line:
+  operator_code: "TUBE"
+  region: london
+  route: jubilee_line
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
+

@@ -12,6 +12,10 @@
   <b><%= "Admin areas:" %></b>
   <%= @route.source_admin_areas.map{|admin_area| admin_area.name }.to_sentence %>
 </div>
+<div class='sources'>
+  <b><%= "Regions:" %></b>
+  <%= @route.route_sources.map{|route_source| route_source.region.name }.uniq.to_sentence %>
+</div>
 
 <h3><%= t('admin.merge') %></h3>
 <%- form_tag admin_url(merge_admin_routes_path), :method => :get do %>

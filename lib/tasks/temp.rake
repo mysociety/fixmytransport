@@ -18,7 +18,7 @@ namespace :temp do
     RouteOperator.connection.execute("update route_operators set generation_low = 1, generation_high = 1")
     JourneyPattern.connection.execute("update journey_patterns set generation_low = 1, generation_high = 1")
     RouteSegment.connection.execute("update route_segments set generation_low = 1, generation_high = 1")
-
+    RouteSourceAdminArea.connection.execute("update route_source_admin_areas set generation_low = 1, generation_high = 1")
   end
 
   desc 'Update campaign slugs that end in a trailing hyphen'

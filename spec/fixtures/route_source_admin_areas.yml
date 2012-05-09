@@ -2,11 +2,17 @@ aldershot_bus:
   operator_code: "BUS"
   source_admin_area: aldershot
   route: aldershot_807_bus
-london_bus: 
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
+london_bus:
   operator_code: "BUS"
   source_admin_area: london
   route: number_807_bus
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 victoria_to_haywards_heath:
   operator_code: "TRAIN"
   source_admin_area: london
   route: victoria_to_haywards_heath
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
