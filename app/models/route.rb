@@ -420,7 +420,17 @@ class Route < ActiveRecord::Base
   # class methods
 
   def self.full_find(id, scope)
-    find(id, :scope => scope, :include => { :route_operators => :operator })
+    find(id, :scope => scope, :include => [{ :route_operators => :operator }])
+  end
+
+  def self.find_all_by_service_code_operator_code_and_region(service_code, operator_code, region)
+    find(:all, :conditions => ['route_sources.service_code = ?
+                                AND route_sources.operator_code = ?
+                                AND route_sources.region_id = ?',
+                                service_code,
+                                operator_code,
+                                region],
+               :include => :route_sources)
   end
 
   # Return routes with this number and transport mode that have a stop or stop area in common with
