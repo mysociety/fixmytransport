@@ -18,7 +18,7 @@ class LocationsController < ApplicationController
     # if there is one
     rescue ActiveRecord::RecordNotFound => error
       if @successor = Stop.find_successor(params[:id], :scope => params[:scope], :include => [:locality])
-        redirect_previous(@successor) and return
+        redirect_previous(@successor, { :scope => :locality }) and return
       end
       raise
     end
@@ -49,7 +49,7 @@ class LocationsController < ApplicationController
     # if there is one
     rescue ActiveRecord::RecordNotFound => error
       if @successor = StopArea.find_successor(params[:id], :scope => params[:scope], :include => [:locality])
-        redirect_previous(@successor) and return
+        redirect_previous(@successor, { :scope => :locality }) and return
       end
       raise
     end
@@ -89,7 +89,19 @@ class LocationsController < ApplicationController
   end
 
   def show_route
-    @route = Route.full_find(params[:id], params[:scope])
+    begin
+     @route = Route.full_find(params[:id], params[:scope])
+    # handle params matching a route in the previous generation with a redirect to the successor
+    # if there is one
+    rescue ActiveRecord::RecordNotFound => error
+      if @successor = Route.find_successor(params[:id],
+                                           :scope => params[:scope],
+                                           :include => [:route_operators => :operator])
+        redirect_previous(@successor, { :scope => :region }) and return
+      end
+      raise
+    end
+
     @commentable = @route
     if @route.friendly_id_status.numeric?
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
@@ -175,8 +187,8 @@ class LocationsController < ApplicationController
 
   private
 
-  def redirect_previous(previous)
-    new_params = { :id => previous.to_param, :scope => previous.locality.to_param }
+  def redirect_previous(successor, options)
+    new_params = { :id => successor.to_param, :scope => successor.send(options[:scope]).to_param }
     redirect_to params.merge(new_params), :status => :moved_permanently
   end
 

@@ -10,9 +10,13 @@ module SharedBehaviours
           # stub the model finding query
           @find_params = [@default_params[:id]]
           if @scope_model
-            @find_params << { :scope => @default_params[:scope], :include => [@scope_field] }
+            if @includes
+              include_associations = [@includes]
+            else
+              include_associations = [@scope_field]
+            end
+            @find_params << { :scope => @default_params[:scope], :include => include_associations }
           end
-
           @model_type.stub!(:find).with(*@find_params).and_raise(ActiveRecord::RecordNotFound)
           # stub the successor query
           @successor = mock_model(@model_type)
