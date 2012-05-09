@@ -110,6 +110,7 @@ class Parsers::NaptanParser
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
       coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
+      nearest_stop = Stop.find_nearest(row['Easting'], row['Northing'])
       yield StopArea.new( :code                      => (row['StopAreaCode'] or row['GroupID']),
                           :name                      => (row['Name'] or row['GroupName']),
                           :administrative_area_code  => row['AdministrativeAreaCode'],
@@ -120,6 +121,7 @@ class Parsers::NaptanParser
                           :coords                    => coords,
                           :lon                       => row['Lon'],
                           :lat                       => row['Lat'],
+                          :locality                  => nearest_stop.locality,
                           :creation_datetime         => row['CreationDateTime'],
                           :modification_datetime     => (row['ModificationDateTime'] or row['LastChanged']),
                           :revision_number           => row['RevisionNumber'],
