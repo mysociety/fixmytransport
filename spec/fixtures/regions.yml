@@ -27,9 +27,18 @@ great_britain:
   cached_slug: great-britain
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-two:
+south_east:
   code: MyString
-  name: MyText
+  name: South East
+  creation_datetime: 2010-05-06 17:57:58
+  modification_datetime: 2010-05-06 17:57:58
+  revision_number: MyString
+  modification: MyString
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
+london:
+  code: MyString
+  name: London
   creation_datetime: 2010-05-06 17:57:58
   modification_datetime: 2010-05-06 17:57:58
   revision_number: MyString
