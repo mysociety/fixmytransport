@@ -98,9 +98,16 @@ describe LocationsController do
 
     before do
       @route = routes(:victoria_to_haywards_heath)
+      @model_type = Route
+      @default_params = { :scope => 'london', :id => 'c10' }
+      @includes = {:route_operators => :operator}
+      @scope_model = Region
+      @scope_field = :region
     end
 
-    def make_request(params)
+    it_should_behave_like "a show action that falls back to a previous generation and redirects"
+
+    def make_request(params=@default_params)
       get :show_route, params
     end
 
