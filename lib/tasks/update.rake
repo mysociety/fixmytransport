@@ -126,6 +126,10 @@ namespace :update do
     Rake::Task['noc:update:operator_codes'].execute
     Rake::Task['noc:update:vosa_licenses'].execute
     Rake::Task['noc:update:operator_contacts'].execute
+
+    ENV['FILE'] = File.join(MySociety::Config.get('NOC_DIR', ''), 'station_operators.txt')
+    Rake::Task['noc:update:station_operators'].execute
+    Rake::Task['noc:update:stop_operators'].execute
   end
 
   desc 'Update TNDS data to the current generation. Runs in dryrun mode unless DRYRUN=0

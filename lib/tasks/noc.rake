@@ -45,7 +45,7 @@ namespace :noc do
       parse(OperatorContact, Parsers::OperatorContactsParser)
     end
 
-    desc "Loads stop area operator information from a CSV file specified as FILE=filename.
+    desc "Loads stop area operator information from a TSV file specified as FILE=filename.
           Runs in dryrun mode unless DRYRUN=0 is specified."
     task :station_operators => :environment do
       parse(StopAreaOperator, Parsers::OperatorsParser)
@@ -80,6 +80,41 @@ namespace :noc do
           set by VERBOSE=1"
     task :vosa_licenses => :environment do
       load_instances_in_generation(VosaLicense, Parsers::NocParser)
+    end
+
+    desc "Updates stop area operators (which are not included in NOC) from a TSV file specified as
+          FILE=filename. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag
+          set by VERBOSE=1"
+    task :station_operators => :environment do
+      load_instances_in_generation(StopAreaOperator, Parsers::OperatorsParser)
+    end
+
+    desc "Create stop operators (which are not included in NOC) in the current generation.
+          Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1'"
+    task :stop_operators => :environment do
+      dryrun = check_dryrun
+      verbose = check_verbose
+      StopOperator.paper_trail_off
+      # At the moment, the only stop operator records are for the Isle of Wight bus stops
+      # run by Southern Vectis
+      southern_vectis = Operator.find_by_name('Southern Vectis')
+      isle_of_wight = AdminArea.find_by_name('Isle of Wight')
+      isle_of_wight.localities.each do |locality|
+        locality.stops.each do |stop|
+          puts "Creating stop operator for #{stop.common_name} #{southern_vectis.name}"
+          stop_operator = stop.stop_operators.build(:operator => southern_vectis)
+          if !stop_operator.valid?
+            puts "ERROR: Stop operator is invalid:"
+            puts stop_operator.inspect
+            puts stop_operator.errors.full_messages.join("\n")
+            exit(1)
+          end
+          if !dryrun
+            stop_operator.save!
+          end
+        end
+      end
+      StopOperator.paper_trail_on
     end
 
   end
