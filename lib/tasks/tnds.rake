@@ -424,6 +424,7 @@ namespace :tnds do
       new_instance.generation_high = CURRENT_GENERATION
       new_instance.generation_low = CURRENT_GENERATION
       new_instance.previous_id = old_instance.id
+      new_instance.persistent_id = old_instance.persistent_id
       return new_instance
     end
 
@@ -446,7 +447,7 @@ namespace :tnds do
 
       Route.in_generation(PREVIOUS_GENERATION) do
         train_mode = TransportMode.find_by_name('Train')
-        Route.find_each(:conditions => ["transport_mode_id = ? AND id >=  28456", train_mode]) do |route|
+        Route.find_each(:conditions => ["transport_mode_id = ?", train_mode]) do |route|
 
           puts "Updating #{route.name} #{route.id} to generation #{CURRENT_GENERATION}" if verbose
           new_gen_route = clone_in_new_generation(route)
@@ -486,6 +487,19 @@ namespace :tnds do
             new_route_operator = new_gen_route.route_operators.build(new_attributes)
             new_route_operator.operator = find_successor(route_operator, Operator, :operator_id)
           end
+
+          route_source_admin_areas = []
+          RouteSourceAdminArea.in_any_generation do
+            route_source_admin_areas = route.route_source_admin_areas(force_reload=true)
+          end
+          route_source_admin_areas.each do |route_source_admin_area|
+            new_attributes = clone_in_new_generation(route_source_admin_area).attributes
+            new_route_source_admin_area = new_gen_route.route_source_admin_areas.build(new_attributes)
+            if route_source_admin_area.source_admin_area_id
+              new_route_source_admin_area.source_admin_area = find_successor(route_source_admin_area, AdminArea, :source_admin_area_id)
+            end
+          end
+
           if !new_gen_route.valid?
             puts "ERROR: Route is invalid:"
             puts new_gen_route.inspect
