@@ -506,7 +506,7 @@ namespace :nptdr do
         next if routes.empty?
         options = { :any_admin_area => true,
                     :require_match_fraction => 1.0,
-                    :use_operator_codes => true }
+                    :use_source_admin_areas => true }
         found = Route.find_all_by_number_and_common_stop(routes.first, options)
         next if found.empty?
         puts "Merging #{found.map{|route| route.id }.join(" ")} to #{routes.first.id} for #{cached_description} #{operator_code}"

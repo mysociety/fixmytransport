@@ -432,14 +432,15 @@ class Route < ActiveRecord::Base
     stop_codes = new_route.stop_codes
     stop_area_codes = new_route.stop_area_codes
     # do we think we know the operator for this route? If so, return any route with the same operator that
-    # meets our other criteria. If we don't know the operator, or we pass the :use_operator_codes option
-    # only return routes with the same operator code (optionally only from the same admin area)
+    # meets our other criteria. If we don't know the operator, or we pass the :use_source_admin_areas option
+    # only return routes with the same source_admin_area operator code (optionally only from the same admin area)
+    # N.B. only routes loaded from NPTDR will have source_admin_areas
     if ! options[:skip_operator_comparison]
       # Using length, not size on the route passed in to this method. Size requeries the database,
       # length just looks at the length of the loaded association. When using changing scopes,
       # as in the data_generations code, size will apply the current scope in database queries
       # so may produce unexpected results.
-      if new_route.route_operators.length >= 1 && !options[:use_operator_codes]
+      if new_route.route_operators.length >= 1 && !options[:use_source_admin_areas]
         # Use persistent ids to generate operators as the passed-in route may belong
         # to a different generation
         operators = []
