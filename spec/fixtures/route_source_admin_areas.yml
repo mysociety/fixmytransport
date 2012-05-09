@@ -16,3 +16,10 @@ victoria_to_haywards_heath:
   route: victoria_to_haywards_heath
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+jubilee_line:
+  operator_code: "TUBE"
+  source_admin_area: london
+  route: jubilee_line
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
+

@@ -28,10 +28,3 @@ metropolitan_line:
   route: metropolitan_line
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-jubilee_line:
-  operator_code: "TUBE"
-  region: london
-  route: jubilee_line
-  generation_low: <%= CURRENT_GENERATION %>
-  generation_high: <%= CURRENT_GENERATION %>
-

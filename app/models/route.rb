@@ -624,14 +624,23 @@ class Route < ActiveRecord::Base
     query = 'routes.id not in (SELECT route_id FROM route_operators)'
     params = []
     if options[:operator_codes]
-      query += " AND route_source_admin_areas.operator_code in (?)"
-      params << options[:operator_codes]
+      route_sources = RouteSource.find(:all,
+                                       :select => 'distinct route_id',
+                                       :conditions => ["operator_code in (?)", options[:operator_codes]])
+      route_ids = route_sources.map{ |route_source| route_source.route_id }
+      route_source_admin_areas = RouteSourceAdminArea.find(:all,
+                                                           :select => 'distinct route_id',
+                                                           :conditions => ['operator_code in (?)',
+                                                                           options[:operator_codes]])
+      route_ids += route_source_admin_areas.map{ |route_source| route_source.route_id }
+      query += " AND id in (?)"
+      params << route_ids
     end
     params = [query] + params
     find(:all, :conditions => params,
          :limit => options[:limit],
          :order => options[:order],
-         :include => :route_source_admin_areas)
+         :include => :region)
   end
 
   def self.count_without_operators(options={})
@@ -639,18 +648,30 @@ class Route < ActiveRecord::Base
   end
 
   # finds operator codes that are associated with routes
-  # where the code isn't associated with an operator,
-  # and the route doesn't have an operator
+  # where the route doesn't have an operator
   def self.find_codes_without_operators(options={})
-    query = "SELECT operator_code, cnt FROM
-               (SELECT operator_code, count(*) as cnt
-                FROM routes
-                WHERE id not in
+    query = "SELECT operator_code, sum(cnt) as total_count FROM
+               ((SELECT operator_code, count(distinct route_id) as cnt
+                FROM route_sources
+                WHERE route_id not in
                   (SELECT route_id
                    FROM route_operators)
+                AND operator_code is not null
+                AND generation_low <= #{CURRENT_GENERATION}
+                AND generation_high >= #{CURRENT_GENERATION}
                 GROUP BY operator_code)
-                 as tmp
-             ORDER BY cnt desc"
+                UNION ALL
+                (SELECT operator_code, count(distinct route_id) as cnt
+                  FROM route_source_admin_areas
+                  WHERE route_id not in
+                    (SELECT route_id
+                     FROM route_operators)
+                  AND operator_code is not null
+                  AND generation_low <= #{CURRENT_GENERATION}
+                  AND generation_high >= #{CURRENT_GENERATION}
+                  GROUP BY operator_code))
+                 as tmp GROUP BY operator_code
+             ORDER BY total_count desc"
     if options[:limit]
       query += " LIMIT #{options[:limit]}"
     end
@@ -658,8 +679,7 @@ class Route < ActiveRecord::Base
   end
 
   def self.count_codes_without_operators()
-    count(:select => 'distinct operator_code',
-          :conditions => ['id not in (SELECT route_id from route_operators)'])
+    find_codes_without_operators.size
   end
 
   def self.count_without_contacts
