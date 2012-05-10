@@ -282,7 +282,7 @@ namespace :tnds do
       parser = Parsers::TransxchangeParser.new
       file_glob = File.join(ENV['DIR'], "**/*.xml")
       index_file = File.join(ENV['DIR'], 'TravelineNationalDataSetFilesList.txt')
-      parser.parse_all_tnds_routes(file_glob, index_file, verbose, skip_loaded=false, regions_as) do |route|
+      parser.parse_all_tnds_routes(file_glob, index_file, verbose, skip_loaded=skip_loaded, regions_as) do |route|
         merged = false
         puts "Parsed route #{route.number}" if verbose
         route.route_sources.each do |route_source|
@@ -330,11 +330,13 @@ namespace :tnds do
     FixMyTransport::DataGenerations.in_generation(PREVIOUS_GENERATION) do
       previous = Route.find_existing_routes(route)
       puts "Found #{previous.size} routes" if verbose
+
       if previous.size == 0
         previous = Route.find_existing_routes(route, { :skip_operator_comparison => true,
                                                        :require_match_fraction => 0.8 })
         puts "Found #{previous.size} routes, on complete stop match without operators" if verbose
       end
+
     end
 
 
@@ -357,6 +359,7 @@ namespace :tnds do
     previous.each do |previous_route|
       puts "Matched to route id: #{previous_route.id}, number #{previous_route.number}" if verbose
       route.previous_id = previous.first.id
+      route.persistent_id = previous.first.persistent_id
       if ! dryrun
         puts "Saving route" if verbose
         route.save!
