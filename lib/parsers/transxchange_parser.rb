@@ -152,7 +152,10 @@ class Parsers::TransxchangeParser
       puts filename if verbose
       if skip_loaded
         sources = RouteSource.find(:all, :conditions => ['filename = ?', filename])
-        next if ! sources.empty?
+        if ! sources.empty?
+          puts "Skipping #{filename}" if verbose
+          next
+        end
       end
       region_name = self.region_hash[File.basename(filename)]
       region = Region.find_by_name(region_name)
