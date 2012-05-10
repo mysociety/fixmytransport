@@ -37,7 +37,7 @@ describe Route do
   end
 
   it_should_behave_like "a model that exists in data generations"
-  
+
   it_should_behave_like "a model that exists in data generations and is versioned"
 
   it_should_behave_like "a model that exists in data generations and has slugs"
@@ -68,6 +68,7 @@ describe Route do
 
   end
 
+
   describe 'when loaded' do
 
     before do
@@ -78,6 +79,19 @@ describe Route do
     it 'should require a region' do
       @route.region_id = nil
       @route.valid?.should be_false
+    end
+
+  end
+
+  describe 'when updating route localities' do
+
+    fixtures default_fixtures
+
+    it 'should update route localities to include all the localities of its stops' do
+      route = routes(:victoria_to_haywards_heath)
+      route.route_localities.size.should == 1
+      route.update_route_localities
+      route.route_localities.size.should == 6
     end
 
   end
@@ -297,19 +311,6 @@ describe Route do
                         :status => 'ACT')
       Route.add!(route)
       existing_route.route_operators.size.should == 2
-    end
-
-    it 'should transfer route locality associations when merging overlapping routes' do
-      existing_route = routes(:victoria_to_haywards_heath)
-      existing_route.route_localities.size.should == 1
-      Route.stub!(:find_existing).and_return([existing_route])
-      route_locality = RouteLocality.new(:locality => Locality.new(:name => 'New Locality'))
-      route = Route.new(:transport_mode_id => 5,
-                        :number => '43',
-                        :route_localities => [route_locality],
-                        :status => 'ACT')
-      Route.add!(route)
-      existing_route.route_localities.size.should == 2
     end
 
     it 'should transfer route sub route associations when merging overlapping routes' do

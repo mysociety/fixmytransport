@@ -23,7 +23,10 @@ class Route < ActiveRecord::Base
   # This model is part of the transport data that is versioned by data generations.
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
-  exists_in_data_generation( :temporary_identity_fields => [:id],
+  exists_in_data_generation( :identity_fields => [],
+                             :temporary_identity_fields => [:id],
+                             :new_record_fields => [], # we don't know before loading which routes (no persistent external identifier)
+                             :update_fields => [], # match existing ones, so don't use these config options
                              :auto_update_fields => [:cached_description,
                                                      :cached_slug,
                                                      :lat,
@@ -62,7 +65,8 @@ class Route < ActiveRecord::Base
   before_save [ :cache_route_coords,
                 :cache_area,
                 :cache_description,
-                :cache_short_name ]
+                :cache_short_name,
+                :update_route_localities ]
   after_save :generate_default_journey
   is_route_or_sub_route
   is_location
@@ -111,6 +115,23 @@ class Route < ActiveRecord::Base
   def cache_short_name
     self.cached_short_name = nil
     self.cached_short_name = self.short_name
+  end
+
+  def update_route_localities
+    locality_ids = []
+    stops.each do |stop|
+      locality_ids << stop.locality_id unless locality_ids.include? stop.locality_id
+    end
+    locality_ids.each do |locality_id|
+      if ! self.route_localities.detect{ |existing| existing.locality_id == locality_id }
+        self.route_localities.build(:locality_id => locality_id)
+      end
+    end
+    self.route_localities.each do |route_locality|
+      if !locality_ids.include?(route_locality.locality_id)
+        route_locality.destroy
+      end
+    end
   end
 
   def description
@@ -526,7 +547,7 @@ class Route < ActiveRecord::Base
           next
         end
       end
-      # If we haven't required a match fraction, include anything that goes through the same
+      # If we haven't required a match fraction, include anything that goes through any of the same
       # stop areas
       if !options[:require_match_fraction]
         route_stop_area_codes = route.stop_area_codes
@@ -773,11 +794,6 @@ class Route < ActiveRecord::Base
                                    :region => route_source.region,
                                    :line_number => route_source.line_number,
                                    :filename => route_source.filename)
-    end
-    duplicate.route_localities.each do |route_locality|
-      if ! original.route_localities.detect{ |existing| existing.locality == route_locality.locality }
-        original.route_localities.build(:locality => route_locality.locality)
-      end
     end
 
     duplicate.route_sub_routes.each do |route_sub_route|
