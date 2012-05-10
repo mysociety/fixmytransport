@@ -5,13 +5,11 @@
       <th width='10%'><%= t('admin.id') %>
       <th width='20%'><%= t('admin.name') %></th>
       <th width='20%'><%= t('admin.short_name')  %></th>
-      <th width='5%'><%= t('admin.code') %></th>
-      <th width='20%'><%= t('admin.email') %></th>
-      <th width='10%'><%= t('admin.email_confirmed') %></th>
+      <th width='5%'><%= t('admin.noc_code') %></th>
       <th width='5%'><%= t('admin.routes') %></th>
       <th width='5%'><%= t('admin.merge_to') %></th>
     </th>
-    
+
     <%-@operators.each do |operator| %>
       <tr class='<%= cycle("odd", "even") %>'>
         <td>
@@ -22,11 +20,9 @@
           <%- if ! operator.name.blank? %>
             <%= link_to operator.name, admin_url(admin_operator_path(operator)) %>
           <%- end %>
-        </td>        
+        </td>
         <td><%= operator.short_name %></td>
-        <td><%= operator.code %></td>
-        <td><%= operator.email %></td>
-        <td><%= operator.email_confirmed %></td>
+        <td><%= operator.noc_code %></td>
         <td><%= operator.routes.count %></td>
         <td>
           <%= raw radio_button_tag "merge_to", operator.id, operator == @operators.first, { :class => "select-item" } %>

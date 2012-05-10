@@ -3,7 +3,7 @@ en:
     operators: Operators
     name: Name
     region: Region
-    code: Code
+    noc_code: NOC Code
     terminuses: Terminuses
     short_name: Short name
     id: ID
@@ -13,7 +13,6 @@ en:
     operator_has_no_routes: This operator has no routes
     no_routes: There are no routes.
     merging_operators: Merging Operators
-    email_confirmed: Email confirmed?
     merge_to: Merge to
     assign_routes: Assign routes to operator
     operator_routes_added: Routes have been added to operator

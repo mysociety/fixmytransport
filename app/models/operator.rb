@@ -39,14 +39,13 @@ class Operator < ActiveRecord::Base
   validate :noc_code_unique_in_generation
   has_many :operator_contacts, :conditions => ['deleted = ?', false],
                                :foreign_key => :operator_persistent_id,
-                               :primary_key => :persistent_id
+                               :primary_key => :persistent_id,
+                               :dependent => :destroy
   has_many :responsibilities, :as => :organization
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   has_paper_trail :meta => { :replayable  => Proc.new { |operator| operator.replayable } }
   cattr_reader :per_page
   @@per_page = 20
-  named_scope :with_email, :conditions => ["email is not null and email != ''"]
-  named_scope :without_email, :conditions => ["email is null or email = ''"]
   has_friendly_id :name, :use_slug => true
 
   # this is a custom validation as noc codes need only be unique within the data generation bounds
@@ -215,13 +214,13 @@ class Operator < ActiveRecord::Base
         operator.route_operators.each do |route_operator|
           merge_to.route_operators.build(:route => route_operator.route)
         end
-        if !operator.email.blank? and merge_to.email.blank?
-          merge_to.email = operator.email
-          merge_to.email_confirmed = operator.email_confirmed
-        end
         operator.destroy
+        MergeLog.create!(:from_id => operator.id,
+                         :to_id => merge_to.id,
+                         :model_name => 'Operator')
       end
       merge_to.save!
+
     end
   end
 

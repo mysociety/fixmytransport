@@ -74,6 +74,28 @@ describe Operator do
 
   end
 
+  describe 'when merging operators' do
+
+    before do
+      @existing = mock_model(Operator, :route_operators => [],
+                                       :save! => nil)
+      @duplicate_one = mock_model(Operator, :route_operators => [],
+                                            :destroy => nil)
+      @duplicate_two = mock_model(Operator, :route_operators => [],
+                                            :destroy => nil)
+    end
+
+    it 'should create a merge log record' do
+      MergeLog.should_receive(:create!).with(:model_name => 'Operator',
+                                             :from_id => @duplicate_one.id,
+                                             :to_id => @existing.id)
+      MergeLog.should_receive(:create!).with(:model_name => 'Operator',
+                                            :from_id => @duplicate_two.id,
+                                            :to_id => @existing.id)
+      Operator.merge!(@existing, [@duplicate_one, @duplicate_two])
+    end
+
+  end
 
   describe 'when asked for categories for a location' do
 
