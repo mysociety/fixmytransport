@@ -1,10 +1,10 @@
 # Parser for loading operator data for stops by CRS code
 
-class Parsers::OperatorsParser 
+class Parsers::OperatorsParser
 
   def initialize
   end
-  
+
   # Loads data from a file with tab-separated columns for CRS code, name, an unused field, and operator name
   # Loads name mappings from a file with tab-separated columns for alternative versions of names
   def parse_stop_area_operators(filepath, mapping_file="data/operators/operator_mappings.txt", stop_area_type='GRLS')
@@ -25,20 +25,21 @@ class Parsers::OperatorsParser
         puts "*** Couldn't find stop for #{name} #{crs_code} #{operator_name}***"
         next
       end
+      stop_area = stop.root_stop_area(stop_area_type)
+      if ! stop_area
+        puts "No stop_area for stop #{stop.name} #{operator_name}"
+        next
+      end
       operators = Operator.find(:all, :conditions => ['LOWER(name) = ?', operator_name.downcase])
       if operators.empty? and operator_mappings[operator_name]
         operator_name = operator_mappings[operator_name]
         # puts "using mapping for #{operator_name}"
         operators = Operator.find(:all, :conditions => ['LOWER(name) = ?', operator_name.downcase])
       end
-      raise "No operator #{operator_name}" if operators.empty?
+      raise "No operator #{operator_name} for #{stop_area.name}" if operators.empty?
       raise "Multiple operators #{operator_name}" if operators.size > 1
       operator = operators.first
-      stop_area = stop.root_stop_area(stop_area_type)
-      if ! stop_area
-        puts "No stop_area for stop #{stop.name} #{operator_name}"
-        next
-      end
+
       stop_area_operator = stop_area.stop_area_operators.build(:operator => operator)
       yield stop_area_operator
       # puts "#{stop_area.name} #{operator.name}"
