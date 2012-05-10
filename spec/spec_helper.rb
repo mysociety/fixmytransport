@@ -26,6 +26,7 @@ Spec::Runner.configure do |config|
   config.before(:each) do
     # make sure we don't call the live API when running tests
     MySociety::MaPit.stub!(:call).and_return({})
+    PaperTrail.whodunnit = nil
   end
 
   config.before(:each, :type => :controller) do
@@ -43,6 +44,17 @@ Spec::Runner.configure do |config|
   end
 
 end
+
+def with_versioning
+  was_enabled = PaperTrail.enabled?
+  PaperTrail.enabled = true
+  begin
+    yield
+  ensure
+    PaperTrail.enabled = was_enabled
+  end
+end
+
 
 def default_fixtures
   [:transport_modes,

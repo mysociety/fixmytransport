@@ -37,6 +37,8 @@ describe Route do
   end
 
   it_should_behave_like "a model that exists in data generations"
+  
+  it_should_behave_like "a model that exists in data generations and is versioned"
 
   it_should_behave_like "a model that exists in data generations and has slugs"
 

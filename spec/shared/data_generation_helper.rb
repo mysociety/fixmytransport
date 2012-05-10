@@ -15,29 +15,7 @@ module SharedBehaviours
 
   module DataGenerationHelper
 
-    shared_examples_for "a model that exists in data generations" do
-
-      describe 'when the data generation is set for all models controlled by data generations' do
-
-        it 'should have the scope for the generation set in the call' do
-          FixMyTransport::DataGenerations.in_generation(PREVIOUS_GENERATION) do
-            condition_string = ["#{@model_type.quoted_table_name}.generation_low <= ?",
-                                "AND #{@model_type.quoted_table_name}.generation_high >= ?"].join(" ")
-            expected_scope = {:conditions => [ condition_string, PREVIOUS_GENERATION, PREVIOUS_GENERATION ]}
-            @model_type.send(:scope, :find).should == expected_scope
-          end
-        end
-
-        it 'should have the default scope after the call' do
-          condition_string = ["#{@model_type.quoted_table_name}.generation_low <= ?",
-                              "AND #{@model_type.quoted_table_name}.generation_high >= ?"].join(" ")
-          expected_scope = {:conditions => [ condition_string , CURRENT_GENERATION, CURRENT_GENERATION ]}
-          FixMyTransport::DataGenerations.in_generation(PREVIOUS_GENERATION) do
-          end
-          @model_type.send(:scope, :find).should == expected_scope
-        end
-
-      end
+    shared_examples_for "a model that exists in data generations and is versioned" do
 
       describe 'when the class is set to replayable' do
 
@@ -77,6 +55,51 @@ module SharedBehaviours
         end
 
       end
+
+      describe 'when a change is made' do
+
+        it 'should store the version with the replayable flag set to true' do
+          with_versioning do
+            @instance = @model_type.new(@default_attrs)
+            @instance.versions.size.should == 0
+            @instance.save!
+            @instance.versions.size.should == 1
+            @instance.versions.first.replayable.should == true
+          end
+        end
+
+        after do
+            @instance.destroy
+        end
+
+      end
+
+    end
+
+    shared_examples_for "a model that exists in data generations" do
+
+      describe 'when the data generation is set for all models controlled by data generations' do
+
+        it 'should have the scope for the generation set in the call' do
+          FixMyTransport::DataGenerations.in_generation(PREVIOUS_GENERATION) do
+            condition_string = ["#{@model_type.quoted_table_name}.generation_low <= ?",
+                                "AND #{@model_type.quoted_table_name}.generation_high >= ?"].join(" ")
+            expected_scope = {:conditions => [ condition_string, PREVIOUS_GENERATION, PREVIOUS_GENERATION ]}
+            @model_type.send(:scope, :find).should == expected_scope
+          end
+        end
+
+        it 'should have the default scope after the call' do
+          condition_string = ["#{@model_type.quoted_table_name}.generation_low <= ?",
+                              "AND #{@model_type.quoted_table_name}.generation_high >= ?"].join(" ")
+          expected_scope = {:conditions => [ condition_string , CURRENT_GENERATION, CURRENT_GENERATION ]}
+          FixMyTransport::DataGenerations.in_generation(PREVIOUS_GENERATION) do
+          end
+          @model_type.send(:scope, :find).should == expected_scope
+        end
+
+      end
+
 
       describe 'when asked for an identity hash' do
 
