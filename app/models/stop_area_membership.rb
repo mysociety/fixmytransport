@@ -26,4 +26,5 @@ class StopAreaMembership < ActiveRecord::Base
                              :deletion_value => 'del' )
   belongs_to :stop_area
   belongs_to :stop
+  has_paper_trail :meta => { :replayable  => Proc.new { |stop_area_membership| stop_area_membership.replayable } }
 end
