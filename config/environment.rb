@@ -92,10 +92,6 @@ Rails::Initializer.run do |config|
 
 end
 
-# Patch the slugs model provided by friendly id so that it knows about data generations
-require File.join(File.dirname(__FILE__), '../lib/patches/friendly_id_slug')
-
-
 # Use an asset host setting so that the admin interface can always get css, images, js.
 if (MySociety::Config.get("DOMAIN", "") != "")
     ActionController::Base.asset_host = MySociety::Config.get("ASSET_HOST", 'localhost:3000')
