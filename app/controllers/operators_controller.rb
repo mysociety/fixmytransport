@@ -159,16 +159,8 @@ class OperatorsController < ApplicationController
   end
 
   def find_issue_count
-    problem_count = Problem.visible.count(:conditions => ["id in (SELECT problem_id
-                                                           FROM responsibilities
-                                                           WHERE organization_type = 'Operator'
-                                                           AND organization_persistent_id = #{@operator.id})"])
-    campaign_count = Campaign.visible.count(:conditions => ["id in (SELECT campaign_id FROM problems
-                                                            WHERE problems.id in (
-                                                            SELECT problem_id
-                                                            FROM responsibilities
-                                                            WHERE organization_type = 'Operator'
-                                                            AND organization_persistent_id = #{@operator.id}))"])
+    problem_count = @operator.problem_count(visible_only=true)
+    campaign_count = @operator.campaign_count(visible_only=true)
     return problem_count + campaign_count
   end
 

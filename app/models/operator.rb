@@ -30,18 +30,23 @@ class Operator < ActiveRecord::Base
 
   has_many :route_operators, :dependent => :destroy
   has_many :routes, :through => :route_operators, :uniq => true, :order => 'routes.number asc'
+  has_many :stop_area_operators, :dependent => :destroy
+  has_many :stop_areas, :through => :stop_area_operators, :uniq => true
+  has_many :stop_operators, :dependent => :destroy
+  has_many :stops, :through => :stop_operators, :uniq => true
+
   has_many :vosa_licenses
   has_many :operator_codes
-  has_many :stop_area_operators, :dependent => :destroy
-  has_many :stop_areas, :through => :stop_area_operators, :dependent => :destroy, :uniq => true
   belongs_to :transport_mode
-  validates_presence_of :name
-  validate :noc_code_unique_in_generation
   has_many :operator_contacts, :conditions => ['deleted = ?', false],
                                :foreign_key => :operator_persistent_id,
                                :primary_key => :persistent_id,
                                :dependent => :destroy
-  has_many :responsibilities, :as => :organization
+  has_many :responsibilities, :foreign_key => :organization_persistent_id,
+                              :primary_key => :persistent_id
+  validates_presence_of :name
+  validate :noc_code_unique_in_generation
+
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   has_paper_trail :meta => { :replayable  => Proc.new { |operator| operator.replayable } }
   cattr_reader :per_page
@@ -122,6 +127,31 @@ class Operator < ActiveRecord::Base
 
   def emails
     self.operator_contacts.map{ |contact| contact.email }.uniq.compact
+  end
+
+  def problem_count(visible_only=false)
+    conditions = ["id in (SELECT problem_id
+                          FROM responsibilities
+                          WHERE organization_type = 'Operator'
+                          AND organization_persistent_id = ?)", self.id]
+    if visible_only
+      Problem.visible.count(:conditions => conditions)
+    else
+      Problem.count(:conditions => conditions)
+    end
+  end
+
+  def campaign_count(visible_only=false)
+    conditions = ["id in (SELECT campaign_id FROM problems
+                          WHERE problems.id in (SELECT problem_id
+                                                FROM responsibilities
+                                                WHERE organization_type = 'Operator'
+                                                AND organization_persistent_id = ?))", self.id]
+    if visible_only
+      Campaign.visible.count(:conditions => conditions)
+    else
+      Campaign.count(:conditions => conditions)
+    end
   end
 
   def self.count_without_contacts
@@ -207,12 +237,37 @@ class Operator < ActiveRecord::Base
   end
 
   # merge operator records to merge_to, transferring associations
+  # NB: This merge method doesn't transfer contacts.
   def self.merge!(merge_to, operators)
     transaction do
       operators.each do |operator|
+        raise "Can't merge operator with responsibilities: #{operator.name} (#{operator.id})" if operator.problem_count > 0
         next if operator == merge_to
         operator.route_operators.each do |route_operator|
-          merge_to.route_operators.build(:route => route_operator.route)
+          if ! merge_to.route_operators.detect { |existing| existing.route == route_operator.route }
+            merge_to.route_operators.build(:route => route_operator.route)
+          end
+        end
+        operator.stop_area_operators.each do |stop_area_operator|
+          if ! merge_to.stop_area_operators.detect { |existing| existing.stop_area == stop_area_operator.stop_area }
+            merge_to.stop_area_operators.build(:stop_area => stop_area_operator.stop_area)
+          end
+        end
+        operator.stop_operators.each do |stop_operator|
+          if ! merge_to.stop_operators.detect { |existing| existing.stop == stop_operator.stop }
+            merge_to.stop_operators.build(:stop => stop_operator.stop)
+          end
+        end
+        operator.operator_codes.each do |operator_code|
+          if ! merge_to.operator_codes.detect { |existing| existing.code == operator_code.code && existing.region_id == operator_code.region_id }
+            merge_to.operator_codes.build(:code => operator_code.code,
+                                          :region_id => operator_code.region_id)
+          end
+        end
+        operator.vosa_licenses.each do |vosa_license|
+          if ! merge_to.vosa_licenses.detect { |existing| existing.number == vosa_license.number }
+            merge_to.vosa_licenses.build(:number => vosa_license.number)
+          end
         end
         operator.destroy
         MergeLog.create!(:from_id => operator.id,

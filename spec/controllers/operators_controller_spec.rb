@@ -12,7 +12,9 @@ describe OperatorsController do
       :transport_mode => @transport_mode,
       :to_i => 11,
       :stop_areas => [],
-      :routes => [])
+      :routes => [],
+      :problem_count => 0,
+      :campaign_count => 0)
     Problem.stub!(:find_recent_issues).and_return([])
   end
 

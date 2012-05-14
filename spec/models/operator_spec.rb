@@ -78,10 +78,25 @@ describe Operator do
 
     before do
       @existing = mock_model(Operator, :route_operators => [],
+                                       :stop_operators => [],
+                                       :stop_area_operators => [],
+                                       :operator_codes => [],
+                                       :vosa_licenses => [],
                                        :save! => nil)
-      @duplicate_one = mock_model(Operator, :route_operators => [],
+      @duplicate_one = mock_model(Operator, :name => 'Duplicate One',
+                                            :route_operators => [],
+                                            :stop_operators => [],
+                                            :stop_area_operators => [],
+                                            :operator_codes => [],
+                                            :vosa_licenses => [],
+                                            :problem_count => 0,
                                             :destroy => nil)
       @duplicate_two = mock_model(Operator, :route_operators => [],
+                                            :stop_operators => [],
+                                            :stop_area_operators => [],
+                                            :operator_codes => [],
+                                            :vosa_licenses => [],
+                                            :problem_count => 0,
                                             :destroy => nil)
     end
 
@@ -93,6 +108,50 @@ describe Operator do
                                             :from_id => @duplicate_two.id,
                                             :to_id => @existing.id)
       Operator.merge!(@existing, [@duplicate_one, @duplicate_two])
+    end
+
+    it 'should transfer route operator associations' do
+      @route = mock_model(Route)
+      @route_operator = mock_model(RouteOperator, :route => @route)
+      @duplicate_one.stub!(:route_operators).and_return([@route_operator])
+      @existing.route_operators.should_receive(:build).with(:route => @route)
+      Operator.merge!(@existing, [@duplicate_one])
+    end
+
+    it 'should transfer stop area operator associations' do
+      @stop_area = mock_model(StopArea)
+      @stop_area_operator = mock_model(StopAreaOperator, :stop_area => @stop_area)
+      @duplicate_one.stub!(:stop_area_operators).and_return([@stop_area_operator])
+      @existing.stop_area_operators.should_receive(:build).with(:stop_area => @stop_area)
+      Operator.merge!(@existing, [@duplicate_one])
+    end
+
+    it 'should transfer stop operator associations' do
+      @stop = mock_model(Stop)
+      @stop_operator = mock_model(StopOperator, :stop => @stop)
+      @duplicate_one.stub!(:stop_operators).and_return([@stop_operator])
+      @existing.stop_operators.should_receive(:build).with(:stop => @stop)
+      Operator.merge!(@existing, [@duplicate_one])
+    end
+
+    it 'should transfer operator codes' do
+      @operator_code = mock_model(OperatorCode, :code => 'PP', :region_id => 1)
+      @duplicate_one.stub!(:operator_codes).and_return([@operator_code])
+      @existing.operator_codes.should_receive(:build).with(:code => 'PP', :region_id => 1)
+      Operator.merge!(@existing, [@duplicate_one])
+    end
+
+    it 'should transfer vosa licenses' do
+      @vosa_license = mock_model(VosaLicense, :number => '1234')
+      @duplicate_one.stub!(:vosa_licenses).and_return([@vosa_license])
+      @existing.vosa_licenses.should_receive(:build).with(:number => '1234')
+      Operator.merge!(@existing, [@duplicate_one])
+    end
+
+    it 'should raise an error if asked to merge an operator with responsibilities' do
+      @duplicate_one.stub!(:problem_count).and_return(1)
+      expected_error = "Can't merge operator with responsibilities: Duplicate One (#{@duplicate_one.id})"
+      lambda{ Operator.merge!(@existing, [@duplicate_one]) }.should raise_error(expected_error)
     end
 
   end
