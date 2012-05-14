@@ -9,7 +9,6 @@ module FixMyTransport
     @@data_generation_models = []
     mattr_accessor :data_generation_models
 
-
     def self.included(base)
       base.send :extend, ClassMethods
     end
@@ -88,109 +87,79 @@ module FixMyTransport
 
         end
 
-        def next_persistent_id
-          count_by_sql("SELECT NEXTVAL('#{table_name}_persistent_id_seq')")
-        end
+        self.instance_eval do
+          # A flag we can use to check if classes are versioned by data generations
+          def versioned_by_data_generations?
+            true
+          end
 
-        # Reorder any slugs that existed in the previous generation, but have been
-        # given a different sequence by the arbitrary load order
-        def normalize_slug_sequences(data_generation)
+          def next_persistent_id
+            count_by_sql("SELECT NEXTVAL('#{table_name}_persistent_id_seq')")
+          end
 
-          # Look for any instances where the slug and scope are the same for a previous version of
-          # an object, and the version in this generation, but the sequences are different
-          results = Slug.connection.execute("SELECT distinct slugs_new.name, slugs_new.scope
-                                           FROM slugs as slugs_old, slugs as slugs_new,
-                                           #{quoted_table_name} as sluggable_old,
-                                           #{quoted_table_name} as sluggable_new
-                                           WHERE slugs_old.sluggable_type = '#{self.to_s}'
-                                           AND slugs_new.sluggable_type = '#{self.to_s}'
-                                           AND slugs_old.sluggable_id = sluggable_old.id
-                                           AND slugs_new.sluggable_id = sluggable_new.id
-                                           AND slugs_new.generation_low = #{data_generation}
-                                           AND slugs_old.generation_low = #{data_generation-1}
-                                           AND (slugs_new.scope = slugs_old.scope
-                                           OR slugs_new.scope is null and slugs_old.scope is null)
-                                           AND (sluggable_new.previous_id = sluggable_old.id
-                                           OR  sluggable_new.id = sluggable_old.id)
-                                           AND (slugs_old.sequence != slugs_new.sequence
-                                                AND slugs_old.name = slugs_new.name)")
-          results.each do |name,slug_scope|
-            condition_string = "slugs.name = ?"
-            params = [name]
-            if slug_scope
-              condition_string += " AND slugs.scope = ?"
-              params << slug_scope
-            end
-            instances = self.find(:all, :include => :slug, :conditions => [condition_string] + params)
-            instances = instances.sort_by(&:slug_sequence_in_previous_generation)
-
-            instances.each do |instance|
-              instance.slug.destroy
-              instance.slug = nil
-            end
-            instances.each do |instance|
-              instance.save
+          # Perform a block of code ignoring data generations
+          def in_any_generation(&block)
+            self.with_exclusive_scope do
+              yield
             end
           end
-        end
 
-      end
-
-      # Perform a block of code ignoring data generations
-      def in_any_generation(&block)
-        self.with_exclusive_scope do
-          yield
-        end
-      end
-
-      # Perform a block of code in the context of the data generation passed
-      def in_generation(generation_id, &block)
-        self.with_exclusive_scope do
-          condition_string = ["#{quoted_table_name}.generation_low <= ?",
-                              "AND #{quoted_table_name}.generation_high >= ?"].join(" ")
-          self.with_scope(:find => {:conditions => [ condition_string, generation_id, generation_id ]}) do
-             yield
+          # Perform a block of code in the context of the data generation passed
+          def in_generation(generation_id, &block)
+            self.with_exclusive_scope do
+              condition_string = ["#{quoted_table_name}.generation_low <= ?",
+                                  "AND #{quoted_table_name}.generation_high >= ?"].join(" ")
+              self.with_scope(:find => {:conditions => [ condition_string, generation_id, generation_id ]}) do
+                 yield
+              end
+            end
           end
-        end
-      end
 
-      def manual_remaps
-        @manual_mapping_hash = get_manual_remaps unless defined? @manual_mapping_hash
-        @manual_mapping_hash
-      end
-
-      def get_manual_remaps
-        mappings = DataGenerationMapping.find(:all, :conditions => ['old_generation_id = ?
-                                                                     AND new_generation_id = ?
-                                                                     AND model_name = ?',
-                                                                     PREVIOUS_GENERATION,
-                                                                     CURRENT_GENERATION,
-                                                                     self.to_s])
-        mapping_hash = {}
-        mappings.each do |mapping|
-          mapping_hash[mapping.old_model_hash] = mapping.new_model_hash
-        end
-        mapping_hash
-      end
-
-      # If the find_params passed would have matched an instance in the previous generation
-      # return that instance (if it is valid in the current generation), or its successor, if
-      # it has one
-      def find_successor(*find_params)
-        previous = nil
-        self.in_generation(PREVIOUS_GENERATION) do
-          previous = self.find(*find_params)
-        end
-        if previous
-          return previous if previous.generation_high >= CURRENT_GENERATION
-          successor = self.find(:first, :conditions => ['previous_id = ?', previous.id])
-          return successor if successor
-          if remap_identity_hash = manual_remaps[previous.identity_hash]
-            return self.find(:first, :conditions => remap_identity_hash)
+          def manual_remaps
+            @manual_mapping_hash = get_manual_remaps unless defined? @manual_mapping_hash
+            @manual_mapping_hash
           end
+
+          def get_manual_remaps
+            mappings = DataGenerationMapping.find(:all, :conditions => ['old_generation_id = ?
+                                                                         AND new_generation_id = ?
+                                                                         AND model_name = ?',
+                                                                         PREVIOUS_GENERATION,
+                                                                         CURRENT_GENERATION,
+                                                                         self.to_s])
+            mapping_hash = {}
+            mappings.each do |mapping|
+              mapping_hash[mapping.old_model_hash] = mapping.new_model_hash
+            end
+            mapping_hash
+          end
+
+          # If the find_params passed would have matched an instance in the previous generation
+          # return that instance (if it is valid in the current generation), or its successor, if
+          # it has one
+          def find_successor(*find_params)
+            previous = nil
+            Slug.in_any_generation do
+              self.in_generation(PREVIOUS_GENERATION) do
+                previous = self.find(*find_params)
+              end
+            end
+            if previous
+              return previous if previous.generation_high >= CURRENT_GENERATION
+              successor = self.find(:first, :conditions => ['previous_id = ?', previous.id])
+              return successor if successor
+              if remap_identity_hash = manual_remaps[previous.identity_hash]
+                return self.find(:first, :conditions => remap_identity_hash)
+              end
+            end
+            return nil
+          end
+
+
         end
-        return nil
+
       end
+
 
     end
 
@@ -271,68 +240,6 @@ module FixMyTransport
         end
         if existing = self.class.find(:first, :conditions => [condition_string] + params)
           errors.add(field,  ActiveRecord::Error.new(self, field, :taken).to_s)
-        end
-      end
-
-
-      # Get the sequence of the slug from the version of this model in the previous
-      # data generation. If there was none, return one more than the highest sequence
-      # number for models with this slug in the previous generation
-      def slug_sequence_in_previous_generation
-        raise "This model does not use friendly_id slugs" unless self.class.uses_friendly_id?
-        if self.previous()
-          # did this object previously have the same slug and scope? If so, return the sequence
-          # it used to have
-          condition_string = "sluggable_id = ? and sluggable_type = ?"
-          params = [self.previous.id, self.class.to_s]
-          if self.slug.scope
-            condition_string += " and scope = ?"
-            params << self.slug.scope
-          end
-          previous_slug = nil
-          Slug.in_generation(PREVIOUS_GENERATION) do
-            previous_slug = Slug.find(:first, :conditions => [condition_string] + params)
-          end
-          return previous_slug.sequence if previous_slug
-        end
-        # If it didn't have the same slug and scope, return an integer one bigger than the
-        # maximum sequence that used to exist for the slug and scope, or 1 if this slug and
-        # scope didn't exist in the previous generation
-        condition_string = "name = ? and sluggable_type = ?"
-        params = [self.slug.name, self.class.to_s]
-        if self.slug.scope
-          condition_string += " and scope = ?"
-          params << self.slug.scope
-        end
-        max_previous_slug = nil
-        Slug.in_generation(PREVIOUS_GENERATION) do
-          max_previous_slug = Slug.find(:first, :conditions => [condition_string] + params,
-                                                :order => 'sequence desc')
-        end
-        if max_previous_slug
-          return max_previous_slug.sequence + 1
-        else
-          return 1
-        end
-      end
-
-      def previous
-        if self.generation_low <= PREVIOUS_GENERATION
-          return self
-        end
-        if self.previous_id
-          self.class.in_generation(PREVIOUS_GENERATION) do
-            return self.class.find(previous_id)
-          end
-        end
-        return nil
-      end
-
-      def in_current_data_generation?
-        if self.generation_high >= CURRENT_GENERATION
-          return true
-        else
-          return false
         end
       end
 
