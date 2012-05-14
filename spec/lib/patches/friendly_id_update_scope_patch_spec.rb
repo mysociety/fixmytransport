@@ -2,24 +2,24 @@ require 'spec_helper'
 describe 'Patched slugged models' do
 
   describe 'when updating the scope of a slugged model to a scope that already has more than
-            one slug with the same name' do 
-            
+            one slug with the same name' do
+
     before do
       @locality = Locality.create!(:name => 'Kenty')
-      @first_stop = Stop.new(:common_name => 'Kent Lane', 
+      @first_stop = Stop.new(:common_name => 'Kent Lane',
                              :locality => @locality,
                              :stop_type => 'BCT')
       @first_stop.status = 'ACT'
       @first_stop.save!
-      @second_stop = Stop.new(:common_name => 'Kent Lane', 
+      @second_stop = Stop.new(:common_name => 'Kent Lane',
                               :locality => @locality,
                               :stop_type => 'BCT')
       @second_stop.status = 'ACT'
       @second_stop.save!
     end
-    
-    it 'should increment the sequence on the slug to one more than the highest sequence of the 
-        similar slugs' do 
+
+    it 'should increment the sequence on the slug to one more than the highest sequence of the
+        similar slugs' do
       @new_stop = Stop.new(:common_name => 'Kent Lane',
                           :stop_type => 'BCT')
       @new_stop.status = 'ACT'
@@ -29,11 +29,12 @@ describe 'Patched slugged models' do
       @new_stop.save!
       @new_stop.slug.sequence.should == 3
     end
-    
+
     after do
       @first_stop.destroy
-      @second_stop.destroy 
+      @second_stop.destroy
       @new_stop.destroy
+      @locality.destroy
     end
   end
 
