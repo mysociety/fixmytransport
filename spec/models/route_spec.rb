@@ -399,6 +399,20 @@ describe Route do
       existing_route.route_segments.size.should == 4
     end
 
+    it 'should create a merge record' do
+      existing_route = routes(:victoria_to_haywards_heath)
+      Route.stub!(:find_existing).and_return([existing_route])
+      route = Route.new(:transport_mode_id => 5,
+                        :number => '43',
+                        :status => 'ACT')
+      route.stub!(:new_record?).and_return(false)
+      route.stub!(:id).and_return(66)
+      MergeLog.should_receive(:create!).with(:from_id => route.id,
+                                             :to_id => existing_route.id,
+                                             :model_name => 'Route')
+      Route.add!(route)
+    end
+
   end
 
   describe "when counting routes without operators " do

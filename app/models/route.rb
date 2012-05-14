@@ -822,7 +822,12 @@ class Route < ActiveRecord::Base
       end
 
     end
-    duplicate.destroy unless duplicate.new_record?
+    if ! duplicate.new_record?
+      MergeLog.create!(:from_id => duplicate.id,
+                       :to_id => original.id,
+                       :model_name => 'Route')
+      duplicate.destroy
+    end
     original.save!
   end
 
