@@ -25,7 +25,7 @@ describe ProblemMailer do
                                             :name => 'Test Operator')
       @mock_user = mock_model(User, :email => 'user@example.com')
       @mock_problem = mock_model(Problem, :operator => @mock_operator,
-                                          :recipient_contact => @mock_contact, 
+                                          :recipient_contact => @mock_contact,
                                           :recipient_emails => { :email => @mock_contact.email },
                                           :reporter => @mock_user,
                                           :reporter_phone => '123',
@@ -50,11 +50,20 @@ describe ProblemMailer do
     describe 'when delivering a problem report' do
 
       before do
+        MySociety::Config.stub!(:getbool).with('SITE_VISIBLE', true).and_return(true  )
+        MySociety::Config.stub!(:get).with("DOMAIN", '127.0.0.1:3000').and_return("127.0.0.1:3000")
+        MySociety::Config.stub!(:get).with("CONTACT_EMAIL", 'contact@localhost').and_return("test@example.com")
         @mailer = ProblemMailer.create_report(@mock_problem, @mock_operator, [@mock_operator])
       end
 
       it 'should deliver successfully' do
         lambda { ProblemMailer.deliver(@mailer) }.should_not raise_error
+      end
+
+      it 'should set the contact address for the application as the "return-to" header' do
+        ProblemMailer.deliver(@mailer)
+        mail = ActionMailer::Base.deliveries.last
+        mail.header['return-path'].spec.should == "test@example.com"
       end
 
     end
@@ -95,7 +104,7 @@ describe ProblemMailer do
 
     it 'should not send an email to the person who created the comment' do
       @mock_problem.stub!(:subscriptions).and_return([])
-      @mock_problem.subscriptions.stub!(:confirmed).and_return([mock_model(Subscription, :user => @mock_commenter)])      
+      @mock_problem.subscriptions.stub!(:confirmed).and_return([mock_model(Subscription, :user => @mock_commenter)])
       ProblemMailer.should_not_receive(:deliver_comment)
       ProblemMailer.send_comment(@mock_comment, @mock_problem)
     end
@@ -166,25 +175,25 @@ describe ProblemMailer do
       @pte_contact = mock_model(PassengerTransportExecutiveContact, :email => 'pte@example.com')
       @pte_without_mail = mock_model(PassengerTransportExecutive, :name => 'Unemailable PTE')
 
-      @mock_problem_email_operator = make_mock_problem([@operator_with_mail], 
-                                                       [], 
-                                                       @operator_contact, 
+      @mock_problem_email_operator = make_mock_problem([@operator_with_mail],
+                                                       [],
+                                                       @operator_contact,
                                                        { :email => @operator_contact.email })
-      @mock_problem_no_email_operator = make_mock_problem([], 
-                                                          [@operator_without_mail], 
-                                                          nil, 
+      @mock_problem_no_email_operator = make_mock_problem([],
+                                                          [@operator_without_mail],
+                                                          nil,
                                                           nil)
-      @mock_problem_email_pte =  make_mock_problem([@pte_with_mail], 
-                                                   [], 
-                                                   @pte_contact, 
+      @mock_problem_email_pte =  make_mock_problem([@pte_with_mail],
+                                                   [],
+                                                   @pte_contact,
                                                    { :email => @pte_contact.email })
-      @mock_problem_no_email_pte = make_mock_problem([], 
-                                                     [@pte_without_mail], 
+      @mock_problem_no_email_pte = make_mock_problem([],
+                                                     [@pte_without_mail],
                                                      nil,
                                                      nil)
-      @mock_problem_some_council_mails = make_mock_problem([@emailable_council], 
-                                                           [@unemailable_council], 
-                                                           @council_contact, 
+      @mock_problem_some_council_mails = make_mock_problem([@emailable_council],
+                                                           [@unemailable_council],
+                                                           @council_contact,
                                                            { :email => @council_contact.email })
       @mock_problem_no_orgs = make_mock_problem([],[], nil, nil)
 
