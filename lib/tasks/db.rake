@@ -9,10 +9,10 @@ namespace :db do
     # Load Localities, Regions, Districts, AdminAreas
     ENV['DIR'] = MySociety::Config.get('NPTG_DIR', '')
     Rake::Task['nptg:load:all'].execute
-    
+
     # In 2010, the locality qualifier name was included in the name field - split it out
     Rake::Task['nptg:post_load:split_locality_qualifiers']
-    
+
     Rake::Task['nptg:geo:convert_localities'].execute
 
     # Load Stops, StopAreas, give StopAreas lat/lon
@@ -24,7 +24,7 @@ namespace :db do
     Rake::Task['noc:load:operators'].execute
     Rake::Task['noc:load:operator_codes'].execute
     Rake::Task['noc:load:vosa_licenses'].execute
-    
+
     # Needs council contacts file to be specified
     # Rake::Task['council:load:contacts'].execute
 
@@ -42,9 +42,9 @@ namespace :db do
     # Load Routes
     ENV['DIR'] = File.join(MySociety::Config.get('NPTDR_DIR', ''), 'routes')
     Rake::Task['nptdr:load:routes'].execute
-    
+
     # Merge routes using various heuristics
-    # TODO: find_existing for a national route should use 
+    # TODO: find_existing for a national route should use
     # find_all_by_number_and_common_stop with the :any_admin_area flag
     # then I think we wouldn't need to merge the national routes here.
     Rake::Task['nptdr:post_load:merge_consecutive_bus_route_pairs']
@@ -56,20 +56,11 @@ namespace :db do
     Rake::Task['naptan:post_load:mark_metro_stops'].execute
     # Needs station operators file to be specified
     # Rake::Task['noc:load:station_operators'].execute
-    
+
 
     # Delete routes with no stops, add localities and regions.
     Rake::Task['nptdr:post_load:delete_routes_without_stops'].execute
-    Rake::Task['nptdr:post_load:add_route_localities'].execute
-    
-    # Regions on routes during loading are not neccesarily right - they're the region
-    # of the admin area of the file the route first came from. Regenerate route regions using 
-    # the localities the route actually goes through.
-    Rake::Task['nptdr:post_load:add_route_regions'].execute
-    
-    # Add coordinates for route mid points
-    Rake::Task['nptdr:post_load:add_route_coords'].execute
-    
+
     # Load PTEs
     Rake::Task['pte:load']
 
