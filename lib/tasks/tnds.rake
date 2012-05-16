@@ -231,7 +231,7 @@ namespace :tnds do
       end
       parser = Parsers::TransxchangeParser.new
       outfile = File.open("data/operators/missing_#{Time.now.to_date.to_s(:db)}.tsv", 'w')
-      headers = ['Short name', 'Trading name', 'Name on license', 'Code', 'Problem', 'Region', 'File']
+      headers = ['NOC Code', 'Short name', 'Trading name', 'Name on license', 'Code', 'Problem', 'Region', 'File']
       outfile.write(headers.join("\t")+"\n")
       file_glob = File.join(ENV['DIR'], "**/*.xml")
       index_file = File.join(ENV['DIR'], 'TravelineNationalDataSetFilesList.txt')
@@ -239,7 +239,8 @@ namespace :tnds do
       parser.parse_all_tnds_routes(file_glob, index_file, verbose, skip_loaded, regions_as) do |route|
         if route.route_operators.length != 1
           lines += 1
-          row = [route.operator_info[:short_name],
+          row = [route.operator_info[:noc_code],
+                 route.operator_info[:short_name],
                  route.operator_info[:trading_name],
                  route.operator_info[:name_on_license],
                  route.operator_info[:code],
