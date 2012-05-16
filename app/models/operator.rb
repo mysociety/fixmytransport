@@ -203,6 +203,37 @@ class Operator < ActiveRecord::Base
     operators
   end
 
+  def normalize_name(name)
+    normalized_name = name.downcase
+    normalized_name = normalized_name.gsub(/\(.*\)/, '')
+    normalized_name = normalized_name.gsub(/,.*/, '')
+    normalized_name = normalized_name.gsub(/[^a-z]/, "")
+    normalized_name = normalized_name.gsub(/(limited|ltd)/, '')
+    normalized_name
+  end
+
+  # Loose comparison method for names to short names from other data
+  # sources - accepts an extra parameter for the length at which the
+  # name passed for comparison has been cropped
+  def matches_short_name?(comparison_name, comparison_max_length=nil)
+    check_cropped = false
+    if comparison_max_length && comparison_name.length == comparison_max_length
+      check_cropped = true
+    end
+    comparison_name = normalize_name(comparison_name)
+    if self.short_name
+      return true if self.normalize_name(self.short_name) == comparison_name
+      if check_cropped
+        return true if self.normalize_name(self.short_name[0 ,comparison_max_length]) == comparison_name
+      end
+    end
+    return true if self.normalize_name(self.name) == comparison_name
+    if check_cropped
+      return true if self.normalize_name(self.name[0, comparison_max_length]) == comparison_name
+    end
+    return false
+  end
+
   def self.vehicle_mode_to_transport_mode(vehicle_mode)
     modes_to_modes = {  'bus'         => 'Bus',
                         'coach'       => 'Coach',

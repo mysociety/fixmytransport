@@ -74,6 +74,33 @@ describe Operator do
 
   end
 
+  describe 'when asked if it matches a short name' do
+
+    before do
+      @operator = Operator.new
+    end
+
+    def expect_no_match(name, short_name, comparison_max_length=24)
+      @operator.name = name
+      @operator.matches_short_name?(short_name, comparison_max_length).should be_false
+    end
+
+    def expect_match(name, short_name, comparison_max_length=24)
+      @operator.name = name
+      @operator.matches_short_name?(short_name, comparison_max_length).should be_true
+    end
+
+    it 'should return correct results for some examples' do
+      expect_no_match('Arriva Midlands','Arriva Midlands North')
+      expect_match('Astons Coaches of Kempsey Ltd', 'ASTONS COACHES OF KEMPSE')
+      expect_match('Stagecoach in Warwickshire', 'Stagecoach in Warwickshi')
+      expect_match('First Potteries Limited', 'First Potteries Ltd')
+      expect_match("Pulhams Coaches", "Pulham's Coaches")
+      expect_match("Hansons (Wordsley) Ltd", "HANSONS (WORDSLEY) LTD.,")
+    end
+
+  end
+
   describe 'when merging operators' do
 
     before do
