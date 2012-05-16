@@ -2,8 +2,8 @@
 <!--
 Version Number (Major): 05
 Version Number (Minor):00
-File Originator:Any Bus Operator                
-Source Product:EMS 8.5.5 Patch 
+File Originator:Any Bus Operator
+Source Product:EMS 8.5.5 Patch
 Production Time:102846
 
 -->
@@ -51,6 +51,7 @@ id='7111569'
 <Operators>
 <Operator id='RLB'>
 <OperatorCode>RLB</OperatorCode>
+<NationalOperatorCode>NOCC</NationalOperatorCode>
 <OperatorShortName>Red Line Buses</OperatorShortName>
 <EnquiryTelephoneNumber>
 <TelNationalNumber>07525 070 527</TelNationalNumber>

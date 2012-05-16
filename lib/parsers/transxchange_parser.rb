@@ -251,6 +251,7 @@ class Parsers::TransxchangeParser
         end
         operator_information = operators_information[registered_operator_ref]
         operator_code = operator_information[:code]
+        noc_code = operator_information[:noc_code]
         route.route_sources.build(:service_code => service_code,
                                   :operator_code => operator_code,
                                   :region => region,
@@ -300,14 +301,12 @@ class Parsers::TransxchangeParser
           missing_stops = self.mark_stop_code_missing(missing_stops, missing_stop_code, route)
         end
         route.operator_info = operator_information
-        operators = Operator.find_all_by_nptdr_code(transport_mode, operator_code, region, route)
-        puts "found #{operators.size} operators by operator code" if verbose
+        operators = find_operators(operator_information, transport_mode, region, route, verbose)
         operators.each do |operator|
           if ! route.route_operators.any?{ |route_operator| route_operator.operator == operator }
             route.route_operators.build( :operator => operator )
           end
         end
-        # apply each element of the data hash - alert if there are unused elements
 
       end
       if routes.empty?
@@ -324,6 +323,41 @@ class Parsers::TransxchangeParser
       end
       return missing_stops
     end
+  end
+
+  def find_operators(info, transport_mode, region, route, verbose)
+    # short_name field is cropped at 24 characters
+    comparison_max_length = 24
+    short_name = info[:short_name]
+    if info[:noc_code]
+      operator = Operator.find_by_noc_code(info[:noc_code])
+      if operator.nil?
+        operators = []
+        puts "Warning: Missing operator with noc code #{info[:noc_code]}" if verbose
+      else
+        operators = [ operator ]
+        puts "Found operator by noc code" if verbose
+        if ! verbose
+          match = operator.matches_short_name?(short_name, comparison_max_length)
+          if short_name && ! match
+            puts "Warning: Operator name mismatch when found using noc code: #{short_name} vs #{operator.name}"
+          end
+        end
+      end
+    else
+      operators = Operator.find_all_by_nptdr_code(transport_mode, info[:code], region, route)
+      puts "Found #{operators.size} operators by operator code" if verbose
+      if short_name && !operators.empty?
+        name_matches = operators.select{ |operator| operator.matches_short_name?(short_name, comparison_max_length) }
+        if name_matches.empty? && ! verbose
+          found_names = operators.map{ |operator| operator.name }.join(", ")
+          puts "Warning: Operator name mismatch when found using operator code: #{short_name} vs #{found_names}"
+        else
+          operators = name_matches
+        end
+      end
+    end
+    return operators
   end
 
   def parse_data(input, filename=nil, verbose=true, &block)
@@ -579,6 +613,8 @@ class Parsers::TransxchangeParser
     parent = @reader.name
     until_element_end(@reader.name) do
       case @reader.name
+      when 'NationalOperatorCode'
+        operator_info[:noc_code] = get_element_text('NationalOperatorCode')
       when 'OperatorCode'
         operator_info[:code] = get_element_text('OperatorCode')
       when 'OperatorShortName'

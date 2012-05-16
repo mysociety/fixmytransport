@@ -26,7 +26,7 @@ describe Parsers::TransxchangeParser do
       @parser = Parsers::TransxchangeParser.new
       @simple_file = example_file("SVRYSDO005-20120130-80845.xml")
       @combined_file = example_file("ea_20-3_-1-y08.xml")
-      mock_operator = mock_model(Operator)
+      mock_operator = mock_model(Operator, :matches_short_name? => true)
       Operator.stub!(:find_all_by_nptdr_code).and_return([mock_operator])
       @mock_region = mock_model(Region, :name => 'Yorkshire')
     end
@@ -55,7 +55,7 @@ describe Parsers::TransxchangeParser do
       route_source = routes.first.route_sources.first
       route_source.service_code.should == 'YSDO005'
       route_source.operator_code.should == 'RLB'
-      route_source.line_number.should == 74
+      route_source.line_number.should == 75
       route_source.filename.should == @example_file_path
     end
 
@@ -72,10 +72,19 @@ describe Parsers::TransxchangeParser do
     end
 
     it 'should create an operator for the route based on the operator code' do
-      mock_operator = mock_model(Operator)
+      mock_operator = mock_model(Operator, :matches_short_name? => true)
       expected_arguments = [anything(), '027WP', @mock_region, anything()]
       Operator.stub!(:find_all_by_nptdr_code).with(*expected_arguments).and_return([mock_operator])
       routes = get_routes(@parser, [@combined_file, nil, nil, @combined_file, verbose=false, @mock_region])
+      combined_route = routes.first
+      combined_route.route_operators.size.should == 1
+      combined_route.route_operators.first.operator.should == mock_operator
+    end
+
+    it 'should create an operator for the route based on the noc code if one is given' do
+      mock_operator = mock_model(Operator, :matches_short_name? => true)
+      Operator.stub!(:find_by_noc_code).with('NOCC').and_return(mock_operator)
+      routes = get_routes(@parser, [@simple_file, nil, nil, @simple_file, verbose=false, @mock_region])
       combined_route = routes.first
       combined_route.route_operators.size.should == 1
       combined_route.route_operators.first.operator.should == mock_operator
