@@ -216,7 +216,7 @@ namespace :tnds do
 
     desc 'Produce a list of unmatched operator information from a set of TransXchange
           files in a directory passed as DIR=dir. Verbose flag set by VERBOSE=1.
-          To re-load routes from files that have already been loaded in this data generation,
+          To include routes from files that have already been loaded in this data generation,
           supply SKIP_LOADED=0. Otherwise these files will be ignored.
           Specify FIND_REGION_BY=directory if regions need to be inferred from directories.'
     task :list_unmatched_operators => :environment do
@@ -255,6 +255,48 @@ namespace :tnds do
       end
       outfile.close()
     end
+
+    desc "Produce a list of missing stop information from a set of TransXChange files
+          in a directory passed as DIR=dir. Verbose flag set by VERBOSE=1.
+          To include routes from files that have already been loaded in this data generation,
+          supply SKIP_LOADED=0. Otherwise these files will be ignored.
+          Specify FIND_REGION_BY=directory if regions need to be inferred from directories."
+    task :list_unmatched_stops => :environment do
+      check_for_dir
+      verbose = check_verbose
+      skip_loaded = true
+      skip_loaded = false if ENV['SKIP_LOADED'] == '0'
+      if ENV['FIND_REGION_BY'] == 'directory'
+        regions_as = :directories
+      else
+        regions_as = :index
+      end
+      parser = Parsers::TransxchangeParser.new
+      outfile = File.open("data/stops/missing_#{Time.now.to_date.to_s(:db)}.tsv", 'w')
+      headers = ['Stop Code', 'Region', 'File', 'Service Code', 'Line number']
+      outfile.write(headers.join("\t")+"\n")
+      file_glob = File.join(ENV['DIR'], "**/*.xml")
+      index_file = File.join(ENV['DIR'], 'TravelineNationalDataSetFilesList.txt')
+      lines = 0
+      parser.parse_all_tnds_routes(file_glob, index_file, verbose, skip_loaded, regions_as) do |route|
+        if !route.missing_stops.empty?
+          route.missing_stops.each do |stop_code|
+            lines += 1
+            row = [stop_code,
+                   route.region.name,
+                   route.route_sources.first.filename,
+                   route.route_sources.first.service_code,
+                   route.route_sources.first.line_number]
+            outfile.write(row.join("\t")+"\n")
+            if lines % 10 == 0
+              outfile.flush
+            end
+          end
+        end
+      end
+      outfile.close()
+    end
+
   end
 
   namespace :load do

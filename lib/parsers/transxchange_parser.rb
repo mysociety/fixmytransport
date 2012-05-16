@@ -301,6 +301,7 @@ class Parsers::TransxchangeParser
           missing_stops = self.mark_stop_code_missing(missing_stops, missing_stop_code, route)
         end
         route.operator_info = operator_information
+        route.missing_stops = missing
         operators = find_operators(operator_information, transport_mode, region, route, verbose)
         operators.each do |operator|
           if ! route.route_operators.any?{ |route_operator| route_operator.operator == operator }
