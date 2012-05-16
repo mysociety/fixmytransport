@@ -43,7 +43,8 @@ namespace :tnds do
 
     desc 'Loads data from a file produced by tnds:preload:list_unmatched_operators and loads missing
           operator codes and operators into the database. Accepts a file as FILE=file.
-          Verbose flag set by VERBOSE=1. Runs in dryrun mode unless DRYRUN=0 is specified'
+          Verbose flag set by VERBOSE=1. Runs in dryrun mode unless DRYRUN=0 is specified.
+          Produces an output file of suggested actions with respect to the NOC database.'
     task :load_unmatched_operators => :environment do
       tsv_options = { :quote_char => '"',
                       :col_sep => "\t",
