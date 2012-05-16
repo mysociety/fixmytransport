@@ -27,11 +27,11 @@
 
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-victoria: 
+victoria:
   northing: "179150"
   source_locality_type: Lo
-  admin_area_id: "171"
-  national: 
+  admin_area: london
+  national:
   name: Victoria
   grid_type: U
   revision_number: "0"
@@ -43,11 +43,11 @@ victoria:
   easting: "528936"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-haywards_heath: 
+haywards_heath:
   northing: "124110"
   source_locality_type: Pa
-  admin_area_id: "243"
-  national: 
+  admin_area: london
+  national:
   name: Haywards Heath
   grid_type: U
   revision_number: "0"
@@ -59,11 +59,11 @@ haywards_heath:
   easting: "532850"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-broadmead:  
+broadmead:
   northing: "173518"
   source_locality_type: Add
-  admin_area_id: "247"
-  national: 
+  admin_area: london
+  national:
   name: Broadmead
   grid_type: U
   revision_number: "0"
@@ -75,11 +75,11 @@ broadmead:
   easting: "358955"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-shirehampton:  
+shirehampton:
   northing: "176911"
   source_locality_type: Lo
-  admin_area_id: "247"
-  national: 
+  admin_area: london
+  national:
   name: Shirehampton
   grid_type: U
   revision_number: "0"
@@ -94,8 +94,8 @@ shirehampton:
 clapham_junction:
   northing: "175500"
   source_locality_type: Lo
-  admin_area_id: "171"
-  national: 
+  admin_area: london
+  national:
   name: Clapham Junction
   grid_type: U
   revision_number: "0"
@@ -110,8 +110,8 @@ clapham_junction:
 croydon:
   northing: "165340"
   source_locality_type: Add
-  admin_area_id: "171"
-  national: 
+  admin_area: london
+  national:
   name: Croydon
   grid_type: U
   revision_number: "0"
@@ -126,8 +126,8 @@ croydon:
 gatwick_airport:
   northing: "141324"
   source_locality_type: Add
-  admin_area_id: "243"
-  national: 
+  admin_area: london
+  national:
   name: Gatwick Airport
   grid_type: U
   revision_number: "1"
@@ -142,8 +142,8 @@ gatwick_airport:
 south_moor:
   northing: "551960"
   source_locality_type: Lo
-  admin_area_id: "178"
-  national: 
+  admin_area: london
+  national:
   name: South Moor
   grid_type: U
   revision_number: "1"
@@ -158,8 +158,8 @@ south_moor:
 stanley:
   northing: "553023"
   source_locality_type: Lo
-  admin_area_id: "178"
-  national: 
+  admin_area: london
+  national:
   name: Stanley
   grid_type: U
   revision_number: "1"
@@ -174,8 +174,8 @@ stanley:
 weybourne:
   northing: "149037"
   source_locality_type: Lo
-  admin_area_id: "242"
-  national: 
+  admin_area: london
+  national:
   name: Weybourne
   grid_type: U
   revision_number: "0"
@@ -190,8 +190,8 @@ weybourne:
 north_town:
   northing: "150470"
   source_locality_type: Add
-  admin_area_id: "260"
-  national: 
+  admin_area: london
+  national:
   name: North Town
   grid_type: U
   revision_number: "0"
@@ -206,8 +206,8 @@ north_town:
 catchgate:
   northing: "552130"
   source_locality_type: Lo
-  admin_area_id: "178"
-  national: 
+  admin_area: london
+  national:
   name: Catchgate
   grid_type: U
   revision_number: "1"
@@ -219,11 +219,11 @@ catchgate:
   easting: "416440"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-annfield_plain: 
+annfield_plain:
   northing: "551442"
   source_locality_type: Lo
-  admin_area_id: "178"
-  national: 
+  admin_area: london
+  national:
   name: Annfield Plain
   grid_type: U
   revision_number: "1"
@@ -238,8 +238,8 @@ annfield_plain:
 aldershot:
   northing: "150625"
   source_locality_type: Lo
-  admin_area_id: "260"
-  national: 
+  admin_area: london
+  national:
   name: Aldershot
   grid_type: U
   revision_number: "0"
@@ -251,11 +251,11 @@ aldershot:
   easting: "486371"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-bristol: 
+bristol:
   northing: "173086"
   source_locality_type: US
-  admin_area_id: "247"
-  national: 
+  admin_area: london
+  national:
   name: Bristol
   grid_type: U
   revision_number: "1"
@@ -267,11 +267,11 @@ bristol:
   easting: "358640"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-london: 
+london:
   northing: "180514"
   source_locality_type: Add
-  admin_area_id: "171"
-  national: 
+  admin_area: london
+  national:
   name: London
   grid_type: U
   revision_number: "0"
@@ -283,45 +283,45 @@ london:
   easting: "530062"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-avonmouth: 
+avonmouth:
   northing: "179239"
   source_locality_type: Lo
-  admin_area_id: "98"
-  national: 
+  admin_area: london
+  national:
   name: Avonmouth
   grid_type: U
   revision_number: "0"
   code: E0035565
   qualifier_name: ""
-  district_id: 
+  district_id:
   modification: ""
   short_name: ""
   coords: 0101000020346C000000000000688015410000000038E10541
   easting: "352282"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-shirehampton: 
+shirehampton:
   northing: "176911"
   source_locality_type: Lo
-  admin_area_id: "98"
-  national: 
+  admin_area: london
+  national:
   name: Shirehampton
   grid_type: U
   revision_number: "0"
   code: E0035642
   qualifier_name: ""
-  district_id: 
+  district_id:
   modification: ""
   short_name: ""
   coords: 0101000020346C000000000000E88E15410000000078980541
   easting: "353210"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-the_borough: 
+the_borough:
   northing: "179690"
   source_locality_type: Lo
-  admin_area_id: "22"
-  national: 
+  admin_area: london
+  national:
   name: The Borough
   grid_type: U
   revision_number: "0"
@@ -334,17 +334,17 @@ the_borough:
   easting: "532420"
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-kingswood: 
+kingswood:
   northing: "254081"
   source_locality_type: Lo
-  admin_area_id: "136"
-  national: 
+  admin_area: london
+  national:
   name: Kingswood
   grid_type: U
   revision_number: "3"
   code: E0038221
   qualifier_name: Hereford
-  district_id: 
+  district_id:
   modification: rev
   short_name: ""
   cached_slug: kingswood-hereford
