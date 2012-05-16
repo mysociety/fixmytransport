@@ -30,7 +30,19 @@ namespace :update do
 
     # LOAD TNDS DATA
     Rake::Task['update:tnds']
+    ENV['MODEL'] = 'Route'
+    Rake::Task['update:replay_updates']
+
+    ENV['MODEL'] = 'RouteOperator'
+    Rake::Task['update:replay_updates']
+
+    ENV['MODEL'] = 'StopAreaOperator'
+    Rake::Task['update:replay_updates']
+
     # Rake::Task['naptan:post_load:mark_metro_stops'].execute
+
+    # Mark records as loaded
+    Rake::Task['db:mark_loaded']
 
   end
 
@@ -136,6 +148,10 @@ namespace :update do
         is specified. Verbose flag set by VERBOSE=1'
   task :tnds => :environment do
     ENV['DIR'] = MySociety::Config.get('TNDS_DIR', '')
+
+    # Iterate through routes to be loaded, produce file of stops that can't be found
+    Rake::Task['tnds:preload:list_unmatched_stops'].execute
+
     # Iterate through the routes to be loaded, produce file of operators that can't
     # be matched by operator code
     Rake::Task['tnds:preload:list_unmatched_operators'].execute
