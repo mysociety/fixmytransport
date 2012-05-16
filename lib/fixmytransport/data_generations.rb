@@ -69,6 +69,7 @@ module FixMyTransport
           # These callbacks set the data generation and persistent columns to the current generation
           # and a new persistent_id if no value has been set on them
           before_validation :set_persistent_id
+          validates_presence_of :persistent_id
           before_create :set_generations
           validate :persistent_id_unique_in_generation
 
