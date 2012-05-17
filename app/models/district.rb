@@ -16,8 +16,8 @@
 #
 
 class District < ActiveRecord::Base
-  belongs_to :admin_area
-  has_many :localities
+  belongs_to :admin_area, :conditions => AdminArea.data_generation_conditions
+  has_many :localities, :conditions => Locality.data_generation_conditions
   # This model is part of the transport data that is versioned by data generations.
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
@@ -51,7 +51,7 @@ class District < ActiveRecord::Base
     end
      [name, admin_area_name]
   end
-  
+
   def self.find_all_by_full_name(name)
     name.downcase!
     name, admin_area_name = self.get_name_and_admin_area_name(name)
@@ -64,10 +64,10 @@ class District < ActiveRecord::Base
       includes << :admin_area
     end
     conditions = [query_string] + params
-    districts = self.find(:all, :conditions => conditions, 
+    districts = self.find(:all, :conditions => conditions,
                                 :include => includes)
-    districts = districts.select{ |district| ! district.localities.empty? }                
-    districts               
+    districts = districts.select{ |district| ! district.localities.empty? }
+    districts
   end
 
 end

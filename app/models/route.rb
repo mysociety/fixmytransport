@@ -24,7 +24,6 @@ class Route < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
   exists_in_data_generation( :identity_fields => [],
-                             :temporary_identity_fields => [:id],
                              :new_record_fields => [], # we don't know before loading which routes (no persistent external identifier)
                              :update_fields => [], # match existing ones, so don't use these config options
                              :auto_update_fields => [:cached_description,
@@ -36,23 +35,34 @@ class Route < ActiveRecord::Base
                                                      :coords] )
   has_many :route_sub_routes
   has_many :sub_routes, :through => :route_sub_routes
-  has_many :route_operators, :dependent => :destroy, :uniq => true
-  has_many :operators, :through => :route_operators, :uniq => true
-  has_many :journey_patterns, :dependent => :destroy, :order => 'id asc'
-  has_many :route_segments, :dependent => :destroy, :order => 'id asc'
+  has_many :route_operators, :dependent => :destroy,
+                             :uniq => true,
+                             :conditions => RouteOperator.data_generation_conditions
+  has_many :operators, :through => :route_operators,
+                       :uniq => true
+  has_many :journey_patterns, :dependent => :destroy,
+                              :order => 'id asc',
+                              :conditions => JourneyPattern.data_generation_conditions
+  has_many :route_segments, :dependent => :destroy,
+                            :order => 'id asc',
+                            :conditions => RouteSegment.data_generation_conditions
+
   has_many :from_stops, :through => :route_segments, :class_name => 'Stop'
   has_many :to_stops, :through => :route_segments, :class_name => 'Stop'
   belongs_to :transport_mode
   has_many :route_localities, :dependent => :destroy
   has_many :localities, :through => :route_localities
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
-  belongs_to :region
+  belongs_to :region, :conditions => Region.data_generation_conditions
   belongs_to :default_journey, :class_name => 'JourneyPattern'
+
   # Routes loaded from TNDS have route_source records
   has_many :route_sources, :dependent => :destroy
   # Routes loaded from NPTDR have route_source_admin_area records
-  has_many :route_source_admin_areas, :dependent => :destroy
-  has_many :source_admin_areas, :through => :route_source_admin_areas, :class_name => 'AdminArea'
+  has_many :route_source_admin_areas, :dependent => :destroy,
+                                      :conditions => RouteSourceAdminArea.data_generation_conditions
+  has_many :source_admin_areas, :through => :route_source_admin_areas,
+                                :class_name => 'AdminArea'
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   accepts_nested_attributes_for :journey_patterns, :allow_destroy => true, :reject_if => :journey_pattern_invalid
   validates_presence_of :number, :transport_mode_id
@@ -535,6 +545,7 @@ class Route < ActiveRecord::Base
     conditions = [condition_string, new_route.number, new_route.number, new_route.transport_mode.id]
     conditions += operator_params
     conditions += id_params
+
     routes = Route.find(:all, :conditions => conditions,
                         :include => [ {:journey_patterns => {:route_segments => [:from_stop, :to_stop] }},
                                        { :route_operators => :operator },

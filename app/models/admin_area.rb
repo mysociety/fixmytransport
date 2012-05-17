@@ -33,11 +33,11 @@ class AdminArea < ActiveRecord::Base
                                                 :revision_number],
                              :deletion_field => :modification,
                              :deletion_value => 'del' )
-  belongs_to :region
-  has_many :localities
+  belongs_to :region, :conditions => Region.data_generation_conditions
+  has_many :localities, :conditions => Locality.data_generation_conditions
 
   # instance methods
-  
+
   def full_name
     text = name
     if !region.blank?
@@ -45,9 +45,9 @@ class AdminArea < ActiveRecord::Base
     end
     text
   end
-  
-  # class methods 
-  
+
+  # class methods
+
   def self.get_name_and_region_name(name)
     name = name.downcase
      name_parts = name.split(',', 2)
@@ -59,7 +59,7 @@ class AdminArea < ActiveRecord::Base
      end
      [name, region_name]
   end
-  
+
   def self.find_all_by_full_name(name)
     name.downcase!
     return [] if name.starts_with?('national -')
@@ -72,7 +72,7 @@ class AdminArea < ActiveRecord::Base
       params << region_name
       includes << :region
     end
-    admin_areas = self.find(:all, :conditions => [query_string] + params, 
+    admin_areas = self.find(:all, :conditions => [query_string] + params,
                                   :include => includes)
     if admin_areas.empty?
       name_with_ampersand = name.gsub(' and ', ' & ')
@@ -91,5 +91,5 @@ class AdminArea < ActiveRecord::Base
     end
     admin_areas
   end
-  
+
 end

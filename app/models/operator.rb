@@ -25,18 +25,24 @@ class Operator < ActiveRecord::Base
                                                 :parent,
                                                 :ultimate_parent,
                                                 :vehicle_mode],
-                             :temporary_identity_fields => [:id],
                              :auto_update_fields => [:cached_slug])
 
-  has_many :route_operators, :dependent => :destroy
-  has_many :routes, :through => :route_operators, :uniq => true, :order => 'routes.number asc'
-  has_many :stop_area_operators, :dependent => :destroy
-  has_many :stop_areas, :through => :stop_area_operators, :uniq => true
-  has_many :stop_operators, :dependent => :destroy
-  has_many :stops, :through => :stop_operators, :uniq => true
+  has_many :route_operators, :dependent => :destroy,
+                             :conditions => RouteOperator.data_generation_conditions
+  has_many :routes, :through => :route_operators,
+                    :uniq => true,
+                    :order => 'routes.number asc'
+  has_many :stop_area_operators, :dependent => :destroy,
+                                 :conditions => StopAreaOperator.data_generation_conditions
+  has_many :stop_areas, :through => :stop_area_operators,
+                        :uniq => true
+  has_many :stop_operators, :dependent => :destroy,
+                            :conditions => StopOperator.data_generation_conditions
+  has_many :stops, :through => :stop_operators,
+                   :uniq => true
 
-  has_many :vosa_licenses
-  has_many :operator_codes
+  has_many :vosa_licenses, :conditions => VosaLicense.data_generation_conditions
+  has_many :operator_codes, :conditions => OperatorCode.data_generation_conditions
   belongs_to :transport_mode
   has_many :operator_contacts, :conditions => ['deleted = ?', false],
                                :foreign_key => :operator_persistent_id,

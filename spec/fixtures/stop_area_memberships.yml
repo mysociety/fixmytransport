@@ -14,28 +14,38 @@
 #  updated_at            :datetime
 #
 
-one: 
+one:
   revision_number: "0"
   stop: victoria_station_one
   modification: new
   stop_area: victoria_station_root
-two: 
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
+two:
   revision_number: "1"
   stop: victoria_station_two
   modification: del
   stop_area: victoria_station_root
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
 three:
   revision_number: "0"
   stop: victoria_station_two
   modification: new
   stop_area: victoria_station_leaf
-four: 
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
+four:
   revision_number: "1"
   stop: arch_ne
   modification: rev
   stop_area: south_moor_and_arch
-five: 
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>
+five:
   revision_number: "1"
   stop: arch_sw
   modification: rev
   stop_area: south_moor_and_arch
+  generation_low: <%= CURRENT_GENERATION %>
+  generation_high: <%= CURRENT_GENERATION %>

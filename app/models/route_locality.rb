@@ -11,6 +11,6 @@
 #
 
 class RouteLocality < ActiveRecord::Base
-  belongs_to :route
-  belongs_to :locality
+  belongs_to :route, :conditions => Route.data_generation_conditions
+  belongs_to :locality, :conditions => Locality.data_generation_conditions
 end

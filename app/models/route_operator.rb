@@ -15,8 +15,9 @@ class RouteOperator < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generation
   exists_in_data_generation(:identity_fields => [:route_id, :operator_id])
-  belongs_to :operator
-  belongs_to :route
+
+  belongs_to :operator, :conditions => Operator.data_generation_conditions
+  belongs_to :route, :conditions => Route.data_generation_conditions
   has_paper_trail :meta => { :replayable  => Proc.new { |route_operator| route_operator.replayable } }
   # virtual attribute used for adding new route operators
   attr_accessor :_add

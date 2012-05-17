@@ -45,23 +45,24 @@ class Locality < ActiveRecord::Base
                                                 :revision_number],
                              :deletion_field => :modification,
                              :deletion_value => 'del' )
-  belongs_to :admin_area
-  belongs_to :district
+  belongs_to :admin_area, :conditions => AdminArea.data_generation_conditions
+  belongs_to :district, :conditions => District.data_generation_conditions
   has_dag_links :link_class_name => 'LocalityLink'
-  has_many :stops, :order => 'common_name asc'
-  has_many :stop_areas
+  has_many :stops, :order => 'common_name asc',
+                   :conditions => Stop.data_generation_conditions
+  has_many :stop_areas, :conditions => StopArea.data_generation_conditions
   has_many :route_localities
   has_many :routes, :through => :route_localities
   has_friendly_id :name_and_qualifier_name, :use_slug => true
   before_save :set_metaphones
   # instance methods
-  
+
   def name_and_qualifier_name
     "#{name} #{qualifier_name}"
   end
-  
+
   def name_and_qualifier_name_with_comma
-    text = name 
+    text = name
     if !qualifier_name.blank?
       text += ", #{qualifier_name}"
     elsif !district.blank?
@@ -75,10 +76,10 @@ class Locality < ActiveRecord::Base
   def full_name
     name_and_qualifier_name_with_comma
   end
-  
+
   # Set metaphones used to find localities in the case of mis-spelt searches
   def set_metaphones
-    if self.new_record? || self.name_changed? 
+    if self.new_record? || self.name_changed?
       normalized_name = self.name.gsub(' & ', ' and ')
       self.primary_metaphone, self.secondary_metaphone = Text::Metaphone.double_metaphone(normalized_name)
     end

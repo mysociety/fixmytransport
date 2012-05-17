@@ -3,10 +3,12 @@ class JourneyPattern < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generation
   exists_in_data_generation()
-  belongs_to :route
+  belongs_to :route, :conditions => Route.data_generation_conditions
   # virtual attribute used for adding new journey patterns
   attr_accessor :_add
-  has_many :route_segments, :order => 'segment_order asc', :dependent => :destroy
+  has_many :route_segments, :order => 'segment_order asc',
+                            :dependent => :destroy,
+                            :conditions => RouteSegment.data_generation_conditions
   accepts_nested_attributes_for :route_segments, :allow_destroy => true, :reject_if => :route_segment_invalid
 
   has_paper_trail

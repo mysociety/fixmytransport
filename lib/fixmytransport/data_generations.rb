@@ -61,37 +61,16 @@ module FixMyTransport
         self.data_generation_options_hash = options
         send :include, InstanceMethods
 
-        self.class_eval do
-          # This default scope hides any models that belong to past or future data generations.
-          default_scope :conditions => [ ["#{quoted_table_name}.generation_low <= ?",
-                                          "AND #{quoted_table_name}.generation_high >= ?"].join(" "),
-                                         CURRENT_GENERATION, CURRENT_GENERATION ]
-          # These callbacks set the data generation and persistent columns to the current generation
-          # and a new persistent_id if no value has been set on them
-          before_validation :set_persistent_id
-          validates_presence_of :persistent_id
-          before_create :set_generations
-          validate :persistent_id_unique_in_generation
-
-          def set_generations
-            self.generation_low = CURRENT_GENERATION if self.generation_low.nil?
-            self.generation_high = CURRENT_GENERATION if self.generation_high.nil?
-          end
-
-          def set_persistent_id
-            self.persistent_id = self.class.next_persistent_id if self.persistent_id.nil?
-          end
-
-          def persistent_id_unique_in_generation
-            self.field_unique_in_generation(:persistent_id)
-          end
-
-        end
-
         self.instance_eval do
           # A flag we can use to check if classes are versioned by data generations
           def versioned_by_data_generations?
             true
+          end
+
+          def data_generation_conditions
+            [ ["#{quoted_table_name}.generation_low <= ?",
+               "AND #{quoted_table_name}.generation_high >= ?"].join(" "),
+               CURRENT_GENERATION, CURRENT_GENERATION ]
           end
 
           def next_persistent_id
@@ -158,6 +137,34 @@ module FixMyTransport
 
 
         end
+
+        self.class_eval do
+
+          # This default scope hides any models that belong to past or future data generations.
+          default_scope :conditions => self.data_generation_conditions
+
+          # These callbacks set the data generation and persistent columns to the current generation
+          # and a new persistent_id if no value has been set on them
+          before_validation :set_persistent_id
+          validates_presence_of :persistent_id
+          before_create :set_generations
+          validate :persistent_id_unique_in_generation
+
+          def set_generations
+            self.generation_low = CURRENT_GENERATION if self.generation_low.nil?
+            self.generation_high = CURRENT_GENERATION if self.generation_high.nil?
+          end
+
+          def set_persistent_id
+            self.persistent_id = self.class.next_persistent_id if self.persistent_id.nil?
+          end
+
+          def persistent_id_unique_in_generation
+            self.field_unique_in_generation(:persistent_id)
+          end
+
+        end
+
 
       end
 
