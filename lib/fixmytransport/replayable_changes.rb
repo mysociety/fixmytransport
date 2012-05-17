@@ -105,7 +105,7 @@ module FixMyTransport
                        :id => version.id }
       # make sure we can see all data generations - we will be looking for changes
       # that happened regardless of data generation
-      model_class.send(:with_exclusive_scope) do
+      model_class.in_any_generation() do
         case version.event
         when 'create'
           if only_replayable && !options[:temporary_identity_fields]
