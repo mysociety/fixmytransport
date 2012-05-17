@@ -92,7 +92,6 @@ namespace :update do
     ENV['MODEL'] = 'Locality'
     # N.B. Run this before loading stops or stop areas so that the scoping of those slugs doesn't
     # get out of sync with the rejigged locality slugs
-    Rake::Task['update:normalize_slug_sequences'].execute
     Rake::Task['nptg:geo:convert_localities'].execute
 
     # Can just reuse the load code here - localities will be scoped by the current data generation
@@ -261,14 +260,6 @@ namespace :update do
     verbose = check_verbose()
     model = ENV['MODEL'].constantize
     mark_unreplayable(model, dryrun, verbose)
-  end
-
-  desc 'Reorder any slugs that existed in the previous generation, but have been given a different
-        sequence by the arbitrary load order'
-  task :normalize_slug_sequences => :environment do
-    check_for_model()
-    check_for_generation()
-    ENV['MODEL'].constantize.normalize_slug_sequences(ENV['GENERATION'].to_i)
   end
 
 end

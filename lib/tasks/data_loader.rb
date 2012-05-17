@@ -122,7 +122,7 @@ set it to #{expected_generation})"
   # Convert a list of fields to an attribute hash with values coming from an
   # instance of a model. Basic handling of association fields so that a field
   # "[association]_id" will have a value in the hash generated from instance.association.id
-  # if instance.associationis not nil, and nil otherwise
+  # if instance.association is not nil, and nil otherwise
   def fields_to_attribute_hash(fields, instance)
     fields = fields.collect do |field|
       if field.to_s.ends_with?("_id")
