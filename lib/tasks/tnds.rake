@@ -1,5 +1,3 @@
-require File.dirname(__FILE__) +  '/data_loader'
-
 namespace :tnds do
 
   def operators_from_info(short_name, license_name, trading_name, verbose)

@@ -1,9 +1,9 @@
+require 'fixmytransport/data_loader'
 require 'zip/zip'
-require File.dirname(__FILE__) +  '/data_loader'
 
 namespace :nptdr do
 
-  include DataLoader
+  include FixMyTransport::DataLoader
   include FixMyTransport::GeoFunctions
 
   def get_route_missing_stop_data()

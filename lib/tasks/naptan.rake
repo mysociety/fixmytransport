@@ -1,11 +1,10 @@
-require File.dirname(__FILE__) +  '/data_loader'
-require File.dirname(__FILE__) +  '/../fixmytransport/geo_functions'
-
+require 'fixmytransport/data_loader'
+require 'fixmytransport/geo_functions'
 namespace :naptan do
 
   namespace :load do
 
-    include DataLoader
+    include FixMyTransport::DataLoader
     include FixMyTransport::GeoFunctions
 
     desc "Loads stop data from a CSV file specified as FILE=filename.
@@ -67,7 +66,7 @@ namespace :naptan do
   end
 
   namespace :post_load do
-  
+
     desc "Deletes stop areas with no stops"
     task :delete_unpopulated_stop_areas => :environment do
       count = 0

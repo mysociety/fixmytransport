@@ -1,7 +1,8 @@
-namespace :locale do 
-  
-  include DataLoader
-  
+require 'fixmytransport/data_loader'
+namespace :locale do
+
+  include FixMyTransport::DataLoader
+
 
   def iterate(hash, fhash, path, outfile)
     hash.each {|key, val|
@@ -14,9 +15,9 @@ namespace :locale do
       end
     }
   end
-  
+
   desc "Dump model and view locale files to csv"
-  task :dump => :environment do 
+  task :dump => :environment do
     outfile = File.open("#{RAILS_ROOT}/data/en_strings.csv", 'w')
     Dir.glob("#{RAILS_ROOT}/config/locales/views/**/en.yml").each do |file|
       translations = YAML::load_file(file)
@@ -25,24 +26,24 @@ namespace :locale do
     end
     outfile.close()
   end
-  
+
   def write_line(output_file, level, key, value=nil)
     padding = []
-    level.times do 
+    level.times do
       padding << "  "
     end
     padding = padding.join
-    if value 
+    if value
       output_file.write("#{padding}#{key}: #{value.inspect}\n")
     else
       output_file.write("#{padding}#{key}:\n")
     end
   end
-  
+
   def write_hash(output_file, hash, existing_hash, level, previous_key_parts)
     hash.sort.each do |key, value|
-      if value.is_a?(String) 
-        existing_value = existing_hash[key] rescue nil  
+      if value.is_a?(String)
+        existing_value = existing_hash[key] rescue nil
         if ! existing_value
           puts "New key: #{previous_key_parts}:#{key} #{value}" if verbose
         end
@@ -64,9 +65,9 @@ namespace :locale do
     end
 
   end
-  
-  desc "Load model and view locale files from csv" 
-  task :load => :environment do 
+
+  desc "Load model and view locale files from csv"
+  task :load => :environment do
     check_for_file
     csv_data = File.read(ENV['FILE'])
     locale_values = {}
@@ -83,7 +84,7 @@ namespace :locale do
       current_hash[last] = value
     end
     locale_values.sort.each do |key, data|
-      
+
       if key == 'activerecord'
         models= data['errors']['models']
         models.each do |model, model_data|
@@ -98,15 +99,15 @@ namespace :locale do
           write_line(output_file, 0, 'en')
           write_line(output_file, 1, 'activerecord')
           write_line(output_file, 2, 'errors')
-          write_line(output_file, 3, 'models') 
-          write_line(output_file, 4, model)    
-          existing_hash = existing_data['en']['activerecord']['errors']['models'][model]     
+          write_line(output_file, 3, 'models')
+          write_line(output_file, 4, model)
+          existing_hash = existing_data['en']['activerecord']['errors']['models'][model]
           write_hash(output_file, model_data, (existing_hash or {}), 5, "en:activerecord:errors:models:#{model}")
           output_file.close
         end
-        
+
       else
-        
+
         puts "writing file #{key}" if verbose
         FileUtils.mkdir_p("#{RAILS_ROOT}/data/new_locales/views/#{key}")
         output_file = File.open("#{RAILS_ROOT}/data/new_locales/views/#{key}/en.yml", 'w')
@@ -121,8 +122,8 @@ namespace :locale do
         output_file.close
 
       end
-      
+
     end
-   
+
   end
 end

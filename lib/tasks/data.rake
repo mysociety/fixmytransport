@@ -1,34 +1,34 @@
-require File.dirname(__FILE__) +  '/data_loader'
+require 'fixmytransport/data_loader'
 require "#{RAILS_ROOT}/app/helpers/application_helper"
 namespace :data do
 
-  include DataLoader
-  
+  include FixMyTransport::DataLoader
+
   desc 'Create a spreadsheet of problems'
-  task :create_problem_spreadsheet => :environment do 
-   
+  task :create_problem_spreadsheet => :environment do
+
     include ActionController::UrlWriter
     ActionController.default_url_options[:host] = MySociety::Config.get("DOMAIN", 'localhost:3000')
     include ApplicationHelper
-    
+
     check_for_dir
     puts "Writing problem spreadsheet to #{ENV['DIR']}..."
     File.open(File.join(ENV['DIR'], 'problems.tsv'), 'w') do |problem_file|
-      headers = ['ID', 
-                 'Subject', 
-                 'Campaign', 
+      headers = ['ID',
+                 'Subject',
+                 'Campaign',
                  'Problem URL',
                  'Campaign URL',
                  'Location',
-                 'Transport mode', 
-                 'Reporter', 
-                 'Organization', 
-                 'Status', 
-                 'Created', 
+                 'Transport mode',
+                 'Reporter',
+                 'Organization',
+                 'Status',
+                 'Created',
                  'Updated',
                  'Supporters',
                  'Comments']
-      # add supporters, comments 
+      # add supporters, comments
       problem_file.write(headers.join("\t") + "\n")
       Problem.find_each(:conditions => ['status_code in (?)', Problem.visible_status_codes]) do |problem|
         if problem.campaign
@@ -43,17 +43,17 @@ namespace :data do
           supporters = ''
           comments = problem.comments.visible.count
         end
-        columns = [problem.id, 
-                   problem.subject, 
+        columns = [problem.id,
+                   problem.subject,
                    problem.campaign ? 'Y' : 'N',
                    problem_url,
-                   campaign_url, 
+                   campaign_url,
                    problem.location.name,
                    problem.transport_mode_text,
                    problem.reporter.name,
                    problem.responsible_organizations.map{ |org| org.name }.to_sentence,
                    problem.status,
-                   problem.created_at.localtime.to_s(:short), 
+                   problem.created_at.localtime.to_s(:short),
                    problem.updated_at.localtime.to_s(:short),
                    supporters,
                    comments]
@@ -61,15 +61,15 @@ namespace :data do
       end
     end
   end
-  
-  
-  desc "Create a spreadsheet of praise reports" 
-  task :create_praise_spreadsheet => :environment do 
-    
+
+
+  desc "Create a spreadsheet of praise reports"
+  task :create_praise_spreadsheet => :environment do
+
     include ActionController::UrlWriter
     ActionController.default_url_options[:host] = MySociety::Config.get("DOMAIN", 'localhost:3000')
     include ApplicationHelper
-    
+
     check_for_dir
     puts "Writing praise spreadsheet to #{ENV['DIR']}..."
     File.open(File.join(ENV['DIR'], 'praise.tsv'), 'w') do |praise_file|
@@ -78,8 +78,8 @@ namespace :data do
       # Any comment attached to a location is praise
       locations = ['Stop', 'StopArea', 'Route', 'SubRoute']
       Comment.find_each(:conditions => ['commented_type in (?)', locations]) do |comment|
-        praise_file.write([commented_url(comment.commented), 
-                           comment.confirmed_at.to_s, 
+        praise_file.write([commented_url(comment.commented),
+                           comment.confirmed_at.to_s,
                            "\"#{comment.text}\"",
                            comment.user_name].join("\t") + "\n")
       end

@@ -1,7 +1,7 @@
-require File.dirname(__FILE__) +  '/data_loader'
+require 'fixmytransport/data_loader'
 namespace :nptg do
 
-  include DataLoader
+  include FixMyTransport::DataLoader
 
   namespace :match do
 
