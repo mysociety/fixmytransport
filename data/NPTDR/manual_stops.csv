@@ -1,6 +1,7 @@
 ATCO code	Name	Easting	Northing	Locality ID	Lat	Lon	Stop type
-9300RQP	Richmond Pier				51.456417	-0.305037	FER
-9300WAP	Wandsworth Pier				51.462742	-0.199003	FER
+9300RQP	Riverside Quarter Pier				51.46277	-0.19901	FER
+9300WAP	Woolwich Arsenal Pier				51.495858	0.070982	FER
+9300THP	Twickenham Hammertons Pier				51.44706	-0.31539	FER
 9400ZZLUDGY1	Dagenham Heathway Underground Station				51.54164	0.14754	MET
 490000276005	Woodside Park Underground Station				51.61796	-0.18516	MET
 490000238006	Tower Hill Underground Station				51.510046	-0.076352	MET
