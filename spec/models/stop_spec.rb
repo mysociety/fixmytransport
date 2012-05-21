@@ -112,10 +112,7 @@ describe Stop do
 
       it 'should be valid if it has an atco code already used in a previous generation' do
         atco_code = '9100VICTRIP'
-        previous_stop = nil
-        Stop.in_generation(PREVIOUS_GENERATION) do
-          previous_stop = Stop.find(:first, :conditions => ['atco_code = ?', atco_code])
-        end
+        previous_stop = Stop.in_generation(PREVIOUS_GENERATION).find(:first, :conditions => ['atco_code = ?', atco_code])
         previous_stop.should_not == nil
         @stop.atco_code = previous_stop.atco_code
         @stop.valid?.should == true

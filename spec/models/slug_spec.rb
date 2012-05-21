@@ -25,14 +25,12 @@ describe Slug do
       @previous_slug.generation_high = PREVIOUS_GENERATION
       @previous_stop.stub!(:build_a_slug)
       @previous_stop.save!
-      Stop.in_any_generation do
-        Slug.in_any_generation do
-          @previous_stop = Stop.find(@previous_stop.id)
-          @previous_slug = @previous_stop.slug
-          @previous_slug.name.should == 'slug-sequence-test'
-          @previous_slug.scope.should == 'slug-sequence-locality'
-          @previous_slug.sequence.should == 1
-        end
+      Slug.in_any_generation do
+        @previous_stop = Stop.find(@previous_stop.id)
+        @previous_slug = @previous_stop.slug
+        @previous_slug.name.should == 'slug-sequence-test'
+        @previous_slug.scope.should == 'slug-sequence-locality'
+        @previous_slug.sequence.should == 1
       end
 
       # New stop with the same name and locality, which is not a successor of the previous stop

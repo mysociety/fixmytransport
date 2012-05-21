@@ -89,10 +89,7 @@ describe StopArea do
 
     it 'should be valid if it has a code already used in a previous generation' do
       code = '910GVICTRIP'
-      previous_stop_area = nil
-      StopArea.in_generation(PREVIOUS_GENERATION) do
-        previous_stop_area = StopArea.find(:first, :conditions => ['code = ?', code])
-      end
+      previous_stop_area = StopArea.in_generation(PREVIOUS_GENERATION).find(:first, :conditions => ['code = ?', code])
       previous_stop_area.should_not == nil
       @stop_area.code = previous_stop_area.code
       @stop_area.valid?.should == true

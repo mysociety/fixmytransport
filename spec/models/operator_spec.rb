@@ -63,10 +63,7 @@ describe Operator do
 
     it 'should be valid if it has a noc code already used in a previous generation' do
       noc_code = 'TRAI'
-      previous_operator = nil
-      Operator.in_generation(PREVIOUS_GENERATION) do
-        previous_operator = Operator.find(:first, :conditions => ['noc_code = ?', noc_code])
-      end
+      previous_operator = Operator.in_generation(PREVIOUS_GENERATION).find(:first, :conditions => ['noc_code = ?', noc_code])
       previous_operator.should_not == nil
       @operator.noc_code = previous_operator.noc_code
       @operator.valid?.should == true
