@@ -25,7 +25,8 @@ module FixMyTransport
         yield
       else
         current_model = models_to_set_generation_on.pop
-        current_model.in_generation(generation) do
+        conditions = current_model.data_generation_conditions(generation)
+        current_model.send(:with_scope, :find => {:conditions => conditions}) do
           self.set_generation(models_to_set_generation_on, generation, &block)
         end
       end
@@ -67,32 +68,14 @@ module FixMyTransport
             true
           end
 
-          def data_generation_conditions
+          def data_generation_conditions(generation)
             [ ["#{quoted_table_name}.generation_low <= ?",
                "AND #{quoted_table_name}.generation_high >= ?"].join(" "),
-               CURRENT_GENERATION, CURRENT_GENERATION ]
+               generation, generation ]
           end
 
           def next_persistent_id
             count_by_sql("SELECT NEXTVAL('#{table_name}_persistent_id_seq')")
-          end
-
-          # Perform a block of code ignoring data generations
-          def in_any_generation(&block)
-            self.with_exclusive_scope do
-              yield
-            end
-          end
-
-          # Perform a block of code in the context of the data generation passed
-          def in_generation(generation_id, &block)
-            self.with_exclusive_scope do
-              condition_string = ["#{quoted_table_name}.generation_low <= ?",
-                                  "AND #{quoted_table_name}.generation_high >= ?"].join(" ")
-              self.with_scope(:find => {:conditions => [ condition_string, generation_id, generation_id ]}) do
-                 yield
-              end
-            end
           end
 
           def manual_remaps
@@ -118,36 +101,31 @@ module FixMyTransport
           # return that instance (if it is valid in the current generation), or its successor, if
           # it has one
           def find_successor(*find_params)
-            previous = nil
-            Slug.in_any_generation do
-              self.in_generation(PREVIOUS_GENERATION) do
-                previous = self.find(*find_params)
-              end
-            end
+            previous = self.in_generation(PREVIOUS_GENERATION).find(*find_params)
             if previous
               return previous if previous.generation_high >= CURRENT_GENERATION
-              successor = self.find(:first, :conditions => ['previous_id = ?', previous.id])
+              successor = self.current.find(:first, :conditions => ['previous_id = ?', previous.id])
               return successor if successor
               if remap_identity_hash = manual_remaps[previous.identity_hash]
-                return self.find(:first, :conditions => remap_identity_hash)
+                return self.current.find(:first, :conditions => remap_identity_hash)
               end
             end
             return nil
           end
 
-
         end
 
         self.class_eval do
 
-          # This default scope hides any models that belong to past or future data generations.
-          default_scope :conditions => self.data_generation_conditions
+          # This scope hides any model that is not active in the generation specified
+          named_scope :in_generation, lambda { |generation| { :conditions => self.data_generation_conditions(generation) }}
+          # This scope hides any model that is not active in the current generation
+          named_scope :current, :conditions => self.data_generation_conditions(CURRENT_GENERATION)
 
           # These callbacks set the data generation and persistent columns to the current generation
-          # and a new persistent_id if no value has been set on them
-          before_validation :set_persistent_id
+          # if no value has been set on them, and add a new persistent id if none has been set
+          before_validation :set_persistent_id, :set_generations
           validates_presence_of :persistent_id
-          before_create :set_generations
           validate :persistent_id_unique_in_generation
 
           def set_generations
