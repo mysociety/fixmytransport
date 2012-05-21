@@ -199,9 +199,7 @@ module FixMyTransport
       end
 
       # Validation method checking that a field is unique within a given data generation.
-      # Supplying a :scope option constrains the check to include only objects whose values
-      # for the scope option fields in the database are the same as the current object's
-      def field_unique_in_generation(field, options={})
+      def field_unique_in_generation(field)
         value = self.send(field)
         return if value.blank?
         condition_string = "#{field} = ?"
@@ -210,21 +208,7 @@ module FixMyTransport
           condition_string += " AND id != ?"
           params << self.id
         end
-        if !options[:scope].nil?
-          if !options[:scope].is_a?(Array)
-            options[:scope] = [ options[:scope] ]
-          end
-          options[:scope].each do |scope_element|
-            scope_value = self.send(scope_element)
-            if scope_value.nil?
-              condition_string += " AND #{scope_element} IS NULL"
-            else
-              condition_string += " AND #{scope_element} = ?"
-              params << scope_value
-            end
-          end
-        end
-        if existing = self.class.find(:first, :conditions => [condition_string] + params)
+        if existing = self.class.current.find(:first, :conditions => [condition_string] + params)
           errors.add(field,  ActiveRecord::Error.new(self, field, :taken).to_s)
         end
       end
