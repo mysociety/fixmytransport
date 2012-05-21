@@ -150,12 +150,8 @@ namespace :temp do
   task :populate_sub_routes_persistent_ids => :environment do
     SubRoute.find_each do |sub_route|
       # puts sub_route.inspect
-      from_station = nil
-      to_station = nil
-      StopArea.in_any_generation do
-        from_station = StopArea.find(:first, :conditions => ['id = ?', sub_route.from_station_id])
-        to_station = StopArea.find(:first, :conditions => ['id = ?', sub_route.to_station_id])
-      end
+      from_station = StopArea.find(:first, :conditions => ['id = ?', sub_route.from_station_id])
+      to_station = StopArea.find(:first, :conditions => ['id = ?', sub_route.to_station_id])
       if ! from_station
         puts "No stop area with id #{sub_route.from_station_id}"
         next
@@ -182,10 +178,7 @@ namespace :temp do
   desc 'Populate operator_contacts operator_persistent_id field'
   task :populate_operator_contacts_operator_persistent_id => :environment do
     OperatorContact.find_each(:conditions => ['operator_persistent_id is null']) do |contact|
-      operator = nil
-      Operator.in_any_generation do
-        operator = Operator.find(:first, :conditions => ['id = ?', contact.operator_id])
-      end
+      operator = Operator.find(:first, :conditions => ['id = ?', contact.operator_id])
       if ! operator
         puts "No operator with id #{contact.operator_id}"
         next
@@ -199,11 +192,8 @@ namespace :temp do
   desc 'Populate operator_contacts location_persistent_id field'
   task :populate_operator_contacts_location_persistent_id => :environment do
     OperatorContact.find_each(:conditions => ['location_persistent_id is null and location_type is not null']) do |contact|
-      location = nil
       location_type = contact.location_type.constantize
-      location_type.in_any_generation do
-        location = location_type.find(:first, :conditions => ['id = ?', contact.location_id])
-      end
+      location = location_type.find(:first, :conditions => ['id = ?', contact.location_id])
       if ! location
         puts "No #{location_type} with id #{contact.location_id}"
         next
@@ -217,11 +207,8 @@ namespace :temp do
   desc 'Populate campaign location_persistent_id field'
   task :populate_campaign_persistent_id => :environment do
     Campaign.find_each(:conditions => ['location_persistent_id is null']) do |campaign|
-      location = nil
       location_type = campaign.location_type.constantize
-      location_type.in_any_generation do
-        location = location_type.find(:first, :conditions => ['id = ?', campaign.location_id])
-      end
+      location = location_type.find(:first, :conditions => ['id = ?', campaign.location_id])
       if ! location
         puts "No location with id #{campaign.location_id}"
         next
@@ -235,11 +222,8 @@ namespace :temp do
   desc 'Populate problem location_persistent_id field'
   task :populate_problem_persistent_id => :environment do
     Problem.find_each(:conditions => ['location_persistent_id is null']) do |problem|
-      location = nil
       location_type = problem.location_type.constantize
-      location_type.in_any_generation do
-        location = location_type.find(:first, :conditions => ['id = ?', problem.location_id])
-      end
+      location = location_type.find(:first, :conditions => ['id = ?', problem.location_id])
       if ! location
         puts "No location with id #{problem.location_id}"
         next
@@ -253,11 +237,8 @@ namespace :temp do
   desc 'Populate responsibilities organization_persistent_id field'
   task :populate_responsibility_organization_persistent_id => :environment do
     Responsibility.find_each(:conditions => ['organization_persistent_id is null']) do |responsibility|
-      operator = nil
       if responsibility.organization_type == 'Operator'
-        Operator.in_any_generation do
-          operator = Operator.find(:first, :conditions => ['id = ?', responsibility.organization_id])
-        end
+        operator = Operator.find(:first, :conditions => ['id = ?', responsibility.organization_id])
         if ! operator
           puts "No operator with id #{responsibility.organization_id}"
           next
