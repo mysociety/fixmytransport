@@ -47,32 +47,34 @@ describe AdminArea do
 
   it_should_behave_like "a model that exists in data generations"
 
-  describe 'find all by name' do
+  describe 'find all current by full name' do
 
     before do
       @admin_area = mock_model(AdminArea)
+      @current_gen = mock('current generation')
+      AdminArea.stub!(:current).and_return(@current_gen)
       AdminArea.stub!(:find).and_return([@admin_area])
     end
 
     it 'should not return admin areas starting with "National -"' do
-      AdminArea.find_all_by_full_name('National - National Coach').should == []
+      AdminArea.find_all_current_by_full_name('National - National Coach').should == []
     end
 
     it 'should find admin areas supplied with their region in a comma-delimited string' do
       expected_conditions = ["LOWER(admin_areas.name) = ? AND LOWER(regions.name) = ?", "warrington", "north west"]
-      AdminArea.should_receive(:find).with(:all, :include => [:region],
-                                                 :conditions => expected_conditions)
-      AdminArea.find_all_by_full_name('Warrington, North West')
+      @current_gen.should_receive(:find).with(:all, :include => [:region],
+                                                    :conditions => expected_conditions).and_return([])
+      AdminArea.find_all_current_by_full_name('Warrington, North West')
     end
 
     it 'should find areas regardless of usage of ampersands or ands' do
       expected_conditions = ["LOWER(admin_areas.name) = ?", 'tyne & wear']
       expected_substitute_conditions = ["LOWER(admin_areas.name) = ?", 'tyne and wear']
-      AdminArea.should_receive(:find).with(:all, :include => [],
-                                                 :conditions  => expected_conditions).and_return([])
-      AdminArea.should_receive(:find).with(:all, :include => [],
-                                                 :conditions => expected_substitute_conditions)
-      AdminArea.find_all_by_full_name('Tyne & Wear')
+      @current_gen.should_receive(:find).with(:all, :include => [],
+                                                    :conditions  => expected_conditions).and_return([])
+      @current_gen.should_receive(:find).with(:all, :include => [],
+                                                    :conditions => expected_substitute_conditions)
+      AdminArea.find_all_current_by_full_name('Tyne & Wear')
     end
 
   end

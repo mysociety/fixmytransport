@@ -42,7 +42,7 @@ class Gazetteer
     end
     # is there a locality with this name?
     name = name.downcase.strip
-    localities = Locality.find_all_by_full_name(name)
+    localities = Locality.find_all_current_by_full_name(name)
     # we've been passed a unique place name and a stop name
     if localities.size == 1 and !stop_name.nil?
       stop_name = stop_name.downcase.strip
@@ -66,11 +66,11 @@ class Gazetteer
 
     # Is this the name of a larger area?
     if mode == :browse
-      districts = District.find_all_by_full_name(name)
+      districts = District.find_all_current_by_full_name(name)
       if !districts.empty?
         return { :district => districts.first }
       end
-      admin_areas = AdminArea.find_all_by_full_name(name)
+      admin_areas = AdminArea.find_all_current_by_full_name(name)
       if !admin_areas.empty?
         return { :admin_area => admin_areas.first }
       end
@@ -145,7 +145,7 @@ class Gazetteer
         if coord_info == :not_found or coord_info == :bad_request
           error = :postcode_not_found
         elsif coord_info == :not_postcode
-          areas = Locality.find_areas_by_name(area, area_type)
+          areas = Locality.find_current_areas_by_name(area, area_type)
           if areas.size > 1
             return { :areas => areas }
           end

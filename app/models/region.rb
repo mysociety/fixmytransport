@@ -46,10 +46,10 @@ class Region < ActiveRecord::Base
   end
 
   # class methods
-  def self.find_all_by_full_name(name)
+  def self.find_all_current_by_full_name(name)
     name = name.downcase
     name = name.gsub(/ region$/, '')
-    find(:all, :conditions => ["LOWER(name) = ?", name])
+    current.find(:all, :conditions => ["LOWER(name) = ?", name])
   end
 
   def bus_route_letters

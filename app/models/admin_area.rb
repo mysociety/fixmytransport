@@ -60,7 +60,7 @@ class AdminArea < ActiveRecord::Base
      [name, region_name]
   end
 
-  def self.find_all_by_full_name(name)
+  def self.find_all_current_by_full_name(name)
     name.downcase!
     return [] if name.starts_with?('national -')
     name, region_name = self.get_name_and_region_name(name)
@@ -72,20 +72,20 @@ class AdminArea < ActiveRecord::Base
       params << region_name
       includes << :region
     end
-    admin_areas = self.find(:all, :conditions => [query_string] + params,
-                                  :include => includes)
+    admin_areas = self.current.find(:all, :conditions => [query_string] + params,
+                                          :include => includes)
     if admin_areas.empty?
       name_with_ampersand = name.gsub(' and ', ' & ')
       if name_with_ampersand != name
         params[0] = name_with_ampersand
-        admin_areas = self.find(:all, :conditions => [query_string] + params,
-                                      :include => includes)
+        admin_areas = self.current.find(:all, :conditions => [query_string] + params,
+                                              :include => includes)
       else
         name_with_and = name.gsub(' & ', ' and ')
         if name_with_and != name
           params[0] = name_with_and
-          admin_areas =  self.find(:all, :conditions => [query_string] + params,
-                                         :include => includes)
+          admin_areas =  self.current.find(:all, :conditions => [query_string] + params,
+                                                 :include => includes)
         end
       end
     end

@@ -52,7 +52,7 @@ class District < ActiveRecord::Base
      [name, admin_area_name]
   end
 
-  def self.find_all_by_full_name(name)
+  def self.find_all_current_by_full_name(name)
     name.downcase!
     name, admin_area_name = self.get_name_and_admin_area_name(name)
     query_string = "LOWER(districts.name) = ?"
@@ -64,9 +64,9 @@ class District < ActiveRecord::Base
       includes << :admin_area
     end
     conditions = [query_string] + params
-    districts = self.find(:all, :conditions => conditions,
-                                :include => includes)
-    districts = districts.select{ |district| ! district.localities.empty? }
+    districts = self.current.find(:all, :conditions => conditions,
+                                        :include => includes)
+    districts = districts.select{ |district| ! district.localities.current.empty? }
     districts
   end
 

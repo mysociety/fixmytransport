@@ -150,7 +150,7 @@ describe Gazetteer do
 
       before do
         @mock_locality = mock_model(Locality)
-        Locality.stub!(:find_all_by_full_name).and_return([@mock_locality])
+        Locality.stub!(:find_all_current_by_full_name).and_return([@mock_locality])
       end
 
       it 'should return the localities in a hash with the key :localities' do
@@ -163,8 +163,8 @@ describe Gazetteer do
 
       before do
         @mock_district = mock_model(District)
-        Locality.stub!(:find_all_by_full_name).and_return([])
-        District.stub!(:find_all_by_full_name).and_return([@mock_district])
+        Locality.stub!(:find_all_current_by_full_name).and_return([])
+        District.stub!(:find_all_current_by_full_name).and_return([@mock_district])
         @mock_stop = mock_model(Stop)
         Stop.stub!(:find).and_return([@mock_stop])
         StopArea.stub!(:find).and_return([])
@@ -192,7 +192,7 @@ describe Gazetteer do
 
       before do
         mock_locality = mock_model(Locality)
-        Locality.stub!(:find_all_by_full_name).and_return([mock_locality])
+        Locality.stub!(:find_all_current_by_full_name).and_return([mock_locality])
       end
 
       it 'should look for stops and stations in that locality matching the stop name' do
@@ -206,7 +206,7 @@ describe Gazetteer do
     describe 'when no localities, but some stops or stations match the name' do
 
       before do
-        Locality.stub!(:find_all_by_full_name).and_return([])
+        Locality.stub!(:find_all_current_by_full_name).and_return([])
         @mock_stop = mock_model(Stop)
         Stop.stub!(:find).and_return([@mock_stop])
         StopArea.stub!(:find).and_return([])
@@ -221,7 +221,7 @@ describe Gazetteer do
     describe 'when nothing matches the name' do
 
       before do
-        Locality.stub!(:find_all_by_full_name).and_return([])
+        Locality.stub!(:find_all_current_by_full_name).and_return([])
         Stop.stub!(:find).and_return([])
         StopArea.stub!(:find).and_return([])
       end

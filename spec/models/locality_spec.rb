@@ -64,30 +64,35 @@ describe Locality do
 
   end
 
-  describe 'when finding by full name' do
+  describe 'when finding current by full name' do
 
-    it 'should query for the name ignoring case' do
-      Locality.should_receive(:find).with(:all, :order => 'localities.name asc',
-                                                :conditions => ['LOWER(localities.name) = ?', 'london'],
+    before do
+      @current_gen = mock('current generation')
+      Locality.stub!(:current).and_return(@current_gen)
+    end
+
+    it 'should query for the name ignoring case in the current generation' do
+      @current_gen.should_receive(:find).with(:all, :order => 'localities.name asc',
+                                                    :conditions => ['LOWER(localities.name) = ?', 'london'],
                                                 :include => [:admin_area, :district]).and_return([mock('result')])
-      Locality.find_all_by_full_name('London')
+      Locality.find_all_current_by_full_name('London')
     end
 
 
     describe 'when a name with and " and " is given and there are no results' do
 
       before do
-        Locality.stub!(:find).with(:all, :order => 'localities.name asc',
-                                         :conditions => ['LOWER(localities.name) = ?', 'upwood and the raveleys'],
-                                         :include => [:admin_area, :district]).and_return([])
+        @current_gen.stub!(:find).with(:all, :order => 'localities.name asc',
+                                             :conditions => ['LOWER(localities.name) = ?', 'upwood and the raveleys'],
+                                             :include => [:admin_area, :district]).and_return([])
       end
 
 
       it 'should try a version with " & "' do
-        Locality.should_receive(:find).with(:all, :order => 'localities.name asc',
+        @current_gen.should_receive(:find).with(:all, :order => 'localities.name asc',
                                             :conditions => ['LOWER(localities.name) = ?', 'upwood & the raveleys'],
                                             :include => [:admin_area, :district]).and_return([])
-        Locality.find_all_by_full_name('Upwood and the Raveleys')
+        Locality.find_all_current_by_full_name('Upwood and the Raveleys')
       end
 
     end
@@ -99,10 +104,10 @@ describe Locality do
                          OR LOWER(districts.name) = ?
                          OR LOWER(admin_areas.name) = ?)",
                          'euston', 'london', 'london', 'london']
-        Locality.should_receive(:find).with(:all, :conditions => expected_conditions,
+        @current_gen.should_receive(:find).with(:all, :conditions => expected_conditions,
                                                   :include => [:admin_area, :district],
                                                   :order => 'localities.name asc').and_return([mock('result')])
-        Locality.find_all_by_full_name('Euston, London')
+        Locality.find_all_current_by_full_name('Euston, London')
       end
     end
   end

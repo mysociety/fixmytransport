@@ -39,21 +39,28 @@ describe District do
     District.create!(@valid_attributes)
   end
 
-  describe 'find all by name' do
+  describe 'find all current by name' do
+
+    before do
+      @current_gen = mock('current generation')
+      District.stub!(:current).and_return(@current_gen)
+    end
 
     it 'should find areas with their admin area, supplied as a comma-delimited string' do
       expected_conditions = ["LOWER(districts.name) = ? AND LOWER(admin_areas.name) = ?",
                              "bromley", "greater london"]
-      District.should_receive(:find).with(:all, :conditions => expected_conditions,
-                                                :include => [:localities, :admin_area]).and_return([])
-      District.find_all_by_full_name('Bromley, Greater London')
+      @current_gen.should_receive(:find).with(:all, :conditions => expected_conditions,
+                                                    :include => [:localities, :admin_area]).and_return([])
+      District.find_all_current_by_full_name('Bromley, Greater London')
     end
 
-    it 'should not return districts without localities' do
-      district_no_localities = mock_model(District, :localities => [])
-      district_with_localities = mock_model(District, :localities => [mock_model(Locality)])
-      District.stub!(:find).and_return([district_with_localities, district_no_localities])
-      District.find_all_by_full_name('London')
+    it 'should not return districts without current localities' do
+      localities = mock('localities', :current => [mock_model(Locality)])
+      no_localities = mock('no localities', :current => [])
+      district_with_localities = mock_model(District, :localities => localities)
+      district_no_localities = mock_model(District, :localities => no_localities)
+      @current_gen.stub!(:find).and_return([district_with_localities, district_no_localities])
+      District.find_all_current_by_full_name('London').should == [district_with_localities]
     end
 
   end
