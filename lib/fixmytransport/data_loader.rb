@@ -205,10 +205,7 @@ module FixMyTransport
           next
         end
         search_conditions = fields_to_attribute_hash(change_in_place_fields, instance)
-        existing = nil
-        model_class.in_generation(previous_generation) do
-          existing = model_class.find(:first, :conditions => search_conditions)
-        end
+        existing = model_class.in_generation(previous_generation).find(:first, :conditions => search_conditions)
         # make a string we can use in output to identify the new instance by it's key attributes
         if existing
           puts "Updating and setting generation_high to #{generation} on #{reference_string(model_class, existing, change_in_place_fields)}" if verbose
@@ -230,9 +227,7 @@ module FixMyTransport
         else
           # Can we find this record at all in the previous generation?
           search_conditions = fields_to_attribute_hash(identity_fields, instance)
-          model_class.in_generation(previous_generation) do
-            existing = model_class.find(:first, :conditions => search_conditions)
-          end
+          existing = model_class.in_generation(previous_generation).find(:first, :conditions => search_conditions)
           if existing
             puts "New record in this generation for existing instance #{reference_string(model_class, existing, change_in_place_fields)}" if verbose
             diff_hash = existing.diff(instance)
