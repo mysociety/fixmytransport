@@ -46,16 +46,16 @@ class Gazetteer
     # we've been passed a unique place name and a stop name
     if localities.size == 1 and !stop_name.nil?
       stop_name = stop_name.downcase.strip
-      stops = Stop.find(:all, :conditions => ['(lower(common_name) = ?
-                                                OR lower(common_name) like ?
-                                                OR lower(street) = ?
-                                                OR naptan_code = ?)
-                                                AND stop_type in (?)
-                                                AND locality_id = ?',
-                                              stop_name, "#{stop_name} %", stop_name, stop_name,
-                                              StopType.primary_types, localities.first] )
-      stations = self.find_stations_from_name(stop_name, exact=false, {:types => StopAreaType.primary_types,
-                                                                       :locality => localities.first})
+      stops = Stop.current.find(:all, :conditions => ['(lower(common_name) = ?
+                                                      OR lower(common_name) like ?
+                                                      OR lower(street) = ?
+                                                      OR naptan_code = ?)
+                                                      AND stop_type in (?)
+                                                      AND locality_id = ?',
+                                                      stop_name, "#{stop_name} %", stop_name, stop_name,
+                                                      StopType.primary_types, localities.first] )
+      stations = self.find_current_stations_from_name(stop_name, exact=false, {:types => StopAreaType.primary_types,
+                                                                               :locality => localities.first})
 
       return { :locations => stops + stations }
     end
@@ -77,15 +77,15 @@ class Gazetteer
 
     end
 
-    # is there a stop/station with this name?
-    stops = Stop.find(:all, :conditions => ['(lower(common_name) = ?
-                                              OR lower(common_name) like ?
-                                              OR lower(street) = ?
-                                              OR naptan_code = ?)
-                                              AND stop_type in (?)',
-                                            name, "#{name} %", name, name, StopType.primary_types] )
+    # is there a current stop/station with this name?
+    stops = Stop.current.find(:all, :conditions => ['(lower(common_name) = ?
+                                                     OR lower(common_name) like ?
+                                                     OR lower(street) = ?
+                                                     OR naptan_code = ?)
+                                                     AND stop_type in (?)',
+                                                     name, "#{name} %", name, name, StopType.primary_types] )
 
-    stations = self.find_stations_from_name(name, exact=false, {:types => StopAreaType.primary_types})
+    stations = self.find_current_stations_from_name(name, exact=false, {:types => StopAreaType.primary_types})
     candidates = stops + stations
     # are the stops/stations in multiple areas? Simplify things by showing the areas
     if stops.size > 1 or stations.size > 1
@@ -98,8 +98,9 @@ class Gazetteer
     if !stops.empty? or !stations.empty?
       return { :locations => stops + stations }
     end
+
     # try a sounds-like area search
-    localities = Locality.find_by_double_metaphone(name)
+    localities = Locality.find_current_by_double_metaphone(name)
     if !localities.empty?
       return { :localities => localities }
     end
@@ -159,7 +160,7 @@ class Gazetteer
           else
             distance = 1000
           end
-          areas = Locality.find_by_coordinates(coord_info['easting'], coord_info['northing'], distance)
+          areas = Locality.find_current_by_coordinates(coord_info['easting'], coord_info['northing'], distance)
         end
         if areas.empty? and !error
           error = :area_not_found
@@ -217,8 +218,8 @@ class Gazetteer
       transport_mode = TransportMode.find_by_name('Train').id
     end
 
-    from_stops = Gazetteer.find_stations_from_name(from.strip, from_exact, :types => station_types)
-    to_stops = Gazetteer.find_stations_from_name(to.strip, to_exact, :types => station_types)
+    from_stops = self.find_current_stations_from_name(from.strip, from_exact, :types => station_types)
+    to_stops = self.find_current_stations_from_name(to.strip, to_exact, :types => station_types)
 
     # if there are multiple stations with the exact same name, don't ask the user to select one
     # just pass them all to find_all_by_locations, and see which one has the route
@@ -269,18 +270,18 @@ class Gazetteer
   # options
   # - limit - Number of results to return
   # - types - The area_types to constrain the search
-  def self.find_stations_from_name(name, exact, options={})
-    results = self._find_stations_from_name(name, exact, options)
+  def self.find_current_stations_from_name(name, exact, options={})
+    results = self._find_current_stations_from_name(name, exact, options)
 
     # try variations on and
     if results.empty? and !exact
       name_with_ampersand = name.gsub(' and ', ' & ')
       if name_with_ampersand != name
-        results = self._find_stations_from_name(name_with_ampersand, exact, options)
+        results = self._find_current_stations_from_name(name_with_ampersand, exact, options)
       else
         name_with_and = name.gsub(' & ', ' and ')
         if name_with_and != name
-          results = self._find_stations_from_name(name_with_and, exact, options)
+          results = self._find_current_stations_from_name(name_with_and, exact, options)
         end
       end
     end
@@ -296,7 +297,7 @@ class Gazetteer
     results
   end
 
-  def self._find_stations_from_name(name, exact, options)
+  def self._find_current_stations_from_name(name, exact, options)
     query = 'area_type in (?)'
     params = [options[:types]]
     name = name.downcase.strip
@@ -323,7 +324,7 @@ class Gazetteer
     end
 
     conditions = [query] + params
-    results = StopArea.find(:all, :conditions => conditions,
-                                  :limit => options[:limit], :order => 'name')
+    results = StopArea.current.find(:all, :conditions => conditions,
+                                          :limit => options[:limit], :order => 'name')
   end
 end

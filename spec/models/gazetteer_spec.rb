@@ -51,8 +51,8 @@ describe Gazetteer do
 
     describe 'if given a partial postcode' do
 
-      it 'should look for localities within 5km of the partial postcode centroid' do
-        Locality.should_receive(:find_by_coordinates).with("532578", "179760", 5000).and_return([])
+      it 'should look for current localities within 5km of the partial postcode centroid' do
+        Locality.should_receive(:find_current_by_coordinates).with("532578", "179760", 5000).and_return([])
         Gazetteer.bus_route_from_route_number('C10', 'ZZ9', 10)
       end
 
@@ -60,8 +60,8 @@ describe Gazetteer do
 
     describe 'if given a full postcode' do
 
-      it 'should look for localities within 1km of the postcode point' do
-        Locality.should_receive(:find_by_coordinates).with("532578", "179760", 1000).and_return([])
+      it 'should look for current localities within 1km of the postcode point' do
+        Locality.should_receive(:find_current_by_coordinates).with("532578", "179760", 1000).and_return([])
         Gazetteer.bus_route_from_route_number('C10', 'ZZ9 9ZZ', 10)
       end
 
@@ -197,7 +197,7 @@ describe Gazetteer do
 
       it 'should look for stops and stations in that locality matching the stop name' do
         Stop.should_receive(:find).and_return([])
-        Gazetteer.should_receive(:find_stations_from_name).and_return([])
+        Gazetteer.should_receive(:find_current_stations_from_name).and_return([])
         Gazetteer.place_from_name('London', 'Camden Road')
       end
 

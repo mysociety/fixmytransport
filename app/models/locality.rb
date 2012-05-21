@@ -104,24 +104,24 @@ class Locality < ActiveRecord::Base
          :limit => limit)
   end
 
-  def self.find_all_by_full_name(name)
+  def self.find_all_current_by_full_name(name)
     name, qualifier_name = self.get_name_and_qualifier(name)
-    results = self._find_all_by_name_and_qualifier(name, qualifier_name)
+    results = self._find_all_current_by_name_and_qualifier(name, qualifier_name)
     if results.empty?
       name_with_ampersand = name.gsub(' and ', ' & ')
       if name_with_ampersand != name
-        results = self._find_all_by_name_and_qualifier(name_with_ampersand, qualifier_name)
+        results = self._find_all_current_by_name_and_qualifier(name_with_ampersand, qualifier_name)
       else
         name_with_and = name.gsub(' & ', ' and ')
         if name_with_and != name
-          results = self._find_all_by_name_and_qualifier(name_with_and, qualifier_name)
+          results = self._find_all_current_by_name_and_qualifier(name_with_and, qualifier_name)
         end
       end
     end
     return results
   end
 
-  def self._find_all_by_name_and_qualifier(name, qualifier_name)
+  def self._find_all_current_by_name_and_qualifier(name, qualifier_name)
     query_clause = "LOWER(localities.name) = ?"
     query_params = [ name ]
     includes = [:admin_area, :district]
@@ -132,8 +132,8 @@ class Locality < ActiveRecord::Base
       3.times{ query_params << qualifier_name }
     end
 
-    return find(:all, :conditions => [query_clause] + query_params,
-                :include => includes, :order => "localities.name asc")
+    return self.current.find(:all, :conditions => [query_clause] + query_params,
+                                   :include => includes, :order => "localities.name asc")
   end
 
   def self.get_name_and_qualifier(name)
@@ -148,15 +148,15 @@ class Locality < ActiveRecord::Base
      [name, qualifier_name]
   end
 
-  def self.find_areas_by_name(name, area_type)
+  def self.find_current_areas_by_name(name, area_type)
     area_types = ['Locality', 'AdminArea', 'District', 'Region']
     areas = []
     if area_type && area_types.include?(area_type)
-      areas = area_type.constantize.find_all_by_full_name(name)
+      areas = area_type.constantize.find_all_current_by_full_name(name)
       return areas
     end
     area_types.each do |area_type|
-      areas += area_type.constantize.find_all_by_full_name(name)
+      areas += area_type.constantize.find_all_current_by_full_name(name)
     end
     areas.each do |area|
       if area.is_a?(Locality) && (areas.include?(area.admin_area.region) || areas.include?(area.admin_area) || areas.include?(area.district))
@@ -164,16 +164,16 @@ class Locality < ActiveRecord::Base
       end
     end
     if areas.empty?
-      areas += self.find_by_double_metaphone(name)
+      areas += self.find_current_by_double_metaphone(name)
     end
     areas
   end
 
-  def self.find_by_double_metaphone(name)
+  def self.find_current_by_double_metaphone(name)
     name, qualifier_name = self.get_name_and_qualifier(name)
     primary_metaphone, secondary_metaphone = Text::Metaphone.double_metaphone(name)
-    results = Locality.find(:all, :conditions => ['primary_metaphone = ?', primary_metaphone],
-                                  :order => 'name')
+    results = Locality.current.find(:all, :conditions => ['primary_metaphone = ?', primary_metaphone],
+                                          :order => 'name')
   end
 
   def self.find_with_descendants(area)
@@ -189,12 +189,12 @@ class Locality < ActiveRecord::Base
     with_descendants = localities + descendents
   end
 
-  def self.find_by_coordinates(easting, northing, distance=1000)
+  def self.find_current_by_coordinates(easting, northing, distance=1000)
     distance_clause = "ST_Distance(
                        ST_GeomFromText('POINT(#{easting} #{northing})', #{BRITISH_NATIONAL_GRID}),
                        localities.coords)"
-    localities = find(:all, :conditions => ["#{distance_clause} < ?", distance],
-                      :order => "#{distance_clause} asc")
+    localities = current.find(:all, :conditions => ["#{distance_clause} < ?", distance],
+                                    :order => "#{distance_clause} asc")
   end
 
 end
