@@ -105,54 +105,52 @@ module FixMyTransport
                        :id => version.id }
       # make sure we can see all data generations - we will be looking for changes
       # that happened regardless of data generation
-      model_class.in_any_generation() do
-        case version.event
-        when 'create'
-          if only_replayable && !options[:temporary_identity_fields]
-            raise "New #{table_name} have been created (e.g. id #{version.item_id}),
-                   but there is no temporary id field defined"
-          end
-          if version.next()
-            version_model = version.next.reify()
-          else
-            begin
-              version_model = model_class.find(version.item_id)
-            rescue ActiveRecord::RecordNotFound => e
-              puts ["New #{model_name} with id #{version.item_id} created in version #{version.id}",
-                    "but no further history or current #{model_name} exists"].join(" ") if verbose
-              return nil
-            end
-          end
-          info_hash[:identity] = version_model.get_identity_hash()
-          diff = model_class.new.diff(version_model)
-          diff = remove_ignored(diff, keys_to_ignore, values_to_ignore)
-          details_hash.update( :changes => diff )
-          info_hash[:details] = details_hash
-        when 'update'
-          version_model = version.reify()
-          info_hash[:identity] =  version_model.get_identity_hash()
-          next_version = version_model.next_version
-          if next_version.nil?
-            begin
-              next_version = model_class.find(version.item_id)
-            rescue ActiveRecord::RecordNotFound => e
-              puts ["#{model_name} with id #{version.item_id} updated in version #{version.id}",
-                    "but no further history or current #{model_name} exists"].join(" ") if verbose
-              return nil
-            end
-          end
-          diff = version_model.diff(next_version)
-          diff = remove_ignored(diff, keys_to_ignore, values_to_ignore)
-          details_hash.update( :changes => diff )
-          info_hash[:details] = details_hash
-        when 'destroy'
-          version_model = version.reify()
-          info_hash[:identity] =  version_model.get_identity_hash()
-          details_hash.update( :changes => {} )
-          info_hash[:details] = details_hash
-        else
-          raise "Unknown version event for version id #{version.id}: #{version.event}"
+      case version.event
+      when 'create'
+        if only_replayable && !options[:temporary_identity_fields]
+          raise "New #{table_name} have been created (e.g. id #{version.item_id}),
+                 but there is no temporary id field defined"
         end
+        if version.next()
+          version_model = version.next.reify()
+        else
+          begin
+            version_model = model_class.find(version.item_id)
+          rescue ActiveRecord::RecordNotFound => e
+            puts ["New #{model_name} with id #{version.item_id} created in version #{version.id}",
+                  "but no further history or current #{model_name} exists"].join(" ") if verbose
+            return nil
+          end
+        end
+        info_hash[:identity] = version_model.get_identity_hash()
+        diff = model_class.new.diff(version_model)
+        diff = remove_ignored(diff, keys_to_ignore, values_to_ignore)
+        details_hash.update( :changes => diff )
+        info_hash[:details] = details_hash
+      when 'update'
+        version_model = version.reify()
+        info_hash[:identity] =  version_model.get_identity_hash()
+        next_version = version_model.next_version
+        if next_version.nil?
+          begin
+            next_version = model_class.find(version.item_id)
+          rescue ActiveRecord::RecordNotFound => e
+            puts ["#{model_name} with id #{version.item_id} updated in version #{version.id}",
+                  "but no further history or current #{model_name} exists"].join(" ") if verbose
+            return nil
+          end
+        end
+        diff = version_model.diff(next_version)
+        diff = remove_ignored(diff, keys_to_ignore, values_to_ignore)
+        details_hash.update( :changes => diff )
+        info_hash[:details] = details_hash
+      when 'destroy'
+        version_model = version.reify()
+        info_hash[:identity] =  version_model.get_identity_hash()
+        details_hash.update( :changes => {} )
+        info_hash[:details] = details_hash
+      else
+        raise "Unknown version event for version id #{version.id}: #{version.event}"
       end
       return info_hash
     end
@@ -202,9 +200,7 @@ module FixMyTransport
           if changes.first[:event] == 'create'
             # This was a locally created object, so find the model in the previous generation
             puts "#{model_name} created locally. Looking in previous generation." if verbose
-            model_class.in_generation(PREVIOUS_GENERATION) do
-              existing = model_class.find(:first, :conditions => identity_hash)
-            end
+            existing = model_class.in_generation(PREVIOUS_GENERATION).find(:first, :conditions => identity_hash)
             if ! existing
               puts ["Can't find locally created #{model_name} in previous generation to update",
                     "for #{identity_hash.inspect}"].join(" ") if verbose
