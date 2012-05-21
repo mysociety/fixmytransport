@@ -61,7 +61,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def location
-    self.location_type.constantize.find_by_persistent_id(self.location_persistent_id)
+    self.location_type.constantize.current.find_by_persistent_id(self.location_persistent_id)
   end
 
   def confirm

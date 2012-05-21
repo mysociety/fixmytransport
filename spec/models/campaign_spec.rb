@@ -300,10 +300,18 @@ describe Campaign do
 
     it 'should set the location so that it can be retrieved from the saved object' do
       @campaign = Campaign.new(@default_attrs)
-      @campaign.location = stop_areas(:victoria_station_root)
+      @campaign.location = stops(:victoria_station_one)
       @campaign.save!
       @saved_campaign = Campaign.find(@campaign)
-      @saved_campaign.location.should == stop_areas(:victoria_station_root)
+      @saved_campaign.location.should == stops(:victoria_station_one)
+    end
+
+    it 'should not retrieve a location from a previous generation' do
+      @campaign = Campaign.new(@default_attrs)
+      @campaign.location = stops(:victoria_station_previous_generation)
+      @campaign.save!
+      @saved_campaign = Campaign.find(@campaign)
+      @saved_campaign.location.should == stops(:victoria_station_one)
     end
 
     after do
