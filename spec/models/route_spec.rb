@@ -236,7 +236,7 @@ describe Route do
                                            :from_terminus => false,
                                            :to_terminus => false,
                                            :segment_order => 5)
-      Route.find_existing_train_routes(@route).should include(@existing_route)
+      Route.find_existing_train_routes(@route, {}).should include(@existing_route)
     end
 
     it 'should not include a route with a journey pattern with the same terminus segments but with a different operator' do
@@ -250,7 +250,7 @@ describe Route do
                                              :to_terminus => route_segment.to_terminus?,
                                              :segment_order => route_segment.segment_order)
       end
-      Route.find_existing_train_routes(@route).should_not include(@existing_route)
+      Route.find_existing_train_routes(@route, {}).should_not include(@existing_route)
     end
 
     it 'should include route with a journey pattern with the same terminus segments with the same operator code from the same admin area' do
@@ -263,7 +263,7 @@ describe Route do
                                              :from_terminus => route_segment.from_terminus?,
                                              :to_terminus => route_segment.to_terminus?)
       end
-      Route.find_existing_train_routes(@route).should_not include(@existing_route)
+      Route.find_existing_train_routes(@route, {}).should_not include(@existing_route)
     end
   end
 

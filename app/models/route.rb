@@ -728,7 +728,7 @@ class Route < ActiveRecord::Base
   end
 
   # Return train routes by the same operator that have the same terminuses
-  def Route.find_existing_train_routes(new_route)
+  def Route.find_existing_train_routes(new_route, options)
     operator_code = new_route.operator_code
     options = { :as_terminus => true,
                 :transport_modes => [new_route.transport_mode_id] }

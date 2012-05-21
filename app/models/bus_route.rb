@@ -18,10 +18,10 @@
 
 class BusRoute < Route
 
-  def self.find_existing(route)
-    self.find_existing_routes(route)
+  def self.find_existing(route, options={})
+    self.find_existing_routes(route, options)
   end
-  
+
   def name(from_stop=nil, short=false)
     return self[:name] if !self[:name].blank?
     if from_stop

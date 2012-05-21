@@ -17,9 +17,9 @@
 #
 
 class TramMetroRoute < Route
-  
-  def self.find_existing(route)
-    self.find_existing_routes(route)
+
+  def self.find_existing(route, options={})
+    self.find_existing_routes(route, options)
   end
-  
+
 end
