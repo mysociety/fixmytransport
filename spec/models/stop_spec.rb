@@ -214,17 +214,17 @@ describe Stop do
 
   end
 
-  describe 'when finding by ATCO code' do
+  describe 'when finding current stops by ATCO code' do
 
     fixtures default_fixtures
 
     it 'should ignore case' do
-      Stop.find_by_atco_code('9100VICTric').should == stops(:victoria_station_one)
+      Stop.find_current_by_atco_code('9100VICTric').should == stops(:victoria_station_one)
     end
 
     it 'should return nil if the code passed is blank' do
       Stop.stub!(:find).and_return(mock_model(Stop))
-      Stop.find_by_atco_code('').should be_nil
+      Stop.find_current_by_atco_code('').should be_nil
     end
 
   end

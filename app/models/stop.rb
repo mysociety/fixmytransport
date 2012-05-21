@@ -285,28 +285,18 @@ class Stop < ActiveRecord::Base
     return stops
   end
 
-  def self.find_by_atco_code(atco_code, options={})
+  def self.find_current_by_atco_code(atco_code, options={})
     return nil if atco_code.blank?
     includes = options[:includes] or {}
-    find(:first, :conditions => ["lower(atco_code) = ?", atco_code.downcase], :include => includes)
+    current.find(:first, :conditions => ["lower(atco_code) = ?", atco_code.downcase], :include => includes)
   end
 
   def self.find_by_code(code, options={})
     return nil if code.blank?
     includes = options[:includes] or {}
-    atco_match = self.find_by_atco_code(code)
+    atco_match = self.find_current_by_atco_code(code)
     return atco_match if atco_match
     find(:first, :conditions => ["lower(other_code) = ?", code.downcase], :include => includes)
-  end
-
-  def self.match_old_stop(stop)
-     existing = find_by_atco_code(stop.atco_code)
-     return existing if existing
-     existing = find_by_name_and_coords(stop.common_name, stop.easting, stop.northing, 5)
-     return existing if existing
-     existing = find_by_easting_and_northing(stop.easting, stop.northing)
-     return existing if existing
-     return nil
   end
 
   # find the nearest stop to a set of National Grid coordinates. Accepts a model id to

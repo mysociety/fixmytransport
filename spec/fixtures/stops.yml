@@ -67,7 +67,7 @@ victoria_station_one:
   coords: 0101000020346C0000000000000824204100000000C0D90541
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-  persistent_id: <%= Stop.next_persistent_id %>
+  persistent_id: <%= Fixtures.identify(:victoria_station_one) %>
 victoria_station_two:
   status: ACT
   lat: "51.49526"
@@ -712,6 +712,36 @@ finchley_road_station_plat:
   generation_high: <%= CURRENT_GENERATION %>
   persistent_id: <%= Stop.next_persistent_id %>
 victoria_station_previous_generation:
+  status: ACT
+  lat: "51.49526"
+  lon: "-0.14455"
+  northing: "179000"
+  easting: "528900"
+  grid_type: U
+  naptan_code: ""
+  revision_number: "2"
+  landmark: ""
+  common_name: London Victoria Rail Station
+  administrative_area_code: "110"
+  bearing: ""
+  plate_code: ""
+  stop_type: RLY
+  locality_centre: t
+  suburb: ""
+  modification: rev
+  bus_stop_type: ""
+  crossing: ""
+  short_common_name: ""
+  atco_code: 9100VICTRIC
+  town: ""
+  street: "-"
+  indicator: ""
+  locality: london
+  coords: 0101000020346C0000000000000824204100000000C0D90541
+  generation_low: <%= PREVIOUS_GENERATION %>
+  generation_high: <%= PREVIOUS_GENERATION %>
+  persistent_id: <%= Fixtures.identify(:victoria_station_one) %>
+victoria_station_other_previous_generation:
   status: ACT
   lat: "51.49526"
   lon: "-0.14455"
