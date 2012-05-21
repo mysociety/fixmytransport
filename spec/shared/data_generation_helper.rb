@@ -80,20 +80,14 @@ module SharedBehaviours
 
       describe 'when the data generation is set for all models controlled by data generations' do
 
-        it 'should have the scope for the generation set in the call' do
+        it 'should have the scope for the generation set in the call and no scope after the call' do
           FixMyTransport::DataGenerations.in_generation(PREVIOUS_GENERATION) do
             condition_string = ["#{@model_type.quoted_table_name}.generation_low <= ?",
                                 "AND #{@model_type.quoted_table_name}.generation_high >= ?"].join(" ")
             expected_scope = {:conditions => [ condition_string, PREVIOUS_GENERATION, PREVIOUS_GENERATION ]}
             @model_type.send(:scope, :find).should == expected_scope
           end
-        end
-
-        it 'should have the default scope after the call' do
-          condition_string = ["#{@model_type.quoted_table_name}.generation_low <= ?",
-                              "AND #{@model_type.quoted_table_name}.generation_high >= ?"].join(" ")
-          expected_scope = {:conditions => [ condition_string , CURRENT_GENERATION, CURRENT_GENERATION ]}
-          @model_type.send(:scope, :find).should == expected_scope
+          @model_type.send(:scope, :find).should == nil
         end
 
       end
@@ -120,14 +114,14 @@ module SharedBehaviours
 
         it 'should find a model in the generation' do
           @old_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
-          @model_type.in_generation(PREVIOUS_GENERATION){ @model_type.find(@old_instance.id) }.should == @old_instance
+          @model_type.in_generation(PREVIOUS_GENERATION).find(@old_instance.id).should == @old_instance
           @old_instance.destroy
         end
 
         it 'should not find a model in the current generation' do
           @current_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
           expected_error = "Couldn't find #{@model_type} with ID=#{@current_instance.id}"
-          lambda{ @model_type.in_generation(PREVIOUS_GENERATION){ @model_type.find(@current_instance.id) } }.should raise_error(expected_error)
+          lambda{ @model_type.in_generation(PREVIOUS_GENERATION).find(@current_instance.id)}.should raise_error(expected_error)
           @current_instance.destroy
         end
 
@@ -137,17 +131,17 @@ module SharedBehaviours
         end
       end
 
-      describe 'when finding a model in any generation' do
+      describe 'when finding a model' do
 
         it 'should find a model in a previous generation' do
           @old_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
-          @model_type.in_any_generation{ @model_type.find(@old_instance.id) }.should == @old_instance
+          @model_type.find(@old_instance.id).should == @old_instance
           @old_instance.destroy
         end
 
         it 'should find a model in the current generation' do
           @current_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
-          @model_type.in_any_generation(){ @model_type.find(@current_instance.id) }.should == @current_instance
+          @model_type.find(@current_instance.id).should == @current_instance
           @current_instance.destroy
         end
 
@@ -161,6 +155,10 @@ module SharedBehaviours
       describe "when finding the successor to a set of find parameters" do
 
         before do
+          @prev_gen = mock('Previous generation')
+          @current_gen = mock('Current generation')
+          @model_type.stub!(:in_generation).with(PREVIOUS_GENERATION).and_return(@prev_gen)
+          @model_type.stub!(:current).and_return(@current_gen)
           @find_params = [55]
           if @scope_model
             @find_params << { :scope => @default_params[:scope], :include => [@scope_field] }
@@ -168,9 +166,8 @@ module SharedBehaviours
         end
 
         it 'should look for an instance matching the find parameters in the previous generation' do
-          @model_type.should_receive(:in_generation).with(PREVIOUS_GENERATION).and_yield
-          # not really testing that this is in the scope of the previous generation
-          @model_type.should_receive(:find).with(*@find_params).and_return(@previous)
+          @model_type.should_receive(:in_generation).with(PREVIOUS_GENERATION).and_return(@prev_gen)
+          @prev_gen.should_receive(:find).with(*@find_params).and_return(@previous)
           @model_type.find_successor(*@find_params)
         end
 
@@ -180,12 +177,11 @@ module SharedBehaviours
             @previous = mock_model(@model_type, :generation_high => PREVIOUS_GENERATION,
                                                 :generation_low => PREVIOUS_GENERATION,
                                                 :identity_hash => { :id => 55 } )
-            # this stubbed call is called in the scope of the previous generation
-            @model_type.stub(:find).with(*@find_params).and_return(@previous)
+            @prev_gen.stub(:find).with(*@find_params).and_return(@previous)
           end
 
           it 'should look for the successor to the instance in this generation' do
-            @model_type.should_receive(:find).with(:first, :conditions => ['previous_id = ?', @previous.id]).and_return(@successor)
+            @current_gen.should_receive(:find).with(:first, :conditions => ['previous_id = ?', @previous.id]).and_return(@successor)
             @model_type.find_successor(*@find_params)
           end
 
@@ -212,7 +208,7 @@ module SharedBehaviours
             describe 'if there is a successor' do
 
               before do
-                @model_type.stub!(:find).with(:first, @previous_conditions).and_return(@successor)
+                @current_gen.stub!(:find).with(:first, @previous_conditions).and_return(@successor)
               end
 
               it 'should return the successor' do
@@ -224,7 +220,7 @@ module SharedBehaviours
             describe 'if there is no successor' do
 
               before do
-                @model_type.stub!(:find).with(:first, @previous_conditions).and_return(nil)
+                @current_gen.stub!(:find).with(:first, @previous_conditions).and_return(nil)
               end
 
               describe 'if there is a manual mapping to another object' do
@@ -232,7 +228,7 @@ module SharedBehaviours
                 before do
                   @model_type.stub!(:manual_remaps).and_return({{:id => 55} => {:id => 99}})
                   @mapped_successor = mock_model(@model_type)
-                  @model_type.stub!(:find).with(:first, :conditions => {:id => 99}).and_return(@mapped_successor)
+                  @current_gen.stub!(:find).with(:first, :conditions => {:id => 99}).and_return(@mapped_successor)
                 end
 
                 it 'should return the manually mapped object' do
@@ -249,29 +245,30 @@ module SharedBehaviours
 
               end
             end
+
           end
         end
 
       end
 
-      describe 'when finding a model' do
+      describe 'when finding a model in the current generation' do
 
         it 'should find a model in the current generation' do
           current_instance = create_model(generation_low=CURRENT_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
-          @model_type.find(current_instance.id).should == current_instance
+          @model_type.current.find(current_instance.id).should == current_instance
           current_instance.destroy
         end
 
         it 'should not find a model in an older generation' do
           current_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=PREVIOUS_GENERATION, @model_type, @default_attrs)
           expected_error = "Couldn't find #{@model_type} with ID=#{current_instance.id}"
-          lambda{ @model_type.find(current_instance.id) }.should raise_error(expected_error)
+          lambda{ @model_type.current.find(current_instance.id) }.should raise_error(expected_error)
           current_instance.destroy
         end
 
         it 'should find a model that spans the previous generation and the current generation' do
           spanning_instance = create_model(generation_low=PREVIOUS_GENERATION, generation_high=CURRENT_GENERATION, @model_type, @default_attrs)
-          @model_type.find(spanning_instance.id).should == spanning_instance
+          @model_type.current.find(spanning_instance.id).should == spanning_instance
           spanning_instance.destroy
         end
 
@@ -347,12 +344,11 @@ module SharedBehaviours
     end
 
     shared_examples_for "a model that exists in data generations and has slugs" do
-
-      describe 'when reordering slugs' do
-
-
+      it 'should have some specs' do
+        pending do
+          1.should == 0
+        end
       end
-
     end
 
   end
