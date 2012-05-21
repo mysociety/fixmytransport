@@ -24,7 +24,7 @@ class Parsers::NaptanParser
     FasterCSV.parse(csv_data, csv_options) do |row|
       atco_code = (row['AtcoCode'] or row["NaPTAN"])
       raise "No ATCO code in row #{row.inspect}" if atco_code.blank?
-      stop = Stop.find_by_atco_code(atco_code)
+      stop = Stop.find_current_by_atco_code(atco_code)
       if ! stop
         puts "*** Missing #{row['AtcoCode']} ***"
         next
@@ -93,7 +93,7 @@ class Parsers::NaptanParser
   def parse_stop_area_memberships filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      stop = Stop.find_by_atco_code((row['AtcoCode'] or row['ATCOCode']))
+      stop = Stop.find_current_by_atco_code((row['AtcoCode'] or row['ATCOCode']))
       stop_area = StopArea.find_by_code((row['StopAreaCode'] or row['GroupID']))
       if stop and stop_area
         yield StopAreaMembership.new( :stop_id                => stop.id,
