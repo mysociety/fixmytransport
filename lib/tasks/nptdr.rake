@@ -50,7 +50,7 @@ namespace :nptdr do
       files.each do |file|
         puts file
         parser.parse_stops(file) do |stop|
-          existing = Stop.find_by_atco_code(stop.atco_code)
+          existing = Stop.find_current_by_atco_code(stop.atco_code)
           if ! existing && !unmatched_codes[stop.atco_code]
             unmatched_codes[stop.atco_code] = stop
           end
