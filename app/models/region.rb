@@ -31,17 +31,14 @@ class Region < ActiveRecord::Base
                                                 :modification],
                              :deletion_field => :modification,
                              :deletion_value => 'del' )
-  has_many :admin_areas, :conditions => AdminArea.data_generation_conditions
+  has_many :admin_areas
   has_many :localities, :through => :admin_areas
-  has_many :routes, :conditions => Route.data_generation_conditions
-  has_many :bus_routes, :order => 'number asc',
-                        :conditions => Route.data_generation_conditions
-  has_many :train_routes, :order => 'cached_short_name asc',
-                          :conditions => Route.data_generation_conditions
-  has_many :coach_routes, :order => 'number asc',
-                          :conditions => Route.data_generation_conditions
-  has_many :tram_metro_routes, :conditions => Route.data_generation_conditions
-  has_many :ferry_routes, :conditions => Route.data_generation_conditions
+  has_many :routes
+  has_many :bus_routes, :order => 'number asc'
+  has_many :train_routes, :order => 'cached_short_name asc'
+  has_many :coach_routes, :order => 'number asc'
+  has_many :tram_metro_routes
+  has_many :ferry_routes
 
   # instance methods
   def full_name

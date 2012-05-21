@@ -2,8 +2,7 @@ class OperatorContact < ActiveRecord::Base
   # This association uses custom keys as the object associated is scoped by data generations - a
   # persistent id may be held by a different model instance in each generation
   belongs_to :operator, :foreign_key => :operator_persistent_id,
-                        :primary_key => :persistent_id,
-                        :conditions => Operator.data_generation_conditions
+                        :primary_key => :persistent_id
   has_many :sent_emails, :as => :recipient
   has_many :outgoing_messages, :as => :recipient
   validates_presence_of :category

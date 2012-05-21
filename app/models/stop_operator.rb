@@ -3,7 +3,7 @@ class StopOperator < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generation
   exists_in_data_generation()
-  belongs_to :operator, :conditions => Operator.data_generation_conditions
-  belongs_to :stop, :conditions => Stop.data_generation_conditions
+  belongs_to :operator
+  belongs_to :stop
   has_paper_trail
 end

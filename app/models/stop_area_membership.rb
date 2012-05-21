@@ -24,7 +24,7 @@ class StopAreaMembership < ActiveRecord::Base
                                                 :modification, :revision_number],
                              :deletion_field => :modification,
                              :deletion_value => 'del' )
-  belongs_to :stop_area, :conditions => StopArea.data_generation_conditions
-  belongs_to :stop, :conditions => Stop.data_generation_conditions
+  belongs_to :stop_area
+  belongs_to :stop
   has_paper_trail :meta => { :replayable  => Proc.new { |stop_area_membership| stop_area_membership.replayable } }
 end

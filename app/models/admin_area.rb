@@ -33,8 +33,8 @@ class AdminArea < ActiveRecord::Base
                                                 :revision_number],
                              :deletion_field => :modification,
                              :deletion_value => 'del' )
-  belongs_to :region, :conditions => Region.data_generation_conditions
-  has_many :localities, :conditions => Locality.data_generation_conditions
+  belongs_to :region
+  has_many :localities
 
   # instance methods
 

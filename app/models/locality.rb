@@ -45,12 +45,11 @@ class Locality < ActiveRecord::Base
                                                 :revision_number],
                              :deletion_field => :modification,
                              :deletion_value => 'del' )
-  belongs_to :admin_area, :conditions => AdminArea.data_generation_conditions
-  belongs_to :district, :conditions => District.data_generation_conditions
+  belongs_to :admin_area
+  belongs_to :district
   has_dag_links :link_class_name => 'LocalityLink'
-  has_many :stops, :order => 'common_name asc',
-                   :conditions => Stop.data_generation_conditions
-  has_many :stop_areas, :conditions => StopArea.data_generation_conditions
+  has_many :stops, :order => 'common_name asc'
+  has_many :stop_areas
   has_many :route_localities
   has_many :routes, :through => :route_localities
   has_friendly_id :name_and_qualifier_name, :use_slug => true

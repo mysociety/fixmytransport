@@ -43,21 +43,18 @@ class StopArea < ActiveRecord::Base
                              :auto_update_fields => [:cached_description, :cached_slug,
                                                      :primary_metaphone, :secondary_metaphone,
                                                      :lat, :lon, :coords])
-  has_many :stop_area_memberships, :conditions => StopAreaMembership.data_generation_conditions
+  has_many :stop_area_memberships
   has_many :stops, :through => :stop_area_memberships
   has_dag_links :link_class_name => 'StopAreaLink'
-  belongs_to :locality, :conditions => Locality.data_generation_conditions
-  has_many :stop_area_operators, :dependent => :destroy,
-                                 :conditions => StopAreaOperator.data_generation_conditions
+  belongs_to :locality
+  has_many :stop_area_operators, :dependent => :destroy
   has_many :operators, :through => :stop_area_operators,
                        :uniq => true
   has_friendly_id :name, :use_slug => true, :scope => :locality
   has_many :route_segments_as_from_stop_area, :foreign_key => 'from_stop_area_id',
-                                              :class_name => 'RouteSegment',
-                                              :conditions => RouteSegment.data_generation_conditions
+                                              :class_name => 'RouteSegment'
   has_many :route_segments_as_to_stop_area, :foreign_key => 'to_stop_area_id',
-                                            :class_name => 'RouteSegment',
-                                            :conditions => RouteSegment.data_generation_conditions
+                                            :class_name => 'RouteSegment'
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   accepts_nested_attributes_for :stop_area_operators, :allow_destroy => true,
                                                       :reject_if => :stop_area_operator_invalid

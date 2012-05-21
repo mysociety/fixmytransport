@@ -36,16 +36,13 @@ class Route < ActiveRecord::Base
   has_many :route_sub_routes
   has_many :sub_routes, :through => :route_sub_routes
   has_many :route_operators, :dependent => :destroy,
-                             :uniq => true,
-                             :conditions => RouteOperator.data_generation_conditions
+                             :uniq => true
   has_many :operators, :through => :route_operators,
                        :uniq => true
   has_many :journey_patterns, :dependent => :destroy,
-                              :order => 'id asc',
-                              :conditions => JourneyPattern.data_generation_conditions
+                              :order => 'id asc'
   has_many :route_segments, :dependent => :destroy,
-                            :order => 'id asc',
-                            :conditions => RouteSegment.data_generation_conditions
+                            :order => 'id asc'
 
   has_many :from_stops, :through => :route_segments, :class_name => 'Stop'
   has_many :to_stops, :through => :route_segments, :class_name => 'Stop'
@@ -53,14 +50,13 @@ class Route < ActiveRecord::Base
   has_many :route_localities, :dependent => :destroy
   has_many :localities, :through => :route_localities
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
-  belongs_to :region, :conditions => Region.data_generation_conditions
+  belongs_to :region
   belongs_to :default_journey, :class_name => 'JourneyPattern'
 
   # Routes loaded from TNDS have route_source records
   has_many :route_sources, :dependent => :destroy
   # Routes loaded from NPTDR have route_source_admin_area records
-  has_many :route_source_admin_areas, :dependent => :destroy,
-                                      :conditions => RouteSourceAdminArea.data_generation_conditions
+  has_many :route_source_admin_areas, :dependent => :destroy
   has_many :source_admin_areas, :through => :route_source_admin_areas,
                                 :class_name => 'AdminArea'
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
@@ -495,11 +491,8 @@ class Route < ActiveRecord::Base
       if new_route.route_operators.length >= 1 && !options[:use_source_admin_areas]
         # Use persistent ids to generate operators as the passed-in route may belong
         # to a different generation
-        operators = []
         operator_ids = new_route.route_operators.map{ |route_operator| route_operator.operator_id }
-        Operator.in_any_generation do
-          operators = Operator.find(:all, :conditions => ['id in (?)', operator_ids])
-        end
+        operators = Operator.find(:all, :conditions => ['id in (?)', operator_ids])
         operator_clause = "AND operators.persistent_id in (?)"
         operator_params = [ operators.map{ |operator| operator.persistent_id } ]
       else

@@ -62,19 +62,16 @@ class Stop < ActiveRecord::Base
                              :temp_to_perm => { :other_code => :atco_code },
                              :auto_update_fields => [:cached_description, :cached_slug, :metro_stop,
                                                      :coords] )
-  has_many :stop_area_memberships, :conditions => StopAreaMembership.data_generation_conditions
+  has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
   validates_presence_of :common_name
   has_many :route_segments_as_from_stop, :foreign_key => 'from_stop_id',
-                                         :class_name => 'RouteSegment',
-                                         :conditions => RouteSegment.data_generation_conditions
+                                         :class_name => 'RouteSegment'
   has_many :route_segments_as_to_stop, :foreign_key => 'to_stop_id',
-                                       :class_name => 'RouteSegment',
-                                       :conditions => RouteSegment.data_generation_conditions
+                                       :class_name => 'RouteSegment'
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
-  belongs_to :locality, :conditions => Locality.data_generation_conditions
-  has_many :stop_operators, :dependent => :destroy,
-                            :conditions => StopOperator.data_generation_conditions
+  belongs_to :locality
+  has_many :stop_operators, :dependent => :destroy
   has_many :operators, :through => :stop_operators,
                        :uniq => true
   validates_presence_of :locality_id, :lon, :lat, :if => :loaded?

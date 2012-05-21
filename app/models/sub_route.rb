@@ -3,15 +3,13 @@ class SubRoute < ActiveRecord::Base
   include FixMyTransport::Locations
 
   has_many :route_sub_routes
-  has_many :routes, :through => :route_sub_routes, :conditions => Route.data_generation_conditions
+  has_many :routes, :through => :route_sub_routes
   belongs_to :from_station, :class_name => 'StopArea',
                             :primary_key => :persistent_id,
-                            :foreign_key => :from_station_persistent_id,
-                            :conditions => StopArea.data_generation_conditions
+                            :foreign_key => :from_station_persistent_id
   belongs_to :to_station, :class_name => 'StopArea',
                           :primary_key => :persistent_id,
-                          :foreign_key => :to_station_persistent_id,
-                          :conditions => StopArea.data_generation_conditions
+                          :foreign_key => :to_station_persistent_id
   belongs_to :transport_mode
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   before_create :set_lat_lon_and_coords

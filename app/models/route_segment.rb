@@ -18,16 +18,12 @@ class RouteSegment < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generation
   exists_in_data_generation()
-  belongs_to :from_stop, :class_name => 'Stop',
-                         :conditions => Stop.data_generation_conditions
-  belongs_to :to_stop, :class_name => 'Stop',
-                       :conditions => Stop.data_generation_conditions
-  belongs_to :from_stop_area, :class_name => 'StopArea',
-                              :conditions => StopArea.data_generation_conditions
-  belongs_to :to_stop_area, :class_name => 'StopArea',
-                            :conditions => StopArea.data_generation_conditions
-  belongs_to :route, :conditions => Route.data_generation_conditions
-  belongs_to :journey_pattern, :conditions => JourneyPattern.data_generation_conditions
+  belongs_to :from_stop, :class_name => 'Stop'
+  belongs_to :to_stop, :class_name => 'Stop'
+  belongs_to :from_stop_area, :class_name => 'StopArea'
+  belongs_to :to_stop_area, :class_name => 'StopArea'
+  belongs_to :route
+  belongs_to :journey_pattern
   validates_presence_of :segment_order
   # virtual attribute used for adding new route segments
   attr_accessor :_add

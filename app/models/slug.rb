@@ -53,12 +53,9 @@ class Slug < ActiveRecord::Base
   def self.previous_similar_slugs_for_same_persistent_id(slug)
     klass = slug.sluggable_type.constantize
     sluggable = slug.sluggable
-    sluggable_ids = []
-    klass.in_any_generation do
-      sluggable_ids = klass.find(:all,
-                                 :select => 'id',
-                                 :conditions => ['persistent_id = ?', sluggable.persistent_id]).map(&:id)
-    end
+    sluggable_ids = klass.find(:all,
+                               :select => 'id',
+                               :conditions => ['persistent_id = ?', sluggable.persistent_id]).map(&:id)
     return [] if sluggable_ids.empty?
     previous_similar = []
     self.in_any_generation do
