@@ -93,8 +93,6 @@ module SharedBehaviours
           condition_string = ["#{@model_type.quoted_table_name}.generation_low <= ?",
                               "AND #{@model_type.quoted_table_name}.generation_high >= ?"].join(" ")
           expected_scope = {:conditions => [ condition_string , CURRENT_GENERATION, CURRENT_GENERATION ]}
-          FixMyTransport::DataGenerations.in_generation(PREVIOUS_GENERATION) do
-          end
           @model_type.send(:scope, :find).should == expected_scope
         end
 
