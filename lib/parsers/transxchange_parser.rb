@@ -346,7 +346,7 @@ class Parsers::TransxchangeParser
         end
       end
     else
-      operators = Operator.find_all_by_nptdr_code(transport_mode, info[:code], region, route)
+      operators = Operator.find_all_current_by_nptdr_code(transport_mode, info[:code], region, route)
       puts "Found #{operators.size} operators by operator code" if verbose
       if short_name && !operators.empty?
         name_matches = operators.select{ |operator| operator.matches_short_name?(short_name, comparison_max_length) }

@@ -27,7 +27,7 @@ describe Parsers::TransxchangeParser do
       @simple_file = example_file("SVRYSDO005-20120130-80845.xml")
       @combined_file = example_file("ea_20-3_-1-y08.xml")
       mock_operator = mock_model(Operator, :matches_short_name? => true)
-      Operator.stub!(:find_all_by_nptdr_code).and_return([mock_operator])
+      Operator.stub!(:find_all_current_by_nptdr_code).and_return([mock_operator])
       @mock_region = mock_model(Region, :name => 'Yorkshire')
     end
 
@@ -74,7 +74,7 @@ describe Parsers::TransxchangeParser do
     it 'should create an operator for the route based on the operator code' do
       mock_operator = mock_model(Operator, :matches_short_name? => true)
       expected_arguments = [anything(), '027WP', @mock_region, anything()]
-      Operator.stub!(:find_all_by_nptdr_code).with(*expected_arguments).and_return([mock_operator])
+      Operator.stub!(:find_all_current_by_nptdr_code).with(*expected_arguments).and_return([mock_operator])
       routes = get_routes(@parser, [@combined_file, nil, nil, @combined_file, verbose=false, @mock_region])
       combined_route = routes.first
       combined_route.route_operators.size.should == 1

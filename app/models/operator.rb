@@ -158,20 +158,22 @@ class Operator < ActiveRecord::Base
   end
 
   def self.count_without_contacts
-    count(:conditions => ['persistent_id not in (select operator_persistent_id from operator_contacts where deleted = ?)', false])
+    count(:conditions => ['persistent_id NOT IN (SELECT operator_persistent_id
+                                                 FROM operator_contacts
+                                                 WHERE deleted = ?)', false])
   end
 
-  def self.find_all_by_nptdr_code(transport_mode, code, region, route)
-    operators = find(:all, :include => :operator_codes,
-                           :conditions => ['transport_mode_id = ?
-                                            AND operator_codes.code = ?
-                                            AND operator_codes.region_id = ?',
-                                            transport_mode, code, region])
+  def self.find_all_current_by_nptdr_code(transport_mode, code, region, route)
+    operators = current.find(:all, :include => :operator_codes,
+                                   :conditions => ['transport_mode_id = ?
+                                                    AND operator_codes.code = ?
+                                                    AND operator_codes.region_id = ?',
+                                                    transport_mode, code, region])
     # try specific lookups
     if operators.empty?
       if transport_mode.name == 'Train'
-        operators = find(:all, :conditions => ["transport_mode_id = ?
-                                                AND noc_code = ?", transport_mode, "=#{code}"])
+        operators = current.find(:all, :conditions => ["transport_mode_id = ?
+                                                        AND noc_code = ?", transport_mode, "=#{code}"])
       end
     end
 
@@ -179,29 +181,29 @@ class Operator < ActiveRecord::Base
       # if no operators, add any operators with this code with the right transport_mode in a region the route
       # goes through
       regions = route.stops.map{ |stop| stop.locality.admin_area.region }.uniq
-      operators = find(:all, :conditions => ["transport_mode_id = ?
-                                              AND operator_codes.code = ?
-                                              AND region_id in (?)",
-                                              transport_mode, code, regions],
-                             :include => :operator_codes)
+      operators = current.find(:all, :conditions => ["transport_mode_id = ?
+                                                      AND operator_codes.code = ?
+                                                      AND region_id in (?)",
+                                                      transport_mode, code, regions],
+                                      :include => :operator_codes)
     end
     if operators.empty?
       if similar = self.similar_mode(transport_mode)
         # look for the code in the region with a similar transport_mode
-        operators = find(:all, :conditions => ["transport_mode_id = ?
-                                                AND operator_codes.code = ?
-                                                AND region_id = ?",
-                                                similar, code, region],
-                               :include => :operator_codes)
+        operators = current.find(:all, :conditions => ["transport_mode_id = ?
+                                                        AND operator_codes.code = ?
+                                                        AND region_id = ?",
+                                                        similar, code, region],
+                                        :include => :operator_codes)
       end
     end
 
     # # try any operators with that code
     if (transport_mode.name == 'Train' || transport_mode.name == 'Coach') && operators.empty?
-      operators = find(:all, :include => :operator_codes,
-                             :conditions => ['transport_mode_id = ?
-                                              AND operator_codes.code = ?',
-                                              transport_mode, code])
+      operators = current.find(:all, :include => :operator_codes,
+                                     :conditions => ['transport_mode_id = ?
+                                                      AND operator_codes.code = ?',
+                                                      transport_mode, code])
     end
     operators
   end

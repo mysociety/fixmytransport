@@ -80,7 +80,7 @@ class Parsers::NptdrParser
     end
     return missing_stops
   end
-  
+
   def build_segments_for_journey_pattern(journey_pattern, route, stops, options)
     segment_order = 0
     stops.each_cons(2) do |from_stop_code,to_stop_code|
@@ -111,7 +111,7 @@ class Parsers::NptdrParser
     FasterCSV.parse(csv_data, csv_options) do |row|
       route_number = row['Route Number']
       if only_numbers
-        next unless only_numbers.include?(route_number) 
+        next unless only_numbers.include?(route_number)
       end
       vehicle_code = row['Vehicle Code']
       operator_code = row['Operator Code']
@@ -135,7 +135,7 @@ class Parsers::NptdrParser
       route.route_source_admin_areas.build({:source_admin_area => source_admin_area,
                                             :operator_code => operator_code})
 
-      operators = Operator.find_all_by_nptdr_code(transport_mode, operator_code, region, route)
+      operators = Operator.find_all_current_by_nptdr_code(transport_mode, operator_code, region, route)
       operators.each do |operator|
         route.route_operators.build({ :operator => operator })
       end
