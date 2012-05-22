@@ -27,7 +27,7 @@ victoria_to_haywards_heath:
   status: ACT
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-number_807_bus: 
+number_807_bus:
   transport_mode_id: 1
   number: 807
   type: BusRoute
@@ -43,8 +43,8 @@ aldershot_807_bus:
   status: ACT
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
-borough_C10: 
-  name: 
+borough_C10:
+  name:
   number: C10
   type: BusRoute
   transport_mode_id: "1"
@@ -79,3 +79,12 @@ train_line_with_old_operator:
   status: ACT
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+borough_C10_in_previous_gen:
+  name:
+  number: C10
+  type: BusRoute
+  transport_mode_id: "1"
+  operator_code: LONDON_BUS
+  status: ACT
+  generation_low: <%= PREVIOUS_GENERATION %>
+  generation_high: <%= PREVIOUS_GENERATION %>

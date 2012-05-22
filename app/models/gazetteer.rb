@@ -181,7 +181,7 @@ class Gazetteer
     end
     params = ["#{select_clause} #{from_clause} #{where_clause} #{order_clause} #{limit_clause}"] + params
     routes = Route.find_by_sql(params)
-    routes = Route.find(:all, :conditions => ['id in (?)', routes], :order => 'cached_description' )
+    routes = Route.current.find(:all, :conditions => ['id in (?)', routes], :order => 'cached_description' )
     if routes.empty? and !ignore_area and !areas.empty?
       return bus_route_from_route_number(route_number, area, limit, ignore_area=true)
     end
@@ -251,7 +251,7 @@ class Gazetteer
     name.gsub(/(( train| railway| rail| tube)? station)$/i, '')
   end
 
-  def self.find_stations_by_double_metaphone(name, options={})
+  def self.find_current_stations_by_double_metaphone(name, options={})
     query = 'area_type in (?)'
     params = [options[:types]]
     primary_metaphone, secondary_metaphone = Text::Metaphone.double_metaphone(name)
@@ -262,8 +262,8 @@ class Gazetteer
       params << options[:locality]
     end
     conditions = [query] + params
-    results = StopArea.find(:all, :conditions => conditions,
-                                  :limit => options[:limit], :order => 'name')
+    results = StopArea.current.find(:all, :conditions => conditions,
+                                          :limit => options[:limit], :order => 'name')
   end
 
   # - name - stop/station name
@@ -287,7 +287,7 @@ class Gazetteer
     end
 
     if results.empty? and !exact
-      results = self.find_stations_by_double_metaphone(name, options)
+      results = self.find_current_stations_by_double_metaphone(name, options)
     end
 
     # reduce redundant results for stop areas

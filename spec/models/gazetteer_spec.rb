@@ -77,6 +77,34 @@ describe Gazetteer do
       end
     end
 
+    describe 'when given a route number that exists in more than one generation' do
+
+      fixtures default_fixtures
+
+      it 'should only return results from the current generation' do
+        result = Gazetteer.bus_route_from_route_number('C10', 'London', 10)
+        result[:routes].should == [routes(:borough_C10)]
+      end
+
+    end
+
+  end
+
+  describe 'when looking for current stations by name' do
+
+    fixtures default_fixtures
+
+    it 'should not return stations from previous generations that match by name' do
+      result = Gazetteer.find_current_stations_from_name('London Victoria', exact=false, {:types => ['GRLS']})
+      result.include?(stop_areas(:victoria_station_old)).should be_false
+    end
+
+    it 'should not return results from previous generations that match by metaphone' do
+      Gazetteer.stub!(:_find_current_stations_from_name).and_return([])
+      result = Gazetteer.find_current_stations_from_name('London Victoria', exact=false, {:types => ['GRLS']})
+      result.include?(stop_areas(:victoria_station_old)).should be_false
+    end
+
   end
 
   describe 'when finding a place from a name' do
@@ -195,7 +223,7 @@ describe Gazetteer do
         Locality.stub!(:find_all_current_by_full_name).and_return([mock_locality])
       end
 
-      it 'should look for stops and stations in that locality matching the stop name' do
+      it 'should look for current stops and stations in that locality matching the stop name' do
         Stop.should_receive(:find).and_return([])
         Gazetteer.should_receive(:find_current_stations_from_name).and_return([])
         Gazetteer.place_from_name('London', 'Camden Road')

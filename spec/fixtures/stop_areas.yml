@@ -200,6 +200,7 @@ victoria_station_old:
   locality: london
   lon: -0.14455
   lat: 51.4952
+  primary_metaphone: LNTN
   generation_low: <%= PREVIOUS_GENERATION %>
   generation_high: <%= PREVIOUS_GENERATION %>
   persistent_id: <%= StopArea.next_persistent_id %>

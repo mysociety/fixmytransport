@@ -38,6 +38,7 @@ london:
   atco_code: "606"
   short_name: London
   country: Great Britain
+  region: london
   national: false
   creation_datetime: 2010-05-06 17:21:35
   modification_datetime: 2010-05-06 17:21:35
