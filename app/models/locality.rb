@@ -86,7 +86,7 @@ class Locality < ActiveRecord::Base
 
   # class methods
 
-  def self.find_by_name_or_id(query, limit=nil)
+  def self.find_current_by_name_or_id(query, limit=nil)
     query_clauses = []
     query_clause = "(LOWER(name) LIKE ?
                     OR LOWER(name) LIKE ?"
@@ -99,9 +99,9 @@ class Locality < ActiveRecord::Base
     query_clause += ")"
     query_clauses << query_clause
     conditions = [query_clauses.join(" AND ")] + query_params
-    find(:all,
-         :conditions => conditions,
-         :limit => limit)
+    current.find(:all,
+                 :conditions => conditions,
+                 :limit => limit)
   end
 
   def self.find_all_current_by_full_name(name)
