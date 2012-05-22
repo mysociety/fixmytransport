@@ -680,7 +680,7 @@ class Route < ActiveRecord::Base
   end
 
   def self.count_without_operators(options={})
-    count(:conditions => ['id not in (SELECT route_id FROM route_operators)'])
+    current.count(:conditions => ['id not in (SELECT route_id FROM route_operators)'])
   end
 
   # finds operator codes that are associated with routes

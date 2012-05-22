@@ -419,7 +419,7 @@ describe Route do
 
     fixtures default_fixtures
 
-    it 'should return routes without route operators' do
+    it 'should return current routes without route operators' do
       Route.count_without_operators.should == 3
     end
 
