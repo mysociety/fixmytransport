@@ -5,6 +5,7 @@ class AddPersistentIdSequences < ActiveRecord::Migration
       District,
       JourneyPattern,
       Locality,
+      LocalityLink,
       Operator,
       OperatorCode,
       Region,
