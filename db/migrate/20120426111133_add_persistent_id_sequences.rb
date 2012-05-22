@@ -16,6 +16,7 @@ class AddPersistentIdSequences < ActiveRecord::Migration
       RouteSourceAdminArea,
       Stop,
       StopArea,
+      StopAreaLink,
       StopOperator,
       StopAreaOperator,
       StopAreaMembership,
