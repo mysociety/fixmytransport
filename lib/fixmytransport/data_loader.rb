@@ -143,20 +143,16 @@ module FixMyTransport
     # Generate a string from a model instance that gives model type, id and certain fields and values
     def reference_string(model_class, instance, fields)
       reference_string = "#{model_class} #{instance.id}"
-      reference_string += " ("
-      reference_string +=  fields.map{ |field| "#{field}=#{instance.send(field)}"}.join(", ")
-      reference_string += ")"
+      reference_string += " (#{fields_to_attribute_hash(fields, instance).inspect})"
     end
 
-    # Load a new model instance into a generation, checking for existing record in previous generation
-    # and updating that or creating a new record in the new generation as appropriate
+    # Load a new model instance into a generation, creating a new record in the new generation and linking it
+    # to any previous record representing the same entity.
     # field_hash has the following keys:
     # :identity_fields - Fields that determine the identity of the instance - i.e. if the values of these fields
     # are the same, this is fundamentally the same thing
-    # :new_record_fields - Fields that are significant enough that they require a new record if changed
-    # e.g names, other fields used in slugs - we don't want any changes made to these fields to
-    # leak into the previous generation
-    # :update_fields - fields that should be updated if changed, but don't require a new record
+    # :deletion_field - a field that can indicate that the record has been deleted
+    # :deletion_value - the value of the deletion_field that indicates deletion
     # Note that if the model is also versioned using papertrail to document local changes, changes
     # made by this function will be recorded as non-replayable, as they are assumed to have been
     # produced by loading data from the official source.
@@ -169,16 +165,12 @@ module FixMyTransport
 
       field_hash = model_class.data_generation_options_hash
       identity_fields = field_hash[:identity_fields]
-      new_record_fields = field_hash[:new_record_fields]
-      update_fields = field_hash[:update_fields]
       deletion_field = field_hash[:deletion_field]
       deletion_value = field_hash[:deletion_value]
       table_name = model_class.to_s.tableize
       counts = { :deleted => 0,
-                 :updated_existing_record => 0,
                  :updated_new_record => 0,
                  :new => 0 }
-      diffs = {}
 
       # Store any changes as not replayable - ie. not manual edits from our interface
       if model_class.respond_to?(:replayable)
@@ -192,86 +184,38 @@ module FixMyTransport
           yield instance
         end
 
-
-        instance.generation_low = generation
-        instance.generation_high = generation
-        # Can we find a record in the previous generation with few enough differences that we can update it
-        # in place?
-        change_in_place_fields = identity_fields + new_record_fields
         # discard if actually deleted
         if deletion_field && instance.send(deletion_field) == deletion_value
-          puts "Dropping deleted record #{reference_string(model_class, instance, change_in_place_fields)}" if verbose
+          puts "Dropping deleted record #{reference_string(model_class, instance, identity_fields)}" if verbose
           counts[:deleted] += 1
           next
         end
-        search_conditions = fields_to_attribute_hash(change_in_place_fields, instance)
+        # Can we find this record in the previous generation?
+        search_conditions = fields_to_attribute_hash(identity_fields, instance)
         existing = model_class.in_generation(previous_generation).find(:first, :conditions => search_conditions)
-        # make a string we can use in output to identify the new instance by it's key attributes
         if existing
-          puts "Updating and setting generation_high to #{generation} on #{reference_string(model_class, existing, change_in_place_fields)}" if verbose
-          # update all the update fields
-          update_fields.each do |field_name|
-            existing.send("#{field_name}=", instance.send(field_name))
-          end
-          existing.generation_high = generation
-          counts[:updated_existing_record] += 1
-          if ! dryrun
-            existing.save!
-          else
-            if ! existing.valid?
-              puts "ERROR: Existing instance is invalid:"
-              puts existing.errors.full_messages.join("\n")
-              exit(1)
-            end
-          end
+          puts "New record in this generation for existing instance #{reference_string(model_class, existing, identity_fields)}" if verbose
+          # Associate the old generation record with the new generation record
+          instance.previous_id = existing.id
+          instance.persistent_id = existing.persistent_id
+          counts[:updated_new_record] += 1
         else
-          # Can we find this record at all in the previous generation?
-          search_conditions = fields_to_attribute_hash(identity_fields, instance)
-          existing = model_class.in_generation(previous_generation).find(:first, :conditions => search_conditions)
-          if existing
-            puts "New record in this generation for existing instance #{reference_string(model_class, existing, change_in_place_fields)}" if verbose
-            diff_hash = existing.diff(instance)
-            significant_diff_hash = {}
-            diff_hash.each do |key, value|
-              if new_record_fields.include?(key)
-                if diffs[key].nil?
-                  diffs[key] = 1
-                else
-                  diffs[key] +=1
-                end
-                significant_diff_hash[key] = value
-              end
-            end
-            puts significant_diff_hash.inspect if verbose
-            # Associate the old generation record with the new generation record
-            instance.previous_id = existing.id
-            instance.persistent_id = existing.persistent_id
-            counts[:updated_new_record] += 1
-          else
-            puts "New instance #{reference_string(model_class, instance, change_in_place_fields)}" if verbose
-            counts[:new] += 1
-          end
-          if ! dryrun
-            instance.save!
-          else
-            if ! instance.valid?
-              puts "ERROR: New instance is invalid:"
-              puts instance.errors.full_messages.join("\n")
-              exit(1)
-            end
+          puts "New instance #{reference_string(model_class, instance, identity_fields)}" if verbose
+          counts[:new] += 1
+        end
+        if ! dryrun
+          instance.save!
+        else
+          if ! instance.valid?
+            puts "ERROR: New instance is invalid:"
+            puts instance.errors.full_messages.join("\n")
+            exit(1)
           end
         end
       end
       puts "Totally new #{table_name}: #{counts[:new]}"
-      puts "Updated #{table_name} (using existing record): #{counts[:updated_existing_record]}"
       puts "Updated #{table_name} (new record): #{counts[:updated_new_record]}"
       puts "Deleted #{table_name}: #{counts[:deleted]}"
-      if ! diffs.empty?
-        puts "New records were created for existing objects due to differences in the following fields:"
-        diffs.each do |key, value|
-          puts "#{key}: #{value} times"
-        end
-      end
       if model_class.respond_to?(:replayable)
         model_class.replayable = previous_replayable_value
       end
