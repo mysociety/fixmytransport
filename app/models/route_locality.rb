@@ -13,4 +13,5 @@
 class RouteLocality < ActiveRecord::Base
   belongs_to :route
   belongs_to :locality
+  exists_in_data_generation()
 end

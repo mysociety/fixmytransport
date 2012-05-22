@@ -10,6 +10,7 @@ class AddPersistentIdSequences < ActiveRecord::Migration
       OperatorCode,
       Region,
       Route,
+      RouteLocality,
       RouteOperator,
       RouteSegment,
       RouteSource,
