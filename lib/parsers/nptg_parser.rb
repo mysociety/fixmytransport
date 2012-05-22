@@ -85,20 +85,12 @@ class Parsers::NptgParser
     end
   end
 
-  def parse_locality_hierarchies filepath
+  def parse_locality_links filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      ancestor = Locality.find_by_code((row['ParentNptgLocalityCode'] or row['Parent ID']))
-      descendant = Locality.find_by_code((row['ChildNptgLocalityCode'] or row['Child ID']))
-      
-      if existing_link = LocalityLink.find_link(ancestor, descendant)
-        if ! LocalityLink.direct?(ancestor, descendant)
-          existing_link.make_direct()
-          yield existing_link
-        end
-      else
-        yield LocalityLink.build_edge(ancestor, descendant)
-      end
+      ancestor = Locality.current.find_by_code((row['ParentNptgLocalityCode'] or row['Parent ID']))
+      descendant = Locality.current.find_by_code((row['ChildNptgLocalityCode'] or row['Child ID']))
+      yield LocalityLink.build_edge(ancestor, descendant)
     end
   end
 

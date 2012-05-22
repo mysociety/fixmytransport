@@ -44,8 +44,8 @@ namespace :nptg do
 
     desc "Loads locality hierarchy data from a CSV file specified as FILE=filename.
           Runs in dryrun mode unless DRYRUN=0 is specified."
-    task :locality_hierarchy => :environment do
-      parse('locality_hierarchy', Parsers::NptgParser)
+    task :locality_links => :environment do
+      parse('locality_links', Parsers::NptgParser)
     end
 
     desc "Updates districts with the admin areas given in the locality data"
@@ -74,7 +74,7 @@ namespace :nptg do
       ENV['FILE'] = File.join(ENV['DIR'], 'Localities.csv')
       Rake::Task['nptg:load:localities'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'Hierarchy.csv')
-      Rake::Task['nptg:load:locality_hierarchy'].execute
+      Rake::Task['nptg:load:locality_links'].execute
       Rake::Task['nptg:load:add_district_admin_areas'].execute
     end
 
@@ -139,5 +139,6 @@ namespace :nptg do
     task :localities => :environment do
       load_instances_in_generation(Locality, Parsers::NptgParser)
     end
+
   end
 end

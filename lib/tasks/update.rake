@@ -96,7 +96,7 @@ namespace :update do
 
     # Can just reuse the load code here - localities will be scoped by the current data generation
     ENV['FILE'] = File.join(MySociety::Config.get('NPTG_DIR', ''), 'LocalityHierarchy.csv')
-    Rake::Task['nptg:load:locality_hierarchy'].execute
+    Rake::Task['nptg:load:locality_links'].execute
   end
 
   desc 'Update NaPTAN data to the current data generation. Runs in dryrun mode unless DRYRUN=0
