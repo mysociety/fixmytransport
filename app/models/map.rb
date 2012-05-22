@@ -153,8 +153,8 @@ class Map
       if highlight == :has_content
         data = self.issue_data(map_corners, options)
       end
-      stop_data = Stop.find_in_bounding_box(map_corners, {:exclude_ids => data[:stop_ids]})
-      stop_area_data = StopArea.find_in_bounding_box(map_corners, {:exclude_ids => data[:stop_area_ids]})
+      stop_data = Stop.find_current_in_bounding_box(map_corners, {:exclude_ids => data[:stop_ids]})
+      stop_area_data = StopArea.find_current_in_bounding_box(map_corners, {:exclude_ids => data[:stop_area_ids]})
       # want issue data markers (if any) drawn last so they'll be on top
       data[:locations] = stop_data + stop_area_data + data[:locations]
     elsif highlight && zoom >= MIN_ZOOM_FOR_HIGHLIGHTED_MARKERS

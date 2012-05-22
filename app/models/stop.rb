@@ -269,7 +269,7 @@ class Stop < ActiveRecord::Base
                  :order => "easting_dist asc, northing_dist asc")
   end
 
-  def self.find_in_bounding_box(coords, options={})
+  def self.find_current_in_bounding_box(coords, options={})
     query = "stops.stop_type in (?)
              AND status = 'ACT'
              AND stops.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
@@ -280,8 +280,8 @@ class Stop < ActiveRecord::Base
       query += " AND id not in (?)"
       params << options[:exclude_ids]
     end
-    stops = find(:all, :conditions => [query] + params,
-                       :include => :locality)
+    stops = current.find(:all, :conditions => [query] + params,
+                               :include => :locality)
     return stops
   end
 

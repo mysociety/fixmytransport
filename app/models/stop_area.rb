@@ -158,7 +158,7 @@ class StopArea < ActiveRecord::Base
     end
   end
 
-  def self.find_in_bounding_box(coords, options={})
+  def self.find_current_in_bounding_box(coords, options={})
     query = "stop_areas.area_type in (?)
              AND status = 'ACT'
              AND stop_areas.coords && ST_Transform(ST_SetSRID(ST_MakeBox2D(
@@ -169,8 +169,8 @@ class StopArea < ActiveRecord::Base
       query += " AND id not in (?)"
       params << options[:exclude_ids]
     end
-    stop_areas = find(:all, :conditions => [query] + params,
-                            :include => :locality)
+    stop_areas = current.find(:all, :conditions => [query] + params,
+                                    :include => :locality)
     stop_areas.map{ |stop_area| stop_area.station_root ? stop_area.station_root : stop_area }
   end
 
