@@ -20,45 +20,87 @@ namespace :data do
     problems
   end
 
+  desc 'Produce stats on whether number of comments correlates to return visits'
+  task :return_visits_and_comments => :environment do
+    frequencies = {}
+    check_for_file
+    outfile = File.open(ENV['FILE'], 'w')
+    Problem.find_recent_issues(nil).each do |issue|
+      if issue.is_a?(Campaign)
+        comment_count = issue.comments.count
+        user = issue.initiator
+        if ! frequencies[user.id]
+          frequencies[user.id] = {:comment_count => comment_count,
+                                  :campaign_count => 1,
+                                  :visit_count => user.login_count}
+        else
+          frequencies[user.id][:comment_count] += comment_count
+          frequencies[user.id][:campaign_count] += 1
+        end
+      end
+    end
+    headers = ['Comment count', 'Campaign count', 'Comments per campaign', 'Visit count']
+    outfile.write(headers.join(","))
+    frequencies.each do |user_id, user_data|
+      user_data[:comments_per_campaign] = user_data[:comment_count].to_f / user_data[:campaign_count].to_f
+      outfile.write([user_data[:comment_count], user_data[:campaign_count], user_data[:comments_per_campaign], user_data[:visit_count]].join(",")+"\n")
+    end
+    outfile.close
+  end
+
   desc 'Produce a list of the most apologetic operators'
   task :all_apologies => :environment do
 
-    apologies = ['sorry', 'apologies', 'apologise']
-    frequencies = {'Operator' => {},
-                   'Council' => {},
-                   'PassengerTransportExecutive' => {}}
+    phrase_words = { :thanks => ['thankyou'],
+                     :sorry =>  ['sorry', 'apologies', 'apologise'] }
+
+    frequencies = {}
+    phrase_words.each do |phrase, phrase_tokens|
+      frequencies[phrase] = {'Operator' => {},
+                             'Council' => {},
+                             'PassengerTransportExecutive' => {}}
+    end
     IncomingMessage.find_each do |message|
       words = tokenize(message.body_for_quoting)
       print "."
       words.each do |word|
-        if apologies.include?(word)
-          problem = message.campaign.problem
-          problem.responsibilities.each do |responsibility|
-
-            organization = responsibility.organization_type.constantize.find_by_id(responsibility.organization_id)
-            if !frequencies[responsibility.organization_type].has_key?(responsibility.organization_id)
-
-              frequencies[responsibility.organization_type][responsibility.organization_id] = {:name => organization.name,
-                                                                                               :count => 1}
-            else
-              frequencies[responsibility.organization_type][responsibility.organization_id][:count] += 1
+        word = word.downcase
+        phrase_words.each do |phrase, phrase_tokens|
+          if phrase_tokens.include?(word)
+            problem = message.campaign.problem
+            problem.responsibilities.each do |responsibility|
+              organization = responsibility.organization_type.constantize.find_by_id(responsibility.organization_id)
+              if !frequencies[phrase][responsibility.organization_type].has_key?(responsibility.organization_id)
+                frequencies[phrase][responsibility.organization_type][responsibility.organization_id] = {:name => organization.name,
+                                                                                                         :count => 1}
+              else
+                frequencies[phrase][responsibility.organization_type][responsibility.organization_id][:count] += 1
+              end
             end
           end
         end
       end
     end
-    frequencies.each do |organization_type, org_freqs|
-      org_freqs.each do |org_id, org_data|
-        total_problems = Responsibility.count(:all, :conditions => ['organization_type = ? and organization_id = ?',
-                                                                    organization_type, org_id])
-        org_data[:count_per_report] = org_data[:count].to_f / total_problems.to_f
+    frequencies.each do |phrase, phrase_frequencies|
+      phrase_frequencies.each do |organization_type, org_freqs|
+        org_freqs.each do |org_id, org_data|
+          total_problems = Responsibility.count(:all, :conditions => ['organization_type = ? and organization_id = ?',
+                                                                      organization_type, org_id])
+          org_data[:count_per_report] = org_data[:count].to_f / total_problems.to_f
+        end
+        org_freqs.sort_by { |x,y| y[:count_per_report] }.each do |org_id,org_data|
+          if org_data[:count] > 10
+            puts "#{organization_type},#{phrase},#{org_data[:name]},#{org_data[:count_per_report]}"
+          end
+        end
       end
-      org_freqs.sort_by { |x,y| y[:count_per_report] }.each { |org_id,org_data| puts "#{org_data[:name]} #{org_data[:count_per_report]}"}
     end
   end
 
   desc 'Produce some word count statistics'
   task :word_counts => :environment do
+    check_for_file
+    outfile = File.open(ENV['FILE'], 'w')
     stopwords = 'a,able,about,across,after,all,almost,also,am,among,an,and,any,are,as,at,be,because,been,but,by,can,cannot,could,dear,did,do,does,either,else,ever,every,for,from,get,got,had,has,have,he,her,hers,him,his,how,however,i,if,in,into,is,it,its,just,least,let,like,likely,may,me,might,most,must,my,neither,no,nor,not,of,off,often,on,only,or,other,our,own,rather,said,say,says,she,should,since,so,some,than,that,the,their,them,then,there,these,they,this,tis,to,too,twas,us,wants,was,we,were,what,when,where,which,while,who,whom,why,will,with,would,yet,you,your'
     stopwords = stopwords.split(',')
     frequencies = Hash.new(0)
@@ -66,12 +108,14 @@ namespace :data do
     problems.each do |problem|
       words = tokenize(problem.subject + problem.description)
       words.each do |word|
-        unless ( word.blank? || stopwords.include?(word) )
+        word = word.downcase
+        unless ( word.blank? || stopwords.include?(word) || word.size == 1 )
           frequencies[word] += 1
         end
       end
     end
-    frequencies.sort_by { |x,y| y }.each { |w,f| puts "#{w} #{f}"}
+    frequencies.sort_by { |x,y| y }.each { |w,f| outfile.write("#{w},#{f}\n") }
+    outfile.close
   end
 
   desc 'Return the most reported on places'
@@ -91,9 +135,8 @@ namespace :data do
       end
     end
     locations.each do |location_type, type_data|
-      puts location_type
       locations[location_type].sort_by { |x,y| y }.each do |location_id, frequency|
-        puts "#{location_type.constantize.find(location_id).name} #{frequency}"
+        puts "#{location_type.constantize.find(location_id).name},#{frequency}"
       end
     end
   end
