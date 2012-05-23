@@ -20,18 +20,50 @@ namespace :data do
     problems
   end
 
+  desc 'Produce a list of the most apologetic operators'
+  task :all_apologies => :environment do
+
+    apologies = ['sorry', 'apologies', 'apologise']
+    frequencies = {'Operator' => {},
+                   'Council' => {},
+                   'PassengerTransportExecutive' => {}}
+    IncomingMessage.find_each do |message|
+      words = tokenize(message.body_for_quoting)
+      print "."
+      words.each do |word|
+        if apologies.include?(word)
+          problem = message.campaign.problem
+          problem.responsibilities.each do |responsibility|
+
+            organization = responsibility.organization_type.constantize.find_by_id(responsibility.organization_id)
+            if !frequencies[responsibility.organization_type].has_key?(responsibility.organization_id)
+
+              frequencies[responsibility.organization_type][responsibility.organization_id] = {:name => organization.name,
+                                                                                               :count => 1}
+            else
+              frequencies[responsibility.organization_type][responsibility.organization_id][:count] += 1
+            end
+          end
+        end
+      end
+    end
+    frequencies.each do |organization_type, org_freqs|
+      org_freqs.each do |org_id, org_data|
+        total_problems = Responsibility.count(:all, :conditions => ['organization_type = ? and organization_id = ?',
+                                                                    organization_type, org_id])
+        org_data[:count_per_report] = org_data[:count].to_f / total_problems.to_f
+      end
+      org_freqs.sort_by { |x,y| y[:count_per_report] }.each { |org_id,org_data| puts "#{org_data[:name]} #{org_data[:count_per_report]}"}
+    end
+  end
+
   desc 'Produce some word count statistics'
   task :word_counts => :environment do
     stopwords = 'a,able,about,across,after,all,almost,also,am,among,an,and,any,are,as,at,be,because,been,but,by,can,cannot,could,dear,did,do,does,either,else,ever,every,for,from,get,got,had,has,have,he,her,hers,him,his,how,however,i,if,in,into,is,it,its,just,least,let,like,likely,may,me,might,most,must,my,neither,no,nor,not,of,off,often,on,only,or,other,our,own,rather,said,say,says,she,should,since,so,some,than,that,the,their,them,then,there,these,they,this,tis,to,too,twas,us,wants,was,we,were,what,when,where,which,while,who,whom,why,will,with,would,yet,you,your'
     stopwords = stopwords.split(',')
     frequencies = Hash.new(0)
     problems = get_problems
-    problems.each do |issue|
-      if issue.is_a?(Problem)
-        problem = issue
-      else
-        problem = issue.problem
-      end
+    problems.each do |problem|
       words = tokenize(problem.subject + problem.description)
       words.each do |word|
         unless ( word.blank? || stopwords.include?(word) )
