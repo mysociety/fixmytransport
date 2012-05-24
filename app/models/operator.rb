@@ -157,10 +157,10 @@ class Operator < ActiveRecord::Base
     end
   end
 
-  def self.count_without_contacts
-    count(:conditions => ['persistent_id NOT IN (SELECT operator_persistent_id
-                                                 FROM operator_contacts
-                                                 WHERE deleted = ?)', false])
+  def self.count_current_without_contacts
+    current.count(:conditions => ['persistent_id NOT IN (SELECT operator_persistent_id
+                                                         FROM operator_contacts
+                                                         WHERE deleted = ?)', false])
   end
 
   def self.find_all_current_by_nptdr_code(transport_mode, code, region, route)

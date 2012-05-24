@@ -122,7 +122,7 @@ class Admin::OperatorsController < Admin::AdminController
 
   def make_route_operators codes
     return [] if codes.empty?
-    Route.find_without_operators(:operator_codes => codes).map{ |route| RouteOperator.new(:route => route) }
+    Route.find_current_without_operators(:operator_codes => codes).map{ |route| RouteOperator.new(:route => route) }
   end
 
 end

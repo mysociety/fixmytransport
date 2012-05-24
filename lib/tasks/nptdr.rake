@@ -743,10 +743,10 @@ namespace :nptdr do
     task :status => :environment do
 
       # routes without operators
-      puts "Routes without operators: #{Route.count_without_operators} out of #{Route.count}"
+      puts "Routes without operators: #{Route.count_current_without_operators} out of #{Route.current.count}"
 
       # operators without contact details
-      puts "Missing operators contacts #{Operator.count_without_contacts} out of #{Operator.count}, affects #{Route.count_without_contacts} out of #{Route.count} routes"
+      puts "Missing operators contacts #{Operator.count_current_without_contacts} out of #{Operator.current.count}, affects #{Route.count_current_without_contacts} out of #{Route.current.count} routes"
 
     end
 

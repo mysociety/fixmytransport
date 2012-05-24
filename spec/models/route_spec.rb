@@ -425,7 +425,7 @@ describe Route do
     fixtures default_fixtures
 
     it 'should return current routes without route operators' do
-      Route.count_without_operators.should == 3
+      Route.count_current_without_operators.should == 3
     end
 
   end
@@ -435,7 +435,7 @@ describe Route do
     fixtures default_fixtures
 
     it 'should return codes (with counts) that are attached to routes but have no operators' do
-      Route.find_codes_without_operators.should == [['TUBE', '2'], ['LONDON_BUS', '1']]
+      Route.find_current_codes_without_operators.should == [['TUBE', '2'], ['LONDON_BUS', '1']]
     end
 
   end
@@ -445,7 +445,7 @@ describe Route do
     fixtures default_fixtures
 
     it 'should return the number of operator codes in use for which there are no operators' do
-      Route.count_codes_without_operators.should == 2
+      Route.count_current_codes_without_operators.should == 2
     end
 
   end

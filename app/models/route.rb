@@ -471,8 +471,8 @@ class Route < ActiveRecord::Base
                         :include => :route_sources)
   end
 
-  # Return routes with this number and transport mode that have a stop or stop area in common with
-  # the route given
+  # Return routes with the same number and transport mode that have a stop or stop area in common with
+  # the route given. Scoped to a particular generation, the current generation by default.
   def self.find_all_by_number_and_common_stop(new_route, options={})
     stop_codes = new_route.stop_codes
     stop_area_codes = new_route.stop_area_codes
@@ -570,9 +570,9 @@ class Route < ActiveRecord::Base
     Route.find(routes_with_same_stops.map{ |route| route.id })
   end
 
-  # Accepts an array of stops or an array of arrays of locations (stops or stop areas) as first parameter.
-  # If passed the latter, will find routes that pass through at least one location in
-  # each array. Additional params to constrain the search can be passed as options.
+  # Accepts two arrays of locations (stops or stop areas). Finds routes that pass through at least one
+  # location ineach array. Additional params to constrain the search can be passed as options. Scoped
+  # by generation, by default the current generation
   def self.find_all_by_locations(from_locations, to_locations, options)
     generation = options[:generation] || CURRENT_GENERATION
     from_terminus_clause = ''
@@ -642,39 +642,40 @@ class Route < ActiveRecord::Base
     find_all_by_number_and_common_stop(new_route, options)
   end
 
-  def self.find_without_operators(options={})
+
+  def self.find_current_without_operators(options={})
     if !options.has_key?(:order)
       options[:order] = 'number ASC'
     end
     query = 'routes.id not in (SELECT route_id FROM route_operators)'
     params = []
     if options[:operator_codes]
-      route_sources = RouteSource.find(:all,
-                                       :select => 'distinct route_id',
-                                       :conditions => ["operator_code in (?)", options[:operator_codes]])
+      route_sources = RouteSource.current.find(:all,
+                                               :select => 'distinct route_id',
+                                               :conditions => ["operator_code in (?)", options[:operator_codes]])
       route_ids = route_sources.map{ |route_source| route_source.route_id }
-      route_source_admin_areas = RouteSourceAdminArea.find(:all,
-                                                           :select => 'distinct route_id',
-                                                           :conditions => ['operator_code in (?)',
+      route_source_admin_areas = RouteSourceAdminArea.current.find(:all,
+                                                                   :select => 'distinct route_id',
+                                                                   :conditions => ['operator_code in (?)',
                                                                            options[:operator_codes]])
       route_ids += route_source_admin_areas.map{ |route_source| route_source.route_id }
       query += " AND id in (?)"
       params << route_ids
     end
     params = [query] + params
-    find(:all, :conditions => params,
-         :limit => options[:limit],
-         :order => options[:order],
-         :include => :region)
+    current.find(:all, :conditions => params,
+                       :limit => options[:limit],
+                       :order => options[:order],
+                       :include => :region)
   end
 
-  def self.count_without_operators(options={})
+  def self.count_current_without_operators(options={})
     current.count(:conditions => ['id not in (SELECT route_id FROM route_operators)'])
   end
 
   # finds operator codes that are associated with routes
   # where the route doesn't have an operator
-  def self.find_codes_without_operators(options={})
+  def self.find_current_codes_without_operators(options={})
     query = "SELECT operator_code, sum(cnt) as total_count FROM
                ((SELECT operator_code, count(distinct route_id) as cnt
                 FROM route_sources
@@ -703,17 +704,17 @@ class Route < ActiveRecord::Base
     connection.select_rows(query)
   end
 
-  def self.count_codes_without_operators()
-    find_codes_without_operators.size
+  def self.count_current_codes_without_operators()
+    find_current_codes_without_operators.size
   end
 
-  def self.count_without_contacts
-    count(:conditions => ['route_operators.operator_id not in
-                          (SELECT distinct operators.id
-                           FROM operators, operator_contacts
-                           WHERE operators.persistent_id = operator_contacts.operator_persistent_id
-                           AND operator_contacts.deleted = ?)', false],
-          :include => :route_operators)
+  def self.count_current_without_contacts
+    current.count(:conditions => ['route_operators.operator_id not in
+                                  (SELECT distinct operators.id
+                                   FROM operators, operator_contacts
+                                   WHERE operators.persistent_id = operator_contacts.operator_persistent_id
+                                   AND operator_contacts.deleted = ?)', false],
+                  :include => :route_operators)
   end
 
   # Return train routes by the same operator that have the same terminuses
