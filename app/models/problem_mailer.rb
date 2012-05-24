@@ -135,7 +135,7 @@ class ProblemMailer < ApplicationMailer
       if unsendable_problems.size > 0
         STDERR.puts "Organisations need to be found for the following problem locations:"
         unsendable_problems.each do |problem|
-          location = problem.location_type.constantize.find_by_persistent_id(problem.location_persistent_id)
+          location = problem.location_type.constantize.current.find_by_persistent_id(problem.location_persistent_id)
           STDERR.puts "Problem #{problem.id}: #{location.class} '#{location.name}' (id #{location.id})"
         end
       end
