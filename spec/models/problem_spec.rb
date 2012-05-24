@@ -444,4 +444,24 @@ describe Problem do
 
   end
 
+  describe 'when getting the location associated with a problem' do
+
+    fixtures default_fixtures
+
+    it 'should not return a location from a previous generation' do
+      @problem = Problem.new(:category => 'Other',
+                             :subject => 'A test problem',
+                             :description => 'A test description')
+      @problem.location = stops(:victoria_station_previous_generation)
+      @problem.save!
+      @problem = Problem.find(@problem.id)
+      @problem.location.should == stops(:victoria_station_one)
+    end
+
+    after do
+      @problem.destroy
+    end
+
+  end
+
 end

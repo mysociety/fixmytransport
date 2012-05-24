@@ -58,7 +58,7 @@ class Problem < ActiveRecord::Base
       return @location
     end
     if self.location_type
-      return self.location_type.constantize.find_by_persistent_id(self.location_persistent_id)
+      return self.location_type.constantize.current.find_by_persistent_id(self.location_persistent_id)
     end
     return nil
   end
