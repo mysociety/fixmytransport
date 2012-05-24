@@ -325,7 +325,7 @@ module FixMyTransport
       if identity_type == :temporary
         existing = find_instance_for_temporary_identity(model_class, identity_hash, verbose)
       else
-        existing = model_class.find(:first, :conditions => identity_hash)
+        existing = model_class.current.find(:first, :conditions => identity_hash)
       end
       return existing
     end
