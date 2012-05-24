@@ -265,7 +265,7 @@ namespace :nptdr do
       route_stops = get_route_missing_stop_data()
       all_stops.each do |code, stop_info|
         coords = Point.from_x_y(stop_info[:easting], stop_info[:northing], BRITISH_NATIONAL_GRID)
-        locality = Locality.find_by_code((stop_info[:locality_id]))
+        locality = Locality.current.find_by_code((stop_info[:locality_id]))
         if locality.blank?
           nearest_stop = Stop.find_nearest_current(stop_info[:easting], stop_info[:northing])
           locality = nearest_stop.locality
@@ -355,7 +355,7 @@ namespace :nptdr do
         # add a locality
         locality_code = row['Locality ID'] ? row['Locality ID'].strip : nil
         if !locality_code.blank?
-         stop.locality = Locality.find_by_code(locality_code)
+         stop.locality = Locality.current.find_by_code(locality_code)
         end
 
         # generate the coords

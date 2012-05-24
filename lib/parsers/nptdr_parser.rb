@@ -35,7 +35,7 @@ class Parsers::NptdrParser
       district_name = row['District Name']
       town_name = row['Town Name']
       if !gazetteer_code.blank?
-        locality = Locality.find_by_code(gazetteer_code)
+        locality = Locality.current.find_by_code(gazetteer_code)
       else
         locality = nil
       end

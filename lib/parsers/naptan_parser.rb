@@ -134,7 +134,7 @@ class Parsers::NaptanParser
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
       coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
-      locality = Locality.find_by_code((row['NptgLocalityCode'] or row['NatGazID']))
+      locality = Locality.current.find_by_code((row['NptgLocalityCode'] or row['NatGazID']))
       yield Stop.new( :atco_code                  => (row['AtcoCode'] or row['ATCOCode']),
                       :naptan_code                => (row['NaptanCode'] or row['SMSNumber']),
                       :plate_code                 => clean_field(:plate_code, row['PlateCode']),
