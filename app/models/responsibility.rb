@@ -14,7 +14,7 @@ class Responsibility < ActiveRecord::Base
   def organization
     case self.organization_type
     when 'Operator'
-      return Operator.find_by_persistent_id(self.organization_persistent_id)
+      return Operator.current.find_by_persistent_id(self.organization_persistent_id)
     when 'PassengerTransportExecutive'
       return PassengerTransportExecutive.find(self.organization_id)
     when 'Council'
