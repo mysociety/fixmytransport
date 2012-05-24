@@ -328,9 +328,9 @@ namespace :tnds do
         merged = false
         puts "Parsed route #{route.number}" if verbose
         route.route_sources.each do |route_source|
-          existing = Route.find_all_by_service_code_operator_code_and_region(route_source.service_code,
-                                                                             route_source.operator_code,
-                                                                             route_source.region)
+          existing = Route.find_all_current_by_service_code_operator_code_and_region(route_source.service_code,
+                                                                                     route_source.operator_code,
+                                                                                     route_source.region)
           if existing.size > 1
             raise "More than one existing route for matching source criteria"
           end
