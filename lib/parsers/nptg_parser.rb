@@ -31,7 +31,7 @@ class Parsers::NptgParser
   def parse_admin_areas filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      region = Region.find_by_code((row['RegionCode'] or row['Traveline Region ID']))
+      region = Region.current.find_by_code((row['RegionCode'] or row['Traveline Region ID']))
       yield AdminArea.new(:code =>                  (row['AdministrativeAreaCode'] or row['Admin Area ID']).to_i.to_s,
                           :atco_code =>             (row['AtcoAreaCode'] or row['ATCO Code']),
                           :name =>                  (row['AreaName'] or row['Admin Area Name']),
@@ -50,7 +50,7 @@ class Parsers::NptgParser
   def parse_districts filepath
     csv_data = convert_encoding(filepath)
      FasterCSV.parse(csv_data, csv_options) do |row|
-       admin_area = AdminArea.find_by_code(row['AdministrativeAreaCode'].to_i.to_s)
+       admin_area = AdminArea.current.find_by_code(row['AdministrativeAreaCode'].to_i.to_s)
        yield District.new(:code =>                  (row['DistrictCode'] or row['District ID']).to_i.to_s,
                           :name =>                  (row['DistrictName'] or row['District Name']),
                           :admin_area =>            admin_area,
@@ -64,8 +64,8 @@ class Parsers::NptgParser
   def parse_localities filepath
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
-      admin_area = AdminArea.find_by_code((row['AdministrativeAreaCode'] or row['Admin Area ID']).to_i.to_s)
-      district = District.find_by_code((row['NptgDistrictCode'] or row['District ID']).to_i.to_s)
+      admin_area = AdminArea.current.find_by_code((row['AdministrativeAreaCode'] or row['Admin Area ID']).to_i.to_s)
+      district = District.current.find_by_code((row['NptgDistrictCode'] or row['District ID']).to_i.to_s)
       coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
       yield Locality.new(:code                      => (row['NptgLocalityCode'] or row['National Gazetteer ID']),
                          :name                      => (row['LocalityName'] or row['Locality Name']),

@@ -73,8 +73,10 @@ describe Parsers::NptgParser do
       @locality_links = []
       @parent_locality = mock_model(Locality)
       @child_locality = mock_model(Locality)
-      Locality.stub!(:find_by_code).and_return(@parent_locality)
-      Locality.stub!(:find_by_code).with('E0034965').and_return(@child_locality)
+      @current_generation = mock('current generation')
+      Locality.stub!(:current).and_return(@current_generation)
+      @current_generation.stub!(:find_by_code).and_return(@parent_locality)
+      @current_generation.stub!(:find_by_code).with('E0034965').and_return(@child_locality)
       @parser.parse_locality_links(example_file("LocalityHierarchy.csv")){ |locality_link| @locality_links << locality_link }
     end
 

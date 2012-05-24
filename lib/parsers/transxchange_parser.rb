@@ -48,7 +48,7 @@ class Parsers::TransxchangeParser
   def data_from_filename
     name_parts = File.basename(@filename, '.txc').split("_")
     admin_area_code = name_parts[1]
-    @admin_area = AdminArea.find_by_atco_code(admin_area_code)
+    @admin_area = AdminArea.current.find_by_atco_code(admin_area_code)
     @region = @admin_area.region
     vehicle_type = name_parts[2]
     mode_from_filename(vehicle_type)
@@ -122,9 +122,9 @@ class Parsers::TransxchangeParser
       folder_name = parent_directory.split(File::SEPARATOR).last
       region_part = folder_name.split("_").first
       puts "Indexing directory #{region_part}" if verbose
-      region = Region.find(:first, :conditions => ['name = ?', region_part])
+      region = Region.current.find(:first, :conditions => ['name = ?', region_part])
       if region.nil?
-        region = Region.find(:first, :conditions => ['code = ?', region_part])
+        region = Region.current.find(:first, :conditions => ['code = ?', region_part])
       end
       if region.nil?
         raise "Couldn't find region using folder name #{folder_name}"
@@ -151,14 +151,14 @@ class Parsers::TransxchangeParser
     filelist.sort_by { rand }.each do |filename|
       puts filename if verbose
       if skip_loaded
-        sources = RouteSource.find(:all, :conditions => ['filename = ?', filename])
+        sources = RouteSource.current.find(:all, :conditions => ['filename = ?', filename])
         if ! sources.empty?
           puts "Skipping #{filename}" if verbose
           next
         end
       end
       region_name = self.region_hash[File.basename(filename)]
-      region = Region.find_by_name(region_name)
+      region = Region.current.find_by_name(region_name)
       if ! region
         raise "Could not find region for #{filename} in index"
       end
@@ -331,7 +331,7 @@ class Parsers::TransxchangeParser
     comparison_max_length = 24
     short_name = info[:short_name]
     if info[:noc_code]
-      operator = Operator.find_by_noc_code(info[:noc_code])
+      operator = Operator.current.find_by_noc_code(info[:noc_code])
       if operator.nil?
         operators = []
         puts "Warning: Missing operator with noc code #{info[:noc_code]}" if verbose

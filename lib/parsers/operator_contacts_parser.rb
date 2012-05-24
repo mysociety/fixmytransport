@@ -58,7 +58,7 @@ class Parsers::OperatorContactsParser
       if data[:url] && data[:url].starts_with?('sales@')
         data[:url] = nil
       end
-      operators = Operator.find(:all, :conditions => ['name = ?', data[:name]])
+      operators = Operator.current.find(:all, :conditions => ['name = ?', data[:name]])
       if operators.size == 1
         operator = operators.first
         if options[:new_contacts_only] == true

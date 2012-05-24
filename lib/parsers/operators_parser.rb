@@ -20,7 +20,7 @@ class Parsers::OperatorsParser
       crs_code = row_data[0]
       name = row_data[1]
       operator_name = row_data[3]
-      stop = Stop.find_by_crs_code(crs_code)
+      stop = Stop.current.find_by_crs_code(crs_code)
       if ! stop
         puts "*** Couldn't find stop for #{name} #{crs_code} #{operator_name}***"
         next
@@ -30,11 +30,11 @@ class Parsers::OperatorsParser
         puts "No stop_area for stop #{stop.name} #{operator_name}"
         next
       end
-      operators = Operator.find(:all, :conditions => ['LOWER(name) = ?', operator_name.downcase])
+      operators = Operator.current.find(:all, :conditions => ['LOWER(name) = ?', operator_name.downcase])
       if operators.empty? and operator_mappings[operator_name]
         operator_name = operator_mappings[operator_name]
         # puts "using mapping for #{operator_name}"
-        operators = Operator.find(:all, :conditions => ['LOWER(name) = ?', operator_name.downcase])
+        operators = Operator.current.find(:all, :conditions => ['LOWER(name) = ?', operator_name.downcase])
       end
       raise "No operator #{operator_name} for #{stop_area.name}" if operators.empty?
       raise "Multiple operators #{operator_name}" if operators.size > 1
