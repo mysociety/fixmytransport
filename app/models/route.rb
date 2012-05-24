@@ -142,7 +142,7 @@ class Route < ActiveRecord::Base
     regions = self.route_localities.map{ |route_locality| route_locality.locality.admin_area.region }.uniq
 
     if regions.size > 1
-      regions = [ Region.find_by_name('Great Britain') ]
+      regions = [ Region.current.find_by_name('Great Britain') ]
     end
     if regions.empty?
       self.region = nil
