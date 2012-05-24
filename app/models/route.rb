@@ -457,8 +457,8 @@ class Route < ActiveRecord::Base
 
   # class methods
 
-  def self.full_find(id, scope)
-    find(id, :scope => scope, :include => [{ :route_operators => :operator }])
+  def self.find_current(id, scope)
+    self.current.find(id, :scope => scope, :include => [{ :route_operators => :operator }])
   end
 
   def self.find_all_by_service_code_operator_code_and_region(service_code, operator_code, region)

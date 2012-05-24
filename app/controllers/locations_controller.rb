@@ -90,7 +90,7 @@ class LocationsController < ApplicationController
 
   def show_route
     begin
-     @route = Route.full_find(params[:id], params[:scope])
+     @route = Route.find_current(params[:id], params[:scope])
     # handle params matching a route in the previous generation with a redirect to the successor
     # if there is one
     rescue ActiveRecord::RecordNotFound => error
