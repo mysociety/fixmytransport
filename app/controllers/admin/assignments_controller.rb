@@ -8,7 +8,8 @@ class Admin::AssignmentsController < Admin::AdminController
       @operator = @assignment.problem.responsible_operators.first
     else
       if @assignment.data[:organization_name]
-        @operator = Operator.find(:first, :conditions => ['lower(name) = ?', @assignment.data[:organization_name].downcase])
+        @operator = Operator.current.find(:first, :conditions => ['lower(name) = ?',
+                                                                  @assignment.data[:organization_name].downcase])
       end
     end
   end
@@ -20,7 +21,7 @@ class Admin::AssignmentsController < Admin::AdminController
       return false
     else
       begin
-        @operator = Operator.find(params[:operator_id])
+        @operator = Operator.current.find(params[:operator_id])
       rescue Exception => e
         flash[:error] = e.message
         redirect_to admin_url(admin_assignment_path(@assignment.id))
