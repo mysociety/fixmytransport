@@ -12,10 +12,10 @@ class Admin::StopsController < Admin::AdminController
     if !params[:query].blank? or !params[:mode].blank?
       conditions = Stop.name_or_id_conditions(params[:query], params[:mode])
     end
-    @stops = Stop.paginate :page => params[:page],
-                           :conditions => conditions,
-                           :include => :locality,
-                           :order => 'lower(common_name)'
+    @stops = Stop.current.paginate :page => params[:page],
+                                   :conditions => conditions,
+                                   :include => :locality,
+                                   :order => 'lower(common_name)'
   end
 
   def new

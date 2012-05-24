@@ -21,7 +21,7 @@ class Admin::OperatorContactsController < Admin::AdminController
       flash[:notice] = t('admin.operator_contact_created')
       redirect_to(admin_url(admin_operator_contact_path(@operator_contact)))
     else
-      @operator = Operator.find_by_persistent_id(params[:operator_contact][:operator_persistent_id])
+      @operator = Operator.current.find_by_persistent_id(params[:operator_contact][:operator_persistent_id])
       render :new
     end
   end
@@ -29,8 +29,8 @@ class Admin::OperatorContactsController < Admin::AdminController
   def update
     @operator_contact = OperatorContact.find(params[:id])
     # don't set the stop_area_id unless it has a value
-    if params[:operator_contact][:stop_area_id].blank?
-      params[:operator_contact].delete(:stop_area_id)
+    if params[:operator_contact][:stop_area_persistent_id].blank?
+      params[:operator_contact].delete(:stop_area_persistent_id)
     end
     if @operator_contact.update_attributes(params[:operator_contact])
       flash[:notice] = t('admin.operator_contact_updated')

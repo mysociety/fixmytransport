@@ -27,7 +27,7 @@ describe OperatorsController do
         :to_i => 11)
 
       Operator.stub!(:find).and_return([@mock_operator, @mock_operator_z])
-      Operator.stub!(:all_by_letter).and_return({@mock_operator.name[0].chr.upcase => Array.new(22, @mock_operator),
+      Operator.stub!(:all_current_by_letter).and_return({@mock_operator.name[0].chr.upcase => Array.new(22, @mock_operator),
                                                  @mock_operator_z.name[0].chr.upcase => [@mock_operator_z]})
       Operator.stub!(:count).and_return(30)
     end
@@ -37,7 +37,7 @@ describe OperatorsController do
     end
 
     it 'should ask for a list of all operators' do
-      Operator.should_receive(:all_by_letter)
+      Operator.should_receive(:all_current_by_letter)
       make_request
       assigns[:operator_initial_chars].should == ['S', 'Z']
     end
@@ -59,7 +59,7 @@ describe OperatorsController do
       describe 'if there are only a few results' do
 
         before do
-          Operator.stub!(:all_by_letter).and_return({@mock_operator.name[0].chr.upcase => [@mock_operator]})
+          Operator.stub!(:all_current_by_letter).and_return({@mock_operator.name[0].chr.upcase => [@mock_operator]})
           Operator.stub!(:count).and_return(1)
         end
 

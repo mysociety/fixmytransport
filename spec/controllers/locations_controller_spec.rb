@@ -171,7 +171,9 @@ describe LocationsController do
 
     before do
       @mock_stop = mock_model(Stop)
-      Stop.stub!(:find).and_return(@mock_stop)
+      @current_generation = mock('current generation')
+      Stop.stub!(:current).and_return(@current_generation)
+      @current_generation.stub!(:find).and_return(@mock_stop)
     end
 
     def make_request
@@ -179,7 +181,7 @@ describe LocationsController do
     end
 
     it 'should look for the stop' do
-      Stop.should_receive(:find).with("44", :scope => "66")
+      @current_generation.should_receive(:find).with("44", :scope => "66")
       make_request
     end
 
@@ -194,15 +196,17 @@ describe LocationsController do
 
     before do
       @mock_stop_area = mock_model(StopArea)
-      StopArea.stub!(:find).and_return(@mock_stop_area)
+      @current_generation = mock('current generation')
+      StopArea.stub!(:current).and_return(@current_generation)
+      @current_generation.stub!(:find).and_return(@mock_stop_area)
     end
 
     def make_request
       get :add_comment_to_stop_area, {:id => 44, :scope => 66 }
     end
 
-    it 'should look for the stop' do
-      StopArea.should_receive(:find).with("44", :scope => "66")
+    it 'should look for the stop in the current generation' do
+      @current_generation.should_receive(:find).with("44", :scope => "66")
       make_request
     end
 

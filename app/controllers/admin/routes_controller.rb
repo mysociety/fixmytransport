@@ -33,11 +33,11 @@ class Admin::RoutesController < Admin::AdminController
       query_clauses << query_clause
     end
     conditions = [query_clauses.join(" AND ")] + conditions
-    @routes = Route.paginate :select => "distinct routes.*",
-                             :page => params[:page],
-                             :conditions => conditions,
-                             :include => :region,
-                             :order => "#{sort_column} #{sort_direction}"
+    @routes = Route.current.paginate :select => "distinct routes.*",
+                                     :page => params[:page],
+                                     :conditions => conditions,
+                                     :include => :region,
+                                     :order => "#{sort_column} #{sort_direction}"
   end
 
   def new

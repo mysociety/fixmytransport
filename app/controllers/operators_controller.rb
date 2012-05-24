@@ -17,10 +17,10 @@ class OperatorsController < ApplicationController
       @search_query = params[:query].downcase.gsub(/\s+/, " ").strip  # multiple spaces most likely to be in error
       conditions << "(lower(name) like ? OR lower(short_name) like ?)"
       2.times{ conditions << "%%#{@search_query}%%" }
-      operators_by_letter = MySociety::Util.by_letter(Operator.find(:all, :conditions => conditions), :upcase){|o| o.name }
+      operators_by_letter = MySociety::Util.by_letter(Operator.current.find(:all, :conditions => conditions), :upcase){|o| o.name }
       operators_by_letter.each_value {|ops| @operator_count  += ops.size }
     else
-      operators_by_letter = Operator.all_by_letter # memoized
+      operators_by_letter = Operator.all_current_by_letter # memoized
       @operator_count = Operator.count(:all)
     end
     if @operator_count > @operator_list_threshold
@@ -136,7 +136,7 @@ class OperatorsController < ApplicationController
 
   def find_operator
     begin
-      @operator = Operator.find(params[:id])
+      @operator = Operator.current.find(params[:id])
     rescue ActiveRecord::RecordNotFound => error
       if @successor = Operator.find_successor(params[:id])
         redirect_previous(@successor) and return false
@@ -184,11 +184,11 @@ class OperatorsController < ApplicationController
 
   def setup_paginated_stations
     @stations = WillPaginate::Collection.create((params[:page] or 1), @links_per_page) do |pager|
-      stations = StopArea.find(:all, :conditions => ["stop_area_operators.operator_id = ?", @operator.id],
-                                      :include => [:stop_area_operators],
-                                      :order => 'stop_areas.name asc',
-                                      :limit => @links_per_page,
-                                      :offset => pager.offset)
+      stations = StopArea.current.find(:all, :conditions => ["stop_area_operators.operator_id = ?", @operator.id],
+                                             :include => [:stop_area_operators],
+                                             :order => 'stop_areas.name asc',
+                                             :limit => @links_per_page,
+                                             :offset => pager.offset)
       pager.replace(stations)
       if pager.total_entries
         @station_count = pager.total_entries
@@ -205,7 +205,7 @@ class OperatorsController < ApplicationController
 
   def setup_paginated_routes
     @routes = WillPaginate::Collection.create((params[:page] or 1), @links_per_page) do |pager|
-      routes = Route.find(:all, :conditions => ["route_operators.operator_id = ?", @operator.id],
+      routes = Route.current.find(:all, :conditions => ["route_operators.operator_id = ?", @operator.id],
                                         :include => [:route_operators],
                                         :order => 'cached_description asc',
                                         :limit => @links_per_page,
@@ -229,9 +229,9 @@ class OperatorsController < ApplicationController
       if ! @stations.nil? && @stations.size > 0
         sample_station = @stations.first
       else
-        sample_station = StopArea.first(:conditions => ["stop_area_operators.operator_id = ?", @operator.id],
-                                        :include => [:stop_area_operators],
-                                        :order => 'name asc') # order cautiously ensures same result as "stations" tab
+        sample_station = StopArea.current.first(:conditions => ["stop_area_operators.operator_id = ?", @operator.id],
+                                                :include => [:stop_area_operators],
+                                                :order => 'name asc') # order cautiously ensures same result as "stations" tab
       end
       descriptions = StopAreaType.generic_name_for_type(sample_station.area_type)
     else

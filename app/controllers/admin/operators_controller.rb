@@ -19,9 +19,9 @@ class Admin::OperatorsController < Admin::AdminController
       query_clauses << query_clause
     end
     conditions = [query_clauses.join(" AND ")] + conditions
-    @operators = Operator.paginate :page => params[:page],
-                                   :conditions => conditions,
-                                   :order => 'name ASC'
+    @operators = Operator.current.paginate :page => params[:page],
+                                           :conditions => conditions,
+                                           :order => 'name ASC'
   end
 
   def new
