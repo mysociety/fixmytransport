@@ -97,6 +97,15 @@ module FixMyTransport
             mapping_hash
           end
 
+          def find_in_generation_by_id(instance_id, generation)
+            instance = self.find(instance_id)
+            find_in_generation(instance, generation)
+          end
+
+          def find_in_generation(instance, generation)
+            in_generation(generation).find_by_persistent_id(instance.persistent_id)
+          end
+
           # If the find_params passed would have matched an instance in the previous generation
           # return that instance (if it is valid in the current generation), or its successor, if
           # it has one
