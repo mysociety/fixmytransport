@@ -1,28 +1,28 @@
 class Admin::StopAreasController < Admin::AdminController
-  
+
   cache_sweeper :stop_area_sweeper
   before_filter :require_can_admin_locations, :except => :autocomplete_for_name
-  
-  def show 
+
+  def show
     @stop_area = StopArea.find(params[:id])
   end
-  
+
   def index
     conditions = []
     if !params[:query].blank? or !params[:mode].blank?
       conditions = StopArea.name_or_id_conditions(params[:query], params[:mode])
     end
-    @stop_areas = StopArea.paginate :page => params[:page], 
-                                    :conditions => conditions, 
+    @stop_areas = StopArea.paginate :page => params[:page],
+                                    :conditions => conditions,
                                     :include => :locality,
                                     :order => 'lower(name)'
   end
-  
+
   def new
     @stop_area = StopArea.new(:loaded => true)
   end
-  
-  def create 
+
+  def create
     @stop_area = StopArea.new(params[:stop_area])
     if @stop_area.save
       flash[:notice] = t('admin.stop_area_created')
@@ -31,7 +31,7 @@ class Admin::StopAreasController < Admin::AdminController
       render :new
     end
   end
-  
+
   def update
     @stop_area = StopArea.find(params[:id])
     if @stop_area.update_attributes(params[:stop_area])
@@ -43,7 +43,7 @@ class Admin::StopAreasController < Admin::AdminController
       render :show
     end
   end
-  
+
   def destroy
     @stop_area = StopArea.find(params[:id])
     if @stop_area.campaigns.size > 0 || @stop_area.problems.size > 0
@@ -58,13 +58,13 @@ class Admin::StopAreasController < Admin::AdminController
       redirect_to admin_url(admin_stop_areas_path)
     end
   end
-  
+
   def autocomplete_for_name
     query = params[:term].downcase
-    stop_areas = StopArea.find_by_name_or_id(query, params[:transport_mode_id], 20)
-    stop_areas = stop_areas.map do |stop_area| 
-      { :id => stop_area.id, 
-        :name => @template.stop_area_name_for_admin(stop_area) } 
+    stop_areas = StopArea.find_current_by_name_or_id(query, params[:transport_mode_id], 20)
+    stop_areas = stop_areas.map do |stop_area|
+      { :id => stop_area.id,
+        :name => @template.stop_area_name_for_admin(stop_area) }
     end
     render :json => stop_areas
   end

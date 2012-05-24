@@ -356,11 +356,11 @@ describe StopArea do
       expected_order = "ST_Distance(ST_Transform(ST_GeomFromText('POINT(0.084 51.497)', 4326),27700),coords) asc"
       StopArea.should_receive(:find).with(:first, { :conditions=> expected_conditions,
                                                     :order=> expected_order }).and_return([])
-      stop_area_list = StopArea.find_nearest(0.084, 51.497, 'Tram/Metro')
+      stop_area_list = StopArea.find_nearest_current(0.084, 51.497, 'Tram/Metro')
     end
 
     it 'should fail with invalid (lon,lat)' do
-      expect { StopArea.find_nearest(0.01, 'foo') }.should raise_error
+      expect { StopArea.find_nearest_current(0.01, 'foo') }.should raise_error
     end
 
   end

@@ -19,10 +19,10 @@ describe Parsers::NptdrParser do
       @operator = mock_model(Operator, :name => 'A Test Operator')
       Operator.stub!(:find_all_current_by_nptdr_code).and_return([@operator])
       @stop = mock_model(Stop, :atco_code => 'xxxxx')
-      Stop.stub!(:find_by_code).and_return{ |atco_code, options| mock_model(Stop, :atco_code => atco_code,
+      Stop.stub!(:find_current_by_code).and_return{ |atco_code, options| mock_model(Stop, :atco_code => atco_code,
                                                                                   :other_code => nil,
                                                                                   :stop_type => 'BCS')}
-      Stop.stub!(:find_by_code).with('eeeeeeee', anything()).and_return(nil)
+      Stop.stub!(:find_current_by_code).with('eeeeeeee', anything()).and_return(nil)
       @parser = Parsers::NptdrParser.new
       @routes = []
       @missing = @parser.parse_routes(example_file("routes.tsv")){ |route| @routes << route }

@@ -270,8 +270,8 @@ class Parsers::TransxchangeParser
           section_refs.each do |section_ref|
             section = journey_pattern_sections[section_ref]
             section[:timing_links].each do |timing_link|
-              from_stop = Stop.find_by_code(timing_link[:from_info][:stop], stop_options)
-              to_stop = Stop.find_by_code(timing_link[:to_info][:stop], stop_options)
+              from_stop = Stop.find_current_by_code(timing_link[:from_info][:stop], stop_options)
+              to_stop = Stop.find_current_by_code(timing_link[:to_info][:stop], stop_options)
               if !from_stop
                 missing << timing_link[:from_info][:stop]
               end

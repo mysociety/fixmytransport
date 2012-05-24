@@ -84,8 +84,8 @@ class Parsers::NptdrParser
   def build_segments_for_journey_pattern(journey_pattern, route, stops, options)
     segment_order = 0
     stops.each_cons(2) do |from_stop_code,to_stop_code|
-      from_stop = Stop.find_by_code(from_stop_code.strip, options)
-      to_stop = Stop.find_by_code(to_stop_code.strip, options)
+      from_stop = Stop.find_current_by_code(from_stop_code.strip, options)
+      to_stop = Stop.find_current_by_code(to_stop_code.strip, options)
       route_segment = journey_pattern.route_segments.build(:from_stop => from_stop,
                                                            :to_stop   => to_stop,
                                                            :route => route,
@@ -141,7 +141,7 @@ class Parsers::NptdrParser
       end
       # Which ones are in the db
       options = {:includes => {:stop_area_memberships => :stop_area}}
-      found, missing = stop_codes.partition{ |stop_code| Stop.find_by_code(stop_code.strip, options) }
+      found, missing = stop_codes.partition{ |stop_code| Stop.find_current_by_code(stop_code.strip, options) }
 
       missing.each do |missing_stop_code|
         missing_stops = self.mark_stop_code_missing(missing_stops, missing_stop_code, route)

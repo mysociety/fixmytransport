@@ -93,7 +93,7 @@ namespace :naptan do
 
     def find_stop_area_locality(stop_area)
       if stop_area.stops.empty?
-        nearest_stop = Stop.find_nearest(stop_area.easting, stop_area.northing)
+        nearest_stop = Stop.find_nearest_current(stop_area.easting, stop_area.northing)
         return nearest_stop.locality
       else
         localities = stop_area.stops.map{ |stop| stop.locality }.uniq
@@ -144,7 +144,7 @@ namespace :naptan do
       Stop.paper_trail_off
       extra_conditions = "locality_id is not null"
       Stop.find_each(:conditions => ['locality_id is NULL']) do |stop|
-        nearest_stop = Stop.find_nearest(stop.easting, stop.northing, exclude_id=stop.id, extra_conditions)
+        nearest_stop = Stop.find_nearest_current(stop.easting, stop.northing, exclude_id=stop.id, extra_conditions)
         puts stop.inspect
         stop.locality = nearest_stop.locality
         stop.save!

@@ -40,9 +40,9 @@ class Parsers::NaptanParser
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
       ancestor_code = (row['ParentStopAreaCode'] or row['ParentID'])
-      ancestor = StopArea.find_by_code(ancestor_code)
+      ancestor = StopArea.find_current_by_code(ancestor_code)
       descendant_code = (row['ChildStopAreaCode'] or row['ChildID'])
-      descendant = StopArea.find_by_code(descendant_code)
+      descendant = StopArea.find_current_by_code(descendant_code)
       if ancestor && descendant
         if existing_link = StopAreaLink.find_link(ancestor, descendant)
           if ! StopAreaLink.direct?(ancestor, descendant)
@@ -94,7 +94,7 @@ class Parsers::NaptanParser
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
       stop = Stop.find_current_by_atco_code((row['AtcoCode'] or row['ATCOCode']))
-      stop_area = StopArea.find_by_code((row['StopAreaCode'] or row['GroupID']))
+      stop_area = StopArea.find_current_by_code((row['StopAreaCode'] or row['GroupID']))
       if stop and stop_area
         yield StopAreaMembership.new( :stop_id                => stop.id,
                                       :stop_area_id           => stop_area.id,
@@ -110,7 +110,7 @@ class Parsers::NaptanParser
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
       coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
-      nearest_stop = Stop.find_nearest(row['Easting'], row['Northing'])
+      nearest_stop = Stop.find_nearest_current(row['Easting'], row['Northing'])
       yield StopArea.new( :code                      => (row['StopAreaCode'] or row['GroupID']),
                           :name                      => (row['Name'] or row['GroupName']),
                           :administrative_area_code  => row['AdministrativeAreaCode'],

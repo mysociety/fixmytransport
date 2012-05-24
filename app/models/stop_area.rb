@@ -174,13 +174,13 @@ class StopArea < ActiveRecord::Base
     stop_areas.map{ |stop_area| stop_area.station_root ? stop_area.station_root : stop_area }
   end
 
-  def self.find_parents(stop, station_type)
+  def self.find_current_parents(stop, station_type)
     distance_clause = "ST_Distance(
                        ST_GeomFromText('POINT(#{stop.easting} #{stop.northing})', #{BRITISH_NATIONAL_GRID}),
                        coords)"
-    existing_stations = StopArea.find(:all, :conditions => ["name = ?
-                                                             AND area_type = ?
-                                                             AND #{distance_clause} < ?",
+    existing_stations = current.find(:all, :conditions => ["name = ?
+                                                            AND area_type = ?
+                                                            AND #{distance_clause} < ?",
                                                             stop.common_name, station_type, 500] )
     existing_stations = map_to_common_areas(existing_stations)
   end
@@ -224,22 +224,22 @@ class StopArea < ActiveRecord::Base
     conditions = [query_clauses.join(" AND ")] + query_params
   end
 
-  def self.find_by_name_or_id(query, transport_mode_id, limit)
-    find(:all,
-         :conditions => name_or_id_conditions(query, transport_mode_id),
-         :limit => limit)
+  def self.find_current_by_name_or_id(query, transport_mode_id, limit)
+    current.find(:all,
+                 :conditions => name_or_id_conditions(query, transport_mode_id),
+                 :limit => limit)
   end
 
-  def self.full_find(id, scope)
-    find(id, :scope => scope, :include => [:locality])
+  def self.find_current(id, scope)
+    current.find(id, :scope => scope, :include => [:locality])
   end
 
-  def self.find_by_code(code)
-    find(:first, :conditions => ["lower(code) = ?", code.downcase])
+  def self.find_current_by_code(code)
+    current.find(:first, :conditions => ["lower(code) = ?", code.downcase])
   end
 
   # find the nearest stop_area to a set of National Grid coordinates
-  def self.find_nearest(lon, lat, transport_mode_name=nil)
+  def self.find_nearest_current(lon, lat, transport_mode_name=nil)
     if MySociety::Validate.is_valid_lon_lat(lon, lat)
       query_clauses = []
       query_params = []
@@ -252,7 +252,7 @@ class StopArea < ActiveRecord::Base
         query_params += query_param_list
       end
       conditions = [query_clauses.join(" AND ")] + query_params
-      return find(:first, :order => "#{distance_clause} asc", :conditions => conditions)
+      return current.find(:first, :order => "#{distance_clause} asc", :conditions => conditions)
     else
       raise "invalid (lon, lat): (#{lon}, #{lat})"
     end

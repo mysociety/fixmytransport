@@ -22,7 +22,7 @@ describe LocationsController do
       mock_stop_area = mock_model(StopArea, :area_type => 'GRLS',
                                             :locality => 'london',
                                             :station_root => nil)
-      StopArea.stub!(:full_find).and_return(mock_stop_area)
+      StopArea.stub!(:find_current).and_return(mock_stop_area)
       make_request
       response.should redirect_to(station_url(mock_stop_area.locality, mock_stop_area))
     end
@@ -31,7 +31,7 @@ describe LocationsController do
       mock_stop_area = mock_model(StopArea, :area_type => 'GTMU',
                                             :locality => 'london',
                                             :station_root => nil)
-      StopArea.stub!(:full_find).and_return(mock_stop_area)
+      StopArea.stub!(:find_current).and_return(mock_stop_area)
       make_request
       response.should redirect_to(station_url(mock_stop_area.locality, mock_stop_area))
     end
@@ -40,7 +40,7 @@ describe LocationsController do
       mock_stop_area = mock_model(StopArea, :area_type => 'GFTD',
                                             :locality => 'london',
                                             :station_root => nil)
-      StopArea.stub!(:full_find).and_return(mock_stop_area)
+      StopArea.stub!(:find_current).and_return(mock_stop_area)
       make_request
       response.should redirect_to(ferry_terminal_url(mock_stop_area.locality, mock_stop_area))
     end
@@ -54,7 +54,7 @@ describe LocationsController do
         @mock_stop_area = mock_model(StopArea, :area_type => 'GRLS',
                                               :locality => 'victoria',
                                               :station_root => @parent_stop_area)
-        StopArea.stub!(:full_find).and_return(@mock_stop_area)
+        StopArea.stub!(:find_current).and_return(@mock_stop_area)
       end
 
       it 'should redirect to the ancestor area if there is one of the same type' do
@@ -161,7 +161,7 @@ describe LocationsController do
     end
 
     it 'should render the "show_stop" template' do
-      Stop.stub!(:full_find).and_return(@stop)
+      Stop.stub!(:find_current).and_return(@stop)
       make_request
       response.should render_template('locations/show_stop')
     end

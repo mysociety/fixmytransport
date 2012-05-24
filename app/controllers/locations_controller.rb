@@ -13,7 +13,7 @@ class LocationsController < ApplicationController
 
   def show_stop
     begin
-      @stop = Stop.full_find(params[:id], params[:scope])
+      @stop = Stop.find_current(params[:id], params[:scope])
     # handle params matching a stop in the previous generation with a redirect to the successor
     # if there is one
     rescue ActiveRecord::RecordNotFound => error
@@ -44,7 +44,7 @@ class LocationsController < ApplicationController
 
   def show_stop_area
     begin
-      @stop_area = StopArea.full_find(params[:id], params[:scope])
+      @stop_area = StopArea.find_current(params[:id], params[:scope])
     # handle params matching a stop area in the previous generation with a redirect to the successor
     # if there is one
     rescue ActiveRecord::RecordNotFound => error

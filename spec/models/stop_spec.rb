@@ -233,20 +233,7 @@ describe Stop do
 
     it 'should return nil if the code passed is blank' do
       Stop.stub!(:find).and_return(mock_model(Stop))
-      Stop.find_by_code('').should be_nil
-    end
-
-  end
-
-  describe 'when finding by name and coordinates' do
-
-    fixtures default_fixtures
-
-    it 'should only return a stop whose name matches and whose coordinates are less than the specified distance away from the given stop' do
-      stop = Stop.find_by_name_and_coords('Haywards Heath Rail Station', 533030, 124583, 10)
-      stop.should == stops(:haywards_heath_station_interchange)
-      stop = Stop.find_by_name_and_coords('Haywards Heath Rail Station', 533030, 124594, 10)
-      stop.should be_nil
+      Stop.find_current_by_code('').should be_nil
     end
 
   end
@@ -453,19 +440,19 @@ describe Stop do
     it 'should exclude an id passed in the exclude_id parameter from the search conditions' do
       Stop.should_receive(:find).with(:first, :order => anything(),
                                               :conditions => ["id != ?", 55])
-      Stop.find_nearest(@easting, @northing, exclude_id=55)
+      Stop.find_nearest_current(@easting, @northing, exclude_id=55)
     end
 
     it 'should include any extra conditions passed in the search conditions' do
       Stop.should_receive(:find).with(:first, :order => anything(),
                                               :conditions => ['lat is not null'])
-      Stop.find_nearest(@easting, @northing, exclude_id=nil, extra_conditions="lat is not null")
+      Stop.find_nearest_current(@easting, @northing, exclude_id=nil, extra_conditions="lat is not null")
     end
 
     it 'should combine exclude_id and extra conditions if both are passed' do
       Stop.should_receive(:find).with(:first, :order => anything(),
                                               :conditions => ['id != ? AND lat is not null', 55])
-      Stop.find_nearest(@easting, @northing, exclude_id=55, extra_conditions="lat is not null")
+      Stop.find_nearest_current(@easting, @northing, exclude_id=55, extra_conditions="lat is not null")
     end
 
   end

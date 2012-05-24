@@ -43,8 +43,8 @@ describe Parsers::TransxchangeParser do
 
     it "should look for the stops referenced in a timing pattern associated with a section of the route's
         journey pattern" do
-      Stop.should_receive(:find_by_code).with('370055370', {:includes => {:stop_area_memberships => :stop_area}})
-      Stop.should_receive(:find_by_code).with('370055986', {:includes => {:stop_area_memberships => :stop_area}})
+      Stop.should_receive(:find_current_by_code).with('370055370', {:includes => {:stop_area_memberships => :stop_area}})
+      Stop.should_receive(:find_current_by_code).with('370055986', {:includes => {:stop_area_memberships => :stop_area}})
       routes = get_routes(@parser, [@simple_file, nil, nil, @simple_file, verbose=false, @mock_region])
     end
 

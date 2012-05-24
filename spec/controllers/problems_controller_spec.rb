@@ -359,7 +359,7 @@ describe ProblemsController do
       before do
         @mock_locality = mock_model(Locality, :name => 'Euston')
         @mock_stop = mock_model(Stop, :locality => @mock_locality, :name =>"London Euston rail station")
-        Stop.stub!(:find_nearest).and_return(@mock_stop)
+        Stop.stub!(:find_nearest_current).and_return(@mock_stop)
       end
 
       describe 'if the lon/lat is outside that used by the National Grid' do
@@ -1561,7 +1561,7 @@ describe ProblemsController do
                                       :name =>"London Euston rail station",
                                       :lat => 0.01,
                                       :lon => 51.1)
-        Stop.stub!(:find_nearest).and_return(@mock_stop)
+        Stop.stub!(:find_nearest_current).and_return(@mock_stop)
       end
 
       it 'should render the browse template' do

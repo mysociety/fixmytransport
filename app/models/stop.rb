@@ -252,21 +252,11 @@ class Stop < ActiveRecord::Base
     conditions = [query_clauses.join(" AND ")] + query_params
   end
 
-  def self.find_by_name_or_id(query, transport_mode_id, limit, show_all_metro=false)
-    find(:all,
-         :conditions => name_or_id_conditions(query, transport_mode_id, show_all_metro),
-         :limit => limit,
-         :order => 'common_name asc')
-  end
-
-  def self.find_by_name_and_coords(name, easting, northing, distance)
-    find(:first, :select => "*, ABS(easting - #{easting}) as easting_dist,
-                                ABS(northing - #{northing}) as northing_dist",
-                 :conditions => ["common_name = ?
-                                  AND ABS(easting - ?) < ?
-                                  AND ABS(northing - ?) < ?",
-                                  name, easting, distance, northing, distance],
-                 :order => "easting_dist asc, northing_dist asc")
+  def self.find_current_by_name_or_id(query, transport_mode_id, limit, show_all_metro=false)
+    current.find(:all,
+                 :conditions => name_or_id_conditions(query, transport_mode_id, show_all_metro),
+                 :limit => limit,
+                 :order => 'common_name asc')
   end
 
   def self.find_current_in_bounding_box(coords, options={})
@@ -291,7 +281,7 @@ class Stop < ActiveRecord::Base
     current.find(:first, :conditions => ["lower(atco_code) = ?", atco_code.downcase], :include => includes)
   end
 
-  def self.find_by_code(code, options={})
+  def self.find_current_by_code(code, options={})
     return nil if code.blank?
     includes = options[:includes] or {}
     atco_match = self.find_current_by_atco_code(code)
@@ -301,7 +291,7 @@ class Stop < ActiveRecord::Base
 
   # find the nearest stop to a set of National Grid coordinates. Accepts a model id to
   # exclude from results, and an extra condition string to constrain the search
-  def self.find_nearest(easting, northing, exclude_id = nil, extra_conditions=nil)
+  def self.find_nearest_current(easting, northing, exclude_id = nil, extra_conditions=nil)
     conditions = nil
     if exclude_id
       conditions = ["id != ?", exclude_id]
@@ -319,7 +309,7 @@ class Stop < ActiveRecord::Base
                        :conditions => conditions)
   end
 
-  def self.full_find(id, scope)
+  def self.find_current(id, scope)
     find(id, :scope => scope, :include => [:locality])
   end
 

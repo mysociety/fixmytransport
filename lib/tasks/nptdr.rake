@@ -267,7 +267,7 @@ namespace :nptdr do
         coords = Point.from_x_y(stop_info[:easting], stop_info[:northing], BRITISH_NATIONAL_GRID)
         locality = Locality.find_by_code((stop_info[:locality_id]))
         if locality.blank?
-          nearest_stop = Stop.find_nearest(stop_info[:easting], stop_info[:northing])
+          nearest_stop = Stop.find_nearest_current(stop_info[:easting], stop_info[:northing])
           locality = nearest_stop.locality
         end
         if route_stops[code] and stop_info[:easting] != '-1.0' and !stop_info[:name].blank? and stop_info[:name].strip != '-'
@@ -346,7 +346,7 @@ namespace :nptdr do
                          :stop_type => row['Stop type'] ? row['Stop type'].strip : nil)
 
         # check if already exists
-        existing = Stop.find_by_code(stop.other_code)
+        existing = Stop.find_current_by_code(stop.other_code)
         if existing
           puts "Stop already in db #{existing.inspect}"
           next
@@ -374,7 +374,7 @@ namespace :nptdr do
         if station_part_stops.include?(stop.stop_type)
           station_type = station_types[stop.stop_type]
           puts "Looking for a parent of type #{station_type} for #{stop.common_name}" if ENV['DRYRUN']
-          existing_stations = StopArea.find_parents(stop, station_type)
+          existing_stations = StopArea.find_current_parents(stop, station_type)
           if existing_stations.empty?
             puts "Couldn't find parent for #{stop.common_name} (#{stop.other_code})" if ENV['DRYRUN']
           elsif existing_stations.size > 1
@@ -397,7 +397,7 @@ namespace :nptdr do
 
           # approximate a locality if needed
           if !stop.locality
-            nearest_stop = Stop.find_nearest(stop.easting, stop.northing, exclude_id=stop.id)
+            nearest_stop = Stop.find_nearest_current(stop.easting, stop.northing, exclude_id=stop.id)
             stop.locality = nearest_stop.locality
             stop.save!
           end
