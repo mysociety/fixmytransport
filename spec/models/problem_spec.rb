@@ -464,4 +464,56 @@ describe Problem do
 
   end
 
+  describe 'when finding recent issues' do
+
+    describe 'when finding issues for a route' do
+
+      fixtures default_fixtures
+
+      it 'should include issues reported to the route' do
+        @problem =  Problem.new(:category => 'Other',
+                               :subject => 'A test problem',
+                               :description => 'A test description')
+
+        @problem.location = routes(:victoria_to_haywards_heath)
+        @problem.status = :confirmed
+        @problem.save!
+        issues = Problem.find_recent_issues(nil, :location => routes(:victoria_to_haywards_heath))
+        issues.include?(@problem).should be_true
+      end
+
+      it 'should include issues reported to a sub route that have the same operator' do
+        @problem =  Problem.new(:category => 'Other',
+                               :subject => 'A test problem',
+                               :description => 'A test description')
+
+        @problem.location = sub_routes(:victoria_to_haywards_heath)
+        @problem.responsibilities.build(:organization_type => 'Operator',
+                                        :organization_persistent_id => operators(:a_train_company).persistent_id)
+        @problem.status = :confirmed
+        @problem.save!
+        issues = Problem.find_recent_issues(nil, :location => routes(:victoria_to_haywards_heath))
+        issues.include?(@problem).should be_true
+      end
+
+      it 'should not include issues with non-visible statuses' do
+        @problem =  Problem.new(:category => 'Other',
+                               :subject => 'A test problem',
+                               :description => 'A test description')
+
+        @problem.location = routes(:victoria_to_haywards_heath)
+        @problem.status = :new
+        @problem.save!
+        issues = Problem.find_recent_issues(nil, :location => routes(:victoria_to_haywards_heath))
+        issues.include?(@problem).should be_false
+      end
+
+      after do
+        @problem.destroy
+      end
+
+    end
+
+  end
+
 end

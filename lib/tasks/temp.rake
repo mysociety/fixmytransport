@@ -129,7 +129,6 @@ namespace :temp do
     FixMyTransport::DataGenerations.models_existing_in_data_generations.each do |model_class|
       puts model_class
       table_name = model_class.to_s.tableize
-      next if [JourneyPattern, RouteSegment].include?(model_class)
       model_class.connection.execute("UPDATE #{table_name}
                                       SET persistent_id = id
                                       WHERE previous_id IS NULL
@@ -143,35 +142,6 @@ namespace :temp do
                                       SET persistent_id = (SELECT persistent_id from #{table_name} as prev
                                                            WHERE prev.id = #{table_name}.previous_id)
                                       WHERE previous_id IS NOT NULL")
-    end
-  end
-
-  desc 'Populate the persistent_id column for sub_routes'
-  task :populate_sub_routes_persistent_ids => :environment do
-    SubRoute.find_each do |sub_route|
-      # puts sub_route.inspect
-      from_station = StopArea.find(:first, :conditions => ['id = ?', sub_route.from_station_id])
-      to_station = StopArea.find(:first, :conditions => ['id = ?', sub_route.to_station_id])
-      if ! from_station
-        puts "No stop area with id #{sub_route.from_station_id}"
-        next
-      end
-      if ! to_station
-        puts "No stop area with id #{sub_route.to_station_id}"
-        next
-      end
-      SubRoute.connection.execute("UPDATE sub_routes
-                                   SET from_station_persistent_id = #{from_station.persistent_id},
-                                       to_station_persistent_id = #{to_station.persistent_id},
-                                       persistent_id = #{sub_route.id}
-                                   WHERE id = #{sub_route.id}")
-      sub_route = SubRoute.find(sub_route.id)
-      if ! sub_route.from_station
-        puts "From station (id #{from_station.id}) does not exist in current generation"
-      end
-      if ! sub_route.to_station
-        puts "To station (id #{to_station.id}) does not exist in current generation"
-      end
     end
   end
 

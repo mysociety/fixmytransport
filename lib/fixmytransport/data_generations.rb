@@ -113,7 +113,7 @@ module FixMyTransport
             previous = self.in_generation(PREVIOUS_GENERATION).find(*find_params)
             if previous
               return previous if previous.generation_high >= CURRENT_GENERATION
-              successor = self.current.find(:first, :conditions => ['previous_id = ?', previous.id])
+              successor = self.current.find(:first, :conditions => ['persistent_id = ?', previous.persistent_id])
               return successor if successor
               if remap_identity_hash = manual_remaps[previous.identity_hash]
                 return self.current.find(:first, :conditions => remap_identity_hash)

@@ -474,13 +474,11 @@ namespace :tnds do
         puts "Updating #{route.name} #{route.id} to generation #{CURRENT_GENERATION}" if verbose
         new_gen_route = clone_in_new_generation(route)
         new_gen_route.region = find_successor(route, Region, :region_id)
-        journey_patterns = route.journey_patterns(force_reload=true)
-        journey_patterns.each do |journey_pattern|
+        route.journey_patterns.each do |journey_pattern|
           new_attributes = clone_in_new_generation(journey_pattern).attributes
           new_gen_journey_pattern = new_gen_route.journey_patterns.build(new_attributes)
           new_gen_journey_pattern.route = new_gen_route
-          route_segments = journey_pattern.route_segments(force_reload=true)
-          route_segments.each do |route_segment|
+          journey_pattern.route_segments.each do |route_segment|
             new_attributes = clone_in_new_generation(route_segment).attributes
             new_gen_route_segment = new_gen_journey_pattern.route_segments.build(new_attributes)
             new_gen_route_segment.route = new_gen_route
@@ -494,20 +492,37 @@ namespace :tnds do
             end
           end
         end
-        route_operators = route.route_operators(force_reload=true)
-        route_operators.each do |route_operator|
+        route.route_operators.each do |route_operator|
           new_attributes = clone_in_new_generation(route_operator).attributes
           new_route_operator = new_gen_route.route_operators.build(new_attributes)
           new_route_operator.operator = find_successor(route_operator, Operator, :operator_id)
         end
 
-        route_source_admin_areas = route.route_source_admin_areas(force_reload=true)
-        route_source_admin_areas.each do |route_source_admin_area|
+        route.route_source_admin_areas.each do |route_source_admin_area|
           new_attributes = clone_in_new_generation(route_source_admin_area).attributes
           new_route_source_admin_area = new_gen_route.route_source_admin_areas.build(new_attributes)
           if route_source_admin_area.source_admin_area_id
             new_route_source_admin_area.source_admin_area = find_successor(route_source_admin_area, AdminArea, :source_admin_area_id)
           end
+        end
+
+        route.route_sub_routes.each do |route_sub_route|
+          sub_route = find_sucessor(route_sub_route, SubRoute, :sub_route_id)
+          if ! sub_route
+            sub_route = clone_in_new_generation(route_sub_route.sub_route)
+            if !sub_route.valid?
+              puts "ERROR: Sub route is invalid:"
+              puts sub_route.inspect
+              puts sub_route.errors.full_messages.join("\n")
+              exit(1)
+            end
+            if !dryrun
+              sub_route.save!
+            end
+          end
+          new_attributes = clone_in_new_generation(route_sub_route).attributes
+          new_route_sub_route = new_gen_route.route_sub_routes.build(new_attributes)
+          new_route_sub_route.sub_route = sub_route
         end
 
         if !new_gen_route.valid?

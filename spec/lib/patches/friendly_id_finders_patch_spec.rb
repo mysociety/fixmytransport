@@ -24,13 +24,13 @@ describe 'Patched slugged models' do
       @old_slug = create_old_slug('old-name', 'old-scope', @first_stop)
     end
 
-    it 'should not find a model using a slug from another data generation' do
+    it 'should not find a model in the current scope using a slug from another data generation' do
       expected_error = "Couldn't find Stop with ID=old-name, scope: old-scope"
-      lambda{ Stop.find('old-name', :scope => 'old-scope') }.should raise_error(expected_error)
+      lambda{ Stop.current.find('old-name', :scope => 'old-scope') }.should raise_error(expected_error)
     end
 
-    it 'should find a model using a slug from the current generation' do
-      Stop.find('kent-lane', :scope => 'kenty').should == @first_stop
+    it 'should find a model in the current scope using a slug from the current generation' do
+      Stop.current.find('kent-lane', :scope => 'kenty').should == @first_stop
     end
 
     after do

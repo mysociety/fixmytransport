@@ -27,6 +27,7 @@ victoria_to_haywards_heath:
   status: ACT
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= Route.next_persistent_id %>
 number_807_bus:
   transport_mode_id: 1
   number: 807
@@ -35,6 +36,7 @@ number_807_bus:
   status: ACT
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= Route.next_persistent_id %>
 aldershot_807_bus:
   number: "807"
   type: BusRoute
@@ -43,6 +45,7 @@ aldershot_807_bus:
   status: ACT
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= Route.next_persistent_id %>
 borough_C10:
   name:
   number: C10
@@ -52,6 +55,7 @@ borough_C10:
   status: ACT
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= Route.next_persistent_id %>
 metropolitan_line:
   name: Metropolitan Line
   number: MET0
@@ -61,6 +65,7 @@ metropolitan_line:
   status: ACT
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= Route.next_persistent_id %>
 jubilee_line:
   name: Jubilee Line
   number: JUB0
@@ -70,6 +75,7 @@ jubilee_line:
   status: ACT
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= Route.next_persistent_id %>
 train_line_with_old_operator:
   name: Train line
   number: TRRR
@@ -79,6 +85,7 @@ train_line_with_old_operator:
   status: ACT
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= Route.next_persistent_id %>
 borough_C10_in_previous_gen:
   name:
   number: C10
@@ -88,3 +95,4 @@ borough_C10_in_previous_gen:
   status: ACT
   generation_low: <%= PREVIOUS_GENERATION %>
   generation_high: <%= PREVIOUS_GENERATION %>
+  persistent_id: <%= Route.next_persistent_id %>

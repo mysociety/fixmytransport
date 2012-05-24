@@ -176,12 +176,14 @@ module SharedBehaviours
           before do
             @previous = mock_model(@model_type, :generation_high => PREVIOUS_GENERATION,
                                                 :generation_low => PREVIOUS_GENERATION,
-                                                :identity_hash => { :id => 55 } )
+                                                :identity_hash => { :id => 55 },
+                                                :persistent_id => 66 )
             @prev_gen.stub(:find).with(*@find_params).and_return(@previous)
           end
 
           it 'should look for the successor to the instance in this generation' do
-            @current_gen.should_receive(:find).with(:first, :conditions => ['previous_id = ?', @previous.id]).and_return(@successor)
+            expected_conditions = ['persistent_id = ?', @previous.persistent_id]
+            @current_gen.should_receive(:find).with(:first, :conditions => expected_conditions).and_return(@successor)
             @model_type.find_successor(*@find_params)
           end
 
@@ -202,13 +204,13 @@ module SharedBehaviours
             before do
               @previous.stub!(:generation_high).and_return(PREVIOUS_GENERATION)
               @successor = mock_model(@model_type)
-              @previous_conditions = { :conditions => ['previous_id = ?', @previous.id] }
+              @persistent_conditions = { :conditions => ['persistent_id = ?', @previous.persistent_id] }
             end
 
             describe 'if there is a successor' do
 
               before do
-                @current_gen.stub!(:find).with(:first, @previous_conditions).and_return(@successor)
+                @current_gen.stub!(:find).with(:first, @persistent_conditions).and_return(@successor)
               end
 
               it 'should return the successor' do
@@ -220,7 +222,7 @@ module SharedBehaviours
             describe 'if there is no successor' do
 
               before do
-                @current_gen.stub!(:find).with(:first, @previous_conditions).and_return(nil)
+                @current_gen.stub!(:find).with(:first, @persistent_conditions).and_return(nil)
               end
 
               describe 'if there is a manual mapping to another object' do

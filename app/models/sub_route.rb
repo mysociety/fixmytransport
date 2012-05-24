@@ -4,12 +4,8 @@ class SubRoute < ActiveRecord::Base
 
   has_many :route_sub_routes
   has_many :routes, :through => :route_sub_routes
-  belongs_to :from_station, :class_name => 'StopArea',
-                            :primary_key => :persistent_id,
-                            :foreign_key => :from_station_persistent_id
-  belongs_to :to_station, :class_name => 'StopArea',
-                          :primary_key => :persistent_id,
-                          :foreign_key => :to_station_persistent_id
+  belongs_to :from_station, :class_name => 'StopArea'
+  belongs_to :to_station, :class_name => 'StopArea'
   belongs_to :transport_mode
   has_many :comments, :as => :commented, :order => 'confirmed_at asc'
   before_create :set_lat_lon_and_coords
@@ -18,6 +14,10 @@ class SubRoute < ActiveRecord::Base
   is_route_or_sub_route
   is_location
   include FixMyTransport::GeoFunctions
+  # This model is part of the transport data that is versioned by data generations.
+  # This means they have a default scope of models valid in the current data generation.
+  # See lib/fixmytransport/data_generations
+  exists_in_data_generation()
 
   def points
     [from_station, to_station]
