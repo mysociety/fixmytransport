@@ -190,10 +190,7 @@ namespace :nptdr do
       transport_mode = ENV['MODE']
       load_run = ENV['LOAD_RUN']
       zip = ENV['FILE']
-      Route.paper_trail_off
-      RouteSegment.paper_trail_off
-      RouteOperator.paper_trail_off
-      JourneyPattern.paper_trail_off
+      PaperTrail.enabled = false
       parser = Parsers::TransxchangeParser.new
       Zip::ZipFile.foreach(zip) do |txc_file|
         puts txc_file
@@ -205,10 +202,7 @@ namespace :nptdr do
           route.class.add!(route, verbose=true)
         end
       end
-      Route.paper_trail_on
-      RouteSegment.paper_trail_on
-      RouteOperator.paper_trail_on
-      JourneyPattern.paper_trail_on
+      PaperTrail.enabled = true
     end
 
     desc 'Loads route data from TSV files named *.tsv in a directory specified as DIR=dirname'
@@ -306,8 +300,8 @@ namespace :nptdr do
 
     desc 'Deletes routes without stops'
     task :delete_routes_without_stops => :environment do
-      Route.find_each(:conditions => ['route_segments.id is null'],
-                         :include => 'route_segments') do |route|
+      Route.current.find_each(:conditions => ['route_segments.id is null'],
+                              :include => 'route_segments') do |route|
         Route.destroy(route.id)
       end
     end
@@ -316,7 +310,7 @@ namespace :nptdr do
       if admin_area_name == 'National'
         filename = 'National.tsv'
       else
-        region = Region.find(:first, :conditions => ['name = ?', region_name])
+        region = Region.current.find(:first, :conditions => ['name = ?', region_name])
         admin_areas = region.admin_areas.find(:all, :conditions => ['name = ?', admin_area_name])
         raise "More than one admin_area called #{admin_area_name} in #{region_name}" if admin_areas.size > 1
         raise "No admin area #{admin_area_name} found in #{region_name}" if admin_areas.size < 1
@@ -472,7 +466,7 @@ namespace :nptdr do
     task :merge_consecutive_bus_route_pairs => :environment do
       count = 0
       bus_mode = TransportMode.find_by_name("Bus")
-      Route.find_each(:conditions => ['transport_mode_id = ?', bus_mode]) do |route|
+      Route.current.find_each(:conditions => ['transport_mode_id = ?', bus_mode]) do |route|
         next_route = Route.find(:first,
                                 :conditions => ['transport_mode_id = ? and id > ?', 1, route.id],
                                 :order => 'id asc')
@@ -502,8 +496,8 @@ namespace :nptdr do
       results.each do |result|
         cached_description = result['cached_description']
         operator_code = result['operator_code']
-        routes = Route.find(:all, :conditions => ['cached_description = ? and operator_code = ?',
-                                                   cached_description, operator_code])
+        routes = Route.current.find(:all, :conditions => ['cached_description = ? and operator_code = ?',
+                                                          cached_description, operator_code])
         next if routes.empty?
         options = { :any_admin_area => true,
                     :require_match_fraction => 1.0,
@@ -520,7 +514,7 @@ namespace :nptdr do
     task :merge_national_routes => :environment do
       route_type = ENV['ROUTE_TYPE']
       total = route_type.constantize.maximum(:id)
-      great_britain = Region.find_by_name('Great Britain')
+      great_britain = Region.current.find_by_name('Great Britain')
       offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : route_type.constantize.minimum(:id, :conditions => ['region_id = ?', great_britain])
       puts "Merging routes ..."
       while offset < total
@@ -533,7 +527,7 @@ namespace :nptdr do
 
     desc 'Merges a set of national routes into routes from admin areas'
     task :merge_national_route_set => :environment do
-      great_britain = Region.find_by_name('Great Britain')
+      great_britain = Region.current.find_by_name('Great Britain')
       offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : 1
       route_type = ENV['ROUTE_TYPE'].constantize
       max = offset + 100
@@ -556,8 +550,8 @@ namespace :nptdr do
 
     desc 'Generate list of merge candidates from national routes'
     task :generate_merge_candidates_national => :environment do
-      great_britain = Region.find_by_name('Great Britain')
-      routes = BusRoute.find(:all, :conditions => ['region_id = ?
+      great_britain = Region.current.find_by_name('Great Britain')
+      routes = BusRoute.current.find(:all, :conditions => ['region_id = ?
                                                      AND id NOT IN (
                                                       SELECT route_id
                                                       FROM route_operators)', great_britain])
@@ -577,7 +571,9 @@ namespace :nptdr do
                                      AND a.number = b.number
                                      AND a.transport_mode_id = 1
                                      AND b.transport_mode_id = 1
-                                     AND a.cached_description = b.cached_description")
+                                     AND a.cached_description = b.cached_description
+                                     AND generation_low <= #{CURRENT_GENERATION}
+                                     AND generation_high >= #{CURRENT_GENERATION}")
        routes.each do |route|
          others = Route.find_existing_routes(route, options={:skip_operator_comparison => true,
                                                              :generation => CURRENT_GENERATION})
@@ -605,7 +601,7 @@ namespace :nptdr do
 
     desc 'Adds region associations based on route localities'
     task :add_route_regions => :environment do
-      total = Route.maximum(:id)
+      total = Route.current.maximum(:id)
       offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : Route.minimum(:id)
       puts "Adding locations for routes ..."
       while offset < total
@@ -620,8 +616,8 @@ namespace :nptdr do
     task :add_region_to_route_set => :environment do
       offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : 1
       max = offset + 100
-      great_britain = Region.find_by_name('Great Britain')
-      Route.find_each(:conditions => ['id >= ? AND id <= ?', offset, max]) do |route|
+      great_britain = Region.current.find_by_name('Great Britain')
+      Route.current.find_each(:conditions => ['id >= ? AND id <= ?', offset, max]) do |route|
         regions = route.localities.map{ |locality| locality.admin_area.region }.uniq
         if regions.size > 1
           regions = [great_britain]
@@ -653,8 +649,8 @@ namespace :nptdr do
     task :add_route_locality_sets => :environment do
       offset = ENV['OFFSET'] ? ENV['OFFSET'].to_i : 1
       max = offset + 100
-      Route.paper_trail_off
-      Route.find_each(:conditions => ['id >= ? AND id <= ?', offset, max]) do |route|
+      PaperTrail.enabled = false
+      Route.current.find_each(:conditions => ['id >= ? AND id <= ?', offset, max]) do |route|
         puts route.id
         locality_ids = []
         route.stops.each do |stop|
@@ -667,13 +663,13 @@ namespace :nptdr do
         end
         route.save!
       end
-      Route.paper_trail_on
+      PaperTrail.enabled = true
     end
 
     desc 'Adds lats and lons to routes calculated from stops'
     task :add_route_coords => :environment do
-      Route.paper_trail_off
-      Route.find_each(:conditions => ["lat is null"]) do |route|
+      PaperTrail.enabled = false
+      Route.current.find_each(:conditions => ["lat is null"]) do |route|
         puts route.name
         if ! route.lat
           lons = route.stops.map{ |element| element.lon }
@@ -685,40 +681,19 @@ namespace :nptdr do
           route.save!
         end
       end
-      Route.paper_trail_on
+      PaperTrail.enabled = true
     end
 
     desc 'Cache route descriptions'
     task :cache_route_descriptions => :environment do
-      Route.paper_trail_off
-      Route.find_each(:conditions => ["cached_description is null"]) do |route|
+      PaperTrail.enabled = false
+      Route.current.find_each(:conditions => ["cached_description is null"]) do |route|
         route.cached_description = route.description
         route.save!
       end
-      Route.paper_trail_on
+      PaperTrail.enabled = true
     end
 
-    desc 'Adds stop_area_ids to route_segments for train, ferry and metro station interchange and platform stops'
-    task :add_stop_areas_to_route_segments => :environment do
-      conditions = ["stop_type in (?)", StopType.station_part_types]
-      station_types = StopType.station_part_types_to_station_types
-      interchange_stops = Stop.find_each(:conditions => conditions) do |interchange_stop|
-        station_stop_area = interchange_stop.root_stop_area(station_types[interchange_stop.stop_type])
-        if !station_stop_area
-          puts  "No station for #{interchange_stop.name}"
-          next
-        end
-        # puts "Adding #{station_stop_area.name} to segments for #{interchange_stop.name}"
-        interchange_stop.route_segments_as_from_stop.each do |route_segment|
-          route_segment.from_stop_area_id = station_stop_area.id
-          route_segment.save!
-        end
-        interchange_stop.route_segments_as_to_stop.each do |route_segment|
-          route_segment.to_stop_area_id = station_stop_area.id
-          route_segment.save!
-        end
-      end
-    end
 
     desc 'Generate list of 100 routes for data audit'
     task :generate_audit_set => :environment do
@@ -727,7 +702,7 @@ namespace :nptdr do
       audit_file = File.open("#{RAILS_ROOT}/data/audit.tsv", 'w')
       headers = ["Route ID", "Description", "URL", "Operators", "Does the description map to more than one (identical looking) route?", "Do the route terminuses look about right compared to any external source you can find?", "Is the operator right (if there is one)?"]
       audit_file.write(headers.join("\t") + "\n")
-      random_routes = Route.find(:all, :order => 'random()', :limit => 100)
+      random_routes = Route.current.find(:all, :order => 'random()', :limit => 100)
       random_routes.each do |route|
         route_url = route_url(route.region, route, :host => MySociety::Config.get("DOMAIN", "localhost:3000"))
         route_operators = route.operators.map{|operator| operator.name}.to_sentence

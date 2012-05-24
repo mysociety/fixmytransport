@@ -74,7 +74,7 @@ namespace :db do
   desc 'Mark records as loaded - triggers stricter validation'
   task :mark_loaded => :environment do
     [Stop, StopArea, Route].each do |model_type|
-      model_type.find_each do |instance|
+      model_type.current.find_each do |instance|
         instance.loaded = true
         instance.save!
       end

@@ -13,7 +13,7 @@ namespace :tnds do
     end
     query = query_conditions.join(" OR ")
     conditions =  [query] + params
-    operators = Operator.find(:all, :conditions => conditions)
+    operators = Operator.current.find(:all, :conditions => conditions)
     puts "Loose query found #{operators.size} #{operators.inspect}" if verbose
     # if loose query is ambiguous, try without short name
     query_conditions = []
@@ -31,7 +31,7 @@ namespace :tnds do
 
       query = query_conditions.join(" OR ")
       conditions =  [query] + params
-      operators = Operator.find(:all, :conditions => conditions)
+      operators = Operator.current.find(:all, :conditions => conditions)
       puts "Strict query found #{operators.size} operators" if verbose
     end
     operators
@@ -123,7 +123,7 @@ namespace :tnds do
         if !new_data[operator_info]
           puts "Looking for #{short_name} #{trading_name} #{license_name}" if verbose
           if manual_name = (manual_matches[short_name] || manual_matches[trading_name])
-            operators = Operator.find(:all, :conditions => ['lower(name) = ?', manual_name.downcase])
+            operators = Operator.current.find(:all, :conditions => ['lower(name) = ?', manual_name.downcase])
           else
             operators = operators_from_info(short_name, license_name, trading_name, verbose)
             if operators.empty?
@@ -132,7 +132,8 @@ namespace :tnds do
               short_name_canonical = short_name_canonical.gsub('Stagecoach', 'Stagecoach in')
               short_name_canonical = short_name_canonical.gsub('&amp;', '&')
               if short_name_canonical != short_name
-                operators = Operator.find(:all, :conditions => ['lower(name) = ?', short_name_canonical.downcase])
+                operators = Operator.current.find(:all, :conditions => ['lower(name) = ?',
+                                                                         short_name_canonical.downcase])
               end
              end
           end
@@ -188,7 +189,7 @@ namespace :tnds do
           new_operators += 1
         end
         region_data.each do |region_name, operator_codes|
-          region = Region.find_by_name(region_name)
+          region = Region.current.find_by_name(region_name)
           raise "No region found for name #{region_name}" unless region
           operator_codes.each do |operator_code|
             operator.operator_codes.build(:region => region, :code => operator_code )
@@ -317,10 +318,7 @@ namespace :tnds do
       else
         regions_as = :index
       end
-      Route.paper_trail_off
-      RouteSegment.paper_trail_off
-      RouteOperator.paper_trail_off
-      JourneyPattern.paper_trail_off
+      PaperTrail.enabled = false
       parser = Parsers::TransxchangeParser.new
       file_glob = File.join(ENV['DIR'], "**/*.xml")
       index_file = File.join(ENV['DIR'], 'TravelineNationalDataSetFilesList.txt')
@@ -350,10 +348,7 @@ namespace :tnds do
           puts "saved as #{route.id}" if verbose
         end
       end
-      Route.paper_trail_on
-      RouteSegment.paper_trail_on
-      RouteOperator.paper_trail_on
-      JourneyPattern.paper_trail_on
+      PaperTrail.enabled = true
     end
 
   end
@@ -415,7 +410,7 @@ namespace :tnds do
         conditions = { :conditions => ['routes.previous_id IS NULL and transport_mode_id != ?
                                         AND route_operators.id IS NOT NULL', train_mode],
                        :include => :route_operators }
-        Route.find_each(conditions) do |route|
+        Route.current.find_each(conditions) do |route|
           puts "Looking for #{route.number}" if verbose
           find_previous_for_route(route, verbose, dryrun)
         end
@@ -471,10 +466,7 @@ namespace :tnds do
     task :train_routes => :environment do
       verbose = check_verbose
       dryrun = check_dryrun
-      Route.paper_trail_off
-      RouteSegment.paper_trail_off
-      RouteOperator.paper_trail_off
-      JourneyPattern.paper_trail_off
+      PaperTrail.enabled = false
 
       train_mode = TransportMode.find_by_name('Train')
       Route.in_generation(PREVIOUS_GENERATION).find_each(:conditions => ["transport_mode_id = ?", train_mode]) do |route|
@@ -528,10 +520,7 @@ namespace :tnds do
           new_gen_route.save!
         end
       end
-      Route.paper_trail_on
-      RouteSegment.paper_trail_on
-      RouteOperator.paper_trail_on
-      JourneyPattern.paper_trail_on
+      PaperTrail.enabled = true
     end
   end
 

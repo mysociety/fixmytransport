@@ -1,4 +1,4 @@
-namespace :crawler do 
+namespace :crawler do
 
   def connect_to_site
     require 'net/http'
@@ -13,7 +13,7 @@ namespace :crawler do
       yield http
     end
   end
-  
+
   def make_request(http, path)
     puts path
     req = Net::HTTP::Get.new(path)
@@ -28,40 +28,40 @@ namespace :crawler do
     response = http.request(req)
     puts response.code
   end
-  
-  desc 'Spider the site route pages' 
-  task :routes => :environment do 
+
+  desc 'Spider the site route pages'
+  task :routes => :environment do
     connect_to_site do |http|
-      Route.find_each(:include => 'region') do |route|
-        path = route_path(route.region, route) 
+      Route.current.find_each(:include => 'region') do |route|
+        path = route_path(route.region, route)
         make_request(http, path)
       end
     end
   end
-  
-  desc 'Spider the site stop pages' 
-  task :stops => :environment do 
+
+  desc 'Spider the site stop pages'
+  task :stops => :environment do
     if ENV['START_ID']
       conditions = ['id > ?', ENV['START_ID']]
     else
       conditions = nil
     end
     connect_to_site do |http|
-      Stop.find_each(:conditions => conditions, :include => 'locality') do |stop|
+      Stop.current.find_each(:conditions => conditions, :include => 'locality') do |stop|
         path = stop_path(stop.locality, stop)
         make_request(http, path)
       end
     end
   end
-  
-  desc 'Spider the site stop area pages' 
-  task :stop_areas => :environment do 
+
+  desc 'Spider the site stop area pages'
+  task :stop_areas => :environment do
     connect_to_site do |http|
-      StopArea.find_each(:include => 'locality', :conditions => ['area_type in (?)', StopAreaType.primary_types]) do |stop_area|
+      StopArea.current.find_each(:include => 'locality', :conditions => ['area_type in (?)', StopAreaType.primary_types]) do |stop_area|
         path = location_path(stop_area)
         make_request(http, path)
       end
     end
   end
-  
+
 end

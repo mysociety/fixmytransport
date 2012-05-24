@@ -107,9 +107,9 @@ namespace :temp do
                                                                   stop_area_operator.operator_id])
         if !existing
           puts "Deleted record #{stop_area_operator.stop_area.name} #{stop_area_operator.operator.name}"
-          StopAreaOperator.paper_trail_off
+          PaperTrail.enabled = false
           stop_area_operator.save
-          StopAreaOperator.paper_trail_on
+          PaperTrail.enabled = true
           stop_area_operator.destroy
           deletions += 1
         end

@@ -3,19 +3,6 @@ namespace :nptg do
 
   include FixMyTransport::DataLoader
 
-  namespace :match do
-
-    desc 'Matches stops to localities using the nptg_locality_code field'
-    task :stops_to_localities => :environment do
-      Stop.find_each do |stop|
-        locality = Locality.current.find_by_code(stop.nptg_locality_code)
-        stop.locality = locality
-        stop.save!
-      end
-    end
-
-  end
-
   namespace :load do
 
     desc "Loads regions from a CSV file specified as FILE=filename.
@@ -50,7 +37,7 @@ namespace :nptg do
 
     desc "Updates districts with the admin areas given in the locality data"
     task :add_district_admin_areas => :environment do
-      District.find_each(:conditions => ['admin_area_id is null']) do |district|
+      District.current.find_each(:conditions => ['admin_area_id is null']) do |district|
         admin_areas = district.localities.map{ |locality| locality.admin_area }.uniq
         puts "#{district.name} has #{district.localities.size} localities"
         raise "More than one admin area for district #{district.name} #{admin_areas.inspect}" unless admin_areas.size <= 1
@@ -90,7 +77,7 @@ namespace :nptg do
 
     desc 'Split the name and qualifier for localities, which in the 2010 data release are in one field with the qualifier in brackets'
     task :split_locality_qualifiers => :environment do
-      Locality.find_each(:conditions => ["name like ?", '%%(%%']) do |locality|
+      Locality.current.find_each(:conditions => ["name like ?", '%%(%%']) do |locality|
         name_pattern = /\s*(.*)\s+\((.*)\)\s*/
         match_data = name_pattern.match(locality.name)
         name = match_data[1]

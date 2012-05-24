@@ -70,8 +70,8 @@ namespace :naptan do
     desc "Deletes stop areas with no stops"
     task :delete_unpopulated_stop_areas => :environment do
       count = 0
-      StopArea.find_each(:conditions => ['stop_area_memberships.id is null'],
-                         :include => 'stop_area_memberships') do |stop_area|
+      StopArea.current.find_each(:conditions => ['stop_area_memberships.id is null'],
+                                 :include => 'stop_area_memberships') do |stop_area|
         puts stop_area.name
         puts stop_area.area_type
         count += 1
@@ -125,31 +125,27 @@ namespace :naptan do
 
     desc 'Add locality_id to stop areas'
     task :add_locality_to_stop_areas => :environment do
-      StopArea.connection.execute("DELETE
-                                   FROM slugs
-                                   WHERE sluggable_type = 'StopArea'
-                                   AND scope is null;")
-      StopArea.paper_trail_off
-      StopArea.find_each(:conditions => ['locality_id is NULL']) do |stop_area|
+      PaperTrail.enabled = false
+      StopArea.current.find_each(:conditions => ['locality_id is NULL']) do |stop_area|
         puts stop_area.name
         locality = find_stop_area_locality(stop_area)
         stop_area.locality = find_stop_area_locality(stop_area)
         stop_area.save!
       end
-      StopArea.paper_trail_on
+      PaperTrail.enabled = true
     end
 
     desc 'Add locality_id to any stop missing it'
     task :add_locality_to_stops => :environment do
-      Stop.paper_trail_off
+      PaperTrail.enabled = false
       extra_conditions = "locality_id is not null"
-      Stop.find_each(:conditions => ['locality_id is NULL']) do |stop|
+      Stop.current.find_each(:conditions => ['locality_id is NULL']) do |stop|
         nearest_stop = Stop.find_nearest_current(stop.easting, stop.northing, exclude_id=stop.id, extra_conditions)
         puts stop.inspect
         stop.locality = nearest_stop.locality
         stop.save!
       end
-      Stop.paper_trail_on
+      PaperTrail.enabled = true
     end
 
     desc 'Add TIPLOC and CRS codes to stops'

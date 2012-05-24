@@ -94,11 +94,11 @@ namespace :noc do
     task :stop_operators => :environment do
       dryrun = check_dryrun
       verbose = check_verbose
-      StopOperator.paper_trail_off
+      PaperTrail.enabled = false
       # At the moment, the only stop operator records are for the Isle of Wight bus stops
       # run by Southern Vectis
-      southern_vectis = Operator.find_by_name('Southern Vectis')
-      isle_of_wight = AdminArea.find_by_name('Isle of Wight')
+      southern_vectis = Operator.current.find_by_name('Southern Vectis')
+      isle_of_wight = AdminArea.current.find_by_name('Isle of Wight')
       isle_of_wight.localities.each do |locality|
         locality.stops.each do |stop|
           puts "Creating stop operator for #{stop.common_name} #{southern_vectis.name}"
@@ -114,7 +114,7 @@ namespace :noc do
           end
         end
       end
-      StopOperator.paper_trail_on
+      PaperTrail.enabled = true
     end
 
   end

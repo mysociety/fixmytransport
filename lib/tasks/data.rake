@@ -136,7 +136,7 @@ namespace :data do
     File.open(File.join(ENV['DIR'], 'operator_contacts.tsv'), 'w') do |operator_contact_file|
       operator_contact_file.write("ID\tOperator\tCompany no\tRegistered address\tCompany URL\tContact category\tContact location\tContact email\tNotes\tRoute count\tURL - has list of routes\n")
 
-      Operator.find(:all, :order => 'name').each do |operator|
+      Operator.current.find(:all, :order => 'name').each do |operator|
         if operator.routes.count > 0
           if operator.operator_contacts.empty?
             operator_contact_file.write([operator.id,
