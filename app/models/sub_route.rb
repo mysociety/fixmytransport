@@ -70,15 +70,6 @@ class SubRoute < ActiveRecord::Base
     name
   end
 
-  def make_routes
-    find_options = { :transport_modes => [TransportMode.find_by_name('Train').id],
-                     :as_terminus => false }
-    found_routes = Route.find_all_by_locations([from_station], [to_station], find_options)
-    found_routes.each do |route|
-      self.route_sub_routes.create!(:route => route)
-    end
-  end
-
   # store a rough center point as coords and lat/lon
   def set_lat_lon_and_coords
     lons = [from_station.lon, to_station.lon]
