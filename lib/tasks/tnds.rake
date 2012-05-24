@@ -362,25 +362,15 @@ namespace :tnds do
   def find_previous_for_route(route, verbose, dryrun)
     operators = route.operators.map{ |operator| operator.name }.join(", ")
     puts "Route id: #{route.id}, number: #{route.number}, operators: #{operators}" if verbose
-    # Call these functions on the route to make sure stops, stop areas and route operators are queried
-    # before we enter the find_all_by_number_and_common_stop method, which is scoped to
-    # the previous data generation
-    route.stop_area_codes
-    route.stop_codes
-    route.route_operators(force_reload=true)
-    previous = nil
-    FixMyTransport::DataGenerations.in_generation(PREVIOUS_GENERATION) do
-      previous = Route.find_existing_routes(route)
-      puts "Found #{previous.size} routes" if verbose
+    previous = Route.find_existing(route, { :generation => PREVIOUS_GENERATION })
+    puts "Found #{previous.size} routes" if verbose
 
-      if previous.size == 0
-        previous = Route.find_existing_routes(route, { :skip_operator_comparison => true,
-                                                       :require_match_fraction => 0.8 })
-        puts "Found #{previous.size} routes, on complete stop match without operators" if verbose
-      end
-
+    if previous.size == 0
+      previous = Route.find_existing(route, { :skip_operator_comparison => true,
+                                              :require_match_fraction => 0.8,
+                                              :generation => PREVIOUS_GENERATION })
+      puts "Found #{previous.size} routes, on complete stop match without operators" if verbose
     end
-
 
     if previous.size > 1
       # discard any of the routes that have other operators

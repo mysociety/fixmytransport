@@ -33,6 +33,7 @@ aldershot:
   modification: MyString
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= AdminArea.next_persistent_id %>
 london:
   code: "505"
   atco_code: "606"
@@ -46,3 +47,4 @@ london:
   modification: MyString
   generation_low: <%= CURRENT_GENERATION %>
   generation_high: <%= CURRENT_GENERATION %>
+  persistent_id: <%= AdminArea.next_persistent_id %>

@@ -275,7 +275,7 @@ class Route < ActiveRecord::Base
                              #{to_terminus_clause}))"
     stop_area_conditions = [stop_area_sql] + params
     stop_areas = StopArea.find(:all, :conditions => stop_area_conditions,
-                            :include => :locality)
+                                     :include => :locality)
     return stops + stop_areas
   end
 
@@ -474,29 +474,21 @@ class Route < ActiveRecord::Base
   # Return routes with this number and transport mode that have a stop or stop area in common with
   # the route given
   def self.find_all_by_number_and_common_stop(new_route, options={})
-    # If this is the first call to these methods on the new_route model (they are memoized), note
-    # that is will be executed in the current scope of the models concerned. i.e. whatever the data
-    # generation conditions for the current scope on the models are, will be applied.
     stop_codes = new_route.stop_codes
     stop_area_codes = new_route.stop_area_codes
+    generation = options[:generation] || CURRENT_GENERATION
     # do we think we know the operator for this route? If so, return any route with the same operator that
     # meets our other criteria. If we don't know the operator, or we pass the :use_source_admin_areas option
     # only return routes with the same source_admin_area operator code (optionally only from the same admin area)
     # N.B. only routes loaded from NPTDR will have source_admin_areas
     if ! options[:skip_operator_comparison]
-      # Using length, not size on the route passed in to this method. Size requeries the database,
-      # length just looks at the length of the loaded association. When using changing scopes,
-      # as in the data_generations code, size will apply the current scope in database queries
-      # so may produce unexpected results.
       if new_route.route_operators.length >= 1 && !options[:use_source_admin_areas]
-        # Use persistent ids to generate operators as the passed-in route may belong
-        # to a different generation
-        operator_ids = new_route.route_operators.map{ |route_operator| route_operator.operator_id }
-        operators = Operator.find(:all, :conditions => ['id in (?)', operator_ids])
-        operator_clause = "AND operators.persistent_id in (?)"
-        operator_params = [ operators.map{ |operator| operator.persistent_id } ]
+        operator_ids = new_route.route_operators.map do |route_operator|
+          Operator.find_in_generation_by_id(route_operator.operator_id, generation).id
+        end
+        operator_clause = "AND route_operators.operator_id in (?)"
+        operator_params = [ operator_ids ]
       else
-        source_admin_area = new_route.route_source_admin_areas.first
         operator_clauses = []
         operator_params = []
 
@@ -506,9 +498,10 @@ class Route < ActiveRecord::Base
           route_operator_clauses = []
 
           if ! options[:any_admin_area]
-            if route_source_admin_area.source_admin_area_id
+            admin_area_id = route_source_admin_area.source_admin_area_id
+            if admin_area_id
               route_operator_clauses << "(route_source_admin_areas.source_admin_area_id = ? AND "
-              operator_params << route_source_admin_area.source_admin_area_id
+              operator_params << AdminArea.find_in_generation_by_id(admin_area_id, generation)
             else
               route_operator_clauses << "(route_source_admin_areas.source_admin_area_id is NULL AND "
             end
@@ -539,10 +532,10 @@ class Route < ActiveRecord::Base
     conditions += operator_params
     conditions += id_params
 
-    routes = Route.find(:all, :conditions => conditions,
-                        :include => [ {:journey_patterns => {:route_segments => [:from_stop, :to_stop] }},
-                                       { :route_operators => :operator },
-                                       :route_source_admin_areas ])
+    routes = Route.in_generation(generation).find(:all, :conditions => conditions,
+                                :include => [ {:journey_patterns => {:route_segments => [:from_stop, :to_stop] }},
+                                               :route_operators,
+                                               :route_source_admin_areas ])
     routes_with_same_stops = []
 
     routes.each do |route|
@@ -580,7 +573,8 @@ class Route < ActiveRecord::Base
   # Accepts an array of stops or an array of arrays of locations (stops or stop areas) as first parameter.
   # If passed the latter, will find routes that pass through at least one location in
   # each array. Additional params to constrain the search can be passed as options.
-  def self.find_all_by_locations(stops_or_stop_areas, options)
+  def self.find_all_by_locations(from_locations, to_locations, options)
+    generation = options[:generation] || CURRENT_GENERATION
     from_terminus_clause = ''
     to_terminus_clause = ''
     params = []
@@ -593,46 +587,41 @@ class Route < ActiveRecord::Base
 
     if options[:operator_id]
       condition_string += " AND route_operators.operator_id = ? "
-      params << options[:operator_id]
+      params << Operator.find_in_generation_by_id(options[:operator_id], generation)
       include_params << :route_operators
     end
 
     if options[:source_admin_area]
+      admin_area = AdminArea.find_in_generation(options[:source_admin_area].source_admin_area, generation)
       condition_string += " AND route_source_admin_areas.operator_code = ?
                             AND route_source_admin_areas.source_admin_area_id = ?"
       params << options[:source_admin_area].operator_code
-      params << options[:source_admin_area].source_admin_area_id
+      params << admin_area.id
       include_params << :route_source_admin_areas
     end
 
     include_params << :route_segments
     joins = ''
     last_index = nil
-    stops_or_stop_areas.each_with_index do |item,index|
+
+    [from_locations, to_locations].each_with_index do |locations,index|
       if options[:as_terminus]
         from_terminus_clause = "rs#{index}.from_terminus = 't' and"
         to_terminus_clause = "rs#{index}.to_terminus = 't' and"
       end
-      if item.is_a? Array
-        stop_id_criteria = "in (?)"
-        if item.all?{ |location| location.is_a?(StopArea) }
-          location_key = 'stop_area_id'
-        else
-          location_key = 'stop_id'
-        end
+      if locations.all?{ |location| location.is_a?(StopArea) }
+        location_key = 'stop_area_id'
       else
-        stop_id_criteria = "= ?"
-        if item.is_a?(StopArea)
-          location_key = 'stop_area_id'
-        else
-          location_key = 'stop_id'
-        end
+        location_key = 'stop_id'
       end
       joins += " inner join route_segments rs#{index} on routes.id = rs#{index}.route_id"
-      condition_string += " and ((#{from_terminus_clause} rs#{index}.from_#{location_key} #{stop_id_criteria})"
-      condition_string += " or (#{to_terminus_clause} rs#{index}.to_#{location_key} #{stop_id_criteria}))"
-      params << item
-      params << item
+      condition_string += " and ((#{from_terminus_clause} rs#{index}.from_#{location_key} in (?))"
+      condition_string += " or (#{to_terminus_clause} rs#{index}.to_#{location_key} in (?)))"
+      locations_in_generation = locations.map do |location|
+        location.class.find_in_generation(location, generation)
+      end
+      params << locations_in_generation
+      params << locations_in_generation
       if last_index
         condition_string += " and rs#{index}.journey_pattern_id = rs#{last_index}.journey_pattern_id"
       end
@@ -646,7 +635,7 @@ class Route < ActiveRecord::Base
                         :limit => options[:limit]).uniq
     # The joins in the query above cause it to return instances with missing segments -
     # remap to clean route objects
-    Route.find(routes.map{ |route| route.id })
+    Route.in_generation(generation).find(routes.map{ |route| route.id })
   end
 
   def self.find_existing_routes(new_route, options={})
@@ -730,13 +719,13 @@ class Route < ActiveRecord::Base
   # Return train routes by the same operator that have the same terminuses
   def Route.find_existing_train_routes(new_route, options)
     operator_code = new_route.operator_code
-    options = { :as_terminus => true,
-                :transport_modes => [new_route.transport_mode_id] }
+    options.update({ :as_terminus => true,
+                     :transport_modes => [new_route.transport_mode_id] })
     if new_route.route_operators.size == 1
       options[:operator_id] = new_route.route_operators.first.operator_id
     else
       source_admin_area = new_route.route_source_admin_areas.first
-      options[:source_admin_area => source_admin_area]
+      options[:source_admin_area] = source_admin_area
     end
     found_routes = []
     new_route.journey_patterns.each do |journey_pattern|
@@ -744,7 +733,7 @@ class Route < ActiveRecord::Base
       to_terminus_segments = journey_pattern.route_segments.select{ |route_segment| route_segment.to_terminus? }
       from_terminuses = from_terminus_segments.map{ |route_segment| route_segment.from_stop_area }
       to_terminuses = to_terminus_segments.map{ |route_segment| route_segment.to_stop_area }
-      found_routes << Route.find_all_by_locations([from_terminuses, to_terminuses], options)
+      found_routes << Route.find_all_by_locations(from_terminuses, to_terminuses, options)
     end
     found_routes.flatten.uniq
   end
@@ -759,7 +748,7 @@ class Route < ActiveRecord::Base
 
   def self.add!(route, verbose=false)
     puts "Adding #{route.number}" if verbose
-    existing_routes = find_existing(route)
+    existing_routes = find_existing(route, { :generation => CURRENT_GENERATION })
     if existing_routes.empty?
       route.save!
       return route
@@ -772,7 +761,7 @@ class Route < ActiveRecord::Base
     duplicates.each do |duplicate|
       original = Route.find(original.id)
       puts "merging duplicates" if verbose
-      if find_existing(duplicate).include? original
+      if find_existing(duplicate, { :generation => CURRENT_GENERATION }).include? original
         merge_duplicate_route(duplicate, original)
       end
     end

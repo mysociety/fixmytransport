@@ -435,11 +435,12 @@ namespace :nptdr do
     def get_journey_patterns_to_replace(route, admin_area_name, stop, nptdr_parser, tried_codes)
       matched_journeys = {}
       if admin_area_name == 'National'
-        options = {:any_admin_area => true}
+        options = {:any_admin_area => true,
+                   :generation => CURRENT_GENERATION}
       else
         options = {}
       end
-      existing_routes = Route.find_all_by_number_and_common_stop(route, options)
+      existing_routes = Route.find_existing_routes(route, options)
       route.journey_patterns.each do |journey_pattern|
         stops = journey_pattern.stop_list()
         # for any journey pattern including the new stop
@@ -506,8 +507,9 @@ namespace :nptdr do
         next if routes.empty?
         options = { :any_admin_area => true,
                     :require_match_fraction => 1.0,
-                    :use_source_admin_areas => true }
-        found = Route.find_all_by_number_and_common_stop(routes.first, options)
+                    :use_source_admin_areas => true,
+                    :generation => CURRENT_GENERATION }
+        found = Route.find_existing_routes(routes.first, options)
         next if found.empty?
         puts "Merging #{found.map{|route| route.id }.join(" ")} to #{routes.first.id} for #{cached_description} #{operator_code}"
         Route.merge!(routes.first, found)
@@ -541,7 +543,8 @@ namespace :nptdr do
                                        AND id NOT IN (
                                          SELECT route_id
                                          FROM route_operators)', offset, max, great_britain]) do |route|
-        existing_routes = Route.find_all_by_number_and_common_stop(route, {:any_admin_area => true})
+        existing_routes = Route.find_existing_routes(route, {:any_admin_area => true,
+                                                             :generation => CURRENT_GENERATION})
         if existing_routes.size == 1
           existing_route = existing_routes.first
           puts "merging #{existing_route.cached_description} #{route.cached_description}"
@@ -559,7 +562,8 @@ namespace :nptdr do
                                                       SELECT route_id
                                                       FROM route_operators)', great_britain])
       routes.each do |route|
-        others = Route.find_all_by_number_and_common_stop(route, options={:skip_operator_comparison => true})
+        others = Route.find_existing_routes(route, options={:skip_operator_comparison => true,
+                                                            :generation => CURRENT_GENERATION})
         if ! others.empty?
           MergeCandidate.create!(:national_route => route, :regional_route_ids => others.map{|route| route.id}.join("|"))
         end
@@ -575,7 +579,8 @@ namespace :nptdr do
                                      AND b.transport_mode_id = 1
                                      AND a.cached_description = b.cached_description")
        routes.each do |route|
-         others = Route.find_all_by_number_and_common_stop(route, options={:skip_operator_comparison => true})
+         others = Route.find_existing_routes(route, options={:skip_operator_comparison => true,
+                                                             :generation => CURRENT_GENERATION})
          if ! others.empty?
            MergeCandidate.create!(:national_route => route, :regional_route_ids => others.map{|route| route.id}.join("|"))
          end

@@ -243,7 +243,7 @@ class Gazetteer
     end
     find_options = { :transport_modes => [ transport_mode ],
                      :as_terminus => false }
-    routes = Route.find_all_by_locations([from_stops, to_stops], find_options)
+    routes = Route.find_all_by_locations(from_stops, to_stops, find_options)
     return { :routes => routes, :from_stops => from_stops, :to_stops => to_stops }
   end
 

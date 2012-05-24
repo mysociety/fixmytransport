@@ -246,6 +246,8 @@ describe Route do
       @terminus_segments.each do |route_segment|
         journey_pattern.route_segments.build(:from_stop => route_segment.from_stop,
                                              :to_stop => route_segment.to_stop,
+                                             :from_stop_area => route_segment.from_stop_area,
+                                             :to_stop_area => route_segment.to_stop_area,
                                              :from_terminus => route_segment.from_terminus?,
                                              :to_terminus => route_segment.to_terminus?,
                                              :segment_order => route_segment.segment_order)
@@ -260,10 +262,13 @@ describe Route do
       @terminus_segments.each do |route_segment|
         journey_pattern.route_segments.build(:from_stop => route_segment.from_stop,
                                              :to_stop => route_segment.to_stop,
+                                             :from_stop_area => route_segment.from_stop_area,
+                                             :to_stop_area => route_segment.to_stop_area,
                                              :from_terminus => route_segment.from_terminus?,
-                                             :to_terminus => route_segment.to_terminus?)
+                                             :to_terminus => route_segment.to_terminus?,
+                                             :segment_order => route_segment.segment_order)
       end
-      Route.find_existing_train_routes(@route, {}).should_not include(@existing_route)
+      Route.find_existing_train_routes(@route, {}).should include(@existing_route)
     end
   end
 
