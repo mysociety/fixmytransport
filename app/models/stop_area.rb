@@ -63,7 +63,8 @@ class StopArea < ActiveRecord::Base
   # set attributes to include and exclude when performing model diffs
   diff :include => [:locality_id]
 
-  has_paper_trail :meta => { :replayable  => Proc.new { |stop_area| stop_area.replayable } }
+  has_paper_trail :meta => { :replayable  => Proc.new { |stop_area| stop_area.replayable },
+                             :persistent_id => Proc.new { |stop_area| stop_area.persistent_id } }
   before_save :cache_description, :set_metaphones, :update_coords
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area

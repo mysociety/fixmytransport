@@ -5,5 +5,6 @@ class StopOperator < ActiveRecord::Base
   exists_in_data_generation()
   belongs_to :operator
   belongs_to :stop
-  has_paper_trail
+  has_paper_trail :meta => { :replayable  => Proc.new { |stop_operator| stop_operator.replayable },
+                             :persistent_id => Proc.new { |stop_operator| stop_operator.persistent_id } }
 end

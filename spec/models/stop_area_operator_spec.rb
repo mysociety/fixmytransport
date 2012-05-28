@@ -23,18 +23,4 @@ describe StopAreaOperator do
   it_should_behave_like "a model that exists in data generations and is versioned"
 
 
-  describe 'when destroying a stop area operator' do
-
-    before do
-      @mock_stop_area = mock_model(StopArea)
-      @mock_operator = mock_model(Operator)
-      @mock_problem = mock_model(Problem)
-      @valid_attributes = {
-        :operator => @mock_operator,
-        :stop_area => @mock_stop_area
-      }
-    end
-
-  end
-
 end

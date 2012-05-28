@@ -58,12 +58,14 @@ module SharedBehaviours
 
       describe 'when a change is made' do
 
-        it 'should store the version with the replayable flag set to true' do
+        it 'should store the version with the persistent id and the replayable flag set to true' do
           with_versioning do
             @instance = @model_type.new(@default_attrs)
             @instance.versions.size.should == 0
             @instance.save!
             @instance.versions.size.should == 1
+            @instance.versions.first.persistent_id.should_not be_nil
+            @instance.versions.first.persistent_id.should == @instance.persistent_id
             @instance.versions.first.replayable.should == true
           end
         end

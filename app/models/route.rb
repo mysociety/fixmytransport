@@ -66,7 +66,8 @@ class Route < ActiveRecord::Base
   validates_inclusion_of :status, :in => self.statuses.keys
   cattr_reader :per_page
   has_friendly_id :short_name, :use_slug => true, :scope => :region
-  has_paper_trail :meta => { :replayable  => Proc.new { |route| route.replayable } }
+  has_paper_trail :meta => { :replayable  => Proc.new { |route| route.replayable },
+                             :persistent_id => Proc.new { |route| route.persistent_id } }
   attr_accessor :show_as_point, :operator_info, :missing_stops
   before_save [ :cache_route_coords,
                 :cache_area,

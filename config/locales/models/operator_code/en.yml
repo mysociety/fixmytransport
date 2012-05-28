@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        operator_code:
+          attributes:
+            persistent_id:
+              taken: ID already exists in data generation

@@ -51,7 +51,8 @@ class Operator < ActiveRecord::Base
   validate :noc_code_unique_in_generation
 
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
-  has_paper_trail :meta => { :replayable  => Proc.new { |operator| operator.replayable } }
+  has_paper_trail :meta => { :replayable  => Proc.new { |operator| operator.replayable },
+                             :persistent_id => Proc.new { |operator| operator.persistent_id } }
   cattr_reader :per_page
   @@per_page = 20
   has_friendly_id :name, :use_slug => true

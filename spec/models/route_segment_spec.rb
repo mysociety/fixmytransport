@@ -25,10 +25,21 @@ describe RouteSegment do
       :route_id => 1,
       :segment_order => 0
     }
+    @model_type = RouteSegment
+    @default_attrs = { :from_stop_id => 1,
+                       :to_stop_id => 1,
+                       :segment_order => 0 }
+    @expected_identity_hash = {}
+    @expected_temporary_identity_hash = {}
   end
 
   it "should create a new instance given valid attributes" do
     route_segment = RouteSegment.new(@valid_attributes)
     route_segment.valid?.should be_true
   end
+
+  it_should_behave_like "a model that exists in data generations"
+
+  it_should_behave_like "a model that exists in data generations and is versioned"
+
 end

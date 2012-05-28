@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        route_segment:
+          attributes:
+            persistent_id:
+              taken: ID already exists in data generation

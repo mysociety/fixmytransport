@@ -28,23 +28,24 @@ class RouteSegment < ActiveRecord::Base
   # virtual attribute used for adding new route segments
   attr_accessor :_add
   before_save :set_stop_areas
-  has_paper_trail
+  has_paper_trail :meta => { :replayable  => Proc.new { |route_segment| route_segment.replayable },
+                             :persistent_id => Proc.new { |route_segment| route_segment.persistent_id } }
   after_destroy :check_destroy_journey_pattern
 
   def check_destroy_journey_pattern
-    journey_pattern.destroy if journey_pattern.route_segments.empty?
+    journey_pattern.destroy if (journey_pattern && journey_pattern.route_segments.empty?)
   end
 
   def set_stop_areas
     station_part_stops = StopType.station_part_types
     station_types = StopType.station_part_types_to_station_types
 
-    if ! from_stop_area
+    if from_stop && ! from_stop_area
       if station_part_stops.include?(from_stop.stop_type)
         self.from_stop_area = from_stop.root_stop_area(station_types[from_stop.stop_type])
       end
     end
-    if ! to_stop_area
+    if to_stop && ! to_stop_area
       if station_part_stops.include?(to_stop.stop_type)
         self.to_stop_area = to_stop.root_stop_area(station_types[to_stop.stop_type])
       end

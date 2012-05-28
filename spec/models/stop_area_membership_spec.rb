@@ -33,8 +33,15 @@ describe StopAreaMembership do
 
   it_should_behave_like "a model that exists in data generations"
 
+  it_should_behave_like "a model that exists in data generations and is versioned"
+
   it "should create a new instance given valid attributes" do
     membership = StopAreaMembership.new(@valid_attributes)
     membership.valid?.should be_true
   end
+
+  after(:each) do
+    StopAreaMembership.destroy_all
+  end
+
 end

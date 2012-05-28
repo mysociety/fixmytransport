@@ -47,5 +47,9 @@ describe RouteOperator do
 
   end
 
+  after(:each) do
+    RouteOperator.destroy_all
+  end
+
 
 end

@@ -8,5 +8,6 @@ class OperatorCode < ActiveRecord::Base
                              :new_record_fields => [],
                              :update_fields => [] )
 
-  has_paper_trail :meta => { :replayable  => Proc.new { |operator_code| operator_code.replayable } }
+  has_paper_trail :meta => { :replayable  => Proc.new { |operator_code| operator_code.replayable },
+                             :persistent_id => Proc.new { |operator_code| operator_code.persistent_id } }
 end

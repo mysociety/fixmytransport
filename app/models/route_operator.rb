@@ -18,7 +18,8 @@ class RouteOperator < ActiveRecord::Base
 
   belongs_to :operator
   belongs_to :route
-  has_paper_trail :meta => { :replayable  => Proc.new { |route_operator| route_operator.replayable } }
+  has_paper_trail :meta => { :replayable  => Proc.new { |route_operator| route_operator.replayable },
+                             :persistent_id => Proc.new { |route_operator| route_operator.persistent_id } }
   # virtual attribute used for adding new route operators
   attr_accessor :_add
 
