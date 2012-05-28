@@ -14,7 +14,7 @@ require 'spec_helper'
 
 describe RouteOperator do
 
-  fixtures :routes, :operators
+  fixtures default_fixtures
 
   before(:each) do
     @mock_route = mock_model(Route)

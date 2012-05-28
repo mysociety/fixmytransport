@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe StopOperator do
 
-  fixtures :stops, :operators
+  fixtures default_fixtures
 
   before(:each) do
     @mock_stop = mock_model(Stop)
