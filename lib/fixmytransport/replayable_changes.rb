@@ -200,10 +200,9 @@ module FixMyTransport
       when 'create'
         changes[:generation_high] = [PREVIOUS_GENERATION, CURRENT_GENERATION]
         applied_changes = apply_changeset(model_name, changes, instance, verbose)
-          change_list << { :event => :create,
-                           :model => instance,
-                           :changes => changes }
-        end
+        change_list << { :event => :create,
+                         :model => instance,
+                         :changes => changes }
       when 'update'
         applied_changes = apply_changeset(model_name, changes, instance, verbose)
         if !applied_changes.empty?
@@ -212,7 +211,7 @@ module FixMyTransport
                            :changes => applied_changes }
         end
       when 'destroy'
-        puts "Destroying #{model_name} #{existing.id}"
+        puts "Destroying #{model_name} #{instance.id}"
         change_list <<  { :event => :destroy,
                           :model => instance }
       end
