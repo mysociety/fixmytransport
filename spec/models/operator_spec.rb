@@ -27,8 +27,6 @@ describe Operator do
     }
     @model_type = Operator
     @default_attrs = { :name => 'value for name' }
-    @expected_identity_hash = { :noc_code => 'NOXX' }
-    @expected_temporary_identity_hash = { :id => nil }
   end
 
   it_should_behave_like "a model that exists in data generations"

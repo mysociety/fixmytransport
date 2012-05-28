@@ -27,7 +27,6 @@ describe StopAreaMembership do
       :modification => "value for modification"
     }
     @default_attrs = {}
-    @expected_identity_hash = { :stop_id => 1, :stop_area_id => 1 }
     @model_type = StopAreaMembership
   end
 

@@ -49,8 +49,6 @@ describe Stop do
     @default_attrs = { :common_name => 'A test stop',
                        :status => 'ACT',
                        :stop_type => 'BCT' }
-    @expected_identity_hash = { :atco_code => 'a test atco_code' }
-    @expected_temporary_identity_hash = { :other_code => 'a test other code' }
   end
 
   it_should_behave_like "a model that exists in data generations"

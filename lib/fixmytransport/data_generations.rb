@@ -163,35 +163,12 @@ module FixMyTransport
 
     module InstanceMethods
 
-      # An identity hash identifies what is essentially the same object over different
-      # generations of data, when the object id may be different.
-      def get_identity_hash
-        identity_hash = self.identity_hash()
-        identity_type = :permanent
-        if identity_hash.values.all?{ |value| value.blank? }
-          identity_hash = self.temporary_identity_hash()
-          identity_type = :temporary
-          if identity_hash.values.all?{ |value| value.blank? }
-            raise "#{self} has neither permanent or temporary identity values"
-          end
-        end
-        return { :identity_hash => identity_hash,
-                 :identity_type => identity_type }
-      end
-
       def identity_hash
         if !self.class.data_generation_options_hash[:identity_fields]
           return {}
         else
           make_id_hash(self.class.data_generation_options_hash[:identity_fields])
         end
-      end
-
-      def temporary_identity_hash
-        if !self.class.data_generation_options_hash[:temporary_identity_fields]
-          raise "No temporary identity fields have been defined for #{self.class.to_s}"
-        end
-        make_id_hash(self.class.data_generation_options_hash[:temporary_identity_fields])
       end
 
       def make_id_hash(field_list)

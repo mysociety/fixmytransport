@@ -46,7 +46,6 @@ describe StopArea do
     @default_attrs = { :name => 'A test stop area',
                        :status => 'ACT' }
     @model_type = StopArea
-    @expected_identity_hash = { :code => 'value for code' }
   end
 
   it_should_behave_like "a model that exists in data generations"

@@ -94,24 +94,6 @@ module SharedBehaviours
 
       end
 
-
-      describe 'when asked for an identity hash' do
-
-        it 'should return an identity hash for an example instance' do
-          @model_type.new(@valid_attributes).identity_hash().should == @expected_identity_hash
-        end
-
-        it 'should return a temporary identity hash for an example instance or raise an error if no temporary identity keys are defined' do
-          if @model_type.data_generation_options_hash[:temporary_identity_fields]
-            @model_type.new(@valid_attributes).temporary_identity_hash().should == @expected_temporary_identity_hash
-          else
-            @expected_error = "No temporary identity fields have been defined for #{@model_type}"
-            lambda{ @model_type.new(@valid_attributes).temporary_identity_hash() }.should raise_error(@expected_error)
-          end
-        end
-
-      end
-
       describe 'when finding a model in another generation' do
 
         it 'should find a model in the generation' do

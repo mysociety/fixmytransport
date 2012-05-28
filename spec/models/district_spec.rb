@@ -30,7 +30,6 @@ describe District do
     }
     @model_type = District
     @default_attrs = {}
-    @expected_identity_hash = { :code => 'value for code'}
   end
 
   it_should_behave_like "a model that exists in data generations"

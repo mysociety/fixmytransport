@@ -32,8 +32,6 @@ describe Route do
                        :number => 'ZZ9',
                        :transport_mode_id => 1 }
     @model_type = Route
-    @expected_identity_hash = {}
-    @expected_temporary_identity_hash = { :id => nil }
   end
 
   it_should_behave_like "a model that exists in data generations"

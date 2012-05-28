@@ -31,7 +31,6 @@ describe RouteOperator do
       :operator_id => @operator.id,
       :route_id => @route.id
     }
-    @expected_identity_hash = { :operator_id => @mock_operator.id, :route_id => @mock_route.id }
   end
 
   it_should_behave_like "a model that exists in data generations"

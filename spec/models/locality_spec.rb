@@ -41,7 +41,6 @@ describe Locality do
     }
     @model_type = Locality
     @default_attrs = { :name => 'A test locality' }
-    @expected_identity_hash = { :code => "value for code" }
   end
 
   it_should_behave_like "a model that exists in data generations"

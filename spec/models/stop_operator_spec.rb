@@ -21,7 +21,6 @@ describe StopOperator do
     }
 
     @model_type = StopOperator
-    @expected_identity_hash = {}
   end
 
   it "should create a new instance given valid attributes" do

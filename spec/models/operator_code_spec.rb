@@ -9,8 +9,6 @@ describe OperatorCode do
     }
     @model_type = OperatorCode
     @default_attrs = { :code => 'a test code' }
-    @expected_identity_hash = { :region_id => 1, :operator_id => 1, :code => 'value for code' }
-    @expected_temporary_identity_hash = { :id => nil }
   end
 
   it "should create a new instance given valid attributes" do
