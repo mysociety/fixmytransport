@@ -10,8 +10,8 @@ class JourneyPattern < ActiveRecord::Base
                             :dependent => :destroy
   accepts_nested_attributes_for :route_segments, :allow_destroy => true, :reject_if => :route_segment_invalid
 
-  has_paper_trail :meta => { :replayable  => Proc.new { |journey_pattern| journey_pattern.replayable },
-                             :persistent_id => Proc.new { |journey_pattern| journey_pattern.persistent_id }}
+  has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
+                             :replay_of => Proc.new {|instance| instance.replay_of } }
 
   def route_segment_invalid(attributes)
     (attributes['_add'] != "1" and attributes['_destroy'] != "1") or \

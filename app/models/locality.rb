@@ -30,19 +30,6 @@ class Locality < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
   exists_in_data_generation( :identity_fields => [:code],
-                             :new_record_fields => [:name,
-                                                    :admin_area_id,
-                                                    :district_id,
-                                                    :qualifier_name,
-                                                    :easting,
-                                                    :northing],
-                             :update_fields => [:short_name,
-                                                :source_locality_type,
-                                                :grid_type,
-                                                :creation_datetime,
-                                                :modification_datetime,
-                                                :modification,
-                                                :revision_number],
                              :deletion_field => :modification,
                              :deletion_value => 'del' )
   belongs_to :admin_area

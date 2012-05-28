@@ -4,10 +4,8 @@ class OperatorCode < ActiveRecord::Base
   # This model is part of the transport data that is versioned by data generations.
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
-  exists_in_data_generation( :identity_fields => [:region_id, :operator_id, :code],
-                             :new_record_fields => [],
-                             :update_fields => [] )
+  exists_in_data_generation( :identity_fields => [:region_id, :operator_id, :code] )
 
-  has_paper_trail :meta => { :replayable  => Proc.new { |operator_code| operator_code.replayable },
-                             :persistent_id => Proc.new { |operator_code| operator_code.persistent_id } }
+  has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
+                             :replay_of => Proc.new { |instance| instance.replay_of } }
 end

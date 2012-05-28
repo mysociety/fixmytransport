@@ -48,18 +48,8 @@ class Stop < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
   exists_in_data_generation( :identity_fields => [:atco_code],
-                             :new_record_fields => [:common_name, :naptan_code, :plate_code,
-                                                    :landmark, :street, :crossing, :indicator,
-                                                    :bearing, :locality_id, :easting, :northing,
-                                                    :lon, :lat, :stop_type, :bus_stop_type,
-                                                    :easting, :northing, :status],
-                             :update_fields => [:short_common_name,
-                                                :town, :suburb, :locality_centre, :grid_type,
-                                                :administrative_area_code, :creation_datetime,
-                                                :modification_datetime, :modification, :revision_number],
                              :deletion_field => :modification,
                              :deletion_value => 'del',
-                             :temp_to_perm => { :other_code => :atco_code },
                              :auto_update_fields => [:cached_description, :cached_slug, :metro_stop,
                                                      :coords] )
   has_many :stop_area_memberships
@@ -82,8 +72,8 @@ class Stop < ActiveRecord::Base
   is_stop_or_stop_area
   is_location
   has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality
-  has_paper_trail :meta => { :replayable  => Proc.new { |stop| stop.replayable },
-                             :persistent_id => Proc.new { |stop| stop.persistent_id } }
+  has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
+                             :replay_of => Proc.new { |instance| instance.replay_of } }
   before_save :cache_description, :update_coords
   # set attributes to include and exclude when performing model diffs
   diff :include => [:locality_id]

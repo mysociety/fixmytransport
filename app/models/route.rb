@@ -24,8 +24,6 @@ class Route < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
   exists_in_data_generation( :identity_fields => [],
-                             :new_record_fields => [], # we don't know before loading which routes (no persistent external identifier)
-                             :update_fields => [], # match existing ones, so don't use these config options
                              :auto_update_fields => [:cached_description,
                                                      :cached_slug,
                                                      :lat,
@@ -66,8 +64,8 @@ class Route < ActiveRecord::Base
   validates_inclusion_of :status, :in => self.statuses.keys
   cattr_reader :per_page
   has_friendly_id :short_name, :use_slug => true, :scope => :region
-  has_paper_trail :meta => { :replayable  => Proc.new { |route| route.replayable },
-                             :persistent_id => Proc.new { |route| route.persistent_id } }
+  has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
+                             :replay_of => Proc.new { |instance| instance.replay_of } }
   attr_accessor :show_as_point, :operator_info, :missing_stops
   before_save [ :cache_route_coords,
                 :cache_area,

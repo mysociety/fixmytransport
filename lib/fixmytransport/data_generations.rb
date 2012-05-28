@@ -55,6 +55,9 @@ module FixMyTransport
         FixMyTransport::DataGenerations.data_generation_models << self
 
         cattr_accessor :data_generation_options_hash
+
+        # accessor used during replay of changes - see lib/replayable_changes.rb
+        attr_accessor :replay_of
         # Want this not to be inherited by instances
         class << self
           attr_accessor :replayable

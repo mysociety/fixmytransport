@@ -24,13 +24,6 @@ class AdminArea < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
   exists_in_data_generation( :identity_fields => [:atco_code, :code],
-                             :new_record_fields => [:name, :region_id, :country],
-                             :update_fields => [:short_name,
-                                                :national,
-                                                :creation_datetime,
-                                                :modification_datetime,
-                                                :modification,
-                                                :revision_number],
                              :deletion_field => :modification,
                              :deletion_value => 'del' )
   belongs_to :region

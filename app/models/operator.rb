@@ -20,11 +20,6 @@ class Operator < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
   exists_in_data_generation( :identity_fields => [:noc_code],
-                             :new_record_fields => [:name, :transport_mode_id],
-                             :update_fields => [:vosa_license_name,
-                                                :parent,
-                                                :ultimate_parent,
-                                                :vehicle_mode],
                              :auto_update_fields => [:cached_slug])
 
   has_many :route_operators, :dependent => :destroy
@@ -51,8 +46,8 @@ class Operator < ActiveRecord::Base
   validate :noc_code_unique_in_generation
 
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
-  has_paper_trail :meta => { :replayable  => Proc.new { |operator| operator.replayable },
-                             :persistent_id => Proc.new { |operator| operator.persistent_id } }
+  has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
+                             :replay_of => Proc.new {|instance| instance.replay_of } }
   cattr_reader :per_page
   @@per_page = 20
   has_friendly_id :name, :use_slug => true

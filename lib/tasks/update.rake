@@ -170,15 +170,13 @@ namespace :update do
     model = ENV['MODEL'].constantize
     only_replayable = (ENV['ALL'] == "1") ? false : true
     update_hash = get_updates(model, only_replayable=only_replayable, ENV['DATE'], verbose)
-    update_hash.each do |identity, changes|
-      identity_type = identity[:identity_type]
-      identity_hash = identity[:identity_hash]
+    update_hash.each do |persistent_id, changes|
       changes.each do |details_hash|
-        id = details_hash[:id]
+        version_id = details_hash[:version_id]
         event = details_hash[:event]
         date = details_hash[:date]
         changes = details_hash[:changes]
-        puts "#{id} #{date} #{event} #{identity_hash.inspect} #{changes.inspect}"
+        puts "#{version_id} #{date} #{event}: #{persistent_id} - #{changes.inspect}"
       end
     end
   end
@@ -193,48 +191,20 @@ namespace :update do
     outfile = File.open("data/#{model}_changes_#{Date.today.to_s(:db)}.tsv", 'w')
     headers = ['Change type']
     identity_fields = model.data_generation_options_hash[:identity_fields]
-    significant_fields = model.data_generation_options_hash[:new_record_fields] +
-                          model.data_generation_options_hash[:update_fields]
     identity_fields.each do |identity_field|
       headers << identity_field
     end
-    headers += ["Attribute", "Old value", "New value", "Data"]
+    headers += ["Data"]
     outfile.write(headers.join("\t")+"\n")
     change_list.each do |change_info|
       change_event = change_info[:event]
       instance = change_info[:model]
-      if change_event == :update
-        attribute = change_info[:attribute]
-        from_value = change_info[:from_value]
-        to_value = change_info[:to_value]
-        if attribute == :generation_high
-          data_row = ["New"]
-          identity_fields.each do |identity_field|
-            data_row << ''
-          end
-          data_row += ['', '', '']
-          new_instance_info = {}
-          significant_fields.each do |field|
-            value = instance.send(field)
-            if value
-              new_instance_info[field] = value
-            end
-          end
-          data_row << new_instance_info.inspect
-        elsif attribute == :coords
-        elsif significant_fields.include?(attribute)
-          data_row = ["Update"]
-          identity_fields.each do |identity_field|
-            data_row << instance.send(identity_field)
-          end
-          data_row += [attribute, from_value, to_value]
-        end
-      elsif change_event == :destroy
-        data_row = ["Destroy"]
-        identity_fields.each do |identity_field|
-          data_row << instance.send(identity_field)
-        end
+      changes = change_info[:changes]
+      data_row = [change_event.to_s]
+      identity_fields.each do |identity_field|
+        data_row << instance.send(identity_field)
       end
+      data_row << changes.inspect
       outfile.write(data_row.join("\t")+"\n") if data_row
     end
     outfile.close

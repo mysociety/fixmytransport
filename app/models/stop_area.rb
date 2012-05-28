@@ -34,10 +34,6 @@ class StopArea < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
   exists_in_data_generation( :identity_fields => [:code],
-                             :new_record_fields => [:name, :area_type, :easting, :northing, :status,
-                                                    :locality_id],
-                             :update_fields => [:grid_type, :administrative_area_code, :creation_datetime,
-                                                :modification_datetime, :modification, :revision_number],
                              :deletion_field => :modification,
                              :deletion_value => 'del',
                              :auto_update_fields => [:cached_description, :cached_slug,
@@ -63,8 +59,8 @@ class StopArea < ActiveRecord::Base
   # set attributes to include and exclude when performing model diffs
   diff :include => [:locality_id]
 
-  has_paper_trail :meta => { :replayable  => Proc.new { |stop_area| stop_area.replayable },
-                             :persistent_id => Proc.new { |stop_area| stop_area.persistent_id } }
+  has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
+                             :replay_of => Proc.new { |instance| instance.replay_of } }
   before_save :cache_description, :set_metaphones, :update_coords
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area
