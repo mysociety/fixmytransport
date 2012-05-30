@@ -423,8 +423,8 @@ class Problem < ActiveRecord::Base
         # that were reported to a matching operator
         operator_persistent_ids = location.operators.map{ |operator| conn.quote(operator.persistent_id) }.join(',')
         location_id = conn.quote(location.id)
-        extra_tables = ", responsibilities"
-        location_clause = "AND ((problems.location_persistent_id = #{location_persistent_id}
+        extra_tables = ''
+        location_clause = " AND ((problems.location_persistent_id = #{location_persistent_id}
                             AND problems.location_type = #{location_class})
                             OR
                             (problems.location_persistent_id in (SELECT sub_routes.persistent_id
@@ -432,9 +432,10 @@ class Problem < ActiveRecord::Base
                                              WHERE route_sub_routes.route_id = #{location_id}
                                              AND sub_routes.id = route_sub_routes.sub_route_id)
                              AND problems.location_type = 'SubRoute'
-                             AND problems.id = responsibilities.problem_id
-                             AND responsibilities.organization_type = 'Operator'
-                             AND responsibilities.organization_persistent_id in (#{operator_persistent_ids}))) "
+                             AND problems.id in (SELECT responsibilities.problem_id
+                             FROM responsibilities
+                             WHERE responsibilities.organization_type = 'Operator'
+                             AND responsibilities.organization_persistent_id in (#{operator_persistent_ids})))) "
       else
         extra_tables = ''
         location_clause = " AND problems.location_persistent_id = #{location_persistent_id}
