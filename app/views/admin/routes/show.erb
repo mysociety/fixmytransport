@@ -33,7 +33,7 @@
   <p><%= link_to t('admin.on_main_site'), main_url(route_path(@route.region, @route)), {:class => 'admin-offsite-link', :target => '_blank'} %></p>
   <p><%= link_to t('admin.external_search_route'), external_search_link("#{@route.description}"), {:class => 'admin-offsite-link', :target => '_blank'} %></p>
 
-  <%= render :partial => "route_operators", :locals => { :f => f, :route_operators => @route.route_operators, :title => t('admin.operators') } %>
+  <%= render :partial => "route_operators", :locals => { :f => f, :route_operators => @route.route_operators.current, :title => t('admin.operators') } %>
 
 
   <h3><%= t('admin.assign_an_operator') %></h3>

@@ -10,8 +10,8 @@
 <%- end %>
 <%- form_for [:admin, @stop_area], :url => admin_url(admin_stop_area_path(@stop_area.id)), :html => { :class => 'stop-area-form' } do |f|  %>
   <%= render :partial => "form", :locals => { :f => f } %>
-  
-    <%= render :partial => "stop_area_operators", :locals => { :f => f, :stop_area_operators => @stop_area.stop_area_operators, :title => t('admin.operators') } %>
+
+    <%= render :partial => "stop_area_operators", :locals => { :f => f, :stop_area_operators => @stop_area.stop_area_operators.current, :title => t('admin.operators') } %>
   <h3><%= t('admin.assign_an_operator') %></h3>
   <%- f.fields_for :stop_area_operators, StopAreaOperator.new do |stop_area_operator_fields| %>
     <div class='form-field'>
@@ -38,6 +38,6 @@
   jQuery(document).ready(function(){
     area_init();
     setupShowStopArea();
-    
+
   });
 </script>
