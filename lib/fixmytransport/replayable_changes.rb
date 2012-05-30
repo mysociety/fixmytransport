@@ -42,7 +42,7 @@ module FixMyTransport
 
           def object_to_string(object)
             attrs = object.attributes.select{ |attr, val| ! unsettable_fields.include?(attr.to_sym) }
-            attrs.to_yaml
+            Hash[attrs].to_yaml
           end
 
         end
