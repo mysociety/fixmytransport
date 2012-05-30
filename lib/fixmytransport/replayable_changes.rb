@@ -8,6 +8,71 @@ module FixMyTransport
   # own changes to the updated data if they are still relevant.
   module ReplayableChanges
 
+    def self.included(base)
+      base.send :extend, ClassMethods
+    end
+
+    module ClassMethods
+
+      def paper_trail_with_dag()
+
+        self.class_eval do
+
+          # We want to record local changes using paper_trail, but acts_as_dag records field changes by
+          # trying to set attributes to their previous value on a cloned copy of the instance. The count=
+          # method is not available outside the acts_as_dag plugin, so the following methods are
+          # monkey patches of methods provided by paper_trail allowing us to specify attributes that
+          # do not need to be recorded.
+          def unsettable_fields
+            [:count]
+          end
+
+          def item_before_change
+            previous = self.clone
+            previous.id = id
+            changes.each do |attr, ary|
+              if !unsettable_fields.include?(attr.to_sym)
+                previous.send "#{attr}=", ary.first
+              end
+            end
+            previous
+          end
+
+          def object_to_string(object)
+            attrs = object.attributes.select{ |attr, val| ! unsettable_fields.include?(attr.to_sym) }
+            attrs.to_yaml
+          end
+
+        end
+
+      end
+
+      def replayable_with_dag()
+
+        self.class_eval do
+
+          # This method calls the replayable method provided in data_generations
+          # and customizes it so that paper_trail versions created by the behind the scenes
+          # creation and destruction of indirect links by acts_as_dag are not marked as replayable
+          def replayable_with_direct_checks
+            if replayable_without_direct_checks == false
+              return false
+            end
+            if changes['direct'] == [true, false] ||
+               changes['direct'] == [false, true] ||
+               changes['direct'] == [nil, true]
+              return true
+            end
+            return false
+          end
+          alias_method_chain :replayable, :direct_checks
+
+        end
+
+      end
+
+    end
+
     # Mark as unreplayable local updates that don't contain changes to any significant fields.
     def mark_unreplayable(model_class, dryrun, verbose)
 
