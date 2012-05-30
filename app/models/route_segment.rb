@@ -17,7 +17,8 @@ class RouteSegment < ActiveRecord::Base
   # This model is part of the transport data that is versioned by data generations.
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generation
-  exists_in_data_generation()
+  exists_in_data_generation(:identity_fields => [],
+                            :descriptor_fields => [])
   belongs_to :from_stop, :class_name => 'Stop'
   belongs_to :to_stop, :class_name => 'Stop'
   belongs_to :from_stop_area, :class_name => 'StopArea'

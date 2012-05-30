@@ -26,14 +26,20 @@ describe Operator do
       :noc_code => 'NOXX'
     }
     @model_type = Operator
-    @default_attrs = { :name => 'value for name' }
+    @default_attrs = { :name => 'value for name', :noc_code => 'xxxx' }
+    @expected_identity_hash = {:noc_code => 'xxxx'}
+    @expected_external_identity_fields = [:noc_code, :name]
   end
 
-  it_should_behave_like "a model that exists in data generations"
+  describe 'in data generations' do
 
-  it_should_behave_like "a model that exists in data generations and is versioned"
+    it_should_behave_like "a model that exists in data generations"
 
-  it_should_behave_like "a model that exists in data generations and has slugs"
+    it_should_behave_like "a model that exists in data generations and is versioned"
+
+    it_should_behave_like "a model that exists in data generations and has slugs"
+
+  end
 
   it "should create a new instance given valid attributes" do
     operator = Operator.new(@valid_attributes)

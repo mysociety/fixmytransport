@@ -28,7 +28,9 @@ describe Region do
       :modification => "value for modification"
     }
     @model_type = Region
-    @default_attrs = { :name => 'A test region' }
+    @default_attrs = { :name => 'A test region', :code => 'yyyy' }
+    @expected_identity_hash = { :code => 'yyyy' }
+    @expected_external_identity_fields = [ :code, :name ]
   end
 
   it_should_behave_like "a model that exists in data generations"

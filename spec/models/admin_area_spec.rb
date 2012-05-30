@@ -36,7 +36,9 @@ describe AdminArea do
       :modification => "value for modification"
     }
     @model_type = AdminArea
-    @default_attrs = {}
+    @default_attrs = {:atco_code => 'xxxx', :code => 'yy'}
+    @expected_identity_hash = {:atco_code => 'xxxx', :code => 'yy'}
+    @expected_external_identity_fields = [:atco_code, :code, :name]
   end
 
   it "should create a new instance given valid attributes" do

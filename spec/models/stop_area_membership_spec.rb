@@ -17,6 +17,7 @@
 require 'spec_helper'
 
 describe StopAreaMembership do
+
   before(:each) do
     @valid_attributes = {
       :stop_id => 1,
@@ -26,8 +27,15 @@ describe StopAreaMembership do
       :revision_number => 1,
       :modification => "value for modification"
     }
-    @default_attrs = {}
+    @stop = Stop.new
+    @stop.stub!(:persistent_id).and_return(44)
+    @stop_area = StopArea.new
+    @stop_area.stub!(:persistent_id).and_return(55)
+    @default_attrs = { :stop => @stop, :stop_area => @stop_area }
     @model_type = StopAreaMembership
+    @expected_identity_hash = { :stop => {:persistent_id => 44 },
+                                :stop_area => {:persistent_id => 55 }}
+    @expected_external_identity_fields = [{:stop=>[:atco_code, :name]}, {:stop_area=>[:code, :name]}]
   end
 
   it_should_behave_like "a model that exists in data generations"

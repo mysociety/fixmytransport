@@ -29,6 +29,8 @@ describe RouteSegment do
     @default_attrs = { :from_stop_id => 1,
                        :to_stop_id => 1,
                        :segment_order => 0 }
+    @expected_identity_hash = {}
+    @expected_external_identity_fields = []
   end
 
   it "should create a new instance given valid attributes" do

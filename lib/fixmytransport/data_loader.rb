@@ -121,29 +121,10 @@ module FixMyTransport
       end
     end
 
-    # Convert a list of fields to an attribute hash with values coming from an
-    # instance of a model. Basic handling of association fields so that a field
-    # "[association]_id" will have a value in the hash generated from instance.association.id
-    # if instance.association is not nil, and nil otherwise
-    def fields_to_attribute_hash(fields, instance)
-      fields = fields.collect do |field|
-        if field.to_s.ends_with?("_id")
-          if association = instance.send(field.to_s[0...-3])
-            [ field, association.id ]
-          else
-            [ field, nil ]
-          end
-        else
-          [ field, instance.send(field) ]
-        end
-      end
-      Hash[ *fields.flatten ]
-    end
-
     # Generate a string from a model instance that gives model type, id and certain fields and values
-    def reference_string(model_class, instance, fields)
+    def reference_string(model_class, instance)
       reference_string = "#{model_class} #{instance.id}"
-      reference_string += " (#{fields_to_attribute_hash(fields, instance).inspect})"
+      reference_string += " (#{instance.identity_hash.inspect})"
     end
 
     # Load a new model instance into a generation, creating a new record in the new generation and linking it
@@ -186,21 +167,32 @@ module FixMyTransport
 
         # discard if actually deleted
         if deletion_field && instance.send(deletion_field) == deletion_value
-          puts "Dropping deleted record #{reference_string(model_class, instance, identity_fields)}" if verbose
+          puts "Dropping deleted record #{reference_string(model_class, instance)}" if verbose
           counts[:deleted] += 1
           next
         end
         # Can we find this record in the previous generation?
-        search_conditions = fields_to_attribute_hash(identity_fields, instance)
-        existing = model_class.in_generation(previous_generation).find(:first, :conditions => search_conditions)
+        search_conditions = instance.identity_hash
+        includes = []
+        search_conditions.each do |key, value|
+          if value.is_a?(Hash)
+            includes << key.to_s.singularize.to_sym
+          end
+        end
+        existing = model_class.in_generation(previous_generation).find(:first, :conditions => search_conditions,
+                                                                               :include => includes)
+
         if existing
-          puts "New record in this generation for existing instance #{reference_string(model_class, existing, identity_fields)}" if verbose
+          puts "New record in this generation for existing instance #{reference_string(model_class, existing)}" if verbose
           # Associate the old generation record with the new generation record
           instance.previous_id = existing.id
           instance.persistent_id = existing.persistent_id
+          puts "#{instance.stop_area.name} #{instance.operator.name}"
+          puts "Setting persistent_id to #{existing.persistent_id}"
+
           counts[:updated_new_record] += 1
         else
-          puts "New instance #{reference_string(model_class, instance, identity_fields)}" if verbose
+          puts "New instance #{reference_string(model_class, instance)}" if verbose
           counts[:new] += 1
         end
         if ! dryrun

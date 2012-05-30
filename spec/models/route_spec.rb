@@ -32,6 +32,8 @@ describe Route do
                        :number => 'ZZ9',
                        :transport_mode_id => 1 }
     @model_type = Route
+    @expected_identity_hash = {}
+    @expected_external_identity_fields = [:number, {:region=>[:code, :name]}]
   end
 
   it_should_behave_like "a model that exists in data generations"

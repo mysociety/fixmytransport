@@ -1,4 +1,3 @@
-
 module FixMyTransport
 
   # Functions for transport models that are loaded regularly from external data sources - these models
@@ -56,8 +55,6 @@ module FixMyTransport
 
         cattr_accessor :data_generation_options_hash
 
-        # accessor used during replay of changes - see lib/replayable_changes.rb
-        attr_accessor :replay_of
         # Want this not to be inherited by instances
         class << self
           attr_accessor :replayable
@@ -125,6 +122,25 @@ module FixMyTransport
             return nil
           end
 
+          def external_identity_fields
+            fields = data_generation_options_hash[:identity_fields] +
+                    data_generation_options_hash[:descriptor_fields]
+            fields = fields.collect do |field|
+              if field.is_a?(Hash)
+                if field.keys.size > 1
+                  raise "More than one key in hash passed to fields_to_attribute_hash"
+                end
+                association_name = field.keys.first
+                association_class = self.reflect_on_association(association_name).klass
+                field[association_name] = association_class.external_identity_fields
+                field
+              else
+                field
+              end
+            end
+            fields
+          end
+
         end
 
         self.class_eval do
@@ -139,6 +155,9 @@ module FixMyTransport
           before_validation :set_persistent_id, :set_generations
           validates_presence_of :persistent_id
           validate :persistent_id_unique_in_generation
+          # accessor used during replay of changes - see lib/replayable_changes.rb
+          attr_accessor :replay_of
+
 
           def set_generations
             self.generation_low = CURRENT_GENERATION if self.generation_low.nil?
@@ -167,16 +186,24 @@ module FixMyTransport
         if !self.class.data_generation_options_hash[:identity_fields]
           return {}
         else
-          make_id_hash(self.class.data_generation_options_hash[:identity_fields])
+          fields_to_attribute_hash(self.class.data_generation_options_hash[:identity_fields])
         end
       end
 
-      def make_id_hash(field_list)
-        id_hash = {}
-        field_list.each do |identity_field|
-          id_hash[identity_field] = self.send(identity_field)
+      def fields_to_attribute_hash(fields)
+        fields = fields.collect do |field|
+          if field.is_a?(Hash)
+            if field.keys.size > 1
+              raise "More than one key in hash passed to fields_to_attribute_hash"
+            end
+            association_name = field.keys.first
+            association = self.send(association_name)
+            [association_name, association.fields_to_attribute_hash(field[association_name])]
+          else
+            [ field, self.send(field) ]
+          end
         end
-        id_hash
+        Hash[ *fields.flatten ]
       end
 
       def replayable

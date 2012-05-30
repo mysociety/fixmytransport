@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe StopOperator do
 
-  fixtures default_fixtures
 
   before(:each) do
     @mock_stop = mock_model(Stop)
@@ -12,15 +11,18 @@ describe StopOperator do
       :stop => @mock_stop,
       :operator => @mock_operator
     }
-    @operator = operators(:a_train_company)
-    @stop = stops(:victoria_station_one)
-
+    @operator = Operator.new
+    @operator.stub!(:persistent_id).and_return(44)
+    @stop = Stop.new
+    @stop.stub!(:persistent_id).and_return(88)
     @default_attrs = {
-      :stop_id => @stop.id,
-      :operator_id => @operator.id
+      :stop => @stop,
+      :operator => @operator
     }
-
     @model_type = StopOperator
+    @expected_identity_hash = {:stop => {:persistent_id => 88},
+                              :operator => {:persistent_id => 44}}
+    @expected_external_identity_fields = [{:stop=>[:atco_code, :name]}, {:operator=>[:noc_code, :name]}]
   end
 
   it "should create a new instance given valid attributes" do
@@ -31,9 +33,5 @@ describe StopOperator do
   it_should_behave_like "a model that exists in data generations"
 
   it_should_behave_like "a model that exists in data generations and is versioned"
-
-  after(:each) do
-    StopOperator.destroy_all
-  end
 
 end

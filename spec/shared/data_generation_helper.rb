@@ -80,6 +80,19 @@ module SharedBehaviours
 
     shared_examples_for "a model that exists in data generations" do
 
+      describe 'when generating identity hashes and field lists' do
+
+        it 'should create an identity hash that matches the expected hash' do
+          instance = @model_type.new(@default_attrs)
+          instance.identity_hash.should == @expected_identity_hash
+        end
+
+        it 'should create external identity fields that match the expected fields' do
+          @model_type.external_identity_fields.should == @expected_external_identity_fields
+        end
+
+      end
+
       describe 'when the data generation is set for all models controlled by data generations' do
 
         it 'should have the scope for the generation set in the call and no scope after the call' do
@@ -306,7 +319,7 @@ module SharedBehaviours
           instance = @model_type.new(@default_attrs)
           instance.persistent_id = @current_generation_instance.persistent_id
           instance.valid?.should == false
-          instance.errors.full_messages.should == ['Persistent ID already exists in data generation']
+          instance.errors.full_messages.include?('Persistent ID already exists in data generation').should be_true
         end
 
         it 'should be valid if its persistent id exists in a previous data generation' do

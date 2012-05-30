@@ -48,6 +48,7 @@ class Stop < ActiveRecord::Base
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
   exists_in_data_generation( :identity_fields => [:atco_code],
+                             :descriptor_fields => [:name],
                              :deletion_field => :modification,
                              :deletion_value => 'del',
                              :auto_update_fields => [:cached_description, :cached_slug, :metro_stop,
@@ -186,7 +187,7 @@ class Stop < ActiveRecord::Base
   def root_stop_area(area_type)
     root_stop_areas = all_stop_areas.select{ |stop_area| stop_area.area_type == area_type }.uniq
     root_stop_areas = root_stop_areas.select{ |stop_area| stop_area.root? } if root_stop_areas.size > 1
-    raise "More than one root stop area for stop #{id}" if root_stop_areas.size > 1
+    raise "More than one root stop area for stop #{id} #{root_stop_areas.inspect}" if root_stop_areas.size > 1
     return nil if root_stop_areas.empty?
     return root_stop_areas.first
   end

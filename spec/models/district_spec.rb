@@ -29,7 +29,9 @@ describe District do
       :modification => "value for modification"
     }
     @model_type = District
-    @default_attrs = {}
+    @default_attrs = {:code => 'xxxx'}
+    @expected_identity_hash = {:code => 'xxxx'}
+    @expected_external_identity_fields = [:code, :name]
   end
 
   it_should_behave_like "a model that exists in data generations"

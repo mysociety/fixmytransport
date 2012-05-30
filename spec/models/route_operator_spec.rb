@@ -14,8 +14,6 @@ require 'spec_helper'
 
 describe RouteOperator do
 
-  fixtures default_fixtures
-
   before(:each) do
     @mock_route = mock_model(Route)
     @mock_operator = mock_model(Operator)
@@ -25,12 +23,18 @@ describe RouteOperator do
       :route => @mock_route
     }
     @model_type = RouteOperator
-    @operator = operators(:a_train_company)
-    @route = routes(:victoria_to_haywards_heath)
+    @operator = Operator.new
+    @operator.stub!(:persistent_id).and_return(33)
+    @route = Route.new
+    @route.stub!(:persistent_id).and_return(22)
     @default_attrs = {
-      :operator_id => @operator.id,
-      :route_id => @route.id
+      :operator => @operator,
+      :route => @route
     }
+    @expected_identity_hash = { :operator => { :persistent_id => 33 },
+                                :route => { :persistent_id => 22 } }
+    @expected_external_identity_fields = [{:route=>[:number, {:region => [:code, :name]}]},
+                                          {:operator=>[:noc_code, :name]}]
   end
 
   it_should_behave_like "a model that exists in data generations"

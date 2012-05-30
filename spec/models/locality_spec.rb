@@ -40,7 +40,9 @@ describe Locality do
       :modification => "value for modification"
     }
     @model_type = Locality
-    @default_attrs = { :name => 'A test locality' }
+    @default_attrs = { :name => 'A test locality', :code => 'xxxx' }
+    @expected_identity_hash = {:code => 'xxxx'}
+    @expected_external_identity_fields = [:code, :name]
   end
 
   it_should_behave_like "a model that exists in data generations"
