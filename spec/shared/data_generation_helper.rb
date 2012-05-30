@@ -71,7 +71,7 @@ module SharedBehaviours
         end
 
         after do
-            @instance.destroy
+          @instance.destroy
         end
 
       end
