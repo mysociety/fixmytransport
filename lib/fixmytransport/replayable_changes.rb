@@ -14,6 +14,8 @@ module FixMyTransport
 
     module ClassMethods
 
+
+      # Allow classes using acts_as_dag to also use paper_trail to track changes
       def paper_trail_with_dag()
 
         self.class_eval do
@@ -47,20 +49,22 @@ module FixMyTransport
 
       end
 
+      # Allow classes in data generations using acts_as_dag and paper_trail to set the 'replayable'
+      # flag on a version depending on whether the link instance is direct or indirect.
       def replayable_with_dag()
 
         self.class_eval do
 
           # This method calls the replayable method provided in data_generations
-          # and customizes it so that paper_trail versions created by the behind the scenes
+          # and customizes it so that paper_trail versions created by the behind-the-scenes
           # creation and destruction of indirect links by acts_as_dag are not marked as replayable
           def replayable_with_direct_checks
             if replayable_without_direct_checks == false
               return false
             end
-            if changes['direct'] == [true, false] ||
-               changes['direct'] == [false, true] ||
-               changes['direct'] == [nil, true]
+            if changes['direct'] == [true, false] || # making a direct link indirect
+               changes['direct'] == [false, true] || # making an indirect link direct
+               changes['direct'] == [nil, true] # creating a direct link.
               return true
             end
             return false
