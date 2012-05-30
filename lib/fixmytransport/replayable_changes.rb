@@ -269,9 +269,11 @@ module FixMyTransport
       when 'create'
         changes[:generation_high] = [PREVIOUS_GENERATION, CURRENT_GENERATION]
         applied_changes = apply_changeset(model_name, changes, instance, verbose)
-        change_list << { :event => :create,
-                         :model => instance,
-                         :changes => changes }
+        if !applied_changes.empty?
+          change_list << { :event => :create,
+                           :model => instance,
+                           :changes => changes }
+        end
       when 'update'
         applied_changes = apply_changeset(model_name, changes, instance, verbose)
         if !applied_changes.empty?
