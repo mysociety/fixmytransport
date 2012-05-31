@@ -79,7 +79,105 @@ namespace :temp do
                                 AND replayable is null")
   end
 
-  desc 'Backload Version records for the StopAreaOperator model'
+  desc 'Backload version records for the StopAreaLink model'
+  task :backload_stop_area_link_versions => :environment do
+    #MONKEY PATCH
+    module PaperTrail
+      module Model
+        module InstanceMethods
+          def create_initial_pt_version
+            record_create if versions.blank?
+            puts "created #{self.class} #{self.id}"
+          end
+
+        end
+      end
+    end
+
+    FixMyTransport::DataGenerations.in_generation(1) do
+      file = check_for_file
+      parser = Parsers::NaptanParser.new
+      deletions = 0
+      parser.parse_stop_area_links(file) do |stop_area_link|
+        stop_area_link.generation_low = 1
+        stop_area_link.generation_high = 1
+        existing = StopAreaLink.in_generation(1).find(:first, :conditions => ['ancestor_id = ?
+                                                                  AND descendant_id = ?
+                                                                  AND direct = ?',
+                                                                  stop_area_link.ancestor_id,
+                                                                  stop_area_link.descendant_id,
+                                                                  true])
+        if !existing
+          puts "Deleted record #{stop_area_link.ancestor.name} #{stop_area_link.ancestor_id} #{stop_area_link.descendant.name} #{stop_area_link.descendant_id}"
+          PaperTrail.enabled = false
+          begin
+            stop_area_link.make_direct
+            stop_area_link.save!
+            PaperTrail.enabled = true
+            stop_area_link.destroy
+            deletions += 1
+          rescue Exception => e
+            puts e.message
+            puts e.backtrace
+            puts "Skipping #{stop_area_link.inspect}"
+            PaperTrail.enabled = false
+          end
+        end
+      end
+      puts "Found #{deletions} deletions"
+      stop_area_links = StopAreaLink.in_generation(1).find(:all, :conditions => ["date_trunc('day',created_at) > '2011-03-28 00:00:00'"])
+      stop_area_links.each do |stop_area_link|
+        puts "#{stop_area_link.id}"
+        stop_area_link.create_initial_pt_version
+      end
+    end
+  end
+
+  desc 'Backload version records for the StopAreaMembership model'
+  task :backload_stop_area_membership_versions => :environment do
+    #MONKEY PATCH
+    module PaperTrail
+      module Model
+        module InstanceMethods
+          def create_initial_pt_version
+            record_create if versions.blank?
+            puts "created #{self.class} #{self.id}"
+          end
+
+        end
+      end
+    end
+    FixMyTransport::DataGenerations.in_generation(1) do
+      file = check_for_file
+      parser = Parsers::NaptanParser.new
+      deletions = 0
+      parser.parse_stop_area_memberships(file) do |stop_area_membership|
+        stop_area_membership.generation_low = 1
+        stop_area_membership.generation_high = 1
+        existing = StopAreaMembership.in_generation(1).find(:first, :conditions => ['stop_area_id = ?
+                                                                  AND stop_id = ?',
+                                                                  stop_area_membership.stop_area_id,
+                                                                  stop_area_membership.stop_id])
+        if !existing && ! stop_area_membership.modification == 'del'
+          puts "Deleted record #{stop_area_membership.stop_area.name} #{stop_area_membership.stop_area_id} #{stop_area_membership.stop.name} #{stop_area_membership.stop_id}"
+          PaperTrail.enabled = false
+          stop_area_membership.save
+          PaperTrail.enabled = true
+          stop_area_membership.destroy
+          deletions += 1
+        end
+      end
+      puts "Found #{deletions} deletions"
+      stop_area_memberships = StopAreaMembership.in_generation(1).find(:all, :conditions => ["date_trunc('day',created_at) > '2011-03-28 00:00:00'"])
+      stop_area_memberships.each do |stop_area_membership|
+        puts "#{stop_area_membership.id}"
+        stop_area_membership.create_initial_pt_version
+      end
+    end
+
+  end
+
+  desc 'Backload version records for the StopAreaOperator model'
   task :backload_stop_area_operator_versions => :environment do
     #MONKEY PATCH
     module PaperTrail
@@ -101,7 +199,7 @@ namespace :temp do
       parser.parse_stop_area_operators(file) do |stop_area_operator|
         stop_area_operator.generation_low = 1
         stop_area_operator.generation_high = 1
-        existing = StopAreaOperator.find(:first, :conditions => ['stop_area_id = ?
+        existing = StopAreaOperator.in_generation(1).find(:first, :conditions => ['stop_area_id = ?
                                                                   AND operator_id = ?',
                                                                   stop_area_operator.stop_area_id,
                                                                   stop_area_operator.operator_id])
@@ -115,10 +213,50 @@ namespace :temp do
         end
       end
       puts "Found #{deletions} deletions"
-      stop_area_operators = StopAreaOperator.find(:all, :conditions => ["date_trunc('day',created_at) > '2011-03-28 00:00:00'"])
+      stop_area_operators = StopAreaOperator.in_generation(1).find(:all, :conditions => ["date_trunc('day',created_at) > '2011-03-28 00:00:00'"])
       stop_area_operators.each do |stop_area_operator|
         puts "#{stop_area_operator.id}"
         stop_area_operator.create_initial_pt_version
+      end
+    end
+  end
+
+  desc 'Remove duplicate location operators'
+  task :remove_location_operator_duplicates => :environment do
+    conditions = ['id in (SELECT a.id
+                          FROM route_operators as a, route_operators as b
+                          WHERE a.id > b.id
+                          AND a.operator_id = b.operator_id
+                          AND a.route_id = b.route_id)']
+    RouteOperator.find(:all, :conditions => conditions).each do |route_operator|
+      route_operator.destroy
+    end
+    conditions = ['id in (SELECT a.id
+                          FROM stop_area_operators as a, stop_area_operators as b
+                          WHERE a.id > b.id
+                          AND a.operator_id = b.operator_id
+                          AND a.stop_area_id = b.stop_area_id)']
+    StopAreaOperator.find(:all, :conditions => conditions).each do |stop_area_operator|
+      stop_area_operator.destroy
+    end
+  end
+
+  desc 'Remove bad station links'
+  task :remove_bad_station_links => :environment do
+    codes = {'910GBCSTRTN' => '910GBCSTN',
+             '910GCNTBW' => '910GCNTBE',
+             '910GEDNT' => '910GEDNB',
+             '910GMSTONEE' => '910GMSTONEB',
+             '910GWHYTELF' => '910GUWRLNGH',
+             '910GNTHCAMP' => '910GASHVALE'}
+
+    codes.each do |ancestor_code, descendant_code|
+      ancestor = StopArea.in_generation(1).find_by_code(ancestor_code)
+      descendant = StopArea.in_generation(1).find_by_code(descendant_code)
+      link = StopAreaLink.find_link(ancestor, descendant)
+      if link
+        puts "destroying #{ancestor.name} => #{descendant.name}"
+        link.destroy
       end
     end
   end
