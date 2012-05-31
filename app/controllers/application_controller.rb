@@ -450,7 +450,7 @@ class ApplicationController < ActionController::Base
                      'SubRoute',
                      'CoachRoute']
     if allowed_types.include?(location_type)
-      return location_type.current.constantize.find(:first, :conditions => ['persistent_id = ?', location_id])
+      return location_type.constantize.current.find(:first, :conditions => ['persistent_id = ?', location_id])
     else
       return nil
     end
