@@ -387,6 +387,22 @@ namespace :tnds do
       puts "Matched to route id: #{previous_route.id}, number #{previous_route.number}" if verbose
       route.previous_id = previous.first.id
       route.persistent_id = previous.first.persistent_id
+
+      # find previous records for route operators
+      route.route_operators.each do |route_operator|
+        previous_route_operator = RouteOperator.find_in_generation_by_identity_hash(route_operator,
+                                                                                    PREVIOUS_GENERATION)
+        if previous_route_operator
+          route_operator.previous_id = previous_route_operator.id
+          route_operator.persistent_id = previous_route_operator.persistent_id
+          if ! dryrun
+            puts "Saving route operator" if verbose
+            route_operator.save!
+          end
+        end
+
+      end
+
       if ! dryrun
         puts "Saving route" if verbose
         route.save!
