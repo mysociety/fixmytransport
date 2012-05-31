@@ -137,12 +137,15 @@ module FixMyTransport
     # Note that if the model is also versioned using papertrail to document local changes, changes
     # made by this function will be recorded as non-replayable, as they are assumed to have been
     # produced by loading data from the official source.
-    def load_instances_in_generation(model_class, parser, &block)
+    def load_instances_in_generation(model_class, parser, skip_invalid=true, &block)
       verbose = check_verbose()
       dryrun = check_dryrun()
       generation = ENV['GENERATION']
       previous_generation = get_previous_generation()
       puts "Loading #{model_class}" if verbose
+      if skip_invalid
+        skipped_count = 0
+      end
 
       field_hash = model_class.data_generation_options_hash
       identity_fields = field_hash[:identity_fields]
@@ -172,22 +175,13 @@ module FixMyTransport
           next
         end
         # Can we find this record in the previous generation?
-        search_conditions = instance.identity_hash
-        includes = []
-        search_conditions.each do |key, value|
-          if value.is_a?(Hash)
-            includes << key.to_s.singularize.to_sym
-          end
-        end
-        existing = model_class.in_generation(previous_generation).find(:first, :conditions => search_conditions,
-                                                                               :include => includes)
+        existing = model_class.find_in_generation_by_identity_hash(instance, previous_generation)
 
         if existing
           puts "New record in this generation for existing instance #{reference_string(model_class, existing)}" if verbose
           # Associate the old generation record with the new generation record
           instance.previous_id = existing.id
           instance.persistent_id = existing.persistent_id
-          puts "#{instance.stop_area.name} #{instance.operator.name}"
           puts "Setting persistent_id to #{existing.persistent_id}"
 
           counts[:updated_new_record] += 1
@@ -195,19 +189,27 @@ module FixMyTransport
           puts "New instance #{reference_string(model_class, instance)}" if verbose
           counts[:new] += 1
         end
-        if ! dryrun
-          instance.save!
-        else
-          if ! instance.valid?
-            puts "ERROR: New instance is invalid:"
-            puts instance.errors.full_messages.join("\n")
+        if ! instance.valid?
+          puts "ERROR: New instance is invalid:"
+          puts instance.errors.full_messages.join("\n")
+          if skip_invalid
+            puts "Skipping..."
+            skipped_count += 1
+            next
+          else
             exit(1)
           end
+        end
+        if ! dryrun
+          instance.save!
         end
       end
       puts "Totally new #{table_name}: #{counts[:new]}"
       puts "Updated #{table_name} (new record): #{counts[:updated_new_record]}"
       puts "Deleted #{table_name}: #{counts[:deleted]}"
+      if skip_invalid && (skipped_count > 1)
+        puts "Skipped #{table_name}: #{skipped_count}"
+      end
       if model_class.respond_to?(:replayable)
         model_class.replayable = previous_replayable_value
       end

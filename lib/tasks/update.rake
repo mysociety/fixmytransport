@@ -12,6 +12,9 @@ namespace :update do
     # Load NPTG data
     Rake::Task['update:nptg'].execute
 
+    ENV['MODEL'] = 'LocalityLink'
+    Rake::Task['update:replay_updates']
+
     # LOAD NAPTAN DATA
     Rake::Task['update:naptan'].execute
 
@@ -20,6 +23,12 @@ namespace :update do
     Rake::Task['update:replay_updates']
 
     ENV['MODEL'] = 'StopArea'
+    Rake::Task['update:replay_updates']
+
+    ENV['MODEL'] = 'StopAreaMembership'
+    Rake::Task['update:replay_updates']
+
+    ENV['MODEL'] = 'StopAreaLink'
     Rake::Task['update:replay_updates']
 
     # LOAD NOC DATA
@@ -37,6 +46,9 @@ namespace :update do
     Rake::Task['update:replay_updates']
 
     ENV['MODEL'] = 'StopAreaOperator'
+    Rake::Task['update:replay_updates']
+
+    ENV['MODEL'] = 'StopOperator'
     Rake::Task['update:replay_updates']
 
     # Rake::Task['naptan:post_load:mark_metro_stops'].execute
@@ -94,9 +106,8 @@ namespace :update do
     # get out of sync with the rejigged locality slugs
     Rake::Task['nptg:geo:convert_localities'].execute
 
-    # Can just reuse the load code here - localities will be scoped by the current data generation
     ENV['FILE'] = File.join(MySociety::Config.get('NPTG_DIR', ''), 'LocalityHierarchy.csv')
-    Rake::Task['nptg:load:locality_links'].execute
+    Rake::Task['nptg:update:locality_links'].execute
   end
 
   desc 'Update NaPTAN data to the current data generation. Runs in dryrun mode unless DRYRUN=0
@@ -114,9 +125,8 @@ namespace :update do
     ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'StopsInArea.csv')
     Rake::Task['naptan:update:stop_area_memberships'].execute
 
-    # Can just reuse the load code here - stop areas will be scoped by the current data generation
     ENV['FILE'] = File.join(MySociety::Config.get('NAPTAN_DIR', ''), 'AreaHierarchy.csv')
-    Rake::Task['naptan:load:stop_area_hierarchy'].execute
+    Rake::Task['naptan:update:stop_area_links'].execute
 
     # Some post-load cleanup on NaPTAN data - add locality to stop areas, and any stops missing locality
     Rake::Task['naptan:post_load:add_locality_to_stops'].execute
@@ -190,9 +200,19 @@ namespace :update do
     change_list = replay_updates(model, dryrun=true, verbose=verbose)
     outfile = File.open("data/#{model}_changes_#{Date.today.to_s(:db)}.tsv", 'w')
     headers = ['Change type']
-    identity_fields = model.data_generation_options_hash[:identity_fields]
+    identity_fields = model.external_identity_fields
     identity_fields.each do |identity_field|
-      headers << identity_field
+      if identity_field.is_a? Symbol
+        headers << identity_field
+      elsif identity_field.is_a?(Hash)
+        if identity_field.keys.size > 1
+          raise "More than one key in hash passed to fields_to_attribute_hash"
+        end
+        association_name = identity_field.keys.first
+        identity_field[association_name].each do |secondary_field|
+          headers << "#{association_name.to_s.titleize} #{secondary_field}"
+        end
+      end
     end
     headers += ["Data"]
     outfile.write(headers.join("\t")+"\n")
@@ -202,7 +222,20 @@ namespace :update do
       changes = change_info[:changes]
       data_row = [change_event.to_s]
       identity_fields.each do |identity_field|
-        data_row << instance.send(identity_field)
+        if identity_field.is_a? Symbol
+          data_row << instance.send(identity_field)
+        elsif identity_field.is_a?(Hash)
+          if identity_field.keys.size > 1
+            raise "More than one key in hash passed to fields_to_attribute_hash"
+          end
+          association_name = identity_field.keys.first
+          identity_field[association_name].each do |secondary_field|
+            association = instance.send(association_name)
+            value = association.send(secondary_field)
+            data_row << value
+          end
+        end
+
       end
       data_row << changes.inspect
       outfile.write(data_row.join("\t")+"\n") if data_row

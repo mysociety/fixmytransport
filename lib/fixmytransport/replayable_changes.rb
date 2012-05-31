@@ -141,12 +141,11 @@ module FixMyTransport
     end
 
     # Get a hash describing a set of significant changes out of a version model.
-    # The hash will have one key - the persistent_id of the model being changed.
-    # The values will be:
     # :version_id - the id of the Version model where this change was made
     # :date - datetime the change was made on
     # :event - create|update|destroy
     # :changes - the significant changes in the form { attribute => [old_value, new_value] }
+    # :persistent_id - the persistent_id of the model being changed.
     # The options param passed should be the data_generation_options_hash of the model class
     def get_changes(version, model_class, options, verbose)
       model_name = model_class.to_s.downcase
@@ -239,7 +238,17 @@ module FixMyTransport
         existing = model_class.current.find_by_persistent_id(persistent_id)
         if ! existing
           puts "Can't find current #{model_name} to update for persistent_id #{persistent_id}" if verbose
-          if changes.first[:event] == 'create'
+          if destruction = changes.find{ |change| change[:event] == 'destroy'}
+            # Double check to see if a new instance matching the identity hash has been loaded
+            # after the instance in the previous generation was deleted (thus not getting the
+            # same persistent id)
+            destroyed_instance = Version.find(destruction[:version_id]).reify()
+            existing = model_class.find_in_generation_by_identity_hash(destroyed_instance, CURRENT_GENERATION)
+            if ! existing
+              puts ["Can't find any #{model_name} to match destroyed #{model_name}",
+                    "with persistent_id #{persistent_id} (version #{destruction[:version_id]})"].join(" ") if verbose
+            end
+          elsif changes.first[:event] == 'create'
             # This was a locally created object, so find the model in the previous generation
             puts "#{model_name} created locally. Looking in previous generation." if verbose
             existing = model_class.in_generation(PREVIOUS_GENERATION).find_by_persistent_id(persistent_id)
@@ -288,7 +297,7 @@ module FixMyTransport
       end
       if ! dryrun
         if event == 'destroy'
-          instance.destory
+          instance.destroy
         else
           instance.save!
         end

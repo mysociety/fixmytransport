@@ -127,5 +127,12 @@ namespace :nptg do
       load_instances_in_generation(Locality, Parsers::NptgParser)
     end
 
+
+    desc "Loads locality hierarchy from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
+    task :locality_links => :environment do
+      load_instances_in_generation(LocalityLink, Parsers::NptgParser)
+    end
+
   end
 end

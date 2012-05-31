@@ -141,6 +141,27 @@ module FixMyTransport
             fields
           end
 
+          def find_in_generation_by_identity_hash(instance, generation)
+            search_conditions = instance.identity_hash
+            if self.data_generation_options_hash[:identity_joins]
+              joins = self.data_generation_options_hash[:identity_joins]
+            else
+              joins = []
+              search_conditions.each do |key, value|
+                if value.is_a?(Hash)
+                  joins << key.to_s.singularize.to_sym
+                  # make sure the table reference is pluralized even if the
+                  # association is singular
+                  search_conditions.delete(key)
+                  key = key.to_s.pluralize.to_sym
+                  search_conditions[key] = value
+                end
+              end
+            end
+            existing = self.in_generation(generation).find(:first, :conditions => search_conditions,
+                                                                   :joins => joins)
+          end
+
         end
 
         self.class_eval do

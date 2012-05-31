@@ -27,7 +27,7 @@ namespace :naptan do
 
     desc "Loads stop area hierarchy from a CSV file specified as FILE=filename.
           Runs in dryrun mode unless DRYRUN=0 is specified."
-    task :stop_area_hierarchy => :environment do
+    task :stop_area_links => :environment do
       parse(StopAreaLink, Parsers::NaptanParser)
     end
 
@@ -61,7 +61,7 @@ namespace :naptan do
       ENV['FILE'] = File.join(ENV['DIR'], 'StopsInGroup.csv')
       Rake::Task['naptan:load:stop_area_memberships'].execute
       ENV['FILE'] = File.join(ENV['DIR'], 'GroupsInGroup.csv')
-      Rake::Task['naptan:load:stop_area_hierarchy'].execute
+      Rake::Task['naptan:load:stop_area_links'].execute
     end
   end
 
@@ -194,6 +194,12 @@ namespace :naptan do
           set by VERBOSE=1'
     task :stop_area_memberships => :environment do
       load_instances_in_generation(StopAreaMembership, Parsers::NaptanParser)
+    end
+
+    desc "Loads stop area hierarchy from a CSV file specified as FILE=filename.
+          Runs in dryrun mode unless DRYRUN=0 is specified."
+    task :stop_area_links => :environment do
+      load_instances_in_generation(StopAreaLink, Parsers::NaptanParser)
     end
 
   end

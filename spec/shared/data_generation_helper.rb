@@ -15,6 +15,164 @@ module SharedBehaviours
 
   module DataGenerationHelper
 
+    shared_examples_for "an acts_as_dag model that exists in data generations and is versioned" do
+
+      it_should_behave_like "a model that generates identity hashes"
+
+      describe 'when updating' do
+
+        before do
+          @grandparent = mock_model(@linked_class)
+          @parent = mock_model(@linked_class)
+          @child = mock_model(@linked_class)
+
+          @g_to_p = @link_class.build_edge(@grandparent, @parent)
+          @p_to_c = @link_class.build_edge(@parent, @child)
+          @g_to_p.save!
+          @p_to_c.save!
+          @g_to_c = @link_class.find_link(@grandparent, @child)
+          @g_to_c.direct.should be_false
+        end
+
+        it 'should store a replayable version if the link has been made direct' do
+          with_versioning do
+            @g_to_c.versions.size.should == 0
+            @g_to_c.make_direct
+            @g_to_c.save!
+            @g_to_c.versions.size.should == 1
+            old_version = @g_to_c.versions.first
+            diff = old_version.reify().diff(@g_to_c)
+            diff[:direct].should == [false, true]
+            old_version.replayable.should be_true
+          end
+        end
+
+        it 'should store a replayable version if the link has been made indirect' do
+          @g_to_c.make_direct
+          @g_to_c.save!
+          with_versioning do
+            @g_to_c.versions.size.should == 0
+            @g_to_c.make_indirect
+            @g_to_c.save!
+            @g_to_c.versions.size.should == 1
+            old_version = @g_to_c.versions.first
+            diff = old_version.reify().diff(@g_to_c)
+            diff[:direct].should == [true, false]
+            old_version.replayable.should be_true
+          end
+        end
+
+        it 'should not store a replayable version for any other change' do
+          with_versioning do
+            @g_to_c.versions.size.should == 0
+            @g_to_c.internal_count = 5
+            @g_to_c.save!
+            @g_to_c.versions.size.should == 0
+          end
+        end
+
+        after do
+          @link_class.delete_all
+          Version.delete_all
+        end
+
+      end
+
+      describe 'when creating' do
+
+        before do
+          @grandparent = mock_model(@linked_class)
+          @parent = mock_model(@linked_class)
+          @child = mock_model(@linked_class)
+          @g_to_p = @link_class.build_edge(@grandparent, @parent)
+          @p_to_c = @link_class.build_edge(@parent, @child)
+        end
+
+        it 'should not store a replayable version if replayable has been set to false on the class' do
+          @link_class.replayable = false
+          with_versioning do
+            @g_to_p.versions.size.should == 0
+            @g_to_p.save!
+            @g_to_p.versions.size.should == 1
+            old_version = @g_to_p.versions.first
+            old_version.replayable.should be_false
+          end
+          @link_class.replayable = true
+        end
+
+        it 'should store a replayable version if the link is direct' do
+          with_versioning do
+            @g_to_p.versions.size.should == 0
+            @g_to_p.save!
+            @g_to_p.versions.size.should == 1
+            old_version = @g_to_p.versions.first
+            old_version.replayable.should be_true
+          end
+        end
+
+        it 'should not store a replayable version if the link is indirect' do
+          with_versioning do
+            @g_to_p.save!
+            @p_to_c.save!
+            @g_to_c = @link_class.find_link(@grandparent, @child)
+            @g_to_c.versions.size.should == 1
+            old_version = @g_to_c.versions.first
+            old_version.replayable.should be_false
+          end
+        end
+
+        after do
+          @link_class.delete_all
+          Version.delete_all
+        end
+
+      end
+
+      describe 'when destroying' do
+
+        before do
+          @grandparent = mock_model(@linked_class)
+          @parent = mock_model(@linked_class)
+          @child = mock_model(@linked_class)
+          @g_to_p = @link_class.build_edge(@grandparent, @parent)
+          @p_to_c = @link_class.build_edge(@parent, @child)
+        end
+
+        it 'should store a replayable version if the link is direct' do
+          @g_to_p.save!
+          @p_to_c.save!
+          with_versioning do
+            @g_to_p.destroy
+            @g_to_p.versions.size.should == 1
+            old_version = @g_to_p.versions.first
+            old_version.event.should == 'destroy'
+            old_version.replayable.should be_true
+          end
+        end
+
+        it 'should not store a replayable version if the link is indirect' do
+          @g_to_p.save!
+          @p_to_c.save!
+          with_versioning do
+            @g_to_c = @link_class.find_link(@grandparent, @child)
+            @g_to_p.destroy
+            @p_to_c.destroy
+            @g_to_c.versions.size.should == 1
+            old_version = @g_to_c.versions.first
+            old_version.event.should == 'destroy'
+            old_version.replayable.should be_false
+          end
+        end
+
+        after do
+          @link_class.delete_all
+          Version.delete_all
+        end
+
+      end
+
+    end
+
     shared_examples_for "a model that exists in data generations and is versioned" do
 
       describe 'when the class is set to replayable' do
@@ -78,7 +236,7 @@ module SharedBehaviours
 
     end
 
-    shared_examples_for "a model that exists in data generations" do
+    shared_examples_for "a model that generates identity hashes" do
 
       describe 'when generating identity hashes and field lists' do
 
@@ -93,6 +251,20 @@ module SharedBehaviours
 
       end
 
+      describe 'when finding in a generation with an identity hash' do
+
+        it 'should not raise an exception' do
+          instance = @model_type.new(@default_attrs)
+          lambda{ @model_type.find_in_generation_by_identity_hash(instance, CURRENT_GENERATION) }.should_not raise_error()
+        end
+
+      end
+    end
+
+    shared_examples_for "a model that exists in data generations" do
+
+      it_should_behave_like "a model that generates identity hashes"
+
       describe 'when the data generation is set for all models controlled by data generations' do
 
         it 'should have the scope for the generation set in the call and no scope after the call' do
@@ -106,6 +278,8 @@ module SharedBehaviours
         end
 
       end
+
+
 
       describe 'when finding a model in another generation' do
 
@@ -329,7 +503,6 @@ module SharedBehaviours
                                                       @default_attrs)
           instance = @model_type.new(@default_attrs)
           instance.persistent_id = @previous_generation_instance.persistent_id
-          instance.valid?
           instance.valid?.should == true
         end
 

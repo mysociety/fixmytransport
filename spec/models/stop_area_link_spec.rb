@@ -1,34 +1,20 @@
-# == Schema Information
-# Schema version: 20100707152350
-#
-# Table name: locality_links
-#
-#  id            :integer         not null, primary key
-#  ancestor_id   :integer
-#  descendant_id :integer
-#  direct        :boolean
-#  count         :integer
-#  created_at    :datetime
-#  updated_at    :datetime
-#
-
 require 'spec_helper'
 
-describe LocalityLink do
+describe StopAreaLink do
 
   before do
-    @link_class = LocalityLink
-    @linked_class = Locality
-    @ancestor = Locality.new
+    @link_class = StopAreaLink
+    @linked_class = StopArea
+    @ancestor = StopArea.new
     @ancestor.stub!(:persistent_id).and_return(66)
-    @descendant = Locality.new
+    @descendant = StopArea.new
     @descendant.stub!(:persistent_id).and_return(44)
     @default_attrs = {
+      :direct => true,
       :ancestor => @ancestor,
-      :descendant => @descendant,
-      :direct => true
+      :descendant => @descendant
     }
-    @model_type = LocalityLink
+    @model_type = StopAreaLink
     @expected_identity_hash = { :direct => true,
                                 :ancestor => { :persistent_id => 66 },
                                 :descendant => { :persistent_id => 44 } }
