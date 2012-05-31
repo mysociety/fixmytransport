@@ -30,6 +30,11 @@ describe StopOperator do
     stop_operator.valid?.should be_true
   end
 
+  after do
+    @current_generation_instance.destroy if @current_generation_instance
+    @previous_generation_instance.destroy if @previous_generation_instance
+  end
+
   it_should_behave_like "a model that exists in data generations"
 
   it_should_behave_like "a model that exists in data generations and is versioned"

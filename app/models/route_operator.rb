@@ -19,9 +19,16 @@ class RouteOperator < ActiveRecord::Base
                              :descriptor_fields => [])
   belongs_to :operator
   belongs_to :route
+  validate :route_operator_unique_in_generation
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
                              :replay_of => Proc.new { |instance| instance.replay_of } }
   # virtual attribute used for adding new route operators
   attr_accessor :_add
   diff :include => [ :route_id, :operator_id ]
+
+
+  def route_operator_unique_in_generation
+    self.field_unique_in_generation(:operator_id, :scope => [:route_id])
+  end
+
 end

@@ -24,7 +24,29 @@ describe StopAreaOperator do
   end
 
   it "should create a new instance given valid attributes" do
-    StopAreaOperator.create!(@valid_attributes)
+    stop_area_operator = StopAreaOperator.new(@valid_attributes)
+    stop_area_operator.valid?.should be_true
+  end
+
+  it "should not be valid if an instance with its stop area and operator exists in the current data generation" do
+    @current_generation_instance = StopAreaOperator.create!(@valid_attributes)
+    instance = StopAreaOperator.new(@valid_attributes)
+    instance.valid?.should == false
+    instance.errors.full_messages.include?('Operator has already been taken').should be_true
+  end
+
+  it 'should be valid if its persistent id exists in a previous data generation' do
+    previous_generation_attributes = { :generation_low => PREVIOUS_GENERATION,
+                                       :generation_high => PREVIOUS_GENERATION }
+    attributes = @valid_attributes.merge(previous_generation_attributes)
+    @previous_generation_instance = StopAreaOperator.create!(attributes)
+    instance = StopAreaOperator.new(@valid_attributes)
+    instance.valid?.should == true
+  end
+
+  after do
+    @current_generation_instance.destroy if @current_generation_instance
+    @previous_generation_instance.destroy if @previous_generation_instance
   end
 
   it_should_behave_like "a model that exists in data generations"

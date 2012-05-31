@@ -7,10 +7,16 @@ class StopAreaOperator < ActiveRecord::Base
                             :descriptor_fields => [])
   belongs_to :operator
   belongs_to :stop_area
+  validate :stop_area_operator_unique_in_generation
   # virtual attribute used for adding new stop area operators
   attr_accessor :_add
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
                              :replay_of => Proc.new { |instance| instance.replay_of } }
 
   diff :include => [:stop_area_id, :operator_id]
+
+  def stop_area_operator_unique_in_generation
+    self.field_unique_in_generation(:operator_id, :scope => [:stop_area_id])
+  end
+
 end
