@@ -65,9 +65,19 @@ namespace :temp do
                                 OR (date_trunc('day', created_at) = '2011-04-05'
                                     AND date_trunc('hour', created_at) >= '2011-04-05 17:05:00'))")
     Version.connection.execute("UPDATE versions
-                                SET replayable = 't'
+                                SET replayable = 'f'
                                 WHERE item_type = 'Route'
-                                AND replayable is null")
+                                AND (event = 'create'
+                                OR event = 'destroy')
+                                AND ((date_trunc('hour', created_at) <= '2011-04-05 18:00:00')
+                                OR (date_trunc('day', created_at) = '2011-04-05'
+                                    AND date_trunc('hour', created_at) >= '2011-04-05 17:05:00'))")
+    Version.connection.execute("UPDATE versions
+                                SET replayable = 'f'
+                                WHERE item_type = 'Route'
+                                AND event = 'destroy'
+                                AND (date_trunc('hour', created_at) = '2011-06-19 11:00:00'
+                                OR date_trunc('hour', created_at) = '2011-06-19 10:00:00')")
 
     Version.connection.execute("UPDATE versions
                                 SET replayable = 'f'
@@ -221,6 +231,32 @@ namespace :temp do
     end
   end
 
+  desc 'Backload merge log records'
+  task :backload_merge_logs => :environment do
+    Version.find_each(:conditions => ["item_type = 'Route'
+                                       AND event = 'destroy'"]) do |destroyed_version|
+      destroyed_route = destroyed_version.reify()
+      time_limit = destroyed_version.created_at + 5.seconds
+      merged_version = Version.find(:first, :conditions => ["item_type = 'Route'
+                                                            AND id > ?
+                                                            AND event = 'update'
+                                                            AND created_at <= ?",
+                                                           destroyed_version.id, time_limit],
+                                            :order => 'id asc')
+
+      if merged_version
+        merged_route = merged_version.reify()
+        if merged_route.number == destroyed_route.number
+          MergeLog.create!(:model_name => 'Route',
+                           :from_id => destroyed_route.id,
+                           :to_id => merged_version.item_id,
+                           :created_at => destroyed_version.created_at)
+          puts "#{destroyed_version.id} Destruction of #{destroyed_route.id} #{destroyed_route.inspect} #{merged_version.inspect}"
+        end
+      end
+    end
+  end
+
   desc 'Remove duplicate location operators'
   task :remove_location_operator_duplicates => :environment do
     conditions = ['id in (SELECT a.id
@@ -260,7 +296,6 @@ namespace :temp do
       end
     end
   end
-
 
   desc 'Populate the persistent_id column for models in data generations'
   task :populate_persistent_id => :environment do

@@ -25,6 +25,7 @@ class Route < ActiveRecord::Base
   # See lib/fixmytransport/data_generations
   exists_in_data_generation( :identity_fields => [],
                              :descriptor_fields => [:number, {:region => [:persistent_id]}],
+                             :replay_merges => false,
                              :auto_update_fields => [:cached_description,
                                                      :cached_slug,
                                                      :lat,
@@ -455,7 +456,52 @@ class Route < ActiveRecord::Base
     self.send(:update_without_callbacks)
   end
 
+  def restore_associations
+    destroyed_records = Version.find(:all, :conditions => ["item_type = 'RouteOperator'
+                                                            AND event = 'destroy'
+                                                            AND object like E'%%route_id: #{self.id}\n%%'"])
+    destroyed_records.each do |destroyed_record|
+      route_operator = destroyed_record.reify
+      self.route_operators.build(:operator => route_operator.operator)
+    end
+  end
   # class methods
+
+  # Find a match for a route in a given generation
+  def self.find_in_generation_by_attributes(route, generation, verbose)
+    operators = route.route_operators.map{ |route_operator| route_operator.operator.name }.join(", ")
+    puts "Route id: #{route.id}, number: #{route.number}, operators: #{operators}" if verbose
+    previous = route.class.find_existing(route, { :generation => generation })
+    puts "Found #{previous.size} routes" if verbose
+
+    if previous.size == 0
+      previous = route.class.find_existing(route, { :skip_operator_comparison => true,
+                                                    :require_match_fraction => 0.8,
+                                                    :generation => generation })
+      puts "Found #{previous.size} routes, on complete stop match without operators" if verbose
+    end
+
+    if previous.size > 1
+      # discard any of the routes that have other operators
+      previous = previous.delete_if do |previous_route|
+        other_operators = previous_route.operators.any?{ |operator| ! route.operators.include?(operator) }
+        if other_operators
+          puts "Rejecting #{previous_route.id} as it has other operators" if verbose
+        end
+        other_operators
+      end
+    end
+    if previous.size > 1
+      route_ids = previous.map{ |previous_route| previous_route.id }.join(", ")
+      puts "Matched more than one previous route! #{route_ids}" if verbose
+      return nil
+    end
+    if previous.size == 0
+      puts "No routes matched" if verbose
+      return nil
+    end
+    return previous.first
+  end
 
   def self.find_current(id, scope)
     self.current.find(id, :scope => scope, :include => [{ :route_operators => :operator }])

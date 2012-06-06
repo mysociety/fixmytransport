@@ -355,35 +355,8 @@ namespace :tnds do
 
   # Try and identify a route that matches this one in the previous data generation
   def find_previous_for_route(route, verbose, dryrun)
-    operators = route.operators.map{ |operator| operator.name }.join(", ")
-    puts "Route id: #{route.id}, number: #{route.number}, operators: #{operators}" if verbose
-    previous = Route.find_existing(route, { :generation => PREVIOUS_GENERATION })
-    puts "Found #{previous.size} routes" if verbose
-
-    if previous.size == 0
-      previous = Route.find_existing(route, { :skip_operator_comparison => true,
-                                              :require_match_fraction => 0.8,
-                                              :generation => PREVIOUS_GENERATION })
-      puts "Found #{previous.size} routes, on complete stop match without operators" if verbose
-    end
-
-    if previous.size > 1
-      # discard any of the routes that have other operators
-      previous = previous.delete_if do |previous_route|
-        other_operators = previous_route.operators.any?{ |operator| ! route.operators.include?(operator) }
-        if other_operators
-          puts "Rejecting #{previous_route.id} as it has other operators" if verbose
-        end
-        other_operators
-      end
-    end
-    if previous.size > 1
-      route_ids = previous.map{ |previous_route| previous_route.id }.join(", ")
-      puts "Matched more than one previous route! #{route_ids}"
-      return
-    end
-
-    previous.each do |previous_route|
+    previous = Route.find_match_in_generation(route, PREVIOUS_GENERATION, verbose)
+    if previous
       puts "Matched to route id: #{previous_route.id}, number #{previous_route.number}" if verbose
       route.previous_id = previous.first.id
       route.persistent_id = previous.first.persistent_id
@@ -407,6 +380,8 @@ namespace :tnds do
         puts "Saving route" if verbose
         route.save!
       end
+    else
+      puts "No match for route id: #{route.id}"
     end
   end
 

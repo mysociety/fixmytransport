@@ -84,7 +84,8 @@ describe FixMyTransport::ReplayableChanges do
       stub!(:get_updates).with(Stop, true, nil, false).and_return(@stop_update_hash)
       @current_gen_stop = mock_model(Stop, :common_name => 'Old name',
                                            :common_name= => nil,
-                                           :replay_of= => nil)
+                                           :replay_of= => nil,
+                                           :valid? => true)
       @current_gen = mock('current generation')
       @current_gen.stub!(:find_by_persistent_id).with(5454).and_return(@current_gen_stop)
       Stop.stub!(:current).and_return(@current_gen)

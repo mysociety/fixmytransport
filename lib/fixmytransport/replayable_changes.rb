@@ -229,6 +229,15 @@ module FixMyTransport
         puts "This model does not store a history of local edits. Updates cannot be replayed."
         exit(0)
       end
+      if model_class.data_generation_options_hash.has_key?(:replay_merges)
+        replay_merges = model_class.data_generation_options_hash[:replay_merges]
+      else
+        replay_merges = true
+      end
+      identity_fields = model_class.data_generation_options_hash[:identity_fields]
+      after_restore = model_class.data_generation_options_hash[:after_restore]
+
+      puts "Replay of merges is #{replay_merges}"
       update_hash = get_updates(model_class, only_replayable=true, date=nil, verbose=verbose)
       model_name = model_class.to_s.downcase
       update_hash.each do |persistent_id, changes|
@@ -239,15 +248,34 @@ module FixMyTransport
         if ! existing
           puts "Can't find current #{model_name} to update for persistent_id #{persistent_id} (#{changes.first[:version_id]})" if verbose
           if destruction = changes.find{ |change| change[:event] == 'destroy'}
+            destroyed_instance = Version.find(destruction[:version_id]).reify()
+            if destroyed_instance.respond_to?(:restore_associations)
+              destroyed_instance.restore_associations
+            end
+            if !replay_merges
+              merge = MergeLog.find(:first, :conditions => ['model_name = ?
+                                                             AND from_id = ?',
+                                                             model_class.to_s, destroyed_instance])
+              if merge
+                puts "Discarding merged #{model_class}" if verbose
+                next
+              end
+            end
+
             # Double check to see if a new instance matching the identity hash has been loaded
             # after the instance in the previous generation was deleted (thus not getting the
             # same persistent id)
-            destroyed_instance = Version.find(destruction[:version_id]).reify()
-
-            existing = model_class.find_in_generation_by_identity_hash(destroyed_instance, CURRENT_GENERATION)
-            if ! existing
-              puts ["Can't find any #{model_name} to match destroyed #{model_name}",
-                    "with persistent_id #{persistent_id} (version #{destruction[:version_id]})"].join(" ") if verbose
+            if !identity_fields.empty?
+              existing = model_class.find_in_generation_by_identity_hash(destroyed_instance, CURRENT_GENERATION)
+              if ! existing
+                puts ["Can't find any #{model_name} to match destroyed #{model_name}",
+                      "with persistent_id #{persistent_id} (version #{destruction[:version_id]})"].join(" ") if verbose
+              end
+            elsif model_class.respond_to?(:find_in_generation_by_attributes)
+              existing = model_class.find_in_generation_by_attributes(destroyed_instance, CURRENT_GENERATION, verbose)
+            else
+              puts ["#{model_class} has neither identity fields nor find_in_generation_by_attributes - cannot",
+                    "match instance to current generation"]
             end
           elsif changes.first[:event] == 'create'
             # This was a locally created object, so find the model in the previous generation
@@ -292,9 +320,15 @@ module FixMyTransport
                            :changes => applied_changes }
         end
       when 'destroy'
-        puts "Destroying #{model_name} #{instance.id} (version id #{version_id} #{change_details[:date]})"
+        puts "Destroying #{model_name} #{instance.id} (version id #{version_id} #{change_details[:date]})" if verbose
         change_list <<  { :event => :destroy,
                           :model => instance }
+      end
+      if ! instance.valid?
+        puts "ERROR: New instance is invalid:"
+        puts instance.inspect
+        puts instance.errors.full_messages.join("\n")
+        exit(1)
       end
       if ! dryrun
         if event == 'destroy'
