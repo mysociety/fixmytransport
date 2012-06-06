@@ -198,7 +198,7 @@ module FixMyTransport
       else
         raise "Unknown version event for version id #{version.id}: #{version.event}"
       end
-      details_hash[:item_persistent_id] = version_model.persistent_id
+      details_hash[:item_persistent_id] = version_model.persistent_id ? version_model.persistent_id : version_model.id
       return details_hash
     end
 
@@ -243,6 +243,7 @@ module FixMyTransport
             # after the instance in the previous generation was deleted (thus not getting the
             # same persistent id)
             destroyed_instance = Version.find(destruction[:version_id]).reify()
+
             existing = model_class.find_in_generation_by_identity_hash(destroyed_instance, CURRENT_GENERATION)
             if ! existing
               puts ["Can't find any #{model_name} to match destroyed #{model_name}",
@@ -291,7 +292,7 @@ module FixMyTransport
                            :changes => applied_changes }
         end
       when 'destroy'
-        puts "Destroying #{model_name} #{instance.id}"
+        puts "Destroying #{model_name} #{instance.id} (version id #{version_id} #{change_details[:date]})"
         change_list <<  { :event => :destroy,
                           :model => instance }
       end
