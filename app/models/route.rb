@@ -481,14 +481,19 @@ class Route < ActiveRecord::Base
     # meets our other criteria. If we don't know the operator, or we pass the :use_source_admin_areas option
     # only return routes with the same source_admin_area operator code (optionally only from the same admin area)
     # N.B. only routes loaded from NPTDR will have source_admin_areas
+
+    operator_clause = ''
+    operator_params = []
     if ! options[:skip_operator_comparison]
-      if new_route.route_operators.length >= 1 && !options[:use_source_admin_areas]
-        operator_ids = new_route.route_operators.map do |route_operator|
-          Operator.find_in_generation_by_id(route_operator.operator_id, generation).id
+      if  !options[:use_source_admin_areas]
+        if new_route.route_operators.length >= 1
+          operator_ids = new_route.route_operators.map do |route_operator|
+            Operator.find_in_generation_by_id(route_operator.operator_id, generation).id
+          end
+          operator_clause = "AND route_operators.operator_id in (?)"
+          operator_params = [ operator_ids ]
         end
-        operator_clause = "AND route_operators.operator_id in (?)"
-        operator_params = [ operator_ids ]
-      else
+      elsif new_route.route_source_admin_areas.length >= 1
         operator_clauses = []
         operator_params = []
 
@@ -514,9 +519,6 @@ class Route < ActiveRecord::Base
         end
         operator_clause = "AND (#{operator_clauses.join(" OR ")})"
       end
-    else
-      operator_clause = ''
-      operator_params = []
     end
 
     id_clause = ''
