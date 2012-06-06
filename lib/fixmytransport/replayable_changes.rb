@@ -237,7 +237,7 @@ module FixMyTransport
         # Try to find the object in the current generation
         existing = model_class.current.find_by_persistent_id(persistent_id)
         if ! existing
-          puts "Can't find current #{model_name} to update for persistent_id #{persistent_id}" if verbose
+          puts "Can't find current #{model_name} to update for persistent_id #{persistent_id} (#{changes.first[:version_id]})" if verbose
           if destruction = changes.find{ |change| change[:event] == 'destroy'}
             # Double check to see if a new instance matching the identity hash has been loaded
             # after the instance in the previous generation was deleted (thus not getting the
