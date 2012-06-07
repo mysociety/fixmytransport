@@ -399,6 +399,32 @@ namespace :tnds do
 
   namespace :update do
 
+    desc 'Finds all the cases where more than one route in the previous generation matches
+          a route in the current generation and creates merge candidates for them.
+          Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1'
+    task :create_merge_candidates_from_multiple_matches => :environment do
+      verbose = check_verbose
+      dryrun = check_dryrun
+
+        train_mode = TransportMode.find_by_name('Train')
+        conditions = { :conditions => ['routes.previous_id IS NULL
+                                        AND transport_mode_id != ?
+                                        AND generation_low = ?', train_mode, CURRENT_GENERATION],
+                       :include => :route_operators }
+        Route.find_each(conditions) do |route|
+          puts "Looking for #{route.number}" if verbose
+          puts "#{route.class.to_s} #{route.transport_mode.name}"
+          routes = Route.find_in_generation_by_attributes(route, PREVIOUS_GENERATION, verbose, {:multiple => true})
+          if routes.size > 1
+            first = routes.pop
+            if ! dryrun
+              MergeCandidate.create!(:national_route => first, :regional_route_ids => routes.map{|route| route.id}.join("|"))
+            end
+          end
+        end
+    end
+
+
     desc 'Attempts to match routes in the current generation with routes in the previous
           generation. Call with ROUTE_ID=id to specify a single route to try and match.
           Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1'
