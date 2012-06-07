@@ -125,20 +125,22 @@ module FixMyTransport
           def external_identity_fields
             fields = data_generation_options_hash[:identity_fields] +
                     data_generation_options_hash[:descriptor_fields]
-            fields = fields.collect do |field|
+            external_fields = []
+            fields.each do |field|
               if field.is_a?(Hash)
+                external_field = {}
                 if field.keys.size > 1
                   raise "More than one key in hash passed to fields_to_attribute_hash"
                 end
                 association_name = field.keys.first
                 association_class = self.reflect_on_association(association_name).klass
-                field[association_name] = association_class.external_identity_fields
-                field
+                external_field[association_name] = association_class.external_identity_fields
               else
-                field
+                external_field = field
               end
+              external_fields << external_field
             end
-            fields
+            external_fields
           end
 
           def find_in_generation_by_identity_hash(instance, generation)
@@ -203,6 +205,37 @@ module FixMyTransport
 
     module InstanceMethods
 
+      def identity_hash_populated?
+        if (!self.class.data_generation_options_hash[:identity_fields]) || self.data_generation_options_hash[:identity_fields].empty?
+          return false
+        else
+          return hash_populated?(self.class.data_generation_options_hash[:identity_fields])
+        end
+      end
+
+      def hash_populated?(fields)
+        fields.each do |field|
+          if field.is_a?(Hash)
+            if field.keys.size > 1
+              raise "More than one key in hash passed to fields_to_attribute_hash"
+            end
+            association_name = field.keys.first
+            association = self.send(association_name)
+            if association.nil?
+              return false
+            else
+              association_hash_valid = association.hash_populated?(field[association_name])
+              return false if association_hash_valid == false
+            end
+          else
+            if self.send(field).nil?
+              return false
+            end
+          end
+        end
+        return true
+      end
+
       def identity_hash
         if !self.class.data_generation_options_hash[:identity_fields]
           return {}
@@ -212,6 +245,7 @@ module FixMyTransport
       end
 
       def fields_to_attribute_hash(fields)
+
         fields = fields.collect do |field|
           if field.is_a?(Hash)
             if field.keys.size > 1

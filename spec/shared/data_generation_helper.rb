@@ -249,6 +249,11 @@ module SharedBehaviours
           @model_type.external_identity_fields.should == @expected_external_identity_fields
         end
 
+        it 'should return an expected value for identity_hash_populated?' do
+          instance = @model_type.new(@default_attrs)
+          instance.identity_hash_populated?.should == @expected_identity_hash_populated
+        end
+
       end
 
       describe 'when finding in a generation with an identity hash' do

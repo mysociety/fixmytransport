@@ -20,6 +20,7 @@ describe OperatorCode do
     @expected_external_identity_fields = [:code,
                                           {:region => [:code, :name]},
                                           {:operator => [:noc_code, :name]}]
+    @expected_identity_hash_populated = true
   end
 
   it "should create a new instance given valid attributes" do

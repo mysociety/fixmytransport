@@ -49,6 +49,7 @@ describe StopArea do
     @model_type = StopArea
     @expected_identity_hash = {:code => 'fxfx'}
     @expected_external_identity_fields = [:code, :name]
+    @expected_identity_hash_populated = true
   end
 
   it_should_behave_like "a model that exists in data generations"

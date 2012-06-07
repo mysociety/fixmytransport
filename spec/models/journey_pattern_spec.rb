@@ -10,6 +10,7 @@ describe JourneyPattern do
     @default_attrs = {  }
     @expected_identity_hash = {}
     @expected_external_identity_fields = []
+    @expected_identity_hash_populated = false
   end
 
   it_should_behave_like "a model that exists in data generations"

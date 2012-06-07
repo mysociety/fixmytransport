@@ -35,6 +35,7 @@ describe LocalityLink do
     @expected_external_identity_fields = [:direct,
                                           {:ancestor => [:code, :name]},
                                           {:descendant => [:code, :name]}]
+    @expected_identity_hash_populated = true
   end
 
   it_should_behave_like "an acts_as_dag model that exists in data generations and is versioned"

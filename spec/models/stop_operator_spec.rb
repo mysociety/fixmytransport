@@ -21,8 +21,9 @@ describe StopOperator do
     }
     @model_type = StopOperator
     @expected_identity_hash = {:stop => {:persistent_id => 88},
-                              :operator => {:persistent_id => 44}}
+                               :operator => {:persistent_id => 44}}
     @expected_external_identity_fields = [{:stop=>[:atco_code, :name]}, {:operator=>[:noc_code, :name]}]
+    @expected_identity_hash_populated = true
   end
 
   it "should create a new instance given valid attributes" do

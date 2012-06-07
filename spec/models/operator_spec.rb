@@ -29,6 +29,7 @@ describe Operator do
     @default_attrs = { :name => 'value for name', :noc_code => 'xxxx' }
     @expected_identity_hash = {:noc_code => 'xxxx'}
     @expected_external_identity_fields = [:noc_code, :name]
+    @expected_identity_hash_populated = true
   end
 
   describe 'in data generations' do

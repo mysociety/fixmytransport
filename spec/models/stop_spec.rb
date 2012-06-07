@@ -52,6 +52,7 @@ describe Stop do
                        :atco_code => 'xxxy' }
     @expected_identity_hash = { :atco_code => 'xxxy'}
     @expected_external_identity_fields = [ :atco_code, :name ]
+    @expected_identity_hash_populated = true
   end
 
   it_should_behave_like "a model that exists in data generations"

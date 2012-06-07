@@ -43,6 +43,7 @@ describe Locality do
     @default_attrs = { :name => 'A test locality', :code => 'xxxx' }
     @expected_identity_hash = {:code => 'xxxx'}
     @expected_external_identity_fields = [:code, :name]
+    @expected_identity_hash_populated = true
   end
 
   it_should_behave_like "a model that exists in data generations"

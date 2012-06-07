@@ -31,6 +31,7 @@ describe RouteSegment do
                        :segment_order => 0 }
     @expected_identity_hash = {}
     @expected_external_identity_fields = []
+    @expected_identity_hash_populated = false
   end
 
   it "should create a new instance given valid attributes" do

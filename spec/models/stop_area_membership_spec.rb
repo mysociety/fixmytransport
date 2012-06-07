@@ -36,6 +36,7 @@ describe StopAreaMembership do
     @expected_identity_hash = { :stop => {:persistent_id => 44 },
                                 :stop_area => {:persistent_id => 55 }}
     @expected_external_identity_fields = [{:stop=>[:atco_code, :name]}, {:stop_area=>[:code, :name]}]
+    @expected_identity_hash_populated = true
   end
 
   it_should_behave_like "a model that exists in data generations"

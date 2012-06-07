@@ -35,6 +35,7 @@ describe RouteOperator do
                                 :route => { :persistent_id => 22 } }
     @expected_external_identity_fields = [{:route=>[:number, {:region => [:code, :name]}]},
                                           {:operator=>[:noc_code, :name]}]
+    @expected_identity_hash_populated = true
   end
 
   it_should_behave_like "a model that exists in data generations"

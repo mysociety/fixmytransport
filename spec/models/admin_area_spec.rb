@@ -39,6 +39,7 @@ describe AdminArea do
     @default_attrs = {:atco_code => 'xxxx', :code => 'yy'}
     @expected_identity_hash = {:atco_code => 'xxxx', :code => 'yy'}
     @expected_external_identity_fields = [:atco_code, :code, :name]
+    @expected_identity_hash_populated = true
   end
 
   it "should create a new instance given valid attributes" do
