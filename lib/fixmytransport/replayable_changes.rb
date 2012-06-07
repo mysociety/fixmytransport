@@ -14,6 +14,41 @@ module FixMyTransport
 
     module ClassMethods
 
+      def paper_trail_restorable_associations(associations_hash)
+        cattr_accessor :restorable_associations
+        self.restorable_associations = associations_hash
+
+        self.class_eval do
+
+          # Paper trail does not automatically restore 'has many' associations on reified
+          # objects but we will sometimes need them in order to identify the successors of
+          # deleted instances in the next generation - see route model. This is a rather
+          # limited hacky method for digging them out.
+          def restore_associations
+            self.class.restorable_associations.each do |association_hash|
+              if association_hash.keys.size > 1
+                raise "More than one key in hash passed to restore_associations"
+              end
+              association_name = association_hash.keys.first
+              association_key = association_hash[association_name][:foreign_key]
+              attributes = association_hash[association_name][:attributes]
+              class_name = self.class.reflections[association_name].class_name
+              destroyed_records = Version.find(:all, :conditions => ["item_type = ?
+                                                                      AND event = 'destroy'
+                                                                      AND object like E'%%#{association_key}: #{self.id}\n%%'",
+                                                                      class_name])
+              destroyed_records.each do |destroyed_record|
+                instance = destroyed_record.reify
+                attribute_hash = Hash[attributes.map{|attribute| [attribute, instance.send(attribute)] }]
+                self.send(association_name).build(attribute_hash)
+              end
+            end
+          end
+
+        end
+
+      end
+
 
       # Allow classes using acts_as_dag to also use paper_trail to track changes
       def paper_trail_with_dag()
@@ -265,7 +300,7 @@ module FixMyTransport
             # Double check to see if a new instance matching the identity hash has been loaded
             # after the instance in the previous generation was deleted (thus not getting the
             # same persistent id)
-            if !identity_fields.empty?
+            if destroyed_instance.identity_hash_populated?
               existing = model_class.find_in_generation_by_identity_hash(destroyed_instance, CURRENT_GENERATION)
               if ! existing
                 puts ["Can't find any #{model_name} to match destroyed #{model_name}",
@@ -275,7 +310,7 @@ module FixMyTransport
               existing = model_class.find_in_generation_by_attributes(destroyed_instance, CURRENT_GENERATION, verbose)
             else
               puts ["#{model_class} has neither identity fields nor find_in_generation_by_attributes - cannot",
-                    "match instance to current generation"]
+                    "match instance to current generation"] if verbose
             end
           elsif changes.first[:event] == 'create'
             # This was a locally created object, so find the model in the previous generation

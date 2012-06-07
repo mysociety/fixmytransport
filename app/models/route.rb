@@ -68,6 +68,8 @@ class Route < ActiveRecord::Base
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
                              :replay_of => Proc.new { |instance| instance.replay_of } }
+  paper_trail_restorable_associations [ :route_operators => { :foreign_key => :route_id,
+                                                              :attributes => [:operator] } ]
   attr_accessor :show_as_point, :operator_info, :missing_stops
   before_save [ :cache_route_coords,
                 :cache_area,
