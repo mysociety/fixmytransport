@@ -272,7 +272,7 @@ module FixMyTransport
       identity_fields = model_class.data_generation_options_hash[:identity_fields]
       after_restore = model_class.data_generation_options_hash[:after_restore]
 
-      puts "Replay of merges is #{replay_merges}"
+      puts "Replay of merges is #{replay_merges}" if verbose
       update_hash = get_updates(model_class, only_replayable=true, date=nil, verbose=verbose)
       model_name = model_class.to_s.downcase
       update_hash.each do |persistent_id, changes|
