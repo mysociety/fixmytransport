@@ -470,12 +470,12 @@ class Route < ActiveRecord::Base
   # class methods
 
   # Find a match for a route in a given generation
-  def self.find_in_generation_by_attributes(route, generation, verbose)
+  def self.find_in_generation_by_attributes(route, generation, verbose, options={})
     operators = route.route_operators.map{ |route_operator| route_operator.operator.name }.join(", ")
     puts "Route id: #{route.id}, number: #{route.number}, operators: #{operators}" if verbose
     previous = route.class.find_existing(route, { :generation => generation })
     puts "Found #{previous.size} routes" if verbose
-
+    multiple = options.has_key?(:multiple) ? options[:multiple] : false
     if previous.size == 0
       previous = route.class.find_existing(route, { :skip_operator_comparison => true,
                                                     :require_match_fraction => 0.8,
@@ -483,7 +483,7 @@ class Route < ActiveRecord::Base
       puts "Found #{previous.size} routes, on complete stop match without operators" if verbose
     end
 
-    if previous.size > 1
+    if previous.size > 1 && ! multiple
       # discard any of the routes that have other operators
       previous = previous.delete_if do |previous_route|
         other_operators = previous_route.operators.any?{ |operator| ! route.operators.include?(operator) }
@@ -493,16 +493,24 @@ class Route < ActiveRecord::Base
         other_operators
       end
     end
-    if previous.size > 1
+    if previous.size > 1 && ! multiple
       route_ids = previous.map{ |previous_route| previous_route.id }.join(", ")
       puts "Matched more than one previous route! #{route_ids}" if verbose
       return nil
     end
     if previous.size == 0
       puts "No routes matched" if verbose
-      return nil
+      if multiple
+        return []
+      else
+        return nil
+      end
     end
-    return previous.first
+    if multiple
+      return previous
+    else
+      return previous.first
+    end
   end
 
   def self.find_current(id, scope)
