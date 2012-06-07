@@ -458,15 +458,28 @@ class Route < ActiveRecord::Base
     self.send(:update_without_callbacks)
   end
 
-  def restore_associations
-    destroyed_records = Version.find(:all, :conditions => ["item_type = 'RouteOperator'
-                                                            AND event = 'destroy'
-                                                            AND object like E'%%route_id: #{self.id}\n%%'"])
-    destroyed_records.each do |destroyed_record|
-      route_operator = destroyed_record.reify
-      self.route_operators.build(:operator => route_operator.operator)
+  def find_previous_route_operators(verbose, dryrun)
+    self.route_operators.each do |route_operator|
+      previous_route_operator = RouteOperator.find_in_generation_by_identity_hash(route_operator,
+                                                                                  PREVIOUS_GENERATION)
+      if previous_route_operator
+        route_operator.previous_id = previous_route_operator.id
+        route_operator.persistent_id = previous_route_operator.persistent_id
+        if !route_operator.valid?
+          puts "ERROR: Route operator is invalid:"
+          puts route_operator.inspect
+          puts route_operaotr.errors.full_messages.join("\n")
+          return
+        end
+
+        if ! dryrun
+          puts "Saving route operator" if verbose
+          route_operator.save!
+        end
+      end
     end
   end
+
   # class methods
 
   # Find a match for a route in a given generation
