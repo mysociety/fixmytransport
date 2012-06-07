@@ -355,33 +355,45 @@ namespace :tnds do
 
   # Try and identify a route that matches this one in the previous data generation
   def find_previous_for_route(route, verbose, dryrun)
-    previous = Route.find_match_in_generation(route, PREVIOUS_GENERATION, verbose)
+    previous = Route.find_in_generation_by_attributes(route, PREVIOUS_GENERATION, verbose)
     if previous
-      puts "Matched to route id: #{previous_route.id}, number #{previous_route.number}" if verbose
-      route.previous_id = previous.first.id
-      route.persistent_id = previous.first.persistent_id
+      puts "Matched to route id: #{previous.id}, number #{previous.number}" if verbose
 
-      # find previous records for route operators
-      route.route_operators.each do |route_operator|
-        previous_route_operator = RouteOperator.find_in_generation_by_identity_hash(route_operator,
-                                                                                    PREVIOUS_GENERATION)
-        if previous_route_operator
-          route_operator.previous_id = previous_route_operator.id
-          route_operator.persistent_id = previous_route_operator.persistent_id
-          if ! dryrun
-            puts "Saving route operator" if verbose
-            route_operator.save!
-          end
+      merged = false
+      existing_successor = Route.current.find_by_persistent_id(previous.persistent_id)
+      if existing_successor
+        puts "Merging to existing successor #{existing_successor.id}, number #{existing_successor.number}" if verbose
+        if !dryrun
+          Route.merge_duplicate_route(route, existing_successor)
+          existing_successor.find_previous_route_operators(verbose, dryrun)
+          merged = true
         end
-
       end
 
-      if ! dryrun
-        puts "Saving route" if verbose
-        route.save!
+      if !merged
+        route.previous_id = previous.id
+        route.persistent_id = previous.persistent_id
+
+        # find previous records for route operators
+        route.find_previous_route_operators(verbose, dryrun)
+
+        if !route.valid?
+           puts "ERROR: Route is invalid:"
+           puts route.inspect
+           puts route.errors.full_messages.join("\n")
+           exit(1)
+         end
+
+        if ! dryrun
+          puts "Saving route" if verbose
+          route.save!
+        end
       end
     else
       puts "No match for route id: #{route.id}"
+      if route.previous_id
+        raise "No match for a route that previously matched"
+      end
     end
   end
 
