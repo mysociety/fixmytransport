@@ -550,17 +550,23 @@ class Route < ActiveRecord::Base
     # meets our other criteria. If we don't know the operator, or we pass the :use_source_admin_areas option
     # only return routes with the same source_admin_area operator code (optionally only from the same admin area)
     # N.B. only routes loaded from NPTDR will have source_admin_areas
-
     operator_clause = ''
     operator_params = []
     if ! options[:skip_operator_comparison]
       if  !options[:use_source_admin_areas]
         if new_route.route_operators.length >= 1
           operator_ids = new_route.route_operators.map do |route_operator|
-            Operator.find_in_generation_by_id(route_operator.operator_id, generation).id
+            operator = Operator.find_in_generation_by_id(route_operator.operator_id, generation)
+            operator ? operator.id : nil
           end
-          operator_clause = "AND route_operators.operator_id in (?)"
-          operator_params = [ operator_ids ]
+          operator_ids.compact!
+          if operator_ids.size > 0
+            operator_clause = "AND route_operators.operator_id in (?)"
+            operator_params = [ operator_ids ]
+          else
+            # None of the operators exist in this generation, so return an empty set of routes
+            return []
+          end
         end
       elsif new_route.route_source_admin_areas.length >= 1
         operator_clauses = []
@@ -602,7 +608,6 @@ class Route < ActiveRecord::Base
     conditions = [condition_string, new_route.number, new_route.number, new_route.transport_mode.id]
     conditions += operator_params
     conditions += id_params
-
     routes = Route.in_generation(generation).find(:all, :conditions => conditions,
                                 :include => [ {:journey_patterns => {:route_segments => [:from_stop, :to_stop] }},
                                                :route_operators,
