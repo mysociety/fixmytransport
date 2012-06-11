@@ -310,7 +310,7 @@ module FixMyTransport
               existing = model_class.find_in_generation_by_attributes(destroyed_instance, CURRENT_GENERATION, verbose)
             else
               puts ["#{model_class} has neither identity fields nor find_in_generation_by_attributes - cannot",
-                    "match instance to current generation"] if verbose
+                    "match instance to current generation"].join(" ") if verbose
             end
           elsif changes.first[:event] == 'create'
             # This was a locally created object, so find the model in the previous generation
