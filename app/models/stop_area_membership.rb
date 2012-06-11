@@ -22,7 +22,8 @@ class StopAreaMembership < ActiveRecord::Base
                                                   {:stop_area => [:persistent_id]}],
                              :descriptor_fields => [],
                              :deletion_field => :modification,
-                             :deletion_value => 'del' )
+                             :deletion_value => 'del',
+                             :data_generation_associations => [:stop, :stop_area] )
   belongs_to :stop_area
   belongs_to :stop
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },

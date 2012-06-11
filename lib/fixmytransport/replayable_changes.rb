@@ -315,10 +315,28 @@ module FixMyTransport
           elsif changes.first[:event] == 'create'
             # This was a locally created object, so find the model in the previous generation
             puts "#{model_name} created locally. Looking in previous generation." if verbose
-            existing = model_class.in_generation(PREVIOUS_GENERATION).find_by_persistent_id(persistent_id)
-            if ! existing
+            previous = model_class.in_generation(PREVIOUS_GENERATION).find_by_persistent_id(persistent_id)
+            if ! previous
               puts ["Can't find locally created #{model_name} in previous generation to update",
                     "for persistent_id #{persistent_id}"].join(" ") if verbose
+            else
+              # Can we find the an instance in this generation with a matching identity hash?
+              if previous.identity_hash_populated?
+                existing = model_class.find_in_generation_by_identity_hash(previous, CURRENT_GENERATION)
+              end
+              # if not, clone the instance to the current generation
+              if ! existing
+                existing = model_class.clone_in_current_generation(previous)
+                begin
+                  # update any associations
+                  model_class.data_generation_options_hash[:data_generation_associations].each do |association|
+                    existing.update_association_to_current_generation(association)
+                  end
+                rescue DataGenerations::UpdateError => e
+                  puts "Can't clone locally created #{model_name} to new generation: #{e.message}"
+                  existing = nil
+                end
+              end
             end
           end
         end
@@ -340,13 +358,10 @@ module FixMyTransport
       instance.replay_of = previous_version.id
       case event
       when 'create'
-        changes[:generation_high] = [PREVIOUS_GENERATION, CURRENT_GENERATION]
-        applied_changes = apply_changeset(model_name, changes, instance, verbose)
-        if !applied_changes.empty?
-          change_list << { :event => :create,
-                           :model => instance,
-                           :changes => changes }
-        end
+        puts "Creating #{model_name} (version id #{version_id} #{change_details[:date]})" if verbose
+        change_list << { :event => :create,
+                         :model => instance,
+                         :changes => changes }
       when 'update'
         applied_changes = apply_changeset(model_name, changes, instance, verbose)
         if !applied_changes.empty?

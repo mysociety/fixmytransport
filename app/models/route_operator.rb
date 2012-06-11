@@ -16,7 +16,8 @@ class RouteOperator < ActiveRecord::Base
   # See lib/fixmytransport/data_generation
   exists_in_data_generation( :identity_fields => [ { :route => [ :persistent_id ] },
                                                    { :operator => [ :persistent_id ] }],
-                             :descriptor_fields => [])
+                             :descriptor_fields => [],
+                             :data_generation_associations => [:route, :operator] )
   belongs_to :operator
   belongs_to :route
   validate :route_operator_unique_in_generation

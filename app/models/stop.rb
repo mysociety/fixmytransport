@@ -52,7 +52,8 @@ class Stop < ActiveRecord::Base
                              :deletion_field => :modification,
                              :deletion_value => 'del',
                              :auto_update_fields => [:cached_description, :cached_slug, :metro_stop,
-                                                     :coords] )
+                                                     :coords],
+                             :data_generation_associations => [:locality] )
   has_many :stop_area_memberships
   has_many :stop_areas, :through => :stop_area_memberships
   validates_presence_of :common_name
