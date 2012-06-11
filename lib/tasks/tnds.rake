@@ -361,7 +361,7 @@ namespace :tnds do
 
       merged = false
       existing_successor = Route.current.find_by_persistent_id(previous.persistent_id)
-      if existing_successor
+      if existing_successor && ! (existing_successor.id == route.id)
         puts "Merging to existing successor #{existing_successor.id}, number #{existing_successor.number}" if verbose
         if !dryrun
           Route.merge_duplicate_route(route, existing_successor)
@@ -436,10 +436,11 @@ namespace :tnds do
         find_previous_for_route(route, verbose, dryrun)
       else
         train_mode = TransportMode.find_by_name('Train')
-        conditions = { :conditions => ['routes.previous_id IS NULL and transport_mode_id != ?
-                                        AND route_operators.id IS NOT NULL', train_mode],
+        conditions = { :conditions => ['transport_mode_id != ?
+                                        AND route_operators.id IS NOT NULL
+                                        AND routes.generation_low = ?', train_mode, CURRENT_GENERATION],
                        :include => :route_operators }
-        Route.current.find_each(conditions) do |route|
+        Route.find_each(conditions) do |route|
           puts "Looking for #{route.number}" if verbose
           find_previous_for_route(route, verbose, dryrun)
         end
@@ -474,22 +475,6 @@ namespace :tnds do
 
     end
 
-    def clone_in_new_generation(old_instance)
-      new_instance = old_instance.clone
-      new_instance.generation_high = CURRENT_GENERATION
-      new_instance.generation_low = CURRENT_GENERATION
-      new_instance.previous_id = old_instance.id
-      new_instance.persistent_id = old_instance.persistent_id
-      return new_instance
-    end
-
-    def find_successor(old_instance, model_class, relationship)
-      old_identifier = old_instance.send(relationship)
-      new_related_instance = model_class.find_successor(old_identifier)
-      raise "Can't find successor to #{model_class} #{old_identifier}" unless new_related_instance
-      return new_related_instance
-    end
-
     desc 'Promote train routes (which are not included in TNDS) to the current generation.
           Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1'
     task :train_routes => :environment do
@@ -501,44 +486,44 @@ namespace :tnds do
       Route.in_generation(PREVIOUS_GENERATION).find_each(:conditions => ["transport_mode_id = ?", train_mode]) do |route|
 
         puts "Updating #{route.name} #{route.id} to generation #{CURRENT_GENERATION}" if verbose
-        new_gen_route = clone_in_new_generation(route)
-        new_gen_route.region = find_successor(route, Region, :region_id)
+        new_gen_route = clone_in_current_generation(route)
+        new_gen_route.update_association_to_current_generation(:region)
         route.journey_patterns.each do |journey_pattern|
-          new_attributes = clone_in_new_generation(journey_pattern).attributes
+          new_attributes = clone_in_current_generation(journey_pattern).attributes
           new_gen_journey_pattern = new_gen_route.journey_patterns.build(new_attributes)
           new_gen_journey_pattern.route = new_gen_route
           journey_pattern.route_segments.each do |route_segment|
-            new_attributes = clone_in_new_generation(route_segment).attributes
+            new_attributes = clone_in_current_generation(route_segment).attributes
             new_gen_route_segment = new_gen_journey_pattern.route_segments.build(new_attributes)
             new_gen_route_segment.route = new_gen_route
-            new_gen_route_segment.from_stop = find_successor(route_segment, Stop, :from_stop_id)
-            new_gen_route_segment.to_stop = find_successor(route_segment, Stop, :to_stop_id)
+            new_gen_route_segment.update_association_to_current_generation(:from_stop)
+            new_gen_route_segment.update_association_to_current_generation(:to_stop)
             if route_segment.from_stop_area_id
-              new_gen_route_segment.from_stop_area = find_successor(route_segment, StopArea, :from_stop_area_id)
+              new_gen_route_segment.update_association_to_current_generation(:from_stop_area)
             end
             if route_segment.to_stop_area_id
-              new_gen_route_segment.to_stop_area = find_successor(route_segment, StopArea, :to_stop_area_id)
+              new_gen_route_segment.update_association_to_current_generation(:to_stop_area)
             end
           end
         end
         route.route_operators.each do |route_operator|
-          new_attributes = clone_in_new_generation(route_operator).attributes
+          new_attributes = clone_in_current_generation(route_operator).attributes
           new_route_operator = new_gen_route.route_operators.build(new_attributes)
-          new_route_operator.operator = find_successor(route_operator, Operator, :operator_id)
+          new_route_operator.update_association_to_current_generation(:operator)
         end
 
         route.route_source_admin_areas.each do |route_source_admin_area|
-          new_attributes = clone_in_new_generation(route_source_admin_area).attributes
+          new_attributes = clone_in_current_generation(route_source_admin_area).attributes
           new_route_source_admin_area = new_gen_route.route_source_admin_areas.build(new_attributes)
           if route_source_admin_area.source_admin_area_id
-            new_route_source_admin_area.source_admin_area = find_successor(route_source_admin_area, AdminArea, :source_admin_area_id)
+            new_route_source_admin_area.update_association_to_current_generation(:source_admin_area)
           end
         end
 
         route.route_sub_routes.each do |route_sub_route|
-          sub_route = find_sucessor(route_sub_route, SubRoute, :sub_route_id)
+          sub_route = SubRoute.find_in_generation(route_sub_route.sub_route, CURRENT_GENERATION)
           if ! sub_route
-            sub_route = clone_in_new_generation(route_sub_route.sub_route)
+            sub_route = clone_in_current_generation(route_sub_route.sub_route)
             if !sub_route.valid?
               puts "ERROR: Sub route is invalid:"
               puts sub_route.inspect
@@ -549,7 +534,7 @@ namespace :tnds do
               sub_route.save!
             end
           end
-          new_attributes = clone_in_new_generation(route_sub_route).attributes
+          new_attributes = clone_in_current_generation(route_sub_route).attributes
           new_route_sub_route = new_gen_route.route_sub_routes.build(new_attributes)
           new_route_sub_route.sub_route = sub_route
         end

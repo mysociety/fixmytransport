@@ -5,6 +5,9 @@ module FixMyTransport
   # is internally consistent, and supercedes previous data generations.
   module DataGenerations
 
+    class UpdateError < StandardError
+    end
+
     @@data_generation_models = []
     mattr_accessor :data_generation_models
 
@@ -164,6 +167,15 @@ module FixMyTransport
                                                                    :joins => joins)
           end
 
+          def clone_in_current_generation(old_instance)
+            new_instance = old_instance.clone
+            new_instance.generation_high = CURRENT_GENERATION
+            new_instance.generation_low = CURRENT_GENERATION
+            new_instance.previous_id = old_instance.id
+            new_instance.persistent_id = old_instance.persistent_id
+            return new_instance
+          end
+
         end
 
         self.class_eval do
@@ -298,6 +310,17 @@ module FixMyTransport
         if existing = self.class.current.find(:first, :conditions => [condition_string] + params)
           errors.add(field,  ActiveRecord::Error.new(self, field, :taken).to_s)
         end
+      end
+
+      def update_association_to_current_generation(relationship)
+        old_instance = self.send(relationship)
+        association_class = old_instance.class
+        new_instance = association_class.find_in_generation(old_instance, CURRENT_GENERATION)
+        unless new_instance
+          raise DataGenerations::UpdateError, "Can't find successor to #{association_class} #{old_instance.id}"
+        end
+        puts "updating #{self.class} #{self.id} #{relationship} from #{old_instance.id} to #{new_instance.id}"
+        self.send("#{relationship}=", new_instance)
       end
 
     end
