@@ -5,11 +5,11 @@ class Admin::RoutesController < Admin::AdminController
   before_filter :require_can_admin_locations
 
   def show
-    @route = Route.find(params[:id], :include => [ {:journey_patterns =>
+    @route = Route.current.find(params[:id], :include => [ {:journey_patterns =>
                                                    {:route_segments  => [:from_stop, :to_stop]}},
                                                    {:route_operators => :operator},
                                                    :region])
-    @route.journey_patterns.build( :_add => "1")
+    @route.journey_patterns.build( :_add => "1") if @route
   end
 
   def index

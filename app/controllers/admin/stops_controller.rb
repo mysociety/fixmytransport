@@ -4,7 +4,7 @@ class Admin::StopsController < Admin::AdminController
   before_filter :require_can_admin_locations, :except => :autocomplete_for_name
 
   def show
-    @stop = Stop.find(params[:id])
+    @stop = Stop.current.find(params[:id])
   end
 
   def index
