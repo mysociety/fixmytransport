@@ -251,6 +251,23 @@ namespace :temp do
                            :from_id => destroyed_route.id,
                            :to_id => merged_version.item_id,
                            :created_at => destroyed_version.created_at)
+          destroyed_route_operator_versions = Version.find(:all, :conditions => ["item_type = 'RouteOperator'
+                                                                   AND event = 'destroy'
+                                                                   AND object like E'%%route_id: #{destroyed_route.id}\n%%'"])
+          puts "Found #{destroyed_route_operator_versions.size} route operators"
+          destroyed_route_operator_versions.each do |destroyed_route_operator_version|
+            destroyed_route_operator = destroyed_route_operator_version.reify()
+            destroyed_route_operator.route = merged_route
+            if destroyed_route_operator.identity_hash_populated?
+              merged_route_operator = RouteOperator.find_in_generation_by_identity_hash(destroyed_route_operator, 1)
+              if merged_route_operator
+                MergeLog.create!(:model_name => 'RouteOperator',
+                                 :from_id => destroyed_route_operator.id,
+                                 :to_id => merged_route_operator.id,
+                                 :created_at => destroyed_route_operator_version.created_at)
+              end
+            end
+          end
           puts "#{destroyed_version.id} Destruction of #{destroyed_route.id} #{destroyed_route.inspect} #{merged_version.inspect}"
         end
       end
