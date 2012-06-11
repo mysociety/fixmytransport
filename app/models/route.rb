@@ -908,6 +908,12 @@ class Route < ActiveRecord::Base
       MergeLog.create!(:from_id => duplicate.id,
                        :to_id => original.id,
                        :model_name => 'Route')
+      duplicate.route_operators.each do |route_operator|
+        duplicate_route_operator = original.route_operators.detect { |existing| existing.operator == route_operator.operator }
+        MergeLog.create!(:from_id => route_operator.id,
+                         :to_id => duplicate_route_operator.id,
+                         :model_name => 'RouteOperator')
+      end
       duplicate.destroy
     end
     original.save!
