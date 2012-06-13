@@ -48,8 +48,19 @@
   <%= raw f.label :notes %>
   <%= raw f.text_field :notes %>
 </div>
+
+<div class='form-field'>
+  <%- if @operator.errors.on(:status) %>
+    <div class='error'>
+      <%= error_message_on @operator, :status %>
+    </div>
+  <%- end %>
+  <%= raw label(:operator, :status) %>
+  <%= f.select(:status, Operator.statuses.invert) %>
+</div>
+
 <div class='form-field'>
   <%= raw f.label :transport_mode %>
-  <%= raw f.collection_select(:transport_mode_id, TransportMode.active, :id, :name, :prompt => true) %> 
+  <%= raw f.collection_select(:transport_mode_id, TransportMode.active, :id, :name, :prompt => true) %>
 </div>
 <%= raw submit_tag t('admin.go') %>

@@ -23,10 +23,11 @@ describe Operator do
     @valid_attributes = {
       :code => "value for code",
       :name => "value for name",
-      :noc_code => 'NOXX'
+      :noc_code => 'NOXX',
+      :status => 'ACT'
     }
     @model_type = Operator
-    @default_attrs = { :name => 'value for name', :noc_code => 'xxxx' }
+    @default_attrs = { :name => 'value for name', :noc_code => 'xxxx', :status => 'ACT' }
     @expected_identity_hash = {:noc_code => 'xxxx'}
     @expected_external_identity_fields = [:noc_code, :name]
     @expected_identity_hash_populated = true

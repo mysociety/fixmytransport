@@ -46,6 +46,13 @@ class Operator < ActiveRecord::Base
   validates_presence_of :name
   validate :noc_code_unique_in_generation
 
+  def self.statuses
+    { 'ACT' => 'Active',
+      'DEL' => 'Deleted' }
+  end
+
+  validates_inclusion_of :status, :in => self.statuses.keys
+
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
                              :replay_of => Proc.new {|instance| instance.replay_of },

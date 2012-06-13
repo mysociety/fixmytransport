@@ -95,7 +95,8 @@ class Parsers::NocParser
                               :parent => parent,
                               :ultimate_parent => ultimate_parent,
                               :vehicle_mode => vehicle_mode,
-                              :transport_mode => transport_mode)
+                              :transport_mode => transport_mode,
+                              :status => 'ACT')
       yield operator
     end
   end

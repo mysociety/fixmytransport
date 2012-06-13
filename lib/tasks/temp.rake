@@ -150,6 +150,12 @@ namespace :temp do
     end
   end
 
+  desc 'Backload operator statuses'
+  task :backload_operator_statuses => :environment do
+    Operator.connection.execute("UPDATE operators
+                                 SET status = 'ACT'")
+  end
+
   desc 'Backload version records for the StopAreaMembership model'
   task :backload_stop_area_membership_versions => :environment do
     #MONKEY PATCH
