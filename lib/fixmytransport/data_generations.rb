@@ -319,7 +319,7 @@ module FixMyTransport
         unless new_instance
           raise DataGenerations::UpdateError, "Can't find successor to #{association_class} #{old_instance.id}"
         end
-        puts "updating #{self.class} #{self.id} #{relationship} from #{old_instance.id} to #{new_instance.id}"
+        puts "updating #{self.class} #{self.id} #{relationship} from #{old_instance.id} to #{new_instance.id}" if verbose
         self.send("#{relationship}=", new_instance)
       end
 
