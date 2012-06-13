@@ -1,9 +1,10 @@
 class Council
 
-  attr_accessor :name, :id
+  attr_accessor :name, :id, :persistent_id
 
   def initialize(attributes)
     @id = attributes[:id]
+    @persistent_id = attributes[:id]
     @name = attributes[:name]
   end
 
@@ -11,7 +12,7 @@ class Council
     return self.new(:id => attributes['id'],
                     :name => attributes['name'])
   end
-  
+
   def ==(other)
     (other.is_a?(Council)) && (@id == other.id) && (@name == other.name)
   end
@@ -79,12 +80,16 @@ class Council
     council_data = MySociety::MaPit.call("area", id)
     council = Council.from_hash(council_data)
   end
-  
+
+  def self.find_by_persistent_id(id)
+    return self.find_by_id(id)
+  end
+
   def self.get_all_councils()
     council_parent_types = MySociety::VotingArea.va_council_parent_types
-    council_data = MySociety::MaPit.call("areas", council_parent_types.join(','))    
+    council_data = MySociety::MaPit.call("areas", council_parent_types.join(','))
   end
-  
+
   def self.find_all()
     council_data = self.get_all_councils()
     councils = council_data.values.map{ |council_info| Council.from_hash(council_info) }
@@ -93,7 +98,7 @@ class Council
 
   def self.find_all_without_ptes()
     council_data = self.get_all_councils()
-    pte_area_ids = PassengerTransportExecutiveArea.find(:all).map{ |area| area.area_id }
+    pte_area_ids = PassengerTransportExecutiveArea.current.find(:all).map{ |area| area.area_id }
     council_data = council_data.values.reject{ |council_info| pte_area_ids.include? council_info['id'] }
     councils = council_data.map{ |council_info| Council.from_hash(council_info) }
     councils = councils.sort_by(&:name)

@@ -706,12 +706,7 @@ class ProblemsController < ApplicationController
 
   def handle_problem_no_current_user
     responsibilities = @problem.responsibilities.map do |responsibility|
-      if responsibility.organization_type == 'Operator'
-        id_field = :organization_persistent_id
-      else
-        id_field = :organization_id
-      end
-      [ responsibility.send(id_field), responsibility.organization_type, id_field.to_s ].join("|")
+      [ responsibility.organization_persistent_id, responsibility.organization_type, 'organization_persistent_id' ].join("|")
     end.join(",")
     # encoding the text to avoid YAML issues with multiline strings
     # http://redmine.ruby-lang.org/issues/show/1311

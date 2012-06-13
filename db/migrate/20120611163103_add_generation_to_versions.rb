@@ -5,6 +5,6 @@ class AddGenerationToVersions < ActiveRecord::Migration
   end
 
   def self.down
-    remove_column :versons, :generation
+    remove_column :versions, :generation
   end
 end

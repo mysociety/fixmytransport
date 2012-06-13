@@ -115,7 +115,7 @@
     <%= raw responsibility_fields.hidden_field :organization_type, :value => 'PassengerTransportExecutive', :class => 'organization-type' %><%= t('admin.passenger_transport_executive').titleize %>
   </td>
   <td>
-    <%= raw responsibility_fields.select :organization_id, PassengerTransportExecutive.find(:all).map{ |pte| [pte.name, pte.id] }, :include_blank => true %>
+    <%= raw responsibility_fields.select :organization_persistent_id, PassengerTransportExecutive.current.find(:all).map{ |pte| [pte.name, pte.persistent_id] }, :include_blank => true %>
   </td>
   <td>
   </td>
@@ -127,7 +127,7 @@
     <%= raw responsibility_fields.hidden_field :organization_type, :value => 'Council', :class => 'organization-type' %><%= t('admin.council').titleize %>
   </td>
   <td>
-    <%= raw responsibility_fields.select :organization_id, @councils = Council.find_all().map{ |council| [council.name, council.id] }, :include_blank => true %>
+    <%= raw responsibility_fields.select :organization_persistent_id, @councils = Council.find_all().map{ |council| [council.name, council.persistent_id] }, :include_blank => true %>
   </td>
   <td>
   </td>

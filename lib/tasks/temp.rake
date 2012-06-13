@@ -356,6 +356,20 @@ namespace :temp do
     end
   end
 
+  desc 'Populate passenger_transport_executive_contacts passenger_transport_executive_persistent_id field'
+  task :populate_passenger_transport_executive_contacts_persistent_id => :environment do
+    PassengerTransportExecutiveContact.find_each(:conditions => ['passenger_transport_executive_persistent_id is null']) do |contact|
+      pte = PassengerTransportExecutive.find(:first, :conditions => ['id = ?', contact.passenger_transport_executive_id])
+      if ! pte
+        puts "No pte with id #{contact.passenger_transport_executive_id}"
+        next
+      end
+      contact.passenger_transport_executive_persistent_id = pte.persistent_id
+      puts "Setting passenger_transport_executive_persistent_id to #{contact.passenger_transport_executive_persistent_id} for #{contact.id}, pte #{pte.id}"
+      contact.save!
+    end
+  end
+
   desc 'Populate operator_contacts location_persistent_id field'
   task :populate_operator_contacts_location_persistent_id => :environment do
     OperatorContact.find_each(:conditions => ['location_persistent_id is null and location_type is not null']) do |contact|
@@ -412,8 +426,24 @@ namespace :temp do
         end
         responsibility.organization_persistent_id = operator.persistent_id
         puts "Setting organization_persistent_id to #{responsibility.organization_persistent_id} for #{responsibility.id}, operator #{operator.id}"
+      elsif responsibility.organization_type == 'PassengerTransportExecutive'
+        pte = PassengerTransportExecutive.find(:first, :conditions => ['id = ?', responsibility.organization_id])
+        if ! pte
+          puts "No PTE with id #{responsibility.organization_id}"
+          next
+        end
+        responsibility.organization_persistent_id = pte.persistent_id
+        puts "Setting organization_persistent_id to #{responsibility.organization_persistent_id} for #{responsibility.id}, pte #{pte.id}"
+      elsif responsibility.organization_type == 'Council'
+        council = Council.find_by_id(responsibility.organization_id)
+        if ! council
+          puts "No council with id #{responsibility.organization_id}"
+          next
+        end
+        responsibility.organization_persistent_id = council.id
+        puts "Setting organization_persistent_id to #{responsibility.organization_persistent_id} for #{responsibility.id}, council #{council.id}"
       end
-
+      responsibility.save!
     end
   end
 

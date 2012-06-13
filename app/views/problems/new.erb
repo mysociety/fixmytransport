@@ -30,11 +30,7 @@
           <%- @problem.reference.responsible_organizations.each do |organization| %>
             <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
               <%= responsibility_fields.hidden_field :organization_type,  :value => organization.class.to_s %>
-              <%- if organization.class.to_s == 'Operator'%>
-                <%= responsibility_fields.hidden_field :organization_persistent_id,  :value => organization.id %>
-              <%- else %>
-                <%= responsibility_fields.hidden_field :organization_id,  :value => organization.id %>
-              <%- end %>
+                <%= responsibility_fields.hidden_field :organization_persistent_id,  :value => organization.persistent_id %>
             <%- end %>
           <%- end %>
           <%= f.hidden_field :reference_id, :value => @problem.reference.id %>
@@ -54,7 +50,7 @@
                   <div class='error error-responsibilities_organization_persistent_id' style="display: none;" role="alert">
                   </div>
                 <%- end %>
-                <%= raw responsibility_fields.collection_select("organization_persistent_id", @problem.location.operators, :perssistent_id, :name, :include_blank => t('problems.new.select_operator')) %>
+                <%= raw responsibility_fields.collection_select("organization_persistent_id", @problem.location.operators, :persistent_id, :name, :include_blank => t('problems.new.select_operator')) %>
                 <%= responsibility_fields.hidden_field :organization_type,  :value => 'Operator' %>
 
               <%- elsif @problem.location.operators.size == 1 %>
@@ -72,7 +68,7 @@
           <%- elsif @problem.location.pte_responsible?  %>
             <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
               <%= responsibility_fields.hidden_field :organization_type,  :value => 'PassengerTransportExecutive' %>
-              <%= responsibility_fields.hidden_field :organization_id,  :value => @problem.location.passenger_transport_executive.id %>
+              <%= responsibility_fields.hidden_field :organization_persistent_id,  :value => @problem.location.passenger_transport_executive.persistent_id %>
               <div class="static-value">
                 <%= @problem.location.passenger_transport_executive.name %>
               </div>
@@ -81,7 +77,7 @@
             <%- @problem.location.councils.each do |council| %>
               <%- f.fields_for :responsibilities, Responsibility.new do |responsibility_fields| %>
                 <%= responsibility_fields.hidden_field :organization_type,  :value => 'Council' %>
-                <%= responsibility_fields.hidden_field :organization_id,  :value => council.id %>
+                <%= responsibility_fields.hidden_field :organization_persistent_id,  :value => council.persistent_id %>
               <%- end %>
             <%- end %>
             <div class="static-value">

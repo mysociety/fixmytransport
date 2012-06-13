@@ -834,23 +834,21 @@ describe ProblemsController do
   describe "POST #create" do
 
     before do
-      @council = mock('council', :id => 33, :name => 'A test council')
-      @other_council = mock('another council', :id => 55, :name => 'Another council')
+      @council = mock('council', :id => 33, :persistent_id => 33, :name => 'A test council')
+      @other_council = mock('another council', :persistent_id => 55, :id => 55, :name => 'Another council')
       @operator = mock_model(Operator, :id => 44, :persistent_id => 66)
       @stop = mock_model(Stop, :points => [mock_model(Stop, :lat => 50, :lon => 0)],
                                :responsible_organizations => [@operator, @council])
       @mock_user = mock_model(User)
       @responsibility_one = mock_model(Responsibility, :organization => @council,
-                                                       :organization_id => @council.id,
-                                                       :organization_persistent_id => nil,
+                                                       :organization_persistent_id => @council.id,
                                                        :organization_type => 'Council')
       @responsibility_two = mock_model(Responsibility, :organization => @operator,
                                                        :organization_persistent_id => @operator.id,
                                                        :organization_id => @operator.persistent_id,
                                                        :organization_type => 'Operator')
       @extra_responsibility = mock_model(Responsibility, :organization => @other_council,
-                                                         :organization_id => @other_council.id,
-                                                         :organization_persistent_id => nil,
+                                                         :organization_persistent_id => @other_council.id,
                                                          :organization_type => 'Council',
                                                          :destroy => true)
       @mock_problem = mock_model(Problem, :valid? => true,
@@ -1006,7 +1004,7 @@ describe ProblemsController do
         it 'should save the problem data to the session with the description encoded' do
           expected_params = { :location_persistent_id => 55,
                               :subject => "A Test Subject",
-                              :responsibilities => "33|Council|organization_id,44|Operator|organization_persistent_id",
+                              :responsibilities => "33|Council|organization_persistent_id,44|Operator|organization_persistent_id",
                               :location_type => "Route",
                               :description => "QSBUZXN0IERlc2NyaXB0aW9u\n",
                               :action => :create_problem,

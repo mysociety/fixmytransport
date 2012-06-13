@@ -37,6 +37,10 @@ namespace :update do
     ENV['MODEL'] = 'Operator'
     Rake::Task['update:replay_updates']
 
+    # UPDATE PTEs, PTE areas to current generation
+    Rake::Task['update:ptes'].execute
+    Rake::Task['update:pte_areas'].execute
+
     # LOAD TNDS DATA
     Rake::Task['update:tnds']
     ENV['MODEL'] = 'Route'
@@ -265,4 +269,42 @@ namespace :update do
     mark_unreplayable(model, dryrun, verbose)
   end
 
+  desc "Update passenger transport executive models to the current generation. Runs in dryrun mode
+        unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1"
+  task :ptes => :environment do
+    dryrun = check_dryrun()
+    verbose = check_verbose()
+    PassengerTransportExecutive.in_generation(PREVIOUS_GENERATION).find_each() do |pte|
+      puts "Cloning #{pte.name} to generation #{CURRENT_GENERATION}" if verbose
+      new_gen_pte = PassengerTransportExecutive.clone_in_current_generation(pte)
+      if ! new_gen_pte.valid?
+        puts "ERROR: New instance is invalid:"
+        puts new_gen_pte.errors.full_messages.join("\n")
+        exit(1)
+      end
+      if ! dryrun
+        new_gen_pte.save!
+      end
+    end
+  end
+
+  desc "Update passenger transport executive area models to the current generation. Runs in dryrun mode
+        unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1"
+  task :pte_areas => :environment do
+    dryrun = check_dryrun()
+    verbose = check_verbose()
+    PassengerTransportExecutiveArea.in_generation(PREVIOUS_GENERATION).find_each() do |pte_area|
+      puts "Cloning #{pte_area.id} to generation #{CURRENT_GENERATION}" if verbose
+      new_gen_pte_area = PassengerTransportExecutiveArea.clone_in_current_generation(pte_area)
+      new_gen_pte_area.update_association_to_current_generation(:pte, verbose)
+      if ! new_gen_pte_area.valid?
+        puts "ERROR: New instance is invalid:"
+        puts new_gen_pte_area.errors.full_messages.join("\n")
+        exit(1)
+      end
+      if ! dryrun
+        new_gen_pte_area.save!
+      end
+    end
+  end
 end

@@ -1,8 +1,5 @@
 class OperatorContact < ActiveRecord::Base
-  # This association uses custom keys as the object associated is scoped by data generations - a
-  # persistent id may be held by a different model instance in each generation
-  belongs_to :operator, :foreign_key => :operator_persistent_id,
-                        :primary_key => :persistent_id
+
   has_many :sent_emails, :as => :recipient
   has_many :outgoing_messages, :as => :recipient
   validates_presence_of :category
@@ -15,7 +12,6 @@ class OperatorContact < ActiveRecord::Base
                                        :if => Proc.new{ |contact| ! contact.deleted? }
   has_paper_trail
 
-
   def name
     operator.name
   end
@@ -23,6 +19,20 @@ class OperatorContact < ActiveRecord::Base
   def last_editor
     return nil if versions.empty?
     return versions.last.whodunnit
+  end
+
+  def operator=(new_operator)
+    self.operator_persistent_id = new_operator.persistent_id
+    @operator = new_operator
+  end
+
+  def operator
+    if @operator
+      return @operator
+    end
+    if self.operator_persistent_id
+      return Operator.current.find_by_persistent_id(self.operator_persistent_id)
+    end
   end
 
   def location=(new_location)
@@ -35,7 +45,7 @@ class OperatorContact < ActiveRecord::Base
     if @location
       return @location
     end
-    if self.location_type
+    if self.location_type && self.location_persistent_id
       return self.location_type.constantize.current.find_by_persistent_id(self.location_persistent_id)
     end
     return nil
