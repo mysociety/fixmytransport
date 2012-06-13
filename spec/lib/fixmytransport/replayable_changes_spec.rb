@@ -58,15 +58,15 @@ describe FixMyTransport::ReplayableChanges do
   describe 'when getting updates for a model class' do
 
     before do
-      Version.stub!(:find).with(:all, :conditions => ['item_type = ? AND replayable = ?',
-                                                      'Stop', true],
+      Version.stub!(:find).with(:all, :conditions => ['item_type = ? AND generation = ? AND replayable = ?',
+                                                      'Stop', PREVIOUS_GENERATION, true],
                                       :order => 'created_at asc').and_return([@version])
       stub!(:get_changes).and_return(@version_change_hash)
     end
 
-    it 'should look for versions of instances of that class' do
-      Version.should_receive(:find).with(:all, :conditions => ['item_type = ? AND replayable = ?',
-                                                               'Stop', true],
+    it 'should look for versions of instances of that class created in the previous generation' do
+      Version.should_receive(:find).with(:all, :conditions => ['item_type = ? AND generation = ? AND replayable = ?',
+                                                               'Stop', PREVIOUS_GENERATION, true],
                                                :order => 'created_at asc').and_return([@version])
       get_updates(Stop, only_replayable=true, date=nil, verbose=false)
     end
