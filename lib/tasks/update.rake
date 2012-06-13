@@ -13,52 +13,53 @@ namespace :update do
     Rake::Task['update:nptg'].execute
 
     ENV['MODEL'] = 'LocalityLink'
-    Rake::Task['update:replay_updates']
+    Rake::Task['update:replay_updates'].execute
 
     # LOAD NAPTAN DATA
     Rake::Task['update:naptan'].execute
 
     # Replay updates to stops, stop areas
     ENV['MODEL'] = 'Stop'
-    Rake::Task['update:replay_updates']
+    Rake::Task['update:replay_updates'].execute
 
     ENV['MODEL'] = 'StopArea'
-    Rake::Task['update:replay_updates']
+    Rake::Task['update:replay_updates'].execute
 
     ENV['MODEL'] = 'StopAreaMembership'
-    Rake::Task['update:replay_updates']
+    Rake::Task['update:replay_updates'].execute
 
     ENV['MODEL'] = 'StopAreaLink'
-    Rake::Task['update:replay_updates']
+    Rake::Task['update:replay_updates'].execute
 
     # LOAD NOC DATA
     Rake::Task['update:noc'].execute
 
     ENV['MODEL'] = 'Operator'
-    Rake::Task['update:replay_updates']
+    Rake::Task['update:replay_updates'].execute
 
     # UPDATE PTEs, PTE areas to current generation
     Rake::Task['update:ptes'].execute
     Rake::Task['update:pte_areas'].execute
 
     # LOAD TNDS DATA
-    Rake::Task['update:tnds']
+    Rake::Task['update:tnds'].execute
+
     ENV['MODEL'] = 'Route'
-    Rake::Task['update:replay_updates']
+    Rake::Task['update:replay_updates'].execute
 
     ENV['MODEL'] = 'RouteOperator'
-    Rake::Task['update:replay_updates']
+    Rake::Task['update:replay_updates'].execute
 
     ENV['MODEL'] = 'StopAreaOperator'
-    Rake::Task['update:replay_updates']
+    Rake::Task['update:replay_updates'].execute
 
     ENV['MODEL'] = 'StopOperator'
-    Rake::Task['update:replay_updates']
+    Rake::Task['update:replay_updates'].execute
 
     # Rake::Task['naptan:post_load:mark_metro_stops'].execute
 
     # Mark records as loaded
-    Rake::Task['db:mark_loaded']
+    Rake::Task['db:mark_loaded'].execute
 
   end
 
