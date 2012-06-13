@@ -86,6 +86,11 @@ namespace :temp do
                                 WHERE item_type = 'RouteOperator'
                                 AND date_trunc('hour', created_at) < '2011-04-05 00:00:00'")
     Version.connection.execute("UPDATE versions
+                                SET replayable = 'f'
+                                WHERE item_type = 'RouteOperator'
+                                AND event = 'create'
+                                AND date_trunc('hour', created_at) < '2011-07-29 00:00:00'")
+    Version.connection.execute("UPDATE versions
                                 SET replayable = 't'
                                 WHERE item_type = 'RouteOperator'
                                 AND replayable is null")
