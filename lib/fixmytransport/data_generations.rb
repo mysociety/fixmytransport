@@ -312,7 +312,7 @@ module FixMyTransport
         end
       end
 
-      def update_association_to_current_generation(relationship)
+      def update_association_to_current_generation(relationship, verbose)
         old_instance = self.send(relationship)
         association_class = old_instance.class
         new_instance = association_class.find_in_generation(old_instance, CURRENT_GENERATION)

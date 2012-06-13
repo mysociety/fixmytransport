@@ -487,7 +487,7 @@ namespace :tnds do
 
         puts "Updating #{route.name} #{route.id} to generation #{CURRENT_GENERATION}" if verbose
         new_gen_route = clone_in_current_generation(route)
-        new_gen_route.update_association_to_current_generation(:region)
+        new_gen_route.update_association_to_current_generation(:region, verbose)
         route.journey_patterns.each do |journey_pattern|
           new_attributes = clone_in_current_generation(journey_pattern).attributes
           new_gen_journey_pattern = new_gen_route.journey_patterns.build(new_attributes)
@@ -496,27 +496,27 @@ namespace :tnds do
             new_attributes = clone_in_current_generation(route_segment).attributes
             new_gen_route_segment = new_gen_journey_pattern.route_segments.build(new_attributes)
             new_gen_route_segment.route = new_gen_route
-            new_gen_route_segment.update_association_to_current_generation(:from_stop)
-            new_gen_route_segment.update_association_to_current_generation(:to_stop)
+            new_gen_route_segment.update_association_to_current_generation(:from_stop, verbose)
+            new_gen_route_segment.update_association_to_current_generation(:to_stop, verbose)
             if route_segment.from_stop_area_id
-              new_gen_route_segment.update_association_to_current_generation(:from_stop_area)
+              new_gen_route_segment.update_association_to_current_generation(:from_stop_area, verbose)
             end
             if route_segment.to_stop_area_id
-              new_gen_route_segment.update_association_to_current_generation(:to_stop_area)
+              new_gen_route_segment.update_association_to_current_generation(:to_stop_area, verbose)
             end
           end
         end
         route.route_operators.each do |route_operator|
           new_attributes = clone_in_current_generation(route_operator).attributes
           new_route_operator = new_gen_route.route_operators.build(new_attributes)
-          new_route_operator.update_association_to_current_generation(:operator)
+          new_route_operator.update_association_to_current_generation(:operator, verbose)
         end
 
         route.route_source_admin_areas.each do |route_source_admin_area|
           new_attributes = clone_in_current_generation(route_source_admin_area).attributes
           new_route_source_admin_area = new_gen_route.route_source_admin_areas.build(new_attributes)
           if route_source_admin_area.source_admin_area_id
-            new_route_source_admin_area.update_association_to_current_generation(:source_admin_area)
+            new_route_source_admin_area.update_association_to_current_generation(:source_admin_area, verbose)
           end
         end
 

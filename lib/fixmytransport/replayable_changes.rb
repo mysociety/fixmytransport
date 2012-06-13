@@ -330,7 +330,7 @@ module FixMyTransport
                 begin
                   # update any associations
                   model_class.data_generation_options_hash[:data_generation_associations].each do |association|
-                    existing.update_association_to_current_generation(association)
+                    existing.update_association_to_current_generation(association, verbose)
                   end
                 rescue DataGenerations::UpdateError => e
                   puts "Can't clone locally created #{model_name} to new generation: #{e.message}"
