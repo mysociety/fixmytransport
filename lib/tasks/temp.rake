@@ -18,6 +18,8 @@ namespace :temp do
   desc "Add replayable flag values to versions models in data generations. Indicates whether a change is
         replayable after a new generation of data is loaded"
   task :add_replayable_to_versions => :environment do
+    Version.connection.execute("UPDATE versons
+                                SET generation = 1;")
     Version.connection.execute("UPDATE versions
                                 SET replayable = 'f'
                                 WHERE item_type = 'Stop'

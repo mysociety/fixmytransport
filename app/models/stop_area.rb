@@ -62,7 +62,8 @@ class StopArea < ActiveRecord::Base
   diff :include => [:locality_id]
 
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
-                             :replay_of => Proc.new { |instance| instance.replay_of } }
+                             :replay_of => Proc.new { |instance| instance.replay_of },
+                             :generation => CURRENT_GENERATION }
   before_save :cache_description, :set_metaphones, :update_coords
   # load common stop/stop area functions from stops_and_stop_areas
   is_stop_or_stop_area

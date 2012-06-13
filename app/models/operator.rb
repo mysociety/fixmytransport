@@ -48,7 +48,8 @@ class Operator < ActiveRecord::Base
 
   accepts_nested_attributes_for :route_operators, :allow_destroy => true, :reject_if => :route_operator_invalid
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
-                             :replay_of => Proc.new {|instance| instance.replay_of } }
+                             :replay_of => Proc.new {|instance| instance.replay_of },
+                             :generation => CURRENT_GENERATION }
   cattr_reader :per_page
   @@per_page = 20
   has_friendly_id :name, :use_slug => true

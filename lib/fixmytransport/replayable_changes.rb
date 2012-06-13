@@ -147,8 +147,8 @@ module FixMyTransport
     def get_updates(model_class, only_replayable=true,date=nil, verbose=false)
       update_hash = {}
       options = model_class.data_generation_options_hash
-      condition_string = "item_type = ?"
-      params = [model_class.to_s]
+      condition_string = "item_type = ? AND generation = ?"
+      params = [model_class.to_s, PREVIOUS_GENERATION]
       if date
         condition_string += " AND date_trunc('day', created_at) = ?"
         params << date

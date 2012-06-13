@@ -23,7 +23,8 @@ class RouteOperator < ActiveRecord::Base
   belongs_to :route
   validate :route_operator_unique_in_generation
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
-                             :replay_of => Proc.new { |instance| instance.replay_of } }
+                             :replay_of => Proc.new { |instance| instance.replay_of },
+                             :generation => CURRENT_GENERATION }
   # virtual attribute used for adding new route operators
   attr_accessor :_add
   diff :include => [ :route_id, :operator_id ]

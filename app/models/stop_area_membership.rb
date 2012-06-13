@@ -27,7 +27,8 @@ class StopAreaMembership < ActiveRecord::Base
   belongs_to :stop_area
   belongs_to :stop
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
-                             :replay_of => Proc.new { |instance| instance.replay_of } }
+                             :replay_of => Proc.new { |instance| instance.replay_of },
+                             :generation => CURRENT_GENERATION }
 
   diff :include => [:stop_id, :stop_area_id]
 end

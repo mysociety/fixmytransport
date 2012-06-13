@@ -170,7 +170,7 @@ namespace :update do
     Rake::Task['tnds:update:find_previous_routes'].execute
   end
 
-  desc 'Display a list of updates that have been made to instances of a model.
+  desc 'Display a list of updates that have been made to instances of a model in the previous generation.
         Default behaviour is to only show updates that have been marked as replayable.
         Specify ALL=1 to see all updates. Specify model class as MODEL=ModelName.
         Specify a particular day as DATE=2012-04-23. Verbose flag set by VERBOSE=1'

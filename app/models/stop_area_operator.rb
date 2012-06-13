@@ -11,7 +11,8 @@ class StopAreaOperator < ActiveRecord::Base
   # virtual attribute used for adding new stop area operators
   attr_accessor :_add
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
-                             :replay_of => Proc.new { |instance| instance.replay_of } }
+                             :replay_of => Proc.new { |instance| instance.replay_of },
+                             :generation => CURRENT_GENERATION }
 
   diff :include => [:stop_area_id, :operator_id]
 

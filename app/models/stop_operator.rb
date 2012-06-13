@@ -9,7 +9,8 @@ class StopOperator < ActiveRecord::Base
   belongs_to :stop
   validate :stop_operator_unique_in_generation
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
-                             :replay_of => Proc.new { |instance| instance.replay_of } }
+                             :replay_of => Proc.new { |instance| instance.replay_of },
+                             :generation => CURRENT_GENERATION }
   diff :include => [:stop_id, :operator_id]
 
   def stop_operator_unique_in_generation

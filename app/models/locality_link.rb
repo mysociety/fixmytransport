@@ -24,7 +24,8 @@ class LocalityLink < ActiveRecord::Base
                             :descriptor_fields => [])
   has_paper_trail :ignore => [:ancestor_id, :descendant_id, :count, :created_at, :updated_at],
                   :meta => { :replayable  => Proc.new { |instance| instance.replayable },
-                             :replay_of => Proc.new { |instance| instance.replay_of } }
+                             :replay_of => Proc.new { |instance| instance.replay_of },
+                             :generation => CURRENT_GENERATION }
   paper_trail_with_dag
   replayable_with_dag
 end

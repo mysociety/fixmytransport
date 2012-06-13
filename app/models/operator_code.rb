@@ -11,7 +11,8 @@ class OperatorCode < ActiveRecord::Base
                              :data_generation_associations => [:region, :operator] )
 
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
-                             :replay_of => Proc.new { |instance| instance.replay_of } }
+                             :replay_of => Proc.new { |instance| instance.replay_of },
+                             :generation => CURRENT_GENERATION }
 
   diff :include => [:region_id, :operator_id]
 end

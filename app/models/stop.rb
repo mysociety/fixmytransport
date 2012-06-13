@@ -75,7 +75,8 @@ class Stop < ActiveRecord::Base
   is_location
   has_friendly_id :name_with_indicator, :use_slug => true, :scope => :locality
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
-                             :replay_of => Proc.new { |instance| instance.replay_of } }
+                             :replay_of => Proc.new { |instance| instance.replay_of },
+                             :generation => CURRENT_GENERATION }
   before_save :cache_description, :update_coords
   # set attributes to include and exclude when performing model diffs
   diff :include => [:locality_id]

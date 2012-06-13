@@ -67,7 +67,8 @@ class Route < ActiveRecord::Base
   cattr_reader :per_page
   has_friendly_id :short_name, :use_slug => true, :scope => :region
   has_paper_trail :meta => { :replayable  => Proc.new { |instance| instance.replayable },
-                             :replay_of => Proc.new { |instance| instance.replay_of } }
+                             :replay_of => Proc.new { |instance| instance.replay_of },
+                             :generation => CURRENT_GENERATION }
   paper_trail_restorable_associations [ :route_operators => { :foreign_key => :route_id,
                                                               :attributes => [:operator] } ]
   attr_accessor :show_as_point, :operator_info, :missing_stops
