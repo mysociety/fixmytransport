@@ -431,6 +431,10 @@ namespace :tnds do
     task :find_previous_routes => :environment do
       verbose = check_verbose
       dryrun = check_dryrun
+
+      Route.replayable = false
+      RouteOperator.replayable = false
+
       if ENV['ROUTE_ID']
         route = Route.find(ENV['ROUTE_ID'])
         find_previous_for_route(route, verbose, dryrun)
