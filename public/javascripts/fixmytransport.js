@@ -11,8 +11,8 @@ $(document).ready(function(){
        'beforeSend': function(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content')); }
      });
 
-	/* Frontpage scroller
-	   ================================================== */
+  /* Frontpage scroller
+     ================================================== */
   if($('#frontpage-problem-scroller').length > 0){
    //fix height to tallest child
    var h = 0;
@@ -62,60 +62,65 @@ $(document).ready(function(){
      }
 
      function tabshook(){
-	 /* If the URL has an anchor, try to open a tab that it names */
-	 var hash = window.location.hash, parentid;
-	 if (hash.indexOf('#') == 0) {
-	     parent = $(hash).parent();
-	     parentid = parent.attr('id');
-	     if (parentid == 'tabs') {
-		 /* Then the anchor is selecting a top-level tab
-		    (e.g. trains, buses, etc.) */
-		 parent.tabs('select', hash);
-	     } else {
-		 /* Otherwise, this is an anchor like
-		    #bus_starts_with_W in which case we first need to
-		    select the correct higher-level tab. */
-		 $('#tabs').tabs('select', '#' + parentid);
-		 parent.tabs('select', hash);
-	     }
-	 }
-     	var activetab = 'childactive-'+$('#tabs-main-nav li.ui-state-active').attr('id');
-     	$("#tabs-main-nav").removeClass (function (index, css) {
-     	    return (css.match (/\bchildactive-\S+/g) || []).join(' ');
-     	});
-     	$('#tabs-main-nav').addClass(activetab);
+  /* Set the anchor in the URL on tab selection */
+       $("#tabs").bind( "tabsselect", function(event, ui) {
+         window.location.hash = ui.tab.hash;
+       });
+
+   /* If the URL has an anchor, try to open a tab that it names */
+   var hash = window.location.hash, parentid;
+   if (hash.indexOf('#') == 0) {
+       parent = $(hash).parent();
+       parentid = parent.attr('id');
+       if (parentid == 'tabs') {
+     /* Then the anchor is selecting a top-level tab
+        (e.g. trains, buses, etc.) */
+        parent.tabs('select', hash);
+       } else {
+     /* Otherwise, this is an anchor like
+        #bus_starts_with_W in which case we first need to
+        select the correct higher-level tab. */
+     $('#tabs').tabs('select', '#' + parentid);
+     parent.tabs('select', hash);
+       }
+   }
+      var activetab = 'childactive-'+$('#tabs-main-nav li.ui-state-active').attr('id');
+      $("#tabs-main-nav").removeClass (function (index, css) {
+          return (css.match (/\bchildactive-\S+/g) || []).join(' ');
+      });
+      $('#tabs-main-nav').addClass(activetab);
      }
      tabifyRouteLists();
      addSearchGuidance();
 
-   	$('#tabs').bind('tabsshow', function(event, ui) {
-   		tabshook();
-   	});
+    $('#tabs').bind('tabsshow', function(event, ui) {
+      tabshook();
+    });
 
-	/* Region map
-	   ================================================== */
-	$('#RegionMap area').hover(function(){
-		var regionclass = $(this).attr('id');
-		$('#region-list li.'+regionclass).addClass('active');
-	},function(){
-		$('#region-list li').removeClass('active');
-	});
+  /* Region map
+     ================================================== */
+  $('#RegionMap area').hover(function(){
+    var regionclass = $(this).attr('id');
+    $('#region-list li.'+regionclass).addClass('active');
+  },function(){
+    $('#region-list li').removeClass('active');
+  });
 
-	/* Goto top
-	   ================================================== */
-  	$('.goto-top').click(function(e){
-  		e.preventDefault();
-  		 $('html, body').animate({scrollTop : 0},'slow');
-  	});
+  /* Goto top
+     ================================================== */
+    $('.goto-top').click(function(e){
+      e.preventDefault();
+       $('html, body').animate({scrollTop : 0},'slow');
+    });
 
-	/* Form focusses
-	   ================================================== */
-	$('#find-stop input, .form-list li input').focus(function(){
-		$(this).parent().addClass('active');
-	});
-	$('#find-stop input, .form-list li input').blur(function(){
-		$(this).parent().removeClass('active');
-	});
+  /* Form focusses
+     ================================================== */
+  $('#find-stop input, .form-list li input').focus(function(){
+    $(this).parent().addClass('active');
+  });
+  $('#find-stop input, .form-list li input').blur(function(){
+    $(this).parent().removeClass('active');
+  });
 
   /* Questionnaire
      ================================================== */
@@ -139,40 +144,40 @@ $(document).ready(function(){
     }
   });
 
-	/* Thread
-	   ================================================== */
-	function thread(li){
-		if(li.hasClass('open')){
-			$('.thread-details', li).hide('blind', '', 1000, function(){
-				li.removeClass('open');
-			});
-		}else{
-			li.addClass('open');
-			$('.thread-details', li).show('blind', '', 1000);
-		}
-	}
+  /* Thread
+     ================================================== */
+  function thread(li){
+    if(li.hasClass('open')){
+      $('.thread-details', li).hide('blind', '', 1000, function(){
+        li.removeClass('open');
+      });
+    }else{
+      li.addClass('open');
+      $('.thread-details', li).show('blind', '', 1000);
+    }
+  }
 
-	//init
-	$('ul.closed-campaign-thread li').removeClass('open');
+  //init
+  $('ul.closed-campaign-thread li').removeClass('open');
 
-	//main toggle
-	$('ul#campaign-thread li a.thread-item').click(function(e){
-		e.preventDefault();
-		if(!$(this).hasClass('compact'))
-			thread($(this).parent('li'));
-	});
+  //main toggle
+  $('ul#campaign-thread li a.thread-item').click(function(e){
+    e.preventDefault();
+    if(!$(this).hasClass('compact'))
+      thread($(this).parent('li'));
+  });
 
-	//show all
-	$('.thread-controls .expand-all').click(function(e){
-		e.preventDefault();
-		thread($('ul#campaign-thread li:not(:has(.compact))').not('.open'));
-	});
+  //show all
+  $('.thread-controls .expand-all').click(function(e){
+    e.preventDefault();
+    thread($('ul#campaign-thread li:not(:has(.compact))').not('.open'));
+  });
 
-	//collapse all
-	$('.thread-controls .collapse-all').click(function(e){
-		e.preventDefault();
-		thread($('ul#campaign-thread li.open:not(:has(.compact))'));
-	});
+  //collapse all
+  $('.thread-controls .collapse-all').click(function(e){
+    e.preventDefault();
+    thread($('ul#campaign-thread li.open:not(:has(.compact))'));
+  });
 
 
   /* Advice in input areas
@@ -201,62 +206,62 @@ $(document).ready(function(){
        addGuidanceField('#guidance-from', '#ferry_route_form #from');
      }
 
-	/* Dialog Boxes
-	   ================================================== */
+  /* Dialog Boxes
+     ================================================== */
 
-	$("#login-box").dialog({
-		autoOpen: false,
-		show: "fade",
-		hide: "fade",
-		modal: true,
-		width: 500,
-		title: "Sign In or Sign Up",
-		beforeClose: function(event, ui) {
+  $("#login-box").dialog({
+    autoOpen: false,
+    show: "fade",
+    hide: "fade",
+    modal: true,
+    width: 500,
+    title: "Sign In or Sign Up",
+    beforeClose: function(event, ui) {
       // get rid of any next actions
-		  $("#login-box form").find("#next_action").remove();
+      $("#login-box form").find("#next_action").remove();
       // clear form errors
-		  $("#login-box .error").html();
-		  $("#login-box .error").hide();
-		  $('#login-box input[type=text]').val("");
-		  $('#login-box input[type=password]').val("");
-		   }
-	  });
+      $("#login-box .error").html();
+      $("#login-box .error").hide();
+      $('#login-box input[type=text]').val("");
+      $('#login-box input[type=password]').val("");
+       }
+    });
 
-	//login click
-	$(".auth").click(function(e) {
-	  e.preventDefault();
-  	$('.login-box .pane').hide();
-  	$('#login-landing').show();
-		$("#login-box").dialog({title: "Sign In or Sign Up"});
-		$("#login-box").dialog("open");
-		return false;
-	});
+  //login click
+  $(".auth").click(function(e) {
+    e.preventDefault();
+    $('.login-box .pane').hide();
+    $('#login-landing').show();
+    $("#login-box").dialog({title: "Sign In or Sign Up"});
+    $("#login-box").dialog("open");
+    return false;
+  });
 
-	/* Login Options */
-	$('.login-box .pane').not('#login-landing').hide();
+  /* Login Options */
+  $('.login-box .pane').not('#login-landing').hide();
 
   //create account
   $('.pane #create-account').click(function(e){
-  	e.preventDefault();
-  	$('.pane:visible').fadeOut(500, function(){
-  	  $("#login-box").dialog({title: "Create Account"});
-  		$('#login-create-account').fadeIn();
-  	});
+    e.preventDefault();
+    $('.pane:visible').fadeOut(500, function(){
+      $("#login-box").dialog({title: "Create Account"});
+      $('#login-create-account').fadeIn();
+    });
   });
 
   //login
   $('.pane #login-to-account').click(function(e){
-  	e.preventDefault();
-  	$('.pane:visible').fadeOut(500, function(){
-  	  $("#login-box").dialog({title: "Sign In or Sign Up"});
-  		$('#login-landing').fadeIn();
-  	});
+    e.preventDefault();
+    $('.pane:visible').fadeOut(500, function(){
+      $("#login-box").dialog({title: "Sign In or Sign Up"});
+      $('#login-landing').fadeIn();
+    });
   });
 
   //forgot password
   $('.pane #forgot-password').click(function(e){
-	  e.preventDefault();
-	  $('.pane:visible').fadeOut(500, function(){
+    e.preventDefault();
+    $('.pane:visible').fadeOut(500, function(){
       $("#login-box").dialog({title: "Reset Password"});
       $('#login-forgot-password').fadeIn();
     });
@@ -276,10 +281,10 @@ $(document).ready(function(){
       var post_message = construct_message(campaign_data.facebook_post_title, campaign_data.facebook_post_description);
       $(post_message).appendTo('#post-message');
       $('#fb-share').show();
-    	$("#login-box").dialog({title: "Facebook"});
-    	$("#login-box").dialog("open");
-    	return false;
-	  }
+      $("#login-box").dialog({title: "Facebook"});
+      $("#login-box").dialog("open");
+      return false;
+    }
   });
 
   //email
@@ -289,9 +294,9 @@ $(document).ready(function(){
       $('.login-box .pane').hide();
 
       $('#email-share').show();
-    	$("#login-box").dialog({title: "Email"});
-    	$("#login-box").dialog("open");
-    	return false;
+      $("#login-box").dialog({title: "Email"});
+      $("#login-box").dialog("open");
+      return false;
     }
   });
 
@@ -352,18 +357,18 @@ $(document).ready(function(){
   $('.advice-trigger').click(function(e){
       if ($(window).width() > 600 ) {
 
-      	e.preventDefault();
-      	$('.login-box .pane').hide();
-      	$('#campaign-update').show();
-      	// Add the index of the last campaign event being shown to the form
-      	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
+        e.preventDefault();
+        $('.login-box .pane').hide();
+        $('#campaign-update').show();
+        // Add the index of the last campaign event being shown to the form
+        var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
         $('#campaign-update-form-modal').append($('<input/>')
                     .attr('type', 'hidden')
                     .attr('name', 'last_thread_index')
                     .attr('class', 'last_thread_index')
                     .val(last_thread_index));
 
-      	$("#login-box").dialog({title: $('.advice-trigger').attr('data-title')});
+        $("#login-box").dialog({title: $('.advice-trigger').attr('data-title')});
         // Set the button text
         $('#campaign-update-form-modal button[type=submit]').html("Ask for advice")
         // Add the hidden field
@@ -373,8 +378,8 @@ $(document).ready(function(){
                     .attr('name', 'campaign_update[is_advice_request]')
                     .val('true'));
 
-      	$("#login-box").dialog("open");
-      	return false;
+        $("#login-box").dialog("open");
+        return false;
       }
     });
 
@@ -382,57 +387,57 @@ $(document).ready(function(){
   $('.update-trigger').click(function(e){
     if ($(window).width() > 600 ) {
 
-    	e.preventDefault();
-    	$('.login-box .pane').hide();
-    	$('#campaign-update').show();
-    	// Add the index of the last campaign event being shown to the form
-    	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
+      e.preventDefault();
+      $('.login-box .pane').hide();
+      $('#campaign-update').show();
+      // Add the index of the last campaign event being shown to the form
+      var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
       $('#campaign-update-form').append($('<input/>')
                   .attr('type', 'hidden')
                   .attr('name', 'last_thread_index')
                   .attr('class', 'last_thread_index')
                   .val(last_thread_index));
 
-    	$("#login-box").dialog({title: "Update:"});
-    	// Set the button text
+      $("#login-box").dialog({title: "Update:"});
+      // Set the button text
       $('#campaign-update-form button[type=submit]').html("Add Update")
 
-    	$("#login-box").dialog("open");
-    	return false;
+      $("#login-box").dialog("open");
+      return false;
     }
   });
 
-		/* Comment */
+    /* Comment */
   $('.comment-trigger').click(function(e){
     if ($(window).width() > 600 ) {
-    	e.preventDefault();
-    	$('.login-box .pane').hide();
-    	$('#comment-and-login').show();
-    	// Add the index of the last campaign event being shown to the form
-    	var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
+      e.preventDefault();
+      $('.login-box .pane').hide();
+      $('#comment-and-login').show();
+      // Add the index of the last campaign event being shown to the form
+      var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
       $('#comment-form').append($('<input/>')
                   .attr('type', 'hidden')
                   .attr('name', 'last_thread_index')
                   .attr('class', 'last_thread_index')
                   .val(last_thread_index));
-  	  $("#login-box").dialog({title: $(this).attr('data-title')+":"});
-    	$("#login-box").dialog("open");
-    	return false;
-	  }
+      $("#login-box").dialog({title: $(this).attr('data-title')+":"});
+      $("#login-box").dialog("open");
+      return false;
+    }
   });
 
-	/* Add Photos */
-	$('.add-photos-trigger').click(function(e){
-	    if ($(window).width() > 600 ) {
-  	  	e.preventDefault();
-  	  	$('.login-box .pane').hide();
-  	  	$('#campaign-add-photos').show();
+  /* Add Photos */
+  $('.add-photos-trigger').click(function(e){
+      if ($(window).width() > 600 ) {
+        e.preventDefault();
+        $('.login-box .pane').hide();
+        $('#campaign-add-photos').show();
 
-  	  	$("#login-box").dialog({title: "Add a photo"});
-  	  	$("#login-box").dialog("open");
-  	  	return false;
-	    }
-	  });
+        $("#login-box").dialog({title: "Add a photo"});
+        $("#login-box").dialog("open");
+        return false;
+      }
+    });
 
   function showFormErrors(form_selector, response) {
     $(form_selector + " .error").html('');
@@ -465,7 +470,7 @@ $(document).ready(function(){
   // ajax submission of support form
   function setupSupportForm(form_selector) {
     if ($(window).width() > 600 ) {
-  	  options = defaultFormOptions();
+      options = defaultFormOptions();
 
       options['success'] = function(response) {
 
@@ -476,25 +481,25 @@ $(document).ready(function(){
         // show the login form
         $('.login-box .pane').hide();
         $("#login-box").dialog({title: "Sign In or Sign Up"});
-    		$('#login-landing').show();
-    		$("#login-box").dialog("open");
+        $('#login-landing').show();
+        $("#login-box").dialog("open");
 
-    		// record a hit on the login box in analytics
+        // record a hit on the login box in analytics
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-24232514-1']);
         _gaq.push(['_gat._anonymizeIp']);
         _gaq.push(['_trackPageview', location.pathname + '/login']);
-  	  };
-  	  $(form_selector).ajaxForm(options);
+      };
+      $(form_selector).ajaxForm(options);
     }
   }
 
   // ajax submission of update/advice form
   function setupUpdateForm(form_selector) {
     options = defaultFormOptions();
-	  options['error'] = function() { generalError(form_selector + ' .error-text'); }
-	  options['success'] = function(response) {
-	    if (response.success) {
+    options['error'] = function() { generalError(form_selector + ' .error-text'); }
+    options['success'] = function(response) {
+      if (response.success) {
         // close the dialog box
 
         $("#login-box").dialog("close");
@@ -512,8 +517,8 @@ $(document).ready(function(){
         } else {
         showFormErrors(form_selector, response);
       }
-	  }
-	  $(form_selector).ajaxForm(options);
+    }
+    $(form_selector).ajaxForm(options);
 
   }
 
@@ -559,9 +564,9 @@ $(document).ready(function(){
   // ajax submission of problem form
   function setupProblemForm(form_selector) {
     options = defaultFormOptions();
-	  options['error'] = function() { generalError(form_selector + ' .error-text'); }
-	  options['success'] = function(response) {
-	    if (response.success) {
+    options['error'] = function() { generalError(form_selector + ' .error-text'); }
+    options['success'] = function(response) {
+      if (response.success) {
         if (response.requires_login) {
           if ($(window).width() > 600 ) {
           // add the notice to the login form
@@ -590,33 +595,33 @@ $(document).ready(function(){
       } else {
         showFormErrors(form_selector, response);
       }
-	  }
-	  $(form_selector).ajaxForm(options);
+    }
+    $(form_selector).ajaxForm(options);
 
   }
-	// ajax submission of comment form
-	function setupCommentForm(form_selector) {
+  // ajax submission of comment form
+  function setupCommentForm(form_selector) {
 
-	    /* Prevent the user from submitting the form twice, e.g. by
-	       double-clicking on the submit button.  Note that we have to
-	       re-enable submission in the success and error callbacks
-	       supplied in options below.  This code is based on this
-	       suggestion: http://stackoverflow.com/a/6435544/223092 */
+      /* Prevent the user from submitting the form twice, e.g. by
+         double-clicking on the submit button.  Note that we have to
+         re-enable submission in the success and error callbacks
+         supplied in options below.  This code is based on this
+         suggestion: http://stackoverflow.com/a/6435544/223092 */
 
-	    $(form_selector).submit(function () {
-	      $(':submit', this).attr('disabled', 'disabled');
-	    });
+      $(form_selector).submit(function () {
+        $(':submit', this).attr('disabled', 'disabled');
+      });
 
-	  options = defaultFormOptions();
-	  options['error'] = function() {
-	    $(form_selector + " :submit").removeAttr('disabled');
-	    generalError(form_selector + ' .error-text');
-	  }
-	  options['success'] = function(response) {
-	    $(form_selector + " :submit").removeAttr('disabled');
-	    if (response.success) {
+    options = defaultFormOptions();
+    options['error'] = function() {
+      $(form_selector + " :submit").removeAttr('disabled');
+      generalError(form_selector + ' .error-text');
+    }
+    options['success'] = function(response) {
+      $(form_selector + " :submit").removeAttr('disabled');
+      if (response.success) {
 
-	      if (response.redirect) {
+        if (response.redirect) {
           window.location = response.redirect;
           return;
         }
@@ -645,7 +650,7 @@ $(document).ready(function(){
           // show the login form
           $('.login-box .pane').hide();
           $("#login-box").dialog({title: "Sign In or Sign Up"});
-      		$('#login-landing').show();
+          $('#login-landing').show();
 
         }else{
 
@@ -658,9 +663,9 @@ $(document).ready(function(){
       } else {
         showFormErrors(form_selector, response);
       }
-	  }
-	  $(form_selector).ajaxForm(options);
-	}
+    }
+    $(form_selector).ajaxForm(options);
+  }
 
   function addCampaignItem(html) {
     // load the new comment into the campaign history
@@ -669,12 +674,12 @@ $(document).ready(function(){
     // set up the new item events
     var new_item = $('ul#campaign-thread li:last-child a.thread-item');
     new_item.click(function(e){
-  		e.preventDefault();
-  		thread($(this).parent('li'));
-  	});
+      e.preventDefault();
+      thread($(this).parent('li'));
+    });
 
     // open the comment
-  	new_item.click();
+    new_item.click();
 
   }
 
@@ -696,9 +701,9 @@ $(document).ready(function(){
         } else {
           showFormErrors(form_selector, response);
         }
-   	};
-	  $(form_selector).ajaxForm(options);
-	}
+    };
+    $(form_selector).ajaxForm(options);
+  }
 
   setupUpdateForm('.pane #campaign-update-form-modal');
   setupStaticUpdateForm('#campaign-update-form-static');
@@ -733,30 +738,30 @@ $(document).ready(function(){
      ================================================== */
      $('.facebook-login').click(callFacebook);
 
-	/* Tip Box
-	   ================================================== */
-	//needs to include an if already showing thing when we focus
-	$('.tipbox').prepend('<div class="tip-nub"></div>');
+  /* Tip Box
+     ================================================== */
+  //needs to include an if already showing thing when we focus
+  $('.tipbox').prepend('<div class="tip-nub"></div>');
 
-	$('.form-1 input, .form-1 textarea').focus(function(){
-		var parent = $(this).parent();
-		$('.tipbox').not('.fixed').css({'right':'-999999em'});
-		$('.tipbox', parent).not('.fixed').css({'right':'-350px', 'opacity':'0'}).animate({'opacity':'1'}, {duration: 500, queue: false});
-	});
+  $('.form-1 input, .form-1 textarea').focus(function(){
+    var parent = $(this).parent();
+    $('.tipbox').not('.fixed').css({'right':'-999999em'});
+    $('.tipbox', parent).not('.fixed').css({'right':'-350px', 'opacity':'0'}).animate({'opacity':'1'}, {duration: 500, queue: false});
+  });
 
-	$('.tip-close').click(function(e){
-		e.preventDefault();
-		$('.tipbox').not('.fixed').animate({'opacity':'0'}, {duration: 500, queue: false});
-	});
+  $('.tip-close').click(function(e){
+    e.preventDefault();
+    $('.tipbox').not('.fixed').animate({'opacity':'0'}, {duration: 500, queue: false});
+  });
 
   /* Campaign photo lightboxing
      ================================================== */
   if ($('.gallery a').length > 0){
     $('.gallery a').lightBox( {
       imageLoading:  '/images/lightbox-ico-loading.gif',
-     	imageBtnClose: '/images/lightbox-btn-close.gif',
-     	imageBtnPrev:  '/images/lightbox-btn-prev.gif',
-     	imageBtnNext:  '/images/lightbox-btn-next.gif'
+      imageBtnClose: '/images/lightbox-btn-close.gif',
+      imageBtnPrev:  '/images/lightbox-btn-prev.gif',
+      imageBtnNext:  '/images/lightbox-btn-next.gif'
     });
   }
 
@@ -798,9 +803,9 @@ $(document).ready(function(){
   });
 
 
-	/* Banner for people coming from other countries
-	   ============================================== */
-	if ($('#other-country-notice').length > 0) {
+  /* Banner for people coming from other countries
+     ============================================== */
+  if ($('#other-country-notice').length > 0) {
     $.ajax({
       url: "/request_country",
       dataType: 'html',
@@ -831,7 +836,7 @@ function externalAuth(authParams) {
 }
 
 window.fbAsyncInit = function() {
-	// fmt_facebook_app_id declared in layouts/application.erb
+  // fmt_facebook_app_id declared in layouts/application.erb
     FB.init({appId: fmt_facebook_app_id,
              status: false,
              cookie: false,
@@ -859,17 +864,17 @@ window.fbAsyncInit = function() {
 /* Frontpage scroller function
    ================================================== */
 function frontpageScroller(dsp, fsp){
-	$('#frontpage-problem-scroller li:not(".hidden")').delay(dsp).fadeOut(fsp, function(){
-		$(this).addClass('hidden');
+  $('#frontpage-problem-scroller li:not(".hidden")').delay(dsp).fadeOut(fsp, function(){
+    $(this).addClass('hidden');
 
-		if($(this).hasClass('last')) {
-			$('#frontpage-problem-scroller li.first').removeClass('hidden').fadeIn(fsp, function(){
-				frontpageScroller(dsp, fsp);
-			});
-		} else {
-			$(this).next().removeClass('hidden').fadeIn(fsp, function(){
-				frontpageScroller(dsp, fsp);
-			});
-		}
-	});
+    if($(this).hasClass('last')) {
+      $('#frontpage-problem-scroller li.first').removeClass('hidden').fadeIn(fsp, function(){
+        frontpageScroller(dsp, fsp);
+      });
+    } else {
+      $(this).next().removeClass('hidden').fadeIn(fsp, function(){
+        frontpageScroller(dsp, fsp);
+      });
+    }
+  });
 }
