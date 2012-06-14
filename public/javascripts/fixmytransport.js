@@ -579,9 +579,24 @@ $(document).ready(function(){
   }
 	// ajax submission of comment form
 	function setupCommentForm(form_selector) {
+
+	    /* Prevent the user from submitting the form twice, e.g. by
+	       double-clicking on the submit button.  Note that we have to
+	       re-enable submission in the success and error callbacks
+	       supplied in options below.  This code is based on this
+	       suggestion: http://stackoverflow.com/a/6435544/223092 */
+
+	    $(form_selector).submit(function () {
+	      $(':submit', this).attr('disabled', 'disabled');
+	    });
+
 	  options = defaultFormOptions();
-	  options['error'] = function() { generalError(form_selector + ' .error-text'); }
+	  options['error'] = function() {
+	    $(form_selector + " :submit").removeAttr('disabled');
+	    generalError(form_selector + ' .error-text');
+	  }
 	  options['success'] = function(response) {
+	    $(form_selector + " :submit").removeAttr('disabled');
 	    if (response.success) {
 
 	      if (response.redirect) {
