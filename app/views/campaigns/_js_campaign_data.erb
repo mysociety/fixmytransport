@@ -1,19 +1,22 @@
 <script>
-	var campaign_data = {
-		title: "<%= escape_javascript(truncate(@campaign.title, 47)) %>",
-		id: <%= @campaign.id %>,
-		url: document.location.protocol + '//' + document.location.host + "<%= campaign_path(@campaign) %>",
-		description: "<%= escape_javascript(truncate(@campaign.description, 252)) %>",
-	  facebook_description: "<%= escape_javascript(facebook_description(@campaign, current_user)) %>",
-	  facebook_message: "<%= escape_javascript(facebook_message(@campaign, current_user)) %>",
-	  initiator: <%= (initiator_view(@campaign)) ? 'true' : 'false' %>,
-	  <%- if initiator_view(@campaign) %>
-	  facebook_post_title: "<%= escape_javascript(t('campaigns.show.tell_about_your_campaign')) %>",
-	  <%- elsif supporter_initiator_view(@campaign) %>
-	  facebook_post_title: "<%= escape_javascript(t('campaigns.show.tell_youre_a_supporter')) %>",
-	  <%- end %>
-	  facebook_post_description: "<%= escape_javascript(t('campaigns.show.post_to_wall')) %>",	
-	  facebook_send_title: "<%= escape_javascript(t('shared.facebook.send')) %>",
-	  facebook_send_description: "<%= escape_javascript(t('shared.facebook.send_to_people')) %>"
-	};
+  var campaign_data = {
+    title: "<%= escape_javascript(truncate(@campaign.title, 47)) %>",
+    id: <%= @campaign.id %>,
+    url: document.location.protocol + '//' + document.location.host + "<%= campaign_path(@campaign) %>",
+    <%- if @campaign.campaign_photos.size > 0 %>
+    picture: "<%= main_url(@campaign.campaign_photos.first.image.url(:max)) %>",
+    <%- end %>
+    description: "<%= escape_javascript(truncate(@campaign.description, 252)) %>",
+    facebook_description: "<%= escape_javascript(facebook_description(@campaign, current_user)) %>",
+    facebook_message: "<%= escape_javascript(facebook_message(@campaign, current_user)) %>",
+    initiator: <%= (initiator_view(@campaign)) ? 'true' : 'false' %>,
+    <%- if initiator_view(@campaign) %>
+    facebook_post_title: "<%= escape_javascript(t('campaigns.show.tell_about_your_campaign')) %>",
+    <%- elsif supporter_initiator_view(@campaign) %>
+    facebook_post_title: "<%= escape_javascript(t('campaigns.show.tell_youre_a_supporter')) %>",
+    <%- end %>
+    facebook_post_description: "<%= escape_javascript(t('campaigns.show.post_to_wall')) %>",
+    facebook_send_title: "<%= escape_javascript(t('shared.facebook.send')) %>",
+    facebook_send_description: "<%= escape_javascript(t('shared.facebook.send_to_people')) %>"
+  };
 </script>

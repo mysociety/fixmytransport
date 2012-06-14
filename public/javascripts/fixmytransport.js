@@ -341,6 +341,9 @@ $(document).ready(function(){
     ui_params['method'] = 'feed';
     ui_params['caption'] = campaign_data.description;
     ui_params['message'] = campaign_data.facebook_message;
+    if ('picture' in campaign_data) {
+      ui_params['picture'] = campaign_data.picture;
+    }
     FB.ui(ui_params, function(response) { facebook_response(response, '#post-message'); });
     return false;
   });
