@@ -1,80 +1,88 @@
 <%- content_for :banner_content do %>
 <div class="top-notice" id="conditional-notice">
-	<div id="other-country-notice" class="container"></div>
+  <div id="other-country-notice" class="container"></div>
 </div>
 <%- end %>
 <%- content_for :body_content do %>
 <div class="mobile-only" id="site-name">
   FixMyTransport
 </div>
+<%- content_for :meta do %>
+  <meta property="fb:app_id" content="<%= MySociety::Config.get("FACEBOOK_APP_ID", '') %>"/>
+  <meta property="og:title" content="FixMyTransport" />
+  <meta property="og:url" content="<%= request.url %>"/>
+  <meta property="og:image" content="<%=  main_url("/images/logo-fb.jpg") %>"/>
+  <meta property="og:site_name" content="FixMyTransport"/>
+<%- end %>
+
 <%- end %>
 <div id="frontpage-top" class="container">
-	<div class="leftcol widecol">
-		<ul id="frontpage-problem-scroller">
-			<li>
-				<h1><%= t('problems.frontpage.bad_train')%></h1>
-			</li>
-			<li>
-				<h1><%= t('problems.frontpage.bad_bus') %></h1>
-			</li>
-			<li>
-				<h1><%= t('problems.frontpage.bad_ferry')%></h1>
-			</li>
-		</ul>
+  <div class="leftcol widecol">
+    <ul id="frontpage-problem-scroller">
+      <li>
+        <h1><%= t('problems.frontpage.bad_train')%></h1>
+      </li>
+      <li>
+        <h1><%= t('problems.frontpage.bad_bus') %></h1>
+      </li>
+      <li>
+        <h1><%= t('problems.frontpage.bad_ferry')%></h1>
+      </li>
+    </ul>
     <p class="font-1"><%= raw t('problems.frontpage.report_problem') %></p>
 
-		<div class="button-col">
-		 <%= raw(link_to(raw(t('problems.frontpage.stop_or_station')), find_stop_problems_url, :class => 'font-1 button green')) %>
+    <div class="button-col">
+     <%= raw(link_to(raw(t('problems.frontpage.stop_or_station')), find_stop_problems_url, :class => 'font-1 button green')) %>
 
-  		<div class="button-explanation">
-  		  <%= t('problems.frontpage.stop_examples') %>
-  		</div>
-  	</div>
+      <div class="button-explanation">
+        <%= t('problems.frontpage.stop_examples') %>
+      </div>
+    </div>
 
     <div class="button-col">
-		  <%= raw(link_to(raw(t('problems.frontpage.journey_or_route')), find_route_problems_url, :class => 'font-1 button green')) %>
-			<div class="button-explanation">
-			  <%= t('problems.frontpage.route_examples') %>
-			</div>
-		</div>
+      <%= raw(link_to(raw(t('problems.frontpage.journey_or_route')), find_route_problems_url, :class => 'font-1 button green')) %>
+      <div class="button-explanation">
+        <%= t('problems.frontpage.route_examples') %>
+      </div>
+    </div>
 
     <p class="font-1"><%= raw t('problems.frontpage.get_it_fixed')%></p>
     <p class="font-1"><%= raw t('problems.frontpage.see_issues', :link => raw( link_to(t('problems.frontpage.issues_near_you'), browse_issues_url(:geolocate => 1))))%></p>
 
-		<div id="followus" class="font-1">
-			<a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank" title="Facebook (opens in a new window)">
-				<span class="icon facebook"></span>
-				<span class="facebook-text"><%= t('problems.frontpage.follow_on_facebook')%></span>
-			</a>
-			<a href="http://twitter.com/FixMyTransport" title="Twitter (opens in a new window)" target="_target">
-				<span class="icon twitter"></span>
-				<span class="twitter-text"><%= t('problems.frontpage.follow_on_twitter')%></span>
-			</a>
-		</div>
-	</div>
+    <div id="followus" class="font-1">
+      <a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank" title="Facebook (opens in a new window)">
+        <span class="icon facebook"></span>
+        <span class="facebook-text"><%= t('problems.frontpage.follow_on_facebook')%></span>
+      </a>
+      <a href="http://twitter.com/FixMyTransport" title="Twitter (opens in a new window)" target="_target">
+        <span class="icon twitter"></span>
+        <span class="twitter-text"><%= t('problems.frontpage.follow_on_twitter')%></span>
+      </a>
+    </div>
+  </div>
 
-	<div id="what-it-does" class="rightcol narrowcol" >
-		<h2><%= t('problems.frontpage.what_it_does') %></h2>
-		<ul id="secret-list">
-			<li class="secret-report"><%= t('problems.frontpage.reports_problems')%></li>
-			<li class="secret-find"><%= t('problems.frontpage.finds_responsible') %></li>
-			<li class="secret-grow"><%= t('problems.frontpage.grows_support') %></li>
-			<li class="secret-track"><%= t('problems.frontpage.tracks_progress')%></li>
-			<li class="secret-done"><%= t('problems.frontpage.gets_things_done')%></li>
-		</ul>
+  <div id="what-it-does" class="rightcol narrowcol" >
+    <h2><%= t('problems.frontpage.what_it_does') %></h2>
+    <ul id="secret-list">
+      <li class="secret-report"><%= t('problems.frontpage.reports_problems')%></li>
+      <li class="secret-find"><%= t('problems.frontpage.finds_responsible') %></li>
+      <li class="secret-grow"><%= t('problems.frontpage.grows_support') %></li>
+      <li class="secret-track"><%= t('problems.frontpage.tracks_progress')%></li>
+      <li class="secret-done"><%= t('problems.frontpage.gets_things_done')%></li>
+    </ul>
 
-		  <a href="#how-it-works" class="font-1 button"><%= t('problems.frontpage.how_does_it_work')%></a>
-	</div>
+      <a href="#how-it-works" class="font-1 button"><%= t('problems.frontpage.how_does_it_work')%></a>
+  </div>
 
 </div>
 
 
 <div id="frontpage-banner" class="blue">
-	<div class="container">
-		<div id="frontpage-banner-left">
-			<div class="dotted-white">&nbsp;</div>
-			<div class="left">
-				<h2 class="font-1">Welcome to FixMyTransport</h2>
+  <div class="container">
+    <div id="frontpage-banner-left">
+      <div class="dotted-white">&nbsp;</div>
+      <div class="left">
+        <h2 class="font-1">Welcome to FixMyTransport</h2>
         <p>
         You can use this site to contact any transport operator in the UK - we'll
         send your message direct to their Customer Services department. We put it
@@ -100,61 +108,61 @@
         <p>
               And if you've got a problem with your transport? Go ahead and let the
               operators know.
-      	</p>
-			</div>
-			<a href="http://www.flickr.com/photos/amanky/123970168/"><%= image_tag("/images/scrabble.jpg", :class => 'right', :alt => '') %></a>
-			<p style="float: right">Image by Amancay Maahs</p>
-			<div class="dotted-white">&nbsp;</div>
-		</div>
-		<div id="frontpage-banner-right">
-			<h2 class="font-1">Browse Site</h2>
-			<ul>
-				<li><a href="<%= issues_url %>" class="font-1"><%= t('problems.frontpage.recent_issues')%></a></li>
-				<li><a href="<%= routes_url %>" class="font-1"><%= t('problems.frontpage.browse_routes')%></a></li>
-				<li><a href="<%= browse_issues_url %>" class="font-1"><%= t('problems.frontpage.browse_issues')%></a></li>
-				<li><a href="<%= guide_index_url %>" class="font-1"><%= t('problems.frontpage.guides')%></a></li>
-			</ul>
-		</div>
-	</div>
+        </p>
+      </div>
+      <a href="http://www.flickr.com/photos/amanky/123970168/"><%= image_tag("/images/scrabble.jpg", :class => 'right', :alt => '') %></a>
+      <p style="float: right">Image by Amancay Maahs</p>
+      <div class="dotted-white">&nbsp;</div>
+    </div>
+    <div id="frontpage-banner-right">
+      <h2 class="font-1">Browse Site</h2>
+      <ul>
+        <li><a href="<%= issues_url %>" class="font-1"><%= t('problems.frontpage.recent_issues')%></a></li>
+        <li><a href="<%= routes_url %>" class="font-1"><%= t('problems.frontpage.browse_routes')%></a></li>
+        <li><a href="<%= browse_issues_url %>" class="font-1"><%= t('problems.frontpage.browse_issues')%></a></li>
+        <li><a href="<%= guide_index_url %>" class="font-1"><%= t('problems.frontpage.guides')%></a></li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 <div id="how-it-works" class="container">
-	<div id="fg-head">
-		<div id="fg-head-inner">
-			<h2 class="font-1"><%= t('problems.frontpage.how_does_it_work')%></h2>
-			<p><%= t('problems.frontpage.how_details_one')%></p>
-			<p><%= t('problems.frontpage.how_details_two')%></p>
-		</div>
-	</div>
-	<ol id="frontpage-grid">
-		<li class="fg-top">
-			<div id="fg-img-1" class="fg-img"></div>
-			<h3 class="font-1"><%= t('problems.frontpage.step_one')%></h3>
-			<p><%= t('problems.frontpage.step_one_details')%></p>
-		</li>
-		<li class="fg-top end">
-			<div id="fg-img-2" class="fg-img"></div>
-			<h3 class="font-1"><%= t('problems.frontpage.step_two')%></h3>
-			<p><%= t('problems.frontpage.step_two_details')%></p>
-		</li>
+  <div id="fg-head">
+    <div id="fg-head-inner">
+      <h2 class="font-1"><%= t('problems.frontpage.how_does_it_work')%></h2>
+      <p><%= t('problems.frontpage.how_details_one')%></p>
+      <p><%= t('problems.frontpage.how_details_two')%></p>
+    </div>
+  </div>
+  <ol id="frontpage-grid">
+    <li class="fg-top">
+      <div id="fg-img-1" class="fg-img"></div>
+      <h3 class="font-1"><%= t('problems.frontpage.step_one')%></h3>
+      <p><%= t('problems.frontpage.step_one_details')%></p>
+    </li>
+    <li class="fg-top end">
+      <div id="fg-img-2" class="fg-img"></div>
+      <h3 class="font-1"><%= t('problems.frontpage.step_two')%></h3>
+      <p><%= t('problems.frontpage.step_two_details')%></p>
+    </li>
 
-		<span class="fg-bottom">
-		<li>
-			<div id="fg-img-3" class="fg-img"></div>
-			<h3 class="font-1"><%= t('problems.frontpage.step_three')%></h3>
-			<p><%= t('problems.frontpage.step_three_details')%></p>
-		</li>
-		<li>
-			<div id="fg-img-4" class="fg-img"></div>
-			<h3 class="font-1"><%= t('problems.frontpage.step_four')%></h3>
-			<p><%= t('problems.frontpage.step_four_details')%></p>
-		</li>
-		<li class="end">
-			<div id="fg-img-5" class="fg-img"></div>
-			<h3 class="font-1"><%= t('problems.frontpage.step_five')%></h3>
-			<p><%= t('problems.frontpage.step_five_details')%></p>
-		</li>
-		</span>
-	</ol>
+    <span class="fg-bottom">
+    <li>
+      <div id="fg-img-3" class="fg-img"></div>
+      <h3 class="font-1"><%= t('problems.frontpage.step_three')%></h3>
+      <p><%= t('problems.frontpage.step_three_details')%></p>
+    </li>
+    <li>
+      <div id="fg-img-4" class="fg-img"></div>
+      <h3 class="font-1"><%= t('problems.frontpage.step_four')%></h3>
+      <p><%= t('problems.frontpage.step_four_details')%></p>
+    </li>
+    <li class="end">
+      <div id="fg-img-5" class="fg-img"></div>
+      <h3 class="font-1"><%= t('problems.frontpage.step_five')%></h3>
+      <p><%= t('problems.frontpage.step_five_details')%></p>
+    </li>
+    </span>
+  </ol>
 </div>
 
