@@ -7,6 +7,9 @@
 <%- content_for :meta do %>
 <meta property="fb:app_id" content="<%= MySociety::Config.get("FACEBOOK_APP_ID", '') %>"/>
 <meta property="og:title" content="FixMyTransport: <%= MySociety::Format.ucfirst(@title) %>"/>
+<%- @campaign.campaign_photos.each do |photo| %>
+<meta property="og:image" content="<%= photo.image.url(:max) %>"/>
+<%-end %>
 <meta property="og:image" content="<%= main_url("/images/facebook-feed-logo.gif") %>"/>
 <meta property="og:url" content="<%= request.url %>"/>
 <meta property="og:type" content="cause"/>
@@ -38,55 +41,55 @@
 <%- if (supporter_initiator_view(@campaign)) || @campaign.status == :fixed %>
   <div id="banner" class="<%= 'supporter' %>">
     <a id="home" href="/">FixMyTransport</a>
-  	<div class="container">
-  		<div class="right">
-  		  <%- if (supporter_initiator_view(@campaign)) %>
-  		  <div class="campaign-options">
-  		  <%- if initiator_view(@campaign) %>
-  			  <span class="status"><%= t('campaigns.show.your_campaign')%></span>
-  			<%- elsif supporter_initiator_view(@campaign) %>
-  			  <span class="status"><%= t('campaigns.show.you_support_this') %></span>
+    <div class="container">
+      <div class="right">
+        <%- if (supporter_initiator_view(@campaign)) %>
+        <div class="campaign-options">
+        <%- if initiator_view(@campaign) %>
+          <span class="status"><%= t('campaigns.show.your_campaign')%></span>
+        <%- elsif supporter_initiator_view(@campaign) %>
+          <span class="status"><%= t('campaigns.show.you_support_this') %></span>
 
             <%- form_for @campaign, :url => leave_campaign_url(@campaign), :html => { :method => 'POST', :id => 'campaign-leave' } do |f| %>
-    				<button type="submit" class="button" >
-    					<%= t('campaigns.show.leave') %>
-    				</button>
-    		<%- end %>
+            <button type="submit" class="button" >
+              <%= t('campaigns.show.leave') %>
+            </button>
+        <%- end %>
 
-    		<%- if current_user.subscribed_to?(@campaign) %>
-    			  <%- form_for @campaign, :url => unsubscribe_url, :html => { :method => 'POST', :id => 'campaign-unsubscribe' } do |f| %>
-    			  <input type="hidden" name="target_id" value="<%= @campaign.id %>">
-    			  <input type="hidden" name="target_type" value="Campaign">
-    				<button type="submit" class="button">
-    					<%= t('campaigns.show.unsubscribe') %>
-    				</button>
-    			  <%- end %>
-  			<%- else %>
-    			  <%- form_for @campaign, :url => subscribe_url, :html => { :method => 'POST', :id => 'campaign-unsubscribe' } do |f| %>
-    			    <input type="hidden" name="target_id" value="<%= @campaign.id %>">
-    			    <input type="hidden" name="target_type" value="Campaign">
-    				  <button type="submit" class="button">
-    					  <%= t('campaigns.show.subscribe') %>
-    				  </button>
-    			  <%- end %>
-  			 <%- end %>
-  			<%- end %>
+        <%- if current_user.subscribed_to?(@campaign) %>
+            <%- form_for @campaign, :url => unsubscribe_url, :html => { :method => 'POST', :id => 'campaign-unsubscribe' } do |f| %>
+            <input type="hidden" name="target_id" value="<%= @campaign.id %>">
+            <input type="hidden" name="target_type" value="Campaign">
+            <button type="submit" class="button">
+              <%= t('campaigns.show.unsubscribe') %>
+            </button>
+            <%- end %>
+        <%- else %>
+            <%- form_for @campaign, :url => subscribe_url, :html => { :method => 'POST', :id => 'campaign-unsubscribe' } do |f| %>
+              <input type="hidden" name="target_id" value="<%= @campaign.id %>">
+              <input type="hidden" name="target_type" value="Campaign">
+              <button type="submit" class="button">
+                <%= t('campaigns.show.subscribe') %>
+              </button>
+            <%- end %>
+         <%- end %>
+        <%- end %>
       </div>
-  		<%- end %>
-  		<%- if @campaign.status == :fixed %>
-			<span class="ribbon"><%= t('campaigns.show.campaign_fixed') %></span>
-  		<%- end %>
-  		</div>
-  		<h1>
-  		  <%- if initiator_view(@campaign) %>
-  		  <a href="<%= location_url(@campaign.location) %>"><%= @campaign.short_initiator_call_to_action %></a>
-  		  <%- else %>
-  		  <a href="<%= location_url(@campaign.location) %>"><%= @campaign.short_call_to_action %></a>
-  		  <%- end %>
-  		</h1>
+      <%- end %>
+      <%- if @campaign.status == :fixed %>
+      <span class="ribbon"><%= t('campaigns.show.campaign_fixed') %></span>
+      <%- end %>
+      </div>
+      <h1>
+        <%- if initiator_view(@campaign) %>
+        <a href="<%= location_url(@campaign.location) %>"><%= @campaign.short_initiator_call_to_action %></a>
+        <%- else %>
+        <a href="<%= location_url(@campaign.location) %>"><%= @campaign.short_call_to_action %></a>
+        <%- end %>
+      </h1>
 
 
-  	</div>
+    </div>
   </div>
 
 
@@ -94,10 +97,10 @@
 
   <div class="container-wide">
     <div class="supporter-notice">
-	      <h1><%= t('campaigns.show.campaign_supporter_first_time_header', :user => @campaign.initiator.first_name)%></h1>
+        <h1><%= t('campaigns.show.campaign_supporter_first_time_header', :user => @campaign.initiator.first_name)%></h1>
 
-	  </div>
-	  <div class="supporter-notice-arrow"></div>
+    </div>
+    <div class="supporter-notice-arrow"></div>
   </div>
   <%- end %>
 <%- else %>
@@ -108,13 +111,13 @@
   </div>
 </div>
   <div id="yellowbanner" class="container">
-  	<div class="leftcol-banner">
-  		<h1>&ldquo;<%= @campaign.call_to_action %>&rdquo; &ndash; <%= @campaign.initiator.name %></h1>
-  	</div>
+    <div class="leftcol-banner">
+      <h1>&ldquo;<%= @campaign.call_to_action %>&rdquo; &ndash; <%= @campaign.initiator.name %></h1>
+    </div>
 
-  	<div class="rightcol narrowcol">
+    <div class="rightcol narrowcol">
       <%= render :partial => 'support_button', :locals => { :button_class => 'support-big', :display_supporter => true, :display_initiator => true } %>
-  	</div>
+    </div>
   </div>
 <%- end %>
 <%- if initiator_view(@campaign) && current_user.new_initiator?(@campaign) %>
@@ -127,27 +130,27 @@
 <%- end %>
 <div id="main-content" class="container campaign-content">
 
-	<div class="leftcol widecol">
+  <div class="leftcol widecol">
 
       <%- if show_questionnaire %>
           <%= render :partial => "shared/#{show_questionnaire}", :locals => {:subject => @campaign }%>
-		  <%- else %>
+      <%- else %>
         <%- if initiator_view(@campaign) %>
           <%= render :partial => "campaigns/initiator_buttons" %>
         <%- end %>
-		  <%- end %>
-		<div class="box campaign-description">
-			<h3><%= t('campaigns.show.campaign_description_header') %></h3>
-		  	<%- if !supporter_initiator_view(@campaign) %>
-			<img src="<%= @campaign.initiator.profile_photo.url(:small_thumb) %>" class="avatar" alt="" />
-			<%- end %>
-			<div>
-				<%- if !supporter_initiator_view(@campaign) %>
-				<h4><a href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a></h4>
-				<%- end %>
-				<%= raw simple_format(sanitize(@campaign.description)) %>
-			</div>
-		</div>
+      <%- end %>
+    <div class="box campaign-description">
+      <h3><%= t('campaigns.show.campaign_description_header') %></h3>
+        <%- if !supporter_initiator_view(@campaign) %>
+      <img src="<%= @campaign.initiator.profile_photo.url(:small_thumb) %>" class="avatar" alt="" />
+      <%- end %>
+      <div>
+        <%- if !supporter_initiator_view(@campaign) %>
+        <h4><a href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a></h4>
+        <%- end %>
+        <%= raw simple_format(sanitize(@campaign.description)) %>
+      </div>
+    </div>
 
    <%- if current_user && current_user.is_admin? && show_admin_tools %>
 
@@ -186,124 +189,124 @@
    <%- end %>
 
     <%- if @campaign.campaign_photos.count > 0 %>
-		<div class="box">
-			<h5><%= t('campaigns.show.images_and_media') %></h5>
-			<ul class="gallery">
-			  <%- @campaign.campaign_photos.each do |campaign_photo| %>
-			    <%- if ! campaign_photo.new_record? %>
-				    <li>
-				      <a href="<%= campaign_photo.image.url(:max) %>"><img src="<%= campaign_photo.image.url(:default) %>" alt="" />
-				      </a>
-				    </li>
-				  <%- end %>
-				<%- end %>
-			</ul>
-		</div>
-		<%- end %>
+    <div class="box">
+      <h5><%= t('campaigns.show.images_and_media') %></h5>
+      <ul class="gallery">
+        <%- @campaign.campaign_photos.each do |campaign_photo| %>
+          <%- if ! campaign_photo.new_record? %>
+            <li>
+              <a href="<%= campaign_photo.image.url(:max) %>"><img src="<%= campaign_photo.image.url(:default) %>" alt="" />
+              </a>
+            </li>
+          <%- end %>
+        <%- end %>
+      </ul>
+    </div>
+    <%- end %>
 
-		<div class="box">
-		  <%- if show_comment_button %>
-  			<a class="button comment comment-trigger right" href="<%= add_comment_campaign_url(@campaign) %>" data-title="<%= t('campaigns.show.campaign_comment_title') %>"><%= t('campaigns.show.campaign_comment') %></a>
-			<%- end %>
-		</div>
+    <div class="box">
+      <%- if show_comment_button %>
+        <a class="button comment comment-trigger right" href="<%= add_comment_campaign_url(@campaign) %>" data-title="<%= t('campaigns.show.campaign_comment_title') %>"><%= t('campaigns.show.campaign_comment') %></a>
+      <%- end %>
+    </div>
 
-		<div class="clear">
-			<h3 class='left campaign-history'><%= t('campaigns.show.campaign_history') %></h3>
-			<div class="thread-controls">
-				<a href="#" class="expand-all"><%= t('campaigns.show.expand_all') %></a>
-				<a href="#" class="collapse-all"><%= t('campaigns.show.collapse_all') %></a>
-			</div>
-		</div>
-		<ul id="campaign-thread" class="closed-campaign-thread">
-		<%- @event_index = 1 %>
-		<%- @campaign.campaign_events.visible.each do |campaign_event| %>
-		  <%- if !campaign_event.described.respond_to?(:visible?) or campaign_event.described.visible? %>
-			<%= render :partial => 'campaigns/campaign_event', :locals => { :event => campaign_event, :index => @event_index } %>
-			<%- @event_index += 1%>
-			<%- end %>
-		<%- end %>
-		</ul>
-		<%- if show_comment_button %>
-	  	<a class="button comment comment-trigger right" href="<%= add_comment_campaign_url(@campaign) %>" data-title="<%= t('campaigns.show.campaign_comment_title') %>"><%= t('campaigns.show.campaign_comment') %></a>
-	  <%- end %>
+    <div class="clear">
+      <h3 class='left campaign-history'><%= t('campaigns.show.campaign_history') %></h3>
+      <div class="thread-controls">
+        <a href="#" class="expand-all"><%= t('campaigns.show.expand_all') %></a>
+        <a href="#" class="collapse-all"><%= t('campaigns.show.collapse_all') %></a>
+      </div>
+    </div>
+    <ul id="campaign-thread" class="closed-campaign-thread">
+    <%- @event_index = 1 %>
+    <%- @campaign.campaign_events.visible.each do |campaign_event| %>
+      <%- if !campaign_event.described.respond_to?(:visible?) or campaign_event.described.visible? %>
+      <%= render :partial => 'campaigns/campaign_event', :locals => { :event => campaign_event, :index => @event_index } %>
+      <%- @event_index += 1%>
+      <%- end %>
+    <%- end %>
+    </ul>
+    <%- if show_comment_button %>
+      <a class="button comment comment-trigger right" href="<%= add_comment_campaign_url(@campaign) %>" data-title="<%= t('campaigns.show.campaign_comment_title') %>"><%= t('campaigns.show.campaign_comment') %></a>
+    <%- end %>
     <%- if !(supporter_initiator_view(@campaign) || @campaign.status == :fixed) %>
     <%= render :partial => 'campaigns/support_button', :locals => { :button_class => 'right support', :display_supporter => false, :display_initiator => false } %>
     <%- end %>
-	</div>
+  </div>
 
 
-	<div class="rightcol narrowcol">
-		<%- if current_user && current_user.new_supporter?(@campaign) %>
-	    <div class="contrib-tools-initial">
-			<a href="<%= facebook_campaign_url(@campaign) %>" class="facebook-trigger">
-				<span class="icon facebook"></span>
-				<%= t('campaigns.show.facebook_title') %>
-			</a>
-			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup" title="Twitter (opens in a new window)">
-				<span class="icon twitter"></span>
-				<%= t('campaigns.show.twitter_title') %>
-			</a>
-			<a href="<%= share_campaign_url(@campaign) %>" class="email-trigger">
-				<span class="icon grey email"></span>
-				<%= t('campaigns.show.email_title') %>
-			</a>
-	    </div>
-	  <%- end %>
+  <div class="rightcol narrowcol">
+    <%- if current_user && current_user.new_supporter?(@campaign) %>
+      <div class="contrib-tools-initial">
+      <a href="<%= facebook_campaign_url(@campaign) %>" class="facebook-trigger">
+        <span class="icon facebook"></span>
+        <%= t('campaigns.show.facebook_title') %>
+      </a>
+      <a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup" title="Twitter (opens in a new window)">
+        <span class="icon twitter"></span>
+        <%= t('campaigns.show.twitter_title') %>
+      </a>
+      <a href="<%= share_campaign_url(@campaign) %>" class="email-trigger">
+        <span class="icon grey email"></span>
+        <%= t('campaigns.show.email_title') %>
+      </a>
+      </div>
+    <%- end %>
 
-	  <%- if supporter_initiator_view(@campaign) && (! current_user.new_supporter?(@campaign)) && show_social %>
-		<div class="contrib-tools">
-			<a href="<%= facebook_campaign_url(@campaign) %>" class="facebook-trigger">
-				<span class="icon facebook"></span>
-				<%= t('campaigns.show.facebook_title') %>
-			</a>
-			<a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup" title="Twitter (opens in a new window)">
-				<span class="icon twitter"></span>
-				<%= t('campaigns.show.twitter_title') %>
-			</a>
-			<a href="<%= share_campaign_url(@campaign) %>" class="email-trigger">
-				<span class="icon grey email"></span>
-				<%= t('campaigns.show.email_title') %>
-			</a>
-		</div>
-		<%- end %>
+    <%- if supporter_initiator_view(@campaign) && (! current_user.new_supporter?(@campaign)) && show_social %>
+    <div class="contrib-tools">
+      <a href="<%= facebook_campaign_url(@campaign) %>" class="facebook-trigger">
+        <span class="icon facebook"></span>
+        <%= t('campaigns.show.facebook_title') %>
+      </a>
+      <a href="<%= twitter_url(@campaign) %>" target="_blank" class="twitter-popup" title="Twitter (opens in a new window)">
+        <span class="icon twitter"></span>
+        <%= t('campaigns.show.twitter_title') %>
+      </a>
+      <a href="<%= share_campaign_url(@campaign) %>" class="email-trigger">
+        <span class="icon grey email"></span>
+        <%= t('campaigns.show.email_title') %>
+      </a>
+    </div>
+    <%- end %>
 
-		<ul class="campaign-meta">
-			<li>started <span><%= @campaign.created_at.strftime("%e %B %Y") %></span></li>
-			<li>supporters <%= @campaign.supporter_count %></li>
-		</ul>
+    <ul class="campaign-meta">
+      <li>started <span><%= @campaign.created_at.strftime("%e %B %Y") %></span></li>
+      <li>supporters <%= @campaign.supporter_count %></li>
+    </ul>
 
-		<%- if @campaign.location %>
-		<div id="map-container">
-			<div id="small-map">
-			  <h5>
-			    <%= link_to(@campaign.location.description, location_url(@campaign.location)) %>
-			    <%= raw problem_operator_links(@campaign.problem) %>
-			  </h5>
-			  <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => @map_height, :width => @map_width, :static => true } %>
-			</div>
-		</div>
-		<%- end %>
+    <%- if @campaign.location %>
+    <div id="map-container">
+      <div id="small-map">
+        <h5>
+          <%= link_to(@campaign.location.description, location_url(@campaign.location)) %>
+          <%= raw problem_operator_links(@campaign.problem) %>
+        </h5>
+        <%= render :partial => 'shared/map', :locals => { :locations => [@campaign.location], :other_locations => [], :link_type => :location, :height => @map_height, :width => @map_width, :static => true } %>
+      </div>
+    </div>
+    <%- end %>
 
     <%- if show_initiator %>
-		<div class="box" id="campaign-manager">
-			<h5><%= t('campaigns.show.campaign_manager') %></h5>
-			<div class="greybox">
-				<div class="avatar"><a href="<%= profile_url(@campaign.initiator) %>"><img src="<%= @campaign.initiator.profile_photo.url(:large_thumb) %>" alt="" /></a></div>
-				<div class="user-info">
-					<a class="name" href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a> <%= raw role_flags(@campaign.initiator) %>
-					<%- if @campaign.initiator.location %>
-					<p class="location"><%= @campaign.initiator.location %></p>
-					<%- end %>
-					<p><%= t('campaigns.show.managing') %> <a href="<%= profile_url(@campaign.initiator, :anchor => "managing") %>"><%= pluralize(@campaign.initiator.initiated_campaigns.count, t('campaigns.show.issue')) %></a></p>
-					<p><%= t('campaigns.show.supporting') %> <a href="<%= profile_url(@campaign.initiator, :anchor => "supporting") %>"><%= pluralize(@campaign.initiator.campaigns.count, t('campaigns.show.issue')) %></a></p>
-				</div>
-			</div>
-		</div>
-		<%- end %>
+    <div class="box" id="campaign-manager">
+      <h5><%= t('campaigns.show.campaign_manager') %></h5>
+      <div class="greybox">
+        <div class="avatar"><a href="<%= profile_url(@campaign.initiator) %>"><img src="<%= @campaign.initiator.profile_photo.url(:large_thumb) %>" alt="" /></a></div>
+        <div class="user-info">
+          <a class="name" href="<%= profile_url(@campaign.initiator) %>"><%= @campaign.initiator.name %></a> <%= raw role_flags(@campaign.initiator) %>
+          <%- if @campaign.initiator.location %>
+          <p class="location"><%= @campaign.initiator.location %></p>
+          <%- end %>
+          <p><%= t('campaigns.show.managing') %> <a href="<%= profile_url(@campaign.initiator, :anchor => "managing") %>"><%= pluralize(@campaign.initiator.initiated_campaigns.count, t('campaigns.show.issue')) %></a></p>
+          <p><%= t('campaigns.show.supporting') %> <a href="<%= profile_url(@campaign.initiator, :anchor => "supporting") %>"><%= pluralize(@campaign.initiator.campaigns.count, t('campaigns.show.issue')) %></a></p>
+        </div>
+      </div>
+    </div>
+    <%- end %>
 
-		<%- if @campaign.supporters.registered.count > 0 && show_supporters %>
-		  <%= render :partial => "campaigns/supporters", :locals => {:show_all => (params[:all_supporters] == '1') }%>
-		<%- end %>
+    <%- if @campaign.supporters.registered.count > 0 && show_supporters %>
+      <%= render :partial => "campaigns/supporters", :locals => {:show_all => (params[:all_supporters] == '1') }%>
+    <%- end %>
 
-	</div>
+  </div>
 </div>
