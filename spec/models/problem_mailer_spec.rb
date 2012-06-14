@@ -51,11 +51,20 @@ describe ProblemMailer do
     describe 'when delivering a problem report' do
 
       before do
+        MySociety::Config.stub!(:getbool).with('SITE_VISIBLE', true).and_return(true  )
+        MySociety::Config.stub!(:get).with("DOMAIN", '127.0.0.1:3000').and_return("127.0.0.1:3000")
+        MySociety::Config.stub!(:get).with("CONTACT_EMAIL", 'contact@localhost').and_return("test@example.com")
         @mailer = ProblemMailer.create_report(@mock_problem, @mock_operator, [@mock_operator])
       end
 
       it 'should deliver successfully' do
         lambda { ProblemMailer.deliver(@mailer) }.should_not raise_error
+      end
+
+      it 'should set the contact address for the application as the "return-to" header' do
+        ProblemMailer.deliver(@mailer)
+        mail = ActionMailer::Base.deliveries.last
+        mail.header['return-path'].spec.should == "test@example.com"
       end
 
     end

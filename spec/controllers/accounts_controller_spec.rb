@@ -98,6 +98,17 @@ describe AccountsController do
 
       end
 
+      describe 'if the user does not enter a password' do
+
+        it 'should not set the confirmed password flag and force password validation' do
+          @mock_user.should_not_receive(:registered=).with(true)
+          @mock_user.should_not_receive(:confirmed_password=).with(true)
+          @mock_user.should_not_receive(:force_password_validation=).with(true)
+          make_request(@default_params.merge({:user => {:password => ''}}))
+        end
+
+      end
+
       describe 'if the user adds a profile photo' do
 
         it 'should set the profile photo remote url to nil' do

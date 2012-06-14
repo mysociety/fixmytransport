@@ -14,14 +14,14 @@ class AccountsController < ApplicationController
     # if someone logged in by confirmation creates a password here, register their account
     # and set the flag showing that they've confirmed their password, also validate the password
     # as if new
-    if params[:user][:password]
+    if !params[:user][:password].blank?
       current_user.password = params[:user][:password]
       current_user.password_confirmation = params[:user][:password_confirmation]
       current_user.force_password_validation = true
       current_user.registered = true
       current_user.confirmed_password = true
     end
-    
+
     # if the user is uploading a photo, make sure the the remote url field is set to nil
     if params[:user][:profile_photo]
       current_user.profile_photo = params[:user][:profile_photo]
@@ -51,7 +51,7 @@ class AccountsController < ApplicationController
     ActiveRecord::Base.transaction do
       @account_user = User.find_or_initialize_by_email(user_email)
       already_registered = @account_user.registered?
-      # want to force validation as if a new record 
+      # want to force validation as if a new record
       @account_user.ignore_blank_passwords = false
       @account_user.force_new_record_validation = true
       @account_user.registered = true
@@ -92,11 +92,11 @@ class AccountsController < ApplicationController
           end
         end
       else
-        # Could be an existing user - but until they enter valid details, we want to 
-        # treat them just the same as a new user - if we send an existing record back 
+        # Could be an existing user - but until they enter valid details, we want to
+        # treat them just the same as a new user - if we send an existing record back
         # to the form, the form will assume it's an account update, not creation. So
         # create a new record and validate it (we know the email exists, so skip that validation)
-        if !@account_user.new_record? 
+        if !@account_user.new_record?
           @account_user = @account_user.clone
           @account_user.password = params[:user][:password]
           @account_user.password_confirmation = params[:user][:password_confirmation]
@@ -105,7 +105,7 @@ class AccountsController < ApplicationController
         end
         respond_to do |format|
           format.html do
-            render :action => :new  
+            render :action => :new
           end
           format.json do
             @json = {}
@@ -134,7 +134,7 @@ class AccountsController < ApplicationController
       return
     end
     # log in the user.
-    UserSession.login_by_confirmation(@account_user)      
+    UserSession.login_by_confirmation(@account_user)
     redirect_back_or_default root_url
   end
 

@@ -979,6 +979,25 @@ describe ProblemsController do
           response.should render_template('problems/new')
         end
 
+        it 'should assign the map height to the view' do
+          make_request
+          assigns[:map_height].should == 350
+        end
+
+        it 'should assign the map width to the view' do
+          make_request
+          assigns[:map_width].should == 450
+        end
+
+        it 'should set up the map params with the problem map height and width' do
+          expected_params = [ @mock_problem.location.points,
+                              find_other_locations=false,
+                              height=PROBLEM_CREATION_MAP_HEIGHT,
+                              width=PROBLEM_CREATION_MAP_WIDTH ]
+          controller.should_receive(:map_params_from_location).with(*expected_params)
+          make_request
+        end
+
       end
 
       describe 'if the request asks for JSON' do

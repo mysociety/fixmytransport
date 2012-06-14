@@ -214,9 +214,11 @@ class Problem < ActiveRecord::Base
     end
     # save new values without validation - don't want to validate any associated campaign yet
     self.update_attribute('status', :confirmed)
-    self.update_attribute('confirmed_at', Time.now)
-    # create a subscription for the problem reporter
-    Subscription.create!(:user => self.reporter, :target => self, :confirmed_at => Time.now)
+    self.update_attribute('confirmed_at', Time.now) unless self.confirmed_at
+    # create a subscription for the problem reporter if one doesn't exist
+    if Subscription.find_for_user_and_target(self.reporter, self.id, self.class.to_s).nil?
+      Subscription.create!(:user => self.reporter, :target => self, :confirmed_at => Time.now)
+    end
   end
 
   def create_new_campaign

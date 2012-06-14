@@ -29,6 +29,7 @@ class ProblemMailer < ApplicationMailer
   end
 
   def report(problem, recipient, recipient_models, missing_recipient_models=[])
+    headers['return-path'] = contact_from_name_and_email
     recipient_emails = problem.recipient_emails(recipient)
     recipients recipient_emails[:to]
     if recipient_emails[:cc]

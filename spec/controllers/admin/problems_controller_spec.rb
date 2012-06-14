@@ -19,23 +19,35 @@ describe Admin::ProblemsController do
 
 
   end
-  
+
   describe 'POST #update' do
-  
+
     before do
-      @problem = mock_model(Problem, :update_attributes => nil)
+      @problem = mock_model(Problem, :update_attributes => nil,
+                                     :status => :new)
       Problem.stub!(:find).and_return(@problem)
+      @default_params = { :id => 55, :problem => {:responsibilities_attributes => {}}}
     end
-    
-    def make_request
-      post :update, { :id => 55, :problem => {:responsibilities_attributes => {}}}
+
+    def make_request(params=@default_params)
+      post :update, params
     end
-    
-    it 'should not update the problem with a nil status code' do 
+
+    it 'should not update the problem with a nil status code' do
       @problem.should_not_receive(:status_code=).with(nil)
-      make_request
+      make_request()
     end
-  
+
+    describe 'if the status has been changed from new to confirmed' do
+
+      it "should call the problem's confirm! method" do
+        @problem.stub!(:status).and_return(:new)
+        @problem.should_receive(:confirm!)
+        make_request(@default_params.merge(:problem => {:status_code => "1", :responsibilities_attributes => {}}))
+      end
+
+    end
+
   end
 
   describe 'POST #resend' do
