@@ -62,6 +62,23 @@ $(document).ready(function(){
      }
 
      function tabshook(){
+	 /* If the URL has an anchor, try to open a tab that it names */
+	 var hash = window.location.hash, parentid;
+	 if (hash.indexOf('#') == 0) {
+	     parent = $(hash).parent();
+	     parentid = parent.attr('id');
+	     if (parentid == 'tabs') {
+		 /* Then the anchor is selecting a top-level tab
+		    (e.g. trains, buses, etc.) */
+		 parent.tabs('select', hash);
+	     } else {
+		 /* Otherwise, this is an anchor like
+		    #bus_starts_with_W in which case we first need to
+		    select the correct higher-level tab. */
+		 $('#tabs').tabs('select', '#' + parentid);
+		 parent.tabs('select', hash);
+	     }
+	 }
      	var activetab = 'childactive-'+$('#tabs-main-nav li.ui-state-active').attr('id');
      	$("#tabs-main-nav").removeClass (function (index, css) {
      	    return (css.match (/\bchildactive-\S+/g) || []).join(' ');
