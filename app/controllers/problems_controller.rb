@@ -447,6 +447,7 @@ class ProblemsController < ApplicationController
   end
 
   def find_area(options)
+    status = 200
     @map_height = options[:map_height]
     @map_width = options[:map_width]
     to_render = nil
@@ -531,6 +532,7 @@ class ProblemsController < ApplicationController
               @error_message = t('problems.find_stop.postcode_area_not_known')
             elsif postcode_info[:error] == :service_unavailable
               @error_message = t('problems.find_stop.postcode_service_unavailable')
+              status = 503
             else
               @error_message = t('problems.find_stop.postcode_not_found')
             end
@@ -560,14 +562,14 @@ class ProblemsController < ApplicationController
       format.html do
         @issues_feed_params = params.clone
         @issues_feed_params[:format] = 'atom'
-        render to_render if to_render
+        render to_render, :status => status if to_render
       end
       format.atom do
         @title = atom_feed_title @lon, @lat
         @issues = []
         @issues.concat(@issues_on_map) if @issues_on_map
         @issues.concat(@nearest_issues) if @nearest_issues
-        render :template => 'shared/issues.atom.builder', :layout => false
+        render :template => 'shared/issues.atom.builder', :status => status, :layout => false
       end
     end
   end

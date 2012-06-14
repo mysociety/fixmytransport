@@ -578,7 +578,7 @@ describe ProblemsController do
 
           end
 
-          describe 'when the postcode information includes a bad request error' do
+          describe 'when the postcode information includes a service unavailable error' do
 
             before do
               Gazetteer.stub!(:place_from_name).and_return({:postcode_info => {:error => :service_unavailable }})
@@ -592,6 +592,20 @@ describe ProblemsController do
             it 'should display an appropriate error message' do
               make_request({:name => 'ZZ9 9ZZ'})
               assigns[:error_message].should == "Sorry, our postcode lookup service is currently unavailable. Please try again in a few minutes"
+            end
+
+            it 'should return a 503 (Service Unavailable) error code' do
+              make_request({:name => 'ZZ9 9ZZ'})
+              response.response_code.should == 503
+            end
+
+            describe 'when asked for an atom feed' do
+
+              it 'should return 503 (Service Unavailable) error code for an atom request' do
+                make_request({:name => 'ZZ9 9ZZ', :format => 'atom'})
+                response.response_code.should == 503
+              end
+
             end
 
           end
