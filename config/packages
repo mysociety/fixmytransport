@@ -1,6 +1,7 @@
 bsd-mailx
 elinks
 irb
+libapache2-mod-passenger
 libopenssl-ruby1.8
 libpgsql-ruby1.8
 libjson-ruby
