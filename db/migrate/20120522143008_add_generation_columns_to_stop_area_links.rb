@@ -6,8 +6,10 @@ class AddGenerationColumnsToStopAreaLinks < ActiveRecord::Migration
     add_column :stop_area_links, :persistent_id, :integer
     remove_index :stop_area_links, :ancestor_id
     remove_index :stop_area_links, :descendant_id
-    add_index :stop_area_links, [:ancestor_id, :generation_low, :generation_high]
-    add_index :stop_area_links, [:descendant_id, :generation_low, :generation_high]
+    add_index :stop_area_links, [:ancestor_id, :generation_low, :generation_high],
+                                :name => 'index_stop_area_links_on_ancestor_id_and_gens'
+    add_index :stop_area_links, [:descendant_id, :generation_low, :generation_high],
+                                :name => 'index_stop_area_links_on_descendant_id_and_gens'
   end
 
   def self.down
