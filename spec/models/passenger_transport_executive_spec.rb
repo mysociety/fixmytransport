@@ -4,6 +4,7 @@ describe PassengerTransportExecutive do
   before(:each) do
     @valid_attributes = {
       :name => "value for name",
+      :status => 'ACT'
     }
   end
 

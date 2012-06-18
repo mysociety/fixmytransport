@@ -85,6 +85,9 @@
     </td>
     <td>
       <%= link_to(responsibility.organization.name, admin_organization_url(responsibility.organization)) %>
+      <%- if responsibility.organization.status == 'DEL' %>
+        (<%= t('admin.deleted') %>)
+      <%- end %>
     </td>
     <td>
       <%= responsibility_fields.check_box :_destroy %>

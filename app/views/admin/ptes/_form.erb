@@ -22,4 +22,14 @@
   <%= raw f.text_field :wikipedia_url %>
 </div>
 
+<div class='form-field'>
+  <%- if @pte.errors.on(:status) %>
+    <div class='error'>
+      <%= error_message_on @pte, :status %>
+    </div>
+  <%- end %>
+  <%= raw label(:pte, :status) %>
+  <%= f.select(:status, PassengerTransportExecutive.statuses.invert) %>
+</div>
+
 <%= raw submit_tag t('admin.go') %>

@@ -3,8 +3,8 @@ class Admin::PtesController < Admin::AdminController
   before_filter :require_can_admin_organizations
 
   def index
-    @ptes = PassengerTransportExecutive.paginate :page => params[:page],
-                                                 :order => 'name ASC'
+    @ptes = PassengerTransportExecutive.current.paginate :page => params[:page],
+                                                         :order => 'name ASC'
   end
 
   def show

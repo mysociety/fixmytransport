@@ -155,6 +155,12 @@ namespace :temp do
                                  SET status = 'ACT'")
   end
 
+  desc 'Backload PTE statuses'
+  task :backload_pte_statuses => :environment do
+    PassengerTransportExecutive.connection.execute("UPDATE passenger_transport_executives
+                                                    SET status = 'ACT'")
+  end
+
   desc 'Backload version records for the StopAreaMembership model'
   task :backload_stop_area_membership_versions => :environment do
     #MONKEY PATCH

@@ -17,6 +17,10 @@ class Council
     (other.is_a?(Council)) && (@id == other.id) && (@name == other.name)
   end
 
+  def status
+    'ACT'
+  end
+
   def emailable?(location)
     !self.contacts.empty?
   end

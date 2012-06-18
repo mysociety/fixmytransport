@@ -8,6 +8,13 @@ class PassengerTransportExecutive < ActiveRecord::Base
   validate :name_unique_in_generation
   has_paper_trail
 
+  def self.statuses
+    { 'ACT' => 'Active',
+      'DEL' => 'Deleted' }
+  end
+
+  validates_inclusion_of :status, :in => self.statuses.keys
+
   # This model is part of the transport data that is versioned by data generations.
   # This means they have a default scope of models valid in the current data generation.
   # See lib/fixmytransport/data_generations
