@@ -308,4 +308,38 @@ namespace :update do
       end
     end
   end
+
+  desc 'Look for operators that have responsibilities, but no record in the current data generation.
+        Clone them from the previous generation and set their status as "DEL". Runs in dryrun mode
+        unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1'
+  task :deleted_operators => :environment do
+    dryrun = check_dryrun()
+    verbose = check_verbose()
+    # Look for responsibilities where the organization type is operator and the persistent
+    # id doesn't exist in the current generation
+    cloned_persistent_ids = []
+    Responsibility.find_each(:conditions => ["organization_type = 'Operator'
+                                              AND organization_persistent_id not in
+                                               (SELECT persistent_id
+                                                FROM operators
+                                                WHERE generation_low <= ?
+                                                AND generation_high >= ?)",
+                                                CURRENT_GENERATION, CURRENT_GENERATION]) do |responsibility|
+      next if cloned_persistent_ids.include?(responsibility.organization_persistent_id)
+      cloned_persistent_ids << responsibility.organization_persistent_id
+      previous_operator = Operator.in_generation(PREVIOUS_GENERATION).find_by_persistent_id(responsibility.organization_persistent_id)
+      raise "No previous operator for persistent_id #{responsibility.organization_persistent_id}" unless previous_operator
+      puts "Cloning #{previous_operator.name} into current generation with 'DEL' status" if verbose
+      new_operator = Operator.clone_in_current_generation(previous_operator)
+      new_operator.status = 'DEL'
+      if ! new_operator.valid?
+        puts "ERROR: New instance is invalid:"
+        puts new_operator.errors.full_messages.join("\n")
+        exit(1)
+      end
+      if ! dryrun
+        new_operator.save!
+      end
+    end
+  end
 end
