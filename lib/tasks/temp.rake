@@ -8,7 +8,6 @@ namespace :temp do
         puts model_class
         table_name = model_class.to_s.tableize
         puts table_name
-        next if [JourneyPattern, RouteSegment].include?(model_class)
         model_class.connection.execute("UPDATE #{table_name}
                                         SET generation_low = 1, generation_high = 1")
     end
