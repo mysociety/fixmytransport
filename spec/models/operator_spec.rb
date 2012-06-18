@@ -275,16 +275,32 @@ describe Operator do
 
   end
 
-  it 'should respond to emailable? correctly' do
-    mock_station = mock_model(StopArea, :type => 'GRLS', :persistent_id => 55)
-    mock_operator_contact = mock_model(OperatorContact)
-    operator = Operator.new
-    operator.operator_contacts.stub!(:find).and_return([mock_operator_contact])
-    operator.emailable?(mock_station).should be_true
+  describe 'when asked whether it is emailable' do
 
-    operator.operator_contacts.stub!(:find).and_return([])
-    operator.operator_contacts.delete
-    operator.emailable?(mock_station).should be_false
+    before do
+      @mock_station = mock_model(StopArea, :type => 'GRLS', :persistent_id => 55)
+      @mock_operator_contact = mock_model(OperatorContact)
+    end
+
+    it 'should return true if there is an operator contact' do
+      operator = Operator.new(:status => 'ACT')
+      operator.operator_contacts.stub!(:find).and_return([@mock_operator_contact])
+      operator.emailable?(@mock_station).should be_true
+    end
+
+    it 'should return false if there are no operator contacts' do
+      operator = Operator.new(:status => 'ACT')
+      operator.operator_contacts.stub!(:find).and_return([])
+      operator.operator_contacts.delete
+      operator.emailable?(@mock_station).should be_false
+    end
+
+    it 'should return false for any location if its status is "DEL"' do
+      operator = Operator.new(:status => 'DEL')
+      operator.operator_contacts.stub!(:find).and_return([@mock_operator_contact])
+      operator.emailable?(@mock_station).should be_false
+    end
+
   end
 
 end

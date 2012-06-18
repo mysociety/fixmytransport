@@ -26,8 +26,13 @@ describe PassengerTransportExecutive do
 
     before do
       @mock_route = mock_model(BusRoute)
-      @pte = PassengerTransportExecutive.new
+      @pte = PassengerTransportExecutive.new(:status => 'ACT')
       @pte_contact = mock_model(PassengerTransportExecutiveContact)
+    end
+
+    it 'should return false if its status is "DEL"' do
+      @pte.status = 'DEL'
+      @pte.emailable?(@mock_route).should be_false
     end
 
     it 'should return true if there is a general contact for category "Other" or a specific contact for that type of location and category "Other"' do

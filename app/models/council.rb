@@ -41,22 +41,24 @@ class Council
     self.contacts.select{ |contact| contact.district_id.nil? }
   end
 
+  private :contacts_for_location, :general_contacts
+
   def contact_for_category(contact_list, category)
     contact_list.detect{ |contact| contact.category == category }
   end
 
   # return the appropriate contact for a particular type of problem
   def contact_for_category_and_location(category, location)
-    location_contacts = self.contacts_for_location(location)
+    location_contacts = contacts_for_location(location)
     if category_contact = contact_for_category(location_contacts, category)
       return category_contact
     elsif other_contact = contact_for_category(location_contacts, "Other")
       return other_contact
     else
-      general_contacts = self.general_contacts
-      if category_contact = contact_for_category(general_contacts, category)
+      general_contacts_list = general_contacts
+      if category_contact = contact_for_category(general_contacts_list, category)
         return category_contact
-      elsif other_contact = contact_for_category(general_contacts, "Other")
+      elsif other_contact = contact_for_category(general_contacts_list, "Other")
         return other_contact
       else
         raise "No \"Other\" category contact for #{self.name} (area ID: #{self.id})"

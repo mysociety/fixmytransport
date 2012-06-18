@@ -29,6 +29,7 @@ class PassengerTransportExecutive < ActiveRecord::Base
   end
 
   def emailable?(location)
+    return false if self.status == 'DEL'
     conditions = ["category = 'Other' and (location_type = ? or location_type is null or location_type = '')",
                   location.class.to_s]
     general_contacts = self.pte_contacts.find(:all, :conditions => conditions)
@@ -41,24 +42,24 @@ class PassengerTransportExecutive < ActiveRecord::Base
   end
 
   def categories(location)
-    contacts = self.contacts_for_location_type(location.class.to_s)
+    contacts = contacts_for_location_type(location.class.to_s)
     if contacts.empty?
-      contacts = self.general_contacts
+      contacts = general_contacts
     end
     contacts.map{ |contact| contact.category }
   end
 
   def contact_for_category_and_location(category, location)
-    location_contacts = self.contacts_for_location_type(location.class.to_s)
+    location_contacts = contacts_for_location_type(location.class.to_s)
     if category_contact = self.contact_for_category(location_contacts, category)
       return category_contact
     elsif other_contact = self.contact_for_category(location_contacts, "Other")
       return other_contact
     else
-      general_contacts = self.general_contacts
-      if category_contact = contact_for_category(general_contacts, category)
+      general_contacts_list = general_contacts
+      if category_contact = contact_for_category(general_contacts_list, category)
         return category_contact
-      elsif other_contact = contact_for_category(general_contacts, "Other")
+      elsif other_contact = contact_for_category(general_contacts_list, "Other")
         return other_contact
       else
         raise "No \"Other\" category contact for #{self.name} (PTE ID: #{self.id})"
@@ -77,5 +78,7 @@ class PassengerTransportExecutive < ActiveRecord::Base
   def general_contacts
     self.pte_contacts.find(:all, :conditions => ["location_type is null or location_type = ''"])
   end
+
+  private :contacts_for_location_type, :general_contacts
 
 end

@@ -73,6 +73,7 @@ class Operator < ActiveRecord::Base
   end
 
   def emailable?(location)
+    return false if self.status == 'DEL'
     general_contacts = self.operator_contacts.find(:all, :conditions => ["category = 'Other'
                                                                           AND (location_persistent_id is null
                                                                           OR (location_persistent_id = ?
@@ -94,14 +95,16 @@ class Operator < ActiveRecord::Base
                                                        OR location_type = '')"])
   end
 
+  private :contacts_for_location, :general_contacts
+
   def codes
     operator_codes.map{ |operator_code| operator_code.code }.uniq
   end
 
   def categories(location)
-    contacts = self.contacts_for_location(location)
+    contacts = contacts_for_location(location)
     if contacts.empty?
-      contacts = self.general_contacts
+      contacts = general_contacts
     end
     contacts.map{ |contact| contact.category }
   end
@@ -112,16 +115,16 @@ class Operator < ActiveRecord::Base
 
   # return the appropriate contact for a particular type of problem
   def contact_for_category_and_location(category, location, exception_on_fail=true)
-    location_contacts = self.contacts_for_location(location)
+    location_contacts = contacts_for_location(location)
     if category_contact = contact_for_category(location_contacts, category)
       return category_contact
     elsif other_contact = contact_for_category(location_contacts, "Other")
       return other_contact
     else
-      general_contacts = self.general_contacts
-      if category_contact = contact_for_category(general_contacts, category)
+      general_contact_list = general_contacts
+      if category_contact = contact_for_category(general_contact_list, category)
         return category_contact
-      elsif other_contact = contact_for_category(general_contacts, "Other")
+      elsif other_contact = contact_for_category(general_contact_list, "Other")
         return other_contact
       else
         if exception_on_fail
