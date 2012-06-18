@@ -587,7 +587,7 @@ $(document).ready(function(){
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-24232514-1']);
             _gaq.push(['_gat._anonymizeIp']);
-            _gaq.push(['_trackPageview', location.pathname + window.location.search + '/login']);
+            _gaq.push(['_trackPageview', location.pathname + window.location.search + '&login=true']);
 
           } else {
             window.location = response.redirect;
