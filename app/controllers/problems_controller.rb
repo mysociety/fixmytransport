@@ -2,6 +2,7 @@ class ProblemsController < ApplicationController
 
   before_filter :process_map_params, :only => [:show,
                                                :new,
+                                               :new_alternate,
                                                :find_stop,
                                                :find_bus_route,
                                                :find_train_route,
@@ -36,7 +37,7 @@ class ProblemsController < ApplicationController
     redirect_to :action => 'issues_index'
   end
 
-  def new
+  def setup_new
     @map_height = PROBLEM_CREATION_MAP_HEIGHT
     @map_width = PROBLEM_CREATION_MAP_WIDTH
     location = instantiate_location(params[:location_id], params[:location_type])
@@ -55,6 +56,17 @@ class ProblemsController < ApplicationController
     map_params_from_location(@problem.location.points, find_other_locations=false,
                              height=@map_height, width=@map_width)
     setup_problem_advice(@problem)
+  end
+
+  def new
+    setup_new
+    @variant = 0
+  end
+
+  def new_alternate
+    setup_new
+    @variant = 1
+    render :action => 'new'
   end
 
   def existing

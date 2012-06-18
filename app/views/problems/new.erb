@@ -125,7 +125,7 @@
 
 
 			<li>
-				<label for="problem_description"><%= t('problems.new.description')%></label>
+				<label for="problem_description"><%= @variant == 1 ? t('problems.new.description_alternate') : t('problems.new.description') %></label>
 				<textarea id="problem_description" name="problem[description]" ><%= @problem.description %></textarea>
 					  <%- if @problem.errors.on('description') %>
 		          <div class='error'>

@@ -209,6 +209,7 @@ en:
       pick_a_category: "-- Pick a category --"
       no_details_for_organization: "IMPORTANT: We do not yet have contact details for %{organization}. Your message will <strong>not be sent</strong> to %{organization_unstrong}. However, if you write a message we will a) keep it ready to send when an email address is found and b) publish it online for others to see."
       description: "Description"
+      description_alternate: "Description: What's wrong?"
       select_operator: "-- Choose the name of the company --"
       problem_will_be_sent: "Let's get your problem fixed. Write an email using the form below, and we'll send it to %{organization}."
       problem_will_be_sent_multiple: "Let's get your problem fixed. Write an email using the form below, and we'll send it to %{organizations}."
