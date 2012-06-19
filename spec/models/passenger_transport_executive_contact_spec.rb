@@ -54,4 +54,24 @@ describe PassengerTransportExecutiveContact do
     duplicate_ptec.should be_valid
   end
 
+  describe 'when asked if deleted or organization deleted' do
+
+    before do
+      @pte_contact = PassengerTransportExecutiveContact.new
+    end
+
+    it 'should return true if it is deleted' do
+      @pte_contact.deleted = true
+      @pte_contact.deleted_or_organization_deleted?.should be_true
+    end
+
+    it "should return true if it's operator's status is 'DEL'" do
+      @pte_contact.deleted = false
+      pte = PassengerTransportExecutive.new(:status => 'DEL')
+      @pte_contact.passenger_transport_executive = pte
+      @pte_contact.deleted_or_organization_deleted?.should be_true
+    end
+
+  end
+
 end

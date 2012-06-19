@@ -61,6 +61,10 @@ class OperatorContact < ActiveRecord::Base
     self.location_persistent_id
   end
 
+  def deleted_or_organization_deleted?
+    (deleted? || operator.status == "DEL")
+  end
+
   def self.contacts_missing_operators
     self.find(:all, :conditions => ['operator_persistent_id NOT IN (SELECT persistent_id
                                                                     FROM operators

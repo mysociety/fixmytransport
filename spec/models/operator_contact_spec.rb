@@ -73,4 +73,24 @@ describe OperatorContact do
     duplicate_operator_contact.should be_valid
   end
 
+  describe 'when asked if deleted or organization deleted' do
+
+    before do
+      @operator_contact = OperatorContact.new
+    end
+
+    it 'should return true if it is deleted' do
+      @operator_contact.deleted = true
+      @operator_contact.deleted_or_organization_deleted?.should be_true
+    end
+
+    it "should return true if it's operator's status is 'DEL'" do
+      @operator_contact.deleted = false
+      operator = Operator.new(:status => 'DEL')
+      @operator_contact.operator = operator
+      @operator_contact.deleted_or_organization_deleted?.should be_true
+    end
+
+  end
+
 end

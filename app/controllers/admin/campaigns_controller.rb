@@ -1,12 +1,12 @@
 class Admin::CampaignsController < Admin::AdminController
- 
+
   helper_method :sort_column, :sort_direction
   before_filter :require_can_admin_issues
-  
+
   def show
     @campaign = Campaign.find(params[:id])
   end
-  
+
   def index
     conditions = []
     query_clauses = []
@@ -18,17 +18,17 @@ class Admin::CampaignsController < Admin::AdminController
       if query.to_i.to_s == query
         query_clause += " OR id = ?"
         conditions << query.to_i
-      end  
+      end
       query_clause += ")"
       query_clauses << query_clause
     end
     conditions = [query_clauses.join(" AND ")] + conditions
-    @campaigns = Campaign.paginate :page => params[:page], 
-                                   :conditions => conditions, 
-                                   :include => [:location, :problem],
+    @campaigns = Campaign.paginate :page => params[:page],
+                                   :conditions => conditions,
+                                   :include => [:problem],
                                    :order => "#{sort_column} #{sort_direction}"
   end
-  
+
   def update
     @campaign = Campaign.find(params[:id])
     @campaign.status_code = params[:campaign][:status_code]
@@ -40,14 +40,14 @@ class Admin::CampaignsController < Admin::AdminController
       render :show
     end
   end
-  
+
   def sort_column
-    columns = Campaign.column_names 
+    columns = Campaign.column_names
     columns.include?(params[:sort]) ? params[:sort] : "id"
   end
 
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
-  
+
 end

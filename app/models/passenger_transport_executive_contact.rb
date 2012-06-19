@@ -33,4 +33,9 @@ class PassengerTransportExecutiveContact < ActiveRecord::Base
       return PassengerTransportExecutive.current.find_by_persistent_id(self.passenger_transport_executive_persistent_id)
     end
   end
+
+  def deleted_or_organization_deleted?
+    (deleted? || passenger_transport_executive.status == "DEL")
+  end
+
 end
