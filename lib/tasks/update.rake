@@ -63,10 +63,12 @@ namespace :update do
 
   end
 
-  desc "Create a new data generation."
+  desc "Create a new data generation. Runs in dryrun mode unless DRYRUN=0
+        is specified."
   task :create_data_generation => :environment do
     dryrun = check_dryrun()
-    puts "Creating a new data generation..."
+    verbose = check_verbose()
+    puts "Creating a new data generation..." if verbose
 
     check_new_generation()
     data_generation = DataGeneration.new(:name => 'Data Update',
