@@ -103,6 +103,11 @@ namespace :noc do
         locality.stops.each do |stop|
           puts "Creating stop operator for #{stop.common_name} #{southern_vectis.name}"
           stop_operator = stop.stop_operators.build(:operator => southern_vectis)
+          existing = StopOperator.find_in_generation_by_identity_hash(stop_operator, PREVIOUS_GENERATION)
+          if existing
+            stop_operator.previous_id = existing.id
+            stop_operator.persistent_id = existing.persistent_id
+          end
           if !stop_operator.valid?
             puts "ERROR: Stop operator is invalid:"
             puts stop_operator.inspect
