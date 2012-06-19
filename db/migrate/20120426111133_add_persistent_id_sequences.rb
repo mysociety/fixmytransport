@@ -8,6 +8,8 @@ class AddPersistentIdSequences < ActiveRecord::Migration
       LocalityLink,
       Operator,
       OperatorCode,
+      PassengerTransportExecutive,
+      PassengerTransportExecutiveArea,
       Region,
       Route,
       RouteLocality,
@@ -15,12 +17,14 @@ class AddPersistentIdSequences < ActiveRecord::Migration
       RouteSegment,
       RouteSource,
       RouteSourceAdminArea,
+      RouteSubRoute,
       Stop,
       StopArea,
       StopAreaLink,
       StopOperator,
       StopAreaOperator,
       StopAreaMembership,
+      SubRoute,
       VosaLicense ]
   end
 
