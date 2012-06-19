@@ -488,7 +488,6 @@ $(document).ready(function(){
         $("#login-box").dialog("open");
 
         // record a hit on the login box in analytics
-        var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-24232514-1']);
         _gaq.push(['_gat._anonymizeIp']);
         _gaq.push(['_trackPageview', location.pathname + '/login']);
@@ -584,7 +583,6 @@ $(document).ready(function(){
             $("#login-box").dialog("open");
 
             // record a hit on the login box in analytics
-            var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-24232514-1']);
             _gaq.push(['_gat._anonymizeIp']);
             _gaq.push(['_trackPageview', location.pathname + window.location.search + '&login=true']);
