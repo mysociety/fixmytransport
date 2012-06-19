@@ -1,4 +1,5 @@
 <%- @title = t('problems.new.reporting_a_problem', :location => @problem.location.name) %>
+<%- if @variant == 0 %>
 <%- content_for :experiment do %>
   <%- if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com' %>
 <!-- Google Analytics Content Experiment code -->
@@ -18,6 +19,7 @@ valueOf()+(h?'&utmxhash='+escape(h.substr(1)):'')+
   <%- else %>
      <!-- On the live site, the experiment GA code would be here -->
   <%- end %>
+<%- end %>
 <%- end %>
 <div id="banner">
   <a id="home" href="/">FixMyTransport</a>
