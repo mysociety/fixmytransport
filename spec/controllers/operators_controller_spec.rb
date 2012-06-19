@@ -11,8 +11,8 @@ describe OperatorsController do
       :name => 'Sodor & Mainland Railway',
       :transport_mode => @transport_mode,
       :to_i => 11,
-      :stop_areas => [],
-      :routes => [],
+      :stop_areas => mock("stop areas", :current => []),
+      :routes => mock("routes", :current => []),
       :problem_count => 0,
       :campaign_count => 0)
     Problem.stub!(:find_recent_issues).and_return([])
