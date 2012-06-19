@@ -13,7 +13,13 @@
     </div>
   </div>
 <%- end %>
+
 <div id="main-content" class="container operators has-tabs">
+  <%- if @operator.status == 'DEL' %>
+      <div class='location-status'>
+        <%= t('route_operators.show.inactive') %>
+      </div>
+   <%- end %>
   <p>
     <%= raw @banner_text %>
   </p>
