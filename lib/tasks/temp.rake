@@ -10,8 +10,9 @@ namespace :temp do
         puts table_name
         model_class.connection.execute("UPDATE #{table_name}
                                         SET generation_low = 1, generation_high = 1")
-    end
 
+    end
+    Slug.connection.execute("UPDATE slugs SET generation_low = 1, generation_high = 1")
   end
 
   desc "Add replayable flag values to versions models in data generations. Indicates whether a change is
