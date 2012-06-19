@@ -182,7 +182,7 @@ module FixMyTransport
           # Associate the old generation record with the new generation record
           instance.previous_id = existing.id
           instance.persistent_id = existing.persistent_id
-          puts "Setting persistent_id to #{existing.persistent_id}"
+          puts "Setting persistent_id to #{existing.persistent_id}" if verbose
 
           counts[:updated_new_record] += 1
         else
