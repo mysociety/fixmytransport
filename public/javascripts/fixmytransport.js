@@ -157,9 +157,6 @@ $(document).ready(function(){
     }
   }
 
-  //init
-  $('ul.closed-campaign-thread li').removeClass('open');
-
   //main toggle
   $('ul#campaign-thread li a.thread-item').click(function(e){
     e.preventDefault();
