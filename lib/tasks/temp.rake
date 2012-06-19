@@ -407,7 +407,7 @@ namespace :temp do
       end
       campaign.location_persistent_id = location.persistent_id
       puts "Setting location_persistent_id to #{campaign.location_persistent_id} for #{campaign.id}, #{location_type} #{location.id}"
-      campaign.save!
+      campaign.save(perform_validation=false)
     end
   end
 
