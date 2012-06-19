@@ -3,7 +3,7 @@
     <%= t('admin.pte_contact_form_error') %>
   </div>
 <%- end %>
-<%= raw f.hidden_field :passenger_transport_executive_id %>
+<%= raw f.hidden_field :passenger_transport_executive_persistent_id %>
 <div class='form-field'>
   <%- if @pte_contact.errors.on(:category) %>
     <div class='error'>

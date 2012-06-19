@@ -8,7 +8,7 @@ class Admin::PteContactsController < Admin::AdminController
 
   def new
     @pte = PassengerTransportExecutive.find_by_id(params[:pte_id])
-    @pte_contact = PassengerTransportExecutiveContact.new(:passenger_transport_executive_id => params[:pte_id])
+    @pte_contact = PassengerTransportExecutiveContact.new(:passenger_transport_executive_persistent_id => @pte.persistent_id)
   end
 
   def create
@@ -17,7 +17,7 @@ class Admin::PteContactsController < Admin::AdminController
       flash[:notice] = t('admin.pte_contact_created')
       redirect_to(admin_url(admin_pte_contact_path(@pte_contact)))
     else
-      @pte = PassengerTransportExecutive.find_by_id(params[:pte_contact][:passenger_transport_executive_id])
+      @pte = PassengerTransportExecutive.find_by_persistent_id(params[:pte_contact][:passenger_transport_executive_persistent_id])
       render :new
     end
   end
