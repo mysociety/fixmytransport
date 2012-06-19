@@ -179,7 +179,7 @@ class OperatorsController < ApplicationController
   end
 
   def find_station_count
-    @operator.stop_areas.count
+    @operator.stop_areas.current.count
   end
 
   def setup_paginated_stations
@@ -200,7 +200,7 @@ class OperatorsController < ApplicationController
   end
 
   def find_route_count
-    @operator.routes.count
+    @operator.routes.current.count
   end
 
   def setup_paginated_routes
