@@ -1,4 +1,26 @@
 <%- @title = t('problems.new.reporting_a_problem', :location => @problem.location.name) %>
+<%- if @variant == 0 %>
+<%- content_for :experiment do %>
+  <%- if MySociety::Config.get("DOMAIN", '127.0.0.1:3000') == 'www.fixmytransport.com' %>
+<!-- Google Analytics Content Experiment code -->
+<script>function utmx_section(){}function utmx(){}(function(){var
+k='47650191-0',d=document,l=d.location,c=d.cookie;
+if(l.search.indexOf('utm_expid='+k)>0)return;
+function f(n){if(c){var i=c.indexOf(n+'=');if(i>-1){var j=c.
+indexOf(';',i);return escape(c.substring(i+n.length+1,j<0?c.
+length:j))}}}var x=f('__utmx'),xx=f('__utmxx'),h=l.hash;d.write(
+'<sc'+'ript src="'+'http'+(l.protocol=='https:'?'s://ssl':
+'://www')+'.google-analytics.com/ga_exp.js?'+'utmxkey='+k+
+'&utmx='+(x?x:'')+'&utmxx='+(xx?xx:'')+'&utmxtime='+new Date().
+valueOf()+(h?'&utmxhash='+escape(h.substr(1)):'')+
+'" type="text/javascript" charset="utf-8"></sc'+'ript>')})();
+</script><script>utmx('url','A/B');</script>
+<!-- End of Google Analytics Content Experiment code -->
+  <%- else %>
+     <!-- On the live site, the experiment GA code would be here -->
+  <%- end %>
+<%- end %>
+<%- end %>
 <div id="banner">
   <a id="home" href="/">FixMyTransport</a>
 	<div class="container">
@@ -125,7 +147,7 @@
 
 
 			<li>
-				<label for="problem_description"><%= t('problems.new.description')%></label>
+				<label for="problem_description"><%= @variant == 1 ? t('problems.new.description_alternate') : t('problems.new.description') %></label>
 				<textarea id="problem_description" name="problem[description]" ><%= @problem.description %></textarea>
 					  <%- if @problem.errors.on('description') %>
 		          <div class='error'>

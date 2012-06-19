@@ -53,7 +53,8 @@ ActionController::Routing::Routes.draw do |map|
                                             :find_train_route => :get,
                                             :find_ferry_route => :get,
                                             :find_other_route => :get,
-                                            :existing => :get }
+                                            :existing => :get,
+                                            :new_alternate => :get }
 
   # questionnaires
   map.questionnaire_fixed '/q/fixed', :action => 'creator_fixed',
