@@ -344,4 +344,41 @@ namespace :update do
       end
     end
   end
+
+  desc 'Look for locations that have problem reports, but no record in the current data generation.
+        Clone them from the previous generation and set their status as "DEL". Runs in dryrun mode
+        unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1'
+  task :deleted_locations => :environment do
+    dryrun = check_dryrun()
+    verbose = check_verbose()
+    cloned_persistent_ids = []
+    location_types = [Stop, StopArea, Route]
+    location_types.each do |location_type|
+      Problem.find_each(:conditions => ["location_type = ?
+                                         AND location_persistent_id not in
+                                        (SELECT persistent_id
+                                         FROM #{location_type.to_s.tableize}
+                                         WHERE generation_low <= ?
+                                         AND generation_high >= ?)",
+                                         location_type.to_s,
+                                         CURRENT_GENERATION,
+                                         CURRENT_GENERATION]) do |problem|
+        next if cloned_persistent_ids.include?(problem.location_persistent_id)
+        previous_location = location_type.in_generation(PREVIOUS_GENERATION).find_by_persistent_id(problem.location_persistent_id)
+        raise "No previous #{location_type} for persistent_id #{problem.location_persistent_id}" unless previous_location
+        puts "Cloning #{previous_location.name} into current generation with 'DEL' status" if verbose
+        new_location = location_type.clone_in_current_generation(previous_location)
+        new_location.status = 'DEL'
+        if ! new_location.valid?
+          puts "ERROR: New instance is invalid:"
+          puts new_location.errors.full_messages.join("\n")
+          exit(1)
+        end
+        if ! dryrun
+          new_location.save!
+        end
+      end
+    end
+  end
+
 end
