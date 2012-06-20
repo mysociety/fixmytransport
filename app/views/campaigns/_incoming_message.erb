@@ -1,11 +1,12 @@
-<a href="#" class="thread-item">
+<span class="thread-item incoming-message">
   <span class="num"><%= index %></span>
   <span class="title"><%= raw t('campaigns.show.got_a_message', :link => link_to(t('campaigns.show.a_reply'), campaign_incoming_message_path(@campaign, message)), :sender => message.safe_from, :campaigner => h(@campaign.initiator.name)) %></span>
   <span class="close">close</span>
   <span class="date">
   <%= event.created_at.localtime.to_s(:standard_with_date) %>
   </span>
-</a>
+  <%= render :partial => 'campaigns/campaign_event_permalink', :locals => {:event => event} %>
+</span>
 
 <div class="thread-details">
 	<div class="thread-copy">

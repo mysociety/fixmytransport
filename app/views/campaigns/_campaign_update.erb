@@ -4,14 +4,15 @@
 <%- else %>
   <%- text = 'campaigns.show.added_an_update' %>
 <%- end %>
-<a href="#" class="thread-item">
+<span class="thread-item campaign-update">
   <span class="num"><%= index %></span>
   <span class="title"><%= raw t(text, :name => h(update.user.name)) %></span>
   <span class="close">close</span>
   <span class="date">
     <%= update.created_at.localtime.to_s(:standard_with_date) %>
   </span>
-</a>
+  <%= render :partial => 'campaigns/campaign_event_permalink', :locals => {:event => event} %>
+</span>
 
 <div class="thread-details">
 	<div class="thread-copy"><%= raw simple_format(sanitize(update.text)) %></div>

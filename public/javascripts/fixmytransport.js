@@ -157,15 +157,16 @@ $(document).ready(function(){
     }
   }
 
-  //init
-  $('ul.closed-campaign-thread li').removeClass('open');
-
   //main toggle
-  $('ul#campaign-thread li a.thread-item').click(function(e){
+  $('ul#campaign-thread li span.thread-item').click(function(e){
     e.preventDefault();
     if(!$(this).hasClass('compact'))
       thread($(this).parent('li'));
   });
+
+    $('.permalink').click(function(e){
+	e.stopPropagation();
+    });
 
   //show all
   $('.thread-controls .expand-all').click(function(e){
@@ -179,6 +180,16 @@ $(document).ready(function(){
     thread($('ul#campaign-thread li.open:not(:has(.compact))'));
   });
 
+  /* If there's an anchor for a campaign event, highlight it */
+  (function () {
+    var hash = window.location.hash, rest;
+    if (hash.indexOf('#') == 0) {
+      rest = hash.substring(1);
+      if (rest.match(/^e[0-9]+$/)) {
+	$(hash).addClass('event-highlighted');
+      }
+    }
+  }());
 
   /* Advice in input areas
      ================================================== */
@@ -673,7 +684,7 @@ $(document).ready(function(){
     $('#campaign-thread').append(html);
 
     // set up the new item events
-    var new_item = $('ul#campaign-thread li:last-child a.thread-item');
+    var new_item = $('ul#campaign-thread li:last-child span.thread-item');
     new_item.click(function(e){
       e.preventDefault();
       thread($(this).parent('li'));
@@ -768,8 +779,8 @@ $(document).ready(function(){
 
   /* Ellipsis in campaign thread
   ================================================== */
-  if ($('.campaign-content ul#campaign-thread li a.thread-item span.title').length > 0 && $(window).width() > 600){
-   $(".campaign-content ul#campaign-thread li a.thread-item span.title").ellipsis();
+  if ($('.campaign-content ul#campaign-thread li span.thread-item span.title').length > 0 && $(window).width() > 600){
+   $(".campaign-content ul#campaign-thread li span.thread-item span.title").ellipsis();
   }
 
   /* Email quoting folding and unfolding
