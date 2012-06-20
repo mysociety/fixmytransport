@@ -1604,6 +1604,11 @@ ul#campaign-thread {
       background: #048fc2;
       color: #fff;
   }
+  ul#campaign-thread li.event-highlighted {
+      background: #55ABDD;
+      margin: 1.5em 0;
+      color: #fff;
+  }
     ul#campaign-thread li.open span.thread-item {
       background: none;
       color: #fff;

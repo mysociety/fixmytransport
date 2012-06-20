@@ -180,6 +180,16 @@ $(document).ready(function(){
     thread($('ul#campaign-thread li.open:not(:has(.compact))'));
   });
 
+  /* If there's an anchor for a campaign event, highlight it */
+  (function () {
+    var hash = window.location.hash, rest;
+    if (hash.indexOf('#') == 0) {
+      rest = hash.substring(1);
+      if (rest.match(/^e[0-9]+$/)) {
+	$(hash).addClass('event-highlighted');
+      }
+    }
+  }());
 
   /* Advice in input areas
      ================================================== */
