@@ -1,4 +1,4 @@
-<a href="#" class="thread-item">
+<a href="#" class="thread-item incoming-message">
   <span class="num"><%= index %></span>
   <span class="title"><%= raw t('campaigns.show.got_a_message', :link => link_to(t('campaigns.show.a_reply'), campaign_incoming_message_path(@campaign, message)), :sender => message.safe_from, :campaigner => h(@campaign.initiator.name)) %></span>
   <span class="close">close</span>

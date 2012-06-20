@@ -1,5 +1,5 @@
 <%-if assignment.task_type_name == 'write-to-other' %>
-<a href="#" class="thread-item">
+<a href="#" class="thread-item new-assignment">
 <span class="num"><%= index %></span>
 <span class="title"><%= raw t('campaigns.show.expert_advised_writing', :expert => h(assignment.creator.name), :user => h(assignment.user.first_name),  :recipient => h(assignment.data[:name]), :advised => t('campaigns.show.advised')) %></span>
 <span class="close">close</span>

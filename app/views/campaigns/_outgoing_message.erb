@@ -4,7 +4,7 @@
   <%- assignment_text = '' %>
 <%- end %>
 
-<a href="#" class="thread-item">
+<a href="#" class="thread-item outgoing-message">
   <span class="num"><%= index %></span>
   <span class="title"><%= raw t('campaigns.show.wrote_a_message', :sender => h(message.author.name), :recipient => h(message.recipient_name), :assignment_text => assignment_text) %></span>
   <span class="close">close</span>

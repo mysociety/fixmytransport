@@ -4,7 +4,7 @@
 <%- else %>
   <%- text = 'campaigns.show.added_an_update' %>
 <%- end %>
-<a href="#" class="thread-item">
+<a href="#" class="thread-item campaign-update">
   <span class="num"><%= index %></span>
   <span class="title"><%= raw t(text, :name => h(update.user.name)) %></span>
   <span class="close">close</span>
