@@ -1,7 +1,7 @@
 class Assignment < ActiveRecord::Base
-  
+
   include FixMyTransport::Status
-  
+
   belongs_to :campaign
   belongs_to :user
   belongs_to :creator, :class_name => 'User'
@@ -19,6 +19,7 @@ class Assignment < ActiveRecord::Base
   validate :validate_find_transport_organization_fields, :if => Proc.new{ |assignment| assignment.task_type_name == 'find-transport-organization' && ! assignment.new_record? }
   validate :validate_find_contact_details_fields, :if => Proc.new{ |assignment| assignment.task_type_name == 'find-transport-organization-contact-details' && ! assignment.new_record? }
   validate :validate_subject, :if => Proc.new { |assignment| assignment.task_type_name == 'write-to-other' }
+  validate :validate_write_to_new_transport_organization_fields, :if => Proc.new{ |assignment| assignment.task_type_name == 'write-to-new-transport-organization' }
   has_paper_trail
 
   # Validation of assignment data for the write-to-other task type
@@ -53,6 +54,22 @@ class Assignment < ActiveRecord::Base
     end
     if !data.nil? and !data[:organization_email].blank? and data[:organization_email].to_s !~ Regexp.new("^#{MySociety::Validate.email_match_regexp}\$")
       errors.add(:organization_email, ActiveRecord::Error.new(self, :organization_email, :invalid).to_s)
+    end
+  end
+
+  # Validation of assignment data for the write-to-new-transport-organization task type
+  def validate_write_to_new_transport_organization_fields
+    [:organization_name, :organization_type, :organization_persistent_id].each do |field|
+      if data.nil? or data[field].blank?
+        errors.add(field, ActiveRecord::Error.new(self, field, :blank).to_s)
+      end
+    end
+    if errors.empty?
+      organization_class = data[:organization_type].constantize
+      organization = organization_class.current.find_by_persistent_id(data[:organization_persistent_id])
+      if ! organization.emailable?(self.campaign.problem.location)
+        errors.add(:base, ActiveRecord::Error.new(self, :base, :not_emailable).to_s)
+      end
     end
   end
 
