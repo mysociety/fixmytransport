@@ -629,6 +629,8 @@ module ApplicationHelper
       return t('campaigns.show.find_operator_task_title')
     when 'find_transport_organization_contact_details'
       return t('campaigns.show.find_contact_task_title')
+    when 'write_to_new_transport_organization'
+      return t('campaigns.show.write_new_organization_task_title')
     else
       raise "No title set for assignment type #{assignment.task_type}"
     end
@@ -637,10 +639,15 @@ module ApplicationHelper
   def assignment_details(assignment)
     case assignment.task_type
     when 'find_transport_organization'
-      return t('campaigns.show.find_operator_task_description', :location => readable_location_type(assignment.campaign.location))
+      return t('campaigns.show.find_operator_task_description',
+               :location => readable_location_type(assignment.campaign.location))
     when 'find_transport_organization_contact_details'
       names = assignment.problem.responsible_organizations.map{ |org| org.name }.to_sentence
       return t('campaigns.show.find_contact_task_description', :name => names)
+    when 'write_to_new_transport_organization'
+      return t('campaigns.show.write_new_organization_task_description',
+               :name => assignment.data[:name],
+               :location => readable_location_type(assignment.campaign.location))
     else
       raise "No details set for assignment type #{assignment.task_type}"
     end
@@ -652,8 +659,23 @@ module ApplicationHelper
       return 'person'
     when 'find_transport_organization_contact_details'
       return 'person'
+    when 'write_to_new_transport_organization'
+      return 'pencil'
     else
       raise "No icon set for assignment type #{assignment.task_type}"
+    end
+  end
+
+  def assignment_action_path(assignment)
+    case assignment.task_type
+    when 'find_transport_organization',
+         'find_transport_organization_contact_details'
+      return edit_campaign_assignment_path(assignment.problem.campaign, assignment)
+    when 'write_to_other',
+         'write_to_new_transport_organization'
+      return new_campaign_outgoing_message_path(assignment.campaign, :assignment_id => assignment.id)
+    else
+      raise "No action path for assignment type #{assignment.task_type}"
     end
   end
 

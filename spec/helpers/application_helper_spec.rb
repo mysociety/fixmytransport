@@ -200,8 +200,28 @@ describe ApplicationHelper do
       location = mock_model(StopArea, :area_type => 'GTFS', :transport_mode_names => ['Ferry'])
       helper.readable_location_type(location).should == 'terminal'
     end
+  end
 
+  describe 'when returning the action path for an assignment' do
 
+    before do
+      @campaign = mock_model(Campaign)
+      @problem = mock_model(Problem, :campaign => @campaign)
+      @assignment = mock_model(Assignment, :problem => @problem, :campaign => @campaign)
+    end
+
+    it 'should return the edit assignment path for a "find_transport_organization_contact_details"
+        assignment' do
+      @assignment.stub!(:task_type).and_return('find_transport_organization_contact_details')
+      expected_path = "/campaigns/#{@campaign.id}/assignments/#{@assignment.id}/edit"
+      helper.assignment_action_path(@assignment).should == expected_path
+    end
+
+    it 'should return the outgoing message path for a "write_to_other" assignment' do
+      @assignment.stub!(:task_type).and_return('write_to_other')
+      expected_path = "/campaigns/#{@campaign.id}/outgoing_messages/new?assignment_id=#{@assignment.id}"
+      helper.assignment_action_path(@assignment).should == expected_path
+    end
 
   end
 
