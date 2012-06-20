@@ -7,7 +7,7 @@
   <span class="date"><%= event.created_at.localtime.to_s(:standard_with_date) %>
   </span>
   <%= render :partial => 'campaigns/campaign_event_permalink', :locals => {:event => event} %>
-</a>
+</span>
 <div class="thread-details">
 	<div class="thread-copy">
 		<p><%= t('campaigns.show.here_is_the_letter', :name => assignment.user_name) %></p>
