@@ -55,6 +55,24 @@ class Campaign < ActiveRecord::Base
 
   # instance methods
 
+  def handle_location_responsibility_change(organizations)
+    campaign_events.create!(:event_type => 'location_responsibility_changed')
+    organizations.each do |organization|
+      draft_text = "\n\n-----#{I18n.translate('outgoing_messages.new.original_message')}-----\n\n"
+      draft_text += self.problem.description
+      assignment_attributes = { :task_type_name => 'write-to-new-transport-organization',
+                                :status => :new,
+                                :user => self.problem.reporter,
+                                :data => { :name => organization.name,
+                                           :organization_type => organization.class.to_s,
+                                           :organization_persistent_id => organization.persistent_id,
+                                           :draft_text => draft_text },
+                                :problem => self.problem,
+                                :campaign => self }
+      Assignment.create_assignment(assignment_attributes)
+    end
+  end
+
   def location=(new_location)
     self.location_type = new_location.class.base_class.name.to_s
     self.location_persistent_id = new_location.persistent_id
@@ -92,7 +110,8 @@ class Campaign < ActiveRecord::Base
 
   def recommended_assignments
     priority_assignments = ['find_transport_organization',
-                            'find_transport_organization_contact_details']
+                            'find_transport_organization_contact_details',
+                            'write_to_new_transport_organization']
     recommended_assignments =  self.assignments.select do |assignment|
       assignment.status == :new && priority_assignments.include?(assignment.task_type)
     end
