@@ -11,6 +11,7 @@
   <span class="date">
     <%= update.created_at.localtime.to_s(:standard_with_date) %>
   </span>
+  <%= render :partial => 'campaigns/campaign_event_permalink', :locals => {:event => event} %>
 </a>
 
 <div class="thread-details">

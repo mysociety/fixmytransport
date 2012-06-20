@@ -2,4 +2,4 @@
   <%= t('campaigns.show.responsible_org_found', :user_name => assignment.user.name,  :location => readable_location_type(assignment.campaign.location)) %> 
 <%-elsif assignment.task_type_name == 'find-transport-organization-contact-details' %>
   <%= t('campaigns.show.contact_found', :user_name => assignment.user.name, :operator_name => assignment.campaign.problem.operator_names ) %>
-<%- end %></span><span class="date"><%= event.created_at.localtime.to_s(:standard_with_date) %></span></a>
+<%- end %></span><span class="date"><%= event.created_at.localtime.to_s(:standard_with_date) %></span><%= render :partial => 'campaigns/campaign_event_permalink', :locals => {:event => event} %></a>

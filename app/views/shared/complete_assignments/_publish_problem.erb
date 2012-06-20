@@ -6,4 +6,5 @@
   <span class="close">close</span>
   <span class="date"><%= event.created_at.localtime.to_s(:standard_with_date) %>
   </span>
+  <%= render :partial => 'campaigns/campaign_event_permalink', :locals => {:event => event} %>
 </a>

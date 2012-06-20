@@ -1530,7 +1530,7 @@ ul#campaign-thread {
       white-space: nowrap;
       display:block;
       float: left;
-      width:360px;
+      width:340px;
       margin:10px 0;
       line-height:1.5;
       text-overflow:ellipsis;
@@ -1543,6 +1543,45 @@ ul#campaign-thread {
       font-style:italic;
       line-height:1.5;
     }
+    ul#campaign-thread li span.thread-item span.event-permalink {
+      display: inline-block;
+      float: right;
+      margin:10px 10px 10px 0;
+      font-size:0.9em;
+      font-style:italic;
+      line-height:1.5;
+    }
+
+    /* --------------------------------------------------------------
+       The default colour of links is invisible on the blue background
+       so force all versions of the permalink to match the colours of
+       the rest of the text in the box.
+     */
+
+    ul#campaign-thread li span.thread-item span.event-permalink a:link,
+    ul#campaign-thread li span.thread-item span.event-permalink a:hover,
+    ul#campaign-thread li span.thread-item span.event-permalink a:visited,
+    ul#campaign-thread li span.thread-item span.event-permalink a:active {
+	color: #000
+    }
+
+    ul#campaign-thread li.open span.thread-item span.event-permalink a:link,
+    ul#campaign-thread li.open span.thread-item span.event-permalink a:hover,
+    ul#campaign-thread li.open span.thread-item span.event-permalink a:visited,
+    ul#campaign-thread li.open span.thread-item span.event-permalink a:active {
+	color: #FFF
+    }
+
+    ul#campaign-thread li.open span.thread-item:hover span.event-permalink a:link,
+    ul#campaign-thread li.open span.thread-item:hover span.event-permalink a:hover,
+    ul#campaign-thread li.open span.thread-item:hover span.event-permalink a:visited,
+    ul#campaign-thread li.open span.thread-item:hover span.event-permalink a:active {
+        background: none;
+        color: #333;
+    }
+
+    /* -------------------------------------------------------------- */
+
     ul#campaign-thread li span.thread-item span.close {
       display: inline-block;
       height: 12px;
