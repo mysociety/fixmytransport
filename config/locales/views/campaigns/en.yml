@@ -23,7 +23,7 @@ en:
     edit:
       edit_campaign_description: "Edit your headline and description:"
       save: "Save"
-    share: 
+    share:
       share_by_email: Share by email
     show:
       contacts_email: "Email"
@@ -94,6 +94,8 @@ en:
       contact_found: "%{user_name} found an email address for %{operator_name}"
       find_operator: "Find operator"
       find_contact_task_description: "We're sorry but we don't know the email address of %{name}. In order to be able to persuade them of anything, finding their address is a vital first step. Please find it out and add it here."
+      write_new_organization_task_title: Write to the new operator
+      write_new_organization_task_description: "This %{location} is now operated by %{name}. Write to them and let them know about your problem. We've added a copy of your original problem report to make this really easy."
       your_campaign: "Your problem page"
       app_email_replacement: "[FixMyTransport contact email]"
       recommended_actions: "Recommended actions"
@@ -109,7 +111,7 @@ en:
       campaign_supporter_first_time_header: "Yay! Thanks for becoming a supporter. As a supporter you can help in lots of ways, like offering advice. But in the first instance what %{user} really needs is for you to shout about it. Twitter, Facebook, email - whatever suits."
       contact_council: "Council"
       sign_in_to_join: "Please sign in or create an account to help get this problem fixed"
-      transport_experts: "Transport experts" 
+      transport_experts: "Transport experts"
       site_admins: "Site admins"
       admin_campaign: "Admin page"
       special_powers: "In order to help get this problem fixed, here are your special powers: "
