@@ -158,7 +158,7 @@ $(document).ready(function(){
   }
 
   //main toggle
-  $('ul#campaign-thread li a.thread-item').click(function(e){
+  $('ul#campaign-thread li span.thread-item').click(function(e){
     e.preventDefault();
     if(!$(this).hasClass('compact'))
       thread($(this).parent('li'));
@@ -670,7 +670,7 @@ $(document).ready(function(){
     $('#campaign-thread').append(html);
 
     // set up the new item events
-    var new_item = $('ul#campaign-thread li:last-child a.thread-item');
+    var new_item = $('ul#campaign-thread li:last-child span.thread-item');
     new_item.click(function(e){
       e.preventDefault();
       thread($(this).parent('li'));
@@ -765,8 +765,8 @@ $(document).ready(function(){
 
   /* Ellipsis in campaign thread
   ================================================== */
-  if ($('.campaign-content ul#campaign-thread li a.thread-item span.title').length > 0 && $(window).width() > 600){
-   $(".campaign-content ul#campaign-thread li a.thread-item span.title").ellipsis();
+  if ($('.campaign-content ul#campaign-thread li span.thread-item span.title').length > 0 && $(window).width() > 600){
+   $(".campaign-content ul#campaign-thread li span.thread-item span.title").ellipsis();
   }
 
   /* Email quoting folding and unfolding
