@@ -56,7 +56,9 @@ class Campaign < ActiveRecord::Base
   # instance methods
 
   def handle_location_responsibility_change(organizations)
-    campaign_events.create!(:event_type => 'location_responsibility_changed')
+    event_data = {:organization_names => organizations.map{ |organization| organization.name }}
+    campaign_events.create!(:event_type => 'location_responsibility_changed',
+                            :data => event_data)
     organizations.each do |organization|
       draft_text = "\n\n-----#{I18n.translate('outgoing_messages.new.original_message')}-----\n\n"
       draft_text += self.problem.description

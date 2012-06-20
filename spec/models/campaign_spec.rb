@@ -309,7 +309,9 @@ describe Campaign do
     end
 
     it 'should add a campaign event indicating the change of responsibility' do
-      @campaign_events.should_receive(:create!).with(:event_type => 'location_responsibility_changed')
+      expected_data = { :organization_names => ['A test operator'] }
+      @campaign_events.should_receive(:create!).with(:event_type => 'location_responsibility_changed',
+                                                     :data => expected_data)
       @campaign.handle_location_responsibility_change([@operator])
     end
 
