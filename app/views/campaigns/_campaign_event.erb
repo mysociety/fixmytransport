@@ -1,4 +1,4 @@
-<li class="open">
+<li class="open" id="e<%= event.id %>">
   <%- case event.event_type %>
   <%- when 'incoming_message_received' %>
     <%= render :partial => 'campaigns/incoming_message', :locals => { :message => event.described, :event => event, :index => index } %>
