@@ -65,12 +65,18 @@ class Assignment < ActiveRecord::Base
       end
     end
     if errors.empty?
-      organization_class = data[:organization_type].constantize
-      organization = organization_class.current.find_by_persistent_id(data[:organization_persistent_id])
-      if ! organization.emailable?(self.campaign.problem.location)
+      if ! self.organization
+        errors.add(:base, ActiveRecord::Error.new(self, :base, :no_organization).to_s)
+      elsif ! self.organization.emailable?(self.campaign.problem.location)
         errors.add(:base, ActiveRecord::Error.new(self, :base, :not_emailable).to_s)
       end
     end
+  end
+
+  def organization
+    return nil unless task_type_name == 'write-to-new-transport-organization'
+    organization_class = data[:organization_type].constantize
+    organization = organization_class.current.find_by_persistent_id(data[:organization_persistent_id])
   end
 
   def task_type

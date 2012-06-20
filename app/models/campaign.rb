@@ -115,7 +115,7 @@ class Campaign < ActiveRecord::Base
                             'find_transport_organization_contact_details',
                             'write_to_new_transport_organization']
     recommended_assignments =  self.assignments.select do |assignment|
-      assignment.status == :new && priority_assignments.include?(assignment.task_type)
+      assignment.status == :new && priority_assignments.include?(assignment.task_type) && assignment.valid?
     end
     recommended_assignments
   end

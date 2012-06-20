@@ -298,14 +298,20 @@ describe Campaign do
 
     before do
       @user = mock_model(User)
+      @route = mock_model(Route)
       @problem = mock_model(Problem, :reporter => @user,
-                                     :description => 'A test problem description')
+                                     :description => 'A test problem description',
+                                     :location => @route)
       @campaign = Campaign.new
       @campaign.stub!(:problem).and_return(@problem)
       @campaign_events = mock("campaign events", :create! => nil)
       @campaign.stub!(:campaign_events).and_return(@campaign_events)
       @operator = mock_model(Operator, :name => 'A test operator',
-                                       :persistent_id => 66)
+                                       :persistent_id => 66,
+                                       :emailable? => true)
+      @current_gen = mock("current generation")
+      Operator.stub!(:current).and_return(@current_gen)
+      @current_gen.stub!(:find_by_persistent_id).and_return(@operator)
     end
 
     it 'should add a campaign event indicating the change of responsibility' do
@@ -319,7 +325,7 @@ describe Campaign do
       expected_assignment_attributes = { :task_type_name => 'write-to-new-transport-organization',
                                          :status => :new,
                                          :user => @user,
-                                         :data => { :name => 'A test operator',
+                                         :data => { :organization_name => 'A test operator',
                                                     :organization_type => 'Operator',
                                                     :organization_persistent_id => 66,
                                                     :draft_text => "\n\n-----Original Message-----\n\nA test problem description" },

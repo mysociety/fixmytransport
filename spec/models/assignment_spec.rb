@@ -267,6 +267,15 @@ describe Assignment do
           @assignment.errors.on(:organization_persistent_id).should == "Please give the persistent id of the organization"
         end
 
+        it 'should not be valid if the organization cannot be found' do
+          @assignment.data = { :organization_name => 'A test organization',
+                               :organization_type => 'Operator',
+                               :organization_persistent_id => 77 }
+          @current_gen.stub!(:find_by_persistent_id).and_return(nil)
+          @assignment.valid?.should be_false
+          @assignment.errors.on(:base).should == "The organization cannot be found"
+        end
+
         it 'should be invalid if the organization is not emailable' do
           @assignment.data = { :organization_name => 'A test organization',
                                :organization_type => 'Operator',
@@ -274,6 +283,14 @@ describe Assignment do
           @operator.stub!(:emailable?).with(@route).and_return(false)
           @assignment.valid?.should be_false
           @assignment.errors.on(:base).should == "The organization is not emailable"
+        end
+
+        it 'should be valid with all required fields and an emailable organization' do
+          @assignment.data = { :organization_name => 'A test organization',
+                               :organization_type => 'Operator',
+                               :organization_persistent_id => 77 }
+          @operator.stub!(:emailable?).with(@route).and_return(true)
+          @assignment.valid?.should be_true
         end
 
       end
