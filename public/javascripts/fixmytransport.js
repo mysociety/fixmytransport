@@ -164,6 +164,10 @@ $(document).ready(function(){
       thread($(this).parent('li'));
   });
 
+    $('.permalink').click(function(e){
+	e.stopPropagation();
+    });
+
   //show all
   $('.thread-controls .expand-all').click(function(e){
     e.preventDefault();
