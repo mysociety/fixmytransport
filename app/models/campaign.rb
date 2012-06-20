@@ -65,7 +65,7 @@ class Campaign < ActiveRecord::Base
       assignment_attributes = { :task_type_name => 'write-to-new-transport-organization',
                                 :status => :new,
                                 :user => self.problem.reporter,
-                                :data => { :name => organization.name,
+                                :data => { :organization_name => organization.name,
                                            :organization_type => organization.class.to_s,
                                            :organization_persistent_id => organization.persistent_id,
                                            :draft_text => draft_text },

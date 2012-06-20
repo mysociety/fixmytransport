@@ -646,7 +646,7 @@ module ApplicationHelper
       return t('campaigns.show.find_contact_task_description', :name => names)
     when 'write_to_new_transport_organization'
       return t('campaigns.show.write_new_organization_task_description',
-               :name => assignment.data[:name],
+               :name => assignment.data[:organization_name],
                :location => readable_location_type(assignment.campaign.location))
     else
       raise "No details set for assignment type #{assignment.task_type}"
