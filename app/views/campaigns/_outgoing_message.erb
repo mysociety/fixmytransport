@@ -1,4 +1,4 @@
-<%- if message.completed_assignment  %>
+<%- if message.completed_assignment && message.assignment.task_type == 'write_to_other' %>
   <%- assignment_text = t('campaigns.show.following_experts_advice', :expert => message.assignment.creator.name) %>
 <%- else %>
   <%- assignment_text = '' %>
@@ -14,11 +14,11 @@
 </a>
 
 <div class="thread-details">
-	<div class="thread-copy"><%= raw simple_format(h(message.body)) %></div>
-	<div class="thread-furniture">
-		<div class="thumb"><a href="<%= profile_url(message.author) %>"><img src="<%= message.author.profile_photo.url(:large_thumb) %>" alt="" /></a>
-		<%= raw role_flags(message.author) %>
-		</div>
+  <div class="thread-copy"><%= raw simple_format(h(message.body)) %></div>
+  <div class="thread-furniture">
+    <div class="thumb"><a href="<%= profile_url(message.author) %>"><img src="<%= message.author.profile_photo.url(:large_thumb) %>" alt="" /></a>
+    <%= raw role_flags(message.author) %>
+    </div>
 
-	</div>
+  </div>
 </div>
