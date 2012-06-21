@@ -25,7 +25,10 @@ class CampaignEvent < ActiveRecord::Base
   end
 
   def set_visibility
-    if self.event_type == 'assignment_completed' && ['write-to-other'].include?(self.described.task_type_name)
+    # These assignments are already represented in the campaign thread by the outgoing message that the
+    # user sends to complete the assignment
+    outgoing_message_assignments = ['write-to-other', 'write-to-new-transport-organization']
+    if self.event_type == 'assignment_completed' && outgoing_message_assignments.include?(self.described.task_type_name)
       self.visible = false
     elsif ['incoming_message_deleted', 'incoming_message_redelivered'].include?(self.event_type)
       self.visible = false
