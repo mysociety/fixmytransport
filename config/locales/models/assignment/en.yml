@@ -3,6 +3,8 @@ en:
     errors:
       models:
         assignment:
+          not_emailable: "The organization is not emailable"
+          no_organization: "The organization cannot be found"
           attributes:
             description:
               blank: "Please give a description of this person or organisation"
@@ -20,3 +22,7 @@ en:
               blank: "Please give a reason for writing to this person or organisation"
             subject:
               blank: "Please give a subject line for your message"
+            organization_type:
+              blank: "Please give the type of the organization"
+            organization_persistent_id:
+              blank: "Please give the persistent id of the organization"
