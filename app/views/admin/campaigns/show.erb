@@ -148,7 +148,7 @@
 <%- end %>
 </table>
 
-<%= render :partial => 'admin/shared/comment', :locals => { :comments => @campaign.comments } %>
+<%= render :partial => 'admin/shared/comment', :locals => { :comments => @campaign.comments, :event => nil } %>
 
 <h3><%= t('admin.admin_actions') %></h3>
 <table class='history index-list'>

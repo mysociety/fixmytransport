@@ -35,7 +35,7 @@
 
 <%- end %>
 
-<%= render :partial => 'admin/shared/comment', :locals => { :comments => @problem.comments } %>
+<%= render :partial => 'admin/shared/comment', :locals => { :comments => @problem.comments, :event => nil } %>
 
 <h3><%= t('admin.admin_actions') %></h3>
 <table class='history index-list'>

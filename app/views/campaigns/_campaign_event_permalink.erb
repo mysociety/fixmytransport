@@ -1,1 +1,3 @@
+<%- if event -%>
 <span class="event-permalink"><%= link_to "#", campaign_path(@campaign, :anchor => "e#{event.id}"), :title => "Link to this comment", :class => 'permalink' %></span>
+<%- end -%>

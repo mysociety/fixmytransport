@@ -522,7 +522,8 @@ class ApplicationController < ActionController::Base
             index = params[:last_thread_index].to_i + 1
             comment_html = render_to_string :partial => "shared/comment",
                                             :locals => { :comment => @comment,
-                                                        :index => index }
+                                                         :index => index,
+                                                         :event => nil }
             @json = { :success => true,
                       :html => "<li>#{comment_html}</li>",
                       :mark_fixed => @comment.mark_fixed,
