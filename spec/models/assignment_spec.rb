@@ -53,7 +53,9 @@ describe Assignment do
   describe 'when completing' do
 
     before do
-      @mock_problem = mock_model(Problem, :campaign => nil)
+      @responsibilities = mock('responsibilities', :create! => nil)
+      @mock_problem = mock_model(Problem, :campaign => nil,
+                                          :responsibilities => @responsibilities)
       @assignment = Assignment.new(:data => {},
                                    :problem => @mock_problem)
       @assignment.stub!(:save!).and_return(true)
@@ -93,6 +95,27 @@ describe Assignment do
                                                                      :described => @assignment)
         @assignment.complete!
       end
+
+    end
+
+    describe 'if the assignment is of type "write-to-new-transport-organization"' do
+
+      it "should add a responsibility for the organization and the assignment's problem" do
+        @assignment.task_type_name = 'write-to-new-transport-organization'
+        @assignment.data = { :organization_name => 'A test operator',
+                             :organization_type => 'Operator',
+                             :organization_persistent_id => 55 }
+        @current_gen = mock('current generation')
+        Operator.stub!(:current).and_return(@current_gen)
+        @operator = mock_model(Operator, :persistent_id => 55)
+        @current_gen.stub!(:find_by_persistent_id).and_return(@operator)
+        expected_params = { :problem => @mock_problem,
+                            :organization_persistent_id => @operator.persistent_id,
+                            :organization_type => 'Operator'}
+        @mock_problem.responsibilities.should_receive(:create!).with(expected_params)
+        @assignment.complete!
+      end
+
     end
 
    end

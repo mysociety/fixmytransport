@@ -102,6 +102,12 @@ class Assignment < ActiveRecord::Base
     end
     ActiveRecord::Base.transaction do
       self.save!
+      if self.task_type_name == 'write-to-new-transport-organization'
+        responsibility_attributes = { :organization_persistent_id => self.organization.persistent_id,
+                                      :organization_type => self.organization.class.base_class.name.to_s,
+                                      :problem => self.problem }
+        self.problem.responsibilities.create!(responsibility_attributes)
+      end
       # if this is an assignment for a campaign, create a campaign event
       if self.problem.campaign
         self.problem.campaign.campaign_events.create!(:event_type => 'assignment_completed',
