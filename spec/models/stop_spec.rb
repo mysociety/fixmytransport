@@ -441,19 +441,22 @@ describe Stop do
 
     it 'should exclude an id passed in the exclude_id parameter from the search conditions' do
       Stop.should_receive(:find).with(:first, :order => anything(),
-                                              :conditions => ["id != ?", 55])
+                                              :conditions => ["id != ?", 55],
+                                              :select => 'stops.*')
       Stop.find_nearest_current(@easting, @northing, exclude_id=55)
     end
 
     it 'should include any extra conditions passed in the search conditions' do
       Stop.should_receive(:find).with(:first, :order => anything(),
-                                              :conditions => ['lat is not null'])
+                                              :conditions => ['lat is not null'],
+                                              :select => 'stops.*')
       Stop.find_nearest_current(@easting, @northing, exclude_id=nil, extra_conditions="lat is not null")
     end
 
     it 'should combine exclude_id and extra conditions if both are passed' do
       Stop.should_receive(:find).with(:first, :order => anything(),
-                                              :conditions => ['id != ? AND lat is not null', 55])
+                                              :conditions => ['id != ? AND lat is not null', 55],
+                                              :select => 'stops.*')
       Stop.find_nearest_current(@easting, @northing, exclude_id=55, extra_conditions="lat is not null")
     end
 

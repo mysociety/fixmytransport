@@ -285,7 +285,7 @@ class Stop < ActiveRecord::Base
 
   # find the nearest stop to a set of National Grid coordinates. Accepts a model id to
   # exclude from results, and an extra condition string to constrain the search
-  def self.find_nearest_current(easting, northing, exclude_id = nil, extra_conditions=nil)
+  def self.find_nearest_current(easting, northing, exclude_id = nil, extra_conditions=nil, select="stops.*")
     conditions = nil
     if exclude_id
       conditions = ["id != ?", exclude_id]
@@ -300,7 +300,8 @@ class Stop < ActiveRecord::Base
     stops = find(:first, :order => "ST_Distance(
                        ST_GeomFromText('POINT(#{easting} #{northing})', #{BRITISH_NATIONAL_GRID}),
                        stops.coords) asc",
-                       :conditions => conditions)
+                       :conditions => conditions,
+                       :select => select)
   end
 
   def self.find_current(id, scope)
