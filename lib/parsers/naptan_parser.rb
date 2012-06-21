@@ -110,18 +110,25 @@ class Parsers::NaptanParser
     csv_data = convert_encoding(filepath)
     FasterCSV.parse(csv_data, csv_options) do |row|
       coords = Point.from_x_y(row['Easting'], row['Northing'], BRITISH_NATIONAL_GRID)
-      nearest_stop = Stop.find_nearest_current(row['Easting'], row['Northing'])
+      easting = row['Easting'].to_i
+      northing = row['Northing'].to_i
+      box_string = "BOX3D(#{easting+500} #{northing+500}, #{easting-500} #{northing-500})"
+      conditions = "stops.coords && '#{box_string}'::box3d"
+      nearest_stop = Stop.find_nearest_current(easting, northing, exclude_id=nil, extra_conditions=conditions, select="locality_id")
+      if ! nearest_stop
+        nearest_stop = Stop.find_nearest_current(easting, northing, exclude_id=nil, extra_conditions=nil, select="locality_id")
+      end
       yield StopArea.new( :code                      => (row['StopAreaCode'] or row['GroupID']),
                           :name                      => (row['Name'] or row['GroupName']),
                           :administrative_area_code  => row['AdministrativeAreaCode'],
                           :area_type                 => (row['StopAreaType'] or row['Type']),
                           :grid_type                 => row['GridType'],
-                          :easting                   => row['Easting'],
-                          :northing                  => row['Northing'],
+                          :easting                   => easting,
+                          :northing                  => northing,
                           :coords                    => coords,
                           :lon                       => row['Lon'],
                           :lat                       => row['Lat'],
-                          :locality                  => nearest_stop.locality,
+                          :locality_id               => nearest_stop.locality_id,
                           :creation_datetime         => row['CreationDateTime'],
                           :modification_datetime     => (row['ModificationDateTime'] or row['LastChanged']),
                           :revision_number           => row['RevisionNumber'],
