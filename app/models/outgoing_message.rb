@@ -75,7 +75,14 @@ class OutgoingMessage < ActiveRecord::Base
     elsif incoming_message
       return incoming_message.mail.from_or_sender_address
     elsif assignment
-      return assignment.data[:email]
+      if assignment.data && assignment.data[:email]
+        return assignment.data[:email]
+      elsif assignment.valid? && assignment.organization
+        recipient_emails = self.campaign.problem.recipient_emails(assignment.organization)
+        return recipient_emails[:to]
+      else
+        raise "Cannot generate recipient email for assignment #{assignment.id}"
+      end
     end
   end
 
@@ -85,10 +92,24 @@ class OutgoingMessage < ActiveRecord::Base
     elsif incoming_message
       return incoming_message.safe_from
     elsif assignment
-      return assignment.data[:name]
+      if assignment.data && assignment.data[:name]
+        return assignment.data[:name]
+      elsif assignment.valid? && assignment.organization
+        return assignment.organization.name
+      else
+        raise "Cannot generate recipient name for assignment #{assignment.id}"
+      end
     else
       return nil
     end
+  end
+
+  def recipient_cc
+    if assignment && assignment.valid? && assignment.organization
+      recipient_emails = self.campaign.problem.recipient_emails(assignment.organization)
+      return recipient_emails[:cc]
+    end
+    return nil
   end
 
   # returns the assignment that this message completed (if any)

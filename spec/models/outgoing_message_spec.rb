@@ -63,6 +63,98 @@ describe OutgoingMessage do
 
   end
 
+  describe 'when asked for the recipient name' do
+
+    describe 'if there is an assignment' do
+
+      before do
+        @assignment = mock_model(Assignment, :data => nil, :valid? => true)
+        @outgoing_message = OutgoingMessage.new
+        @outgoing_message.stub!(:assignment).and_return(@assignment)
+      end
+
+      it 'should return the name value from the data hash of the assignment if there is one' do
+        @assignment.stub!(:data).and_return({ :name => 'A test organization'})
+        @outgoing_message.recipient_name.should == 'A test organization'
+      end
+
+      it 'should return the name of the assignment organization if the assignment is valid and there is one' do
+        operator = mock_model(Operator, :name => 'A test operator')
+        @assignment.stub!(:organization).and_return(operator)
+        @outgoing_message.recipient_name.should == 'A test operator'
+      end
+
+      it 'should raise an error if there is neither a name in the data hash or an operator on a valid assignment' do
+        @assignment.stub!(:organization).and_return(nil)
+        expected_error = "Cannot generate recipient name for assignment #{@assignment.id}"
+        lambda{ @outgoing_message.recipient_name }.should raise_error(expected_error)
+      end
+
+    end
+
+  end
+
+  describe 'when asked for the recipient cc email' do
+
+    describe 'if there is an assignment' do
+
+      before do
+        @assignment = mock_model(Assignment, :data => nil, :valid? => true)
+        @outgoing_message = OutgoingMessage.new
+        @outgoing_message.stub!(:assignment).and_return(@assignment)
+      end
+
+      it 'should return the recipient "cc" email of the assignment organization if the assignment
+          for the problem location if the assignment is valid and there is an organization' do
+        operator = mock_model(Operator, :name => 'A test operator')
+        campaign = mock_model(Campaign)
+        problem = mock_model(Problem, :recipient_emails => {:cc => 'cc@example.com'})
+        @assignment.stub!(:organization).and_return(operator)
+        @assignment.stub!(:campaign).and_return(campaign)
+        @campaign.stub!(:problem).and_return(problem)
+        @outgoing_message.recipient_cc.should == 'cc@example.com'
+      end
+    end
+
+  end
+
+  describe 'when asked for the recipient email' do
+
+    describe 'if there is an assignment' do
+
+      before do
+        @assignment = mock_model(Assignment, :data => nil, :valid? => true)
+        @outgoing_message = OutgoingMessage.new
+        @outgoing_message.stub!(:assignment).and_return(@assignment)
+      end
+
+      it 'should return the email value from the data hash of the assignment if there is one' do
+        @assignment.stub!(:data).and_return({ :email => 'organization@example.com'})
+        @outgoing_message.recipient_email.should == 'organization@example.com'
+      end
+
+      it 'should return the recipient "to" email of the assignment organization if the assignment
+          for the problem location if the assignment is valid and there is an organization' do
+        operator = mock_model(Operator, :name => 'A test operator')
+        campaign = mock_model(Campaign)
+        problem = mock_model(Problem, :recipient_emails => {:to => 'organization@example.com'})
+        @assignment.stub!(:organization).and_return(operator)
+        @assignment.stub!(:campaign).and_return(campaign)
+        @campaign.stub!(:problem).and_return(problem)
+        @outgoing_message.recipient_email.should == 'organization@example.com'
+      end
+
+      it 'should raise an error if there is neither a name in the data hash or an operator on a valid assignment' do
+        @assignment.stub!(:organization).and_return(nil)
+        expected_error = "Cannot generate recipient name for assignment #{@assignment.id}"
+        lambda{ @outgoing_message.recipient_name }.should raise_error(expected_error)
+      end
+
+
+    end
+
+  end
+
   describe 'when creating a message from attributes' do
 
     before do
