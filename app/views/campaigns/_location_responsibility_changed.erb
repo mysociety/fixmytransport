@@ -1,2 +1,2 @@
-<a href="#" class="thread-item"><span class="num"><%= index %></span><span class="title"><%= t('campaigns.show.responsibility_changed', :location => readable_location_type(@campaign.location), :organization => event.data[:organization_names].to_sentence)%>
+<a href="#" class="thread-item location-responsibility-changed"><span class="num"><%= index %></span><span class="title"><%= t('campaigns.show.responsibility_changed', :location => readable_location_type(@campaign.location), :organization => event.data[:organization_names].to_sentence)%>
 </span><span class="date"><%= event.created_at.localtime.to_s(:standard_with_date) %></span></a>
