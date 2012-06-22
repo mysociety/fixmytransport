@@ -19,6 +19,7 @@ load "url_mapper.rb"
 load "util.rb"
 load "validate.rb"
 load "voting_area.rb"
+load "autorotate_image.rb"
 
 # Patch Rails::GemDependency to cope with older versions of rubygems
 # Restores override removed in https://github.com/rails/rails/commit/c20a4d18e36a13b5eea3155beba36bb582c0cc87
