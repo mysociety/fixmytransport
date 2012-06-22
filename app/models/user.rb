@@ -48,6 +48,17 @@ class User < ActiveRecord::Base
                                  :small_thumb => "40x40#",
                                  :medium_thumb => "46x46#" }
 
+
+  before_post_process :autorotate_paperclip_image
+
+  def autorotate_paperclip_image
+    uploaded_filename = profile_photo.queued_for_write[:original].path
+    # Ignore return values form autorotate_image - if it's not a JPEG
+    # or reorientation fails, the original file is left untouched:
+    autorotate_image(uploaded_filename)
+    true
+  end
+
   attr_accessor :ignore_blank_passwords,
                 :skip_email_uniqueness_validation,
                 :profile_photo_url,
