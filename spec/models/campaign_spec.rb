@@ -312,37 +312,78 @@ describe Campaign do
                                        :emailable? => true)
       @current_gen = mock("current generation")
       Operator.stub!(:current).and_return(@current_gen)
-      CampaignMailer.stub!(:deliver_responsibility_change)
       @current_gen.stub!(:find_by_persistent_id).and_return(@operator)
       @assignment = mock_model(Assignment)
-      Assignment.stub!(:create_assignment).and_return(@assignment)
     end
 
-    it 'should add a campaign event indicating the change of responsibility' do
-      expected_data = { :organization_names => ['A test operator'] }
-      @campaign_events.should_receive(:create!).with(:event_type => 'location_responsibility_changed',
-                                                     :data => expected_data)
-      @campaign.handle_location_responsibility_change([@operator])
+    describe 'when not running in dryrun mode' do
+
+      before do
+        CampaignMailer.stub!(:deliver_responsibility_change)
+        Assignment.stub!(:create_assignment).and_return(@assignment)
+      end
+
+      it 'should add a campaign event indicating the change of responsibility' do
+        expected_data = { :organization_names => ['A test operator'] }
+        @campaign_events.should_receive(:create!).with(:event_type => 'location_responsibility_changed',
+                                                       :data => expected_data)
+        @campaign.handle_location_responsibility_change([@operator], dryrun=false, verbose=false)
+      end
+
+      it "should add an assignment to write to each new organization" do
+        expected_assignment_attributes = { :task_type_name => 'write-to-new-transport-organization',
+                                           :status => :new,
+                                           :user => @user,
+                                           :data => { :organization_name => 'A test operator',
+                                                      :organization_type => 'Operator',
+                                                      :organization_persistent_id => 66,
+                                                      :draft_text => "\n\n-----Original Message-----\n\nA test problem description" },
+                                           :problem => @problem,
+                                           :campaign => @campaign }
+        Assignment.should_receive(:create_assignment).with(expected_assignment_attributes)
+        @campaign.handle_location_responsibility_change([@operator], dryrun=false, verbose=false)
+      end
+
+      it 'should send an email to the campaign initiator about the responsibility change' do
+        assignment_hash = {'A test operator' => @assignment}
+        CampaignMailer.should_receive(:deliver_responsibility_change).with(@user, assignment_hash, @campaign)
+        @campaign.handle_location_responsibility_change([@operator], dryrun=false, verbose=false)
+      end
+
     end
 
-    it "should add an assignment to write to each new organization" do
-      expected_assignment_attributes = { :task_type_name => 'write-to-new-transport-organization',
-                                         :status => :new,
-                                         :user => @user,
-                                         :data => { :organization_name => 'A test operator',
-                                                    :organization_type => 'Operator',
-                                                    :organization_persistent_id => 66,
-                                                    :draft_text => "\n\n-----Original Message-----\n\nA test problem description" },
-                                         :problem => @problem,
-                                         :campaign => @campaign }
-      Assignment.should_receive(:create_assignment).with(expected_assignment_attributes)
-      @campaign.handle_location_responsibility_change([@operator])
-    end
+    describe 'when running in dryrun mode' do
 
-    it 'should send an email to the campaign initiator about the responsibility change' do
-      assignment_hash = {'A test operator' => @assignment}
-      CampaignMailer.should_receive(:deliver_responsibility_change).with(@user, assignment_hash, @campaign)
-      @campaign.handle_location_responsibility_change([@operator])
+      before do
+        CampaignMailer.stub!(:create_responsibility_change)
+        Assignment.stub!(:assignment_from_attributes).and_return(@assignment)
+      end
+
+      it 'should not create a campaign event' do
+        @campaign_events.should_not_receive(:create!)
+        @campaign.handle_location_responsibility_change([@operator], dryrun=true, verbose=false)
+      end
+
+      it 'should create an assignment to write to each organization but not save the assignments' do
+        expected_assignment_attributes = { :task_type_name => 'write-to-new-transport-organization',
+                                           :status => :new,
+                                           :user => @user,
+                                           :data => { :organization_name => 'A test operator',
+                                                      :organization_type => 'Operator',
+                                                      :organization_persistent_id => 66,
+                                                      :draft_text => "\n\n-----Original Message-----\n\nA test problem description" },
+                                           :problem => @problem,
+                                           :campaign => @campaign }
+        Assignment.should_receive(:assignment_from_attributes).with(expected_assignment_attributes)
+        @campaign.handle_location_responsibility_change([@operator], dryrun=true, verbose=false)
+      end
+
+      it 'should create an email to the campaign initiator about the responsibility change but not send it' do
+        assignment_hash = {'A test operator' => @assignment}
+        CampaignMailer.should_receive(:create_responsibility_change).with(@user, assignment_hash, @campaign)
+        @campaign.handle_location_responsibility_change([@operator], dryrun=true, verbose=false)
+      end
+
     end
 
   end

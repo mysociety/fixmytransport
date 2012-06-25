@@ -55,12 +55,14 @@ class Campaign < ActiveRecord::Base
 
   # instance methods
 
-  def handle_location_responsibility_change(organizations)
+  def handle_location_responsibility_change(organizations, dryrun, verbose)
     created_assignments = {}
     ActiveRecord::Base.transaction do
       event_data = {:organization_names => organizations.map{ |organization| organization.name }}
-      campaign_events.create!(:event_type => 'location_responsibility_changed',
-                              :data => event_data)
+      if ! dryrun
+        campaign_events.create!(:event_type => 'location_responsibility_changed',
+                                :data => event_data)
+      end
       # create assignments to write to the new organizations
       organizations.each do |organization|
         draft_text = "\n\n-----#{I18n.translate('outgoing_messages.new.original_message')}-----\n\n"
@@ -74,11 +76,23 @@ class Campaign < ActiveRecord::Base
                                              :draft_text => draft_text },
                                   :problem => self.problem,
                                   :campaign => self }
-        created_assignments[organization.name] = Assignment.create_assignment(assignment_attributes)
+        if dryrun
+          created_assignments[organization.name] = Assignment.assignment_from_attributes(assignment_attributes)
+        else
+          created_assignments[organization.name] = Assignment.create_assignment(assignment_attributes)
+        end
       end
     end
     # send an email about the change
-    CampaignMailer.deliver_responsibility_change(initiator, created_assignments, self)
+    if dryrun
+      mail = CampaignMailer.create_responsibility_change(initiator, created_assignments, self)
+      if verbose
+        puts "Would send the following:"
+        puts mail
+      end
+    else
+      CampaignMailer.deliver_responsibility_change(initiator, created_assignments, self)
+    end
   end
 
   def location=(new_location)
