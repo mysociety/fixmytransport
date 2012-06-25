@@ -103,7 +103,6 @@ class Problem < ActiveRecord::Base
                                 :problem => self,
                                 :campaign => self.campaign }
       Assignment.create_assignment(assignment_attributes)
-
     end
   end
 
