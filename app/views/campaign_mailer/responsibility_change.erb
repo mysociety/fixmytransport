@@ -1,6 +1,6 @@
 Hi<%= " #{raw @user.name}" %>,
 
-Important news: we've updated out data, and it looks like the operator for <%= raw @location %> has changed. It is now the responsibility of <%= @links.keys.to_sentence %>.
+Important news: we've updated our data, and it looks like the operator for <%- if @location.is_a?(Route) %>the <%- end %><%= raw @location.description %> has changed. It is now the responsibility of <%= @links.keys.to_sentence %>.
 
 We're letting you know about this in case writing to the new operator will help you resolve the issue you raised in "<%= raw @campaign.title %>".
 
