@@ -79,7 +79,8 @@ class CampaignMailer < ApplicationMailer
     from outgoing_message.reply_name_and_email
     subject outgoing_message.subject
     body({ :outgoing_message => outgoing_message,
-           :feedback_link => main_url(feedback_path) })
+           :feedback_link => main_url(feedback_path),
+           :problem => outgoing_message.campaign.problem })
   end
 
 

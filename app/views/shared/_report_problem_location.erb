@@ -1,0 +1,48 @@
+Here is some information from FixMyTransport about the location of this issue:
+
+Location name: <%= raw @problem.location.name %>
+
+<%- if @problem.location.is_a? Stop and !@problem.location.atco_code.blank? %>
+Location ATCO code: <%= raw @problem.location.atco_code %>
+
+<%- end %>
+<%- if @problem.location.is_a? Stop and !@problem.location.plate_code.blank? %>
+Location plate code: <%= raw @problem.location.plate_code %>
+
+<%- end %>
+<%- if @problem.location.is_a? Stop and !@problem.location.naptan_code.blank? %>
+Location NaPTAN code: <%= raw @problem.location.naptan_code %>
+
+<%- end %>
+<%- if @problem.location.respond_to?(:area) and !@problem.location.area.blank? %>
+Area: <%= raw(@problem.location.area) %>
+
+<%- end %>
+<%- if @problem.location.is_a? Stop and !@problem.location.landmark.blank? %>
+Nearby landmark: <%= raw(@problem.location.landmark) %>
+
+<%- end %>
+<%- if @problem.location.is_a? Stop and !@problem.location.street.blank? %>
+Street: <%= raw(@problem.location.street) %>
+
+<%- end %>
+<%- if @problem.location.is_a? Stop and !@problem.location.crossing.blank? %>
+Crossing: <%= raw(@problem.location.crossing) %>
+
+<%- end %>
+<%- if @problem.location.is_a? Stop and !@problem.location.indicator.blank? %>
+Indicator: <%= raw(@problem.location.indicator) %>
+
+<%- end %>
+<%- if @problem.location.is_a? Stop and !@problem.location.bearing.blank? %>
+Bearing: <%= raw @problem.location.bearing %>
+
+<%- end %>
+<%- if @problem.location.respond_to?(:easting) %>
+Easting: <%= raw @problem.location.easting %>
+
+<%- end %>
+<%- if @problem.location.respond_to?(:northing) %>
+Northing: <%= raw @problem.location.northing %>
+
+<%- end %>

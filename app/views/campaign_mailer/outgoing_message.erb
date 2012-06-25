@@ -1,5 +1,10 @@
+
+
 <%= raw @outgoing_message.body.strip %>
 
+<%- if @outgoing_message.assignment && @outgoing_message.assignment.task_type_name == 'write-to-new-transport-organization'%>
+<%= render :partial => "shared/report_problem_location"%>
+<%- end %>
 <%- if MySociety::Config.getbool('SITE_VISIBLE', true) %>
 
 [ PLEASE NOTE: Any reply you send to this message will be sent to <%= @outgoing_message.author.name %> and will be published online. This message was sent via FixMyTransport.com - a not-for-profit service dedicated to helping people get public transport problems resolved. To give feedback on FixMyTransport, please visit <<%= raw @feedback_link %>>. ]

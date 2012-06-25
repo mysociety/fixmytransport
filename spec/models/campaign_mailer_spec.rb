@@ -185,10 +185,25 @@ describe CampaignMailer do
     before do
       @user = mock_model(User, :name => "A test user")
       @mock_operator_contact = mock_model(OperatorContact)
+      @mock_stop = mock_model(Stop, :name => 'A test stop',
+                                    :atco_code => 'A test ATCO code',
+                                    :plate_code => 'def',
+                                    :naptan_code => nil,
+                                    :landmark => nil,
+                                    :street => nil,
+                                    :crossing => nil,
+                                    :indicator => nil,
+                                    :bearing => nil,
+                                    :easting => 444.44,
+                                    :northing => 555.55,
+                                    :persistent_id => 66,
+                                    :transport_mode_names => ['Bus', 'Tram/Metro'])
       @mock_problem = mock_model(Problem, :recipient_contact => @mock_operator_contact,
                                           :sent_at => Time.now-1.day,
-                                          :update_attribute => nil)
+                                          :update_attribute => nil,
+                                          :location => @mock_stop)
       @mock_operator = mock_model(Operator)
+      @mock_campaign = mock_model(Campaign, :problem => @mock_problem)
       @mock_assignment = mock_model(Assignment, :problem => @mock_problem,
                                                 :task_type_name => 'write-to-new-transport-organization',
                                                 :organization => @mock_operator)
@@ -198,7 +213,8 @@ describe CampaignMailer do
                                                       :subject => 'A test subject',
                                                       :body => 'A test body',
                                                       :author => @user,
-                                                      :assignment => @mock_assignment)
+                                                      :assignment => @mock_assignment,
+                                                      :campaign => @mock_campaign)
     end
 
     it 'should deliver successfully' do
