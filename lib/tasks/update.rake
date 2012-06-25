@@ -381,4 +381,42 @@ namespace :update do
     end
   end
 
+  desc 'Look for campaigns at locations where the organizations responsible for the location have changed,
+        and the organizations listed as responsible for the campaign are no longer in the organizations
+        responsible for the location. Runs in dryrun mode unless DRYRUN=0 is specified.'
+  task :campaigns_at_locations_with_changed_operators => :environment do
+    dryrun = check_dryrun()
+    verbose = check_verbose()
+
+    # Only looking for Routes or StopAreas as these are updated from external data
+    Problem.find_each(:conditions => ["campaign_id IS NOT NULL
+                                       AND (location_type = 'Route'
+                                            OR location_type = 'StopArea')"]) do |problem|
+
+      next if problem.campaign.status == :fixed
+      next if (problem.campaign.status == :new && problem.created_at < Time.now - 1.month)
+      location = problem.location
+      location_class = problem.location_type.constantize
+      next unless location.operators_responsible?
+
+      previous_location = location_class.in_generation(PREVIOUS_GENERATION).find_by_persistent_id(location.persistent_id)
+      if ! previous_location
+        puts "#{location_class} for problem #{problem.id} has no previous #{location_class}"
+        next
+      end
+
+      current_ids = location.operators.map{ |operator| operator.persistent_id }
+      previous_ids = previous_location.operators.map{ |operator| operator.persistent_id }
+      ids = problem.responsible_operators.map{ |operator| operator.persistent_id }
+      names = problem.responsible_operators.map{ |operator| operator.name }.to_sentence
+      in_current_location_resps = ids.any?{ |operator_id| current_ids.include?(operator_id) }
+      in_previous_location_resps = ids.any?{ |operator_id| previous_ids.include?(operator_id) }
+      if in_previous_location_resps && ! in_current_location_resps
+        puts "#{location_class} #{location.id} no longer run by #{names}, listed as responsible for problem #{problem.id}"
+        problem.campaign.handle_location_responsibility_change(location.operators, dryrun, verbose)
+      end
+    end
+
+  end
+
 end
