@@ -50,7 +50,7 @@ describe ProblemMailer do
     describe 'when delivering a problem report' do
 
       before do
-        MySociety::Config.stub!(:getbool).with('SITE_VISIBLE', true).and_return(true  )
+        MySociety::Config.stub!(:getbool).with('SITE_VISIBLE', true).and_return(true)
         MySociety::Config.stub!(:get).with("DOMAIN", '127.0.0.1:3000').and_return("127.0.0.1:3000")
         MySociety::Config.stub!(:get).with("CONTACT_EMAIL", 'contact@localhost').and_return("test@example.com")
         @mailer = ProblemMailer.create_report(@mock_problem, @mock_operator, [@mock_operator])

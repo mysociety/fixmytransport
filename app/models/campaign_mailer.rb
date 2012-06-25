@@ -28,11 +28,11 @@ class CampaignMailer < ApplicationMailer
     recipients recipient.name_and_email
     from contact_from_name_and_email
     subject I18n.translate('mailers.comment_subject', :title => campaign.title)
-    body_hash = { :campaign => campaign, 
-                  :recipient => recipient, 
-                  :comment => comment, 
+    body_hash = { :campaign => campaign,
+                  :recipient => recipient,
+                  :comment => comment,
                   :link => main_url(campaign_path(campaign)) }
-    if subscription 
+    if subscription
       body_hash[:unsubscribe_link] = main_url(confirm_unsubscribe_path(:email_token => subscription.token))
     end
     body(body_hash)
@@ -71,6 +71,7 @@ class CampaignMailer < ApplicationMailer
   end
 
   def outgoing_message(outgoing_message)
+    headers['return-path'] = contact_from_name_and_email
     recipients outgoing_message.recipient_email
     from outgoing_message.reply_name_and_email
     subject outgoing_message.subject
@@ -86,7 +87,7 @@ class CampaignMailer < ApplicationMailer
     body({ :assignment => assignment,
            :campaign => campaign })
   end
-  
+
   def unmatched_incoming_message()
     recipients contact_from_name_and_email
     from contact_from_name_and_email
@@ -109,7 +110,7 @@ class CampaignMailer < ApplicationMailer
 
   def receive(email, raw_email)
     campaigns = campaigns_matching_email(email)
-    if campaigns.empty? 
+    if campaigns.empty?
       # no matching campaigns
       IncomingMessage.create_from_mail(email, raw_email, nil)
       CampaignMailer.deliver_unmatched_incoming_message()
@@ -144,10 +145,10 @@ class CampaignMailer < ApplicationMailer
     else
       sent_emails = SentEmail.find(:all, :conditions => ['comment_id = ?', update_or_comment])
     end
-    
+
     sent_recipients = sent_emails.map{ |sent_email| sent_email.recipient }
-    campaign_subscriptions = campaign.subscriptions.confirmed    
-    recipients = campaign_subscriptions.map{ |campaign_subscription| [campaign_subscription, 
+    campaign_subscriptions = campaign.subscriptions.confirmed
+    recipients = campaign_subscriptions.map{ |campaign_subscription| [campaign_subscription,
                                                                       campaign_subscription.user] }
     if update_or_comment.is_a?(Comment)
       recipients << [nil, campaign.initiator]
@@ -157,7 +158,7 @@ class CampaignMailer < ApplicationMailer
       # don't send an email to the person who created the update or comment
       next if recipient == update_or_comment.user
       next if recipient.email.nil?
-      
+
       if self.dryrun
         STDERR.puts("Would send the following:")
         if update_or_comment.is_a?(CampaignUpdate) && update_or_comment.is_advice_request?
@@ -176,7 +177,7 @@ class CampaignMailer < ApplicationMailer
         else
           deliver_comment(recipient, campaign, subscription, update_or_comment)
         end
-        
+
         sent_email_attributes = { :recipient => recipient,
                                   :campaign => campaign }
         if update_or_comment.is_a?(CampaignUpdate)
@@ -200,7 +201,7 @@ class CampaignMailer < ApplicationMailer
       send_update(campaign_update, campaign_update.campaign)
     end
   end
-  
+
   def self.send_comments(dryrun=false)
     self.dryrun = dryrun
     self.sent_count = 0
@@ -208,5 +209,5 @@ class CampaignMailer < ApplicationMailer
       send_update(campaign_comment, campaign_comment.commented)
     end
   end
-  
+
 end

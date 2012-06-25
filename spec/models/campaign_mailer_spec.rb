@@ -90,6 +90,33 @@ describe CampaignMailer do
                                             :update_attribute => true)
       end
 
+      describe 'when delivering an outgoing message' do
+
+        before do
+          MySociety::Config.stub!(:getbool).with('SITE_VISIBLE', true).and_return(true)
+          MySociety::Config.stub!(:get).with("DOMAIN", '127.0.0.1:3000').and_return("127.0.0.1:3000")
+          MySociety::Config.stub!(:get).with("CONTACT_EMAIL", 'contact@localhost').and_return("contact@example.com")
+          @outgoing_message = mock_model(OutgoingMessage, :recipient_email => 'recipient@example.com',
+                                                          :recipient_name => 'A test recipient',
+                                                          :reply_name_and_email => 'Test reply <reply@example.com>',
+                                                          :subject => 'A test subject',
+                                                          :body => 'Well hello there',
+                                                          :author => mock_model(User, :name => 'A Test User'))
+          @mailer = CampaignMailer.create_outgoing_message(@outgoing_message)
+        end
+
+        it 'should deliver successfully' do
+          lambda { CampaignMailer.deliver(@mailer) }.should_not raise_error
+        end
+
+        it 'should set the contact address for the application as the "return-to" header' do
+          CampaignMailer.deliver(@mailer)
+          mail = ActionMailer::Base.deliveries.last
+          mail.header['return-path'].spec.should == "contact@example.com"
+        end
+
+      end
+
       describe 'when sending emails about an update' do
 
         it 'should create a sent email model for each update email sent' do
