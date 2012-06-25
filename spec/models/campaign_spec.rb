@@ -304,6 +304,7 @@ describe Campaign do
                                      :location => @route)
       @campaign = Campaign.new
       @campaign.stub!(:problem).and_return(@problem)
+      @campaign.stub!(:initiator).and_return(@user)
       @campaign_events = mock("campaign events", :create! => nil)
       @campaign.stub!(:campaign_events).and_return(@campaign_events)
       @operator = mock_model(Operator, :name => 'A test operator',
@@ -311,7 +312,10 @@ describe Campaign do
                                        :emailable? => true)
       @current_gen = mock("current generation")
       Operator.stub!(:current).and_return(@current_gen)
+      CampaignMailer.stub!(:deliver_responsibility_change)
       @current_gen.stub!(:find_by_persistent_id).and_return(@operator)
+      @assignment = mock_model(Assignment)
+      Assignment.stub!(:create_assignment).and_return(@assignment)
     end
 
     it 'should add a campaign event indicating the change of responsibility' do
@@ -332,6 +336,12 @@ describe Campaign do
                                          :problem => @problem,
                                          :campaign => @campaign }
       Assignment.should_receive(:create_assignment).with(expected_assignment_attributes)
+      @campaign.handle_location_responsibility_change([@operator])
+    end
+
+    it 'should send an email to the campaign initiator about the responsibility change' do
+      assignment_hash = {'A test operator' => @assignment}
+      CampaignMailer.should_receive(:deliver_responsibility_change).with(@user, assignment_hash, @campaign)
       @campaign.handle_location_responsibility_change([@operator])
     end
 

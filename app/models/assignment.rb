@@ -129,6 +129,7 @@ class Assignment < ActiveRecord::Base
   def self.create_assignment(attributes)
     assignment = assignment_from_attributes(attributes)
     assignment.save!
+    assignment
   end
 
   # Assumes that only the problem reporter ever gets assignments related to the problem

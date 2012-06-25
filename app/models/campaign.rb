@@ -56,23 +56,29 @@ class Campaign < ActiveRecord::Base
   # instance methods
 
   def handle_location_responsibility_change(organizations)
-    event_data = {:organization_names => organizations.map{ |organization| organization.name }}
-    campaign_events.create!(:event_type => 'location_responsibility_changed',
-                            :data => event_data)
-    organizations.each do |organization|
-      draft_text = "\n\n-----#{I18n.translate('outgoing_messages.new.original_message')}-----\n\n"
-      draft_text += self.problem.description
-      assignment_attributes = { :task_type_name => 'write-to-new-transport-organization',
-                                :status => :new,
-                                :user => self.problem.reporter,
-                                :data => { :organization_name => organization.name,
-                                           :organization_type => organization.class.to_s,
-                                           :organization_persistent_id => organization.persistent_id,
-                                           :draft_text => draft_text },
-                                :problem => self.problem,
-                                :campaign => self }
-      Assignment.create_assignment(assignment_attributes)
+    created_assignments = {}
+    ActiveRecord::Base.transaction do
+      event_data = {:organization_names => organizations.map{ |organization| organization.name }}
+      campaign_events.create!(:event_type => 'location_responsibility_changed',
+                              :data => event_data)
+      # create assignments to write to the new organizations
+      organizations.each do |organization|
+        draft_text = "\n\n-----#{I18n.translate('outgoing_messages.new.original_message')}-----\n\n"
+        draft_text += self.problem.description
+        assignment_attributes = { :task_type_name => 'write-to-new-transport-organization',
+                                  :status => :new,
+                                  :user => self.problem.reporter,
+                                  :data => { :organization_name => organization.name,
+                                             :organization_type => organization.class.to_s,
+                                             :organization_persistent_id => organization.persistent_id,
+                                             :draft_text => draft_text },
+                                  :problem => self.problem,
+                                  :campaign => self }
+        created_assignments[organization.name] = Assignment.create_assignment(assignment_attributes)
+      end
     end
+    # send an email about the change
+    CampaignMailer.deliver_responsibility_change(initiator, created_assignments, self)
   end
 
   def location=(new_location)

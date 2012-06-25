@@ -1,6 +1,7 @@
 class CampaignMailer < ApplicationMailer
 
   cattr_accessor :sent_count, :dryrun
+  include ApplicationHelper
 
   def new_message(recipient, incoming_message, campaign)
     recipients recipient.name_and_email
@@ -95,6 +96,22 @@ class CampaignMailer < ApplicationMailer
     from contact_from_name_and_email
     subject I18n.translate('mailers.unmatched_incoming_message_subject')
     body({ :admin_link => admin_url(admin_root_path) })
+  end
+
+  def responsibility_change(user, assignment_hash, campaign)
+    recipients user.name_and_email
+    from contact_from_name_and_email
+    subject I18n.translate('mailers.responsibility_changed_subject', :location => campaign.location.description)
+    links = {}
+    assignment_hash.each do |organization_name, assignment|
+      links[organization_name] = main_url(assignment_action_path(assignment))
+    end
+    body({ :assignment_hash => assignment_hash,
+           :user => user,
+           :campaign => campaign,
+           :links => links,
+           :location => campaign.location,
+           :campaign_link => main_url(campaign_path(campaign)) })
   end
 
   def campaigns_matching_email(email)

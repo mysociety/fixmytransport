@@ -1,0 +1,20 @@
+Hi<%= " #{raw @user.name}" %>,
+
+Important news: we've updated out data, and it looks like the operator for <%= raw @location %> has changed. It is now the responsibility of <%= @links.keys.to_sentence %>.
+
+We're letting you know about this in case writing to the new operator will help you resolve the issue you raised in "<%= raw @campaign.title %>".
+
+<%- @links.each do |operator_name, link| %>
+To write to <%= raw operator_name %>, click on the link below:
+
+<%= raw link %>
+
+<%- end %>
+
+If your issue has been fixed, you can mark it as fixed from your public page:
+
+<%= raw @campaign_link %>
+
+Hope that's helpful,
+
+FixMyTransport
