@@ -1,6 +1,6 @@
 $(document).ready(function(){
   $.ifixpng('../images/pixel.gif');
-  $('.supporter-notice-arrow, .fb-post-to-wall, ul#campaign-thread li a.thread-item span.close').ifixpng();
+  $('.supporter-notice-arrow, .fb-post-to-wall, ul#campaign-thread li span.thread-item span.close').ifixpng();
   	
 	/* Tip Box - explicitly declares .tip-nub's so they don't get left visible in ie8
 	   ================================================== */

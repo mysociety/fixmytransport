@@ -59,14 +59,17 @@ class ProblemsController < ApplicationController
   end
 
   def new
-    setup_new
     @variant = 0
+    return setup_new
   end
 
   def new_alternate
-    setup_new
     @variant = 1
-    render :action => 'new'
+    result = setup_new
+    if result
+      render :action => 'new'
+    end
+    return result
   end
 
   def existing

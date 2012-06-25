@@ -1487,29 +1487,30 @@ ul#campaign-thread {
     border-bottom: 3px solid #fff;
     line-height:0;
   }
-    ul#campaign-thread li a.thread-item {
+    ul#campaign-thread li span.thread-item {
         display: inline-block;
       width:100%;
         color: #444;
         background: #eee;
         height: 40px;
     }
-    ul#campaign-thread li a.thread-item:hover,
-    ul#campaign-thread li a.thread-item:focus {
+
+    ul#campaign-thread li span.thread-item:hover,
+    ul#campaign-thread li span.thread-item:focus {
         background: #048fc2;
       color:#fff;
     }
-      ul#campaign-thread li a.thread-item:hover span.close,
-      ul#campaign-thread li a.thread-item:focus span.close {
+      ul#campaign-thread li span.thread-item:hover span.close,
+      ul#campaign-thread li span.thread-item:focus span.close {
         background-position: -18px -29px;
       }
-    ul#campaign-thread li a.thread-item.compact:hover,
-    ul#campaign-thread li a.thread-item.compact:focus {
+    ul#campaign-thread li span.thread-item.compact:hover,
+    ul#campaign-thread li span.thread-item.compact:focus {
       background:#eee;
       cursor:default;
       color:#444;
     }
-    ul#campaign-thread li a.thread-item span.num {
+    ul#campaign-thread li span.thread-item span.num {
         display: inline-block;
         float: left;
         text-align: center;
@@ -1524,17 +1525,17 @@ ul#campaign-thread {
         -moz-border-radius: 20px;
         -webkit-border-radius: 20px;
     }
-    ul#campaign-thread li a.thread-item span.title {
+    ul#campaign-thread li span.thread-item span.title {
       overflow: hidden;
       white-space: nowrap;
       display:block;
       float: left;
-      width:360px;
+      width:340px;
       margin:10px 0;
       line-height:1.5;
       text-overflow:ellipsis;
     }
-    ul#campaign-thread li a.thread-item span.date {
+    ul#campaign-thread li span.thread-item span.date {
       display: inline-block;
       float: right;
       margin:10px 20px 10px 0;
@@ -1542,7 +1543,46 @@ ul#campaign-thread {
       font-style:italic;
       line-height:1.5;
     }
-    ul#campaign-thread li a.thread-item span.close {
+    ul#campaign-thread li span.thread-item span.event-permalink {
+      display: inline-block;
+      float: right;
+      margin:10px 10px 10px 0;
+      font-size:0.9em;
+      font-style:italic;
+      line-height:1.5;
+    }
+
+    /* --------------------------------------------------------------
+       The default colour of links is invisible on the blue background
+       so force all versions of the permalink to match the colours of
+       the rest of the text in the box.
+     */
+
+    ul#campaign-thread li span.thread-item span.event-permalink a:link,
+    ul#campaign-thread li span.thread-item span.event-permalink a:hover,
+    ul#campaign-thread li span.thread-item span.event-permalink a:visited,
+    ul#campaign-thread li span.thread-item span.event-permalink a:active {
+	color: #000
+    }
+
+    ul#campaign-thread li.open span.thread-item span.event-permalink a:link,
+    ul#campaign-thread li.open span.thread-item span.event-permalink a:hover,
+    ul#campaign-thread li.open span.thread-item span.event-permalink a:visited,
+    ul#campaign-thread li.open span.thread-item span.event-permalink a:active {
+	color: #FFF
+    }
+
+    ul#campaign-thread li.open span.thread-item:hover span.event-permalink a:link,
+    ul#campaign-thread li.open span.thread-item:hover span.event-permalink a:hover,
+    ul#campaign-thread li.open span.thread-item:hover span.event-permalink a:visited,
+    ul#campaign-thread li.open span.thread-item:hover span.event-permalink a:active {
+        background: none;
+        color: #333;
+    }
+
+    /* -------------------------------------------------------------- */
+
+    ul#campaign-thread li span.thread-item span.close {
       display: inline-block;
       height: 12px;
       width: 18px;
@@ -1554,7 +1594,7 @@ ul#campaign-thread {
       background-position: 0 -29px;
       background-repeat: no-repeat;
     }
-    ul#campaign-thread li a.thread-item.compact span.close {
+    ul#campaign-thread li span.thread-item.compact span.close {
         background:none;
     }
     ul#campaign-thread li .thread-details {
@@ -1564,25 +1604,30 @@ ul#campaign-thread {
       background: #048fc2;
       color: #fff;
   }
-    ul#campaign-thread li.open a.thread-item {
+  ul#campaign-thread li.event-highlighted {
+      background: #55ABDD;
+      margin: 1.5em 0;
+      color: #fff;
+  }
+    ul#campaign-thread li.open span.thread-item {
       background: none;
       color: #fff;
       height: auto;
     }
-    ul#campaign-thread li.open a.thread-item span.title {
+    ul#campaign-thread li.open span.thread-item span.title {
       white-space: normal;
     }
 
-    ul#campaign-thread li.open a.thread-item:hover,
-    ul#campaign-thread li.open a.thread-item:focus {
+    ul#campaign-thread li.open span.thread-item:hover,
+    ul#campaign-thread li.open span.thread-item:focus {
         background: none;
         color: #333;
     }
-      ul#campaign-thread li.open a.thread-item:hover span.close,
-      ul#campaign-thread li.open a.thread-item:focus span.close {
+      ul#campaign-thread li.open span.thread-item:hover span.close,
+      ul#campaign-thread li.open span.thread-item:focus span.close {
           background-position: -18px 0;
       }
-    ul#campaign-thread li.open a.thread-item span.close {
+    ul#campaign-thread li.open span.thread-item span.close {
         background-position: 0 0;
     }
     ul#campaign-thread li.open .box {
@@ -3298,12 +3343,12 @@ body.facebook-canvas .button {
         clear: both;
         position: relative; /* container for absolute positioned class='close' widgets */
     }
-    ul#campaign-thread li a.thread-item {
+    ul#campaign-thread li span.thread-item {
         display: block;
         height: 100%;
         overflow: auto;
     }
-    ul#campaign-thread li a.thread-item span.title {
+    ul#campaign-thread li span.thread-item span.title {
       width: auto;
       float: none !important;
       overflow: visible;

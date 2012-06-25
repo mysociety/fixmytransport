@@ -1,10 +1,11 @@
 <%-if assignment.task_type_name == 'write-to-other' %>
-<a href="#" class="thread-item">
+<span class="thread-item new-assignment">
 <span class="num"><%= index %></span>
 <span class="title"><%= raw t('campaigns.show.expert_advised_writing', :expert => h(assignment.creator.name), :user => h(assignment.user.first_name),  :recipient => h(assignment.data[:name]), :advised => t('campaigns.show.advised')) %></span>
 <span class="close">close</span>
 <span class="date"><%= event.created_at.localtime.to_s(:standard_with_date) %></span>
-</a>
+<%= render :partial => 'campaigns/campaign_event_permalink', :locals => {:event => event} %>
+</span>
 <div class="thread-details">
 	<div class="thread-copy">
 		<%= raw simple_format(h(assignment.data[:reason])) %>

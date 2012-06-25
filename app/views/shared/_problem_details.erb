@@ -52,7 +52,7 @@
 		<ul id="campaign-thread">
 		  <%- @problem.comments.visible.each_with_index do |comment, index|  %>
   		 <li class="open">
-  		  <%= render :partial => 'shared/comment', :locals => { :comment => comment,  :index => index+1 }%>
+		  <%= render :partial => 'shared/comment', :locals => { :comment => comment,  :index => index+1, :event => nil }%>
 		   </li>
 		<%- end %>
 		</ul>
