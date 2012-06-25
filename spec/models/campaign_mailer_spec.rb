@@ -180,4 +180,70 @@ describe CampaignMailer do
 
   end
 
+  describe 'when sending an outgoing message' do
+
+    before do
+      @user = mock_model(User, :name => "A test user")
+      @mock_operator_contact = mock_model(OperatorContact)
+      @mock_problem = mock_model(Problem, :recipient_contact => @mock_operator_contact,
+                                          :sent_at => Time.now-1.day,
+                                          :update_attribute => nil)
+      @mock_operator = mock_model(Operator)
+      @mock_assignment = mock_model(Assignment, :problem => @mock_problem,
+                                                :task_type_name => 'write-to-new-transport-organization',
+                                                :organization => @mock_operator)
+      @outgoing_message = mock_model(OutgoingMessage, :recipient_email => "recipient@example.com",
+                                                      :recipient_cc => "cc@example.com",
+                                                      :reply_name_and_email => 'reply@example.com',
+                                                      :subject => 'A test subject',
+                                                      :body => 'A test body',
+                                                      :author => @user,
+                                                      :assignment => @mock_assignment)
+    end
+
+    it 'should deliver successfully' do
+      @mailer = CampaignMailer.create_outgoing_message(@outgoing_message)
+      lambda { CampaignMailer.deliver(@mailer) }.should_not raise_error
+    end
+
+    describe 'when the outgoing message is in response to a "write-to-new-transport-organization" assignment' do
+
+      describe 'if the problem has already been sent' do
+
+        before do
+          @mock_problem.stub!(:sent_at).and_return(Time.now-1.day)
+        end
+
+        it 'should not set the sent_at time on the problem' do
+          @mock_problem.should_not_receive(:set_attribute).with(:sent_at, anything())
+          CampaignMailer.send_outgoing_message(@outgoing_message)
+        end
+
+
+      end
+
+      describe 'if the problem has not already been sent' do
+
+        before do
+          @mock_problem.stub!(:sent_at).and_return(nil)
+        end
+
+        it 'should set the sent_at time on the problem' do
+          @mock_problem.should_receive(:update_attribute).with(:sent_at, anything())
+          CampaignMailer.send_outgoing_message(@outgoing_message)
+        end
+
+      end
+
+      it 'should add a sent email record for the organization contact and the problem the assignment is
+          associated with' do
+        SentEmail.should_receive(:create!).with(:recipient => @mock_operator_contact,
+                                                :problem => @mock_problem)
+        CampaignMailer.send_outgoing_message(@outgoing_message)
+      end
+
+    end
+
+  end
+
 end

@@ -46,7 +46,7 @@ class OutgoingMessage < ActiveRecord::Base
   def send_message
     ActiveRecord::Base.transaction do
       self.sent_at = Time.now
-      CampaignMailer.deliver_outgoing_message(self)
+      CampaignMailer.send_outgoing_message(self)
       self.save!
       self.campaign.campaign_events.create!(:event_type => 'outgoing_message_sent',
                                             :described => self)

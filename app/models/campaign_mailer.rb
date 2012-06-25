@@ -212,4 +212,20 @@ class CampaignMailer < ApplicationMailer
     end
   end
 
+  def self.send_outgoing_message(outgoing_message)
+    deliver_outgoing_message(outgoing_message)
+    if outgoing_message.assignment &&
+      outgoing_message.assignment.task_type_name == 'write-to-new-transport-organization'
+      problem = outgoing_message.assignment.problem
+      if problem.sent_at.nil?
+        problem.update_attribute(:sent_at, Time.now)
+      end
+      organization = outgoing_message.assignment.organization
+      recipient_contact = problem.recipient_contact(organization)
+      SentEmail.create!(:problem => problem,
+                        :recipient => recipient_contact)
+    end
+
+  end
+
 end
