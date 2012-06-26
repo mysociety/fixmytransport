@@ -1,9 +1,6 @@
-From Name To Name
-ScotRail	First Scotrail
-London Underground	London Underground (TfL)
-Chiltern Railways	Chiltern Railway Co.
-East Coast	National Express East Coast
-Island Line	Island Line (South West Trains)
-Island Line Trains	Island Line (South West Trains)
+From Name	To Name
 London Overground	LOROL London Overground (TfL)
 First Great Western	First Great Western Railway
+London Underground	London Underground (TfL)
+Island Line	Island Line (South West Trains)
+Glasgow Prestwick Airport Ltd	Glasgow Prestwick Airport
