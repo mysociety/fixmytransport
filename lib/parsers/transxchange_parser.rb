@@ -123,7 +123,7 @@ class Parsers::TransxchangeParser
 
   # Go through a directory and look for zip files in each directory. Get a stream from every
   # zip file found and pass it to parse_routes
-  def parse_all_tnds_routes_in_zip(dirname, verbose, skip_loaded=true, &block)
+  def parse_all_tnds_routes_in_zips(dirname, verbose, skip_loaded=true, &block)
     bus_mode = TransportMode.find_by_name('Bus')
     zips = Dir.glob(File.join(dirname, '*.zip'))
     zips.each do |zip|
@@ -132,7 +132,7 @@ class Parsers::TransxchangeParser
       if region.nil?
         raise "Couldn't find region using zipfile name #{region_code}"
       else
-        puts "Region is #{region.name}"
+        puts "Region is #{region.name}" if verbose
       end
       Zip::ZipFile.foreach(zip) do |txc_file|
         puts txc_file if verbose
@@ -239,13 +239,14 @@ class Parsers::TransxchangeParser
         standard_service = service.delete(:standard_service)
         registered_operator_ref = service.delete(:registered_operator_ref)
         mode = service.delete(:mode)
-        if ! mode || mode.blank? || mode == 'air'
+        if ! mode || mode.blank?
           transport_mode = default_transport_mode
         else
           transport_mode = Operator.vehicle_mode_to_transport_mode(mode)
         end
         if ! transport_mode
-          raise "Could not map route mode #{mode} to a transport mode"
+          puts "Could not map route mode #{mode} to a transport mode at line #{line_number} of file #{filename}"
+          next
         end
 
         # Not currently used
@@ -328,7 +329,7 @@ class Parsers::TransxchangeParser
 
       end
       if routes.empty?
-        raise "No routes in this file"
+        puts "No routes in this file"
       end
       routes.each do |line_id, route|
         yield route
@@ -388,7 +389,7 @@ class Parsers::TransxchangeParser
       @reader = XML::Reader.io(input)
     end
 
-    puts "starting..." if verbose
+    # puts "starting..." if verbose
     @unexpected_elements = {}
     while @reader.read
       case @reader.node_type
@@ -436,7 +437,7 @@ class Parsers::TransxchangeParser
   # ServicedOrganisations
 
   def handle_serviced_organisations
-    puts "handling serviced_organisations" if verbose
+    # puts "handling serviced_organisations" if verbose
     until_element_end(@reader.name)
   end
 
@@ -445,7 +446,7 @@ class Parsers::TransxchangeParser
   # StopPoints
 
   def handle_stop_points
-    puts "handling stop points" if verbose
+    # puts "handling stop points" if verbose
     until_element_end(@reader.name)
   end
 
@@ -454,7 +455,7 @@ class Parsers::TransxchangeParser
   # RouteSections
 
   def handle_route_sections
-    puts "handling route sections" if verbose
+    # puts "handling route sections" if verbose
     if @skip_sections.include?(:route_sections)
       until_element_end(@reader.name)
     else
@@ -517,7 +518,7 @@ class Parsers::TransxchangeParser
   # Routes
 
   def handle_routes
-    puts "handling routes" if verbose
+    # puts "handling routes" if verbose
     if @skip_sections.include?(:routes)
       until_element_end(@reader.name)
     else
@@ -550,7 +551,7 @@ class Parsers::TransxchangeParser
   # JourneyPatternSections
 
   def handle_journey_pattern_sections
-    puts "handling journey pattern sections" if verbose
+    # puts "handling journey pattern sections" if verbose
     if @skip_sections.include?(:journey_pattern_sections)
       until_element_end(@reader.name)
     else
@@ -616,7 +617,7 @@ class Parsers::TransxchangeParser
   # Operators
 
   def handle_operators
-    puts "handling operators" if verbose
+    # puts "handling operators" if verbose
     if @skip_sections.include?(:operators)
       until_element_end(@reader.name)
     else
@@ -673,7 +674,7 @@ class Parsers::TransxchangeParser
 
   # Services
   def handle_services
-    puts "handling services" if verbose
+    # puts "handling services" if verbose
     if @skip_sections.include?(:services)
       until_element_end(@reader.name)
     else
@@ -836,7 +837,7 @@ class Parsers::TransxchangeParser
   # VehicleJourneys
 
   def handle_vehicle_journeys
-    puts "handling vehicle journeys" if verbose
+    # puts "handling vehicle journeys" if verbose
     if @skip_sections.include?(:vehicle_journeys)
       until_element_end(@reader.name)
     else
@@ -936,7 +937,7 @@ class Parsers::TransxchangeParser
   def until_element_end(name)
     return if @reader.empty_element?
     if ! block_given?
-      puts "Skipping #{name} and all children" if verbose
+      # puts "Skipping #{name} and all children" if verbose
     end
     while !(@reader.node_type == XML::Reader::TYPE_END_ELEMENT && @reader.name == name)
       @reader.read
