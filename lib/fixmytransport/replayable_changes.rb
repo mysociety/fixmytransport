@@ -374,7 +374,7 @@ module FixMyTransport
         change_list <<  { :event => :destroy,
                           :model => instance }
       end
-      if ! instance.valid?
+      if event != 'destroy' && ! instance.valid?
         puts "ERROR: New instance is invalid:"
         puts instance.inspect
         puts instance.errors.full_messages.join("\n")
