@@ -229,10 +229,18 @@ namespace :update do
       instance = change_info[:model]
       changes = change_info[:changes]
       data_row = [change_event.to_s]
+      changes_to_write = {}
       if options[:ignore_in_file_output_fields] && changes
-        if ! changes.keys.any?{ |attribute| ! options[:ignore_in_file_output_fields].include?(attribute) }
-          next
+        changes.each do |attribute, change|
+          if !options[:ignore_in_file_output_fields].include?(attribute)
+            changes_to_write[attribute] = change
+          end
         end
+      else
+        changes_to_write = changes
+      end
+      if change_event == :update && changes_to_write.empty?
+        next
       end
       identity_fields.each do |identity_field|
         if identity_field.is_a? Symbol
@@ -250,7 +258,7 @@ namespace :update do
         end
 
       end
-      data_row << changes.inspect
+      data_row << changes_to_write.inspect
       outfile.write(data_row.join("\t")+"\n") if data_row
     end
     outfile.close
