@@ -14,22 +14,6 @@ class Parsers::TransxchangeParser
     @region_hash = {}
   end
 
-
-
-  # Go through a directory and look for zip files in each directory. Get a stream from every
-  # zip file found and pass it to parse_routes
-  def parse_all_routes_in_zip(dirname, transport_mode=nil, load_run=nil, &block)
-    Dir.glob(File.join(dirname, '*/')).each do |subdir|
-      zips = Dir.glob(File.join(subdir, '*.zip'))
-      zips.each do |zip|
-        Zip::ZipFile.foreach(zip) do |txc_file|
-          puts txc_file
-          parse_routes(txc_file.get_input_stream(), transport_mode, load_run, txc_file.to_s, &block)
-        end
-      end
-    end
-  end
-
   def parse_index(filepath)
     @region_hash = {}
     tsv_data = File.read(filepath)
@@ -133,6 +117,39 @@ class Parsers::TransxchangeParser
       xml_files.each do |file_path|
         filename = File.basename(file_path)
         @region_hash[filename.strip] = region.name
+      end
+    end
+  end
+
+  # Go through a directory and look for zip files in each directory. Get a stream from every
+  # zip file found and pass it to parse_routes
+  def parse_all_tnds_routes_in_zip(dirname, verbose, skip_loaded=true, &block)
+    bus_mode = TransportMode.find_by_name('Bus')
+    zips = Dir.glob(File.join(dirname, '*.zip'))
+    zips.each do |zip|
+      region_code = File.basename(zip, '.zip')
+      region = Region.current.find(:first, :conditions => ['code = ?', region_code])
+      if region.nil?
+        raise "Couldn't find region using zipfile name #{region_code}"
+      else
+        puts "Region is #{region.name}"
+      end
+      Zip::ZipFile.foreach(zip) do |txc_file|
+        puts txc_file if verbose
+        if skip_loaded
+          sources = RouteSource.current.find(:all, :conditions => ['filename = ?', txc_file.to_s])
+          if ! sources.empty?
+            puts "Skipping #{filename}" if verbose
+            next
+          end
+        end
+        self.parse_routes(txc_file.get_input_stream(),
+                        default_transport_mode=bus_mode,
+                        nil,
+                        txc_file.to_s,
+                        verbose,
+                        region,
+                        &block)
       end
     end
   end
