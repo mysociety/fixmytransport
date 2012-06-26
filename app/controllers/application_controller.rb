@@ -109,7 +109,7 @@ class ApplicationController < ActionController::Base
     end
     return true
   end
-  
+
   def campaign_param
     if self.class == CampaignsController
       param = :id
@@ -460,6 +460,12 @@ class ApplicationController < ActionController::Base
     @zoom = params[:zoom].to_i if params[:zoom] && (MIN_ZOOM_LEVEL <= params[:zoom].to_i && params[:zoom].to_i <= MAX_VISIBLE_ZOOM)
     @lon = params[:lon].to_f if params[:lon]
     @lat = params[:lat].to_f if params[:lat]
+
+    # reset map params if outside GB
+    if (@lat && @lon) && (@lat > BNG_MAX_LAT || @lat < BNG_MIN_LAT || @lon < BNG_MIN_LON || @lon > BNG_MAX_LON)
+      @lat = nil
+      @lon = nil
+    end
   end
 
   # set the lat, lon and zoom based on the locations being shown, and find other locations
