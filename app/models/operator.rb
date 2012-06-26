@@ -21,7 +21,12 @@ class Operator < ActiveRecord::Base
   # See lib/fixmytransport/data_generations
   exists_in_data_generation( :identity_fields => [:noc_code],
                              :descriptor_fields => [:name],
-                             :auto_update_fields => [:cached_slug])
+                             :auto_update_fields => [:cached_slug],
+                             :ignore_in_file_output_fields => [:notes,
+                                                               :url,
+                                                               :phone,
+                                                               :company_no,
+                                                               :registered_address])
 
   has_many :route_operators, :dependent => :destroy
   has_many :routes, :through => :route_operators,

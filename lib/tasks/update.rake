@@ -204,6 +204,7 @@ namespace :update do
     check_for_model()
     verbose = check_verbose()
     model = ENV['MODEL'].constantize
+    options = model.data_generation_options_hash
     change_list = replay_updates(model, dryrun=true, verbose=verbose)
     outfile = File.open("data/#{model}_changes_#{Date.today.to_s(:db)}.tsv", 'w')
     headers = ['Change type']
@@ -228,6 +229,11 @@ namespace :update do
       instance = change_info[:model]
       changes = change_info[:changes]
       data_row = [change_event.to_s]
+      if options[:ignore_in_file_output_fields]
+        if ! changes.keys.any?{ |attribute| ! options[:ignore_in_file_output_fields].include?(attribute) }
+          next
+        end
+      end
       identity_fields.each do |identity_field|
         if identity_field.is_a? Symbol
           data_row << instance.send(identity_field)
