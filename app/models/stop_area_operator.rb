@@ -4,7 +4,8 @@ class StopAreaOperator < ActiveRecord::Base
   # See lib/fixmytransport/data_generation
   exists_in_data_generation(:identity_fields => [{ :stop_area => [ :persistent_id ] },
                                                   { :operator => [ :persistent_id ] } ],
-                            :descriptor_fields => [])
+                            :descriptor_fields => [],
+                            :data_generation_associations => [:stop_area, :operator])
   belongs_to :operator
   belongs_to :stop_area
   validate :stop_area_operator_unique_in_generation
