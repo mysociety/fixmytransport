@@ -34,12 +34,12 @@ namespace :update do
     # LOAD NOC DATA
     Rake::Task['update:noc'].execute
 
-    ENV['MODEL'] = 'Operator'
-    Rake::Task['update:replay_updates'].execute
-
     # UPDATE PTEs, PTE areas to current generation
     Rake::Task['update:ptes'].execute
     Rake::Task['update:pte_areas'].execute
+
+    ENV['MODEL'] = 'StopAreaOperator'
+    Rake::Task['update:replay_updates'].execute
 
     # LOAD TNDS DATA
     Rake::Task['update:tnds'].execute
@@ -50,11 +50,6 @@ namespace :update do
     ENV['MODEL'] = 'RouteOperator'
     Rake::Task['update:replay_updates'].execute
 
-    ENV['MODEL'] = 'StopAreaOperator'
-    Rake::Task['update:replay_updates'].execute
-
-    ENV['MODEL'] = 'StopOperator'
-    Rake::Task['update:replay_updates'].execute
 
     # Rake::Task['naptan:post_load:mark_metro_stops'].execute
 
@@ -154,6 +149,9 @@ namespace :update do
     Rake::Task['noc:update:operator_codes'].execute
     Rake::Task['noc:update:vosa_licenses'].execute
     Rake::Task['noc:update:operator_contacts'].execute
+
+    ENV['MODEL'] = 'Operator'
+    Rake::Task['update:replay_updates'].execute
 
     ENV['FILE'] = File.join(MySociety::Config.get('NOC_DIR', ''), 'station_operators.txt')
     Rake::Task['noc:update:station_operators'].execute
