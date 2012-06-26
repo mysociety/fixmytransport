@@ -1,0 +1,108 @@
+--- !ruby/object:Gem::Specification 
+name: cocaine
+version: !ruby/object:Gem::Version 
+  hash: 27
+  prerelease: 
+  segments: 
+  - 0
+  - 0
+  - 2
+  version: 0.0.2
+platform: ruby
+authors: 
+- Jon Yurek
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2011-05-18 00:00:00 +01:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: rspec
+  prerelease: false
+  requirement: &id001 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 3
+        segments: 
+        - 0
+        version: "0"
+  type: :development
+  version_requirements: *id001
+- !ruby/object:Gem::Dependency 
+  name: bourne
+  prerelease: false
+  requirement: &id002 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 3
+        segments: 
+        - 0
+        version: "0"
+  type: :development
+  version_requirements: *id002
+- !ruby/object:Gem::Dependency 
+  name: mocha
+  prerelease: false
+  requirement: &id003 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 3
+        segments: 
+        - 0
+        version: "0"
+  type: :development
+  version_requirements: *id003
+description: A small library for doing (command) lines
+email: jyurek@thoughtbot.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- spec/cocaine/command_line_spec.rb
+has_rdoc: true
+homepage: http://www.thoughtbot.com/projects/cocaine
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: 
+rubygems_version: 1.6.2
+signing_key: 
+specification_version: 3
+summary: A small library for doing (command) lines
+test_files: 
+- spec/cocaine/command_line_spec.rb

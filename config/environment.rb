@@ -49,12 +49,14 @@ Rails::Initializer.run do |config|
   config.gem 'activerecord-diff', :version => '0.0.2'
   config.gem 'authlogic', :version => '2.1.6'
   config.gem 'bcrypt-ruby', :version => '2.1.4', :lib => 'bcrypt'
+  config.gem 'cocaine', :version => '0.0.2' # Required by paperclip
   config.gem "erubis", :version => '2.6.6'
   config.gem "fastercsv", :version => '1.5.3'
   config.gem 'foreigner', :version => '0.9.1'
   config.gem "friendly_id", :version => '3.1.7'
+  config.gem 'mime-types', :version => '1.17' # Required by paperclip
   config.gem 'paper_trail', :version => '1.5.1'
-  config.gem "paperclip", :version => "~> 2.3"
+  config.gem "paperclip", :version => "~> 2.7.0"
   config.gem "rack", :version => '1.1.0'
   config.gem 'rspec', :lib => false, :version => '1.3.1'
   config.gem 'rspec-rails', :lib => false, :version => '1.3.3'
