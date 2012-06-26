@@ -340,7 +340,7 @@ module FixMyTransport
                 existing = model_class.clone_in_current_generation(previous)
                 begin
                   # update any associations
-                  if model_class.data_generation_options_hash[:data_generation_options_hash]
+                  if model_class.data_generation_options_hash[:data_generation_associations]
                     model_class.data_generation_options_hash[:data_generation_associations].each do |association|
                       existing.update_association_to_current_generation(association, verbose)
                     end
