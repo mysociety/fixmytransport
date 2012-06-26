@@ -20,7 +20,7 @@ class LocationsController < ApplicationController
       format.html do
         @feed_link_text = t('locations.show_stop.feed_link_text')
         @map_height = PROBLEM_CREATION_MAP_HEIGHT
-        @map_width = PROBLEM_CREATION_MAP_HEIGHT
+        @map_width = PROBLEM_CREATION_MAP_WIDTH
         map_params_from_location(@stop.points,
                                 find_other_locations=true,
                                 height=@map_height,
