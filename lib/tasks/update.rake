@@ -229,7 +229,7 @@ namespace :update do
       instance = change_info[:model]
       changes = change_info[:changes]
       data_row = [change_event.to_s]
-      if options[:ignore_in_file_output_fields]
+      if options[:ignore_in_file_output_fields] && changes
         if ! changes.keys.any?{ |attribute| ! options[:ignore_in_file_output_fields].include?(attribute) }
           next
         end
