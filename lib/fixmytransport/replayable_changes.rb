@@ -106,6 +106,17 @@ module FixMyTransport
           end
           alias_method_chain :replayable, :direct_checks
 
+
+          # This method removes an edge in the appropriate way
+          def replayable_destroy
+            if destroyable?
+              destroy
+            else
+              make_indirect
+              save!
+            end
+          end
+
         end
 
       end
@@ -382,7 +393,11 @@ module FixMyTransport
       end
       if ! dryrun
         if event == 'destroy'
-          instance.destroy
+          if instance.respond_to?(:replayable_destroy)
+            instance.replayable_destroy
+          else
+            instance.destroy
+          end
         else
           instance.save!
         end
