@@ -372,9 +372,11 @@ module FixMyTransport
       case event
       when 'create'
         puts "Creating #{model_name} (version id #{version_id} #{change_details[:date]})" if verbose
-        change_list << { :event => :create,
-                         :model => instance,
-                         :changes => changes }
+        if instance.new_record?
+          change_list << { :event => :create,
+                           :model => instance,
+                           :changes => changes }
+        end
       when 'update'
         applied_changes = apply_changeset(model_name, changes, instance, verbose)
         if !applied_changes.empty?
