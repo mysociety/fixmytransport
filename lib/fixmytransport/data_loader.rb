@@ -23,6 +23,13 @@ module FixMyTransport
       return ENV['DIR']
     end
 
+    def check_for_output_dir
+      unless ENV['OUTPUT_DIR']
+        usage_message "usage: This task requires OUTPUT_DIR=output_dirname"
+      end
+      return ENV['OUTPUT_DIR']
+    end
+
     def check_for_model
       unless ENV['MODEL']
         usage_message "usage: This task requires MODEL=model_name"
