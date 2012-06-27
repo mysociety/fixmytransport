@@ -256,21 +256,29 @@ namespace :tnds do
       outfile.close()
     end
 
-    desc "Produce a list of missing stop information from a set of TransXChange files
-          in zip files in a directory passed as DIR=dir. Verbose flag set by VERBOSE=1.
-          To include routes from files that have already been loaded in this data generation,
-          supply SKIP_LOADED=0. Otherwise these files will be ignored."
+    desc "Produce a list of missing stop information in output directory passed as
+          OUTPUT_DIR=output_dir from a set of TransXChange files in zip files in a directory
+          passed as DIR=dir. Verbose flag set by VERBOSE=1. To include routes from files that
+          have already been loaded in this data generation, supply SKIP_LOADED=0. Otherwise
+          these files will be ignored."
     task :list_unmatched_stops => :environment do
-      check_for_dir
+      dir = check_for_dir
+      output_dir = check_for_output_dir
       verbose = check_verbose
       skip_loaded = true
       skip_loaded = false if ENV['SKIP_LOADED'] == '0'
       parser = Parsers::TransxchangeParser.new
-      outfile = File.open("data/stops/missing_#{Time.now.to_date.to_s(:db)}.tsv", 'w')
+      outfile = File.open(File.join(output_dir,"tnds_missing_stops_#{Time.now.to_date.to_s(:db)}.tsv"), 'w')
       headers = ['Stop Code', 'Region', 'File', 'Service Code', 'Line number']
       outfile.write(headers.join("\t")+"\n")
       lines = 0
-      parser.parse_all_tnds_routes_in_zips(ENV['DIR'], verbose, skip_loaded) do |route|
+      route_count = 0
+      parser.parse_all_tnds_routes_in_zips(dir, verbose, skip_loaded) do |route|
+        route_count += 1
+        if route_count % 100
+          print '.'
+          STDOUT.flush
+        end
         if !route.missing_stops.empty?
           route.missing_stops.each do |stop_code|
             lines += 1
