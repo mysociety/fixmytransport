@@ -275,7 +275,7 @@ namespace :tnds do
       route_count = 0
       parser.parse_all_tnds_routes_in_zips(dir, verbose, skip_loaded) do |route|
         route_count += 1
-        if route_count % 100
+        if route_count % 10 == 0
           print '.'
           STDOUT.flush
         end
