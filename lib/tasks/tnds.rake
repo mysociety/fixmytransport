@@ -39,7 +39,7 @@ namespace :tnds do
 
   namespace :preload do
 
-    desc 'Loads data from a file produced by tnds:preload:list_unmatched_operators and loads missing
+    desc 'Loads data from a file produced by tnds:preload:list_unmatched_stops_and_operators and loads missing
           operator codes and operators into the database. Accepts a file as FILE=file.
           Verbose flag set by VERBOSE=1. Runs in dryrun mode unless DRYRUN=0 is specified.
           Produces an output file of suggested actions with respect to the NOC database.'
@@ -214,31 +214,51 @@ namespace :tnds do
       end
     end
 
-    desc 'Produce a list of unmatched operator information from a set of TransXchange
-          files in a directory passed as DIR=dir. Verbose flag set by VERBOSE=1.
-          To include routes from files that have already been loaded in this data generation,
-          supply SKIP_LOADED=0. Otherwise these files will be ignored.
-          Specify FIND_REGION_BY=directory if regions need to be inferred from directories.'
-    task :list_unmatched_operators => :environment do
-      check_for_dir
+    desc "Produce a lists of unmatched stop and operator information (in an output directory passed as
+          OUTPUT_DIR=output_dir) from a set of TransXChange files in zip files in a directory
+          passed as DIR=dir. Verbose flag set by VERBOSE=1. To include routes from files that
+          have already been loaded in this data generation, supply SKIP_LOADED=0. Otherwise
+          these files will be ignored."
+    task :list_unmatched_stops_and_operators => :environment do
+      dir = check_for_dir
+      output_dir = check_for_output_dir
       verbose = check_verbose
       skip_loaded = true
       skip_loaded = false if ENV['SKIP_LOADED'] == '0'
-      if ENV['FIND_REGION_BY'] == 'directory'
-        regions_as = :directories
-      else
-        regions_as = :index
-      end
       parser = Parsers::TransxchangeParser.new
-      outfile = File.open("data/operators/missing_#{Time.now.to_date.to_s(:db)}.tsv", 'w')
-      headers = ['NOC Code', 'Short name', 'Trading name', 'Name on license', 'Code', 'Problem', 'Region', 'File']
-      outfile.write(headers.join("\t")+"\n")
-      file_glob = File.join(ENV['DIR'], "**/*.xml")
-      index_file = File.join(ENV['DIR'], 'TravelineNationalDataSetFilesList.txt')
-      lines = 0
-      parser.parse_all_tnds_routes(file_glob, index_file, verbose, skip_loaded, regions_as) do |route|
+      date_string = Time.now.to_date.to_s(:db)
+      stop_outfile = File.open(File.join(output_dir,"tnds_missing_stops_#{date_string}.tsv"), 'w')
+      operator_outfile = File.open(File.join(output_dir,"tnds_missing_operators_#{date_string}.tsv"), 'w')
+
+      stop_headers = ['Stop Code',
+                      'Region',
+                      'File',
+                      'Service Code',
+                      'Line number']
+      stop_outfile.write(stop_headers.join("\t")+"\n")
+      stop_lines = 0
+
+      operator_headers = ['NOC Code',
+                          'Short name',
+                          'Trading name',
+                          'Name on license',
+                          'Code',
+                          'Problem',
+                          'Region',
+                          'File']
+      operator_outfile.write(operator_headers.join("\t")+"\n")
+      operator_lines = 0
+
+
+      route_count = 0
+      parser.parse_all_tnds_routes_in_zips(dir, verbose, skip_loaded) do |route|
+        route_count += 1
+        if route_count % 10 == 0
+          print '.'
+          STDOUT.flush
+        end
         if route.route_operators.length != 1
-          lines += 1
+          operator_lines += 1
           row = [route.operator_info[:noc_code],
                  route.operator_info[:short_name],
                  route.operator_info[:trading_name],
@@ -247,37 +267,10 @@ namespace :tnds do
                  route.route_operators.length > 1 ? 'ambiguous' : 'not found',
                  route.region.name,
                  route.route_sources.first.filename]
-          outfile.write(row.join("\t")+"\n")
-          if lines % 10 == 0
-            outfile.flush
+          operator_outfile.write(row.join("\t")+"\n")
+          if operator_lines % 10 == 0
+            operator_outfile.flush
           end
-        end
-      end
-      outfile.close()
-    end
-
-    desc "Produce a list of missing stop information in output directory passed as
-          OUTPUT_DIR=output_dir from a set of TransXChange files in zip files in a directory
-          passed as DIR=dir. Verbose flag set by VERBOSE=1. To include routes from files that
-          have already been loaded in this data generation, supply SKIP_LOADED=0. Otherwise
-          these files will be ignored."
-    task :list_unmatched_stops => :environment do
-      dir = check_for_dir
-      output_dir = check_for_output_dir
-      verbose = check_verbose
-      skip_loaded = true
-      skip_loaded = false if ENV['SKIP_LOADED'] == '0'
-      parser = Parsers::TransxchangeParser.new
-      outfile = File.open(File.join(output_dir,"tnds_missing_stops_#{Time.now.to_date.to_s(:db)}.tsv"), 'w')
-      headers = ['Stop Code', 'Region', 'File', 'Service Code', 'Line number']
-      outfile.write(headers.join("\t")+"\n")
-      lines = 0
-      route_count = 0
-      parser.parse_all_tnds_routes_in_zips(dir, verbose, skip_loaded) do |route|
-        route_count += 1
-        if route_count % 10 == 0
-          print '.'
-          STDOUT.flush
         end
         if !route.missing_stops.empty?
           route.missing_stops.each do |stop_code|
@@ -287,14 +280,15 @@ namespace :tnds do
                    route.route_sources.first.filename,
                    route.route_sources.first.service_code,
                    route.route_sources.first.line_number]
-            outfile.write(row.join("\t")+"\n")
-            if lines % 10 == 0
-              outfile.flush
+            stop_outfile.write(row.join("\t")+"\n")
+            if stop_lines % 10 == 0
+              stop_outfile.flush
             end
           end
         end
       end
-      outfile.close()
+      stop_outfile.close()
+      operator_outfile.close()
     end
 
   end

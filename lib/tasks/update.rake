@@ -163,12 +163,11 @@ namespace :update do
   task :tnds => :environment do
     ENV['DIR'] = MySociety::Config.get('TNDS_DIR', '')
 
-    # Iterate through routes to be loaded, produce file of stops that can't be found
-    Rake::Task['tnds:preload:list_unmatched_stops'].execute
+    # Iterate through routes to be loaded, produce file of stops and operators that can't be found
+    Rake::Task['tnds:preload:list_unmatched_stops_and_operators'].execute
 
     # Iterate through the routes to be loaded, produce file of operators that can't
     # be matched by operator code
-    Rake::Task['tnds:preload:list_unmatched_operators'].execute
     Rake::Task['tnds:preload:load_unmatched_operators'].execute
     Rake::Task['tnds:load:routes'].execute
     Rake::Task['tnds:update:train_routes'].execute
