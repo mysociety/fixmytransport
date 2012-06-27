@@ -275,8 +275,9 @@ class Parsers::TransxchangeParser
                                   :region => region,
                                   :line_number => line_number,
                                   :filename => filename)
+        jp_hashes = {}
         journey_patterns.each do |id, journey_pattern|
-
+          jp_hash = ''
           # not currently used
           direction = journey_pattern.delete(:direction)
 
@@ -288,26 +289,34 @@ class Parsers::TransxchangeParser
           section_refs.each do |section_ref|
             section = journey_pattern_sections[section_ref]
             section[:timing_links].each do |timing_link|
-              from_stop = Stop.find_current_by_code(timing_link[:from_info][:stop], stop_options)
-              to_stop = Stop.find_current_by_code(timing_link[:to_info][:stop], stop_options)
+              from_stop_code = timing_link[:from_info][:stop]
+              to_stop_code = timing_link[:to_info][:stop]
+              from_stop = Stop.find_current_by_code(from_stop_code, stop_options)
+              to_stop = Stop.find_current_by_code(to_stop_code, stop_options)
               if !from_stop
-                missing << timing_link[:from_info][:stop]
+                missing << from_stop_code
               end
               if !to_stop
-                missing << timing_link[:to_info][:stop]
+                missing << to_stop_code
               end
               if (from_stop and to_stop)
                 route_segment = jp.route_segments.build( :from_stop => from_stop,
-                                                         :to_stop   => to_stop,
+                                                         :to_stop => to_stop,
                                                          :route => route,
                                                          :segment_order => segment_order,
                                                          :generation_low => CURRENT_GENERATION,
                                                          :generation_high => CURRENT_GENERATION )
+                jp_hash << from_stop_code << to_stop_code
                 segment_order += 1
                 route_segment.set_stop_areas
               end
             end
           end
+          if jp_hashes[jp_hash]
+            route.journey_patterns.delete(jp)
+          end
+          jp_hashes[jp_hash] = true
+
           if jp.route_segments.first
             jp.route_segments.first.from_terminus = true
           end
