@@ -274,7 +274,7 @@ namespace :tnds do
         end
         if !route.missing_stops.empty?
           route.missing_stops.each do |stop_code|
-            lines += 1
+            stop_lines += 1
             row = [stop_code,
                    route.region.name,
                    route.route_sources.first.filename,
