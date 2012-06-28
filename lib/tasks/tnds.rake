@@ -328,28 +328,19 @@ namespace :tnds do
 
   namespace :load do
 
-    desc 'Loads routes from a set of TransXchange files in a directory passed as DIR=dir.
+    desc 'Loads routes from a set of TransXchange files in a zip file passed as ZIP=zip.
           Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1.
           To re-load routes from files that have already been loaded in this data generation,
-          supply SKIP_LOADED=0. Otherwise these files will be ignored.
-          Specify FIND_REGION_BY=directory if regions need to be inferred from directories.'
-    task :routes => :environment do
-      dir = check_for_param('DIR')
+          supply SKIP_LOADED=0. Otherwise these files will be ignored.'
+    task :routes_for_region => :environment do
       verbose = check_verbose
       dryrun = check_dryrun
+      zip = check_for_param('ZIP')
       skip_loaded = true
       skip_loaded = false if ENV['SKIP_LOADED'] == '0'
-      puts "Loading routes from #{dir}..."
-      if ENV['FIND_REGION_BY'] == 'directory'
-        regions_as = :directories
-      else
-        regions_as = :index
-      end
       PaperTrail.enabled = false
       parser = Parsers::TransxchangeParser.new
-      file_glob = File.join(dir, "**/*.xml")
-      index_file = File.join(dir, 'TravelineNationalDataSetFilesList.txt')
-      parser.parse_all_tnds_routes(file_glob, index_file, verbose, skip_loaded=skip_loaded, regions_as) do |route|
+      parser.parse_all_tnds_routes_in_zip(zip, verbose, skip_loaded) do |route|
         merged = false
         puts "Parsed route #{route.number}" if verbose
         route.route_sources.each do |route_source|
@@ -376,6 +367,28 @@ namespace :tnds do
         end
       end
       PaperTrail.enabled = true
+    end
+
+    desc 'Loads routes from a set of TransXchange files in a directory passed as DIR=dir.
+          Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1.
+          To re-load routes from files that have already been loaded in this data generation,
+          supply SKIP_LOADED=0. Otherwise these files will be ignored.'
+    task :routes => :environment do
+      dir = check_for_param('DIR')
+      verbose = check_verbose
+      dryrun = check_dryrun
+
+      puts "Loading routes from #{dir}..."
+      zip_files = Dir.glob(File.join(dir, "*.zip"))
+      zip_files.each do |zip_file|
+        puts "Loading routes from #{zip_file}"
+        command = "rake RAILS_ENV=#{ENV['RAILS_ENV']}"
+        command << " tnds:load:routes_for_region"
+        command << " ZIP=#{zip_file} SKIP_LOADED=#{ENV['SKIP_LOADED']}"
+        command << " --trace"
+        exit_status = run_in_shell(command, File.basename(zip_file))
+        raise "Process exited with error" unless exit_status == 0
+      end
     end
 
   end
