@@ -39,11 +39,11 @@ namespace :nptdr do
 
     desc 'Check stops data from any *.tsv files in directory specified DIR=dirname against existing stop data'
     task :check_stops => :environment do
-      check_for_dir
-      puts "Checking stops in #{ENV['DIR']}..."
+      dir = check_for_param('DIR')
+      puts "Checking stops in #{dir}..."
       parser = Parsers::NptdrParser.new
-      files = Dir.glob(File.join(ENV['DIR'], "*.tsv"))
-      missing_file = File.open(File.join(ENV['DIR'], 'unmapped_stops.tsv'), 'w')
+      files = Dir.glob(File.join(dir, "*.tsv"))
+      missing_file = File.open(File.join(dir, 'unmapped_stops.tsv'), 'w')
       missing_file.write("ATCO code\tName\tEasting\tNorthing\tLocality ID\n")
       unmatched_codes = {}
       unmatched_count = 0
@@ -103,8 +103,8 @@ namespace :nptdr do
 
     desc 'Process routes from tsv files in a dir specified as DIR=dirname and output operator match and missing stop information'
     task :check_routes => :environment do
-      check_for_dir
-      puts "Checking routes in #{ENV['DIR']}..."
+      dir = check_for_param('DIR')
+      puts "Checking routes in #{dir}..."
       parser = Parsers::NptdrParser.new
       dir = ENV['DIR']
       operators_outfile = File.open("#{RAILS_ROOT}/data/NPTDR/oct_2010/unmatched_operators.tsv", 'w')
@@ -122,7 +122,7 @@ namespace :nptdr do
                         "NPTDR Route Numbers"]
       stops_outfile.write(stops_headings.join("\t") + "\n")
 
-      files = Dir.glob(File.join(ENV['DIR'], '*.tsv'))
+      files = Dir.glob(File.join(dir, '*.tsv'))
       files.each do |file|
         unmatched_codes = {}
         ambiguous_codes = {}
@@ -159,21 +159,21 @@ namespace :nptdr do
 
     desc 'Loads operators data from the tsv file specified as FILE=filename'
     task :operators => :environment do
-      check_for_file
-      puts "Loading operator names from #{ENV['FILE']}..."
+      file = check_for_param('FILE')
+      puts "Loading operator names from #{file}..."
       parser = Parsers::NptdrParser.new
-      parser.parse_operators(ENV['FILE']) do |operator|
+      parser.parse_operators(file) do |operator|
         operator.save!
       end
     end
 
     desc 'Loads route data from zipped TransXChange files named *.txc in subdirectories of a directory specified as DIR=dirname'
     task :routes_from_transxchange => :environment do
-      check_for_dir
-      puts "Loading routes from #{ENV['DIR']}..."
+      dir = check_for_param('DIR')
+      puts "Loading routes from #{dir}..."
       transport_mode = ENV['MODE']
       load_run = ENV['LOAD_RUN']
-      Dir.glob(File.join(ENV['DIR'], '*/')).each do |subdir|
+      Dir.glob(File.join(dir, '*/')).each do |subdir|
         zips = Dir.glob(File.join(subdir, '*.zip'))
         zips.each do |zip|
           puts "Loading routes from #{zip.inspect}"
@@ -186,10 +186,9 @@ namespace :nptdr do
 
     desc 'Loads route data for one admin area from a zipped TransXChange file named *.txc in a directory specified as DIR=dirname'
     task :routes_from_transxchange_file => :environment do
-      check_for_file
+      zip = check_for_param('FILE')
       transport_mode = ENV['MODE']
       load_run = ENV['LOAD_RUN']
-      zip = ENV['FILE']
       PaperTrail.enabled = false
       parser = Parsers::TransxchangeParser.new
       Zip::ZipFile.foreach(zip) do |txc_file|
@@ -207,9 +206,9 @@ namespace :nptdr do
 
     desc 'Loads route data from TSV files named *.tsv in a directory specified as DIR=dirname'
     task :routes => :environment do
-      check_for_dir
-      puts "Loading routes from #{ENV['DIR']}..."
-      files = Dir.glob(File.join(ENV['DIR'], "*.tsv"))
+      dir = check_for_param('DIR')
+      puts "Loading routes from #{dir}..."
+      files = Dir.glob(File.join(dir, "*.tsv"))
       files.each do |file|
         puts "Loading routes from #{file}"
         command = "rake RAILS_ENV=#{ENV['RAILS_ENV']} nptdr:load:routes_from_file FILE=#{file}"
@@ -219,8 +218,7 @@ namespace :nptdr do
 
     desc 'Loads route data from a TSV file specified as FILE=filename'
     task :routes_from_file => :environment do
-      check_for_file
-      file = ENV['FILE']
+      file = check_for_param('FILE')
       puts "Loading routes from #{file}"
       parser = Parsers::NptdrParser.new
       parser.parse_routes(file) do |route|
@@ -323,13 +321,13 @@ namespace :nptdr do
 
     desc 'Load manually created stops from a TSV file specified as FILE'
     task :load_manual_stops => :environment do
-      check_for_file
+      file = check_for_param('FILE')
 
       # get a hash of missing stops and the routes that reference them
       route_stops = get_route_missing_stop_data()
 
       nptdr_parser = Parsers::NptdrParser.new
-      FasterCSV.parse(File.read(ENV['FILE']), csv_options) do |row|
+      FasterCSV.parse(File.read(file), csv_options) do |row|
         stop = Stop.new( :common_name => row['Name'] ? row['Name'].strip : nil,
                          :easting => row['Easting'] ? row['Easting'].strip : nil,
                          :northing => row['Northing'] ? row['Northing'].strip : nil,

@@ -68,8 +68,8 @@ namespace :locale do
 
   desc "Load model and view locale files from csv"
   task :load => :environment do
-    check_for_file
-    csv_data = File.read(ENV['FILE'])
+    file = check_for_param('FILE')
+    csv_data = File.read(file)
     locale_values = {}
     FasterCSV.parse(csv_data, {}) do |row|
       key = row[2]

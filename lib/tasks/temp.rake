@@ -112,7 +112,7 @@ namespace :temp do
     end
 
     FixMyTransport::DataGenerations.in_generation(1) do
-      file = check_for_file
+      file = check_for_param('FILE')
       parser = Parsers::NaptanParser.new
       deletions = 0
       parser.parse_stop_area_links(file) do |stop_area_link|
@@ -177,7 +177,7 @@ namespace :temp do
       end
     end
     FixMyTransport::DataGenerations.in_generation(1) do
-      file = check_for_file
+      file = check_for_param('FILE')
       parser = Parsers::NaptanParser.new
       deletions = 0
       parser.parse_stop_area_memberships(file) do |stop_area_membership|
@@ -222,7 +222,7 @@ namespace :temp do
     end
 
     FixMyTransport::DataGenerations.in_generation(1) do
-      file = check_for_file
+      file = check_for_param('FILE')
       parser = Parsers::OperatorsParser.new
       deletions = 0
       parser.parse_stop_area_operators(file) do |stop_area_operator|

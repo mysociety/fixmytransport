@@ -9,32 +9,11 @@ module FixMyTransport
       exit 0
     end
 
-    def check_for_file
-      unless ENV['FILE']
-        usage_message "usage: This task requires FILE=filename"
+    def check_for_param(param)
+      unless ENV[param]
+        usage_message "usage: This task requires #{param}=#{param.downcase}"
       end
-      return ENV['FILE']
-    end
-
-    def check_for_dir
-      unless ENV['DIR']
-        usage_message "usage: This task requires DIR=dirname"
-      end
-      return ENV['DIR']
-    end
-
-    def check_for_output_dir
-      unless ENV['OUTPUT_DIR']
-        usage_message "usage: This task requires OUTPUT_DIR=output_dirname"
-      end
-      return ENV['OUTPUT_DIR']
-    end
-
-    def check_for_model
-      unless ENV['MODEL']
-        usage_message "usage: This task requires MODEL=model_name"
-      end
-      return ENV['MODEL']
+      return ENV[param]
     end
 
     def check_for_generation
@@ -84,19 +63,19 @@ module FixMyTransport
     end
 
     def parse_for_update(model, parser_class)
-      check_for_file
-      puts "Updating #{model} from #{ENV['FILE']}..."
+      file = check_for_param('FILE')
+      puts "Updating #{model} from #{file}..."
       parser = parser_class.new
-      parser.send("parse_#{model}".to_sym, ENV['FILE']) do |model|
+      parser.send("parse_#{model}".to_sym, file) do |model|
         yield model
       end
     end
 
     def parse(model_class, parser_class, parse_method_name=nil, skip_invalid=true)
-      check_for_file
+      file = check_for_param('FILE')
       dryrun = check_dryrun()
       table_name = model_class.to_s.tableize
-      puts "Loading #{table_name} from #{ENV['FILE']}..."
+      puts "Loading #{table_name} from #{file}..."
 
       if model_class.respond_to?(:replayable)
         previous_replayable_value = model_class.replayable

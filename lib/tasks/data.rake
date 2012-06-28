@@ -11,9 +11,9 @@ namespace :data do
     ActionController.default_url_options[:host] = MySociety::Config.get("DOMAIN", 'localhost:3000')
     include ApplicationHelper
 
-    check_for_dir
+    dir = check_for_param('DIR')
     puts "Writing problem spreadsheet to #{ENV['DIR']}..."
-    File.open(File.join(ENV['DIR'], 'problems.tsv'), 'w') do |problem_file|
+    File.open(File.join(dir, 'problems.tsv'), 'w') do |problem_file|
       headers = ['ID',
                  'Subject',
                  'Campaign',
@@ -70,9 +70,9 @@ namespace :data do
     ActionController.default_url_options[:host] = MySociety::Config.get("DOMAIN", 'localhost:3000')
     include ApplicationHelper
 
-    check_for_dir
-    puts "Writing praise spreadsheet to #{ENV['DIR']}..."
-    File.open(File.join(ENV['DIR'], 'praise.tsv'), 'w') do |praise_file|
+    dir = check_for_param('DIR')
+    puts "Writing praise spreadsheet to #{dir}..."
+    File.open(File.join(dir, 'praise.tsv'), 'w') do |praise_file|
       headers = ['URL', 'Date', 'Text', 'User']
       praise_file.write(headers.join("\t") + "\n")
       # Any comment attached to a location is praise
@@ -92,9 +92,9 @@ namespace :data do
     include ActionController::UrlWriter
     ActionController.default_url_options[:host] = MySociety::Config.get("DOMAIN", 'localhost:3000')
 
-    check_for_dir
-    puts "Writing PTE contact spreadsheet to #{ENV['DIR']}..."
-    File.open(File.join(ENV['DIR'], 'ptes.tsv'), 'w') do |pte_file|
+    dir = check_for_param('DIR')
+    puts "Writing PTE contact spreadsheet to #{dir}..."
+    File.open(File.join(dir, 'ptes.tsv'), 'w') do |pte_file|
       pte_file.write("Passenger Transport Executive\tWikipedia URL\tContact category\tContact location type\tContact email\tNotes\n")
       PassengerTransportExecutive.find_each do |pte|
         if pte.pte_contacts.empty?
@@ -117,8 +117,8 @@ namespace :data do
       end
     end
 
-    puts "Writing council contact spreadsheet to #{ENV['DIR']}..."
-    File.open(File.join(ENV['DIR'], 'council_contacts.tsv'), 'w') do |council_contacts_file|
+    puts "Writing council contact spreadsheet to #{dir}..."
+    File.open(File.join(dir, 'council_contacts.tsv'), 'w') do |council_contacts_file|
       council_contacts_file.write("Council\tArea ID\tContact category\tContact district ID\tContact email\tNotes\n")
       Council.find_all_without_ptes().each do |council|
         council.contacts.each do |council_contact|
@@ -132,8 +132,8 @@ namespace :data do
       end
     end
 
-    puts "Writing operator contact spreadsheet to #{ENV['DIR']}..."
-    File.open(File.join(ENV['DIR'], 'operator_contacts.tsv'), 'w') do |operator_contact_file|
+    puts "Writing operator contact spreadsheet to #{dir}..."
+    File.open(File.join(dir, 'operator_contacts.tsv'), 'w') do |operator_contact_file|
       operator_contact_file.write("ID\tOperator\tCompany no\tRegistered address\tCompany URL\tContact category\tContact location\tContact email\tNotes\tRoute count\tURL - has list of routes\n")
 
       Operator.current.find(:all, :order => 'name').each do |operator|

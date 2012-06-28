@@ -50,10 +50,10 @@ namespace :tnds do
                       :return_headers => false,
                       :headers => :first_row,
                       :encoding => 'N' }
-      check_for_file
+      file = check_for_param('FILE')
       verbose = check_verbose
       dryrun = check_dryrun
-      tsv_data = File.read(ENV['FILE'])
+      tsv_data = File.read(file)
       new_data = {}
       outfile = File.open("data/operators/missing_#{Time.now.to_date.to_s(:db)}_with_fixes.tsv", 'w')
       headers = ['Short name',
@@ -220,8 +220,8 @@ namespace :tnds do
           have already been loaded in this data generation, supply SKIP_LOADED=0. Otherwise
           these files will be ignored."
     task :list_unmatched_stops_and_operators => :environment do
-      dir = check_for_dir
-      output_dir = check_for_output_dir
+      dir = check_for_param('DIR')
+      output_dir = check_for_param('OUTPUT_DIR')
       verbose = check_verbose
       skip_loaded = true
       skip_loaded = false if ENV['SKIP_LOADED'] == '0'
@@ -301,12 +301,12 @@ namespace :tnds do
           supply SKIP_LOADED=0. Otherwise these files will be ignored.
           Specify FIND_REGION_BY=directory if regions need to be inferred from directories.'
     task :routes => :environment do
-      check_for_dir
+      dir = check_for_param('DIR')
       verbose = check_verbose
       dryrun = check_dryrun
       skip_loaded = true
       skip_loaded = false if ENV['SKIP_LOADED'] == '0'
-      puts "Loading routes from #{ENV['DIR']}..."
+      puts "Loading routes from #{dir}..."
       if ENV['FIND_REGION_BY'] == 'directory'
         regions_as = :directories
       else
@@ -314,8 +314,8 @@ namespace :tnds do
       end
       PaperTrail.enabled = false
       parser = Parsers::TransxchangeParser.new
-      file_glob = File.join(ENV['DIR'], "**/*.xml")
-      index_file = File.join(ENV['DIR'], 'TravelineNationalDataSetFilesList.txt')
+      file_glob = File.join(dir, "**/*.xml")
+      index_file = File.join(dir, 'TravelineNationalDataSetFilesList.txt')
       parser.parse_all_tnds_routes(file_glob, index_file, verbose, skip_loaded=skip_loaded, regions_as) do |route|
         merged = false
         puts "Parsed route #{route.number}" if verbose

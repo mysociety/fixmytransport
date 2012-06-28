@@ -179,9 +179,9 @@ namespace :update do
         Specify ALL=1 to see all updates. Specify model class as MODEL=ModelName.
         Specify a particular day as DATE=2012-04-23. Verbose flag set by VERBOSE=1'
   task :show_updates => :environment do
-    check_for_model()
+    model = check_for_param('MODEL')
     verbose = check_verbose()
-    model = ENV['MODEL'].constantize
+    model = model.constantize
     only_replayable = (ENV['ALL'] == "1") ? false : true
     update_hash = get_updates(model, only_replayable=only_replayable, ENV['DATE'], verbose)
     update_hash.each do |persistent_id, changes|
@@ -198,9 +198,9 @@ namespace :update do
   desc 'Generates an update file suitable for sending back to the source data provider from
         the changes that have been made locally to a particular model. Verbose flag set by VERBOSE=1.'
   task :create_update_file => :environment do
-    check_for_model()
+    model = check_for_param('MODEL')
     verbose = check_verbose()
-    model = ENV['MODEL'].constantize
+    model = model.constantize
     options = model.data_generation_options_hash
     change_list = replay_updates(model, dryrun=true, verbose=verbose)
     outfile = File.open("data/#{model}_changes_#{Date.today.to_s(:db)}.tsv", 'w')
@@ -264,10 +264,10 @@ namespace :update do
   desc 'Apply the replayable local updates for a model class that is versioned in data generations.
         Runs in dryrun mode unless DRYRUN=0 is specified. Verbose flag set by VERBOSE=1'
   task :replay_updates => :environment do
-    check_for_model()
+    model = check_for_param('MODEL')
     dryrun = check_dryrun()
     verbose = check_verbose()
-    model = ENV['MODEL'].constantize
+    model = model.constantize
     replay_updates(model, dryrun, verbose)
   end
 
@@ -276,10 +276,10 @@ namespace :update do
         changes to any significant fields. Runs in dryrun mode unless DRYRUN=0 is specified. Verbose
         flag set by VERBOSE=1"
   task :mark_unreplayable => :environment do
-    check_for_model()
+    model = check_for_param('MODEL')
     dryrun = check_dryrun()
     verbose = check_verbose()
-    model = ENV['MODEL'].constantize
+    model = model.constantize
     mark_unreplayable(model, dryrun, verbose)
   end
 

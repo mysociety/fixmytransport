@@ -83,7 +83,7 @@ namespace :db do
 
   desc 'Load data from a Postgres binary dump'
   task :load_from_binary => :environment do
-    check_for_file
+    file = check_for_param('FILE')
 
     puts "migrating down"
     ENV['VERSION'] = '0'
@@ -102,7 +102,7 @@ namespace :db do
     port = ActiveRecord::Base.configurations[RAILS_ENV]['port']
     database = ActiveRecord::Base.configurations[RAILS_ENV]['database']
     user = ActiveRecord::Base.configurations[RAILS_ENV]['username']
-    system("pg_restore --port=#{port} --disable-triggers --data-only -d #{database} -U #{user} #{ENV['FILE']}")
+    system("pg_restore --port=#{port} --disable-triggers --data-only -d #{database} -U #{user} #{file}")
   end
 
 end
