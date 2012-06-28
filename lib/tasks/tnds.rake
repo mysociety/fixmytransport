@@ -214,44 +214,27 @@ namespace :tnds do
       end
     end
 
-    desc "Produce a lists of unmatched stop and operator information (in an output directory passed as
-          OUTPUT_DIR=output_dir) from a set of TransXChange files in zip files in a directory
-          passed as DIR=dir. Verbose flag set by VERBOSE=1. To include routes from files that
+    desc 'Appends unmatched stop and operator information to files passed as STOP_OUTFILE and
+          OPERATOR_OUTFILE from a set of TransXChange files in a region zip file
+          passed as ZIP=zip. Verbose flag set by VERBOSE=1. To include routes from files that
           have already been loaded in this data generation, supply SKIP_LOADED=0. Otherwise
-          these files will be ignored."
-    task :list_unmatched_stops_and_operators => :environment do
-      dir = check_for_param('DIR')
-      output_dir = check_for_param('OUTPUT_DIR')
-      verbose = check_verbose
+          these files will be ignored.'
+    task :list_unmatched_stops_and_operators_for_region => :environment do
       skip_loaded = true
       skip_loaded = false if ENV['SKIP_LOADED'] == '0'
+      verbose = check_verbose
+      operator_outfile_path = check_for_param('OPERATOR_OUTFILE')
+      stop_outfile_path = check_for_param('STOP_OUTFILE')
+      zip = check_for_param('ZIP')
+      operator_outfile = File.open(operator_outfile_path, 'a')
+      stop_outfile = File.open(stop_outfile_path, 'a')
+
+
       parser = Parsers::TransxchangeParser.new
-      date_string = Time.now.to_date.to_s(:db)
-      stop_outfile = File.open(File.join(output_dir,"tnds_missing_stops_#{date_string}.tsv"), 'w')
-      operator_outfile = File.open(File.join(output_dir,"tnds_missing_operators_#{date_string}.tsv"), 'w')
-
-      stop_headers = ['Stop Code',
-                      'Region',
-                      'File',
-                      'Service Code',
-                      'Line number']
-      stop_outfile.write(stop_headers.join("\t")+"\n")
-      stop_lines = 0
-
-      operator_headers = ['NOC Code',
-                          'Short name',
-                          'Trading name',
-                          'Name on license',
-                          'Code',
-                          'Problem',
-                          'Region',
-                          'File']
-      operator_outfile.write(operator_headers.join("\t")+"\n")
       operator_lines = 0
-
-
       route_count = 0
-      parser.parse_all_tnds_routes_in_zips(dir, verbose, skip_loaded) do |route|
+      stop_lines = 0
+      parser.parse_all_tnds_routes_in_zip(zip, verbose, skip_loaded) do |route|
         route_count += 1
         if route_count % 10 == 0
           print '.'
@@ -287,8 +270,58 @@ namespace :tnds do
           end
         end
       end
+
+      operator_outfile.close
+      stop_outfile.close
+
+    end
+
+    desc "Produce a lists of unmatched stop and operator information (in an output directory passed as
+          OUTPUT_DIR=output_dir) from a set of TransXChange files in zip files in a directory
+          passed as DIR=dir. Verbose flag set by VERBOSE=1. To include routes from files that
+          have already been loaded in this data generation, supply SKIP_LOADED=0. Otherwise
+          these files will be ignored."
+    task :list_unmatched_stops_and_operators => :environment do
+      dir = check_for_param('DIR')
+      output_dir = check_for_param('OUTPUT_DIR')
+      verbose = check_verbose
+
+      # Open the files, write the headers to them
+      date_string = Time.now.to_date.to_s(:db)
+      stop_outfile_name = File.join(output_dir,"tnds_missing_stops_#{date_string}.tsv")
+      operator_outfile_name = File.join(output_dir,"tnds_missing_operators_#{date_string}.tsv")
+      stop_outfile = File.open(stop_outfile_name, 'w')
+      operator_outfile = File.open(operator_outfile_name, 'w')
+      stop_headers = ['Stop Code',
+                      'Region',
+                      'File',
+                      'Service Code',
+                      'Line number']
+      stop_outfile.write(stop_headers.join("\t")+"\n")
+      operator_headers = ['NOC Code',
+                          'Short name',
+                          'Trading name',
+                          'Name on license',
+                          'Code',
+                          'Problem',
+                          'Region',
+                          'File']
+      operator_outfile.write(operator_headers.join("\t")+"\n")
       stop_outfile.close()
       operator_outfile.close()
+      puts dir
+      zip_files = Dir.glob(File.join(dir, "*.zip"))
+      zip_files.each do |zip_file|
+        puts "Loading routes from #{zip_file}"
+        command = "rake RAILS_ENV=#{ENV['RAILS_ENV']}"
+        command << " tnds:preload:list_unmatched_stops_and_operators_for_region"
+        command << " ZIP=#{zip_file} DIR=#{dir} OUTPUT_DIR=#{output_dir} SKIP_LOADED=#{ENV['SKIP_LOADED']}"
+        command << " STOP_OUTFILE=#{stop_outfile_name} OPERATOR_OUTFILE=#{operator_outfile_name}"
+        command << " --trace"
+        exit_status = run_in_shell(command, File.basename(zip_file))
+        raise "Process exited with error" unless exit_status == 0
+      end
+
     end
 
   end
