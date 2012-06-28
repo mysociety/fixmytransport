@@ -54,7 +54,7 @@ Rails::Initializer.run do |config|
   config.gem "fastercsv", :version => '1.5.3'
   config.gem 'foreigner', :version => '0.9.1'
   config.gem "friendly_id", :version => '3.1.7'
-  config.gem 'mime-types', :version => '1.17' # Required by paperclip
+  config.gem 'mime-types', :version => '1.17', :lib => 'mime/types' # Required by paperclip
   config.gem 'paper_trail', :version => '1.5.1'
   config.gem "paperclip", :version => "~> 2.7.0"
   config.gem "rack", :version => '1.1.0'
