@@ -121,36 +121,32 @@ class Parsers::TransxchangeParser
     end
   end
 
-  # Go through a directory and look for zip files in each directory. Get a stream from every
-  # zip file found and pass it to parse_routes
-  def parse_all_tnds_routes_in_zips(dirname, verbose, skip_loaded=true, &block)
+  # Get a stream from every file found in a zip and pass it to parse_routes
+  def parse_all_tnds_routes_in_zip(zip, verbose, skip_loaded=true, &block)
     bus_mode = TransportMode.find_by_name('Bus')
-    zips = Dir.glob(File.join(dirname, '*.zip'))
-    zips.each do |zip|
-      region_code = File.basename(zip, '.zip')
-      region = Region.current.find(:first, :conditions => ['code = ?', region_code])
-      if region.nil?
-        raise "Couldn't find region using zipfile name #{region_code}"
-      else
-        puts "Region is #{region.name}" if verbose
-      end
-      Zip::ZipFile.foreach(zip) do |txc_file|
-        puts txc_file if verbose
-        if skip_loaded
-          sources = RouteSource.current.find(:all, :conditions => ['filename = ?', txc_file.to_s])
-          if ! sources.empty?
-            puts "Skipping #{filename}" if verbose
-            next
-          end
+    region_code = File.basename(zip, '.zip')
+    region = Region.current.find(:first, :conditions => ['code = ?', region_code])
+    if region.nil?
+      raise "Couldn't find region using zipfile name #{region_code}"
+    else
+      puts "Region is #{region.name}" if verbose
+    end
+    Zip::ZipFile.foreach(zip) do |txc_file|
+      puts txc_file if verbose
+      if skip_loaded
+        sources = RouteSource.current.find(:all, :conditions => ['filename = ?', txc_file.to_s])
+        if ! sources.empty?
+          puts "Skipping #{filename}" if verbose
+          next
         end
-        self.parse_routes(txc_file.get_input_stream(),
-                        default_transport_mode=bus_mode,
-                        nil,
-                        txc_file.to_s,
-                        verbose,
-                        region,
-                        &block)
       end
+      self.parse_routes(txc_file.get_input_stream(),
+                      default_transport_mode=bus_mode,
+                      nil,
+                      txc_file.to_s,
+                      verbose,
+                      region,
+                      &block)
     end
   end
 
