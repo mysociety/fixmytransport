@@ -263,9 +263,14 @@ class Parsers::TransxchangeParser
         else
           route = routes[line[:name]]
         end
-        operator_information = operators_information[registered_operator_ref]
-        operator_code = operator_information[:code]
-        noc_code = operator_information[:noc_code]
+        if operators_information
+          operator_information = operators_information[registered_operator_ref]
+          operator_code = operator_information[:code]
+        else
+          operator_information = nil
+          operator_code = nil
+        end
+
         route.route_sources.build(:service_code => service_code,
                                   :operator_code => operator_code,
                                   :region => region,
@@ -323,9 +328,13 @@ class Parsers::TransxchangeParser
         missing.each do |missing_stop_code|
           missing_stops = self.mark_stop_code_missing(missing_stops, missing_stop_code, route)
         end
-        route.operator_info = operator_information
+        if operators_information
+          route.operator_info = operator_information
+        end
         route.missing_stops = missing.uniq
-        operators = find_operators(operator_information, transport_mode, region, route, verbose)
+        if operators_information
+          operators = find_operators(operator_information, transport_mode, region, route, verbose)
+        end
         operators.each do |operator|
           if ! route.route_operators.any?{ |route_operator| route_operator.operator == operator }
             route.route_operators.build( :operator => operator )
