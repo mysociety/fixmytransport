@@ -265,7 +265,11 @@ class Parsers::TransxchangeParser
         end
         if operators_information
           operator_information = operators_information[registered_operator_ref]
-          operator_code = operator_information[:code]
+          if operator_information
+            operator_code = operator_information[:code]
+          else
+            operator_code = nil
+          end
         else
           operator_information = nil
           operator_code = nil
