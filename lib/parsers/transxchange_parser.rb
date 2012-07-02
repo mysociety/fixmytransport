@@ -338,6 +338,8 @@ class Parsers::TransxchangeParser
         route.missing_stops = missing.uniq
         if operator_information
           operators = find_operators(operator_information, transport_mode, region, route, verbose)
+        else
+          operators = []
         end
         operators.each do |operator|
           if ! route.route_operators.any?{ |route_operator| route_operator.operator == operator }
