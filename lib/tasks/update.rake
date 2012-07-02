@@ -430,4 +430,34 @@ namespace :update do
 
   end
 
+  desc 'Mark as unreplayable the local creation of stops that have no routes or problem reports attached
+        to them, and delete the stops themselves. Runs in dryrun mode unless DRYRUN=0 is specified.'
+  task :mark_unused_local_stop_creations_as_unreplayable => :environment do
+    # Find local stops - they won't have an ATCO code
+    dryrun = check_dryrun()
+    verbose = check_verbose()
+    count = 0
+    if verbose
+      puts "Looking for locally created stops with no routes or problems associated with them"
+    end
+    Stop.current.find_each(:conditions => "atco_code IS NULL OR atco_code = ''") do |stop|
+      next if !stop.problems.empty?
+      next if !stop.routes.empty?
+      if verbose
+        puts "Destroying stop #{stop.id} #{stop.common_name}"
+      end
+      if ! dryrun
+        stop.destroy
+        versions = Version.find(:all, :conditions => ["item_type = 'Stop'
+                                                       AND item_id = ?", stop.id])
+        versions.each do |version|
+          version.replayable = false
+          version.save
+        end
+
+      end
+      count +=1
+    end
+    puts "Total #{count}"
+  end
 end
