@@ -315,7 +315,7 @@ namespace :tnds do
         puts "Loading routes from #{zip_file}"
         command = "rake RAILS_ENV=#{ENV['RAILS_ENV']}"
         command << " tnds:preload:list_unmatched_stops_and_operators_for_region"
-        command << " ZIP=#{zip_file} DIR=#{dir} OUTPUT_DIR=#{output_dir} SKIP_LOADED=#{ENV['SKIP_LOADED']}"
+        command << " ZIP=#{zip_file} DIR=#{dir} SKIP_LOADED=#{ENV['SKIP_LOADED']}"
         command << " STOP_OUTFILE=#{stop_outfile_name} OPERATOR_OUTFILE=#{operator_outfile_name}"
         command << " --trace"
         exit_status = run_in_shell(command, File.basename(zip_file))
