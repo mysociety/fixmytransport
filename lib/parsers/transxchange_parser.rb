@@ -332,11 +332,11 @@ class Parsers::TransxchangeParser
         missing.each do |missing_stop_code|
           missing_stops = self.mark_stop_code_missing(missing_stops, missing_stop_code, route)
         end
-        if operators_information
+        if operator_information
           route.operator_info = operator_information
         end
         route.missing_stops = missing.uniq
-        if operators_information
+        if operator_information
           operators = find_operators(operator_information, transport_mode, region, route, verbose)
         end
         operators.each do |operator|
