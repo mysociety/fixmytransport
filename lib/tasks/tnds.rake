@@ -242,11 +242,24 @@ namespace :tnds do
         end
         if route.route_operators.length != 1
           operator_lines += 1
-          row = [route.operator_info[:noc_code],
-                 route.operator_info[:short_name],
-                 route.operator_info[:trading_name],
-                 route.operator_info[:name_on_license],
-                 route.operator_info[:code],
+          if route.operator_info
+            noc_code = route.operator_info[:noc_code]
+            code = route.operator_info[:code]
+            short_name = route.operator_info[:short_name]
+            trading_name = route.operator_info[:trading_name]
+            license_name = route.operator_info[:name_on_license]
+          else
+            noc_code = nil
+            code = nil
+            short_name = nil
+            trasing_name = nil
+            license_name = nil
+          end
+          row = [noc_code,
+                 short_name,
+                 trading_name,
+                 license_name,
+                 code,
                  route.route_operators.length > 1 ? 'ambiguous' : 'not found',
                  route.region.name,
                  route.route_sources.first.filename]
