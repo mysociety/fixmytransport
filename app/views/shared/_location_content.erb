@@ -13,3 +13,24 @@
 <%- else %>
   <%= t('shared.location_content.no_problems')%>
 <%- end %>
+
+<h3 class="location-content-header">Timetables</h3>
+
+<p>FixMyTransport is a site aimed primarily at reporting
+problems on public transport. We provide maps to make that
+easier, but for up-to-date timetabling and detailed route
+information, you should use the operator's website
+or <a href="http://www.traveline.info/">Traveline</a>.</p>
+
+<p>The following search on Google may also help you to find
+the timetable information that you're looking for:</p>
+
+<ul>
+<% for operator in location.operators %>
+  <% search_string = "timetable \"#{operator.name}\" #{location.short_name}" %>
+  <% google_search = "http://www.google.com/search?q=#{CGI.escape(search_string)}" %>
+  <li><a href="<%= google_search %>"><%= search_string %></li>
+<% end %>
+</ul>
+
+</p>
