@@ -5,13 +5,16 @@
 # is made consistent with that of any previous models sharing its persistent id. New models do not reuse
 # slugs from previous generations
 
-class Slug < ActiveRecord::Base
+class Slug < AbstractSlug
+
+  puts "in app/models"
   default_scope :conditions => [ "#{quoted_table_name}.generation_low <= ?
                                   AND #{quoted_table_name}.generation_high >= ?",
                                   CURRENT_GENERATION, CURRENT_GENERATION ]
   before_create :set_generations
 
   def set_generations
+    puts "setting generations"
     self.generation_low = CURRENT_GENERATION if self.generation_low.nil?
     self.generation_high = CURRENT_GENERATION if self.generation_high.nil?
   end
@@ -21,6 +24,7 @@ class Slug < ActiveRecord::Base
   # sequence of the most recent previous instance with the same sluggable model persistent
   # id, name and scope.
   def set_sequence
+    puts "setting sequence"
     return unless new_record?
     klass = self.sluggable_type.constantize
     if klass.respond_to?(:versioned_by_data_generations?)
@@ -38,6 +42,7 @@ class Slug < ActiveRecord::Base
 
   # Finds similar slugs by name, scope and sluggable type across data generations
   def self.similar_slugs_across_all_generations(slug)
+    puts "similar slugs"
     similar = nil
     self.in_any_generation do
       similar = self.find(:all, :conditions => { :name  => slug.name,
@@ -51,6 +56,7 @@ class Slug < ActiveRecord::Base
   # Finds similar slugs by name, scope and sluggable type across data generations that
   # are associated with the same persistent id as the slug passed.
   def self.previous_similar_slugs_for_same_persistent_id(slug)
+    puts "previous similar slugs"
     klass = slug.sluggable_type.constantize
     sluggable = slug.sluggable
     sluggable_ids = klass.find(:all,
