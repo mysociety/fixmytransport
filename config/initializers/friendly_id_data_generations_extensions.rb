@@ -1,0 +1,1 @@
+require "#{RAILS_ROOT}/lib/patches/friendly_id_data_generations_extensions"
