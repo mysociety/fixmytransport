@@ -56,6 +56,9 @@ namespace :update do
     # Mark records as loaded
     Rake::Task['db:mark_loaded'].execute
 
+    # Destroy locally created stops that aren't needed anymore
+    Rake::Task['update:mark_unused_local_stop_creations_as_unreplayable'].execute
+
   end
 
   desc "Create a new data generation. Runs in dryrun mode unless DRYRUN=0
