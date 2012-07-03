@@ -13,3 +13,23 @@
 <%- else %>
   <%= t('shared.location_content.no_problems')%>
 <%- end %>
+
+<h3 class="location-content-header">Timetables</h3>
+
+<%- transport_mode_names = location.transport_modes.map { |tm| tm.name }
+    timetable_link = nil
+    if transport_mode_names.include? 'Bus'
+        timetable_link = '<a href="http://traveline.info/">Traveline</a>'
+    elsif transport_mode_names.include? 'Train'
+        timetable_link = '<a href="http://www.nationalrail.co.uk">National Rail Enquiries</a>'
+    end
+    timetable_explanation = t('shared.location_content.timetable_preamble')
+    if timetable_link
+        timetable_explanation += t('shared.location_content.timetable_alternative', :timetable_link => timetable_link)
+    end
+-%>
+
+<p><%= raw(timetable_explanation) %>.
+   <%= raw(t('shared.location_content.generic_journey_planning',
+           :generic_journey_planning_link => '<a href="http://www.transportdirect.info">TransportDirect</a>')) %>
+</p>
