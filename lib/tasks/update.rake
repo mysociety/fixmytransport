@@ -486,4 +486,33 @@ namespace :update do
     end
     puts "Total #{count}"
   end
+
+  desc 'Purge an old generation of transport data, specified as GENERATION=generation. Verbose flag
+        set by VERBOSE=1. Runs in dryrun mode unless DRYRUN=0 is specified.'
+  task :purge_generation => :environment do
+    dryrun = check_dryrun()
+    verbose = check_verbose()
+    # on completion of a generation load, the generation should be marked as loaded. Don't
+    # purge a generation unless there is a subsequent generation that has been marked as loaded.
+    generation_to_purge = check_for_generation()
+    subsequent_loaded_generations = DataGeneration.find(:all, :conditions => ['id > ?
+                                                                               AND loaded_at is not null',
+                                                                               generation_to_purge])
+    if subsequent_loaded_generations.empty?
+      raise "There are no loaded generations after generation #{generation_to_purge}: cannot purge!"
+    end
+
+    FixMyTransport::DataGenerations.models_existing_in_data_generations.each do |model_class|
+      table_name = model_class.to_s.tableize
+      puts "Deleting generation #{generation_to_purge} in table #{table_name}" if verbose
+      if ! dryrun
+        model_class.connection.execute("DELETE FROM #{table_name}
+                                        WHERE generation_high = #{generation_to_purge}")
+      end
+    end
+
+
+
+  end
+
 end
