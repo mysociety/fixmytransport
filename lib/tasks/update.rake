@@ -502,7 +502,13 @@ namespace :update do
       raise "There are no loaded generations after generation #{generation_to_purge}: cannot purge!"
     end
 
-    FixMyTransport::DataGenerations.models_existing_in_data_generations.each do |model_class|
+    dependent_models = [StopAreaMembership,
+                        StopAreaOperator,
+                        StopOperator,
+                        RouteOperator]
+    data_generation_models = FixMyTransport::DataGenerations.models_existing_in_data_generations
+    dependent_models.each{ |model| data_generation_models.unshift(data_generation_models.delete(model))}
+    data_generation_models.each do |model_class|
       table_name = model_class.to_s.tableize
       puts "Deleting generation #{generation_to_purge} in table #{table_name}" if verbose
       if ! dryrun
