@@ -19,11 +19,19 @@ module FriendlyIdDataGenerationsExtensions
         default_scope :conditions => [ "#{self.quoted_table_name}.generation_low <= ?
                                             AND #{self.quoted_table_name}.generation_high >= ?",
                                             CURRENT_GENERATION, CURRENT_GENERATION ]
-        before_create :set_generations
+        before_create :set_generations, :set_persistent_id
 
         def set_generations
           self.generation_low = CURRENT_GENERATION if self.generation_low.nil?
           self.generation_high = CURRENT_GENERATION if self.generation_high.nil?
+        end
+
+        def set_persistent_id
+          return unless new_record?
+          klass = self.sluggable_type.constantize
+          if klass.respond_to?(:versioned_by_data_generations?)
+            self.sluggable_persistent_id = self.sluggable.persistent_id
+          end
         end
 
         # Extension of the friendly_id set_sequence method - will set the sequence of a new  slug

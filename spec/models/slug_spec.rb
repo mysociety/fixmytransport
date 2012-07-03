@@ -64,6 +64,15 @@ describe Slug do
       @not_successor.slug.sequence.should == 2
     end
 
+    it 'should store the persistent id of the model in the attribute sluggable_persistent_id' do
+      @successor.slug.sluggable_persistent_id.should == 66
+      Slug.in_any_generation do
+        @previous_stop = Stop.find(@previous_stop.id)
+        @previous_slug = @previous_stop.slug
+        @previous_slug.sluggable_persistent_id.should == 66
+      end
+    end
+
     after do
       @previous_slug.destroy
       @previous_stop.destroy
