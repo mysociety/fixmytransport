@@ -1,5 +1,5 @@
 <h2><%= @operator.name %></h2>
-<%- form_for @operator, :url => admin_url(admin_operator_path(@operator)), :html => { :method => :delete, :class => 'destroy-link' } do |f| 
+<%- form_for @operator, :url => admin_url(admin_operator_path(@operator)), :html => { :method => :delete, :class => 'destroy-link' } do |f|
  %>  <%= raw hidden_field_tag :confirmation, t('admin.are_you_sure'), {:id => 'destroy_confirmation'} %>
   <%= raw submit_tag t('admin.destroy')  %>
 <%-end %>
@@ -44,7 +44,7 @@
   <p>
     <%= link_to t('admin.external_search_operator'), external_search_link(@operator.name), {:class => 'admin-offsite-link', :target => '_blank'}  %>
   </p>
-  <%= render :partial => 'route_operators', :locals => { :f => f, :route_operators => @operator.route_operators, :title => t('admin.routes') } %>
+  <%= render :partial => 'route_operators', :locals => { :f => f, :route_operators => @operator.route_operators.current, :title => t('admin.routes') } %>
   <%= render :partial => 'route_operators', :locals => { :f => f, :route_operators => @route_operators, :title => t('admin.routes_with_code') } %>
 <%-end %>
 <script type="text/javascript">
@@ -54,4 +54,4 @@
     setupItemSelection('.check-route-operator');
   });
 </script>
-  
+
