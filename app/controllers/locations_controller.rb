@@ -14,10 +14,13 @@ class LocationsController < ApplicationController
   def show_stop
     begin
       @stop = Stop.find_current(params[:id], params[:scope])
+      if @stop.friendly_id_status.numeric?
+        raise ActiveRecord::RecordNotFound
+      end
     # handle params matching a stop in the previous generation with a redirect to the successor
     # if there is one
     rescue ActiveRecord::RecordNotFound => error
-      if @successor = Stop.find_successor(params[:id], :scope => params[:scope], :include => [:locality])
+      if @successor = find_successor(Stop, params[:id], :scope => params[:scope], :include => [:locality])
         redirect_previous(@successor, { :scope => :locality }) and return
       end
       raise
@@ -45,10 +48,13 @@ class LocationsController < ApplicationController
   def show_stop_area
     begin
       @stop_area = StopArea.find_current(params[:id], params[:scope])
+      if @stop_area.friendly_id_status.numeric?
+        raise ActiveRecord::RecordNotFound
+      end
     # handle params matching a stop area in the previous generation with a redirect to the successor
     # if there is one
     rescue ActiveRecord::RecordNotFound => error
-      if @successor = StopArea.find_successor(params[:id], :scope => params[:scope], :include => [:locality])
+      if @successor = find_successor(StopArea, params[:id], :scope => params[:scope], :include => [:locality])
         redirect_previous(@successor, { :scope => :locality }) and return
       end
       raise
@@ -91,10 +97,13 @@ class LocationsController < ApplicationController
   def show_route
     begin
      @route = Route.find_current(params[:id], params[:scope])
+     if @route.friendly_id_status.numeric?
+       raise ActiveRecord::RecordNotFound
+     end
     # handle params matching a route in the previous generation with a redirect to the successor
     # if there is one
     rescue ActiveRecord::RecordNotFound => error
-      if @successor = Route.find_successor(params[:id],
+      if @successor = find_successor(Route, params[:id],
                                            :scope => params[:scope],
                                            :include => [:route_operators => :operator])
         redirect_previous(@successor, { :scope => :region }) and return
@@ -103,10 +112,6 @@ class LocationsController < ApplicationController
     end
 
     @commentable = @route
-    if @route.friendly_id_status.numeric?
-      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
-      return false
-    end
     @title = @route.name
     respond_to do |format|
       format.html do
@@ -126,12 +131,18 @@ class LocationsController < ApplicationController
   end
 
   def show_sub_route
-    @sub_route = SubRoute.find(params[:id])
-    @commentable = @sub_route
-    if @sub_route.friendly_id_status.numeric?
-      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
-      return false
+    begin
+      @sub_route = SubRoute.find_current(params[:id])
+      if @sub_route.friendly_id_status.numeric?
+        raise ActiveRecord::RecordNotFound
+      end
+    rescue ActiveRecord::RecordNotFound => error
+      if @successor = find_successor(SubRoute, params[:id], {})
+        redirect_previous(@successor) and return
+      end
+      raise
     end
+    @commentable = @sub_route
     @title = @sub_route.name
     respond_to do |format|
       format.html do
@@ -187,8 +198,11 @@ class LocationsController < ApplicationController
 
   private
 
-  def redirect_previous(successor, options)
-    new_params = { :id => successor.to_param, :scope => successor.send(options[:scope]).to_param }
+  def redirect_previous(successor, options={})
+    new_params = { :id => successor.to_param }
+    if options[:scope]
+      new_params[:scope] = successor.send(options[:scope]).to_param
+    end
     redirect_to params.merge(new_params), :status => :moved_permanently
   end
 

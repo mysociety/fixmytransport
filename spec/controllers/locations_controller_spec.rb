@@ -10,6 +10,10 @@ describe LocationsController do
       @default_params = { :type => :stop_area, :scope => 'london', :id => 'euston' }
       @scope_model = Locality
       @scope_field = :locality
+      @friendly_id_status = mock('friendly id status', :numeric? => false)
+      @stop_area = mock_model(StopArea, :locality => 'london',
+                                        :friendly_id_status => @friendly_id_status,
+                                        :station_root => nil)
     end
 
     it_should_behave_like "a show action that falls back to a previous generation and redirects"
@@ -19,30 +23,24 @@ describe LocationsController do
     end
 
     it 'should redirect to a station url if the stop area is a train station' do
-      mock_stop_area = mock_model(StopArea, :area_type => 'GRLS',
-                                            :locality => 'london',
-                                            :station_root => nil)
-      StopArea.stub!(:find_current).and_return(mock_stop_area)
+      @stop_area.stub!(:area_type).and_return("GRLS")
+      StopArea.stub!(:find_current).and_return(@stop_area)
       make_request
-      response.should redirect_to(station_url(mock_stop_area.locality, mock_stop_area))
+      response.should redirect_to(station_url(@stop_area.locality, @stop_area))
     end
 
     it 'should redirect to a station url if the stop area is a metro station' do
-      mock_stop_area = mock_model(StopArea, :area_type => 'GTMU',
-                                            :locality => 'london',
-                                            :station_root => nil)
-      StopArea.stub!(:find_current).and_return(mock_stop_area)
+      @stop_area.stub!(:area_type).and_return("GTMU")
+      StopArea.stub!(:find_current).and_return(@stop_area)
       make_request
-      response.should redirect_to(station_url(mock_stop_area.locality, mock_stop_area))
+      response.should redirect_to(station_url(@stop_area.locality, @stop_area))
     end
 
     it 'should redirect to a ferry terminal url if the stop area is a ferry terminal' do
-      mock_stop_area = mock_model(StopArea, :area_type => 'GFTD',
-                                            :locality => 'london',
-                                            :station_root => nil)
-      StopArea.stub!(:find_current).and_return(mock_stop_area)
+      @stop_area.stub!(:area_type).and_return("GFTD")
+      StopArea.stub!(:find_current).and_return(@stop_area)
       make_request
-      response.should redirect_to(ferry_terminal_url(mock_stop_area.locality, mock_stop_area))
+      response.should redirect_to(ferry_terminal_url(@stop_area.locality, @stop_area))
     end
 
     describe 'if there is an ancestor area of the same type' do
@@ -53,6 +51,7 @@ describe LocationsController do
                                                 :locality => 'victoria')
         @mock_stop_area = mock_model(StopArea, :area_type => 'GRLS',
                                               :locality => 'victoria',
+                                              :friendly_id_status => @friendly_id_status,
                                               :station_root => @parent_stop_area)
         StopArea.stub!(:find_current).and_return(@mock_stop_area)
       end
@@ -105,16 +104,29 @@ describe LocationsController do
       @scope_field = :region
     end
 
-    it_should_behave_like "a show action that falls back to a previous generation and redirects"
-
     def make_request(params=@default_params)
       get :show_route, params
     end
 
-    it 'should not find a route by its id' do
-      make_request({:id => @route.id, :scope => 'great-britain'})
-      response.status.should == '404 Not Found'
+    it_should_behave_like "a show action that falls back to a previous generation and redirects"
+
+  end
+
+  describe 'GET #show_sub_route' do
+    fixtures default_fixtures
+
+    before do
+      @sub_route = sub_routes(:victoria_to_haywards_heath)
+      @model_type = SubRoute
+      @default_params = {:id => 'victoria-to-haywards-heath' }
+      @includes = {}
     end
+
+    def make_request(params=@default_params)
+      get :show_sub_route, params
+    end
+
+    it_should_behave_like "a show action that falls back to a previous generation and redirects"
 
   end
 
@@ -150,6 +162,7 @@ describe LocationsController do
       @controller.stub!(:map_params_from_location)
       @default_params = { :id => "44", :scope => "66" }
       @stop = mock_model(Stop, :full_name => "A Test Stop",
+                               :friendly_id_status => mock('friendly id status', :numeric? => false),
                                :points => [])
 
     end

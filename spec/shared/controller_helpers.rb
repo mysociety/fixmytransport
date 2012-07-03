@@ -4,39 +4,60 @@ module SharedBehaviours
 
     shared_examples_for "a show action that falls back to a previous generation and redirects" do
 
+      before do
+        # stub the model finding query
+        @find_params = [@default_params[:id]]
+        if @scope_model
+          if @includes
+            include_associations = [@includes]
+          else
+            include_associations = [@scope_field]
+          end
+          @find_params << { :scope => @default_params[:scope], :include => include_associations }
+        end
+        # stub the successor query
+        @successor = mock_model(@model_type)
+        if @scope_model
+          @current_scope = mock_model(@scope_model)
+          @successor.stub!(@scope_field).and_return(@current_scope)
+        end
+        @successor_params = [@model_type] + @find_params
+        if ! @scope_model
+          @successor_params << {}
+        end
+        @controller.stub!(:find_successor).with(*@successor_params).and_return(@successor)
+      end
+
+      describe 'if a current instance is found via a numeric identifier' do
+
+        before do
+          @friendly_id_status = mock('friendly id status', :numeric? => true)
+          @instance = mock_model(@model_type, :friendly_id_status => @friendly_id_status)
+          @model_type.stub!(:find).with(*@find_params).and_return(@instance)
+        end
+
+        it "should look for the the successor of an instance in the previous generation matching the params" do
+          @controller.should_receive(:find_successor).with(*@successor_params).and_return(@successor)
+          make_request
+        end
+
+      end
+
       describe 'if the instance cannot be found' do
 
         before do
-          # stub the model finding query
-          @find_params = [@default_params[:id]]
-          if @scope_model
-            if @includes
-              include_associations = [@includes]
-            else
-              include_associations = [@scope_field]
-            end
-            @find_params << { :scope => @default_params[:scope], :include => include_associations }
-          end
           @model_type.stub!(:find).with(*@find_params).and_raise(ActiveRecord::RecordNotFound)
-          # stub the successor query
-          @successor = mock_model(@model_type)
-
-          if @scope_model
-            @current_scope = mock_model(@scope_model)
-            @successor.stub!(@scope_field).and_return(@current_scope)
-          end
-          @model_type.stub!(:find_successor).with(*@find_params).and_return(@successor)
         end
 
         it "should look for the instance's successor" do
-          @model_type.should_receive(:find_successor).with(*@find_params).and_return(@successor)
+          @controller.should_receive(:find_successor).with(*@successor_params).and_return(@successor)
           make_request
         end
 
         describe 'if the successor cannot be found' do
 
           before do
-            @model_type.stub!(:find_successor).and_return(nil)
+            @controller.stub!(:find_successor).and_return(nil)
           end
 
           it 'should re-raise the error (returning a 404 in production)' do
@@ -48,6 +69,7 @@ module SharedBehaviours
       end
 
     end
+
     shared_examples_for "add_comment when an invalid comment has been submitted" do
 
       describe 'when handling a request asking for HTML' do

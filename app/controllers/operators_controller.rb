@@ -137,8 +137,11 @@ class OperatorsController < ApplicationController
   def find_operator
     begin
       @operator = Operator.current.find(params[:id])
+      if @operator.friendly_id_status.numeric?
+        raise ActiveRecord::RecordNotFound
+      end
     rescue ActiveRecord::RecordNotFound => error
-      if @successor = Operator.find_successor(params[:id])
+      if @successor = find_successor(Operator, params[:id], {})
         redirect_previous(@successor) and return false
       end
       raise

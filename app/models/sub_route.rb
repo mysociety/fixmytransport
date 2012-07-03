@@ -97,4 +97,9 @@ class SubRoute < ActiveRecord::Base
     end
     return sub_route
   end
+
+  def self.find_current(id)
+    self.current.find(id)
+  end
+
 end

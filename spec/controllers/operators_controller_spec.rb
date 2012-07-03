@@ -7,12 +7,14 @@ describe OperatorsController do
   before do
     @transport_mode = mock_model(TransportMode, :name => 'train')
     TransportMode.stub!(:find).and_return(@transport_mode)
+    @friendly_id_status = mock('friendly id status', :numeric? => false)
     @mock_operator = mock_model(Operator,
       :name => 'Sodor & Mainland Railway',
       :transport_mode => @transport_mode,
       :to_i => 11,
       :stop_areas => mock("stop areas", :current => []),
       :routes => mock("routes", :current => []),
+      :friendly_id_status => @friendly_id_status,
       :problem_count => 0,
       :campaign_count => 0)
     Problem.stub!(:find_recent_issues).and_return([])

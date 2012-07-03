@@ -675,4 +675,21 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def find_successor(model_type, name, options)
+    old_slug = nil
+    name, sequence = name.parse_friendly_id(model_type.friendly_id_config.sequence_separator)
+    Slug.in_any_generation do
+      old_slug = Slug.find(:first, :conditions => ['name = ?
+                                                    AND scope = ?
+                                                    AND sluggable_type = ?
+                                                    AND sequence = ?',
+                                                    name, options[:scope], model_type.to_s, sequence],
+                                                    :order => "id desc")
+    end
+    return nil if not old_slug
+    return model_type.current.find(:first, :conditions => ['persistent_id = ?',
+                                                          old_slug.sluggable_persistent_id],
+                                            :include => options[:include])
+  end
+
 end
