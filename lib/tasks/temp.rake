@@ -11,6 +11,19 @@ namespace :temp do
 
   end
 
+  desc 'Transfer Bowers routes to High Peak Centrebus'
+  task :transfer_bowers_routes_to_high_peak => :environment do
+    bowers = Operator.find_by_name('Bowers Coaches')
+    high_peak = Operator.find_by_name('High Peak Centrebus')
+    raise "Couldn't find Bowers" unless bowers
+    raise "Couldn't find High Peak" unless high_peak
+    bowers.route_operators.each do |route_operator|
+      route = route_operator.route
+      RouteOperator.create!(:operator => high_peak, :route => route)
+      puts route_operator.id
+      route_operator.destroy
+    end
+  end
 
   desc 'Transfer NXEA routes to Greater Anglia'
   task :transfer_nxea_routes_to_greater_anglia => :environment do
@@ -19,7 +32,7 @@ namespace :temp do
     raise "Couldn't find NXEA" unless operator
     operator.route_operators.each do |route_operator|
       route = route_operator.route
-      StopAreaOperator.create!(:operator => new_operator, :route => route)
+      RouteOperator.create!(:operator => new_operator, :route => route)
       puts route_operator.id
       route_operator.destroy
     end
