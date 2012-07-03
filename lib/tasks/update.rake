@@ -56,6 +56,9 @@ namespace :update do
     # Mark records as loaded
     Rake::Task['db:mark_loaded'].execute
 
+    # Mark generation as loaded
+    Rake::Task['update:data_generation_loaded']
+
     # Destroy locally created stops that aren't needed anymore
     Rake::Task['update:mark_unused_local_stop_creations_as_unreplayable'].execute
 
@@ -89,6 +92,26 @@ namespace :update do
                     SET generation_high = #{data_generation.id}
                     WHERE sluggable_type
                     NOT in (#{data_generation_models})")
+    end
+  end
+
+  desc "Mark a data generation as loaded. Verbose flag set by VERBOSE=1.
+        Runs in dryrun mode unless DRYRUN=0 is specified."
+  task :data_generation_loaded => :environment do
+    dryrun = check_dryrun()
+    verbose = check_verbose()
+
+    puts "Marking current data generation, generation #{CURRENT_GENERATION}, as loaded" if verbose
+    data_generation = DataGeneration.find(:first, :conditions => ['id = ?',CURRENT_GENERATION])
+    if ! data_generation
+      raise "Data generation #{CURRENT_GENERATION} does not exist!"
+    end
+    if !data_generation.loaded_at.nil?
+      puts "Data generation #{CURRENT_GENERATION} has already been marked as loaded at #{data_generation.loaded_at}"
+    end
+    if ! dryrun
+      data_generation.loaded_at = Time.now
+      data_generation.save!
     end
   end
 
