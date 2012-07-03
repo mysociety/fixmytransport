@@ -70,8 +70,8 @@ namespace :update do
 
     check_new_generation()
     data_generation = DataGeneration.new(:name => 'Data Update',
-                                         :description => 'Update from official data sources',
-                                         :id => CURRENT_GENERATION)
+                                         :description => 'Update from official data sources')
+    data_generation.id = CURRENT_GENERATION
     if !dryrun
       data_generation.save!
       # update the slugs for all non-generation models to be visible in the new
