@@ -305,7 +305,7 @@ class Stop < ActiveRecord::Base
   end
 
   def self.find_current(id, scope)
-    find(id, :scope => scope, :include => [:locality])
+    current.find(id, :scope => scope, :include => [:locality])
   end
 
 end
