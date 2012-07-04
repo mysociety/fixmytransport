@@ -220,9 +220,15 @@ namespace :tnds do
           have already been loaded in this data generation, supply SKIP_LOADED=0. Otherwise
           these files will be ignored.'
     task :list_unmatched_stops_and_operators_for_region => :environment do
+
       skip_loaded = true
       skip_loaded = false if ENV['SKIP_LOADED'] == '0'
       verbose = check_verbose
+
+      previous_logger_level = Rails.logger.level
+      puts "Setting logging level from #{previous_logger_level} to :info" if verbose
+      Rails.logger.level = 1 # :info
+
       operator_outfile_path = check_for_param('OPERATOR_OUTFILE')
       stop_outfile_path = check_for_param('STOP_OUTFILE')
       zip = check_for_param('ZIP')
@@ -284,6 +290,7 @@ namespace :tnds do
         end
       end
 
+      Rails.logger.level = previous_logger_level
       operator_outfile.close
       stop_outfile.close
 
@@ -348,6 +355,11 @@ namespace :tnds do
     task :routes_for_region => :environment do
       verbose = check_verbose
       dryrun = check_dryrun
+
+      previous_logger_level = Rails.logger.level
+      puts "Setting logging level from #{previous_logger_level} to :info" if verbose
+      Rails.logger.level = 1 # :info
+
       zip = check_for_param('ZIP')
       skip_loaded = true
       skip_loaded = false if ENV['SKIP_LOADED'] == '0'
@@ -379,6 +391,7 @@ namespace :tnds do
           puts "saved as #{route.id}" if verbose
         end
       end
+      Rails.logger.level = previous_logger_level
       PaperTrail.enabled = true
     end
 
