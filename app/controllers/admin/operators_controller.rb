@@ -59,7 +59,7 @@ class Admin::OperatorsController < Admin::AdminController
   end
 
   def show
-    @operator = Operator.find(params[:id])
+    @operator = Operator.current.find(params[:id])
     @route_operators = make_route_operators(@operator.codes)
   end
 
