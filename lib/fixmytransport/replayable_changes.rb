@@ -415,7 +415,7 @@ module FixMyTransport
       changes.each do |attribute, values|
         from_value, to_value = values
         current_value = instance.send(attribute)
-        if from_value == current_value
+        if (from_value == current_value) or (from_value.blank? && current_value.blank?)
           puts "#{model_name} (#{instance.id}) updating #{attribute} from #{from_value} to #{to_value}" if verbose
           instance.send("#{attribute}=", to_value)
           applied_changes[attribute] = values

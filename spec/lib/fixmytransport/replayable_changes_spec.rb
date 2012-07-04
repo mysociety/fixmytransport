@@ -109,6 +109,18 @@ describe FixMyTransport::ReplayableChanges do
       replay_updates(Stop, dryrun=true, verbose=false)
     end
 
+    it 'should apply a change when the current value is blank and the first value of the attribute is blank,
+        but they are different e.g. nil and ""' do
+      changes = { 5454 => [ { :date => @version.created_at,
+                              :event => "update",
+                              :changes => { :status => [nil, "ACT"] },
+                              :version_id=> @version.id }] }
+      stub!(:get_updates).and_return(changes)
+      @current_gen_stop.stub!(:status).and_return("")
+      @current_gen_stop.should_receive(:status=).with('ACT')
+      replay_updates(Stop, dryrun=true, verbose=false)
+    end
+
     it 'an instance that currently has one of the intermediate values of an attribute should get the final value' do
       changes = { 5454 => [ { :date => @version.created_at,
                               :event => "update",
