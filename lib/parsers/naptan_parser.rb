@@ -113,7 +113,7 @@ class Parsers::NaptanParser
       easting = row['Easting'].to_i
       northing = row['Northing'].to_i
       box_string = "BOX3D(#{easting+500} #{northing+500}, #{easting-500} #{northing-500})"
-      conditions = "stops.coords && '#{box_string}'::box3d"
+      conditions = "stops.coords && setSRID('#{box_string}'::box3d, #{BRITISH_NATIONAL_GRID})"
       nearest_stop = Stop.find_nearest_current(easting, northing, exclude_id=nil, extra_conditions=conditions, select="locality_id")
       if ! nearest_stop
         nearest_stop = Stop.find_nearest_current(easting, northing, exclude_id=nil, extra_conditions=nil, select="locality_id")

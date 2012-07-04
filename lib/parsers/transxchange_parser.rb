@@ -215,6 +215,10 @@ class Parsers::TransxchangeParser
       journey_pattern_sections = data.delete(:journey_pattern_sections)
       operators_information = data.delete(:operators)
       services = data.delete(:services)
+      if ! services
+        puts "No services in this file: #{filename}" if verbose
+        next
+      end
       services.each do |service|
         if service[:standard_service][:journey_patterns].empty?
           puts "Skipping service #{service[:service_code]} - no standard service in this file" if verbose
