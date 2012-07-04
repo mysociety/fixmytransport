@@ -4,6 +4,6 @@ class AddLoadedAtToDataGenerations < ActiveRecord::Migration
   end
 
   def self.down
-    remove_column :data_generation, :loaded_at
+    remove_column :data_generations, :loaded_at
   end
 end
