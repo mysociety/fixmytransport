@@ -88,6 +88,9 @@ en:
       metro_route_explanation: "Overcrowding? Fare or ticket problems? Report a problem on this route%{orgs}"
       stop_explanation: "Broken glass? Missing timetable? Report a problem at this %{location}%{orgs}"
       station_explanation: "Poor %{location} facilities? Access problems? Report a problem at this %{location}%{orgs}"
+      timetable_preamble: "FixMyTransport is a site aimed primarily at reporting problems on public transport. We provide maps to make that easier, but for up-to-date timetabling and detailed route information, you should use the operator's website"
+      timetable_alternative: " or %{timetable_link}"
+      generic_journey_planning: "For planning journeys, you may find %{generic_journey_planning_link} useful."
     login:
       a_fixmytransport_boffin: "a FixMyTransport boffin"
       must_be_logged_out: "You must be logged out to access this page"
