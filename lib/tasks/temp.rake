@@ -28,6 +28,11 @@ namespace :temp do
     sr = SoleResponsibility.create!(:council_id => 2236, :non_responsible_council_id => 2415)
     sr = SoleResponsibility.create!(:council_id => 2236, :non_responsible_council_id => 2416)
 
+    # Dorset County Council have responsibility for several District Council areas
+    sr = SoleResponsibility.create!(:council_id => 2222, :non_responsible_council_id => 2293)
+    sr = SoleResponsibility.create!(:council_id => 2222, :non_responsible_council_id => 2292)
+    sr = SoleResponsibility.create!(:council_id => 2222, :non_responsible_council_id => 2295)
+
   end
 
 end
