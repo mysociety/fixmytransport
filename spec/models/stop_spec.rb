@@ -226,8 +226,8 @@ describe Stop do
                                                               "id"=>2388,
                                                               "type"=>"DIS",
                                                               "type_name"=>"District council" }})
-        sr = mock_model(SoleResponsibility, :council_id => 2233)
-        SoleResponsibility.stub!(:find).with(:all).and_return([sr])
+        sr = mock_model(SoleResponsibility, :council_id => 2233, :non_responsible_council_id => 2388)
+        SoleResponsibility.stub!(:find).with(:all, :conditions => ['council_id in (?)', [2233, 2388]]).and_return([sr])
       end
 
       it 'should only return that council' do
