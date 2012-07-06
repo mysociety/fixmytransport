@@ -220,7 +220,7 @@ class Parsers::TransxchangeParser
         next
       end
       services.each do |service|
-        if service[:standard_service][:journey_patterns].empty?
+        if (!service) || (!service[:standard_service]) || service[:standard_service][:journey_patterns].empty?
           puts "Skipping service #{service[:service_code]} - no standard service in this file" if verbose
           next
         end
