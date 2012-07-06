@@ -380,7 +380,7 @@ class Parsers::TransxchangeParser
       else
         operators = [ operator ]
         puts "Found operator by noc code" if verbose
-        if verbose
+        if verbose && short_name
           match = operator.matches_short_name?(short_name, comparison_max_length)
           if short_name && ! match
             puts "Warning: Operator name mismatch when found using noc code: #{short_name} vs #{operator.name}"
