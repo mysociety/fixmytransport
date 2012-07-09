@@ -177,6 +177,7 @@ namespace :tnds do
           operator = operator_info[:match]
         else
           operator = Operator.new( :short_name => operator_info[:short_name])
+          operator.status = 'ACT'
           if !operator_info[:trading_name].blank?
             operator.name = operator_info[:trading_name]
           else
