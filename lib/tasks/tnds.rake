@@ -412,7 +412,7 @@ namespace :tnds do
         command = "rake RAILS_ENV=#{ENV['RAILS_ENV']}"
         command << " tnds:load:routes_for_region"
         command << " ZIP=#{zip_file} SKIP_LOADED=#{ENV['SKIP_LOADED']}"
-        command << " DRYRUN=#{ENV['DRYRUN']}"
+        command << " DRYRUN=#{ENV['DRYRUN']} VERBOSE=#{ENV['VERBOSE']}"
         command << " --trace"
         exit_status = run_in_shell(command, File.basename(zip_file))
         raise "Process exited with error" unless exit_status == 0
