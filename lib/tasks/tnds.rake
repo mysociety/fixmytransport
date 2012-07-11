@@ -6,6 +6,8 @@ namespace :tnds do
     if license_name
       query_conditions << 'lower(vosa_license_name) = ?'
       params << license_name.downcase
+      query_conditions << 'lower(name) = ?'
+      params << license_name.downcase
     end
     if trading_name
       query_conditions << 'lower(name) = ?'
