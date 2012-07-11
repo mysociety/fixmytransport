@@ -50,6 +50,11 @@ namespace :update do
     ENV['MODEL'] = 'RouteOperator'
     Rake::Task['update:replay_updates'].execute
 
+    Rake::Task['update:deleted_locations'].execute
+
+    Rake::Task['update:deleted_operators'].execute
+
+    Rake::Task['update:campaigns_at_locations_with_changed_operators'].execute
 
     # Rake::Task['naptan:post_load:mark_metro_stops'].execute
 
