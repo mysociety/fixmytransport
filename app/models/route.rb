@@ -755,24 +755,22 @@ class Route < ActiveRecord::Base
   # where the route doesn't have an operator
   def self.find_current_codes_without_operators(options={})
     query = "SELECT operator_code, sum(cnt) as total_count FROM
-               ((SELECT operator_code, count(distinct route_id) as cnt
-                FROM route_sources
-                WHERE route_id not in
-                  (SELECT route_id
-                   FROM route_operators)
-                AND operator_code is not null
-                AND generation_low <= #{CURRENT_GENERATION}
-                AND generation_high >= #{CURRENT_GENERATION}
-                GROUP BY operator_code)
+               ((SELECT operator_code, count(distinct route_sources.route_id) as cnt
+               FROM route_sources
+               LEFT JOIN route_operators ON route_sources.route_id = route_operators.route_id
+               WHERE route_operators.id IS NULL
+               AND operator_code IS NOT NULL
+               AND route_sources.generation_low <= #{CURRENT_GENERATION}
+               AND route_sources.generation_high >= #{CURRENT_GENERATION}
+               GROUP BY operator_code)
                 UNION ALL
-                (SELECT operator_code, count(distinct route_id) as cnt
+                (SELECT operator_code, count(distinct route_source_admin_areas.route_id) as cnt
                   FROM route_source_admin_areas
-                  WHERE route_id not in
-                    (SELECT route_id
-                     FROM route_operators)
-                  AND operator_code is not null
-                  AND generation_low <= #{CURRENT_GENERATION}
-                  AND generation_high >= #{CURRENT_GENERATION}
+                  LEFT JOIN route_operators ON route_source_admin_areas.route_id = route_operators.route_id
+                   WHERE route_operators.id IS NULL
+                   AND operator_code IS NOT NULL
+                   AND route_source_admin_areas.generation_low <= #{CURRENT_GENERATION}
+                   AND route_source_admin_areas.generation_high >= #{CURRENT_GENERATION}
                   GROUP BY operator_code))
                  as tmp GROUP BY operator_code
              ORDER BY total_count desc"
