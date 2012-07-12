@@ -114,6 +114,7 @@ namespace :tnds do
         license_name = row['Name on license']
         problem = row['Problem']
         file = row['File']
+        transport_mode_name = row['Transport mode']
 
         raise "No short name in line #{row.inspect}" if short_name.blank?
         short_name.strip!
@@ -122,7 +123,8 @@ namespace :tnds do
 
         operator_info = { :short_name => short_name,
                           :trading_name => trading_name,
-                          :license_name => license_name }
+                          :license_name => license_name,
+                          :transport_mode => transport_mode_name }
         if !new_data[operator_info]
           puts "Looking for #{short_name} #{trading_name} #{license_name}" if verbose
           if manual_name = (manual_matches[short_name] || manual_matches[trading_name])
@@ -179,7 +181,8 @@ namespace :tnds do
           existing_operators += 1
           operator = operator_info[:match]
         else
-          operator = Operator.new( :short_name => operator_info[:short_name])
+          operator = Operator.new( :short_name => operator_info[:short_name],
+                                   :transport_mode_id => TransportMode.find_by_name(operator_info[:transport_mode]).id)
           operator.status = 'ACT'
           if !operator_info[:trading_name].blank?
             operator.name = operator_info[:trading_name]
@@ -272,6 +275,7 @@ namespace :tnds do
                  code,
                  route.route_operators.length > 1 ? 'ambiguous' : 'not found',
                  route.region.name,
+                 route.transport_mode.name,
                  route.route_sources.first.filename]
           operator_outfile.write(row.join("\t")+"\n")
           if operator_lines % 10 == 0
@@ -329,6 +333,7 @@ namespace :tnds do
                           'Code',
                           'Problem',
                           'Region',
+                          'Transport mode',
                           'File']
       operator_outfile.write(operator_headers.join("\t")+"\n")
       stop_outfile.close()
