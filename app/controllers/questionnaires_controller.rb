@@ -86,10 +86,16 @@ class QuestionnairesController < ApplicationController
     end
 
     # show a thanks message
+    # TODO_QUESTIONNAIRE: I've marked what I think is the best place for the external questionnaire link
+    # in the questionnaires/completed.erb template.
     if params[:fixed] == 'yes'
       render :action => 'completed'
       return false
     else
+      # TODO_QUESTIONNAIRE: If the user says the issue hasn't been fixed, or they don't know,
+      # they get taken back to the campaign or problem page with a large notice giving some advice on
+      # what to do next. Probably the best place to put the external questionnaire link is at the
+      # bottom of this notice.
       if params[:fixed] == 'no'
         if @questionnaire.subject.is_a?(Problem)
           location = @questionnaire.subject.location
