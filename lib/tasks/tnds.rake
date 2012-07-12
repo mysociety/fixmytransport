@@ -104,6 +104,7 @@ namespace :tnds do
                          'P&O Ferries' => 'P & O Ferries',
                          'RH Transport' => 'R H Transport',
                          "Safford's Coaches" => 'Safford Coaches',
+                         'Travel West Midlands' => 'National Express West  Midlands (NXWM)'
                          }
       FasterCSV.parse(tsv_data, tsv_options) do |row|
         region = row['Region']
