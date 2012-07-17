@@ -2468,6 +2468,10 @@ body.facebook-canvas .button {
   margin: 1em;
 }
 
+.external-questionnaire-suggestion {
+  font-size: 1.1em;
+}
+
 /*===[ Narrow screens]===*/
 @media screen and (max-width: 600px) {
         .mobile-only {

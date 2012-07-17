@@ -18,6 +18,7 @@ class Campaign < ActiveRecord::Base
   has_many :subscriptions, :as => :target
   has_many :subscribers, :through => :subscriptions, :source => :user, :conditions => ['subscriptions.confirmed_at is not null']
   has_many :questionnaires, :as => :subject
+  has_many :external_questionnaires, :as => :subject
   has_and_belongs_to_many :guides
   validates_length_of :title, :maximum => 80, :on => :update, :allow_nil => true
   validates_presence_of :title, :description, :on => :update

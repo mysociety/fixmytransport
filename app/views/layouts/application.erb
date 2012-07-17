@@ -86,7 +86,7 @@
 
 			<%= render :partial => "shared/login" %>
 
-			<%- [:notice, :error, :large_notice].each do |key| %>
+			<%- [:notice, :error, :large_notice, :extra].each do |key| %>
 					<%- unless flash[key].blank? %>
 					<div class="container">
 					<p class="<%= "flash #{key}" %>">

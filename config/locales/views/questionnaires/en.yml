@@ -34,6 +34,7 @@ en:
       next_steps_campaign: "We're sorry to hear that this problem hasn't been fixed. If you're stuck for what to do next, use the \"Ask an expert\" button to ask your supporters and our experts for advice."
       success_thanks: "Thank you very much for filling in our questionnaire. We're glad to hear your problem has been fixed!"
       thanks: Thanks!
+      external_suggestion: "We are working with Loughborough University to understand how people use FixMyTransport, and how it may be improved. If you would like to spend 5 minutes answering some further questions on FixMyTransport, and be entered into a prize draw for £100 of Amazon vouchers, please <a href=\"%{url}\">follow this link</a>."
     creator_fixed:
       issue_not_found: "Sorry, we couldn't find your issue in the database."
       thanks_title: Thanks!

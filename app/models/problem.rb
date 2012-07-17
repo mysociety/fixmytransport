@@ -14,6 +14,7 @@ class Problem < ActiveRecord::Base
   has_many :sent_emails
   has_many :responsibilities
   has_many :questionnaires, :as => :subject
+  has_many :external_questionnaires, :as => :subject
   has_and_belongs_to_many :guides
   validates_presence_of :description, :subject, :category, :if => :location
   validates_associated :reporter
