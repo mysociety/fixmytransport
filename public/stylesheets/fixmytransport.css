@@ -555,6 +555,11 @@ ul.user-list {
   overflow:hidden;
   display:none;
 }
+
+.login-box .email-suggestion {
+  margin-bottom: 10px;
+}
+
   #login-box .pane{
       display: none;
   }

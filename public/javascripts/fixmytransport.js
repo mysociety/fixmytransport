@@ -238,6 +238,71 @@ $(document).ready(function(){
        }
     });
 
+  var domains = Kicksend.mailcheck.defaultDomains.slice(0);
+  domains.push('mysociety.org');
+
+  var topLevelDomains = ["ac.uk",
+                         "co.uk",
+                         "gov.uk",
+                         "judiciary.uk",
+                         "ltd.uk",
+                         "me.uk",
+                         "mod.uk",
+                         "net.uk",
+                         "nhs.uk",
+                         "nic.uk",
+                         "org.uk",
+                         "parliament.uk",
+                         "plc.uk",
+                         "police.uk",
+                         "sch.uk",
+                         "bl.uk",
+                         /* omit the very rare jet.uk, since it's so similar to net.uk */
+                         "nls.uk",
+                         /* Now some of the more common generic TLDs: */
+                         "biz",
+                         "com",
+                         "edu",
+                         "gov",
+                         "info",
+                         "mil",
+                         "mobi",
+                         "name",
+                         "net",
+                         "org"];
+
+  $('#login-box #user_email').blur(function() {
+
+    /* This is a variant of code suggested by Edmund von der Burg  */
+
+    var emailInput = $(this),
+        suggestion = emailInput.next('.email-suggestion');
+
+    if (!suggestion.length) {
+      suggestion = $('<div class="email-suggestion">Did you mean ' +
+                     '<a href="#" class="email-correction"/> ?</div>');
+      emailInput.after(suggestion);
+      suggestion.hide();
+    }
+
+    emailInput.mailcheck({
+      domains: domains,
+      topLevelDomains: topLevelDomains,
+      suggested: function (element, suggestedCorrection) {
+        suggestion.find('.email-correction').text(suggestedCorrection.full).click(
+          function (e) {
+            e.preventDefault();
+            emailInput.val(suggestedCorrection.full);
+            suggestion.slideUp();
+          });
+        suggestion.slideDown();
+      },
+      empty: function (element) {
+        suggestion.slideUp();
+      }
+    });
+  });
+
   //login click
   $(".auth").click(function(e) {
     e.preventDefault();

@@ -24,7 +24,8 @@ module ApplicationHelper
                          'jquery-ui-1.8.13.custom.min',
                          'jquery.autofill.min',
                          'jquery.form.min',
-                         'OpenLayers']
+                         'OpenLayers',
+                         'mailcheck.min']
     js_files = ['map']
     files = minified_js_files + minify(js_files)
     javascript_include_tag(files, :charset => 'utf-8', :cache => 'libraries')
