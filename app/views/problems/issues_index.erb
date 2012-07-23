@@ -6,6 +6,17 @@
 </div>
 <div id="main-content" class="container">
   <div class="leftcol widecol">
+  <p class="issue-order-options">Order by
+    <%- if @order == 'creation' -%>
+      <%= link_to t('problems.issues_index.order_by_last_modification') %>
+      <%= t('problems.issues_index.order_or') %>
+      <%= t('problems.issues_index.order_by_creation') %>
+    <%- else -%>
+      <%= t('problems.issues_index.order_by_last_modification') %>
+      <%= t('problems.issues_index.order_or') %>
+      <%= link_to t('problems.issues_index.order_by_creation'), url_for( :order => 'creation' ) %>
+    <%- end -%>
+  </p>
   <%= will_paginate @issues %>
     <ul class="issues-list">
       <%= render :partial => "shared/issue", :collection => @issues, :locals => {:context => :issue_list } %>
