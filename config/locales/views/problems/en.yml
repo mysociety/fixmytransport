@@ -181,6 +181,9 @@ en:
       guides: Guides and How-Tos
     issues_index:
       title: "Recent issues"
+      order_by_creation: 'creation date'
+      order_by_last_modification: 'latest activity'
+      order_or: 'or'
     list:
       reported_on: "Reported on %{date}"
       reported_by: "by %{name}"

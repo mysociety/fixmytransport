@@ -20,6 +20,8 @@ class Comment < ActiveRecord::Base
 
   named_scope :visible, :conditions => ["status_code = ?", self.symbol_to_status_code[:confirmed]], :order => "confirmed_at asc"
 
+  after_save :update_latest_update_at
+
   # set attributes to include and exclude when performing model diffs
   diff :exclude => [:updated_at]
 
@@ -58,7 +60,13 @@ class Comment < ActiveRecord::Base
   def needs_questionnaire?
     self.user_marks_as_fixed? && !self.user.answered_ever_reported?
   end
-  
+
+  def update_latest_update_at
+    if commented.is_a? Problem
+      commented.update_attribute('latest_update_at', self.updated_at)
+    end
+  end
+
   def confirm!
     return unless self.status == :new
     ActiveRecord::Base.transaction do

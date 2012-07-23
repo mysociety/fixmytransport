@@ -22,7 +22,11 @@ class ProblemsController < ApplicationController
   def issues_index
     @title = t('problems.issues_index.title')
     @issues = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
-      issues = Problem.find_recent_issues(pager.per_page, :offset => pager.offset)
+      options = { :offset => pager.offset }
+      if params[:order] == 'creation'
+        options[:date_to_use] = @order = 'creation'
+      end
+      issues = Problem.find_recent_issues(pager.per_page, options)
       # inject the result array into the paginated collection:
       pager.replace(issues)
 

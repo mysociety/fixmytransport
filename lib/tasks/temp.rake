@@ -35,4 +35,25 @@ namespace :temp do
 
   end
 
+  desc 'Set a useful default for the latest_update column of problems'
+  task :set_latest_update_default => :environment do
+
+    def guess_problem_latest_update(problem)
+      # If there are comments, take the date of the latest one:
+      ordered_comments = problem.comments.visible.all(:order => 'created_at DESC')
+      # Otherwise, if it's been confirmed, use that date, otherwise the
+      # created date, or the current time:
+      if ordered_comments.empty?
+        problem.confirmed_at or problem.created_at or Time.now
+      else
+        ordered_comments[0].updated_at
+      end
+    end
+
+    Problem.find(:all, :conditions => { :latest_update_at => nil }).each do |p|
+      p.update_attribute('latest_update_at', guess_problem_latest_update(p))
+    end
+
+  end
+
 end

@@ -18,6 +18,38 @@ describe Problem do
 
   end
 
+  describe 'when saving an instance' do
+
+    before do
+      @p = Problem.new
+    end
+
+    it 'should call the set_latest_update_after_creation callback' do
+      @p.stub!(:add_coords)
+      @p.stub!(:generate_confirmation_token)
+      @p.should_receive(:set_latest_update_after_creation)
+      @p.save
+    end
+
+    after do
+      @p.destroy if @p
+    end
+
+  end
+
+  describe 'when calling the set_latest_update_after_creation method' do
+
+    it 'should set the latest_update_at column from created_at' do
+      p = Problem.new
+      p.created_at = Time.now
+      p.stub!(:add_coords)
+      p.set_latest_update_after_creation
+      p.latest_update_at.should_not be_nil
+      p.latest_update_at.should == p.created_at
+    end
+
+  end
+
   describe 'when creating a problem from a hash' do
 
 
@@ -258,6 +290,19 @@ describe Problem do
         @problem.confirmed_at = @confirmation_time
         @problem.confirm!
         @problem.confirmed_at.should == @confirmation_time
+      end
+
+      it 'should update the latest_update_at on confirming, if the confirmed time is not set' do
+        @problem.confirmed_at = nil
+        @problem.confirm!
+        @problem.latest_update_at.should == @problem.confirmed_at
+      end
+
+      it 'should not update the latest_update_at on confirming, if the confirmed time is set' do
+        previous_confirmed_at = @problem.confirmed_at = @confirmation_time
+        @problem.confirm!
+        @problem.confirmed_at.should == @confirmation_time
+        @problem.latest_update_at.should == previous_confirmed_at
       end
 
       it 'should create assignments associated with the problem' do
