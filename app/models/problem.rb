@@ -386,6 +386,15 @@ class Problem < ActiveRecord::Base
       order_clause = 'ORDER by latest_date desc'
     end
 
+    if options.fetch(:date_to_use, '') == 'creation'
+      problem_date_column = 'problems.created_at'
+      campaign_date_column = 'campaigns.created_at'
+    else
+      problem_date_column = 'problems.updated_at'
+      campaign_date_column = 'campaigns.latest_event_at'
+    end
+
+
     if options[:location]
       location = options[:location]
       location_id = conn.quote(location.id)
@@ -432,14 +441,14 @@ class Problem < ActiveRecord::Base
     visible_campaign_codes = Campaign.visible_status_codes.map{ |code| conn.quote(code) }.join(",")
     issue_info = self.connection.select_rows("SELECT id, model_type
                                              FROM
-                                             (SELECT problems.id, 'Problem' as model_type, confirmed_at as latest_date, coords
+                                             (SELECT problems.id, 'Problem' as model_type, #{problem_date_column} as latest_date, coords
                                               FROM problems #{extra_tables}
                                               WHERE status_code in (#{visible_problem_codes})
                                               AND campaign_id is null
                                               #{location_clause}
                                               #{other_condition_clause}
                                               UNION
-                                              SELECT campaigns.id, 'Campaign' as model_type, latest_event_at as latest_date, coords
+                                              SELECT campaigns.id, 'Campaign' as model_type, #{campaign_date_column} as latest_date, coords
                                               FROM campaigns, problems #{extra_tables}
                                               WHERE campaigns.status_code in (#{visible_campaign_codes})
                                               #{location_clause}

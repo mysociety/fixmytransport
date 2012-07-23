@@ -2472,6 +2472,11 @@ body.facebook-canvas .button {
   font-size: 1.1em;
 }
 
+.issue-order-options {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
 /*===[ Narrow screens]===*/
 @media screen and (max-width: 600px) {
         .mobile-only {
