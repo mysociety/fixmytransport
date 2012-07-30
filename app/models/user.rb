@@ -214,14 +214,14 @@ class User < ActiveRecord::Base
 
   def do_download_remote_profile_photo
     begin
-      io = open(URI.parse(profile_photo_url))
-      def io.original_filename; base_uri.path.split('/').last; end
-      io.original_filename.blank? ? nil : io
-    rescue
-      if self.error_on_bad_profile_photo_url
-        raise
-      end
-    end
+       io = open(URI.parse(profile_photo_url))
+       def io.original_filename; base_uri.path.split('/').last; end
+       io.original_filename.blank? ? nil : io
+     rescue
+       if self.error_on_bad_profile_photo_url
+         raise
+       end
+     end
   end
 
   def profile_photo_url_provided?
@@ -345,7 +345,7 @@ class User < ActiveRecord::Base
   def self.get_facebook_app_access_token(http_session, verbose)
     facebook_app_id = MySociety::Config.get('FACEBOOK_APP_ID', '')
     facebook_app_secret = MySociety::Config.get('FACEBOOK_APP_SECRET', '')
-    if ! facebook_app_id or !facebook_app_secret
+    if ! facebook_app_id or ! facebook_app_secret
       raise "Missing Facebook app credentials"
     end
     auth_params = { :client_id => facebook_app_id,
@@ -368,7 +368,8 @@ class User < ActiveRecord::Base
     return access_token
   end
 
-  def self.get_facebook_batch_api_data(http_session, fb_query_set, access_token, verbose)
+  def self.get_facebook_batch_api_data(http_session, fb_query_set, access_token, verbose, is_retry=false)
+    retry_delay = 10
     profile_data_request = Net::HTTP::Post.new('/')
     profile_data_request.body = "access_token=#{access_token}&batch=#{CGI.escape(fb_query_set.to_json)}"
     puts "Asking for picture data on #{fb_query_set.size} users" if verbose
@@ -379,7 +380,13 @@ class User < ActiveRecord::Base
       profile_picture_data = JSON.load(response_body)
       puts "Got picture data" if verbose
     else
-      profile_picture_response.error!
+      if ! is_retry
+        puts "Got error, retrying in #{retry_delay} seconds" if verbose
+        sleep(retry_delay)
+        self.get_facebook_batch_api_data(http_session, fb_query_set, access_token, verbose, is_retry=true)
+      else
+        profile_picture_response.error!
+      end
     end
     return profile_picture_data
   end
