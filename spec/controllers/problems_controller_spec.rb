@@ -670,6 +670,30 @@ describe ProblemsController do
       @controller.stub!(:instantiate_location)
     end
 
+    describe 'if source, location_type and code params are given' do
+
+      it 'should instantiate the location using the code' do
+        @controller.should_receive(:instantiate_location_by_code)
+        make_request({ :source => 'external_app',
+                       :location_type => 'Stop',
+                       :code => 'XXXX' })
+      end
+
+      describe 'if no location can be instantiated from the code' do
+
+        before do
+          @controller.stub!(:instantiate_location_by_code).and_return(nil)
+        end
+
+        it 'should render a 404' do
+          make_request
+          response.status.should == '404 Not Found'
+        end
+
+      end
+
+    end
+
     it 'should try and instantiate a location from the params' do
       @controller.should_receive(:instantiate_location)
       make_request
@@ -710,9 +734,21 @@ describe ProblemsController do
           Problem.stub!(:find_recent_issues).and_return([])
         end
 
+        describe 'if the source param is set' do
+
+          it 'should redirect to the new problem url including the source param' do
+            make_request(@default_params.merge({:source => 'external_app'}))
+            response.should redirect_to(new_problem_url(:location_id => @mock_stop.id,
+                                                        :location_type => 'Stop',
+                                                        :source => 'external_app'))
+          end
+
+        end
+
         it 'should redirect to the new problem url' do
           make_request
-          response.should redirect_to(new_problem_url(:location_id => @mock_stop.id, :location_type => 'Stop'))
+          response.should redirect_to(new_problem_url(:location_id => @mock_stop.id,
+                                                      :location_type => 'Stop'))
         end
 
       end

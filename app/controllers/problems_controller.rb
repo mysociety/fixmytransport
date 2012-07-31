@@ -75,7 +75,11 @@ class ProblemsController < ApplicationController
   def existing
     @map_height = PROBLEM_CREATION_MAP_HEIGHT
     @map_width = PROBLEM_CREATION_MAP_WIDTH
-    @location = instantiate_location(params[:location_id], params[:location_type])
+    if params[:source] && params[:location_type] && params[:code]
+      @location = instantiate_location_by_code(params[:code], params[:location_type])
+    else
+      @location = instantiate_location(params[:location_id], params[:location_type])
+    end
     if !@location
       render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
       return false
@@ -91,7 +95,12 @@ class ProblemsController < ApplicationController
       end
     end
     if @issues.empty?
-      redirect_to new_problem_url(:location_id => @location.id, :location_type => @location.type)
+      new_problem_params = { :location_id => @location.id,
+                             :location_type => @location.type }
+      if params[:source]
+        new_problem_params[:source] = params[:source]
+      end
+      redirect_to new_problem_url(new_problem_params)
       return
     end
     if params[:source] != 'questionnaire'
