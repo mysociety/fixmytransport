@@ -55,6 +55,9 @@ class User < ActiveRecord::Base
     uploaded_filename = profile_photo.queued_for_write[:original].path
     # Ignore return values form autorotate_image - if it's not a JPEG
     # or reorientation fails, the original file is left untouched:
+    # Note that if the jhead package on which autorotate_image depends
+    # is not installed, the exception raised, although caught by the function,
+    # will cause the database connection in the save transaction to be lost.
     autorotate_image(uploaded_filename)
     true
   end
