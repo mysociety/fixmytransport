@@ -237,6 +237,47 @@ describe AccountsController do
           make_request
         end
 
+        describe 'if saving the user results in a constraint violation' do
+
+          before do
+            error_message = 'duplicate key value violates unique constraint "index_users_on_email"'
+            @constraint_exception =  ActiveRecord::StatementInvalid.new(error_message)
+            @mock_user.should_receive(:save_without_session_maintenance).and_raise(@constraint_exception)
+          end
+
+          describe 'if the request asks for html' do
+
+            it 'should render the "confirmation_sent" template' do
+              make_request
+              response.should render_template("shared/confirmation_sent")
+            end
+
+          end
+
+          describe 'if the request asks for json' do
+
+            it 'should return the "confirmation_sent" template rendered as a string in the response' do
+              @controller.stub!(:render_to_string).with(:template => 'shared/confirmation_sent', :layout => 'confirmation').and_return("content")
+              make_request(format="json")
+              JSON.parse(response.body)['html'].should == "content"
+            end
+          end
+
+        end
+
+        describe 'if saving the user results in a different ActiveRecord::StatementInvalid error' do
+
+          before do
+            @other_exception = ActiveRecord::StatementInvalid.new("some other error")
+            @mock_user.should_receive(:save_without_session_maintenance).and_raise(@other_exception)
+          end
+
+          it 'should raise the error' do
+            lambda{ make_request }.should raise_error(ActiveRecord::StatementInvalid)
+          end
+
+        end
+
         describe 'if there is no post login action set' do
 
           before do

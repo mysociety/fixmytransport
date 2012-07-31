@@ -64,7 +64,20 @@ class AccountsController < ApplicationController
           new_account = true
           # don't want to actually set them as registered until they confirm
           @account_user.registered = false
-          @account_user.save_without_session_maintenance
+          # A double submission may cause the same record to be created in a race condition
+          # by two processes - as these are record creations, the transaction doesn't protect against
+          # this. If this happens, and a constraint violation is produced when the second record
+          # is saved, render as on account creation success as the other process has created the record
+          begin
+            @account_user.save_without_session_maintenance
+          rescue ActiveRecord::StatementInvalid => error
+            if /violates unique constraint "index_users_on_email"/ =~ error.message
+              render_account_creation_success
+              return false
+            else
+              raise
+            end
+          end
         else
           new_account = false
           # Refresh the user, discard all the changes
@@ -80,17 +93,8 @@ class AccountsController < ApplicationController
         @account_user.reset_perishable_token!
         unconfirmed_model = save_post_login_action_to_database(@account_user)
         send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model, new_account)
-        respond_to do |format|
-          format.html do
-            render :template => 'shared/confirmation_sent'
-          end
-          format.json do
-            @json = {}
-            @json[:success] = true
-            @json[:html] = render_to_string :template => 'shared/confirmation_sent', :layout => 'confirmation'
-            render :json => @json
-          end
-        end
+        render_account_creation_success
+        return false
       else
         # Could be an existing user - but until they enter valid details, we want to
         # treat them just the same as a new user - if we send an existing record back
@@ -140,6 +144,21 @@ class AccountsController < ApplicationController
 
   private
 
+  def render_account_creation_success
+    respond_to do |format|
+      format.html do
+        render :template => 'shared/confirmation_sent'
+        return
+      end
+      format.json do
+        @json = {}
+        @json[:success] = true
+        @json[:html] = render_to_string :template => 'shared/confirmation_sent', :layout => 'confirmation'
+        render :json => @json
+        return
+      end
+    end
+  end
 
   def send_new_account_mail(already_registered, post_login_action_data, unconfirmed_model, new_account)
     # no one's used this email before
