@@ -686,8 +686,17 @@ describe ProblemsController do
         end
 
         it 'should render a 404' do
-          make_request
+          make_request({ :source => 'external_app',
+                         :location_type => 'Stop',
+                         :code => 'XXXX' })
           response.status.should == '404 Not Found'
+        end
+
+        it 'should render the "existing_not_found" template' do
+          make_request({ :source => 'external_app',
+                         :location_type => 'Stop',
+                         :code => 'XXXX' })
+          response.should render_template("existing_not_found")
         end
 
       end

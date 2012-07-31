@@ -1,6 +1,6 @@
 en:
   problems:
-    browse: 
+    browse:
       where_do_you_want_to_browse: Where do you want to see issues for?
       on_and_around_the_map: On and around the map
       no_issues_on_map: No issues have been reported yet.
@@ -49,6 +49,8 @@ en:
       header: "Issues at this location"
       intro: "Attention: you're not the first person to have reported a problem %{location}. If your problem is listed then please add your support."
       report_your_problem: "Report a new problem here"
+      not_found: "Bus stop not found"
+      not_found_explanation: "Sorry, it looks like FixMyTransport doesn't have any information about that bus stop."
     find_bus_route:
       title: "Finding a bus or coach route"
       route_not_found: "Sorry, we could not find the route you entered. Please modify it and try again!"
