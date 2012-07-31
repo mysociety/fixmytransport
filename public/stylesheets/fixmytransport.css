@@ -330,7 +330,7 @@ form#search {
   #greybanner p, #greybanner li {
     color:#333;
     font-size: 1.2em;
-      line-height: 1.25;
+    line-height: 1.25;
     margin:5px 0;
   }
 #yellowbanner {
@@ -2487,7 +2487,8 @@ body.facebook-canvas .button {
         @font-face {
           font-family: Arial, sans-serif;
         }
-        h1, h2, h3, h4, h5, h6, .font-1, #greybanner p {
+
+        h1, h2, h3, h4, h5, h6, .font-1, #greybanner p, #greybanner li {
           font-family: Arial, sans-serif;
         }
 
