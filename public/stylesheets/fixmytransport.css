@@ -31,7 +31,7 @@
     url('../fonts/MuseoSansRounded500.ttf') format('truetype'),
     url('../fonts/MuseoSansRounded500.svg#MuseoSansRounded-500') format('svg');
 }
-h1, h2, h3, h4, h5, h6, .font-1, #greybanner p {
+h1, h2, h3, h4, h5, h6, .font-1, #greybanner p, #greybanner li {
   font-family: 'MuseoSansRounded-500', Arial, sans-serif;
 }
 
@@ -327,7 +327,7 @@ form#search {
   margin-bottom:1em;
   padding:10px 0;
 }
-  #greybanner p {
+  #greybanner p, #greybanner li {
     color:#333;
     font-size: 1.2em;
       line-height: 1.25;
@@ -1567,14 +1567,14 @@ ul#campaign-thread {
     ul#campaign-thread li span.thread-item span.event-permalink a:hover,
     ul#campaign-thread li span.thread-item span.event-permalink a:visited,
     ul#campaign-thread li span.thread-item span.event-permalink a:active {
-	color: #000
+  color: #000
     }
 
     ul#campaign-thread li.open span.thread-item span.event-permalink a:link,
     ul#campaign-thread li.open span.thread-item span.event-permalink a:hover,
     ul#campaign-thread li.open span.thread-item span.event-permalink a:visited,
     ul#campaign-thread li.open span.thread-item span.event-permalink a:active {
-	color: #FFF
+  color: #FFF
     }
 
     ul#campaign-thread li.open span.thread-item:hover span.event-permalink a:link,
