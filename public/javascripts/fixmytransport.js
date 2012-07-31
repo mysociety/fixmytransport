@@ -165,7 +165,7 @@ $(document).ready(function(){
   });
 
     $('.permalink').click(function(e){
-	e.stopPropagation();
+  e.stopPropagation();
     });
 
   //show all
@@ -186,7 +186,7 @@ $(document).ready(function(){
     if (hash.indexOf('#') == 0) {
       rest = hash.substring(1);
       if (rest.match(/^e[0-9]+$/)) {
-	$(hash).addClass('event-highlighted');
+  $(hash).addClass('event-highlighted');
       }
     }
   }());
@@ -762,9 +762,23 @@ $(document).ready(function(){
 
   // ajax submission of login/create account forms
   function ajaxifyForm(form_selector) {
+    /* Prevent the user from submitting the form twice, e.g. by
+       double-clicking on the submit button.  Note that we have to
+       re-enable submission in the success and error callbacks
+       supplied in options below.  This code is based on this
+       suggestion: http://stackoverflow.com/a/6435544/223092 */
+
+    $(form_selector).submit(function () {
+      $(':submit', this).attr('disabled', 'disabled');
+    });
     options = defaultFormOptions();
-    options['error'] = function() { generalError(form_selector + ' #error-base' ) };
+
+    options['error'] = function() {
+      $(form_selector + " :submit").removeAttr('disabled');
+      generalError(form_selector + ' #error-base' )
+    };
     options['success'] = function(response) {
+       $(form_selector + " :submit").removeAttr('disabled');
        if (response.success) {
            if (response.redirect) {
              window.location = response.redirect;
