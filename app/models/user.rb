@@ -383,7 +383,7 @@ class User < ActiveRecord::Base
       if ! is_retry
         puts "Got error, retrying in #{retry_delay} seconds" if verbose
         sleep(retry_delay)
-        self.get_facebook_batch_api_data(http_session, fb_query_set, access_token, verbose, is_retry=true)
+        return self.get_facebook_batch_api_data(http_session, fb_query_set, access_token, verbose, is_retry=true)
       else
         profile_picture_response.error!
       end
