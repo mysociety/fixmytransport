@@ -459,4 +459,106 @@ namespace :temp do
     end
   end
 
+  desc 'Populate transport mode for operators that were loaded from TNDS without it'
+  task :backload_operator_transport_modes => :environment do
+    file = check_for_param('FILE')
+    verbose = check_verbose
+    dryrun = check_dryrun
+    tsv_data = File.read(file)
+    tsv_options = { :quote_char => '"',
+                    :col_sep => "\t",
+                    :row_sep =>:auto,
+                    :return_headers => false,
+                    :headers => :first_row,
+                    :encoding => 'N' }
+    new_data = {}
+    manual_matches = { 'First in Greater Manchester' => 'First Manchester',
+                       'Grovesnor Coaches' => 'Grosvenor Coaches',
+                       'TC Minicoaches' => 'T C Minicoaches',
+                       'Fletchers Coaches' => "Fletcher's Coaches",
+                       'Select Bus & Coach Servi' => 'Select Bus & Coach',
+                       'Landmark Coaches' => 'Landmark  Coaches',
+                       'Romney Hythe and Dymchu' => 'Romney Hythe & Dymchurch Light Railway',
+                       'Sovereign Coaches' => 'Sovereign',
+                       'TM Travel' => 'T M Travel Ltd',
+                       'First in London' => 'First (in the London area)',
+                       'First in Berkshire & Th' => 'First (in the Thames Valley)',
+                       'First in Calderdale & H' => 'First Huddersfield',
+                       'First in Essex' => 'First (in the Essex area)',
+                       'First in Greater Manche' => 'First Manchester',
+                       'First in Suffolk & Norf' => 'First Eastern Counties (First Suffolk & Norfolk)',
+                       'Yourbus' => 'Your Bus',
+                       'Andybus &amp; Coach' => 'Andybus & Coach Ltd',
+                       'AJ & NM Carr' => 'A J & N M Carr',
+                       'AP Travel' => 'AP Travel Ltd',
+                       'Ad&apos;Rains Psv' => "AD'RAINS PSV",
+                       'Anitas Coaches' => "Anita's Coaches",
+                       'B&NES' => 'Bath & North East Somerset Council',
+                       'Bath Bus Company' => 'Bath Bus Co Ltd',
+                       'Briggs Coach Hire' => 'Briggs Coaches',
+                       'Centrebus (Beds Herts &' => 'Centrebus (Beds & Herts area)',
+                       'Eagles Coaches' => 'Eagle Coaches',
+                       'First in Bristol, Bath & the West' => 'First Bristol',
+                       'Green Line (operated by Arriva the Shires)' => 'Green Line (operated by Arriva the Shires & Essex)',
+                       'Green Line (operated by First in Berkshire)' => 'Green Line (operated by First - Thames Valley)',
+                       'H.C.Chambers & Son' => 'H C Chambers & Son',
+                       'Holloways Coaches' => 'Holloway Coaches',
+                       'Kimes Coaches' => 'Kimes',
+                       'P&O Ferries' => 'P & O Ferries',
+                       'RH Transport' => 'R H Transport',
+                       "Safford's Coaches" => 'Safford Coaches',
+                       'Travel West Midlands' => 'National Express West  Midlands (NXWM)'
+                       }
+    FasterCSV.parse(tsv_data, tsv_options) do |row|
+      region = row['Region']
+      operator_code = row['Code']
+      short_name = row['Short name']
+      trading_name = row['Trading name']
+      license_name = row['Name on license']
+      problem = row['Problem']
+      file = row['File']
+      transport_mode_name = row['Transport mode']
+
+      if short_name.blank?
+        puts "No short name in line #{row.inspect}" if short_name.blank?
+        next
+      end
+
+      operator_info = { :short_name => short_name,
+                        :trading_name => trading_name,
+                        :license_name => license_name,
+                        :transport_mode => transport_mode_name }
+
+      if !new_data[operator_info]
+        new_data[operator_info] = 1
+        puts "Looking for #{short_name} #{trading_name} #{license_name}" if verbose
+        if manual_name = (manual_matches[short_name] || manual_matches[trading_name])
+          operators = Operator.current.find(:all, :conditions => ['lower(name) = ?', manual_name.downcase])
+        else
+          operators = operators_from_info(short_name, license_name, trading_name, verbose)
+          if operators.empty?
+            short_name_canonical = short_name.gsub('First in', 'First')
+            short_name_canonical = short_name_canonical.gsub('.', '')
+            short_name_canonical = short_name_canonical.gsub('Stagecoach', 'Stagecoach in')
+            short_name_canonical = short_name_canonical.gsub('&amp;', '&')
+            if short_name_canonical != short_name
+              operators = Operator.current.find(:all, :conditions => ['lower(name) = ?',
+                                                                       short_name_canonical.downcase])
+            end
+           end
+        end
+        if operators.size == 1
+          operator = operators.first
+          if operator.transport_mode_id.nil?
+            operator.transport_mode = TransportMode.find_by_name(transport_mode_name)
+            puts "Setting transport mode for #{operator.name} to #{transport_mode_name}"
+            if ! dryrun
+              operator.save!
+            end
+          end
+        end
+      end
+    end
+  end
+
 end
