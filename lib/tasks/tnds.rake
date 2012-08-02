@@ -200,7 +200,7 @@ namespace :tnds do
           raise "No region found for name #{region_name}" unless region
           operator_codes.each do |operator_code|
             operator.operator_codes.build(:region => region, :code => operator_code )
-            # puts "#{region_name} #{operator_code}"
+            puts "Adding #{operator_code} for #{operator.name} in #{region_name}" if verbose
           end
         end
         if !operator.valid?
