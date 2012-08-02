@@ -154,10 +154,11 @@ namespace :tnds do
            end
         end
         if !new_data[operator_info][:regions][region]
-          new_data[operator_info][region] = []
+          new_data[operator_info][:regions][region] = []
         end
-
-        new_data[operator_info][region] << operator_code unless new_data[operator_info][region].include?(operator_code)
+        unless new_data[operator_info][:regions][region].include?(operator_code)
+          new_data[operator_info][:regions][region] << operator_code
+        end
         if new_data[operator_info][:match]
           if new_data[operator_info][:match].size > 1
             suggested_noc_action = "Maybe new NOC record, maybe new code - matches more than one"
