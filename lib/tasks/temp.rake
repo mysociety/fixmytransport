@@ -561,4 +561,21 @@ namespace :temp do
     end
   end
 
+
+  desc 'Retry operator finding for routes without operators (to be run once transport mode ids are backloaded)'
+  task :retry_route_operator_matching => :environment do
+
+    Route.find_current_without_operators().each do |route|
+
+      source_codes = route.route_sources.map{ |route_source| [route_source.operator_code, route_source.region] }.uniq
+      if source_codes.size == 1
+        operator_code, region = source_codes.first
+        operators = Operator.find_all_current_by_nptdr_code(route.transport_mode, operator_code, region, route)
+        if operators.size == 1
+          puts "Assigning route #{route.number} #{operator_code} to operator #{operators.first.name}"
+        end
+      end
+    end
+  end
+
 end
