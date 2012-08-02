@@ -116,7 +116,10 @@ namespace :tnds do
         file = row['File']
         transport_mode_name = row['Transport mode']
 
-        raise "No short name in line #{row.inspect}" if short_name.blank?
+        if short_name.blank?
+          puts "No short name in line #{row.inspect}" if short_name.blank?
+          next
+        end
         short_name.strip!
         trading_name.strip! if trading_name
         license_name.strip! if license_name
@@ -142,9 +145,8 @@ namespace :tnds do
               end
              end
           end
-          if operators.size == 1
-            # puts "Found operator #{operators.first.name} for #{short_name}"
-            operator_info[:match] = operators.first
+          if operators.size >= 1
+            operator_info[:match] = operators
           end
 
 
@@ -154,12 +156,18 @@ namespace :tnds do
           new_data[operator_info][region] = []
         end
         new_data[operator_info][region] << operator_code unless new_data[operator_info][region].include?(operator_code)
-        matched_code = operator_info[:match].nil? ? '' : operator_info[:match].noc_code
-        matched_name = operator_info[:match].nil? ? '' : operator_info[:match].name
-        if matched_code.blank?
-          suggested_noc_action = 'New NOC record needed'
+        if operator_info[:match]
+          if operator_info[:match].size > 1
+            suggested_noc_action = "Maybe new NOC record, maybe new code - matches more than one"
+          else
+            suggested_noc_action = "Add code in region for NOC match"
+          end
+          matched_codes = operator_info[:match].map{ |operator| operator.noc_code }.join(", ")
+          matched_names = operator_info[:match].map{ |operator| operator.name }.join(", ")
         else
-          suggested_noc_action = "Add code in region for NOC match"
+          suggested_noc_action = 'New NOC record needed'
+          matched_codes = ''
+          matched_names = ''
         end
         outfile.write([short_name,
                        trading_name,
@@ -168,8 +176,8 @@ namespace :tnds do
                        problem,
                        region,
                        file,
-                       matched_code,
-                       matched_name,
+                       matched_codes,
+                       matched_names,
                        suggested_noc_action].join("\t")+"\n")
       end
       outfile.close()
@@ -177,9 +185,12 @@ namespace :tnds do
       new_operators = 0
       new_operator_names = []
       new_data.each do |operator_info, region_data|
-        if operator_info[:match]
+        if operator_info[:match] && operator_info[:match].size > 1
+          puts "More than one match for #{operator_info[:short_name]}, doing nothing" if verbose
+          next
+        elsif operator_info[:match]
           existing_operators += 1
-          operator = operator_info[:match]
+          operator = operator_info[:match].first
         else
           operator = Operator.new( :short_name => operator_info[:short_name],
                                    :transport_mode_id => TransportMode.find_by_name(operator_info[:transport_mode]).id)
