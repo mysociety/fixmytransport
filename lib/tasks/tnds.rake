@@ -145,25 +145,27 @@ namespace :tnds do
               end
              end
           end
-          if operators.size >= 1
-            operator_info[:match] = operators
-          end
 
 
-          new_data[operator_info] = {}
+          new_data[operator_info] = {:regions => {},
+                                     :match => nil }
+           if operators.size >= 1
+             new_data[operator_info][:match] = operators
+           end
         end
-        if !new_data[operator_info][region]
+        if !new_data[operator_info][:regions][region]
           new_data[operator_info][region] = []
         end
+
         new_data[operator_info][region] << operator_code unless new_data[operator_info][region].include?(operator_code)
-        if operator_info[:match]
-          if operator_info[:match].size > 1
+        if new_data[operator_info][:match]
+          if new_data[operator_info][:match].size > 1
             suggested_noc_action = "Maybe new NOC record, maybe new code - matches more than one"
           else
             suggested_noc_action = "Add code in region for NOC match"
           end
-          matched_codes = operator_info[:match].map{ |operator| operator.noc_code }.join(", ")
-          matched_names = operator_info[:match].map{ |operator| operator.name }.join(", ")
+          matched_codes = new_data[operator_info][:match].map{ |operator| operator.noc_code }.join(", ")
+          matched_names = new_data[operator_info][:match].map{ |operator| operator.name }.join(", ")
         else
           suggested_noc_action = 'New NOC record needed'
           matched_codes = ''
@@ -184,16 +186,18 @@ namespace :tnds do
       existing_operators = 0
       new_operators = 0
       new_operator_names = []
-      new_data.each do |operator_info, region_data|
-        if operator_info[:match] && operator_info[:match].size > 1
+      new_data.each do |operator_info, data|
+        if data[:match] && data[:match].size > 1
           puts "More than one match for #{operator_info[:short_name]}, doing nothing" if verbose
           next
-        elsif operator_info[:match]
+        elsif data[:match]
           existing_operators += 1
-          operator = operator_info[:match].first
+          operator = data[:match].first
         else
-          operator = Operator.new( :short_name => operator_info[:short_name],
-                                   :transport_mode_id => TransportMode.find_by_name(operator_info[:transport_mode]).id)
+          operator = Operator.new( :short_name => operator_info[:short_name])
+          if operator_info[:transport_mode]
+            operator.transport_mode_id = TransportMode.find_by_name(operator_info[:transport_mode]).id
+          end
           operator.status = 'ACT'
           if !operator_info[:trading_name].blank?
             operator.name = operator_info[:trading_name]
@@ -206,7 +210,7 @@ namespace :tnds do
           new_operator_names << "#{operator.short_name} #{operator.name} #{operator.vosa_license_name}"
           new_operators += 1
         end
-        region_data.each do |region_name, operator_codes|
+        data[:regions].each do |region_name, operator_codes|
           region = Region.current.find_by_name(region_name)
           raise "No region found for name #{region_name}" unless region
           operator_codes.each do |operator_code|
