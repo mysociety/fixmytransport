@@ -216,8 +216,8 @@ namespace :tnds do
           operator_codes.each do |operator_code|
             if ! operator.operator_codes.any?{ |existing_code| existing_code.code == operator_code && existing_code.region == region }
               operator.operator_codes.build(:region => region, :code => operator_code )
+              puts "Adding #{operator_code} for #{operator.name} in #{region_name}" if verbose
             end
-            puts "Adding #{operator_code} for #{operator.name} in #{region_name}" if verbose
           end
         end
         if !operator.valid?
