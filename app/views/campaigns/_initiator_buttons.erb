@@ -57,7 +57,7 @@
 				<%- @campaign.assignments.is_new.each do |assignment| %>
           <%- if assignment.task_type == 'find_transport_organization' %>
            <li>
-   					 	<a href="<%= edit_campaign_assignment_path(assignment.problem.campaign, assignment) %>" role="menuitem">
+   					 	<a href="<%= edit_campaign_assignment_path(assignment.problem.campaign, assignment) %>" role="menuitem" title="<%= t('campaigns.show.find_operator_tooltip') %>">
      						<span class="icon person"></span>
      						<%= t('campaigns.show.find_operator') %>
      					</a>
@@ -65,7 +65,7 @@
            <%- end %>
            <%- if assignment.task_type == 'find_transport_organization_contact_details' %>
             <li>
-    					 	<a href="<%= edit_campaign_assignment_path(assignment.problem.campaign, assignment) %>" role="menuitem">
+    					 	<a href="<%= edit_campaign_assignment_path(assignment.problem.campaign, assignment) %>" role="menuitem" title="<%= t('campaigns.show.add_contact_tooltip') %>">
       						<span class="icon person"></span>
       						<%= t('campaigns.show.add_contact') %>
       					</a>
