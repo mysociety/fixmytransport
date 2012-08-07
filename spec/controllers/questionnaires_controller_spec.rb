@@ -381,7 +381,6 @@ describe QuestionnairesController do
                                          :save! => nil,
                                          :comments => mock('comments', :build => @comment))
         @questionnaire.stub!(:subject).and_return(@campaign)
-
       end
 
       describe 'if the "fixed" param is "no"' do
@@ -401,6 +400,11 @@ describe QuestionnairesController do
         it 'should redirect to the campaign url' do
           make_request(@params)
           response.should redirect_to(campaign_url(@campaign))
+        end
+
+        it 'should set the flag to skip title length validation on the campaign' do
+          @campaign.should_receive(:skip_title_length_validation=).with(true)
+          make_request(@params)
         end
 
       end

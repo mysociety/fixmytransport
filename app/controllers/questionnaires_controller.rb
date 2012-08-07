@@ -65,6 +65,10 @@ class QuestionnairesController < ApplicationController
             @questionnaire.subject.updated_at = Time.now
           end
         end
+        # Don't raise error for a long automatically-set campaign title
+        if @questionnaire.subject.respond_to?(:skip_title_length_validation=)
+          @questionnaire.subject.skip_title_length_validation = true
+        end
         @questionnaire.subject.save!
       end
 

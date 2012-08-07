@@ -54,14 +54,14 @@ describe Campaign do
 
   end
 
-  describe 'when generating a URL param' do 
-  
-    it 'should not create a param with a trailing dash' do 
+  describe 'when generating a URL param' do
+
+    it 'should not create a param with a trailing dash' do
       # title trimmed to max chars allowed in slug will end in space
       @campaign = Campaign.new(:title => 'aaaaa aaaaaa aaaaa aaaa aaa aaaaaaa aaa')
       @campaign.send(:build_a_slug).should == 'aaaaa-aaaaaa-aaaaa-aaaa-aaa-aaaaaaa'
     end
-     
+
   end
 
   describe 'confirming' do
@@ -116,11 +116,11 @@ describe Campaign do
 
   describe 'when asked for its email address' do
 
-    before do 
+    before do
       MySociety::Config.stub!(:get).with("INCOMING_EMAIL_PREFIX", 'campaign-').and_return('prefix-')
       MySociety::Config.stub!(:get).with("INCOMING_EMAIL_DOMAIN", 'localhost').and_return('test.host')
     end
-    
+
     it 'should return an email address generated from the prefix, key and domain' do
       @campaign = Campaign.new
       @campaign.stub!(:id).and_return(5049322)
@@ -147,21 +147,34 @@ describe Campaign do
       @campaign.errors.on(:title).should == 'Please enter a headline'
     end
 
-    it 'should be invalid if the title is a single non-alphanumeric character' do 
+    it 'should be invalid if the title is a single non-alphanumeric character' do
       @campaign.title = '.'
-      @campaign.valid? 
+      @campaign.valid?
       @campaign.errors.on(:title).should == 'Please enter a headline with some words in it'
     end
 
-    it 'should be valid regarding title if the title is a single lowercase character' do 
+    it 'should be valid regarding title if the title is a single lowercase character' do
       @campaign.title = 'a'
-      @campaign.valid? 
+      @campaign.valid?
       @campaign.errors.on(:title).should == nil
     end
-    
-    it 'should be valid regarding title if the title is a single uppercase character' do 
+
+    it 'should be valid regarding title if the title is a single uppercase character' do
       @campaign.title = 'A'
-      @campaign.valid? 
+      @campaign.valid?
+      @campaign.errors.on(:title).should == nil
+    end
+
+    it 'should not be valid with a title in excess of 80 characters' do
+      @campaign.title = 'A'*81
+      @campaign.valid?
+      @campaign.errors.on(:title).should == 'Please enter a headline that is at most 80 characters long'
+    end
+
+    it 'should be valid with a title in excess of 80 characters if skipping title length validation' do
+      @campaign.title = 'A'*81
+      @campaign.skip_title_length_validation = true
+      @campaign.valid?
       @campaign.errors.on(:title).should == nil
     end
 
@@ -169,7 +182,7 @@ describe Campaign do
 
   describe 'when finding a campaign by campaign email' do
 
-    before do 
+    before do
       MySociety::Config.stub!(:get).with("INCOMING_EMAIL_PREFIX", 'campaign-').and_return('prefix-')
     end
 
@@ -186,42 +199,42 @@ describe Campaign do
     end
 
   end
-  
-  describe 'when guessing which campaigns might match a given email' do 
-    
-    before do 
+
+  describe 'when guessing which campaigns might match a given email' do
+
+    before do
       MySociety::Config.stub!(:get).with("INCOMING_EMAIL_PREFIX", 'campaign-').and_return('prefix-')
       @mock_campaign = mock_model(Campaign)
     end
-    
-    it 'should look for a campaign whose id matches the decoded email id in the email' do 
+
+    it 'should look for a campaign whose id matches the decoded email id in the email' do
       Campaign.should_receive(:find).with(:first, :conditions => ['id = ?', 75]).and_return(@mock_campaign)
       Campaign.guess_by_campaign_email('prefix-cx-vgfdf@example.com').should == @mock_campaign
     end
   end
 
-  describe 'when removing a supporter' do 
-    
-    before do 
+  describe 'when removing a supporter' do
+
+    before do
       @campaign = Campaign.new
       @user = User.new
       @campaign.stub!(:supporters).and_return([@user])
       @subscription = mock_model(Subscription, :user => @user)
       @campaign.stub!(:subscriptions).and_return([@subscription])
     end
-    
-    it 'should delete the supporter relationship' do 
+
+    it 'should delete the supporter relationship' do
       @campaign.supporters.should_receive(:delete).with(@user)
       @campaign.remove_supporter(@user)
     end
-    
-    it 'should remove any subscription the user has to that campaign' do 
+
+    it 'should remove any subscription the user has to that campaign' do
       @campaign.subscribers.should_receive(:delete).with(@user)
       @campaign.remove_supporter(@user)
     end
-  
+
   end
-  
+
   describe 'when adding user as a supporter' do
 
     before do
@@ -250,7 +263,7 @@ describe Campaign do
         @campaign.add_supporter(@user)
       end
 
-      it 'should create an unconfirmed subscription for the user' do 
+      it 'should create an unconfirmed subscription for the user' do
         @mock_subscriptions.should_receive(:create!).with(:user => @user)
         @campaign.add_supporter(@user)
       end

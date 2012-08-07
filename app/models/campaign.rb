@@ -20,13 +20,17 @@ class Campaign < ActiveRecord::Base
   has_many :questionnaires, :as => :subject
   has_many :external_questionnaires, :as => :subject
   has_and_belongs_to_many :guides
-  validates_length_of :title, :maximum => 80, :on => :update, :allow_nil => true
+  validates_length_of :title, :maximum => 80,
+                              :on => :update,
+                              :allow_nil => true,
+                              :unless => :skip_title_length_validation
   validates_presence_of :title, :description, :on => :update
   validates_format_of :title, :with => /^.*(?=.*[a-zA-Z]).*$/,
                               :on => :update,
                               :allow_nil => true
   validates_associated :initiator, :on => :update
   cattr_reader :per_page
+  attr_accessor :skip_title_length_validation
   delegate :transport_mode_text, :to => :problem
   accepts_nested_attributes_for :campaign_photos, :allow_destroy => true
   after_create :generate_key
