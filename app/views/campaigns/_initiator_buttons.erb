@@ -26,13 +26,13 @@
 			<h3 class="font-1"><%= t('campaigns.show.actions')%></h3>
 			<ul>
 				<li>
-					<a href="<%= raw add_update_campaign_url(@campaign, :is_advice_request => true) %>" role="menuitem" class="advice-trigger" data-title="<%= t('campaigns.show.ask_our_expert_panel') %>">
+					<a href="<%= raw add_update_campaign_url(@campaign, :is_advice_request => true) %>" role="menuitem" class="advice-trigger" data-title="<%= t('campaigns.show.ask_our_expert_panel') %>" title="<%= t('campaigns.show.ask_an_expert_tooltip') %>">
 						<span class="icon question"></span>
 						<%= t('campaigns.show.ask_an_expert') %>
 					</a>
 				</li>
 				<li>
-					<a href="<%= raw add_photos_campaign_url(@campaign) %>" class="add-photos-trigger" role="menuitem" >
+					<a href="<%= raw add_photos_campaign_url(@campaign) %>" class="add-photos-trigger" role="menuitem" title="<%= t('campaigns.show.add_images_tooltip') %>">
 						<span class="icon camera"></span>
 						<%= t('campaigns.show.add_images') %>
 					</a>
@@ -40,7 +40,7 @@
 				<%- if @campaign.status != :fixed %>
 				  <%- form_for @campaign, :url => complete_campaign_url(@campaign), :html => { :method => 'POST', :id => 'campaign-complete' } do |f| %>
 				<li>
-					<button class="button" type="submit" role="menuitem" >
+					<button class="button" type="submit" role="menuitem" title="<%= t('campaigns.show.mark_as_complete_tooltip') %>">
 						<span class="icon tick"></span>
 						<%= t('campaigns.show.mark_as_complete') %>
 					</button>
@@ -48,7 +48,7 @@
 				  <%- end %>
 				<%- end %>
 				<li>
-					<a href="<%=edit_campaign_path(@campaign) %>" role="menuitem">
+					<a href="<%=edit_campaign_path(@campaign) %>" role="menuitem" title="<%= t('campaigns.show.edit_description_tooltip') %>" title="<%= t('campaigns.show.edit_description_tooltip') %>">
 						<span class="icon pencil"></span>
 						<%= t('campaigns.show.edit_description') %>
 					</a>
@@ -57,7 +57,7 @@
 				<%- @campaign.assignments.is_new.each do |assignment| %>
           <%- if assignment.task_type == 'find_transport_organization' %>
            <li>
-   					 	<a href="<%= edit_campaign_assignment_path(assignment.problem.campaign, assignment) %>" role="menuitem">
+   					 	<a href="<%= edit_campaign_assignment_path(assignment.problem.campaign, assignment) %>" role="menuitem" title="<%= t('campaigns.show.find_operator_tooltip') %>">
      						<span class="icon person"></span>
      						<%= t('campaigns.show.find_operator') %>
      					</a>
@@ -65,7 +65,7 @@
            <%- end %>
            <%- if assignment.task_type == 'find_transport_organization_contact_details' %>
             <li>
-    					 	<a href="<%= edit_campaign_assignment_path(assignment.problem.campaign, assignment) %>" role="menuitem">
+    					 	<a href="<%= edit_campaign_assignment_path(assignment.problem.campaign, assignment) %>" role="menuitem" title="<%= t('campaigns.show.add_contact_tooltip') %>">
       						<span class="icon person"></span>
       						<%= t('campaigns.show.add_contact') %>
       					</a>
