@@ -10,6 +10,6 @@ class CreateExternalQuestionnaires < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :questionnaires
+    drop_table :external_questionnaires
   end
 end
