@@ -21,8 +21,13 @@
 	  <%- end %>
 	<%- end %>
 	<dl class="details">
-		<dt><%= t('shared.problem.added') %></dt>
-		<dd><%= problem.confirmed_at.localtime.to_s(:short) %></dd>
+		<%- if @display_latest_activity_date %>
+			<dt><%= t('shared.problem.updated') %></dt>
+			<dd><%= problem.latest_update_at.localtime.to_s(:short) %></dd>
+		<%- else %>
+			<dt><%= t('shared.problem.added') %></dt>
+			<dd><%= problem.confirmed_at.localtime.to_s(:short) %></dd>
+		<%- end %>
 	</dl>
   	<dl class="status-item">
   			<dt>Status:</dt>

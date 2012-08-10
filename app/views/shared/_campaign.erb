@@ -20,8 +20,13 @@
       </p>
     <%- end %>
 	<dl class="details">
-		<dt><%= t('shared.campaign.started')%></dt>
-		<dd><%= campaign.created_at.localtime.to_s(:short) %></dd>
+		<%- if @display_latest_activity_date %>
+			<dt><%= t('shared.campaign.updated')%></dt>
+			<dd><%= campaign.latest_event_at.localtime.to_s(:short) %></dd>
+		<%- else %>
+			<dt><%= t('shared.campaign.started')%></dt>
+			<dd><%= campaign.created_at.localtime.to_s(:short) %></dd>
+		<%- end %>
 		<dt><%= t('shared.campaign.supporters') %></dt>
 		<dd><%= campaign.supporters.count %></dd>
 	</dl>

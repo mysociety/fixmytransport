@@ -25,6 +25,7 @@ en:
       by: "by"
       supporters: "Supporters:"
       started: "Started:"
+      updated: "Updated:"
       status: "Status:"
       seeking_support: Seeking support
     comment_form:
@@ -122,6 +123,7 @@ en:
       main_site: "Non-mobile optimised site"
     problem:
       added: "Added:"
+      updated: "Updated:"
       by: "by"
       posted_time: "%{time} ago"
       the: "The"

@@ -25,6 +25,8 @@ class ProblemsController < ApplicationController
       options = { :offset => pager.offset }
       if params[:order] == 'creation'
         options[:date_to_use] = @order = 'creation'
+      else
+        @display_latest_activity_date = true
       end
       issues = Problem.find_recent_issues(pager.per_page, options)
       # inject the result array into the paginated collection:
