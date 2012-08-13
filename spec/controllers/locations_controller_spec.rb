@@ -35,9 +35,9 @@ describe LocationsController do
       response.should redirect_to(ferry_terminal_url(mock_stop_area.locality, mock_stop_area))
     end
 
-    describe 'if there is an ancestor area of the same type' do 
-      
-      before do 
+    describe 'if there is an ancestor area of the same type' do
+
+      before do
         @parent_stop_area = mock_model(StopArea, :area_type => 'GRLS',
                                                 :ancestors => [],
                                                 :locality => 'victoria')
@@ -45,19 +45,19 @@ describe LocationsController do
                                               :locality => 'victoria',
                                               :station_root => @parent_stop_area)
         StopArea.stub!(:full_find).and_return(@mock_stop_area)
-      end  
-      
+      end
+
       it 'should redirect to the ancestor area if there is one of the same type' do
         make_request
         response.should redirect_to(station_url(@parent_stop_area.locality, @parent_stop_area))
       end
-    
+
       it 'should have a response code of 301 (moved permanently)' do
         make_request
         response.status.should == '301 Moved Permanently'
       end
-      
-      
+
+
     end
 
     describe 'when request is directed at an asset server' do
@@ -124,27 +124,51 @@ describe LocationsController do
 
   end
 
-  describe 'GET #show_stop' do 
-    
+  describe 'GET #show_stop' do
+
     before do
       @controller.stub!(:map_params_from_location)
       @default_params = { :id => 44, :scope => 66 }
       @stop = mock_model(Stop, :full_name => "A Test Stop",
-                               :points => [])
+                               :points => [],
+                               :stop_type => 'BCT')
       Stop.stub!(:find).and_return(@stop)
     end
-    
+
     def make_request(params=@default_params)
       get :show_stop, params
     end
-  
-    it 'should render the "show_stop" template' do 
+
+    it 'should render the "show_stop" template' do
       make_request
       response.should render_template('locations/show_stop')
     end
-  
+
+    describe 'when the stop is a station part stop type' do
+
+      before do
+        @locality = mock_model(Locality)
+        @stop_area = mock_model(StopArea, :locality => @locality,
+                                          :area_type => 'GRLS')
+        @stop.stub!(:stop_type).and_return('RLY')
+        @stop.stub!(:root_stop_area).and_return(@stop_area)
+      end
+
+      it 'should redirect to the station if there is a root station' do
+        make_request
+        response.should redirect_to(station_url(@stop_area.locality, @stop_area))
+      end
+
+      it 'should render a 404 if there is no route station' do
+        @stop.stub!(:root_stop_area).and_return(nil)
+        make_request
+        response.status.should == '404 Not Found'
+      end
+
+    end
+
   end
-  
+
   describe 'GET #add_comment_to_stop' do
 
     before do

@@ -14,6 +14,15 @@ class LocationsController < ApplicationController
 
   def show_stop
     @stop = Stop.full_find(params[:id], params[:scope])
+    if StopType.station_part_types.include?(@stop.stop_type)
+      @stop_area = @stop.root_stop_area(StopType.station_part_types_to_station_types[@stop.stop_type])
+      if @stop_area
+        redirect_to @template.location_url(@stop_area) and return false
+      else
+        render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+        return false
+      end
+    end
     @commentable = @stop
     @title = @stop.full_name
     respond_to do |format|
