@@ -8,6 +8,7 @@ class ProblemsController < ApplicationController
                                                :find_train_route,
                                                :find_ferry_route,
                                                :find_other_route,
+                                               :autocomplete_train_station,
                                                :browse,
                                                :atom_link]
   before_filter :find_visible_problem, :only => [:show, :update, :add_comment]
@@ -18,6 +19,16 @@ class ProblemsController < ApplicationController
   after_filter :update_problem_users, :only => [:show]
 
   include FixMyTransport::GeoFunctions
+
+  def initialize
+    super
+    setup_autocomplete_query
+  end
+
+  def setup_autocomplete_query
+    tm = TransportMode.find_by_name 'Train'
+    @train_stop_area_codes = tm.stop_area_types.map { |st| "'#{st.code}'" }.join ', '
+  end
 
   def issues_index
     @title = t('problems.issues_index.title')
@@ -201,6 +212,31 @@ class ProblemsController < ApplicationController
                 :map_height => LARGE_MAP_HEIGHT,
                 :map_width => LARGE_MAP_WIDTH }
     return find_area(options)
+  end
+
+  def get_train_stations_like(like)
+    where_clause = "area_type in (#{@train_stop_area_codes}) AND lower(name) LIKE lower(?)"
+    return StopArea.find(:all,
+                         :conditions => [where_clause, like],
+                         :select => 'name',
+                         :order => 'name').map { |e| e.name }
+  end
+
+  def get_train_stations_from_prefix(s)
+    get_train_stations_like "#{s}%"
+  end
+
+  def get_train_stations_from_midstring(s)
+    get_train_stations_like "_%#{s}%"
+  end
+
+  def autocomplete_train_station
+    prefix_result = get_train_stations_from_prefix(params[:term])
+    if prefix_result.empty?
+      render :json => get_train_stations_from_midstring(params[:term])
+    else
+      render :json => prefix_result
+    end
   end
 
   def find_route

@@ -545,6 +545,24 @@ $(document).ready(function(){
      return options;
   }
 
+  /* Highlight the substring which is being completed.  This
+     is from: http://stackoverflow.com/a/7765435/223092 */
+  $.ui.autocomplete.prototype._renderItem = function( ul, item){
+    var term = this.term.split(' ').join('|');
+    var re = new RegExp("(" + term + ")", "gi") ;
+    var t = item.label.replace(re,"<b>$1</b>");
+    return $( "<li></li>" )
+      .data( "item.autocomplete", item )
+      .append( "<a>" + t + "</a>" )
+      .appendTo( ul );
+  };
+
+  function setupTrainStationAutocomplete(inputSelector) {
+    $(inputSelector).autocomplete({
+      source: "/problems/autocomplete_train_station",
+	minLength: 3
+    });
+  }
 
   // ajax submission of support form
   function setupSupportForm(form_selector) {
@@ -801,6 +819,7 @@ $(document).ready(function(){
   setupProblemForm('#create-problem');
   setupCommentForm('.pane #comment-form');
   setupSupportForm('.login-to-support');
+  setupTrainStationAutocomplete('#train_route_form input');
   ajaxifyForm('.pane #login-form');
   ajaxifyForm('.pane #create-account-form');
   ajaxifyForm('.pane .password_reset_email');

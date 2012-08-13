@@ -53,6 +53,7 @@ ActionController::Routing::Routes.draw do |map|
                                             :find_train_route => :get,
                                             :find_ferry_route => :get,
                                             :find_other_route => :get,
+                                            :autocomplete_train_station => :get,
                                             :existing => :get,
                                             :new_alternate => :get }
 
