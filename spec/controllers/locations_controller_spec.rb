@@ -156,6 +156,7 @@ describe LocationsController do
 
       it 'should redirect to the station if there is a root station' do
         make_request
+        response.status.should == '301 Moved Permanently'
         response.should redirect_to(station_url(@stop_area.locality, @stop_area))
       end
 

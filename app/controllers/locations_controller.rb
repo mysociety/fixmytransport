@@ -17,7 +17,7 @@ class LocationsController < ApplicationController
     if StopType.station_part_types.include?(@stop.stop_type)
       @stop_area = @stop.root_stop_area(StopType.station_part_types_to_station_types[@stop.stop_type])
       if @stop_area
-        redirect_to @template.location_url(@stop_area) and return false
+        redirect_to @template.location_url(@stop_area), :status => :moved_permanently and return false
       else
         render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
         return false
