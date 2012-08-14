@@ -48,9 +48,11 @@ module FixMyTransport
         council_data = MySociety::MaPit.call('point',
                                              "#{WGS_84}/#{formatted_lon},#{formatted_lat}",
                                              :type => council_parent_types)
-        if [:bad_request, :service_unavailable, :not_found].include?(council_data)
-          raise "Council lookup service unavailable"
-        end
+        exception = {
+          :bad_request => "Bad request to council lookup service",
+          :service_unavailable => "Council lookup service unavailable",
+          :not_found => "Council lookup service not found"}[council_data]
+        raise exception if exception
 
         council_ids = council_data.keys.map{ |council_id| council_id.to_i }
 
