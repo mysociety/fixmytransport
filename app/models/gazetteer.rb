@@ -261,7 +261,15 @@ class Gazetteer
   # - limit - Number of results to return
   # - types - The area_types to constrain the search
   def self.find_stations_from_name(name, exact, options={})
-    results = self._find_stations_from_name(name, exact, options)
+    # Even if we haven't asked for *only* exact matches, try to do an
+    # exact match first, in case the name is exactly right:
+    results = []
+    unless exact
+      results = self._find_stations_from_name(name, true, options)
+    end
+    if results.empty?
+      results = self._find_stations_from_name(name, exact, options)
+    end
 
     # try variations on and
     if results.empty? and !exact
