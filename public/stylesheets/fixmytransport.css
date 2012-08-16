@@ -2477,6 +2477,37 @@ body.facebook-canvas .button {
   margin-bottom: 0.5em;
 }
 
+/* ===[ Styling of the train station autocompletion ]=== */
+.ui-autocomplete {
+  background-color: #ffffff;
+}
+
+/* If we don't specify the width of the autocomplete suggestions list,
+   it's absurdly wide. FIXME: instead set the width dynamically with
+   autocomplete's open callback. */
+
+ul.ui-autocomplete {
+  list-style-type: none;
+  width: 320px;
+  font-size: 1.2em;
+  border: 1px solid grey;
+}
+
+/* Add a vertical scroll bar to the suggestions if there are too many */
+
+.ui-autocomplete {
+    max-height: 240px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Embolden suggested completions when you move over them with the up
+   or down arrow keys */
+
+.ui-autocomplete .ui-state-hover {
+    font-weight:bolder;
+}
+
 /*===[ Narrow screens]===*/
 @media screen and (max-width: 600px) {
         .mobile-only {

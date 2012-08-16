@@ -256,27 +256,37 @@ class Gazetteer
                                   :limit => options[:limit], :order => 'name')
   end
 
-  # - name - stop/station name
+  # - name - Stop/station name
+  # - only_exact - Only return exact matches of names
   # options
   # - limit - Number of results to return
   # - types - The area_types to constrain the search
-  def self.find_stations_from_name(name, exact, options={})
-    results = self._find_stations_from_name(name, exact, options)
+  def self.find_stations_from_name(name, only_exact, options={})
 
-    # try variations on and
-    if results.empty? and !exact
+    # Even if we haven't asked for only exact matches, try to do an
+    # exact match first, in case the name is exactly right:
+    results = self._find_stations_from_name(name, true, options)
+    if results.empty? and !only_exact
+      results = self._find_stations_from_name(name, false, options)
+    end
+
+    if results.empty? and !only_exact
+      # If there were no matches, try swapping "and" for ampersand,
+      # and vice versa:
       name_with_ampersand = name.gsub(' and ', ' & ')
       if name_with_ampersand != name
-        results = self._find_stations_from_name(name_with_ampersand, exact, options)
+        results = self._find_stations_from_name(name_with_ampersand, only_exact, options)
       else
         name_with_and = name.gsub(' & ', ' and ')
         if name_with_and != name
-          results = self._find_stations_from_name(name_with_and, exact, options)
+          results = self._find_stations_from_name(name_with_and, only_exact, options)
         end
       end
     end
 
-    if results.empty? and !exact
+    if results.empty? and !only_exact
+      # If there were still no matches, try a phonetic match using
+      # double metaphone:
       results = self.find_stations_by_double_metaphone(name, options)
     end
 
@@ -287,11 +297,11 @@ class Gazetteer
     results
   end
 
-  def self._find_stations_from_name(name, exact, options)
+  def self._find_stations_from_name(name, only_exact, options)
     query = 'area_type in (?)'
     params = [options[:types]]
     name = name.downcase.strip
-    if exact
+    if only_exact
       query += " AND lower(name) = ?"
       params << name
     else
