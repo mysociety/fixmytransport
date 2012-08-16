@@ -206,6 +206,10 @@ class ProblemsController < ApplicationController
 
   def find_stop
     @title = t('problems.find_stop.title')
+    @transport_type = nil
+    if ['bus', 'train', 'tram', 'boat'].include? params[:transport_type]
+      @transport_type = params[:transport_type]
+    end
     options = { :find_template => :find_stop,
                 :browse_template => :choose_location,
                 :map_options => { :mode => :find },
@@ -237,6 +241,10 @@ class ProblemsController < ApplicationController
     else
       render :json => prefix_result
     end
+  end
+
+  def find_stop_type
+    @title = t('problems.find_stop_type.find_a_stop_type_title')
   end
 
   def find_route

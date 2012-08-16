@@ -48,6 +48,7 @@ ActionController::Routing::Routes.draw do |map|
                                        :add_comment => [:get, :post] },
                            :collection => { :choose_location => :get,
                                             :find_stop => :get,
+                                            :find_stop_type => :get,
                                             :find_route => :get,
                                             :find_bus_route => :get,
                                             :find_train_route => :get,

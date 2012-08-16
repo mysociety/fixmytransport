@@ -1,0 +1,20 @@
+<div id="banner">
+    <a id="home" href="/">FixMyTransport</a>
+	<div class="container">
+		<h1><%= t('problems.find_stop_type.find_a_stop_type') %></h1>
+	</div>
+</div>
+<div id="greybanner">
+	<div class="container">
+		<p><%= t('problems.find_stop_type.subheader') %></p>
+	</div>
+</div>
+
+<div id="main-content" class="container">
+  <ul id="route-type-list" class="font-1">
+    <li class=""><a class="bus button" href="<%= find_stop_problems_path :transport_type => 'bus' %>"><%= t('problems.find_stop_type.bus')%></a></li>
+    <li class=""><a class="train button" href="<%= find_stop_problems_path :transport_type => 'train' %>"><%= t('problems.find_stop_type.train') %></a></li>
+    <li class=""><a class="tram button" href="<%= find_stop_problems_path :transport_type => 'tram' %>"><%= t('problems.find_stop_type.tram') %></a></li>
+    <li class=""><a class="ferry button" href="<%= find_stop_problems_path :transport_type => 'boat' %>"><%= t('problems.find_stop_type.ferry') %></a></li>
+  </ul>
+</div>

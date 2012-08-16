@@ -111,6 +111,14 @@ en:
       tram: "tram / metro underground"
       ferry: ferry
       subheader: Choose from one of the four options below
+    find_stop_type:
+      find_a_stop_type: "First, select the kind of stop or station you had a problem with"
+      find_a_stop_type_title: "Select the kind of stop or station you had a problem with"
+      ferry: ferry terminus
+      bus: bus stop or coach station
+      tram: "tram, metro or tube stop"
+      train: train station
+      subheader: "Choose from one of the four options below:"
     find_stop:
       choose_from_list: "Choose from a list of stops and stations."
       title: "Finding a stop or station"

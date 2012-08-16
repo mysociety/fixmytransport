@@ -11,6 +11,7 @@
   	  <label for="name" id='guidance-name' class='guidance'><%= t('problems.find_stop.instructions')%></label>
       <div id="find-stop">
   		  <%= raw text_field_tag 'name', params[:name], :size => 40 %>
+  		  <%= raw hidden_field_tag 'transport_type', @transport_type %>
   		  <button class="point-go" type='submit'>
   		    <%= t('problems.find_stop.go') %>
   		  </button>
