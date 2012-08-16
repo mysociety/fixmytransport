@@ -191,8 +191,8 @@ namespace :data do
         end
         columns = [problem.id,
                    campaign_id,
-                   problem.subject,
-                   problem.description,
+                   "\"#{problem.subject.gsub('"', '""')}\"",
+                   "\"#{problem.description.gsub('"', '""')}\"",
                    problem.campaign ? 'Y' : 'N',
                    problem_url,
                    campaign_url,
