@@ -151,8 +151,10 @@ namespace :data do
     check_for_dir
     puts "Writing problem spreadsheet to #{ENV['DIR']}..."
     File.open(File.join(ENV['DIR'], 'problems.tsv'), 'w') do |problem_file|
-      headers = ['ID',
+      headers = ['Problem ID',
+                 'Campaign ID',
                  'Subject',
+                 'Description',
                  'Campaign',
                  'Problem URL',
                  'Campaign URL',
@@ -177,16 +179,20 @@ namespace :data do
           problem_url = ''
           campaign = problem.campaign
           campaign_url = campaign_url(campaign)
+          campaign_id = campaign.id
           supporters = campaign.supporters.count
           comments = campaign.comments.visible.count
         else
           problem_url = problem_url(problem)
           campaign_url = ''
+          campaign_id = ''
           supporters = ''
           comments = problem.comments.visible.count
         end
         columns = [problem.id,
+                   campaign_id,
                    problem.subject,
+                   problem.description,
                    problem.campaign ? 'Y' : 'N',
                    problem_url,
                    campaign_url,
@@ -195,8 +201,8 @@ namespace :data do
                    problem.reporter.name,
                    problem.responsible_organizations.map{ |org| org.name }.to_sentence,
                    issue.status,
-                   problem.created_at.localtime.to_s(:short),
-                   problem.updated_at.localtime.to_s(:short),
+                   problem.created_at.localtime.to_s(:standard_with_date),
+                   problem.updated_at.localtime.to_s(:standard_with_date),
                    supporters,
                    comments]
         problem_file.write(columns.join("\t") + "\n")
