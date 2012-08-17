@@ -239,6 +239,7 @@ var area_init, route_init;
 
   function updateLocations(eevent) {
     var currentZoom = map.getZoom(), newLat, newLon, newPath, url;
+    var parametersObject, mapParametersObject;
     var parameters, key, center, mapViewParameters;
     var positionKeys = {'lon': true,
                         'lat': true,
@@ -276,14 +277,21 @@ var area_init, route_init;
         dataType: 'html',
         success: replaceAtomLink,
         failure: replaceAtomLinkFailure});
+      mapParametersObject = {'lon': newLon, 'lat': newLat, 'zoom': currentZoom};
       // If we're able to replace the URL with history.replaceState,
       // update it to give a permalink to the new map position:
       if (history.replaceState) {
-        parameters = getQueryStringParametersMap(window.location.search);
-        jQuery.extend(parameters, {'lon': newLon, 'lat': newLat, 'zoom': currentZoom});
-        newPath = updateURLParameters(window.location.href, parameters);
+        parametersObject = getQueryStringParametersMap(window.location.search);
+        jQuery.extend(parametersObject, mapParametersObject);
+        newPath = updateURLParameters(window.location.href, parametersObject);
         history.replaceState(null, "New Map Position", newPath);
       }
+      // Also update the parameters in the "choose from a list
+      // instead" link, so that after dragging or zooming the map, the
+      // alternative list will match:
+      $('.choose-from-list').each(function (index, element) {
+        element.href = updateURLParameters(element.href, mapParametersObject);
+      });
     }
   }
 
