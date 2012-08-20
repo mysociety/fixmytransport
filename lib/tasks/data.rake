@@ -150,25 +150,25 @@ namespace :data do
 
     check_for_dir
     puts "Writing problem spreadsheet to #{ENV['DIR']}..."
-    File.open(File.join(ENV['DIR'], 'problems.tsv'), 'w') do |problem_file|
-      headers = ['Problem ID',
-                 'Campaign ID',
-                 'Subject',
-                 'Description',
-                 'Campaign',
-                 'Problem URL',
-                 'Campaign URL',
-                 'Location',
-                 'Transport mode',
-                 'Reporter',
-                 'Organization',
-                 'Status',
-                 'Created',
-                 'Updated',
-                 'Supporters',
-                 'Comments']
+
+    FasterCSV.open(File.join(ENV['DIR'], 'problems.tsv'), 'w', :col_sep => "\t") do |problem_file|
+      problem_file << ['Problem ID',
+                       'Campaign ID',
+                       'Subject',
+                       'Description',
+                       'Campaign',
+                       'Problem URL',
+                       'Campaign URL',
+                       'Location',
+                       'Transport mode',
+                       'Reporter',
+                       'Organization',
+                       'Status',
+                       'Created',
+                       'Updated',
+                       'Supporters',
+                       'Comments']
       # add supporters, comments
-      problem_file.write(headers.join("\t") + "\n")
       Problem.find_recent_issues(nil).each do |issue|
         if issue.is_a?(Problem)
           problem = issue
@@ -191,8 +191,8 @@ namespace :data do
         end
         columns = [problem.id,
                    campaign_id,
-                   "\"#{problem.subject.gsub('"', '""')}\"",
-                   "\"#{problem.description.gsub('"', '""')}\"",
+                   problem.subject,
+                   problem.description,
                    problem.campaign ? 'Y' : 'N',
                    problem_url,
                    campaign_url,
@@ -205,7 +205,7 @@ namespace :data do
                    problem.updated_at.localtime.to_s(:standard_with_date),
                    supporters,
                    comments]
-        problem_file.write(columns.join("\t") + "\n")
+        problem_file << columns
       end
     end
   end
