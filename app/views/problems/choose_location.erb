@@ -27,7 +27,7 @@
 			<%= t('problems.choose_location.multiple_locations_intro') %>
 		</p>
 		<p>
-			<%= raw t('problems.choose_location.cant_see_the_map', :link => link_to(t('problems.find_stop.choose_from_list'), params.merge("choose_from_list" => 1)))%>
+			<%= raw t('problems.choose_location.cant_see_the_map', :link => link_to(t('problems.find_stop.choose_from_list'), params.merge("choose_from_list" => 1), :class => 'choose-from-list'))%>
 			<%= raw t('problems.choose_location.cant_find_the_stop_or_station', :link => link_to(t('problems.choose_location.let_us_know'), feedback_path(:url => CGI.escape(request.request_uri)), :rel => 'nofollow')) %>
 		</p>
 	</div>

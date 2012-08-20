@@ -177,10 +177,24 @@ var area_init, route_init;
     // ignore errors here; there's nothing much that can be done
   }
 
-  function getQueryStringParametersMap() {
+  /* This function should be passed a string like:
+
+       ?foo=bar&baz=quux
+
+     .... such as window.location.search.  It will return an object
+     that maps keys to values.  e.g. for the input above, the returned
+     object would be:
+
+     {'foo': 'bar',
+      'baz': 'quux'}
+  */
+  function getQueryStringParametersMap(searchPart) {
     // Based on: http://stackoverflow.com/a/3855394/223092
-    var result = {}, i, value, parts;
-    var keyValuePairs = window.location.search.substr(1).split('&');
+    var result = {}, i, value, parts, keyValuePairs;
+    if (searchPart[0] != '?') {
+      throw new Error('The argument to getQueryStringParametersMap must be a search string beginning with \'?\'');
+    }
+    keyValuePairs = searchPart.substr(1).split('&');
     if (!keyValuePairs) {
       return result;
     }
@@ -196,8 +210,36 @@ var area_init, route_init;
     return result;
   }
 
+  function updateURLParameters(originalURL, parametersToSet) {
+    /* Use the DOM to parse the URL, using the nice trick from here:
+       http://james.padolsey.com/javascript/parsing-urls-with-the-dom/ */
+    var a = document.createElement('a'),
+        originalParameters,
+        result,
+        questionMarkIndex,
+        toJoin = [],
+        key;
+    questionMarkIndex = originalURL.indexOf('?');
+    if (questionMarkIndex >= 0) {
+      result = originalURL.substr(0, questionMarkIndex);
+    } else {
+      result = originalURL;
+    }
+    a.href = originalURL;
+    originalParameters = getQueryStringParametersMap(a.search);
+    jQuery.extend(originalParameters, parametersToSet);
+    result += '?';
+    for (key in originalParameters) {
+      if (originalParameters.hasOwnProperty(key)) {
+        toJoin.push(key + '=' + encodeURIComponent(originalParameters[key]));
+      }
+    }
+    return result + toJoin.join('&');
+  }
+
   function updateLocations(eevent) {
     var currentZoom = map.getZoom(), newLat, newLon, newPath, url;
+    var parametersObject, mapParametersObject;
     var parameters, key, center, mapViewParameters;
     var positionKeys = {'lon': true,
                         'lat': true,
@@ -235,23 +277,22 @@ var area_init, route_init;
         dataType: 'html',
         success: replaceAtomLink,
         failure: replaceAtomLinkFailure});
+      mapParametersObject = {'lon': newLon, 'lat': newLat, 'zoom': currentZoom};
       // If we're able to replace the URL with history.replaceState,
       // update it to give a permalink to the new map position:
       if (history.replaceState) {
-        newPath = window.location.pathname + '?';
-        parameters = getQueryStringParametersMap();
-        for (key in parameters) {
-          if (parameters.hasOwnProperty(key)) {
-            if (!positionKeys[key]) {
-              newPath += key + '=' + encodeURIComponent(parameters[key]) + '&';
-            }
-          }
-        }
-        newPath += 'lon='+newLon+'&lat='+newLat+'&zoom='+currentZoom;
+        parametersObject = getQueryStringParametersMap(window.location.search);
+        jQuery.extend(parametersObject, mapParametersObject);
+        newPath = updateURLParameters(window.location.href, parametersObject);
         history.replaceState(null, "New Map Position", newPath);
       }
+      // Also update the parameters in the "choose from a list
+      // instead" link, so that after dragging or zooming the map, the
+      // alternative list will match:
+      $('.choose-from-list').each(function (index, element) {
+        element.href = updateURLParameters(element.href, mapParametersObject);
+      });
     }
-
   }
 
   function createAreaMap(){
