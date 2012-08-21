@@ -10,6 +10,19 @@ describe ApplicationHelper do
 
   end
 
+  # See config/initializers/strip_tags_xss_patch.rb
+  describe 'when using the strip_tags helper' do
+
+    it 'should strip a script tag' do
+      assert_equal "", helper.strip_tags("<script>")
+    end
+
+    it 'should escape broken HTML' do
+      escaped_stripped = ERB::Util.html_escape(helper.strip_tags("something <img onerror=alert(1337)"))
+      assert_equal "something &lt;img onerror=alert(1337)", escaped_stripped
+    end
+  end
+
   describe 'when using "on the" or "at the" to describe a location' do
 
     it 'should use "on the" for a route' do
