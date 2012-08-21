@@ -150,8 +150,7 @@ namespace :data do
 
     check_for_dir
     puts "Writing problem spreadsheet to #{ENV['DIR']}..."
-
-    FasterCSV.open(File.join(ENV['DIR'], 'problems.tsv'), 'w', :col_sep => "\t") do |problem_file|
+    FasterCSV.open(File.join(ENV['DIR'], 'problems.csv'), 'w', :col_sep => ",", :force_quotes => true) do |problem_file|
       problem_file << ['Problem ID',
                        'Campaign ID',
                        'Subject',
