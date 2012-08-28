@@ -16,10 +16,15 @@
     border: 0;
 }
 
+#large-map-wrapper {
+  text-align: center;
+}
+
 #large-map {
   width: 500px;
   margin:auto;
   margin-bottom: 3em;
+  display: inline-block;
 }
 
 #large-map #map{
@@ -29,6 +34,18 @@
   margin: auto;
 }
 
+#map-legend {
+  line-height: 50px;
+  display: inline-block;
+  vertical-align: top;
+  text-align: left;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.legend-icon {
+  vertical-align: middle;
+}
 
 #medium-map {
   width: 590px;

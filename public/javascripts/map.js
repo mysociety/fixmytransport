@@ -100,14 +100,47 @@ var area_init, route_init;
                                                               'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
                                                                                                  20037508.34, 20037508.34)});
     map.addLayer(layer);
+    // If there are checkboxes for transport types, update the
+    // visibility when they're changed:
+    $('.transport-type-checkbox').change(function () {
+      updateMarkerVisibility();
+    });
   }
 
   function pointCoords(lon, lat) {
     return new OpenLayers.Geometry.Point(lon, lat).transform(proj, map.getProjectionObject());
   }
 
+  function setMarkerVisibility(feature, visible) {
+    if (visible) {
+      delete feature.style['display'];
+    } else {
+      feature.style.display = 'none';
+    }
+  }
+
+  function updateMarkerVisibility() {
+    var transportTypesToShow = getTransportTypesToShow(),
+        visible, i, il, feature, features,
+        layers = [markers, otherMarkers, highlightedMarkers];
+
+    for (il in layers) {
+      if (layers.hasOwnProperty(il)) {
+        features = layers[il].features;
+        for (i = 0; i < features.length; ++i) {
+          feature = features[i];
+          visible = feature.data.transportType in transportTypesToShow;
+          setMarkerVisibility(feature, visible);
+        }
+        layers[il].redraw();
+      }
+    }
+  }
+
   function addMarker(current, bounds, layer, other, highlightedLayer){
-    var stopCoords = pointCoords(current.lon, current.lat);
+    var stopCoords = pointCoords(current.lon, current.lat),
+        transportTypesToShow = getTransportTypesToShow(),
+        visible = current.transport_type in transportTypesToShow;
 
     if (stopsById[current.id] === undefined) {
       bounds.extend(stopCoords);
@@ -115,7 +148,8 @@ var area_init, route_init;
         url: current.url,
         name: current.description,
         id: current.id,
-        highlight: current.highlight
+        highlight: current.highlight,
+        transportType: current.transport_type
       },
                                                  {externalGraphic: current.icon + ".png",
                                                   graphicTitle: current.description,
@@ -126,7 +160,7 @@ var area_init, route_init;
                                                   graphicYOffset: -current.height,
                                                   cursor: 'pointer'
                                                  });
-
+      setMarkerVisibility(marker, visible);
       stopsById[current.id] = marker;
       if (current.highlight === true && other === true) {
         highlightedLayer.addFeatures( marker );
@@ -153,8 +187,31 @@ var area_init, route_init;
     }
   }
 
+  function getTransportTypesToShow() {
+    var result = {}, checkboxes = $('.transport-type-checkbox');
+    if (checkboxes.length == 0) {
+      return {'bus': true,
+              'train': true,
+              'tram': true,
+              'boat': true};
+    } else {
+      // Find which stop types to display:
+      checkboxes.each(function (e) {
+        var elementID = $(this).attr('id');
+        if (this.checked) {
+          result[elementID.replace(/^show-(.*)/mg, "$1")] = true;
+        }
+      });
+      return result;
+    }
+  }
+
   function loadNewMarkers(markerData) {
-    var newMarkers, newContent;
+    /* This is called after changes in the map view.  markerData is
+       the parsed JSON data returned from a URL like:
+         /locations/[zoom]/[lat]/[lon]/problem?height=500&width=500&highlight=
+     */
+    var newMarkers, newContent, typesToShow = getTransportTypesToShow();
     newMarkers = markerData.locations;
     // load new background markers
     addMarkerList(newMarkers, otherMarkers, true, highlightedMarkers);

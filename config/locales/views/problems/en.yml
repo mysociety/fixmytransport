@@ -24,6 +24,10 @@ en:
       cant_see_the_map: "Can't see the map? %{link}"
       cant_find_the_stop_or_station: "Can't find the stop or station you're looking for? %{link}"
       let_us_know: "Please let us know."
+      show_bus_stops: "Show bus stops"
+      show_train_stops: "Show train stations"
+      show_tram_stops: "Show metro / tram stops"
+      show_boat_stops: "Show ferry termini"
     choose_route:
       show_all: "Show all results"
       information_wrong: "Is this route information wrong?"

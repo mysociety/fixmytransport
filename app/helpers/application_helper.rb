@@ -111,6 +111,7 @@ module ApplicationHelper
       data = { :lat => stop.lat,
                :lon => stop.lon,
                :id => "#{stop.class}_#{stop.id}",
+               :transport_type => location_to_transport_type(location),
                :url => map_link_path(location, options[:link_type]),
                :description => location.description,
                :highlight => location.highlighted == true,
@@ -739,6 +740,18 @@ module ApplicationHelper
       end
     end
     return change_hash
+  end
+
+  # If there is no specific transport_type specified, all checkboxes
+  # should be on by default, so that all stop types are shown.  If a
+  # transport_type is specified, however, that is the only checkbox
+  # that should be shown.
+  def transport_type_checkbox_state(checkbox, transport_type)
+    if transport_type
+      return (checkbox == transport_type) ? "checked " : ""
+    else
+      return "checked "
+    end
   end
 
   def experiment_start(name)

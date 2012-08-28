@@ -33,8 +33,30 @@
 	</div>
 </div>
 <div id="main-content" class="container">
+  <div id="large-map-wrapper">
 	<div id='large-map'>
 		<%= render :partial => 'shared/map', :locals => { :locations => @locations, :other_locations => @other_locations, :link_type => :problem, :height => @map_height, :width => @map_width  } %>
 	</div>
+    <div id='map-legend'>
+      <form>
+        <input type="checkbox" <%= transport_type_checkbox_state('bus', @transport_type) %>name="show-bus" id="show-bus" class="transport-type-checkbox">
+          <label for="show-bus">
+            <img class="legend-icon" src="<%= main_url(stop_icon('bus', false, true)) %>.png">
+            <%= t('problems.choose_location.show_bus_stops') %></label><br/>
+        <input type="checkbox" <%= transport_type_checkbox_state('train', @transport_type) %>name="show-train" id="show-train" class="transport-type-checkbox">
+          <label for="show-train">
+            <img class="legend-icon" src="<%= main_url(stop_icon('train', false, true)) %>.png">
+            <%= t('problems.choose_location.show_train_stops') %></label><br/>
+        <input type="checkbox" <%= transport_type_checkbox_state('tram', @transport_type) %>name="show-tram" id="show-tram" class="transport-type-checkbox">
+          <label for="show-tram">
+            <img class="legend-icon" src="<%= main_url(stop_icon('tram', false, true)) %>.png">
+            <%= t('problems.choose_location.show_tram_stops') %></label><br/>
+        <input type="checkbox" <%= transport_type_checkbox_state('boat', @transport_type) %>name="show-boat" id="show-boat" class="transport-type-checkbox">
+          <label for="show-boat">
+            <img class="legend-icon" src="<%= main_url(stop_icon('boat', false, true)) %>.png">
+            <%= t('problems.choose_location.show_boat_stops') %></label>
+      </form>
+    </div>
+  </div>
 <%- end %>
 </div>
