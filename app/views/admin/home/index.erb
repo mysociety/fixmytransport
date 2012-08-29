@@ -15,7 +15,7 @@
         </td>
         <%- Problem.statuses.each do |status, code| %>
           <td class="numeric">
-            <%= Problem.count(:conditions => ['status_code = ? and created_at >= ?', code, (Time.now - 7.days)]) %>
+            <%= Problem.count(:conditions => ['status_code = ? and created_at >= ? and campaign_id is null', code, (Time.now - 7.days)]) %>
           </td>
         <%- end %>
       </tr>
@@ -37,7 +37,7 @@
           <%= t('admin.problems') %>:
         </td>        
         <%- Problem.statuses.each do |status, code| %>
-          <td class="numeric"><%= Problem.count(:conditions => ['status_code = ?', code]) %></td>
+          <td class="numeric"><%= Problem.count(:conditions => ['status_code = ? and campaign_id is null', code]) %></td>
         <%- end %>
       </tr>
       <tr class="all-time-camps">
