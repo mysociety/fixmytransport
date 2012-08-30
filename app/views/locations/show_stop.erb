@@ -10,7 +10,7 @@
   <meta property="og:locality" content="<%= @stop.locality_name %>" />
   <meta property="og:country-name" content="Great Britain" />
   <meta property="og:url" content="<%= request.url %>"/>
-  <meta property="og:image" content="<%=  main_url("#{stop_icon(@stop, small=false)}.png") %>"/>
+  <meta property="og:image" content="<%=  main_url("#{stop_icon_from_location(@stop, small=false)}.png") %>"/>
   <meta property="og:description" content="<%= @stop.description %>"/>
   <meta property="og:site_name" content="FixMyTransport"/>
 <%- end %>

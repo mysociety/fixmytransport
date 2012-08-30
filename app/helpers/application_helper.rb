@@ -114,56 +114,68 @@ module ApplicationHelper
                :url => map_link_path(location, options[:link_type]),
                :description => location.description,
                :highlight => location.highlighted == true,
-               :icon => stop_icon(stop, options[:small], options[:highlight]),
+               :icon => stop_icon_from_location(stop, options[:small], options[:highlight]),
                :height => icon_height(options[:small]),
                :width => icon_width(options[:small]) }
     end
     return data
   end
 
-  def stop_icon(location, small=false, highlight=nil)
-    if highlight == :has_content
-      background = ! location.highlighted == true
-    else
-      background = false
-    end
-    name = '/images/map-icons/map-'
+  def icon_color(transport_type)
+    {'train' => 'blue',
+      'tram' => 'green',
+      'boat' => 'orange',
+      'bus' => 'magenta'}[transport_type]
+  end
+
+  def location_to_transport_type(location)
     if location.is_a?(Route) || location.is_a?(SubRoute)
       if location.is_a?(SubRoute) || location.transport_mode_name == 'Train'
-        name += 'train-'
-        name += background ? 'grey' : 'blue'
+        'train'
       elsif location.transport_mode_name == 'Tram/Metro'
-        name += 'tram-'
-        name += background ? 'grey' : 'green'
+        'tram'
       elsif location.transport_mode_name == 'Ferry'
-        name += 'boat-'
-        name += background ? 'grey' : 'orange'
+        'boat'
       else
-        name += 'bus-'
-        name += background ? 'grey' : 'magenta'
+        'bus'
       end
     else
       if location.respond_to?(:area_type) && location.area_type == 'GRLS'
-        name += 'train-'
-        name += background ? 'grey' : 'blue'
+        'train'
       elsif location.respond_to?(:area_type) && location.area_type == 'GTMU'
-        name += 'tram-'
-        name += background ? 'grey' : 'green'
+        'tram'
       elsif location.respond_to?(:area_type) && location.area_type == 'GFTD'
-        name += 'boat-'
-        name += background ? 'grey' : 'orange'
+        'boat'
       else
-        name += 'bus-'
-        name += background ? 'grey' : 'magenta'
+        'bus'
       end
     end
+  end
 
+  def location_to_highlight(location, highlight=nil)
+    if highlight == :has_content
+      ! location.highlighted == true
+    else
+      false
+    end
+  end
+
+  def stop_icon(transport_type, background, small=false)
+    standard_color = icon_color transport_type
+    color = background ? 'grey' : standard_color
+    name = "/images/map-icons/map-#{transport_type}-#{color}"
     if small
       name += '-sml'
     else
       name += '-med'
     end
     return name
+  end
+
+  def stop_icon_from_location(location, small=false, highlight=nil)
+    background = location_to_highlight location, highlight
+    transport_type = location_to_transport_type location
+    return stop_icon(transport_type, background, small)
   end
 
   def route_segment_js(route, line_only=false)
