@@ -148,7 +148,10 @@ class Map
                 :map_height => map_height,
                 :map_width => map_width }
     data = { :locations => [], :stop_ids => [], :stop_area_ids => [] }
+    # If the zoom is further out than MIN_ZOOM_FOR_HIGHLIGHTED_MARKERS
+    # then no data is returned.
     if zoom >= MIN_ZOOM_FOR_OTHER_MARKERS
+      # i.e. if we're very zoomed-in, include other markers:
       map_corners = self.calculate_map_corners(lat, lon, zoom, map_height, map_width)
       if highlight == :has_content
         data = self.issue_data(map_corners, options)
@@ -158,6 +161,7 @@ class Map
       # want issue data markers (if any) drawn last so they'll be on top
       data[:locations] = stop_data + stop_area_data + data[:locations]
     elsif highlight && zoom >= MIN_ZOOM_FOR_HIGHLIGHTED_MARKERS
+      # i.e. highlight is on, and we're not zoomed out too far
       map_corners = self.calculate_map_corners(lat, lon, zoom, map_height, map_width)
       data = self.issue_data(map_corners, options)
     end
