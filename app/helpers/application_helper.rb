@@ -456,7 +456,7 @@ module ApplicationHelper
   # keep the order stable)
   def sort_stations(locations)
     stations, stops = locations.partition{ |location| location.is_a?(StopArea) }
-    return stations + stops
+    return stations.sort_by(&:name) + stops.sort_by(&:name)
   end
 
   def comment_header(comment)
