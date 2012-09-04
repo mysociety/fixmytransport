@@ -27,7 +27,7 @@ en:
       show_bus_stops: "Show bus stops"
       show_train_stops: "Show train stations"
       show_tram_stops: "Show metro / tram stops"
-      show_boat_stops: "Show ferry termini"
+      show_boat_stops: "Show ferry terminals"
     choose_route:
       show_all: "Show all results"
       information_wrong: "Is this route information wrong?"
