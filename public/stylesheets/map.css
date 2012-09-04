@@ -25,6 +25,10 @@
   margin:auto;
   margin-bottom: 3em;
   display: inline-block;
+  /* The following are required for IE 6 and 7, as described here:
+     http://stackoverflow.com/q/5838454/223092 */
+  *display: inline;
+  zoom: 1;
 }
 
 #large-map #map{
@@ -41,6 +45,10 @@
   text-align: left;
   padding-left: 10px;
   padding-right: 10px;
+  /* The following are required for IE 6 and 7, as described here:
+     http://stackoverflow.com/q/5838454/223092 */
+  *display: inline;
+  zoom: 1;
 }
 
 .legend-icon {
