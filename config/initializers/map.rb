@@ -1,7 +1,11 @@
 # Mapping constants
 
+# "MIN" always means "furthest zoomed-out"
+# "MAX" always means "deepest zoom in"
+
 MIN_ZOOM_LEVEL = 8
 MAX_ZOOM_LEVEL = 21
+
 MAX_VISIBLE_ZOOM = 16
 
 MAP_WIDTH = 400
