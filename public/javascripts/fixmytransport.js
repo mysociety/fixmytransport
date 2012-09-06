@@ -3,6 +3,39 @@
  * Authors: Josh Angell
  */
 
+/* This function should be passed a string like:
+
+     ?foo=bar&baz=quux
+
+   .... such as window.location.search.  It will return an object
+   that maps keys to values.  e.g. for the input above, the returned
+   object would be:
+
+   {'foo': 'bar',
+    'baz': 'quux'}
+*/
+function getQueryStringParametersMap(searchPart) {
+  // Based on: http://stackoverflow.com/a/3855394/223092
+  var result = {}, i, value, parts, keyValuePairs;
+  if (searchPart[0] != '?') {
+    throw new Error('The argument to getQueryStringParametersMap must be a search string beginning with \'?\'');
+  }
+  keyValuePairs = searchPart.substr(1).split('&');
+  if (!keyValuePairs) {
+    return result;
+  }
+  for (i = 0; i < keyValuePairs.length; ++i) {
+    parts = keyValuePairs[i].split('=');
+    // Skip over any malformed parts with multiple = signs:
+    if (parts.length !== 2) {
+      continue;
+    }
+    value = decodeURIComponent(parts[1].replace(/\+/g, " "));
+    result[parts[0]] = value;
+  }
+  return result;
+}
+
 $(document).ready(function(){
   /* AJAX forms
      ================================================== */
@@ -820,6 +853,11 @@ $(document).ready(function(){
   setupCommentForm('.pane #comment-form');
   setupSupportForm('.login-to-support');
   setupTrainStationAutocomplete('#train_route_form input');
+  if (window.location.pathname.search(/\/find_stop$/) >= 0) {
+    if (getQueryStringParametersMap(window.location.search)['transport_type'] == 'train') {
+      setupTrainStationAutocomplete('#find-stop input#name');
+    }
+  }
   ajaxifyForm('.pane #login-form');
   ajaxifyForm('.pane #create-account-form');
   ajaxifyForm('.pane .password_reset_email');

@@ -234,39 +234,6 @@ var area_init, route_init;
     // ignore errors here; there's nothing much that can be done
   }
 
-  /* This function should be passed a string like:
-
-       ?foo=bar&baz=quux
-
-     .... such as window.location.search.  It will return an object
-     that maps keys to values.  e.g. for the input above, the returned
-     object would be:
-
-     {'foo': 'bar',
-      'baz': 'quux'}
-  */
-  function getQueryStringParametersMap(searchPart) {
-    // Based on: http://stackoverflow.com/a/3855394/223092
-    var result = {}, i, value, parts, keyValuePairs;
-    if (searchPart[0] != '?') {
-      throw new Error('The argument to getQueryStringParametersMap must be a search string beginning with \'?\'');
-    }
-    keyValuePairs = searchPart.substr(1).split('&');
-    if (!keyValuePairs) {
-      return result;
-    }
-    for (i = 0; i < keyValuePairs.length; ++i) {
-      parts = keyValuePairs[i].split('=');
-      // Skip over any malformed parts with multiple = signs:
-      if (parts.length !== 2) {
-        continue;
-      }
-      value = decodeURIComponent(parts[1].replace(/\+/g, " "));
-      result[parts[0]] = value;
-    }
-    return result;
-  }
-
   function updateURLParameters(originalURL, parametersToSet) {
     /* Use the DOM to parse the URL, using the nice trick from here:
        http://james.padolsey.com/javascript/parsing-urls-with-the-dom/ */
