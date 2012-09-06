@@ -580,13 +580,22 @@ class ProblemsController < ApplicationController
             setup_browse_template(stop_info[:locations], options[:map_options])
             to_render = options[:browse_template]
           else
-            map_params_from_location(stop_info[:locations],
-                                     find_other_locations=true,
-                                     @map_height,
-                                     @map_width,
-                                     options[:map_options])
-            @locations = stop_info[:locations]
-            to_render = options[:browse_template]
+            if @transport_type == 'train' && stop_info[:locations].length == 1
+              # If there's an exact match for a train station name
+              # (for example, from autocomplete), go directly to that
+              # location's page, rather than showing the map:
+              unique_location = stop_info[:locations][0]
+              redirect_to existing_problems_url(:location_id => unique_location.id,
+                                                :location_type => unique_location.class.to_s)
+            else
+              map_params_from_location(stop_info[:locations],
+                                       find_other_locations=true,
+                                       @map_height,
+                                       @map_width,
+                                       options[:map_options])
+              @locations = stop_info[:locations]
+              to_render = options[:browse_template]
+            end
           end
           # got back postcode info
         elsif stop_info[:postcode_info]
