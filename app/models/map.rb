@@ -87,7 +87,7 @@ class Map
     x_diff = (max_x - min_x).abs
     y_diff = (max_y - min_y).abs
     diff = [x_diff, y_diff].max
-    return MAX_VISIBLE_ZOOM - 1 if diff == 0
+    return MIN_ZOOM_FOR_OTHER_MARKERS if diff == 0
     diff_over_dimension = [(x_diff/width), (y_diff/height)].max
     return MAX_VISIBLE_ZOOM if diff_over_dimension == 0
     zoom = MAX_ZOOM_LEVEL - (Math::log(diff_over_dimension) / Math::log(2)).ceil
