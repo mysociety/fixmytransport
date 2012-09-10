@@ -376,6 +376,18 @@ describe ProblemsController do
 
   end
 
+  describe "GET #find_stop_type" do
+
+    describe 'when no parameters are supplied' do
+
+      it 'should render the template "find_stop_type"' do
+        get :find_stop_type, {}
+      end
+
+    end
+
+  end
+
   describe "GET #find_stop" do
 
     def make_request(params={})
