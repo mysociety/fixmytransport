@@ -128,8 +128,15 @@ en:
       postcode_not_found: "That postcode wasn't recognised. Please modify it and try again!"
       postcode_area_not_known: "Sorry, we don't know the location of that postcode. Please try another."
       postcode_service_unavailable: "Sorry, our postcode lookup service is currently unavailable. Please try again in a few minutes"
-      instructions: "Enter an area, town or postcode"
-      where_is_it: "Where is it?"
+      instructions:
+        generic: "Enter an area, town or postcode"
+        train: "Enter a station, town or postcode"
+      where_is_it:
+        generic: "Where is it?"
+        bus: "Where is the bus stop or coach station?"
+        train: "Which train station is it?"
+        tram: "Where is the tram stop, metro or underground station?"
+        boat: "Where is the ferry terminal or boat stop?"
       too_big: "Sorry, that's too big an area to show all the bus stops and stations for. Please choose something more specific."
       geolocation_outside_area: "Sorry, your location appears to be outside Great Britain. Please enter a GB area, town or postcode"
     find_train_route:

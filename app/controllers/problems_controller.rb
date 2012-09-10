@@ -210,6 +210,10 @@ class ProblemsController < ApplicationController
     if ['bus', 'train', 'tram', 'boat'].include? params[:transport_type]
       @transport_type = params[:transport_type]
     end
+    @where_question = t('problems.find_stop.where_is_it.' +
+                        (@transport_type || "generic"))
+    @input_guidance = t('problems.find_stop.instructions.' +
+                        (@transport_type == 'train' ? 'train' : 'generic'))
     options = { :find_template => :find_stop,
                 :browse_template => :choose_location,
                 :map_options => { :mode => :find },

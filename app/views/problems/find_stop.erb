@@ -1,14 +1,14 @@
 <div id="banner">
     <a id="home" href="/">FixMyTransport</a>
 	<div class="container">
-		<h1><%= t('problems.find_stop.where_is_it') %></h1>
+		<h1><%= @where_question %></h1>
 	</div>
 </div>
 
 <div id="main-content" class="container">
 	<%- form_tag find_stop_problems_path, :id => 'stop_name_form', :method => 'GET' do  %>
     <div id="find-stop-container" class="fmt-has-geolocation">
-  	  <label for="name" id='guidance-name' class='guidance'><%= t('problems.find_stop.instructions')%></label>
+  	  <label for="name" id='guidance-name' class='guidance'><%= @input_guidance %></label>
       <div id="find-stop">
   		  <%= raw text_field_tag 'name', params[:name], :size => 40 %>
   		  <%= raw hidden_field_tag 'transport_type', @transport_type %>
