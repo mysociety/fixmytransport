@@ -114,7 +114,7 @@ en:
     find_stop_type:
       find_a_stop_type: "First, select the kind of stop or station you had a problem with"
       find_a_stop_type_title: "Select the kind of stop or station you had a problem with"
-      ferry: ferry terminus
+      ferry: ferry terminal
       bus: bus stop or coach station
       tram: "tram, metro or tube stop"
       train: train station
