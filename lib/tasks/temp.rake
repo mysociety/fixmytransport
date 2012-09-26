@@ -7,13 +7,10 @@ namespace :temp do
     text = File.open(file, 'r').read
     mail = ""
     text.each do |line|
-      puts line
+
       if /^From /.match(line)
         if !mail.blank?
-          puts "*****"
-          puts mail
-          puts "*****"
-          # CampaignMailer.receive(mail)
+          CampaignMailer.receive(mail)
           mail = ""
         end
       end
