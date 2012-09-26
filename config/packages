@@ -22,5 +22,5 @@ tnef (>= 1.4.5)
 unzip
 vpim
 xlhtml
-yui-compressor
+yui-compressor (>= 2.4.6)
 zlib1g-dev
