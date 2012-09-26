@@ -1,5 +1,27 @@
 namespace :temp do
 
+  desc 'Read incoming messages from a file and receive them into the application'
+  task :receive_incoming => :environment do
+    check_for_file
+    file = ENV['FILE']
+    text = File.open(file, 'r').read
+    mail = ""
+    text.each do |line|
+      puts line
+      if /^From /.match(line)
+        if !mail.blank?
+          puts "*****"
+          puts mail
+          puts "*****"
+          # CampaignMailer.receive(mail)
+          mail = ""
+        end
+      end
+      mail += line
+    end
+  end
+
+
   desc "Populate non responsible council ids in existing sole responsiblity records and add new records"
   task :update_sole_responsibilities => :environment do
     # Hertfordshire County Council has sole responsibility for problems in the
