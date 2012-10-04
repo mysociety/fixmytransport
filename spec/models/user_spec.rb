@@ -187,12 +187,12 @@ describe User do
 
   end
 
-  describe 'when marking an issue as seen' do 
-    
-    describe 'when the issue is a campaign' do 
-      
-      describe 'when the user is a campaign supporter' do 
-        
+  describe 'when marking an issue as seen' do
+
+    describe 'when the issue is a campaign' do
+
+      describe 'when the user is a campaign supporter' do
+
         before do
           @user = User.new
           @other_user = User.new
@@ -202,82 +202,82 @@ describe User do
           @user.stub!(:campaign_supporters).and_return(mock('supporters', :confirmed => [@mock_supporter]))
 
         end
-        
-        describe 'if the supporter is a new supporter' do 
-          
+
+        describe 'if the supporter is a new supporter' do
+
           before do
             @mock_supporter.stub!(:new_supporter?).and_return(true)
           end
-          
-          it 'should mark the supporter as not a new supporter' do 
+
+          it 'should mark the supporter as not a new supporter' do
             @mock_supporter.should_receive(:new_supporter=).with(false)
             @mock_supporter.should_receive(:save)
             @user.mark_seen(@mock_campaign)
           end
         end
-        
+
       end
-      
-      describe 'when the user is the campaign initiator' do 
-        
+
+      describe 'when the user is the campaign initiator' do
+
         before do
           @user = User.new
           @mock_campaign = mock_model(Campaign, :initiator => @user)
         end
-        
-        describe 'if the campaign has not been seen by the initiator' do 
-        
+
+        describe 'if the campaign has not been seen by the initiator' do
+
           before do
             @mock_campaign.stub!(:initiator_seen?).and_return(false)
           end
-          
-          it 'should mark the campaign as seen by the initiator' do 
+
+          it 'should mark the campaign as seen by the initiator' do
             @mock_campaign.should_receive(:update_attribute).with("initiator_seen", true)
             @user.mark_seen(@mock_campaign)
           end
-      
+
         end
-        
-        describe 'if the campaign has been seen by the initiator' do 
-          
+
+        describe 'if the campaign has been seen by the initiator' do
+
           before do
             @mock_campaign.stub!(:initiator_seen?).and_return(true)
           end
-          
-          it 'should not mark the campaign as seen by the initiator' do 
+
+          it 'should not mark the campaign as seen by the initiator' do
             @mock_campaign.should_not_receive(:update_attribute).with("initiator_seen", true)
             @user.mark_seen(@mock_campaign)
           end
-          
+
         end
-        
-        
+
+
       end
-      
+
     end
-    
-    
-    describe 'when the user is the problem reporter' do 
-      
-      describe 'when the reporter has not seen the problem' do 
-      
-        before do 
+
+
+    describe 'when the user is the problem reporter' do
+
+      describe 'when the reporter has not seen the problem' do
+
+        before do
           @user = User.new
           @mock_problem = mock_model(Problem, :reporter_seen? => false,
                                               :reporter => @user)
         end
-        
-        it 'should mark the reporter as having seen the problem' do 
+
+        it 'should mark the reporter as having seen the problem' do
           @mock_problem.should_receive(:update_attribute).with('reporter_seen', true)
           @user.mark_seen(@mock_problem)
         end
-        
+
       end
-      
+
     end
-    
+
   end
-  
+
   describe 'when asked if can admin users' do
 
     before do
@@ -310,6 +310,10 @@ describe User do
   end
 
   describe 'when handling an external auth token' do
+
+    def set_facebook_data(data)
+      User.stub!(:get_facebook_data).and_return(data)
+    end
 
     describe 'when getting facebook data' do
 
@@ -345,10 +349,11 @@ describe User do
                                       :errors => mock('errors', :full_messages => []))
         @mock_user.access_tokens.stub!(:build).and_return(true)
         User.stub!(:new).and_return(@mock_user)
-        User.stub!(:get_facebook_data).and_return({'id' => 'myfbid',
-                                                   'name' => 'Test Name',
-                                                   'email' => 'test@example.com',
-                                                   'picture' => 'http://profile.example.com/mypicture.jpg'})
+        set_facebook_data({'id' => 'myfbid',
+                           'name' => 'Test Name',
+                           'email' => 'test@example.com',
+                           'picture' => {'data' => {'url' => 'http://profile.example.com/mypicture.jpg',
+                                                    'is_silhouette' => false}}})
         @mock_session = mock_model(UserSession, :httponly= => nil,
                                                 :save => nil)
         UserSession.stub!(:new).and_return(@mock_session)
@@ -408,10 +413,11 @@ describe User do
         describe "when the facebook data does not contain enough information and the user can't be saved" do
 
           before do
-            User.stub!(:get_facebook_data).and_return({'id' => 'myfbid',
-                                                       'name' => 'Test Name',
-                                                       'email' => nil,
-                                                       'picture' => 'http://profile.example.com/mypicture.jpg'})
+            set_facebook_data({'id' => 'myfbid',
+                               'name' => 'Test Name',
+                               'email' => nil,
+                               'picture' => {'data' => {'url' => 'http://profile.example.com/mypicture.jpg',
+                                                         'is_silhouette' => false}}})
             @mock_user.stub!(:save_without_session_maintenance).and_return(false)
           end
 
@@ -423,10 +429,11 @@ describe User do
 
 
         it 'should search for the user by email ignoring case' do
-          User.stub!(:get_facebook_data).and_return({'id' => 'myfbid',
-                                                     'name' => 'Test Name',
-                                                     'email' => 'Test@Example.com',
-                                                     'picture' => 'http://profile.example.com/mypicture.jpg'})
+          set_facebook_data({'id' => 'myfbid',
+                             'name' => 'Test Name',
+                             'email' => 'Test@Example.com',
+                            'picture' => {'data' => {'url' => 'http://profile.example.com/mypicture.jpg',
+                                                     'is_silhouette' => false}}})
           User.should_receive(:find).with(:first, :conditions => ['lower(email) = ?', 'test@example.com'])
           User.handle_external_auth_token('mytoken', 'facebook', false)
         end
@@ -442,10 +449,11 @@ describe User do
         end
 
         it 'should not set the remote profile photo url if the remote url is a static one' do
-          User.stub!(:get_facebook_data).and_return({'id' => 'myfbid',
-                                                     'name' => 'Test Name',
-                                                     'email' => 'test@example.com',
-                                                     'picture' => 'http://static.example.com/mypicture.jpg'})
+          set_facebook_data({'id' => 'myfbid',
+                             'name' => 'Test Name',
+                             'email' => 'test@example.com',
+                             'picture' => {'data' => {'url' => 'http://profile.example.com/mypicture.jpg',
+                                                      'is_silhouette' => true}}})
           @mock_user.should_not_receive(:profile_photo_url=)
           User.handle_external_auth_token('mytoken', 'facebook', false)
         end
@@ -486,7 +494,9 @@ describe User do
                                                                         :key => 'mykey')
         AccessToken.stub!(:find_each).and_yield(@token_for_user_without_profile_photo)
         AccessToken.stub!(:find).and_return(@token_for_user_without_profile_photo)
-        picture_data = {'id' => 'mykey', 'picture' => 'http://example.com/image.jpg'}
+        picture_data = {'id' => 'mykey',
+                        'picture' =>{'data' => {'url' => 'http://profile.example.com/mypicture.jpg',
+                                                'is_silhouette' => false}}}
         User.stub!(:get_facebook_batch_api_data).and_return([{'body' => picture_data.to_json}])
       end
 
@@ -507,7 +517,9 @@ describe User do
       describe 'if the new url is static' do
 
         before do
-          picture_data = {'id' => 'mykey', 'picture' => 'http://static.example.com/image.jpg'}
+          picture_data = {'id' => 'mykey',
+                          'picture' =>{'data' => {'url' => 'http://profile.example.com/mypicture.jpg',
+                                                  'is_silhouette' => true}}}
           User.stub!(:get_facebook_batch_api_data).and_return([{'body' => picture_data.to_json}])
         end
 
@@ -521,7 +533,9 @@ describe User do
       describe 'if the picture url from facebook is not static' do
 
         before do
-          picture_data = {'id' => 'mykey', 'picture' => 'http://example.com/image.jpg'}
+          picture_data = {'id' => 'mykey',
+                          'picture' => {'data' => {'url' => 'http://profile.example.com/mypicture.jpg',
+                                                   'is_silhouette' => false}}}
           User.stub!(:get_facebook_batch_api_data).and_return([{'body' => picture_data.to_json}])
         end
 
@@ -531,7 +545,8 @@ describe User do
         end
 
         it 'should set the remote profile url' do
-          @user_without_profile_photo.should_receive(:profile_photo_url=).with('http://example.com/image.jpg')
+          url = 'http://profile.example.com/mypicture.jpg'
+          @user_without_profile_photo.should_receive(:profile_photo_url=).with(url)
           User.update_remote_profile_photos
         end
 
@@ -555,7 +570,9 @@ describe User do
                                                                      :key => 'mykey')
         AccessToken.stub!(:find_each).and_yield(@token_for_user_with_profile_photo)
         AccessToken.stub!(:find).and_return(@token_for_user_with_profile_photo)
-        picture_data = {'id' => 'mykey', 'picture' => 'http://example.com/image.jpg'}
+        picture_data = {'id' => 'mykey',
+                        'picture' => {'data' => {'url' => 'http://different.example.com/image.jpg',
+                                                 'is_silhouette' => false}}}
         User.stub!(:get_facebook_batch_api_data).and_return([{'body' => picture_data.to_json}])
       end
 
@@ -581,7 +598,9 @@ describe User do
         describe 'if the url from facebook is different from the existing url and not static' do
 
           before do
-            picture_data = {'id' => 'mykey', 'picture' => 'http://different.example.com/image.jpg'}
+            picture_data = {'id' => 'mykey',
+                            'picture' => {'data' => {'url' => 'http://different.example.com/image.jpg',
+                                                     'is_silhouette' => false}}}
             User.stub!(:get_facebook_batch_api_data).and_return([{'body' => picture_data.to_json}])
           end
 
@@ -606,7 +625,9 @@ describe User do
         describe 'if the new url is static' do
 
           before do
-            picture_data = {'id' => 'mykey', 'picture' => 'http://static.example.com/image.jpg'}
+            picture_data = {'id' => 'mykey',
+                            'picture' => {'data' => {'url' => 'http://different.example.com/image.jpg',
+                                                     'is_silhouette' => true}}}
             User.stub!(:get_facebook_batch_api_data).and_return([{'body' => picture_data.to_json}])
           end
 
@@ -617,10 +638,12 @@ describe User do
 
         end
 
-        describe "if the existing url is the same as the user's remote profile url" do
+        describe "if the existing url is not static but is the same as the user's remote profile url" do
 
           before do
-            picture_data = {'id' => 'mykey', 'picture' => 'http://example.com/image.jpg'}
+            picture_data = {'id' => 'mykey',
+                            'picture' => {'data' => {'url' => 'http://example.com/image.jpg',
+                                                     'is_silhouette' => false}}}
             User.stub!(:get_facebook_batch_api_data).and_return([{'body' => picture_data.to_json}])
           end
 

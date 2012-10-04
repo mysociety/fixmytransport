@@ -304,9 +304,11 @@ class User < ActiveRecord::Base
           # don't replace an existing uploaded photo
           if ! user.profile_photo?
             # discard the profile photo if it's just the default
-            if facebook_data['picture'] and !self.facebook_static_profile_picture?(facebook_data['picture'])
-              user.profile_photo_url = facebook_data['picture']
-              user.error_on_bad_profile_photo_url = false
+            if facebook_data['picture']
+              if ! facebook_data['picture']['data']['is_silhouette']
+                user.profile_photo_url = facebook_data['picture']['data']['url']
+                user.error_on_bad_profile_photo_url = false
+              end
             end
           end
           user.access_tokens.build({:user_id => user.id,
@@ -432,7 +434,8 @@ class User < ActiveRecord::Base
 
   def self.set_profile_remote_photo(json_response, verbose)
     picture_data = JSON.load(json_response)
-    picture_url =  picture_data['picture']
+    picture_url =  picture_data['picture']['data']['url']
+    picture_static = picture_data['picture']['data']['is_silhouette']
     id = picture_data['id']
     puts "FB key: #{id}, url #{picture_url}" if verbose
     token = AccessToken.find(:first, :conditions => ['key = ? and token_type = ?', id, 'facebook'])
@@ -444,7 +447,7 @@ class User < ActiveRecord::Base
       if picture_url == user.profile_photo_remote_url
         puts "Remote profile picture URL for user #{user.id} is same as current" if verbose
       else
-        if self.facebook_static_profile_picture?(picture_url)
+        if picture_static
           puts "Remote profile picture URL for user #{user.id} is static #{picture_url}" if verbose
         else
           puts "Setting remote profile picture URL for user to #{picture_url}" if verbose
