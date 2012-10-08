@@ -434,6 +434,10 @@ class User < ActiveRecord::Base
 
   def self.set_profile_remote_photo(json_response, verbose)
     picture_data = JSON.load(json_response)
+    if picture_data.has_key?('error')
+      puts "Error: #{picture_data['error'].inspect}"
+      return
+    end
     picture_url =  picture_data['picture']['data']['url']
     picture_static = picture_data['picture']['data']['is_silhouette']
     id = picture_data['id']
