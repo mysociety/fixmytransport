@@ -108,7 +108,7 @@ class ProblemsController < ApplicationController
       end
     end
     if @issues.empty?
-      redirect_to new_problem_url(:location_id => @location.id, :location_type => @location.type)
+      redirect_to new_problem_url(:location_id => @location.id, :location_type => @location.class.to_s)
       return
     end
     if params[:source] != 'questionnaire'
