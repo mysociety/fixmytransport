@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <title>
+      FixMyTransport: HTTP method not allowed (405)
+    </title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-type' />
+    <meta name="viewport" content="width=device-width" />
+
+    <link href="/stylesheets/core.css" media="screen" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/fixmytransport.css" media="screen" rel="stylesheet" type="text/css">
+  </head>
+	<body>
+		<div id="wrapper">
+			<div id="top" class="container" role="navigation">
+				<ul id="mysociety-tab">
+					<li><a id="mysociety-logo" href="http://mysociety.org">MySociety</a></li>
+					<li><a href="http://mysociety.org/donate">Donate</a></li>
+					<li><a href="http://www.mysociety.org/projects/">Our Sites</a></li>
+				</ul>
+				<ul id="top-nav">
+					<li><a href="/about">About</a></li>
+					<li><a href="/feedback">Feedback</a></li>
+				</ul>
+  		  <a id="logo" href="<%= root_url %>">FixMyTransport</a>
+		  </div>
+      <div id="banner">
+      	<div class="container">
+      		<h1>Sorry, that HTTP method is not allowed.</h1>
+      	</div>
+      </div>
+
+      <div id="main-content" class="container">
+      	<div class="container">
+          <div class="not-found-message">
+            <p>A request was received using an HTTP method that isn't allowed for the requested resource.</p>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <div id="footer">
+			<div class="container">
+			  <div class="mobile-only">
+      	    <ul id="mob-footer-nav">
+      			<li><a href="/about">About</a></li>
+      			<li><a href="/feedback">Feedback</a></li>
+      		</ul>
+      	</div>
+				<p>
+				  Built by <a href="http://mysociety.org">mySociety</a>,
+				   which is supported by the <a href="http://indigotrust.wordpress.com/">Indigo Trust</a>,
+				   the <a href="http://www.esmeefairbairn.org.uk">Esmée Fairbairn Foundation</a>,
+				   the <a href="http://www.omidyar.com/">Omidyar Network</a>,
+				   and many <a href="http://mysociety.org/donate">small donors</a>.
+				</p>
+			</div>
+		</div>
+		<script type="text/javascript">
+      if (document.domain == 'www.fixmytransport.com') {
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24232514-1']);
+        _gaq.push(['_gat._anonymizeIp']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      }
+    </script>
+	</body>
+</html>
