@@ -601,6 +601,11 @@ ul.user-list {
   #create-account-privacy {
     margin: 0.5em 0;
   }
+  #public-name-warning {
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: smaller
+  }
 
   .pane #password-reset {
     float: left;
