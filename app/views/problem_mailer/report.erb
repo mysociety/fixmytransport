@@ -3,6 +3,13 @@ Dear <%= raw @recipient.name %>,
 <%= raw(@problem.description) %>
 
 ------------------
+<% unless @problem.campaign %>
+
+Responding to this email will send your reply directly to the
+passenger.  If you feel that your response would help other
+passengers too, please consider updating the public webpage at
+<%= raw @problem_link %>
+<%- end %>
 
 Here is some information from FixMyTransport about the location of this issue:
 
