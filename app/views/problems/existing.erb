@@ -1,26 +1,26 @@
 <div id="banner">
   <a id="home" href="/">FixMyTransport</a>
-	<div class="container">
-		<h1><%= t('problems.existing.header')%></h1>
-	</div>
+  <div class="container">
+    <h1><%= t('problems.existing.header')%></h1>
+  </div>
 </div>
 
 <div id="main-content" class="container">
   <div id="problem-map">
     <h5><%= @location.description %></h5>
-  			<%= render :partial => 'shared/map', :locals => { :locations => [@location], :other_locations => [], :link_type => :location, :height => @map_height, :width => @map_width } %>
-		</div>
+        <%= render :partial => 'shared/map', :locals => { :locations => [@location], :other_locations => [], :link_type => :location, :height => @map_height, :width => @map_width } %>
+    </div>
 
-	<div class="leftcol mediumwidecol">
-	  <%= link_to( t('problems.existing.report_your_problem'), new_problem_url(:location_id => @location.id, :location_type => @location.type), :class => 'button big red report') %>
+  <div class="leftcol mediumwidecol">
+    <%= link_to( t('problems.existing.report_your_problem'), new_problem_url(:location_id => @location.id, :location_type => @location.class.to_s), :class => 'button big red report') %>
     <%= will_paginate @issues %>
     <ul class="issues-list" id="existing-issues-list">
-    	<%- @issues.each do |issue| %>
+      <%- @issues.each do |issue| %>
          <%= render :partial => 'shared/issue', :locals => { :issue => issue, :context => :new_problem } %>
       <%- end %>
     </ul>
     <%= will_paginate @issues %>
-	</div>
+  </div>
 
 
 
