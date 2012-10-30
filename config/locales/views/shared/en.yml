@@ -107,6 +107,7 @@ en:
       sign_in: "Sign In"
       sign_in_with_facebook: "Sign in with Facebook - We'll never spam your wall!"
       forgot: "Forgot?"
+      public_name_warning: "This name will be published on the site along with your problem report."
       create_account: "Create Account"
       create_one: "Create one"
       no_account: "Don't have an account?"

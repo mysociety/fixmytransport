@@ -1,3 +1,4 @@
+/* -*- mode: espresso; espresso-indent-level: 2; indent-tabs-mode: nil -*- */
 /*
  * Project: Fix My Transport
  * Authors: Josh Angell
