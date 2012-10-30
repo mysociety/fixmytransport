@@ -48,8 +48,15 @@
   <%= raw f.label :notes %>
   <%= raw f.text_field :notes %>
 </div>
+
 <div class='form-field'>
   <%= raw f.label :transport_mode %>
-  <%= raw f.collection_select(:transport_mode_id, TransportMode.active, :id, :name, :prompt => true) %> 
+  <%= raw f.collection_select(:transport_mode_id, TransportMode.active, :id, :name, :prompt => true) %>
 </div>
+
+<div class='form-field'>
+  <%= raw f.label :skip_missing_email_alert %>
+  <%= raw f.check_box :skip_missing_email_alert %>
+</div>
+
 <%= raw submit_tag t('admin.go') %>
