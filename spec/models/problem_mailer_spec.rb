@@ -164,16 +164,19 @@ describe ProblemMailer do
       @emailable_council = mock_model(Council, :name => 'Emailable council')
       @council_contact = mock_model(CouncilContact, :email => 'council@example.com')
 
-      @unemailable_council = mock_model(Council, :name => 'Unemailable council')
+      @unemailable_council = mock_model(Council, :name => 'Unemailable council',
+                                                 :skip_missing_email_alert? => false)
 
       @operator_with_mail = mock_model(Operator, :name => "Emailable operator")
       @operator_contact = mock_model(OperatorContact, :email => 'operator@example.com')
 
-      @operator_without_mail = mock_model(Operator, :name => "Unemailable operator")
+      @operator_without_mail = mock_model(Operator, :name => "Unemailable operator",
+                                                    :skip_missing_email_alert? => false)
 
       @pte_with_mail = mock_model(PassengerTransportExecutive, :name => 'Emailable PTE')
       @pte_contact = mock_model(PassengerTransportExecutiveContact, :email => 'pte@example.com')
-      @pte_without_mail = mock_model(PassengerTransportExecutive, :name => 'Unemailable PTE')
+      @pte_without_mail = mock_model(PassengerTransportExecutive, :name => 'Unemailable PTE',
+                                                                  :skip_missing_email_alert? => false)
 
       @mock_problem_email_operator = make_mock_problem([@operator_with_mail],
                                                        [],
@@ -226,6 +229,13 @@ describe ProblemMailer do
 
       it 'should print a list of operators with missing emails' do
         STDERR.should_receive(:puts).with("Unemailable operator")
+        ProblemMailer.send_reports(dryrun=false, verbose=true)
+      end
+
+      it 'should not include operators with the skip_missing_email_alert flag set in the
+          list of operators with missing emails' do
+        @operator_without_mail.stub!(:skip_missing_email_alert?).and_return(true)
+        STDERR.should_not_receive(:puts).with("Unemailable operator")
         ProblemMailer.send_reports(dryrun=false, verbose=true)
       end
 

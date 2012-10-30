@@ -1,24 +1,28 @@
 class PassengerTransportExecutive < ActiveRecord::Base
   has_many :areas, :class_name => "PassengerTransportExecutiveArea"
-  has_many :pte_contacts, :class_name => 'PassengerTransportExecutiveContact',  
+  has_many :pte_contacts, :class_name => 'PassengerTransportExecutiveContact',
                           :foreign_key => 'passenger_transport_executive_id',
                           :conditions => ['deleted = ?', false]
   has_many :responsibilities, :as => :organization
   validates_uniqueness_of :name
   has_paper_trail
-  
+
   def emailable?(location)
-    conditions = ["category = 'Other' and (location_type = ? or location_type is null or location_type = '')", 
+    conditions = ["category = 'Other' and (location_type = ? or location_type is null or location_type = '')",
                   location.class.to_s]
     general_contacts = self.pte_contacts.find(:all, :conditions => conditions)
     return false if general_contacts.empty?
     return true
   end
-  
+
   def emails
     self.pte_contacts.map{ |contact| contact.email }.uniq.compact
   end
-  
+
+  def skip_missing_email_alert?
+    false
+  end
+
   def categories(location)
     contacts = self.contacts_for_location_type(location.class.to_s)
     if contacts.empty?
@@ -26,7 +30,7 @@ class PassengerTransportExecutive < ActiveRecord::Base
     end
     contacts.map{ |contact| contact.category }
   end
-  
+
   def contact_for_category_and_location(category, location)
     location_contacts = self.contacts_for_location_type(location.class.to_s)
     if category_contact = self.contact_for_category(location_contacts, category)
@@ -44,17 +48,17 @@ class PassengerTransportExecutive < ActiveRecord::Base
       end
     end
   end
-  
+
   def contact_for_category(contact_list, category)
     contact_list.detect{ |contact| contact.category == category }
   end
-    
+
   def contacts_for_location_type(location_type)
     self.pte_contacts.find(:all, :conditions => ['location_type = ?', location_type])
   end
-  
+
   def general_contacts
     self.pte_contacts.find(:all, :conditions => ["location_type is null or location_type = ''"])
-  end 
-  
+  end
+
 end

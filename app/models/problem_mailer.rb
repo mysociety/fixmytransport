@@ -106,7 +106,9 @@ class ProblemMailer < ApplicationMailer
       end
 
       problem.unemailable_organizations.each do |organization|
-        missing_emails[organization.class.to_s.tableize.singularize.to_sym][organization.id] = organization
+        if !organization.skip_missing_email_alert?
+          missing_emails[organization.class.to_s.tableize.singularize.to_sym][organization.id] = organization
+        end
       end
 
     end

@@ -11,13 +11,17 @@ class Council
     return self.new(:id => attributes['id'],
                     :name => attributes['name'])
   end
-  
+
   def ==(other)
     (other.is_a?(Council)) && (@id == other.id) && (@name == other.name)
   end
 
   def emailable?(location)
     !self.contacts.empty?
+  end
+
+  def skip_missing_email_alert?
+    false
   end
 
   def categories(location)
@@ -79,12 +83,12 @@ class Council
     council_data = MySociety::MaPit.call("area", id)
     council = Council.from_hash(council_data)
   end
-  
+
   def self.get_all_councils()
     council_parent_types = MySociety::VotingArea.va_council_parent_types
-    council_data = MySociety::MaPit.call("areas", council_parent_types.join(','))    
+    council_data = MySociety::MaPit.call("areas", council_parent_types.join(','))
   end
-  
+
   def self.find_all()
     council_data = self.get_all_councils()
     councils = council_data.values.map{ |council_info| Council.from_hash(council_info) }
