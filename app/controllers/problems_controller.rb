@@ -38,6 +38,9 @@ class ProblemsController < ApplicationController
   end
 
   def setup_new
+    if params[:source] == 'bus_checker'
+      flash.now[:large_notice] = t('problems.new.buschecker_intro')
+    end
     @map_height = PROBLEM_CREATION_MAP_HEIGHT
     @map_width = PROBLEM_CREATION_MAP_WIDTH
     location = instantiate_location(params[:location_id], params[:location_type])
@@ -109,7 +112,13 @@ class ProblemsController < ApplicationController
       return
     end
     if params[:source] != 'questionnaire'
-      flash.now[:large_notice] = t('problems.existing.intro', :location => @template.at_the_location(@location))
+      if params[:source] == 'bus_checker'
+        flash.now[:large_notice] = t('problems.existing.buschecker_intro',
+                                     :location => @template.at_the_location(@location))
+      else
+        flash.now[:large_notice] = t('problems.existing.intro',
+                                     :location => @template.at_the_location(@location))
+      end
     end
     map_params_from_location([@location],
                              find_other_locations=false,

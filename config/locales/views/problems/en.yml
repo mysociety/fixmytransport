@@ -47,6 +47,7 @@ en:
       tools_for_spreading_the_word: "Tools for spreading the word"
     existing:
       header: "Issues at this location"
+      buschecker_intro: "You've been redirected from Bus Checker to FixMyTransport, an independent website which helps people get their voice heard by transport operators, in order to report your problem. You're not the first person to have reported a problem %{location}. If your problem is listed then please add your support."
       intro: "Attention: you're not the first person to have reported a problem %{location}. If your problem is listed then please add your support."
       report_your_problem: "Report a new problem here"
       not_found: "Bus stop not found"
@@ -218,6 +219,7 @@ en:
       choose_operator: "Please choose a company to report the problem to"
       no_details_for_some_operators: "We do not yet have all the contact details for this %{location_type}. If your message is for %{uncontactable}, it will <strong>not</strong> be sent to them until an email address for them is found. If your problem relates to %{contactable}, it will be sent straight away."
       location_inactive: "N.B. This %{location_type} has been marked as inactive."
+      buschecker_intro: "You've been redirected from Bus Checker to FixMyTransport, an independent website which helps people get their voice heard by transport operators, in order to report your problem."
     show:
       fixed: "Fixed"
       comment: "Update"

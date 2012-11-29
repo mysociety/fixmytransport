@@ -794,6 +794,21 @@ describe ProblemsController do
 
         end
 
+        describe 'if the "source" param is "bus_checker"' do
+
+          it' should show a large notice telling the user they have been redirected' do
+            make_request(@default_params.merge(:source => 'bus_checker'))
+            expected_notice = ["You've been redirected from Bus Checker to FixMyTransport,",
+                               "an independent website which helps people get their voice heard",
+                               "by transport operators, in order to report your problem.",
+                               "You're not the first person to have",
+                               "reported a problem at the Test Stop. If your",
+                               "problem is listed then please add your support."].join(" ")
+            response.flash.now[:large_notice].should == expected_notice
+          end
+
+        end
+
       end
 
     end
@@ -812,6 +827,18 @@ describe ProblemsController do
 
     def make_request(params=@default_params)
       get :new, params
+    end
+
+    describe 'when the source is "bus_checker"' do
+
+      it 'should show a large notice explaining that they have been redirected' do
+        make_request(@default_params.merge(:source => 'bus_checker'))
+        expected_notice = ["You've been redirected from Bus Checker to FixMyTransport,",
+                           "an independent website which helps people get their voice heard",
+                           "by transport operators, in order to report your problem."].join(" ")
+        response.flash.now[:large_notice].should == expected_notice
+      end
+
     end
 
     describe 'when no location can be instantiated from the params' do
