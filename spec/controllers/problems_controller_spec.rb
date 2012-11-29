@@ -815,7 +815,8 @@ describe ProblemsController do
                                "by transport operators, in order to report your problem.",
                                "You're not the first person to have",
                                "reported a problem at the Test Stop. If your",
-                               "problem is listed then please add your support."].join(" ")
+                               "problem is listed then please add your support.",
+                               "If not, please click 'Report a new problem here'."].join(" ")
             response.flash.now[:large_notice].should == expected_notice
           end
 

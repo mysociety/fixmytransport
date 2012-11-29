@@ -51,7 +51,7 @@ en:
       tools_for_spreading_the_word: "Tools for spreading the word"
     existing:
       header: "Issues at this location"
-      buschecker_intro: "You've been redirected from Bus Checker to FixMyTransport, an independent website which helps people get their voice heard by transport operators, in order to report your problem. You're not the first person to have reported a problem %{location}. If your problem is listed then please add your support. If not, please click 'Report a new problem here'"
+      buschecker_intro: "You've been redirected from Bus Checker to FixMyTransport, an independent website which helps people get their voice heard by transport operators, in order to report your problem. You're not the first person to have reported a problem %{location}. If your problem is listed then please add your support. If not, please click 'Report a new problem here'."
       intro: "Attention: you're not the first person to have reported a problem %{location}. If your problem is listed then please add your support."
       report_your_problem: "Report a new problem here"
       not_found: "Bus stop not found"
