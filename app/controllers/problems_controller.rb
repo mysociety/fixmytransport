@@ -55,6 +55,9 @@ class ProblemsController < ApplicationController
   end
 
   def setup_new
+    if params[:source] == 'bus_checker'
+      flash.now[:large_notice] = t('problems.new.buschecker_intro')
+    end
     @map_height = PROBLEM_CREATION_MAP_HEIGHT
     @map_width = PROBLEM_CREATION_MAP_WIDTH
     location = instantiate_location(params[:location_id], params[:location_type])
@@ -92,10 +95,19 @@ class ProblemsController < ApplicationController
   def existing
     @map_height = PROBLEM_CREATION_MAP_HEIGHT
     @map_width = PROBLEM_CREATION_MAP_WIDTH
-    @location = instantiate_location(params[:location_id], params[:location_type])
-    if !@location
-      render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
-      return false
+    if params[:source] && params[:location_type] &&
+      params[:code] && allowed_location_types.include?(params[:location_type])
+      @location = instantiate_location_by_code(params[:code], params[:location_type])
+      if !@location
+        render :action => 'existing_not_found', :status => :not_found
+        return false
+      end
+    else
+      @location = instantiate_location(params[:location_id], params[:location_type])
+      if !@location
+        render :file => "#{RAILS_ROOT}/public/404.html", :status => :not_found
+        return false
+      end
     end
     @issues = WillPaginate::Collection.create((params[:page] or 1), 10) do |pager|
       issues = Problem.find_recent_issues(pager.per_page, {:offset => pager.offset, :location => @location})
@@ -108,11 +120,22 @@ class ProblemsController < ApplicationController
       end
     end
     if @issues.empty?
-      redirect_to new_problem_url(:location_id => @location.id, :location_type => @location.class.to_s)
+      new_problem_params = { :location_id => @location.id,
+                             :location_type => @location.class.to_s }
+      if params[:source]
+        new_problem_params[:source] = params[:source]
+      end
+      redirect_to new_problem_url(new_problem_params)
       return
     end
     if params[:source] != 'questionnaire'
-      flash.now[:large_notice] = t('problems.existing.intro', :location => @template.at_the_location(@location))
+      if params[:source] == 'bus_checker'
+        flash.now[:large_notice] = t('problems.existing.buschecker_intro',
+                                     :location => @template.at_the_location(@location))
+      else
+        flash.now[:large_notice] = t('problems.existing.intro',
+                                     :location => @template.at_the_location(@location))
+      end
     end
     map_params_from_location([@location],
                              find_other_locations=false,

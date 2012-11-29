@@ -682,6 +682,39 @@ describe ProblemsController do
       @controller.stub!(:instantiate_location)
     end
 
+    describe 'if source, location_type and code params are given' do
+
+      it 'should instantiate the location using the code' do
+        @controller.should_receive(:instantiate_location_by_code)
+        make_request({ :source => 'external_app',
+                       :location_type => 'Stop',
+                       :code => 'XXXX' })
+      end
+
+      describe 'if no location can be instantiated from the code' do
+
+        before do
+          @controller.stub!(:instantiate_location_by_code).and_return(nil)
+        end
+
+        it 'should render a 404' do
+          make_request({ :source => 'external_app',
+                         :location_type => 'Stop',
+                         :code => 'XXXX' })
+          response.status.should == '404 Not Found'
+        end
+
+        it 'should render the "existing_not_found" template' do
+          make_request({ :source => 'external_app',
+                         :location_type => 'Stop',
+                         :code => 'XXXX' })
+          response.should render_template("existing_not_found")
+        end
+
+      end
+
+    end
+
     it 'should try and instantiate a location from the params' do
       @controller.should_receive(:instantiate_location)
       make_request
@@ -722,9 +755,21 @@ describe ProblemsController do
           Problem.stub!(:find_recent_issues).and_return([])
         end
 
+        describe 'if the source param is set' do
+
+          it 'should redirect to the new problem url including the source param' do
+            make_request(@default_params.merge({:source => 'external_app'}))
+            response.should redirect_to(new_problem_url(:location_id => @mock_stop.id,
+                                                        :location_type => 'Stop',
+                                                        :source => 'external_app'))
+          end
+
+        end
+
         it 'should redirect to the new problem url' do
           make_request
-          response.should redirect_to(new_problem_url(:location_id => @mock_stop.id, :location_type => 'Stop'))
+          response.should redirect_to(new_problem_url(:location_id => @mock_stop.id,
+                                                      :location_type => 'Stop'))
         end
 
       end
@@ -761,6 +806,21 @@ describe ProblemsController do
 
         end
 
+        describe 'if the "source" param is "bus_checker"' do
+
+          it' should show a large notice telling the user they have been redirected' do
+            make_request(@default_params.merge(:source => 'bus_checker'))
+            expected_notice = ["You've been redirected from Bus Checker to FixMyTransport,",
+                               "an independent website which helps people get their voice heard",
+                               "by transport operators, in order to report your problem.",
+                               "You're not the first person to have",
+                               "reported a problem at the Test Stop. If your",
+                               "problem is listed then please add your support."].join(" ")
+            response.flash.now[:large_notice].should == expected_notice
+          end
+
+        end
+
       end
 
     end
@@ -779,6 +839,18 @@ describe ProblemsController do
 
     def make_request(params=@default_params)
       get :new, params
+    end
+
+    describe 'when the source is "bus_checker"' do
+
+      it 'should show a large notice explaining that they have been redirected' do
+        make_request(@default_params.merge(:source => 'bus_checker'))
+        expected_notice = ["You've been redirected from Bus Checker to FixMyTransport,",
+                           "an independent website which helps people get their voice heard",
+                           "by transport operators, in order to report your problem."].join(" ")
+        response.flash.now[:large_notice].should == expected_notice
+      end
+
     end
 
     describe 'when no location can be instantiated from the params' do

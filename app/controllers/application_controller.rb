@@ -438,19 +438,30 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def allowed_location_types
+    ['BusRoute',
+     'FerryRoute',
+     'TrainRoute',
+     'TramMetroRoute',
+     'Route',
+     'StopArea',
+     'Stop',
+     'SubRoute',
+     'CoachRoute']
+  end
+
   # Turn a location id and type from params into a model
   def instantiate_location(location_id, location_type)
-    allowed_types = ['BusRoute',
-                     'FerryRoute',
-                     'TrainRoute',
-                     'TramMetroRoute',
-                     'Route',
-                     'StopArea',
-                     'Stop',
-                     'SubRoute',
-                     'CoachRoute']
-    if allowed_types.include?(location_type)
+    if allowed_location_types.include?(location_type)
       return location_type.constantize.find(:first, :conditions => ['id = ?', location_id])
+    else
+      return nil
+    end
+  end
+
+  def instantiate_location_by_code(code, location_type)
+    if location_type == 'Stop'
+      return Stop.find_by_atco_code(code)
     else
       return nil
     end
