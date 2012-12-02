@@ -41,6 +41,7 @@ public/javascripts/ie.min.js
 public/javascripts/map.min.js
 public/javascripts/geo.min.js
 public/javascripts/fmt_geo.min.js
+public/javascripts/jquery.form.min.js
 public/stylesheets/buttons.min.css
 public/stylesheets/core.min.css
 public/stylesheets/fixmytransport.min.css

@@ -9,7 +9,7 @@ namespace :cached_assets do
   end
   
   def js_files
-    ['map', 'fixmytransport', 'fb', 'ie', 'geo', 'fmt_geo', 'admin']
+    ['map', 'fixmytransport', 'fb', 'ie', 'geo', 'fmt_geo', 'admin', 'jquery.form']
   end
   
   def css_files
