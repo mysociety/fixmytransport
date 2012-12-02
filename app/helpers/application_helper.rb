@@ -21,7 +21,7 @@ module ApplicationHelper
 
   def library_js_link
     minified_js_files = ['jquery-1.8.3.min',
-                         'jquery-ui-1.8.13.custom.min',
+                         'jquery-ui-1.9.2.custom.min',
                          'jquery.autofill.min',
                          'OpenLayers',
                          'mailcheck.min']
@@ -32,7 +32,7 @@ module ApplicationHelper
 
   def admin_library_js_link
     minified_js_files = ['jquery-1.8.3.min',
-                         'jquery-ui-1.8.13.custom.min',
+                         'jquery-ui-1.9.2.custom.min',
                          'admin/OpenLayers']
     js_files = ['map', 'admin']
     files = minified_js_files + minify(js_files)
