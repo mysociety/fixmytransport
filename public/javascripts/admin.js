@@ -5,7 +5,7 @@ function setupAssignAllAndNone(all_selector, none_selector, table_selector, chec
     operators.parents('tr').addClass("selected");
     event.preventDefault();
   })
-  
+
   $(none_selector).click(function(event){
     var operators = $(this).closest(table_selector).find(check_selector)
     operators.attr('checked', false);
@@ -39,65 +39,65 @@ function setupItemSelection(class_name){
 function setupAutocomplete(text_input_selector, url_input_selector, target_selector) {
   $(text_input_selector).autocomplete({
     source: function(request, response){
-      	$.ajax({
-  				url: $(url_input_selector).val(),
-  				dataType: "json",
-  				data: { term: request.term, transport_mode_id: $('select#route_transport_mode_id').val() },
-  				success: function(data){
-  				  response($.map(data, function(item) {
-          		return {
-          			label: item.name,
-          			value: item.name,
-          			id: item.id
-          		}
-          	}))
-  				}
-  			})
-  		},
-  		minLength: 0,
-  		select: function(event, ui) {
-  			$(this).next(target_selector).val(ui.item.id);
-  		},
-  		search: function(event, ui) {
-  		  $(this).next(target_selector).val('');
-  		  if ($(this).val().length == 0){
-  		    return false;
-  		  }
-  		}
+        $.ajax({
+          url: $(url_input_selector).val(),
+          dataType: "json",
+          data: { term: request.term, transport_mode_id: $('select#route_transport_mode_id').val() },
+          success: function(data){
+            response($.map(data, function(item) {
+              return {
+                label: item.name,
+                value: item.name,
+                id: item.id
+              }
+            }))
+          }
+        })
+      },
+      minLength: 0,
+      select: function(event, ui) {
+        $(this).nextAll(target_selector+":first").val(ui.item.id);
+      },
+      search: function(event, ui) {
+        $(this).nextAll(target_selector+":first").val('');
+        if ($(this).val().length == 0){
+          return false;
+        }
+      }
   });
 }
 
 function setupOrganizationAutocomplete(){
-  setupAutocomplete('input.organization_name_auto', 
-                    'input#operator_name_autocomplete_url', 
+  setupAutocomplete('input.organization_name_auto',
+                    'input#operator_name_autocomplete_url',
                     'input.organization-id');
 }
 
 function setupStopAutocompletes(){
-  setupAutocomplete('input.from_stop_name_auto', 
-                    'input#stop_name_autocomplete_url', 
+  setupAutocomplete('input.from_stop_name_auto',
+                    'input#stop_name_autocomplete_url',
                     'input.from-stop-id');
-  setupAutocomplete('input.to_stop_name_auto', 
-                    'input#stop_name_autocomplete_url', 
+  setupAutocomplete('input.to_stop_name_auto',
+                    'input#stop_name_autocomplete_url',
                     'input.to-stop-id');
 }
 
 function setupOperatorAutocomplete(){
-  setupAutocomplete('input.operator_name_auto', 
-                    'input#operator_name_autocomplete_url', 
+  setupAutocomplete('input.operator_name_auto',
+                    'input#operator_name_autocomplete_url',
                     'input.operator-id');
 }
 
 function setupLocalityAutocomplete(){
-  setupAutocomplete('input.locality_name_auto', 
-                    'input#locality_name_autocomplete_url', 
+  setupAutocomplete('input.locality_name_auto',
+                    'input#locality_name_autocomplete_url',
                     'input.locality-id');
 }
 
 // link to add new route segments to a journey pattern
 function setupAddSegmentLink(){
   $('.add-segment-link').click(function(event){
-    
+
     // copy the hidden template
     var template_segment_row = $(this).closest('tr').next('.add-segment-template');
     var new_segment_row = template_segment_row.clone();
@@ -113,7 +113,7 @@ function setupAddSegmentLink(){
     if (last_segment_row.length == 1){
       last_segment_order = last_segment_row.find('.segment-order-input').val();
     }
-    
+
     new_segment_row = popoutRouteSegmentRow(new_segment_row, display_class);
     // insert into the DOM
     route_segment_table.append(new_segment_row);
@@ -137,18 +137,18 @@ function popoutRouteSegmentRow(new_segment_row, class_name){
   new_segment_row.addClass(class_name);
   // make visible
   new_segment_row.css('display', 'table-row');
-  // give fields a unique index 
+  // give fields a unique index
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_route_segment", "g");
-  new_segment_row.html(function(index, html){ 
+  new_segment_row.html(function(index, html){
     return html.replace(regexp, new_id);
   });
   // add autocomplete events
-  setupAutocomplete(new_segment_row.find('input.from_stop_name_auto'), 
-                        "input#stop_name_autocomplete_url", 
+  setupAutocomplete(new_segment_row.find('input.from_stop_name_auto'),
+                        "input#stop_name_autocomplete_url",
                         new_segment_row.find('input.from-stop-id'));
-  setupAutocomplete(new_segment_row.find('input.to_stop_name_auto'), 
-                        "input#stop_name_autocomplete_url", 
+  setupAutocomplete(new_segment_row.find('input.to_stop_name_auto'),
+                        "input#stop_name_autocomplete_url",
                         new_segment_row.find('input.to-stop-id'));
   return new_segment_row;
 }
@@ -161,7 +161,7 @@ function setupSectionControls() {
     if (imgUrl.search(/close/) > 0){
       imgUrl = imgUrl.replace('_close', '_open');
     } else {
-      imgUrl = imgUrl.replace('_open', '_close'); 
+      imgUrl = imgUrl.replace('_open', '_close');
     }
     $(this).toggleClass('active').css("background-image", imgUrl);
     section.slideToggle('slow');
@@ -201,7 +201,7 @@ function setupNewRoute(){
   setupStopAutocompletes();
   setupAssignAllAndNone('.check-all-route-operators','.uncheck-all-route-operators', '.route-operators','.check-route-operator');
   setupItemSelection('.check-route-operator');
-  setupItemSelection('.check-route-segment');  
+  setupItemSelection('.check-route-segment');
   setupAddSegmentLink();
 }
 
