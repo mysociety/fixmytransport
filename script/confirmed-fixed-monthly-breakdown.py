@@ -16,25 +16,60 @@ import itertools
 status_types = ('confirmed', 'fixed')
 
 counts = {}
+type_counts = { 'Bus stop' : {},
+                'Train route': {},
+                'Train station': {},
+                'Tram/metro station': {},
+                'Bus/coach route': {},
+                'Tram/metro route': {},
+                'Other': {} }
+
 for status_type in status_types:
     counts[status_type] = defaultdict(int)
+
+for location_type in type_counts.keys():
+    for status_type in status_types:
+        type_counts[location_type][status_type] = defaultdict(int)
+
+# map the location class names to better descriptions
+type_mappings = { 'BusRoute': 'Bus/coach route',
+                  'CoachRoute': 'Bus/coach route',
+                  'FerryRoute': 'Other',
+                  'Stop': 'Bus stop',
+                  'SubRoute': 'Train route',
+                  'TrainRoute': 'Train route',
+                  'TramMetroRoute': 'Tram/metro route' }
 
 today = datetime.date.today()
 latest_month = earliest_month = (today.year, today.month)
 
 maximum_count = -1
 
-with open('problems.csv') as fp:
+with open('problems2.csv') as fp:
     reader = csv.DictReader(fp, delimiter=',', quotechar='"')
     for row in reader:
         d = datetime.datetime.strptime(row['Created'],
                                        '%H:%M %d %b %Y')
         ym = (d.year, d.month)
         earliest_month = min(earliest_month, ym)
+        location_type = row['Location type']
+        aggregate_type = 'Other'
+        if location_type == 'StopArea':
+            transport_mode = row['Transport mode']
+            if transport_mode == 'Train':
+                aggregate_type = 'Train station'
+            elif transport_mode == 'Tram/Metro':
+                aggregate_type = 'Tram/metro station'
+
+        else:
+            aggregate_type = type_mappings[location_type]
+
         if row['Status'] == 'confirmed':
             counts['confirmed'][ym] += 1
+            type_counts[aggregate_type]['confirmed'][ym] += 1
         elif row['Status'] == 'fixed':
             counts['fixed'][ym] += 1
+            type_counts[aggregate_type]['fixed'][ym] += 1
         maximum_count = max(maximum_count, counts['fixed'][ym], counts['confirmed'][ym])
 
 def months_between(earlier, later):
@@ -62,8 +97,21 @@ for d in counts.values():
 
 with open('monthly-breakdown.csv', 'w') as fp:
     writer = csv.writer(fp)
-    writer.writerow(['Month', 'Confirmed', 'Fixed'])
+    headers = ['Month', 'Confirmed', 'Fixed', 'Total of both']
+    location_list = type_counts.keys()
+    for location in location_list:
+        headers.append(location + " (confirmed)")
+        headers.append(location + " (fixed)")
+        headers.append(location + " (total)")
+    writer.writerow(headers)
     for ym in all_months:
-        writer.writerow(["%d-%02d" % (ym[0], ym[1]),
+        data = ["%d-%02d" % (ym[0], ym[1]),
                          counts['confirmed'][ym],
-                         counts['fixed'][ym]])
+                         counts['fixed'][ym],
+                         counts['confirmed'][ym] + counts['fixed'][ym]]
+        for location in location_list:
+            data.append(type_counts[location]['confirmed'][ym])
+            data.append(type_counts[location]['fixed'][ym])
+            data.append(type_counts[location]['confirmed'][ym] +
+                        type_counts[location]['fixed'][ym])
+        writer.writerow(data)
