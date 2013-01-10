@@ -6,108 +6,110 @@
       <%= "#{t('shared.header.site_name')}#{@title ? ':' : ''} #{@title}" %>
     </title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-type' />
-		<%- if MySociety::Config.getbool('STAGING_SITE', true) %>
+        <%- if MySociety::Config.getbool('STAGING_SITE', true) %>
       <meta name="robots" content="noindex">
     <%- end %>
     <%- if MySociety::Config.get('GOOGLE_SITE_VERIFICATION_CODE', '') != '' %>
       <meta name="google-site-verification" content="<%= MySociety::Config.get('GOOGLE_SITE_VERIFICATION_CODE', '') %>" />
     <%- end %>
 
- 	<meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width" />
 
     <%= yield :meta %>
     <%= yield :feeds %>
     <%= csrf_meta_tag %>
     <%= raw main_style_link %>
 
-	<!--[if lte IE 7]><%= raw stylesheet_link_tag(minify(['ie67'])) %><![endif]-->
+    <!--[if lte IE 7]><%= raw stylesheet_link_tag(minify(['ie67'])) %><![endif]-->
 
-	<!--[if lte IE 8]><%= raw stylesheet_link_tag(minify(['ie678'])) %><![endif]-->
-	
-	<!--[if gte IE 9]> <%= raw stylesheet_link_tag(minify(['ie9'])) %><![endif]-->
+    <!--[if lte IE 8]><%= raw stylesheet_link_tag(minify(['ie678'])) %><![endif]-->
+
+    <!--[if gte IE 9]> <%= raw stylesheet_link_tag(minify(['ie9'])) %><![endif]-->
 
     <%= yield :stylesheets %>
     <%= raw library_js_link %>
     <script type="text/javascript">
       var fmt_facebook_app_id = '<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>';
     </script>
-	<noscript>
-		<%= raw stylesheet_link_tag(minify(['no-js'])) %>
-	</noscript>
+    <noscript>
+        <%= raw stylesheet_link_tag(minify(['no-js'])) %>
+    </noscript>
   </head>
-	<body <%-if @body_class %>class="<%= @body_class %>"<%- end %>>
+    <body <%-if @body_class %>class="<%= @body_class %>"<%- end %>>
     <%= yield :body_content %>
     <%- if MySociety::Config.getbool('STAGING_SITE', true) %>
     <div class="staging-banner top-notice">
       <div class="container"><%= t('shared.header.development_site') %></div>
     </div>
     <%- end %>
-    
+
     <%= yield :banner_content %>
 
-    
-		<div id="wrapper">
+        <div class="top-notice">
+            <div class="container">Would you like to work with the team that built this site? <a href="http://mysocietyltd.theresumator.com/apply/">We're recruiting.</a></div>
+        </div>
+        <div id="wrapper">
 
-			<div id="top" class="container" role="banner">
+            <div id="top" class="container" role="banner">
 
-				<ul id="mysociety-tab" role="navigation">
-					<li><a id="mysociety-logo" href="http://www.mysociety.org">MySociety</a></li>
-					<li><a href="http://mysociety.org/donate"><%= t('shared.header.donate') %></a></li>
-					<li><a href="http://www.mysociety.org/projects/"><%= t('shared.header.our_sites') %></a></li>
-				</ul>
-				<ul id="top-nav">
-				  <li><a href="http://blog.fixmytransport.com"><%= t('shared.header.blog') %></a></li>
-					<li><a href="<%= about_url %>"><%= t('shared.header.about') %></a></li>
-					<li><a href="<%= feedback_url(:url => request.request_uri) %>" rel="nofollow"><%= t('shared.header.feedback') %></a></li>
-				</ul>
+                <ul id="mysociety-tab" role="navigation">
+                    <li><a id="mysociety-logo" href="http://www.mysociety.org">MySociety</a></li>
+                    <li><a href="http://mysociety.org/donate"><%= t('shared.header.donate') %></a></li>
+                    <li><a href="http://www.mysociety.org/projects/"><%= t('shared.header.our_sites') %></a></li>
+                </ul>
+                <ul id="top-nav">
+                  <li><a href="http://blog.fixmytransport.com"><%= t('shared.header.blog') %></a></li>
+                    <li><a href="<%= about_url %>"><%= t('shared.header.about') %></a></li>
+                    <li><a href="<%= feedback_url(:url => request.request_uri) %>" rel="nofollow"><%= t('shared.header.feedback') %></a></li>
+                </ul>
 
         <a id="logo" href="<%= root_url %>">FixMyTransport</a>
 
-				<%- if current_user %>
-				<p id="member-info">
-				  <%= t('shared.header.hi')%>
-				  <a href="<%= profile_path(current_user) %>">
-				    <%= current_user.name %></a>.
-				  <%- if @no_redirect_on_logout %>
-				    <a href="<%= logout_path() %>">
-				  <%- else %>
-				    <a href="<%= logout_path(:redirect => request.request_uri) %>">
-				  <%- end %>
-				    <%= t('shared.login.sign_out')%>
-				  </a>
-				</p>
-				<%- else %>
-				<p id="member-info">
-				  <a class="auth" href="<%= login_path(:redirect => request.request_uri) %>" rel="nofollow">
-				  <%= t('shared.login.sign_in')%></a>
-				</p>
-				<%- end %>
-			</div>
+                <%- if current_user %>
+                <p id="member-info">
+                  <%= t('shared.header.hi')%>
+                  <a href="<%= profile_path(current_user) %>">
+                    <%= current_user.name %></a>.
+                  <%- if @no_redirect_on_logout %>
+                    <a href="<%= logout_path() %>">
+                  <%- else %>
+                    <a href="<%= logout_path(:redirect => request.request_uri) %>">
+                  <%- end %>
+                    <%= t('shared.login.sign_out')%>
+                  </a>
+                </p>
+                <%- else %>
+                <p id="member-info">
+                  <a class="auth" href="<%= login_path(:redirect => request.request_uri) %>" rel="nofollow">
+                  <%= t('shared.login.sign_in')%></a>
+                </p>
+                <%- end %>
+            </div>
 
-			<%= render :partial => "shared/login" %>
+            <%= render :partial => "shared/login" %>
 
-			<%- [:notice, :error, :large_notice, :extra].each do |key| %>
-					<%- unless flash[key].blank? %>
-					<div class="container">
-					<p class="<%= "flash #{key}" %>">
-					  <%= raw flash[key] %>
-					</p>
-					</div>
-					<%- end %>
-			<%- end %>
-			<%= yield %>
-			<div id="goto-top-wrap" class="container">
-				<a href="#top" class="goto-top right"><%= t('shared.footer.top_of_page') %></a>
-			</div>
-    	</div>
+            <%- [:notice, :error, :large_notice, :extra].each do |key| %>
+                    <%- unless flash[key].blank? %>
+                    <div class="container">
+                    <p class="<%= "flash #{key}" %>">
+                      <%= raw flash[key] %>
+                    </p>
+                    </div>
+                    <%- end %>
+            <%- end %>
+            <%= yield %>
+            <div id="goto-top-wrap" class="container">
+                <a href="#top" class="goto-top right"><%= t('shared.footer.top_of_page') %></a>
+            </div>
+        </div>
 
-	  <%= render :partial => 'shared/footer' %>
-	  <div id="fb-root-container"><div id="fb-root"></div></div>
-		<%= yield :javascript %>
-		<%= raw main_js_link %>
-		<!--[if lte IE 8]><%= raw javascript_include_tag((minify(['ie']) + ['jquery.ifixpng2.min']), :charset => 'utf-8') %><![endif]-->
-		<%= render :partial => 'shared/tracking' %>
+      <%= render :partial => 'shared/footer' %>
+      <div id="fb-root-container"><div id="fb-root"></div></div>
+        <%= yield :javascript %>
+        <%= raw main_js_link %>
+        <!--[if lte IE 8]><%= raw javascript_include_tag((minify(['ie']) + ['jquery.ifixpng2.min']), :charset => 'utf-8') %><![endif]-->
+        <%= render :partial => 'shared/tracking' %>
 
 
-	</body>
+    </body>
 </html>
