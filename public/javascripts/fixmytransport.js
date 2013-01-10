@@ -594,7 +594,7 @@ $(document).ready(function(){
   function setupTrainStationAutocomplete(inputSelector) {
     $(inputSelector).autocomplete({
       source: "/problems/autocomplete_train_station",
-	minLength: 3
+  minLength: 3
     });
   }
 
@@ -698,6 +698,12 @@ $(document).ready(function(){
     options['success'] = function(response) {
       if (response.success) {
         if (response.requires_login) {
+
+          // record a hit on the login box in analytics
+          _gaq.push(['_setAccount', 'UA-24232514-1']);
+          _gaq.push(['_gat._anonymizeIp']);
+          _gaq.push(['_trackPageview', location.pathname + window.location.search + '&login=true']);
+
           if ($(window).width() > 600 ) {
           // add the notice to the login form
 
@@ -710,10 +716,6 @@ $(document).ready(function(){
             $('#login-create-account').fadeIn();
             $("#login-box").dialog("open");
 
-            // record a hit on the login box in analytics
-            _gaq.push(['_setAccount', 'UA-24232514-1']);
-            _gaq.push(['_gat._anonymizeIp']);
-            _gaq.push(['_trackPageview', location.pathname + window.location.search + '&login=true']);
 
           } else {
             window.location = response.redirect;
