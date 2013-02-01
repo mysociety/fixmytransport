@@ -57,7 +57,7 @@ Rails::Initializer.run do |config|
   config.gem 'mime-types', :version => '1.17', :lib => 'mime/types' # Required by paperclip
   config.gem 'paper_trail', :version => '1.5.1'
   config.gem "paperclip", :version => "~> 2.7.0"
-  config.gem "rack", :version => '1.1.3'
+  config.gem "rack", :version => '1.1.5'
   config.gem 'rspec', :lib => false, :version => '1.3.1'
   config.gem 'rspec-rails', :lib => false, :version => '1.3.3'
   config.gem 'session', :version => '3.1.0'
