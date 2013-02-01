@@ -1,13 +1,13 @@
 --- !ruby/object:Gem::Specification 
 name: rack
 version: !ruby/object:Gem::Version 
-  hash: 21
+  hash: 25
   prerelease: 
   segments: 
   - 1
   - 1
-  - 3
-  version: 1.1.3
+  - 5
+  version: 1.1.5
 platform: ruby
 authors: 
 - Christian Neukirchen
@@ -15,7 +15,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2011-12-28 00:00:00 +00:00
+date: 2013-01-13 00:00:00 +00:00
 default_executable: rackup
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -135,6 +135,7 @@ extensions: []
 extra_rdoc_files: []
 
 files: 
+- test/spec_auth.rb
 - test/spec_rack_auth_basic.rb
 - test/spec_rack_auth_digest.rb
 - test/spec_rack_builder.rb
@@ -215,6 +216,7 @@ signing_key:
 specification_version: 3
 summary: a modular Ruby webserver interface
 test_files: 
+- test/spec_auth.rb
 - test/spec_rack_auth_basic.rb
 - test/spec_rack_auth_digest.rb
 - test/spec_rack_builder.rb
