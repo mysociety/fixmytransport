@@ -31,4 +31,6 @@ config.action_mailer.delivery_method = :test
 # config.active_record.schema_format = :sql
 
 # Don't keep a paper trail of model changes in the test environment
-PaperTrail.enabled = false
+config.after_initialize do
+  PaperTrail.enabled = false
+end
