@@ -4,8 +4,6 @@
 # Email: louise@mysociety.org; WWW: http://www.mysociety.org/
 #
 
-$:.push(File.join(File.dirname(__FILE__), '../ruby-msg/lib'))
-$:.push(File.join(File.dirname(__FILE__), '../ruby-ole/lib'))
 require 'mapi/msg'
 require 'mapi/convert'
 
