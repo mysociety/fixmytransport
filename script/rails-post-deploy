@@ -53,14 +53,14 @@ if [ ! -e "config/rails_env.rb" ]
 then
     cat <<END
 
-***************************************************************** 
+*****************************************************************
 WARNING: About to make config/rails_env.rb which, via special
 code in config/boot.rb, forces the Rails environment to be a
 particular one - this is used for the mySociety deployment
-system. You don't want it for local development, because it will 
+system. You don't want it for local development, because it will
 not work in a confusing way you try and use two environments
 (e.g. development and test) in the same working directory.
-***************************************************************** 
+*****************************************************************
 
 END
 fi
@@ -74,8 +74,17 @@ else
     echo "ENV['RAILS_ENV'] = 'development'" > config/rails_env.rb
 fi
 
-# build any native gems
-rake gems:build
+bundle_install_options=""
+if [ "$OPTION_STAGING_SITE" = "0" ]
+then
+    bundle_install_options="--deployment"
+fi
+if [ "$OPTION_STAGING_SITE" = "1" ]
+then
+    bundle_install_options="--path vendor/bundle"
+fi
+bundle install $bundle_install_options
+
 # upgrade database
 rake db:migrate #--trace
 # redeploy any cached assets
