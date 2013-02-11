@@ -10,6 +10,7 @@ libjson-ruby
 libtmail-ruby1.8
 libxml2
 libxml2-dev
+libxslt-dev
 libzip-ruby1.8
 mahoro-ruby1.8 | libmahoro-ruby1.8
 mutt
