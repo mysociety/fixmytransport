@@ -52,7 +52,6 @@ task :noop do
 end
 
 task :default => :spec
-task :spec => ['spec:commonlib']
 task :stats => "spec:statsetup"
 
 desc "Run all specs in spec directory (excluding plugin specs)"
