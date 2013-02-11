@@ -31,6 +31,6 @@ config.action_mailer.delivery_method = :test
 # config.active_record.schema_format = :sql
 
 # Don't keep a paper trail of model changes in the test environment
-PaperTrail.enabled = false
-
-  config.gem 'rspec-rails', :version => '>= 1.3.3', :lib => false unless File.directory?(File.join(Rails.root, 'vendor/plugins/rspec-rails'))
+config.after_initialize do
+  PaperTrail.enabled = false
+end

@@ -1,14 +1,14 @@
-require File.join(File.dirname(__FILE__),'..','..','vendor','rails','railties','lib','rails','gem_dependency.rb')
+require 'rails/gem_dependency'
 module Rails
   class GemDependency < Gem::Dependency
-  
+
     # This definition of the requirement method is a patch
     if !method_defined?(:requirement)
       def requirement
         req = version_requirements
       end
     end
-  
+
     def add_load_paths
       self.class.add_frozen_gem_path
       return if @loaded || @load_paths_added
@@ -22,7 +22,7 @@ module Rails
         spec = Gem.source_index.find { |_,s| s.satisfies_requirement?(dep) }.last
         spec.activate           # a way that exists
       rescue
-        begin 
+        begin
           gem self.name, self.requirement # <  1.8 unhappy way
         # This second rescue is a patch - fall back to passing Rails::GemDependency to gem
         # for older rubygems
@@ -37,5 +37,5 @@ module Rails
     rescue Gem::LoadError
     end
   end
-  
+
 end

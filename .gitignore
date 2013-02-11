@@ -1,3 +1,4 @@
+.bundle
 log
 tmp/**/*
 db/schema.rb
@@ -55,16 +56,5 @@ public/stylesheets/main.css
 public/stylesheets/ie9.min.css
 moo.txt
 rdoc
-vendor/gems/libxml-ruby-1.1.4/lib/*.so
-vendor/gems/libxml-ruby-1.1.4/ext/**/*.o
-vendor/gems/libxml-ruby-1.1.4/ext/**/*.so
-vendor/gems/libxml-ruby-1.1.4/ext/**/*.so.a
-vendor/gems/libxml-ruby-1.1.4/ext/**/Makefile
-vendor/gems/libxml-ruby-1.1.4/ext/**/*.log
-vendor/gems/libxml-ruby-1.1.4/ext/**/**/*.log
-vendor/gems/libxml-ruby-1.1.4/ext/**/gem_make.out
-vendor/gems/libxml-ruby-1.1.4/ext/libxml/extconf.h
-vendor/gems/libxml-ruby-1.1.4/ext/libxml/*.log
-vendor/gems/libxml-ruby-1.1.4/**/**/*.bundle
-vendor/gems/libxml-ruby-1.1.4/**/*.bundle
+vendor/bundle
 *~
