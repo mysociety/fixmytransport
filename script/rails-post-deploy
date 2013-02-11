@@ -86,9 +86,9 @@ fi
 bundle install $bundle_install_options
 
 # upgrade database
-rake db:migrate #--trace
+bundle exec rake db:migrate #--trace
 # redeploy any cached assets
-rake cached_assets:minify
-rake cached_assets:regenerate
+bundle exec rake cached_assets:minify
+bundle exec rake cached_assets:regenerate
 # reload the guides, in case they have changed
-rake guides:add_static_guides
+bundle exec rake guides:add_static_guides
