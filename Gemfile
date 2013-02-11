@@ -1,7 +1,7 @@
 source :rubygems
 
 # A fork of rails that is kept up to date with security patches
-git "git://github.com/mysociety/rails.git", :tag => "v2.3.16.1" do
+git "git://github.com/mysociety/rails.git", :tag => "v2.3.17.1" do
   gem 'rails'
 end
 
@@ -15,7 +15,7 @@ gem 'fastercsv', '1.5.3'
 gem 'foreigner', '0.9.1'
 gem 'friendly_id', '3.1.7'
 gem 'GeoRuby', '1.3.4'
-gem 'json', '1.5.4'
+gem 'json', '1.5.5'
 gem 'paper_trail', '1.5.1'
 gem 'paperclip', "~> 2.7.0"
 gem 'rack', '1.1.5'
