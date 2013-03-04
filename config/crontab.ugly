@@ -30,7 +30,7 @@ MAILTO=louise@mysociety.org
 */11 * * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/send-campaign-updates.lock /data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-campaign-updates || echo "stalled?"
 
 # Every 12 minutes - send problem updates
-*/12 * * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-problem-updates || echo "stalled?"
+*/12 * * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/send-problem-updates.lock /data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-problem-updates || echo "stalled?"
 
 # Every half hour - send questionnaires
-*/30 * * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-questionnaires || echo "stalled?"
+*/30 * * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/send-questionnaires.lock /data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-questionnaires || echo "stalled?"
