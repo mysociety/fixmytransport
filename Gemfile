@@ -18,7 +18,7 @@ gem 'GeoRuby', '1.3.4'
 gem 'json', '1.5.5'
 gem 'paper_trail', '1.5.1'
 gem 'paperclip', "~> 2.7.0"
-gem 'rack', '1.1.5'
+gem 'rack', '~> 1.1.0'
 gem 'rails_xss', '0.3.2'
 gem 'ruby-msg', '1.5'
 gem 'ruby-ole', '1.2.10.1'
