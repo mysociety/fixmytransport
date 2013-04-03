@@ -14,7 +14,9 @@ class StaticController < ApplicationController
     if request.post?
       @feedback = Feedback.new(params[:feedback])
       if @feedback.valid?
-        ProblemMailer.deliver_feedback(params[:feedback], @location, @operator)
+        if !@feedback.is_spam?
+            ProblemMailer.deliver_feedback(params[:feedback], @location, @operator)
+        end
         flash[:notice] = t('static.feedback.feedback_thanks')
         redirect_to(root_url)
       else
