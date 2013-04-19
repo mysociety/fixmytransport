@@ -1,4 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 
 # A fork of rails that is kept up to date with security patches
 git "git://github.com/mysociety/rails.git", :tag => "v2.3.18.1" do

@@ -22,7 +22,7 @@ GIT
       rake (>= 0.8.3)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     GeoRuby (1.3.4)
     abstract (1.0.0)
