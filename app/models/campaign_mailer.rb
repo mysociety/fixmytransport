@@ -113,7 +113,11 @@ class CampaignMailer < ApplicationMailer
     if campaigns.empty?
       # no matching campaigns
       IncomingMessage.create_from_mail(email, raw_email, nil)
-      CampaignMailer.deliver_unmatched_incoming_message()
+      # FIXME: we're temporarily disabling the sending of
+      # "Unmatched incoming message" emails until we have a
+      # better way of dealing with campaign addresses that
+      # are being used by spammers - see issue #763
+      # CampaignMailer.deliver_unmatched_incoming_message()
     else
       campaigns.each do |campaign, recipient|
         incoming_message = IncomingMessage.create_from_mail(email, raw_email, campaign)
