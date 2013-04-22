@@ -27,6 +27,7 @@ gem 'text', '0.2.0'
 gem 'vpim', '0.695'
 gem 'will_paginate', '2.3.15'
 gem 'zip', '2.0.2'
+gem 'mahoro', '0.4'
 
 group :test do
   gem 'nokogiri', '1.4.6'
