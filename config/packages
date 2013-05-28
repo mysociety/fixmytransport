@@ -7,6 +7,7 @@ libapache2-mod-passenger
 libopenssl-ruby1.8
 libpgsql-ruby1.8
 libjson-ruby
+libmagic-dev
 libtmail-ruby1.8
 libxml2
 libxml2-dev

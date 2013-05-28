@@ -44,10 +44,15 @@ describe CampaignMailer do
         CampaignMailer.receive(@raw_email)
       end
 
-      it 'should send a message to the contact address saying there is an unmatched incoming message' do
-        CampaignMailer.should_receive(:deliver_unmatched_incoming_message)
-        CampaignMailer.receive(@raw_email)
-      end
+      # FIXME: we're temporarily disabling the sending of
+      # "Unmatched incoming message" emails until we have a
+      # better way of dealing with campaign addresses that
+      # are being used by spammers - see issue #763
+
+      # it 'should send a message to the contact address saying there is an unmatched incoming message' do
+      #   CampaignMailer.should_receive(:deliver_unmatched_incoming_message)
+      #   CampaignMailer.receive(@raw_email)
+      # end
 
     end
 

@@ -1,4 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 
 # A fork of rails that is kept up to date with security patches
 git "git://github.com/mysociety/rails.git", :tag => "v2.3.18.1" do
@@ -16,6 +16,7 @@ gem 'foreigner', '0.9.1'
 gem 'friendly_id', '3.1.7'
 gem 'GeoRuby', '1.3.4'
 gem 'json', '1.5.5'
+gem 'mahoro', '0.4'
 gem 'paper_trail', '1.5.1'
 gem 'paperclip', "~> 2.7.0"
 gem 'rack', '~> 1.1.0'
