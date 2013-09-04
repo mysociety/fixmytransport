@@ -82,12 +82,10 @@ var area_init, route_init;
     OpenLayers.ImgPath = javascriptPath + 'img/';
     var options = {
       'projection': new OpenLayers.Projection("EPSG:900913"),
-      'units': "m",
       'numZoomLevels': 18,
       'maxResolution': 156543.0339,
       'theme': null,
-      'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
-                                         20037508.34, 20037508.34),
+      'zoomMethod': null,
       'controls': [
         new OpenLayers.Control.Navigation(),
         new OpenLayers.Control.PanZoom(),
@@ -97,6 +95,7 @@ var area_init, route_init;
     $('.static-map-element').hide();
     map = new OpenLayers.Map(map_element, options);
     var layer = new OpenLayers.Layer.Google("Google Streets",{'sphericalMercator': true,
+                                                              'animationEnabled': false,
                                                               'maxExtent': new OpenLayers.Bounds(-20037508.34, -20037508.34,
                                                                                                  20037508.34, 20037508.34)});
     map.addLayer(layer);
