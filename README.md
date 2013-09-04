@@ -89,14 +89,4 @@ Then you can run the following command in the fixmytransport directory:
 
     RSPEC=true autotest
 
-If you see many gem-related deprecation warnings when running the
-tests, such as:
 
-    NOTE: Gem.source_index is deprecated, use Specification. It will be removed on or after 2011-11-01.
-    Gem.source_index called from /home/mark/fixmytransport/config/../vendor/rails/railties/lib/rails/gem_dependency.rb:21.
-
-... then your version of RubyGems is much more recent that the
-components of Rails in the `vendor` subdirectory.  One solution to
-this is to downgrade to an earlier version of RubyGems with:
-
-    gem update --system 1.6.2

@@ -1,5 +1,6 @@
 begin
   require "rubygems"
+  Gem::Deprecate.skip = true if defined?(Gem::Deprecate)
   require "bundler"
 rescue LoadError
   raise "Could not load the bundler gem. Install it with `gem install bundler`."
