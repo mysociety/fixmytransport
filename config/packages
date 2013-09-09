@@ -13,7 +13,6 @@ libxml2
 libxml2-dev
 libxslt-dev
 libzip-ruby1.8
-mahoro-ruby1.8 | libmahoro-ruby1.8
 mutt
 postgresql-8.3-postgis | postgresql-8.4-postgis
 rake (>= 0.8.4-1)
