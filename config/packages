@@ -14,7 +14,7 @@ libxml2-dev
 libxslt-dev
 libzip-ruby1.8
 mutt
-postgresql-8.3-postgis | postgresql-8.4-postgis
+postgresql-8.3-postgis | postgresql-8.4-postgis | postgresql-9.1-postgis
 rake (>= 0.8.4-1)
 ruby1.8
 ruby1.8-dev
