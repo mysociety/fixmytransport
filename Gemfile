@@ -30,7 +30,7 @@ gem 'will_paginate', '2.3.15'
 gem 'zip', '2.0.2'
 
 group :test do
-  gem 'nokogiri', '1.4.6'
+  gem 'nokogiri', '1.5.10'
   gem 'rspec', '1.3.1'
   gem 'rspec-rails', '1.3.3'
 end
