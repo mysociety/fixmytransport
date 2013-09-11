@@ -436,7 +436,22 @@ class User < ActiveRecord::Base
   def self.set_profile_remote_photo(json_response, verbose)
     picture_data = JSON.load(json_response)
     if picture_data.has_key?('error')
-      puts "Error: #{picture_data['error'].inspect}"
+      if picture_data['error']['code'] == 100
+          # Can't get public profile data - it seems like this is probably
+          # because the user has opted out of apps:
+          # http://stackoverflow.com/questions/13367852/facebook-graph-api-unsupported-get-request-when-trying-to-get-public-informat
+          # http://stackoverflow.com/questions/10622558/facebook-open-graph-returns-false
+          # TODO: It seems like the right thing to do here would be
+          # to remove any existing profile photo (and possibly our access key) but the error message
+          # and associated documentation (or lack thereof) is not giving me confidence that
+          # this is the only situation in which this error is returned. Additionally,
+          # a permissions check on an example case via
+          # https://graph.facebook.com/[user_id]/permissions?access_token=[app_access_token]
+          # still shows that we have access to their basic data and email address. So...
+          # do nothing for now, but silence the errors.
+      else
+        puts "Error: #{picture_data['error'].inspect}"
+      end
       return
     end
     picture_url =  picture_data['picture']['data']['url']
