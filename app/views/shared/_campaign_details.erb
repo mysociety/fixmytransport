@@ -6,13 +6,14 @@
 <%- end %>
 <%- content_for :meta do %>
 <meta property="fb:app_id" content="<%= MySociety::Config.get("FACEBOOK_APP_ID", '') %>"/>
-<meta property="og:title" content="FixMyTransport: <%= MySociety::Format.ucfirst(@title) %>"/>
+<meta property="og:title" content="FixMyTransport campaign: <%= truncate(@campaign.title, 47) %>"/>
 <%- @campaign.campaign_photos.each do |photo| %>
 <meta property="og:image" content="<%= main_url(photo.image.url(:max)) %>"/>
 <%-end %>
 <meta property="og:image" content="<%= main_url("/images/facebook-feed-logo.gif") %>"/>
 <meta property="og:url" content="<%= request.url %>"/>
 <meta property="og:type" content="cause"/>
+<meta property="og:description" content="<%= facebook_description(@campaign, current_user) %>">
 <%- end %>
 
 <%- if current_user && current_user.new_initiator?(@campaign) %>
