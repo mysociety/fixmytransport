@@ -13,7 +13,7 @@
 <meta property="og:image" content="<%= main_url("/images/facebook-feed-logo.gif") %>"/>
 <meta property="og:url" content="<%= request.url %>"/>
 <meta property="og:type" content="cause"/>
-<meta property="og:description" content="<%= facebook_description(@campaign, current_user) %>">
+<meta property="og:description" content="<%= facebook_description(@campaign, current_user) %>"/>
 <%- end %>
 
 <%- if current_user && current_user.new_initiator?(@campaign) %>
