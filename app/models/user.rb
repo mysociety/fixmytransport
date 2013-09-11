@@ -462,14 +462,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.facebook_static_profile_picture?(url)
-    if /static/ =~ url
-      return true
-    else
-      return false
-    end
-  end
-
   def self.update_remote_profile_photo(user, photo_url)
     user.profile_photo_url = photo_url
     user.error_on_bad_profile_photo_url = true
