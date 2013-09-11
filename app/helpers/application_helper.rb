@@ -604,7 +604,6 @@ module ApplicationHelper
   end
 
   def facebook_description(campaign, user)
-    return '' if ! user
     if user == campaign.initiator
       text = t("campaigns.show.initiator_facebook_description")
     else
