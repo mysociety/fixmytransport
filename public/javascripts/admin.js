@@ -146,10 +146,10 @@ function popoutRouteSegmentRow(new_segment_row, class_name){
   // add autocomplete events
   setupAutocomplete(new_segment_row.find('input.from_stop_name_auto'),
                         "input#stop_name_autocomplete_url",
-                        new_segment_row.find('input.from-stop-id'));
+                        'input.from-stop-id');
   setupAutocomplete(new_segment_row.find('input.to_stop_name_auto'),
                         "input#stop_name_autocomplete_url",
-                        new_segment_row.find('input.to-stop-id'));
+                        'input.to-stop-id');
   return new_segment_row;
 }
 
