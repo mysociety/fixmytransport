@@ -404,7 +404,7 @@ class User < ActiveRecord::Base
       facebook_queries = []
 
       # get a list of fb keys that we want to check profile pictures for
-      AccessToken.find_each(:conditions => ['access_token IS NOT NULL AND token_type = ?', 'facebook'],
+      AccessToken.find_each(:conditions => ['key IS NOT NULL AND token_type = ?', 'facebook'],
                             :include => :user) do |access_token|
         user = access_token.user
         if ! user.profile_photo? or !user.profile_photo_remote_url.blank?
