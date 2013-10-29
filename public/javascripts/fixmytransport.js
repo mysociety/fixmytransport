@@ -18,7 +18,7 @@
 function getQueryStringParametersMap(searchPart) {
   // Based on: http://stackoverflow.com/a/3855394/223092
   var result = {}, i, value, parts, keyValuePairs;
-  if (searchPart[0] != '?') {
+  if (searchPart.length > 0 && searchPart[0] != '?') {
     throw new Error('The argument to getQueryStringParametersMap must be a search string beginning with \'?\'');
   }
   keyValuePairs = searchPart.substr(1).split('&');
