@@ -34,7 +34,3 @@ MAILTO=louise@mysociety.org
 
 # Every half hour - send questionnaires
 */30 * * * * !!(*= $user *)!! run-with-lockfile -n /data/vhost/!!(*= $vhost *)!!/send-questionnaires.lock /data/vhost/!!(*= $vhost *)!!/fixmytransport/script/send-questionnaires || echo "stalled?"
-
-# Once a day - rotate logs
-# (we own the config file, and recent versions of logrotate strictly enforce config file ownership)
-5 0 * * * !!(*= $user *)!! /usr/sbin/logrotate /etc/logrotate.d/!!(*= $vhost *)!!
