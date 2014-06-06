@@ -1,9 +1,8 @@
 source 'https://rubygems.org'
 
-# A fork of rails that is kept up to date with security patches
-git "git://github.com/mysociety/rails.git", :tag => "v2.3.18.1" do
-  gem 'rails'
-end
+
+# Rails 2.3 LTS sources for free Community plan
+gem 'rails', :git => 'https://github.com/makandra/rails.git', :branch => '2-3-lts'
 
 gem 'pg'
 
