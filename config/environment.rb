@@ -65,6 +65,8 @@ Rails::Initializer.run do |config|
   # override default fieldWithError divs in model-associated forms
   config.action_view.field_error_proc = Proc.new{ |html_tag, instance| html_tag }
 
+  # Use Rails 2.3 LTS compatibility mode
+  config.rails_lts_options = { :default => :compatible }
 end
 
 
