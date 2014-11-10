@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/makandra/rails.git
-  revision: 133bbcb301a2b51918d3641541f4d0aa2b086af0
+  revision: 63daeef511dbecdec3d93f667634dadf39a9d2a2
   branch: 2-3-lts
   specs:
     actionmailer (2.3.18)
@@ -19,7 +19,7 @@ GIT
       activerecord (= 2.3.18)
       activeresource (= 2.3.18)
       activesupport (= 2.3.18)
-      railslts-version (= 2.3.18.10)
+      railslts-version (= 2.3.18.12)
       rake (>= 0.8.3)
 
 GEM
@@ -55,7 +55,7 @@ GEM
     pg (0.14.1)
     rack (1.1.6)
     rails_xss (0.3.2)
-    railslts-version (2.3.18.10)
+    railslts-version (2.3.18.12)
     rake (10.3.2)
     rspec (1.3.1)
     rspec-rails (1.3.3)
