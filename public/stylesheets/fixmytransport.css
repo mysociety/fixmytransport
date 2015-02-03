@@ -3566,4 +3566,70 @@ ul.ui-autocomplete {
 
 } /* end of media query */
 
+.retirement-banner__logo {
+  text-indent: -1000%;
+  white-space: nowrap;
+  overflow: hidden; }
+
+.retirement-banner, .retirement-banner * {
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-align: left; }
+
+.retirement-banner {
+  background-color: #ce4848;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.2em;
+  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif; }
+  .retirement-banner p a, .retirement-banner p a:link {
+    margin: 0 0.2em;
+    color: #f5dada;
+    text-decoration: none;
+    border-bottom: 1px solid #e6a3a3; }
+  .retirement-banner p a:hover, .retirement-banner p a:focus {
+    text-decoration: none;
+    color: #fff;
+    border-bottom-color: #f5dada; }
+
+.retirement-banner__inner {
+  padding: 1.5em 1em;
+  margin: 0 auto; }
+
+.retirement-banner__logo {
+  display: block;
+  width: 93px;
+  height: 19px;
+  margin-bottom: 1em;
+  background-position: 0 0;
+  -webkit-background-size: 93px 19px;
+  -moz-background-size: 93px 19px;
+  -o-background-size: 93px 19px;
+  -ms-background-size: 93px 19px;
+  background-size: 93px 19px;
+  background-repeat: no-repeat;
+  background-image: url("../images/mysociety-logo-white.png"); }
+  @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi) {
+    .retirement-banner__logo {
+      background-image: url("../images/mysociety-logo-white@2.png"); } }
+  @media (min-width: 480px) {
+    .retirement-banner__logo {
+      float: right;
+      margin-left: 2em; } }
+
+.retirement-banner__more,
+.retirement-banner__more:link {
+  margin-left: 0.2em; }
+
+.retirement-banner--fixmytransport .retirement-banner__inner {
+  max-width: 59.375em; }
+
+.retirement-replacement-body {
+  position: relative; }
 
