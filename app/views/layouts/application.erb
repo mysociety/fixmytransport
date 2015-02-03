@@ -27,6 +27,7 @@
     <!--[if gte IE 9]> <%= raw stylesheet_link_tag(minify(['ie9'])) %><![endif]-->
 
     <%= yield :stylesheets %>
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,600">
     <%= raw library_js_link %>
     <script type="text/javascript">
       var fmt_facebook_app_id = '<%= MySociety::Config.get('FACEBOOK_APP_ID','') %>';
@@ -45,6 +46,12 @@
 
     <%= yield :banner_content %>
 
+       <div class="retirement-banner retirement-banner--fixmytransport">
+         <div class="retirement-banner__inner">
+           <a class="retirement-banner__logo" href="https://mysociety.org">mySociety</a>
+           <p class="retirement-banner__description">Attention! With regret, we've made the difficult decision to close this site down. <a class="retirement-banner__more" href="https://www.mysociety.org/2015/01/29/fixmytransport-needs-a-new-owner/">Find out more&hellip;</a></p>
+         </div>
+       </div>
 
         <div id="wrapper">
 
