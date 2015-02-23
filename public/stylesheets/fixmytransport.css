@@ -3633,3 +3633,9 @@ ul.ui-autocomplete {
 .retirement-replacement-body {
   position: relative; }
 
+.frontpage-notice {
+  display:block;
+  width:100%;
+  height:auto;
+  font-size: 3.3em;
+}
