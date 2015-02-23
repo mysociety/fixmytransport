@@ -17,16 +17,11 @@
 </div>
 <div id="main-content" class="container">
 
-	<div class="leftcol standardcol">
-	  <div class="report-explanation">
-    <a class="button big red report_variant" href="<%= new_problem_url(:location_id => @sub_route.id, :location_type => 'SubRoute')%>" rel="nofollow"><%= t('shared.location_content.report_a_problem_variant', :on_or_at => t('locations.show_route.on_the'), :location => t('locations.show_route.route')) %></a>  
-  
-  	<%= raw location_explanation(@sub_route) %>
-  	</div>
-	  <%= render :partial => "shared/location_content",  :locals => { :location => @sub_route } %>
+  <div class="leftcol standardcol">
+    <%= render :partial => "shared/location_content",  :locals => { :location => @sub_route } %>
 
-	</div>
-  	
+  </div>
+
   <div class="rightcol standardcol">
     <div id="medium-map-variant">
       <h5><%= @sub_route.description %></h5>

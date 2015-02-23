@@ -49,10 +49,7 @@
 <div id="main-content" class="container">
 
     <div class="leftcol standardcol">
-      <div class="report-explanation">
-      <a class="button big red report_variant" href="<%= new_problem_url(:location_id => @stop_area.id, :location_type => 'StopArea')%>" rel="nofollow"><%= t('shared.location_content.report_a_problem_variant', :on_or_at => t('locations.show_stop_area.at_the'), :location => readable_location_type(@stop_area)) %></a>
-      <%= raw location_explanation(@stop_area) %>
-      </div>
+
       <%= render :partial => "shared/location_content",  :locals => { :location => @stop_area } %>
 
     </div>

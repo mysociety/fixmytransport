@@ -12,7 +12,6 @@
     </div>
 
   <div class="leftcol mediumwidecol">
-    <%= link_to( t('problems.existing.report_your_problem'), new_problem_url(:location_id => @location.id, :location_type => @location.class.to_s), :class => 'button big red report') %>
     <%= will_paginate @issues %>
     <ul class="issues-list" id="existing-issues-list">
       <%- @issues.each do |issue| %>
