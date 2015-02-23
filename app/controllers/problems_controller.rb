@@ -167,15 +167,8 @@ class ProblemsController < ApplicationController
     end
     delete_mismatched_responsibilities(@problem)
     @problem.status = :new
-    if @problem.valid?
-      if current_user
-        handle_problem_current_user
-      else
-        handle_problem_no_current_user
-      end
-    else
-      render_or_return_invalid_problem
-    end
+    @problem.errors.add(:base, 'FixMyTransport is no longer accepting new problem reports. <a href="https://www.mysociety.org/2015/01/28/goodbye-to-some-old-friends/">Find out more&hellip;</a>')
+    render_or_return_invalid_problem
   end
 
   def show
