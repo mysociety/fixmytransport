@@ -75,4 +75,16 @@ namespace :temp do
 
   end
 
+  desc 'Create a list of users who have created campaigns or recent problem reports'
+  task :list_recent_users => :environment do
+
+    problem_reporters = Problem.visible.find(:all, :conditions => ['created_at > ?',
+                                             Time.now - 6.months]).map{ |p| p.reporter }
+    campaign_initiators = Campaign.visible.find(:all).map{ |c| c.initiator }
+    user_list = (problem_reporters + campaign_initiators).uniq
+    user_list.each do |user|
+        puts user.email
+    end
+  end
+
 end
