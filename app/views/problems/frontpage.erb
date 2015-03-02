@@ -18,36 +18,10 @@
 <%- end %>
 <div id="frontpage-top" class="container">
   <div class="leftcol widecol">
-    <ul id="frontpage-problem-scroller">
-      <li>
-        <h1><%= t('problems.frontpage.bad_train')%></h1>
-      </li>
-      <li>
-        <h1><%= t('problems.frontpage.bad_bus') %></h1>
-      </li>
-      <li>
-        <h1><%= t('problems.frontpage.bad_ferry')%></h1>
-      </li>
-    </ul>
-    <p class="font-1"><%= raw t('problems.frontpage.report_problem') %></p>
+    <div class="frontpage-notice">
+      FixMyTransport is no longer accepting new problem reports. <a href="https://www.mysociety.org/2015/01/28/goodbye-to-some-old-friends/">Find out more&hellip;</a>
 
-    <div class="button-col">
-     <%= raw(link_to(raw(t('problems.frontpage.stop_or_station')), find_stop_type_problems_url, :class => 'font-1 button green')) %>
-
-      <div class="button-explanation">
-        <%= t('problems.frontpage.stop_examples') %>
-      </div>
     </div>
-
-    <div class="button-col">
-      <%= raw(link_to(raw(t('problems.frontpage.journey_or_route')), find_route_problems_url, :class => 'font-1 button green')) %>
-      <div class="button-explanation">
-        <%= t('problems.frontpage.route_examples') %>
-      </div>
-    </div>
-
-    <p class="font-1"><%= raw t('problems.frontpage.get_it_fixed')%></p>
-    <p class="font-1"><%= raw t('problems.frontpage.see_issues', :link => raw( link_to(t('problems.frontpage.issues_near_you'), browse_issues_url(:geolocate => 1))))%></p>
 
     <div id="followus" class="font-1">
       <a href="http://www.facebook.com/pages/FixMyTransport/208222939208330" target="_blank" title="Facebook (opens in a new window)">
