@@ -55,7 +55,7 @@ module ApplicationHelper
   #  no_jquery - don't include a tag for the main jquery js file
   def map_javascript_include_tags(options={})
     tags = []
-    tags << "<script src=\"//maps.googleapis.com/maps/api/js?key=#{google_maps_key}&amp;sensor=false\" type=\"text/javascript\"></script>"
+    tags << "<script src=\"//maps.googleapis.com/maps/api/js?key=#{google_maps_key}&amp;sensor=false&amp;v=3\" type=\"text/javascript\"></script>"
     tags.join("\n")
   end
 
