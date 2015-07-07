@@ -2,6 +2,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # home page
   map.root :controller => 'problems', :action => 'frontpage'
+  map.site_root '/frontpage', :controller => 'problems', :action => 'frontpage'
   map.alternative_root '/home', :controller => 'problems', :action => 'frontpage'
 
   # operator pages
