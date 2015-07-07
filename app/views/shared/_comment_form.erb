@@ -1,28 +1,2 @@
 
-<%- form_for :comment, @comment ||= Comment.new, :url => add_comment_url(@commentable), :html => {:id => 'comment-form'} do |f| %>
-<%- if @comment.errors.on('text') %>
-  <div class='error error-text'>
-    <%= error_message_on @comment, :text %>
-  </div>
-  <%- else %>
-    <div class='error error-text' style="display: none;" role="alert"></div>
-<%- end %>
-<%= raw f.label :text, {}, {:style => 'display:none'} %>
-<%= raw f.text_area :text %>
-<div id="comment-login-options">	
-    <%- if context == 'problems' %>
-      <%- if @commentable.status == :fixed %>
-        <%- if current_user && current_user == @commentable.reporter %>
-          <span class="checkbox"><%= raw f.check_box :mark_open %>
-            <%= raw f.label :mark_open, t('problems.show.mark_open') %>
-          </span>
-        <%- end %>
-      <%- else %>
-      <span class="checkbox"><%= raw f.check_box :mark_fixed %>
-        <%= raw f.label :mark_fixed, t('problems.show.mark_fixed') %>
-      </span>
-      <%- end %>
-    <%- end %>
-	<button class="button" type="submit"><%= t('shared.comment_form.post')%></button>
-</div>
-<%- end %>
+FixMyTransport is no longer accepting new comments. <a href="/">Find out more&hellip;</a>

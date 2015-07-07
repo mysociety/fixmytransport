@@ -521,71 +521,12 @@ class ApplicationController < ActionController::Base
 
   # handle a posted comment if there is a current user
   def handle_comment_current_user
-    @comment.user = current_user
-    if @comment.valid?
-      @comment.save
-      @comment.confirm!
-      next_url = get_comment_next_url(@comment)
-      respond_to do |format|
-        format.html do
-          flash[:notice] = t('shared.add_comment.thanks_for_comment')
-          redirect_to next_url
-        end
-        format.json do
-          if @comment.needs_questionnaire?
-             @json = { :success => true,
-                       :redirect => next_url }
-          else
-            index = params[:last_thread_index].to_i + 1
-            comment_html = render_to_string :partial => "shared/comment",
-                                            :locals => { :comment => @comment,
-                                                         :index => index,
-                                                         :event => nil }
-            @json = { :success => true,
-                      :html => "<li>#{comment_html}</li>",
-                      :mark_fixed => @comment.mark_fixed,
-                      :mark_open => @comment.mark_open }
-          end
-          render :json => @json
-        end
-      end
-    else
       render_or_return_for_invalid_comment and return false
-    end
   end
 
   # handle a posted comment if there's no current user logged in
   def handle_comment_no_user
-    @comment.skip_name_validation = true
-    if @comment.valid?
-      commented_type = @comment.commented_type
-      # encoding the text to avoid YAML issues with multiline strings
-      # http://redmine.ruby-lang.org/issues/show/1311
-      comment_data = { :action => :add_comment,
-                       :id => @comment.commented_id,
-                       :commented_type => commented_type,
-                       :text => ActiveSupport::Base64.encode64(@comment.text),
-                       :text_encoded => true,
-                       :mark_fixed => @comment.mark_fixed,
-                       :mark_open => @comment.mark_open,
-                       :notice => t('shared.add_comment.sign_in_to_comment',
-                                    :commented_type => commented_type_description(@comment.commented)) }
-      session[:next_action] = data_to_string(comment_data)
-      respond_to do |format|
-        format.html do
-          flash[:notice] = comment_data[:notice]
-          redirect_to(login_url)
-        end
-        format.json do
-          @json = { :success => true,
-                    :requires_login => true,
-                    :notice => comment_data[:notice] }
-          render :json => @json
-        end
-      end
-    else
       render_or_return_for_invalid_comment and return false
-    end
   end
 
   def render_or_return_for_invalid_comment
