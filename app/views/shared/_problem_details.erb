@@ -21,11 +21,11 @@
 </div>
 <div id="main-content" class="container">
 	<div class="rightcol narrowcol">
-	  
+
 	  <%- if show_questionnaire %>
 	    <%= render :partial => "shared/#{show_questionnaire}", :locals => { :subject => @problem } %>
 	  <%- end %>
-	  
+
 		<h3>Initial problem</h3>
 			<p><%= raw simple_format(sanitize(@problem.description)) %></p>
 
@@ -38,14 +38,14 @@
         <a href="<%= admin_url(admin_problem_path(@problem.id)) %>" class="button"><%= t('problems.show.admin_problem') %></a>
 			<%- end %>
 	</div>
-	<div class="leftcol widecol">	
+	<div class="leftcol widecol">
 	  <div id="medium-map">
     <%= render :partial => 'shared/map', :locals => { :locations => [@problem.location], :other_locations => [], :link_type => :location, :height => @map_height, :width => @map_width } %>
 		</div>
 		<div class="clear">
 			<h5 class="left"><%= t('problems.show.comments')%></h5>
 			<%- if show_comment_button %>
-			  <a id="problem-comment-button" class="comment button right comment-trigger" href="<%= add_comment_problem_url(@problem) %>" data-title="<%= t('problems.show.comment_title') %>"><%= t('problems.show.comment')%></a>
+			  <a id="problem-comment-button" class="comment button right comment-trigger" href="" data-title="<%= t('problems.show.comment_title') %>"><%= t('problems.show.comment')%></a>
 			<%- end %>
 		</div>
 

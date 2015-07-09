@@ -207,7 +207,7 @@
 
     <div class="box">
       <%- if show_comment_button %>
-        <a class="button comment comment-trigger right" href="<%= add_comment_campaign_url(@campaign) %>" data-title="<%= t('campaigns.show.campaign_comment_title') %>"><%= t('campaigns.show.campaign_comment') %></a>
+        <a class="button comment comment-trigger right" href="" data-title="<%= t('campaigns.show.campaign_comment_title') %>"><%= t('campaigns.show.campaign_comment') %></a>
       <%- end %>
     </div>
 
@@ -228,7 +228,7 @@
     <%- end %>
     </ul>
     <%- if show_comment_button %>
-      <a class="button comment comment-trigger right" href="<%= add_comment_campaign_url(@campaign) %>" data-title="<%= t('campaigns.show.campaign_comment_title') %>"><%= t('campaigns.show.campaign_comment') %></a>
+      <a class="button comment comment-trigger right" href="" data-title="<%= t('campaigns.show.campaign_comment_title') %>"><%= t('campaigns.show.campaign_comment') %></a>
     <%- end %>
     <%- if !(supporter_initiator_view(@campaign) || @campaign.status == :fixed) %>
     <%= render :partial => 'campaigns/support_button', :locals => { :button_class => 'right support', :display_supporter => false, :display_initiator => false } %>
