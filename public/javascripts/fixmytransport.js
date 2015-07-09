@@ -347,35 +347,6 @@ $(document).ready(function(){
     return false;
   });
 
-  /* Login Options */
-  $('.login-box .pane').not('#login-landing').hide();
-
-  //create account
-  $('.pane #create-account').click(function(e){
-    e.preventDefault();
-    $('.pane:visible').fadeOut(500, function(){
-      $("#login-box").dialog({title: "Create Account"});
-      $('#login-create-account').fadeIn();
-    });
-  });
-
-  //login
-  $('.pane #login-to-account').click(function(e){
-    e.preventDefault();
-    $('.pane:visible').fadeOut(500, function(){
-      $("#login-box").dialog({title: "Sign In or Sign Up"});
-      $('#login-landing').fadeIn();
-    });
-  });
-
-  //forgot password
-  $('.pane #forgot-password').click(function(e){
-    e.preventDefault();
-    $('.pane:visible').fadeOut(500, function(){
-      $("#login-box").dialog({title: "Reset Password"});
-      $('#login-forgot-password').fadeIn();
-    });
-  });
 
   function construct_message(title, description) {
     var message = '<b>' + title + '</b><br/>' + description + '<br/>';
@@ -520,24 +491,6 @@ $(document).ready(function(){
     }
   });
 
-    /* Comment */
-  $('.comment-trigger').click(function(e){
-    if ($(window).width() > 600 ) {
-      e.preventDefault();
-      $('.login-box .pane').hide();
-      $('#comment-and-login').show();
-      // Add the index of the last campaign event being shown to the form
-      var last_thread_index = $('#campaign-thread li:last-child .thread-item .num').text();
-      $('#comment-form').append($('<input/>')
-                  .attr('type', 'hidden')
-                  .attr('name', 'last_thread_index')
-                  .attr('class', 'last_thread_index')
-                  .val(last_thread_index));
-      $("#login-box").dialog({title: $(this).attr('data-title')+":"});
-      $("#login-box").dialog("open");
-      return false;
-    }
-  });
 
   /* Add Photos */
   $('.add-photos-trigger').click(function(e){
@@ -850,20 +803,6 @@ $(document).ready(function(){
     $(form_selector).ajaxForm(options);
   }
 
-  setupUpdateForm('.pane #campaign-update-form-modal');
-  setupStaticUpdateForm('#campaign-update-form-static');
-  setupProblemForm('#create-problem');
-  setupCommentForm('.pane #comment-form');
-  setupSupportForm('.login-to-support');
-  setupTrainStationAutocomplete('#train_route_form input');
-  if (window.location.pathname.search(/\/find_stop$/) >= 0) {
-    if (getQueryStringParametersMap(window.location.search)['transport_type'] == 'train') {
-      setupTrainStationAutocomplete('#find-stop input#name');
-    }
-  }
-  ajaxifyForm('.pane #login-form');
-  ajaxifyForm('.pane #create-account-form');
-  ajaxifyForm('.pane .password_reset_email');
 
   /* Twitter button
      ================================================== */
