@@ -9,7 +9,7 @@
           <%- if current_user %>
           <li><%= t('shared.footer.logged_in_as')%>: <a href="<%= profile_path(current_user) %>"><%= current_user.name %></a></li> <li><a href="<%= logout_path(:redirect => request.request_uri) %>"><%= t('shared.login.sign_out')%></a></li>
           <%- else %>
-          <li><a href="<%= login_path(:redirect => request.request_uri) %>" rel="nofollow"><%= t('shared.login.sign_in')%></a></li>
+          <li><a href="" rel="nofollow"><%= t('shared.login.sign_in')%></a></li>
           <%- end %>
         </ul>
       </div>
