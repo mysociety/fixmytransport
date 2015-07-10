@@ -63,14 +63,8 @@ module ApplicationHelper
   # then regenerate the content and don't cache. Otherwise, save new content to cache, and allow existing
   # cache to be used.
   def cache_unless_map_params(cache_options)
-    if params[:lat] or params[:lon] or params[:zoom]
       yield
-    else
-      cache(cache_options) do
-        yield
-      end
     end
-  end
 
   def icon_style(location, center_y, center_offset_y, center_x, center_offset_x, zoom)
     top = Map.lat_to_y_offset(center_y, center_offset_y, location[:lat], zoom) - location[:height]
